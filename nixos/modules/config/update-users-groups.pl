@@ -3,6 +3,7 @@ use warnings;
 use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
+use IPC::Open3 qw(open3);
 use JSON;
 use Time::Piece;
 
@@ -94,16 +95,59 @@ sub allocUid {
     return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
 }
 
+sub loginctl {
+    system("${systemd}/bin/loginctl", "--no-legend", "--no-pager", @_);
+}
+
+sub loginctlSilent {
+    my $pid = open3(my $stdin, my $stdout, undef, "${systemd}/bin/loginctl", "--no-legend", "--no-pager", @_);
+    waitpid($pid, 0);
+    return $?;
+};
+
+# `loginctl show-session`, when called without any session names, "[shows]
+# properties [of] the manager itself" (`man 1 loginctl`), where "the manager"
+# is the systemd login manager.  If this command completes successfully, we can
+# be confident that the login manager is up and running.
+if (loginctlSilent("show-session") == 0) {
+    *doDisableLinger = sub { loginctl("disable-linger", @_); };
+    *doEnableLinger = sub { loginctl("enable-linger", @_); };
+} else {
+    require Errno; # For magic `%!' in `doDisableLinger`
+
+    my $lingering_dir = "/var/lib/systemd/linger";
+
+    *doDisableLinger = sub {
+        foreach my $name (@_) {
+            my $file = "${lingering_dir}/${name}";
+            unlink $file or do {
+                # Don't bother warning about files that are already absent.
+                warn "failed to unlink '$file': $!" unless $!{ENOENT};
+            };
+        }
+    };
+
+    *doEnableLinger = sub {
+        make_path($lingering_dir);
+
+        foreach my $name (@_) {
+            my $file = "${lingering_dir}/${name}";
+            open my $fh, ">>", $file or warn "failed to touch '$file': $!";
+            close $fh;
+        }
+    };
+}
+
 sub disableLinger {
     return unless scalar @_;
     dry_print("disabling", "would disable", "lingering for user(s) '$_'") foreach @_;
-    system("${systemd}/bin/loginctl", "disable-linger", @_) unless $is_dry;
+    doDisableLinger(@_) unless $is_dry;
 }
 
 sub enableLinger {
     return unless scalar @_;
     dry_print("enabling", "would enable", "lingering for user(s) '$_'") foreach @_;
-    system("${systemd}/bin/loginctl", "enable-linger", @_) unless $is_dry;
+    doEnableLinger(@_) unless $is_dry;
 }
 
 # Read the declared users/groups
