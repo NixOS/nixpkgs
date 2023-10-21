@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
@@ -22,8 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     name = finalAttrs.pname;
     owner = finalAttrs.src.owner;
     repo = finalAttrs.src.repo;
-    page = "releases?per_page=2";
-    filter = ".[1].tag_name | split(\"-\") | .[1]";
   };
 
   meta = with lib; {

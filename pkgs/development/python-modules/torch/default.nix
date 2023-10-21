@@ -95,8 +95,7 @@ let
 
     paths = with rocmPackages; [
       rocm-core clr rccl miopen miopengemm rocrand rocblas
-      rocsparse hipsparse rocthrust rocprim hipcub
-      roctracer # Unfree at the moment due to hsa-amd-aqlprofile hard dependency in rocprofiler
+      rocsparse hipsparse rocthrust rocprim hipcub roctracer
       rocfft rocsolver hipfft hipsolver hipblas
       rocminfo rocm-thunk rocm-comgr rocm-device-libs
       rocm-runtime clr.icd hipify
