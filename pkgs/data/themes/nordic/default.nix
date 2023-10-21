@@ -83,7 +83,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ jdupes ];
 
-  buildInputs = [
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
     breeze-icons
     plasma-framework
     plasma-workspace
@@ -91,8 +92,6 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapQtApps = true;
-
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall
