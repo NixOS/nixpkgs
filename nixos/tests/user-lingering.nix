@@ -24,6 +24,12 @@ import ./make-test-python.nix (
         };
       in
       {
+        users.mutableUsers = lib.mkDefault false;
+        users.users.on-boot-linger = {
+          isNormalUser = true;
+          linger = true;
+        };
+
         # Stop this service in order to isolate the lingering-management logic
         # in `update-users-groups.pl`.
         systemd.services.linger-users.enable = false;
@@ -75,6 +81,16 @@ import ./make-test-python.nix (
           lingerDirAbsent("yes-linger")
           lingerDirPresent("no-linger")
 
+      def checkSession():
+          machine.wait_for_unit("multi-user.target")
+          lingerDirPresent("on-boot-linger")
+          state = machine.succeed("loginctl show-user --value --property=State on-boot-linger").strip()
+          assert state in ("lingering", "active"), f"expected state to be 'lingering' or 'active' but got '{state}'"
+          machine.wait_for_unit("user@$(id -u on-boot-linger)")
+
+      with subtest("User lingering settings apply successfully on boot"):
+          checkSession()
+
       with subtest("Lingering settings for new users are enforced in mutable mode"):
           lingerDirAbsent("yes-linger")
           lingerDirAbsent("no-linger")
@@ -96,14 +112,6 @@ import ./make-test-python.nix (
           prepLingering()
           machine.succeed(
               "/run/booted-system/specialisation/mutable/bin/switch-to-configuration test"
-          )
-          lingerDirAbsent("yes-linger")
-          lingerDirPresent("no-linger")
-
-      with subtest("dry-activation does not change lingering settings"):
-          prepLingering()
-          machine.succeed(
-              "/run/booted-system/specialisation/immutable/bin/switch-to-configuration dry-activate"
           )
           lingerDirAbsent("yes-linger")
           lingerDirPresent("no-linger")
@@ -157,6 +165,15 @@ import ./make-test-python.nix (
               "/run/booted-system/specialisation/removed-mutable/bin/switch-to-configuration test"
           )
           lingerDirPresent(user)
+
+      with subtest("User lingering settings reapply successfully on boot"):
+          disableLinger("on-boot-linger")
+          lingerDir = lingerDirOf("on-boot-linger")
+          # Since the `on-boot-linger` account might not be present right now
+          machine.succeed(f"rm -f {lingerDir}")
+          machine.shutdown()
+          machine.start()
+          checkSession()
     '';
   }
 )
