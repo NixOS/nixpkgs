@@ -15,6 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "test";
 
+  # it currently has a unused result, so we need to remove the setting
+  # that unused results are treated as errors instead of warnings
+  preBuild = ''
+    substituteInPlace blink/builtin.h \
+      --replace '#pragma GCC diagnostic error "-Wunused-result"' ""
+  '';
+
   meta = {
     description = "Tiniest x86-64-linux emulator";
     longDescription = ''
