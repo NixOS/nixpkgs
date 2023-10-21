@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.7.4";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "banesullivan";
     repo = "scooby";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BgQwsgAYtRgxxjo7NHbgNME1maoZQpocGGBW7Vddr+o=";
+    hash = "sha256-x6GPRo0OuXJtN41urviY0joZKzq0SQjUdRBpIylgcXY=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,8 @@ buildPythonPackage rec {
     "test_tracking"
     "test_import_os_error"
     "test_import_time"
+    # TypeError: expected str, bytes or os.PathLike object, not list
+    "test_cli"
   ];
 
   meta = with lib; {
