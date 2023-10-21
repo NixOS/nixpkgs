@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "5.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -24,6 +24,13 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-TI5wu2FYVUMvgDkbktcwPLnTSD8XUSy8qwOCdrsiopk=";
   };
+
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}" \
+      --replace "--cov" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -40,13 +47,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
 
   pythonImportsCheck = [
     "elgato"
