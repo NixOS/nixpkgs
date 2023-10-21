@@ -149,13 +149,13 @@ rec {
     headers = "009p1ffh2cyn98fcmprrjzq79jysp7h565v4f54wvjxjsq2nkr97";
   };
 
-  electron_25-bin = mkElectron "25.9.0" {
-    armv7l-linux = "dab54628685fc08f9a060de6bb5c9a7910eb2f6d0118ceb257447ace42378b36";
-    aarch64-linux = "7f80fe6016aca69ded956cdd5b64f35a34c1a92a6c16d945465ba00708a4556c";
-    x86_64-linux = "c762b14eb72749b9b400f3b7fff565b6722e0974c1cfb4b6d71b9df9fa364d07";
-    x86_64-darwin = "9b676a67c6ae62b2b8972281934405861539e0c0f1dd5bf892e013d325927746";
-    aarch64-darwin = "098d3673fbca3421021477f0639cb40a54856b35b8af4fa979d0defa1ba75801";
-    headers = "0wcqz4vgkyz1zcd0ybx1ywzv9kz96hdxwk9an98v87nb1gfhk05c";
+  electron_25-bin = mkElectron "25.9.3" {
+    armv7l-linux = "90af008302d62ca1f8629bd3329fafad39d4ebee87ddcc17cee0c79ac053e346";
+    aarch64-linux = "bf1303ee3389574d4769bff7d9de2308d5ce4b92fa240e868b508d9f324b6643";
+    x86_64-linux = "ba94532620d60cff9a7d2a7fdd3d0b0e16b91acc91b60827c12bc3b39c7f650a";
+    x86_64-darwin = "e72a25003b1be5e825fd322fe98eb66282842c3fa6649fcd4abc206811da68af";
+    aarch64-darwin = "d607a884dae70554ea83af84abdb0522fa267b3885465171f05980d917e7559e";
+    headers = "0z918k6bz7kgp7xf9d1kpkgg9jv2s37h8fckymgcwvbsz0ir7sxd";
   };
 
   electron_26-bin = mkElectron "26.3.0" {
