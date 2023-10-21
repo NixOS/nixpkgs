@@ -216,19 +216,19 @@ in rec {
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "unstable-2021-04-04";
+    version = "unstable-2023-10-21";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
-      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+      rev = "f69af5fb5e5ff6a4ae7e30ec91c7e15146ebdf07";
+      sha256 = "sha256-mAe2J81VVrWQKxG3rrAH6oIq47ZFfJtv8OzBiqrr6m8=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
+    for f in extrakto.sh open.sh; do
       wrapProgram $target/scripts/$f \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
+        [ pkgs.fzf pkgs.python3 pkgs.xclip pkgs.wl-copy ]
         )}
     done
 
