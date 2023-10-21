@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
     rm -r $out/share/themes/*/xfwm4/{assets,render_assets.fish}
 
     # move kde related contents to appropriate directories
-    mkdir -p $out/share/{aurorae/themes,color-schemes,Kvantum,plasma,sddm/themes/Nordic}
+    mkdir -p $out/share/{aurorae/themes,color-schemes,Kvantum,plasma,sddm/themes}
     mv -v $out/share/themes/Nordic/kde/aurorae/* $out/share/aurorae/themes/
     mv -v $out/share/themes/Nordic/kde/colorschemes/* $out/share/color-schemes/
     mv -v $out/share/themes/Nordic/kde/konsole $out/share/
     mv -v $out/share/themes/Nordic/kde/kvantum/* $out/share/Kvantum/
     mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
-    mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/Nordic/
+    mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/
     rm -rf $out/share/themes/Nordic/kde
 
     # Replace duplicate files with hardlinks to the first file in each
