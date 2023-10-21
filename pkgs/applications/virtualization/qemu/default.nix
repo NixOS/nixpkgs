@@ -40,6 +40,7 @@
 , nixosTestRunner ? false
 , toolsOnly ? false
 , gitUpdater
+, qemu-utils # for tests attribute
 }:
 
 let
@@ -251,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
     qemu-system-i386 = "bin/qemu-system-i386";
     tests = lib.optionalAttrs (!toolsOnly) {
       qemu-tests = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      qemu-utils-builds = qemu-utils;
     };
     updateScript = gitUpdater {
       # No nicer place to find latest release.
