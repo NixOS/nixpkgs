@@ -12,11 +12,11 @@ By default, `enableParallelBuilding` is enabled as Meson supports parallel build
 
 Controls the flags passed to `meson setup`.
 
-##### `mesonCheckFlags` {#mesoncheckflags}
+### `mesonCheckFlags` {#mesoncheckflags}
 
 Controls the flags passed to `meson test`.
 
-##### `mesonInstallFlags` {#mesoninstallflags}
+### `mesonInstallFlags` {#mesoninstallflags}
 
 Controls the flags passed to `meson install`.
 
@@ -36,10 +36,10 @@ What value to set [`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#c
 
 Disables using Meson’s `configurePhase`.
 
-##### `dontUseMesonCheck` {#dontusemesoncheck}
+### `dontUseMesonCheck` {#dontusemesoncheck}
 
 Disables using Meson’s `checkPhase`.
 
-##### `dontUseMesonInstall` {#dontusemesoninstall}
+### `dontUseMesonInstall` {#dontusemesoninstall}
 
 Disables using Meson’s `installPhase`.
