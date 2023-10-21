@@ -2,8 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , gtk-engine-murrine
+, breeze-icons
+, plasma-framework
+, plasma-workspace
+, qtgraphicaleffects
 , jdupes
-, libsForQt5
 }:
 
 stdenv.mkDerivation rec {
@@ -80,11 +83,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ jdupes ];
 
-  buildInputs = with libsForQt5; [
-    plasma-framework
-    qtgraphicaleffects
-    plasma-workspace
+  buildInputs = [
     breeze-icons
+    plasma-framework
+    plasma-workspace
+    qtgraphicaleffects
   ];
 
   dontWrapQtApps = true;
