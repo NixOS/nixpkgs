@@ -138,6 +138,12 @@ if (loginctlSilent("show-session") == 0) {
     };
 }
 
+sub disableLingerRemoved {
+    return unless scalar @_;
+    dry_print("disabling", "would disable", "lingering for removed user(s) '$_'") foreach @_;
+    doDisableLinger(@_) unless $is_dry;
+}
+
 sub disableLinger {
     return unless scalar @_;
     dry_print("disabling", "would disable", "lingering for user(s) '$_'") foreach @_;
@@ -351,7 +357,7 @@ foreach my $name (keys %usersCur) {
 # `loginctl disable-linger my-deleted-user` is liable to complain "Failed to
 # look up user my-deleted-user: No such process" and fail to remove
 # /var/lib/systemd/linger/my-deleted-user.
-disableLinger(@disableLingerRemoved);
+disableLingerRemoved(@disableLingerRemoved);
 
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
