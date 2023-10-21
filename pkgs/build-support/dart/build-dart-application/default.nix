@@ -18,11 +18,10 @@
 , dartEntryPoints ? null
   # Used when wrapping aot, jit, kernel, and js builds.
   # Set to null to disable wrapping.
-, dartRuntimeCommand ?
-    if dartOutputType == "aot-snapshot" then "${dart}/bin/dartaotruntime"
-    else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then "${dart}/bin/dart"
-    else if dartOutputType == "js" then "${nodejs}/bin/node"
-    else null
+, dartRuntimeCommand ? if dartOutputType == "aot-snapshot" then "${dart}/bin/dartaotruntime"
+  else if (dartOutputType == "jit-snapshot" || dartOutputType == "kernel") then "${dart}/bin/dart"
+  else if dartOutputType == "js" then "${nodejs}/bin/node"
+  else null
 
 , pubspecLockFile ? null
 , vendorHash ? ""
@@ -43,15 +42,15 @@ let
   inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook;
 in
 assert !(builtins.isString dartOutputType && dartOutputType != "") ->
-  throw "dartOutputType must be a non-empty string";
+throw "dartOutputType must be a non-empty string";
 stdenv.mkDerivation (args // {
   inherit pubGetScript dartCompileCommand dartOutputType dartRuntimeCommand
     dartCompileFlags dartJitFlags;
 
-    dartEntryPoints =
-      if (dartEntryPoints != null)
-      then writeText "entrypoints.json" (builtins.toJSON dartEntryPoints)
-      else null;
+  dartEntryPoints =
+    if (dartEntryPoints != null)
+    then writeText "entrypoints.json" (builtins.toJSON dartEntryPoints)
+    else null;
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
     dart
