@@ -2771,7 +2771,8 @@
       sqlalchemy
     ];
     "myq" = ps: with ps; [
-    ]; # missing inputs: python-myq
+      python-myq
+    ];
     "mysensors" = ps: with ps; [
       aiohttp-cors
       janus
@@ -5405,6 +5406,7 @@
     "mullvad"
     "mutesync"
     "my"
+    "myq"
     "mysensors"
     "mystrom"
     "mythicbeastsdns"

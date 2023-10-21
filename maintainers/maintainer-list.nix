@@ -6622,6 +6622,12 @@
     githubId = 4656860;
     name = "Gaute Ravndal";
   };
+  gray-heron = {
+    email = "ave+nix@cezar.info";
+    github = "gray-heron";
+    githubId = 7032646;
+    name = "Cezary Siwek";
+  };
   graysonhead = {
     email = "grayson@graysonhead.net";
     github = "graysonhead";
@@ -18003,6 +18009,12 @@
     github = "tshaynik";
     githubId = 15064765;
     name = "tshaynik";
+  };
+  tsowell = {
+    email = "tom@ldtlb.com";
+    github = "tsowell";
+    githubId = 4044033;
+    name = "Thomas Sowell";
   };
   ttuegel = {
     email = "ttuegel@mailbox.org";

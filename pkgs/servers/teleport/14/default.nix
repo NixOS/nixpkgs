@@ -1,9 +1,9 @@
 { callPackage, ... }@args:
 callPackage ../generic.nix ({
-  version = "14.0.1";
-  hash = "sha256-esQwk2PFnk3/REzLr3ExtzEcUs2q4Tn/2KpfFWAx5uU=";
-  vendorHash = "sha256-lzwrkW0dHxCHBSJjzNhXgq3Av8Zj8xEn3kfTRtT/q04=";
-  yarnHash = "sha256-Y2dVxRyKPLD2xjwr0QqrKHf/4gnMCErmDzievu5zTGg=";
+  version = "14.0.3";
+  hash = "sha256-X+vekYmuTE7n22SH/z2GWO3wnBsIef1GEjR7WOJpjc8=";
+  vendorHash = "sha256-+R6f2HrlN/RLec83YutccDFJW6gq6HXbxoJVtxMgdp8=";
+  yarnHash = "sha256-udM4DNaTGiMkqfkllJjmT+Nk6PNbGUzT34ixQOhmScw=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
