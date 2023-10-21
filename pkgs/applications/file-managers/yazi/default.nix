@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     ''
       wrapProgram $out/bin/yazi \
          --prefix PATH : "${makeBinPath runtimePaths}"
-      installShellCompletion --cmd ${pname} \
+      installShellCompletion --cmd yazi \
         --bash ./config/completions/yazi.bash \
         --fish ./config/completions/yazi.fish \
         --zsh  ./config/completions/_yazi
