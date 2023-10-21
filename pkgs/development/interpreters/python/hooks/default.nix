@@ -107,7 +107,7 @@ in {
     makePythonHook {
       name = "python-catch-conflicts-hook";
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuptools;
+        inherit pythonInterpreter pythonSitePackages;
         catchConflicts=../catch_conflicts/catch_conflicts.py;
       };
     } ./python-catch-conflicts-hook.sh) {};
