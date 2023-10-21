@@ -10195,6 +10195,21 @@ with self; {
     };
   };
 
+  FutureQueue = buildPerlModule {
+    pname = "Future-Queue";
+    version = "0.51";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-Queue-0.51.tar.gz";
+      hash = "sha256-HVAcOpot3/x8YPlvpmlp1AyykuCSBM9t7NHCuLUAPNY=";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ Future ];
+    meta = {
+      description = "A FIFO queue of values that uses L<Future>s";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GamesSolitaireVerify = buildPerlModule {
     pname = "Games-Solitaire-Verify";
     version = "0.2403";
