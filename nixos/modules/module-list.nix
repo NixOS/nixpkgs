@@ -777,6 +777,7 @@
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix
+  ./services/misc/whisparr.nix
   ./services/misc/xmr-stak.nix
   ./services/misc/xmrig.nix
   ./services/misc/zoneminder.nix
