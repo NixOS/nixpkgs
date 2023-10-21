@@ -19,6 +19,12 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       };
     };
   in {
+    users.mutableUsers = lib.mkDefault false;
+    users.users.on-boot-linger = {
+      isNormalUser = true;
+      linger = true;
+    };
+
     specialisation.mutable.configuration = lib.mkMerge [
       common
       { users.mutableUsers = true; }
@@ -47,6 +53,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         machine.succeed("loginctl enable-linger no-linger")
         machine.fail("test -e /var/lib/systemd/linger/yes-linger")
         machine.succeed("test -e /var/lib/systemd/linger/no-linger")
+
+    def checkSession():
+        machine.wait_for_unit("multi-user.target")
+        machine.succeed("test -e /var/lib/systemd/linger/on-boot-linger")
+        state = machine.succeed("loginctl show-user --value --property=State on-boot-linger").strip()
+        assert state in ("lingering", "active"), f"expected state to be 'lingering' or 'active' but got '{state}'"
+        machine.wait_for_unit("user@$(id -u on-boot-linger)")
+
+    with subtest("User lingering settings apply successfully on boot"):
+        checkSession()
 
     with subtest("Lingering settings for new users are enforced in mutable mode"):
         machine.fail("test -e /var/lib/systemd/linger/yes-linger")
@@ -128,5 +144,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
             "/run/booted-system/specialisation/removed-mutable/bin/switch-to-configuration test"
         )
         machine.succeed("test -e /var/lib/systemd/linger/extra-linger")
+
+    with subtest("User lingering settings reapply successfully on boot"):
+        machine.execute("loginctl disable-linger on-boot-linger")
+        # Since the `on-boot-linger` account might not be present right now
+        machine.succeed("rm -f /var/lib/systemd/linger/on-boot-linger")
+        machine.shutdown()
+        machine.start()
+        checkSession()
   '';
 })
