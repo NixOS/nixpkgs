@@ -1,0 +1,2 @@
+- [`lib.lists.foldl'`](https://nixos.org/manual/nixpkgs/stable#function-library-lib.lists.foldl-prime) now always evaluates the initial accumulator argument first.
+  If you depend on the lazier behavior, consider using [`lib.lists.foldl`](https://nixos.org/manual/nixpkgs/stable#function-library-lib.lists.foldl) or [`builtins.foldl'`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-foldl') instead.

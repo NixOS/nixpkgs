@@ -1,0 +1,1 @@
+- The `extend` function of `llvmPackages` has been removed due it coming from the `tools` attrset thus only extending the `tool` attrset. A possible replacement is to construct the set from `libraries` and `tools`, or patch nixpkgs.

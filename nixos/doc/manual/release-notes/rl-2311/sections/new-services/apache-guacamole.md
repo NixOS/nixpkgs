@@ -1,0 +1,1 @@
+- [Apache Guacamole](https://guacamole.apache.org/), a cross-platform, clientless remote desktop gateway. Available as [services.guacamole-server](#opt-services.guacamole-server.enable) and [services.guacamole-client](#opt-services.guacamole-client.enable) services.

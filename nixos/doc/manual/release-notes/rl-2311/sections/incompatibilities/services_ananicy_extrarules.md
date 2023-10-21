@@ -1,0 +1,1 @@
+- The `services.ananicy.extraRules` option now has the type of `listOf attrs` instead of `string`.

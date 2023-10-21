@@ -1,0 +1,1 @@
+- The `hail` NixOS module was removed, as `hail` was unmaintained since 2017.

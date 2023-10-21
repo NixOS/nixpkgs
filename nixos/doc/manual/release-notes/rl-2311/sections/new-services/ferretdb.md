@@ -1,0 +1,1 @@
+- [ferretdb](https://www.ferretdb.io/), an open-source proxy, converting the MongoDB 6.0+ wire protocol queries to PostgreSQL or SQLite. Available as [services.ferretdb](options.html#opt-services.ferretdb.enable).

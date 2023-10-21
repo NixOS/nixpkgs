@@ -1,0 +1,1 @@
+- [LibreNMS](https://www.librenms.org), a auto-discovering PHP/MySQL/SNMP based network monitoring. Available as [services.librenms](#opt-services.librenms.enable).

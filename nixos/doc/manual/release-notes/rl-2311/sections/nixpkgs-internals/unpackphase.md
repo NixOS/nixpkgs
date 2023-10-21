@@ -1,0 +1,1 @@
+- The use of `sourceRoot = "source";`, `sourceRoot = "source/subdir";`, and similar lines in package derivations using the default `unpackPhase` is deprecated as it requires `unpackPhase` to always produce a directory named "source". Use `sourceRoot = src.name`, `sourceRoot = "${src.name}/subdir";`, or `setSourceRoot = "sourceRoot=$(echo */subdir)";` or similar instead.

@@ -1,0 +1,1 @@
+- `varnish` was upgraded from 7.2.x to 7.4.x, see https://varnish-cache.org/docs/7.3/whats-new/upgrading-7.3.html and https://varnish-cache.org/docs/7.4/whats-new/upgrading-7.4.html for upgrade notes. The current LTS version is still offered as `varnish60`.

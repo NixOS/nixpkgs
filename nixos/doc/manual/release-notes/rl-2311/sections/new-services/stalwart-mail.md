@@ -1,0 +1,1 @@
+- [stalwart-mail](https://stalw.art), an all-in-one email server (SMTP, IMAP, JMAP). Available as [services.stalwart-mail](#opt-services.stalwart-mail.enable).

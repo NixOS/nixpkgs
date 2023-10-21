@@ -1,0 +1,1 @@
+- Support for WiFi6 (IEEE 802.11ax) and WPA3-SAE-PK was enabled in the `hostapd` package, along with a significant rework of the hostapd module.

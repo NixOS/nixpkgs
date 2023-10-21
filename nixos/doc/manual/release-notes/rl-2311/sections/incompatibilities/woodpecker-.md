@@ -1,0 +1,1 @@
+- The `woodpecker-*` CI packages have been updated to 1.0.0. This release is wildly incompatible with the 0.15.X versions that were previously packaged. Please read [upstream's documentation](https://woodpecker-ci.org/docs/next/migrations#100) to learn how to update your CI configurations.

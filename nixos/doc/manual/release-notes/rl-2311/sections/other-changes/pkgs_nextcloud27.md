@@ -1,0 +1,5 @@
+- The latest available version of Nextcloud is v27 (available as `pkgs.nextcloud27`). The installation logic is as follows:
+  - If [`services.nextcloud.package`](#opt-services.nextcloud.package) is specified explicitly, this package will be installed (**recommended**)
+  - If [`system.stateVersion`](#opt-system.stateVersion) is >=23.11, `pkgs.nextcloud27` will be installed by default.
+  - If [`system.stateVersion`](#opt-system.stateVersion) is >=23.05, `pkgs.nextcloud26` will be installed by default.
+  - Please note that an upgrade from v25 (or older) to v27 directly is not possible. Please upgrade to `nextcloud26` (or earlier) first. Nextcloud prohibits skipping major versions while upgrading. You can upgrade by declaring [`services.nextcloud.package = pkgs.nextcloud26;`](options.html#opt-services.nextcloud.package).

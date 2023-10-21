@@ -1,0 +1,1 @@
+- [acme-dns](https://github.com/joohoi/acme-dns), a limited DNS server to handle ACME DNS challenges easily and securely. Available as [services.acme-dns](#opt-services.acme-dns.enable).

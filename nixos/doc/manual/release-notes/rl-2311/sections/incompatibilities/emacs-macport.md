@@ -1,0 +1,1 @@
+- Emacs macport version 29 was introduced.

@@ -1,0 +1,1 @@
+- `programs.gnupg` now has the option `agent.settings` to set verbatim config values in `/etc/gnupg/gpg-agent.conf`.

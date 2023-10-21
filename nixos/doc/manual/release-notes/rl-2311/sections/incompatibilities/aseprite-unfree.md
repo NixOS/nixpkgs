@@ -1,0 +1,1 @@
+- The `aseprite-unfree` package has been upgraded from 1.2.16.3 to 1.2.40. The free version of aseprite has been dropped because it is EOL and the package attribute now points to the unfree version. A maintained fork of the last free version of Aseprite, named 'LibreSprite', is available in the `libresprite` package.

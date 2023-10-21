@@ -1,0 +1,1 @@
+- [osquery](https://www.osquery.io/), a SQL powered operating system instrumentation, monitoring, and analytics.

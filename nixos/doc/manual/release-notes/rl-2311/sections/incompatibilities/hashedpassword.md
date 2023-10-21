@@ -1,0 +1,1 @@
+- The `users.users.<name>.passwordFile` has been renamed to `users.users.<name>.hashedPasswordFile` to avoid possible confusions. The option is in fact the file-based version of `hashedPassword`, not `password`, and expects a file containing the {manpage}`crypt(3)` hash of the user password.

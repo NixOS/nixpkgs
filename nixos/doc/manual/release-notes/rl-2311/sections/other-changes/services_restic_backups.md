@@ -1,0 +1,1 @@
+- `services.restic.backups` now adds wrapper scripts to your system path, which set the same environment variables as the service, so restic operations can easily be run from the command line. This behavior can be disabled by setting `createWrapper` to `false`, per backup configuration.

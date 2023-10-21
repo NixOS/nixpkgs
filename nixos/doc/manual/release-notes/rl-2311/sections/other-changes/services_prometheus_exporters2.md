@@ -1,0 +1,1 @@
+- `services.prometheus.exporters` has a new [exporter](https://github.com/hipages/php-fpm_exporter) to monitor PHP-FPM processes, see [#240394](https://github.com/NixOS/nixpkgs/pull/240394) for more details.

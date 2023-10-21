@@ -1,0 +1,1 @@
+- `gitlab` installations created or updated between versions \[15.11.0, 15.11.2] have an incorrect database schema. This will become a problem when upgrading to `gitlab` >=16.2.0. A workaround for affected users can be found in the [GitLab docs](https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later).

@@ -1,0 +1,1 @@
+- [Typesense](https://github.com/typesense/typesense), a fast, typo-tolerant search engine for building delightful search experiences. Available as [services.typesense](#opt-services.typesense.enable).

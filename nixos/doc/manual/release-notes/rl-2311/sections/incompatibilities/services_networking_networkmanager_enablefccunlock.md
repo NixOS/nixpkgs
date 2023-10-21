@@ -1,0 +1,1 @@
+- The option `services.networking.networkmanager.enableFccUnlock` was removed in favor of `networking.networkmanager.fccUnlockScripts`, which allows specifying unlock scripts explicitly. The previous option simply did enable all unlock scripts bundled with ModemManager, which is risky, and didn't allow using vendor-provided unlock scripts at all.

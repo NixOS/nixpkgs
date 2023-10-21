@@ -1,0 +1,1 @@
+- [hddfancontrol](https://github.com/desbma/hddfancontrol), a service to regulate fan speeds based on hard drive temperature. Available as [services.hddfancontrol](#opt-services.hddfancontrol.enable).

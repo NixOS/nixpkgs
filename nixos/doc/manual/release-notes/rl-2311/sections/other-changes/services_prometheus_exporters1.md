@@ -1,0 +1,1 @@
+- `services.prometheus.exporters` has a new exporter to monitor electrical power consumption based on PowercapRAPL sensor called [Scaphandre](https://github.com/hubblo-org/scaphandre), see [#239803](https://github.com/NixOS/nixpkgs/pull/239803) for more details.

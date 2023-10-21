@@ -1,0 +1,1 @@
+- Suricata was upgraded from 6.0 to 7.0 and no longer considers HTTP/2 support as experimental, see [upstream release notes](https://forum.suricata.io/t/suricata-7-0-0-released/3715) for more details.

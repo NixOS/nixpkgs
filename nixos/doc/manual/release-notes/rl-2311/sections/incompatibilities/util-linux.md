@@ -1,0 +1,1 @@
+- `util-linux` is now supported on Darwin and is no longer an alias to `unixtools`. Use the `unixtools.util-linux` package for access to the Apple variants of the utilities.

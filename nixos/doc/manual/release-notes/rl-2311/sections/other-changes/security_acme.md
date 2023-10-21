@@ -1,0 +1,1 @@
+- Certificate generation via the `security.acme` now limits the concurrent number of running certificate renewals and generation jobs, to avoid spiking resource usage when processing many certificates at once. The limit defaults to *5* and can be adjusted via `maxConcurrentRenewals`. Setting it to *0* disables the limits altogether.
