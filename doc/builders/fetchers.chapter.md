@@ -1,12 +1,21 @@
 # Fetchers {#chap-pkgs-fetchers}
 
 Building software with Nix often requires downloading source code and other files from the internet.
-`nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
+To this end, Nixpkgs provides *fetchers*: functions to obtain remote sources via various protocols and services.
+
+As opposed to built-in fetchers such as [`builtins.fetchTarball`][https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchTarball], which return a store path, Nixpkgs fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs).
+This means that files are downloaded at build time instead of at evaluation time, and are kept in the Nix store.
+The following table shows an overview of the differences:
+
+| Fetchers | Download | Output | Cache |
+|-|-|-|-|
+| `builtins.fetch*` | evaluation time | store path | `~/.cache/nix` |
+| `lib.fetch*` | build time | fixed output derivation | `/nix/store` |
+
+This significantly reduces the time needed to evaluate the entirety of Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
+For these reasons, built-in fetchers are not allowed in Nixpkgs source code.
 
 ## Caveats {#chap-pkgs-fetchers-caveats}
-
-Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
-Nix can reuse the downloaded files via the hash of the resulting derivation.
 
 The fact that the hash belongs to the Nix derivation output and not the file itself can lead to confusion.
 For example, consider the following fetcher:
