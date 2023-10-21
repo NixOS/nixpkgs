@@ -96,11 +96,7 @@ self: super: {
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
-  inherit (let
-    hls_overlay = lself: lsuper: {
-      ghc-lib-parser = lself.ghc-lib-parser_9_6_2_20230523;
-      ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
-      Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
+  haskell-language-server = dontCheck (super.haskell-language-server.overrideScope (lself: lsuper: {
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -111,26 +107,7 @@ self: super: {
     # otherwise we have different versions of ghc-paths
     # around which have the same abi-hash, which can lead to confusions and conflicts.
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-  };
-  in lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-    haskell-language-server = allowInconsistentDependencies (dontCheck super.haskell-language-server);
-    # Tests fail due to the newly-build fourmolu not being in PATH
-    # https://github.com/fourmolu/fourmolu/issues/231
-    fourmolu = dontCheck super.fourmolu_0_14_0_0;
-    ormolu = super.ormolu_0_7_2_0;
-    hlint = super.hlint_3_6_1;
-    stylish-haskell = super.stylish-haskell_0_14_5_0;
-  })
-    haskell-language-server
-  # HLS from 2.3 needs at least formolu 0.14.
-  # This means we need to bump a lot of other tools, too, because they all us ghc-lib-parser
-  # We do this globally to prevent inconsistent formatting or lints between hls and the command line tools.
-    fourmolu
-    ormolu
-    hlint
-    stylish-haskell;
-
-  fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
+  }));
 
   # hasn't bumped upper bounds
   # test fails: "floskell-test: styles/base.md: openBinaryFile: does not exist (No such file or directory)"

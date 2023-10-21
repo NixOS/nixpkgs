@@ -91,6 +91,12 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
+  # Tests fail due to the newly-build fourmolu not being in PATH
+  # https://github.com/fourmolu/fourmolu/issues/231
+  fourmolu = dontCheck super.fourmolu_0_14_0_0;
+  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
+  hlint = super.hlint_3_6_1;
+
   # v0.1.6 forbids base >= 4.18
   singleton-bool = doDistribute super.singleton-bool_0_1_7;
 
@@ -166,10 +172,6 @@ self: super: {
       hls-floskell-plugin = null;
     };
 
-  fourmolu = super.fourmolu_0_14_0_0;
-  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
-  stylish-haskell = super.stylish-haskell_0_14_5_0;
-
   # Newer version of servant required for GHC 9.6
   servant = self.servant_0_20_1;
   servant-server = self.servant-server_0_20;
@@ -204,8 +206,6 @@ self: super: {
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
    HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
   ]) super.ghc-exactprint_1_7_0_1);
-
-  hlint = super.hlint_3_6_1;
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin

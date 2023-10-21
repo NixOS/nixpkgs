@@ -1143,6 +1143,7 @@ dont-distribute-packages:
  - distributed-process-systest
  - distributed-process-task
  - distributed-process-tests
+ - distributed-process-zookeeper
  - distributed-static
  - distribution-plot
  - dixi
@@ -4299,4 +4300,5 @@ dont-distribute-packages:
  - zoom-cache
  - zoom-cache-pcm
  - zoom-cache-sndfile
+ - zoovisitor
  - zuramaru
