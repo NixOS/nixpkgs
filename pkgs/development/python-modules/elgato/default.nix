@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "4.0.1";
+  version = "5.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-elgato";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kyFnc/lMxgYy8s/gAP5vpEPV8a+dphOummr6G7deGQ4=";
+    hash = "sha256-TI5wu2FYVUMvgDkbktcwPLnTSD8XUSy8qwOCdrsiopk=";
   };
 
   nativeBuildInputs = [
