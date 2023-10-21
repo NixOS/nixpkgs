@@ -107,6 +107,61 @@ rec {
         }
       else result);
 
+  /*
+    Apply arbitrary customization to an overridable attribute set and its overriding results.
+
+    This function apply the specified customization *modify*
+    to an [overridable](#chap-overrides) attribute set *overridable*
+    and update common attributes that perform overriding
+    to automatically re-apply the customization to future overriding results.
+
+    Attributes [`override`](#sec-pkg-override),
+    [`overrideAttributes`](#sec-pkg-overrideAttrs) and
+    [`overrideDerivation`](#sec-pkg-overrideDerivation) are chosen
+    to cover most of the use cases.
+
+    Example:
+      helloWithAns1 = lib.extendDerivation true { ans = 42; } pkgs.hello
+
+      helloWithAns1.ans
+      => 42
+      (helloWithAns1.override { }).ans
+      => error: attribute 'ans' missing
+
+      helloWithAns2 = lib.applyToOverridable (lib.extendDerivation true { ans = 42; }) pkgs.hello
+
+      helloWithAns2.ans
+      => 42
+      (helloWithAns2.override { }).ans
+      => 42
+
+      helloFive1 = lib.extendDerivation (2 + 2 == 5) { } pkgs.hello
+
+      helloFive1
+      => error: assertion 'condition' failed
+      helloFive1.override { }
+      => «derivation /nix/store/4f4rwzm6s707ify0yqgib2lckp4dw8as-hello-2.12.1.drv»
+
+      helloFive2 = lib.applyToOverridable (lib.extendDerivation (2 + 2 == 5) { }) pkgs.hello
+
+      helloFive2
+      => error: assertion 'condition' failed
+      helloFive2.override { }
+      => error: assertion 'condition' failed
+
+    Type:
+      applyToOverridable :: (AttrSet -> AttrSet) -> AttrSet -> AttrSet
+  */
+  applyToOverridable = modify: overridable:
+    let
+      r = modify overridable;
+    in
+    r // {
+      ${if r ? override then "override" else null} = lib.mirrorFunctionArgs r.override (fdrv: applyToOverridable modify (r.override fdrv));
+      ${if r ? overrideAttrs then "overrideAttrs" else null} = fdrv: applyToOverridable modify (r.overrideAttrs fdrv);
+      ${if r ? overrideDerivation then "overrideDerivation" else null} = fdrv: applyToOverridable modify (r.overrideDerivation fdrv);
+    };
+
 
   /* Call the package function in the file `fn` with the required
     arguments automatically.  The function is called with the

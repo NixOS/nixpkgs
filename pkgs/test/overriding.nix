@@ -31,6 +31,43 @@ let
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
         expected = true;
       })
+      ({
+        name = "extendDerivation-passthru";
+        expr = helloWithAns.ans == 42;
+        expected = true;
+      })
+    ]
+    ++ getTestsApplyToOverridable { }
+    ;
+
+  getTestsApplyToOverridable =
+    { applyToOverridable ? lib.applyToOverridable
+    , fname ? "applyToOverridable"
+    }:
+    let
+      helloWithAnsOverridable = applyToOverridable (lib.extendDerivation true { ans = 42; }) pkgs.hello;
+    in
+    [
+      ({
+        name = fname + "-self";
+        expr = helloWithAnsOverridable.ans == 42;
+        expected = true;
+      })
+      ({
+        name = fname + "-override";
+        expr = (helloWithAnsOverridable.override { stdenv = pkgs.clangStdenv; }).ans == 42;
+        expected = true;
+      })
+      ({
+        name = fname + "-overrideAttrs";
+        expr = (helloWithAnsOverridable.overrideAttrs (previousAttrs: { FOO = "bar"; })).ans == 42;
+        expected = true;
+      })
+      ({
+        name = fname + "-overrideDerivation";
+        expr = (helloWithAnsOverridable.overrideDerivation (previousDrv: { FOO = "bar"; })).ans == 42;
+        expected = true;
+      })
     ];
 
   addEntangled = origOverrideAttrs: f:
@@ -55,6 +92,8 @@ let
   overrides1 = example.overrideAttrs (_: super: { pname = "a-better-${super.pname}"; });
 
   repeatedOverrides = overrides1.overrideAttrs (_: super: { pname = "${super.pname}-with-blackjack"; });
+
+  helloWithAns = lib.extendDerivation true { ans = 42; } pkgs.hello;
 in
 
 stdenvNoCC.mkDerivation {
