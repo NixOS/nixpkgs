@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-pvoutput";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6oVACUnK8WVlEx047CUXmSXQ0+M3xnSvyMHw5Wttk7M=";
+    hash = "sha256-SvsrvGwIAlj/8hdk90+rxigVrx6n3YInvF/4eux2H04=";
   };
 
   nativeBuildInputs = [
