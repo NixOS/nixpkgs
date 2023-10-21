@@ -224,11 +224,11 @@ in
         extraPrefs = cfg.autoConfig;
         extraNativeMessagingHosts =
           old.extraNativeMessagingHosts or []
-          ++ optional nmh.ff2mpv ff2mpv
-          ++ optional nmh.euwebid web-eid-app
-          ++ optional nmh.gsconnect gnomeExtensions.gsconnect
-          ++ optional nmh.jabref jabref
-          ++ optional nmh.passff passff-host;
+          ++ optional nmh.ff2mpv pkgs.ff2mpv
+          ++ optional nmh.euwebid pkgs.web-eid-app
+          ++ optional nmh.gsconnect pkgs.gnomeExtensions.gsconnect
+          ++ optional nmh.jabref pkgs.jabref
+          ++ optional nmh.passff pkgs.passff-host;
         cfg = let
           # copy-pasted from the wrapper; TODO: figure out fix
           applicationName = cfg.package.binaryName or (lib.getName cfg.package);
