@@ -1,0 +1,1 @@
+- [wayfire](https://wayfire.org), A modular and extensible wayland compositor. Available as [programs.wayfire](#opt-programs.wayfire.enable).

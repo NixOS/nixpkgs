@@ -1,0 +1,1 @@
+- A new option was added to the virtualisation module that enables specifying explicitly named network interfaces in QEMU VMs. The existing `virtualisation.vlans` is still supported for cases where the name of the network interface is irrelevant.

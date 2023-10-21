@@ -1,0 +1,1 @@
+- `rome` was removed because it is no longer maintained and is succeeded by `biome`.

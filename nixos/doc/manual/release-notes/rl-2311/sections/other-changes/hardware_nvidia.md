@@ -1,0 +1,1 @@
+- `hardware.nvidia` gained `datacenter` options for enabling NVIDIA Data Center drivers and configuration of NVLink/NVSwitch topologies through `nv-fabricmanager`.

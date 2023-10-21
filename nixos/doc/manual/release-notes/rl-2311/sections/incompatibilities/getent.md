@@ -1,0 +1,1 @@
+- `getent` has been moved from `glibc`'s `bin` output to its own dedicated output, reducing closure size for many dependents. Dependents using the `getent` alias should not be affected; others should move from using `glibc.bin` or `getBin glibc` to `getent` (which also improves compatibility with non-glibc platforms).

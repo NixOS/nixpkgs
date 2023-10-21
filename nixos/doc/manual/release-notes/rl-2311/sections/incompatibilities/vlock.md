@@ -1,0 +1,1 @@
+- The `vlock` program from the `kbd` package has been moved into its own package output and should now be referenced explicitly as `kbd.vlock` or replaced with an alternative such as the standalone `vlock` package or `physlock`.

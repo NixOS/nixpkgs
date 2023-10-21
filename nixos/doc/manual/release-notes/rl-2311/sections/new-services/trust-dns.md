@@ -1,0 +1,1 @@
+- [trust-dns](https://trust-dns.org/), a Rust based DNS server built to be safe and secure from the ground up. Available as [services.trust-dns](#opt-services.trust-dns.enable).

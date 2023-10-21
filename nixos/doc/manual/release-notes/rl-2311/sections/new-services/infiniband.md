@@ -1,0 +1,1 @@
+- hardware/infiniband.nix adds infiniband subnet manager support using an [opensm](https://github.com/linux-rdma/opensm) systemd-template service, instantiated on card guids. The module also adds kernel modules and cli tooling to help administrators debug and measure performance. Available as [hardware.infiniband.enable](#opt-hardware.infiniband.enable).

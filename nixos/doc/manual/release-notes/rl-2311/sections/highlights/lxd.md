@@ -1,0 +1,1 @@
+- LXD now supports virtual machine instances to complement the existing container support

@@ -1,0 +1,1 @@
+- The Cinnamon module now enables XDG desktop integration by default. If you are experiencing collisions related to xdg-desktop-portal-gtk you can safely remove `xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];` from your NixOS configuration.

@@ -1,0 +1,1 @@
+- `llvmPackages_rocm` has been moved to `rocmPackages.llvm`.

@@ -1,0 +1,1 @@
+- `programs.nano.nanorc` and `programs.nano.syntaxHighlight` no longer have an effect unless `programs.nano.enable` is set to true which is the default.

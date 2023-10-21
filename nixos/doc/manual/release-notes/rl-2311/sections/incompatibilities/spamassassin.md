@@ -1,0 +1,1 @@
+- `spamassassin` no longer supports the `Hashcash` module. The module needs to be removed from the `loadplugin` list if it was copied over from the default `initPreConf` option.

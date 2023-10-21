@@ -1,0 +1,1 @@
+- The `cawbird` package is dropped from nixpkgs, as it got broken by the Twitter API closing down and has been abandoned upstream.

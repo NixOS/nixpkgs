@@ -1,0 +1,1 @@
+- The module `services.calibre-server` has new options to configure the `host`, `port`, `auth.enable`, `auth.mode` and `auth.userDb` path, see [#216497](https://github.com/NixOS/nixpkgs/pull/216497/) for more details.

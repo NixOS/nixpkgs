@@ -1,0 +1,1 @@
+- Emacs mainline version 29 was introduced. This new version includes many major additions, most notably `tree-sitter` support (enabled by default) and the pgtk variant (useful for Wayland users), which is available under the attribute `emacs29-pgtk`.

@@ -1,0 +1,1 @@
+- `services.keyd` changed API. Now you can create multiple configuration files.

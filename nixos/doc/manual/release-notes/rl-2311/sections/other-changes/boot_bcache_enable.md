@@ -1,0 +1,1 @@
+- New `boot.bcache.enable` (default enabled) allows completely removing `bcache` mount support.

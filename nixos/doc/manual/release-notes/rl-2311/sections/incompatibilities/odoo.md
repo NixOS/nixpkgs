@@ -1,0 +1,1 @@
+- `odoo` now defaults to 16, updated from 15.

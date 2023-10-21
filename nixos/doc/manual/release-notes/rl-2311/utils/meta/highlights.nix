@@ -1,0 +1,10 @@
+[
+  "foundation.md"
+  "hostapd.md"
+  "lxd.md"
+  "nixos-rebuild.md"
+  "systemd.md"
+  "sudo-rs.md"
+  "rocm.md"
+  "users.md"
+]

@@ -1,0 +1,1 @@
+- `services.ddclient` has been removed on the request of the upstream maintainer because it is unmaintained and has bugs. Please switch to a different software like `inadyn` or `knsupdate`.

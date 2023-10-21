@@ -1,0 +1,1 @@
+- `programs.gnupg.agent.pinentryFlavor` is now set in `/etc/gnupg/gpg-agent.conf`, and will no longer take precedence over a `pinentry-program` set in `~/.gnupg/gpg-agent.conf`.

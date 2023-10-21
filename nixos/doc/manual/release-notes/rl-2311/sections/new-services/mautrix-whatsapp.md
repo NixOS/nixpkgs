@@ -1,0 +1,1 @@
+- [mautrix-whatsapp](https://docs.mau.fi/bridges/go/whatsapp/index.html) A Matrix-WhatsApp puppeting bridge

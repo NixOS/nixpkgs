@@ -1,0 +1,1 @@
+- `python3.pkgs.sequoia` was removed in favor of `python3.pkgs.pysequoia`. The latter package is based on upstream's dedicated repository for sequoia's Python bindings, where the Python bindings from [gitlab:sequoia-pgp/sequoia](https://gitlab.com/sequoia-pgp/sequoia) were removed long ago.

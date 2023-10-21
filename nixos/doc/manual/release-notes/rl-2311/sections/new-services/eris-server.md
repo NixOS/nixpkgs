@@ -1,0 +1,1 @@
+- [eris-server](https://codeberg.org/eris/eris-go). [ERIS](https://eris.codeberg.page/) is an encoding for immutable storage and this server provides block exchange as well as content decoding over HTTP and through a FUSE file-system. Available as [services.eris-server](#opt-services.eris-server.enable).

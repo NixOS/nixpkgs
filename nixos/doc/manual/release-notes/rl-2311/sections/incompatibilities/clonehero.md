@@ -1,0 +1,1 @@
+- The latest version of `clonehero` now stores custom content in `~/.clonehero`. See the [migration instructions](https://clonehero.net/2022/11/29/v23-to-v1-migration-instructions.html). Typically, these content files would exist along side the binary, but the previous build used a wrapper script that would store them in `~/.config/unity3d/srylain Inc_/Clone Hero`.

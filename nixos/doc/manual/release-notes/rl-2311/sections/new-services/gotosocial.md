@@ -1,0 +1,1 @@
+- [GoToSocial](https://gotosocial.org/), an ActivityPub social network server, written in Golang. Available as [services.gotosocial](#opt-services.gotosocial.enable).

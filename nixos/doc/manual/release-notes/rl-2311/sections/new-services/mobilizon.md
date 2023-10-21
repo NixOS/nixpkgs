@@ -1,0 +1,1 @@
+- [Mobilizon](https://joinmobilizon.org/), a Fediverse platform for publishing events.

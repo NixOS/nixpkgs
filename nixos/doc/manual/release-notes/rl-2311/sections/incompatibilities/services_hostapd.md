@@ -1,0 +1,5 @@
+- The `services.hostapd` module was rewritten to support `passwordFile` like options, WPA3-SAE, and management of multiple interfaces. This breaks compatibility with older configurations.
+  - `hostapd` is now started with additional systemd sandbox/hardening options for better security.
+  - `services.hostapd.interface` was replaced with a per-radio and per-bss configuration scheme using [services.hostapd.radios](#opt-services.hostapd.radios).
+  - `services.hostapd.wpa` has been replaced by [services.hostapd.radios.&lt;name&gt;.networks.&lt;name&gt;.authentication.wpaPassword](#opt-services.hostapd.radios._name_.networks._name_.authentication.wpaPassword) and [services.hostapd.radios.&lt;name&gt;.networks.&lt;name&gt;.authentication.saePasswords](#opt-services.hostapd.radios._name_.networks._name_.authentication.saePasswords) which configure WPA2-PSK and WP3-SAE respectively.
+  - The default authentication has been changed to WPA3-SAE. Options for other (legacy) schemes are still available.

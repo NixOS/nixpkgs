@@ -1,0 +1,1 @@
+- The default `kops` version is now 1.28.0 and support for 1.25 and older has been dropped.

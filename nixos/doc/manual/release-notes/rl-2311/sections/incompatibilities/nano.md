@@ -1,0 +1,1 @@
+- `nano` was removed from `environment.defaultPackages`. To not leave systems without a editor, now `programs.nano.enable` is enabled by default.

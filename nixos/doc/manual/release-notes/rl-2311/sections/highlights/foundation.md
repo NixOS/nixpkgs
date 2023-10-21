@@ -1,0 +1,1 @@
+- FoundationDB now defaults to major version 7.

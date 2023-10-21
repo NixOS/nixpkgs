@@ -1,0 +1,1 @@
+- `dagger` was removed because using a package called `dagger` and packaging it from source violates their trademark policy.

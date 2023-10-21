@@ -1,0 +1,1 @@
+- `services.nginx` gained a `defaultListen` option at server-level with support for PROXY protocol listeners, also `proxyProtocol` is now exposed in `services.nginx.virtualHosts.<name>.listen` option. It is now possible to run PROXY listeners and non-PROXY listeners at a server-level, see [#213510](https://github.com/NixOS/nixpkgs/pull/213510/) for more details.
