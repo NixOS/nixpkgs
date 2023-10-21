@@ -34,17 +34,43 @@ let
     }
   '';
 
-  openCommand = name: fs:
-    let
-      # we need only unlock one device manually, and cannot pass multiple at once
-      # remove this adaptation when bcachefs implements mounting by filesystem uuid
-      # also, implement automatic waiting for the constituent devices when that happens
-      # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
-      firstDevice = head (splitString ":" fs.device);
-    in
-      ''
-        tryUnlock ${name} ${firstDevice}
+  # we need only unlock one device manually, and cannot pass multiple at once
+  # remove this adaptation when bcachefs implements mounting by filesystem uuid
+  # also, implement automatic waiting for the constituent devices when that happens
+  # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
+  firstDevice = fs: head (splitString ":" fs.device);
+
+  openCommand = name: fs: ''
+    tryUnlock ${name} ${firstDevice fs}
+  '';
+
+  mkUnits = prefix: name: fs: let
+    mountUnit = "${utils.escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint))}.mount";
+    device = firstDevice fs;
+    deviceUnit = "${utils.escapeSystemdPath device}.device";
+  in {
+    name = "unlock-bcachefs-${utils.escapeSystemdPath fs.mountPoint}";
+    value = {
+      description = "Unlock bcachefs for ${fs.mountPoint}";
+      requiredBy = [ mountUnit ];
+      before = [ mountUnit ];
+      bindsTo = [ deviceUnit ];
+      after = [ deviceUnit ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecCondition = "${pkgs.bcachefs-tools}/bin/bcachefs unlock -c \"${device}\"";
+        Restart = "on-failure";
+        RestartMode = "direct";
+        # Ideally, this service would lock the key on stop.
+        # As is, RemainAfterExit doesn't accomplish anything.
+        RemainAfterExit = true;
+      };
+      script = ''
+        ${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"
       '';
+    };
+  };
 
 in
 
@@ -59,6 +85,8 @@ in
 
       # use kernel package with bcachefs support until it's in mainline
       boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
+
+      systemd.services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
     }
 
     (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
@@ -79,6 +107,8 @@ in
       '';
 
       boot.initrd.postDeviceCommands = commonFunctions + concatStrings (mapAttrsToList openCommand bootFs);
+
+      boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
     })
   ]);
 }

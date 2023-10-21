@@ -918,6 +918,10 @@ in {
     enableOCR = true;
     preBootCommands = ''
       machine.start()
+      # Enter it wrong once
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("wrong\n")
+      # Then enter it right.
       machine.wait_for_text("enter passphrase for ")
       machine.send_chars("password\n")
     '';
