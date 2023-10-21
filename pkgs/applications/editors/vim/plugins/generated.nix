@@ -4080,12 +4080,12 @@ final: prev:
 
   haskell-tools-nvim = buildNeovimPlugin {
     pname = "haskell-tools.nvim";
-    version = "2023-10-20";
+    version = "2023-10-21";
     src = fetchFromGitHub {
       owner = "MrcJkb";
       repo = "haskell-tools.nvim";
-      rev = "407fe7098f1815613f8e82325c41e2a8728e35de";
-      sha256 = "1zdbkrqa5h5hhy3vkk5g1gb2mlsg17ikii5xjd5j7vsv2slxs6mw";
+      rev = "5cb31c5553862e15ce8a4a73ed2698ad42323020";
+      sha256 = "13hhlqg5fn9iwhrrfq2k77n5hzk2r9d32izhpx5015rbxn8cc3fv";
     };
     meta.homepage = "https://github.com/MrcJkb/haskell-tools.nvim/";
   };
