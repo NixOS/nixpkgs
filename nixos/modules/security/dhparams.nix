@@ -163,7 +163,9 @@ in {
           # TODO: Ideally this would be removing the *former* cfg.path, though
           # this does not seem really important as changes to it are quite
           # unlikely
-          rmdir --ignore-fail-on-non-empty ${cfg.path}
+          if ! mountpoint -q "${cfg.path}"; then
+            rmdir --ignore-fail-on-non-empty ${cfg.path}
+          fi
         '';
       };
     } // lib.mapAttrs' (name: { bits, path, ... }: lib.nameValuePair "dhparams-gen-${name}" {
