@@ -15,12 +15,12 @@ buildPythonPackage rec {
   version = "2.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-r0LZS8TXux1mzzXBTSu+x5sxUZOCzW7poKG3dQ2A6No=";
   };
 
@@ -45,7 +45,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "twentemilieu" ];
+  pythonImportsCheck = [
+    "twentemilieu"
+  ];
 
   meta = with lib; {
     description = "Python client for Twente Milieu";
