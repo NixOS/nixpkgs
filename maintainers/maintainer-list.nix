@@ -18010,6 +18010,12 @@
     githubId = 15064765;
     name = "tshaynik";
   };
+  tsowell = {
+    email = "tom@ldtlb.com";
+    github = "tsowell";
+    githubId = 4044033;
+    name = "Thomas Sowell";
+  };
   ttuegel = {
     email = "ttuegel@mailbox.org";
     github = "ttuegel";

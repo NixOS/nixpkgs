@@ -6977,6 +6977,8 @@ with pkgs;
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
+  evsieve = callPackage ../tools/inputmethods/evsieve { };
+
   eyedropper = callPackage ../applications/graphics/eyedropper { };
 
   persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
