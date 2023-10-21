@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ zane ];
     mainProgram = "openrussian";
     platforms   = platforms.unix;
+    broken = true;
   };
 }
