@@ -25,6 +25,7 @@
   else null
 
 , runtimeDependencies ? [ ]
+, extraWrapProgramArgs ? ""
 , customPackageOverrides ? { }
 , autoDepsList ? false
 , depsListFile ? null
