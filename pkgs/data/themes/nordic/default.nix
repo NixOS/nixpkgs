@@ -123,9 +123,9 @@ stdenv.mkDerivation rec {
     mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/
     rm -rf $out/share/themes/Nordic/kde
 
-    # Replace duplicate files with hardlinks to the first file in each
-    # set of duplicates, reducing the installed size in about 65%
-    jdupes -L -r $out/share
+    # Replace duplicate files with symbolic links to the first file in
+    # each set of duplicates, reducing the installed size in about 53%
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
