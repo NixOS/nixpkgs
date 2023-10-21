@@ -1022,8 +1022,8 @@ let self = {
       name = "zstd";
       owner = "tokers";
       repo = "zstd-nginx-module";
-      rev = "25d88c262be47462cf90015ee7ebf6317b6848f9";
-      sha256 = "sha256-YRluKekhx1tb6e5IL1FPK05jPtzfQPaHI47cdada928=";
+      rev = "0.1.0";
+      hash = "sha256-8SBU9hJnKtNrwbpioy+Z/mfiVuqAx+U1t64m5tfEy6o=";
     };
 
     inputs = [ zstd ];
