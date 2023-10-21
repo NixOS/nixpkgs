@@ -18406,7 +18406,9 @@ with pkgs;
 
   glslls = callPackage ../development/tools/language-servers/glslls { };
 
-  gopls = callPackage ../development/tools/language-servers/gopls { };
+  gopls = callPackage ../development/tools/language-servers/gopls {
+    buildGoModule = buildGo121Module;
+  };
 
   helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
 
