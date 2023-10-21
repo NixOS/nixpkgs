@@ -343,12 +343,14 @@ let
   };
 
 
-  history-tree = build-asdf-system {
+  history-tree = build-asdf-system rec {
     pname = "history-tree";
-    version = "20230214-git";
-    src = pkgs.fetchzip {
-      url = "http://beta.quicklisp.org/archive/history-tree/2023-02-14/history-tree-20230214-git.tgz";
-      sha256 = "12kvnc8vcvg7nmgl5iqgbr4pj0vgb8f8avk9l5czz7f2hj91ysdp";
+    version = "0.1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "history-tree";
+      rev = version;
+      hash = "sha256-lOORalyTybdut/If+dBXS4PlZt2AnZrEI/qjQWS03pk=";
     };
     lispLibs = with self; [
       alexandria
