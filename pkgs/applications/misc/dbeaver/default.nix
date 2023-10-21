@@ -25,16 +25,16 @@ let
 in
 mavenJdk17.buildMavenPackage rec {
   pname = "dbeaver";
-  version = "22.2.2"; # When updating also update mvnHash
+  version = "23.2.2"; # When updating also update mvnHash
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+    hash = "sha256-7a4A0X4XMYJ1kj9Za/xUWhhkVEKHg4GteGgKOruU+as=";
   };
 
-  mvnHash = "sha256-ERZYDsPxp1YXteSmunFIgTGZUYqjZJhqrNytLnIUNBQ=";
+  mvnHash = "sha256-heWOdk/ovjSOUdlMMb1ZD5Mav2NYH8YjESTEWo9ytXk=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
