@@ -27593,9 +27593,9 @@ with self; {
     };
     patches = [
       (fetchpatch {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/curl-7.71.0.patch?h=perl-www-curl&id=261d84887d736cc097abef61164339216fb79180";
-        hash = "sha256-2lHV8qKZPdM/WnuvNYphCGRAq7UOTdPKH0k56iYtPMI=";
-        name = "WWWCurl-curl-7.71.0.patch";
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/makefile.patch?h=perl-www-curl&id=7e004bb8c5dc49c903a5d5fa5ff28c30a58e2595";
+        hash = "sha256-8JZbe4IMfRZyLa118AAH/wsXrazOFy79OoH3Nuy57A4=";
+        name = "perl-www-curl-makefile.patch";
       })
     ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
