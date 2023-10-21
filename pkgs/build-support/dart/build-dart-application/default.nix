@@ -1,6 +1,7 @@
 { lib, stdenv, callPackage, fetchDartDeps, runCommand, writeText, dartHooks, makeWrapper, dart, cacert, nodejs, darwin, jq }:
 
-{ pubGetScript ? "dart pub get"
+{ sdkSetupScript ? ""
+, pubGetScript ? "dart pub get"
 
   # Output type to produce. Can be any kind supported by dart
   # https://dart.dev/tools/dart-compile#types-of-output
@@ -41,13 +42,13 @@ let
     '';
   }) {
     buildDrvArgs = args;
-    inherit pubGetScript vendorHash pubspecLockFile;
+    inherit sdkSetupScript pubGetScript vendorHash pubspecLockFile;
   };
   inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 
   baseDerivation = stdenv.mkDerivation (finalAttrs: args // {
-    inherit pubGetScript dartCompileCommand dartOutputType dartRuntimeCommand
-      dartCompileFlags dartJitFlags runtimeDependencies;
+    inherit sdkSetupScript pubGetScript dartCompileCommand dartOutputType
+      dartRuntimeCommand dartCompileFlags dartJitFlags runtimeDependencies;
 
     dartEntryPoints =
       if (dartEntryPoints != null)
