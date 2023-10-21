@@ -1779,11 +1779,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpthreadstubs = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libpthread-stubs";
-    version = "0.4";
+    version = "0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xcb/libpthread-stubs-0.4.tar.bz2";
-      sha256 = "0cz7s9w8lqgzinicd4g36rjg08zhsbyngh0w68c3np8nlc8mkl74";
+      url = "mirror://xorg/individual/xcb/libpthread-stubs-0.5.tar.xz";
+      sha256 = "1g224hyy694jch54357zc895z46r90xs193hg4m7rfnfxinmdnjr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
