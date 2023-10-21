@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-twentemilieu";
     rev = "v${version}";
-    hash = "sha256-MTAVa5gP5e8TIE/i1DjfmwKm1zDVC/WEcYKxZSV/+Ug=";
+    hash = "sha256-r0LZS8TXux1mzzXBTSu+x5sxUZOCzW7poKG3dQ2A6No=";
   };
 
   postPatch = ''
