@@ -10,7 +10,7 @@
  urllib3 }:
 
 buildPythonPackage rec {
-  pname = "qds_sdk";
+  pname = "qds-sdk";
   version = "1.16.1";
 
   # pypi does not contain tests, using github sources instead
