@@ -4,6 +4,7 @@
     "flit",
     "flit-core",
     "pbr",
+    "flitBuildHook",
     "cython",
     "hatchling",
     "hatch-vcs",

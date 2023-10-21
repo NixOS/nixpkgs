@@ -3,9 +3,6 @@
 , poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
-  # Poetry2nix version
-  version = "1.42.1";
-
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
   # Map SPDX identifiers to license names
@@ -17,7 +14,7 @@ let
   toPluginAble = (import ./plugins.nix { inherit pkgs lib; }).toPluginAble;
 
   # List of known build systems that are passed through from nixpkgs unmodified
-  knownBuildSystems = builtins.fromJSON (builtins.readFile ./known-build-systems.json);
+  knownBuildSystems = lib.importJSON ./known-build-systems.json;
   nixpkgsBuildSystems = lib.subtractLists [ "poetry" "poetry-core" ] knownBuildSystems;
 
   mkInputAttrs =
@@ -93,9 +90,6 @@ let
 
 in
 lib.makeScope pkgs.newScope (self: {
-
-  inherit version;
-
   /* Returns a package of editable sources whose changes will be available without needing to restart the
     nix-shell.
     In editablePackageSources you can pass a mapping from package name to source directory to have
@@ -469,7 +463,6 @@ lib.makeScope pkgs.newScope (self: {
   /* Poetry2nix CLI used to supplement SHA-256 hashes for git dependencies  */
   cli = import ./cli.nix {
     inherit pkgs lib;
-    inherit (self) version;
   };
 
   # inherit mkPoetryEnv mkPoetryApplication mkPoetryPackages;

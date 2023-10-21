@@ -1,13 +1,13 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
-, version
 }:
 let
   inherit (pkgs) python3;
+  pname = "poetry2nix-cli";
 in
 pkgs.stdenv.mkDerivation {
-  pname = "poetry2nix";
-  inherit version;
+  inherit pname;
+  version = "0";
 
   buildInputs = [
     (python3.withPackages (ps: [ ps.toml ]))
@@ -23,6 +23,7 @@ pkgs.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
+    # this is the ./bin/poetry2nix
     patchShebangs poetry2nix
     runHook postBuild
   '';
@@ -30,9 +31,10 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    mv poetry2nix $out/bin
+    # need to remap this to be consistent with `pkgs.lib.getBin` "standard"
+    mv poetry2nix $out/bin/${pname}
 
-    wrapProgram $out/bin/poetry2nix --prefix PATH ":" ${lib.makeBinPath [
+    wrapProgram $out/bin/${pname} --prefix PATH ":" ${lib.makeBinPath [
       pkgs.nix-prefetch-git
     ]}
 
