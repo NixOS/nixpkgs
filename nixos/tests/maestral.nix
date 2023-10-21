@@ -24,6 +24,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           wantedBy = [ "default.target" ];
           serviceConfig.ExecStart = "${pkgs.maestral}/bin/maestral start --foreground";
         };
+        users.users.alice.linger = true;
       };
 
       gui = { ... }: common {
@@ -58,9 +59,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       start_all()
 
       with subtest("CLI"):
-        # we need SOME way to give the user an active login session
-        cli.execute("loginctl enable-linger ${user.name}")
-        cli.systemctl("start user@${toString user.uid}")
+        cli.wait_for_unit("user@${toString user.uid}")
         cli.wait_for_unit("maestral.service", "${user.name}")
 
       with subtest("GUI"):

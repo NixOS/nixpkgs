@@ -7,8 +7,14 @@ import ./make-test-python.nix ({ lib, ... }: {
 
   nodes.machine = { ... }: {
     users.users = {
-      alice.isNormalUser = true;
-      bob.isNormalUser = true;
+      alice = {
+        isNormalUser = true;
+        linger = true;
+      };
+      bob = {
+        isNormalUser = true;
+        linger = true;
+      };
     };
 
     systemd.user.tmpfiles = {
@@ -22,13 +28,13 @@ import ./make-test-python.nix ({ lib, ... }: {
   };
 
   testScript = { ... }: ''
-    machine.succeed("loginctl enable-linger alice bob")
-
-    machine.wait_until_succeeds("systemctl --user --machine=alice@ is-active systemd-tmpfiles-setup.service")
+    machine.wait_for_unit("user@$(id -u alice)")
+    machine.wait_for_unit("systemd-tmpfiles-setup.service", "alice")
     machine.succeed("[ -d ~alice/user_tmpfiles_created ]")
     machine.succeed("[ -d ~alice/only_alice ]")
 
-    machine.wait_until_succeeds("systemctl --user --machine=bob@ is-active systemd-tmpfiles-setup.service")
+    machine.wait_for_unit("user@$(id -u alice)")
+    machine.wait_for_unit("systemd-tmpfiles-setup.service", "bob")
     machine.succeed("[ -d ~bob/user_tmpfiles_created ]")
     machine.succeed("[ ! -e ~bob/only_alice ]")
   '';
