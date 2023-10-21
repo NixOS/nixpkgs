@@ -78,12 +78,17 @@ buildPythonPackage rec {
     pygobject3
   ];
 
+  pythonNamespaces = [
+    "chip"
+    "chip.clusters"
+  ];
+
   pythonImportsCheck = [
     "chip"
     "chip.ble"
-    # https://github.com/project-chip/connectedhomeip/pull/24376
-    #"chip.configuration"
+    "chip.configuration"
     "chip.discovery"
+    "chip.exceptions"
     "chip.native"
     "chip.storage"
   ];
