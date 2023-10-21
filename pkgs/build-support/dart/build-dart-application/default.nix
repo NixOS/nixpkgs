@@ -23,6 +23,7 @@
   else if dartOutputType == "js" then "${nodejs}/bin/node"
   else null
 
+, runtimeDependencies ? [ ]
 , pubspecLockFile ? null
 , vendorHash ? ""
 , ...
@@ -39,18 +40,20 @@ let
     buildDrvArgs = args;
     inherit pubGetScript vendorHash pubspecLockFile;
   };
-  inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook;
+  inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 in
 assert !(builtins.isString dartOutputType && dartOutputType != "") ->
 throw "dartOutputType must be a non-empty string";
 stdenv.mkDerivation (args // {
   inherit pubGetScript dartCompileCommand dartOutputType dartRuntimeCommand
-    dartCompileFlags dartJitFlags;
+    dartCompileFlags dartJitFlags runtimeDependencies;
 
   dartEntryPoints =
     if (dartEntryPoints != null)
     then writeText "entrypoints.json" (builtins.toJSON dartEntryPoints)
     else null;
+
+  runtimeDependencyLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
     dart
@@ -58,6 +61,7 @@ stdenv.mkDerivation (args // {
     dartConfigHook
     dartBuildHook
     dartInstallHook
+    dartFixupHook
     makeWrapper
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.sigtool
