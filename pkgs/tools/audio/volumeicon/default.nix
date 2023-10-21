@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Maato";
     repo = "volumeicon";
     rev = version;
-    hash = "sha256-zYKC7rOoLf08rV4B43TrGNBcXfSBFxWZCe9bQD9JzaA";
+    sha256 = "sha256-zYKC7rOoLf08rV4B43TrGNBcXfSBFxWZCe9bQD9JzaA";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "http://nullwise.com/volumeicon.html";
     platforms = platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus; # Assume it's licensed under GPL3 or later
   };
 }
-
