@@ -5,7 +5,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}-src.tar.gz";
+    url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}-src.tar.gz";
     hash = platformAttrs.${stdenv.system}.srcHash;
   };
   sourceRoot = "hadoop-${finalAttrs.version}-src/hadoop-yarn-project/hadoop-yarn/"
