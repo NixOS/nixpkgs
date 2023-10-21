@@ -211,6 +211,8 @@ in
     # this needs to run as a user service, since it's associated with the
     # user who is making the requests
     systemd.user.services = mkIf cfg.enableDemoAgent {
+      "app-geoclue\\x2ddemo\\x2dagent@autostart".enable =
+        !lib.any (x: x == "/etc/xdg/autostart") config.environment.pathsToLink;
       geoclue-agent = {
         description = "Geoclue agent";
         # this should really be `partOf = [ "geoclue.service" ]`, but
