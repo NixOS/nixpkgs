@@ -34,6 +34,7 @@ let
     , nameSuffix ? ""
     , icon ? applicationName
     , wmClass ? applicationName
+    , nativeMessagingHosts ? []
     , extraNativeMessagingHosts ? []
     , pkcs11Modules ? []
     , useGlvnd ? true
@@ -62,18 +63,28 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      nativeMessagingHosts =
-        [ ]
-          ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
-          ++ lib.optional (cfg.enableBukubrow or false) bukubrow
-          ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
-          ++ lib.optional (cfg.enableGnomeExtensions or false) gnome-browser-connector
-          ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
-          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
-          ++ lib.optional (cfg.enableFXCastBridge or false) fx-cast-bridge
-          ++ lib.optional (cfg.enableKeePassXC or false) keepassxc
-          ++ extraNativeMessagingHosts
-        ;
+      deprecatedNativeMessagingHost = option: pkg:
+        if (cfg.${option} or false)
+          then
+            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
+            [pkg]
+          else [];
+
+      allNativeMessagingHosts = builtins.map lib.getBin (
+        nativeMessagingHosts
+          ++ deprecatedNativeMessagingHost "enableBrowserpass" browserpass
+          ++ deprecatedNativeMessagingHost "enableBukubrow" bukubrow
+          ++ deprecatedNativeMessagingHost "enableTridactylNative" tridactyl-native
+          ++ deprecatedNativeMessagingHost "enableGnomeExtensions" gnome-browser-connector
+          ++ deprecatedNativeMessagingHost "enableUgetIntegrator" uget-integrator
+          ++ deprecatedNativeMessagingHost "enablePlasmaBrowserIntegration" plasma5Packages.plasma-browser-integration
+          ++ deprecatedNativeMessagingHost "enableFXCastBridge" fx-cast-bridge
+          ++ deprecatedNativeMessagingHost "enableKeePassXC" keepassxc
+          ++ (if extraNativeMessagingHosts != []
+                then lib.warn "The extraNativeMessagingHosts argument for the Firefox wrapper is deprecated, please use `nativeMessagingHosts`" extraNativeMessagingHosts
+                else [])
+       );
+
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg_5
@@ -338,7 +349,7 @@ let
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
         mkdir -p $out/lib/mozilla/native-messaging-hosts
-        for ext in ${toString nativeMessagingHosts}; do
+        for ext in ${toString allNativeMessagingHosts}; do
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
 

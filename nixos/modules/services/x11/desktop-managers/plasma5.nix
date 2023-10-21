@@ -379,7 +379,7 @@ in
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
 
-      programs.firefox.wrapperConfig.enablePlasmaBrowserIntegration = true;
+      programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
     })
 
     (mkIf (cfg.kwinrc != {}) {

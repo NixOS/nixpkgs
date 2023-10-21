@@ -42,6 +42,6 @@ in
 
     services.dbus.packages = [ pkgs.gnome-browser-connector ];
 
-    programs.firefox.wrapperConfig.enableGnomeExtensions = true;
+    programs.firefox.nativeMessagingHosts.packages = [ pkgs.gnome-browser-connector ];
   };
 }

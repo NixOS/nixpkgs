@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.programs.firefox;
 
-  nmh = cfg.nativeMessagingHosts;
-
   policyFormat = pkgs.formats.json { };
 
   organisationInfo = ''
@@ -17,6 +15,50 @@ let
     given control of your browser, unless of course they also control your
     NixOS configuration.
   '';
+
+  # deprecated per-native-messaging-host options
+  nmhOptions = {
+    browserpass = {
+      name = "Browserpass";
+      package = pkgs.browserpass;
+    };
+    bukubrow = {
+      name = "Bukubrow";
+      package = pkgs.bukubrow;
+    };
+    euwebid = {
+      name = "Web eID";
+      package = pkgs.web-eid-app;
+    };
+    ff2mpv = {
+      name = "ff2mpv";
+      package = pkgs.ff2mpv;
+    };
+    fxCast = {
+      name = "fx_cast";
+      package = pkgs.fx-cast-bridge;
+    };
+    gsconnect = {
+      name = "GSConnect";
+      package = pkgs.gnomeExtensions.gsconnect;
+    };
+    jabref = {
+      name = "JabRef";
+      package = pkgs.jabref;
+    };
+    passff = {
+      name = "PassFF";
+      package = pkgs.passff-host;
+    };
+    tridactyl = {
+      name = "Tridactyl";
+      package = pkgs.tridactyl-native;
+    };
+    ugetIntegrator = {
+      name = "Uget Integrator";
+      package = pkgs.uget-integrator;
+    };
+  };
 in
 {
   options.programs.firefox = {
@@ -204,46 +246,31 @@ in
       '';
     };
 
-    nativeMessagingHosts = mapAttrs (_: v: mkEnableOption (mdDoc v)) {
-      browserpass = "Browserpass support";
-      bukubrow = "Bukubrow support";
-      euwebid = "Web eID support";
-      ff2mpv = "ff2mpv support";
-      fxCast = "fx_cast support";
-      gsconnect = "GSConnect support";
-      jabref = "JabRef support";
-      passff = "PassFF support";
-      tridactyl = "Tridactyl support";
-      ugetIntegrator = "Uget Integrator support";
-    };
+    nativeMessagingHosts = ({
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = mdDoc ''
+          Additional packages containing native messaging hosts that should be made available to Firefox extensions.
+        '';
+      };
+    }) // (mapAttrs (k: v: mkEnableOption (mdDoc "${v.name} support")) nmhOptions);
   };
 
-  config = mkIf cfg.enable {
+  config = let
+    forEachEnabledNmh = fn: flatten (mapAttrsToList (k: v: lib.optional cfg.nativeMessagingHosts.${k} (fn k v)) nmhOptions);
+  in mkIf cfg.enable {
+    warnings = forEachEnabledNmh (k: v:
+      "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, " +
+      "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
+    );
+    programs.firefox.nativeMessagingHosts.packages = forEachEnabledNmh (_: v: v.package);
+
     environment.systemPackages = [
       (cfg.package.override (old: {
-        extraPrefs = cfg.autoConfig;
-        extraNativeMessagingHosts =
-          old.extraNativeMessagingHosts or []
-          ++ optional nmh.ff2mpv pkgs.ff2mpv
-          ++ optional nmh.euwebid pkgs.web-eid-app
-          ++ optional nmh.gsconnect pkgs.gnomeExtensions.gsconnect
-          ++ optional nmh.jabref pkgs.jabref
-          ++ optional nmh.passff pkgs.passff-host;
-        cfg = let
-          # copy-pasted from the wrapper; TODO: figure out fix
-          applicationName = cfg.package.binaryName or (lib.getName cfg.package);
-
-          oldCfg = old.cfg or {};
-          nixpkgsConfig = pkgs.config.${applicationName} or {};
-          optionConfig = cfg.wrapperConfig;
-          nmhConfig = {
-            enableBrowserpass = nmh.browserpass;
-            enableBukubrow = nmh.bukubrow;
-            enableTridactylNative = nmh.tridactyl;
-            enableUgetIntegrator = nmh.ugetIntegrator;
-            enableFXCastBridge = nmh.fxCast;
-          };
-        in oldCfg // nixpkgsConfig // optionConfig // nmhConfig;
+        extraPrefsFiles = old.extraPrefsFiles or [] ++ [(pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig)];
+        nativeMessagingHosts = old.nativeMessagingHosts or [] ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or {}) // cfg.wrapperConfig;
       }))
     ];
 
