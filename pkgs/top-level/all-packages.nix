@@ -1902,6 +1902,8 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+  litmus = callPackage ../tools/networking/litmus { };
+
   markdownlint-cli = callPackage ../tools/text/markdownlint-cli { };
 
   markdownlint-cli2 = callPackage ../tools/text/markdownlint-cli2 { };
