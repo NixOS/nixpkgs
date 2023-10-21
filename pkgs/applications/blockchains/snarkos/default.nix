@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";
-  version = "2.1.7";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "snarkOS";
     rev = "v${version}";
-    sha256 = "sha256-kW41SNbl2vckgUth+BZ6/aM03aT6MFeY4Hwi9OVWtTI=";
+    sha256 = "sha256-vEoEnjVjxVnjZ3Lya1qO2kOypNu07aYSlrSya5NJZzs=";
   };
 
-  cargoHash = "sha256-znEAb4q9H0Doc+XYCf27hV/z2t74kjQUffl/aJzW6tI=";
+  cargoHash = "sha256-CVHvBqfcTqWBtLFcEcs9y/LmQ4gXjX+dfqqZSxN+33A=";
 
   # buildAndTestSubdir = "cli";
 
