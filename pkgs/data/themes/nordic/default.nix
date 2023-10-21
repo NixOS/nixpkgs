@@ -5,7 +5,6 @@
 , breeze-icons
 , plasma-framework
 , plasma-workspace
-, qtgraphicaleffects
 , jdupes
 }:
 
@@ -88,7 +87,6 @@ stdenv.mkDerivation rec {
     breeze-icons
     plasma-framework
     plasma-workspace
-    qtgraphicaleffects
   ];
 
   dontWrapQtApps = true;

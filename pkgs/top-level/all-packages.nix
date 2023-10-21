@@ -29746,7 +29746,7 @@ with pkgs;
   };
 
   nordic = callPackage ../data/themes/nordic {
-    inherit (libsForQt5) breeze-icons plasma-framework plasma-workspace qtgraphicaleffects;
+    inherit (libsForQt5) breeze-icons plasma-framework plasma-workspace;
   };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
