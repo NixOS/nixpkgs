@@ -13,6 +13,7 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , fetchpatch
+, nixosTests
 }:
 
 let
@@ -68,6 +69,10 @@ stdenv.mkDerivation rec {
     "-DWITH_THREADING=ON"
     "-DWITH_WEBSOCKETS=ON"
   ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
+
+  passthru.tests = {
+    inherit (nixosTests) mosquitto;
+  };
 
   meta = with lib; {
     description = "An open source MQTT v3.1/3.1.1/5.0 broker";
