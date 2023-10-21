@@ -120,10 +120,6 @@ let
         # Ensure that depmod gets resolved through PATH
         sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
 
-        # fixup for pre-4.15 kernels using the $(cd $foo && /bin/pwd) pattern
-        # FIXME: remove when no longer needed
-        substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
-
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
         # This way kernels can be bit-by-bit reproducible depending on settings
         # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
