@@ -329,14 +329,17 @@ let
     lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
   };
 
-  nkeymaps = build-asdf-system {
+  nkeymaps = build-asdf-system rec {
     pname = "nkeymaps";
-    version = "20230214-git";
-    src = pkgs.fetchzip {
-      url = "http://beta.quicklisp.org/archive/nhooks/2023-02-14/nkeymaps-20230214-git.tgz";
-      sha256 = "197vxqby87vnpgcwchs3dqihk1gimp2cx9cc201pkdzvnbrixji6";
+    version = "1.1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nkeymaps";
+      rev = version;
+      hash = "sha256-ewMu2IgEzCYY72vG91IA7l8X78Ph6jpQvbKeOFZdAyM=";
     };
-    lispLibs = with self; [ alexandria fset trivial-package-local-nicknames ];
+    lispLibs = with self; [ alexandria fset trivial-package-local-nicknames
+                            str ];
   };
 
 
