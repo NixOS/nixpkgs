@@ -21,5 +21,7 @@ in
         copy_bin_and_libs ${pkgs.cifs-utils}/sbin/mount.cifs
       '';
 
+    boot.initrd.systemd.extraBin."mount.cifs" = mkIf inInitrd "${pkgs.cifs-utils}/sbin/mount.cifs";
+
   };
 }
