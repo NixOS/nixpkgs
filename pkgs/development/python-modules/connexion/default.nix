@@ -1,70 +1,94 @@
 { lib
-, aiohttp
-, aiohttp-jinja2
-, aiohttp-remotes
-, aiohttp-swagger
-, buildPythonPackage
-, clickclick
-, decorator
 , fetchFromGitHub
-, flask
+, buildPythonPackage
+, pythonOlder
+
+# build-system
+, poetry-core
+
+# dependencies
+, asgiref
+, httpx
 , inflection
 , jsonschema
-, openapi-spec-validator
-, packaging
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+, jinja2
+, python-multipart
 , pyyaml
 , requests
+, starlette
+, typing-extensions
+, werkzeug
+
+# optional-dependencies
+, a2wsgi
+, flask
 , swagger-ui-bundle
+, uvicorn
+
+# tests
+, pytest-aiohttp
+, pytestCheckHook
 , testfixtures
 }:
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.14.2";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spec-first";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
+    hash = "sha256-9h2eDwRnHeXgccrTgFJEyMymsJH8f9aABb+M/yFvpr4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    aiohttp-jinja2
-    aiohttp-swagger
-    clickclick
-    flask
-    inflection
-    jsonschema
-    openapi-spec-validator
-    packaging
-    pyyaml
-    requests
-    swagger-ui-bundle
+  nativeBuildInputs = [
+    poetry-core
   ];
 
+  propagatedBuildInputs = [
+    asgiref
+    httpx
+    inflection
+    jsonschema
+    jinja2
+    python-multipart
+    pyyaml
+    requests
+    starlette
+    typing-extensions
+    werkzeug
+  ];
+
+  passthru.optional-dependencies = {
+    flask = [
+      a2wsgi
+      flask
+    ];
+    swagger-ui = [
+      swagger-ui-bundle
+    ];
+    uvicorn = [
+      uvicorn
+    ];
+  };
+
   nativeCheckInputs = [
-    aiohttp-remotes
-    decorator
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "connexion"
   ];
 
   disabledTests = [
-    # AssertionError
-    "test_headers"
+    # ValueError: 'name' may not be empty.
+    "test_api_base_path_slash"
   ];
 
   meta = with lib; {
