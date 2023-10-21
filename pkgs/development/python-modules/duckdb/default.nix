@@ -56,6 +56,8 @@ buildPythonPackage rec {
   disabledTests = [
     # tries to make http request
     "test_install_non_existent_extension"
+    # test is racy and interrupt can be delivered before or after target point
+    "test_connection_interrupt"
   ];
 
   preCheck = ''
