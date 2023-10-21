@@ -690,6 +690,9 @@ in {
           "zpool create rpool /dev/vda2",
           "zfs create -o mountpoint=legacy rpool/root",
           "mount -t zfs rpool/root /mnt",
+          "zfs create -o mountpoint=legacy rpool/root/usr",
+          "mkdir /mnt/usr",
+          "mount -t zfs rpool/root/usr /mnt/usr",
           "udevadm settle",
       )
     '';
