@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "presenterm";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "mfontanini";
     repo = "presenterm";
-    rev = version;
-    hash = "sha256-mNWnUUezKIffh5gMgMMdvApNZZTxxB8XrL0jFLyBxuk=";
+    rev = "v${version}";
+    hash = "sha256-sXVMVU34gxZKGNye6hoyv07a7N7f6UbivA6thbSOeZA=";
   };
 
-  cargoHash = "sha256-JLPJLhWN/yXpPIHa+FJ2aQ/GDUFKtZ7t+/8rvR8WNKM=";
+  cargoHash = "sha256-PsDaXMws/8hEvAZwClQ4okGuryg1iKg0IBr7Xp2QYBE=";
 
   meta = with lib; {
     description = "A terminal based slideshow tool";

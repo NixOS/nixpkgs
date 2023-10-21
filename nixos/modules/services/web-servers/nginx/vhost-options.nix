@@ -31,12 +31,12 @@ with lib;
         options = {
           addr = mkOption {
             type = str;
-            description = lib.mdDoc "IP address.";
+            description = lib.mdDoc "Listen address.";
           };
           port = mkOption {
-            type = port;
+            type = types.nullOr port;
             description = lib.mdDoc "Port number.";
-            default = 80;
+            default = null;
           };
           ssl = mkOption {
             type = bool;
@@ -60,6 +60,7 @@ with lib;
       example = [
         { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
+        { addr = "unix:/var/run/nginx.sock"; }
       ];
       description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.

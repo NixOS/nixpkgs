@@ -791,6 +791,28 @@ class Machine:
         with self.nested(f"waiting for TCP port {port} on {addr}"):
             retry(port_is_open, timeout)
 
+    def wait_for_open_unix_socket(
+        self, addr: str, is_datagram: bool = False, timeout: int = 900
+    ) -> None:
+        """
+        Wait until a process is listening on the given UNIX-domain socket
+        (default to a UNIX-domain stream socket).
+        """
+
+        nc_flags = [
+            "-z",
+            "-uU" if is_datagram else "-U",
+        ]
+
+        def socket_is_open(_: Any) -> bool:
+            status, _ = self.execute(f"nc {' '.join(nc_flags)} {addr}")
+            return status == 0
+
+        with self.nested(
+            f"waiting for UNIX-domain {'datagram' if is_datagram else 'stream'} on '{addr}'"
+        ):
+            retry(socket_is_open, timeout)
+
     def wait_for_closed_port(
         self, port: int, addr: str = "localhost", timeout: int = 900
     ) -> None:

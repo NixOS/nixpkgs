@@ -478,6 +478,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+ferris-nvim = callPackage({ fetchzip, buildLuarocksPackage, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "ferris.nvim";
+  version = "2.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/ferris.nvim-2.0.0-1.rockspec";
+    sha256 = "00d3x2hbs8625ky50r2w08c6idcx3bkrk0rks5qd8yh7v61nj53h";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/ferris.nvim/archive/2.0.0.zip";
+    sha256 = "1fb18k0ylb06h4ifs9k6lfc42y74xpavzwkqy55lfdkmlbc7jmhy";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/ferris.nvim";
+    description = "Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
 fifo = callPackage({ fetchzip, lua, buildLuarocksPackage }:
 buildLuarocksPackage {
   pname = "fifo";
