@@ -1274,6 +1274,9 @@
     github = "antonmosich";
     githubId = 27223336;
     name = "Anton Mosich";
+    keys = [ {
+      fingerprint = "F401 287C 324F 0A1C B321  657B 9B96 97B8 FB18 7D14";
+    } ];
   };
   antono = {
     email = "self@antono.info";
