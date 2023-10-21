@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchFromGitHub
+, pillow
 , setuptools-scm
 , setuptools
 , vdf
@@ -14,13 +15,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.10.1";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gKrdUwX5TzeHHXuwhUyI4REPE6TNiZ6lhonyMCHcBCA=";
+    hash = "sha256-N9AUpHDJWhUCxXffcfNdW1TtYXMNh/Jh5kAcHovZ6iQ=";
   };
 
   patches = [
@@ -35,6 +36,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     setuptools # implicit dependency, used to find data/icon_placeholder.png
     vdf
+    pillow
   ];
 
   makeWrapperArgs = [

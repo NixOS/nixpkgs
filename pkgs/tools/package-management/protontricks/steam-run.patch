@@ -76,16 +76,17 @@ index b5552e1..b11bc99 100644
  # Helper script
  set -o errexit
  
-@@ -80,6 +80,8 @@ done
- log_info "Following directories will be mounted inside container: ${mount_dirs[*]}"
- log_info "Using temporary directory: $PROTONTRICKS_TEMP_PATH"
+@@ -92,6 +92,8 @@
+ # the launcher has finished starting up.
+ status_fd="$1"
  
--exec "$STEAM_RUNTIME_PATH"/run --share-pid --launcher \
+-exec "$STEAM_RUNTIME_PATH"/run --share-pid --launcher --pass-fd "$status_fd" \
 +exec steam-run "$STEAM_RUNTIME_PATH"/pressure-vessel/bin/pressure-vessel-wrap \
 +--variable-dir="${PRESSURE_VESSEL_VARIABLE_DIR:-$STEAM_RUNTIME_PATH/var}" \
 +--share-pid --launcher \
  "${mount_params[@]}" -- \
- --bus-name="com.github.Matoking.protontricks.App${STEAM_APPID}_${PROTONTRICKS_SESSION_ID}"
+ --info-fd "$status_fd" --bus-name="com.github.Matoking.protontricks.App${STEAM_APPID}_${PROTONTRICKS_SESSION_ID}"
+
 diff --git a/src/protontricks/data/scripts/wine_launch.sh b/src/protontricks/data/scripts/wine_launch.sh
 index 1f8a432..2d82f2b 100644
 --- a/src/protontricks/data/scripts/wine_launch.sh
@@ -175,28 +176,20 @@ diff --git a/src/protontricks/util.py b/src/protontricks/util.py
 index 7e95af5..7dc9a29 100644
 --- a/src/protontricks/util.py
 +++ b/src/protontricks/util.py
-@@ -8,14 +8,14 @@ import shutil
- import tempfile
- import re
- from pathlib import Path
--from subprocess import PIPE, check_output, run, Popen, DEVNULL
-+from subprocess import PIPE, run, Popen, DEVNULL
- 
- import pkg_resources
+@@ -12,7 +12,7 @@
  
  __all__ = (
-     "SUPPORTED_STEAM_RUNTIMES", "lower_dict",
--    "get_legacy_runtime_library_paths", "get_host_library_paths",
--    "RUNTIME_ROOT_GLOB_PATTERNS", "get_runtime_library_paths",
-+    "get_host_library_paths", "RUNTIME_ROOT_GLOB_PATTERNS",
-+    "get_runtime_library_paths",
-     "WINE_SCRIPT_TEMPLATE", "create_wine_bin_dir", "run_command"
- )
+     "SUPPORTED_STEAM_RUNTIMES", "OS_RELEASE_PATHS", "lower_dict",
+-    "is_steam_deck", "get_legacy_runtime_library_paths",
++    "is_steam_deck",
+     "get_host_library_paths", "RUNTIME_ROOT_GLOB_PATTERNS",
+     "get_runtime_library_paths", "WINE_SCRIPT_TEMPLATE",
+     "get_cache_dir", "create_wine_bin_dir", "run_command"
+@@ -64,25 +64,6 @@
  
-@@ -43,24 +43,6 @@ def lower_dict(d):
-     return {k.lower(): _lower_value(v) for k, v in d.items()}
+     return False
  
- 
+-
 -def get_legacy_runtime_library_paths(legacy_steam_runtime_path, proton_app):
 -    """
 -    Get LD_LIBRARY_PATH value to use when running a command using Steam Runtime
@@ -218,58 +211,27 @@ index 7e95af5..7dc9a29 100644
  def get_host_library_paths():
      """
      Get host library paths to use when creating the LD_LIBRARY_PATH environment
-@@ -72,7 +54,7 @@ def get_host_library_paths():
+@@ -94,7 +75,7 @@
      # Since that command is unavailable with newer Steam Runtime releases,
      # do it ourselves here.
      result = run(
 -        ["/sbin/ldconfig", "-XNv"],
-+        ["steam-run", "ldconfig", "-XNv"],
++        ["steam-run" "ldconfig", "-XNv"],
          check=True, stdout=PIPE, stderr=PIPE
      )
      lines = result.stdout.decode("utf-8").split("\n")
-@@ -90,7 +72,7 @@ RUNTIME_ROOT_GLOB_PATTERNS = (
- )
- 
- 
--def get_runtime_library_paths(proton_app, use_bwrap=True):
-+def get_runtime_library_paths(proton_app, proton_app_only=True):
-     """
-     Get LD_LIBRARY_PATH value to use when running a command using Steam Runtime
-     """
-@@ -111,7 +93,7 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
-             f"Could not find Steam Runtime runtime root for {runtime_app.name}"
-         )
- 
--    if use_bwrap:
-+    if proton_app_only:
-         return "".join([
-             str(proton_app.proton_dist_path / "lib"), os.pathsep,
-             str(proton_app.proton_dist_path / "lib64"), os.pathsep
-@@ -313,7 +295,7 @@ def run_command(
-             wine_environ["STEAM_RUNTIME_PATH"] = \
-                 str(proton_app.required_tool_app.install_path)
-             wine_environ["PROTON_LD_LIBRARY_PATH"] = \
--                get_runtime_library_paths(proton_app, use_bwrap=use_bwrap)
-+                get_runtime_library_paths(proton_app, proton_app_only=use_bwrap)
- 
-             runtime_name = proton_app.required_tool_app.name
-             logger.info(
-@@ -337,13 +319,9 @@ def run_command(
-                     "Current Steam Runtime not recognized by Protontricks."
-                 )
-         else:
--            # Legacy Steam Runtime requires a different LD_LIBRARY_PATH
--            # that is produced by a script.
+@@ -437,9 +418,7 @@
+             # that is produced by a script.
              wine_environ["PROTONTRICKS_STEAM_RUNTIME"] = "legacy"
              wine_environ["PROTON_LD_LIBRARY_PATH"] = \
 -                get_legacy_runtime_library_paths(
 -                    legacy_steam_runtime_path, proton_app
 -                )
-+                get_runtime_library_paths(proton_app, proton_app_only=True)
++                get_runtime_library_paths(proton_app, use_bwrap=True)
  
              # bwrap is not available, so ensure it is not launched even if the
              # user configured it so
-@@ -353,7 +331,6 @@ def run_command(
+@@ -449,7 +428,6 @@
      # configuring the environment and Wine before launching the underlying
      # Wine binaries.
      wine_bin_dir = create_wine_bin_dir(proton_app)
@@ -423,7 +385,7 @@ diff --git a/tests/test_util.py b/tests/test_util.py
 index ec5f4f3..0b0a66c 100644
 --- a/tests/test_util.py
 +++ b/tests/test_util.py
-@@ -98,44 +98,6 @@ class TestRunCommand:
+@@ -103,43 +103,6 @@
          assert command.env["WINELOADER"] == "/fake/wine"
          assert command.env["WINESERVER"] == "/fake/wineserver"
  
@@ -464,7 +426,6 @@ index ec5f4f3..0b0a66c 100644
 -        assert warning.getMessage() == \
 -            "Current Steam Runtime not recognized by Protontricks."
 -
--
- class TestLowerDict:
-     def test_lower_nested_dict(self):
-         """
+     @pytest.mark.usefixtures("steam_deck")
+     def test_locale_fixed_on_steam_deck(
+             self, proton_factory, default_proton, steam_app_factory, home_dir,
