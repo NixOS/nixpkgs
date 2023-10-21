@@ -5965,7 +5965,7 @@ with pkgs;
 
   merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
-  meson = callPackage ../development/tools/build-managers/meson {
+  meson = callPackage ../by-name/me/meson/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation OpenGL AppKit Cocoa;
   };
 
