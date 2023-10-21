@@ -7425,6 +7425,8 @@ with pkgs;
 
   ddcutil = callPackage ../tools/misc/ddcutil { };
 
+  ddclient = callPackage ../tools/networking/ddclient { };
+
   dd_rescue = callPackage ../tools/system/dd_rescue { };
 
   ddh = callPackage ../tools/system/ddh { };
@@ -20840,6 +20842,8 @@ with pkgs;
 
   certbot-full = certbot.withPlugins (cp: with cp; [
     certbot-dns-cloudflare
+    certbot-dns-google
+    certbot-dns-ovh
     certbot-dns-rfc2136
     certbot-dns-route53
   ]);
@@ -28320,7 +28324,9 @@ with pkgs;
     checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
   minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
-  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix { };
+  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix {
+    inherit (stdenv) hostPlatform;
+  };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
@@ -28445,7 +28451,9 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
-  golangci-lint = callPackage ../development/tools/golangci-lint { };
+  golangci-lint = callPackage ../development/tools/golangci-lint {
+    buildGoModule = buildGo121Module;
+  };
 
   golangci-lint-langserver = callPackage ../development/tools/golangci-lint-langserver { };
 
