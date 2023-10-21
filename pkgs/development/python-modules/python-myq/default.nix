@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pymyq";
+  pname = "python-myq";
   version = "3.1.13";
   pyproject = true;
 

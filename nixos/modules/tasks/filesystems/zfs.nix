@@ -632,7 +632,8 @@ in
           targets.zfs-import.wantedBy = [ "zfs.target" ];
           targets.zfs.wantedBy = [ "initrd.target" ];
           extraBin = {
-            # zpool and zfs are already in thanks to fsPackages
+            zpool = "${cfgZfs.package}/sbin/zpool";
+            zfs = "${cfgZfs.package}/sbin/zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
         };
