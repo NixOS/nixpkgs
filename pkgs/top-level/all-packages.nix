@@ -35390,8 +35390,6 @@ with pkgs;
 
   tart = callPackage ../applications/virtualization/tart { };
 
-  tecoc = callPackage ../applications/editors/tecoc { };
-
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
   wavebox = libsForQt5.callPackage ../applications/networking/instant-messengers/wavebox { };
