@@ -97,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
+
+    # Try mounting fonts and icons from NixOS locations if FHS locations don't exist.
+    # https://github.com/NixOS/nixpkgs/issues/119433
+    ./fix-fonts-icons.patch
   ];
 
   nativeBuildInputs = [
