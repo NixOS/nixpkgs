@@ -1,21 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, pkg-config
 , libxml2
 , systemd
 }:
 
 stdenv.mkDerivation {
   pname   = "qdl";
-  version = "unstable-2021-05-06";
+  version = "unstable-2023-04-11";
 
   src = fetchFromGitHub {
-    owner = "andersson";
+    owner = "linux-msm";
     repo = "qdl";
-    rev = "2021b303a81ca1bcf21b7f1f23674b5c8747646f";
-    sha256 = "0akrdca4jjdkfdya36vy1y5vzimrc4pp5jm24rmlw8hbqxvj72ri";
+    rev = "3b22df2bc7de02d867334af3a7aa8606db4f8cdd";
+    sha256 = "sha256-2sL9HX73APTn9nQOx1Efdkz9F4bNASPMVFMx6YOqxyc=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd libxml2 ];
 
   installPhase = ''
@@ -25,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/andersson/qdl";
+    homepage = "https://github.com/linux-msm/qdl";
     description = "Tool for flashing images to Qualcomm devices";
     license = licenses.bsd3;
     maintainers = with maintainers; [ muscaln ];
