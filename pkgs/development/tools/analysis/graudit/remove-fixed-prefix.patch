@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index b685fae..d1b7073 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,6 @@
+ # graudit makefile
+ ###
+ 
+-prefix = /usr
+ dataroot = $(prefix)/share
+ datadir = $(dataroot)/graudit
+ bindir = $(prefix)/bin

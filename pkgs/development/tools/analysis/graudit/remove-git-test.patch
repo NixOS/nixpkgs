@@ -1,0 +1,11 @@
+diff --git a/t/git-test.sh b/t/git-test.sh
+index b5acd87..3ae7fd3 100755
+--- a/t/git-test.sh
++++ b/t/git-test.sh
+@@ -6,6 +6,4 @@ test_description='graudit repo tests'
+ . ./test-lib.sh
+ 
+ # TESTS
+-test_expect_success 'No outstanding commits' 'git status|grep "working tree clean"'
+-test_expect_code 1 'No outstanding push/pulls' 'git status|grep "# Your branch is"'
+ test_done
