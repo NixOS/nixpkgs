@@ -13,11 +13,6 @@
 buildDartApplication.override { inherit dart; } rec {
   pname = "flutter-tools";
   inherit version;
-
-  # The SDK normally uses a JIT snapshot, so we do as well.
-  # Previously, we used a kernel snapshot - but this was found to cause
-  # extremely strange behaviour at runtime (observed in `flutter precache`),
-  # where certain functions would not execute properly.
   dartOutputType = "jit-snapshot";
 
   src = flutterSrc;
