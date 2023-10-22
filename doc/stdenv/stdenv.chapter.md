@@ -125,7 +125,7 @@ For example, if the failure is in the build phase, the following phases would be
 phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase" genericBuild
 ```
 
-Rerun a single phase as many times as necessary to examine the failure like so:
+Re-run a single phase as many times as necessary to examine the failure like so:
 
 ```bash
 phases="buildPhase" genericBuild
@@ -153,8 +153,8 @@ The following is a non-exhaustive list of such differences:
 - Output store paths are not writable, so the variables for outputs need to be overridden to writable paths.
 - Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
 
-If the build fails differently inside the shell than in the sandbox, consider using [breakpointHook](#breakpointhook) and invoking a `nix-build` instead.
-The `--keep-failed` option for `nix-build` may also be useful to examine the build directory of a failed build.
+If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
 :::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
