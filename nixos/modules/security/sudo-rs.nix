@@ -208,6 +208,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [ {
+      assertion = ! config.security.sudo.enable;
+      message = "`security.sudo` and `security.sudo-rs` cannot both be enabled";
+    }];
+    security.sudo.enable = mkDefault false;
+
     security.sudo-rs.extraRules =
       let
         defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
