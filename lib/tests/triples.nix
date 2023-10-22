@@ -79,11 +79,6 @@ let
       # We have been shipping Broadcom VC4 forks of gcc/binutils
       # using nonstandard triples since 4aa1ffae041bb9c65eb3067e9dbaaa70710ed100
       (canonicalize v) != "vc4-elf"
-
-      # This triple is special to GHC/Cabal/GHCJS and not recognized by autotools
-      # See: https://gitlab.haskell.org/ghc/ghc/-/commit/6636b670233522f01d002c9b97827d00289dbf5c
-      # https://github.com/ghcjs/ghcjs/issues/53
-      && (canonicalize v) != "javascript-unknown-ghcjs"
     ))
   ];
 in {
