@@ -140,7 +140,8 @@ in
   };
 
   gdk-pixbuf-sys = attrs: {
-    buildInputs = [ dbus-glib ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ dbus-glib gobject-introspection gdk-pixbuf ];
   };
 
   gdk-pixbuf = attrs: {
