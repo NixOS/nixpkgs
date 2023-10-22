@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchurl, mkRubyVersion, makeBinaryWrapper, jre }:
+{ lib, stdenv, callPackage, fetchurl, gitUpdater, mkRubyVersion, makeBinaryWrapper, jre }:
 
 let
   # The version number here is whatever is reported by the RUBY_VERSION string
@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     libPath = "lib/${rubyEngine}/${rubyVersion.libDir}";
     devEnv = callPackage ../ruby/dev.nix {
       ruby = finalAttrs.finalPackage;
+    };
+    updateScript = gitUpdater {
+      url = "https://github.com/jruby/jruby.git";
     };
   };
 
