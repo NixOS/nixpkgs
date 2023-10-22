@@ -120,7 +120,7 @@ let
   # We do not patch it since the script doesn't require engine artifacts(which are the only thing not added by the unwrapped derivation), so it shouldn't fail, and patching it will just be harder to maintain.
   immutableFlutter = writeShellScript "flutter_immutable" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    export FLUTTER_CACHE_DIR=${cacheDir}
+    export FLUTTER_CACHE_DIR=''${FLUTTER_CACHE_DIR:-'${cacheDir}'}
     ${flutter}/bin/flutter "$@"
   '';
 
