@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${version}";
-    sha256 = "sha256-jSGad3qMhAdiGdwomQO6BIyHIbKrGLRGniGrJN97gN8=";
+    hash = "sha256-jSGad3qMhAdiGdwomQO6BIyHIbKrGLRGniGrJN97gN8=";
   };
 
   pnpm-deps = stdenvNoCC.mkDerivation {
