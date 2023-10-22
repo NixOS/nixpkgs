@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.85.0";
+  version = "0.87.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-n7lOd3G9MGB63Jveis6DPMOEs80B8gCf0BD5fZ4+/u8=";
+    sha256 = "sha256-b1TCj3aKupqUMQ74O58O5WJfQM9tj1G0ny5YeeilFAM=";
   };
 
   # proxy vendor to avoid hash missmatches between linux and macOS
@@ -23,6 +23,11 @@ buildGoModule rec {
 
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcontribcol";
+
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   # journalctl is required in-$PATH for the journald receiver tests.
   nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
@@ -33,6 +38,8 @@ buildGoModule rec {
   # so expose this as an option for those who want more control over
   # it instead of trusting the global $PATH.
   propagatedBuildInputs = lib.optionals withSystemd [ systemdMinimal ];
+
+  preCheck = "export CGO_ENABLED=1";
 
   # This test fails on darwin for mysterious reasons.
   checkFlags = lib.optionals stdenv.isDarwin
