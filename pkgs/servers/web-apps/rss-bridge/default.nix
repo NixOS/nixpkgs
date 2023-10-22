@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "The RSS feed for websites missing it";
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ dawidsowa ];
+    maintainers = with maintainers; [ dawidsowa mynacol ];
     platforms = platforms.all;
   };
 }
