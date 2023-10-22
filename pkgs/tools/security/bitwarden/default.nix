@@ -1,7 +1,7 @@
 { lib
-, applyPatches
 , buildNpmPackage
 , cargo
+, copyDesktopItems
 , dbus
 , electron_25
 , fetchFromGitHub
@@ -27,15 +27,6 @@ let
 
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
   electron = electron_25;
-
-  desktopItem = makeDesktopItem {
-    name = "bitwarden";
-    exec = "bitwarden %U";
-    inherit icon;
-    comment = description;
-    desktopName = "Bitwarden";
-    categories = [ "Utility" ];
-  };
 in buildNpmPackage' rec {
   pname = "bitwarden";
   version = "2023.9.3";
@@ -63,6 +54,7 @@ in buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    copyDesktopItems
     jq
     makeWrapper
     moreutils
@@ -128,6 +120,8 @@ in buildNpmPackage' rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     pushd apps/desktop/dist/linux-unpacked
@@ -141,9 +135,6 @@ in buildNpmPackage' rec {
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-
     pushd apps/desktop/resources/icons
     for icon in *.png; do
       dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
@@ -151,7 +142,20 @@ in buildNpmPackage' rec {
       cp "$icon" "$dir"/${icon}.png
     done
     popd
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bitwarden";
+      exec = "bitwarden %U";
+      inherit icon;
+      comment = description;
+      desktopName = "Bitwarden";
+      categories = [ "Utility" ];
+    })
+  ];
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
