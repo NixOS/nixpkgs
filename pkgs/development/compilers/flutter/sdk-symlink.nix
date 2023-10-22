@@ -6,7 +6,7 @@ let
   self =
     symlinkJoin {
       name = "${flutter.name}-sdk-links";
-      paths = [ flutter flutter.sdk ];
+      paths = [ flutter flutter.cacheDir flutter.sdk ];
 
       nativeBuildInputs = [ makeWrapper ];
       postBuild = ''
