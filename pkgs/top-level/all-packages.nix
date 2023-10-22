@@ -10289,9 +10289,9 @@ with pkgs;
 
   nodenv = callPackage ../development/tools/nodenv { };
 
-  nodejs = hiPrio nodejs_18;
-  nodejs-slim = nodejs-slim_18;
-  corepack = hiPrio corepack_18;
+  nodejs = hiPrio nodejs_20;
+  nodejs-slim = nodejs-slim_20;
+  corepack = hiPrio corepack_20;
 
   nodejs_14 = callPackage ../development/web/nodejs/v14.nix { openssl = openssl_1_1; };
   nodejs-slim_14 = callPackage ../development/web/nodejs/v14.nix {
