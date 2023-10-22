@@ -24512,8 +24512,6 @@ with pkgs;
 
   pdal = callPackage ../development/libraries/pdal { };
 
-  pdf2xml = callPackage ../development/libraries/pdf2xml { };
-
   pdfhummus = libsForQt5.callPackage ../development/libraries/pdfhummus { };
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
