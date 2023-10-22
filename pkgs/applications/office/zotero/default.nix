@@ -153,5 +153,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ i077 ];
+    knownVulnerabilities = [ "CVE-2023-5217" ];
   };
 }
