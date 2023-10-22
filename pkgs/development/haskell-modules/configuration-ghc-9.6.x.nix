@@ -72,7 +72,7 @@ self: super: {
   th-desugar = doDistribute self.th-desugar_1_15;
   semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
   bifunctors = doDistribute self.bifunctors_5_6_1;
-  base-compat = doDistribute self.base-compat_0_13_0;
+  base-compat = doDistribute self.base-compat_0_13_1;
   base-compat-batteries = doDistribute self.base-compat-batteries_0_13_0;
   fgl = doDistribute self.fgl_5_8_1_1;
 
