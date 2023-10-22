@@ -28,6 +28,9 @@ substituteAll {
   ];
   postInstall = ''
     installManPage ${./nixos-rebuild.8}
+
+    installShellCompletion \
+      --bash ${./_nixos-rebuild}
   '';
 
   # run some a simple installer tests to make sure nixos-rebuild still works for them
