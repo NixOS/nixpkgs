@@ -9,9 +9,6 @@ let
   inherit (config.security.pam) enableSSHAgentAuth;
   inherit (pkgs) sudo sudo-rs;
 
-  usingMillersSudo = cfg.package.pname == sudo.pname;
-  usingSudoRs = cfg.package.pname == sudo-rs.pname;
-
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
 
@@ -38,10 +35,7 @@ in
 
     defaultOptions = mkOption {
       type = with types; listOf str;
-      default = optional usingMillersSudo "SETENV";
-      defaultText = literalMD ''
-        `[ "SETENV" ]` if using the default `sudo` implementation
-      '';
+      default = [];
       description = mdDoc ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
@@ -268,18 +262,12 @@ in
         source = "${cfg.package.out}/bin/sudo";
         inherit owner group setuid permissions;
       };
-      # sudo-rs does not yet ship a sudoedit (as of v0.2.0)
-      sudoedit = mkIf usingMillersSudo {
-        source = "${cfg.package.out}/bin/sudoedit";
-        inherit owner group setuid permissions;
-      };
     };
 
     environment.systemPackages = [ sudo ];
 
     security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
-    security.pam.services.sudo-i = mkIf usingSudoRs
-      { sshAgentAuth = true; usshAuth = true; };
+    security.pam.services.sudo-i = { sshAgentAuth = true; usshAuth = true; };
 
     environment.etc.sudoers =
       { source =
@@ -288,7 +276,7 @@ in
             src = pkgs.writeText "sudoers-in" cfg.configFile;
             preferLocalBuild = true;
           }
-          "${pkgs.buildPackages."${cfg.package.pname}"}/bin/visudo -f $src -c && cp $src $out";
+          "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
         mode = "0440";
       };
 
