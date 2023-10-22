@@ -252,6 +252,7 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
+ - LPFP
  - LPPaver
  - LambdaHack
  - LambdaINet
@@ -405,6 +406,7 @@ dont-distribute-packages:
  - UTFTConverter
  - UrlDisp
  - ViennaRNA-extras
+ - Vis
  - WEditorBrick
  - WEditorHyphen
  - WL500gPControl
@@ -599,6 +601,7 @@ dont-distribute-packages:
  - babylon
  - backblaze-b2-hs
  - backdropper
+ - balkon
  - ballast
  - bamboo
  - bamboo-launcher
@@ -846,6 +849,8 @@ dont-distribute-packages:
  - clash-vhdl
  - clashilator
  - classify-frog
+ - classy-effects
+ - classy-effects-th
  - classy-miso
  - clckwrks
  - clckwrks-cli
@@ -985,6 +990,7 @@ dont-distribute-packages:
  - craftwerk-cairo
  - craftwerk-gtk
  - craze
+ - credentials-cli
  - crf-chain1
  - crf-chain1-constrained
  - crf-chain2-generic
@@ -1122,6 +1128,7 @@ dont-distribute-packages:
  - discogs-haskell
  - discord-gateway
  - discord-hs
+ - discord-register
  - discord-rest
  - distributed-fork
  - distributed-fork-aws-lambda
@@ -2003,6 +2010,8 @@ dont-distribute-packages:
  - hedgehog-checkers-lens
  - hedgehog-gen-json
  - hedis-pile
+ - heftia
+ - heftia-effects
  - heist-aeson
  - heist-async
  - heist-extra
@@ -2486,6 +2495,7 @@ dont-distribute-packages:
  - ldapply
  - leaky
  - lean
+ - learn-physics_0_6_6
  - learning-hmm
  - legion
  - legion-discovery
@@ -3013,6 +3023,7 @@ dont-distribute-packages:
  - phonetic-languages-simplified-common
  - phonetic-languages-simplified-examples-array
  - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-common
  - phonetic-languages-simplified-lists-examples
  - phonetic-languages-simplified-properties-lists
  - phonetic-languages-simplified-properties-lists-double
@@ -3051,6 +3062,7 @@ dont-distribute-packages:
  - point-octree
  - pointless-lenses
  - pointless-rewrite
+ - poke
  - poker
  - polh-lexicon
  - polydata
@@ -3104,6 +3116,7 @@ dont-distribute-packages:
  - potoki-conduit
  - potoki-hasql
  - potoki-zlib
+ - powerqueue-sqs
  - pqueue-mtl
  - practice-room
  - pred-set
@@ -3733,6 +3746,7 @@ dont-distribute-packages:
  - stackage-sandbox
  - stackage-setup
  - stackage-upload
+ - stackage2nix
  - stackctl
  - starrover2
  - stateful-mtl
@@ -3766,6 +3780,7 @@ dont-distribute-packages:
  - stripe-tests
  - strongswan-sql
  - structural-induction
+ - structured-haskell-mode
  - structured-mongoDB
  - stunts
  - stutter
@@ -3822,6 +3837,7 @@ dont-distribute-packages:
  - tagsoup-navigate
  - tagstew
  - tahoe-directory
+ - tahoe-great-black-swamp
  - tahoe-ssk
  - tak-ai
  - takahashi
