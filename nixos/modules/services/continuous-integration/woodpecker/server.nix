@@ -31,8 +31,8 @@ in
         description = lib.mdDoc "woodpecker-server config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
       };
       environmentFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
+        type = with lib.types; coercedTo path (f: [ f ]) (listOf path);
+        default = [ ];
         example = "/root/woodpecker-server.env";
         description = lib.mdDoc ''
           File to load environment variables
@@ -61,7 +61,7 @@ in
           StateDirectoryMode = "0700";
           UMask = "0007";
           ConfigurationDirectory = "woodpecker-server";
-          EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+          EnvironmentFile = cfg.environmentFile;
           ExecStart = "${cfg.package}/bin/woodpecker-server";
           Restart = "on-failure";
           RestartSec = 15;
