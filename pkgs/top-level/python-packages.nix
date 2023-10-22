@@ -6452,6 +6452,8 @@ self: super: with self; {
     inherit (pkgs) libxml2 libxslt zlib;
   };
 
+  lxml-stubs = callPackage ../development/python-modules/lxml-stubs { };
+
   lyricwikia = callPackage ../development/python-modules/lyricwikia { };
 
   lz4 = callPackage ../development/python-modules/lz4 { };
