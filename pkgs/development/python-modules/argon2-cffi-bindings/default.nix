@@ -3,6 +3,7 @@
 , fetchPypi
 , cffi
 , setuptools-scm
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  propagatedNativeBuildInputs = [
     cffi
   ];
+
+  ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
 
   # tarball doesn't include tests, but the upstream tests are minimal
   doCheck = false;
