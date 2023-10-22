@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-W0y5JgMgduw0a7XAvA0CMflo/g9WWRPMFpNLt5Ovsjk=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    guile
+    pkg-config
+  ];
 
   buildInputs = [
     gnutls
