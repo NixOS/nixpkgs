@@ -35,7 +35,10 @@ with lib;
           };
           port = mkOption {
             type = types.nullOr port;
-            description = lib.mdDoc "Port number.";
+            description = lib.mdDoc ''
+              Port number to listen on.
+              If unset and the listen address is not a socket then nginx defaults to 80.
+            '';
             default = null;
           };
           ssl = mkOption {
