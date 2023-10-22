@@ -13,6 +13,10 @@ buildKodiAddon rec {
 
   propagatedBuildInputs = [ tzdata ];
 
+  passthru = {
+    pythonPath = "lib";
+  };
+
   meta = with lib; {
     homepage = "https://pypi.org/project/backports.zoneinfo/";
     description =

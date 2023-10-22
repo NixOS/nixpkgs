@@ -10,8 +10,8 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "Catch-up-TV-and-More";
     repo = "plugin.video.catchuptvandmore";
-    rev = "9ffa2aa80a9d4f8cbfd3b37ee6bf287487a9d280";
-    hash = "sha256-ayQaV1m0AllGpZjAD1NyttbrLdiZlwi1HWXhMpKcNug=";
+    rev = "b8fd0772e5197be8803b983b5de559a1ddd7da1d";
+    hash = "sha256-lsEv7h2Xo1ML85RBGRczagkHhYEy/5hQTmOMq+sPDg0=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,10 @@ buildKodiAddon rec {
     future
     catchuptvandmore-images
   ];
+
+  passthru = {
+    pythonPath = "resources/lib";
+  };
 
   meta = with lib; {
     homepage =

@@ -12,6 +12,10 @@ buildKodiAddon rec {
     hash = "sha256-NEMlBgeX2ignIGo21BzkN8QYdyYzUUwY3Tko9fY8xow=";
   };
 
+  passthru = {
+    pythonPath = "lib";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/powlo/script.module.pytz";
     description = "XBMC script wrapper around pytz";

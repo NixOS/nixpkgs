@@ -14,6 +14,10 @@ buildKodiAddon rec {
 
   propagatedBuildInputs = [ signals kodi-six ];
 
+  passthru = {
+    pythonPath = "lib";
+  };
+
   meta = with lib; {
     homepage =
       "https://github.com/Catch-up-TV-and-More/script.module.youtube.dl";

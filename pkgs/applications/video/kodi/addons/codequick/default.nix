@@ -15,6 +15,10 @@ buildKodiAddon rec {
 
   propagatedBuildInputs = [ youtube-dl requests ];
 
+  passthru = {
+    pythonPath = "lib";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/willforde/script.module.codequick/";
     description = "Kodi addon framework";

@@ -14,6 +14,10 @@ buildKodiAddon rec {
 
   propagatedBuildInputs = [ tzdata backports-zoneinfo ];
 
+  passthru = {
+    pythonPath = "lib";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/regebro/tzlocal";
     description =

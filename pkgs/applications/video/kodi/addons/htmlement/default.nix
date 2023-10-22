@@ -8,7 +8,11 @@ buildKodiAddon rec {
   src = fetchzip {
     url =
       "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-CCCPAEB39dWpNsgoBqCKpLLXmqBI/v0wnnbCTRhYGzE=";
+    sha256 = "sha256-As9DsZBHepM4+HkMuEI+aTg6LVsAyKp2H2diQuRv/48=";
+  };
+
+  passthru = {
+    pythonPath = "lib";
   };
 
   meta = with lib; {

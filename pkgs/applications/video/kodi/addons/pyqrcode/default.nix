@@ -11,6 +11,10 @@ buildKodiAddon rec {
     sha256 = "sha256-amqEdEu3gXlshWBzCXBE7myjaVB9fLBwA91YHadoIFg=";
   };
 
+  passthru = {
+    pythonPath = "lib";
+  };
+
   meta = with lib; {
     homepage = "https://pypi.org/project/PyQRCode/";
     description = "Python 3 module to generate QR Codes";
