@@ -953,11 +953,11 @@
     "vendorHash": null
   },
   "project": {
-    "hash": "sha256-D+UBv6JEbJKGfwTJU7/W5N6otOLW2lq6+euUKpoJ+To=",
+    "hash": "sha256-UO9GBBoOzA1stMq8naXWtxomme6CVdlngVCLQlbZDv0=",
     "homepage": "https://registry.terraform.io/providers/jfrog/project",
     "owner": "jfrog",
     "repo": "terraform-provider-project",
-    "rev": "v1.3.2",
+    "rev": "v1.3.3",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-Tj+NefCIacwpPS9rNPPxV2lLeKsXJMZhf9Xo+Rzz6gI="
   },
@@ -1279,11 +1279,11 @@
     "vendorHash": "sha256-4ulRYzb4bzk0TztT04CwqlnMGw8tp7YnoCm2/NqGN7Y="
   },
   "vultr": {
-    "hash": "sha256-65QWogqHR5RYUXBYjM50PNQSuVWYGtqtULTGNy1ivag=",
+    "hash": "sha256-8pj+udTNTjT/tXggOaIOThRQkYoI3v68rEssSUojM2A=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.16.3",
+    "rev": "v2.16.4",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

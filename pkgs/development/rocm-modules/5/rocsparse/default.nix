@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"

@@ -90,12 +90,17 @@ let
 
   getPoolMounts = prefix: pool:
     let
+      poolFSes = getPoolFilesystems pool;
+
       # Remove the "/" suffix because even though most mountpoints
       # won't have it, the "/" mountpoint will, and we can't have the
       # trailing slash in "/sysroot/" in stage 1.
       mountPoint = fs: escapeSystemdPath (prefix + (lib.removeSuffix "/" fs.mountPoint));
+
+      hasUsr = lib.any (fs: fs.mountPoint == "/usr") poolFSes;
     in
-      map (x: "${mountPoint x}.mount") (getPoolFilesystems pool);
+      map (x: "${mountPoint x}.mount") poolFSes
+      ++ lib.optional hasUsr "sysusr-usr.mount";
 
   getKeyLocations = pool: if isBool cfgZfs.requestEncryptionCredentials then {
     hasKeys = cfgZfs.requestEncryptionCredentials;
@@ -632,7 +637,8 @@ in
           targets.zfs-import.wantedBy = [ "zfs.target" ];
           targets.zfs.wantedBy = [ "initrd.target" ];
           extraBin = {
-            # zpool and zfs are already in thanks to fsPackages
+            zpool = "${cfgZfs.package}/sbin/zpool";
+            zfs = "${cfgZfs.package}/sbin/zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
         };

@@ -25,5 +25,7 @@ in
         ln -sv e2fsck $out/bin/fsck.ext4
       '';
 
+    boot.initrd.systemd.initrdBin = lib.mkIf inInitrd [ pkgs.e2fsprogs ];
+
   };
 }

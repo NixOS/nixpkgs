@@ -76,25 +76,14 @@ stdenv'.mkDerivation {
     substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
     substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                   --replace "/etc/default"            "$out/etc/default"
-    # TODO: drop when upgrading to 2.2.0
-    ${if isUnstable then ''
-      substituteInPlace ./contrib/initramfs/Makefile.am \
-        --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
-      substituteInPlace ./udev/vdev_id \
-        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-         "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
-      substituteInPlace ./config/zfs-build.m4 \
-        --replace "bashcompletiondir=/etc/bash_completion.d" \
-          "bashcompletiondir=$out/share/bash-completion/completions"
-    '' else ''
-      substituteInPlace ./etc/zfs/Makefile.am --replace "\$(sysconfdir)/zfs" "$out/etc/zfs"
-
-      find ./contrib/initramfs -name Makefile.am -exec sed -i -e 's|/usr/share/initramfs-tools|'$out'/share/initramfs-tools|g' {} \;
-
-      substituteInPlace ./cmd/vdev_id/vdev_id \
-        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-        "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
-    ''}
+    substituteInPlace ./contrib/initramfs/Makefile.am \
+      --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
+    substituteInPlace ./udev/vdev_id \
+      --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+       "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+    substituteInPlace ./config/zfs-build.m4 \
+      --replace "bashcompletiondir=/etc/bash_completion.d" \
+        "bashcompletiondir=$out/share/bash-completion/completions"
   '';
 
   nativeBuildInputs = [ autoreconfHook269 nukeReferences ]

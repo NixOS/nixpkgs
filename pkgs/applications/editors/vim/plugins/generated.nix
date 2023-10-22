@@ -3333,6 +3333,18 @@ final: prev:
     meta.homepage = "https://github.com/wincent/ferret/";
   };
 
+  ferris-nvim = buildNeovimPlugin {
+    pname = "ferris.nvim";
+    version = "2023-11-21";
+    src = fetchFromGitHub {
+      owner = "mrcjkb";
+      repo = "ferris.nvim";
+      rev = "54943eaeb0d4534988d2378936052655c988c3c2";
+      sha256 = "o4yY4IHYBCnanfy7dx/wGdiPFMLMKZsYrG2SqlPRvdI=";
+    };
+    meta.homepage = "https://github.com/mrcjkb/ferris.nvim/";
+  };
+
   fidget-nvim = buildVimPlugin {
     pname = "fidget.nvim";
     version = "2023-06-10";

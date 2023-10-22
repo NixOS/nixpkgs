@@ -18,7 +18,7 @@
 # Can also use cuBLAS
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"

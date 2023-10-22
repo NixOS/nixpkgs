@@ -32,7 +32,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"

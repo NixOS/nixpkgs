@@ -4,29 +4,29 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argtable";
-  version = "3.2.1";
-  srcVersion = "v${version}.52f24e5";
+  version = "3.2.2";
+  srcVersion = "v${finalAttrs.version}.f25c624";
 
   src = fetchFromGitHub {
     owner = "argtable";
     repo = "argtable3";
-    rev = srcVersion;
-    hash = "sha256-HFsk91uJXQ0wpvAQxP4/yZwRQx9kLH7KgB3Y/+zcZC0=";
+    rev = finalAttrs.srcVersion;
+    hash = "sha256-X89xFLDs6NEgjzzwy8kplvTgukQd/CV3Xa9A3JXecf4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
   ];
 
   postPatch = ''
     patchShebangs tools/build
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/argtable/argtable3";
     description = "A single-file, ANSI C command-line parsing library";
     longDescription = ''
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
       handling logic and textual descriptions of the command line syntax, which
       are essential but tedious to implement for a robust CLI program.
     '';
-    license = with licenses; bsd3;
-    maintainers = with maintainers; [ AndersonTorres artuuge ];
-    platforms = with platforms; all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ AndersonTorres artuuge ];
+    platforms = lib.platforms.all;
   };
-}
+})
 # TODO: a NixOS test suite
 # TODO: multiple outputs
 # TODO: documentation
