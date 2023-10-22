@@ -1,10 +1,18 @@
-{ symlinkJoin }: flutter:
+{ symlinkJoin
+, makeWrapper
+}: flutter:
 
 let
   self =
     symlinkJoin {
       name = "${flutter.name}-sdk-links";
       paths = [ flutter flutter.sdk ];
+
+      nativeBuildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram "$out/bin/flutter" \
+          --set-default FLUTTER_ROOT "$out"
+      '';
 
       passthru = flutter.passthru // {
         # Update the SDK attribute.
