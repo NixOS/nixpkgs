@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Vencord/Vesktop";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
   };
 }
