@@ -5,6 +5,7 @@
 , installShellFiles
 , jq
 , python3
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -18,6 +19,14 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "disable-broken-urwid-test.patch";
+      url = "https://github.com/pimutils/todoman/commit/7ff0d2e2e69e24df5d66fecc58f8cd0b4e5ced6d.patch";
+      hash = "sha256-MMNnnIthNqobexd8GaA6lYxzv5gr1l0e9YK+Ygeje2w=";
+    })
+  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
