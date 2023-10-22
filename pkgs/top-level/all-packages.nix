@@ -12787,6 +12787,8 @@ with pkgs;
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
 
+  rkvm = callPackage ../tools/misc/rkvm { };
+
   rkrlv2 = callPackage ../applications/audio/rkrlv2 { };
 
   rmlint = callPackage ../tools/misc/rmlint {
