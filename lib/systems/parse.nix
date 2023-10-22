@@ -452,11 +452,6 @@ rec {
       "javascript-unknown-ghcjs".  You tried to create
       "${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}"
       '';
-    # The following assertions can (and must) be removed when our gnu-config is bumped to at least 2023-07-31
-    assert with components;                      vendor.name != "" && kernel.name == "none" && abi.name == "elf"
-      -> throw "two component *-*-none-elf triples are not allowed; please omit the vendor";
-    assert with components; cpu.name != "vc4" && vendor.name == "" && kernel.name == ""     && abi.name == "elf"
-      -> throw "two component *-elf triples are not allowed, except for vc4-elf";
     setType "system" components;
 
   mkSkeletonFromList = l: {
