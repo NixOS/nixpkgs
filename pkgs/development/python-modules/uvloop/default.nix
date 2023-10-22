@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.18.0";
+  version = "0.19.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1dETW+/+nNldA1DxnicWvDi+R9XfKW18xG47dVfA0f8=";
+    hash = "sha256-Akb0/Rvyv3AuBrDUXukWd+5cMSQvOaq06m/gxRrt0P0=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin) [
     # Segmentation fault
     "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "--deselect=tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
   ];
