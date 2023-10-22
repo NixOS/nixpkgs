@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.9.0";
+  version = "2.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "c0fec0de";
     repo = "anytree";
     rev = "refs/tags/${version}";
-    hash = "sha256-e7mmOOvrZuMCcyUg74YLLXGzkb5nCtuYmhNzAbY65gg=";
+    hash = "sha256-DY68fULTO6vJzQWeUQJCrz9R0nRJL11cTS+eEfQ1WaU=";
   };
 
   patches = lib.optionals withGraphviz [
