@@ -113,6 +113,11 @@ stdenv.mkDerivation rec {
     rm -r $out/share/themes/*/gtk-4.0/{apps,widgets,*.scss}
     rm -r $out/share/themes/*/xfwm4/{assets,render_assets.fish}
 
+    # move wallpapers to appropriate directory
+    mkdir -p $out/share/wallpapers/Nordic
+    mv -v $out/share/themes/Nordic/extras/wallpapers/* $out/share/wallpapers/Nordic/
+    rmdir $out/share/themes/Nordic/extras{/wallpapers,}
+
     # move kde related contents to appropriate directories
     mkdir -p $out/share/{aurorae/themes,color-schemes,Kvantum,plasma,sddm/themes}
     mv -v $out/share/themes/Nordic/kde/aurorae/* $out/share/aurorae/themes/
