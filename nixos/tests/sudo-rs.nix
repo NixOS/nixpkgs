@@ -22,8 +22,6 @@ in
           test5 = { isNormalUser = true; };
         };
 
-        security.sudo.enable = false;
-
         security.sudo-rs = {
           enable = true;
           package = pkgs.sudo-rs;
@@ -55,8 +53,6 @@ in
         admin = { isNormalUser = true; extraGroups = [ "wheel" ]; };
         noadmin = { isNormalUser = true; };
       };
-
-      security.sudo.enable = false;
 
       security.sudo-rs = {
         package = pkgs.sudo-rs;
