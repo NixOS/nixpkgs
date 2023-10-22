@@ -39,6 +39,7 @@ in
 mapAliases ({
   kak-auto-pairs         = auto-pairs-kak; # backwards compat, added 2021-01-04
   kak-buffers            = kakoune-buffers; # backwards compat, added 2021-01-04
+  kak-byline             = byline-kak; # backwards compat, added 2023-10-22
   kak-fzf                = fzf-kak; # backwards compat, added 2021-01-04
   kak-powerline          = powerline-kak; # backwards compat, added 2021-01-04
   kak-prelude            = prelude-kak; # backwards compat, added 2021-01-04
