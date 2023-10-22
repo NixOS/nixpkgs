@@ -180,7 +180,10 @@ in ''
          export CARGO_FEATURE_$feature=1
        done
 
-       target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+       # build script failures are reported to stdout rather than stderr, so we
+       # use tee here instead of > to ensure that `nix log` contains useful
+       # information when a failure occurs
+       target/build/${crateName}/build_script_build | tee target/build/${crateName}.opt
      )
 
      set +e
