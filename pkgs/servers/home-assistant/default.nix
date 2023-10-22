@@ -87,16 +87,6 @@ let
         };
       });
 
-      faadelays = super.faadelays.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.7";
-        src = fetchFromGitHub {
-          owner = "ntilley905";
-          repo = "faadelays";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-NmBijDr/6pGATvzZhCrOjdDU7DKwLFAfwSgozvBYHMo=";
-        };
-      });
-
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
         src = fetchFromGitHub {
@@ -114,16 +104,6 @@ let
         src = fetchPypi {
           inherit pname version;
           hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
-      });
-
-      google-nest-sdm = super.google-nest-sdm.overridePythonAttrs (oldAtrs: rec {
-        version = "2.2.5";
-        src = fetchFromGitHub {
-          owner = "allenporter";
-          repo = "python-google-nest-sdm";
-          rev = "refs/tags/${version}";
-          hash = "sha256-UMP4FMyS8nAZmN7oKBZhMbqTgi4bSR/JmIeyWaZRZis=";
         };
       });
 
@@ -262,15 +242,6 @@ let
         };
       });
 
-      pysensibo = super.pysensibo.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.33";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-A7IzAIV8dQVSmYTEp9yeySQ8eXnLFVkiuWFS3pe2YTA=";
-        };
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -339,27 +310,6 @@ let
         doCheck = false;
       });
 
-      screenlogicpy = super.screenlogicpy.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.2";
-        src = fetchFromGitHub {
-          owner = "dieselrabbit";
-          repo = "screenlogicpy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-7w2cg+LfL3w2Xxf8s7lFxE/HkqZ6RBYp8LkZTOwgK+I=";
-        };
-      });
-
-      syrupy = super.syrupy.overridePythonAttrs (oldAttrs: rec {
-        version = "4.2.1";
-        src = fetchFromGitHub {
-          owner = "tophat";
-          repo = "syrupy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-MXUuLw4+J/9JtXY1DYwBjj2sgAbO2cXQi1HnVRx3BhM=";
-        };
-        doCheck = false;
-      });
-
       # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
@@ -368,17 +318,6 @@ let
           repo = "python-tailscale";
           rev = "refs/tags/v${version}";
           hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
-        };
-      });
-
-      velbus-aio = super.velbus-aio.overridePythonAttrs (oldAttrs: rec {
-        version = "2023.2.0";
-        src = fetchFromGitHub {
-          owner = "Cereal2nd";
-          repo = "velbus-aio";
-          rev = "refs/tags/${version}";
-          hash = "sha256-y8M9Zf/CMM7NH0Sr7E9sx7JnOFGlExEk7cFEGrHBi7g=";
-          fetchSubmodules = true;
         };
       });
 
@@ -427,7 +366,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.10.4";
+  hassVersion = "2023.10.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -443,7 +382,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HG8Uyk52Bj9CpQ+dn+dbsXVBKakXDlRktG4KSkVVVmE=";
+    hash = "sha256-jVw0Mudb/L4Lw3AodwcOTrNJZctSfEIcXUzxozo7saA=";
   };
 
   # Secondary source is git for tests
@@ -451,7 +390,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-m3MjJHFq9S0dogFijIlpryqGQoHpLqkqgkWLuIxLHa8=";
+    hash = "sha256-wKxAwa4t3JbS4puDAufjpzcVLcvEY9Bk73qmg3JeLPk=";
   };
 
   nativeBuildInputs = with python.pkgs; [
