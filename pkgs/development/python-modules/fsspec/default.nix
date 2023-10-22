@@ -29,16 +29,16 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2023.9.1";
+  version = "2023.10.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = "filesystem_spec";
-    rev = version;
-    hash = "sha256-1ai+/8akUlP9kfzSKYEpDnobBfUC6EAPFPVVxh4jb/0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GVBF2ppyIEvC4rR9IF4gwsdc4fJe1xHS1CyJEwFuVGw=";
   };
 
   propagatedBuildInputs = [
