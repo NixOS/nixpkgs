@@ -141,5 +141,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }
