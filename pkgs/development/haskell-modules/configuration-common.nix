@@ -21,7 +21,7 @@ with haskellLib;
 self: super: {
   # Make sure that Cabal 3.10.* can be built as-is
   Cabal_3_10_1_0 = doDistribute (super.Cabal_3_10_1_0.override ({
-    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
     process = self.process_1_6_18_0;
@@ -40,7 +40,7 @@ self: super: {
           resolv = cself.resolv_0_1_2_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
           Cabal = cself.Cabal_3_10_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_10_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_10_2_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
           # We need at least directory >= 1.3.7.0. Using the latest version
           # 1.3.8.* is not an option since it causes very annoying dependencies
@@ -1393,7 +1393,7 @@ self: super: {
   # 2022-08-31: Jailbreak is done to allow aeson 2.0.*:
   # https://github.com/haskell-CI/haskell-ci/commit/6ad0d5d701cbe101013335d597acaf5feadd3ab9#r82681900
   cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
   }));
 
   # Test suite requires database
@@ -2123,7 +2123,7 @@ self: super: {
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2023-07-03: allow lattices-2.2, waiting on https://github.com/haskell-CI/haskell-ci/pull/664
   haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
-    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
   }));
 
   large-hashable = lib.pipe (super.large-hashable.override {
@@ -2370,7 +2370,7 @@ self: super: {
 
   cabal-fmt = doJailbreak (super.cabal-fmt.override {
     # Needs newer Cabal-syntax version.
-    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
   });
 
   # 2023-07-18: https://github.com/srid/ema/issues/156

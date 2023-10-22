@@ -117,7 +117,7 @@ in {
         hls_overlay = lself: lsuper: {
           ghc-lib-parser = lself.ghc-lib-parser_9_6_2_20230523;
           ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
-          Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
+          Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
