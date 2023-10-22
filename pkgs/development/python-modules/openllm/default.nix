@@ -183,6 +183,8 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
     # skip GPUs test on CI
     export GITHUB_ACTIONS=1
+    # disable hypothesis' deadline
+    export CI=1
   '';
 
   disabledTests = [
