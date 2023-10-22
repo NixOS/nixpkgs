@@ -10200,6 +10200,21 @@ with self; {
     };
   };
 
+  FutureQueue = buildPerlModule {
+    pname = "Future-Queue";
+    version = "0.51";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-Queue-0.51.tar.gz";
+      hash = "sha256-HVAcOpot3/x8YPlvpmlp1AyykuCSBM9t7NHCuLUAPNY=";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ Future ];
+    meta = {
+      description = "A FIFO queue of values that uses L<Future>s";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GamesSolitaireVerify = buildPerlModule {
     pname = "Games-Solitaire-Verify";
     version = "0.2403";
@@ -20224,7 +20239,7 @@ with self; {
       url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.905.tar.gz";
       hash = "sha256-RVW1J5nBZBXDy/5eMB6gLKDrvDQhTH/lLx19ykUwLik=";
     };
-    propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
+    propagatedBuildInputs = [ Future FutureQueue IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/pls

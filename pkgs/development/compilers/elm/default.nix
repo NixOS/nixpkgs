@@ -69,7 +69,7 @@ let
       attoparsec = self.attoparsec_0_13_2_5;
 
       # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
-      aeson = self.aeson_1_5_6_0;
+      aeson = doJailbreak self.aeson_1_5_6_0;
 
       # elm-instrument needs this
       indents = self.callPackage ./packages/indents.nix {};
