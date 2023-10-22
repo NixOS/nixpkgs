@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , django
 
 # optionals
@@ -19,14 +20,16 @@
 
 buildPythonPackage rec {
   pname = "django-markup";
-  version = "1.7.2";
-  format = "setuptools";
+  version = "1.8.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bartTC";
     repo = "django-markup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NvGlvrXOwDrwHhbFHrWf7Kz9sEzTTyq84/Z6jjRNy8Q=";
+    hash = "sha256-Hhcp4wVJEcYV1lEZ2jWf7nOlt5m4lVAfC6VmKIdxf4c=";
   };
 
   postPatch = ''
