@@ -32,7 +32,7 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe ashkitten ];
     license = licenses.agpl3Only;
     platforms = platforms.all;
   };
