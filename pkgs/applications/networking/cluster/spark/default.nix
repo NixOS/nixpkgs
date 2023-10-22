@@ -10,6 +10,7 @@
 , hadoop
 , RSupport ? true
 , R
+, nixosTests
 }:
 
 let
@@ -59,6 +60,10 @@ let
         done
         ln -s $out/lib/${untarDir}/lib/spark-assembly-*.jar $out/share/java
       '';
+
+      passthru.tests = nixosTests.spark.default.passthru.override {
+        sparkPackage = finalAttrs.finalPackage;
+      };
 
       meta = {
         description = "Apache Spark is a fast and general engine for large-scale data processing";
