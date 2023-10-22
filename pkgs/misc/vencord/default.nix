@@ -54,6 +54,8 @@ buildNpmPackage rec {
       cp -r dist/ $out
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
