@@ -67,6 +67,7 @@ let
 
         mkdir -p $out
         cp -r . $out
+        rm -rf $out/bin/cache/dart-sdk
         ln -sf ${dart} $out/bin/cache/dart-sdk
 
         # The regular launchers are designed to download/build/update SDK
