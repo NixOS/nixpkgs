@@ -1,14 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, python, mock, pythonAtLeast }:
+{ lib, buildPythonPackage, fetchPypi, python, mock }:
 
 buildPythonPackage rec {
   pname = "stem";
   version = "1.8.2";
-
-  # As of May 2023, the master branch of stem contains fixes for Python 3.11
-  # that the last release (1.8.1) doesn't. The test suite fails on both master
-  # and the 1.8.1 release, so disabling rather than switching to an unstable
-  # source.
-  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
