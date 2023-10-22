@@ -12787,6 +12787,8 @@ with pkgs;
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
 
+  rkvm = callPackage ../tools/misc/rkvm { };
+
   rkrlv2 = callPackage ../applications/audio/rkrlv2 { };
 
   rmlint = callPackage ../tools/misc/rmlint {
@@ -19512,10 +19514,6 @@ with pkgs;
   kcat = callPackage ../development/tools/kcat { };
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
-
-  kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends {
-    gperf = gperf_3_0;
-  };
 
   kcgi = callPackage ../development/web/kcgi { };
 
