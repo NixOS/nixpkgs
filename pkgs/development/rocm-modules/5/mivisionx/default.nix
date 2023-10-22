@@ -38,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     else "cpu"
   );
 
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-ProfessionalCompute-Libraries";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Z7UIqJWuSD+/FoZ1VIbITp4R/bwaqFCQqsL8CRW73Ek=";
+    hash = "sha256-jmOgwESNALQt7ctmUY9JHgKq47tCwsW1ybynkX9236U=";
   };
 
   nativeBuildInputs = [

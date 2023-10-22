@@ -111,8 +111,7 @@ in rec {
 
   # Needs GCC
   roctracer = callPackage ./roctracer {
-    inherit rocmUpdateScript rocm-device-libs rocm-runtime rocprofiler clr;
-    inherit (llvm) clang;
+    inherit rocmUpdateScript rocm-device-libs rocm-runtime clr;
   };
 
   # Needs GCC

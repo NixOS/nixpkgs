@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "rccl";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Abrwmsjnkx9JVTrARP/BM965g+R10lY+XPwthy/SG0k=";
+    hash = "sha256-nFkou/kjGBmImorlPOZNTlCrxbfAYpDhgRveyoAufu8=";
   };
 
   nativeBuildInputs = [

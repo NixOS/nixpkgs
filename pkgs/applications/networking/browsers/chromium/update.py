@@ -59,9 +59,9 @@ def prefetch_src_sri_hash(attr_path, version):
 
 def nix_prefetch_url(url, algo='sha256'):
     """Prefetches the content of the given URL."""
-    print(f'nix-prefetch-url {url}')
-    out = subprocess.check_output(['nix-prefetch-url', '--type', algo, url])
-    return out.decode('utf-8').rstrip()
+    print(f'nix store prefetch-file {url}')
+    out = subprocess.check_output(['nix', 'store', 'prefetch-file', '--json', '--hash-type', algo, url])
+    return json.loads(out)['hash']
 
 
 def nix_prefetch_git(url, rev):
@@ -96,9 +96,9 @@ def get_chromedriver(channel):
 
         return {
             'version': channel['version'],
-            'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
-            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac-x64')),
-            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac-arm64'))
+            'hash_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
+            'hash_darwin': nix_prefetch_url(get_chromedriver_url('mac-x64')),
+            'hash_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac-arm64'))
         }
 
 
@@ -113,7 +113,7 @@ def get_channel_dependencies(version):
             'version': datetime.fromisoformat(gn['date']).date().isoformat(),
             'url': gn['url'],
             'rev': gn['rev'],
-            'sha256': gn['sha256']
+            'hash': gn['hash']
         }
     }
 
@@ -222,11 +222,11 @@ with urlopen(RELEASES_URL) as resp:
             google_chrome_suffix = channel_name
 
         try:
-            channel['sha256'] = prefetch_src_sri_hash(
+            channel['hash'] = prefetch_src_sri_hash(
                 channel_name_to_attr_name(channel_name),
                 release["version"]
             )
-            channel['sha256bin64'] = nix_prefetch_url(
+            channel['hash_deb_amd64'] = nix_prefetch_url(
                 f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
                 f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
         except subprocess.CalledProcessError:
@@ -241,7 +241,7 @@ with urlopen(RELEASES_URL) as resp:
             ungoogled_repo_url = 'https://github.com/ungoogled-software/ungoogled-chromium.git'
             channel['deps']['ungoogled-patches'] = {
                 'rev': release['ungoogled_tag'],
-                'sha256': nix_prefetch_git(ungoogled_repo_url, release['ungoogled_tag'])['sha256']
+                'hash': nix_prefetch_git(ungoogled_repo_url, release['ungoogled_tag'])['hash']
             }
             with open(UNGOOGLED_FLAGS_PATH, 'w') as out:
                 out.write(get_ungoogled_chromium_gn_flags(release['ungoogled_tag']))
