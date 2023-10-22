@@ -95,6 +95,10 @@ let
         export HOME="$(mktemp -d)"
         $out/bin/flutter config --android-studio-dir $HOME
         $out/bin/flutter config --android-sdk $HOME
+        $out/bin/flutter --disable-telemetry
+        $out/bin/flutter --version
+
+        # check that version is equal to expected or fail
         $out/bin/flutter --version | fgrep -q '${version}'
 
         runHook postInstallCheck
