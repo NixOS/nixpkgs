@@ -75,9 +75,9 @@ let
         # Replace them with simple links and wrappers.
         rm "$out/bin"/{dart,flutter}
         ln -s "$out/bin/cache/dart-sdk/bin/dart" "$out/bin/dart"
-        makeWrapper "$out/bin/dart" "$out/bin/flutter" \
+        makeShellWrapper "$out/bin/dart" "$out/bin/flutter" \
           --set-default FLUTTER_ROOT "$out" \
-          --add-flags "--disable-dart-dev $out/bin/cache/flutter_tools.snapshot"
+          --add-flags "--disable-dart-dev \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
         runHook postInstall
       '';
