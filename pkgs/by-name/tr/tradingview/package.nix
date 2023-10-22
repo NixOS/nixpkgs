@@ -64,15 +64,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r squashfs-root/* $out
+    mkdir -p $out/share
+    cp -r squashfs-root $out/share/tradingview
+    rm -rf $out/share/tradingview/meta
 
-    mkdir -p $out/share/applications
-    mv $out/meta/gui/tradingview.desktop $out/share/applications
-    substituteInPlace $out/share/applications/tradingview.desktop --replace \$\{SNAP} $out
+    install -Dm444 squashfs-root/meta/gui/tradingview.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/tradingview.desktop --replace \$\{SNAP}/meta/gui/icon.png tradingview
+
+    mkdir $out/share/icons
+    cp squashfs-root/meta/gui/icon.png $out/share/icons/tradingview.png
 
     mkdir $out/bin
-    makeBinaryWrapper $out/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath buildInputs }
+    makeBinaryWrapper $out/share/tradingview/tradingview $out/bin/tradingview --prefix LD_LIBRARY_PATH : ${ lib.makeLibraryPath buildInputs }
 
     runHook postInstall
   '';
@@ -88,4 +91,3 @@ stdenv.mkDerivation rec {
     mainProgram = "tradingview";
   };
 }
-
