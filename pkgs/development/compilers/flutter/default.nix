@@ -45,10 +45,6 @@ let
           owner = "flutter";
           repo = "flutter";
           rev = version;
-          # The Flutter SDK uses Git to obtain version information,
-          # and relies on many features that do not work with leaveDotGit alone.
-          # https://github.com/flutter/flutter/blob/master/packages/flutter_tools/lib/src/version.dart
-          deepClone = true;
           hash = flutterHash;
         };
       };
@@ -85,7 +81,7 @@ in
       x86_64-darwin = "sha256-BchKowKd6BscVuk/dXibcQzdFkW9//GDfll77mHEI4M=";
       aarch64-darwin = "sha256-9yrx09vYrOTmdqkfJI7mfh7DI1/rg67tPlf82m5+iKI=";
     };
-    flutterHash = "sha256-s6JLDNHRBq3kZjA5vZHID9DQPNn/CZT2a3C3uvV/M6g=";
+    flutterHash = "sha256-00G030FvZZTsdf9ruFs9jdIHcC5h+xpp4NlmL64qVZA=";
     patches = flutter3Patches;
     pubspecLockFile = ./lockfiles/stable/pubspec.lock;
     vendorHash = "sha256-lsFOvvmhszBcFb9XvabpqfL2Ek4wjhmB0OrcWUOURFQ=";

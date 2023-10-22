@@ -62,6 +62,10 @@ let
         cp -r . $out
         ln -sf ${dart} $out/bin/cache/dart-sdk
 
+        # The Flutter CLI launcher checks for the existance of a .git directory.
+        # https://github.com/flutter/flutter/blob/3.13.8/bin/internal/shared.sh#L224
+        mkdir -p "$out/.git"
+
         runHook postInstall
       '';
 
@@ -74,7 +78,7 @@ let
         export HOME="$(mktemp -d)"
         $out/bin/flutter config --android-studio-dir $HOME
         $out/bin/flutter config --android-sdk $HOME
-        $out/bin/flutter --version | fgrep -q '${version}'
+        $out/bin/flutter --version | fgrep -q '${builtins.substring 0 10 engineVersion}'
 
         runHook postInstallCheck
       '';
