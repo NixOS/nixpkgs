@@ -154,16 +154,6 @@ self: super: {
       "vector-tests-O0"
       "vector-tests-O2"
     ];
-    patches = [
-      # Workaround almost guaranteed floating point errors in test suite with quickcheck 2.14.3
-      # https://github.com/haskell/vector/issues/460
-      (pkgs.fetchpatch {
-        name = "vector-quickcheck-2.14.3-float-workaround.patch";
-        url = "https://github.com/haskell/vector/commit/df8dd8e8e84005aa6b187b03cd502f3c6e18cf3c.patch";
-        sha256 = "040wg8mqlkdnrl5axy9wk0mlpn8rpc4vc4afpxignj9i7yc4pfjj";
-        stripLen = 1;
-     })
-   ];
   }) super.vector;
 
   # Almost guaranteed failure due to floating point imprecision with QuickCheck-2.14.3
