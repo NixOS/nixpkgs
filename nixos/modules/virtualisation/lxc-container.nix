@@ -66,7 +66,7 @@ in {
 
     system.build.installBootLoader = pkgs.writeScript "install-lxd-sbin-init.sh" ''
       #!${pkgs.runtimeShell}
-      ln -fs "$1/init" /sbin/init
+      ${pkgs.coreutils}/bin/ln -fs "$1/init" /sbin/init
     '';
 
     systemd.additionalUpstreamSystemUnits = lib.mkIf cfg.nestedContainer ["systemd-udev-trigger.service"];
