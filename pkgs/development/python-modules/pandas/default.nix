@@ -65,16 +65,16 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "2.1.0";
-  format = "pyproject";
+  version = "2.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pandas-dev";
     repo = "pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QwMW/qc1n51DaVhUnIaG0bdOvDitvvPh6ftoDawiYlc=";
+    hash = "sha256-6SgW4BtO7EFnS8P8LL4AGk5EdPwOQ0+is0wXgqsm9w0=";
   };
 
   patches = [
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
-      --replace "meson==1.0.1" "meson>=1.0.1"
+      --replace "meson==1.2.1" "meson>=1.2.1"
   '';
 
   nativeBuildInputs = [
