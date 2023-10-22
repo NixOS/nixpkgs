@@ -3333,18 +3333,6 @@ final: prev:
     meta.homepage = "https://github.com/wincent/ferret/";
   };
 
-  ferris-nvim = buildNeovimPlugin {
-    pname = "ferris.nvim";
-    version = "2023-11-21";
-    src = fetchFromGitHub {
-      owner = "mrcjkb";
-      repo = "ferris.nvim";
-      rev = "54943eaeb0d4534988d2378936052655c988c3c2";
-      sha256 = "o4yY4IHYBCnanfy7dx/wGdiPFMLMKZsYrG2SqlPRvdI=";
-    };
-    meta.homepage = "https://github.com/mrcjkb/ferris.nvim/";
-  };
-
   fidget-nvim = buildVimPlugin {
     pname = "fidget.nvim";
     version = "2023-06-10";
@@ -16139,6 +16127,18 @@ final: prev:
       sha256 = "19gndx91dj3c76zbidlk4gjgjw0qkpv4x0ws6f1fsga9b9gplf3g";
     };
     meta.homepage = "https://github.com/rose-pine/neovim/";
+  };
+
+  rustaceanvim = buildNeovimPlugin {
+    pname = "rustaceanvim";
+    version = "2023-10-22";
+    src = fetchFromGitHub {
+      owner = "mrcjkb";
+      repo = "rustaceanvim";
+      rev = "c85f287896c94791479aeddf28fc47c62b63a5aa";
+      sha256 = "CcBITd6/BZeBu85Vz3tjWtD0yuAn6I8rUX7vxMyX6WI=";
+    };
+    meta.homepage = "https://github.com/mrcjkb/rustaceanvim/";
   };
 
   samodostal-image-nvim = buildVimPlugin {
