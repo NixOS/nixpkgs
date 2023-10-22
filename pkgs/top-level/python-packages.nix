@@ -3057,6 +3057,8 @@ self: super: with self; {
 
   django-scim2 = callPackage ../development/python-modules/django-scim2 { };
 
+  django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
+
   django-scopes = callPackage ../development/python-modules/django-scopes { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
@@ -8732,6 +8734,8 @@ self: super: with self; {
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
+  pasimple = callPackage ../development/python-modules/pasimple { };
+
   passlib = callPackage ../development/python-modules/passlib { };
 
   paste = callPackage ../development/python-modules/paste { };
@@ -12935,6 +12939,8 @@ self: super: with self; {
   slovnet = callPackage ../development/python-modules/slovnet { };
 
   slowapi = callPackage ../development/python-modules/slowapi { };
+
+  slpp = callPackage ../development/python-modules/slpp { };
 
   slugid = callPackage ../development/python-modules/slugid { };
 

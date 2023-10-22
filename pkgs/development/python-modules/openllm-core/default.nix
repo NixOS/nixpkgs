@@ -22,8 +22,8 @@
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.3.4";
-  format = "pyproject";
+  version = "0.3.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uRXsIcsgu+EAxzUGKt9+PIoO1kvo6rWT569D5qXFrAQ=";
+    hash = "sha256-M/ckvaHTdKFg7xfUgFxu7pRBrS6TGw0m2U3L88b2DKU=";
   };
 
   sourceRoot = "source/openllm-core";
@@ -67,6 +67,7 @@ buildPythonPackage rec {
     ] ++ transformers.optional-dependencies.torch
       ++ transformers.optional-dependencies.tokenizers
       ++ transformers.optional-dependencies.accelerate;
+    full = with passthru.optional-dependencies; ( vllm ++ fine-tune );
   };
 
   # there is no tests

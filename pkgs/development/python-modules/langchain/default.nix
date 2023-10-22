@@ -6,8 +6,10 @@
 , pythonRelaxDepsHook
 , poetry-core
 , aiohttp
+, anyio
 , async-timeout
 , dataclasses-json
+, jsonpatch
 , langsmith
 , numexpr
 , numpy
@@ -86,7 +88,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.291";
+  version = "0.0.320";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -95,17 +97,10 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ilmu4l+DCu2soX5kANegk/DMvr2x9AXUcQ1aZOKbQJc=";
+    hash = "sha256-Yw3gGt/OvrQ4IYauFUt6pBWOecy+PaWiGXoo5dWev5M=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
-
-  postPatch = ''
-    substituteInPlace langchain/utilities/bash.py \
-      --replace '"env", ["-i", "bash", ' '"${lib.getExe bash}", ['
-    substituteInPlace tests/unit_tests/test_bash.py \
-      --replace "/bin/sh" "${bash}/bin/sh"
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -128,6 +123,8 @@ buildPythonPackage rec {
     aiohttp
     numexpr
     langsmith
+    anyio
+    jsonpatch
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
   ];

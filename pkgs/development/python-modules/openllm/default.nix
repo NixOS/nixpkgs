@@ -15,6 +15,7 @@
 , einops
 , fairscale
 , flax
+, ghapi
 , hypothesis
 , ipython
 , jax
@@ -35,6 +36,7 @@
 , pytest-xdist
 , ray
 , safetensors
+, scipy
 , sentencepiece
 , soundfile
 , syrupy
@@ -49,7 +51,7 @@
 buildPythonPackage rec {
   inherit (openllm-core) src version;
   pname = "openllm";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -68,17 +70,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    accelerate
     bentoml
     bitsandbytes
     click
+    ghapi
     openllm-client
+    openllm-core
     optimum
     safetensors
     tabulate
     transformers
   ] ++ bentoml.optional-dependencies.io
   ++ tabulate.optional-dependencies.widechars
-  # ++ transformers.optional-dependencies.accelerate
   ++ transformers.optional-dependencies.tokenizers
   ++ transformers.optional-dependencies.torch;
 
@@ -119,13 +123,15 @@ buildPythonPackage rec {
     ];
     gptq = [
       # auto-gptq
+      optimum
     ]; # ++ autogptq.optional-dependencies.triton;
     grpc = [
-    openllm-client
+      openllm-client
     ] ++ openllm-client.optional-dependencies.grpc;
     llama = [
       fairscale
       sentencepiece
+      scipy
     ];
     mpt = [
       einops
@@ -134,7 +140,7 @@ buildPythonPackage rec {
     openai = [
       openai
       tiktoken
-    ];
+    ] ++ openai.optional-dependencies.embeddings;
     opt = [
       flax
       jax
@@ -156,9 +162,10 @@ buildPythonPackage rec {
       ray
       # vllm
     ];
-    all = with passthru.optional-dependencies; (
+    full = with passthru.optional-dependencies; (
       agents ++ baichuan ++ chatglm ++ falcon ++ fine-tune ++ flan-t5 ++ ggml ++ gptq ++ llama ++ mpt ++ openai ++ opt ++ playground ++ starcoder ++ vllm
     );
+    all = passthru.optional-dependencies.full;
   };
 
   nativeCheckInputs = [
@@ -176,6 +183,8 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
     # skip GPUs test on CI
     export GITHUB_ACTIONS=1
+    # disable hypothesis' deadline
+    export CI=1
   '';
 
   disabledTests = [
