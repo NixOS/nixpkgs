@@ -6,16 +6,16 @@
 , pytestCheckHook
 , python-dateutil
 , python-slugify
-, pythonAtLeast
 , pythonOlder
 , requests
+, setuptools
 , sortedcontainers
 }:
 
 buildPythonPackage rec {
   pname = "blinkpy";
   version = "0.22.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,6 +25,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-r8kf5L6bvtivqd9dSi8om1wIi8IHmipKFckNMPT515I=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiofiles
@@ -49,16 +53,10 @@ buildPythonPackage rec {
     "blinkpy.sync_module"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    "test_download_video_exit"
-    "test_parse_camera_not_in_list"
-    "test_parse_downloaded_items"
-  ];
-
   meta = with lib; {
     description = "Python library for the Blink Camera system";
     homepage = "https://github.com/fronzbot/blinkpy";
-    changelog = "https://github.com/fronzbot/blinkpy/releases/tag/v${version}";
+    changelog = "https://github.com/fronzbot/blinkpy/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
