@@ -68,27 +68,29 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "manim";
-  format = "pyproject";
-  version = "0.16.0.post0";
+  pyproject = true;
+  version = "0.17.3";
   disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
+    sha256 = "sha256-TU/b5nwk5Xc9wmFKAIMeBwC4YBy7HauGeGV9/n4Y64c=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
   ];
 
+  patches = [
+    ./pytest-report-header.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
       --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
-      --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
-      --replace 'click = ">=7.2<=9.0"' 'click = ">=7.2,<=9.0"' # https://github.com/ManimCommunity/manim/pull/2954
   '';
 
   buildInputs = [ cairo ];
@@ -119,6 +121,7 @@ in python.pkgs.buildPythonApplication rec {
     screeninfo
     skia-pathops
     srt
+    svgelements
     tqdm
     watchdog
   ];
