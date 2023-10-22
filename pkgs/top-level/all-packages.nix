@@ -7579,8 +7579,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  doggo = callPackage ../tools/networking/doggo { };
-
   dq = callPackage ../tools/networking/dq { };
 
   dool = callPackage ../tools/system/dool { };
