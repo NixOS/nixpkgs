@@ -2657,7 +2657,7 @@ self: super: {
   tomland = doJailbreak super.tomland;
 
   llvm-ffi = super.llvm-ffi.override {
-    LLVM = pkgs.llvmPackages_13.libllvm;
+    LLVM = pkgs.llvmPackages_16.libllvm;
   };
 
   # libfuse3 fails to mount fuse file systems within the build environment
