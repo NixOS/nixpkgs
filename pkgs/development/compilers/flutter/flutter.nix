@@ -9,6 +9,7 @@
 , lib
 , stdenv
 , callPackage
+, makeWrapper
 , darwin
 , git
 , which
@@ -28,7 +29,7 @@ let
       inherit src patches version;
 
       buildInputs = [ git ];
-      nativeBuildInputs = [ ]
+      nativeBuildInputs = [ makeWrapper ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
       preConfigure = ''
@@ -43,15 +44,19 @@ let
       '';
 
       buildPhase = ''
-        export FLUTTER_ROOT="$(pwd)"
+        # The flutter_tools package tries to run many Git commands. In most
+        # cases, unexpected output is handled gracefully, but commands are never
+        # expected to fail completely. A blank repository needs to be created.
+        if [ ! -d .git ]; then
+          git init -b nixpkgs
+          GIT_AUTHOR_NAME=Nixpkgs GIT_COMMITTER_NAME=Nixpkgs GIT_AUTHOR_EMAIL= GIT_COMMITTER_EMAIL= \
+            git commit --allow-empty -m "Initial commit"
+          (. '${../../../build-support/fetchgit/deterministic-git}'; make_deterministic_repo .)
+        fi
 
-        mkdir -p "$FLUTTER_ROOT/bin/cache"
-        export SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
-        export STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
-
-        local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
-        echo "$revision" > "$STAMP_PATH"
-        ln -s '${tools}/share/flutter_tools.snapshot' "$SNAPSHOT_PATH"
+        mkdir -p bin/cache
+        echo "$(git rev-parse HEAD)" > bin/cache/flutter_tools.stamp
+        ln -s '${tools}/share/flutter_tools.snapshot' bin/cache/flutter_tools.snapshot
         echo -n "${version}" > version
       '';
 
@@ -62,9 +67,14 @@ let
         cp -r . $out
         ln -sf ${dart} $out/bin/cache/dart-sdk
 
-        # The Flutter CLI launcher checks for the existance of a .git directory.
-        # https://github.com/flutter/flutter/blob/3.13.8/bin/internal/shared.sh#L224
-        mkdir -p "$out/.git"
+        # The regular launchers are designed to download/build/update SDK
+        # components, and are not very useful in Nix.
+        # Replace them with simple links and wrappers.
+        rm "$out/bin"/{dart,flutter}
+        ln -s "$out/bin/cache/dart-sdk/bin/dart" "$out/bin/dart"
+        makeWrapper "$out/bin/dart" "$out/bin/flutter" \
+          --set-default FLUTTER_ROOT "$out" \
+          --add-flags "--disable-dart-dev $out/bin/cache/flutter_tools.snapshot"
 
         runHook postInstall
       '';
