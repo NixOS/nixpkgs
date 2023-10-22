@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Ruby interpreter written in Java";
     homepage = "https://www.jruby.org/";
-    changelog = "https://github.com/jruby/jruby/releases/tag/${version}";
+    changelog = "https://github.com/jruby/jruby/releases/tag/${finalAttrs.version}";
     license = with licenses; [ cpl10 gpl2 lgpl21 ];
     platforms = jre.meta.platforms;
     maintainers = [ maintainers.fzakaria ];
