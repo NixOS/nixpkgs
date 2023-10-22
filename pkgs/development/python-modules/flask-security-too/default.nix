@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 
 # extras: babel
 , babel
@@ -11,7 +12,6 @@
 , bcrypt
 , bleach
 , flask-mailman
-, qrcode
 
 # extras: fsqla
 , flask-sqlalchemy
@@ -22,17 +22,17 @@
 , cryptography
 , phonenumbers
 , webauthn
+, qrcode
 
 # propagates
-, blinker
 , email-validator
 , flask
 , flask-login
 , flask-principal
 , flask-wtf
-, itsdangerous
 , passlib
 , importlib-resources
+, wtforms
 
 # tests
 , argon2-cffi
@@ -47,32 +47,30 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.3.0";
-  format = "pyproject";
+  version = "5.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-n12DCRPqxm8YhFeVrl99BEvdDYNq6rzP662rain3k1Q=";
+    hash = "sha256-wLUHXfDWSp7zWwTIjTH79AWlkkNzb21tChpLSEWr8+U=";
   };
 
-  postPatch = ''
-    # This should be removed after updating to version 5.3.0.
-    sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
-    blinker
     email-validator
     flask
     flask-login
     flask-principal
     flask-wtf
-    itsdangerous
     passlib
     importlib-resources
+    wtforms
   ];
 
   passthru.optional-dependencies = {
@@ -84,7 +82,6 @@ buildPythonPackage rec {
       bcrypt
       bleach
       flask-mailman
-      qrcode
     ];
     fsqla = [
       flask-sqlalchemy
@@ -95,6 +92,7 @@ buildPythonPackage rec {
       cryptography
       phonenumbers
       webauthn
+      qrcode
     ];
   };
 
