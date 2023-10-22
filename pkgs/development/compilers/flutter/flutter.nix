@@ -18,6 +18,7 @@ let
   tools = callPackage ./flutter-tools.nix {
     inherit dart version;
     flutterSrc = src;
+    inherit patches;
     inherit pubspecLockFile vendorHash depsListFile;
   };
 

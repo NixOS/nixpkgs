@@ -2,6 +2,7 @@
 , dart
 , version
 , flutterSrc
+, patches ? [ ]
 , pubspecLockFile
 , vendorHash
 , depsListFile
@@ -14,6 +15,12 @@ buildDartApplication.override { inherit dart; } rec {
 
   src = flutterSrc;
   sourceRoot = "source/packages/flutter_tools";
+  postUnpack = ''chmod -R u+w "$NIX_BUILD_TOP/source"'';
+
+  inherit patches;
+  # The given patches are made for the entire SDK source tree.
+  prePatch = ''pushd "$NIX_BUILD_TOP/source"'';
+  postPatch = ''popd'';
 
   dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
 
