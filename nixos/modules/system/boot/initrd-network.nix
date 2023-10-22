@@ -80,7 +80,7 @@ in
     };
 
     boot.initrd.network.udhcpc.enable = mkOption {
-      default = config.networking.useDHCP;
+      default = config.networking.useDHCP && !config.boot.initrd.systemd.enable;
       defaultText = "networking.useDHCP";
       type = types.bool;
       description = lib.mdDoc ''
