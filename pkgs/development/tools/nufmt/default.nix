@@ -6,7 +6,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nufmt";
-  version = "0.1.0";
+  version = "unstable-2023-09-25";
 
   src = fetchFromGitHub {
     owner = "nushell";
