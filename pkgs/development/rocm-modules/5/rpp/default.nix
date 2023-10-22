@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     else "cpu"
   );
 
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-ProfessionalCompute-Libraries";

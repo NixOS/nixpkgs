@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ue/2uiLbhOv/5XY4cIJuZ8DUMRhniYgxolq9xMwO1FY=";
+    hash = "sha256-1s/7C9y+73ADLF/17Vepw0pZNVtYnKoP24GdwKc9X2Y=";
   };
 
   nativeBuildInputs = [

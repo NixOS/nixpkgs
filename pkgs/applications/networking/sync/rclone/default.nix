@@ -41,6 +41,10 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
+
+      # filesystem helpers
+      ln -s $out/bin/rclone $out/bin/rclonefs
+      ln -s $out/bin/rclone $out/bin/mount.rclone
     '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
       # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
       # as the setuid wrapper is required as non-root on NixOS.

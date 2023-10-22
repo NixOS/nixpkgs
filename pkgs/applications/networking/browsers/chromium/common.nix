@@ -67,16 +67,16 @@ let
   ]);
   clangFormatPython3 = fetchurl {
     url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
-    sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
+    hash = "sha256-1BRxXP+0QgejAWdFHJzGrLMhk/MsRDoVdK/GVoyFg0U=";
   };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch = { commit, sha256, revert ? false }: fetchpatch {
+  githubPatch = { commit, hash, revert ? false }: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-    inherit sha256 revert;
+    inherit hash revert;
   };
 
   mkGnFlags =
@@ -118,7 +118,7 @@ let
   libExecPath = "$out/libexec/${packageName}";
 
   ungoogler = ungoogled-chromium {
-    inherit (upstream-info.deps.ungoogled-patches) rev sha256;
+    inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
   # There currently isn't a (much) more concise way to get a stdenv
@@ -148,10 +148,10 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
-  recompressTarball = { version, sha256 ? "" }: fetchzip {
+  recompressTarball = { version, hash ? "" }: fetchzip {
     name = "chromium-${version}.tar.zstd";
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    inherit sha256;
+    inherit hash;
 
     nativeBuildInputs = [ zstd ];
 
@@ -180,7 +180,7 @@ let
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
-    src = recompressTarball { inherit version; inherit (upstream-info) sha256; };
+    src = recompressTarball { inherit version; inherit (upstream-info) hash; };
 
     nativeBuildInputs = [
       ninja pkg-config
@@ -250,7 +250,7 @@ let
       (githubPatch {
         # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
         commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
-        sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
+        hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
         revert = true;
       })
     ];

@@ -6199,6 +6199,16 @@
     githubId = 45048741;
     name = "Alwanga Oyango";
   };
+  galaxy = {
+    email = "galaxy@dmc.chat";
+    matrix = "@galaxy:mozilla.org";
+    name = "The Galaxy";
+    github = "ga1aksy";
+    githubId = 148551648;
+    keys = [{
+      fingerprint = "48CA 3873 9E9F CA8E 76A0  835A E3DE CF85 4212 E1EA";
+    }];
+  };
   gal_bolle = {
     email = "florent.becker@ens-lyon.org";
     github = "FlorentBecker";
@@ -13664,6 +13674,12 @@
     githubId = 152312;
     name = "Periklis Tsirakidis";
   };
+  perstark = {
+    email = "perstark.se@gmail.com";
+    github = "perstarkse";
+    githubId = 63069986;
+    name = "Per Stark";
+  };
   petercommand = {
     email = "petercommand@gmail.com";
     github = "petercommand";
@@ -17882,6 +17898,10 @@
     github = "tomhoule";
     githubId = 13155277;
     name = "Tom Houle";
+  };
+  tomkoid = {
+    email = "tomaszierl@outlook.com";
+    name = "Tomkoid";
   };
   tomodachi94 = {
     email = "tomodachi94+nixpkgs@protonmail.com";
