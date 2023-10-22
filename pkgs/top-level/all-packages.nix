@@ -14059,6 +14059,7 @@ with pkgs;
 
   trezord = callPackage ../servers/trezord {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    buildGoModule = buildGo120Module;
   };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
