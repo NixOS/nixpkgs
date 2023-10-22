@@ -80,6 +80,10 @@ self: super: {
   aeson = doJailbreak super.aeson;
   free = doJailbreak super.free;
 
+  # Because we bumped the version of base-compat above.^
+  cabal-plan = unmarkBroken super.cabal-plan;
+  cabal-plan-bounds = unmarkBroken super.cabal-plan-bounds;
+
   # Requires filepath >= 1.4.100.0 <=> GHC >= 9.6
   file-io = unmarkBroken super.file-io;
 
