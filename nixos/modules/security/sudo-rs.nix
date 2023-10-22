@@ -4,13 +4,10 @@ with lib;
 
 let
 
-  inherit (pkgs) sudo sudo-rs;
-
   cfg = config.security.sudo-rs;
 
-  enableSSHAgentAuth =
-    with config.security;
-    pam.enableSSHAgentAuth && pam.sudo.sshAgentAuth;
+  inherit (config.security.pam) enableSSHAgentAuth;
+  inherit (pkgs) sudo sudo-rs;
 
   usingMillersSudo = cfg.package.pname == sudo.pname;
   usingSudoRs = cfg.package.pname == sudo-rs.pname;
