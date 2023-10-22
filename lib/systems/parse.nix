@@ -546,8 +546,8 @@ rec {
                     vendors.apple    # nixpkgs-specific behavior
           else if isx86 parsed && isLinux parsed then vendors.pc
           else if ((abi=="eabi" || abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
-          else if isx86 parsed then vendors.pc
           else if isNone parsed && vendor_ == vendors."" && abi == "elf" then vendors.""
+          else if isx86 parsed then vendors.pc
           else clobberedVendor;
 
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
