@@ -14,20 +14,20 @@
 
 let
   spark = { pname, version, hash, extraMeta ? {} }:
-    stdenv.mkDerivation rec {
-      inherit pname version;
+    stdenv.mkDerivation (finalAttrs: {
+      inherit pname version hash;
       jdk = if hadoopSupport then hadoop.jdk else jdk8;
       src = fetchzip {
-        url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-        inherit hash;
+        url = with finalAttrs; "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+        inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ jdk python3Packages.python ]
+      buildInputs = [ finalAttrs.jdk python3Packages.python ]
         ++ extraPythonPackages
         ++ lib.optional RSupport R;
 
-      untarDir = "${pname}-${version}";
-      installPhase = ''
+      untarDir = with finalAttrs; "${pname}-${version}";
+      installPhase = with finalAttrs; ''
         mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
         mv * $out/lib/${untarDir}
 
@@ -68,7 +68,7 @@ let
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [ thoughtpolice offline kamilchm illustris ];
       } // extraMeta;
-    };
+    });
 in
 {
   spark_3_5 = spark rec {
