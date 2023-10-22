@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b1qg1rgTi1hdRlbR/gG12HYWMQyASEuQnMhMLLjwZP0=";
+    hash = "sha256-x4bj36HzUjmBDlMXzMrb41j0m4yQAaHy9ot5olC5+KE=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
-  version = "2.0.911";
+  version = "2.0.914";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D1LpFGYEpGmkYCAJbYJaQStDnol90mH8X4S6iXg6Nfs=";
+    hash = "sha256-fGOo9FgVMI6ayyB3EMN6RGThwWciShcBZzWTZWtOt8E=";
   };
 
   # disable test coverage

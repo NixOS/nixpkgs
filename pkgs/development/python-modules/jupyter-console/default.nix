@@ -2,9 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, substituteAll
 , hatchling
 , ipykernel
+, exceptiongroup
 , ipython
 , jupyter-client
 , jupyter-core
@@ -51,6 +51,8 @@ buildPythonPackage rec {
     pygments
     pyzmq
     traitlets
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ];
 
   pythonImportsCheck = [

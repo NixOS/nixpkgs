@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyperf";
-  version = "2.5.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n9m+W1ciTmi1pbiPcSbxW2yGZ1c/YqCjn68U1v3ROQk=";
+    hash = "sha256-Fxrqabjv3mEhDlEhZth2Tndlqcdni3aAUhdLAfNJ8kc=";
   };
 
   patches = [

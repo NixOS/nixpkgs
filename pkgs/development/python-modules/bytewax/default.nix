@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bytewax";
-  version = "0.16.2";
+  version = "0.17.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bytewax";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PHjKEZMNhtLliOSGt4XHQFDm8Rc4TejQUVSqFN6Au38=";
+    hash = "sha256-Cv2bTgs3XfYOcHK628/RgGol7S6E4WfHb7gHXXjBhig=";
   };
 
   env = {

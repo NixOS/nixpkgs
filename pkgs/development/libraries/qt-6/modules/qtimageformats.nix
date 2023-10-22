@@ -8,6 +8,6 @@
 
 qtModule {
   pname = "qtimageformats";
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
   buildInputs = [ libwebp jasper libmng libtiff ];
 }

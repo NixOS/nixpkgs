@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchPypi {
     inherit version;
     pname = "aiohttp_socks";
-    hash = "sha256-duWEJDS5Ts3EWNRZ8MJcD7buMh3FRKA+bJiO3P7QWz0=";
+    hash = "sha256-aqtSj2aeCHMBj9N3c7gzouK6KEJDvmcoF/pAG8eUHsY=";
   };
 
   propagatedBuildInputs = [ aiohttp attrs python-socks ];

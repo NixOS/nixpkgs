@@ -15,9 +15,11 @@
 # Latest tagged release release "1.1.2" (Nov 2018) does not contain
 # documenation, it was added in commits Aug 10, 2019. Repository does not have
 # any activity since then.
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sphinx-version-warning";
   version = "unstable-2019-08-10";
+  format = "pyproject";
+
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {

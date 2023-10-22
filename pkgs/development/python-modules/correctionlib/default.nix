@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.2.2";
+  version = "2.3.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h3eggtPLSF/8ShQ5xzowZW1KSlcI/YBsPu3lsSyzHkw=";
+    hash = "sha256-4WXY7XfZVYaJD63y7fPB6tCsc+wGAsgnFlgtFbX5IK0=";
   };
 
   patches = [

@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pathspec";
-  version = "0.11.0";
+  version = "0.11.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZNM41OCRTpHBeSMh5pB7Wlk/GrGFHef8JpVXohsw67w=";
+    hash = "sha256-4NjQrC8S2mGVbrIwa2n5RptC9N6w88tu1HuczpmWztM=";
   };
 
   nativeBuildInputs = [

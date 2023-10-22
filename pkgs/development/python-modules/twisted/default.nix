@@ -1,34 +1,42 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonAtLeast
 , pythonOlder
 , fetchPypi
 , fetchpatch
 , python
-, appdirs
+
+# build-system
+, hatchling
+, hatch-fancy-pypi-readme
+
+# dependencies
 , attrs
 , automat
-, bcrypt
 , constantly
-, cryptography
-, git
-, glibcLocales
-, h2
 , hyperlink
-, hypothesis
-, idna
 , incremental
+, typing-extensions
+, zope_interface
+
+# optional-dependencies
+, appdirs
+, bcrypt
+, cryptography
+, h2
+, idna
 , priority
 , pyasn1
-, pyhamcrest
-, pynacl
 , pyopenssl
 , pyserial
 , service-identity
-, setuptools
-, typing-extensions
-, zope_interface
+
+# tests
+, cython-test-exception-raiser
+, git
+, glibcLocales
+, pyhamcrest
+, hypothesis
 
   # for passthru.tests
 , cassandra-driver
@@ -46,16 +54,15 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "22.10.0";
-  format = "setuptools";
+  version = "23.8.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "Twisted";
-    inherit version;
+    inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";
+    hash = "sha256-PHM2Ct0XM2piLA2BHCos4phmtuWbESX9ZQmxclIJiiQ=";
   };
 
   patches = [
@@ -70,26 +77,15 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
-    # remove half broken pyasn1 integration that blow up with pyasn 0.5.0
-    # https://github.com/twisted/twisted/pull/11843
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/commit/bdee0eb835a76b2982beaf10c85269ff25ea09fa.patch";
-      excludes = [ "pyproject.toml" "tox.ini" ];
-      hash = "sha256-oGAHmZMpMWfK+2zEDjHD115sW7exCYqfORVOLw+Wa6M=";
-    })
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/pull/11734.diff";
-      excludes = [ ".github/workflows/*" ];
-      hash = "sha256-Td08pDxHwl7fPLCA6rUySuXpy8YmZfvXPHGsBpdcmSo=";
-    })
-    (fetchpatch {
-      url = "https://github.com/twisted/twisted/commit/00bf5be704bee022ba4d9b24eb6c2c768b4a1921.patch";
-      hash = "sha256-fnBzczm3OlhbjRcePIQ7dSX6uldlCZ9DJTS+UFO2nAQ=";
-    })
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  nativeBuildInputs = [
+    hatchling
+    hatch-fancy-pypi-readme
+    incremental
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -97,15 +93,11 @@ buildPythonPackage rec {
     constantly
     hyperlink
     incremental
-    setuptools
     typing-extensions
     zope_interface
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"pyasn1 >= 0.4",' ""
-
     echo 'ListingTests.test_localeIndependent.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_newFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_newSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
@@ -127,6 +119,13 @@ buildPythonPackage rec {
 
     # fails since migrating to libxcrypt
     echo 'HelperTests.test_refuteCryptedPassword.skip = "OSError: Invalid argument"' >> src/twisted/conch/test/test_checkers.py
+
+    # expectation mismatch with `python -m twisted --help` and `python -m twisted.trial --help` usage output
+    echo 'MainTests.test_twisted.skip = "Expectation Mismatch"' >> src/twisted/test/test_main.py
+    echo 'MainTests.test_trial.skip = "Expectation Mismatch"' >> src/twisted/test/test_main.py
+
+    # tests for missing https support in usage
+    echo 'ServiceTests.test_HTTPSFailureOnMissingSSL.skip = "Expectation Mismatch"' >> src/twisted/web/test/test_tap.py
 
     # not packaged
     substituteInPlace src/twisted/test/test_failure.py \
@@ -154,12 +153,15 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    cython-test-exception-raiser
     git
     glibcLocales
     hypothesis
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch
+  ++ passthru.optional-dependencies.http2
+  ++ passthru.optional-dependencies.serial
   # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
   ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) passthru.optional-dependencies.tls;
 
@@ -171,9 +173,8 @@ buildPythonPackage rec {
   '';
 
   passthru = {
-    optional-dependencies = rec {
+    optional-dependencies = {
       conch = [ appdirs bcrypt cryptography pyasn1 ];
-      conch_nacl = conch ++ [ pynacl ];
       http2 = [ h2 priority ];
       serial = [ pyserial ];
       tls = [ idna pyopenssl service-identity ];

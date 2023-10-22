@@ -20,6 +20,14 @@ python3.override {
       */
       django = super.django_3;
 
+      elasticsearch = super.elasticsearch.overridePythonAttrs ({ pname, ... }: rec {
+        version = "7.17.9";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-ZsTs4q3+fMEg4rameYof1cd3rs+C7sObuVzvfPx+orM=";
+        };
+      });
+
       # https://gitlab.com/mailman/hyperkitty/-/merge_requests/541
       mistune = super.mistune.overridePythonAttrs (old: rec {
         version = "2.0.5";
@@ -27,6 +35,15 @@ python3.override {
           inherit (old) pname;
           inherit version;
           hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+        };
+      });
+
+      # django-q tests fail with redis 5.0.0.
+      redis = super.redis.overridePythonAttrs ({ pname, ... }: rec {
+        version = "4.5.4";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-c+w12k2iZ9aEfkf2hzD91fYuLKaePvWIXGp4qTdMOJM=";
         };
       });
     })

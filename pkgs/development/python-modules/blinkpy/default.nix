@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, aiofiles
+, aiohttp
 , pytestCheckHook
 , python-dateutil
 , python-slugify
@@ -12,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,10 +23,12 @@ buildPythonPackage rec {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0sEZlnS6CJj8nMyjtSFZRALRKdmY0Uu5N6sozPiDG6w=";
+    hash = "sha256-r8kf5L6bvtivqd9dSi8om1wIi8IHmipKFckNMPT515I=";
   };
 
   propagatedBuildInputs = [
+    aiofiles
+    aiohttp
     python-dateutil
     python-slugify
     requests

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-v2B+tDqvQTm+K+cvTRM8LnfaFp5CTsI8/B5clBDNE08=";
     fetchSubmodules = true;
   };

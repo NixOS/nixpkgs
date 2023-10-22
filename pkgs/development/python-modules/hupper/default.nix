@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "hupper";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FcEb13XY+YCVt0W05lihfCXIbjtzJ1yuiWrByNUzyxg=";
+    hash = "sha256-GLFlPZgyyfjn00AZhsfnryrmeDYWvgvEBr/gsUE0pcY=";
   };
 
   # FIXME: watchdog dependency is disabled on Darwin because of #31865, which causes very silent

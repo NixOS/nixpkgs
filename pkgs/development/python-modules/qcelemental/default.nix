@@ -2,11 +2,11 @@
 , buildPythonPackage
 , lib
 , fetchPypi
+, poetry-core
 , networkx
 , numpy
 , pint
 , pydantic
-, poetry-core
 , pytestCheckHook
 , pythonOlder
 }:
@@ -24,7 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-oU6FEM2/2mRe8UYcGv0C77WZMRcz27pfg/zR1haKbd0=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     networkx

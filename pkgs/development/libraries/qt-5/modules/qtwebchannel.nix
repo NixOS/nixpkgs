@@ -2,7 +2,6 @@
 
 qtModule {
   pname = "qtwebchannel";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 }
-
