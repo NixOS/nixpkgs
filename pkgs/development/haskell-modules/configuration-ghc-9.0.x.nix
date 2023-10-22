@@ -76,9 +76,7 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
   };
 
-  fourmolu = self.fourmolu_0_10_1_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
+  stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
 
   doctest = dontCheck super.doctest;
   # Apply patches from head.hackage.
@@ -91,16 +89,15 @@ self: super: {
     # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
     # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
     additionalDeps = with self.haskell-language-server.scope; [
-      hls-haddock-comments-plugin
       (unmarkBroken hls-splice-plugin)
-      hls-tactics-plugin
     ];
-  in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
+  in addBuildDepends additionalDeps (disableCabalFlag "fourmolu" (super.haskell-language-server.overrideScope (lself: lsuper: {
     # Needed for modern ormolu and fourmolu.
     # Apply this here and not in common, because other ghc versions offer different Cabal versions.
     Cabal = lself.Cabal_3_6_3_0;
     hls-overloaded-record-dot-plugin = null;
-  }));
+    hls-fourmolu-plugin = null;
+  })));
 
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
