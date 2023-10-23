@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "tempo";
@@ -11,6 +11,15 @@ buildGoModule rec {
     fetchSubmodules = true;
     hash = "sha256-23wjD8HTSEGonIMAWCoKORMLIISASxlN4FeY+Bmt/+I=";
   };
+
+  patches = [
+    # Backport patch for Go 1.21 compatibility
+    # FIXME: remove after 2.3.0
+    (fetchpatch {
+      url = "https://github.com/grafana/tempo/commit/0d37e8f0edd8a96876b0a5f5ab97ef79ff04608f.patch";
+      hash = "sha256-YC59g5pdcrwJeQ4raS0Oq+fZvRBKFj4johZtGTAYpEs=";
+    })
+  ];
 
   vendorHash = null;
 
