@@ -68,8 +68,8 @@ fn main() -> ExitCode {
 ///
 /// # Return value
 /// - `Err(e)` if an I/O-related error `e` occurred.
-/// - `Ok(false)` if the structure is invalid, all the structural errors have been written to `error_writer`.
-/// - `Ok(true)` if the structure is valid, nothing will have been written to `error_writer`.
+/// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
+/// - `Ok(true)` if there are no problems
 pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
     version: Version,
