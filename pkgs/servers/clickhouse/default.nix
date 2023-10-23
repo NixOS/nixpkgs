@@ -28,7 +28,7 @@ let
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.3.13.6";
+  version = "23.8.4.69";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
@@ -36,7 +36,7 @@ in mkDerivation rec {
     rev = "v${version}-lts";
     fetchSubmodules = true;
     name = "clickhouse-${rev}.tar.gz";
-    hash = "sha256-ryUjXN8UNGmkZTkqNHotB4C2E1MHZhx2teqXrlp5ySQ=";
+    hash = "sha256-ynFI/wQcLMSxns+aOf5i1P+5MKds93WW7RshHHg8Sxs=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -92,17 +92,11 @@ in mkDerivation rec {
     preBuild = "cd generator";
     hash = "sha256-dhUgpwSjE9NZ2mCkhGiydI51LIOClA5wwk1O3mnnbM8=";
   } else null;
-  blake3Deps = if rustSupport then rustPlatform.fetchCargoTarball {
+  clickhouseDeps = if rustSupport then rustPlatform.fetchCargoTarball {
     inherit src;
-    name = "blake3-deps";
-    preBuild = "cd rust/BLAKE3";
-    hash = "sha256-lDMmmsyjEbTfI5NgTgT4+8QQrcUE/oUWfFgj1i19W0Q=";
-  } else null;
-  skimDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "skim-deps";
-    preBuild = "cd rust/skim";
-    hash = "sha256-gEWB+U8QrM0yYyMXpwocszJZgOemdTlbSzKNkS0NbPk=";
+    name = "clickhouse-deps";
+    preBuild = "cd rust";
+    hash = "sha256-+s8hdCvkMD1xHqAv4j8NhG/CqFwxqtkyOOQJCOKrzTo=";
   } else null;
 
   dontCargoSetupPostUnpack = true;
@@ -117,14 +111,9 @@ in mkDerivation rec {
     corrosionDepsCopy="$cargoDepsCopy"
     popd
 
-    pushd rust/BLAKE3
-    cargoDeps="$blake3Deps" cargoSetupPostUnpackHook
-    blake3DepsCopy="$cargoDepsCopy"
-    popd
-
-    pushd rust/skim
-    cargoDeps="$skimDeps" cargoSetupPostUnpackHook
-    skimDepsCopy="$cargoDepsCopy"
+    pushd rust
+    cargoDeps="$clickhouseDeps" cargoSetupPostUnpackHook
+    clickhouseDepsCopy="$cargoDepsCopy"
     popd
 
     popd
@@ -152,12 +141,8 @@ in mkDerivation rec {
     cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
     popd
 
-    pushd rust/BLAKE3
-    cargoDepsCopy="$blake3DepsCopy" cargoSetupPostPatchHook
-    popd
-
-    pushd rust/skim
-    cargoDepsCopy="$skimDepsCopy" cargoSetupPostPatchHook
+    pushd rust
+    cargoDepsCopy="$clickhouseDepsCopy" cargoSetupPostPatchHook
     popd
 
     cargoSetupPostPatchHook() { true; }
@@ -167,6 +152,7 @@ in mkDerivation rec {
     "-DENABLE_TESTS=OFF"
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
+    "-DENABLE_CLICKHOUSE_LIBRARY_BRIDGE=OFF"
   ];
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
