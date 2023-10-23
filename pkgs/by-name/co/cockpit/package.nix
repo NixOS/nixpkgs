@@ -23,6 +23,7 @@
 , makeWrapper
 , nodejs
 , nixosTests
+, nix-update-script
 , openssh
 , openssl
 , pam
@@ -214,7 +215,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = { inherit (nixosTests) cockpit; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {};
   };
 
   meta = with lib; {
