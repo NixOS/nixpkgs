@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
@@ -13,7 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IU2oW00VzEV8p3BpqIJZwXvdcaeweAF9nGHwtX+98vY=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   cargoBuildFlags = [ "-p" "cargo-nextest" ];
   cargoTestFlags = [ "-p" "cargo-nextest" ];
