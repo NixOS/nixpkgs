@@ -1,9 +1,9 @@
 { lib
-, applyPatches
 , buildNpmPackage
 , cargo
+, copyDesktopItems
 , dbus
-, electron_24
+, electron_25
 , fetchFromGitHub
 , glib
 , gnome
@@ -26,36 +26,27 @@ let
   icon = "bitwarden";
 
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-  electron = electron_24;
-
-  desktopItem = makeDesktopItem {
-    name = "bitwarden";
-    exec = "bitwarden %U";
-    inherit icon;
-    comment = description;
-    desktopName = "Bitwarden";
-    categories = [ "Utility" ];
-  };
+  electron = electron_25;
 in buildNpmPackage' rec {
   pname = "bitwarden";
-  version = "2023.9.0";
+  version = "2023.9.3";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-8rNJmDpKLzTre5c2wktle7tthp1owZK5WAQP80/2R0g=";
+    hash = "sha256-NiMJmtCx+yD24BCyMgHLpRApNwoIJRps5qmmlVdB0G0=";
   };
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-0q3XoC87kfC2PYMsNse4DV8M8OXjckiLTdN3LK06lZY=";
+  npmDepsHash = "sha256-HQPxmATA9bUc4NTfvYsL6fGuicU9baySCmNHahs8EF4=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-YF3UHQWCSuWAg2frE8bo1XrLn44P6+1A7YUh4RZxwo0=";
+    hash = "sha256-mFxvK9cmSBRVnUwEbzADUa5W5TCL51wcUHxuR5JZwLE=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -63,6 +54,7 @@ in buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    copyDesktopItems
     jq
     makeWrapper
     moreutils
@@ -128,6 +120,8 @@ in buildNpmPackage' rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     pushd apps/desktop/dist/linux-unpacked
@@ -141,9 +135,6 @@ in buildNpmPackage' rec {
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-
     pushd apps/desktop/resources/icons
     for icon in *.png; do
       dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
@@ -151,7 +142,20 @@ in buildNpmPackage' rec {
       cp "$icon" "$dir"/${icon}.png
     done
     popd
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bitwarden";
+      exec = "bitwarden %U";
+      inherit icon;
+      comment = description;
+      desktopName = "Bitwarden";
+      categories = [ "Utility" ];
+    })
+  ];
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
