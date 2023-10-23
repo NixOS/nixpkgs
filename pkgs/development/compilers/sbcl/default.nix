@@ -85,27 +85,13 @@ stdenv.mkDerivation rec {
     ./fix-2.4.0-aarch64-darwin.patch
   ];
 
-  postPatch = ''
-    echo '"${version}.nixos"' > version.lisp-expr
-
-    # SBCL checks whether files are up-to-date in many places..
-    # Unfortunately, same timestamp is not good enough
-    sed -e 's@> x y@>= x y@' -i contrib/sb-aclrepl/repl.lisp
-    #sed -e '/(date)/i((= date 2208988801) 2208988800)' -i contrib/asdf/asdf.lisp
-    sed -i src/cold/slam.lisp -e \
-      '/file-write-date input/a)'
-    sed -i src/cold/slam.lisp -e \
-      '/file-write-date output/i(or (and (= 2208988801 (file-write-date output)) (= 2208988801 (file-write-date input)))'
-    sed -i src/code/target-load.lisp -e \
-      '/date defaulted-fasl/a)'
-    sed -i src/code/target-load.lisp -e \
-      '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
-
-    # Fix the tests
-    sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
-    sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
-  ''
-  + (if purgeNixReferences
+  postPatch = (lib.optionalString (builtins.elem stdenv.hostPlatform.system [
+    "x86_64-linux"
+    "x86_64-darwin"
+    "aarch64-linux"
+  ]) ''
+    rm -f tests/foreign-stack-alignment.impure.lisp
+  '') + (if purgeNixReferences
     then
       # This is the default location to look for the core; by default in $out/lib/sbcl
       ''
@@ -117,9 +103,7 @@ stdenv.mkDerivation rec {
       ''
         sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
           src/code/run-program.lisp
-      ''
-    );
-
+      '');
 
   preBuild = ''
     export INSTALL_ROOT=$out
