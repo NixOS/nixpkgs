@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "tvdb_api";
+  pname = "tvdb-api";
   version = "3.2.0-beta";
 
   src = fetchFromGitHub {
