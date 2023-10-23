@@ -1,4 +1,5 @@
-{ buildDartApplication
+{ hostPlatform
+, buildDartApplication
 , git
 , which
 , dart
@@ -24,8 +25,6 @@ buildDartApplication.override { inherit dart; } rec {
   prePatch = ''pushd "$NIX_BUILD_TOP/source"'';
   postPatch = ''popd'';
 
-  dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
-
   # When the JIT snapshot is being built, the application needs to run.
   # It attempts to generate configuration files, and relies on a few external
   # tools.
@@ -36,6 +35,9 @@ buildDartApplication.override { inherit dart; } rec {
     mkdir -p "$FLUTTER_ROOT/bin/cache"
     ln -s '${dart}' "$FLUTTER_ROOT/bin/cache/dart-sdk"
   '';
+
+  dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
+  dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${hostPlatform.system}" ];
 
   # The Dart wrapper launchers are useless for the Flutter tool - it is designed
   # to be launched from a snapshot by the SDK.
