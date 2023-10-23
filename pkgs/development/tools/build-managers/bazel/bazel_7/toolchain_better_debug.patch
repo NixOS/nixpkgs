@@ -1,0 +1,157 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/analysis/platform/DeclaredToolchainInfo.java b/src/main/java/com/google/devtools/build/lib/analysis/platform/DeclaredToolchainInfo.java
+index fa322cf6f0..4a94087a3c 100644
+--- a/src/main/java/com/google/devtools/build/lib/analysis/platform/DeclaredToolchainInfo.java
++++ b/src/main/java/com/google/devtools/build/lib/analysis/platform/DeclaredToolchainInfo.java
+@@ -47,6 +47,9 @@ public abstract class DeclaredToolchainInfo implements TransitiveInfoProvider {
+   /** The label of the toolchain to resolve for use in toolchain-aware rules. */
+   public abstract Label toolchainLabel();
+ 
++  /** The label of the toolchain native rule invocation, for debugging. */
++  public abstract Label label();
++
+   /** Builder class to assist in creating {@link DeclaredToolchainInfo} instances. */
+   public static class Builder {
+     private ToolchainTypeInfo toolchainType;
+@@ -55,6 +58,7 @@ public abstract class DeclaredToolchainInfo implements TransitiveInfoProvider {
+     private ImmutableList.Builder<ConfigMatchingProvider> targetSettings =
+         new ImmutableList.Builder<>();
+     private Label toolchainLabel;
++    private Label label;
+ 
+     /** Sets the type of the toolchain being declared. */
+     @CanIgnoreReturnValue
+@@ -100,6 +104,13 @@ public abstract class DeclaredToolchainInfo implements TransitiveInfoProvider {
+       return this;
+     }
+ 
++    /** Sets the label of the toolchain to resolve for use in toolchain-aware rules. */
++    @CanIgnoreReturnValue
++    public Builder label(Label label) {
++      this.label = label;
++      return this;
++    }
++
+     /** Returns the newly created {@link DeclaredToolchainInfo} instance. */
+     public DeclaredToolchainInfo build() throws DuplicateConstraintException {
+       // Handle constraint duplication in attributes separately, so they can be reported correctly.
+@@ -128,7 +139,8 @@ public abstract class DeclaredToolchainInfo implements TransitiveInfoProvider {
+           execConstraints,
+           targetConstraints,
+           targetSettings.build(),
+-          toolchainLabel);
++          toolchainLabel,
++          label);
+     }
+   }
+ 
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/platform/Toolchain.java b/src/main/java/com/google/devtools/build/lib/rules/platform/Toolchain.java
+index 16d14a5edd..93ad4e47ec 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/platform/Toolchain.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/platform/Toolchain.java
+@@ -57,6 +57,7 @@ public class Toolchain implements RuleConfiguredTargetFactory {
+             .collect(toImmutableList());
+     Label toolchainLabel =
+         ruleContext.attributes().get(ToolchainRule.TOOLCHAIN_ATTR, BuildType.NODEP_LABEL);
++    Label label = ruleContext.getLabel();
+ 
+     DeclaredToolchainInfo registeredToolchain;
+     try {
+@@ -67,6 +68,7 @@ public class Toolchain implements RuleConfiguredTargetFactory {
+               .addTargetConstraints(targetConstraints)
+               .addTargetSettings(targetSettings)
+               .toolchainLabel(toolchainLabel)
++              .label(label)
+               .build();
+     } catch (DeclaredToolchainInfo.DuplicateConstraintException e) {
+       if (e.execConstraintsException() != null) {
+diff --git a/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/SingleToolchainResolutionFunction.java b/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/SingleToolchainResolutionFunction.java
+index 933c200471..5c61ebcb12 100644
+--- a/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/SingleToolchainResolutionFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/SingleToolchainResolutionFunction.java
+@@ -182,11 +182,12 @@ public class SingleToolchainResolutionFunction implements SkyFunction {
+       if (!nonmatchingSettings.isEmpty()) {
+         debugMessage(
+             eventHandler,
+-            "    Type %s: %s platform %s: Rejected toolchain %s; mismatching config settings: %s",
++            "    Type %s: %s platform %s: Rejected toolchain %s (from %s); mismatching config settings: %s",
+             toolchainType.toolchainType(),
+             "target",
+             targetPlatform.label(),
+             toolchain.toolchainLabel(),
++            toolchain.label(),
+             String.join(", ", nonmatchingSettings));
+         continue;
+       }
+@@ -198,7 +199,8 @@ public class SingleToolchainResolutionFunction implements SkyFunction {
+           "target",
+           targetPlatform,
+           toolchainType,
+-          toolchain.toolchainLabel())) {
++          toolchain.toolchainLabel(),
++          toolchain.label())) {
+         continue;
+       }
+ 
+@@ -208,12 +210,13 @@ public class SingleToolchainResolutionFunction implements SkyFunction {
+         if (platformKeysSeen.contains(executionPlatformKey)) {
+           debugMessage(
+               eventHandler,
+-              "    Type %s: target platform %s: execution platform %s: Skipping toolchain %s;"
++              "    Type %s: target platform %s: execution platform %s: Skipping toolchain %s (from %s);"
+                   + " execution platform already has selected toolchain",
+               toolchainType.toolchainType(),
+               targetPlatform.label(),
+               executionPlatformKey.getLabel(),
+-              toolchain.toolchainLabel());
++              toolchain.toolchainLabel(),
++              toolchain.label());
+           continue;
+         }
+ 
+@@ -224,17 +227,19 @@ public class SingleToolchainResolutionFunction implements SkyFunction {
+             "execution",
+             executionPlatform,
+             toolchainType,
+-            toolchain.toolchainLabel())) {
++            toolchain.toolchainLabel(),
++            toolchain.label())) {
+           continue;
+         }
+ 
+         debugMessage(
+             eventHandler,
+-            "  Type %s: target platform %s: execution %s: Selected toolchain %s",
++            "  Type %s: target platform %s: execution %s: Selected toolchain %s (from %s)",
+             toolchainType.toolchainType(),
+             targetPlatform.label(),
+             executionPlatformKey.getLabel(),
+-            toolchain.toolchainLabel());
++            toolchain.toolchainLabel(),
++            toolchain.label());
+         builder.put(executionPlatformKey, toolchain.toolchainLabel());
+         platformKeysSeen.add(executionPlatformKey);
+       }
+@@ -276,7 +281,8 @@ public class SingleToolchainResolutionFunction implements SkyFunction {
+       String platformType,
+       PlatformInfo platform,
+       ToolchainTypeRequirement toolchainType,
+-      Label toolchainLabel) {
++      Label toolchainLabel,
++      Label label) {
+ 
+     // Check every constraint_setting in either the toolchain or the platform.
+     ImmutableSet<ConstraintSettingInfo> mismatchSettings =
+@@ -315,11 +321,12 @@ public class SingleToolchainResolutionFunction implements SkyFunction {
+       }
+       debugMessage(
+           eventHandler,
+-          "    Type %s: %s platform %s: Rejected toolchain %s%s%s",
++          "    Type %s: %s platform %s: Rejected toolchain %s (from %s)%s%s",
+           toolchainType.toolchainType(),
+           platformType,
+           platform.label(),
+           toolchainLabel,
++          label,
+           mismatchValues,
+           missingSettings);
+     }

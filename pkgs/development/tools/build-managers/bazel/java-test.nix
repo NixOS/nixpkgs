@@ -7,7 +7,6 @@
 , lib
 , openjdk8
 , jdk11_headless
-, jdk17_headless
 , runLocal
 , runtimeShell
 , writeScript
@@ -46,19 +45,16 @@ let
     inherit workspaceDir;
     bazelPkg = bazel;
     buildInputs = [
-      #(if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8
-      #else if lib.strings.versionOlder bazel.version "7.0.0" then jdk11_headless
-      #else jdk17_headless)
-      jdk17_headless
+      (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
     ];
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
         --announce_rc \
+        --toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type' \
         --distdir=${distDir} \
         --verbose_failures \
         --curses=no \
-        --sandbox_debug \
         --strict_java_deps=off \
         //:ProjectRunner \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
@@ -68,6 +64,14 @@ let
     '' + extraBazelArgs;
   };
 
+        # --repo_env=JAVA_HOME=${jdk11_headless}/${if stdenv.hostPlatform.isDarwin then "/zulu-17.jdk/Contents/Home" else "/lib/openjdk"} \
+        #--java_language_version=17 \
+        #--java_language_version=17 \
+        #--java_runtime_version=local_jdk \
+        # --java_language_version=11 \
+        # --tool_java_runtime_version=local_jdk_17 \
+        # --tool_java_language_version=17 \
+        #--java_runtime_version=local_jdk_11 \
 in
 testBazel
 

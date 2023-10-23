@@ -2,6 +2,7 @@
   # tooling
 , fetchFromGitHub
 , newScope
+, recurseIntoAttrs
 , runCommandCC
 , stdenv
   # inputs
@@ -12,6 +13,7 @@
 , repoCache
 , runJdk
 , xe
+, bazel-watcher
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin;
@@ -112,7 +114,6 @@ let
     inherit Foundation;
     extraBazelArgs = ''
       --repository_cache=${repoCache} \
-      --repo_env=JAVA_HOME=${runJdk}${if isDarwin then "/zulu-17.jdk/Contents/Home" else "/lib/openjdk"} \
     '';
     bazel = bazel_self;
   };

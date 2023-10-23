@@ -54,7 +54,7 @@
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
-}:
+}@args:
 
 let
   version = "7.0.0-pre.20230917.3";
@@ -136,70 +136,74 @@ let
   # on aarch64 Darwin, `uname -m` returns "arm64"
   arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
+  #build --extra_toolchains=@local_jdk//:all
+  #build --tool_java_runtime_version=local_jdk
+  #build --java_runtime_version=local_jdk
+  #build --repo_env=JAVA_HOME=${buildJdk}${if isDarwin then "/zulu-11.jdk/Contents/Home" else "/lib/openjdk"}
+
   bazelRC = writeTextFile {
     name = "bazel-rc";
     text = ''
       startup --server_javabase=${buildJdk}
 
-      build --extra_toolchains=@local_jdk//:all
+      # Register nix-specific nonprebuilt java toolchains
+      build --extra_toolchains=@bazel_tools//tools/jdk:all
+      # and set bazel to use them by default
       build --tool_java_runtime_version=local_jdk
       build --java_runtime_version=local_jdk
-      build --repo_env=JAVA_HOME=${buildJdk}${if isDarwin then "/zulu-11.jdk/Contents/Home" else "/lib/openjdk"}
 
       # load default location for the system wide configuration
       try-import /etc/bazel.bazelrc
     '';
   };
 
-  bazelNixFlagsScript = writeScript "bazel-nix-flags" ''
-    cat << EOF
-    common --announce_rc
-    build --toolchain_resolution_debug=".*"
-    build --local_ram_resources=HOST_RAM*.5
-    build --local_cpu_resources=HOST_CPUS*.75
-    build --copt=$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ / --copt=/g')
-    build --host_copt=$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ / --host_copt=/g')
-    build --linkopt=$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ / --linkopt=/g')
-    build --host_linkopt=$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ / --host_linkopt=/g')
-    build --linkopt=-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ / --linkopt=-Wl,/g')
-    build --host_linkopt=-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ / --host_linkopt=-Wl,/g')
-    build --extra_toolchains=@bazel_tools//tools/jdk:nonprebuilt_toolchain_definition
-    build --verbose_failures
-    build --curses=no
-    build --features=-layering_check
-    build --experimental_strict_java_deps=off
-    build --strict_proto_deps=off
-    build --extra_toolchains=@bazel_tools//tools/jdk:nonprebuilt_toolchain_java11_definition
-    build --extra_toolchains=@local_jdk//:all
-    build --tool_java_runtime_version=local_jdk_11
-    build --java_runtime_version=local_jdk_11
-    build --repo_env=JAVA_HOME=${buildJdk}${if isDarwin then "/zulu-11.jdk/Contents/Home" else "/lib/openjdk"}
-    EOF
-  '';
 in
 stdenv.mkDerivation rec {
   pname = "bazel";
-  inherit version;
-
-  meta = with lib; {
-    homepage = "https://github.com/bazelbuild/bazel/";
-    description = "Build tool that builds code quickly and reliably";
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode # source bundles dependencies as jars
-    ];
-    license = licenses.asl20;
-    maintainers = lib.teams.bazel.members;
-    inherit platforms;
-  };
-
-  inherit src;
+  inherit version src;
   inherit sourceRoot;
+
   patches = [
     # TODO: Make GSON work,
     # In particular, our bazel build cannot emit MODULE.bazel.lock
     # it only produces an empty json object `{ }`.
     ./serialize_nulls.patch
+
+    # --extra_toolchains defined later should come before the ones defined earlier.
+    # As-is, this patch also inverts the order of extra_toolchains lists, but it's just a hack
+    ./extra_toolchains_precedence.patch
+
+    #./toolchain_better_debug.patch
+    ./toolchain_group_debug.patch
+
+    # Remote java toolchains do not work on NixOS because they download binaries,
+    # so we need to use the @local_jdk//:jdk
+    # It could in theory be done by registering @local_jdk//:all toolchains,
+    # but these java toolchains still bundle binaries for ijar and stuff. So we
+    # need a nonprebult java toolchain (where ijar and stuff is built from
+    # sources).
+    # There is no such java toolchain, so we introduce one here.
+    # By providing no version information, the toolchain will set itself to the
+    # version of $JAVA_HOME/bin/java, just like the local_jdk does.
+    # To ensure this toolchain gets used, we can set
+    # --{,tool_}java_runtime_version=local_jdk and rely on the fact no java
+    # toolchain registered by default uses the local_jdk, making the selection
+    # unambiguous.
+    # This toolchain has the advantage that it can use any ambiant java jdk,
+    # not only a given, fixed version. It allows bazel to work correctly in any
+    # environment where JAVA_HOME is set to the right java version, like inside
+    # nix derivations.
+    # However, this patch breaks bazel hermeticity, by picking the ambiant java
+    # version instead of the more hermetic remote_jdk prebuilt binaries that
+    # rules_java provide by default. It also requires the user to have a
+    # JAVA_HOME set to the exact version required by the project.
+    # With more code, we could define java toolchains for all the java versions
+    # supported by the jdk as in rules_java's
+    # toolchains/local_java_repository.bzl, but this is not implemented here.
+    # To recover vanilla behavior, non NixOS users can set
+    # --{,tool_}java_runtime_version=remote_jdk, effectively reverting the
+    # effect of this patch and the fake system bazelrc.
+    ./java_toolchain.patch
 
     # Bazel integrates with apple IOKit to inhibit and track system sleep.
     # Inside the darwin sandbox, these API calls are blocked, and bazel
@@ -239,10 +243,7 @@ stdenv.mkDerivation rec {
     # This patch removes using the -fobjc-arc compiler option and makes the code
     # compile without automatic reference counting. Caveat: this leaks memory, but
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
-    (substituteAll {
-      src = ./no-arc.patch;
-      multiBinPatch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "x86_64";
-    })
+    ./no-arc.patch
 
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
@@ -270,13 +271,10 @@ stdenv.mkDerivation rec {
   # See enableNixHacks argument above.
   ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
-
-  # Bazel starts a local server and needs to bind a local address.
-  __darwinAllowLocalNetworking = true;
-
   postPatch =
     let
       darwinPatches = ''
+
         bazelLinkFlags () {
           eval set -- "$NIX_LDFLAGS"
           local flag
@@ -284,10 +282,6 @@ stdenv.mkDerivation rec {
             printf ' -Wl,%s' "$flag"
           done
         }
-
-        # Disable Bazel's Xcode toolchain detection which would configure compilers
-        # and linkers from Xcode instead of from PATH
-        export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 
         # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
         export GCOV=${coreutils}/bin/false
@@ -300,14 +294,16 @@ stdenv.mkDerivation rec {
         # https://github.com/NixOS/nixpkgs/pull/41589
         export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
 
+        # This variable is used by bazel to propagate env vars for homebrew,
+        # which is exactly what we need too.
+        export HOMEBREW_RUBY_PATH="foo"
+
         # don't use system installed Xcode to run clang, use Nix clang instead
         sed -i -E \
           -e "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
           -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${sigtool}/bin/codesign;" \
           scripts/bootstrap/compile.sh \
           tools/osx/BUILD
-
-        substituteInPlace scripts/bootstrap/compile.sh --replace ' -mmacosx-version-min=10.9' ""
 
         # nixpkgs's libSystem cannot use pthread headers directly, must import GCD headers instead
         sed -i -e "/#include <pthread\/spawn.h>/i #include <dispatch/dispatch.h>" src/main/cpp/blaze_util_darwin.cc
@@ -316,23 +312,26 @@ stdenv.mkDerivation rec {
         # invocations of gcc to clang, but vanilla clang doesn't
         sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
 
+        # This is necessary to avoid:
+        # "error: no visible @interface for 'NSDictionary' declares the selector
+        # 'initWithContentsOfURL:error:'"
+        # This can be removed when the apple_sdk is upgraded beyond 10.13+
+        sedVerbose tools/osx/xcode_locator.m \
+          -e '/initWithContentsOfURL:versionPlistUrl/ {
+            N
+            s/error:nil\];/\];/
+          }'
+
         sed -i -e 's;"/usr/bin/libtool";_find_generic(repository_ctx, "libtool", "LIBTOOL", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
         wrappers=( tools/cpp/osx_cc_wrapper.sh.tpl )
         for wrapper in "''${wrappers[@]}"; do
-          sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
-          sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
-          sed -i -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+          sedVerbose $wrapper \
+            -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g"
         done
       '';
 
+          # -e "s,%{cc},${stdenv.cc}/bin/clang,g" \
       genericPatches = ''
-        function sedVerbose() {
-          local path=$1; shift;
-          sed -i".bak-nix" "$path" "$@"
-          diff -U0 "$path.bak-nix" "$path" | sed "s/^/  /" || true
-          rm -f "$path.bak-nix"
-        }
-
         # unzip builtins_bzl.zip so the contents get patched
         builtins_bzl=src/main/java/com/google/devtools/build/lib/bazel/rules/builtins_bzl
         unzip ''${builtins_bzl}.zip -d ''${builtins_bzl}_zip >/dev/null
@@ -348,10 +347,7 @@ stdenv.mkDerivation rec {
         grep -rlZ /bin/ \
           src/main/java/com/google/devtools \
           src/main/starlark/builtins_bzl/common/python \
-          tools/python \
-          tools/cpp \
-          tools/build_rules \
-          tools/osx/BUILD \
+          tools \
         | while IFS="" read -r -d "" path; do
           # If you add more replacements here, you must change the grep above!
           # Only files containing /bin are taken into account.
@@ -377,40 +373,30 @@ stdenv.mkDerivation rec {
         #      Passing EXTRA_BAZEL_ARGS is tricky due to quoting.
 
         sedVerbose compile.sh \
-          -e "/bazel_build /a\  --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
-          -e "/bazel_build /a\  --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
-          -e "/bazel_build /a\  --linkopt=\"$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --linkopt=\"/g')\" \\\\" \
-          -e "/bazel_build /a\  --host_linkopt=\"$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --host_linkopt=\"/g')\" \\\\" \
-          -e "/bazel_build /a\  --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
-          -e "/bazel_build /a\  --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
           -e "/bazel_build /a\  --verbose_failures \\\\" \
           -e "/bazel_build /a\  --curses=no \\\\" \
           -e "/bazel_build /a\  --features=-layering_check \\\\" \
           -e "/bazel_build /a\  --experimental_strict_java_deps=off \\\\" \
           -e "/bazel_build /a\  --strict_proto_deps=off \\\\" \
+          -e "/bazel_build /a\  --action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
+          -e "/bazel_build /a\  --action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
+          -e "/bazel_build /a\  --host_action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
+          -e "/bazel_build /a\  --host_action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
+          -e "/bazel_build /a\  --toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type' \\\\" \
           -e "/bazel_build /a\  --tool_java_runtime_version=local_jdk \\\\" \
           -e "/bazel_build /a\  --java_runtime_version=local_jdk \\\\" \
-          -e "/bazel_build /a\  --repo_env=JAVA_HOME=${buildJdk}/${if isDarwin then "/zulu-11.jdk/Contents/Home" else "/lib/openjdk"} \\\\" \
-          -e "/bazel_build /a\  --extra_toolchains=@local_jdk//:all \\\\" \
-          -e "/bazel_build /a\  --toolchain_resolution_debug=@bazel_tools//tools/jdk:runtime_toolchain_type \\\\" \
-          -e "/bazel_build /a\  --sandbox_debug --verbose_failures \\\\" \
+          -e "/bazel_build /a\  --extra_toolchains=@bazel_tools//tools/jdk:all \\\\" \
+          -e "/bazel_build /a\  --distdir=${distDir} \\\\" \
+
+          #-e "/bazel_build /a\  --action_env=NIX_BINTOOLS=\"$NIX_BINTOOLS\" \\\\" \
+          #-e "/bazel_build /a\  --action_env=NIX_CC=\"$NIX_CC\" \\\\" \
+          #-e "/bazel_build /a\  --action_env=nativeBuildInputs=\"$nativeBuildInputs\" \\\\" \
 
         # Also build parser_deploy.jar with bootstrap bazel
         # TODO: Turn into a proper patch
         sedVerbose compile.sh \
           -e 's!bazel_build !bazel_build src/tools/execlog:parser_deploy.jar !' \
           -e 's!clear_log!cp $(get_bazel_bin_path)/src/tools/execlog/parser_deploy.jar output\nclear_log!'
-
-
-        # This is necessary to avoid:
-        # "error: no visible @interface for 'NSDictionary' declares the selector
-        # 'initWithContentsOfURL:error:'"
-        # This can be removed when the apple_sdk is upgraded beyond 10.13+
-        sedVerbose tools/osx/xcode_locator.m \
-          -e '/initWithContentsOfURL:versionPlistUrl/ {
-            N
-            s/error:nil\];/\];/
-          }'
 
         # append the PATH with defaultShellPath in tools/bash/runfiles/runfiles.bash
         echo "PATH=\$PATH:${defaultShellPath}" >> runfiles.bash.tmp
@@ -427,7 +413,31 @@ stdenv.mkDerivation rec {
         patchShebangs . >/dev/null
       '';
     in
-    lib.optionalString isDarwin darwinPatches + genericPatches;
+    ''
+      function sedVerbose() {
+        local path=$1; shift;
+        sed -i".bak-nix" "$path" "$@"
+        diff -U0 "$path.bak-nix" "$path" | sed "s/^/  /" || true
+        rm -f "$path.bak-nix"
+      }
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
+    + genericPatches;
+
+  meta = with lib; {
+    homepage = "https://github.com/bazelbuild/bazel/";
+    description = "Build tool that builds code quickly and reliably";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode # source bundles dependencies as jars
+    ];
+    license = licenses.asl20;
+    maintainers = lib.teams.bazel.members;
+    inherit platforms;
+  };
+
+  # Bazel starts a local server and needs to bind a local address.
+  __darwinAllowLocalNetworking = true;
 
   buildInputs = [ buildJdk ] ++ defaultShellUtils;
 
@@ -444,9 +454,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isDarwin) [
     cctools
     libcxx
+    Foundation
     CoreFoundation
     CoreServices
-    Foundation
   ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
