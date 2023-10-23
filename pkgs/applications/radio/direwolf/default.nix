@@ -8,6 +8,7 @@
 , hamlib
 , hamlibSupport ? true
 , perl
+, portaudio
 , python3
 , espeak
 , udev
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = lib.optionals stdenv.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.isDarwin [ portaudio ]
     ++ lib.optionals gpsdSupport [ gpsd ]
     ++ lib.optionals hamlibSupport [ hamlib ]
     ++ lib.optionals extraScripts [ python3 perl espeak ];

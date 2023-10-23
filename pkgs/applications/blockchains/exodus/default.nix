@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, requireFile
+, fetchurl
 , unzip
 , glib
 , systemd
@@ -29,9 +29,10 @@ stdenv.mkDerivation rec {
   pname = "exodus";
   version = "23.9.25";
 
-  src = requireFile {
+  src = fetchurl {
     name = "exodus-linux-x64-${version}.zip";
     url = "https://downloads.exodus.com/releases/${pname}-linux-x64-${version}.zip";
+    curlOptsList = [ "--user-agent" "Mozilla/5.0" ];
     sha256 = "a3e314de257e1ec01baa1023886f327ade4b233d833f7fe79f6c3e0f26d07ced";
   };
 
