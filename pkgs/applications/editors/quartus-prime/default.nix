@@ -17,6 +17,16 @@ let
 in buildFHSEnv rec {
   name = "quartus-prime-lite"; # wrapped
 
+  # Only needed on release-23.05 branch; master has commit
+  # c945723356c17f0570217dedefac645721d6fb70
+  # ("buildFHSEnv: disable security features by default") instead.
+  unshareUser = false;
+  unshareIpc = false;
+  unsharePid = false;
+  unshareNet = false;
+  unshareUts = false;
+  unshareCgroup = false;
+
   targetPkgs = pkgs: with pkgs; [
     (runCommand "ld-lsb-compat" {} ''
       mkdir -p "$out/lib"
