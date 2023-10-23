@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, bzip2 }:
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, bzip2
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
@@ -57,6 +63,8 @@ stdenv.mkDerivation rec {
     $out/bin/fnm-gobgp --help 2>&1 | grep "Available Commands"
     $out/bin/fnm-gobgpd --help 2>&1 | grep "Application Options"
   '';
+
+  passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
   meta = with lib; {
     description = "A high performance DDoS detector / sensor - commercial edition";
