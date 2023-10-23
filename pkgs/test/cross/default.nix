@@ -144,6 +144,10 @@ let
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
     pkgs.pkgsCross.mingwW64.stdenv
+
+    # musl-to-glibc cross on the same architecture tends to turn up
+    # lots of interesting corner cases
+    pkgs.pkgsMusl.pkgsCross.gnu64.hello
   ];
 
 in {
