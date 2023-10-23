@@ -40,6 +40,16 @@ let
         };
       });
 
+      # https://github.com/home-assistant/core/pull/101913
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.8.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+        };
+      });
+
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
