@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cloudpickle
+, lightning-utilities
 , scikit-learn
 , scikit-image
 , packaging
@@ -15,7 +16,7 @@
 
 let
   pname = "torchmetrics";
-  version = "1.1.2";
+  version = "1.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,10 +25,11 @@ buildPythonPackage {
     owner = "PyTorchLightning";
     repo = "metrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qbO2POXJp2O0VL16zY5mb6TDpogs1L34anFVeSf502g=";
+    hash = "sha256-g5JuTbiRd8yWx2nM3UE8ejOhuZ0XpAQdS5AC9AlrSFY=";
   };
 
   propagatedBuildInputs = [
+    lightning-utilities
     packaging
     py-deprecate
   ];
