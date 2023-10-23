@@ -46,4 +46,6 @@ python3Packages.buildPythonApplication {
     echo -e "\x1b[32m## run black\x1b[0m"
     black --check --diff .
   '';
+
+  passthru.tests = nixosTests.nixos-test-driver.driver;
 }
