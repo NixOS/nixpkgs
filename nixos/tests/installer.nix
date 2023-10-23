@@ -686,19 +686,31 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary 1024M -1s",
+          + " mkpart primary 1M 100MB"  # bpool
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M -1s", # rpool
           "udevadm settle",
-          "mkswap /dev/vda1 -L swap",
+          "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "zpool create rpool /dev/vda2",
+          "zpool create rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
           "mount -t zfs rpool/root /mnt",
           "zfs create -o mountpoint=legacy rpool/root/usr",
           "mkdir /mnt/usr",
           "mount -t zfs rpool/root/usr /mnt/usr",
+          "zpool create -o compatibility=grub2 bpool /dev/vda1",
+          "zfs create -o mountpoint=legacy bpool/boot",
+          "mkdir /mnt/boot",
+          "mount -t zfs bpool/boot /mnt/boot",
           "udevadm settle",
       )
+    '';
+
+    # umount & export bpool before shutdown
+    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
+    postInstallCommands = ''
+      machine.succeed("umount /mnt/boot")
+      machine.succeed("zpool export bpool")
     '';
   };
 
