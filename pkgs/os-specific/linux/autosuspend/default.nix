@@ -22,26 +22,27 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
+    dbus-python
+    icalendar
+    jsonpath-ng
+    lxml
+    mpd2
     portalocker
     psutil
-    dbus-python
+    python-dateutil
+    pytz
+    requests
+    requests-file
+    tzlocal
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    freezegun
+    pytest-datadir
+    pytest-httpserver
+    pytest-mock
     pytestCheckHook
     python-dbusmock
-    pytest-httpserver
-    dateutils
-    freezegun
-    pytest-mock
-    requests
-    requests-file
-    icalendar
-    tzlocal
-    jsonpath-ng
-    mpd2
-    lxml
-    pytest-datadir
   ];
 
   # Disable tests that need root
