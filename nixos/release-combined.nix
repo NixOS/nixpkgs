@@ -165,7 +165,6 @@ in rec {
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.udisks2")
         (onFullSupported "nixos.tests.xfce")
-        (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         ["nixpkgs.tarball"]
