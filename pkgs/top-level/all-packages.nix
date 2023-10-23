@@ -8565,7 +8565,9 @@ with pkgs;
 
   gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
 
-  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
+  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner {
+    buildGoModule = buildGo120Module;
+  };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
