@@ -6142,6 +6142,8 @@ self: super: with self; {
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
+  libknot = callPackage ../development/python-modules/libknot { };
+
   liblarch = callPackage ../development/python-modules/liblarch { };
 
   liblzfse = callPackage ../development/python-modules/liblzfse {
