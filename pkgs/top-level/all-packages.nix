@@ -29710,7 +29710,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
   };
 
-  nordic = callPackage ../data/themes/nordic { };
+  nordic = callPackage ../data/themes/nordic {
+    inherit (libsForQt5) breeze-icons plasma-framework plasma-workspace;
+  };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
