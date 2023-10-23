@@ -1,6 +1,9 @@
 { lib
 , python3
 , fetchPypi
+, testers
+, aws-sam-cli
+, nix-update-script
 , enableTelemetry ? false
 }:
 
@@ -56,6 +59,16 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   doCheck = false;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = aws-sam-cli;
+      command = "sam --version";
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v([0-9.]+)$" ];
+    };
+  };
 
   meta = with lib; {
     description = "CLI tool for local development and testing of Serverless applications";
