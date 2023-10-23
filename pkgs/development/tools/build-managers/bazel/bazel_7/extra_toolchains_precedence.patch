@@ -1,0 +1,13 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/RegisteredToolchainsFunction.java b/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/RegisteredToolchainsFunction.java
+index 2b407202a3..7591e78f85 100644
+--- a/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/RegisteredToolchainsFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/skyframe/toolchains/RegisteredToolchainsFunction.java
+@@ -88,7 +88,7 @@ public class RegisteredToolchainsFunction implements SkyFunction {
+     try {
+       targetPatternBuilder.addAll(
+           TargetPatternUtil.parseAllSigned(
+-              platformConfiguration.getExtraToolchains(), mainRepoParser));
++              platformConfiguration.getExtraToolchains().reverse(), mainRepoParser));
+     } catch (InvalidTargetPatternException e) {
+       throw new RegisteredToolchainsFunctionException(
+           new InvalidToolchainLabelException(e), Transience.PERSISTENT);
