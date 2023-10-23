@@ -3,23 +3,22 @@
 , build
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
+, hatch-vcs
 , magicgui
 , napari # reverse dependency, for tests
-, psygnal
 , pydantic
 , pythonOlder
 , pytomlpp
 , pyyaml
 , rich
-, setuptools-scm
 , typer
 }:
 
 buildPythonPackage rec {
   pname = "napari-npe2";
   version = "0.7.2";
-
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -30,12 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-PjoLocNTkcAnBNRbPi+MZqZtQ2bjWPIUVz0+k8nIn2A=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    # npe2 *can* build without it,
-    # but then setuptools refuses to acknowledge it when building napari
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
