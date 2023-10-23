@@ -1,10 +1,11 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, callPackage
 , autoPatchelfHook
 , src
 }:
 
-stdenv.mkDerivation {
+(stdenv.mkDerivation {
   inherit (src) name;
   inherit src;
 
@@ -18,4 +19,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
-}
+}).overrideAttrs (
+  if builtins.pathExists ./overrides/${src.platform}.nix
+  then callPackage ./overrides/${src.platform}.nix { }
+  else ({ ... }: { })
+)

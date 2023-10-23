@@ -22,7 +22,14 @@ let
 in
 runCommand "flutter-artifacts-${platform}"
 {
-  nativeBuildInputs = [ flutter unzip ];
+  nativeBuildInputs = [
+    (flutter.override {
+      # Use a version of Flutter with just enough capabilities to download
+      # artifacts.
+      supportedTargetPlatforms = [ ];
+    })
+    unzip
+  ];
 
   NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
 

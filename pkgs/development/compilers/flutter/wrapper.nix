@@ -50,19 +50,10 @@ let
     (callPackage ./artifacts/prepare-artifacts.nix {
       src = callPackage ./artifacts/fetch-artifacts.nix {
         inherit platform;
-        # Use a version of Flutter with just enough capabilities to download
-        # artifacts.
-        flutter = callPackage ./wrapper.nix {
-          inherit flutter;
-          supportedTargetPlatforms = [ ];
-        };
+        flutter = callPackage ./wrapper.nix { inherit flutter; };
         hash = artifactHashes.${platform}.${stdenv.hostPlatform.system} or "";
       };
-    }).overrideAttrs (
-      if builtins.pathExists ./artifacts/overrides/${platform}.nix
-      then callPackage ./artifacts/overrides/${platform}.nix { }
-      else ({ ... }: { })
-    ));
+    }));
 
   cacheDir = symlinkJoin rec {
     name = "flutter-cache-dir";
