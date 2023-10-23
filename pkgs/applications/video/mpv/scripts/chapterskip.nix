@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, nix-update-script
 , stdenvNoCC }:
 
 stdenvNoCC.mkDerivation {
@@ -17,6 +18,10 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
   preferLocalBuild = true;
   installPhase = "install -Dt $out/share/mpv/scripts chapterskip.lua";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/po5/chapterskip";
