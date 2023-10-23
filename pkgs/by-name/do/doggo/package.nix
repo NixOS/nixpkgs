@@ -1,31 +1,21 @@
-{ lib
-, buildGoModule
+{ buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, fetchpatch
+, lib
 }:
 
 buildGoModule rec {
   pname = "doggo";
-  version = "0.5.5";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "mr-karan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qc6RYz2bVaY/IBGIXUYO6wyh7iUDAJ1ASCK0dFwZo6s=";
+    hash = "sha256-hzl7BE3vsE2G9O2nwN/gkqQTJ+9aDfNIjmpmgN1AYq8=";
   };
 
-  patches = [
-    # go 1.20 support
-    # https://github.com/mr-karan/doggo/pull/66
-    (fetchpatch {
-      url = "https://github.com/mr-karan/doggo/commit/7db5c2144fa4a3f18afe1c724b9367b03f84aed7.patch";
-      hash = "sha256-cx8s23e02zIvJOtuqTz8XC9ApYODh96Ubl1KhsFUZ9g=";
-    })
-  ];
-
-  vendorHash = "sha256-GVLfPK1DFVSfNSdIxYSaspHFphd8ft2HUK0SMeWiVUg=";
+  vendorHash = "sha256-uonybBLABPj9CPtc+y82ajvQI7kubK+lKi4eLcZIUqA=";
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 

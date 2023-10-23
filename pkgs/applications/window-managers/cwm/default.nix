@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "leahneukirchen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-L3u4mH2UH2pTHhSPVr5dUi94b9DheslkIWL6EgQ05yA=";
+    hash = "sha256-L3u4mH2UH2pTHhSPVr5dUi94b9DheslkIWL6EgQ05yA=";
   };
 
   strictDeps = true;
