@@ -154,11 +154,10 @@ let
       outputHash = if vendorHash != "" then vendorHash else lib.fakeSha256;
     } // (removeAttrs drvArgs [ "name" "pname" ]));
 
-  depsListDrv = stdenvNoCC.mkDerivation ({
-    name = "${name}-dart-deps-list.json";
-    nativeBuildInputs = [ hook dart jq ];
+  mkDepsDrv = args: stdenvNoCC.mkDerivation (args // {
+    nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ hook dart ];
 
-    configurePhase = ''
+    configurePhase = args.configurePhase or ''
       runHook preConfigure
 
       ${sdkSetupScript}
@@ -170,6 +169,12 @@ let
 
       runHook postConfigure
     '';
+  } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
+
+  depsListDrv = mkDepsDrv {
+    name = "${name}-dart-deps-list.json";
+
+    nativeBuildInputs = [ jq ];
 
     buildPhase = ''
       runHook preBuild
@@ -178,7 +183,7 @@ let
     '';
 
     dontInstall = true;
-  } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
+  };
 
   # As of Dart 3.0.0, Pub checks the revision of cached Git-sourced packages.
   # Git must be wrapped to return a positive result, as the real .git directory is wiped
