@@ -95,7 +95,7 @@ but have run across some challenges along the way:
    libraries, and deep learning frameworks. An entirely separate package manager such as
    [conda](https://docs.conda.io/en/latest/) or 
    [micromamba](https://mamba.readthedocs.io/en/latest/) is often used for dependecy
-   management. If we begin with the 'right' package manager (e.g., Nix), all of this added
+   management. If we begin with the 'right' package manager (e.g., `Nix`), all of this added
    complexity becomes unnecessary.
 4. Popular flight control system (FCS) software (e.g., ArduPilot, PX4, BetaFlight) projects
    remain focused on microcontroller-based real-time OSes for unmanned aircraft systems (UAS).
@@ -114,6 +114,15 @@ but have run across some challenges along the way:
    configuring and deploying robotic systems, which we call RoboDevSecOps.
 8. [OSTree](https://ostreedev.github.io/ostree/) is yet another solution designed without
    robotics in mind that must be arduously adapted to our use case.
+9. [GNU Guix](https://guix.gnu.org/) is the next best thing to `NixOS` with some theoretical
+   advantages. In practice though, we found `Guix` to be less reliable and supported than
+   `NixOS`. While the potential there, we were more comfortable moving forward with the large
+   and rapidly growing `Nix` community.
+10. Although we love unikernels or Library operating systems (libOSes), they are often
+   slow and painful to deploy using common tools. Certaintly, automation can alleviate
+   much of this headache and thankfully `Nix` does just that. That's right, [you can use `Nix`
+   to build and deploy `MirageOS` unikernels](https://tarides.com/blog/2022-12-14-hillingar-mirageos-unikernels-on-nixos/). The two systems are not mutually
+   exclusive.
 
 After careful consideration, we decided that the focus of `Botnix` substantially differs from
 that of `NixOS` and other communities, given our sole focus on AI for robotics. There are
