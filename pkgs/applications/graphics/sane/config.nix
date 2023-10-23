@@ -29,8 +29,8 @@ installSanePath = path: ''
       fi
     '';
     disableBackend = backend: ''
-      grep -q '${backend}' $out/etc/sane.d/dll.conf || { echo '${backend} is not a default plugin in $SANE_CONFIG_DIR/dll.conf'; exit 1; }
-      substituteInPlace $out/etc/sane.d/dll.conf --replace '${backend}' '# ${backend} disabled in nixos config'
+      grep -q '^${backend}$' $out/etc/sane.d/dll.conf || { echo '${backend} is not a default plugin in $SANE_CONFIG_DIR/dll.conf'; exit 1; }
+      sed -i 's|^${backend}$|# ${backend} disabled in nixos config|' $out/etc/sane.d/dll.conf
     '';
 in
 stdenv.mkDerivation {
