@@ -4365,18 +4365,6 @@ final: prev:
     meta.homepage = "https://github.com/3rd/image.nvim/";
   };
 
-  rustaceanvim = buildNeovimPlugin {
-    pname = "rustaceanvim";
-    version = "2023-10-23";
-    src = fetchFromGitHub {
-      owner = "mrcjkb";
-      repo = "rustaceanvim";
-      rev = "f68c89245c5f46753050ada35d00c38ec4e582ef";
-      sha256 = "0lv836yblzwxfx52ybzacpiwygfln6j819vc49pf1fm6m08jlj4l";
-    };
-    meta.homepage = "https://github.com/mrcjkb/rustaceanvim/";
-  };
-
   impatient-nvim = buildVimPlugin {
     pname = "impatient.nvim";
     version = "2023-05-05";
@@ -8758,6 +8746,18 @@ final: prev:
       sha256 = "1xklq4g6dvqd3a5msnrir899hzqmjkscpb8bq9wd4fi3ivmjjjgg";
     };
     meta.homepage = "https://github.com/rust-lang/rust.vim/";
+  };
+
+  rustaceanvim = buildNeovimPlugin {
+    pname = "rustaceanvim";
+    version = "2023-10-23";
+    src = fetchFromGitHub {
+      owner = "mrcjkb";
+      repo = "rustaceanvim";
+      rev = "a994f6efb894aa9b504ffed655309c041d45a3e7";
+      sha256 = "1c99h3aix51r1slrwqyv9rks0qxyvqvadkwkl2skqi1y1l6psqmd";
+    };
+    meta.homepage = "https://github.com/mrcjkb/rustaceanvim/";
   };
 
   sad-vim = buildVimPlugin {
