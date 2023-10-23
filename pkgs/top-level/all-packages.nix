@@ -26280,8 +26280,6 @@ with pkgs;
 
   clickhouse-backup = callPackage ../development/tools/database/clickhouse-backup { };
 
-  cockpit = callPackage ../servers/monitoring/cockpit { };
-
   codeowners = callPackage ../development/tools/codeowners { };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
@@ -30183,8 +30181,6 @@ with pkgs;
 
   vollkorn = callPackage ../data/fonts/vollkorn { };
 
-  whatsapp-emoji-font = callPackage ../data/fonts/whatsapp-emoji { };
-
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
   whitesur-cursors = callPackage ../data/icons/whitesur-cursors { };
@@ -30887,10 +30883,6 @@ with pkgs;
   cipher = callPackage ../applications/misc/cipher { };
 
   clapper = callPackage ../applications/video/clapper { };
-
-  ciscoPacketTracer7 = callPackage ../applications/networking/cisco-packet-tracer/7.nix { };
-
-  ciscoPacketTracer8 = callPackage ../applications/networking/cisco-packet-tracer/8.nix { };
 
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail { };
 

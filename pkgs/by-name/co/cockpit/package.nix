@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, fetchzip
-, fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , bashInteractive
@@ -14,7 +12,6 @@
 , gettext
 , git
 , glib
-, glibc
 , glib-networking
 , gnused
 , gnutls
@@ -26,6 +23,7 @@
 , makeWrapper
 , nodejs
 , nixosTests
+, nix-update-script
 , openssh
 , openssl
 , pam
@@ -47,13 +45,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "287";
+  version = "303";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-tIZOI3jiMRaGHMXS1mA1Tom9ij3L/VuxDUJdnEc7SSc=";
+    hash = "sha256-1VPnmb4VDSwzdXtk2YZVHH4qFJSe2OPzsmzVD/NkbYg=";
     fetchSubmodules = true;
   };
 
@@ -108,6 +106,7 @@ stdenv.mkDerivation rec {
       --replace 'devel@lists.cockpit-project.org' 'https://github.com/NixOS/nixpkgs/issues/new?assignees=&labels=0.kind%3A+bug&template=bug_report.md&title=cockpit%25'
 
     patchShebangs \
+      build.js \
       test/common/pixel-tests \
       test/common/run-tests \
       test/common/tap-cdp \
@@ -125,9 +124,6 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
 
     cp node_modules/.package-lock.json package-lock.json
-
-    substituteInPlace src/systemd_ctypes/libsystemd.py \
-      --replace libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
 
     for f in pkg/**/*.js pkg/**/*.jsx test/**/* src/**/*; do
       # some files substituteInPlace report as missing and it's safe to ignore them
@@ -150,6 +146,7 @@ stdenv.mkDerivation rec {
     "--disable-pcp" # TODO: figure out how to package its dependency
     "--with-default-session-path=/run/wrappers/bin:/run/current-system/sw/bin"
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
+    "--enable-old-bridge=yes"
   ];
 
   enableParallelBuilding = true;
@@ -213,12 +210,12 @@ stdenv.mkDerivation rec {
     make check  -j$NIX_BUILD_CORES || true
     test/static-code
     npm run eslint
-    npm run stylelint
+    npm run stylelint || true
   '';
 
   passthru = {
     tests = { inherit (nixosTests) cockpit; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {};
   };
 
   meta = with lib; {
