@@ -67,5 +67,6 @@ stdenvNoCC.mkDerivation {
     platforms = platforms.all;
     hydraPlatforms = [];
     maintainers = with maintainers; [ manveru ];
+    sourceProvenance = [ sourceTypes.binaryBytecode ];
   };
 }
