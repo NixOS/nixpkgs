@@ -1,5 +1,6 @@
 { lib
 , callPackage
+, config
 , buildPythonPackage
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -18,6 +19,7 @@
 , torchWithRocm
 , python
 , cudaPackages
+, cudaSupport ? config.cudaSupport
 }:
 
 let
@@ -57,6 +59,8 @@ buildPythonPackage rec {
     #   url = "https://github.com/openai/triton/commit/fc7c0b0e437a191e421faa61494b2ff4870850f1.patch";
     #   hash = "sha256-f0shIqHJkVvuil2Yku7vuqWFn7VCRKFSFjYRlwx25ig=";
     # })
+  ] ++ lib.optionals (!cudaSupport) [
+    ./0000-dont-download-ptxas.patch
   ];
 
   nativeBuildInputs = [
@@ -102,21 +106,18 @@ buildPythonPackage rec {
     substituteInPlace bin/CMakeLists.txt \
       --replace "add_subdirectory(FileCheck)" ""
 
-    # Use our linker flags
-    substituteInPlace python/triton/compiler.py \
-      --replace '${oldStr}' '${newStr}'
-
     # Don't fetch googletest
     substituteInPlace unittest/CMakeLists.txt \
       --replace "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
       --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
+  '' + lib.optionalString cudaSupport ''
+    # Use our linker flags
+    substituteInPlace python/triton/compiler.py \
+      --replace '${oldStr}' '${newStr}'
   '';
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure = ''
-    export CC=${cudaPackages.backendStdenv.cc}/bin/cc;
-    export CXX=${cudaPackages.backendStdenv.cc}/bin/c++;
-
     # Upstream's setup.py tries to write cache somewhere in ~/
     export HOME=$(mktemp -d)
 
@@ -127,6 +128,9 @@ buildPythonPackage rec {
 
     # The rest (including buildPhase) is relative to ./python/
     cd python
+  '' + lib.optionalString cudaSupport ''
+    export CC=${cudaPackages.backendStdenv.cc}/bin/cc;
+    export CXX=${cudaPackages.backendStdenv.cc}/bin/c++;
 
     # Work around download_and_copy_ptxas()
     mkdir -p $PWD/triton/third_party/cuda/bin
@@ -137,7 +141,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   # Setuptools (?) strips runpath and +x flags. Let's just restore the symlink
-  postFixup = ''
+  postFixup = lib.optionalString cudaSupport ''
     rm -f $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
     ln -s ${ptxas} $out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas
   '';
