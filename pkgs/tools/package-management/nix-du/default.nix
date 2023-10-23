@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     rev = "v${version}";
-    sha256 = "sha256-Ft0j9kcR5HTSX0K09OKZMIUz25PR/isqZQIKmlNjqNE=";
+    sha256 = "sha256-LI9XWqi3ihcmUBjScQVQbn30e5eLaCYwkmnbj7Y8kuU=";
   };
 
-  cargoSha256 = "sha256-x+NONRKF7b0tADG2flgBKo32wx/TyXm7Z0bd9ZbbES8=";
+  cargoSha256 = "sha256-AM89yYeEsYOcHtbSiQgz5qVQhFvDibVxA0ACaE8Gw2Y=";
 
   doCheck = true;
   nativeCheckInputs = [ nix graphviz ];
