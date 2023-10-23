@@ -665,6 +665,9 @@ in {
 
   # zfs on / with swap
   zfsroot = makeInstallerTest "zfs-root" {
+    bootLoader = "grub";
+    grubUseEfi = true;
+
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "zfs" ];
     };
@@ -681,18 +684,23 @@ in {
 
     createPartitions = ''
       machine.succeed(
-          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary 1024M -1s",
+          "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+          + " mkpart ESP fat32 1M 100M"  # /boot
+          + " set 1 boot on"
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M 100%", # /
           "udevadm settle",
-          "mkswap /dev/vda1 -L swap",
+          "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "zpool create rpool /dev/vda2",
+          "zpool create rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
           "mount -t zfs rpool/root /mnt",
           "zfs create -o mountpoint=legacy rpool/root/usr",
           "mkdir /mnt/usr",
           "mount -t zfs rpool/root/usr /mnt/usr",
+          "mkfs.vfat -n BOOT /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=BOOT /mnt/boot",
           "udevadm settle",
       )
     '';
