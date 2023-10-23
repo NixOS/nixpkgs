@@ -3,7 +3,8 @@ import re
 import signal
 import tempfile
 import threading
-from contextlib import contextmanager
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -66,16 +67,16 @@ class Driver:
     and runs the tests"""
 
     tests: str
-    vlans: List[VLan]
-    machines: List[Machine]
-    polling_conditions: List[PollingCondition]
+    vlans: list[VLan]
+    machines: list[Machine]
+    polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
 
     def __init__(
         self,
-        start_scripts: List[str],
-        vlans: List[int],
+        start_scripts: list[str],
+        vlans: list[int],
         tests: str,
         out_dir: Path,
         keep_vm_state: bool = False,
@@ -92,7 +93,7 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
 
-        def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
+        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
             for s in scripts:
                 yield NixStartScript(s)
 
@@ -129,7 +130,7 @@ class Driver:
                 rootlog.error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
-    def test_symbols(self) -> Dict[str, Any]:
+    def test_symbols(self) -> dict[str, Any]:
         @contextmanager
         def subtest(name: str) -> Iterator[None]:
             return self.subtest(name)
@@ -214,7 +215,7 @@ class Driver:
             # to swallow them and prevent itself from terminating.
             os.kill(os.getpid(), signal.SIGTERM)
 
-    def create_machine(self, args: Dict[str, Any]) -> Machine:
+    def create_machine(self, args: dict[str, Any]) -> Machine:
         tmp_dir = get_tmp_dir()
 
         if args.get("startCommand"):
@@ -245,11 +246,11 @@ class Driver:
 
     def polling_condition(
         self,
-        fun_: Optional[Callable] = None,
+        fun_: Callable | None = None,
         *,
         seconds_interval: float = 2.0,
-        description: Optional[str] = None,
-    ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
+        description: str | None = None,
+    ) -> Callable[[Callable], AbstractContextManager] | AbstractContextManager:
         driver = self
 
         class Poll:
