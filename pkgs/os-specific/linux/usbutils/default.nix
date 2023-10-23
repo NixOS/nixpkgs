@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "usbutils";
-  version = "015";
+  version = "016";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/usb/usbutils/usbutils-${version}.tar.xz";
-    sha256 = "sha256-w7RRux9P+fY1bKxaaVaprI6F2BZRr1ainmiflPpv2m4=";
+    sha256 = "sha256-dQULOhE6PQe56CL7NnuMfvNSQCfTOup8n+v6sDhRHkM=";
   };
 
   patches = [
