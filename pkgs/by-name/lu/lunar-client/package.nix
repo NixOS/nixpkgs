@@ -10,7 +10,7 @@ let
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha256-6OAGNkMyHOZI5wh92OtalnvUVFWNAS9PvkFS0e4YXhk=";
+    hash = "sha512-YUddAvsPbuuOvhJZsWDvgF/7yghABU6Av7DcKNX1bKZqE3BzMAAQADJuNuNL4+UydoTaHetXvRO8oJCbrqgtAQ==";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -29,6 +29,8 @@ appimageTools.wrapType2 rec {
       --replace 'Exec=AppRun --no-sandbox %U' 'Exec=lunar-client' \
       --replace 'Icon=launcher' 'Icon=lunar-client'
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Free Minecraft client with mods, cosmetics, and performance boost.";
