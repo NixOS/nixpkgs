@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ndpi";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
     rev = "refs/tags/${version}";
-    hash = "sha256-S0lVh5FZewPbYG/1ikI2RroCSC7OI8Xmfeq73hYCHnY=";
+    hash = "sha256-V3hRDQ141pbR5jJK2QlP7BF2CEbuzqIvo+iTx3EGhRY=";
   };
 
   configureScript = "./autogen.sh";
