@@ -45,7 +45,6 @@ let
   self = buildPythonPackage rec {
     pname = "orange3";
     version = "3.36.1";
-    format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
