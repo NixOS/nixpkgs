@@ -57,8 +57,18 @@ let
         fi
 
         mkdir -p bin/cache
+
+        # Add a flutter_tools artifact stamp, and build a snapshot.
+        # This is the Flutter CLI application.
         echo "$(git rev-parse HEAD)" > bin/cache/flutter_tools.stamp
         ln -s '${tools}/share/flutter_tools.snapshot' bin/cache/flutter_tools.snapshot
+
+        # Some of flutter_tools's dependencies contain static assets. The
+        # application attempts to read its own package_config.json to find these
+        # assets at runtime.
+        mkdir -p packages/flutter_tools/.dart_tool
+        ln -s '${tools.dartDeps.packageConfig}' packages/flutter_tools/.dart_tool/package_config.json
+
         echo -n "${version}" > version
       '';
 
