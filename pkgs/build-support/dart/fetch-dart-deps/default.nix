@@ -185,6 +185,33 @@ let
     dontInstall = true;
   };
 
+  packageConfigDrv = mkDepsDrv {
+    name = "${name}-package-config.json";
+
+    nativeBuildInputs = [ jq ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      # Canonicalise the package_config.json, and replace references to the
+      # reconstructed package cache with the original FOD.
+      #
+      # The reconstructed package cache is not reproducible. The intended
+      # use-case of this derivation is for use with tools that use a
+      # package_config.json to load assets from packages, and not for use with
+      # Pub directly, which requires the setup performed by the hook before
+      # usage.
+      jq -S '
+        .packages[] |= . + { rootUri: .rootUri | gsub("'"$PUB_CACHE"'"; "${hook.deps}/cache/.pub-cache") }
+      | .generated |= "1970-01-01T00:00:00Z"
+      ' .dart_tool/package_config.json > $out
+
+      runHook postBuild
+    '';
+
+    dontInstall = true;
+  };
+
   # As of Dart 3.0.0, Pub checks the revision of cached Git-sourced packages.
   # Git must be wrapped to return a positive result, as the real .git directory is wiped
   # to produce a deteministic dependency derivation output.
@@ -210,6 +237,7 @@ let
       inherit deps;
       files = deps.outPath;
       depsListFile = depsListDrv.outPath;
+      packageConfig = packageConfigDrv;
     };
   }) ./setup-hook.sh;
 in
