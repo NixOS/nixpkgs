@@ -659,6 +659,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     cmd=(
         "systemd-run"
         "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
+        "-E" "NIXOS_INSTALL_BOOTLOADER"
         "--collect"
         "--no-ask-password"
         "--pty"
@@ -679,7 +680,12 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         cmd=()
     elif ! targetHostCmd "${cmd[@]}" true &>/dev/null; then
         logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
-        cmd=("env" "-i" "LOCALE_ARCHIVE=$LOCALE_ARCHIVE")
+        cmd=(
+            "env"
+            "-i"
+            "LOCALE_ARCHIVE=$LOCALE_ARCHIVE"
+            "NIXOS_INSTALL_BOOTLOADER=$NIXOS_INSTALL_BOOTLOADER"
+        )
     else
         logVerbose "Using systemd-run to switch configuration."
     fi

@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nu_scripts";
-  version = "unstable-2023-10-07";
+  version = "unstable-2023-10-19";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = pname;
-    rev = "85da8c2fb5967a7f575d8f63ebeb8d49d36fc139";
-    hash = "sha256-tT/BTnIXEgcMoyfujzWMFlOM7EclWT9LL/dt5jj7Y2M=";
+    rev = "7b2856ddff8afac538d826df4abc08325c4be39d";
+    hash = "sha256-9OFKtaADDV5I5Yu0sCfQABAmf8yqwX2QwDhPPkh5BEo=";
   };
 
   installPhase = ''
