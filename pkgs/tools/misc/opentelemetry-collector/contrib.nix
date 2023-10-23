@@ -19,7 +19,7 @@ buildGoModule rec {
 
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorHash = "sha256-t6DOt5x6EY6fwsnqgHnvcjWBBKSiLYE9fKqFnso7JV8=";
+  vendorHash = "sha256-o/51Z2Zmdza3pNZa0u3j4uG46orE9S7pUsZOXjHKrnI=";
 
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcontribcol";
