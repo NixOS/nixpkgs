@@ -11764,8 +11764,6 @@ with pkgs;
 
   overmind = callPackage ../applications/misc/overmind { };
 
-  oxker = callPackage ../applications/misc/oxker { };
-
   oxlint = callPackage ../development/tools/oxlint { };
 
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
