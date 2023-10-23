@@ -20,7 +20,7 @@ with haskellLib;
 
 self: super: {
   # Make sure that Cabal 3.10.* can be built as-is
-  Cabal_3_10_1_0 = doDistribute (super.Cabal_3_10_1_0.override ({
+  Cabal_3_10_2_0 = doDistribute (super.Cabal_3_10_2_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_10_2_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
@@ -39,7 +39,7 @@ self: super: {
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
-          Cabal = cself.Cabal_3_10_1_0;
+          Cabal = cself.Cabal_3_10_2_0;
           Cabal-syntax = cself.Cabal-syntax_3_10_2_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
           # We need at least directory >= 1.3.7.0. Using the latest version
@@ -1597,7 +1597,7 @@ self: super: {
   hspec-contrib = dontCheck super.hspec-contrib;
 
   # github.com/ucsd-progsys/liquidhaskell/issues/1729
-  liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
+  liquidhaskell-boot = super.liquidhaskell-boot.override { Diff = self.Diff_0_3_4; };
   Diff_0_3_4 = dontCheck super.Diff_0_3_4;
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
