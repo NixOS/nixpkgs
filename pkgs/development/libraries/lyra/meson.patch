@@ -1,0 +1,91 @@
+diff --git a/data/build.jam b/data/build.jam
+index c88b8f5..7f89ab5 100644
+--- a/data/build.jam
++++ b/data/build.jam
+@@ -76,7 +76,7 @@ local meson_build_header_join_str = ",
+ # ----
+ 
+ project('Lyra','cpp',
+-	version: '1.6',
++	version: '1.6.1',
+ 	default_options : ['cpp_std=c++11', 'cpp_eh=none', 'b_lto=true', 'warning_level=3'],
+ 	license: 'BSL-1.0')
+ 
+@@ -88,15 +88,25 @@ $(lyra_headers_relative:J=$(meson_build_header_join_str))
+ "
+ ]
+ 
+-inc_dir = [include_directories('include')]
+-
+-lyra_lib = shared_library('lyra',
+-	sources : src,
+-	include_directories: inc_dir,
+-	install: true,
+-	install_dir : '/usr/lib')
+-
+-lyra_dep = declare_dependency(include_directories: inc_dir, link_with: lyra_lib)
++fs = import('fs')
++foreach header : src
++	# use substring to drop `include/` prefix
++	install_headers(header, subdir : fs.parent(header.substring(8)))
++endforeach
++
++inc_dir = include_directories('include')
++
++lyra_dep = declare_dependency(include_directories: inc_dir)
++
++pkg = import('pkgconfig')
++pkg.generate(
++	subdirs : 'lyra',
++	filebase : 'lyra',
++	version : meson.project_version(),
++	name : meson.project_name(),
++	description : 'A simple to use, composing, header only, command line arguments parser for C++ 11 and beyond.',
++	url: 'https://github.com/bfgroup/Lyra',
++)
+ " ;
+ 
+ .meson_build_file = $(.meson_build_file:J=) ;
+diff --git a/meson.build b/meson.build
+index aace962..e44a500 100644
+--- a/meson.build
++++ b/meson.build
+@@ -31,7 +31,7 @@
+ # ----
+ 
+ project('Lyra','cpp',
+-	version: '1.6',
++	version: '1.6.1',
+ 	default_options : ['cpp_std=c++11', 'cpp_eh=none', 'b_lto=true', 'warning_level=3'],
+ 	license: 'BSL-1.0')
+ 
+@@ -68,12 +68,22 @@ src = [
+ 	'include/lyra/version.hpp'
+ ]
+ 
+-inc_dir = [include_directories('include')]
++fs = import('fs')
++foreach header : src
++	# use substring to drop `include/` prefix
++	install_headers(header, subdir : fs.parent(header.substring(8)))
++endforeach
+ 
+-lyra_lib = shared_library('lyra',
+-	sources : src,
+-	include_directories: inc_dir,
+-	install: true,
+-	install_dir : '/usr/lib')
++inc_dir = include_directories('include')
+ 
+-lyra_dep = declare_dependency(include_directories: inc_dir, link_with: lyra_lib)
++lyra_dep = declare_dependency(include_directories: inc_dir)
++
++pkg = import('pkgconfig')
++pkg.generate(
++	subdirs : 'lyra',
++	filebase : 'lyra',
++	version : meson.project_version(),
++	name : meson.project_name(),
++	description : 'A simple to use, composing, header only, command line arguments parser for C++ 11 and beyond.',
++	url: 'https://github.com/bfgroup/Lyra',
++)

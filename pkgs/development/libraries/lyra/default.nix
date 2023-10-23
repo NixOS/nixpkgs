@@ -13,12 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja ];
 
-  postPatch = "sed -i s#/usr#$out#g meson.build";
-
-  postInstall = ''
-    mkdir -p $out/include
-    cp -R $src/include/* $out/include
-  '';
+  patches = [ ./meson.patch ];
 
   meta = with lib; {
     homepage = "https://github.com/bfgroup/Lyra";
