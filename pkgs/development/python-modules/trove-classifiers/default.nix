@@ -9,14 +9,14 @@
 let
   self = buildPythonPackage rec {
     pname = "trove-classifiers";
-    version = "2023.7.6";
+    version = "2023.8.7";
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-io4Wi1HSD+1gcEODHTdjK7UJGdHICmTg8Tk3RGkaiyI=";
+      hash = "sha256-yfKgqF1UXlNi6Wfk8Gn1b939kSFeIv+kjGb7KDUhMZo=";
     };
 
     postPatch = ''

@@ -8,6 +8,7 @@
 , hamlib
 , hamlibSupport ? true
 , perl
+, portaudio
 , python3
 , espeak
 , udev
@@ -25,11 +26,14 @@ stdenv.mkDerivation rec {
     sha256 = "0xmz64m02knbrpasfij4rrq53ksxna5idxwgabcw4n2b1ig7pyx5";
   };
 
+  patches = [ ./fix-strlcpy-usage.patch ];
+
   nativeBuildInputs = [ cmake ];
 
   strictDeps = true;
 
   buildInputs = lib.optionals stdenv.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.isDarwin [ portaudio ]
     ++ lib.optionals gpsdSupport [ gpsd ]
     ++ lib.optionals hamlibSupport [ hamlib ]
     ++ lib.optionals extraScripts [ python3 perl espeak ];

@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-M+O7PD9VkzsQ8FOxS19pouJMKFQ+nsdpAkb+R2KN2U8=";
+    sha256 = "sha256-BJlsCNfRxGCWb7JEo9OIM1LCZ0t61SIAPZ9Oy4q0jes=";
   };
 
   # vlock is moved into its own output, since it depends on pam. This

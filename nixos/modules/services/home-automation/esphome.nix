@@ -112,7 +112,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";
         #RemoveIPC = true; # Implied by DynamicUser
         RestrictAddressFamilies = [

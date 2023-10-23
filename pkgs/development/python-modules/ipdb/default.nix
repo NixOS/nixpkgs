@@ -5,6 +5,7 @@
 , decorator
 , ipython
 , isPyPy
+, exceptiongroup
 , tomli
 , setuptools
 , unittestCheckHook
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     ipython
     decorator
   ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
     tomli
   ];
 

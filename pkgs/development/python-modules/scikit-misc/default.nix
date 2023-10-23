@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "scikit_misc";
     inherit version;
-    hash = "sha256-rBTdTpNeRC/DSrHFg7ZhHUYD0G9IgoqFx+A+LCxYK7w=";
+    hash = "sha256-mom0Ch+b3bViErh9ueVYiGfVz5SQUSqCCcGsBJ7+Nrg=";
   };
 
   postPatch = ''

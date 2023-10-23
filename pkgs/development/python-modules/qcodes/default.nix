@@ -18,6 +18,7 @@
 , numpy
 , opencensus
 , opencensus-ext-azure
+, opentelemetry-api
 , packaging
 , pandas
 , pyvisa
@@ -53,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.39.1";
+  version = "0.40.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2gJ/WeynabiGB1Z66+qaUbf6/1wogf/XjIE2mCAXUZY=";
+    sha256 = "sha256-C8/ltX3tSxCbbheuel3BjIkRBl/E92lK709QYx+2FL0=";
   };
 
   postPatch = ''
@@ -86,6 +87,7 @@ buildPythonPackage rec {
     numpy
     opencensus
     opencensus-ext-azure
+    opentelemetry-api
     packaging
     pandas
     pillow
@@ -159,9 +161,10 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python-based data acquisition framework";
-    homepage = "https://qcodes.github.io/Qcodes/";
     changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    description = "Python-based data acquisition framework";
+    downloadPage = "https://github.com/QCoDeS/Qcodes";
+    homepage = "https://qcodes.github.io/Qcodes/";
     license = licenses.mit;
     maintainers = with maintainers; [ evilmav ];
   };

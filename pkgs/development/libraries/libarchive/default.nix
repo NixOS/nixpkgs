@@ -23,35 +23,30 @@
 , cmake
 , nix
 , samba
-, buildPackages
 }:
 
-let
-  autoreconfHook = buildPackages.autoreconfHook269;
-in
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.6.2";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wQbA6vlXH8pnpY7LJLkjrRFEBpcaPR1SqxnK71UVwxg=";
+    hash = "sha256-p2JgJ/rvqaQ6yyXSh+ehScUH565ud5bQncl+lOnsWfc=";
   };
 
-  outputs = [ "out" "lib" "dev" ];
-
   patches = [
-    # fixes static linking; upstream in releases after 3.6.2
-    # https://github.com/libarchive/libarchive/pull/1825 merged upstream
-    (assert finalAttrs.version == "3.6.2"; fetchpatch {
-      name = "001-only-add-iconv-to-pc-file-if-needed.patch";
-      url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
-      hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
+    # Pull fix for test failure on 32-bit systems:
+    (fetchpatch {
+      name = "32-bit-tests-fix.patch";
+      url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
+      hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
     })
   ];
+
+  outputs = [ "out" "lib" "dev" ];
 
   postPatch = let
     skipTestPaths = [

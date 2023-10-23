@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatchling
 , pytestCheckHook
 , mock
 , pyyaml
@@ -9,13 +10,18 @@
 
 buildPythonPackage rec {
   pname = "python-multipart";
-  version = "0.0.5";
-  format = "setuptools";
+  version = "0.0.6";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43";
+    pname = "python_multipart";
+    inherit version;
+    hash = "sha256-6ZJagLtmhSnxtnx/2wpdrN18v8b7C/8+pEP+Ir3WITI=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     six

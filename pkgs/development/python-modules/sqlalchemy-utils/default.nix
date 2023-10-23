@@ -37,13 +37,13 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.40.0";
+  version = "0.41.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "SQLAlchemy-Utils";
-    hash = "sha256-r4AwiaeSmAP662FzuQ8p0aZ60C8dHnMvQLBUqOs8c3A=";
+    hash = "sha256-ohgb/wHuuER544Vx0sBxjrUgQvmv2MGU0NAod+hLfXQ=";
   };
 
   patches = [
@@ -92,6 +92,7 @@ buildPythonPackage rec {
     "--deselect tests/functions/test_database.py::TestDatabasePostgresCreateDatabaseCloseConnection::test_create_database_twice"
     "--deselect tests/functions/test_database.py::TestDatabasePostgresPg8000::test_create_and_drop"
     "--deselect tests/functions/test_database.py::TestDatabasePostgresPsycoPG2CFFI::test_create_and_drop"
+    "--deselect tests/functions/test_database.py::TestDatabasePostgresPsycoPG3::test_create_and_drop"
   ];
 
   meta = with lib; {

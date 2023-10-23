@@ -2504,9 +2504,7 @@ with pkgs;
 
   labctl = callPackage ../tools/networking/labctl { };
 
-  lefthook = callPackage ../applications/version-management/lefthook {
-    buildGoModule = buildGo121Module;
-  };
+  lefthook = callPackage ../applications/version-management/lefthook { };
 
   legit = callPackage ../applications/version-management/legit { };
 
@@ -3023,7 +3021,6 @@ with pkgs;
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
-    go = go_1_21;
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks)
@@ -4651,9 +4648,7 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
-  clash = callPackage ../tools/networking/clash {
-    buildGoModule = buildGo121Module;
-  };
+  clash = callPackage ../tools/networking/clash { };
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
@@ -6147,9 +6142,7 @@ with pkgs;
 
   onboard = callPackage ../applications/misc/onboard { };
 
-  oneshot = callPackage ../tools/networking/oneshot {
-    buildGoModule = buildGo121Module;
-  };
+  oneshot = callPackage ../tools/networking/oneshot { };
 
   orjail = callPackage ../tools/security/orjail { };
 
@@ -7496,9 +7489,7 @@ with pkgs;
 
   diction = callPackage ../tools/text/diction { };
 
-  diffoci = callPackage ../tools/misc/diffoci {
-    buildGoModule = buildGo121Module;
-  };
+  diffoci = callPackage ../tools/misc/diffoci { };
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk8;
@@ -7578,8 +7569,6 @@ with pkgs;
   dogdns = callPackage ../tools/networking/dogdns {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  doggo = callPackage ../tools/networking/doggo { };
 
   dq = callPackage ../tools/networking/dq { };
 
@@ -8027,9 +8016,7 @@ with pkgs;
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
-  evcc = callPackage ../servers/home-automation/evcc {
-    go = go_1_21;
-  };
+  evcc = callPackage ../servers/home-automation/evcc { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
@@ -8976,9 +8963,7 @@ with pkgs;
 
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
 
-  grype = callPackage ../tools/security/grype {
-    buildGoModule = buildGo121Module;
-   };
+  grype = callPackage ../tools/security/grype { };
 
   gt5 = callPackage ../tools/system/gt5 { };
 
@@ -11502,9 +11487,7 @@ with pkgs;
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
-  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix {
-    buildGoModule = buildGo121Module;
-  };
+  opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix { };
 
   opensnitch-ui = libsForQt5.callPackage ../tools/networking/opensnitch/ui.nix { };
 
@@ -12664,7 +12647,7 @@ with pkgs;
 
   rewrk = callPackage ../tools/networking/rewrk { };
 
-  inherit (callPackage ../tools/security/rekor { buildGoModule = buildGo121Module; })
+  inherit (callPackage ../tools/security/rekor { })
     rekor-cli
     rekor-server;
 
@@ -12786,6 +12769,8 @@ with pkgs;
   ripmime = callPackage ../tools/networking/ripmime { };
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
+
+  rkvm = callPackage ../tools/misc/rkvm { };
 
   rkrlv2 = callPackage ../applications/audio/rkrlv2 { };
 
@@ -13679,9 +13664,7 @@ with pkgs;
 
   systrayhelper = callPackage ../tools/misc/systrayhelper { };
 
-  syft = callPackage ../tools/admin/syft {
-    buildGoModule = buildGo121Module;
-  };
+  syft = callPackage ../tools/admin/syft { };
 
   Sylk = callPackage ../applications/networking/Sylk { };
 
@@ -13803,7 +13786,6 @@ with pkgs;
   };
   teleport_14 = callPackage ../servers/teleport/14 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-    buildGoModule = buildGo121Module;
   };
   teleport = teleport_14;
 
@@ -15407,9 +15389,7 @@ with pkgs;
 
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
-  carapace = callPackage ../shells/carapace {
-    buildGoModule = buildGo121Module;
-  };
+  carapace = callPackage ../shells/carapace { };
 
   dash = callPackage ../shells/dash { };
 
@@ -15828,7 +15808,7 @@ with pkgs;
 
   flasm = callPackage ../development/compilers/flasm { };
 
-  flyctl = callPackage ../development/web/flyctl { buildGoModule = buildGo121Module; };
+  flyctl = callPackage ../development/web/flyctl { };
 
   fluidd = callPackage ../applications/misc/fluidd { };
 
@@ -17883,11 +17863,11 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
-  python3 = python310;
+  python3 = python311;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python310Packages;
+  python3Packages = dontRecurseIntoAttrs python311Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;
@@ -18217,9 +18197,9 @@ with pkgs;
   # Needed for autogen
   guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
 
-  guile_2_2 = callPackage ../development/interpreters/guile/2.2.nix { };
+  guile_2_2 = darwin.apple_sdk_11_0.callPackage ../development/interpreters/guile/2.2.nix { };
 
-  guile_3_0 = callPackage ../development/interpreters/guile/3.0.nix { };
+  guile_3_0 = darwin.apple_sdk_11_0.callPackage ../development/interpreters/guile/3.0.nix { };
 
   guile = guile_3_0;
 
@@ -19010,7 +18990,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
   };
 
-  devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo121Module; };
+  devbox = callPackage ../development/tools/devbox { };
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
@@ -19513,10 +19493,6 @@ with pkgs;
 
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
 
-  kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends {
-    gperf = gperf_3_0;
-  };
-
   kcgi = callPackage ../development/web/kcgi { };
 
   kcov = callPackage ../development/tools/analysis/kcov { };
@@ -20002,9 +19978,7 @@ with pkgs;
     withPEPatterns = true;
   };
 
-  reviewdog = callPackage ../development/tools/misc/reviewdog {
-    buildGoModule = buildGo121Module;
-  };
+  reviewdog = callPackage ../development/tools/misc/reviewdog { };
 
   revive = callPackage ../development/tools/revive { };
 
@@ -20280,9 +20254,7 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
-    buildGoModule = buildGo121Module;
-  };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
@@ -21280,9 +21252,9 @@ with pkgs;
   # update to ffmpeg
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
-  ffmpeg = ffmpeg_5;
-  ffmpeg-headless = ffmpeg_5-headless;
-  ffmpeg-full = ffmpeg_5-full;
+  ffmpeg = ffmpeg_6;
+  ffmpeg-headless = ffmpeg_6-headless;
+  ffmpeg-full = ffmpeg_6-full;
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
@@ -24999,7 +24971,7 @@ with pkgs;
 
   simp_le = callPackage ../tools/admin/simp_le { };
 
-  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_3; };
+  simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_4; };
 
   sioclient = callPackage ../development/libraries/sioclient { };
 
@@ -25905,9 +25877,9 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_20;
-  buildGoModule = buildGo120Module;
-  buildGoPackage = buildGo120Package;
+  go = go_1_21;
+  buildGoModule = buildGo121Module;
+  buildGoPackage = buildGo121Package;
 
   # requires a newer Apple SDK
   go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
@@ -26464,9 +26436,7 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
-    buildGoModule = buildGo121Module;
-  };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
@@ -26626,7 +26596,9 @@ with pkgs;
 
   mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
 
-  mailmanPackages = callPackage ../servers/mail/mailman { };
+  mailmanPackages = callPackage ../servers/mail/mailman {
+    python3 = python310;
+  };
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
@@ -27119,14 +27091,14 @@ with pkgs;
     postgresql_15_jit
     postgresql_16_jit
   ;
-  postgresql = postgresql_14.override { this = postgresql; };
-  postgresql_jit = postgresql_14_jit.override { this = postgresql_jit; };
+  postgresql = postgresql_15.override { this = postgresql; };
+  postgresql_jit = postgresql_15_jit.override { this = postgresql_jit; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
   postgresqlJitPackages = recurseIntoAttrs postgresql_jit.pkgs;
   postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
   postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
-  postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
+  postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
   postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
   postgresql11JitPackages = recurseIntoAttrs postgresql_11_jit.pkgs;
   postgresql12JitPackages = recurseIntoAttrs postgresql_12_jit.pkgs;
@@ -27134,7 +27106,7 @@ with pkgs;
   postgresql14JitPackages = recurseIntoAttrs postgresql_14_jit.pkgs;
   postgresql15JitPackages = recurseIntoAttrs postgresql_15_jit.pkgs;
   postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
-  postgresql14Packages = postgresqlPackages;
+  postgresql15Packages = postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -27410,9 +27382,7 @@ with pkgs;
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo121Module;
-  };
+  tailscale = callPackage ../servers/tailscale { };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
@@ -28452,9 +28422,7 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
-  golangci-lint = callPackage ../development/tools/golangci-lint {
-    buildGoModule = buildGo121Module;
-  };
+  golangci-lint = callPackage ../development/tools/golangci-lint { };
 
   golangci-lint-langserver = callPackage ../development/tools/golangci-lint-langserver { };
 
@@ -29762,9 +29730,7 @@ with pkgs;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
-  nuclei = callPackage ../tools/security/nuclei {
-    buildGoModule = buildGo121Module;
-  };
+  nuclei = callPackage ../tools/security/nuclei { };
 
   nullmailer = callPackage ../servers/mail/nullmailer {
     stdenv = gccStdenv;
@@ -31025,6 +30991,12 @@ with pkgs;
   convchain = callPackage ../tools/graphics/convchain { };
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
+
+  cosmic-comp = callPackage ../applications/window-managers/cosmic/comp { };
+
+  cosmic-applets = callPackage ../applications/window-managers/cosmic/applets { };
+
+  cosmic-panel = callPackage ../applications/window-managers/cosmic/panel { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
@@ -41178,7 +41150,7 @@ with pkgs;
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
 
-  inherit (callPackage ../applications/networking/cluster/terraform { buildGoModule = buildGo121Module; })
+  inherit (callPackage ../applications/networking/cluster/terraform { })
     mkTerraform
     terraform_1
     terraform_plugins_test
@@ -41258,9 +41230,7 @@ with pkgs;
 
   tusk = callPackage ../applications/office/tusk { };
 
-  trufflehog = callPackage ../tools/security/trufflehog {
-    buildGoModule = buildGo121Module;
-  };
+  trufflehog = callPackage ../tools/security/trufflehog { };
 
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
@@ -41286,9 +41256,7 @@ with pkgs;
 
   usb-reset = callPackage ../applications/misc/usb-reset { };
 
-  usql = callPackage ../applications/misc/usql {
-    buildGoModule = buildGo121Module;
-  };
+  usql = callPackage ../applications/misc/usql { };
 
   utf8cpp = callPackage ../development/libraries/utf8cpp { };
 

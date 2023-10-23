@@ -36,6 +36,12 @@ buildPythonPackage rec {
       url = "https://github.com/PyTables/PyTables/commit/337792561e5924124efd20d6fea6bbbd2428b2aa.patch";
       hash = "sha256-pz3A/jTPWXXlzr+Yl5PRUvdSAinebFsoExfek4RUHkc=";
     })
+    (fetchpatch {
+      name = "numexpr-2.8.5-compatibility.patch";
+      url = "https://github.com/PyTables/PyTables/commit/1a235490ebe1a138da1139cfa19829b5f0a2af37.patch";
+      includes = [ "tables/tests/test_queries.py" ];
+      hash = "sha256-uMS+Z2Zcz68ILMQaBdIDMnCyasozCaCGOiGIyw0+Evc=";
+    })
   ];
 
   nativeBuildInputs = [

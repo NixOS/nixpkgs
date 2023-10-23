@@ -11,6 +11,7 @@
 
 { stdenv, lib
 , buildPackages
+, targetPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
@@ -19,8 +20,8 @@
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.72.0";
-  rustcSha256 = "sha256-6p1hu7UddrbqaBFW9p8OBZa1lyLwRBSwHG4QC0tb46E=";
+  rustcVersion = "1.72.1";
+  rustcSha256 = "sha256-f0iEX2pSzbtdY/sFKP1fUg60QydbVfmOMoFZ+GVo+JU=";
 
   llvmSharedForBuild = pkgsBuildBuild.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
   llvmSharedForHost = pkgsBuildHost.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };

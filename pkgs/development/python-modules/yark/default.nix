@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "yark";
-  version = "1.2.7";
+  version = "1.2.8";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8O4EpHb1fP/O/t6hS1K1ylSXNKBuiipo7wvEnUJODSw=";
+    hash = "sha256-FXgJ/y8qN7FkR7nhpNgPvUH/EQgw8cgRFqUA9KiJKKM=";
   };
 
   pythonRelaxDeps = [

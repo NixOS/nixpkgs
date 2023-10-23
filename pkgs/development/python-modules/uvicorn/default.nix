@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.23.1";
+  version = "0.23.2";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-X/G6K0X4G1EsMIBpvqy62zZ++8paTHNqgYLi+B7YK+0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-98Ahb6syD/J9StwaOqVj/MCdzbHOgey0sixp7SJnROE=";
   };
 
   outputs = [

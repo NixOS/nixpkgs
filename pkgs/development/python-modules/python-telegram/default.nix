@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "python-telegram";
-  version = "0.15.0";
+  version = "0.18.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Na2NIiVgYexKbEqjN58hfkgxwFdCTL7Z7D3WEhL4wXA=";
+    hash = "sha256-UbJW/op01qe/HchfJUlBPBY9/W8NbZkEmFM8gZ5+EmI=";
   };
 
   patches = [

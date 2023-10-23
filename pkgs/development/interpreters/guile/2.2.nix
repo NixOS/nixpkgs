@@ -34,9 +34,9 @@ builder rec {
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ]
+  depsBuildBuild = if stdenv.buildPlatform.isDarwin
+    then [ buildPackages.darwin.apple_sdk_11_0.stdenv.cc ]
+    else [ buildPackages.stdenv.cc ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     pkgsBuildBuild.guile_2_2;
   nativeBuildInputs = [

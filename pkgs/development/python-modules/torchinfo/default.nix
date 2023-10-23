@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "torchinfo";
-  version = "1.7.2";
+  version = "1.64";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "TylerYep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O+I7BNQ5moV/ZcbbuP/IFoi0LO0WsGHBbSfgPmFu1Ec=";
+    hash = "sha256-gcl8RxCD017FP4LtB60WVtOh7jg2Otv/vNd9hKneEAU=";
   };
 
   propagatedBuildInputs = [

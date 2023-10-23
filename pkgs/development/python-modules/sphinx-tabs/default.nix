@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonImportsCheckHook
+
+# build-system
+, setuptools
+
 # documentation build dependencies
 , sphinxHook
 # runtime dependencies
@@ -16,6 +19,8 @@
 buildPythonPackage rec {
   pname = "sphinx-tabs";
   version = "3.4.1";
+  format = "pyproject";
+
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
@@ -30,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pythonImportsCheckHook
+    setuptools
     sphinxHook
   ];
 

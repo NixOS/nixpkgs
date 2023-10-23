@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "0.28.0";
+  version = "0.29.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "scikit-rf";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cTvWNfIs2bAOYpXDg6ghZA4tRXlaNbUZwcaZMjCi/YY=";
+    hash = "sha256-rBOw1rIEF8Ia6xXlXxVzRRiUxrOjOAlipFuKiL+gRl0=";
   };
 
   buildInputs = [

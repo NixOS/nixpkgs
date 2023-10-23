@@ -1,7 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
+{ lib, buildGo120Module, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
+
 let
   pname = "atomic-swap";
   version = "0.4.2";
+  buildGoModule = buildGo120Module;
 in
 buildGoModule {
   inherit pname version;

@@ -9,14 +9,14 @@
 , pydantic
 , pyhamcrest
 , pytestCheckHook
-, python-jsonrpc-server
+, python-lsp-jsonrpc
 , pythonOlder
 , pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.40.0";
+  version = "0.41.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+3VgONZzlobgs4wujCaGTTYpIgYrWgWwYgKQqirS7t8=";
+    hash = "sha256-1ujEhoxWcCM1g640aLE60YGiNQLB+G7t7oLVZXW8AMM=";
   };
 
   pythonRelaxDeps = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyhamcrest
-    python-jsonrpc-server
+    python-lsp-jsonrpc
   ];
 
   preCheck = ''

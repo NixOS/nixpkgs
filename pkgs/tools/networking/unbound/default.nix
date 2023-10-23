@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , openssl
 , nettle
 , expat
@@ -54,6 +55,15 @@ stdenv.mkDerivation rec {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
     hash = "sha256-PalUkKhc/2Qg8m+uC4Skn1ES3xvxt/w0+HJPAggstxI=";
   };
+
+  patches = [
+    # Backport: fix libunbound with nettle.
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/654a7eab62cbd1844d483cc4a0f2cf2fbcbaf00a.patch";
+      excludes = [ "doc/Changelog" ];
+      hash = "sha256-n3FCeZESFrrn6Wcf28Hb8WZs1eMHWjbsf2WCFOXU3lI=";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.9.2";
+  version = "0.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
-    rev = "v${version}";
-    hash = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-03lHip0iExfptrUe5ObA6xXrsfS4QJPrh1Z0v7q2lDI=";
   };
 
   patches = [

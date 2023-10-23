@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.8.0";
+  version = "2023.9.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZKjfxTJCu3EUOKz16+VP8+cPqQliFNc7AU1FPC1gOXw=";
+    hash = "sha256-NJLZyxVS5L25wC79mZ6kRjxxd5dYcjWiC3x3A5Topm8=";
   };
 
   nativeBuildInputs = [
@@ -140,6 +140,9 @@ buildPythonPackage rec {
     "test_dot"
     "test_dot_nan"
     "test_merge_column_with_nulls"
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmp301jryv_/createme/0.part'
+    "test_to_csv_nodir"
+    "test_to_json_results"
   ];
 
   __darwinAllowLocalNetworking = true;

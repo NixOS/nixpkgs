@@ -8,6 +8,7 @@
 , wtforms
 , email-validator
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -39,6 +41,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-uamqp-python";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-OjZTroaBuUB/dakl5gAYigJkim9EFiCwUEBo7z35vhQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-q8FxM4PBXLD5q68nrUJ+TGkui1yQJ3HHNF7jn+e+HkA=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
