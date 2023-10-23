@@ -1,5 +1,6 @@
 mod check_result;
 mod eval;
+mod nixpkgs_problem;
 mod references;
 mod structure;
 mod utils;

@@ -1,5 +1,6 @@
 use crate::check_result;
-use crate::check_result::{CheckProblem, CheckResult};
+use crate::check_result::CheckResult;
+use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::structure;
 use crate::Version;
 use std::path::Path;
@@ -137,13 +138,13 @@ pub fn check_values(
             };
 
             if !valid {
-                CheckProblem::WrongCallPackage {
+                NixpkgsProblem::WrongCallPackage {
                     relative_package_file: relative_package_file.clone(),
                     package_name: package_name.clone(),
                 }
                 .into_result()
             } else if !attribute_info.is_derivation {
-                CheckProblem::NonDerivation {
+                NixpkgsProblem::NonDerivation {
                     relative_package_file: relative_package_file.clone(),
                     package_name: package_name.clone(),
                 }
@@ -152,7 +153,7 @@ pub fn check_values(
                 check_result::ok(())
             }
         } else {
-            CheckProblem::UndefinedAttr {
+            NixpkgsProblem::UndefinedAttr {
                 relative_package_file: relative_package_file.clone(),
                 package_name: package_name.clone(),
             }
