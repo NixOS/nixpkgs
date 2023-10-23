@@ -11,7 +11,6 @@
 , gnome
 , libphonenumber
 , libqtdbustest
-, lomiri-api
 , pkg-config
 , protobuf
 , qtbase
@@ -91,6 +90,15 @@ stdenv.mkDerivation (finalAttrs: {
     # Bad path concatenation
     substituteInPlace config.h.in \
       --replace '@CMAKE_INSTALL_PREFIX@/@HISTORY_PLUGIN_PATH@' '@HISTORY_PLUGIN_PATH@'
+
+    # Honour GNUInstallDirs
+    substituteInPlace src/CMakeLists.txt \
+      --replace 'INCLUDE_INSTALL_DIR include' 'INCLUDE_INSTALL_DIR ''${CMAKE_INSTALL_FULL_INCLUDEDIR}'
+
+    # Fix concatenations & variable references
+    substituteInPlace src/history-service.pc.in \
+      --replace 'LIB_INSTALL_DIR' 'CMAKE_INSTALL_FULL_LIBDIR' \
+      --replace "\''${CMAKE_INSTALL_PREFIX}/\''${" "\''${" \
 
   '' + (if finalAttrs.doCheck then ''
     # Tests launch these DBus services, fix paths related to them
