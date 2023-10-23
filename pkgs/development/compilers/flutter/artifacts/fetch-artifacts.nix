@@ -41,10 +41,6 @@ runCommand "flutter-artifacts-${platform}"
     inherit platform;
   };
 } ''
-  runHook preBuild
-
   mkdir -p "$out"
   HOME="$NIX_BUILD_TOP" FLUTTER_CACHE_DIR="$out" flutter precache -v '--${platform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove platform platforms))}
-
-  runHook postBuild
 ''
