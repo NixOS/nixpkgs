@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric, pmix, ucx
+, libpsm2, libfabric, pmix, ucx, ucc
 , config
 # Enable CUDA support
 , cudaSupport ? config.cudaSupport, cudatoolkit
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
+    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ucc ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
