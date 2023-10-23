@@ -32,22 +32,22 @@ let
     # set to false if you want to control where to save the generated config
     # (e.g., in ~/.config/init.vim or project/.nvimrc)
     , wrapRc ? true
+    # vimL code that should be sourced as part of the generated init.lua file
     , neovimRcContent ? null
-    , neovimLuaRcContent ? null
+    # lua code to put into the generated init.lua file
+    , luaRcContent ? ""
     # entry to load in packpath
     , packpathDirs
     , ...
   }:
 
-  # we can not have both, a lua and a vimL init file, at least one needs to be
-  # null
-  assert isNull neovimRcContent || isNull neovimLuaRcContent;
-
   let
 
-    selectLua = isNull neovimRcContent;
-    rcContent = if !selectLua then "source ${writeText "init.vim" neovimRcContent}"
-                else if isNull neovimLuaRcContent then "" else neovimLuaRcContent;
+    rcContent = ''
+      ${luaRcContent}
+    '' + lib.optionalString (!isNull neovimRcContent) ''
+      vim.cmd.source "${writeText "init.vim" neovimRcContent}"
+    '';
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
