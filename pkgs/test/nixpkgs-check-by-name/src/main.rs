@@ -6,11 +6,12 @@ mod utils;
 
 use crate::structure::check_structure;
 use anyhow::Context;
-use check_result::pass;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
-use itertools::Either;
-use itertools::Either::{Left, Right};
+use itertools::{
+    Either,
+    Either::{Left, Right},
+};
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -84,7 +85,7 @@ pub fn check_nixpkgs<W: io::Write>(
             "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
             utils::BASE_SUBPATH
         );
-        pass(())
+        check_result::ok(())
     } else {
         match check_structure(&nixpkgs_path)? {
             Left(errors) => Ok(Left(errors)),

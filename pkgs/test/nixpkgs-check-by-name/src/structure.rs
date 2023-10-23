@@ -1,6 +1,5 @@
-use crate::check_result::{
-    flatten_check_results, pass, sequence_check_results, CheckError, CheckResult,
-};
+use crate::check_result;
+use crate::check_result::{CheckProblem, CheckResult};
 use crate::references;
 use crate::utils;
 use crate::utils::{BASE_SUBPATH, PACKAGE_NIX_FILENAME};
@@ -36,7 +35,7 @@ pub fn relative_file_for_package(package_name: &str) -> PathBuf {
 pub fn check_structure(path: &Path) -> CheckResult<Vec<String>> {
     let base_dir = path.join(BASE_SUBPATH);
 
-    let check_results = utils::read_dir_sorted(&base_dir)?
+    let shard_results = utils::read_dir_sorted(&base_dir)?
         .into_iter()
         .map(|shard_entry| {
             let shard_path = shard_entry.path();
@@ -45,35 +44,35 @@ pub fn check_structure(path: &Path) -> CheckResult<Vec<String>> {
 
             if shard_name == "README.md" {
                 // README.md is allowed to be a file and not checked
-                pass(vec![])
+                check_result::ok(vec![])
             } else if !shard_path.is_dir() {
-                CheckError::ShardNonDir {
+                CheckProblem::ShardNonDir {
                     relative_shard_path: relative_shard_path.clone(),
                 }
                 .into_result()
                 // we can't check for any other errors if it's a file, since there's no subdirectories to check
             } else {
                 let shard_name_valid = SHARD_NAME_REGEX.is_match(&shard_name);
-                let check_result = if !shard_name_valid {
-                    CheckError::InvalidShardName {
+                let result = if !shard_name_valid {
+                    CheckProblem::InvalidShardName {
                         relative_shard_path: relative_shard_path.clone(),
                         shard_name: shard_name.clone(),
                     }
                     .into_result()
                 } else {
-                    pass(())
+                    check_result::ok(())
                 };
 
                 let entries = utils::read_dir_sorted(&shard_path)?;
 
-                let duplicate_check_results = entries
+                let duplicate_results = entries
                     .iter()
                     .zip(entries.iter().skip(1))
                     .filter(|(l, r)| {
                         l.file_name().to_ascii_lowercase() == r.file_name().to_ascii_lowercase()
                     })
                     .map(|(l, r)| {
-                        CheckError::CaseSensitiveDuplicate {
+                        CheckProblem::CaseSensitiveDuplicate {
                             relative_shard_path: relative_shard_path.clone(),
                             first: l.file_name(),
                             second: r.file_name(),
@@ -81,90 +80,87 @@ pub fn check_structure(path: &Path) -> CheckResult<Vec<String>> {
                         .into_result::<()>()
                     });
 
-                let check_result = sequence_check_results(
-                    check_result,
-                    flatten_check_results(duplicate_check_results, |_| ()),
-                );
+                let result = check_result::and(result, check_result::sequence_(duplicate_results));
 
-                let check_results = entries.into_iter().map(|package_entry| {
+                let package_results = entries.into_iter().map(|package_entry| {
                     let package_path = package_entry.path();
                     let package_name = package_entry.file_name().to_string_lossy().into_owned();
                     let relative_package_dir =
                         PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
 
                     if !package_path.is_dir() {
-                        CheckError::PackageNonDir {
+                        CheckProblem::PackageNonDir {
                             relative_package_dir: relative_package_dir.clone(),
                         }
                         .into_result()
                     } else {
                         let package_name_valid = PACKAGE_NAME_REGEX.is_match(&package_name);
-                        let name_check_result = if !package_name_valid {
-                            CheckError::InvalidPackageName {
+                        let result = if !package_name_valid {
+                            CheckProblem::InvalidPackageName {
                                 relative_package_dir: relative_package_dir.clone(),
                                 package_name: package_name.clone(),
                             }
                             .into_result()
                         } else {
-                            pass(())
+                            check_result::ok(())
                         };
 
                         let correct_relative_package_dir = relative_dir_for_package(&package_name);
-                        let shard_check_result =
+                        let result = check_result::and(
+                            result,
                             if relative_package_dir != correct_relative_package_dir {
                                 // Only show this error if we have a valid shard and package name
                                 // Because if one of those is wrong, you should fix that first
                                 if shard_name_valid && package_name_valid {
-                                    CheckError::IncorrectShard {
+                                    CheckProblem::IncorrectShard {
                                         relative_package_dir: relative_package_dir.clone(),
                                         correct_relative_package_dir: correct_relative_package_dir
                                             .clone(),
                                     }
                                     .into_result()
                                 } else {
-                                    pass(())
+                                    check_result::ok(())
                                 }
                             } else {
-                                pass(())
-                            };
-
-                        let package_nix_path = package_path.join(PACKAGE_NIX_FILENAME);
-                        let package_nix_check_result = if !package_nix_path.exists() {
-                            CheckError::PackageNixNonExistent {
-                                relative_package_dir: relative_package_dir.clone(),
-                            }
-                            .into_result()
-                        } else if package_nix_path.is_dir() {
-                            CheckError::PackageNixDir {
-                                relative_package_dir: relative_package_dir.clone(),
-                            }
-                            .into_result()
-                        } else {
-                            pass(())
-                        };
-
-                        let reference_check_result = references::check_references(
-                            &relative_package_dir,
-                            &path.join(&relative_package_dir),
+                                check_result::ok(())
+                            },
                         );
 
-                        flatten_check_results(
-                            [
-                                name_check_result,
-                                shard_check_result,
-                                package_nix_check_result,
-                                reference_check_result,
-                            ],
-                            |_| package_name.clone(),
-                        )
+                        let package_nix_path = package_path.join(PACKAGE_NIX_FILENAME);
+                        let result = check_result::and(
+                            result,
+                            if !package_nix_path.exists() {
+                                CheckProblem::PackageNixNonExistent {
+                                    relative_package_dir: relative_package_dir.clone(),
+                                }
+                                .into_result()
+                            } else if package_nix_path.is_dir() {
+                                CheckProblem::PackageNixDir {
+                                    relative_package_dir: relative_package_dir.clone(),
+                                }
+                                .into_result()
+                            } else {
+                                check_result::ok(())
+                            },
+                        );
+
+                        let result = check_result::and(
+                            result,
+                            references::check_references(
+                                &relative_package_dir,
+                                &path.join(&relative_package_dir),
+                            ),
+                        );
+
+                        check_result::map(result, |_| package_name.clone())
                     }
                 });
 
-                sequence_check_results(check_result, flatten_check_results(check_results, |x| x))
+                check_result::and(result, check_result::sequence(package_results))
             }
         });
 
-    flatten_check_results(check_results, |x| {
+    check_result::map(check_result::sequence(shard_results), |x| {
         x.into_iter().flatten().collect::<Vec<_>>()
     })
 }

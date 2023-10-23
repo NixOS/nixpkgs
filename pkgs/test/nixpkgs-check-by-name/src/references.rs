@@ -1,4 +1,5 @@
-use crate::check_result::{flatten_check_results, pass, CheckError, CheckResult};
+use crate::check_result;
+use crate::check_result::{CheckProblem, CheckResult};
 use crate::utils;
 use crate::utils::LineIndex;
 
@@ -46,16 +47,16 @@ fn check_path(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
                 // No need to handle the case of it being inside the directory, since we scan through the
                 // entire directory recursively anyways
                 if let Err(_prefix_error) = target.strip_prefix(context.absolute_package_dir) {
-                    CheckError::OutsideSymlink {
+                    CheckProblem::OutsideSymlink {
                         relative_package_dir: context.relative_package_dir.clone(),
                         subpath: subpath.to_path_buf(),
                     }
                     .into_result()
                 } else {
-                    pass(())
+                    check_result::ok(())
                 }
             }
-            Err(io_error) => CheckError::UnresolvableSymlink {
+            Err(io_error) => CheckProblem::UnresolvableSymlink {
                 relative_package_dir: context.relative_package_dir.clone(),
                 subpath: subpath.to_path_buf(),
                 io_error,
@@ -64,12 +65,11 @@ fn check_path(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
         }
     } else if path.is_dir() {
         // Recursively check each entry
-        let check_results = utils::read_dir_sorted(&path)?.into_iter().map(|entry| {
+        check_result::sequence_(utils::read_dir_sorted(&path)?.into_iter().map(|entry| {
             let entry_subpath = subpath.join(entry.file_name());
             check_path(context, &entry_subpath)
                 .context(format!("Error while recursing into {}", subpath.display()))
-        });
-        flatten_check_results(check_results, |_| ())
+        }))
     } else if path.is_file() {
         // Only check Nix files
         if let Some(ext) = path.extension() {
@@ -79,10 +79,10 @@ fn check_path(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
                     subpath.display()
                 ))
             } else {
-                pass(())
+                check_result::ok(())
             }
         } else {
-            pass(())
+            check_result::ok(())
         }
     } else {
         // This should never happen, git doesn't support other file types
@@ -104,7 +104,7 @@ fn check_nix_file(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
 
     let root = Root::parse(&contents);
     if let Some(error) = root.errors().first() {
-        return CheckError::CouldNotParseNix {
+        return CheckProblem::CouldNotParseNix {
             relative_package_dir: context.relative_package_dir.clone(),
             subpath: subpath.to_path_buf(),
             error: error.clone(),
@@ -114,17 +114,17 @@ fn check_nix_file(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
 
     let line_index = LineIndex::new(&contents);
 
-    let check_results = root.syntax().descendants().map(|node| {
+    check_result::sequence_(root.syntax().descendants().map(|node| {
         let text = node.text().to_string();
         let line = line_index.line(node.text_range().start().into());
 
         if node.kind() != NODE_PATH {
             // We're only interested in Path expressions
-            pass(())
+            check_result::ok(())
         } else if node.children().count() != 0 {
             // Filters out ./foo/${bar}/baz
             // TODO: We can just check ./foo
-            CheckError::PathInterpolation {
+            CheckProblem::PathInterpolation {
                 relative_package_dir: context.relative_package_dir.clone(),
                 subpath: subpath.to_path_buf(),
                 line,
@@ -133,7 +133,7 @@ fn check_nix_file(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
             .into_result()
         } else if text.starts_with('<') {
             // Filters out search paths like <nixpkgs>
-            CheckError::SearchPath {
+            CheckProblem::SearchPath {
                 relative_package_dir: context.relative_package_dir.clone(),
                 subpath: subpath.to_path_buf(),
                 line,
@@ -149,7 +149,7 @@ fn check_nix_file(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
                     // No need to handle the case of it being inside the directory, since we scan through the
                     // entire directory recursively anyways
                     if let Err(_prefix_error) = target.strip_prefix(context.absolute_package_dir) {
-                        CheckError::OutsidePathReference {
+                        CheckProblem::OutsidePathReference {
                             relative_package_dir: context.relative_package_dir.clone(),
                             subpath: subpath.to_path_buf(),
                             line,
@@ -157,10 +157,10 @@ fn check_nix_file(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
                         }
                         .into_result()
                     } else {
-                        pass(())
+                        check_result::ok(())
                     }
                 }
-                Err(e) => CheckError::UnresolvablePathReference {
+                Err(e) => CheckProblem::UnresolvablePathReference {
                     relative_package_dir: context.relative_package_dir.clone(),
                     subpath: subpath.to_path_buf(),
                     line,
@@ -170,6 +170,5 @@ fn check_nix_file(context: &PackageContext, subpath: &Path) -> CheckResult<()> {
                 .into_result(),
             }
         }
-    });
-    flatten_check_results(check_results, |_| ())
+    }))
 }

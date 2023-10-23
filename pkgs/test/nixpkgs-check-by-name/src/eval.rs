@@ -1,4 +1,5 @@
-use crate::check_result::{flatten_check_results, pass, CheckError, CheckResult};
+use crate::check_result;
+use crate::check_result::{CheckProblem, CheckResult};
 use crate::structure;
 use crate::Version;
 use std::path::Path;
@@ -110,7 +111,7 @@ pub fn check_values(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    let check_results = package_names.iter().map(|package_name| {
+    check_result::sequence_(package_names.iter().map(|package_name| {
         let relative_package_file = structure::relative_file_for_package(package_name);
         let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
@@ -136,27 +137,26 @@ pub fn check_values(
             };
 
             if !valid {
-                CheckError::WrongCallPackage {
+                CheckProblem::WrongCallPackage {
                     relative_package_file: relative_package_file.clone(),
                     package_name: package_name.clone(),
                 }
                 .into_result()
             } else if !attribute_info.is_derivation {
-                CheckError::NonDerivation {
+                CheckProblem::NonDerivation {
                     relative_package_file: relative_package_file.clone(),
                     package_name: package_name.clone(),
                 }
                 .into_result()
             } else {
-                pass(())
+                check_result::ok(())
             }
         } else {
-            CheckError::UndefinedAttr {
+            CheckProblem::UndefinedAttr {
                 relative_package_file: relative_package_file.clone(),
                 package_name: package_name.clone(),
             }
             .into_result()
         }
-    });
-    flatten_check_results(check_results, |_| ())
+    }))
 }
