@@ -19,6 +19,7 @@
 , pigz
 , rsync
 , runCommand
+, runInMkShell
 , runtimeShell
 , shadow
 , skopeo
@@ -1234,4 +1235,111 @@ rec {
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
       } "${stream} | pigz -nTR > $out";
+
+  # This function streams a docker image that runs the arguments inside a nix-shell wrapper
+  streamWrapperImage = lib.makeOverridable (
+    { # The derivation whose environment this docker image should be based on
+      drv
+    , # Image name
+      name ? drv.name + "-env"
+    , # Arguments for the wrapper script
+      args  ? [ ]
+    , # User id to run the container as. Defaults to 1000, because many
+      # binaries don't like to be run as root
+      uid ? 1000
+    , # Group id to run the container as, see also uid
+      gid ? 1000
+    , # Commands to be run right before the payload command runs
+      prelude ? ""
+    , # The home directory of the user
+      homeDirectory ? "/build"
+    , # The temporary directory
+      temporaryDirectory ? "/tmp"
+    }@rest:
+
+      let
+
+        normalizedRest = builtins.removeAttrs rest [
+          "drv"
+          "args"
+          "uid"
+          "gid"
+          "homeDirectory"
+          "temporaryDirectory"
+          "prelude"
+        ];
+
+        wrapper = runInMkShell {
+          name = name + "-wrapper";
+          inherit drv prelude;
+        };
+
+        # Environment variables set in the image
+        envVars = {
+
+          # Root certificates for internet access
+          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
+          NIX_STORE = storeDir;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
+          HOME = homeDirectory;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
+          TMPDIR = temporaryDirectory;
+          TEMPDIR = temporaryDirectory;
+          TMP = temporaryDirectory;
+          TEMP = temporaryDirectory;
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
+          # TODO: Make configurable?
+          NIX_BUILD_CORES = "1";
+
+          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
+          TERM = "xterm-256color";
+        };
+
+      in streamLayeredImage (normalizedRest // {
+          contents = (normalizedRest.contents or []) ++ [
+            binSh
+            usrBinEnv
+            (fakeNss.override {
+              # Allows programs to look up the build user's home directory
+              # https://github.com/NixOS/nix/blob/ffe155abd36366a870482625543f9bf924a58281/src/libstore/build/local-derivation-goal.cc#L906-L910
+              # Slightly differs however: We use the passed-in homeDirectory instead of sandboxBuildDir.
+              # We're doing this because it's arguably a bug in Nix that sandboxBuildDir is used here: https://github.com/NixOS/nix/issues/6379
+              extraPasswdLines = [
+                "nixbld:x:${toString uid}:${toString gid}:Build user:${homeDirectory}:/noshell"
+              ];
+              extraGroupLines = [
+                "nixbld:!:${toString gid}:"
+              ];
+            })
+          ];
+        fakeRootCommands = ''
+          # Effectively a single-user installation of Nix, giving the user full
+          # control over the Nix store. Needed for building the derivation this
+          # shell is for, but also in case one wants to use Nix inside the
+          # image
+          mkdir -p ./nix/{store,var/nix} ./etc/nix
+          chown -R ${toString uid}:${toString gid} ./nix ./etc/nix
+
+          # Gives the user control over the build directory
+          mkdir -p .${homeDirectory}
+          chown -R ${toString uid}:${toString gid} .${homeDirectory}
+
+          mkdir -p .${temporaryDirectory}
+          chown -R ${toString uid}:${toString gid} .${temporaryDirectory}
+        '';
+
+        config = (normalizedRest.config or {}) // {
+          # Run this image as the given uid/gid
+          User = "${toString uid}:${toString gid}";
+          WorkingDir = homeDirectory;
+          Env = (lib.mapAttrsToList (name: value: "${name}=${toString value}") envVars) ++ (normalizedRest.config.Env or []);
+          Entrypoint = [ (lib.getExe wrapper) ] ++ args;
+        };
+      }));
 }
+
