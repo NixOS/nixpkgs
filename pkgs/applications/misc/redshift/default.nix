@@ -43,7 +43,7 @@ let
         "--enable-quartz=${if withQuartz then "yes" else "no"}"
         "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
       ] ++ lib.optionals (pname == "gammastep") [
-        "--with-systemduserunitdir=${placeholder "out"}/share/systemd/user/"
+        "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
         "--enable-apparmor"
       ];
 
