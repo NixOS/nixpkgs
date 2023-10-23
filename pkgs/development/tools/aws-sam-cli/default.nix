@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
-    # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
+    # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
     wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
   '';
 
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "CLI tool for local development and testing of Serverless applications";
-    homepage = "https://github.com/awslabs/aws-sam-cli";
+    homepage = "https://github.com/aws/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "sam";
