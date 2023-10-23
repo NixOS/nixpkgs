@@ -32173,6 +32173,10 @@ with pkgs;
 
   flex-ndax = callPackage ../applications/radio/flex-ndax { };
 
+  floorp-unwrapped = callPackage ../applications/networking/browsers/floorp { };
+
+  floorp = wrapFirefox floorp-unwrapped { };
+
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
   hackedbox = callPackage ../applications/window-managers/hackedbox { };
