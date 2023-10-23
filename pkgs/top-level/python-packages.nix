@@ -8430,6 +8430,7 @@ self: super: with self; {
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
   openai-triton = callPackage ../development/python-modules/openai-triton {
+    llvm = pkgs.openai-triton-llvm;
     cudaPackages = pkgs.cudaPackages_12_0;
   };
 

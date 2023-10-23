@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , config
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,6 +14,7 @@
 , ncurses
 , libxml2
 , lit
+, llvm
 , filelock
 , torchWithRocm
 , python
@@ -35,7 +35,6 @@ let
   # be executed on the GPU.
   # Cf. https://nixos.org/manual/nixpkgs/unstable/#sec-cross-infra
   ptxas = "${pkgsTargetTarget.cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-  llvm = callPackage ./llvm.nix { }; # Use a custom llvm, see llvm.nix for details
 in
 buildPythonPackage rec {
   pname = "triton";
