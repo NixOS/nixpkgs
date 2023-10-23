@@ -69,8 +69,8 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, postBootCommands, extraConfig
+  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
+                  , postInstallCommands, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig, testFlakeSwitch
                   }:
     let iface = "virtio";
@@ -152,6 +152,8 @@ let
               }'
               """
           )
+
+      ${postInstallCommands}
 
       with subtest("Shutdown system after installation"):
           machine.succeed("umount -R /mnt")
@@ -368,7 +370,9 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
+    { createPartitions
+    , postInstallCommands ? "", preBootCommands ? "", postBootCommands ? ""
+    , extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
@@ -479,7 +483,7 @@ let
       };
 
       testScript = testScriptFun {
-        inherit bootLoader createPartitions preBootCommands postBootCommands
+        inherit bootLoader createPartitions postInstallCommands preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
                 testSpecialisationConfig testFlakeSwitch;
       };
