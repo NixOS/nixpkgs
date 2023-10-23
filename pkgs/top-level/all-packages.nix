@@ -19690,6 +19690,8 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
+  muon-ssh = callPackage ../tools/networking/muon-ssh { };
+
   haskell-ci = haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci;
 
   neoload = callPackage ../development/tools/neoload {
