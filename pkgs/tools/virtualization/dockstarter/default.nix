@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 main.sh $out/bin/ds
     wrapProgram $out/bin/ds --prefix PATH : ${lib.makeBinPath [
       bash
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
       git
       ncurses
     ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

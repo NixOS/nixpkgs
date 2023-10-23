@@ -15,9 +15,13 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man8
     cp bashcards.8 $out/share/man/man8/
     cp bashcards $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

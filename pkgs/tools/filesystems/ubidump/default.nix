@@ -18,17 +18,29 @@ python3.pkgs.buildPythonApplication rec {
   dontBuild = true;
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i '1s;^;#!${python3.interpreter}\n;' ubidump.py
     patchShebangs ubidump.py
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 ubidump.py $out/bin/ubidump
     wrapProgram $out/bin/ubidump --set PYTHONPATH $PYTHONPATH
+
+    runHook postInstall
   '';
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/ubidump -h  > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

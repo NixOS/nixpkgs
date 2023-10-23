@@ -32,10 +32,14 @@ stdenv.mkDerivation rec {
   ];
 
   fixupPhase = ''
+    runHook preFixup
+
     substituteInPlace $out/bin/vglrun \
       --replace "LD_PRELOAD=libvglfaker" "LD_PRELOAD=$out/lib/libvglfaker" \
       --replace "LD_PRELOAD=libdlfaker" "LD_PRELOAD=$out/lib/libdlfaker" \
       --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
+
+    runHook postFixup
   '';
 
   meta = with lib; {

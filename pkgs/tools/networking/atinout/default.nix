@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     make PREFIX=$out install
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -35,7 +35,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/assh --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

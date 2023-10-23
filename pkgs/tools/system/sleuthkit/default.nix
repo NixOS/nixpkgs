@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     dontConfigure = true;
 
     buildPhase = ''
+      runHook preBuild
+
       export IVY_HOME=$NIX_BUILD_TOP/.ant
       pushd bindings/java
       ant retrieve-deps
@@ -45,9 +47,13 @@ stdenv.mkDerivation rec {
       pushd case-uco/java
       ant get-ivy-dependencies
       popd
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       export IVY_HOME=$NIX_BUILD_TOP/.ant
       mkdir -m 755 -p $out/bindings/java
       cp -r bindings/java/lib $out/bindings/java
@@ -55,6 +61,8 @@ stdenv.mkDerivation rec {
       cp -r case-uco/java/lib $out/case-uco/java
       cp -r $IVY_HOME/lib $out
       chmod -R 755 $out/lib
+
+      runHook postInstall
     '';
 
     outputHashMode = "recursive";

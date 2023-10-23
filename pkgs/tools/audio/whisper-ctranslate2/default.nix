@@ -35,8 +35,12 @@ python3.pkgs.buildPythonApplication {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     # Note: we are not running the `e2e-tests` because they require downloading models from the internet.
     ${python3.interpreter} -m nose2 -s tests
+
+    runHook postCheck
   '';
 
   meta = with lib; {

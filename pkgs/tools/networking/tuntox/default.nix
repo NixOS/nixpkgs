@@ -56,15 +56,22 @@ stdenv.mkDerivation rec {
     '';
 
   buildPhase = ''
-    '' + lib.optionalString stdenv.isLinux ''
-      make
-    '' + lib.optionalString stdenv.isDarwin ''
-      make -f Makefile.mac tuntox
-    '';
+    runHook preBuild
+  '' + lib.optionalString stdenv.isLinux ''
+    make
+  '' + lib.optionalString stdenv.isDarwin ''
+    make -f Makefile.mac tuntox
+  '' + ''
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv tuntox $out/bin/
+
+    runHook postInstall
   '';
 
   doCheck = false;

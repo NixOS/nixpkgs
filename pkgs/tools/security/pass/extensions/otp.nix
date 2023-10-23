@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i -e 's|OATH=\$(which oathtool)|OATH=${oath-toolkit}/bin/oathtool|' otp.bash
+
+    runHook postPatch
   '';
 
   installFlags = [ "PREFIX=$(out)"

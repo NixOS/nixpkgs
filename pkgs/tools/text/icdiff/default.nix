@@ -21,8 +21,12 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   checkPhase = ''
+    runHook preCheck
+
     patchShebangs test.sh
     ./test.sh ${python3Packages.python.interpreter}
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -12,13 +12,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ];
 
   buildPhase = ''
+    runHook preBuild
+
     substituteInPlace config.h --replace "p0f.fp" "$out/etc/p0f.fp"
     substituteInPlace build.sh --replace "/bin/bash" "${bash}/bin/bash"
     ./build.sh
     cd tools && make && cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/sbin $out/etc
 
     cp ./p0f                $out/sbin
@@ -27,6 +33,8 @@ stdenv.mkDerivation rec {
     cp ./tools/p0f-client   $out/sbin
     cp ./tools/p0f-sendsyn  $out/sbin
     cp ./tools/p0f-sendsyn6 $out/sbin
+
+    runHook postInstall
   '';
 
   hardeningDisable = [ "format" ];

@@ -32,7 +32,11 @@ buildGoPackage rec {
 
   #doCheck = true; # broken by tzdata: 2018g -> 2019a
   checkPhase = ''
+    runHook preCheck
+
     make test PKGS=github.com/theupdateframework/notary/cmd/notary
+
+    runHook postCheck
   '';
 
   meta = with lib; {

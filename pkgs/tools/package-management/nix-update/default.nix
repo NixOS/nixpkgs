@@ -28,7 +28,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/nix-update --help >/dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   manpages = [ "dirvish.8" "dirvish-runall.8" "dirvish-expire.8" "dirvish-locate.8" "dirvish.conf.5" ];
 
   buildPhase = ''
+    runHook preBuild
+
     HEADER="#!${perl}/bin/perl
 
     \$CONFDIR = \"/etc/dirvish\";
@@ -29,9 +31,13 @@ stdenv.mkDerivation rec {
       ) > $executable
       chmod +x $executable
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp --target-directory=$out/bin $executables
 
@@ -45,6 +51,8 @@ stdenv.mkDerivation rec {
         exit 1
       fi
     done
+
+    runHook postInstall
   '';
 
   postFixup = ''

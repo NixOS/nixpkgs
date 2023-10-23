@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pciutils libx86 zlib ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace Makefile.in --replace '$(libdir)/libpci.a' ""
+
+    runHook postPatch
   '';
 
   configureFlags = [ "LDFLAGS=-lpci" ];

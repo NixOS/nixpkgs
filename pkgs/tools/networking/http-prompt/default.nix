@@ -22,7 +22,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/${pname} --version | grep -q "${version}"
+
+    runHook postCheck
   '';
 
   meta = with lib; {

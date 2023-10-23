@@ -19,9 +19,21 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildPhase = "./build.py";
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase = "./install.py";
+    ./build.py
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ./install.py
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "XML parser for Vala and C programs";

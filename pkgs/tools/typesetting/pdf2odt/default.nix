@@ -27,10 +27,14 @@ resholve.mkDerivation rec {
   patches = [ ./use_mktemp.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 pdf2odt           -t $out/bin
     install -Dm0644 README.md LICENSE -t $out/share/doc/pdf2odt
 
     ln -rs $out/bin/pdf2odt $out/bin/pdf2ods
+
+    runHook postInstall
   '';
   solutions = {
     default = {

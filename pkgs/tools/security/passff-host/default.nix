@@ -15,10 +15,16 @@ stdenv.mkDerivation rec {
   makeFlags = [ "VERSION=${version}" ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     substituteInPlace bin/${version}/passff.json \
       --replace PLACEHOLDER $out/share/passff-host/passff.py
 
@@ -37,6 +43,8 @@ stdenv.mkDerivation rec {
       install -d $out$manifestDir
       ln -s $out/share/passff-host/passff.json $out$manifestDir/
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -13,7 +13,11 @@ buildPythonApplication rec {
 
   format = "other";
   installPhase = ''
+    runHook preInstall
+
     install -D ./dnschef.py $out/bin/dnschef
+
+    runHook postInstall
   '';
 
   propagatedBuildInputs = [ dnslib ];

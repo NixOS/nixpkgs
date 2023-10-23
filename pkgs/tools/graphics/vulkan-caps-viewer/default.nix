@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.lists.optionals x11Support [ qtx11extras ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace vulkanCapsViewer.pro \
       --replace '/usr/' "/"
+
+    runHook postPatch
   '';
 
   qmakeFlags = [

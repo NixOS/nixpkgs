@@ -17,24 +17,36 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unzip $src
     tar xf "Linux Driver Ver${version}/sclgeneric_${version}_linux_${arch}bit.tar.gz"
     export sourceRoot=$(readlink -e sclgeneric_${version}_linux_${arch}bit)
+
+    runHook postUnpack
   '';
 
   # Add support for SCL011 nPA (subsidized model for German eID)
   patches = [ ./eid.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/pcsc/drivers
     cp -r proprietary/*.bundle $out/pcsc/drivers
+
+    runHook postInstall
   '';
 
   libPath = lib.makeLibraryPath [ libusb-compat-0_1 ];
 
   fixupPhase = ''
+    runHook preFixup
+
     patchelf --set-rpath $libPath \
       $out/pcsc/drivers/SCLGENERIC.bundle/Contents/Linux/libSCLGENERIC.so.${version};
+
+    runHook postFixup
   '';
 
   meta = with lib; {

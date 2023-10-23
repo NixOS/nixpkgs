@@ -71,8 +71,12 @@ in rustPlatform.buildRustPackage rec {
   ];
 
   fixupPhase = ''
+    runHook preFixup
+
     patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $out/bin/ajour)" $out/bin/ajour
     wrapProgram $out/bin/ajour --prefix PATH ":" ${lib.makeBinPath [ zenity kdialog ]}
+
+    runHook postFixup
   '';
 
   meta = with lib; {

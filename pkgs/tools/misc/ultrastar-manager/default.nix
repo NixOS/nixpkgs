@@ -96,6 +96,8 @@ in mkDerivation {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     find -path './src/plugins/*' -prune -type d -print0 \
       | xargs -0 -i'{}' basename '{}' \
       | sed -e '/shared/d' \
@@ -103,6 +105,8 @@ in mkDerivation {
     ${diffPlugins plugins "found_plugins"}
 
     cd src && qmake && make
+
+    runHook postBuild
   '';
 
   # is not installPhase so that qt post hooks can run

@@ -30,6 +30,8 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true; # stay away from exploit executables
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/msf}
 
     cp -r * $out/share/msf
@@ -49,6 +51,8 @@ in stdenv.mkDerivation rec {
 
     makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
       --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
+
+    runHook postInstall
   '';
 
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit

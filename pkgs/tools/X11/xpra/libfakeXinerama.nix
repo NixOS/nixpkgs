@@ -12,15 +12,23 @@ stdenv.mkDerivation  rec {
   buildInputs = [ libX11 libXinerama ];
 
   buildPhase = ''
+    runHook preBuild
+
     gcc -O2 -Wall fakeXinerama.c -fPIC -o libfakeXinerama.so.1.0 -shared
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp libfakeXinerama.so.1.0 $out/lib
     ln -s libfakeXinerama.so.1.0 $out/lib/libXinerama.so.1.0
     ln -s libXinerama.so.1.0 $out/lib/libXinerama.so.1
     ln -s libXinerama.so.1 $out/lib/libXinerama.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

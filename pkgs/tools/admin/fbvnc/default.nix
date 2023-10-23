@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
   buildInputs = [];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp fbvnc "$out/bin"
     mkdir -p "$out/share/doc/${pname}"
     cp README* "$out/share/doc/${pname}"
+
+    runHook postInstall
   '';
 
   meta = {

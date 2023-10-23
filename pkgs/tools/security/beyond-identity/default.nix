@@ -30,10 +30,16 @@ let
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       dpkg -x $src .
+
+      runHook postUnpack
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/opt/beyond-identity
 
       rm -rf usr/share/doc
@@ -45,6 +51,8 @@ let
       cp -ar opt/beyond-identity/bin $out/opt/beyond-identity
 
       ln -s $out/opt/beyond-identity/bin/* $out/bin/
+
+      runHook postInstall
     '';
 
     postFixup = ''

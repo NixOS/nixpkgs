@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "23a889109ca9087a719c638758f14cc3b867a5dcf30a6c90bf6a0985073556dd";
   };
 
-  configurePhase="export makeFlags=\"DESTDIR=$out\"";
+  configurePhase = ''
+    runHook preConfigure
+
+    export makeFlags="DESTDIR=$out"
+
+    runHook postConfigure
+  '';
 
   buildInputs = [ zlib libiconv ];
 

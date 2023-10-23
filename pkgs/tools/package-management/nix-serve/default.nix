@@ -28,11 +28,15 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
 
     makeWrapper ${perl.withPackages(p: [ p.DBDSQLite p.Plack p.Starman nix.perl-bindings ])}/bin/starman $out/bin/nix-serve \
                 --prefix PATH : "${lib.makeBinPath [ bzip2 nix ]}" \
                 --add-flags $out/libexec/nix-serve/nix-serve.psgi
+
+    runHook postInstall
   '';
 
   passthru.tests = {

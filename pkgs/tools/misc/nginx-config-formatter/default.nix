@@ -15,12 +15,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     python3 $src/test_nginxfmt.py
+
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
+
+    runHook postInstall
   '';
 
   meta = with lib; {

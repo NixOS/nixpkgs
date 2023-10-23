@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
   makeFlags = [ "arch=Linux_MPI" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/hpcg
 
     cp bin/xhpcg $out/bin
     cp bin/hpcg.dat $out/share/hpcg
+
+    runHook postInstall
   '';
 
   meta = with lib; {

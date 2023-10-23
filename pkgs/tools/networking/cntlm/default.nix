@@ -17,9 +17,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin; cp cntlm $out/bin/;
     mkdir -p $out/share/; cp COPYRIGHT README VERSION doc/cntlm.conf $out/share/;
     mkdir -p $out/man/; cp doc/cntlm.1 $out/man/;
+
+    runHook postInstall
   '';
 
   meta = with lib; {

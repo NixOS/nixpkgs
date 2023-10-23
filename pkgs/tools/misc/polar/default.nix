@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   # Then, wrap the scripts so that they use the correct ruby environment and put
   # these wrapped executables under bin.
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 -t $out/etc/udev/rules.d ./pkg/99-polar.rules
     mkdir -p $out/{bin,lib/polar,share/polar}
     cp -r lib/* $out/lib/polar/
@@ -53,6 +55,8 @@ exec ${gems}/bin/bundle exec ${ruby}/bin/ruby "$raw" "\$@"
 EOF
       chmod +x $bin
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {

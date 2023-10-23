@@ -21,9 +21,21 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildPhase = "./build.py";
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase = "./install.py";
+    ./build.py
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preBuild
+
+    ./install.py
+
+    runHook postBuild
+  '';
 
   meta = with lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";

@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     PREFIX=\"\" DESTDIR=$out make install
     wrapProgram $out/bin/profile-cleaner \
       --prefix PATH : "${lib.makeBinPath [ parallel sqlite bc file ]}"
+
+    runHook postInstall
   '';
 
   meta = {

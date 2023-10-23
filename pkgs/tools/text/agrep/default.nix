@@ -17,8 +17,12 @@ stdenv.mkDerivation {
     sed -i '1i#include <sys/stat.h>' checkfil.c newmgrep.c recursiv.c
   '';
   installPhase = ''
+    runHook preInstall
+
     install -Dm 555 agrep -t "$out/bin"
     install -Dm 444 docs/* -t "$out/doc"
+
+    runHook postInstall
   '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

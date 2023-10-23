@@ -39,13 +39,21 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     test '${toString clean}' != 1 || rm *x*.S
     ${lib.concatMapStringsSep "\n" (m: "./modeline2edid - <<<'${m}'") modelines}
     make clean all
+
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -14,17 +14,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FHhx+f253+UdbFjd2fOlUY1tpQ6pA2aVu9CBSwUVoKQ=";
   };
 
-  buildPhase = "ant jar";
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase =
-    ''
-      mkdir -p $out/share/${pname}
-      cp $build/build/source/build/jar/ili2c.jar $out/share/${pname}
+    ant jar
 
-      mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/ili2c \
-        --add-flags "-jar $out/share/${pname}/ili2c.jar"
-    '';
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/${pname}
+    cp $build/build/source/build/jar/ili2c.jar $out/share/${pname}
+
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/ili2c \
+      --add-flags "-jar $out/share/${pname}/ili2c.jar"
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "The INTERLIS Compiler";

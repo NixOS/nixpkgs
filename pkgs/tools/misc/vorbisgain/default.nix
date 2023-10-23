@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libogg libvorbis ];
 
   patchPhase = ''
+    runHook prePatch
+
     chmod -v +x configure
     configureFlags="--mandir=$out/share/man"
+
+    runHook postPatch
   '';
 
   meta = with lib; {

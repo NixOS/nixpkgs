@@ -17,7 +17,11 @@ stdenv.mkDerivation {
   installFlags = [ "PREFIX=\${out}" ];
 
   patchPhase = ''
+   runHook prePatch
+
    substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
+
+   runHook postPatch
   '';
 
   preInstall = ''

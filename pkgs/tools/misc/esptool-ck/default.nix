@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "VERSION=${version}" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp esptool $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

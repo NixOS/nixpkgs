@@ -71,6 +71,8 @@ let
 
         # ignore tests that does network call, or assume powershell
         checkPhase = ''
+          runHook preCheck
+
           rm azure/{,cli/}__init__.py
           python -c 'import azure.common; print(azure.common)'
           PYTHONPATH=$PWD:${src}/src/azure-cli-testsdk:$PYTHONPATH HOME=$TMPDIR pytest \
@@ -78,6 +80,8 @@ let
             --ignore=azure/cli/core/tests/test_profile.py \
             --ignore=azure/cli/core/tests/test_generic_update.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
+
+          runHook postCheck
         '';
 
         pythonImportsCheck = [

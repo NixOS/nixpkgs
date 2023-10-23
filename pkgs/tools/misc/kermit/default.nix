@@ -12,9 +12,13 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses libxcrypt ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir -p src
     pushd src
     tar xvzf $src
+
+    runHook postUnpack
   '';
 
   postPatch = ''
@@ -22,12 +26,22 @@ stdenv.mkDerivation {
       -e 's@/usr/local@'"$out"@ makefile
   '';
 
-  buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'";
+  buildPhase = ''
+    runHook preBuild
+
+    make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/man/man1
     make -f makefile install
+
+    runHook postInstall
   '';
 
   meta = with lib; {

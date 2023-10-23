@@ -15,14 +15,22 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 
   buildPhase = ''
+    runHook preBuild
+
     sh Build.sh -r -tpax
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 pax $out/bin/pax
     ln -s $out/bin/pax $out/bin/paxcpio
     ln -s $out/bin/pax $out/bin/paxtar
     install -Dm444 mans/pax{,cpio,tar}.1 -t $out/share/man/man1/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

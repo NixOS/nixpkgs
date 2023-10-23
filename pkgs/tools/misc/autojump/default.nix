@@ -17,12 +17,16 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     python ./install.py -d "$out" -p "" -z "$out/share/zsh/site-functions/"
 
     chmod +x "$out/etc/profile.d/autojump.sh"
     install -Dt "$out/share/bash-completion/completions/" -m444 "$out/share/autojump/autojump.bash"
     install -Dt "$out/share/fish/vendor_conf.d/" -m444 "$out/share/autojump/autojump.fish"
     install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

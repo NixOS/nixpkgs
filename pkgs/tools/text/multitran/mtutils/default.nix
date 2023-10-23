@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmtsupport libfacet libbtree libmtquery help2man ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
       -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
       -e 's@/usr/include/btree@${libbtree}/include/btree@' \
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
     # Fixing multibyte locale output
     sed -i -e 's@message.length()@message.length()*5@' \
       src/converter.cc;
+
+    runHook postPatch
   '';
 
   meta = {

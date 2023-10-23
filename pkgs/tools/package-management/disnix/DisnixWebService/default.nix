@@ -17,8 +17,20 @@ stdenv.mkDerivation rec {
        -e "s|#AXIS2_LIB=|AXIS2_LIB=${axis2}/lib|" \
         scripts/disnix-soap-client
   '';
-  buildPhase = "ant";
-  installPhase = "ant install";
+  buildPhase = ''
+    runHook preBuild
+
+    ant
+
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+
+    ant install
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "A SOAP interface and client for Disnix";

@@ -24,7 +24,11 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     ${python3.interpreter} test/run.py
+
+    runHook postCheck
   '';
 
   meta = {

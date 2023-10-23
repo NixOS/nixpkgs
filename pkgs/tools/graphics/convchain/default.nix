@@ -9,11 +9,17 @@ stdenv.mkDerivation rec {
     sha256 = "0lnscljgbw0s90sfcahwvnxakml0f4d8jxi5ikm4ak8qgnvw6rql";
   };
   buildPhase = ''
+    runHook preBuild
+
     mcs ConvChain.cs -out:convchain.exe -r:System.Drawing
     mcs ConvChainFast.cs -out:convchainfast.exe -r:System.Drawing
     grep -m1 -B999 '^[*][/]' ConvChainFast.cs > COPYING.MIT
+
+    runHook postBuild
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/convchain,share/convchain}
     cp README.md COPYING.MIT "$out"/share/doc/convchain
     cp convchain*.exe "$out"/bin
@@ -28,6 +34,8 @@ stdenv.mkDerivation rec {
     echo "chmod u+w ." >> "$out/bin/convchainfast"
     echo "'${mono}/bin/mono' '$out/bin/convchainfast.exe' \"\$@\"" >>  "$out/bin/convchainfast"
     chmod a+x "$out/bin/convchainfast"
+
+    runHook postInstall
   '';
   buildInputs = [mono];
   meta = {

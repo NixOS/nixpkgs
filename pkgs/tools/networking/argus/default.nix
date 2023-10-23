@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ procps which wget lsof net-snmp ];
 
   patchPhase = ''
+     runHook prePatch
+
      substituteInPlace events/argus-extip.pl \
        --subst-var-by PERLBIN ${perl}/bin/perl
     substituteInPlace events/argus-lsof.pl \
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     substituteInPlace events/argus-snmp.sh \
       --replace /usr/bin/snmpget ${lib.getBin net-snmp}/bin/snmpget \
       --replace /usr/bin/snmpwalk ${lib.getBin net-snmp}/bin/snmpwalk
+
+     runHook postPatch
   '';
 
   meta = with lib; {

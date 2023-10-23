@@ -12,10 +12,14 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     cp -r bin share "$out"
     wrapProgram $out/bin/nix-pin \
       --prefix PATH : "${lib.makeBinPath [ nix git ]}"
+
+    runHook postInstall
   '';
   passthru =
     let

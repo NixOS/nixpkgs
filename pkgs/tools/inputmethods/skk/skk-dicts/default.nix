@@ -38,6 +38,8 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     function dictname() {
       src=$1
       name=$(basename $src)          # remove dir name
@@ -59,6 +61,8 @@ stdenv.mkDerivation {
       $out/share/$(dictname ${large}) + \
       $out/share/$(dictname ${edict}) + \
       $out/share/$(dictname ${assoc}) >> $dst
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

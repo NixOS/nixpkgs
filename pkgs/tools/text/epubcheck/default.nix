@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp -r lib/* $out/lib
 
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/epubcheck \
       --add-flags "-classpath $classpath com.adobe.epubcheck.tool.Checker"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

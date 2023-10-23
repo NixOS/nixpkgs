@@ -132,6 +132,8 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     # This is a NixOS 22.11 image (doesn't actually matter) with a 1 MiB root disk that's all zero.
     # Make sure that it converts properly.
     mkdir -p ovftool-check
@@ -141,6 +143,8 @@ stdenv.mkDerivation rec {
     if [ ! -f nixos.ovf ] || [ ! -f nixos.mf ] || [ ! -f nixos-disk1.vmdk ]; then
       exit 1
     fi
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

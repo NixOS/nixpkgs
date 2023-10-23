@@ -24,7 +24,11 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = "-lOpenCL";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 opencl-info $out/bin/opencl-info
+
+    runHook postInstall
   '';
 
   meta = with lib; {

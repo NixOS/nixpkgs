@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "34a584e45058950337ff9342693b6739b52c3ce17e66440526c4bd6f9575802c";
   };
   patchPhase = ''
+    runHook prePatch
+
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' src/Makefile;
+
+    runHook postPatch
   '';
 
   meta = {

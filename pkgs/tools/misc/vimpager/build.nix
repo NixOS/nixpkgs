@@ -26,8 +26,12 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     sed -i 's,/bin/cat,${coreutils}/bin/cat,g' vimpager
     make
+
+    runHook postBuild
   '';
 
 

@@ -15,7 +15,11 @@ stdenv.mkDerivation {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' Makefile
+
+    runHook postPatch
   '';
 
   meta = {

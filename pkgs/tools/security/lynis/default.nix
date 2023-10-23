@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -d $out/bin $out/share/lynis/plugins
     cp -r include db default.prf $out/share/lynis/
     cp -a lynis $out/bin
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
     installManPage lynis.8
     installShellCompletion --bash --name lynis.bash \
       extras/bash_completion.d/lynis
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng zlib ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i '/png.h/a \#include <zlib.h>' src/rwpng.c
+
+    runHook postPatch
   '';
 
   meta = with lib; {

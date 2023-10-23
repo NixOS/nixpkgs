@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install ssh_client.py $out/bin/pritunl-ssh
     install ssh_host_client.py $out/bin/pritunl-ssh-host
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ jre makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,lib/amidst}
     cp $src $out/lib/amidst/amidst.jar
     makeWrapper ${jre}/bin/java $out/bin/amidst \
       --add-flags "-jar $out/lib/amidst/amidst.jar"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

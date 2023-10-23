@@ -33,9 +33,13 @@ stdenv.mkDerivation rec {
   INSTALL_PATH = "$out";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     patchShebangs install.sh
     ./install.sh --no-sudo
+
+    runHook postInstall
   '';
 
   meta = with lib; {

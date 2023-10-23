@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   patches = [ ./c-compiler.patch ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/bin/
     cp -v nrg2iso $out/bin/nrg2iso
+
+    runHook postInstall
   '';
 
   meta = with lib; {

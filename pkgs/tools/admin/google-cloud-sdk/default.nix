@@ -107,7 +107,11 @@ in stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+
+    runHook postInstallCheck
   '';
 
   passthru = {

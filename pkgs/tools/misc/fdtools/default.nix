@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     cd ${pname}-${version}
     sed -e 's|gcc|$CC|' \
       conf-compile/defaults/host_link.sh \
@@ -34,13 +36,21 @@ in stdenv.mkDerivation {
 
     echo "${skalibs.lib}/lib/skalibs/sysdeps" \
       > conf-compile/depend_skalibs_sysdeps
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     bash package/build
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $bin/bin
     tools=( grabconsole multitee pipecycle recvfd seek0 sendfd setblock setstate statfile vc-get vc-lock vc-switch )
 
@@ -75,6 +85,8 @@ in stdenv.mkDerivation {
 
     # we don’t use this, but nixpkgs requires it
     touch $out
+
+    runHook postInstall
   '';
 
   meta = {

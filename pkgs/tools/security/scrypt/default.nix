@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ getconf ];
 
   patchPhase = ''
+    runHook prePatch
+
     for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh configure ; do
       substituteInPlace $f --replace "command -p " ""
     done
 
     patchShebangs tests/test_scrypt.sh
+
+    runHook postPatch
   '';
 
   doCheck = true;

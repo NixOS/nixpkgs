@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     ./test.sh
+
+    runHook postCheck
   '';
 
   meta = with lib; {

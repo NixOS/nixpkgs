@@ -16,15 +16,23 @@ stdenv.mkDerivation {
   buildInputs = [ popt alsa-lib ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace "src/main.cpp" --replace "/usr/share/pico/lang" "$out/share/lang"
     echo "" > update_build_version.sh
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin nanotts
     install -Dm644 -t $out/share/lang $src/lang/*
     wrapProgram $out/bin/nanotts \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
+
+    runHook postInstall
   '';
 
   meta = {

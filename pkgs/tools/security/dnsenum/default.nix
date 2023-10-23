@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -vD dnsenum.pl $out/bin/dnsenum
     install -vD dns.txt -t $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

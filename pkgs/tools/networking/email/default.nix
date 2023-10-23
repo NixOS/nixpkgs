@@ -37,9 +37,13 @@ stdenv.mkDerivation {
   buildInputs = [ openssl ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     unpackPhase;
     cp -Rp ${dlibSrc}/* ${srcRoot}/dlib;
     chmod -R +w ${srcRoot}/dlib;
+
+    runHook postUnpack
   '';
 
   meta = {

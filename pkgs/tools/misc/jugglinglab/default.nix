@@ -10,9 +10,17 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ jre ];
   nativeBuildInputs = [ ant jdk makeWrapper ];
-  buildPhase = "ant";
+  buildPhase = ''
+    runHook preBuild
+
+    ant
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/lib"
     cp bin/*.jar $out/lib/
@@ -24,6 +32,8 @@ stdenv.mkDerivation rec {
       --add-flags "-cp $classpath" \
       --add-flags "-Xss2048k -Djava.library.path=ortools-lib" \
       --add-flags jugglinglab.JugglingLab
+
+    runHook postInstall
   '';
 
   meta = with lib; {

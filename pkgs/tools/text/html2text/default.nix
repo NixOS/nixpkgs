@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
 
   # the --prefix has no effect
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/man/man{1,5}
     cp html2text $out/bin
     cp html2text.1.gz $out/man/man1
     cp html2textrc.5.gz $out/man/man5
+
+    runHook postInstall
   '';
 
   meta = {

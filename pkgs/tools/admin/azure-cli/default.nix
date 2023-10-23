@@ -192,7 +192,11 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   # almost the entire test suite requires an azure account setup and networking
   # ensure that the azure namespaces are setup correctly and that azure.cli can be accessed
   checkPhase = ''
+    runHook preCheck
+
     HOME=$TMPDIR $out/bin/az --help > /dev/null
+
+    runHook postCheck
   '';
 
   # ensure these namespaces are able to be accessed

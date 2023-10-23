@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" ];      # gcc and/or clang compat
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -i s,/usr,$out, Makefile
+
+    runHook postConfigure
   '';
 
   buildInputs = [ libpng ];

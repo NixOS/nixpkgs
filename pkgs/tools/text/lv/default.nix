@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   configurePhase = ''
+    runHook preConfigure
+
     mkdir -p build
     cd build
     ../src/configure
+
+    runHook postConfigure
   '';
 
   preInstall = ''

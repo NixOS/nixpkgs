@@ -24,21 +24,31 @@ in stdenv.mkDerivation {
   outputs = [ "bin" "man" "doc" "out" ];
 
   patchPhase = ''
+    runHook prePatch
+
     # h_addr field was removed
     sed -e '1 i #define h_addr h_addr_list[0]' \
         -i nettee.c
+
+    runHook postPatch
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cat README.TXT
     mkdir -p $bin/bin
     $CC -o $bin/bin/nettee \
       -Wall -pedantic -std=c99\
       -D_LARGEFILE64_SOURCE -D_POSIX_SOURCE -D_XOPEN_SOURCE\
       nettee.c rb.c nio.c
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ${cleanPackaging.commonFileActions {
         docFiles = [
           "*.html"
@@ -59,6 +69,8 @@ in stdenv.mkDerivation {
     mkdir -p $man/share/man/{man1,man3}
     mv nettee.1 $man/share/man/man1
     mv nettee_cmd.3 $man/share/man/man3
+
+    runHook postInstall
   '';
 
   postFixup = ''

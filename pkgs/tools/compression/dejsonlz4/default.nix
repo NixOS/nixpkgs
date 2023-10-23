@@ -12,12 +12,20 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     ${stdenv.cc.targetPrefix}cc -o dejsonlz4 src/dejsonlz4.c src/lz4.c
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp dejsonlz4 $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

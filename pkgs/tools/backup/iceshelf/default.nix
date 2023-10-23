@@ -20,10 +20,14 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/doc/${pname} $out/${python3.sitePackages}
     cp -v iceshelf iceshelf-restore $out/bin
     cp -v iceshelf.sample.conf $out/share/doc/${pname}/
     cp -rv modules $out/${python3.sitePackages}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

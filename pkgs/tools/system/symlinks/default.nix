@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   buildFlags = [ "CC=${stdenv.cc}/bin/cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man8
     cp symlinks $out/bin
     cp symlinks.8 $out/share/man/man8
+
+    runHook postInstall
   '';
 
   meta = with lib; {

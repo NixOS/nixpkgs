@@ -33,10 +33,14 @@ buildGoModule rec {
   nativeCheckInputs = [ file ];
 
   checkPhase = ''
+    runHook preCheck
+
     ln -s ../../go/bin/holo-build build/holo-build
     go build -ldflags "-s -w -X github.com/holocm/holo-build/src/holo-build/common.version=${version}" -o build/dump-package ./src/dump-package
     bash test/compiler/run_tests.sh
     bash test/interface/run_tests.sh
+
+    runHook postCheck
   '';
 
   postInstall = ''

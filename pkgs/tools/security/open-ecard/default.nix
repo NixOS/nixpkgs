@@ -37,6 +37,8 @@ in stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp ${srcs.richclient} $out/share/java/richclient-${version}.jar
     cp ${srcs.cifs} $out/share/java/cifs-${version}.jar
@@ -50,6 +52,8 @@ in stdenv.mkDerivation rec {
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
       --suffix LD_LIBRARY_PATH ':' ${lib.getLib pcsclite}/lib
+
+    runHook postInstall
   '';
 
   meta = with lib; {

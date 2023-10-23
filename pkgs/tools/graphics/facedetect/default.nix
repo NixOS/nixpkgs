@@ -30,9 +30,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -v -m644 -D README.rst $out/share/doc/${pname}-${version}/README.rst
     install -v -m755 -D facedetect $out/bin/facedetect
     wrapPythonPrograms
+
+    runHook postInstall
   '';
 
   meta = with lib; {

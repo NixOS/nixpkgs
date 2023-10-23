@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ruby ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/* $out/bin/
 
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
     done
 
     sed -e 's|cmd.*=.*"zfs |cmd = "${zfs}/sbin/zfs |g' -i $out/lib/zfstools/{dataset,snapshot}.rb
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 cp437 -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

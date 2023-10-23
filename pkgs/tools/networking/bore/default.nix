@@ -35,9 +35,13 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     printf '\0\0\0\0\0\0\0\0\0\0\0\0' \
     | $out/bin/bore --decode \
     | grep -q ';; NoError #0 Query 0 0 0 0 flags'
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

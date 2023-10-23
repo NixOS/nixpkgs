@@ -58,7 +58,11 @@ buildPythonApplication rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/linode-cli --skip-config --version | grep ${version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   nativeBuildInputs = [ installShellFiles ];

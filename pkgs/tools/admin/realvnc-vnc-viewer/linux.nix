@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libX11 libXext stdenv.cc.cc.libgcc or null ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     rpmextract $src
+
+    runHook postUnpack
   '';
 
   postPatch = ''

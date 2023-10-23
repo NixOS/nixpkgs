@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin colorpicker
+
+    runHook postInstall
   '';
 
   meta = with lib; {

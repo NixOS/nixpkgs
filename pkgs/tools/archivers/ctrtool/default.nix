@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++"];
   enableParallelBuilding = true;
 
-  installPhase = "
+  installPhase = ''
+    runHook preInstall
+
     mkdir $out/bin -p
     cp ctrtool${stdenv.hostPlatform.extensions.executable} $out/bin/
-  ";
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     license = licenses.mit;

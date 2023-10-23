@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  unpackPhase = "tar xf $src";
+  unpackPhase = ''
+    runHook preUnpack
+
+    tar xf $src
+
+    runHook postUnpack
+  '';
   installTargets = [ "install" "install.man" ];
   installFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man/man1" ];
   preBuild = ''

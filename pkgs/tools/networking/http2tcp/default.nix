@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/${pname}}
     cp http2tcp* $out/bin
     cp Protocol $out/share/${pname}/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

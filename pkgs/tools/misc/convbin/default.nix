@@ -20,16 +20,24 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   checkPhase = ''
+    runHook preCheck
+
     pushd test
     patchShebangs test.sh
     ./test.sh
     popd
+
+    runHook postCheck
   '';
 
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bin/convbin $out/bin/convbin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

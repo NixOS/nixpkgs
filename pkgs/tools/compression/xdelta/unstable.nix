@@ -39,16 +39,24 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     mkdir $PWD/tmp
     for i in testing/file.h xdelta3-test.h; do
       substituteInPlace $i --replace /tmp $PWD/tmp
     done
     ./xdelta3regtest
+
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m755 xdelta3 $out/bin/xdelta3
     install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

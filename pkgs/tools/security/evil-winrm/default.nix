@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp evil-winrm.rb $out/bin/evil-winrm
+
+    runHook postInstall
   '';
 
   meta = with lib; {

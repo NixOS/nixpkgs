@@ -44,11 +44,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -t $out/bin $(< ../package/commands)
 
     mkdir -p $man/share/man
     cp -r ../man $man/share/man/man8
+
+    runHook postInstall
   '';
 
   meta = with lib; {

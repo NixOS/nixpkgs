@@ -14,9 +14,13 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i '30i entry_points = { "console_scripts": [ "patray = patray.__main__:main" ] },' setup.py
     sed -i 's/production.txt/production.in/' setup.py
     sed -i '/pyside2/d' requirements/production.in
+
+    runHook postPatch
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

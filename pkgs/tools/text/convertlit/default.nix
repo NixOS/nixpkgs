@@ -15,17 +15,25 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildPhase = ''
+    runHook preBuild
+
     cd lib
     make
     cd ../clit18
     substituteInPlace Makefile \
       --replace ../libtommath-0.30/libtommath.a -ltommath
     make
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp clit $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

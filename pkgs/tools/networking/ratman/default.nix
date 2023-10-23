@@ -54,6 +54,8 @@ rustPlatform.buildRustPackage rec {
     outputs = [ "out" "dist" ];
 
     buildPhase = ''
+      runHook preBuild
+
       # Yarn writes temporary files to $HOME. Copied from mkYarnModules.
       export HOME=$NIX_BUILD_TOP/yarn_home
 
@@ -69,13 +71,19 @@ rustPlatform.buildRustPackage rec {
 
       # Build into `./dist/`, suppress formatting.
       yarn --offline build | cat
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       cp -R . $out
 
       mv $out/dist $dist
       ln -s $dist $out/dist
+
+      runHook postInstall
     '';
   };
 

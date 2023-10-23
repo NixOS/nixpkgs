@@ -12,8 +12,12 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./autogen.sh
     ./configure --prefix=$out
+
+    runHook postConfigure
   '';
 
   nativeBuildInputs = with pkgs; [openssl autoconf automake];

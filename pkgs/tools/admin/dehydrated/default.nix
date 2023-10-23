@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
+
     installManPage docs/man/dehydrated.1
 
     mkdir -p "$out/share/docs/dehydrated"
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -a dehydrated $out/bin
     wrapProgram "$out/bin/dehydrated" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnused gnugrep diffutils curl gawk hexdump ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

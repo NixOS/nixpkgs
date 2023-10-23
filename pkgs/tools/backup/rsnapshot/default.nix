@@ -15,8 +15,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace "Makefile.in" --replace \
       "/usr/bin/pod2man" "${perl}/bin/pod2man"
+
+    runHook postPatch
   '';
 
   meta = with lib; {

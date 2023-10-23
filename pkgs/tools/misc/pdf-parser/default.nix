@@ -12,7 +12,11 @@ python3Packages.buildPythonApplication {
   format = "other";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 pdf-parser.py $out/bin/pdf-parser.py
+
+    runHook postInstall
   '';
 
   preFixup = ''

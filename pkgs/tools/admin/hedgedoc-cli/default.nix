@@ -29,7 +29,11 @@ stdenv.mkDerivation {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     hedgedoc-cli help
+
+    runHook postCheck
   '';
 
   meta = with lib; {

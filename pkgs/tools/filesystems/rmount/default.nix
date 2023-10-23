@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D ${src}/rmount.man  $out/share/man/man1/rmount.1
     install -D ${src}/rmount.bash $out/bin/rmount
     install -D ${src}/config.json $out/share/config.json
 
     wrapProgram $out/bin/rmount --prefix PATH : ${lib.makeBinPath [ nmap jq cifs-utils sshfs ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

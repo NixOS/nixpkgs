@@ -14,8 +14,12 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ ocaml ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp coq2html $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

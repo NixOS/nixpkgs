@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXxf86vm libXext libXrandr ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp xcalib $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

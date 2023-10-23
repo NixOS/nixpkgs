@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bootgen $out/bin/bootgen
+
+    runHook postInstall
   '';
 
   meta = with lib; {

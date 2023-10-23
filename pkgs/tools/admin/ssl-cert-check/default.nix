@@ -43,10 +43,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $pname $out/bin/$pname
     wrapProgram $out/bin/$pname \
       --set PATH "${lib.makeBinPath buildInputs}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

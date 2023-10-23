@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     found=0
     for man in "$out/share/man/man1"/ip2unix.1*; do
       test -s "$man" && found=1
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
       echo "ERROR: Manual page hasn't been generated." >&2
       exit 1
     fi
+
+    runHook postInstallCheck
   '';
 
   meta = {

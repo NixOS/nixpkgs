@@ -9,10 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "1dr5fvdgn1jqqacby6rrqm951adx3jw0j70r5i8pmrqnnw482l8m";
   };
   buildPhase = ''
+    runHook preBuild
+
     mcs *.cs -out:wavefunctioncollapse.exe -r:System.Drawing
     grep -m1 -B999 '^[*][/]' Main.cs > COPYING.MIT
+
+    runHook postBuild
   '';
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,share/doc/wavefunctioncollapse,share/wavefunctioncollapse}
     cp README.md COPYING.MIT "$out"/share/doc/wavefunctioncollapse
     cp wavefunctioncollapse.exe "$out"/bin
@@ -22,6 +28,8 @@ stdenv.mkDerivation rec {
     echo "chmod u+w ." >> "$out/bin/wavefunctioncollapse"
     echo "'${mono}/bin/mono' '$out/bin/wavefunctioncollapse.exe' \"\$@\"" >>  "$out/bin/wavefunctioncollapse"
     chmod a+x "$out/bin/wavefunctioncollapse"
+
+    runHook postInstall
   '';
   buildInputs = [mono];
   meta = {

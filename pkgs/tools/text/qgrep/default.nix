@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 qgrep $out/bin/qgrep
+
+    runHook postInstall
   '';
 
   meta = with lib; {

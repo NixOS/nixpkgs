@@ -29,7 +29,11 @@ stdenvNoCC.mkDerivation rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/betterdiscordctl --version
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

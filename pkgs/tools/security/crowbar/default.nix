@@ -21,16 +21,24 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [ python3Packages.paramiko ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i 's,/usr/bin/xfreerdp,${freerdp}/bin/xfreerdp,g' lib/main.py
     sed -i 's,/usr/bin/vncviewer,${tigervnc}/bin/vncviewer,g' lib/main.py
     sed -i 's,/usr/sbin/openvpn,${openvpn}/bin/openvpn,g' lib/main.py
 
     sed -i 's,/usr/bin/nmap,${nmap}/bin/nmap,g' lib/nmap.py
+
+    runHook postPatch
   '';
 
   # Sanity check
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/crowbar --help > /dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {

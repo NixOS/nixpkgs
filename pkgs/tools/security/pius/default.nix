@@ -14,9 +14,13 @@ python3Packages.buildPythonApplication {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     for file in libpius/constants.py pius-keyring-mgr; do
       sed -i "$file" -E -e's|/usr/bin/gpg2?|${gnupg}/bin/gpg|g'
     done
+
+    runHook postPatch
   '';
 
   buildInputs = [ perl ];

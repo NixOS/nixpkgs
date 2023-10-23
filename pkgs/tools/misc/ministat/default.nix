@@ -16,9 +16,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man1
     cp ministat $out/bin
     cp ministat.1 $out/share/man/man1/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

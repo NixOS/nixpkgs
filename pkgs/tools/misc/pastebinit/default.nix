@@ -35,11 +35,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/etc
     cp -a pastebinit $out/bin
     cp -a pastebin.d $out/etc
     substituteInPlace $out/bin/pastebinit --replace "'/etc/pastebin.d" "'$out/etc/pastebin.d"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

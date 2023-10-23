@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i -e s@/usr/local@$out@ Makefile
+
+    runHook postPatch
   '';
 
   preInstall = ''

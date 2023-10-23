@@ -90,7 +90,11 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     HOME=$(mktemp -d) ${python.interpreter} setup.py test
+
+    runHook postCheck
   '';
 
   meta = with lib; {

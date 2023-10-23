@@ -30,6 +30,8 @@ in stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     patchShebangs .
     ./configure \
       --prefix=$out \
@@ -39,6 +41,8 @@ in stdenv.mkDerivation rec {
       --bash-interp=${bash}/bin/bash \
       --downloader=${curl.bin}/bin/curl
       $configureFlags
+
+    runHook postConfigure
   '';
 
   passthru = {

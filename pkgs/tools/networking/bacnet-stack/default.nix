@@ -14,12 +14,20 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   buildPhase = ''
+    runHook preBuild
+
     make BUILD=debug BACNET_PORT=linux BACDL_DEFINE=-DBACDL_BIP=1 BACNET_DEFINES=" -DPRINT_ENABLED=1 -DBACFILE -DBACAPP_ALL -DBACNET_PROPERTY_LISTS"
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -r bin $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

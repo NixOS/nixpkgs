@@ -37,17 +37,25 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -p * $out/bin
+
+    runHook postInstall
   '';
 
   fixupPhase = ''
+    runHook preFixup
+
     chmod 755 $out/bin/KISSlicer
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath}   $out/bin/KISSlicer
     wrapProgram $out/bin/KISSlicer \
       --add-flags "-inidir ${inidir}" \
       --run "mkdir -p ${inidir}"
+
+    runHook postFixup
   '';
 
   meta = with lib; {

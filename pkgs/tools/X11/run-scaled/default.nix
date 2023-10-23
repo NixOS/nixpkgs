@@ -14,10 +14,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp run_scaled $out/bin
     wrapProgram $out/bin/run_scaled --prefix PATH ":" \
       ${lib.makeBinPath [ bc xorgserver xpra xrandr ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

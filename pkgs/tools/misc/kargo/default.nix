@@ -25,7 +25,11 @@ buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     HOME=$TMPDIR $out/bin/kargo -v
+
+    runHook postCheck
   '';
 
   meta = with lib; {

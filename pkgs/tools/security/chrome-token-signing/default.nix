@@ -16,17 +16,25 @@ mkDerivation rec {
   dontUseQmakeConfigure = true;
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace host-linux/ee.ria.esteid.json --replace /usr $out
     # TODO: macos
     substituteInPlace host-shared/PKCS11Path.cpp \
       --replace opensc-pkcs11.so ${opensc}/lib/pkcs11/opensc-pkcs11.so
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin host-linux/chrome-token-signing
     # TODO: wire these up
     install -D -t $out/etc/chromium/native-messaging-hosts host-linux/ee.ria.esteid.json
     install -D -t $out/lib/mozilla/native-messaging-hosts host-linux/ff/ee.ria.esteid.json
+
+    runHook postInstall
   '';
 
   meta = with lib; {

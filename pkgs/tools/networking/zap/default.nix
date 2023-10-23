@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   # Copying config and adding version tag before first use to avoid permission
   # issues if zap tries to copy config on it's own.
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/share"
     cp -pR . "$out/share/${pname}/"
 
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
     EOF
 
     chmod u+x  "$out/bin/${pname}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -34,16 +34,30 @@ let
     };
 
     buildPhase = ''
+      runHook preBuild
+
       export NODE_OPTIONS=--openssl-legacy-provider
       OUTPUT_DIR=$out yarn --offline build
+
+      runHook postBuild
     '';
 
     configurePhase = ''
+      runHook preConfigure
+
       cp -r $node_modules node_modules
       chmod +w node_modules
+
+      runHook postConfigure
     '';
 
-    distPhase = "true";
+    distPhase = ''
+      runHook preDist
+
+      true
+
+      runHook postDist
+    '';
 
     dontInstall = true;
     dontFixup = true;

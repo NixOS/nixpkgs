@@ -15,8 +15,12 @@ stdenv.mkDerivation {
   buildInputs = [ dbus ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m 755 bin/notify-desktop $out/bin/notify-desktop
+
+    runHook postInstall
   '';
 
   meta = with lib; {

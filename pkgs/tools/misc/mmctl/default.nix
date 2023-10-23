@@ -16,7 +16,13 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  checkPhase = "make test";
+  checkPhase = ''
+    runHook preCheck
+
+    make test
+
+    runHook postCheck
+  '';
 
   ldflags = [
     "-s"

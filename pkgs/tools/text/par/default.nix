@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp par $out/bin
 
     mkdir -p $out/share/man/man1
     cp  par.1 $out/share/man/man1
+
+    runHook postInstall
   '';
 
 

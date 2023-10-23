@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D xcwd "$out/bin/xcwd"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

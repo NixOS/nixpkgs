@@ -23,16 +23,28 @@ let
     doInstallCheck = true;
 
     checkPhase = ''
+      runHook preCheck
+
       ./test.sh
+
+      runHook postCheck
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp ./shab $out/bin/shab
+
+      runHook postInstall
     '';
 
     installCheckPhase = ''
+      runHook preInstallCheck
+
       [[ "$(echo 'Hello $entity' | entity=world $out/bin/shab)" == 'Hello world' ]]
+
+      runHook postInstallCheck
     '';
 
     passthru = {

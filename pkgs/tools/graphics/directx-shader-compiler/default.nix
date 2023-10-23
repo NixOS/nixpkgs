@@ -27,10 +27,14 @@ stdenv.mkDerivation rec {
   # The following is based on the CI script:
   # https://github.com/microsoft/DirectXShaderCompiler/blob/master/appveyor.yml#L63-L66
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib $dev/include
     mv bin/dxc* $out/bin/
     mv lib/libdxcompiler.so* lib/libdxcompiler.*dylib $out/lib/
     cp -r $src/include/dxc $dev/include/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -15,15 +15,23 @@ stdenv.mkDerivation rec {
   # Jasper is disabled because the library is abandoned and has many
   # CVEs.
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace install \
       --replace 'prefix=/usr/local' 'prefix=$out' \
       --replace gcc '$CC' \
       --replace '-ljasper' '-DNO_JASPER=1'
+
+    runHook postPatch
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p $out/bin
     sh -e install
+
+    runHook postBuild
   '';
 
   meta = {

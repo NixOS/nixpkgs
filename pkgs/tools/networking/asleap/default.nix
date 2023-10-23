@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libpcap libxcrypt ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 asleap $out/bin/asleap
     install -Dm755 genkeys $out/bin/genkeys
+
+    runHook postInstall
   '';
 
   meta = with lib; {

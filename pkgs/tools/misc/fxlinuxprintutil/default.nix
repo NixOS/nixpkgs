@@ -42,11 +42,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     mv usr/bin $out
     mv usr/lib $out
 
     wrapProgram $out/bin/fxlputil --prefix PATH : ${lib.makeBinPath [ tcl tk ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -36,7 +36,11 @@ buildPythonApplication rec {
 
   # Requires tox, many packages, and network access
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/custodian --help
+
+    runHook postCheck
   '';
 
   meta = with lib; {

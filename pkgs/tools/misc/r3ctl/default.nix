@@ -19,8 +19,12 @@ qt5.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     qmake .
     make
+
+    runHook postBuild
   '';
 
   postInstall = ''

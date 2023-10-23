@@ -49,17 +49,25 @@ stdenv.mkDerivation rec {
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   checkPhase = ''
+    runHook preCheck
+
     mv ../spectre-cli-tests ../spectre_tests.xml ./
     patchShebangs spectre-cli-tests
     export HOME=$(mktemp -d)
 
     ./spectre-tests
     ./spectre-cli-tests
+
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv spectre $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

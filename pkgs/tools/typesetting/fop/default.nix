@@ -13,11 +13,17 @@ stdenv.mkDerivation rec {
 
   # build only the "package" target, which generates the fop command.
   buildPhase = ''
+     runHook preBuild
+
      export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
      ant -f fop/build.xml package
+
+     runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib $out/share/doc/fop
     cp fop/build/*.jar fop/lib/*.jar $out/lib/
     cp -r README fop/examples/ $out/share/doc/fop/
@@ -30,6 +36,8 @@ stdenv.mkDerivation rec {
     exec ${jdk.jre}/bin/java \$java_exec_args -classpath "$out/lib/*" org.apache.fop.cli.Main "\$@"
     EOF
     chmod a+x $out/bin/fop
+
+    runHook postInstall
   '';
 
   meta = with lib; {

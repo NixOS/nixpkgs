@@ -12,11 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     $CC -o onesixtyone onesixtyone.c
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -D onesixtyone $out/bin/onesixtyone
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,12 +14,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   buildPhase = ''
+   runHook preBuild
+
    ${stdenv.cc}/bin/cc ./ttyplot.c -lncurses -o ttyplot
+
+   runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ttyplot $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

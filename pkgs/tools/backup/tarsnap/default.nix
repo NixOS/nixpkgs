@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
   '';
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace Makefile.in \
       --replace "command -p mv" "mv"
     substituteInPlace configure \
       --replace "command -p getconf PATH" "echo $PATH"
+
+    runHook postPatch
   '';
 
   postInstall = ''

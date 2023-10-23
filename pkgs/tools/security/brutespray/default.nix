@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 brutespray.py $out/bin/brutespray
     patchShebangs $out/bin
     patchPythonScript $out/bin/brutespray
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/brutespray
     cp -r wordlist/ $out/share/brutespray/wordlist
+
+    runHook postInstall
   '';
 
   meta = with lib; {

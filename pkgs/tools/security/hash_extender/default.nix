@@ -14,7 +14,13 @@ stdenv.mkDerivation {
   buildInputs = [ openssl ];
 
   doCheck = true;
-  checkPhase = "./hash_extender --test";
+  checkPhase = ''
+    runHook preCheck
+
+    ./hash_extender --test
+
+    runHook postCheck
+  '';
 
   # https://github.com/iagox86/hash_extender/issues/26
   hardeningDisable = [ "fortify3" ];
@@ -22,8 +28,12 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp hash_extender $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

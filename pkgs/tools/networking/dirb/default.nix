@@ -16,9 +16,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [ curl ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     tar -xf $src
     find . -exec chmod +x "{}" ";"
     export sourceRoot="dirb222"
+
+    runHook postUnpack
   '';
 
   postPatch = ''

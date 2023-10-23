@@ -40,11 +40,15 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
+    runHook preBuild
+
     export HOME=$(mktemp -d)
     cd dev
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_pea.lpi && [ -f pea ]
     lazbuild --lazarusdir=${lazarus}/share/lazarus --widgetset=qt5 --build-all project_peach.lpi && [ -f peazip ]
     cd ..
+
+    runHook postBuild
   '';
 
   installPhase = ''

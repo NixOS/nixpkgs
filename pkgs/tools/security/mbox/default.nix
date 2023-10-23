@@ -20,12 +20,16 @@ stdenv.mkDerivation {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     rm tests/test-*vim.sh tests/test-pip.sh
 
     patchShebangs ./; dontPatchShebags=1
     sed -i 's|^/bin/||' tests/test-fileops.sh
 
     ./testall.sh
+
+    runHook postCheck
   '';
 
   meta = with lib;    {

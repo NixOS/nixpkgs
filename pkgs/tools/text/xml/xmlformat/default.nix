@@ -10,13 +10,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs ./xmlformat.pl
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./xmlformat.pl $out/bin/xmlformat
     cp ./LICENSE $out/
+
+    runHook postInstall
   '';
 
   meta = {

@@ -22,12 +22,20 @@ mkDerivation rec {
 
   dontConfigure = true;
   buildPhase = ''
+    runHook preBuild
+
     bash unixbuild.sh
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
     cp ${lib.concatStringsSep " " installFiles} "$out"/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

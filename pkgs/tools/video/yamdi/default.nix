@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D {,$out/bin/}yamdi
     install -D {,$out/share/man/}man1/yamdi.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

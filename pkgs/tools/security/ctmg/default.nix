@@ -9,7 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1i4v8sriwjrmj3yizbl1ysckb711yl9qsn9x45jq0ij1apsydhyc";
   };
 
-  installPhase = "install -D ctmg.sh $out/bin/ctmg";
+  installPhase = ''
+    runHook preInstall
+
+    install -D ctmg.sh $out/bin/ctmg
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "An encrypted container manager for Linux using cryptsetup";

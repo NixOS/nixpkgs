@@ -11,13 +11,21 @@ stdenv.mkDerivation rec {
   sourceRoot = "Linux";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 mlc $out/bin/mlc
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [ patchelf ];
 
   fixupPhase = ''
+    runHook preFixup
+
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/mlc
+
+    runHook postFixup
   '';
 
   meta = with lib; {

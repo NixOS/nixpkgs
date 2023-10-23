@@ -30,7 +30,13 @@ perlPackages.buildPerlPackage rec {
     installShellFiles
   ];
 
-  configurePhase = "true";
+  configurePhase = ''
+    runHook preConfigure
+
+    true
+
+    runHook postConfigure
+  '';
 
   buildPhase = ''
     runHook preBuild

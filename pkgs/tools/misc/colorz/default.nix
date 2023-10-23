@@ -12,7 +12,11 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ pillow scipy ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/colorz --help > /dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {

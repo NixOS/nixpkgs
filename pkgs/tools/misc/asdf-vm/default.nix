@@ -58,6 +58,8 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/asdf-vm
     cp -r . $out/share/asdf-vm
 
@@ -73,6 +75,8 @@ in stdenv.mkDerivation rec {
       --zsh completions/_asdf \
       --fish completions/asdf.fish \
       --bash completions/asdf.bash
+
+    runHook postInstall
   '';
 
   meta = with lib; {

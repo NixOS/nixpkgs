@@ -42,12 +42,18 @@ let
     nativeBuildInputs = [ gradle ];
 
     buildPhase = ''
+      runHook preBuild
+
       # Run the fetchDeps task
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon -b cie-java/build.gradle fetchDeps
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       # Build a tree compatible with the maven repository format
       pushd "$GRADLE_USER_HOME/caches/modules-2/files-2.1"
       find -type f | awk -F/ -v OFS=/ -v out="$out" '{
@@ -56,6 +62,8 @@ let
         system("install -m644 -D "infile" "out"/"$2"/"$3"/"$4"/"$6)
       }'
       popd
+
+      runHook postInstall
     '';
 
     outputHashAlgo = "sha256";

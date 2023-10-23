@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     ./src/gifsicle --info logo.gif
+
+    runHook postCheck
   '';
 
   meta = {

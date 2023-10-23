@@ -31,8 +31,12 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D ./opt/MegaRAID/storcli/storcli64 $out/bin/storcli64
     ln -s storcli64 $out/bin/storcli
+
+    runHook postInstall
   '';
 
   # Not needed because the binary is statically linked

@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/headset-charge-indicator.py $out/bin/headset-charge-indicator.py
     chmod +x $out/bin/headset-charge-indicator.py
@@ -47,6 +49,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc/xdg/autostart
     cp ${pname}.desktop $out/share/applications/${pname}.desktop
     cp ${pname}.desktop $out/etc/xdg/autostart/${pname}.desktop
+
+    runHook postInstall
   '';
 
   meta = with lib; {

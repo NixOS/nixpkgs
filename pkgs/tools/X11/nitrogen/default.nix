@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gtkmm2 ];
 
   patchPhase = ''
+    runHook prePatch
+
     patchShebangs data/icon-theme-installer
+
+    runHook postPatch
   '';
 
   meta = {

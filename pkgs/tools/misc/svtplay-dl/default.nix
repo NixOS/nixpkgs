@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     sh scripts/run-tests.sh -2
+
+    runHook postCheck
   '';
 
   doInstallCheck = true;

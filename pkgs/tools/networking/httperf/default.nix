@@ -15,15 +15,23 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ openssl ];
 
   configurePhase = ''
+    runHook preConfigure
+
     autoreconf -i
     mkdir -pv build
     cd build
     ../configure
+
+    runHook postConfigure
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -vp $out/bin
     mv -v src/httperf $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

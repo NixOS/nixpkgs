@@ -13,11 +13,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{share/wiremock,bin}
     cp ${src} "$out/share/wiremock/wiremock.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
+
+    runHook postInstall
   '';
 
   meta = {

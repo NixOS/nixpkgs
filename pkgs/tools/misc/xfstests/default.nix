@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace Makefile \
       --replace "cp include/install-sh ." "cp -f include/install-sh ."
 
@@ -55,6 +57,8 @@ stdenv.mkDerivation rec {
     done
 
     patchShebangs .
+
+    runHook postPatch
   '';
 
   preConfigure = ''

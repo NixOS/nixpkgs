@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     sed -e 's,/usr/local/bin/perl,${perl}/bin/perl,' \
       -e "s,/usr/local,$out," \
       Makefile.unix > Makefile
+
+    runHook postConfigure
   '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

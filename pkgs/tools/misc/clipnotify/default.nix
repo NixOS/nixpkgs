@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXfixes ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp clipnotify $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

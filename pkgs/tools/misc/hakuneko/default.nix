@@ -61,15 +61,23 @@ stdenv.mkDerivation rec {
   ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     dpkg --fsys-tarfile $src | tar --extract
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -R usr "$out"
     # Overwrite existing .desktop file.
     cp "${desktopItem}/share/applications/hakuneko-desktop.desktop" \
        "$out/share/applications/hakuneko-desktop.desktop"
+
+    runHook postInstall
   '';
 
   runtimeDependencies = [

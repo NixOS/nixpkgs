@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bdsync -t $out/bin/
     install -Dm644 bdsync.1 -t $out/share/man/man1/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

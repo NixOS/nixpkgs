@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r ${src}/bedmod $out/bin/bedmod
     cp ${src}/doona.pl $out/bin/doona
     chmod +x $out/bin/doona
+
+    runHook postInstall
   '';
 
   meta = with lib; {
