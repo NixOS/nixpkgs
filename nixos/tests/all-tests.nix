@@ -570,7 +570,7 @@ in {
   nixops = handleTest ./nixops/default.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
   nixos-rebuild-install-bootloader = handleTestOn ["x86_64-linux"] ./nixos-rebuild-install-bootloader.nix {};
-  nixos-rebuild-specialisations = handleTest ["x86_64-linux"] ./nixos-rebuild-specialisations.nix {};
+  nixos-rebuild-specialisations = handleTestOn ["x86_64-linux"] ./nixos-rebuild-specialisations.nix {};
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
