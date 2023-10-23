@@ -662,10 +662,10 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "-E" "NIXOS_INSTALL_BOOTLOADER"
         "--collect"
         "--no-ask-password"
-        "--pty"
+        "--pipe"
         "--quiet"
         "--same-dir"
-        "--service-type=exec"
+        "--scope"
         "--unit=nixos-rebuild-switch-to-configuration"
         "--wait"
     )

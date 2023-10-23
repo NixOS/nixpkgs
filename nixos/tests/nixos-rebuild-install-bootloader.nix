@@ -60,8 +60,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # Need to run `nixos-rebuild` twice because the first run will install
       # GRUB anyway
       with subtest("Switch system again and install bootloader"):
-          result = machine.succeed("nixos-rebuild switch --install-bootloader")
-          # install-grub2.pl messages
+          result = machine.succeed("nixos-rebuild switch --install-bootloader 2>&1")
+          # install-grub.pl messages
           assert "updating GRUB 2 menu..." in result
           assert "installing the GRUB 2 boot loader on /dev/vda..." in result
           # GRUB message
