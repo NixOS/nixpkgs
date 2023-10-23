@@ -2,6 +2,7 @@
 , runCommand, quartus-prime-lite
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
+, extraProfile ? ""
 }:
 
 let
@@ -106,7 +107,7 @@ in buildFHSEnv rec {
     if [ "$NIXPKGS_IS_MODELSIM_WRAPPER" != 1 ]; then
         export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}libudev.so.0
     fi
-  '';
+  '' + extraProfile;
 
   # Run the wrappers directly, instead of going via bash.
   runScript = "";
