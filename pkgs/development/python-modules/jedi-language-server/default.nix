@@ -2,11 +2,11 @@
 , buildPythonPackage
 , docstring-to-markdown
 , fetchFromGitHub
+, cattrs
 , jedi
 , lsprotocol
 , poetry-core
 , pygls
-, pydantic
 , pyhamcrest
 , pytestCheckHook
 , python-lsp-jsonrpc
@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.41.0";
-  format = "pyproject";
+  version = "0.41.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pappasam";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1ujEhoxWcCM1g640aLE60YGiNQLB+G7t7oLVZXW8AMM=";
+    hash = "sha256-+ABxH1iF9FDQ7q6dAQowe3AJSgz+wgCy4JS35WpcnTs=";
   };
 
   pythonRelaxDeps = [
@@ -38,10 +38,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    cattrs
     docstring-to-markdown
     jedi
     lsprotocol
-    pydantic
     pygls
   ];
 
