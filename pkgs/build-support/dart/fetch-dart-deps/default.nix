@@ -207,6 +207,7 @@ let
     substitutions = { inherit gitSourceWrapper deps; };
     propagatedBuildInputs = [ dart git ];
     passthru = {
+      inherit deps;
       files = deps.outPath;
       depsListFile = depsListDrv.outPath;
     };
