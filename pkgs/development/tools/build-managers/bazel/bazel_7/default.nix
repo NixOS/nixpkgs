@@ -35,6 +35,7 @@
 , gnupatch
 , file
 , installShellFiles
+, lndir
   # updater
 , python3
 , writeScript
@@ -75,9 +76,10 @@ let
   distDir = repoCache;
   repoCache = callPackage ./bazel-repository-cache.nix {
     inherit lockfile;
-    # TODO: efficiently filter so that all tests find their dependencies
-    # without downloading 10 jdk versions
-    # requiredDeps = ./required-hashes.json;
+    # We use the release tarball that already has everything bundled,
+    # But we need one extra dep required by our nonprebuilt java toolchains.
+    requiredDepNamePredicate = name:
+      null != builtins.match "rules_java~.*~toolchains~remote_java_tools" name;
   };
 
   defaultShellUtils =
@@ -274,7 +276,6 @@ stdenv.mkDerivation rec {
   postPatch =
     let
       darwinPatches = ''
-
         bazelLinkFlags () {
           eval set -- "$NIX_LDFLAGS"
           local flag
@@ -367,30 +368,29 @@ stdenv.mkDerivation rec {
           -e 's!/bin/bash!${bash}/bin/bash!g' \
           -e 's!shasum -a 256!sha256sum!g'
 
-        # Add compile options to command line.
-        # XXX: It would suit a bazelrc file better, but I found no way to pass it.
-        #      It seems it is always ignored.
-        #      Passing EXTRA_BAZEL_ARGS is tricky due to quoting.
+        # Augment bundled repository_cache with our extra paths
+        ${lndir}/bin/lndir ${repoCache}/content_addressable \
+          $PWD/derived/repository_cache/content_addressable
 
+        # Add required flags to bazel command line.
+        # XXX: It would suit a bazelrc file better, but I found no way to pass it.
+        #      It seems that bazel bootstrapping ignores it.
+        #      Passing EXTRA_BAZEL_ARGS is tricky due to quoting.
         sedVerbose compile.sh \
           -e "/bazel_build /a\  --verbose_failures \\\\" \
           -e "/bazel_build /a\  --curses=no \\\\" \
           -e "/bazel_build /a\  --features=-layering_check \\\\" \
           -e "/bazel_build /a\  --experimental_strict_java_deps=off \\\\" \
           -e "/bazel_build /a\  --strict_proto_deps=off \\\\" \
-          -e "/bazel_build /a\  --action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
-          -e "/bazel_build /a\  --action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
-          -e "/bazel_build /a\  --host_action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
-          -e "/bazel_build /a\  --host_action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
           -e "/bazel_build /a\  --toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type' \\\\" \
           -e "/bazel_build /a\  --tool_java_runtime_version=local_jdk \\\\" \
           -e "/bazel_build /a\  --java_runtime_version=local_jdk \\\\" \
           -e "/bazel_build /a\  --extra_toolchains=@bazel_tools//tools/jdk:all \\\\" \
-          -e "/bazel_build /a\  --distdir=${distDir} \\\\" \
 
-          #-e "/bazel_build /a\  --action_env=NIX_BINTOOLS=\"$NIX_BINTOOLS\" \\\\" \
-          #-e "/bazel_build /a\  --action_env=NIX_CC=\"$NIX_CC\" \\\\" \
-          #-e "/bazel_build /a\  --action_env=nativeBuildInputs=\"$nativeBuildInputs\" \\\\" \
+          #-e "/bazel_build /a\  --action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
+          #-e "/bazel_build /a\  --action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
+          #-e "/bazel_build /a\  --host_action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
+          #-e "/bazel_build /a\  --host_action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
 
         # Also build parser_deploy.jar with bootstrap bazel
         # TODO: Turn into a proper patch

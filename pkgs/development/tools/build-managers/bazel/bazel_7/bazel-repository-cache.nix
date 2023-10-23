@@ -4,9 +4,10 @@
 , fetchurl
   # The path to the right MODULE.bazel.lock
 , lockfile
-  # The path to a json file containing the list of hashes we should prefetch
-, requiredDeps ? null
-, extraInputs ? [ ]
+  # A predicate used to select only some dependencies based on their name
+, requiredDepNamePredicate ? _: true
+  # Extra deps in the form of derivations producing a "single file" output path
+, extraDeps ? [ ]
 }:
 let
   modules = builtins.fromJSON (builtins.readFile lockfile);
@@ -28,6 +29,9 @@ let
     in
     # like foldl', force evaluation of intermediate results
     builtins.seq acc' children;
+
+  # remove the "--" prefix, abusing undocumented negative substring length
+  sanitize = builtins.substring 2 (-1);
 
   extract_source = f: acc: value:
     # We take any "attributes" object that has a "sha256" field. Every value
@@ -72,18 +76,8 @@ let
       && f attrs.name
     then accWithNewSource else acc;
 
-  # remove the "--" prefix, abusing undocumented negative substring length
-  sanitize = builtins.substring 2 (-1);
-
-  inputs = foldlJSON (extract_source (n: builtins.trace (sanitize n) true)) { } modules;
-
-  requiredHashes = builtins.fromJSON (builtins.readFile requiredDeps);
-  requiredAttrs = lib.genAttrs requiredHashes throw;
-
-  requiredInputs =
-    if requiredDeps == null
-    then inputs
-    else builtins.intersectAttrs requiredAttrs (builtins.trace inputs inputs);
+  requiredSourcePredicate = n: requiredDepNamePredicate (sanitize n);
+  requiredDeps = foldlJSON (extract_source requiredSourcePredicate) { } modules;
 
   command = ''
     mkdir -p $out/content_addressable/sha256
@@ -92,13 +86,14 @@ let
     # TODO: Do not re-hash. Use nix-hash to convert hashes
     (drv: ''
       filename=$(basename "${lib.head drv.urls}")
+      echo Bundling $filename
       hash=$(${rnix-hashes}/bin/rnix-hashes --encoding BASE16 ${drv.sha256} | cut -f 2)
       mkdir -p content_addressable/sha256/$hash
       ln -sfn ${drv} content_addressable/sha256/$hash/file
       # Expect file name conflicts
       ln -sn ${drv} $filename || true
     '')
-    (builtins.attrValues requiredInputs ++ extraInputs)
+    (builtins.attrValues requiredDeps ++ extraDeps)
   ;
 
   repository_cache = runCommand "bazel-repository-cache" { } command;
