@@ -27534,11 +27534,14 @@ with pkgs;
       libdrm = if stdenv.isLinux then libdrm else null;
     };
 
-    generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
+    packages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/call-xorg.nix { };
+    # uncomment allowAliases once treewide replace is done
+    # uncomment lib once the python aliases.nix file format is copied
+    aliases = self: super: /*lib.optionalAttrs config.allowAliases*/ (import ../servers/x11/xorg/xorg-aliases.nix /*lib*/ self super);
 
     xorgPackages = makeScopeWithSplicing' {
       otherSplices = generateSplicesForMkScope "xorg";
-      f = lib.extends overrides generatedPackages;
+      f = lib.extends (lib.composeExtensions aliases overrides) packages;
     };
 
   in recurseIntoAttrs xorgPackages;
