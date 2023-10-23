@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation {
     rm -rv ofl/cabincondensed \
       ofl/signikanegative \
       ofl/signikanegativesc \
+      ofl/*_todelist \
       axisregistry/tests/data
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
