@@ -27985,8 +27985,6 @@ with pkgs;
 
   iwd = callPackage ../os-specific/linux/iwd { };
 
-  eiwd = callPackage ../os-specific/linux/eiwd { };
-
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
   juju = callPackage ../applications/networking/juju { };
