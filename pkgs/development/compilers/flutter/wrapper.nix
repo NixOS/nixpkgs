@@ -56,7 +56,7 @@ let
           inherit flutter;
           supportedTargetPlatforms = [ ];
         };
-        hash = artifactHashes.${platform} or "";
+        hash = artifactHashes.${platform}.${stdenv.hostPlatform.system} or "";
       };
     }).overrideAttrs (
       if builtins.pathExists ./artifacts/overrides/${platform}.nix

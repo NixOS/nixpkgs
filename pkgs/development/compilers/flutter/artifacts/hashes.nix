@@ -24,15 +24,52 @@
 #     --[no-]flutter_runner               Precache the flutter runner artifacts.
 #     --[no-]use-unsigned-mac-binaries    Precache the unsigned macOS binaries when available.
 
+# Schema:
+# ${flutterVersion}.${targetPlatform}.${hostPlatform}
+#
+# aarch64-darwin as a host is not yet supported.
+# https://github.com/flutter/flutter/issues/60118
 {
   "3.13.8" = {
-    android = "sha256-Uc36aBq8wQo2aEvjAPOoixZElWOE/GNRm2GUfhbwT3Y=";
-    fuchsia = "sha256-eu0BERdz53CkSexbpu3KA7O6Q4g0s9SGD3t1Snsk3Fk=";
-    ios = "sha256-QwkeGnutTVsm682CqxRtEd9rKUvN7zlAJcqkvAQYwao=";
-    linux = "sha256-0gIOwux3YBdmcXgwICr8dpftj1CauaBUX8Rt5GG0WSs=";
-    macos = "sha256-9WqCJQ37mcGc5tzfqQoY5CqHWHGTizjXf9p73bdnNWc=";
-    universal = "sha256-wATt1UPjo/fh7RFO1vvcUAdo0dMAaaOUIuzYodsM0v0=";
-    web = "sha256-DVXJOOFxv7tKt3d0NaYMexkphEcr7+gDFV67I6iAYa0=";
-    windows = "sha256-s8fJtwQkuZaGXr6vrPiKfpwP/NfewbETwyp9ERGqHYI=";
+    android = {
+      x86_64-linux = "sha256-Uc36aBq8wQo2aEvjAPOoixZElWOE/GNRm2GUfhbwT3Y=";
+      aarch64-linux = "sha256-Uc36aBq8wQo2aEvjAPOoixZElWOE/GNRm2GUfhbwT3Y=";
+      x86_64-darwin = "sha256-v/6/GTj7732fEOIgSaoM00yaw2qNwOMuvbuoCvii7vQ=";
+    };
+    fuchsia = {
+      x86_64-linux = "sha256-eu0BERdz53CkSexbpu3KA7O6Q4g0s9SGD3t1Snsk3Fk=";
+      aarch64-linux = "sha256-eu0BERdz53CkSexbpu3KA7O6Q4g0s9SGD3t1Snsk3Fk=";
+      x86_64-darwin = "sha256-eu0BERdz53CkSexbpu3KA7O6Q4g0s9SGD3t1Snsk3Fk=";
+    };
+    ios = {
+      x86_64-linux = "sha256-QwkeGnutTVsm682CqxRtEd9rKUvN7zlAJcqkvAQYwao=";
+      aarch64-linux = "sha256-QwkeGnutTVsm682CqxRtEd9rKUvN7zlAJcqkvAQYwao=";
+      x86_64-darwin = "sha256-QwkeGnutTVsm682CqxRtEd9rKUvN7zlAJcqkvAQYwao=";
+    };
+    linux = {
+      x86_64-linux = "sha256-0gIOwux3YBdmcXgwICr8dpftj1CauaBUX8Rt5GG0WSs=";
+      aarch64-linux = "sha256-drGHsuJoOCLqrhVrXczqJRCOtpeWVlqdWW0OSMS/l5M=";
+      x86_64-darwin = "sha256-0gIOwux3YBdmcXgwICr8dpftj1CauaBUX8Rt5GG0WSs=";
+    };
+    macos = {
+      x86_64-linux = "sha256-9WqCJQ37mcGc5tzfqQoY5CqHWHGTizjXf9p73bdnNWc=";
+      aarch64-linux = "sha256-9WqCJQ37mcGc5tzfqQoY5CqHWHGTizjXf9p73bdnNWc=";
+      x86_64-darwin = "sha256-9WqCJQ37mcGc5tzfqQoY5CqHWHGTizjXf9p73bdnNWc=";
+    };
+    universal = {
+      x86_64-linux = "sha256-wATt1UPjo/fh7RFO1vvcUAdo0dMAaaOUIuzYodsM0v0=";
+      aarch64-linux = "sha256-Z9bszNaIpCccG7OfvE5WFsw36dITiyCQAZ6p29+Yq68=";
+      x86_64-darwin = "sha256-qN5bAXRfQ78TWF3FLBIxWzUB5y5OrZVQTEilY5J/+2k=";
+    };
+    web = {
+      x86_64-linux = "sha256-DVXJOOFxv7tKt3d0NaYMexkphEcr7+gDFV67I6iAYa0=";
+      aarch64-linux = "sha256-DVXJOOFxv7tKt3d0NaYMexkphEcr7+gDFV67I6iAYa0=";
+      x86_64-darwin = "sha256-DVXJOOFxv7tKt3d0NaYMexkphEcr7+gDFV67I6iAYa0=";
+    };
+    windows = {
+      x86_64-linux = "sha256-s8fJtwQkuZaGXr6vrPiKfpwP/NfewbETwyp9ERGqHYI=";
+      aarch64-linux = "sha256-s8fJtwQkuZaGXr6vrPiKfpwP/NfewbETwyp9ERGqHYI=";
+      x86_64-darwin = "sha256-s8fJtwQkuZaGXr6vrPiKfpwP/NfewbETwyp9ERGqHYI=";
+    };
   };
 }
