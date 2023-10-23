@@ -23413,6 +23413,21 @@ with self; {
     };
   };
 
+  SysCpuAffinity = buildPerlModule {
+    pname = "Sys-CpuAffinity";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MOB/Sys-CpuAffinity-1.12.tar.gz";
+      hash = "sha256-/jLAXz6wWXCMZH8ruFslBFhZHyupBR2Nhm9Uajh+6Eg=";
+    };
+    doCheck = false; # Would run checks for all supported systems
+    meta = {
+      description = "Set CPU affinity for processes";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   SysHostnameLong = buildPerlPackage {
     pname = "Sys-Hostname-Long";
     version = "1.5";
