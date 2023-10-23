@@ -67,11 +67,8 @@ let
 
   # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
   # Wrap it to ensure that it does not do that, preferring home directories instead.
-  # The sh file `$out/bin/internal/shared.sh` runs when launching Flutter and calls `"$FLUTTER_ROOT/bin/cache/` instead of our environment variable `FLUTTER_CACHE_DIR`.
-  # We do not patch it since the script doesn't require engine artifacts(which are the only thing not added by the unwrapped derivation), so it shouldn't fail, and patching it will just be harder to maintain.
   immutableFlutter = writeShellScript "flutter_immutable" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    export FLUTTER_CACHE_DIR=''${FLUTTER_CACHE_DIR:-'${cacheDir}/bin/cache'}
     ${flutter}/bin/flutter "$@"
   '';
 

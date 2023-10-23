@@ -1,5 +1,6 @@
 { lib
 , runCommand
+, xorg
 , cacert
 , unzip
 
@@ -19,17 +20,16 @@ let
     "fuchsia"
     "universal"
   ];
+
+  flutter' = flutter.override {
+    # Use a version of Flutter with just enough capabilities to download
+    # artifacts.
+    supportedTargetPlatforms = [ ];
+  };
 in
 runCommand "flutter-artifacts-${platform}"
 {
-  nativeBuildInputs = [
-    (flutter.override {
-      # Use a version of Flutter with just enough capabilities to download
-      # artifacts.
-      supportedTargetPlatforms = [ ];
-    })
-    unzip
-  ];
+  nativeBuildInputs = [ xorg.lndir flutter' unzip ];
 
   NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -41,6 +41,14 @@ runCommand "flutter-artifacts-${platform}"
     inherit platform;
   };
 } ''
-  mkdir -p "$out"
-  HOME="$NIX_BUILD_TOP" FLUTTER_CACHE_DIR="$out" flutter precache -v '--${platform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove platform platforms))}
+  export FLUTTER_ROOT="$NIX_BUILD_TOP"
+  lndir -silent '${flutter'}' "$FLUTTER_ROOT"
+  rm -rf "$FLUTTER_ROOT/bin/cache"
+  mkdir "$FLUTTER_ROOT/bin/cache"
+
+  HOME="$(mktemp -d)" flutter precache -v '--${platform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove platform platforms))}
+  rm -r "$FLUTTER_ROOT/bin/cache/lockfile"
+  find "$FLUTTER_ROOT" -type l -lname '${flutter'}/*' -delete
+
+  cp -r bin/cache "$out"
 ''
