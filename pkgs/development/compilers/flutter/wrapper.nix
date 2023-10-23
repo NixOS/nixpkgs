@@ -46,7 +46,7 @@
 let
   supportsLinuxDesktopTarget = builtins.elem "linux" supportedTargetPlatforms;
 
-  mkPlatformArtifacts = platform:
+  platformArtifacts = lib.genAttrs supportedTargetPlatforms (platform:
     (callPackage ./artifacts/prepare-artifacts.nix {
       src = callPackage ./artifacts/fetch-artifacts.nix {
         inherit platform;
@@ -62,15 +62,16 @@ let
       if builtins.pathExists ./artifacts/overrides/${platform}.nix
       then callPackage ./artifacts/overrides/${platform}.nix { }
       else ({ ... }: { })
-    );
+    ));
 
-  cacheDir = symlinkJoin {
+  cacheDir = symlinkJoin rec {
     name = "flutter-cache-dir";
-    paths = map mkPlatformArtifacts supportedTargetPlatforms;
+    paths = builtins.attrValues platformArtifacts;
     postBuild = ''
       mkdir -p "$out/bin/cache"
       ln -s '${flutter}/bin/cache/dart-sdk' "$out/bin/cache"
     '';
+    passthru.platform = platformArtifacts;
   };
 
   # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
