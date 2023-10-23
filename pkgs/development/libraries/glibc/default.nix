@@ -95,7 +95,7 @@ in
         "user-defined-trusted-dirs=${libgcc}/lib"
       ];
 
-    postInstall = previousAttrs.postInstall + (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+    postInstall = previousAttrs.postInstall + (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
     '' else lib.optionalString stdenv.buildPlatform.isLinux
