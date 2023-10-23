@@ -46,8 +46,7 @@ let
   let
 
     selectLua = isNull neovimRcContent;
-    initFileName = "init." + (if selectLua then "lua" else "vim");
-    rcContent = if !selectLua then neovimRcContent
+    rcContent = if !selectLua then "source ${writeText "init.vim" neovimRcContent}"
                 else if isNull neovimLuaRcContent then "" else neovimLuaRcContent;
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
@@ -77,7 +76,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText initFileName rcContent}" ]
+      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
       ++ commonWrapperArgs
       ;
 
