@@ -82,6 +82,8 @@ import ./make-test-python.nix (
           };
 
           initiatorAuto = { nodes, config, pkgs, ... }: {
+            boot.initrd.systemd.enable = true;
+
             services.openiscsi = {
               enable = true;
               enableAutoLoginOut = true;
@@ -103,6 +105,8 @@ import ./make-test-python.nix (
           };
 
           initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
+            boot.initrd.systemd.enable = true;
+
             boot.loader.grub.enable = false;
             boot.kernelParams = lib.mkOverride 5 (
               [
