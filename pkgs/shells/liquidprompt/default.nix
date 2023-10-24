@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.1.2";
 
   src = fetchFromGitHub {
-    owner = "nojhan";
+    owner = "liquidprompt";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-7mnrXLqnCdOuS2aRs4tVLfO8SRFrqZHNM40gWE/CVFI=";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A full-featured & carefully designed adaptive prompt for Bash & Zsh";
-    homepage = "https://github.com/nojhan/liquidprompt";
+    homepage = "https://github.com/liquidprompt/liquidprompt";
     license = licenses.agpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ gerschtli ];
