@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-eGsGHbJstRe60Wu/DPYsk3FP7sjJf9HIeKXrL7nbZs0=";
+    hash = "sha256-CDjWTXXnUgj9QaLDNuSVy+wf8If5LehwOZ0t0Fuh2Ro=";
   };
 
   passthru.updateScript = ./update.sh;
