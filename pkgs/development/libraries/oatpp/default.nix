@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 }:
 
@@ -13,6 +14,13 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-k6RPg53z9iTrrKZXOm5Ga9qxI32mHgB+4d6y+IUvJC0=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/oatpp/oatpp/pull/813/commits/c59d1ffa9383b4ca054b54a43c230ec52e1aa20c.patch";
+      hash = "sha256-F87tMLUe0j++SGDBAkaKPh1PNIk+O8VaVHM0VIKKyKQ=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

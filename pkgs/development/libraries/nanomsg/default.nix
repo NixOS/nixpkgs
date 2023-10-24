@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/nanomsg/nanomsg/commit/e3323f19579529d272cb1d55bd6b653c4f34c064.patch";
       sha256 = "URz7TAqqpKxqjgvQqNX4WNSShwiEzAvO2h0hCZ2NhVY=";
     })
+    # That PR wasn't enough - also apply https://github.com/nanomsg/nanomsg/pull/1092
+    (fetchpatch {
+      url = "https://github.com/nanomsg/nanomsg/commit/a54ccc7c98d0d36c773df7b666d93852d7e9a297.patch";
+      sha256 = "7TStLpx8WrArijiDlST381dig8N3iOkd3ZUZpMJ7TTg=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];

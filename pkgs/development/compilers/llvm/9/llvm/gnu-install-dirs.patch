@@ -176,29 +176,39 @@ index 22e3dcb776aa..ba77b9c195e2 100644
  
          # '/.' indicates: copy the contents of the directory directly into
 diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
-index 9cf22b436fa7..486e40010cd8 100644
+index 9cf22b436fa7..641120613e55 100644
 --- a/cmake/modules/CMakeLists.txt
 +++ b/cmake/modules/CMakeLists.txt
-@@ -1,4 +1,4 @@
+@@ -1,5 +1,6 @@
 -set(LLVM_INSTALL_PACKAGE_DIR lib${LLVM_LIBDIR_SUFFIX}/cmake/llvm)
+-set(llvm_cmake_builddir "${LLVM_BINARY_DIR}/${LLVM_INSTALL_PACKAGE_DIR}")
 +set(LLVM_INSTALL_PACKAGE_DIR ${LLVM_INSTALL_CMAKE_DIR} CACHE STRING "Path for CMake subdirectory (defaults to 'cmake/llvm')")
- set(llvm_cmake_builddir "${LLVM_BINARY_DIR}/${LLVM_INSTALL_PACKAGE_DIR}")
++set(llvm_install_package_dir_suffix "lib${LLVM_LIBDIR_SUFFIX}/cmake/llvm")
++set(llvm_cmake_builddir "${LLVM_BINARY_DIR}/${llvm_install_package_dir_suffix}")
  
  # First for users who use an installed LLVM, create the LLVMExports.cmake file.
-@@ -96,13 +96,13 @@ foreach(p ${_count})
+ set(LLVM_EXPORTS_FILE ${llvm_cmake_builddir}/LLVMExports.cmake)
+@@ -91,18 +92,18 @@ set(LLVM_CONFIG_CODE "
+ get_filename_component(LLVM_INSTALL_PREFIX \"\${CMAKE_CURRENT_LIST_FILE}\" PATH)")
+ # Construct the proper number of get_filename_component(... PATH)
+ # calls to compute the installation prefix.
+-string(REGEX REPLACE "/" ";" _count "${LLVM_INSTALL_PACKAGE_DIR}")
++string(REGEX REPLACE "/" ";" _count "${llvm_install_package_dir_suffix}")
+ foreach(p ${_count})
    set(LLVM_CONFIG_CODE "${LLVM_CONFIG_CODE}
  get_filename_component(LLVM_INSTALL_PREFIX \"\${LLVM_INSTALL_PREFIX}\" PATH)")
  endforeach(p)
 -set(LLVM_CONFIG_INCLUDE_DIRS "\${LLVM_INSTALL_PREFIX}/include")
-+set(LLVM_CONFIG_INCLUDE_DIRS "\${LLVM_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
++set(LLVM_CONFIG_INCLUDE_DIRS "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
  set(LLVM_CONFIG_INCLUDE_DIR "${LLVM_CONFIG_INCLUDE_DIRS}")
  set(LLVM_CONFIG_MAIN_INCLUDE_DIR "${LLVM_CONFIG_INCLUDE_DIRS}")
 -set(LLVM_CONFIG_LIBRARY_DIRS "\${LLVM_INSTALL_PREFIX}/lib\${LLVM_LIBDIR_SUFFIX}")
-+set(LLVM_CONFIG_LIBRARY_DIRS "\${LLVM_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\${LLVM_LIBDIR_SUFFIX}")
- set(LLVM_CONFIG_CMAKE_DIR "\${LLVM_INSTALL_PREFIX}/${LLVM_INSTALL_PACKAGE_DIR}")
+-set(LLVM_CONFIG_CMAKE_DIR "\${LLVM_INSTALL_PREFIX}/${LLVM_INSTALL_PACKAGE_DIR}")
++set(LLVM_CONFIG_LIBRARY_DIRS "${CMAKE_INSTALL_FULL_LIBDIR}\${LLVM_LIBDIR_SUFFIX}")
++set(LLVM_CONFIG_CMAKE_DIR "${LLVM_INSTALL_PACKAGE_DIR}")
  set(LLVM_CONFIG_BINARY_DIR "\${LLVM_INSTALL_PREFIX}")
 -set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/bin")
-+set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
++set(LLVM_CONFIG_TOOLS_BINARY_DIR "${CMAKE_INSTALL_FULL_BINDIR}")
  set(LLVM_CONFIG_EXPORTS_FILE "\${LLVM_CMAKE_DIR}/LLVMExports.cmake")
  set(LLVM_CONFIG_EXPORTS "${LLVM_EXPORTS}")
  configure_file(
