@@ -594,7 +594,7 @@ in
             $out/bin/zfs --help >/dev/null 2>&1
             $out/bin/zpool --help >/dev/null 2>&1
           '';
-        postDeviceCommands = concatStringsSep "\n" ([''
+        postResumeCommands = concatStringsSep "\n" ([''
             ZFS_FORCE="${optionalString cfgZfs.forceImportRoot "-f"}"
           ''] ++ [(importLib {
             # See comments at importLib definition.
