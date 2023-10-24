@@ -17,6 +17,7 @@
 , gtk3
 , darwin
 , perl
+, wrapGAppsHook
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     nasm
     perl
+    wrapGAppsHook
   ];
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
