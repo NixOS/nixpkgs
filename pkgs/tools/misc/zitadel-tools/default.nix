@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zitadel-tools";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel-tools";
     rev = "v${version}";
-    hash = "sha256-yKSpWvv/xW7ID0KhPIsrZOEWuuhEqpJuiswqO71ooEw=";
+    hash = "sha256-r9GEHpfDlpK98/dnsxjhUgWKn6vHQla8Z+jQUVrHGyo=";
   };
 
-  vendorHash = "sha256-ZS8m3zjLWvX3kFty2jpObw+rfyozJ3yDfZBcFCdD96U=";
+  vendorHash = "sha256-y2PYj0XRSgfiaYpeqAh4VR/+NKUPKd1c0w9pPCWsUrY=";
 
   ldflags = [
     "-s" "-w"
