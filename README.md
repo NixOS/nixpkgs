@@ -104,7 +104,8 @@ but have run across some challenges along the way:
    for microcontrollers. Because of this, ArduPilot- and PX4-based systems still must rely
    on separate Linux companion computers for the heavy lifting. *This is not the way*.
 5. [ROS-O](https://github.com/ros-o/ros-o/), or `ROS One`, aims to make it easier to deploy
-   ROS. This is not an operating system and it is limited to ROS.
+   `ROS` by providing patches for popular operating systems and package managers. `ROS-O` is
+   not an operating system and is limited to ROS deployment, making it a piecemeal solution.
 6. [Debian](https://www.debian.org/) 12 ("bookworm") is our favorite release to date, but it
    remains a traditional Linux OS poorly suited to our use case.
 7. While [Ubuntu](https://ubuntu.com/robotics/) is the most popular Linux OS, and Ubuntu Core
