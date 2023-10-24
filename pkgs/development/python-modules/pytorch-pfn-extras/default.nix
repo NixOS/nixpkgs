@@ -8,6 +8,7 @@
 , torch
 , torchvision
 , typing-extensions
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -60,6 +61,9 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/utils_tests/test_checkpoint.py"
     "tests/pytorch_pfn_extras_tests/utils_tests/test_comparer.py"
     "tests/pytorch_pfn_extras_tests/utils_tests/test_new_comparer.py"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Remove this when https://github.com/NixOS/nixpkgs/pull/259068 is merged
+    "tests/pytorch_pfn_extras_tests/dynamo_tests/test_compile.py"
   ];
 
   meta = with lib; {
