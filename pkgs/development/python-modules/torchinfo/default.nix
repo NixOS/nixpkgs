@@ -53,6 +53,8 @@ buildPythonPackage rec {
     "test_flan_t5_small"
     # AssertionError in output
     "test_google"
+    # "addmm_impl_cpu_" not implemented for 'Half'
+    "test_input_size_half_precision"
   ];
 
   disabledTestPaths = [
