@@ -62,6 +62,7 @@ buildGoModule rec {
     darwin.apple_sdk_11_0.frameworks.Kernel
     darwin.apple_sdk_11_0.frameworks.OpenGL
     darwin.apple_sdk_11_0.frameworks.UserNotifications
+    darwin.apple_sdk_11_0.frameworks.MediaPlayer
   ];
 
   postInstall = ''
