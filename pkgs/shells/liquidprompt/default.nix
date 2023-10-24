@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0444 liquidprompt $out/bin/liquidprompt
     install -D -m 0444 liquidpromptrc-dist $out/share/doc/liquidprompt/liquidpromptrc-dist
     install -D -m 0444 liquid.theme $out/share/doc/liquidprompt/liquid.theme
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
       $out/share/zsh/plugins/liquidprompt/liquidprompt.plugin.zsh
     install -D -m 0444 liquidprompt \
       $out/share/zsh/plugins/liquidprompt/liquidprompt
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { };
