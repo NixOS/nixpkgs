@@ -13,11 +13,9 @@ buildKodiAddon rec {
     hash = "sha256-Rr9VYWrwn1RrCcQ0UdgOnQOoIrdB52JJ0pR4VI7dSAg=";
   };
 
-  propagatedBuildInputs = [ youtube-dl requests ];
+  propagatedBuildInputs = [ youtube-dl requests htmlement ];
 
-  passthru = {
-    pythonPath = "lib";
-  };
+  passthru = { pythonPath = "lib"; };
 
   meta = with lib; {
     homepage = "https://github.com/willforde/script.module.codequick/";

@@ -1,6 +1,6 @@
 { lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, requests
 , inputstreamhelper, kodi-six, six, youtube-dl, codequick, pytz, pyqrcode
-, tzlocal, future, catchuptvandmore-images }:
+, tzlocal, future, catchuptvandmore-images, inputstream-adaptive }:
 
 buildKodiAddon rec {
   pname = "catchuptvandmore";
@@ -19,6 +19,7 @@ buildKodiAddon rec {
     pytz
     requests
     inputstreamhelper
+    inputstream-adaptive
     kodi-six
     six
     youtube-dl
@@ -28,9 +29,7 @@ buildKodiAddon rec {
     catchuptvandmore-images
   ];
 
-  passthru = {
-    pythonPath = "resources/lib";
-  };
+  passthru = { pythonPath = "resources/lib"; };
 
   meta = with lib; {
     homepage =

@@ -1,20 +1,17 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
 
 buildKodiAddon rec {
   pname = "pytz";
   namespace = "script.module.pytz";
-  version = "v2014.2";
+  version = "2023.3.0+matrix.1";
 
-  src = fetchFromGitHub {
-    owner = "powlo";
-    repo = "script.module.pytz";
-    rev = "0057604553d205b0cb586f646f92673efce7e7b7";
-    hash = "sha256-NEMlBgeX2ignIGo21BzkN8QYdyYzUUwY3Tko9fY8xow=";
+  src = fetchzip {
+    url =
+      "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-GNUdxFetiuYUOvzOXS8oQwxIyUF7Y2q8lV/UftqVvQs=";
   };
 
-  passthru = {
-    pythonPath = "lib";
-  };
+  passthru = { pythonPath = "lib"; };
 
   meta = with lib; {
     homepage = "https://github.com/powlo/script.module.pytz";
