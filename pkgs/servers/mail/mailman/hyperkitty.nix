@@ -71,6 +71,6 @@ buildPythonPackage rec {
     description = "Archiver for GNU Mailman v3";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ globin qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }
