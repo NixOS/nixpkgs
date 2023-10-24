@@ -2,27 +2,40 @@
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "liquidprompt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7mnrXLqnCdOuS2aRs4tVLfO8SRFrqZHNM40gWE/CVFI=";
+    hash = "sha256-ra+uJg9E2Cr1k0Ni1+xG9yKFF9iMInJFB5oAFnc52lc=";
   };
 
   strictDeps = true;
+
+  postPatch = ''
+    patchShebangs tools/*.sh
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -D -m 0444 liquidprompt $out/bin/liquidprompt
-    install -D -m 0444 liquidpromptrc-dist $out/share/doc/liquidprompt/liquidpromptrc-dist
-    install -D -m 0444 liquid.theme $out/share/doc/liquidprompt/liquid.theme
 
     install -D -m 0444 liquidprompt.plugin.zsh \
       $out/share/zsh/plugins/liquidprompt/liquidprompt.plugin.zsh
     install -D -m 0444 liquidprompt \
       $out/share/zsh/plugins/liquidprompt/liquidprompt
+
+    # generate default config file
+    mkdir -p $out/share/doc/liquidprompt
+    tools/config-from-doc.sh --verbose > $out/share/doc/liquidprompt/liquidpromptrc-dist
+
+    mkdir -p $out/share/liquidprompt
+    cp -a themes $out/share/liquidprompt/
+
+    mkdir -p $out/share/liquidprompt/contrib
+    cp -a contrib/presets $out/share/liquidprompt/contrib/
 
     runHook postInstall
   '';
