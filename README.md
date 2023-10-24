@@ -41,7 +41,7 @@ for your support!*
 
 While compute and energy constraints have historically limited
 robotic systems to legacy real-time OSes running on underpowered microcontrollers, these
-constraints are rapidly vanishing with development of new low-power 
+constraints are rapidly vanishing with development of new low-power
 [processor architectures](https://riscv.org/),
 [domain-specific accelerators](https://dl.acm.org/doi/10.1145/3350755.3400252),
 [unified memory](https://arxiv.org/abs/2304.12149), and
@@ -93,7 +93,7 @@ but have run across some challenges along the way:
 3. Configuring a machine for AI development and/or deployment can still be a significant
    burden. Common challenges include installing mutually compatible graphics drivers, CUDA
    libraries, and deep learning frameworks. An entirely separate package manager such as
-   [conda](https://docs.conda.io/en/latest/) or 
+   [conda](https://docs.conda.io/en/latest/) or
    [micromamba](https://mamba.readthedocs.io/en/latest/) is often used for dependecy
    management. If we begin with the 'right' package manager (e.g., `Nix`), all of this added
    complexity becomes unnecessary.
@@ -103,26 +103,28 @@ but have run across some challenges along the way:
    Apache [NuttX](https://nuttx.apache.org/), respectively, two hard real-time OSes designed
    for microcontrollers. Because of this, ArduPilot- and PX4-based systems still must rely
    on separate Linux companion computers for the heavy lifting. *This is not the way*.
-5. [Debian](https://www.debian.org/) 12 ("bookworm") is our favorite release to date, but it
+5. [ROS-O](https://github.com/ros-o/ros-o/), or `ROS One`, aims to make it easier to deploy
+   ROS. This is not an operating system and it is limited to ROS.
+6. [Debian](https://www.debian.org/) 12 ("bookworm") is our favorite release to date, but it
    remains a traditional Linux OS poorly suited to our use case.
-6. While [Ubuntu](https://ubuntu.com/robotics/) is the most popular Linux OS, and Ubuntu Core
+7. While [Ubuntu](https://ubuntu.com/robotics/) is the most popular Linux OS, and Ubuntu Core
    is intended for robotics among other things, it has all of the limitations of Debian plus
    proprietary Snaps, a closed source, and a high price. *Robotics should be open to everyone*.
-7. [The Yocto Project](https://www.yoctoproject.org/) and the related
+8. [The Yocto Project](https://www.yoctoproject.org/) and the related
    [OpenEmbedded layers for ROS](https://github.com/ros/meta-ros) is a major step in the
    right direction, but OSes must be hand-crafted and lack the powerful Nix system for
    configuring and deploying robotic systems, which we call RoboDevSecOps.
-8. [OSTree](https://ostreedev.github.io/ostree/) is yet another solution designed without
+9. [OSTree](https://ostreedev.github.io/ostree/) is yet another solution designed without
    robotics in mind that must be arduously adapted to our use case.
-9. [GNU Guix](https://guix.gnu.org/) is the next best thing to `NixOS` with some theoretical
+10. [GNU Guix](https://guix.gnu.org/) is the next best thing to `NixOS` with some theoretical
    advantages. In practice though, we found `Guix` to be less reliable and supported than
    `NixOS`. While the potential there, we were more comfortable moving forward with the large
    and rapidly growing `Nix` community.
-10. Although we love unikernels or Library operating systems (libOSes), they are often
-   slow and painful to deploy using common tools. Certaintly, automation can alleviate
-   much of this headache and thankfully `Nix` does just that. That's right, [you can use `Nix`
-   to build and deploy `MirageOS` unikernels](https://tarides.com/blog/2022-12-14-hillingar-mirageos-unikernels-on-nixos/). The two systems are not mutually
-   exclusive.
+11. We love unikernels or Library operating systems (libOSes), but they are often slow and
+   painful to deploy using common tools. Thankfully `Nix` can automate the process. That's
+   right, you can use `Nix` to
+   [build and deploy unikernels](https://tarides.com/blog/2022-12-14-hillingar-mirageos-unikernels-on-nixos/).
+   The two systems are not mutually exclusive.
 
 After careful consideration, we decided that the focus of `Botnix` substantially differs from
 that of `NixOS` and other communities, given our sole focus on AI for robotics. There are
@@ -228,8 +230,8 @@ For more information about contributing to the project, please visit the [contri
   - [ ] Tensorflow 2.14 (see CUDA)
   - [ ] Reinforcement learning: OpenAI Five, Dactyl, Autocurricula
   - [ ] Agent environments: OpenAI Gym, NVIDIA IsaacGym, Meta HabitatLab, [TBA: AutonomyGym](https://github.com/nervosys/AutonomyGym/)
-  - [ ] Large language models (LLMs): Meta Llama2, Llama2 Code, Eureka/GPT4, LoRA, 
-  - [ ] Text-language: OpenAI CLIP, 
+  - [ ] Large language models (LLMs): Meta Llama2, Llama2 Code, Eureka/GPT4, LoRA,
+  - [ ] Text-language: OpenAI CLIP,
   - [ ] Speech recognition: OpenAI Whisper
   - [ ] Hybrid neural networks: see differentiable physics, programming languages
   - [ ] Probabilistic programming: Pyro
