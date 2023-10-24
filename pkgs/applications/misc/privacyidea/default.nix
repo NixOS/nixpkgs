@@ -257,7 +257,7 @@ python3'.pkgs.buildPythonPackage rec {
     description = "Multi factor authentication system (2FA, MFA, OTP Server)";
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
-    maintainers = with maintainers; [ globin ma27 ];
+    maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
   };
 }
