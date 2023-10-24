@@ -8,6 +8,27 @@ https://nixos.org/nixos and in the manual in doc/manual.
 
 You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
 
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- Format the commit messages in the following way:
+
+  ```
+  nixos/(module): (init module | add setting | refactor | etc)
+
+  (Motivation for change. Link to release notes. Additional information.)
+  ```
+
+  Examples:
+
+  * nixos/hydra: add bazBaz option
+
+    Dual baz behavior is needed to do foo.
+  * nixos/nginx: refactor config generation
+
+    The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
+
 ## Reviewing contributions
 
 When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
