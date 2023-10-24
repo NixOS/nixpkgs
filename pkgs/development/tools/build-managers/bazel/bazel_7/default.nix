@@ -82,6 +82,15 @@ let
       null != builtins.match "rules_java~.*~toolchains~remote_java_tools" name;
   };
 
+  # Two-in-one format
+  testRepoCache = callPackage ./bazel-repository-cache.nix {
+    inherit lockfile;
+    # We use the release tarball that already has everything bundled,
+    # But we need one extra dep required by our nonprebuilt java toolchains.
+    requiredDepNamePredicate = name:
+      null == builtins.match ".*(macos|osx|linux|win|apple|android).*" name;
+  };
+
   defaultShellUtils =
     # Keep this list conservative. For more exotic tools, prefer to use
     # @rules_nixpkgs to pull in tools from the nix repository. Example:
@@ -331,7 +340,6 @@ stdenv.mkDerivation rec {
         done
       '';
 
-          # -e "s,%{cc},${stdenv.cc}/bin/clang,g" \
       genericPatches = ''
         # unzip builtins_bzl.zip so the contents get patched
         builtins_bzl=src/main/java/com/google/devtools/build/lib/bazel/rules/builtins_bzl
@@ -611,11 +619,13 @@ stdenv.mkDerivation rec {
     #
     # in the nixpkgs checkout root to exercise them locally.
     tests = callPackage ./tests.nix {
-      inherit Foundation bazel_self distDir repoCache runJdk;
+      inherit Foundation bazel_self runJdk;
+      distDir = testRepoCache;
+      repoCache = testRepoCache;
     };
 
     updater = throw "TODO";
 
-    inherit distDir repoCache;
+    inherit distDir repoCache testRepoCache;
   };
 }
