@@ -10,6 +10,7 @@ bundlerApp {
   meta = with lib; {
     description = "A tool for executable specifications";
     homepage = "https://cucumber.io/";
+    changelog = "https://github.com/cucumber/cucumber-ruby/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ manveru nicknovitski ];
     platforms = platforms.unix;
