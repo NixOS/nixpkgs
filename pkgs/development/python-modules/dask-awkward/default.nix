@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2023.10.0";
-  format = "pyproject";
+  version = "2023.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
-    repo = pname;
+    repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-02TOUET8frAg8puUmZfB1fRV0s85+Gl/GVgFvGvtBYQ=";
+    hash = "sha256-ov5vE9O+dq0ByfSMluQl7NN0vZAcvvBX27iwoYSruSs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
