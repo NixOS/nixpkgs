@@ -38,16 +38,16 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.9.2";
-  format = "pyproject";
+  version = "2023.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-NJLZyxVS5L25wC79mZ6kRjxxd5dYcjWiC3x3A5Topm8=";
+    hash = "sha256-u7KuZT0uH833zqLNBfqRLU7EcMrUmXgszevYA3Z7G1Y=";
   };
 
   nativeBuildInputs = [
@@ -143,6 +143,9 @@ buildPythonPackage rec {
     # FileNotFoundError: [Errno 2] No such file or directory: '/build/tmp301jryv_/createme/0.part'
     "test_to_csv_nodir"
     "test_to_json_results"
+    # FutureWarning: Those tests should be working fine when pandas will have been upgraded to 2.1.1
+    "test_apply"
+    "test_apply_infer_columns"
   ];
 
   __darwinAllowLocalNetworking = true;
