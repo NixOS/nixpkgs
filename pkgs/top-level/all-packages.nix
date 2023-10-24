@@ -3687,9 +3687,10 @@ with pkgs;
 
   cudd = callPackage ../development/libraries/cudd { };
 
-  cue = callPackage ../development/tools/cue { };
+  cue = cuelang;
+  cuelang = callPackage ../development/tools/cuelang { };
 
-  writeCueValidator = callPackage ../development/tools/cue/validator.nix { };
+  writeCueValidator = callPackage ../development/tools/cuelang/validator.nix { };
 
   cuelsp = callPackage ../development/tools/cuelsp { };
 
@@ -8253,6 +8254,8 @@ with pkgs;
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
   fdk-aac-encoder = callPackage ../applications/audio/fdkaac { };
+
+  cue-music = callPackage ../applications/audio/cue { };
 
   fead = callPackage ../applications/misc/fead { };
 
