@@ -42091,7 +42091,7 @@ with pkgs;
     buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
-  code-maat = callPackage ../development/tools/code-maat { };
+  code-maat = callPackage ../development/tools/code-maat {};
 
   linux-wallpaperengine = callPackage ../applications/graphics/linux-wallpaperengine {};
 }
