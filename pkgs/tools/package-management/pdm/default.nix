@@ -1,34 +1,12 @@
 { lib
 , stdenv
 , python3
-, fetchFromGitHub
 , fetchPypi
 , nix-update-script
 , runtimeShell
 }:
-let
-  python = python3.override {
-    # override resolvelib due to
-    # 1. pdm requiring a later version of resolvelib
-    # 2. Ansible being packaged as a library
-    # 3. Ansible being unable to upgrade to a later version of resolvelib
-    # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
-    packageOverrides = self: super: {
-      resolvelib = super.resolvelib.overridePythonAttrs rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          owner = "sarugaku";
-          repo = "resolvelib";
-          rev = "/refs/tags/${version}";
-          hash = "sha256-oxyPn3aFPOyx/2aP7Eg2ThtPbyzrFT1JzWqy6GqNbzM=";
-        };
-      };
-    };
-    self = python;
-  };
-in
 
-with python.pkgs;
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
   version = "2.9.3";
