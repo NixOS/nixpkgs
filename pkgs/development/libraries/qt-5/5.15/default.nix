@@ -12,7 +12,6 @@ Check for any minor version changes.
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
-, buildPackages
 
   # options
 , developerBuild ? false
@@ -204,28 +203,20 @@ let
 
   addPackages = self: with self;
     let
-      qtModule =
-        import ../qtModule.nix
-        {
-          inherit perl;
-          inherit lib;
-          # Use a variant of mkDerivation that does not include wrapQtApplications
-          # to avoid cyclic dependencies between Qt modules.
-          mkDerivation =
-            import ../mkDerivation.nix
-            { inherit lib; inherit debug; wrapQtAppsHook = null; }
-            stdenv.mkDerivation;
-        }
-        { inherit self srcs patches; };
+      qtModule = callPackage ../qtModule.nix {
+        inherit patches;
+        # Use a variant of mkDerivation that does not include wrapQtApplications
+        # to avoid cyclic dependencies between Qt modules.
+        mkDerivation =
+          (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
+      };
 
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
 
-      mkDerivationWith =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
+      mkDerivationWith = callPackage ../mkDerivation.nix { };
 
       mkDerivation = mkDerivationWith stdenv.mkDerivation;
 
@@ -318,20 +309,20 @@ let
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
-      qmake = makeSetupHook {
+      qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
-        propagatedBuildInputs = [ self.qtbase.dev ];
+        propagatedBuildInputs = [ qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
-      } ../hooks/qmake-hook.sh;
+      } ../hooks/qmake-hook.sh) { };
 
-      wrapQtAppsHook = makeSetupHook {
+      wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
         name = "wrap-qt5-apps-hook";
-        propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeBinaryWrapper ]
-          ++ lib.optional stdenv.isLinux self.qtwayland.dev;
-      } ../hooks/wrap-qt-apps-hook.sh;
+        propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
+          ++ lib.optional stdenv.isLinux qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh) { };
     };
 
   baseScope = makeScopeWithSplicing' {
