@@ -252,7 +252,8 @@ in
   ###### implementation
 
   config = mkMerge
-    [ (mkIf config.boot.initrd.enable {
+    [
+      (mkIf config.boot.initrd.enable {
         boot.initrd.availableKernelModules =
           optionals config.boot.initrd.includeDefaultModules ([
             # Note: most of these (especially the SATA/PATA modules)
@@ -260,41 +261,154 @@ in
             # detects them, but I'm keeping them for now for backwards
             # compatibility.
 
-            # Some SATA/PATA stuff.
+            # SATA/PATA support.
             "ahci"
-            "sata_nv"
-            "sata_via"
-            "sata_sis"
-            "sata_uli"
+
             "ata_piix"
+
+            "sata_inic162x"
+            "sata_nv"
+            "sata_promise"
+            "sata_qstor"
+            "sata_sil"
+            "sata_sil24"
+            "sata_sis"
+            "sata_svw"
+            "sata_sx4"
+            "sata_uli"
+            "sata_via"
+            "sata_vsc"
+
+            "pata_ali"
+            "pata_amd"
+            "pata_artop"
+            "pata_atiixp"
+            "pata_efar"
+            "pata_hpt366"
+            "pata_hpt37x"
+            "pata_hpt3x2n"
+            "pata_hpt3x3"
+            "pata_it8213"
+            "pata_it821x"
+            "pata_jmicron"
             "pata_marvell"
+            "pata_mpiix"
+            "pata_netcell"
+            "pata_ns87410"
+            "pata_oldpiix"
+            "pata_pcmcia"
+            "pata_pdc2027x"
+            "pata_qdi"
+            "pata_rz1000"
+            "pata_serverworks"
+            "pata_sil680"
+            "pata_sis"
+            "pata_sl82c105"
+            "pata_triflex"
+            "pata_via"
+            "pata_winbond"
 
-            # Standard SCSI stuff.
-            "sd_mod"
-            "sr_mod"
+            # SCSI support (incomplete).
+            "3w-9xxx"
+            "3w-xxxx"
+            "aic79xx"
+            "aic7xxx"
+            "arcmsr"
+            "hpsa"
 
-            # SD cards and internal eMMC drives.
-            "mmc_block"
+            # USB support, especially for booting from USB CD-ROM
+            # drives.
+            "uas"
 
-            # Support USB keyboards, in case the boot fails and we only have
-            # a USB keyboard, or for LUKS passphrase prompt.
-            "uhci_hcd"
-            "ehci_hcd"
-            "ehci_pci"
-            "ohci_hcd"
-            "ohci_pci"
-            "xhci_hcd"
-            "xhci_pci"
-            "usbhid"
-            "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
-            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
+            # SD cards.
+            "sdhci_pci"
 
-          ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
-            # Misc. x86 keyboard stuff.
-            "pcips2" "atkbd" "i8042"
+            # NVMe drives
+            "nvme"
 
-            # x86 RTC needed by the stage 2 init script.
-            "rtc_cmos"
+            # Firewire support.  Not tested.
+            "ohci1394"
+            "sbp2"
+
+            # Virtio (QEMU, KVM etc.) support.
+            "virtio_net"
+            "virtio_pci"
+            "virtio_mmio"
+            "virtio_blk"
+            "virtio_scsi"
+            "virtio_balloon"
+            "virtio_console"
+
+            # VMware support.
+            "mptspi"
+            "vmxnet3"
+            "vsock"
+          ] ++ lib.optional pkgs.stdenv.hostPlatform.isx86 "vmw_balloon"
+          ++ lib.optionals (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [
+            "vmw_vmci"
+            "vmwgfx"
+            "vmw_vsock_vmci_transport"
+
+            # Hyper-V support.
+            "hv_storvsc"
+          ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
+            # Most of the following falls into two categories:
+            #  - early KMS / early display
+            #  - early storage (e.g. USB) support
+
+            # Allows using framebuffer configured by the initial boot firmware
+            "simplefb"
+
+            # Allwinner support
+
+            # Required for early KMS
+            "sun4i-drm"
+            "sun8i-mixer" # Audio, but required for kms
+
+            # PWM for the backlight
+            "pwm-sun4i"
+
+            # Broadcom
+
+            "vc4"
+          ] ++ lib.optionals pkgs.stdenv.isAarch64 [
+            # Most of the following falls into two categories:
+            #  - early KMS / early display
+            #  - early storage (e.g. USB) support
+
+            # Broadcom
+
+            "pcie-brcmstb"
+
+            # Rockchip
+            "dw-hdmi"
+            "dw-mipi-dsi"
+            "rockchipdrm"
+            "rockchip-rga"
+            "phy-rockchip-pcie"
+            "pcie-rockchip-host"
+
+            # Misc. uncategorized hardware
+
+            # Used for some platform's integrated displays
+            "panel-simple"
+            "pwm-bl"
+
+            # Power supply drivers, some platforms need them for USB
+            "axp20x-ac-power"
+            "axp20x-battery"
+            "pinctrl-axp209"
+            "mp8859"
+
+            # USB drivers
+            "xhci-pci-renesas"
+
+            # Reset controllers
+            "reset-raspberrypi" # Triggers USB chip firmware load.
+
+            # Misc "weak" dependencies
+            "analogix-dp"
+            "analogix-anx6345" # For DP or eDP (e.g. integrated display)
           ]);
 
         boot.initrd.kernelModules =
