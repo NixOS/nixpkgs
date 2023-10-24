@@ -29,6 +29,7 @@
 , typer
 , typing-extensions
 , wasabi
+, weasel
 , writeScript
 , nix
 , git
@@ -37,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.6.1";
-  format = "setuptools";
+  version = "3.7.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YyOphwauLVVhaUsDqLC1dRiHoAKQOkiU5orrKcxnIWY=";
+    hash = "sha256-zt9JJ78NP+x3OmzkjV0skb2wL+08fV7Ae9uHPxEm8aA=";
   };
 
   pythonRelaxDeps = [
@@ -77,9 +78,12 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
+    weasel
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ];  postPatch = ''
+  ];
+
+  postPatch = ''
     substituteInPlace setup.cfg \
       --replace "thinc>=8.1.8,<8.2.0" "thinc>=8.1.8"
   '';
