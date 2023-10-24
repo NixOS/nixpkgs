@@ -2,19 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "utf8cpp";
-  version = "3.2.5";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "nemtrif";
     repo = "utfcpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-cWiGggn2GP25K/8eopvnFPq6iwcBteNI3i9Lo1Sr+ig=";
+    hash = "sha256-oL/U/gz6Cx1Wp4k6n+1JFmoPbinooPteyLDKs906WYQ=";
   };
-
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ];
 
   nativeBuildInputs = [ cmake ];
 
