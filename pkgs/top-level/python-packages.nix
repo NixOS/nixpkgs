@@ -15492,6 +15492,8 @@ self: super: with self; {
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
+  weasel = callPackage ../development/python-modules/weasel { };
+
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   weaviate-client = callPackage ../development/python-modules/weaviate-client { };
