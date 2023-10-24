@@ -23,6 +23,15 @@ in
       description = lib.mdDoc "Only log messages of this priority or higher.";
     };
 
+    certificate-name = mkOption {
+      type = types.str;
+      default = "nixos";
+      description = lib.mdDoc ''
+        The C/N to use when generating the self-signed certificate. It should generally
+        be the hostname of the machine.
+      '';
+    };
+
     settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -103,7 +112,7 @@ in
         if [[ ! -e "${cfg.settings.X509Key}" && ! -e "${cfg.settings.X509Cert}" ]]; then
             ${cfg.package}/bin/peroxide-cfg -action gen-x509 \
               -x509-org 'N/A' \
-              -x509-cn 'nixos' \
+              -x509-cn '${cfg.certificate-name}' \
               -x509-cert "${cfg.settings.X509Cert}" \
               -x509-key "${cfg.settings.X509Key}"
         fi
