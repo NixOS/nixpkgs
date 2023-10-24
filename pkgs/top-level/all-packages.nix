@@ -8565,7 +8565,9 @@ with pkgs;
 
   gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
 
-  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
+  gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner {
+    buildGoModule = buildGo120Module;
+  };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab/gitlab-shell { };
 
@@ -12827,6 +12829,8 @@ with pkgs;
 
   rosenpass = callPackage ../tools/networking/rosenpass  { };
 
+  rosenpass-tools = callPackage ../tools/networking/rosenpass/tools.nix  { };
+
   rot8 = callPackage ../tools/misc/rot8 { };
 
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
@@ -14039,6 +14043,7 @@ with pkgs;
 
   trezord = callPackage ../servers/trezord {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    buildGoModule = buildGo120Module;
   };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
@@ -17144,9 +17149,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreGraphics Foundation;
   };
 
-  cargo-nextest = callPackage ../development/tools/rust/cargo-nextest {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-nextest = callPackage ../development/tools/rust/cargo-nextest { };
   cargo-play = callPackage ../development/tools/rust/cargo-play { };
   cargo-profiler = callPackage ../development/tools/rust/cargo-profiler { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
@@ -17498,7 +17501,7 @@ with pkgs;
   zulu11 = callPackage ../development/compilers/zulu/11.nix { };
   zulu17 = callPackage ../development/compilers/zulu/17.nix { };
   zulu21 = callPackage ../development/compilers/zulu/21.nix { };
-  zulu = zulu11;
+  zulu = zulu21;
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -17713,7 +17716,9 @@ with pkgs;
 
   joker = callPackage ../development/interpreters/joker { };
 
-  davmail = callPackage ../applications/networking/davmail { };
+  davmail = callPackage ../applications/networking/davmail {
+    zulu = zulu11;
+  };
 
   kamilalisp = callPackage ../development/interpreters/kamilalisp { };
 
@@ -24486,8 +24491,6 @@ with pkgs;
 
   pdal = callPackage ../development/libraries/pdal { };
 
-  pdf2xml = callPackage ../development/libraries/pdf2xml { };
-
   pdfhummus = libsForQt5.callPackage ../development/libraries/pdfhummus { };
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
@@ -26280,8 +26283,6 @@ with pkgs;
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
   clickhouse-backup = callPackage ../development/tools/database/clickhouse-backup { };
-
-  cockpit = callPackage ../servers/monitoring/cockpit { };
 
   codeowners = callPackage ../development/tools/codeowners { };
 
@@ -29711,7 +29712,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
   };
 
-  nordic = callPackage ../data/themes/nordic { };
+  nordic = callPackage ../data/themes/nordic {
+    inherit (libsForQt5) breeze-icons plasma-framework plasma-workspace;
+  };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
@@ -30181,8 +30184,6 @@ with pkgs;
   vistafonts-cht = callPackage ../data/fonts/vista-fonts-cht { };
 
   vollkorn = callPackage ../data/fonts/vollkorn { };
-
-  whatsapp-emoji-font = callPackage ../data/fonts/whatsapp-emoji { };
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
 
@@ -30886,10 +30887,6 @@ with pkgs;
   cipher = callPackage ../applications/misc/cipher { };
 
   clapper = callPackage ../applications/video/clapper { };
-
-  ciscoPacketTracer7 = callPackage ../applications/networking/cisco-packet-tracer/7.nix { };
-
-  ciscoPacketTracer8 = callPackage ../applications/networking/cisco-packet-tracer/8.nix { };
 
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail { };
 

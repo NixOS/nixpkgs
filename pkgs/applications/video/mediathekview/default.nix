@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mediathekview.de/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Plus;
+    mainProgram = "mediathek";
     maintainers = with maintainers; [ moredread ];
     platforms = platforms.all;
   };

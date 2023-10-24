@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.43.1";
+  version = "0.44";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z8OXrra7+fptd4zs1gxJVGLR+SA8hoexK2qY9zpSowU=";
+    hash = "sha256-BNmdyEITSZJb+wwyLU+zZi70kmfuYOqVDhKi8xFCf2E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

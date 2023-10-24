@@ -5,4 +5,5 @@ lib.makeScope newScope (self: with self; {
   formats = callPackage ./formats.nix { inherit IOKit Foundation; };
   query = callPackage ./query.nix { inherit IOKit CoreFoundation; };
   regex = callPackage ./regex.nix { };
+  net = callPackage ./net.nix { inherit IOKit CoreFoundation; };
 })
