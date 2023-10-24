@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -6,22 +7,26 @@
 , ffmpeg
 , llvmPackages_13
 , glibc
+, openssl
+, alsa-lib
+, rust-cbindgen
 }:
 
 let llvmPackages = llvmPackages_13; in
 rustPlatform.buildRustPackage rec {
   pname = "tplay";
-  version = "0.4.5";
+  version = "unstable-2023-10-23";
 
   src = fetchFromGitHub {
     # owner = "maxcurzi";
     owner = "maxcurzi";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qt5I5rel88NWJZ6dYLCp063PfVmGTzkUUKgF3JkhLQk=";
+    # rev = "v${version}";
+    rev = "1f07e66e8331cc8abec04b7285d5759ccba8154b";
+    hash = "sha256-zGnnLDqP3vqS2KWBNZ1+7YrqKbRHe33c9dCWmFAb68c=";
   };
 
-  cargoHash = "sha256-7gG7V+QNp3YeRoLMSVO7bZL25jNr5EwT4FrvXoT2Gpo=";
+  cargoHash = "sha256-eVWOLA+5TVZulMs1q9+62EE7IGdWYugolp7QL6Qe03I=";
 
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
@@ -33,13 +38,19 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.llvm
     pkg-config
     rustPlatform.bindgenHook
+    rust-cbindgen
   ];
 
   buildInputs = [
-    llvmPackages.libclang
-    glibc
-    opencv
+    alsa-lib
     ffmpeg
+    glibc
+    llvmPackages.clang
+    llvmPackages.libclang
+    opencv
+    openssl
+    stdenv.cc.cc.lib
+    stdenv.cc.cc
   ];
 
   meta = with lib; {
