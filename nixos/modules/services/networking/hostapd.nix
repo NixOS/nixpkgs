@@ -161,6 +161,7 @@ in {
                   mode = "wpa2-sha256";
                   wpaPassword = "a flakey password"; # Use wpaPasswordFile if possible.
                 };
+                managementFrameProtection = "optional";
               };
             };
           }
