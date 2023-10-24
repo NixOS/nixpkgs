@@ -20,7 +20,7 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
   GOFLAGS = [ "-trimpath" ];
-  ldFlags = [ "-buildid=" "-w" ];
+  ldflags = [ "-buildid=" "-w" ];
 
   doCheck = false;
 
