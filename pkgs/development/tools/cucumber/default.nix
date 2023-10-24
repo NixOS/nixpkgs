@@ -12,6 +12,7 @@ bundlerApp {
     homepage = "https://cucumber.io/";
     changelog = "https://github.com/cucumber/cucumber-ruby/blob/main/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "cucumber";
     maintainers = with maintainers; [ manveru nicknovitski anthonyroussel ];
     platforms = platforms.unix;
   };
