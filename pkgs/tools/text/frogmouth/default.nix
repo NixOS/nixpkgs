@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-TMCeIwMEoNDQV9iue4XrdYQMmwofXDvdMMLTZKILQ9Q=";
   };
 
+  patches = [ ./use-xdg-base-dirs.patch ];
+
   nativeBuildInputs = [
     python3.pkgs.poetry-core
     python3.pkgs.pythonRelaxDepsHook
@@ -24,13 +26,13 @@ python3.pkgs.buildPythonApplication rec {
     httpx
     textual
     typing-extensions
-    xdg
+    xdg-base-dirs
   ];
 
   pythonRelaxDeps = [
     "httpx"
     "textual"
-    "xdg"
+    "xdg-base-dirs"
   ];
 
   pythonImportsCheck = [ "frogmouth" ];
