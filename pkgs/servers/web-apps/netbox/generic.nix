@@ -57,7 +57,7 @@
         markdown-include
         netaddr
         pillow
-        psycopg2
+        psycopg
         pyyaml
         sentry-sdk
         social-auth-core
