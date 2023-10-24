@@ -203,7 +203,7 @@ let
       # usage.
       jq -S '
         .packages[] |= . + { rootUri: .rootUri | gsub("'"$PUB_CACHE"'"; "${hook.deps}/cache/.pub-cache") }
-      | .generated |= "1970-01-01T00:00:00Z"
+      | .generated |= "1970-01-01T00:00:00.000Z"
       ' .dart_tool/package_config.json > $out
 
       runHook postBuild
