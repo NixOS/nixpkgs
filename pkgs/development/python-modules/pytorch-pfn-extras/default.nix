@@ -41,6 +41,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_export.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_torchvision.py"
     "tests/pytorch_pfn_extras_tests/onnx_tests/utils.py"
+    "tests/pytorch_pfn_extras_tests/onnx_tests/test_lax.py"
 
     # RuntimeError: No Op registered for Gradient with domain_version of 9
     "tests/pytorch_pfn_extras_tests/onnx_tests/test_grad.py"
@@ -53,8 +54,7 @@ buildPythonPackage rec {
     "tests/pytorch_pfn_extras_tests/nn_tests/modules_tests/test_lazy.py"
     "tests/pytorch_pfn_extras_tests/profiler_tests/test_record.py"
     "tests/pytorch_pfn_extras_tests/runtime_tests/test_to.py"
-    "tests/pytorch_pfn_extras_tests/test_handler.py"
-    "tests/pytorch_pfn_extras_tests/test_logic.py"
+    "tests/pytorch_pfn_extras_tests/handler_tests/test_handler.py"
     "tests/pytorch_pfn_extras_tests/test_reporter.py"
     "tests/pytorch_pfn_extras_tests/training_tests/test_trainer.py"
     "tests/pytorch_pfn_extras_tests/utils_tests/test_checkpoint.py"
