@@ -139,9 +139,15 @@ let
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/Applications/GitKraken.app
       cp -R . $out/Applications/GitKraken.app
+
+      runHook postInstall
     '';
+
+    dontFixup = true;
   };
 in
 if stdenv.isDarwin
