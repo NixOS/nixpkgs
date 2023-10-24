@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.261";
+  version = "1.3.268.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
-    rev = "v${version}";
-    hash = "sha256-C5FVkI9F/dgIS8qp7VaOn9J2zoNLb1PnmgAemsVO6zM=";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-IsMxiAR4ak6kC3BNYhtI+JVNkEka4ZceSElxk39THXg=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 
-  patches = [
+  patches = lib.optionals stdenv.isDarwin [
     # Vulkan-Tools expects to find the MoltenVK ICD and `libMoltenVK.dylib` in its source repo.
     # Patch it to use the already-built binaries and ICD in nixpkgs.
     ./use-nix-moltenvk.patch
