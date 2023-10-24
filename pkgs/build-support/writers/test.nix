@@ -261,7 +261,9 @@ lib.recurseIntoAttrs {
 
     toml = expectDataEqual {
       file = writeTOML "data.toml" { hello = "world"; };
-      expected = "hello = 'world'\n";
+      expected = ''
+        hello = "world"
+      '';
     };
 
     yaml = expectDataEqual {
