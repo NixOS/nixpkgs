@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "7.0.13";
+  version = "7.0.14";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-lwZXdNX7g4jrDYkTRY3s/LFn01bkDTHdAc0wwcw5FnM=";
+    hash = "sha256-fhzfNH9JcOo51bf9sZrt7EwhlC4gLeZb3reC040vKZ8=";
   };
 
   patches = [
