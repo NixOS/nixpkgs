@@ -1,4 +1,4 @@
-{ lib, runCommand, dasel }:
+{ lib, pkgs, formats, runCommand, dasel }:
 let
   daselBin = lib.getExe dasel;
 
@@ -23,7 +23,7 @@ rec {
   #   writeJSON = makeDataWriter { input = builtins.toJSON; output = "cp $inputPath $out"; };
   #   myConfig = writeJSON "config.json" { hello = "world"; }
   #
-  makeDataWriter = { input ? lib.id, output ? "cp $inputPath $out" }: nameOrPath: data:
+  makeDataWriter = lib.warn "pkgs.writers.makeDataWriter is deprecated. Use pkgs.writeTextFile." ({ input ? lib.id, output ? "cp $inputPath $out" }: nameOrPath: data:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
     let
       name = last (builtins.split "/" nameOrPath);
@@ -40,41 +40,25 @@ rec {
         mkdir -p $out/$(dirname "${nameOrPath}")
         mv tmp $out/${nameOrPath}
       ''}
-    '';
+    '');
 
-  # Writes the content to text.
-  #
-  # Example:
-  #   writeText "filename.txt" "file content"
-  writeText = makeDataWriter {
-    input = toString;
-    output = "cp $inputPath $out";
-  };
+  inherit (pkgs) writeText;
 
   # Writes the content to a JSON file.
   #
   # Example:
   #   writeJSON "data.json" { hello = "world"; }
-  writeJSON = makeDataWriter {
-    input = builtins.toJSON;
-    output = "${daselBin} -f $inputPath -r json -w json > $out";
-  };
+  writeJSON = (pkgs.formats.json {}).generate;
 
   # Writes the content to a TOML file.
   #
   # Example:
   #   writeTOML "data.toml" { hello = "world"; }
-  writeTOML = makeDataWriter {
-    input = builtins.toJSON;
-    output = "${daselBin} -f $inputPath -r json -w toml > $out";
-  };
+  writeTOML = (pkgs.formats.toml {}).generate;
 
   # Writes the content to a YAML file.
   #
   # Example:
   #   writeYAML "data.yaml" { hello = "world"; }
-  writeYAML = makeDataWriter {
-    input = builtins.toJSON;
-    output = "${daselBin} -f $inputPath -r json -w yaml > $out";
-  };
+  writeYAML = (pkgs.formats.yaml {}).generate;
 }
