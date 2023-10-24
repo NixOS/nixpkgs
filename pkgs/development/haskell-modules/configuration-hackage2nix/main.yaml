@@ -379,6 +379,11 @@ package-maintainers:
     - taffybar
     - arbtt
     - lentil
+  sheepforce:
+    - mpi-hs
+    - mpi-hs-store
+    - mpi-hs-cereal
+    - mpi-hs-binary
   shlok:
     - streamly-archive
     - streamly-lmdb
