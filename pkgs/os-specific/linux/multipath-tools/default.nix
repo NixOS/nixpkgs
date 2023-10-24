@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
     util-linuxMinimal # for libmount
   ];
 
+  # Explicitly link against libgcc_s, to work around the infamous
+  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+  LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
+
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"

@@ -82,6 +82,8 @@ import ./make-test-python.nix (
       };
 
       initiatorAuto = { nodes, config, pkgs, ... }: {
+        boot.initrd.systemd.enable = true;
+
         virtualisation.vlans = [ 1 2 ];
 
         services.multipath = {
@@ -119,6 +121,8 @@ import ./make-test-python.nix (
       };
 
       initiatorRootDisk = { config, pkgs, modulesPath, lib, ... }: {
+        boot.initrd.systemd.enable = true;
+
         boot.initrd.network.enable = true;
         boot.loader.grub.enable = false;
 
