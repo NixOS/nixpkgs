@@ -99,10 +99,6 @@ stageFuns: let
       if args.__raw or false
       then args'
       else allPackages (args' // {
-        # Technically we only need to check `build!=target` since nixpkgs currently doesn't allow
-        # both `build!=host` and `host!=target` at the same time, but we check both in order to be
-        # future-proof.
-        actuallySplice = with thisStage.stdenv; buildPlatform != hostPlatform || hostPlatform  != targetPlatform;
         adjacentPackages =
           let
             # search backwards from `stage` for the most recent stage containing packages which execute on `on` and target `for`

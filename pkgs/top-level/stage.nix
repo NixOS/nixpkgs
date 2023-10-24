@@ -45,7 +45,6 @@ in
   # avoid expensive splicing. `pkgsHostTarget` is skipped because it is always
   # defined as the current stage.
   adjacentPackages
-, actuallySplice
 
 , # The standard environment to use for building packages.
   stdenv
@@ -116,37 +115,42 @@ let
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
 
-  stdenvBootstappingAndPlatforms = self: super: let
-    withFallback = thisPkgs:
-      (if actuallySplice then thisPkgs else self)
-      // { recurseForDerivations = false; };
-  in {
-    # Here are package sets of from related stages. They are all in the form
-    # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
-    # host platform is our build platform, and their target platform is our host
-    # platform. We only care about their host/target platforms, not their build
-    # platform, because the the former two alone affect the interface of the
-    # final package; the build platform is just an implementation detail that
-    # should not leak.
-    pkgsBuildBuild = withFallback adjacentPackages.pkgsBuildBuild;
-    pkgsBuildHost = withFallback adjacentPackages.pkgsBuildHost;
-    pkgsBuildTarget = withFallback adjacentPackages.pkgsBuildTarget;
-    pkgsHostHost = withFallback adjacentPackages.pkgsHostHost;
-    pkgsHostTarget = self // { recurseForDerivations = false; }; # always `self`
-    pkgsTargetTarget = withFallback adjacentPackages.pkgsTargetTarget;
+  stdenvBootstappingAndPlatforms = self: super:
+    (lib.pipe {
+      # Here are package sets of from related stages. They are all in the form
+      # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
+      # host platform is our build platform, and their target platform is our host
+      # platform. We only care about their host/target platforms, not their build
+      # platform, because the the former two alone affect the interface of the
+      # final package; the build platform is just an implementation detail that
+      # should not leak.
+      inherit (adjacentPackages)
+        pkgsBuildBuild pkgsBuildHost pkgsBuildTarget pkgsHostHost pkgsTargetTarget;
+      pkgsHostTarget = self; # always `self`
+    } [
 
-    # Older names for package sets. Use these when only the host platform of the
-    # package set matter (i.e. use `buildPackages` where any of `pkgsBuild*`
-    # would do, and `targetPackages` when any of `pkgsTarget*` would do (if we
-    # had more than just `pkgsTargetTarget`).)
-    buildPackages = self.pkgsBuildHost;
-    pkgs = self.pkgsHostTarget;
-    targetPackages = self.pkgsTargetTarget;
+      # I'm pretty sure the following step can be removed, but it
+      # will cause a mass-rebuild due to a quirk in xgcc if we
+      # aren't splicing, replace all the packagesets with "self"
+      (builtins.mapAttrs (name: pkgset:
+        if /*name=="pkgsTargetTarget" &&*/ stdenv.buildPlatform == stdenv.targetPlatform
+        then self else pkgset))
 
-    inherit stdenv;
-  };
+      # set recurseForDerivations=false on all packagesets (why?)
+      (builtins.mapAttrs (_: pkgset: pkgset // { recurseForDerivations = false; }))
+    ]
+    ) // {
+      # Older names for package sets. Use these when only the host platform of the
+      # package set matter (i.e. use `buildPackages` where any of `pkgsBuild*`
+      # would do, and `targetPackages` when any of `pkgsTarget*` would do (if we
+      # had more than just `pkgsTargetTarget`).)
+      buildPackages = self.pkgsBuildHost;
+      pkgs = self.pkgsHostTarget;
+      targetPackages = self.pkgsTargetTarget;
+      inherit stdenv;
+    };
 
-  splice = self: super: import ./splice.nix lib self actuallySplice;
+  splice = self: super: import ./splice.nix lib self;
 
   allPackages = self: super:
     let res = import ./all-packages.nix

@@ -14,7 +14,7 @@
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
 # parameter there the boolean value of that equality check.
-lib: pkgs: actuallySplice:
+lib: pkgs:
 
 let
 
@@ -102,7 +102,9 @@ let
     , pkgsHostTarget
     , pkgsTargetTarget
     } @ args:
-    if actuallySplice then spliceReal args else pkgsHostTarget;
+    if pkgs.stdenv.buildPlatform == pkgs.stdenv.targetPlatform
+    then pkgsHostTarget
+    else spliceReal args;
 
   splicedPackages = splicePackages
     {
