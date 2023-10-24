@@ -1,7 +1,6 @@
-use crate::check_result;
-use crate::check_result::CheckResult;
 use crate::nixpkgs_problem::NixpkgsProblem;
 use crate::structure;
+use crate::validation::{self, Validation::Success};
 use crate::Version;
 use std::path::Path;
 
@@ -46,7 +45,7 @@ pub fn check_values(
     nixpkgs_path: &Path,
     package_names: Vec<String>,
     eval_accessible_paths: Vec<&Path>,
-) -> CheckResult<()> {
+) -> validation::Result<()> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
@@ -112,52 +111,54 @@ pub fn check_values(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    check_result::sequence_(package_names.iter().map(|package_name| {
-        let relative_package_file = structure::relative_file_for_package(package_name);
-        let absolute_package_file = nixpkgs_path.join(&relative_package_file);
+    Ok(validation::sequence_(package_names.iter().map(
+        |package_name| {
+            let relative_package_file = structure::relative_file_for_package(package_name);
+            let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
-        if let Some(attribute_info) = actual_files.get(package_name) {
-            let valid = match &attribute_info.variant {
-                AttributeVariant::AutoCalled => true,
-                AttributeVariant::CallPackage { path, empty_arg } => {
-                    let correct_file = if let Some(call_package_path) = path {
-                        absolute_package_file == *call_package_path
-                    } else {
-                        false
-                    };
-                    // Only check for the argument to be non-empty if the version is V1 or
-                    // higher
-                    let non_empty = if version >= Version::V1 {
-                        !empty_arg
-                    } else {
-                        true
-                    };
-                    correct_file && non_empty
-                }
-                AttributeVariant::Other => false,
-            };
+            if let Some(attribute_info) = actual_files.get(package_name) {
+                let valid = match &attribute_info.variant {
+                    AttributeVariant::AutoCalled => true,
+                    AttributeVariant::CallPackage { path, empty_arg } => {
+                        let correct_file = if let Some(call_package_path) = path {
+                            absolute_package_file == *call_package_path
+                        } else {
+                            false
+                        };
+                        // Only check for the argument to be non-empty if the version is V1 or
+                        // higher
+                        let non_empty = if version >= Version::V1 {
+                            !empty_arg
+                        } else {
+                            true
+                        };
+                        correct_file && non_empty
+                    }
+                    AttributeVariant::Other => false,
+                };
 
-            if !valid {
-                NixpkgsProblem::WrongCallPackage {
-                    relative_package_file: relative_package_file.clone(),
-                    package_name: package_name.clone(),
+                if !valid {
+                    NixpkgsProblem::WrongCallPackage {
+                        relative_package_file: relative_package_file.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into()
+                } else if !attribute_info.is_derivation {
+                    NixpkgsProblem::NonDerivation {
+                        relative_package_file: relative_package_file.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into()
+                } else {
+                    Success(())
                 }
-                .into_result()
-            } else if !attribute_info.is_derivation {
-                NixpkgsProblem::NonDerivation {
-                    relative_package_file: relative_package_file.clone(),
-                    package_name: package_name.clone(),
-                }
-                .into_result()
             } else {
-                check_result::ok(())
+                NixpkgsProblem::UndefinedAttr {
+                    relative_package_file: relative_package_file.clone(),
+                    package_name: package_name.clone(),
+                }
+                .into()
             }
-        } else {
-            NixpkgsProblem::UndefinedAttr {
-                relative_package_file: relative_package_file.clone(),
-                package_name: package_name.clone(),
-            }
-            .into_result()
-        }
-    }))
+        },
+    )))
 }

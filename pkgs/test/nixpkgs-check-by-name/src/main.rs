@@ -1,18 +1,16 @@
-mod check_result;
 mod eval;
 mod nixpkgs_problem;
 mod references;
 mod structure;
 mod utils;
+mod validation;
 
 use crate::structure::check_structure;
+use crate::validation::Validation::Failure;
+use crate::validation::Validation::Success;
 use anyhow::Context;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
-use itertools::{
-    Either,
-    Either::{Left, Right},
-};
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
@@ -86,26 +84,26 @@ pub fn check_nixpkgs<W: io::Write>(
             "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
             utils::BASE_SUBPATH
         );
-        check_result::ok(())
+        Success(())
     } else {
         match check_structure(&nixpkgs_path)? {
-            Left(errors) => Ok(Left(errors)),
-            Right(package_names) =>
+            Failure(errors) => Failure(errors),
+            Success(package_names) =>
             // Only if we could successfully parse the structure, we do the evaluation checks
             {
-                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths)
+                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths)?
             }
         }
     };
 
-    match check_result? {
-        Either::Left(errors) => {
+    match check_result {
+        Failure(errors) => {
             for error in errors {
                 writeln!(error_writer, "{}", error.to_string().red())?
             }
             Ok(false)
         }
-        Either::Right(_) => Ok(true),
+        Success(_) => Ok(true),
     }
 }
 
