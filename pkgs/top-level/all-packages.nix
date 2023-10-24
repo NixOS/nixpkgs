@@ -11605,6 +11605,8 @@ with pkgs;
 
   openresolv = callPackage ../tools/networking/openresolv { };
 
+  openrefine = callPackage ../applications/science/misc/openrefine { jdk = jdk17; };
+
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
 
   openrgb-with-all-plugins = openrgb.withPlugins [
