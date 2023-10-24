@@ -77,7 +77,10 @@ in
     ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_image old) //
       # needed for sdl2-config to be in PATH
       (addToNativeBuildInputs pkgs.SDL2 old));
-  sdl2-ttf = addToBuildInputs pkgs.SDL2_ttf;
+  sdl2-ttf = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_ttf old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   sqlite3 = addToBuildInputs pkgs.sqlite;
   stemmer = old:
