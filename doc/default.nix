@@ -23,6 +23,7 @@ let
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
       { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
+      { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
     ];
   };
 

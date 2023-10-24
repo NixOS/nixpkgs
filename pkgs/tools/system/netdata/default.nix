@@ -2,13 +2,13 @@
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , netdata-go-plugins
-, bash, curl, jemalloc, libuv, zlib, libyaml
+, bash, curl, jemalloc, json_c, libuv, zlib, libyaml
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
 , withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
-, withCloud ? (!stdenv.isDarwin), json_c
+, withCloud ? false
 , withCloudUi ? false
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.42.4";
+  version = "1.43.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-MaU9sOQD+Y03M+yoSWt1GuV+DrBlD7+r/Qm2JJ9s8EU="
-      else "sha256-41QntBt0MoO1hAsDb8LhHgvvNMzt9R1ZdgiPaR7NrPU=";
+      then "sha256-hrwuJLO9/K5QT3j8d5RYHcpBHChpKvwajaCoUfikw88="
+      else "sha256-+bX6pVpW6N1ms04k63sJg0E9XMOai5K9IjEQPeVCzs8=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -42,14 +42,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
   # bash is only used to rewrite shebangs
-  buildInputs = [ bash curl jemalloc libuv zlib libyaml ]
+  buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ lib.optionals withCups [ cups ]
     ++ lib.optionals withDBengine [ lz4 ]
     ++ lib.optionals withIpmi [ freeipmi ]
     ++ lib.optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ lib.optionals withCloud [ json_c ]
     ++ lib.optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ lib.optionals withConnPrometheus [ snappy ]
     ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]

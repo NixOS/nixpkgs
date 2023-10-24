@@ -1,21 +1,34 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
-, coreutils, git, gnused, nix, nixfmt }:
+, coreutils, git, gnused, nix, zlib }:
 
+let
+  libPath = lib.makeLibraryPath [
+    zlib # libz.so.1
+  ];
+in
 stdenv.mkDerivation rec {
   pname = "coursier";
   version = "2.1.7";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "aih4gkfSFTyZtw61NfB2JcNjfmxYWi1kWNGooI+110E=";
+    hash = "sha256-aih4gkfSFTyZtw61NfB2JcNjfmxYWi1kWNGooI+110E=";
   };
+
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildCommand = ''
+  installPhase = ''
+    runHook preInstall
+
     install -Dm555 $src $out/bin/cs
     patchShebangs $out/bin/cs
-    wrapProgram $out/bin/cs --prefix PATH ":" ${jre}/bin
+    wrapProgram $out/bin/cs \
+      --prefix PATH ":" ${lib.makeBinPath [ jre ]} \
+      --prefix LD_LIBRARY_PATH ":" ${libPath}
+
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "update.sh" ''
@@ -38,5 +51,6 @@ stdenv.mkDerivation rec {
     description = "Scala library to fetch dependencies from Maven / Ivy repositories";
     license = licenses.asl20;
     maintainers = with maintainers; [ adelbertc nequissimus ];
+    platforms = platforms.all;
   };
 }

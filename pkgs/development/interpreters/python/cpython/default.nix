@@ -303,9 +303,12 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
     ./3.7/fix-finding-headers-when-cross-compiling.patch
-  ] ++ optionals stdenv.hostPlatform.isLoongArch64 [
+  ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
+    # backport fix for https://github.com/python/cpython/issues/95855
+    ./platform-triplet-detection.patch
   ] ++ optionals (stdenv.hostPlatform.isMinGW) (let
     # https://src.fedoraproject.org/rpms/mingw-python3
     mingw-patch = fetchgit {
@@ -324,7 +327,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mailcap}"
-  '' + optionalString (x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 

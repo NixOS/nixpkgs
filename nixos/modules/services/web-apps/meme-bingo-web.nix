@@ -8,9 +8,9 @@ in {
   options = {
     services.meme-bingo-web = {
       enable = mkEnableOption (mdDoc ''
-        A web app for the meme bingo, rendered entirely on the web server and made interactive with forms.
+        a web app for the meme bingo, rendered entirely on the web server and made interactive with forms.
 
-        Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3.
+        Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3
       '');
 
       package = mkOption {

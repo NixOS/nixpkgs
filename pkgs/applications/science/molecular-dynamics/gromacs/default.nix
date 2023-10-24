@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2023.2";
+  version = "2023.3";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "sha256-vOFIByfksruQBBO3XZmjJm81B4d9pPWy1JHfeY+fza4=";
+    sha256 = "sha256-Tsj40MevdrE/j9FtuOLBIOdJ3kOa6VVNn2U/gS140cs=";
   };
 
   patches = [ ./pkgconfig.patch ];

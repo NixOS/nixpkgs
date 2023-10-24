@@ -253,6 +253,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${cfg.package}/sbin/lighttpd -D -f ${configFile}";
+      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR1 $MAINPID";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
     };

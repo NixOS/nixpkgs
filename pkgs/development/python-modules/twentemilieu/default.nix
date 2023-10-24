@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
-    rev = "v${version}";
-    hash = "sha256-MTAVa5gP5e8TIE/i1DjfmwKm1zDVC/WEcYKxZSV/+Ug=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-r0LZS8TXux1mzzXBTSu+x5sxUZOCzW7poKG3dQ2A6No=";
   };
 
   postPatch = ''
@@ -45,7 +45,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "twentemilieu" ];
+  pythonImportsCheck = [
+    "twentemilieu"
+  ];
 
   meta = with lib; {
     description = "Python client for Twente Milieu";

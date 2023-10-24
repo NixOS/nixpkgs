@@ -6,6 +6,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, removeReferencesTo
 , makeWrapper
 , which
 , writeTextFile
@@ -20,7 +21,8 @@
 , installShellFiles
 , git
 , unzip
-, dmd_bin ? "${callPackage ./bootstrap.nix { }}/bin"
+, dmdBootstrap ? callPackage ./bootstrap.nix { }
+, dmd_bin ? "${dmdBootstrap}/bin"
 }:
 
 let
@@ -209,6 +211,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${dmd_bin}/dmd '{}' +
+  '';
+
+  disallowedReferences = [ dmdBootstrap ];
 
   meta = with lib; {
     description = "Official reference compiler for the D language";

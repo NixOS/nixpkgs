@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # released under a variant of the MIT license
     # https://spdx.org/licenses/MIT-feh.html
     license = licenses.mit-feh;
-    maintainers = with maintainers; [ viric willibutz globin ma27 ];
+    maintainers = with maintainers; [ viric willibutz globin ];
     platforms = platforms.unix;
     mainProgram = "feh";
   };

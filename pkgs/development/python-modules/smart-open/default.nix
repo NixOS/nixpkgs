@@ -11,6 +11,7 @@
 , moto
 , paramiko
 , pytestCheckHook
+, responses
 }:
 
 buildPythonPackage rec {
@@ -27,27 +28,49 @@ buildPythonPackage rec {
     hash = "sha256-fciNaVw603FAcgrSrND+LEycJffmnFQij2ZpatYZ/e4=";
   };
 
-  propagatedBuildInputs = [
-    azure-common
-    azure-core
-    azure-storage-blob
-    boto3
-    google-cloud-storage
-    requests
+  passthru.optional-dependencies = {
+    s3 = [
+      boto3
+    ];
+    gcs = [
+      google-cloud-storage
+    ];
+    azure = [
+      azure-storage-blob
+      azure-common
+      azure-core
+    ];
+    http = [
+      requests
+    ];
+    webhdfs = [
+      requests
+    ];
+    ssh = [
+      paramiko
+    ];
+  };
+
+  pythonImportsCheck = [
+    "smart_open"
   ];
 
   nativeCheckInputs = [
     moto
-    paramiko
     pytestCheckHook
-  ];
+    responses
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     "smart_open"
   ];
 
-  pythonImportsCheck = [
-    "smart_open"
+  disabledTests = [
+    # https://github.com/RaRe-Technologies/smart_open/issues/784
+    "test_https_seek_forward"
+    "test_seek_from_current"
+    "test_seek_from_end"
+    "test_seek_from_start"
   ];
 
   meta = with lib; {

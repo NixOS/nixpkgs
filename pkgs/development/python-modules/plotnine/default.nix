@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.10.1";
+  version = "0.12.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2RKgS2ONz4IsUaZ4i4VmQjI0jVFfFR2zpkwAAZZvaEE=";
+    hash = "sha256-o43LNgf8ADweWa4MnVNdrngXZQ0cvC5W5W5bPeiN/pk=";
   };
 
   nativeBuildInputs = [

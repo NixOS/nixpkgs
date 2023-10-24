@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "fnv-hash-fast";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "fnv-hash-fast";
     rev = "v${version}";
-    hash = "sha256-vKv3Hfla+U1teYVB+w8ONj0Ur996noanbg6aaJ6S6+I=";
+    hash = "sha256-gAHCssJC6sTR6ftkQHrtF/5Nf9dXE4ykRhVusb0Gu3I=";
   };
 
   postPatch = ''

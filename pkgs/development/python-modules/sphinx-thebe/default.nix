@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "sphinx-thebe";
   version = "0.2.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 

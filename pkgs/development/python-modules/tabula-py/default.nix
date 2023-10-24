@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.7.0";
+  version = "2.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "chezou";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SV4QLvk7dXtU0/husS5A5mBYvbTejLyO9PpiO2oBtjs=";
+    hash = "sha256-QqTfbSwGaNRXBiAzB1fsEawxCvlIunB1j2jSFD9imPI=";
   };
 
   patches = [

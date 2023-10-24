@@ -5,8 +5,11 @@
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
+, attrs
+, cattrs
 , httpx
 , openllm-core
+, orjson
 , soundfile
 , transformers
 }:
@@ -14,7 +17,7 @@
 buildPythonPackage rec {
   inherit (openllm-core) src version;
   pname = "openllm-client";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,8 +30,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    attrs
+    cattrs
     httpx
-    openllm-core
+    orjson
   ];
 
   passthru.optional-dependencies = {

@@ -24,8 +24,8 @@ in
 
   options = {
     services.gnome.gnome-browser-connector.enable = mkEnableOption (mdDoc ''
-      Native host connector for the GNOME Shell browser extension, a DBus service
-      allowing to install GNOME Shell extensions from a web browser.
+      native host connector for the GNOME Shell browser extension, a DBus service
+      allowing to install GNOME Shell extensions from a web browser
     '');
   };
 
@@ -42,6 +42,6 @@ in
 
     services.dbus.packages = [ pkgs.gnome-browser-connector ];
 
-    programs.firefox.wrapperConfig.enableGnomeExtensions = true;
+    programs.firefox.nativeMessagingHosts.packages = [ pkgs.gnome-browser-connector ];
   };
 }

@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   ;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.cc.libcxx != null) "-l${stdenv.cc.libcxx.cxxabi.libName}";
 
   doCheck = true;
 

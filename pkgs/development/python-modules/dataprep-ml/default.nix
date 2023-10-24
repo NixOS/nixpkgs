@@ -26,7 +26,7 @@ buildPythonPackage rec {
   version = "0.0.18";
   pyproject = true;
 
-  disable = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   # using PyPI as github repo does not contain tags or release branches
   src = fetchPypi {

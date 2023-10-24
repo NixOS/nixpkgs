@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyecoforest";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pjanuario";
     repo = "pyecoforest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GBt7uHppWLq5nIIVwYsOWmLjWjcwdvJwDE/Gu2KnSIA=";
+    hash = "sha256-C8sFq0vsVsq6irWbRd0eq18tfKu0qRRBZHt23CiDTGU=";
   };
 
   postPatch = ''

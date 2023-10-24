@@ -4,28 +4,26 @@
   buildGo121Module,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 buildGo121Module rec {
   pname = "turso-cli";
-  version = "0.85.3";
+  version = "0.86.3";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-dJpHrqPyikkUnE4Un1fGOEJL49U5IiInYeSWmI04r18=";
+    hash = "sha256-hTqjNQSScQzCUBs4pYgxRnRvUSoQXXeZIceSZAR1Oa0=";
   };
 
-  vendorHash = "sha256-Hv4CacBrRX2YT3AkbNzyWrA9Ex6YMDPrPvezukwMkTE=";
+  vendorHash = "sha256-EqND/W+NNatoBUMXWrsjNPfxAtX0oUASUxN6Rmhp7SQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # Build with production code
-  tags = ["prod"];
-  # Include version for `turso --version` reporting
-  preBuild = ''
-    echo "v${version}" > internal/cmd/version.txt
-  '';
+  ldflags = [
+    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${version}"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -37,6 +35,8 @@ buildGo121Module rec {
       --fish <($out/bin/turso completion fish) \
       --zsh <($out/bin/turso completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "This is the command line interface (CLI) to Turso.";

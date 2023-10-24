@@ -10,14 +10,14 @@
 
 mkDerivation rec {
   pname = "projecteur";
-  version = "0.9.2";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "jahnf";
     repo = "Projecteur";
     rev = "v${version}";
     fetchSubmodules = false;
-    hash = "sha256-kg6oYtJ4H5A6RNATBg+XvMfCb9FlhEBFjfxamGosMQg=";
+    hash = "sha256-F7o93rBjrDTmArTIz8RB/uGBOYE6ny/U7ppk+jEhM5A=";
   };
 
   postPatch = ''

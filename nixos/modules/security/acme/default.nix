@@ -592,7 +592,7 @@ let
         description = lib.mdDoc ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
-          at <https://go-acme.github.io/lego/usage/cli/#usage>.
+          at <https://go-acme.github.io/lego/usage/cli/options/>.
         '';
       };
 

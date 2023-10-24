@@ -13,13 +13,13 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.15.1";
+    version = "2.16.1";
     format = "pyproject";
 
     src = fetchPypi {
       pname = "Pygments";
       inherit version;
-      hash = "sha256-is5NPB3UgYlLIAX1YOrQ+fGe5k/pgzZr4aIeFx0Sd1w=";
+      hash = "sha256-Ha/wSUggxpvIlB5AeqIPV3N07og2TuEKmP2+Cuzpbik=";
     };
 
     nativeBuildInputs = [

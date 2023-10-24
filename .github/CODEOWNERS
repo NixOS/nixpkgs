@@ -24,10 +24,10 @@
 # Libraries
 /lib                        @edolstra @infinisil
 /lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
-/lib/generators.nix         @edolstra @Profpatsch
-/lib/cli.nix                @edolstra @Profpatsch
-/lib/debug.nix              @edolstra @Profpatsch
-/lib/asserts.nix            @edolstra @Profpatsch
+/lib/generators.nix         @infinisil @edolstra @Profpatsch
+/lib/cli.nix                @infinisil @edolstra @Profpatsch
+/lib/debug.nix              @infinisil @edolstra @Profpatsch
+/lib/asserts.nix            @infinisil @edolstra @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
 /lib/fileset                @infinisil
 /doc/functions/fileset.section.md @infinisil
@@ -53,7 +53,7 @@
 /pkgs/test/nixpkgs-check-by-name @infinisil
 /pkgs/by-name/README.md @infinisil
 /pkgs/top-level/by-name-overlay.nix @infinisil
-/.github/workflows/check-by-name.nix @infinisil
+/.github/workflows/check-by-name.yml @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch

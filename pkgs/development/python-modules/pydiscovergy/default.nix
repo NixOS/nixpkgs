@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "2.0.4";
+  version = "2.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "pydiscovergy";
     rev = "refs/tags/${version}";
-    hash = "sha256-yHACEo5481BZVqqEj8WeuIpSWAfBqnmRdOWRPH5RuHQ=";
+    hash = "sha256-u2G+o/vhPri7CPSnekC8rUo/AvuvePpG51MR+FdH2XA=";
   };
 
   nativeBuildInputs = [

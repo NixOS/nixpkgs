@@ -143,6 +143,8 @@ stdenv.mkDerivation rec {
     + ''
     moveToOutput lib/cmake "$dev"
     rm -f $out/.bin-unwrapped/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+
+    cp config.h $dev/include/pulse
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''

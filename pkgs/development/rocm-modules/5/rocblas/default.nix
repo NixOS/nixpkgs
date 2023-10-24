@@ -73,7 +73,7 @@ let
   fallbacks = rocblas.overrideAttrs { pname = "rocblas-tensile-fallbacks"; };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"

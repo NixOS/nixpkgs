@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -19,13 +20,13 @@
 }:
 
 let
-  version = "1.17.2";
+  version = "1.17.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/0Ml3NRTghqNykB1RZfqDW9TtENnSRM7wqG7Vn4Kl04=";
+    hash = "sha256-Kl8AUfHfEiEy40qeDI8x2rxdXcj01mpitw7T/96ibQQ=";
   };
 
   # Use specific package versions required by paperless-ngx
@@ -51,7 +52,7 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-6EvC9Ka8gl0eRgJtHooB3yQNVGYzuH/WRga4AtzQ0EY=";
+    npmDepsHash = "sha256-5Q9NtIO7k/6AiF9Er10HhmEBFyQOP9CiTkTZglUeChg=";
 
     nativeBuildInputs = [
       python3
@@ -90,6 +91,16 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   inherit version src;
+
+  patches = [
+    # https://github.com/paperless-ngx/paperless-ngx/pull/4146
+    (fetchpatch {
+      name = "fix-tests-for-python311.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/73f6c0a056e3859061339e295f57213fd4239b2d.patch";
+      hash = "sha256-sZcRug5T4cw5ppKpGYrrfz9RxtYxnkeNOlXcMgdWT0E=";
+    })
+  ];
+
 
   nativeBuildInputs = [
     gettext

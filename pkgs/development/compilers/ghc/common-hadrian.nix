@@ -155,7 +155,10 @@
     ghcVersion = version;
     userSettings = hadrianUserSettings;
     # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
-    enableHyperlinkedSource = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+    enableHyperlinkedSource =
+      # TODO(@sternenseemann): Disabling currently doesn't work with GHC >= 9.8
+      lib.versionAtLeast version "9.8" ||
+      !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
   }
 
 , #  Whether to build sphinx documentation.

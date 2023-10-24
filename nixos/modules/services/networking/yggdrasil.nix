@@ -116,9 +116,9 @@ in
       };
 
       persistentKeys = mkEnableOption (lib.mdDoc ''
-        If enabled then keys will be generated once and Yggdrasil
+        persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
-        restarted. Keys are stored at ${keysPath}.
+        restarted. Keys are stored at ${keysPath}
       '');
 
       extraArgs = mkOption {

@@ -243,3 +243,26 @@ or
 
 ***
 ```
+## `fetchFromBittorrent` {#fetchfrombittorrent}
+
+`fetchFromBittorrent` expects two arguments. `url` which can either be a Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file. It can also take a `config` argument which will craft a `settings.json` configuration file and give it to `transmission`, the underlying program that is performing the fetch. The available config options for `transmission` can be found [here](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
+
+```
+{ fetchFromBittorrent }:
+
+fetchFromBittorrent {
+  config = { peer-limit-global = 100; };
+  url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
+  sha256 = "";
+}
+```
+
+### Parameters {#fetchfrombittorrent-parameters}
+
+- `url`: Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file.
+
+- `backend`: Which bittorrent program to use. Default: `"transmission"`. Valid values are `"rqbit"` or `"transmission"`. These are the two most suitable torrent clients for fetching in a fixed-output derivation at the time of writing, as they can be easily exited after usage. `rqbit` is written in Rust and has a smaller closure size than `transmission`, and the performance and peer discovery properties differs between these clients, requiring experimentation to decide upon which is the best.
+
+- `config`: When using `transmission` as the `backend`, a json configuration can
+  be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+

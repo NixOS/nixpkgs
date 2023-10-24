@@ -126,11 +126,12 @@ bash.runCommand "${pname}-${version}" {
     --disable-bootstrap \
     --disable-libsanitizer \
     --disable-lto \
-    --disable-multilib
+    --disable-multilib \
+    --disable-plugin
 
   # Build
   make -j $NIX_BUILD_CORES
 
   # Install
-  make -j $NIX_BUILD_CORES install
+  make -j $NIX_BUILD_CORES install-strip
 ''

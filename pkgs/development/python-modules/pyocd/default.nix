@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pyocd";
-  version = "0.34.3";
+  version = "0.35.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2zDr6fnA2MCTT/hNVvk7u3gugMo+nUF2E2VsOPhJXH4=";
+    sha256 = "sha256-AugIT007JtTXx0cLtHD9TtxsK/K6eB492U2k+EVxyXU=";
   };
 
   patches = [

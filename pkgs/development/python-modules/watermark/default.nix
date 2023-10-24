@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "watermark";
-  version = "2.3.1";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-E3UxdGlxTcvkiKa3RoG9as6LybyW+QrCUZvA9VHwxlk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4/1Y7cdh1tF33jgPrqdxCGPcRnnxx+Wf8lyztF54Ck0=";
   };
 
   propagatedBuildInputs = [

@@ -136,7 +136,7 @@ in
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         ProtectProc = "invisible";
-        ProcSubset = "pid";
+        ProcSubset = "all"; # reads /proc/cpuinfo
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"

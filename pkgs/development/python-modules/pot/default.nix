@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.8.2";
+  version = "0.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "POT";
     inherit version;
-    hash = "sha256-PKmuPI83DPy7RkOgHHPdPJJz5NT/fpr123AVTzTLwgQ=";
+    hash = "sha256-gcJTJ6ABl/8Rwf5SIc8YGtHf/mFWRBUuLhFd3d9eWRs=";
   };
 
   nativeBuildInputs = [

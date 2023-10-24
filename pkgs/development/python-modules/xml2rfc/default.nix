@@ -27,16 +27,16 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.18.1";
+  version = "3.18.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+8L6qkJAMdjT+IDVtZt8/7VsOMdSxi/Jm7ORapJArbI=";
+    hash = "sha256-IpCC5r9sOf4SFn0Bd6QgWqx3Sx0eRGcii7xyMpN5V/s=";
   };
 
   postPatch = ''

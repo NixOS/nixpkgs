@@ -24,13 +24,13 @@
 
 let
   pname = "windmill";
-  version = "1.160.0";
+  version = "1.188.1";
 
   fullSrc = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-WsIYGqBBcLq5CE/zcgqPVCYtxM3GfSxSqF2JeW6C0ss=";
+    hash = "sha256-IiCIiP5KYRw10aPlR40RPW0ynXq5itf0LLtpDtxCNE4=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
@@ -43,7 +43,11 @@ let
 
     sourceRoot = "${fullSrc.name}/frontend";
 
-    npmDepsHash = "sha256-GUrOfN3SyxkvQllgHXDao8JFl5zY4DBxftelsX0Rkqo=";
+    npmDepsHash = "sha256-TgAv3iUD0kP2mOvMVOW4yYCDCsf2Cr8IfXK+V+f35uw";
+
+    # without these you get a
+    # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+    env.NODE_OPTIONS="--max-old-space-size=8192";
 
     preBuild = ''
       npm run generate-backend-client
@@ -90,6 +94,7 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
+      "tinyvector-0.1.0" = "sha256-NYGhofU4rh+2IAM+zwe04YQdXY8Aa4gTmn2V2HtzRfI=";
     };
   };
 
@@ -101,7 +106,7 @@ rustPlatform.buildRustPackage {
   ];
 
   postPatch = ''
-    substituteInPlace windmill-worker/src/worker.rs \
+    substituteInPlace windmill-worker/src/bash_executor.rs \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
 
     substituteInPlace windmill-api/src/lib.rs \
@@ -154,7 +159,7 @@ rustPlatform.buildRustPackage {
     description = "Open-source developer platform to turn scripts into workflows and UIs";
     homepage = "https://windmill.dev";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya happysalada ];
     mainProgram = "windmill";
     # limited by librusty_v8
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];

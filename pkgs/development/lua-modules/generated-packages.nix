@@ -2790,6 +2790,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+rustaceanvim = callPackage({ lua, luaOlder, buildLuarocksPackage, fetchzip }:
+buildLuarocksPackage {
+  pname = "rustaceanvim";
+  version = "3.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/rustaceanvim-3.0.0-1.rockspec";
+    sha256 = "1v1k08spq3zalgya6q3qny6zpwhn0nb5nl5dn0rkcvnc4imvnyfy";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/rustaceanvim/archive/3.0.0.zip";
+    sha256 = "1prpklbijr7p890nflr9jixf955dlp3ph9zl2rq3xxyl20ncyqbk";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/rustaceanvim";
+    description = "Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "GPL-2.0";
+  };
+}) {};
+
 say = callPackage({ luaOlder, fetchgit, lua, buildLuarocksPackage }:
 buildLuarocksPackage {
   pname = "say";

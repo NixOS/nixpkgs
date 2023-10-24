@@ -1,9 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, bash
 , cmake
 , cfitsio
 , libusb1
+, kmod
 , zlib
 , boost
 , libev
@@ -57,6 +59,15 @@ stdenv.mkDerivation rec {
 
   # Socket address collisions between tests
   enableParallelChecking = false;
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    for f in $out/lib/udev/rules.d/*.rules
+    do
+      substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \
+                           --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
+    done
+  '';
+
 
   meta = with lib; {
     homepage = "https://www.indilib.org/";

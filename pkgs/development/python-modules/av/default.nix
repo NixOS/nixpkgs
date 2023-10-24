@@ -9,7 +9,7 @@
 , setuptools
 
 # runtime
-, ffmpeg-headless
+, ffmpeg_5-headless
 
 # tests
 , numpy
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg-headless
+    ffmpeg_5-headless
   ];
 
   preCheck = ''

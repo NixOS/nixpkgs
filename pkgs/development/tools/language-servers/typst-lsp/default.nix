@@ -7,6 +7,8 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typst-lsp";
+  # Please update the corresponding vscode extension when updating
+  # this derivation.
   version = "0.10.1";
 
   src = fetchFromGitHub {

@@ -113,8 +113,6 @@ let
       };
 
       testScript = ''
-        # TODO: Remove this when upgrading stable to zfs 2.2.0
-        unstable = ${if enableUnstable then "True" else "False"};
         machine.wait_for_unit("multi-user.target")
         machine.succeed(
             "zpool status",
@@ -136,8 +134,6 @@ let
             machine.crash()
             machine.wait_for_unit("multi-user.target")
             machine.succeed("zfs set sharesmb=on rpool/shared_smb")
-            if not unstable:
-                machine.succeed("zfs share rpool/shared_smb")
             machine.succeed(
                 "smbclient -gNL localhost | grep rpool_shared_smb",
                 "umount /tmp/mnt",

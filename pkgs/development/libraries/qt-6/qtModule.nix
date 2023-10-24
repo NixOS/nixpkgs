@@ -22,7 +22,9 @@ stdenv.mkDerivation (args // {
   buildInputs = args.buildInputs or [ ];
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
     ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
-  propagatedBuildInputs = (args.qtInputs or [ ]) ++ (args.propagatedBuildInputs or [ ]);
+  propagatedBuildInputs =
+    (lib.warnIf (args ? qtInputs) "qt6.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
+    (args.propagatedBuildInputs or []);
 
   moveToDev = false;
 

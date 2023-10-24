@@ -2,16 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , pyyaml
-, pytest
+, pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "kaptan";
   version = "0.6.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EBMwpE/e3oiFhvMBC9FFwOxIpIBrxWQp+lSHpndAIfg=";
+    hash = "sha256-EBMwpE/e3oiFhvMBC9FFwOxIpIBrxWQp+lSHpndAIfg=";
   };
 
   postPatch = ''
@@ -20,9 +22,17 @@ buildPythonPackage rec {
     substituteInPlace requirements/base.txt --replace 'PyYAML>=3.13,<6' 'PyYAML>=3.13'
   '';
 
-  propagatedBuildInputs = [ pyyaml ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pytest ];
+  propagatedBuildInputs = [
+    pyyaml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Configuration manager for python applications";

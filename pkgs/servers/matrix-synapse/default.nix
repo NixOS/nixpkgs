@@ -113,10 +113,6 @@ python3.pkgs.buildPythonApplication rec {
     sentry = [
       sentry-sdk
     ];
-    opentracing = [
-      jaeger-client
-      opentracing
-    ];
     jwt = [
       authlib
     ];

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "rocm-docs-core";
-  version = "0.25.0";
+  version = "0.26.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm-docs-core";
     rev = "v${version}";
-    hash = "sha256-kOsoIK0vaPT60hGr960s5vc0eloSr5CECtd8Dy24YuM=";
+    hash = "sha256-Mr6/Ne6P+TapoCqN7xkKMNse3fTaIAvvLmMl0kVg7Vs=";
   };
 
   buildInputs = [ setuptools ];

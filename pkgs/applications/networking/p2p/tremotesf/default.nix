@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tremotesf";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "equeim";
     repo = "tremotesf2";
     rev = finalAttrs.version;
-    hash = "sha256-TKtBgMpCWIUl1bohAKCbTcZX2uaPmzeWut/OeNs/rME=";
+    hash = "sha256-mxk2BRUuet3XSNaKt2Dnnxe5dliazd1ArRSnKyoAp1s=";
     # We need this for src/libtremotesf
     fetchSubmodules = true;
   };

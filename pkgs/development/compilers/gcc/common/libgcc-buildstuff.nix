@@ -31,7 +31,22 @@ let
   #
   SHLIB_LC = lib.optionalString stdenv.targetPlatform.isPower "-mnewlib";
 
-in ''
-    echo 'libgcc.a: ${crtstuff-ofiles}' >> libgcc/Makefile.in
-    echo 'SHLIB_LC=${SHLIB_LC}' >> libgcc/Makefile.in
-  ''
+in
+''
+  echo 'libgcc.a: ${crtstuff-ofiles}' >> libgcc/Makefile.in
+  echo 'SHLIB_LC=${SHLIB_LC}' >> libgcc/Makefile.in
+''
+
+  # Meanwhile, crt{i,n}.S are not present on certain platforms
+  # (e.g. LoongArch64), resulting in the following error:
+  #
+  # No rule to make target '../../../gcc-xx.x.x/libgcc/config/loongarch/crti.S', needed by 'crti.o'.  Stop.
+  #
+  # For LoongArch64, a hacky workaround is to simply touch them,
+  # as the platform forces .init_array support.
+  #
+  # https://www.openwall.com/lists/musl/2022/11/09/3
+  #
+  + lib.optionalString stdenv.targetPlatform.isLoongArch64 ''
+  touch libgcc/config/loongarch/crt{i,n}.S
+''

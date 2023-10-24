@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.0.0";
+  version = "5.7.2";
   disabled = pythonOlder "3.6";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
-    rev = version;
-    sha256 = "0lqi15vks4fxbki1l7n1bfzygjy3w17d9wchjxvp22ijmas44yai";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-RU/GyNYV05iYVNanMqKMmoksXWrxTQ2H2XvaIwSSslA=";
   };
 
   propagatedBuildInputs = [ requests ];

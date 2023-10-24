@@ -3,6 +3,7 @@
 , lib
 
 , makeWrapper
+, installShellFiles
 , stdenv
 , Foundation
 
@@ -30,18 +31,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ARpludMVQlZtCRAfW0cNYVmT3m9t9lunMIW24peYX6Y=";
+    hash = "sha256-FhKrq4N32uJRHGc0qRl+CIVNRW597jACcTFEgj8hiSE=";
   };
 
-  cargoHash = "sha256-dhdk5aGKv6tY8x7MmA0hWcmJBiXOXC92DlQTd/1AKtQ=";
+  cargoHash = "sha256-YUymZhDp1Pjm+W6m8Vmh2AgMCdaNt6TQQpiJwSg/gPw=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
 
   postInstall = with lib;
@@ -60,6 +61,10 @@ rustPlatform.buildRustPackage rec {
     ''
       wrapProgram $out/bin/yazi \
          --prefix PATH : "${makeBinPath runtimePaths}"
+      installShellCompletion --cmd yazi \
+        --bash ./config/completions/yazi.bash \
+        --fish ./config/completions/yazi.fish \
+        --zsh  ./config/completions/_yazi
     '';
 
   passthru.updateScript = nix-update-script { };
