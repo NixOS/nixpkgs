@@ -8,7 +8,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/go/pulumi-language-go";
 
-  vendorHash = "sha256-6/umLzw7HMplP/cJknBsWmiwAnc+YM4tIz4Zl2QMTOQ=";
+  vendorHash = "sha256-hMJ6x/zG6rwk/Ai54EF3jwKOTNZ9mwP/JQuX8eGYYVU=";
 
   ldflags = [
     "-s"
