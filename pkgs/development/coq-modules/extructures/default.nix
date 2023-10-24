@@ -17,7 +17,7 @@
 
   releaseRev = v: "v${v}";
 
-  release."0.4.0".sha256 = "sha256:1jbvawwmmczf9algdq81iqnrlmwwl8cxhwyrsi1kq3fmpvanx2f1";
+  release."0.4.0".sha256 = "sha256-hItFO2XY2LTPSofPTKt3AfOEfiLliaYdzUXgDv4ea9Y=";
   release."0.3.1".sha256 = "sha256-KcuG/11Yq5ACem4FyVnQqHKvy3tNK7hd0ir2SJzzMN0=";
   release."0.3.0".sha256 = "sha256:14rm0726f1732ldds495qavg26gsn30w6dfdn36xb12g5kzavp38";
   release."0.2.2".sha256 = "sha256:1clzza73gccy6p6l95n6gs0adkqd3h4wgl4qg5l0qm4q140grvm7";
