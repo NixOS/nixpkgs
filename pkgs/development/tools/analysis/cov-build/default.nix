@@ -1,30 +1,49 @@
-{ lib, stdenv, requireFile }:
+{ lib
+, stdenv
+, fetchurl
 
-let
-  message = ''
-    Register an account at https://scan.coverity.com, download the
-    build tools, and add it to the nix store with nix-prefetch-url
-  '';
-in
+, autoPatchelfHook
+
+, alsa-lib
+, libxcrypt-legacy
+, lttng-ust_2_12
+, xorg
+, zlib
+}:
+
 stdenv.mkDerivation rec {
   pname = "cov-build";
-  version = "7.0.2";
+  version = "2022.12.2";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux"
-    then requireFile {
-      name = "cov-analysis-linux32-${version}.tar.gz";
-      sha256 = "0i06wbd7blgx9adh9w09by4i18vwmldfp9ix97a5dph2cjymsviy";
-      inherit message;
+    then fetchurl {
+      url = "https://archive.org/download/cov-analysis-linux-${version}.tar/cov-analysis-linux-${version}.tar.gz";
+      hash = "sha256-Jr9bMUo9GRp+dgoAPqKxaTqWYWh4djGArdG9ukUK+ZY=";
     }
-    else requireFile {
-      name = "cov-analysis-linux64-${version}.tar.gz";
-      sha256 = "0iby75p0g8gv7b501xav47milr8m9781h0hcgm1ch6x3qj6irqd8";
-      inherit message;
-    };
+    else if stdenv.hostPlatform.system == "x86_64-linux"
+    then fetchurl {
+      url = "https://archive.org/download/cov-analysis-linux64-${version}.tar/cov-analysis-linux64-${version}.tar.gz";
+      hash = "sha256-CyNKILJXlDMOCXbZZF4r/knz0orRx32oSj+Kpq/nxXQ=";
+    }
+    else throw "Unsupported platform '${stdenv.hostPlatform.system}'";
 
-  dontStrip = true;
-  buildPhase = false;
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
+    alsa-lib
+    libxcrypt-legacy
+    lttng-ust_2_12
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXtst
+    zlib
+  ];
+
+  dontConfigure = true;
+
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p $out/bin $out/libexec
     mv * $out/libexec
@@ -37,6 +56,8 @@ stdenv.mkDerivation rec {
         ln -s $out/libexec/bin/$x $out/bin/$x;
     done
   '';
+
+  dontStrip = true;
 
   meta = {
     description = "Coverity Scan build tools";
