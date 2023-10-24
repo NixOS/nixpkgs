@@ -86,6 +86,7 @@ let
         ln -s "$out/bin/cache/dart-sdk/bin/dart" "$out/bin/dart"
         makeShellWrapper "$out/bin/dart" "$out/bin/flutter" \
           --set-default FLUTTER_ROOT "$out" \
+          --set FLUTTER_ALREADY_LOCKED true \
           --add-flags "--disable-dart-dev \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
         runHook postInstall
