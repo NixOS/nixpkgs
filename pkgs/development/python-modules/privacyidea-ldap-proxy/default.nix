@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "LDAP Proxy to intercept LDAP binds and authenticate against privacyIDEA";
     homepage = "https://github.com/privacyidea/privacyidea-ldap-proxy";
     license = licenses.agpl3Only;
-    maintainers = [ maintainers.globin ];
+    maintainers = [ ];
   };
 }

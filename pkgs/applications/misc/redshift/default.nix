@@ -117,7 +117,7 @@ rec {
       license = licenses.gpl3Plus;
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ globin yana ];
+      maintainers = with maintainers; [ yana ];
     };
   };
 

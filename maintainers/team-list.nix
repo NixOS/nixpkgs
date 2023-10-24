@@ -407,7 +407,6 @@ with lib.maintainers; {
   home-assistant = {
     members = [
       fab
-      globin
       hexa
       mic92
     ];
@@ -742,7 +741,6 @@ with lib.maintainers; {
       aanderse
       drupol
       etu
-      globin
       ma27
       talyz
     ];
