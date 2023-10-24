@@ -7,6 +7,7 @@ buildGoModule rec {
 
   version = "16.5.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = data.owner;
     repo = data.repo;
