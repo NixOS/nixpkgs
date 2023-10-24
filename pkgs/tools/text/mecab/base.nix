@@ -1,4 +1,4 @@
-{ fetchurl }:
+{ fetchurl, libiconv }:
 
 finalAttrs: {
   version = "0.996";
@@ -8,6 +8,8 @@ finalAttrs: {
     name = "mecab-${finalAttrs.version}.tar.gz";
     hash = "sha256-4HMyV4MTW3LmZhRceBu0j62lg9UiT7JJD7bBQDumnFk=";
   };
+
+  buildInputs = [ libiconv ];
 
   configureFlags = [
     "--with-charset=utf8"
