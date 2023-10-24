@@ -1,4 +1,5 @@
-{ lib
+{ installShellFiles
+, lib
 , rustPlatform
 , fetchFromGitHub
 }:
@@ -15,6 +16,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-qQA7UdtFqGPyCRHdV+FfbQFiPaOeW4rT4dYC3BeHDw0=";
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd steamguard \
+      --bash <($out/bin/steamguard completion --shell bash) \
+      --fish <($out/bin/steamguard completion --shell fish) \
+      --zsh <($out/bin/steamguard completion --shell zsh) \
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/dyc3/steamguard-cli/releases/tag/v${version}";
