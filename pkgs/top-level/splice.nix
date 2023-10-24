@@ -14,6 +14,15 @@
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
 # parameter there the boolean value of that equality check.
+
+let
+  # This is for debugging only.  It significantly degrades
+  # performance.  In theory it is impure, but in practice it should
+  # not affect the result of eval unless you're going out of your
+  # way to detect that it has been set (i.e. myDrv?__spliced).
+  NIXPKGS_ALWAYS_SPLICE = builtins.getEnv("NIXPKGS_ALWAYS_SPLICE") != "";
+in
+
 lib: pkgs: actuallySplice:
 
 let
@@ -102,7 +111,9 @@ let
     , pkgsHostTarget
     , pkgsTargetTarget
     } @ args:
-    if actuallySplice then spliceReal args else pkgsHostTarget;
+    if !NIXPKGS_ALWAYS_SPLICE && actuallySplice
+    then pkgsHostTarget
+    else spliceReal args;
 
   splicedPackages = splicePackages
     {
