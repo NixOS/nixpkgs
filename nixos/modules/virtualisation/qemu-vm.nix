@@ -690,8 +690,8 @@ in
       package =
         mkOption {
           type = types.package;
-          default = hostPkgs.qemu_kvm;
-          defaultText = literalExpression "config.virtualisation.host.pkgs.qemu_kvm";
+          default = if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then hostPkgs.qemu_kvm else hostPkgs.qemu;
+          defaultText = literalExpression "if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then config.virtualisation.host.pkgs.qemu_kvm else config.virtualisation.host.pkgs.qemu";
           example = literalExpression "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
