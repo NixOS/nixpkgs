@@ -291,7 +291,7 @@ in buildPythonPackage rec {
   ])
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
-  buildInputs = [ blas blas.provider pybind11 ]
+  buildInputs = [ blas blas.provider ]
     ++ lib.optionals stdenv.isLinux [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
@@ -345,6 +345,9 @@ in buildPythonPackage rec {
 
     # ROCm build and `torch.compile` requires openai-triton
     openai-triton
+
+    # torch/csrc requires `pybind11` at runtime
+    pybind11
   ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
