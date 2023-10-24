@@ -638,4 +638,30 @@ rec {
     else
       # In all other cases it's the rhs
       rhs;
+
+  _fileFilter = predicate: fileset:
+    let
+      recurse = path: tree:
+        mapAttrs (name: subtree:
+          if isAttrs subtree || subtree == "directory" then
+            recurse (path + "/${name}") subtree
+          else if
+            predicate {
+              inherit name;
+              type = subtree;
+              # To ensure forwards compatibility with more arguments being added in the future,
+              # adding an attribute which can't be deconstructed :)
+              "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
+            }
+          then
+            subtree
+          else
+            null
+        ) (_directoryEntries path tree);
+    in
+    if fileset._internalIsEmptyWithoutBase then
+      _emptyWithoutBase
+    else
+      _create fileset._internalBase
+        (recurse fileset._internalBase fileset._internalTree);
 }
