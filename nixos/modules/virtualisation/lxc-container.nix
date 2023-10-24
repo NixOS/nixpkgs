@@ -37,7 +37,6 @@ in {
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
-    # TODO: build rootfs as squashfs for faster unpack
     system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
       extraArgs = "--owner=0";
 
@@ -62,6 +61,23 @@ in {
       ];
 
       extraCommands = "mkdir -p proc sys dev";
+    };
+
+    system.build.squashfs = pkgs.callPackage ../../lib/make-squashfs.nix {
+      fileName = "nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}";
+
+      noStrip = true; # keep directory structure
+      comp = "zstd -Xcompression-level 6";
+
+      storeContents = [config.system.build.toplevel];
+
+      pseudoFiles = [
+        "/sbin d 0755 0 0"
+        "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/init"
+        "/dev d 0755 0 0"
+        "/proc d 0555 0 0"
+        "/sys d 0555 0 0"
+      ];
     };
 
     system.build.installBootLoader = pkgs.writeScript "install-lxd-sbin-init.sh" ''

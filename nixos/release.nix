@@ -328,6 +328,21 @@ in rec {
 
   );
 
+  lxdContainerImageSquashfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-container-image.nix
+        ];
+    }).config.system.build.squashfs)
+
+  );
+
   # Metadata for the lxd image
   lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
