@@ -43,3 +43,12 @@ Disables using Meson’s `checkPhase`.
 ### `dontUseMesonInstall` {#dontusemesoninstall}
 
 Disables using Meson’s `installPhase`.
+
+### `mesonInstallFlags` {#mesoninstallflags}
+
+Controls the flags passed to meson install.
+
+### `mesonInstallTags` (#mesoninstalltags)
+
+Tags specified here will be passed to Meson as via `--tags` during
+installation and controls which components will be installed.

@@ -134,6 +134,8 @@
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
+  # build only libudev and libsystemd
+, buildLibsOnly ? false
 
   # name argument
 , pname ? "systemd"
@@ -380,7 +382,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
 
   nativeBuildInputs =
     [
@@ -444,7 +446,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
-  #dontAddPrefix = true;
+  mesonBuildType = "release";
 
   mesonFlags = [
     "-Dversion-tag=${version}"
@@ -705,7 +707,9 @@ stdenv.mkDerivation (finalAttrs: {
     export DESTDIR=/
   '';
 
-  postInstall = ''
+  mesonInstallTags = lib.optionals buildLibsOnly [ "devel" "libudev" "libsystemd" ];
+
+  postInstall = lib.optionalString (!buildLibsOnly) ''
     mkdir -p $out/example/systemd
     mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -723,7 +727,7 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
-  '' + lib.optionalString withKmod ''
+  '' + lib.optionalString (withKmod && !buildLibsOnly) ''
     mv $out/lib/modules-load.d $out/example
   '';
 

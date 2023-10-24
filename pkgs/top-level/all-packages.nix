@@ -22036,8 +22036,6 @@ with pkgs;
 
   hidapi = callPackage ../development/libraries/hidapi {
     inherit (darwin.apple_sdk.frameworks) Cocoa IOKit;
-    # TODO: remove once `udev` is `systemdMinimal` everywhere.
-    udev = systemdMinimal;
   };
 
   highfive = callPackage ../development/libraries/highfive { };
@@ -22741,9 +22739,7 @@ with pkgs;
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
-  libfido2 = callPackage ../development/libraries/libfido2 {
-    udev = systemdMinimal;
-  };
+  libfido2 = callPackage ../development/libraries/libfido2 {};
 
   libfilezilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/libfilezilla {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices;
@@ -23619,8 +23615,6 @@ with pkgs;
   libusb1 = callPackage ../development/libraries/libusb1 {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
-    # TODO: remove once `udev` is `systemdMinimal` everywhere.
-    udev = systemdMinimal;
   };
 
   libusbgx = callPackage ../development/libraries/libusbgx { };
@@ -28265,10 +28259,6 @@ with pkgs;
   lsscsi = callPackage ../os-specific/linux/lsscsi { };
 
   lvm2 = callPackage ../os-specific/linux/lvm2/2_03.nix {
-    # udev is the same package as systemd which depends on cryptsetup
-    # which depends on lvm2 again.  But we only need the libudev part
-    # which does not depend on cryptsetup.
-    udev = systemdMinimal;
     # break the cyclic dependency:
     # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
     # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
@@ -28805,11 +28795,14 @@ with pkgs;
     withUkify = false;
     withBootloader = false;
   };
-
+  systemdLibs = systemdMinimal.override {
+    pname = "systemd-minimal-libs";
+    buildLibsOnly = true;
+  };
 
   udev =
     if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
-    else systemd; # TODO: change to systemdMinimal
+    else systemdLibs;
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
