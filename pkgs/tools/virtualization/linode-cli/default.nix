@@ -72,6 +72,6 @@ buildPythonApplication rec {
     description = "The Linode Command Line Interface";
     homepage = "https://github.com/linode/linode-cli";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ ryantm techknowlogick ];
   };
 }
