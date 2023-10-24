@@ -264,10 +264,10 @@ let
       ];
 
       sha256 = (if cudaSupport then {
-        x86_64-linux = "sha256-Z5cSgdRxdKxidaz4b1RlUF4rVcQiUTmQ1OorlBWlpt0=";
+        x86_64-linux = "sha256-Hw4uFvltH7nlNN3qAEcQ+IR2FAOjRkvwyWA3rCPi7Vo=";
       } else {
-        x86_64-linux = "sha256-sn7p8FFHWIVdBWnsLsVj5jLiSaTlRm7s/qj2RqvQ3jU=";
-        aarch64-linux = "sha256-oAYF5AeuPHTlwtpDMs2+tAhRAJH0yeSVnB7Ni7wmzS8=";
+        x86_64-linux = "sha256-LEugnFwTV3EyeTZWgMvXzHbgeDPdmuT3daXCXJRMYVY=";
+        aarch64-linux = "sha256-0AYF5AeuPHTlwtpDMs2+tAhRAJH0yeSVnB7Ni7wmzS8=";
       }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
