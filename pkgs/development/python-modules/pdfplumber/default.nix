@@ -62,6 +62,13 @@ buildPythonPackage rec {
     "test__repr_png_"
   ];
 
+  disabledTestPaths = [
+    # Tests requires pypdfium2
+    "tests/test_display.py"
+    # Tests require Ghostscript
+    "tests/test_repair.py"
+  ];
+
   meta = with lib; {
     description = "Plumb a PDF for detailed information about each char, rectangle, line, et cetera — and easily extract text and tables";
     homepage = "https://github.com/jsvine/pdfplumber";
