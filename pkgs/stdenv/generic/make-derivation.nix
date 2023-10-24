@@ -287,32 +287,51 @@ else let
   references = nativeBuildInputs ++ buildInputs
             ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
+  getSpliced = type: drv:
+    drv.__spliced or
+      ( assert
+          (drv?stdenv &&
+           drv.stdenv.buildPlatform != drv.stdenv.targetPlatform &&
+
+           # I can't test on Darwin, so let's just ignore it for now.
+           !drv.stdenv.buildPlatform.isDarwin &&
+           !drv.stdenv.hostPlatform.isDarwin &&
+           !drv.stdenv.targetPlatform.isDarwin
+          )
+               -> lib.warn
+                 ''derivation ${attrs.pname or "!!no pname!!"}:
+                     unspliced ${type} dependency ${toString drv}
+                       build=${drv.stdenv.buildPlatform.config}
+                       target=${drv.stdenv.targetPlatform.config}
+                 '' true;
+        {});
+
   dependencies = map (map chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
+      (map (drv: (getSpliced "build-build" drv).buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
+      (map (drv: (getSpliced "build-host" drv).buildHost or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs'))
+      (map (drv: (getSpliced "build-target" drv).buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      (map (drv: (getSpliced "host-host" drv).hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+      (map (drv: (getSpliced "host-target" drv).hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
+      (map (drv: (getSpliced "target-target" drv).targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
     ]
   ];
   propagatedDependencies = map (map chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
-      (map (drv: drv.__spliced.buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
-      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
+      (map (drv: (getSpliced "build-build propagated" drv).buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
+      (map (drv: (getSpliced "build-host propagated" drv).buildHost or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+      (map (drv: (getSpliced "build-target propagated" drv).buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      (map (drv: (getSpliced "host-host propagated" drv).hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
+      (map (drv: (getSpliced "host-target propagated" drv).hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
+      (map (drv: (getSpliced "target-target propagated" drv).targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
     ]
   ];
 
