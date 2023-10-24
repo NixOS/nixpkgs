@@ -77,6 +77,7 @@ let
         dumpFile = with nodes.server.specialisation.dump.configuration.services.forgejo.dump; "${backupDir}/${file}";
       in
       ''
+        import json
         GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
         REPO = "forgejo@server:test/repo"
         PRIVK = "${snakeOilPrivateKey}"
@@ -145,6 +146,11 @@ let
         client2.succeed("chmod 0400 $HOME/.ssh/privk")
         client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
         client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
+
+        with subtest("Testing git protocol version=2 over ssh"):
+            git_protocol = client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' GIT_TRACE2_EVENT=true git -C repo fetch |& grep negotiated-version")
+            version = json.loads(git_protocol).get("value")
+            assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
 
         server.wait_until_succeeds(
             'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
