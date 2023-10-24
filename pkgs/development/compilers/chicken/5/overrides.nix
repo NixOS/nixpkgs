@@ -69,7 +69,10 @@ in
     addToNativeBuildInputs (lib.optionals (stdenv.system == "x86_64-darwin") [ pkgs.memorymappingHook ])
       (addPkgConfig old);
   sdl-base = addToBuildInputs pkgs.SDL;
-  sdl2 = addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2;
+  sdl2 = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
   sdl2-image = addToBuildInputs pkgs.SDL2_image;
   sdl2-ttf = addToBuildInputs pkgs.SDL2_ttf;
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
