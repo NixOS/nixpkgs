@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     install -D -m 0444 liquidprompt \
       $out/share/zsh/plugins/liquidprompt/liquidprompt
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A full-featured & carefully designed adaptive prompt for Bash & Zsh";
