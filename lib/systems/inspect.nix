@@ -91,13 +91,19 @@ rec {
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
-    isEfi = [
+    # This is the list of platforms which can potentially have a UEFI firmware
+    # This is helpful to know when to emit UEFI binaries along your software, e.g. for boot or more.
+    hasEfi = [
       { cpu = { family = "arm"; version = "6"; }; }
       { cpu = { family = "arm"; version = "7"; }; }
       { cpu = { family = "arm"; version = "8"; }; }
       { cpu = { family = "riscv"; }; }
       { cpu = { family = "x86"; }; }
     ];
+
+    # This name will soon be used for detection of the UEFI target itself.
+    # Start deprecation of this in NixOS 24.05
+    isEfi = hasEfi;
   };
 
   matchAnyAttrs = patterns:

@@ -21796,7 +21796,7 @@ with pkgs;
 
   gnu-config = callPackage ../development/libraries/gnu-config { };
 
-  gnu-efi = if stdenv.hostPlatform.isEfi
+  gnu-efi = if stdenv.hostPlatform.hasEfi
               then callPackage ../development/libraries/gnu-efi { }
             else null;
 

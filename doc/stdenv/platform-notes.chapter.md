@@ -1,5 +1,19 @@
 # Platform Notes {#chap-platform-notes}
 
+## UEFI {#sec-uefi}
+
+Some common issues when packaging software for UEFI environments:
+
+- Not all compilers know about UEFI as a proper target.
+
+  Most software will offer ways to compile UEFI software as it was compiled for the host system (not the UEFI host system) which will either confuse nixpkgs, you, or will be a hack.
+
+  Examples of such software are GNU GRUB (GNU-EFI), systemd-boot (elf2efi) and EDK2 firmware (bespoke build scripts)
+
+- Nixpkgs cannot know if you have UEFI firmware support or not on your platform beyond what is declared to be supported.
+
+  Use `pkgs.stdenv.hostPlatform.hasEfi` to know if it potentially have any form of UEFI support.
+
 ## Darwin (macOS) {#sec-darwin}
 
 Some common issues when packaging software for Darwin:
