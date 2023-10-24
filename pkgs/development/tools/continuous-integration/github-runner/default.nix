@@ -81,6 +81,14 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
+  ] ++ lib.optionals (nodeRuntimes == [ "node20" ]) [
+    # If the package is built without Node 16, make Node 20 the default internal version
+    # https://github.com/actions/runner/pull/2844
+    (fetchpatch {
+      name = "internal-node-20.patch";
+      url = "https://github.com/actions/runner/commit/acdc6ed.patch";
+      hash = "sha256-3/6yhhJPr9OMWBFc5/NU/DRtn76aTYvjsjQo2u9ZqnU=";
+    })
   ];
 
   postPatch = ''
