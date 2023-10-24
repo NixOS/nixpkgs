@@ -279,8 +279,8 @@ in {
   };
 
   openssl_3_1 = common {
-    version = "3.1.3";
-    hash = "sha256-8DFqLr2J5/I1KXZEVFhon4AwIJN4jEZmkvsqGIsurPY=";
+    version = "3.1.4";
+    hash = "sha256-hAr1Nmq5tSK95SWCa+PvD7Cvgcap69hMqmAP6hcx7uM=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
