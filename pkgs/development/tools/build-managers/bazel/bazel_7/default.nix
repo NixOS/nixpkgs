@@ -175,18 +175,6 @@ stdenv.mkDerivation rec {
   inherit sourceRoot;
 
   patches = [
-    # TODO: Make GSON work,
-    # In particular, our bazel build cannot emit MODULE.bazel.lock
-    # it only produces an empty json object `{ }`.
-    ./serialize_nulls.patch
-
-    # --extra_toolchains defined later should come before the ones defined earlier.
-    # As-is, this patch also inverts the order of extra_toolchains lists, but it's just a hack
-    ./extra_toolchains_precedence.patch
-
-    #./toolchain_better_debug.patch
-    ./toolchain_group_debug.patch
-
     # Remote java toolchains do not work on NixOS because they download binaries,
     # so we need to use the @local_jdk//:jdk
     # It could in theory be done by registering @local_jdk//:all toolchains,
@@ -395,11 +383,6 @@ stdenv.mkDerivation rec {
           -e "/bazel_build /a\  --java_runtime_version=local_jdk \\\\" \
           -e "/bazel_build /a\  --extra_toolchains=@bazel_tools//tools/jdk:all \\\\" \
 
-          #-e "/bazel_build /a\  --action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
-          #-e "/bazel_build /a\  --action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
-          #-e "/bazel_build /a\  --host_action_env=NIX_CFLAGS_COMPILE=\"$NIX_CFLAGS_COMPILE\" \\\\" \
-          #-e "/bazel_build /a\  --host_action_env=NIX_LDFLAGS=\"$NIX_LDFLAGS\" \\\\" \
-
         # Also build parser_deploy.jar with bootstrap bazel
         # TODO: Turn into a proper patch
         sedVerbose compile.sh \
@@ -506,15 +489,6 @@ stdenv.mkDerivation rec {
     ${python3}/bin/python3 ./bazel_src/scripts/generate_fish_completion.py \
         --bazel=./bazel_src/output/bazel \
         --output=./bazel_src/output/bazel-complete.fish
-
-    #echo "Stage 3 - Generate parser_deploy.jar"
-    # XXX: for now, build in the patched compile.sh script to get all the args right.
-    ## need to change directory for bazel to find the workspace
-    #cd ./bazel_src
-    ## build execlog tooling
-    #export HOME=$(mktemp -d)
-    #./output/bazel build src/tools/execlog:parser_deploy.jar
-    #cd -
 
     runHook postBuild
   '';
