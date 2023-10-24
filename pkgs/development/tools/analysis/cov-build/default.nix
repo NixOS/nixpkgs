@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
 
-let
-  message = ''
-    Register an account at https://scan.coverity.com, download the
-    build tools, and add it to the nix store with nix-prefetch-url
-  '';
-in
+, autoPatchelfHook
+
+, alsa-lib
+, libxcrypt-legacy
+, lttng-ust_2_12
+, xorg
+, zlib
+}:
+
 stdenv.mkDerivation rec {
   pname = "cov-build";
   version = "2022.12.2";
@@ -22,6 +27,18 @@ stdenv.mkDerivation rec {
       hash = "sha256-CyNKILJXlDMOCXbZZF4r/knz0orRx32oSj+Kpq/nxXQ=";
     }
     else throw "Unsupported platform '${stdenv.hostPlatform.system}'";
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
+    alsa-lib
+    libxcrypt-legacy
+    lttng-ust_2_12
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXtst
+    zlib
+  ];
 
   dontConfigure = true;
 
