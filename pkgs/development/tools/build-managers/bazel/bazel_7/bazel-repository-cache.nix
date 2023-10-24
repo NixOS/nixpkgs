@@ -52,24 +52,26 @@ let
     #    }
     let
       attrs = value.attributes;
-      entry = hash: urls: {
+      entry = hash: urls: name: {
         ${hash} = fetchurl {
           name = "source"; # just like fetch*, to get some deduplication
           inherit urls;
           sha256 = hash;
           passthru.sha256 = hash;
+          passthru.source_name = name;
         };
       };
-      insert = acc: hash: urls:
-        acc // entry (sanitize hash) (map sanitize urls);
+      insert = acc: hash: urls: name:
+        acc // entry (sanitize hash) (map sanitize urls) (sanitize name);
       accWithRemotePatches = lib.foldlAttrs
-        (acc: url: hash: insert acc hash [ url ])
+        (acc: url: hash: insert acc hash [ url ] attrs.name)
         acc
         (attrs.remote_patches or { });
       accWithNewSource = insert
         accWithRemotePatches
         (attrs.integrity or attrs.sha256)
-        (attrs.urls or [ attrs.url ]);
+        (attrs.urls or [ attrs.url ])
+        attrs.name;
     in
     if builtins.isAttrs value && value ? attributes
       && (attrs ? sha256 || attrs ? integrity)
@@ -86,7 +88,7 @@ let
     # TODO: Do not re-hash. Use nix-hash to convert hashes
     (drv: ''
       filename=$(basename "${lib.head drv.urls}")
-      echo Bundling $filename
+      echo Bundling $filename ${lib.optionalString (drv?source_name) "from ${drv.source_name}"}
       hash=$(${rnix-hashes}/bin/rnix-hashes --encoding BASE16 ${drv.sha256} | cut -f 2)
       mkdir -p content_addressable/sha256/$hash
       ln -sfn ${drv} content_addressable/sha256/$hash/file
