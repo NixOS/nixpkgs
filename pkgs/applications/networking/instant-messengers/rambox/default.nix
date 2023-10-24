@@ -31,6 +31,8 @@ appimageTools.wrapType2 {
     install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
 
+  extraPkgs = pkgs: with pkgs; [ procps ];
+
   meta = with lib; {
     description = "Workspace Simplifier - a cross-platform application organizing web services into Workspaces similar to browser profiles";
     homepage = "https://rambox.app";
