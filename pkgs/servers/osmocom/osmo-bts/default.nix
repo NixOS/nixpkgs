@@ -8,10 +8,6 @@
 , libosmo-netif
 }:
 
-let
-  inherit (stdenv) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-bts";
   version = "1.7.1";
