@@ -24,7 +24,6 @@ in
 
         security.sudo-rs = {
           enable = true;
-          package = pkgs.sudo-rs;
           wheelNeedsPassword = false;
 
           extraRules = [
@@ -55,7 +54,6 @@ in
       };
 
       security.sudo-rs = {
-        package = pkgs.sudo-rs;
         enable = true;
         wheelNeedsPassword = false;
         execWheelOnly = true;
