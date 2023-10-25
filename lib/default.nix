@@ -164,6 +164,6 @@ let
       fakeHash fakeSha256 fakeSha512
       nixType imap;
     inherit (self.versions)
-      splitVersion;
+      splitVersion dateFormat;
   });
 in lib
