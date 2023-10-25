@@ -53,7 +53,7 @@
 
   sdkSourceBuilders = {
     # https://github.com/dart-lang/pub/blob/68dc2f547d0a264955c1fa551fa0a0e158046494/lib/src/sdk/flutter.dart#L81
-    "flutter" = name: runCommand "flutter-sdk-${name}" { } ''
+    "flutter" = name: runCommand "flutter-sdk-${name}" { passthru.packageRoot = "."; } ''
       for path in '${flutter}/packages/${name}' '${flutter}/bin/cache/pkg/${name}'; do
         if [ -d "$path" ]; then
           ln -s "$path" "$out"

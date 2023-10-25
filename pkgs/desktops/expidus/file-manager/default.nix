@@ -18,8 +18,8 @@ flutter.buildFlutterApplication rec {
   depsListFile = ./deps.json;
 
   gitHashes = {
-    libtokyo = "sha256-NC0EvLCLl0uMoLDlzoPwbJ0V3otkPWPFU1mgUBkOfsI=";
-    libtokyo_flutter = "sha256-ltpDYcKQx5ZKup4zJSrrYClgHxtMPkUNBszLsmgAI3g=";
+    libtokyo = "sha256-T0+vyfSfijLv7MvM+zt3bkVpb3aVrlDnse2xyNMp9GU=";
+    libtokyo_flutter = "sha256-T0+vyfSfijLv7MvM+zt3bkVpb3aVrlDnse2xyNMp9GU=";
   };
 
   postInstall = ''

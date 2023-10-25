@@ -47,40 +47,29 @@ let
         sha256 = details.description.sha256;
       };
     in
-    runCommand "pub-${name}-${details.version}"
-      { } ''
+    runCommand "pub-${name}-${details.version}" { passthru.packageRoot = "."; } ''
       mkdir -p "$out"
       tar xf '${archive}' -C "$out"
     '';
 
-  mkGitDependencySource = name: details: fetchgit {
+  mkGitDependencySource = name: details: (fetchgit {
     name = "pub-${name}-${details.version}";
     url = details.description.url;
     rev = details.description.resolved-ref;
-    postFetch = ''
-      if [ "$(realpath "$out/${details.description.path}")" != "$(realpath "$out")" ]; then
-        (shopt -s dotglob; mv "$out"/* .)
-        rmdir "$out"
-        mv '${details.description.path}' "$out"
-      fi
-    '';
     hash = gitHashes.${name} or (throw "A Git hash is required for ${name}! Set to an empty string to obtain it.");
-  };
+  }).overrideAttrs ({ passthru ? { }, ... }: {
+    passthru = passthru // {
+      packageRoot = details.description.path;
+    };
+  });
 
   mkPathDependencySource = name: details:
-    if builtins.isPath src
-    then
-    # When src is a path, avoid copying it to the store entirely, and allow
-    # non-relative paths.
-      (builtins.path {
-        name = "pub-${name}-${details.version}";
-        path = if details.description.relative then src + "/${packageRoot}" + "/${details.description.path}" else details.description.path;
-      })
-    else
-      assert lib.assertMsg details.description.relative "Only relative paths are supported!";
-      runCommand "pub-${name}-${details.version}" { } ''
-        cp -r '${src}/${packageRoot}/${details.description.path}' "$out"
-      '';
+    assert lib.assertMsg details.description.relative "Only relative paths are supported - ${name} has an absolue path!";
+    (if lib.isDerivation src then src else (runCommand "pub-${name}-${details.version}" { } ''cp -r '${src}' "$out"'')).overrideAttrs ({ passthru ? { }, ... }: {
+      passthru = passthru // {
+        packageRoot = "${packageRoot}/${details.description.path}";
+      };
+    });
 
   mkSdkDependencySource = name: details:
     (sdkSourceBuilders.${details.description} or (throw "No SDK source builder has been given for ${details.description}!")) name;

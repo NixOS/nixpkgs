@@ -28,7 +28,7 @@ flutter.buildFlutterApplication rec {
 
   gitHashes = {
     keyboard_shortcuts = "sha256-U74kRujftHPvpMOIqVT0Ph+wi1ocnxNxIFA1krft4Os=";
-    wakelock_windows = "sha256-/zq8HFnYpBG61R1OTJ80WAaPjZqmHs+8Ww4Gv4rLXAM=";
+    wakelock_windows = "sha256-Dfwe3dSScD/6kvkP67notcbb+EgTQ3kEYcH7wpra2dI=";
   };
 
   desktopItem = makeDesktopItem {
