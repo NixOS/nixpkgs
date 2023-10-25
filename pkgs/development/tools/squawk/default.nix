@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://squawkhq.com/";
     changelog = "https://github.com/sbdchd/squawk/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ andrewsmith ];
+    maintainers = with lib.maintainers; [ andrewsmith marsam ];
   };
 }
