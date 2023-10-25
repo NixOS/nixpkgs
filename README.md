@@ -220,7 +220,7 @@ For more information about contributing to the project, please visit the [contri
   - [ ] Habitat Synthetic Scenes Dataset (HSSD)
 - [ ] Add pinned libraries, APIs, tools for artificial intelligence (AI) in robotics
   - [ ] C++ (C++20: gcc-12, clang-17)
-  - [ ] Rust 1.73.0
+  - [ ] Rust 1.73.0, Ferrocene
   - [ ] Python 3.12
   - [ ] Modular Mojo 1.0
   - [ ] Julia 1.9.3
