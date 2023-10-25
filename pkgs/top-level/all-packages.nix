@@ -38770,7 +38770,6 @@ with pkgs;
 
   itamae = callPackage ../tools/admin/itamae { };
 
-  # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
   jack2 = callPackage ../misc/jackaudio {
