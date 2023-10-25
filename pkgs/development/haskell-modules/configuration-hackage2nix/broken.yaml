@@ -1733,7 +1733,6 @@ broken-packages:
   - fused-effects-resumable # failure in job https://hydra.nixos.org/build/233242479 at 2023-09-02
   - fused-effects-th # failure in job https://hydra.nixos.org/build/233192186 at 2023-09-02
   - fusion # failure in job https://hydra.nixos.org/build/233204359 at 2023-09-02
-  - futhark # failure in job https://hydra.nixos.org/build/236673091 at 2023-10-04
   - futhask # failure in job https://hydra.nixos.org/build/233229281 at 2023-09-02
   - futun # failure in job https://hydra.nixos.org/build/233245115 at 2023-09-02
   - future # failure in job https://hydra.nixos.org/build/233224844 at 2023-09-02

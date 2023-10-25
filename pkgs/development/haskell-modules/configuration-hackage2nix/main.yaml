@@ -156,6 +156,8 @@ package-maintainers:
     - hnix-store-remote
   arturcygan:
     - hevm
+  athas:
+    - futhark
   berberman:
     - nvfetcher
     - arch-web
