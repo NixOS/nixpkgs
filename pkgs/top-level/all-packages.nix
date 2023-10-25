@@ -5987,7 +5987,7 @@ with pkgs;
   };
 
   micropad = callPackage ../applications/office/micropad {
-    electron = electron_25;
+    electron = electron_27;
   };
 
   midicsv = callPackage ../tools/audio/midicsv { };
