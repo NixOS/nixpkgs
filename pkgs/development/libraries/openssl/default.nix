@@ -219,6 +219,7 @@ let
 
     meta = with lib; {
       homepage = "https://www.openssl.org/";
+      changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       mainProgram = "openssl";
@@ -256,8 +257,9 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.11";
-    hash = "sha256-s0JdO7SiIY0Gl+tB9/wM3t4BbtGcpJ0Wi3jo2UeIf1U=";
+    version = "3.0.12";
+    hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
+
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 
@@ -278,8 +280,9 @@ in {
   };
 
   openssl_3_1 = common {
-    version = "3.1.3";
-    hash = "sha256-8DFqLr2J5/I1KXZEVFhon4AwIJN4jEZmkvsqGIsurPY=";
+    version = "3.1.4";
+    hash = "sha256-hAr1Nmq5tSK95SWCa+PvD7Cvgcap69hMqmAP6hcx7uM=";
+
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 
