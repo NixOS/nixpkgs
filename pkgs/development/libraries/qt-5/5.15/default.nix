@@ -322,7 +322,8 @@ let
 
       wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
         name = "wrap-qt5-apps-hook";
-        propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
+        propagatedBuildInputs = [ makeBinaryWrapper ];
+        depsTargetTargetPropagated = [ qtbase.dev ]
           ++ lib.optional stdenv.isLinux qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh) { };
     };
