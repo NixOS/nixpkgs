@@ -218,16 +218,16 @@ in
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraRules’ instead.
       ''
-      (concatStringsSep "\n" (
-        lists.flatten (
-          map (
-            rule: optionals (length rule.commands != 0) [
-              (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
-              (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-            ]
-          ) cfg.extraRules
-        )
-      ) + "\n")
+      (pipe cfg.extraRules [
+        (filter (rule: length rule.commands != 0))
+        (map (rule: [
+          (map (user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.users)
+          (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.groups)
+        ]))
+        flatten
+        (concatStringsSep "\n")
+      ])
+      "\n"
       (optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
