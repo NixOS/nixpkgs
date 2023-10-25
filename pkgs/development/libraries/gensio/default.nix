@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , nix-update-script
+, openssl
 , pkg-config
 , stdenv
 }:
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ openssl ];
 
   meta = with lib; {
     description = "General Stream I/O";
