@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9MTAKiCXQtQ6pw4QwXbWbssd7O1bPbwkb6e+KRKtQqw=";
+    hash = "sha256-izFDqaJFJrgeb3YPP/7rIf/IjvrtlwjbktNy702zVTU=";
   };
 
   vendorHash = "sha256-4I+qCh/A/Yj5kUZLFvXTUV85l/2LVGPUCivTdDlA1ao=";
