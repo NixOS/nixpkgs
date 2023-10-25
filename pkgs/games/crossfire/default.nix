@@ -8,9 +8,8 @@ rec {
   };
 
   crossfire-server = callPackage ./crossfire-server.nix {
-    version = "latest";
-    rev = "22111";
-    sha256 = "04fjif6zv642n2zlw27cgzkak2kknwrxqzg42bvzl7q901bsr9l7";
+    rev = "bd28d7c6b74fa006d95dbb07d7b743bcdbd9883e";
+    hash = "sha256-7uyWSW6TuyM6enWAuxUIl9Tb9EtTN7a+e0SWI4/6Abs=";
     maps = crossfire-maps; arch = crossfire-arch;
   };
 
