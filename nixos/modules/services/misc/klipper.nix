@@ -125,6 +125,9 @@ in
                 type = path;
                 description = lib.mdDoc "Path to firmware config which is generated using `klipper-genconf`";
               };
+              package = lib.mkPackageOptionMD pkgs "klipper-firmware" {
+                extraDescription = "The klipper-firmware package to use for this printer.";
+              };
             };
           });
       };
@@ -217,9 +220,9 @@ in
       let
         default = a: b: if a != null then a else b;
         firmwares = filterAttrs (n: v: v != null) (mapAttrs
-          (mcu: { enable, enableKlipperFlash, configFile, serial }:
+          (mcu: { enable, enableKlipperFlash, configFile, serial, package }:
             if enable then
-              pkgs.klipper-firmware.override
+              package.override
                 {
                   mcu = lib.strings.sanitizeDerivationName mcu;
                   firmwareConfig = configFile;
