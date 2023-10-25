@@ -22,5 +22,11 @@ rec {
     rev = "152b17b1d8976856df441c6f87049dee91edbd4a";
     hash = "sha256-0rogLKEEOU1NtC8Np3BjlrdDobLjNGqgVZVQFC7hH30=";
   };
+
+  crossfire-jxclient = callPackage ./crossfire-jxclient.nix {
+    version = "2023-06-23";
+    rev = "fddc21e368b2f998d968169dc72d4b7ea747f8b0";
+    hash = "sha256-7mbns61v2UPMlmZc4kd081dlk+b3yDUpgHqS/NEZ2wc=";
+  };
   };
 }
