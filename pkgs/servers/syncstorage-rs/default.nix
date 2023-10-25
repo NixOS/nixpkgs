@@ -2,7 +2,6 @@
 , rustPlatform
 , pkg-config
 , python3
-, openssl
 , cmake
 , libmysqlclient
 , makeBinaryWrapper
@@ -39,7 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libmysqlclient
-    openssl
   ];
 
   preFixup = ''
