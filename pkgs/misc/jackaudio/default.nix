@@ -11,6 +11,9 @@
 , dbus ? null, libffado ? null, alsa-lib ? null
 , libopus ? null, systemd ? null, db ? null
 
+# Optional build-time dependencies
+, doxygen ? null
+
 # Extra options
 , prefix ? ""
 }:
@@ -21,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: let
   enabled = pkg: pkg != null && lib.elem pkg finalAttrs.buildInputs;
   libOnly = prefix == "lib";
   withJackDbus = !libOnly && enabled dbus;
+  withDevDoc = doxygen != null;
+  devDocDir = "share/doc/${finalAttrs.pname}/html";
 in {
   pname = "${prefix}jack2";
   version = "1.9.22";
@@ -32,9 +37,9 @@ in {
     sha256 = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withDevDoc "devdoc";
 
-  nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
+  nativeBuildInputs = [ pkg-config python makeWrapper wafHook doxygen ];
   buildInputs = lib.filter shouldUsePkg (lib.concatLists [
     [ libsamplerate eigen celt libopus db ]
     (lib.optionals (!libOnly) [
@@ -64,6 +69,9 @@ in {
     "--autostart=${if withJackDbus then "dbus" else "classic"}"
   ] ++ lib.optionals withJackDbus [
     "--dbus"
+  ] ++ lib.optionals withDevDoc [
+    "--doxygen"
+    "--htmldir=${placeholder "devdoc"}/${devDocDir}"
   ];
 
   postInstall = ''
@@ -86,6 +94,9 @@ in {
   postFixup = ''
     substituteInPlace "$dev/lib/pkgconfig/jack.pc" \
       --replace "$out/include" "$dev/include"
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput ${devDocDir} "$devdoc"
   '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
