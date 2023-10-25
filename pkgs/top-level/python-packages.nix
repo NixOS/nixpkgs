@@ -13323,6 +13323,8 @@ self: super: with self; {
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
+  sqlite-migrate = callPackage ../development/python-modules/sqlite-migrate { };
+
   sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
 
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
