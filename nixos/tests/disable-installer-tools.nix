@@ -8,7 +8,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
     {
         system.disableInstallerTools = true;
         boot.enableContainers = false;
-        environment.defaultPackages = [];
     };
 
   testScript = ''

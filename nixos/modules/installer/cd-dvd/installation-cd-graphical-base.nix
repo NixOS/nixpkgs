@@ -48,7 +48,7 @@ with lib;
   # Enable plymouth
   boot.plymouth.enable = true;
 
-  environment.defaultPackages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     # Include gparted for partitioning disks.
     gparted
 
