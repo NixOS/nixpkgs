@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
+, stdenv
+, darwin
 , libusb1
 , udev
 , nix-update-script
@@ -21,8 +23,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-hSd53K50Y4K/fYGfsT2fHUaipVSpeYN6/EOFlv4ocuE=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 udev ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.DarwinTools
+  ];
+
+  buildInputs = [
+    libusb1
+  ] ++ lib.optionals stdenv.isLinux [
+    udev
+  ];
+
+  checkFlags = lib.optionals stdenv.isDarwin [
+    # system_profiler is not available in the sandbox
+    "--skip=test_run"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
