@@ -28,5 +28,10 @@ rec {
     rev = "fddc21e368b2f998d968169dc72d4b7ea747f8b0";
     hash = "sha256-7mbns61v2UPMlmZc4kd081dlk+b3yDUpgHqS/NEZ2wc=";
   };
+
+  crossfire-editor = callPackage ./crossfire-editor.nix {
+    version = "2023-10-13";
+    rev = "6928c5eb7c894d7e97a20af5495d3fb39d66a516";
+    hash = "sha256-lPKaH1VmImVP1fgm5UMZUpbM8E5O1sxCZWMzfQ3izco=";
   };
 }
