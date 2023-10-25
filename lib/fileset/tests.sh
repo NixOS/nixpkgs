@@ -354,6 +354,11 @@ expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `
 \s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
 rm -rf -- *
 
+# non-regular and non-symlink files cannot be added to the Nix store
+mkfifo a
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'file '\'"$work"'/a'\'' has an unsupported type'
+rm -rf -- *
+
 # Path coercion only works for paths
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
 expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a file set or a path instead.
