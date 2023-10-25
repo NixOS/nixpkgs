@@ -59,6 +59,16 @@
       "agpl"
     ]
   },
+  "end_to_end_encryption": {
+    "sha256": "19vp0ggllplm84hwaqwn95122hsgfglmlk2lbwlgsjv8d36fv1wr",
+    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.12.5/end_to_end_encryption-v1.12.5.tar.gz",
+    "version": "1.12.5",
+    "description": "Provides the necessary endpoint to enable end-to-end encryption.\n\n**Notice:** E2EE is currently not compatible to be used together with server-side encryption",
+    "homepage": "https://github.com/nextcloud/end_to_end_encryption",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "files_markdown": {
     "sha256": "0p97ha6x3czzbflavmjn4jmz3z706h5f84spg4j7dwq3nc9bqrf7",
     "url": "https://github.com/icewind1991/files_markdown/releases/download/v2.4.1/files_markdown-v2.4.1.tar.gz",
