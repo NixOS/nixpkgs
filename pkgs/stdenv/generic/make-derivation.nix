@@ -314,7 +314,8 @@ else let
     ]
     [
       (map (drv: (getSpliced "host-host" drv).hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: (getSpliced "host-target" drv).hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
+      #(map (drv: (getSpliced "host-target" drv).hostTarget or drv) (checkDependencyList "buildInputs" buildInputs'))
     ]
     [
       (map (drv: (getSpliced "target-target" drv).targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
@@ -328,7 +329,8 @@ else let
     ]
     [
       (map (drv: (getSpliced "host-host propagated" drv).hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
-      (map (drv: (getSpliced "host-target propagated" drv).hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      (map (drv: drv.__spliced.hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
+      #(map (drv: (getSpliced "host-target propagated" drv).hostTarget or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
     ]
     [
       (map (drv: (getSpliced "target-target propagated" drv).targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
