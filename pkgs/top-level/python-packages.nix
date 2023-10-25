@@ -12849,6 +12849,8 @@ self: super: with self; {
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 
+  simplicial = callPackage ../development/python-modules/simplicial { };
+  
   simplisafe-python = callPackage ../development/python-modules/simplisafe-python { };
 
   simpful = callPackage ../development/python-modules/simpful { };
