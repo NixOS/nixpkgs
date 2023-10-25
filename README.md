@@ -1,7 +1,5 @@
 <p align="center">
-  <img src="./media/botnix_simple_narrow_bw_1000w.png" width="50%" alt="Botnix logo" />
-  <!-- <img src="./media/botnix_crab_friendly_bw_1000w.png" alt="Botnix logo" /> -->
-  <!-- <img src="./media/botnix_robot_friendly_bw_1000w.png" alt="Botnix logo" /> -->
+  <img src="./media/botnix_simple_narrow_bw_1000w.png" width="67%" alt="Botnix logo" />
 </p>
 
 <!--
