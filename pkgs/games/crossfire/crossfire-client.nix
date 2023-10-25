@@ -1,24 +1,24 @@
-{ stdenv, lib, fetchsvn
+{ stdenv, lib, fetchgit
 , cmake, pkg-config, perl, vala
-, gtk2, pcre, zlib, libpng, fribidi, harfbuzzFull, xorg, util-linux, curl
-, SDL, SDL_image, SDL_mixer, libselinux, libsepol
-, version, rev, sha256
+, gtk2, pcre, pcre2, zlib, libpng, libthai, fribidi, harfbuzzFull, xorg
+, util-linux, curl, SDL, SDL_image, SDL_mixer, libselinux, libsepol, libdatrie
+, rev, hash, version ? "git+${builtins.substring 0 7 rev}"
 }:
 
 stdenv.mkDerivation rec {
   pname = "crossfire-client";
-  version = rev;
+  inherit version;
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/client/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "http://git.code.sf.net/p/crossfire/crossfire-client";
+    inherit rev hash;
   };
 
   nativeBuildInputs = [ cmake pkg-config perl vala ];
   buildInputs = [
-    gtk2 pcre zlib libpng fribidi harfbuzzFull xorg.libpthreadstubs
+    gtk2 pcre pcre2 zlib libpng libthai fribidi harfbuzzFull xorg.libpthreadstubs
     xorg.libXdmcp curl SDL SDL_image SDL_mixer util-linux libselinux libsepol
+    libdatrie
   ];
   hardeningDisable = [ "format" ];
 

@@ -2,9 +2,9 @@
 
 rec {
   crossfire-client = callPackage ./crossfire-client.nix {
-    version = "1.75.0";
-    rev = "21760";
-    sha256 = "0b42sak8hj60nywfswkps777asy9p8r9wsn7pmj2nqbd29ng1p9d";
+    rev = "v1.75.2";
+    version = "1.75.2";
+    hash = "sha256-6z7Tf9B7XpMLtAxID5GQOKAI7krFU3WAv6QzKR+CjUM=";
   };
 
   crossfire-server = callPackage ./crossfire-server.nix {
