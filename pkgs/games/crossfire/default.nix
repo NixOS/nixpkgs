@@ -14,9 +14,8 @@ rec {
   };
 
   crossfire-arch = callPackage ./crossfire-arch.nix {
-    version = "latest";
-    rev = "22111";
-    sha256 = "0l4rp3idvbhknpxxs0w4i4nqfg01wblzm4v4j375xwxxbf00j0ms";
+    rev = "0894e2964d8f05eb2686055c195a5046c904ef4f";
+    hash = "sha256-AL+zEblk9BgH+aL2vurjtqNg94LwY3ROQCw/gyoSeaY=";
   };
 
   crossfire-maps = callPackage ./crossfire-maps.nix {
