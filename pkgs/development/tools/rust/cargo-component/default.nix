@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-component";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
     rev = "v${version}";
-    hash = "sha256-W5p2lE6YTspuVqXXzwT0fcZF1cv2GxceXZ5kMgpHKTA=";
+    hash = "sha256-zXpV5BkZTcvrDNt0rj1IvIuCQuxJW3tDr3h0PaBMMcg=";
   };
 
-  cargoHash = "sha256-8OgksGuzc23/pB2x+zsXDpfByvfvMraJW6/wo4E1ZOQ=";
+  cargoHash = "sha256-nUtE7Uk0Gf+zQBlbnBPWstMonnJYBJZKb+ML9doYOFo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # requires the wasm32-wasi target
