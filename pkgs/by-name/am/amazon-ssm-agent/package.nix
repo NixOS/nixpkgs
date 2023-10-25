@@ -11,7 +11,7 @@
 , bashInteractive
 , nix-update-script
 , testers
-, ssm-agent
+, amazon-ssm-agent
 , overrideEtc ? true
 }:
 
@@ -138,7 +138,7 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      package = ssm-agent;
+      package = amazon-ssm-agent;
       command = "amazon-ssm-agent --version";
     };
   };
