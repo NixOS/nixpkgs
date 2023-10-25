@@ -7,7 +7,6 @@ let
   cfg = config.security.sudo-rs;
 
   inherit (config.security.pam) enableSSHAgentAuth;
-  inherit (pkgs) sudo-rs;
 
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
@@ -236,16 +235,16 @@ in
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
       '')
-      (concatStringsSep "\n" (
-        lists.flatten (
-          map (
-            rule: optionals (length rule.commands != 0) [
-              (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
-              (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-            ]
-          ) cfg.extraRules
-        )
-      ) + "\n")
+      (pipe cfg.extraRules [
+        (filter (rule: length rule.commands != 0))
+        (map (rule: [
+          (map (user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.users)
+          (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.groups)
+        ]))
+        flatten
+        (concatStringsSep "\n")
+      ])
+      "\n"
       (optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
