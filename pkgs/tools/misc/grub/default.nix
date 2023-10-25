@@ -61,7 +61,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-bQPQ65gAcuUQ8ELB2hKywuXZ0kdC2bBCsUII/b4FkvQ=";
+    outputHash = "sha256-XpQ4tu5eNRARdbg95LOjqp+2RCVRj1qZWe+Sc0O5zNg=";
   }
   ''
     mkdir -p po
