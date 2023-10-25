@@ -13,6 +13,7 @@ let
       composerNoDev = previousAttrs.composerNoDev or true;
       composerNoPlugins = previousAttrs.composerNoPlugins or true;
       composerNoScripts = previousAttrs.composerNoScripts or true;
+      composerStrictValidation = previousAttrs.composerStrictValidation or true;
 
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
@@ -69,6 +70,7 @@ let
         composerNoDev = previousAttrs.composerNoDev or true;
         composerNoPlugins = previousAttrs.composerNoPlugins or true;
         composerNoScripts = previousAttrs.composerNoScripts or true;
+        composerStrictValidation = previousAttrs.composerStrictValidation or true;
       };
 
       COMPOSER_CACHE_DIR="/dev/null";

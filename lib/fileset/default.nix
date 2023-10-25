@@ -6,6 +6,7 @@ let
     _coerceMany
     _toSourceFilter
     _unionMany
+    _fileFilter
     _printFileset
     _intersection
     ;
@@ -41,6 +42,7 @@ let
     ;
 
   inherit (lib.trivial)
+    isFunction
     pipe
     ;
 
@@ -277,6 +279,55 @@ If a directory does not recursively contain any file, it is omitted from the sto
         (_coerceMany "lib.fileset.unions")
         _unionMany
       ];
+
+  /*
+    Filter a file set to only contain files matching some predicate.
+
+    Type:
+      fileFilter ::
+        ({
+          name :: String,
+          type :: String,
+          ...
+        } -> Bool)
+        -> FileSet
+        -> FileSet
+
+    Example:
+      # Include all regular `default.nix` files in the current directory
+      fileFilter (file: file.name == "default.nix") ./.
+
+      # Include all non-Nix files from the current directory
+      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
+
+      # Include all files that start with a "." in the current directory
+      fileFilter (file: hasPrefix "." file.name) ./.
+
+      # Include all regular files (not symlinks or others) in the current directory
+      fileFilter (file: file.type == "regular")
+  */
+  fileFilter =
+    /*
+      The predicate function to call on all files contained in given file set.
+      A file is included in the resulting file set if this function returns true for it.
+
+      This function is called with an attribute set containing these attributes:
+
+      - `name` (String): The name of the file
+
+      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+      Other attributes may be added in the future.
+    */
+    predicate:
+    # The file set to filter based on the predicate function
+    fileset:
+    if ! isFunction predicate then
+      throw "lib.fileset.fileFilter: Expected the first argument to be a function, but it's a ${typeOf predicate} instead."
+    else
+      _fileFilter predicate
+        (_coerce "lib.fileset.fileFilter: second argument" fileset);
 
   /*
     The file set containing all files that are in both of two given file sets.

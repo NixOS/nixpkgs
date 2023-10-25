@@ -742,7 +742,7 @@ let
       }
       else if lib.versionOlder "4.10.2" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.15.nix {
-        inherit self;
+        inherit self ocaml;
         inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
       }
       else if lib.versionOlder "4.08" ocaml.version
@@ -794,6 +794,7 @@ let
 
       janeStreet = import ../development/ocaml-modules/janestreet/0.15.nix {
         self = self' // jsDeps;
+        inherit ocaml;
         inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
       };
 

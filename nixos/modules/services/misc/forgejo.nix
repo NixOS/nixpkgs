@@ -632,6 +632,8 @@ in
       };
     };
 
+    services.openssh.settings.AcceptEnv = mkIf (!cfg.settings.START_SSH_SERVER or false) "GIT_PROTOCOL";
+
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {
         home = cfg.stateDir;

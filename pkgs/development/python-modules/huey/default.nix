@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A little task queue for python";
     homepage = "https://github.com/coleifer/huey";
     license = licenses.mit;
-    maintainers = [ maintainers.globin ];
+    maintainers = [];
   };
 }
