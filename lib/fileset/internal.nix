@@ -424,7 +424,7 @@ rec {
       # Filter suited when there's some files
       # This can't be used for when there's no files, because the base directory is always included
       nonEmpty =
-        path: _:
+        path: type:
         let
           # Add a slash to the path string, turning "/foo" to "/foo/",
           # making sure to not have any false prefix matches below.
@@ -432,26 +432,37 @@ rec {
           # but builtins.path doesn't call the filter function on the `path` argument itself,
           # meaning this function can never receive "/" as an argument
           pathSlash = path + "/";
+
+          include =
+            # Same as `hasPrefix pathSlash baseString`, but more efficient.
+            # With base /foo/bar we need to include /foo:
+            # hasPrefix "/foo/" "/foo/bar/"
+            if substring 0 (stringLength pathSlash) baseString == pathSlash then
+              true
+            # Same as `! hasPrefix baseString pathSlash`, but more efficient.
+            # With base /foo/bar we need to exclude /baz
+            # ! hasPrefix "/baz/" "/foo/bar/"
+            else if substring 0 baseLength pathSlash != baseString then
+              false
+            else
+              # Same as `removePrefix baseString path`, but more efficient.
+              # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
+              # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
+              # With base /foo and path /foo/bar/baz this gives
+              # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
+              # == inTree (split "/" "bar/baz")
+              # == inTree [ "bar" "baz" ]
+              inTree (split "/" (substring baseLength (-1) path));
         in
-        # Same as `hasPrefix pathSlash baseString`, but more efficient.
-        # With base /foo/bar we need to include /foo:
-        # hasPrefix "/foo/" "/foo/bar/"
-        if substring 0 (stringLength pathSlash) baseString == pathSlash then
-          true
-        # Same as `! hasPrefix baseString pathSlash`, but more efficient.
-        # With base /foo/bar we need to exclude /baz
-        # ! hasPrefix "/baz/" "/foo/bar/"
-        else if substring 0 baseLength pathSlash != baseString then
-          false
+        # This relies on the fact that Nix only distinguishes path types "directory", "regular", "symlink" and "unknown",
+        # so everything except "unknown" is allowed, seems reasonable to rely on that
+        if include && type == "unknown" then
+          throw ''
+            lib.fileset.toSource: `fileset` contains a file that cannot be added to the store: ${path}
+                This file is neither a regular file nor a symlink, the only file types supported by the Nix store.
+                Therefore the file set cannot be added to the Nix store as is. Make sure to not include that file to avoid this error.''
         else
-          # Same as `removePrefix baseString path`, but more efficient.
-          # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
-          # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
-          # With base /foo and path /foo/bar/baz this gives
-          # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
-          # == inTree (split "/" "bar/baz")
-          # == inTree [ "bar" "baz" ]
-          inTree (split "/" (substring baseLength (-1) path));
+          include;
     in
     # Special case because the code below assumes that the _internalBase is always included in the result
     # which shouldn't be done when we have no files at all in the base

@@ -356,7 +356,9 @@ rm -rf -- *
 
 # non-regular and non-symlink files cannot be added to the Nix store
 mkfifo a
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'file '\'"$work"'/a'\'' has an unsupported type'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` contains a file that cannot be added to the store: '"$work"'/a
+\s*This file is neither a regular file nor a symlink, the only file types supported by the Nix store.
+\s*Therefore the file set cannot be added to the Nix store as is. Make sure to not include that file to avoid this error.'
 rm -rf -- *
 
 # Path coercion only works for paths
