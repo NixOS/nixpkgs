@@ -201,7 +201,7 @@ let
     qttools = [ ./qttools.patch ];
   };
 
-  addPackages = self: with self;
+  addPackages = self:
     let
       qtModule = callPackage ../qtModule.nix {
         inherit patches;
@@ -218,7 +218,7 @@ let
 
       mkDerivationWith = callPackage ../mkDerivation.nix { };
 
-      mkDerivation = mkDerivationWith stdenv.mkDerivation;
+      mkDerivation = callPackage ({ mkDerivationWith }: mkDerivationWith stdenv.mkDerivation) { };
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -300,7 +300,9 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-full-${qtbase.version}" ([
+      full = callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
+      # `with self` is ok to use here because having these spliced is unnecessary
+      (with self; [
         qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
