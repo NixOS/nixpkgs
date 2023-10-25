@@ -14,7 +14,7 @@
 # Optional build-time dependencies
 , doxygen ? null
 
-# Extra options
+# Use prefix = "lib" to build a minimal libraries-only package
 , prefix ? ""
 }:
 
