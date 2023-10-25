@@ -1,0 +1,12 @@
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index cde37c48b0d..be237bc0ad3 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -65,6 +65,7 @@
+ # undef LoadResource
+ # undef GetCurrentThread
+ # include <pthread.h>
++# include <pthread/qos.h>
+ # include <mach/mach.h>
+ # include <mach/mach_error.h>
+ # include <mach-o/getsect.h>

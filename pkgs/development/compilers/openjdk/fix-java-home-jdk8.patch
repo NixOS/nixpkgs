@@ -1,0 +1,15 @@
+--- a/hotspot/src/os/linux/vm/os_linux.cpp  2015-02-04 21:14:39.000000000 +0100
++++ b/hotspot/src/os/linux/vm/os_linux.cpp  2015-05-19 16:17:29.960107613 +0200
+@@ -2304,10 +2304,8 @@
+   assert(ret, "cannot locate libjvm");
+   char *rp = NULL;
+   if (ret && dli_fname[0] != '\0') {
+-    rp = realpath(dli_fname, buf);
++    snprintf(buf, buflen, "%s", dli_fname);
+   }
+-  if (rp == NULL)
+-    return;
+
+   if (Arguments::created_by_gamma_launcher()) {
+     // Support for the gamma launcher.  Typical value for buf is
+

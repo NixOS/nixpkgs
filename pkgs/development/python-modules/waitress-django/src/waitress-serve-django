@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+import sys
+from waitress import serve
+from waitress.adjustments import Adjustments
+import django
+from django.core.handlers.wsgi import WSGIHandler
+from django.contrib.staticfiles.handlers import StaticFilesHandler
+
+if __name__ == "__main__":
+  kw, args = Adjustments.parse_args(sys.argv[1:])
+  django.setup()
+  # These arguments are specific to the runner, not waitress itself.
+  del kw['call'], kw['help']
+  serve(StaticFilesHandler(WSGIHandler()), **kw)

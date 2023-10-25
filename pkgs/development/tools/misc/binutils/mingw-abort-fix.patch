@@ -1,0 +1,30 @@
+From b7eab2a9d4f4e92692daf14b09fc95ca11b72e30 Mon Sep 17 00:00:00 2001
+From: Michael Matz <matz@suse.de>
+Date: Thu, 9 Feb 2023 15:29:00 +0100
+Subject: [PATCH 1/1] Fix PR30079: abort on mingw
+
+the early-out in wild_sort is not enough, it might still be
+that filenames are equal _and_ the wildcard list doesn't specify
+a sort order either.  Don't call compare_section then.
+
+Tested on all targets.
+---
+ ld/ldlang.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/ld/ldlang.c b/ld/ldlang.c
+index 84a2914fc26..b5e0d026ae4 100644
+--- a/ld/ldlang.c
++++ b/ld/ldlang.c
+@@ -649,7 +649,8 @@ wild_sort (lang_wild_statement_type *wild,
+ 	 looking at the sections for this file.  */
+ 
+       /* Find the correct node to append this section.  */
+-      if (compare_section (sec->spec.sorted, section, (*tree)->section) < 0)
++      if (sec && sec->spec.sorted != none && sec->spec.sorted != by_none
++	  && compare_section (sec->spec.sorted, section, (*tree)->section) < 0)
+ 	tree = &((*tree)->left);
+       else
+ 	tree = &((*tree)->right);
+-- 
+2.31.1

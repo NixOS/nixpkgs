@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f8ff3c28..b57ee337 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,13 +30,13 @@ if(WIN32)
+     set(OD_BIN_PATH ${CMAKE_INSTALL_PREFIX})
+ else()
+     # Set binary and data install locations if we want to use the installer
+-    set(OD_BIN_PATH ${CMAKE_INSTALL_PREFIX}/games CACHE PATH "Absolute path to the game binary directory")
++    set(OD_BIN_PATH ${CMAKE_INSTALL_PREFIX}/bin CACHE PATH "Absolute path to the game binary directory")
+     set(OD_DATA_PATH ${CMAKE_INSTALL_PREFIX}/share/games/${PROJECT_NAME} CACHE PATH "Absolute path to the game data directory")
+     set(OD_SHARE_PATH ${CMAKE_INSTALL_PREFIX}/share CACHE PATH "Absolute path to the shared data directory (desktop file, icons, etc.)")
+     set(OD_MAN_PATH ${OD_SHARE_PATH}/man CACHE PATH "Absolute path to the manpages directory")
+     # Set the plugins.cfg file path to a common but architecture-dependent location.
+     # Because the plugins.cfg Ogre plugins path path may vary depending on the architecture used.
+-    set(OD_PLUGINS_CFG_PATH /etc/${PROJECT_NAME} CACHE PATH "Absolute path to the Ogre plugins.cfg file")
++    set(OD_PLUGINS_CFG_PATH ${CMAKE_INSTALL_PREFIX}/etc/${PROJECT_NAME} CACHE PATH "Absolute path to the Ogre plugins.cfg file")
+ endif()
+ 
+ if(NOT MSVC)

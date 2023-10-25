@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    wayback_machine_downloader (2.3.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  wayback_machine_downloader
+
+BUNDLED WITH
+   2.3.6

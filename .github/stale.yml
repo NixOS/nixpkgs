@@ -1,0 +1,9 @@
+# Configuration for probot-stale - https://github.com/probot/stale
+daysUntilStale: 180
+daysUntilClose: false
+exemptLabels:
+  - "1.severity: security"
+  - "2.status: never-stale"
+staleLabel: "2.status: stale"
+markComment: false
+closeComment: false

@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 57dcfc2f7..c9f23dbf7 100644
+--- a/package.json
++++ b/package.json
+@@ -79,5 +79,8 @@
+     "defaults",
+     "not ie > 0",
+     "not ie_mob > 0"
+-  ]
++  ],
++  "scripts": {
++    "build": "node_modules/.bin/webpack"
++  }
+ }

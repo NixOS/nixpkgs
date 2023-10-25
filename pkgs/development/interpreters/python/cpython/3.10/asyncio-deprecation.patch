@@ -1,0 +1,598 @@
+REVERT https://github.com/python/cpython/commit/300d812fd1c4d9244e71de0d228cc72439d312a7
+--- b/Doc/library/asyncio-eventloop.rst
++++ a/Doc/library/asyncio-eventloop.rst
+@@ -43,12 +43,10 @@
+ 
+    Get the current event loop.
+ 
++   If there is no current event loop set in the current OS thread,
++   the OS thread is main, and :func:`set_event_loop` has not yet
++   been called, asyncio will create a new event loop and set it as the
++   current one.
+-   When called from a coroutine or a callback (e.g. scheduled with
+-   call_soon or similar API), this function will always return the
+-   running event loop.
+-
+-   If there is no running event loop set, the function will return
+-   the result of ``get_event_loop_policy().get_event_loop()`` call.
+ 
+    Because this function has rather complex behavior (especially
+    when custom event loop policies are in use), using the
+@@ -60,14 +58,10 @@
+    event loop.
+ 
+    .. deprecated:: 3.10
++      Emits a deprecation warning if there is no running event loop.
++      In future Python releases, this function may become an alias of
++      :func:`get_running_loop` and will accordingly raise a
++      :exc:`RuntimeError` if there is no running event loop.
+-      Deprecation warning is emitted if there is no current event loop.
+-      In Python 3.12 it will be an error.
+-
+-   .. note::
+-      In Python versions 3.10.0--3.10.8 this function
+-      (and other functions which used it implicitly) emitted a
+-      :exc:`DeprecationWarning` if there was no running event loop, even if
+-      the current loop was set.
+ 
+ .. function:: set_event_loop(loop)
+ 
+reverted:
+--- b/Doc/library/asyncio-llapi-index.rst
++++ a/Doc/library/asyncio-llapi-index.rst
+@@ -19,7 +19,7 @@
+       - The **preferred** function to get the running event loop.
+ 
+     * - :func:`asyncio.get_event_loop`
++      - Get an event loop instance (current or via the policy).
+-      - Get an event loop instance (running or current via the current policy).
+ 
+     * - :func:`asyncio.set_event_loop`
+       - Set the event loop as current via the current policy.
+reverted:
+--- b/Doc/library/asyncio-policy.rst
++++ a/Doc/library/asyncio-policy.rst
+@@ -112,11 +112,6 @@
+ 
+       On Windows, :class:`ProactorEventLoop` is now used by default.
+ 
+-   .. deprecated:: 3.10.9
+-      :meth:`get_event_loop` now emits a :exc:`DeprecationWarning` if there
+-      is no current event loop set and a new event loop has been implicitly
+-      created. In Python 3.12 it will be an error.
+-
+ 
+ .. class:: WindowsSelectorEventLoopPolicy
+ 
+reverted:
+--- b/Lib/asyncio/events.py
++++ a/Lib/asyncio/events.py
+@@ -650,21 +650,6 @@
+         if (self._local._loop is None and
+                 not self._local._set_called and
+                 threading.current_thread() is threading.main_thread()):
+-            stacklevel = 2
+-            try:
+-                f = sys._getframe(1)
+-            except AttributeError:
+-                pass
+-            else:
+-                while f:
+-                    module = f.f_globals.get('__name__')
+-                    if not (module == 'asyncio' or module.startswith('asyncio.')):
+-                        break
+-                    f = f.f_back
+-                    stacklevel += 1
+-            import warnings
+-            warnings.warn('There is no current event loop',
+-                          DeprecationWarning, stacklevel=stacklevel)
+             self.set_event_loop(self.new_event_loop())
+ 
+         if self._local._loop is None:
+@@ -778,13 +763,12 @@
+ 
+ 
+ def _get_event_loop(stacklevel=3):
+-    # This internal method is going away in Python 3.12, left here only for
+-    # backwards compatibility with 3.10.0 - 3.10.8 and 3.11.0.
+-    # Similarly, this method's C equivalent in _asyncio is going away as well.
+-    # See GH-99949 for more details.
+     current_loop = _get_running_loop()
+     if current_loop is not None:
+         return current_loop
++    import warnings
++    warnings.warn('There is no current event loop',
++                  DeprecationWarning, stacklevel=stacklevel)
+     return get_event_loop_policy().get_event_loop()
+ 
+ 
+reverted:
+--- b/Lib/test/test_asyncio/test_base_events.py
++++ a/Lib/test/test_asyncio/test_base_events.py
+@@ -752,7 +752,7 @@
+     def test_env_var_debug(self):
+         code = '\n'.join((
+             'import asyncio',
++            'loop = asyncio.get_event_loop()',
+-            'loop = asyncio.new_event_loop()',
+             'print(loop.get_debug())'))
+ 
+         # Test with -E to not fail if the unit test was run with
+reverted:
+--- b/Lib/test/test_asyncio/test_events.py
++++ a/Lib/test/test_asyncio/test_events.py
+@@ -2561,9 +2561,8 @@
+     def test_get_event_loop(self):
+         policy = asyncio.DefaultEventLoopPolicy()
+         self.assertIsNone(policy._local._loop)
++
++        loop = policy.get_event_loop()
+-        with self.assertWarns(DeprecationWarning) as cm:
+-            loop = policy.get_event_loop()
+-        self.assertEqual(cm.filename, __file__)
+         self.assertIsInstance(loop, asyncio.AbstractEventLoop)
+ 
+         self.assertIs(policy._local._loop, loop)
+@@ -2577,10 +2576,7 @@
+                 policy, "set_event_loop",
+                 wraps=policy.set_event_loop) as m_set_event_loop:
+ 
++            loop = policy.get_event_loop()
+-            with self.assertWarns(DeprecationWarning) as cm:
+-                loop = policy.get_event_loop()
+-            self.addCleanup(loop.close)
+-            self.assertEqual(cm.filename, __file__)
+ 
+             # policy._local._loop must be set through .set_event_loop()
+             # (the unix DefaultEventLoopPolicy needs this call to attach
+@@ -2614,8 +2610,7 @@
+ 
+     def test_set_event_loop(self):
+         policy = asyncio.DefaultEventLoopPolicy()
++        old_loop = policy.get_event_loop()
+-        old_loop = policy.new_event_loop()
+-        policy.set_event_loop(old_loop)
+ 
+         self.assertRaises(AssertionError, policy.set_event_loop, object())
+ 
+@@ -2728,11 +2723,15 @@
+             asyncio.set_event_loop_policy(Policy())
+             loop = asyncio.new_event_loop()
+ 
++            with self.assertWarns(DeprecationWarning) as cm:
++                with self.assertRaises(TestError):
++                    asyncio.get_event_loop()
++            self.assertEqual(cm.warnings[0].filename, __file__)
+-            with self.assertRaises(TestError):
+-                asyncio.get_event_loop()
+             asyncio.set_event_loop(None)
++            with self.assertWarns(DeprecationWarning) as cm:
++                with self.assertRaises(TestError):
++                    asyncio.get_event_loop()
++            self.assertEqual(cm.warnings[0].filename, __file__)
+-            with self.assertRaises(TestError):
+-                asyncio.get_event_loop()
+ 
+             with self.assertRaisesRegex(RuntimeError, 'no running'):
+                 asyncio.get_running_loop()
+@@ -2746,11 +2745,16 @@
+             loop.run_until_complete(func())
+ 
+             asyncio.set_event_loop(loop)
++            with self.assertWarns(DeprecationWarning) as cm:
++                with self.assertRaises(TestError):
++                    asyncio.get_event_loop()
++            self.assertEqual(cm.warnings[0].filename, __file__)
++
+-            with self.assertRaises(TestError):
+-                asyncio.get_event_loop()
+             asyncio.set_event_loop(None)
++            with self.assertWarns(DeprecationWarning) as cm:
++                with self.assertRaises(TestError):
++                    asyncio.get_event_loop()
++            self.assertEqual(cm.warnings[0].filename, __file__)
+-            with self.assertRaises(TestError):
+-                asyncio.get_event_loop()
+ 
+         finally:
+             asyncio.set_event_loop_policy(old_policy)
+@@ -2774,8 +2778,10 @@
+             self.addCleanup(loop2.close)
+             self.assertEqual(cm.warnings[0].filename, __file__)
+             asyncio.set_event_loop(None)
++            with self.assertWarns(DeprecationWarning) as cm:
++                with self.assertRaisesRegex(RuntimeError, 'no current'):
++                    asyncio.get_event_loop()
++            self.assertEqual(cm.warnings[0].filename, __file__)
+-            with self.assertRaisesRegex(RuntimeError, 'no current'):
+-                asyncio.get_event_loop()
+ 
+             with self.assertRaisesRegex(RuntimeError, 'no running'):
+                 asyncio.get_running_loop()
+@@ -2789,11 +2795,15 @@
+             loop.run_until_complete(func())
+ 
+             asyncio.set_event_loop(loop)
++            with self.assertWarns(DeprecationWarning) as cm:
++                self.assertIs(asyncio.get_event_loop(), loop)
++            self.assertEqual(cm.warnings[0].filename, __file__)
+-            self.assertIs(asyncio.get_event_loop(), loop)
+ 
+             asyncio.set_event_loop(None)
++            with self.assertWarns(DeprecationWarning) as cm:
++                with self.assertRaisesRegex(RuntimeError, 'no current'):
++                    asyncio.get_event_loop()
++            self.assertEqual(cm.warnings[0].filename, __file__)
+-            with self.assertRaisesRegex(RuntimeError, 'no current'):
+-                asyncio.get_event_loop()
+ 
+         finally:
+             asyncio.set_event_loop_policy(old_policy)
+reverted:
+--- b/Lib/test/test_asyncio/test_futures.py
++++ a/Lib/test/test_asyncio/test_futures.py
+@@ -145,8 +145,10 @@
+         self.assertTrue(f.cancelled())
+ 
+     def test_constructor_without_loop(self):
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                self._new_future()
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            self._new_future()
+ 
+     def test_constructor_use_running_loop(self):
+         async def test():
+@@ -156,10 +158,12 @@
+         self.assertIs(f.get_loop(), self.loop)
+ 
+     def test_constructor_use_global_loop(self):
++        # Deprecated in 3.10
+-        # Deprecated in 3.10, undeprecated in 3.11.1
+         asyncio.set_event_loop(self.loop)
+         self.addCleanup(asyncio.set_event_loop, None)
++        with self.assertWarns(DeprecationWarning) as cm:
++            f = self._new_future()
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        f = self._new_future()
+         self.assertIs(f._loop, self.loop)
+         self.assertIs(f.get_loop(), self.loop)
+ 
+@@ -495,8 +499,10 @@
+             return (arg, threading.get_ident())
+         ex = concurrent.futures.ThreadPoolExecutor(1)
+         f1 = ex.submit(run, 'oi')
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaises(RuntimeError):
++                asyncio.wrap_future(f1)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.wrap_future(f1)
+         ex.shutdown(wait=True)
+ 
+     def test_wrap_future_use_running_loop(self):
+@@ -511,14 +517,16 @@
+         ex.shutdown(wait=True)
+ 
+     def test_wrap_future_use_global_loop(self):
++        # Deprecated in 3.10
+-        # Deprecated in 3.10, undeprecated in 3.11.1
+         asyncio.set_event_loop(self.loop)
+         self.addCleanup(asyncio.set_event_loop, None)
+         def run(arg):
+             return (arg, threading.get_ident())
+         ex = concurrent.futures.ThreadPoolExecutor(1)
+         f1 = ex.submit(run, 'oi')
++        with self.assertWarns(DeprecationWarning) as cm:
++            f2 = asyncio.wrap_future(f1)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        f2 = asyncio.wrap_future(f1)
+         self.assertIs(self.loop, f2._loop)
+         ex.shutdown(wait=True)
+ 
+reverted:
+--- b/Lib/test/test_asyncio/test_streams.py
++++ a/Lib/test/test_asyncio/test_streams.py
+@@ -747,8 +747,10 @@
+         self.assertEqual(data, b'data')
+ 
+     def test_streamreader_constructor_without_loop(self):
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                asyncio.StreamReader()
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.StreamReader()
+ 
+     def test_streamreader_constructor_use_running_loop(self):
+         # asyncio issue #184: Ensure that StreamReaderProtocol constructor
+@@ -762,17 +764,21 @@
+     def test_streamreader_constructor_use_global_loop(self):
+         # asyncio issue #184: Ensure that StreamReaderProtocol constructor
+         # retrieves the current loop if the loop parameter is not set
++        # Deprecated in 3.10
+-        # Deprecated in 3.10, undeprecated in 3.11.1
+         self.addCleanup(asyncio.set_event_loop, None)
+         asyncio.set_event_loop(self.loop)
++        with self.assertWarns(DeprecationWarning) as cm:
++            reader = asyncio.StreamReader()
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        reader = asyncio.StreamReader()
+         self.assertIs(reader._loop, self.loop)
+ 
+ 
+     def test_streamreaderprotocol_constructor_without_loop(self):
+         reader = mock.Mock()
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                asyncio.StreamReaderProtocol(reader)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.StreamReaderProtocol(reader)
+ 
+     def test_streamreaderprotocol_constructor_use_running_loop(self):
+         # asyncio issue #184: Ensure that StreamReaderProtocol constructor
+@@ -786,11 +792,13 @@
+     def test_streamreaderprotocol_constructor_use_global_loop(self):
+         # asyncio issue #184: Ensure that StreamReaderProtocol constructor
+         # retrieves the current loop if the loop parameter is not set
++        # Deprecated in 3.10
+-        # Deprecated in 3.10, undeprecated in 3.11.1
+         self.addCleanup(asyncio.set_event_loop, None)
+         asyncio.set_event_loop(self.loop)
+         reader = mock.Mock()
++        with self.assertWarns(DeprecationWarning) as cm:
++            protocol = asyncio.StreamReaderProtocol(reader)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        protocol = asyncio.StreamReaderProtocol(reader)
+         self.assertIs(protocol._loop, self.loop)
+ 
+     def test_multiple_drain(self):
+reverted:
+--- b/Lib/test/test_asyncio/test_tasks.py
++++ a/Lib/test/test_asyncio/test_tasks.py
+@@ -210,8 +210,10 @@
+ 
+         a = notmuch()
+         self.addCleanup(a.close)
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                asyncio.ensure_future(a)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.ensure_future(a)
+ 
+         async def test():
+             return asyncio.ensure_future(notmuch())
+@@ -221,10 +223,12 @@
+         self.assertTrue(t.done())
+         self.assertEqual(t.result(), 'ok')
+ 
++        # Deprecated in 3.10
+-        # Deprecated in 3.10.0, undeprecated in 3.10.9
+         asyncio.set_event_loop(self.loop)
+         self.addCleanup(asyncio.set_event_loop, None)
++        with self.assertWarns(DeprecationWarning) as cm:
++            t = asyncio.ensure_future(notmuch())
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        t = asyncio.ensure_future(notmuch())
+         self.assertIs(t._loop, self.loop)
+         self.loop.run_until_complete(t)
+         self.assertTrue(t.done())
+@@ -243,8 +247,10 @@
+ 
+         a = notmuch()
+         self.addCleanup(a.close)
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                asyncio.ensure_future(a)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
+-            asyncio.ensure_future(a)
+ 
+         async def test():
+             return asyncio.ensure_future(notmuch())
+@@ -254,10 +260,12 @@
+         self.assertTrue(t.done())
+         self.assertEqual(t.result(), 'ok')
+ 
++        # Deprecated in 3.10
+-        # Deprecated in 3.10.0, undeprecated in 3.10.9
+         asyncio.set_event_loop(self.loop)
+         self.addCleanup(asyncio.set_event_loop, None)
++        with self.assertWarns(DeprecationWarning) as cm:
++            t = asyncio.ensure_future(notmuch())
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        t = asyncio.ensure_future(notmuch())
+         self.assertIs(t._loop, self.loop)
+         self.loop.run_until_complete(t)
+         self.assertTrue(t.done())
+@@ -1480,8 +1488,10 @@
+         self.addCleanup(a.close)
+ 
+         futs = asyncio.as_completed([a])
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                list(futs)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            list(futs)
+ 
+     def test_as_completed_coroutine_use_running_loop(self):
+         loop = self.new_test_loop()
+@@ -1497,14 +1507,17 @@
+         loop.run_until_complete(test())
+ 
+     def test_as_completed_coroutine_use_global_loop(self):
++        # Deprecated in 3.10
+-        # Deprecated in 3.10.0, undeprecated in 3.10.9
+         async def coro():
+             return 42
+ 
+         loop = self.new_test_loop()
+         asyncio.set_event_loop(loop)
+         self.addCleanup(asyncio.set_event_loop, None)
++        futs = asyncio.as_completed([coro()])
++        with self.assertWarns(DeprecationWarning) as cm:
++            futs = list(futs)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        futs = list(asyncio.as_completed([coro()]))
+         self.assertEqual(len(futs), 1)
+         self.assertEqual(loop.run_until_complete(futs[0]), 42)
+ 
+@@ -1974,8 +1987,10 @@
+ 
+         inner = coro()
+         self.addCleanup(inner.close)
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaisesRegex(RuntimeError, 'There is no current event loop'):
++                asyncio.shield(inner)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.shield(inner)
+ 
+     def test_shield_coroutine_use_running_loop(self):
+         async def coro():
+@@ -1989,13 +2004,15 @@
+         self.assertEqual(res, 42)
+ 
+     def test_shield_coroutine_use_global_loop(self):
++        # Deprecated in 3.10
+-        # Deprecated in 3.10.0, undeprecated in 3.10.9
+         async def coro():
+             return 42
+ 
+         asyncio.set_event_loop(self.loop)
+         self.addCleanup(asyncio.set_event_loop, None)
++        with self.assertWarns(DeprecationWarning) as cm:
++            outer = asyncio.shield(coro())
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        outer = asyncio.shield(coro())
+         self.assertEqual(outer._loop, self.loop)
+         res = self.loop.run_until_complete(outer)
+         self.assertEqual(res, 42)
+@@ -2933,7 +2950,7 @@
+         self.assertIsNone(asyncio.current_task(loop=self.loop))
+ 
+     def test_current_task_no_running_loop_implicit(self):
++        with self.assertRaises(RuntimeError):
+-        with self.assertRaisesRegex(RuntimeError, 'no running event loop'):
+             asyncio.current_task()
+ 
+     def test_current_task_with_implicit_loop(self):
+@@ -3097,8 +3114,10 @@
+         return asyncio.gather(*args, **kwargs)
+ 
+     def test_constructor_empty_sequence_without_loop(self):
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaises(RuntimeError):
++                asyncio.gather()
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.gather()
+ 
+     def test_constructor_empty_sequence_use_running_loop(self):
+         async def gather():
+@@ -3111,10 +3130,12 @@
+         self.assertEqual(fut.result(), [])
+ 
+     def test_constructor_empty_sequence_use_global_loop(self):
++        # Deprecated in 3.10
+-        # Deprecated in 3.10.0, undeprecated in 3.10.9
+         asyncio.set_event_loop(self.one_loop)
+         self.addCleanup(asyncio.set_event_loop, None)
++        with self.assertWarns(DeprecationWarning) as cm:
++            fut = asyncio.gather()
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        fut = asyncio.gather()
+         self.assertIsInstance(fut, asyncio.Future)
+         self.assertIs(fut._loop, self.one_loop)
+         self._run_loop(self.one_loop)
+@@ -3202,8 +3223,10 @@
+         self.addCleanup(gen1.close)
+         gen2 = coro()
+         self.addCleanup(gen2.close)
++        with self.assertWarns(DeprecationWarning) as cm:
++            with self.assertRaises(RuntimeError):
++                asyncio.gather(gen1, gen2)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        with self.assertRaisesRegex(RuntimeError, 'no current event loop'):
+-            asyncio.gather(gen1, gen2)
+ 
+     def test_constructor_use_running_loop(self):
+         async def coro():
+@@ -3217,14 +3240,16 @@
+         self.one_loop.run_until_complete(fut)
+ 
+     def test_constructor_use_global_loop(self):
++        # Deprecated in 3.10
+-        # Deprecated in 3.10.0, undeprecated in 3.10.9
+         async def coro():
+             return 'abc'
+         asyncio.set_event_loop(self.other_loop)
+         self.addCleanup(asyncio.set_event_loop, None)
+         gen1 = coro()
+         gen2 = coro()
++        with self.assertWarns(DeprecationWarning) as cm:
++            fut = asyncio.gather(gen1, gen2)
++        self.assertEqual(cm.warnings[0].filename, __file__)
+-        fut = asyncio.gather(gen1, gen2)
+         self.assertIs(fut._loop, self.other_loop)
+         self.other_loop.run_until_complete(fut)
+ 
+reverted:
+--- b/Lib/test/test_asyncio/test_unix_events.py
++++ a/Lib/test/test_asyncio/test_unix_events.py
+@@ -1740,8 +1740,7 @@
+ 
+     def test_child_watcher_replace_mainloop_existing(self):
+         policy = self.create_policy()
++        loop = policy.get_event_loop()
+-        loop = policy.new_event_loop()
+-        policy.set_event_loop(loop)
+ 
+         # Explicitly setup SafeChildWatcher,
+         # default ThreadedChildWatcher has no _loop property
+reverted:
+--- b/Lib/test/test_coroutines.py
++++ a/Lib/test/test_coroutines.py
+@@ -2319,8 +2319,7 @@
+     def test_unawaited_warning_during_shutdown(self):
+         code = ("import asyncio\n"
+                 "async def f(): pass\n"
++                "asyncio.gather(f())\n")
+-                "async def t(): asyncio.gather(f())\n"
+-                "asyncio.run(t())\n")
+         assert_python_ok("-c", code)
+ 
+         code = ("import sys\n"
+reverted:
+--- b/Modules/_asynciomodule.c
++++ a/Modules/_asynciomodule.c
+@@ -332,6 +332,13 @@
+         return loop;
+     }
+ 
++    if (PyErr_WarnEx(PyExc_DeprecationWarning,
++                     "There is no current event loop",
++                     stacklevel))
++    {
++        return NULL;
++    }
++
+     policy = PyObject_CallNoArgs(asyncio_get_event_loop_policy);
+     if (policy == NULL) {
+         return NULL;
+@@ -3085,11 +3092,6 @@
+     return get_event_loop(1);
+ }
+ 
+-// This internal method is going away in Python 3.12, left here only for
+-// backwards compatibility with 3.10.0 - 3.10.8 and 3.11.0.
+-// Similarly, this method's Python equivalent in asyncio.events is going
+-// away as well.
+-// See GH-99949 for more details.
+ /*[clinic input]
+ _asyncio._get_event_loop
+     stacklevel: int = 3

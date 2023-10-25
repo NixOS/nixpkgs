@@ -1,0 +1,50 @@
+diff --git a/netbox/netbox/settings.py b/netbox/netbox/settings.py
+index d5a7bfaec..68754a8c5 100644
+--- a/netbox/netbox/settings.py
++++ b/netbox/netbox/settings.py
+@@ -222,6 +222,7 @@ TASKS_REDIS_PASSWORD = TASKS_REDIS.get('PASSWORD', '')
+ TASKS_REDIS_DATABASE = TASKS_REDIS.get('DATABASE', 0)
+ TASKS_REDIS_SSL = TASKS_REDIS.get('SSL', False)
+ TASKS_REDIS_SKIP_TLS_VERIFY = TASKS_REDIS.get('INSECURE_SKIP_TLS_VERIFY', False)
++TASKS_REDIS_URL = TASKS_REDIS.get('URL')
+ 
+ # Caching
+ if 'caching' not in REDIS:
+@@ -236,11 +237,12 @@ CACHING_REDIS_SENTINELS = REDIS['caching'].get('SENTINELS', [])
+ CACHING_REDIS_SENTINEL_SERVICE = REDIS['caching'].get('SENTINEL_SERVICE', 'default')
+ CACHING_REDIS_PROTO = 'rediss' if REDIS['caching'].get('SSL', False) else 'redis'
+ CACHING_REDIS_SKIP_TLS_VERIFY = REDIS['caching'].get('INSECURE_SKIP_TLS_VERIFY', False)
++CACHING_REDIS_URL = REDIS['caching'].get('URL', f'{CACHING_REDIS_PROTO}://{CACHING_REDIS_HOST}:{CACHING_REDIS_PORT}/{CACHING_REDIS_DATABASE}')
+ 
+ CACHES = {
+     'default': {
+         'BACKEND': 'django_redis.cache.RedisCache',
+-        'LOCATION': f'{CACHING_REDIS_PROTO}://{CACHING_REDIS_HOST}:{CACHING_REDIS_PORT}/{CACHING_REDIS_DATABASE}',
++        'LOCATION': CACHING_REDIS_URL,
+         'OPTIONS': {
+             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+             'PASSWORD': CACHING_REDIS_PASSWORD,
+@@ -383,7 +385,7 @@ USE_X_FORWARDED_HOST = True
+ X_FRAME_OPTIONS = 'SAMEORIGIN'
+ 
+ # Static files (CSS, JavaScript, Images)
+-STATIC_ROOT = BASE_DIR + '/static'
++STATIC_ROOT = getattr(configuration, 'STATIC_ROOT', os.path.join(BASE_DIR, 'static')).rstrip('/')
+ STATIC_URL = f'/{BASE_PATH}static/'
+ STATICFILES_DIRS = (
+     os.path.join(BASE_DIR, 'project-static', 'dist'),
+@@ -562,6 +564,14 @@ if TASKS_REDIS_USING_SENTINEL:
+             'socket_connect_timeout': TASKS_REDIS_SENTINEL_TIMEOUT
+         },
+     }
++elif TASKS_REDIS_URL:
++    RQ_PARAMS = {
++        'URL': TASKS_REDIS_URL,
++        'PASSWORD': TASKS_REDIS_PASSWORD,
++        'SSL': TASKS_REDIS_SSL,
++        'SSL_CERT_REQS': None if TASKS_REDIS_SKIP_TLS_VERIFY else 'required',
++        'DEFAULT_TIMEOUT': RQ_DEFAULT_TIMEOUT,
++    }
+ else:
+     RQ_PARAMS = {
+         'HOST': TASKS_REDIS_HOST,

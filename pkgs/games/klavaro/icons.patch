@@ -1,0 +1,146 @@
+--- a/data/klavaro.glade	(revision 137)
++++ b/data/klavaro.glade	(working copy)
+@@ -311,7 +311,7 @@
+                       <object class="GtkImage" id="image24">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-delete</property>
++                        <property name="icon-name">edit-delete</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -708,7 +708,7 @@
+                     <property name="can-default">True</property>
+                     <property name="has-default">True</property>
+                     <property name="tooltip-text" translatable="yes">Drag and drop text here to practice with it.</property>
+-                    <property name="secondary-icon-name">gtk-clear</property>
++                    <property name="secondary-icon-name">edit-clear</property>
+                     <property name="secondary-icon-tooltip-text" translatable="yes">Press here to restart the exercise. Hotkey: [Ctrl-R]</property>
+                     <property name="secondary-icon-tooltip-markup" translatable="yes">Press here to restart the exercise. Hotkey: [Ctrl-R]</property>
+                     <signal name="activate" handler="on_entry_mesg_activate" after="yes" swapped="no"/>
+@@ -1232,7 +1232,7 @@
+                       <object class="GtkImage" id="image27">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-delete</property>
++                        <property name="icon-name">edit-delete</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -1352,7 +1352,7 @@
+                       <object class="GtkImage" id="image23">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-open</property>
++                        <property name="icon-name">document-open</property>
+                       </object>
+                       <packing>
+                         <property name="expand">True</property>
+@@ -1510,7 +1510,7 @@
+                       <object class="GtkImage" id="image11">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-open</property>
++                        <property name="icon-name">document-open</property>
+                         <property name="icon_size">2</property>
+                       </object>
+                       <packing>
+@@ -1557,7 +1557,7 @@
+                       <object class="GtkImage" id="image6">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-paste</property>
++                        <property name="icon-name">edit-paste</property>
+                         <property name="icon_size">2</property>
+                       </object>
+                       <packing>
+@@ -1604,7 +1604,7 @@
+                       <object class="GtkImage" id="image19">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-delete</property>
++                        <property name="icon-name">edit-delete</property>
+                         <property name="icon_size">2</property>
+                       </object>
+                       <packing>
+@@ -2051,7 +2051,7 @@
+                       <object class="GtkImage" id="image14">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-delete</property>
++                        <property name="icon-name">edit-delete</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -2343,7 +2343,7 @@
+                   <object class="GtkImage" id="image3">
+                     <property name="visible">True</property>
+                     <property name="can-focus">False</property>
+-                    <property name="icon-name">gtk-media-rewind</property>
++                    <property name="icon-name">media-seek-backward</property>
+                     <property name="icon_size">1</property>
+                   </object>
+                 </child>
+@@ -2418,7 +2418,7 @@
+                       <object class="GtkImage" id="image20">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-go-back</property>
++                        <property name="icon-name">go-previous</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -2469,7 +2469,7 @@
+                       <object class="GtkImage" id="image18">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-go-forward</property>
++                        <property name="icon-name">go-next</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -2577,7 +2577,7 @@
+                       <object class="GtkImage" id="image13">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-save</property>
++                        <property name="icon-name">document-save</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -2825,7 +2825,7 @@
+                       <object class="GtkImage" id="image_basic">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-strikethrough</property>
++                        <property name="icon-name">format-text-strikethrough</property>
+                         <property name="icon_size">6</property>
+                       </object>
+                       <packing>
+@@ -2901,7 +2901,7 @@
+                       <object class="GtkImage" id="image_adapt">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-bold</property>
++                        <property name="icon-name">format-text-bold</property>
+                         <property name="icon_size">6</property>
+                       </object>
+                       <packing>
+@@ -3630,7 +3630,7 @@
+                       <object class="GtkImage" id="image_top10_publish">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-goto-top</property>
++                        <property name="icon-name">go-top</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>
+@@ -3678,7 +3678,7 @@
+                       <object class="GtkImage" id="image_top10_update">
+                         <property name="visible">True</property>
+                         <property name="can-focus">False</property>
+-                        <property name="icon-name">gtk-goto-bottom</property>
++                        <property name="icon-name">go-bottom</property>
+                       </object>
+                       <packing>
+                         <property name="expand">False</property>

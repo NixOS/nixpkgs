@@ -1,0 +1,48 @@
+diff -Naur source-old/desktop-ui/GNUmakefile source-new/desktop-ui/GNUmakefile
+--- source-old/desktop-ui/GNUmakefile	1969-12-31 21:00:01.000000000 -0300
++++ source-new/desktop-ui/GNUmakefile	2023-07-08 12:20:08.206582916 -0300
+@@ -91,8 +91,7 @@
+ 	cp resource/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+ 	cp -R $(ares.path)/Shaders $(output.path)/$(name).app/Contents/Resources/
+ 	cp -R $(mia.path)/Database $(output.path)/$(name).app/Contents/Resources/	
+-	sips -s format icns resource/$(name).png --out $(output.path)/$(name).app/Contents/Resources/$(name).icns
+-	codesign --force --deep --options runtime --entitlements resource/$(name).selfsigned.entitlements --sign - $(output.path)/$(name).app
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+ else ifeq ($(platform),windows)
+ 	$(call mkdir,$(output.path)/Shaders/)
+ 	$(call mkdir,$(output.path)/Database/)
+@@ -115,8 +114,8 @@
+ else ifeq ($(shell id -un),root)
+ 	$(error "make install should not be run as root")
+ else ifeq ($(platform),macos)
+-	mkdir -p ~/Library/Application\ Support/$(name)/
+-	cp -R $(output.path)/$(name).app /Applications/$(name).app
++	mkdir -p $(prefix)/Applications/
++	cp -R $(output.path)/$(name).app $(prefix)/Applications/$(name).app
+ else ifneq ($(filter $(platform),linux bsd),)
+ 	mkdir -p $(prefix)/bin/
+ 	mkdir -p $(prefix)/share/applications/
+diff -Naur source-old/mia/GNUmakefile source-new/mia/GNUmakefile
+--- source-old/mia/GNUmakefile	1969-12-31 21:00:01.000000000 -0300
++++ source-new/mia/GNUmakefile	2023-07-08 12:16:55.991517276 -0300
+@@ -39,7 +39,7 @@
+ 	mkdir -p $(output.path)/$(name).app/Contents/Resources/
+ 	mv $(output.path)/$(name) $(output.path)/$(name).app/Contents/MacOS/$(name)
+ 	cp resource/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+-	sips -s format icns resource/$(name).png --out $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns resource/$(name).png
+ endif
+ 
+ verbose: hiro.verbose nall.verbose all;
+diff -Naur source-old/tools/genius/GNUmakefile source-new/tools/genius/GNUmakefile
+--- source-old/tools/genius/GNUmakefile	1969-12-31 21:00:01.000000000 -0300
++++ source-new/tools/genius/GNUmakefile	2023-07-08 12:16:16.273503940 -0300
+@@ -26,7 +26,7 @@
+ 	mkdir -p $(output.path)/$(name).app/Contents/Resources/
+ 	mv $(output.path)/$(name) $(output.path)/$(name).app/Contents/MacOS/$(name)
+ 	cp data/$(name).plist $(output.path)/$(name).app/Contents/Info.plist
+-	sips -s format icns data/$(name).png --$(output.path) $(output.path)/$(name).app/Contents/Resources/$(name).icns
++	png2icns $(output.path)/$(name).app/Contents/Resources/$(name).icns data/$(name).png
+ endif
+ 
+ verbose: hiro.verbose nall.verbose all;

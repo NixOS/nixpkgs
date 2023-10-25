@@ -1,0 +1,29 @@
+diff --git a/PPD/Dell-1250c.ppd b/PPD/Dell-1250c.ppd
+index 828ecd6..98f49e1 100644
+--- a/PPD/Dell-1250c.ppd
++++ b/PPD/Dell-1250c.ppd
+@@ -92,15 +92,15 @@
+ *FoomaticRIPOptionSetting Quality=normal: "  "
+ *CloseUI: *Quality
+ 
+-*OpenUI *ColorMode/Color Mode: PickOne
+-*FoomaticRIPOption ColorMode: enum CmdLine A
+-*OrderDependency: 120 AnySetup *ColorMode
+-*DefaultColorMode: Monochrome
+-*ColorMode Color/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
+-*FoomaticRIPOptionSetting ColorMode=Color: "-c "
+-*ColorMode Monochrome/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
+-*FoomaticRIPOptionSetting ColorMode=Monochrome: " "
+-*CloseUI: *ColorMode
++*OpenUI *ColorModel/Color Mode: PickOne
++*FoomaticRIPOption ColorModel: enum CmdLine A
++*OrderDependency: 120 AnySetup *ColorModel
++*DefaultColorModel: RGB
++*ColorModel RGB/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
++*FoomaticRIPOptionSetting ColorModel=RGB: "-c "
++*ColorModel Gray/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
++*FoomaticRIPOptionSetting ColorModel=Gray: " "
++*CloseUI: *ColorModel
+ 
+ *OpenUI *PageSize/Page Size: PickOne
+ *FoomaticRIPOption PageSize: enum CmdLine A
