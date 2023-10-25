@@ -1,31 +1,43 @@
+# shellcheck shell=bash disable=SC2206
+
 mesonConfigurePhase() {
     runHook preConfigure
 
+    local flagsArray=()
+
     if [ -z "${dontAddPrefix-}" ]; then
-        mesonFlags="--prefix=$prefix $mesonFlags"
+        flagsArray+=("--prefix=$prefix")
     fi
 
     # See multiple-outputs.sh and meson’s coredata.py
-    mesonFlags="\
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --localedir=${!outputLib}/share/locale \
-        -Dauto_features=${mesonAutoFeatures:-enabled} \
-        -Dwrap_mode=${mesonWrapMode:-nodownload} \
-        $mesonFlags"
+    flagsArray+=(
+        "--libdir=${!outputLib}/lib"
+        "--libexecdir=${!outputLib}/libexec"
+        "--bindir=${!outputBin}/bin"
+        "--sbindir=${!outputBin}/sbin"
+        "--includedir=${!outputInclude}/include"
+        "--mandir=${!outputMan}/share/man"
+        "--infodir=${!outputInfo}/share/info"
+        "--localedir=${!outputLib}/share/locale"
+        "-Dauto_features=${mesonAutoFeatures:-enabled}"
+        "-Dwrap_mode=${mesonWrapMode:-nodownload}"
+        ${crossMesonFlags}
+        "--buildtype=${mesonBuildType:-plain}"
+    )
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
+    flagsArray+=(
+        $mesonFlags
+        "${mesonFlagsArray[@]}"
+    )
 
-    echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
+    echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
 
-    meson setup build $mesonFlags "${mesonFlagsArray[@]}"
-    cd build
+    meson setup build "${flagsArray[@]}"
+    cd build || { echoCmd 'mesonConfigurePhase' "could not cd to build"; exit 1; }
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
-        echo "meson: enabled parallel building"
+        echoCmd 'mesonConfigurePhase' "enabled parallel building"
     fi
 
     if [[ ${checkPhase-ninjaCheckPhase} = ninjaCheckPhase && -z $dontUseMesonCheck ]]; then
@@ -43,7 +55,7 @@ mesonCheckPhase() {
 
     local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
 
-    echoCmd 'check flags' "${flagsArray[@]}"
+    echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
     meson test --no-rebuild "${flagsArray[@]}"
 
     runHook postCheck
@@ -52,20 +64,24 @@ mesonCheckPhase() {
 mesonInstallPhase() {
     runHook preInstall
 
-    # shellcheck disable=SC2086
-    local flagsArray=($mesonInstallFlags "${mesonInstallFlagsArray[@]}")
+    local flagsArray=()
 
     if [[ -n "$mesonInstallTags" ]]; then
         flagsArray+=("--tags" "${mesonInstallTags// /,}")
     fi
+    flagsArray+=(
+        $mesonInstallFlags
+        "${mesonInstallFlagsArray[@]}"
+    )
 
-    echoCmd 'install flags' "${flagsArray[@]}"
+    echoCmd 'mesonInstallPhase flags' "${flagsArray[@]}"
     meson install --no-rebuild "${flagsArray[@]}"
 
     runHook postInstall
 }
 
-if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
+if [ -z "${dontUseMesonConfigure-}" ] && [ -z "${configurePhase-}" ]; then
+    # shellcheck disable=SC2034
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi
