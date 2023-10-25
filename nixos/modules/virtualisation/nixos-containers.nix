@@ -539,7 +539,7 @@ in
               default = [];
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
               description = lib.mdDoc ''
-                Grant additional capabilities to the container.  See the
+                Grant additional capabilities to the container. See the
                 capabilities(7) and systemd-nspawn(1) man pages for more
                 information.
               '';
