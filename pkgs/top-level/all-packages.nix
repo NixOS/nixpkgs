@@ -5755,7 +5755,9 @@ with pkgs;
 
   joystickwake = callPackage ../tools/games/joystickwake { };
 
-  juce = darwin.apple_sdk_11_0.callPackage ../development/misc/juce { };
+  juce = callPackage ../development/misc/juce {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   jumppad = callPackage ../tools/virtualization/jumppad { };
 
