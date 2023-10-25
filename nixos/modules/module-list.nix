@@ -907,6 +907,7 @@
   ./services/networking/eternal-terminal.nix
   ./services/networking/expressvpn.nix
   ./services/networking/fakeroute.nix
+  ./services/networking/fastnetmon-advanced.nix
   ./services/networking/ferm.nix
   ./services/networking/firefox-syncserver.nix
   ./services/networking/fireqos.nix
