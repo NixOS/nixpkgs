@@ -8,10 +8,7 @@ mkCoqDerivation rec {
     { case = range "8.16" "8.18";  out = "2023-08-14"; }
   ] null;
   release."2023-08-14".sha256 = "sha256-gu9qOdHO0qJ2B9Y9Vf66q08iNJcfuECJO66fizFB08g=";
-  releaseRev = v: lib.switch v [
-    { case = "2023-08-14";
-      out  = "ca1871dd33649f27257a0fbf94076acc80ecffbc"; }
-  ] null;
+  release."2023-08-14".rev = "ca1871dd33649f27257a0fbf94076acc80ecffbc";
   propagatedBuildInputs = [ iris ];
   meta = {
     description = "Named props for Iris";
