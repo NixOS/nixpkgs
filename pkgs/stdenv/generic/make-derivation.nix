@@ -1,3 +1,67 @@
+let
+
+  #
+  # This is a list of pnames of packages that have failed to splice.
+  # Every one of these is an unfixed bug.  Please fix them instead
+  # of taking shameful behavior, you scoundrel!
+  #
+  list-of-shame =
+    builtins.listToAttrs
+      (builtins.map
+        (name: { inherit name; value = true; })
+        [
+          # shame on you, python
+          "wrap-python-hook"
+          "python-imports-check-hook.sh"
+          "python-namespaces-hook.sh"
+          "wrap-python-hook"
+          "pytest-check-hook"
+          "python-remove-tests-dir-hook"
+          "python-catch-conflicts-hook"
+          "python-remove-bin-bytecode-hook"
+          "python-output-dist-hook"
+          "python-remove-tests-dir-hook"
+          "wrap-python-hook"
+          "setuptools-setup-hook"
+          "pypa-build-hook.sh"
+          "pypa-install-hook"
+          "python3-3.11.5-env"
+          "setuptools-check-hook"
+          "unittest-check-hook"
+
+          # shame on you, llvm!
+          "llvm"
+          "compiler-rt"
+          "libcxx"
+          "libcxxabi"
+          "libunwind"
+
+          # shame on you, embedded ARM!
+          "arm-none-eabi-stage-final-gcc-wrapper"
+          "arm-none-eabi-binutils-wrapper"
+
+          # wasm doesn't care about shamefulness, so I won't bother...
+          "rustc-wasm32"
+
+          # windows
+          # has overrides which discard splicing
+          # improvement: convert makeScope to makeScopeWithSplicing'
+          # may not fix it but it'll improve the set
+          # https://github.com/NixOS/nixpkgs/blob/53aa767c849b159cdb8c59dce4a5a44f167fc31b/pkgs/os-specific/windows/default.nix#L20
+          "mcfgthreads"
+          "i686-w64-mingw32-stage-final-gcc-wrapper"
+          "x86_64-w64-mingw32-stage-final-gcc-wrapper"
+
+          # other shameful derivations
+          "git-minimal"
+          "busybox"
+          "avr-stage-final-gcc-wrapper"
+          "boost-build"
+          "cmake-boot"
+          "perl" # only for libxcrypt; we should fix this
+        ]);
+in
+
 { lib, config }:
 
 stdenv:
@@ -289,18 +353,21 @@ else let
 
   getSpliced = type: drv:
     drv.__spliced or
-      ( assert
+      (let approximate-pname = drv.pname or drv.name; in
+        assert
           (drv?stdenv &&
            drv.stdenv.buildPlatform != drv.stdenv.targetPlatform &&
 
            # I can't test on Darwin, so let's just ignore it for now.
            !drv.stdenv.buildPlatform.isDarwin &&
            !drv.stdenv.hostPlatform.isDarwin &&
-           !drv.stdenv.targetPlatform.isDarwin
+           !drv.stdenv.targetPlatform.isDarwin &&
+
+           !(list-of-shame ? ${approximate-pname})
           )
                -> lib.warn
                  ''derivation ${attrs.pname or "!!no pname!!"}:
-                     unspliced ${type} dependency ${toString drv}
+                     unspliced ${type} dependency ${approximate-pname}
                        build=${drv.stdenv.buildPlatform.config}
                        target=${drv.stdenv.targetPlatform.config}
                  '' true;
