@@ -40563,7 +40563,7 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  nixops_unstable = lowPrio (callPackage ../applications/networking/cluster/nixops { });
+  nixops_unstable = callPackage ../applications/networking/cluster/nixops { };
 
   /*
     Evaluate a NixOS configuration using this evaluation of Nixpkgs.
