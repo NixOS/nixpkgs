@@ -579,6 +579,8 @@ with pkgs;
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
 
+  cpu-energy-meter = callPackage ../tools/misc/cpu-energy-meter { };
+
   crackle = callPackage ../tools/networking/crackle { };
 
   crackql = callPackage ../tools/security/crackql { };
