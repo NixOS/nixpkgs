@@ -17282,8 +17282,6 @@ with pkgs;
   };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
-  scalingo = callPackage ../development/tools/scalingo { };
-
   scryer-prolog = callPackage ../development/compilers/scryer-prolog { };
 
   sdcc = callPackage ../development/compilers/sdcc {
