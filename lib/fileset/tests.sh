@@ -332,7 +332,7 @@ expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/
 \s*`root`: root "'"$work"'/foo/mock-root"
 \s*`fileset`: root "'"$work"'/bar/mock-root"
 \s*Different roots are not supported.'
-rm -rf *
+rm -rf -- *
 
 # `root` needs to exist
 expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) does not exist.'
@@ -342,7 +342,7 @@ touch a
 expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a file, but it should be a directory instead. Potential solutions:
 \s*- If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
 \s*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
-rm -rf *
+rm -rf -- *
 
 # The fileset argument should be evaluated, even if the directory is empty
 expectFailure 'toSource { root = ./.; fileset = abort "This should be evaluated"; }' 'evaluation aborted with the following error message: '\''This should be evaluated'\'
@@ -352,7 +352,7 @@ mkdir a
 expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
 \s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
 \s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
-rm -rf *
+rm -rf -- *
 
 # Path coercion only works for paths
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
@@ -493,7 +493,7 @@ expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/
 \s*element 0: root "'"$work"'/foo/mock-root"
 \s*element 1: root "'"$work"'/bar/mock-root"
 \s*Different roots are not supported.'
-rm -rf *
+rm -rf -- *
 
 # Coercion errors show the correct context
 expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument \('"$work"'/a\) does not exist.'
