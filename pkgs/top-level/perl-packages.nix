@@ -8735,6 +8735,19 @@ with self; {
     };
   };
 
+  ENVUtil = buildPerlPackage {
+    pname = "ENV-Util";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GARU/ENV-Util-0.03.tar.gz";
+      hash = "sha256-B1574ehSxD6wiGYvr978FS9O9WyEPB4F2QDaGQb3P60=";
+    };
+    meta = {
+      description = "Parse prefixed environment variables and dotnev (.env) files into Perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Error = buildPerlModule {
     pname = "Error";
     version = "0.17029";
