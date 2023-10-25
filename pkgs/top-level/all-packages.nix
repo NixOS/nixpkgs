@@ -15965,7 +15965,7 @@ with pkgs;
         reproducibleBuild = true;
         profiledCompiler = false;
 
-        isl = if !stdenv.isDarwin then isl_0_20 else null;
+        isl = if !stdenv.isDarwin then __splicedPackages.isl_0_20 else null;
 
         withoutTargetLibc = true;
         langCC = false;

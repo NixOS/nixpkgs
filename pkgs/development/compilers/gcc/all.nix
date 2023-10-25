@@ -11,6 +11,7 @@
 , cloog_0_18_0, cloog
 , lowPrio
 , wrapCC
+, __splicedPackages
 }@args:
 
 let
@@ -27,7 +28,7 @@ let
         libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
         threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor majorMinorVersion else { };
         isl = if       stdenv.isDarwin then null
-              else if    atLeast "9"   then isl_0_20
+              else if    atLeast "9"   then __splicedPackages.isl_0_20
               else if    atLeast "7"   then isl_0_17
               else if    atLeast "6"   then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
               else if    atLeast "4.9" then isl_0_11
