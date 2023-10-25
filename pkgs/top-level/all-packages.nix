@@ -18930,7 +18930,7 @@ with pkgs;
 
   # can't use override - it triggers infinite recursion
   cmakeMinimal = callPackage ../by-name/cm/cmake/package.nix {
-    isBootstrap = true;
+    isMinimalBuild = true;
   };
 
   cmakeCurses = cmake.override {
