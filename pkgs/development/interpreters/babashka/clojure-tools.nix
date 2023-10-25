@@ -6,10 +6,10 @@
 }:
 clojure.overrideAttrs (previousAttrs: {
   pname = "babashka-clojure-tools";
-  version = "1.11.1.1403";
+  version = "1.11.1.1413";
 
   src = fetchurl {
     url = previousAttrs.src.url;
-    hash = "sha256-bVNHEEzpPanPF8pfDP51d13bxv9gZGzqczNmFQOk6zI=";
+    hash = "sha256-k8Olo63KUcWFgGNBmr9myD2/JOoV4f2S95v35mI4H+A=";
   };
 })
