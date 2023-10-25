@@ -13,11 +13,6 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
-
   preConfigure = ''
     export HOME=$TMPDIR
   '';
