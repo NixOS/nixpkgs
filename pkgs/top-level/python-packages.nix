@@ -989,6 +989,8 @@ self: super: with self; {
 
   axis = callPackage ../development/python-modules/axis { };
 
+  azure-ai-formrecognizer = callPackage ../development/python-modules/azure-ai-formrecognizer { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
