@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -46,6 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";
   };
+
+  patches = [
+    # Fix gbm-kms tests
+    # Remove when version > 2.15.0
+    (fetchpatch {
+      name = "0001-mir-Fix-the-signature-of-drmModeCrtcSetGamma.patch";
+      url = "https://github.com/MirServer/mir/commit/98250e9c32c5b9b940da2fb0a32d8139bbc68157.patch";
+      hash = "sha256-tTtOHGNue5rsppOIQSfkOH5sVfFSn/KPGHmubNlRtLI=";
+    })
+  ];
 
   postPatch = ''
     # Fix scripts that get run in tests
