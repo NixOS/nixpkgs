@@ -6,8 +6,7 @@
 , version
 , flutterSrc
 , patches ? [ ]
-, pubspecLockFile
-, vendorHash
+, pubspecLock
 , depsListFile
 }:
 
@@ -47,5 +46,5 @@ buildDartApplication.override { inherit dart; } rec {
     popd
   '';
 
-  inherit pubspecLockFile vendorHash depsListFile;
+  inherit pubspecLock depsListFile;
 }

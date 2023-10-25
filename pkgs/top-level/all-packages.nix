@@ -41618,7 +41618,7 @@ with pkgs;
 
   dart-sass = callPackage ../development/tools/misc/dart-sass { };
 
-  fetchDartDeps = callPackage ../build-support/dart/fetch-dart-deps { };
+  pub2nix = recurseIntoAttrs (callPackage ../build-support/dart/pub2nix { });
 
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
