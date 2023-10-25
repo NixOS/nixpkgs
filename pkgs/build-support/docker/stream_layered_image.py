@@ -8,7 +8,8 @@ image as an uncompressed tarball to stdout:
 * "architecture", "config", "os", "created", "repo_tag" correspond to
   the fields with the same name on the image spec [2].
 * "created" can be "now".
-* "created" is also used as mtime for files added to the image.
+* "mtime" is mtime for files added to the image. It defaults to "created"
+  if not specified.
 * "store_layers" is a list of layers in ascending order, where each
   layer is the list of store paths to include in that layer.
 
@@ -323,7 +324,14 @@ def main():
       if conf["created"] == "now"
       else datetime.fromisoformat(conf["created"])
     )
-    mtime = int(created.timestamp())
+
+    mtime = (
+        datetime.fromisoformat(conf["mtime"])
+            if conf.get("mtime") # if mtime is specified and not falsey
+            else created
+    )
+    mtime = int(mtime.timestamp())
+
     store_dir = conf["store_dir"]
 
     from_image = load_from_image(conf["from_image"])

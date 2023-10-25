@@ -151,9 +151,15 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `created` _optional_
 
-: Date and time the layers were created. Follows the same `now` exception supported by `buildImage`.
+: Date and time the docker image is created. Follows the same `now` exception supported by `buildImage`.
 
     *Default:* `1970-01-01T00:00:01Z`
+
+`mtime` _optional_
+
+: Date and time set as the modification time of the files in the layers. Defaults to the value of `created`.
+
+    *Default:* `null`
 
 `maxLayers` _optional_
 
