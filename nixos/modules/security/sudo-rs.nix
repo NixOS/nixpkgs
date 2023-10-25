@@ -7,7 +7,7 @@ let
   cfg = config.security.sudo-rs;
 
   inherit (config.security.pam) enableSSHAgentAuth;
-  inherit (pkgs) sudo sudo-rs;
+  inherit (pkgs) sudo-rs;
 
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
@@ -264,7 +264,7 @@ in
       };
     };
 
-    environment.systemPackages = [ sudo ];
+    environment.systemPackages = [ cfg.package ];
 
     security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
     security.pam.services.sudo-i = { sshAgentAuth = true; usshAuth = true; };
