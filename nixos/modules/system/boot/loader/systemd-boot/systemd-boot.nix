@@ -7,12 +7,20 @@ let
 
   efi = config.boot.loader.efi;
 
+  systemdUkify = pkgs.systemdMinimal.override {
+    withEfi = true;
+    withBootloader = true;
+    withUkify = true;
+  };
+
   systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
 
     inherit (pkgs) python3;
+
+    inherit systemdUkify;
 
     systemd = config.systemd.package;
 
@@ -238,6 +246,15 @@ in {
       '';
     };
 
+    useSystemdStub = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Boot from a Unified Kernel Image composed from system-stub, the linux kernel and the initramfs image.
+        Activating this option will induce a steep increase of the size a single generation takes on the boot partition.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -308,5 +325,8 @@ in {
         (isYes "EFI_STUB")
       ];
     };
+
+    boot.bootspec.extensions.useSystemdStub = cfg.useSystemdStub;
+
   };
 }
