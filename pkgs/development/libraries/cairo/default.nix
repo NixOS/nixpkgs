@@ -60,18 +60,18 @@ in {
     (lib.mesonEnable "tests" finalAttrs.doCheck)
     (lib.mesonEnable "xlib" x11Support)
     (lib.mesonEnable "xcb" xcbSupport)
-  # ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-  #   "--cross-file=${builtins.toFile "cross-file.conf" ''
-  #     [properties]
-  #     ipc_rmid_deferred_release = ${
-  #       {
-  #         linux = "true";
-  #         freebsd = "true";
-  #         netbsd = "false";
-  #       }.${stdenv.hostPlatform.parsed.kernel.name} or
-  #         throw "Unknown value for ipc_rmid_deferred_release"
-  #     }
-  #   ''}"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "--cross-file=${builtins.toFile "cross-file.conf" ''
+      [properties]
+      ipc_rmid_deferred_release = ${
+        {
+          linux = "true";
+          freebsd = "true";
+          netbsd = "false";
+        }.${stdenv.hostPlatform.parsed.kernel.name} or
+          (throw "Unknown value for ipc_rmid_deferred_release")
+      }
+    ''}"
   ];
 
   preConfigure = ''
