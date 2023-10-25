@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/liquidprompt/liquidprompt";
     license = licenses.agpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [ gerschtli romildo ];
   };
 }
