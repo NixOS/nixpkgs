@@ -17,6 +17,10 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
+  postInstall = ''
+    rm $out/bin/dists
+  '';
+
   meta = with lib; {
     description = "Command line client for the Scalingo PaaS";
     homepage = "https://doc.scalingo.com/platform/cli/start";
