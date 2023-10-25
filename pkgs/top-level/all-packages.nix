@@ -356,6 +356,8 @@ with pkgs;
 
   bearer = callPackage ../development/tools/bearer { };
 
+  benchexec = callPackage ../tools/misc/benchexec { };
+
   benthos = callPackage ../development/tools/benthos { };
 
   beyond-identity = callPackage ../tools/security/beyond-identity { };
