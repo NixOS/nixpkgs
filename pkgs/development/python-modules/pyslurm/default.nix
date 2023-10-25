@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython slurm ];
 
-  setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
+  setupPyBuildFlags = [ "--slurm-lib=${lib.getLib slurm}/lib" "--slurm-inc=${lib.getDev slurm}/include" ];
 
   # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
   doCheck = false;
