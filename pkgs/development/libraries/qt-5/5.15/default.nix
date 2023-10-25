@@ -406,9 +406,9 @@ let
         }:
         makeSetupHook {
           name = "wrap-qt5-apps-hook";
-          propagatedBuildInputs = [
+          propagatedBuildInputs = [ makeBinaryWrapper ];
+          depsTargetTargetPropagated = [
             qtbase.dev
-            makeBinaryWrapper
           ]
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
         } ../hooks/wrap-qt-apps-hook.sh
