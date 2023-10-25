@@ -10,7 +10,7 @@
     if officialRelease
     then ""
     else "pre${toString (src.rev or src.revCount or "")}"
-, src, stdenv, autoconf, automake, libtool
+, src, lib, stdenv, autoconf, automake, libtool
 , # By default, provide all the GNU Build System as input.
   bootstrapBuildInputs ? [ autoconf automake libtool ]
 , ... } @ args:
@@ -73,7 +73,7 @@ stdenv.mkDerivation (
   }
 
   # Then, the caller-supplied attributes.
-  // args //
+  // (builtins.removeAttrs args [ "lib" ]) //
 
   # And finally, our own stuff.
   {
@@ -117,7 +117,7 @@ stdenv.mkDerivation (
       version = version + versionSuffix;
     };
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (lib.optionalAttrs (args ? meta) args.meta) // {
       description = "Source distribution";
 
       # Tarball builds are generally important, so give them a high

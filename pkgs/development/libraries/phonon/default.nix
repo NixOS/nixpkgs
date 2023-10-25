@@ -52,9 +52,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-fPIC";
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   dontWrapQtApps = true;
 

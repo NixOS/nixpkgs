@@ -81,7 +81,7 @@ in
           if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
             ((UID)) && PROMPT_COLOR="1;32m"
-            if [ -n "$INSIDE_EMACS" ] || [ "$TERM" = "eterm" ] || [ "$TERM" = "eterm-color" ]; then
+            if [ -n "$INSIDE_EMACS" ]; then
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else

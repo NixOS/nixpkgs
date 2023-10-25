@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "duppy";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-duppy";
     rev = "v${version}";
-    sha256 = "132dawca1p5s965m40ldmnihlpgfm47y62kfbzgim7sgsdwxxw5y";
+    sha256 = "sha256-5U/CNQ88Wi/AgJEoFeS9O0zTPiD9ysJNQohRVJdyH9w=";
   };
 
   propagatedBuildInputs = [ ocaml_pcre ];

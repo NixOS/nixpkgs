@@ -4,13 +4,13 @@
 , pythonOlder
 , setuptools
 , versioningit
+, wheel
 
   # mandatory
 , broadbean
 , h5netcdf
 , h5py
 , importlib-metadata
-, importlib-resources
 , ipywidgets
 , ipykernel
 , jsonschema
@@ -18,6 +18,7 @@
 , numpy
 , opencensus
 , opencensus-ext-azure
+, opentelemetry-api
 , packaging
 , pandas
 , pyvisa
@@ -35,8 +36,10 @@
 
   # optional
 , qcodes-loop
+, slack-sdk
 
   # test
+, pip
 , pytestCheckHook
 , deepdiff
 , hypothesis
@@ -51,83 +54,118 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.38.1";
-
-  disabled = pythonOlder "3.8";
+  version = "0.40.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-whUGkRvYQOdYxWoj7qhv2kiiyTwq3ZLLipI424PBzFg=";
+    sha256 = "sha256-C8/ltX3tSxCbbheuel3BjIkRBl/E92lK709QYx+2FL0=";
   };
 
-  nativeBuildInputs = [ setuptools versioningit ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'versioningit ~=' 'versioningit >='
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    versioningit
+    wheel
+  ];
 
   propagatedBuildInputs = [
     broadbean
     h5netcdf
     h5py
-    ipywidgets
     ipykernel
+    ipython
+    ipywidgets
     jsonschema
     matplotlib
     numpy
     opencensus
     opencensus-ext-azure
+    opentelemetry-api
     packaging
     pandas
+    pillow
     pyvisa
+    rsa
     ruamel-yaml
     tabulate
-    typing-extensions
     tqdm
+    typing-extensions
     uncertainties
     websockets
     wrapt
     xarray
-    ipython
-    pillow
-    rsa
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
   passthru.optional-dependencies = {
     loop = [
       qcodes-loop
     ];
+    slack = [
+      slack-sdk
+    ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
-    pytestCheckHook
     deepdiff
     hypothesis
     lxml
+    pip
     pytest-asyncio
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
+    pytestCheckHook
     pyvisa-sim
     sphinx
   ];
 
+  pytestFlagsArray = [
+    # Follow upstream with settings
+    "--durations=20"
+  ];
+
   disabledTestPaths = [
-    # depends on qcodes-loop, causing a cyclic dependency
+    # Test depends on qcodes-loop, causing a cyclic dependency
     "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
   ];
 
-  pythonImportsCheck = [ "qcodes" ];
+  disabledTests = [
+    # Tests are time-sensitive and power-consuming
+    # Those tests fails repeatably
+    "test_access_channels_by_slice"
+    "test_do1d_additional_setpoints_shape"
+    "test_dond_1d_additional_setpoints_shape"
+    "test_field_limits"
+    "test_get_array_in_scalar_param_data"
+    "test_get_parameter_data"
+    "test_ramp_safely"
+  ];
+
+  pythonImportsCheck = [
+    "qcodes"
+  ];
 
   postInstall = ''
     export HOME="$TMPDIR"
   '';
 
-  meta = {
-    homepage = "https://qcodes.github.io/Qcodes/";
+  meta = with lib; {
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
     description = "Python-based data acquisition framework";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evilmav ];
+    downloadPage = "https://github.com/QCoDeS/Qcodes";
+    homepage = "https://qcodes.github.io/Qcodes/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ evilmav ];
   };
 }

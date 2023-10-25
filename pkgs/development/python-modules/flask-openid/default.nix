@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "flask-openid";
   version = "1.3.0";
-  disable = !isPy3k;
 
   src = fetchPypi {
     pname = "Flask-OpenID";
@@ -29,6 +28,6 @@ buildPythonPackage rec {
     description = "OpenID support for Flask";
     homepage = "https://pythonhosted.org/Flask-OpenID/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

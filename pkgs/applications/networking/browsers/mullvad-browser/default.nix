@@ -78,12 +78,19 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "12.0.6";
+  version = "13.0";
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz";
-      hash = "sha256-XE6HFU38FhnikxGHRHxIGS3Z3Y2JNWH0yq2NejqbROI=";
+      urls = [
+        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
+      ];
+      hash = "sha256-YtkGgSnQVJ9wtamDOtLROufhPJ9KizV8j5kK26iJ+ZY=";
     };
   };
 
@@ -222,10 +229,10 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit sources;
-    updateScript = callPackage ../tor-browser-bundle-bin/update.nix {
+    updateScript = callPackage ../tor-browser/update.nix {
       inherit pname version meta;
       baseUrl = "https://cdn.mullvad.net/browser/";
-      prefix = "mullvad-browser-";
+      name = "mullvad-browser";
     };
   };
 
@@ -233,7 +240,7 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr ];
+    maintainers = with maintainers; [ felschr panicgh ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

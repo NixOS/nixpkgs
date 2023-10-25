@@ -4,29 +4,34 @@
 , fetchFromGitHub
 , loguru
 , pytest-asyncio
-, pytest-mypy
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.5.2";
+  version = "3.8.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FFBWkq7ct4JWSTH4Ldg+pbG/BAiW33puB7lqFPBjptw=";
+    hash = "sha256-HoKdMDs67lsuVRb5d51wx6qyEjEM973yD6O6qMO+7MI=";
   };
 
   postPatch = ''
-    sed -i '/--cov/d' pytest.ini
-    sed -i '/--mypy/d' pytest.ini
+    sed -i pytest.ini \
+      -e '/--cov/d' \
+      -e '/--mypy/d'
   '';
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   passthru.optional-dependencies = {
     loguru = [
@@ -36,7 +41,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-mypy
     pytestCheckHook
   ] ++ passthru.optional-dependencies.loguru;
 

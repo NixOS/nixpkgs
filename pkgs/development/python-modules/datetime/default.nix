@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "datetime";
-  version = "5.1";
+  version = "5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zopefoundation";
     repo = "datetime";
     rev = "refs/tags/${version}";
-    hash = "sha256-5H7s2y/2zsQC3Azs1yakotO8ZVLCRV8yPahbX09C5L8=";
+    hash = "sha256-J96IjyPyJaUC5mECK3g/cgxBh1OoVfj62XocBatYgOw=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "DateTime data type, as known from Zope";
     homepage = "https://github.com/zopefoundation/DateTime";
-    changelog = "https://github.com/zopefoundation/DateTime/releases/tag/${version}";
+    changelog = "https://github.com/zopefoundation/DateTime/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ icyrockcom ];
   };

@@ -3,10 +3,9 @@
 , clang
 , desktop-file-utils
 , fetchFromGitLab
-, fetchpatch
 , glib
 , gtk4
-, libclang
+, libadwaita
 , meson
 , ninja
 , pipewire
@@ -14,24 +13,25 @@
 , rustPlatform
 , rustc
 , stdenv
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "helvum";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = pname;
     rev = version;
-    hash = "sha256-TvjO7fGobGmAltVHeXWyMtMLANdVWVGvBYq20JD3mMI=";
+    hash = "sha256-9vlzLPpyZ9qtCEbCDvYhWDcV+8T63ukdos1l2U6fD+E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-W5Imlut30cjV4A6TCjBFLbViB0CDUucNsvIUiCXqu7I=";
+    hash = "sha256-Xebm3XlsO6kBoMnxJsOk/3SO7avVoaGqi2CVWBRzr88=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,14 @@ stdenv.mkDerivation rec {
     cargo
     rustc
     rustPlatform.bindgenHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     desktop-file-utils
     glib
     gtk4
+    libadwaita
     pipewire
   ];
 
@@ -58,5 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
+    mainProgram = "helvum";
   };
 }

@@ -21,7 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/justjanne/powerline-go";
     changelog = "https://github.com/justjanne/powerline-go/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ sifmelcara ];
     mainProgram = "powerline-go";
   };

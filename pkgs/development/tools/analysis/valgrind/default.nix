@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; lib.intersectLists
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
-    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

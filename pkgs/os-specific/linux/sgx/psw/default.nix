@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
-  hardeningDisable = lib.optionals debug [
+  hardeningDisable = [
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+  ] ++ lib.optionals debug [
     "fortify"
   ];
 

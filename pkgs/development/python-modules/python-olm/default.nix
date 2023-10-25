@@ -12,7 +12,7 @@ buildPythonPackage {
 
   disabled = !isPy3k;
 
-  sourceRoot = "source/python";
+  sourceRoot = "${olm.src.name}/python";
   buildInputs = [ olm ];
 
   preBuild = ''

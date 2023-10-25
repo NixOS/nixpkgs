@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-OetDAZ6zC8r7e82FILpQQnM+JHG9eludwhEuPaklrnw=";
   };
 
-  sourceRoot = "source/javascript/net/grpc/web/generator";
+  sourceRoot = "${finalAttrs.src.name}/javascript/net/grpc/web/generator";
 
   enableParallelBuilding = true;
   strictDeps = true;

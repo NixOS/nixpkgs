@@ -20,7 +20,7 @@
 
 let
   pname = "django-redis";
-  version = "5.2.0";
+  version = "5.4.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,8 +30,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-redis";
-    rev = version;
-    hash = "sha256-e8wCgfxBT+WKFY4H83CTMirTpQym3QAoeWnXbRCDO90=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-m7z3c7My24vrSSnyfDQ/LlWhy7pV4U0L8LATMvkfczc=";
   };
 
   postPatch = ''
@@ -67,26 +67,22 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = lib.optionals (pythonAtLeast "3.11") [
-    # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   disabledTests = [
     # ModuleNotFoundError: No module named 'test_cache_options'
     "test_custom_key_function"
     # ModuleNotFoundError: No module named 'test_client'
+    "test_delete_pattern_calls_delete_for_given_keys"
     "test_delete_pattern_calls_get_client_given_no_client"
     "test_delete_pattern_calls_make_pattern"
-    "test_delete_pattern_calls_scan_iter_with_count_if_itersize_given"
-    "test_delete_pattern_calls_scan_iter_with_count_if_itersize_given"
+    "test_delete_pattern_calls_pipeline_delete_and_execute"
     "test_delete_pattern_calls_scan_iter"
-    "test_delete_pattern_calls_delete_for_given_keys"
+    "test_delete_pattern_calls_scan_iter_with_count_if_itersize_given"
   ];
 
   meta = with lib; {
     description = "Full featured redis cache backend for Django";
     homepage = "https://github.com/jazzband/django-redis";
+    changelog = "https://github.com/jazzband/django-redis/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };

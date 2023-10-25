@@ -1,15 +1,19 @@
 { lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.17";
+  version = "5.5.19";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "sha256-Nqnbi2nS95nzyzFNdahSKY/Om30sZXRJhoCSrzRiD9c=";
+    hash = "sha256-4mFn5cY7ipAU4vOiHC2s69fxYJwShQEQ1eA8t5JvOP0=";
   };
+
+  patches = [
+    ./clang.patch
+  ];
 
   nativeBuildInputs = [ perl gettext pkg-config ];
   buildInputs = [ libidn2 libiconv ];

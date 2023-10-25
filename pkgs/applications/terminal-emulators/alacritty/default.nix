@@ -49,16 +49,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.12.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jw66pBKIhvvaQ+Q6tDV6i7ALa7Z0Pw7dp6gAVPqy5bs=";
+    hash = "sha256-SUEI7DTgs6NYT4oiqaMBNCQ8gP1XoZjPFIKhob7tfsk=";
   };
 
-  cargoHash = "sha256-rDcNliuUDGsd4VA2H9k+AiJTf1ylmFyqCUzxwCtM3T8=";
+  cargoHash = "sha256-iLhctiCDNpcTxoMrWwUWHBRc6X5rxSH9Jl2EDuktWmw=";
 
   nativeBuildInputs = [
     cmake
@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
       # As a workaround, strip manually before running patchelf.
       $STRIP -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+      patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
 
@@ -132,6 +132,7 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
+    mainProgram = "alacritty";
     maintainers = with maintainers; [ Br1ght0ne mic92 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";

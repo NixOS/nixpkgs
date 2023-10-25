@@ -21,8 +21,9 @@ If the action is `switch` or `test`, the currently running system is inspected
 and the actions to switch to the new system are calculated. This process takes
 two data sources into account: `/etc/fstab` and the current systemd status.
 Mounts and swaps are read from `/etc/fstab` and the corresponding actions are
-generated. If a new mount is added, for example, the proper `.mount` unit is
-marked to be started. The current systemd state is inspected, the difference
+generated. If the options of a mount are modified, for example, the proper `.mount`
+unit is reloaded (or restarted if anything else changed and it's neither the root
+mount or the nix store). The current systemd state is inspected, the difference
 between the current system and the desired configuration is calculated and
 actions are generated to get to this state. There are a lot of nuances that can
 be controlled by the units which are explained here.
@@ -42,6 +43,10 @@ of actions is always the same:
 - Start units (`systemctl start`)
 - Inspect what changed during these actions and print units that failed and
   that were newly started
+
+By default, some units are filtered from the outputs to make it less spammy.
+This can be disabled for development or testing by setting the environment variable
+`STC_DISPLAY_ALL_UNITS=1`
 
 Most of these actions are either self-explaining but some of them have to do
 with our units or the activation script. For this reason, these topics are

@@ -34,7 +34,7 @@ let
       # copy additional plugin(s), theme(s) and language(s)
       ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
       ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
-      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language}/* $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 

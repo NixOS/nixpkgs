@@ -58,6 +58,12 @@ buildPythonPackage rec {
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
   ];
 
+  disabledTests = [
+    # broken in werkzeug 2.3 upgrade
+    "test_media_types_method"
+    "test_media_types_q"
+  ];
+
   pythonImportsCheck = [
     "flask_restx"
   ];

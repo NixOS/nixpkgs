@@ -1,13 +1,19 @@
 { callPackage, ... }@args:
 callPackage ../generic.nix ({
-  version = "12.1.5";
-  hash = "sha256-bPnXZTe4LB50W2UT/sA+2Or/LJMqcEuPpTTF8ue/2Ak=";
-  vendorHash = "sha256-mznhfliYpsJJJSL17Q7WXX0SkIn+Bcb1fzYdLRTRDI0=";
-  yarnHash = "sha256-cElFTxolQnJAbpln2aGjlTJr/hbUML4QHeHQ3yrWVqU=";
+  version = "12.4.22";
+  hash = "sha256-UEiS+GiderYTU34GHsQr4G8XrasV5ewmPcdrec4v5B4=";
+  vendorHash = "sha256-etutgK/5u+e86kx7ha3x+di9np7Tcr7hpGUMKZxJNT4=";
+  yarnHash = "sha256-MBTElkMH5rb33l+AYWH+zguSLQf+ntXpOkHZpjLAx/Q=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "rdp-rs-0.1.0" = "sha256-n4x4w7GZULxqaR109das12+ZGU0xvY3wGOTWngcwe4M=";
     };
   };
+  extPatches = [
+    # https://github.com/NixOS/nixpkgs/issues/120738
+    ../tsh.patch
+    # https://github.com/NixOS/nixpkgs/issues/132652
+    ../test.patch
+  ];
 } // builtins.removeAttrs args [ "callPackage" ])

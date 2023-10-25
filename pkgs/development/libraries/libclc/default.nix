@@ -10,9 +10,13 @@ stdenv.mkDerivation rec {
     rev = "llvmorg-${version}";
     hash = "sha256-paWwnoU3XMqreRgh9JbT1tDMTwq/ZL0ss3SJTteEGL0=";
   };
-  sourceRoot = "source/libclc";
+  sourceRoot = "${src.name}/libclc";
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    ./libclc-gnu-install-dirs.patch
+  ];
 
   # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
@@ -35,9 +39,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = [ llvm_14 ];
   strictDeps = true;
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ];
 
   postInstall = ''
     install -Dt $dev/bin prepare_builtins

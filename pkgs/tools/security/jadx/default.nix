@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle
+, jdk
+, makeWrapper
+, perl
+, imagemagick
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+}:
 
 let
   pname = "jadx";
@@ -46,10 +57,11 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-QebPRmfLtXy4ZlyKeGC5XNzhMTsYI0X36My+nTFvQpM=";
   };
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
-  nativeBuildInputs = [ gradle jdk makeWrapper ];
+  nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -96,13 +108,38 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out $out/bin
     cp -R build/jadx/lib $out
     for prog in jadx jadx-gui; do
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
     done
+
+    for size in 16 32 48; do
+      install -Dm444 \
+        jadx-gui/src/main/resources/logos/jadx-logo-"$size"px.png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+    done
+    for size in 64 128 256; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+    done
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jadx";
+      desktopName = "JADX";
+      exec = "jadx-gui";
+      icon = "jadx";
+      comment = finalAttrs.meta.description;
+      categories = [ "Development" "Utility" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Dex to Java decompiler";
@@ -118,4 +155,4 @@ in stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];
   };
-}
+})

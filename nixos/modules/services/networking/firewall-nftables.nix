@@ -70,10 +70,8 @@ in
       }
     ];
 
-    networking.nftables.ruleset = ''
-
-      table inet nixos-fw {
-
+    networking.nftables.tables."nixos-fw".family = "inet";
+    networking.nftables.tables."nixos-fw".content = ''
         ${optionalString (cfg.checkReversePath != false) ''
           chain rpfilter {
             type filter hook prerouting priority mangle + 10; policy drop;
@@ -169,9 +167,6 @@ in
 
           }
         ''}
-
-      }
-
     '';
 
   };

@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "wxFormBuilder";
+  pname = "wxformbuilder";
   version = "unstable-2023-04-21";
 
   src = fetchFromGitHub {
@@ -47,13 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/wxFormBuilder.app $out/Applications
-    makeWrapper $out/{Applications/wxFormBuilder.app/Contents/MacOS,bin}/wxFormBuilder
+    makeWrapper $out/Applications/wxFormBuilder.app/Contents/MacOS/wxFormBuilder $out/bin/wxformbuilder
   '';
 
   meta = with lib; {
     description = "RAD tool for wxWidgets GUI design";
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
     license = licenses.gpl2Only;
+    mainProgram = "wxformbuilder";
     maintainers = with maintainers; [ matthuszagh wegank ];
     platforms = platforms.unix;
   };

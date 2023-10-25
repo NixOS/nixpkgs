@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Lightweight template engine";
     homepage = "https://github.com/dmulholland/ibis";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

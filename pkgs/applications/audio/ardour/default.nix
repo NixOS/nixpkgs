@@ -54,18 +54,19 @@
 , vamp-plugin-sdk
 , wafHook
 , xjadeo
+, optimize ? true # disable to print Lua DSP script output to stdout
 , videoSupport ? true
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "7.3";
+  version = "8.0";
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    hash = "sha256-fDZGmKQ6qgENkq8NY/J67Jym+IXoOYs8DT4xyPXLcC4=";
+    hash = "sha256-ZL8aTq2OsCWwLUUx5XYbH4eRN+Xz+oMAj9IS07RfTag=";
   };
 
   bundledContent = fetchzip {
@@ -78,6 +79,7 @@ stdenv.mkDerivation rec {
   patches = [
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
+    ./default-plugin-search-paths.patch
   ];
 
   # Ardour's wscript requires git revision and date to be available.
@@ -154,11 +156,10 @@ stdenv.mkDerivation rec {
     "--docs"
     "--freedesktop"
     "--no-phone-home"
-    "--optimize"
     "--ptformat"
     "--run-tests"
     "--test"
-  ];
+  ] ++ lib.optional optimize "--optimize";
   # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
   # "--use-external-libs"
 
@@ -197,6 +198,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ardour.org/";
     license = licenses.gpl2Plus;
+    mainProgram = "ardour7";
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };

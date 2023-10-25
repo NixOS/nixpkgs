@@ -1,16 +1,16 @@
 { lib, buildNpmPackage, fetchFromGitHub }:
 buildNpmPackage rec {
   pname = "pnpm-lock-export";
-  version = "0.4.0";
+  version = "unstable-2023-07-31";
 
   src = fetchFromGitHub {
-    owner = "cvent";
+    owner = "adamcstephens";
     repo = "pnpm-lock-export";
-    rev = "v${version}";
-    hash = "sha256-vS6AW3R4go1Fdr3PBOCnuN4JDrDkl1lWVF7q+q+xDGg=";
+    rev = "cc03755d6718a9c0d268d0f375907328ac15dc92";
+    hash = "sha256-9OlFgmdKjvz4pB36Wm/fUAQDsD8zs32OSA3m2IAgrH8=";
   };
 
-  npmDepsHash = "sha256-3uW/lzB+UDhFQtRb3X8szNlgAWTcSdwVdtyZvLu+cjI=";
+  npmDepsHash = "sha256-nqkH7vFD78YvYr9Klguk2o7qHr5wr3ZjaywUKRRRjJo=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json

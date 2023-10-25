@@ -45,8 +45,8 @@ services.xserver.displayManager.gdm.enable = true;
 You can set the keyboard layout (and optionally the layout variant):
 
 ```nix
-services.xserver.layout = "de";
-services.xserver.xkbVariant = "neo";
+services.xserver.xkb.layout = "de";
+services.xserver.xkb.variant = "neo";
 ```
 
 The X server is started automatically at boot time. If you don't want
@@ -266,7 +266,7 @@ Once the configuration is applied, and you did a logout/login cycle, the
 layout should be ready to use. You can try it by e.g. running
 `setxkbmap us-greek` and then type `<alt>+a` (it may not get applied in
 your terminal straight away). To change the default, the usual
-`services.xserver.layout` option can still be used.
+`services.xserver.xkb.layout` option can still be used.
 
 A layout can have several other components besides `xkb_symbols`, for
 example we will define new keycodes for some multimedia key and bind

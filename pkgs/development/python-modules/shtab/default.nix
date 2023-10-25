@@ -4,14 +4,15 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 , bashInteractive
 }:
 
 buildPythonPackage rec {
   pname = "shtab";
-  version = "1.6.1";
-  format = "setuptools";
+  version = "1.6.4";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -19,12 +20,18 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5qjavFzwFH75SlTQxxhMoJjBRIjGz9oogdvSw9dkjz0=";
+    hash = "sha256-BMwi3a7CPq58G30XlkJdSfSP6oc6u2AuSPAwEExI9zM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
+  '';
+
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -33,11 +40,6 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
-  '';
 
   pythonImportsCheck = [
     "shtab"

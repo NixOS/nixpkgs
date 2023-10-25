@@ -47,12 +47,5 @@ buildPythonPackage {
 
   format = "other";
   pythonImportsCheck = [ "tblite" "tblite.interface" ];
-  configurePhase = ''
-    runHook preConfigure
-
-    meson setup build -Dpython=true --prefix=$out
-    cd build
-
-    runHook postConfigure
-  '';
+  mesonFlags = [ "-Dpython=true" ];
 }

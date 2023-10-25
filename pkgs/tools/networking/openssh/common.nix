@@ -14,6 +14,7 @@
 , pkgs
 , fetchurl
 , fetchpatch
+, autoreconfHook
 , zlib
 , openssl
 , libedit
@@ -27,10 +28,11 @@
 , hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, withPAM ? stdenv.hostPlatform.isLinux
 , linkOpenssl ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
   patches = [
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libedit ]
     ++ lib.optional withFIDO libfido2
     ++ lib.optional withKerberos libkrb5
-    ++ lib.optional stdenv.isLinux pam;
+    ++ lib.optional withPAM pam;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
     "--with-mantype=man"
     "--with-libedit=yes"
     "--disable-strip"
-    (if stdenv.isLinux then "--with-pam" else "--without-pam")
+    (lib.withFeature withPAM "pam")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
     ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")

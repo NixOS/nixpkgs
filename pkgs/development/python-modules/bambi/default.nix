@@ -12,19 +12,26 @@
 , pandas
 , pymc
 , scipy
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.10.0";
-  disabled = pythonOlder "3.8";
+  version = "0.12.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bambinos";
-    repo = pname;
+    repo = "bambi";
     rev = "refs/tags/${version}";
-    hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
+    hash = "sha256-36D8u813v2vWQdNqBWfM8YVnAJuLGvn5vqdHs94odmU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     arviz
@@ -35,7 +42,9 @@ buildPythonPackage rec {
     scipy
   ];
 
-  preCheck = ''export HOME=$(mktemp -d)'';
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   nativeCheckInputs = [
     blackjax
@@ -43,17 +52,31 @@ buildPythonPackage rec {
     numpyro
     pytestCheckHook
   ];
+
   disabledTests = [
-    # attempt to fetch data:
+    # Tests require network access
+    "test_alias_equal_to_name"
+    "test_custom_prior"
     "test_data_is_copied"
+    "test_distributional_model"
+    "test_extra_namespace"
+    "test_gamma_with_splines"
+    "test_non_distributional_model"
+    "test_normal_with_splines"
     "test_predict_offset"
+    "test_predict_new_groups"
+    "test_predict_new_groups_fail"
+    "test_set_alias_warnings"
   ];
 
-  pythonImportsCheck = [ "bambi" ];
+  pythonImportsCheck = [
+    "bambi"
+  ];
 
   meta = with lib; {
     homepage = "https://bambinos.github.io/bambi";
     description = "High-level Bayesian model-building interface";
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

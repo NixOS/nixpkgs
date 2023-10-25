@@ -143,6 +143,8 @@ stdenv.mkDerivation rec {
     + ''
     moveToOutput lib/cmake "$dev"
     rm -f $out/.bin-unwrapped/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+
+    cp config.h $dev/include/pulse
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
@@ -178,6 +180,9 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;
+
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1089
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
 
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A

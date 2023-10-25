@@ -82,6 +82,53 @@ Note that because the checksum is computed after applying these effects, using o
 
 Most other fetchers return a directory rather than a single file.
 
+
+## `fetchDebianPatch` {#fetchdebianpatch}
+
+A wrapper around `fetchpatch`, which takes:
+- `patch` and `hash`: the patch's filename,
+  and its hash after normalization by `fetchpatch` ;
+- `pname`: the Debian source package's name ;
+- `version`: the upstream version number ;
+- `debianRevision`: the [Debian revision number] if applicable ;
+- the `area` of the Debian archive: `main` (default), `contrib`, or `non-free`.
+
+Here is an example of `fetchDebianPatch` in action:
+
+```nix
+{ lib
+, fetchDebianPatch
+, buildPythonPackage
+}:
+
+buildPythonPackage rec {
+  pname = "pysimplesoap";
+  version = "1.16.2";
+  src = ...;
+
+  patches = [
+    (fetchDebianPatch {
+      inherit pname version;
+      debianRevision = "5";
+      name = "Add-quotes-to-SOAPAction-header-in-SoapClient.patch";
+      hash = "sha256-xA8Wnrpr31H8wy3zHSNfezFNjUJt1HbSXn3qUMzeKc0=";
+    })
+  ];
+
+  ...
+}
+```
+
+Patches are fetched from `sources.debian.org`, and so must come from a
+package version that was uploaded to the Debian archive.  Packages may
+be removed from there once that specific version isn't in any suite
+anymore (stable, testing, unstable, etc.), so maintainers should use
+`copy-tarballs.pl` to archive the patch if it needs to be available
+longer-term.
+
+[Debian revision number]: https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
+
+
 ## `fetchsvn` {#fetchsvn}
 
 Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`.
@@ -181,7 +228,7 @@ Otherwise, the builder will run, but fail with a message explaining to the user 
 requireFile {
   name = "jdk-${version}_linux-x64_bin.tar.gz";
   url = "https://www.oracle.com/java/technologies/javase-jdk11-downloads.html";
-  sha256 = "94bd34f85ee38d3ef59e5289ec7450b9443b924c55625661fffe66b03f2c8de2";
+  hash = "sha256-lL00+F7jjT71nlKJ7HRQuUQ7kkxVYlZh//5msD8sjeI=";
 }
 ```
 results in this error message:
@@ -196,3 +243,26 @@ or
 
 ***
 ```
+## `fetchFromBittorrent` {#fetchfrombittorrent}
+
+`fetchFromBittorrent` expects two arguments. `url` which can either be a Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file. It can also take a `config` argument which will craft a `settings.json` configuration file and give it to `transmission`, the underlying program that is performing the fetch. The available config options for `transmission` can be found [here](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
+
+```
+{ fetchFromBittorrent }:
+
+fetchFromBittorrent {
+  config = { peer-limit-global = 100; };
+  url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
+  sha256 = "";
+}
+```
+
+### Parameters {#fetchfrombittorrent-parameters}
+
+- `url`: Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file.
+
+- `backend`: Which bittorrent program to use. Default: `"transmission"`. Valid values are `"rqbit"` or `"transmission"`. These are the two most suitable torrent clients for fetching in a fixed-output derivation at the time of writing, as they can be easily exited after usage. `rqbit` is written in Rust and has a smaller closure size than `transmission`, and the performance and peer discovery properties differs between these clients, requiring experimentation to decide upon which is the best.
+
+- `config`: When using `transmission` as the `backend`, a json configuration can
+  be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+

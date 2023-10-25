@@ -37,6 +37,7 @@ let
     cinnamon-settings-daemon
     cinnamon-common
     gnome.gnome-terminal
+    gsettings-desktop-schemas
     gtk3
   ] ++ extraGSettingsOverridePackages;
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  sourceRoot = "source/tandem_aligner";
+  sourceRoot = "${finalAttrs.src.name}/tandem_aligner";
 
   nativeBuildInputs = [ cmake ];
 

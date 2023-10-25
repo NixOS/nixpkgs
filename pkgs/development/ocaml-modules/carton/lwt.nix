@@ -21,7 +21,9 @@ buildDunePackage {
     bigstringaf
   ];
 
-  doCheck = true;
+  # Tests fail with git 2.41
+  # see https://github.com/mirage/ocaml-git/issues/617
+  doCheck = false;
   nativeCheckInputs = [
     git-binary
   ];

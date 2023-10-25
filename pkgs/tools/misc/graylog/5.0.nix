@@ -2,8 +2,8 @@
 let
   buildGraylog = callPackage ./graylog.nix {};
 in buildGraylog {
-  version = "5.0.7";
-  sha256 = "sha256-wGw7j1vBa0xcoyfrK7xlLGKElF1SV2ijn+uQ8COj87Y=";
+  version = "5.0.8";
+  sha256 = "sha256-TGJm2PGoXaLhlzyfSWKScEJxEGObTVttpEEaczsXHiA=";
   maintainers = [ lib.maintainers.f2k1de ];
   license = lib.licenses.sspl;
 }

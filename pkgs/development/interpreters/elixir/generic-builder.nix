@@ -16,6 +16,7 @@
 , sha256 ? null
 , rev ? "v${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
+, escriptPath ? "lib/elixir/generate_app.escript"
 } @ args:
 
 let
@@ -38,7 +39,7 @@ stdenv.mkDerivation ({
   buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
   preBuild = ''
-    patchShebangs lib/elixir/generate_app.escript || true
+    patchShebangs ${escriptPath} || true
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
@@ -49,14 +50,14 @@ stdenv.mkDerivation ({
     # to PATH so the scripts can run without problems.
 
     for f in $out/bin/*; do
-     b=$(basename $f)
+      b=$(basename $f)
       if [ "$b" = mix ]; then continue; fi
       wrapProgram $f \
         --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}"
     done
 
     substituteInPlace $out/bin/mix \
-          --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
+      --replace "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
   '';
 
   pos = builtins.unsafeGetAttrPos "sha256" args;

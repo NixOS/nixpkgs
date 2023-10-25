@@ -1,27 +1,44 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, udev, stdenv, Security }:
+{
+  lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, udev
+, stdenv
+, Security
+, nix-update-script
+, openssl
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-espflash";
-  version = "1.7.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     rev = "v${version}";
-    sha256 = "sha256-AauIneSnacnY4mulD/qUgfN4K9tLzZXFug0oEsDuj18=";
+    hash = "sha256-Nv2/33VYpCkPYyUhlVDYJR1BkbtEvEPtmgyZXfVn1ug=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
     udev
   ] ++ lib.optionals stdenv.isDarwin [
     Security
+    SystemConfiguration
   ];
 
-  cargoSha256 = "sha256-82o3B6qmBVPpBVAogClmTbxrBRXY8Lmd2sHmonP5/s8=";
+  cargoHash = "sha256-FpBc92a2JQHRLe5S6yh3l0FpRI8LpkGGEma/4v5X4xs=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Serial flasher utility for Espressif SoCs and modules based on esptool.py";

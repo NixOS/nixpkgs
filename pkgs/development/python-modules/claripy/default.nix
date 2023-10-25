@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.54";
-  format = "pyproject";
+  version = "9.2.73";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "claripy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YZvc2BIc8dAvDFfJ9+DEkfi8pXTFB0gQ5z7irYKZkw8=";
+    hash = "sha256-6wXhGMpMCh/xKmwQwvzQCgk8IQaZqDrgBh12paagkpE=";
   };
 
   nativeBuildInputs = [

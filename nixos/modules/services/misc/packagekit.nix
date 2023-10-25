@@ -40,9 +40,9 @@ in
 
   options.services.packagekit = {
     enable = mkEnableOption (lib.mdDoc ''
-      PackageKit provides a cross-platform D-Bus abstraction layer for
+      PackageKit, a cross-platform D-Bus abstraction layer for
       installing software. Software utilizing PackageKit can install
-      software regardless of the package manager.
+      software regardless of the package manager
     '');
 
     settings = mkOption {

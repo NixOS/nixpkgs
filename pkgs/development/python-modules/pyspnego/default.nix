@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.8.0";
+  version = "0.9.2";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3nFxUu2P8dGt80HRGYOliGHXLrtc83C96kJW27CgXV0=";
+    hash = "sha256-A0vVpEI8TKelZ96dIqSc01SX1gU3pDUVSOV6jap2WtU=";
   };
 
   propagatedBuildInputs = [

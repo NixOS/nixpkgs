@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "lndmon";
-  version = "unstable-2021-03-26";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndmon";
-    sha256 = "14lmmjq61p8yhc86swigs43risqi31vlmz7ri8j0n0fyp8lm2kxs";
-    rev = "3aa925aa4f633a6c4d132601922e78f173ae8ac1";
+    rev = "v${version}";
+    hash = "sha256-j9T60J7n9sya9/nN0Y6wsPDXN2h35pXxMdadsOkAMWI=";
   };
 
-  vendorSha256 = "06if387b9m02ciqgcissih1x06l33djp87vgspwzz589f77vczk8";
+  vendorHash = "sha256-h9+/BOy1KFiqUUV35M548fDKFC3Q5mBaANuD7t1rpp8=";
+
+  # Irrelevant tools dependencies.
+  excludedPackages = [ "./tools" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) lnd; };
 

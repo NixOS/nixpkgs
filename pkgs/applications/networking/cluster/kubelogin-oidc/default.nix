@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "kubelogin";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "int128";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oBgth4lAQP4UrFIk/AErlfyyCgPrugs5wQJDFxqGum0=";
+    sha256 = "sha256-8atEUJLXSbLHdxo1wKtAHAFrZkQYWdW6tP2oKoxahXA=";
   };
 
   subPackages = ["."];
 
-  vendorHash = "sha256-IJCbh1ryyk0r72SrVEiI7K5nIFf1+UGjTkXaNKpGsmo=";
+  vendorHash = "sha256-rLpXBFNBJG3H0+2inCG4wN0I2LuKUhuqozeafUD3aMI=";
 
   # Rename the binary instead of symlinking to avoid conflict with the
   # Azure version of kubelogin

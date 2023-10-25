@@ -33,6 +33,7 @@ let
         pkg-config
         wrapGAppsHook
         wrapPython
+        gobject-introspection
       ];
 
       configureFlags = [
@@ -47,7 +48,6 @@ let
       ];
 
       buildInputs = [
-        gobject-introspection
         gtk3
         python
       ] ++ lib.optional  withRandr        libxcb
@@ -117,7 +117,7 @@ rec {
       license = licenses.gpl3Plus;
       homepage = "http://jonls.dk/redshift";
       platforms = platforms.unix;
-      maintainers = with maintainers; [ globin yana ];
+      maintainers = with maintainers; [ yana ];
     };
   };
 

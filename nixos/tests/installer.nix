@@ -11,15 +11,19 @@ let
 
   # The configuration to install.
   makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0
+               , extraConfig, forceGrubReinstallCount ? 0, flake ? false
                }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
       { imports =
           [ ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+            ${if flake
+              then "" # Still included, but via installer/flake.nix
+              else "<nixpkgs/nixos/modules/testing/test-instrumentation.nix>"}
           ];
+
+        networking.hostName = "thatworked";
 
         documentation.enable = false;
 
@@ -65,9 +69,9 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
-                  , grubIdentifier, preBootCommands, postBootCommands, extraConfig
-                  , testSpecialisationConfig
+  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
+                  , postInstallCommands, preBootCommands, postBootCommands, extraConfig
+                  , testSpecialisationConfig, testFlakeSwitch
                   }:
     let iface = "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -86,9 +90,14 @@ let
 
       qemu_flags = {"qemuFlags": assemble_qemu_flags()}
 
+      import os
+
+      image_dir = machine.state_dir
+      disk_image = os.path.join(image_dir, "machine.qcow2")
+
       hd_flags = {
           "hdaInterface": "${iface}",
-          "hda": "vm-state-machine/machine.qcow2",
+          "hda": disk_image,
       }
       ${optionalString isEfi ''
         hd_flags.update(
@@ -143,6 +152,8 @@ let
               }'
               """
           )
+
+      ${postInstallCommands}
 
       with subtest("Shutdown system after installation"):
           machine.succeed("umount -R /mnt")
@@ -232,6 +243,11 @@ let
       machine = create_machine_named("boot-after-rebuild-switch")
       ${preBootCommands}
       machine.wait_for_unit("network.target")
+
+      # Sanity check, is it the configuration.nix we generated?
+      hostname = machine.succeed("hostname").strip()
+      assert hostname == "thatworked"
+
       ${postBootCommands}
       machine.shutdown()
 
@@ -272,21 +288,102 @@ let
 
       ${postBootCommands}
       machine.shutdown()
+    ''
+    + optionalString testFlakeSwitch ''
+      ${preBootCommands}
+      machine.start()
+
+      with subtest("Configure system with flake"):
+        # TODO: evaluate as user?
+        machine.succeed("""
+          mkdir /root/my-config
+          mv /etc/nixos/hardware-configuration.nix /root/my-config/
+          mv /etc/nixos/secret /root/my-config/
+          rm /etc/nixos/configuration.nix
+        """)
+        machine.copy_from_host_via_shell(
+          "${makeConfig {
+               inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig;
+               forceGrubReinstallCount = 1;
+               flake = true;
+            }}",
+          "/root/my-config/configuration.nix",
+        )
+        machine.copy_from_host_via_shell(
+          "${./installer/flake.nix}",
+          "/root/my-config/flake.nix",
+        )
+        machine.succeed("""
+          # for some reason the image does not have `pkgs.path`, so
+          # we use readlink to find a Nixpkgs source.
+          pkgs=$(readlink -f /nix/var/nix/profiles/per-user/root/channels)/nixos
+          if ! [[ -e $pkgs/pkgs/top-level/default.nix ]]; then
+            echo 1>&2 "$pkgs does not seem to be a nixpkgs source. Please fix the test so that pkgs points to a nixpkgs source.";
+            exit 1;
+          fi
+          sed -e s^@nixpkgs@^$pkgs^ -i /root/my-config/flake.nix
+        """)
+
+      with subtest("Switch to flake based config"):
+        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+
+      ${postBootCommands}
+      machine.shutdown()
+
+      ${preBootCommands}
+      machine.start()
+
+      machine.wait_for_unit("multi-user.target")
+
+      with subtest("nix-channel command is not available anymore"):
+        machine.succeed("! which nix-channel")
+
+      # Note that the channel profile is still present on disk, but configured
+      # not to be used.
+      with subtest("builtins.nixPath is now empty"):
+        machine.succeed("""
+          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
+        """)
+
+      with subtest("<nixpkgs> does not resolve"):
+        machine.succeed("""
+          ! nix-instantiate '<nixpkgs>' --eval --expr
+        """)
+
+      with subtest("Evaluate flake config in fresh env without nix-channel"):
+        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+
+      with subtest("Evaluate flake config in fresh env without channel profiles"):
+        machine.succeed("""
+          (
+            exec 1>&2
+            rm -v /root/.nix-channels
+            rm -vrf ~/.nix-defexpr
+            rm -vrf /nix/var/nix/profiles/per-user/root/channels*
+          )
+        """)
+        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+
+      ${postBootCommands}
+      machine.shutdown()
     '';
 
 
   makeInstallerTest = name:
-    { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
+    { createPartitions
+    , postInstallCommands ? "", preBootCommands ? "", postBootCommands ? ""
+    , extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
+    , testFlakeSwitch ? false
     }:
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.lib.maintainers; {
+      meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -298,7 +395,12 @@ let
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
+            ./common/auto-format-root-device.nix
           ];
+
+          # In systemdStage1, also automatically format the device backing the
+          # root filesystem.
+          virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
@@ -329,15 +431,13 @@ let
           # The test cannot access the network, so any packages we
           # need must be included in the VM.
           system.extraDependencies = with pkgs; [
+            bintools
             brotli
             brotli.dev
             brotli.lib
             desktop-file-utils
             docbook5
             docbook_xsl_ns
-            (docbook-xsl-ns.override {
-              withManOptDedupPatch = true;
-            })
             kbd.dev
             kmod.dev
             libarchive.dev
@@ -383,9 +483,9 @@ let
       };
 
       testScript = testScriptFun {
-        inherit bootLoader createPartitions preBootCommands postBootCommands
+        inherit bootLoader createPartitions postInstallCommands preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig;
+                testSpecialisationConfig testFlakeSwitch;
       };
     };
 
@@ -435,6 +535,10 @@ let
           "mount LABEL=nixos /mnt",
       )
     '';
+  };
+
+  simple-test-config-flake = simple-test-config // {
+    testFlakeSwitch = true;
   };
 
   simple-uefi-grub-config = {
@@ -490,6 +594,8 @@ in {
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
   simple = makeInstallerTest "simple" simple-test-config;
+
+  switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
 
   # Test cloned configurations with the simple grub configuration
   simpleSpecialised = makeInstallerTest "simpleSpecialised" (simple-test-config // specialisation-test-extraconfig);
@@ -580,16 +686,31 @@ in {
     createPartitions = ''
       machine.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-          + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary 1024M -1s",
+          + " mkpart primary 1M 100MB"  # bpool
+          + " mkpart primary linux-swap 100M 1024M"
+          + " mkpart primary 1024M -1s", # rpool
           "udevadm settle",
-          "mkswap /dev/vda1 -L swap",
+          "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
-          "zpool create rpool /dev/vda2",
+          "zpool create rpool /dev/vda3",
           "zfs create -o mountpoint=legacy rpool/root",
           "mount -t zfs rpool/root /mnt",
+          "zfs create -o mountpoint=legacy rpool/root/usr",
+          "mkdir /mnt/usr",
+          "mount -t zfs rpool/root/usr /mnt/usr",
+          "zpool create -o compatibility=grub2 bpool /dev/vda1",
+          "zfs create -o mountpoint=legacy bpool/boot",
+          "mkdir /mnt/boot",
+          "mount -t zfs bpool/boot /mnt/boot",
           "udevadm settle",
       )
+    '';
+
+    # umount & export bpool before shutdown
+    # this is a fix for "cannot import 'bpool': pool was previously in use from another system."
+    postInstallCommands = ''
+      machine.succeed("umount /mnt/boot")
+      machine.succeed("zpool export bpool")
     '';
   };
 
@@ -829,10 +950,9 @@ in {
         "udevadm settle",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
-        "keyctl link @u @s",
         "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
-        "echo password | bcachefs unlock /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
+        "echo password | bcachefs unlock -k session /dev/vda3",
+        "echo password | mount -t bcachefs /dev/vda3 /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",

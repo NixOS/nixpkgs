@@ -11,6 +11,8 @@ Accepted arguments are:
         Packages to be installed for the main host's architecture (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also installed.
 - `multiPkgs`
         Packages to be installed for all architectures supported by a host (i.e. i686 and x86_64 on x86_64 installations). Only libraries are installed by default.
+- `multiArch`
+        Whether to install 32bit multiPkgs into the FHSEnv in 64bit environments
 - `extraBuildCommands`
         Additional commands to be executed for finalizing the directory structure.
 - `extraBuildCommandsMulti`

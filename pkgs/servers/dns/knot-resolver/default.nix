@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "0c82ae937b685dc477fb3176098e3dc106c898b7cd83553e5bc54dccb83c80d7";
+    sha256 = "383ef6db1cccabd2dd788ea9385f05e98a2bafdfeb7f0eda57ff9d572f4fad71";
   };
 
   outputs = [ "out" "dev" ];
@@ -116,7 +116,7 @@ wrapped-full = runCommand unwrapped.name
     allowSubstitutes = false;
     inherit (unwrapped) meta;
   }
-  ''
+  (''
     mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
@@ -125,10 +125,10 @@ wrapped-full = runCommand unwrapped.name
     ln -sr '${unwrapped}/share' "$out"/
     ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
     ln -sr "$out"/{bin,sbin}
-
+  '' + lib.optionalString unwrapped.doInstallCheck ''
     echo "Checking that 'http' module loads, i.e. lua search paths work:"
     echo "modules.load('http')" > test-http.lua
     echo -e 'quit()' | env -i "$out"/bin/kresd -a 127.0.0.1#53535 -c test-http.lua
-  '';
+  '');
 
 in result

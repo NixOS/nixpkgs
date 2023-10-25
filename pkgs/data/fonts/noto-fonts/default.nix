@@ -35,13 +35,13 @@ rec {
     }:
     stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "23.5.1";
+      version = "23.8.1";
 
       src = fetchFromGitHub {
         owner = "notofonts";
         repo = "notofonts.github.io";
         rev = "noto-monthly-release-${version}";
-        hash = "sha256-tIzn9xBDVFT7h9+p2NltA0v0mvB1OH9rX9+eXvIPhv0=";
+        hash = "sha256-TYCJzioZcNFV8N5wLr7Fo69g/p5GQF/tbGgYoLUV7Us=";
       };
 
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
@@ -164,7 +164,7 @@ rec {
     sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
   };
 
-  noto-fonts-emoji =
+  noto-fonts-color-emoji =
     let
       version = "2.038";
       emojiPythonEnv =
@@ -217,7 +217,7 @@ rec {
       '';
 
       meta = with lib; {
-        description = "Color and Black-and-White emoji fonts";
+        description = "Color emoji font";
         homepage = "https://github.com/googlefonts/noto-emoji";
         license = with licenses; [ ofl asl20 ];
         platforms = platforms.all;
@@ -225,17 +225,61 @@ rec {
       };
     };
 
+  noto-fonts-monochrome-emoji =
+    # Metadata fetched from
+    #  https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_TOKEN}&family=Noto+Emoji
+    let metadata = with builtins; head (fromJSON (readFile ./noto-emoji.json)).items;
+        urlHashes = with builtins; fromJSON (readFile ./noto-emoji.hashes.json);
+
+    in
+    stdenvNoCC.mkDerivation {
+      pname = "noto-fonts-monochrome-emoji";
+      version = "${lib.removePrefix "v" metadata.version}.${metadata.lastModified}";
+      preferLocalBuild = true;
+
+      dontUnpack = true;
+      srcs = let
+        weightNames = {
+          "300"   = "Light";
+          regular = "Regular";
+          "500"   = "Medium";
+          "600"   = "SemiBold";
+          "700"   = "Bold";
+        };
+      in lib.mapAttrsToList
+        (variant: url: fetchurl { name = "NotoEmoji-${weightNames.${variant}}.ttf";
+                                  hash = urlHashes.${url};
+                                  inherit url; } )
+        metadata.files;
+
+      installPhase = ''
+        for src in $srcs; do
+          install -D $src $out/share/fonts/noto/$(stripHash $src)
+        done
+      '';
+
+      meta = with lib; {
+        description = "Monochrome emoji font";
+        homepage = "https://fonts.google.com/noto/specimen/Noto+Emoji";
+        license = [ licenses.ofl ];
+        maintainers = [ maintainers.nicoo ];
+
+        platforms = platforms.all;
+        sourceProvenance = [ sourceTypes.binaryBytecode ];
+      };
+    };
+
   noto-fonts-emoji-blob-bin =
     let
       pname = "noto-fonts-emoji-blob-bin";
-      version = "14.0.1";
+      version = "15.0";
     in
     stdenvNoCC.mkDerivation {
       inherit pname version;
 
       src = fetchurl {
         url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
-        hash = "sha256-w9s7uF6E6nomdDmeKB4ATcGB/5A4sTwDvwHT3YGXz8g=";
+        hash = "sha256-3MPWZ1A2ups171dNIiFTJ3C1vZiGy6I8ZF70aUfrePk=";
       };
 
       dontUnpack = true;

@@ -115,10 +115,12 @@ in
       ShowStatus=no
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
 
     boot.initrd.systemd.extraConfig = config.systemd.extraConfig;
@@ -126,7 +128,7 @@ in
     boot.consoleLogLevel = 7;
 
     # Prevent tests from accessing the Internet.
-    networking.defaultGateway = mkOverride 150 "";
+    networking.defaultGateway = mkOverride 150 null;
     networking.nameservers = mkOverride 150 [ ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [

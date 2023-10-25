@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "vmm_clock";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-8z/N/dbkeFd40sH7jatNmSS62B88tC0jVgNljhxslOo=";
   };
 

@@ -1,8 +1,8 @@
 diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
-index 99e4a7a..cf9a901 100644
+index 3e322ea..980aace 100644
 --- a/cmake/MujocoDependencies.cmake
 +++ b/cmake/MujocoDependencies.cmake
-@@ -82,8 +82,6 @@ set(BUILD_SHARED_LIBS
+@@ -87,8 +87,6 @@ set(BUILD_SHARED_LIBS
  if(NOT TARGET lodepng)
    FetchContent_Declare(
      lodepng
@@ -11,7 +11,7 @@ index 99e4a7a..cf9a901 100644
    )
  
    FetchContent_GetProperties(lodepng)
-@@ -111,10 +109,6 @@ findorfetch(
+@@ -127,10 +125,6 @@ findorfetch(
    qhull
    LIBRARY_NAME
    qhull
@@ -21,8 +21,8 @@ index 99e4a7a..cf9a901 100644
 -  ${MUJOCO_DEP_VERSION_qhull}
    TARGETS
    qhull
-   # TODO(fraromano) Remove when https://github.com/qhull/qhull/pull/112 is merged.
-@@ -146,10 +140,6 @@ findorfetch(
+   EXCLUDE_FROM_ALL
+@@ -151,10 +145,6 @@ findorfetch(
    tinyxml2
    LIBRARY_NAME
    tinyxml2
@@ -33,7 +33,7 @@ index 99e4a7a..cf9a901 100644
    TARGETS
    tinyxml2
    EXCLUDE_FROM_ALL
-@@ -164,10 +154,6 @@ findorfetch(
+@@ -169,10 +159,6 @@ findorfetch(
    tinyobjloader
    LIBRARY_NAME
    tinyobjloader
@@ -44,7 +44,7 @@ index 99e4a7a..cf9a901 100644
    TARGETS
    tinyobjloader
    EXCLUDE_FROM_ALL
-@@ -182,10 +168,6 @@ findorfetch(
+@@ -187,10 +173,6 @@ findorfetch(
    ccd
    LIBRARY_NAME
    ccd
@@ -55,7 +55,7 @@ index 99e4a7a..cf9a901 100644
    TARGETS
    ccd
    EXCLUDE_FROM_ALL
-@@ -222,10 +204,6 @@ if(MUJOCO_BUILD_TESTS)
+@@ -227,10 +209,6 @@ if(MUJOCO_BUILD_TESTS)
      absl
      LIBRARY_NAME
      abseil-cpp
@@ -66,7 +66,7 @@ index 99e4a7a..cf9a901 100644
      TARGETS
      absl::core_headers
      EXCLUDE_FROM_ALL
-@@ -249,10 +227,6 @@ if(MUJOCO_BUILD_TESTS)
+@@ -254,10 +232,6 @@ if(MUJOCO_BUILD_TESTS)
      GTest
      LIBRARY_NAME
      googletest
@@ -77,7 +77,7 @@ index 99e4a7a..cf9a901 100644
      TARGETS
      gtest
      gmock
-@@ -283,10 +257,6 @@ if(MUJOCO_BUILD_TESTS)
+@@ -288,10 +262,6 @@ if(MUJOCO_BUILD_TESTS)
      benchmark
      LIBRARY_NAME
      benchmark
@@ -88,7 +88,7 @@ index 99e4a7a..cf9a901 100644
      TARGETS
      benchmark::benchmark
      benchmark::benchmark_main
-@@ -303,8 +273,6 @@ if(MUJOCO_TEST_PYTHON_UTIL)
+@@ -308,8 +278,6 @@ if(MUJOCO_TEST_PYTHON_UTIL)
  
      FetchContent_Declare(
        Eigen3
@@ -98,17 +98,17 @@ index 99e4a7a..cf9a901 100644
  
      FetchContent_GetProperties(Eigen3)
 diff --git a/simulate/cmake/SimulateDependencies.cmake b/simulate/cmake/SimulateDependencies.cmake
-index 6616d6f..5d5a889 100644
+index fa539c2..5985d5a 100644
 --- a/simulate/cmake/SimulateDependencies.cmake
 +++ b/simulate/cmake/SimulateDependencies.cmake
 @@ -81,10 +81,6 @@ findorfetch(
-   glfw
+   glfw3
    LIBRARY_NAME
-   glfw
+   glfw3
 -  GIT_REPO
 -  https://github.com/glfw/glfw.git
 -  GIT_TAG
--  ${MUJOCO_DEP_VERSION_glfw}
+-  ${MUJOCO_DEP_VERSION_glfw3}
    TARGETS
    glfw
    EXCLUDE_FROM_ALL

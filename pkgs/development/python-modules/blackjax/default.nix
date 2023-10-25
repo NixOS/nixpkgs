@@ -2,8 +2,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
+, setuptools-scm
 , fastprogress
 , jax
 , jaxlib
@@ -14,24 +14,21 @@
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "0.9.6";
-  disabled = pythonOlder "3.7";
+  version = "1.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-EieDu9SJxi2cp1bHlxX4vvFZeDGMGIm24GoR8nSyjvE=";
+    hash = "sha256-hqOKSHyZ/BmOu6MJLeecD3H1BbLbZqywmlBzn3xjQRk=";
   };
 
-  patches = [
-    # remove in next release
-    (fetchpatch {
-      name = "fix-lbfgs-args";
-      url = "https://github.com/blackjax-devs/blackjax/commit/1aaa6f64bbcb0557b658604b2daba826e260cbc6.patch";
-      hash = "sha256-XyjorXPH5Ap35Tv1/lTeTWamjplJF29SsvOq59ypftE=";
-    })
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     fastprogress
@@ -56,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
+    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

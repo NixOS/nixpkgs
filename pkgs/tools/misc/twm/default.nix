@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "twm";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OUaT/JMh4JgFbzIYlU34EN7gxEydNKBXSLJfYKOeck4=";
+    sha256 = "sha256-Q8WdNmO5uSm4PvitBXQ7YEkjJhlCz4qfJO/F6+XckXY=";
   };
 
-  cargoHash = "sha256-VGbY3QRkO4znEGs2daUhpDeNntONwvGeUg1ryFyWmjE=";
+  cargoHash = "sha256-fxDUUfC7mBgVHN+M6pb5leRp28wzO69ZdStdYmQFxQE=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];

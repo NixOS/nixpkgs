@@ -1,16 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
+{ lib, buildPythonPackage, fetchFromGitHub, flit-core, sphinx }:
 
 buildPythonPackage rec {
   pname = "python_docs_theme";
-  version = "2023.3.1";
-  format = "flit";
+  version = "2023.9";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
-    rev = version;
-    sha256 = "sha256-WyO5Xc67k5ExB4eCFd17sZCBMaV5djle9BAM0tn5CPc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-XVwMEfprTNdNnaW38HMCAu4CswdVjBXYtNWBgqXfbno=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ sphinx ];
 

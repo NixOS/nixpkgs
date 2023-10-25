@@ -11,20 +11,26 @@ let
     CoreServices
     Security;
   inherit (lib) optionals;
-  inherit (stdenv) isDarwin isLinux;
+  inherit (stdenv) isDarwin;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.1.8";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
-    rev = version;
-    hash = "sha256-z4AqxvKu9E8GGMj6jNUAAWeqoE/j+6NoAEZWeNZ+1BA=";
+    rev = "v${version}";
+    hash = "sha256-+qAXBLV+Jn1qWG7TThn4twUBvN7lO4MX2SSo/gdjgFY=";
   };
 
-  cargoHash = "sha256-w/9W4DXbh4G5DZ8IGUz4nN3LEjHhL7HgybHqODMFzHw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "leptos_hot_reload-0.5.0" = "sha256-huOwadWMYPGGWmZHxztFPPzs4UhIPEmq9rKOB6WPCTE=";
+    };
+  };
+
   nativeBuildInputs = optionals (!isDarwin) [ pkg-config ];
 
   buildInputs = optionals (!isDarwin) [

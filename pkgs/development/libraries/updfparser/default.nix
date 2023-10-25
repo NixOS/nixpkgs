@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "updfparser";
-  version = "unstable-2023-01-10";
-  rev = "a421098092ba600fb1686a7df8fc58cd67429f59";
+  version = "unstable-2023-08-08";
+  rev = "c5ce75b9eea8ebb2746b13eeb0f335813c615115";
 
   src = fetchzip {
     url = "https://indefero.soutade.fr/p/updfparser/source/download/${rev}/";
-    sha256 = "sha256-Kt1QDj7E0GaT615kJW2MQKF9BeU5U7/95TQKODpxgNI=";
+    hash = "sha256-RT7mvu43Izp0rHhKq4wR4kt0TDfzHvB2NGMR+fxO5UM=";
     extension = "zip";
   };
 

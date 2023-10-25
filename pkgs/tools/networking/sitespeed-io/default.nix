@@ -45,7 +45,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-Z9SSIPF/QPDsv4DexiqJAAXhY/QvnWqnauih6DT7I8o=";
+  npmDepsHash = "sha256-RfZlXE8hnAJKiiWdOGFsAFGcxwgnLNvLrXeIinABFb0=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
@@ -87,5 +87,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
+    mainProgram = "sitespeed-io";
   };
 }

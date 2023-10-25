@@ -334,7 +334,8 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "nitter";

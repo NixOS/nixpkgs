@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ lib, stdenv, fetchFromGitHub, applyPatches, pkg-config, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
 
 let
+  version = "0.9.23.1";
+  patchedXrdpSrc = applyPatches {
+    patches = [ ./dynamic_config.patch ];
+    name = "xrdp-patched-${version}";
+    src = fetchFromGitHub {
+      owner = "neutrinolabs";
+      repo = "xrdp";
+      rev = "v${version}";
+      fetchSubmodules = true;
+      hash = "sha256-fJKSEHB5X5QydKgRPjIMJzNaAy1EVJifHETSGmlJttQ=";
+    };
+  };
+
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
     version = "0.9.19";
@@ -28,28 +41,19 @@ let
 
     preConfigure = "./bootstrap";
 
-    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
+    configureFlags = [ "XRDP_CFLAGS=-I${patchedXrdpSrc}/common"  ];
 
     enableParallelBuilding = true;
   };
-
   xrdp = stdenv.mkDerivation rec {
-    version = "0.9.22.1";
+    inherit version;
     pname = "xrdp";
 
-    src = fetchFromGitHub {
-      owner = "neutrinolabs";
-      repo = "xrdp";
-      rev = "v${version}";
-      fetchSubmodules = true;
-      hash = "sha256-8gAP4wOqSmar8JhKRt4qRRwh23coIn0Q8Tt9ClHQSt8=";
-    };
+    src = patchedXrdpSrc;
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];
 
     buildInputs = [ openssl systemd pam fuse libjpeg libopus xorg.libX11 xorg.libXfixes xorg.libXrandr ];
-
-    patches = [ ./dynamic_config.patch ];
 
     postPatch = ''
       substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"

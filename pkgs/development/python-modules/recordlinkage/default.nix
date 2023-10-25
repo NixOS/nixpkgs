@@ -10,20 +10,31 @@
 , pandas
 , pyarrow
 , pytest
+, pythonOlder
 , scikit-learn
 , scipy
-, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "recordlinkage";
-  version = "0.15";
+  version = "0.16";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
+
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aIrx54vnf85I/Kit/4njg/VIOu6H0SE7NdQ1GbeP8Cc=";
+    hash = "sha256-7NoMEN/xOLFwaBXeMysShfZwrn6MzpJZYhNQHVieaqQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     pyarrow
@@ -40,14 +51,19 @@ buildPythonPackage rec {
 
   # pytestCheckHook does not work
   # Reusing their CI setup which involves 'rm -rf recordlinkage' in preCheck phase do not work too.
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+  ];
 
-  pythonImportsCheck = [ "recordlinkage" ];
+  pythonImportsCheck = [
+    "recordlinkage"
+  ];
 
   meta = with lib; {
     description = "Library to link records in or between data sources";
     homepage = "https://recordlinkage.readthedocs.io/";
+    changelog = "https://github.com/J535D165/recordlinkage/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.raitobezarius ];
+    maintainers = with maintainers; [ raitobezarius ];
   };
 }

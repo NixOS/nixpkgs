@@ -5,23 +5,23 @@
 , fetchpatch
 , fetchPypi
 , gssapi
+, icecream
 , invoke
 , mock
 , pyasn1
 , pynacl
-, pytest-relaxed
 , pytestCheckHook
 , six
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.11.0";
+  version = "3.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
+    hash = "sha256-ajd3qWGshtvvN1xfW41QAUoaltD9fwVKQ7yIATSw/3c=";
   };
 
   patches = [
@@ -30,11 +30,6 @@ buildPythonPackage rec {
     (fetchpatch {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
-    })
-    (fetchpatch {
-      name = "fix-sftp-tests.patch";
-      url = "https://github.com/paramiko/paramiko/commit/47cfed55575c21ac558e6d00a4ab1814406be651.patch";
-      hash = "sha256-H3nKT8+4CTEDoiqnlhFfuKnc/65GGfwwAm9H2lwrlK8=";
     })
   ];
 
@@ -52,6 +47,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    icecream
     mock
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
@@ -70,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
+    changelog = "https://github.com/paramiko/paramiko/blob/${version}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
     longDescription = ''
@@ -78,6 +75,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

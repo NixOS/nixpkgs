@@ -107,7 +107,7 @@ in
       )
 
       output = machine.succeed("/run/current-system/bin/switch-to-configuration boot")
-      assert "updating systemd-boot from 000.0-1-notnixos to " in output
+      assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
     '';
   };
 
@@ -118,14 +118,11 @@ in
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "memtest86-efi"
-      ];
     };
 
     testScript = ''
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
-      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
   };
 
@@ -152,15 +149,12 @@ in
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
       boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "memtest86-efi"
-      ];
     };
 
     testScript = ''
       machine.fail("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/loader/entries/apple.conf")
-      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
   };
 
@@ -207,11 +201,17 @@ in
     nodes = {
       inherit common;
 
-      machine = { pkgs, ... }: {
+      machine = { pkgs, nodes, ... }: {
         imports = [ common ];
         boot.loader.systemd-boot.extraFiles = {
           "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
         };
+
+        # These are configs for different nodes, but we'll use them here in `machine`
+        system.extraDependencies = [
+          nodes.common.system.build.toplevel
+          nodes.with_netbootxyz.system.build.toplevel
+        ];
       };
 
       with_netbootxyz = { pkgs, ... }: {
@@ -221,9 +221,9 @@ in
     };
 
     testScript = { nodes, ... }: let
-      originalSystem = nodes.machine.config.system.build.toplevel;
-      baseSystem = nodes.common.config.system.build.toplevel;
-      finalSystem = nodes.with_netbootxyz.config.system.build.toplevel;
+      originalSystem = nodes.machine.system.build.toplevel;
+      baseSystem = nodes.common.system.build.toplevel;
+      finalSystem = nodes.with_netbootxyz.system.build.toplevel;
     in ''
       machine.succeed("test -e /boot/efi/fruits/tomato.efi")
       machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
@@ -252,7 +252,8 @@ in
     '';
   };
 
-  # See: [Firmware file size bug] in systemd/default.nix
+  # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
+  # itself, systems with such firmware won't boot without this fix
   uefiLargeFileWorkaround = makeTest {
     name = "uefi-large-file-workaround";
 

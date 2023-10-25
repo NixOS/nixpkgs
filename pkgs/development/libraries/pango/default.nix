@@ -17,7 +17,7 @@
 , glib
 , python3
 , x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
 }:
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "odd-unstable";
       # 1.90 is alpha for API 2.
-      freeze = true;
+      freeze = "1.90.0";
     };
   };
 
@@ -119,5 +119,14 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.unix;
+
+    pkgConfigModules = [
+      "pango"
+      "pangocairo"
+      "pangofc"
+      "pangoft2"
+      "pangoot"
+      "pangoxft"
+    ];
   };
 }

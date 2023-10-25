@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     xorg.libX11.dev
   ];
 
+  configureFlags = [ "LDFLAGS=-lGL" ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

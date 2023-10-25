@@ -11,8 +11,8 @@
 let
   version = {
     feature = "17";
-    interim = ".0.6";
-    build = "10";
+    interim = ".0.7";
+    build = "7";
   };
 
   # when building a headless jdk, also bootstrap it with a headless jdk
@@ -26,7 +26,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      sha256 = "sha256-zPpINi++3Ct0PCwlwlfhceh/ploMkclw+MgeI9dULdc=";
+      sha256 = "sha256-S6QOB4Tbi+K1yjvvywTfvwFI2eX8AiqIx5c3zfxcskc=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
@@ -98,8 +98,7 @@ let
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
+    ] ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;

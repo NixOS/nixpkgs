@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hakari";
-  version = "0.9.24";
+  version = "0.9.28";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
     rev = "cargo-hakari-${version}";
-    sha256 = "sha256-kg1iWku+zAXG9cCYCD4rqKzKNtDt0hMCnE5QyhJpLq8=";
+    sha256 = "sha256-mTemccM/C9M2kso9PNpd0UGEZJd/tBd1PjCpbDFFtNo=";
   };
 
-  cargoHash = "sha256-hrWsQXjWzhSVVj+bUviGEn+E7Lytzgf1r8VmQxJQubE=";
+  cargoHash = "sha256-UaSW9PZMUhqjvRM0/URHaOfofG5Ap3bvKgAHa+H+MFw=";
 
   cargoBuildFlags = [ "-p" "cargo-hakari" ];
   cargoTestFlags = [ "-p" "cargo-hakari" ];

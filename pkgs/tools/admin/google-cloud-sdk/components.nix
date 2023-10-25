@@ -1,12 +1,10 @@
-{ stdenv
-, lib
-, google-cloud-sdk
+{ lib
+, stdenv
 , system
 , snapshotPath
 , autoPatchelfHook
 , python3
 , libxcrypt-legacy
-, ...
 }:
 
 let
@@ -143,7 +141,7 @@ let
             {
               url = src;
               inherit sha256;
-            }) ;
+            });
       dontUnpack = true;
       installPhase = ''
         mkdir -p $out/google-cloud-sdk/.install

@@ -2,17 +2,21 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "3.74.0";
+  version = "3.84.0";
   rev = "v${version}-gitlab";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    sha256 = "sha256-fwMu45OFfNgFgMyQFWfvmM3Qv+co1ofsZLL44OoW9Wo=";
+    sha256 = "sha256-VdLovX3/y0fME74YlpPxjNPAwFpr1urAHJYO24VJ4AE=";
   };
 
-  vendorHash = "sha256-9rO2GmoFZrNA3Udaktn8Ek9uM8EEoc0I3uv4UEq1c1k=";
+  vendorHash = "sha256-ZFQixOgcB8GqgZPIbjMJEYOlg9cD+wAMZF7mwWaNSXI=";
+
+  patches = [
+    ./Disable-inmemory-storage-driver-test.patch
+  ];
 
   postPatch = ''
     substituteInPlace health/checks/checks_test.go \

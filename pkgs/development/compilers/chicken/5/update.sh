@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i oil -p oil chicken
+#! nix-shell -I nixpkgs=../../../../.. -i oil -p oil chicken
 
 export URL_PREFIX="https://code.call-cc.org/egg-tarballs/5/"
 cd $(nix-prefetch-url \

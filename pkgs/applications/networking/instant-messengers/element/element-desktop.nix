@@ -7,6 +7,7 @@
 , yarn
 , nodejs
 , fetchYarnDeps
+, jq
 , electron
 , element-web
 , sqlcipher
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = desktopSrcHash;
+    hash = desktopSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
+  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper jq ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
@@ -149,5 +150,6 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
+    mainProgram = "element-desktop";
   };
 })

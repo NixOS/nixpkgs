@@ -1,66 +1,38 @@
-{ stdenv, lib, fetchurl, fetchzip, fetchFromGitHub, python3
+{ stdenv, lib, fetchurl, fetchzip, python3
 , wrapQtAppsHook, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
-, libxslt, gst_all_1 ? null
+, libxslt
 , withPdfReader      ? true
-, withMediaPlayback  ? true
-, backend            ? "webengine"
 , pipewireSupport    ? stdenv.isLinux
 , pipewire
 , qtwayland
-, mkDerivationWith ? null
-, qtbase ? null
-, qtwebengine ? null
-, wrapGAppsHook ? null
+, qtbase
+, qtwebengine
 , enableWideVine ? false
 , widevine-cdm
-}: let
-  isQt6 = mkDerivationWith == null;
+, enableVulkan ? stdenv.isLinux
+, vulkan-loader
+}:
 
-  python3Packages = python3.pkgs;
+let
   pdfjs = let
-    version = "2.14.305";
+    version = "3.9.179";
   in
   fetchzip {
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
-    hash = "sha256-E7t+0AUndrgi4zfJth0w28RmWLqLyXMUCnueNf/gNi4=";
+    hash = "sha256-QoJFb7MlZN6lDe2Yalsd10sseukL6+tNRi6JzLPVBYw=";
     stripRoot = false;
   };
 
-  backendPackage =
-   if backend == "webengine" then if isQt6 then python3Packages.pyqt6-webengine else python3Packages.pyqtwebengine else
-   if backend == "webkit"    then python3Packages.pyqt5_with_qtwebkit else
-   throw ''
-     Unknown qutebrowser backend "${backend}".
-     Valid choices are qtwebengine (recommended) or qtwebkit.
-   '';
-
-  buildPythonApplication = if isQt6 then python3Packages.buildPythonApplication else mkDerivationWith python3Packages.buildPythonApplication;
-
   pname = "qutebrowser";
-  version = if isQt6 then "unstable-2023-04-18" else "2.5.3";
+  version = "3.0.2";
 in
 
-assert withMediaPlayback -> gst_all_1 != null;
-assert isQt6 -> backend != "webkit";
-
-buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   inherit pname version;
-
-  src = if isQt6 then
-    # comes from the master branch of upstream
-    # https://github.com/qutebrowser/qutebrowser/issues/7202
-    # https://github.com/qutebrowser/qutebrowser/discussions/7628
-    fetchFromGitHub {
-      owner = "qutebrowser";
-      repo = "qutebrowser";
-      rev = "d4cafc0019a4a5574caa11966fc40ede89076d26";
-      hash = "sha256-Ma79EPvnwmQkeXEG9aSnD/Vt1DGhK2JX9dib7uARH8M=";
-    }
-  # the release tarballs are different from the git checkout!
-   else fetchurl {
+  src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-hF7yJDTQIztUcZJae20HVhfGlLprvz6GWrgpSwLJ14E=";
+    hash = "sha256-pRiT3koSNRmvuDcjuc7SstmPTKUoUnjIHpvdqR7VvFE=";
   };
 
   # Needs tox
@@ -69,40 +41,30 @@ buildPythonApplication {
   buildInputs = [
     qtbase
     glib-networking
-  ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
-    gst-plugins-base gst-plugins-good
-    gst-plugins-bad gst-plugins-ugly gst-libav
-  ]);
+  ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook wrapGAppsHook asciidoc
+    wrapQtAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-  ]
-    ++ lib.optional isQt6 python3Packages.pygments;
+    python3.pkgs.pygments
+  ];
 
-  propagatedBuildInputs = with python3Packages; ([
-    pyyaml backendPackage jinja2 pygments
+  propagatedBuildInputs = with python3.pkgs; ([
+    pyyaml pyqt6-webengine jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
     readability-lxml pykeepass stem
     pynacl
     # extensive ad blocking
     adblock
-  ]
-    ++ lib.optional (pythonOlder "3.9") importlib-resources
-    ++ lib.optional stdenv.isLinux qtwayland
+  ] ++ lib.optional stdenv.isLinux qtwayland
   );
 
   patches = [
     ./fix-restart.patch
   ];
 
-  dontWrapGApps = true;
   dontWrapQtApps = true;
-
-  preConfigure = lib.optionalString isQt6 ''
-    python scripts/asciidoc2html.py
-  '';
 
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
@@ -139,12 +101,16 @@ buildPythonApplication {
   in
     ''
     makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
+      # Force the app to use QT_PLUGIN_PATH values from wrapper
+      --unset QT_PLUGIN_PATH
       "''${qtWrapperArgs[@]}"
-      --add-flags '--backend ${backend}'
-      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
-      ${lib.optionalString isQt6 ''--set QUTE_QT_WRAPPER "PyQt6"''}
-      ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      # avoid persistant warning on starup
+      --set QT_STYLE_OVERRIDE Fusion
+      ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString (enableVulkan) ''
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [vulkan-loader]}
+        --set-default QSG_RHI_BACKEND vulkan
+      ''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
     )
   '';
@@ -153,7 +119,7 @@ buildPythonApplication {
     homepage    = "https://github.com/qutebrowser/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    platforms   = if enableWideVine then [ "x86_64-linux" ] else backendPackage.meta.platforms;
+    platforms   = if enableWideVine then [ "x86_64-linux" ] else qtwebengine.meta.platforms;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda nrdxp ];
   };
 }

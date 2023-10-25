@@ -9,14 +9,14 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b24";
+  version = "2.0.0b30";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZnRDGgJu78KoSHvznYhBNEDJihUm9rUdlb5tXmcpuTc=";
+    hash = "sha256-QQExmnpn+CgNRyV/cQbYpgGCM2r8DzOMdNzgN+DvSos=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     aiohttp
     aiofiles
     biliass
-    dicttoxml
+    dict2xml
     colorama
   ];
 

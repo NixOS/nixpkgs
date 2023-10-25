@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/332462e7f5051b7e26ee3d8c22890cd5e71e7c30.patch";
       sha256 = "sha256-7xHALhnOkKszgFBgPIbiZQaORnEJ+1M6RyoZdFgjElM=";
     })
+    (fetchpatch {
+      name = "minizip-ng-4.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/opencolorio/-/raw/5fc40f42f5c05d905793610c37b46ca3649245f3/minizip-ng-4.patch";
+      hash = "sha256-B+dbBVRn0EuGtJaWxz5ah9el0RN7cLb81hgqnKkvhew=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -78,6 +83,7 @@ stdenv.mkDerivation rec {
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
     # GPU test fails with: freeglut (GPU tests): failed to open display ''
     "-DOCIO_BUILD_GPU_TESTS=OFF"
+    "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include"
   ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 

@@ -23,6 +23,7 @@
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
+, webrtc-audio-processing_1
 , ncurses
 , readline # meson can't find <7 as those versions don't have a .pc file
 , lilv
@@ -42,10 +43,11 @@
 , bluez
 , sbc
 , libfreeaptx
-, ldacbt
 , liblc3
 , fdk_aac
 , libopus
+, ldacbtSupport ? bluezSupport && lib.meta.availableOn stdenv.hostPlatform ldacbt
+, ldacbt
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
 , nativeModemManagerSupport ? true
@@ -66,14 +68,19 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
+, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffado
 }:
+
+# Bluetooth codec only makes sense if general bluetooth enabled
+assert ldacbtSupport -> bluezSupport;
 
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.71";
+    version = "0.3.80";
 
     outputs = [
       "out"
@@ -91,7 +98,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-NPYWl+WeI/z70gNHX1BAKslGFX634D7XrV04vuJgGOo=";
+      sha256 = "sha256-6Ka83Bqd/nsfp8rv0GTBerpGP226MeZvC5u/j62FzP0=";
     };
 
     patches = [
@@ -109,6 +116,12 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # backport fix for building with webrtc-audio-processing 0.3 on platforms where we don't have 1.x
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1f1c308c9766312e684f0b53fc2d1422c7414d31.patch";
+        hash = "sha256-ECM7/84G99yzXsg5A2DkFnXFGJSV9lz3vD0IRSzR8vU=";
+      })
     ];
 
     strictDeps = true;
@@ -136,20 +149,22 @@ let
       udev
       vulkan-headers
       vulkan-loader
-      webrtc-audio-processing
       tinycompress
     ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
-    ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
+    ++ lib.optionals bluezSupport [ bluez libfreeaptx liblc3 sbc fdk_aac libopus ]
+    ++ lib.optional ldacbtSupport ldacbt
     ++ lib.optional nativeModemManagerSupport modemmanager
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
-    ++ lib.optional mysofaSupport libmysofa;
+    ++ lib.optional mysofaSupport libmysofa
+    ++ lib.optional ffadoSupport ffado;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -163,6 +178,7 @@ let
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
+      "-Dlibffado=${mesonEnableFeature ffadoSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
@@ -180,6 +196,7 @@ let
       # source code is not easily obtainable
       "-Dbluez5-codec-lc3plus=disabled"
       "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
+      "-Dbluez5-codec-ldac=${mesonEnableFeature ldacbtSupport}"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"
@@ -217,10 +234,11 @@ let
       moveToOutput "bin/pw-jack" "$jack"
     '';
 
-    passthru.tests = nixosTests.installed-tests.pipewire;
+    passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
 
     meta = with lib; {
       description = "Server and user space API to deal with multimedia pipelines";
+      changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${version}";
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;

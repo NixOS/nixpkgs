@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-HD5OK8HjnLDbyC/TmVI2HfBRIUCyyHTbA3JvKoeXV5E=";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Reconnaissance tool for GitHub code search";
@@ -26,6 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/tillson/git-hound";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }

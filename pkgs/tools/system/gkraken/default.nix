@@ -42,7 +42,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
     gtk3
     libnotify

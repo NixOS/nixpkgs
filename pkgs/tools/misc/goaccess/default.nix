@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.2";
+  version = "1.8";
   pname = "goaccess";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LYvdxVlGL4dVfhYkeR+TmYSvey0ArJrkC37t5BIIJfE=";
+    sha256 = "sha256-nZqjC6PEpD/md+mWRhuro2hAxVAGiUhETfZMVHlfP5o=";
   };
 
   nativeBuildInputs = [

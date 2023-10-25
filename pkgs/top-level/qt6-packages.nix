@@ -13,25 +13,16 @@
 (lib.makeScope pkgs.newScope ( self:
 
 let
-  libsForQt6 = self;
   callPackage = self.callPackage;
-  kdeFrameworks = let
-    mkFrameworks = import ../development/libraries/kde-frameworks;
-    attrs = {
-      libsForQt5 = libsForQt6;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkFrameworks attrs);
 in
-
 (qt6 // {
   inherit stdenv;
 
   # LIBRARIES
 
-  inherit (kdeFrameworks) kcoreaddons;
-
   qt6ct = callPackage ../tools/misc/qt6ct { };
+
+  qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -39,9 +30,13 @@ in
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+    qt5Kvantum = pkgs.libsForQt5.qtstyleplugin-kvantum;
+  };
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 

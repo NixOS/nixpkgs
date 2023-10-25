@@ -195,7 +195,7 @@ fn handle_path(
                         .wrap_err_with(|| format!("failed to resolve symlink of {:?}", source))?;
 
                     // Create the link, then push its target to the queue
-                    if !target.exists() {
+                    if !target.exists() && !target.is_symlink() {
                         unix::fs::symlink(&link_target, &target).wrap_err_with(|| {
                             format!("failed to symlink {:?} to {:?}", link_target, target)
                         })?;

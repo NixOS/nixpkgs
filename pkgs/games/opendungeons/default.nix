@@ -1,14 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, ogre, cegui, boost, sfml, openal, cmake, ois, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ogre_13
+, cegui
+, boost
+, sfml
+, openal
+, ois
+}:
 
-stdenv.mkDerivation rec {
+let
+  ogre' = ogre_13.overrideAttrs (old: {
+    cmakeFlags = old.cmakeFlags ++ [
+      "-DOGRE_RESOURCEMANAGER_STRICT=0"
+    ];
+  });
+  cegui' = cegui.override {
+    ogre = ogre';
+  };
+in
+stdenv.mkDerivation {
   pname = "opendungeons";
-  version = "unstable-2021-11-06";
+  version = "unstable-2023-03-18";
 
   src = fetchFromGitHub {
-    owner = "OpenDungeons";
+    owner = "paroj";
     repo = "OpenDungeons";
-    rev = "c180ed1864eab5fbe847d1dd5c5c936c4e45444e";
-    sha256 = "0xf7gkpy8ll1h59wyaljf0hr8prg7p4ixz80mxqwcnm9cglpgn63";
+    rev = "974378d75591214dccbe0fb26e6ec8a40c2156e0";
+    hash = "sha256-vz9cT+rNcyKT3W9I9VRKcFol2SH1FhOhOALALjgKfIE=";
   };
 
   patches = [
@@ -21,8 +42,25 @@ stdenv.mkDerivation rec {
     cp source/utils/StackTrace{Stub,Unix}.cpp
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ogre cegui boost sfml openal ois ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    ogre'
+    cegui'
+    boost
+    sfml
+    openal
+    ois
+  ];
+
+  cmakeFlags = [
+    "-DOD_TREAT_WARNINGS_AS_ERRORS=FALSE"
+  ];
 
   meta = with lib; {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";

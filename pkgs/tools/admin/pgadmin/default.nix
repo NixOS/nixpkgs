@@ -14,14 +14,14 @@
 
 let
   pname = "pgadmin";
-  version = "7.2";
-  yarnSha256 = "sha256-9iuD0cy0PEtx9Jc626LtE0sAOtP451TGlFKGtC8Tjs4=";
+  version = "7.7";
+  yarnHash = "sha256-8EbbyZHodrYz4a2IYuIWYGutqvrjauSv34o9KFvR/6c=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-RefEuP/Oh4X6knnIBnPrlITXFHbbL2U9yfvc4Ng6VJ4=";
+    hash = "sha256-+KD05hzghNFpuw2xW3NUVyKwspCUO9fyJgMPzYk1Xt8=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -30,7 +30,7 @@ let
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
-    hash = yarnSha256;
+    hash = yarnHash;
   };
 
 in
@@ -63,9 +63,13 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
-    #TODO: Can be removed once cryptography>=40 has been merged to master
+    #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
     substituteInPlace requirements.txt \
-      --replace "cryptography>=40.0.*" "cryptography>=39.0.*"
+      --replace "boto3>=1.28.*" "boto3>=1.26.*"
+    substituteInPlace requirements.txt \
+      --replace "botocore>=1.31.*" "botocore>=1.29.*"
+    substituteInPlace requirements.txt \
+      --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
@@ -140,8 +144,8 @@ pythonPackages.buildPythonApplication rec {
     flask
     flask-gravatar
     flask-login
-    flask_mail
-    flask_migrate
+    flask-mail
+    flask-migrate
     flask-sqlalchemy
     flask-wtf
     flask-compress

@@ -76,6 +76,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # wait for user services
     machine.wait_for_unit("default.target", "alice")
 
+    with subtest("systemctl edit suggests --runtime"):
+        # --runtime is suggested when using `systemctl edit`
+        ret, out = machine.execute("systemctl edit testservice1.service 2>&1")
+        assert ret == 1
+        assert out.rstrip("\n") == "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead."
+        # editing w/o `--runtime` is possible for user-services, however
+        # it's not possible because we're not in a tty when grepping
+        # (i.e. hacky way to ensure that the error from above doesn't appear here).
+        _, out = machine.execute("systemctl --user edit testservice2.service 2>&1")
+        assert out.rstrip("\n") == "Cannot edit units if not on a tty."
+
     # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
     with subtest("systemd reads timezone database in /etc/zoneinfo"):
         timer = machine.succeed("TZ=UTC systemctl show --property=TimersCalendar oncalendar-test.timer")
@@ -169,7 +180,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     # Do some IP traffic
     output_ping = machine.succeed(
-        "systemd-run --wait -- /run/wrappers/bin/ping -c 1 127.0.0.1 2>&1"
+        "systemd-run --wait -- ping -c 1 127.0.0.1 2>&1"
     )
 
     with subtest("systemd reports accounting data on system.slice"):

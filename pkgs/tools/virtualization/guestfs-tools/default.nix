@@ -8,10 +8,12 @@
 , curl
 , flex
 , getopt
+, glib
 , gnupg
 , hivex
 , jansson
 , libguestfs-with-appliance
+, libosinfo
 , libvirt
 , libxml2
 , makeWrapper
@@ -27,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guestfs-tools";
-  version = "1.48.2";
+  version = "1.50.1";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor version}-stable/guestfs-tools-${version}.tar.gz";
-    sha256 = "sha256-G9l5sG5g5kMlSXzg0GX8+Et7M9/k2dRLMBgsMI4MaxA=";
+    sha256 = "sha256-rH/MK9Xid+lb1bKnspCE3gATefBnHDZAQ3NRavhTvLA=";
   };
 
   nativeBuildInputs = [
@@ -61,9 +63,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion
+    glib
     hivex
     jansson
     libguestfs-with-appliance
+    libosinfo
     libvirt
     libxml2
     ncurses

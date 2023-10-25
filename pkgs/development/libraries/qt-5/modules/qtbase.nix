@@ -15,6 +15,7 @@
   # optional dependencies
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
+, qttranslations ? null
 
   # options
 , libGLSupported ? !stdenv.isDarwin
@@ -83,6 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
+  # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/icu"))
+  '';
 
   enableParallelBuilding = true;
 
@@ -304,6 +311,8 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
+    ] ++ lib.optional (qttranslations != null) [
+      "-translationdir" "${qttranslations}/translations"
     ]
   );
 

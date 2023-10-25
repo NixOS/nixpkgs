@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2023.4.2";
-  format = "pyproject";
+  version = "2023.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
-    repo = pname;
+    repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-c3NnARost/406cALQDKmeUsl2kFSQHAswAEwgreFXPc=";
+    hash = "sha256-ov5vE9O+dq0ByfSMluQl7NN0vZAcvvBX27iwoYSruSs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -55,6 +55,7 @@ buildPythonPackage rec {
     # Tests require network access
     "test_remote_double"
     "test_remote_single"
+    "test_from_text"
   ];
 
   meta = with lib; {

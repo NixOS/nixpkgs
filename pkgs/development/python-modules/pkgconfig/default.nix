@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Interface Python with pkg-config";
     homepage = "https://github.com/matze/pkgconfig";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

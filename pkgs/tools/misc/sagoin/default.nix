@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sagoin";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-bhBC7Cblw8vmP4BalYv2DMRQWPK2AELb8Ia9PSeWcXE=";
+    hash = "sha256-/WNUDlJxxUGAtykX44A9EqMdBNwVKsGkPnq9pATmLEQ=";
   };
 
-  cargoHash = "sha256-1XcI2LUo6xOs6bJDXKVDqMangH2dq2E6fNokuSDzpK0=";
+  cargoHash = "sha256-YGQZR5n71srD/8QrBUOoEe72nPm0cwgk5zrzoXy2Hx0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

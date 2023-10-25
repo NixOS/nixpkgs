@@ -1,45 +1,40 @@
-{ appimageTools, lib, fetchurl, makeDesktopItem }:
+{ appimageTools
+, fetchurl
+, lib
+, makeWrapper
+}:
 
 let
-  name = "lunar-client";
-  version = "2.15.1";
-
-  desktopItem = makeDesktopItem {
-    name = "lunar-client";
-    exec = "lunar-client";
-    icon = "lunarclient";
-    comment = "Minecraft 1.7, 1.8, 1.12, 1.15, 1.16, 1.17, and 1.18 Client";
-    desktopName = "Lunar Client";
-    genericName = "Minecraft Client";
-    categories = [ "Game" ];
-  };
-
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  pname = "lunar-client";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    name = "lunar-client.AppImage";
-    hash = "sha256-8F6inLctNLCrTvO/f4IWHclpm/6vqW44NKbct0Epp4s=";
+    hash = "sha256-6OAGNkMyHOZI5wh92OtalnvUVFWNAS9PvkFS0e4YXhk=";
   };
+
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
-appimageTools.wrapType1 rec {
-  inherit name src;
+appimageTools.wrapType2 rec {
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-    cp -r ${appimageContents}/usr/share/icons/ $out/share/
+    mv $out/bin/{${pname}-${version},${pname}}
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+    install -Dm444 ${appimageContents}/launcher.desktop $out/share/applications/lunar-client.desktop
+    install -Dm444 ${appimageContents}/launcher.png $out/share/pixmaps/lunar-client.png
+    substituteInPlace $out/share/applications/lunar-client.desktop \
+      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=lunar-client' \
+      --replace 'Icon=launcher' 'Icon=lunar-client'
   '';
 
-  extraPkgs = pkgs: [ pkgs.libpulseaudio ];
-
   meta = with lib; {
-    description = "Minecraft 1.7, 1.8, 1.12, 1.15, 1.16, 1.17, and 1.18 Client";
+    description = "Free Minecraft client with mods, cosmetics, and performance boost.";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
-    maintainers = with maintainers; [ zyansheep Technical27 ];
+    maintainers = with maintainers; [ zyansheep Technical27 surfaceflinger ];
     platforms = [ "x86_64-linux" ];
   };
 }

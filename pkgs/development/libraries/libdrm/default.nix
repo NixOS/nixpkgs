@@ -1,15 +1,15 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
 , libpthreadstubs, libpciaccess
-, withValgrind ? valgrind-light.meta.available, valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.115";
+  version = "2.4.116";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VUz7/gVCvds5G04+Bb+7/D4oK5Vb1WIY0hwGFkgfZes=";
+    sha256 = "sha256-RsU/QHNeo9JtYUKX8VX2ExpRBiSiQnT2VPZGnKkFM5o=";
   };
 
   outputs = [ "out" "dev" "bin" ];

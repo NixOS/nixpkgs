@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, pkg-config, SDL2, gtk2, mpfr }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "basiliskii";
   version = "unstable-2022-09-30";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     rev = "2fa17a0783cf36ae60b77b5ed930cda4dc1824af";
     sha256 = "+jkns6H2YjlewbUzgoteGSQYWJL+OWVu178aM+BtABM=";
   };
-  sourceRoot = "source/BasiliskII/src/Unix";
+  sourceRoot = "${finalAttrs.src.name}/BasiliskII/src/Unix";
   patches = [ ./remove-redhat-6-workaround-for-scsi-sg.h.patch ];
   nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [ SDL2 gtk2 mpfr ];
@@ -25,4 +25,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ quag ];
     platforms = platforms.linux;
   };
-}
+})

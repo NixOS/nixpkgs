@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = z3.src;
 
-  sourceRoot = "source/examples/tptp";
+  sourceRoot = "${src.name}/examples/tptp";
 
   nativeBuildInputs = [cmake];
   buildInputs = [z3];

@@ -61,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.01.1";
+  version = "10.02.0";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha512-2US+norvaNEXbWTEDbb6htVdDJ4wBH8hR8AoBqthz+msLLANTlshj/PFHMbtR87/4brE3Z1MwXYLeXTzDGwnNQ==";
+    hash = "sha512-xJNEFRBj6RWt1VoKhCwqZF2DYqXLymY70HY49L02maCMreN6nv6QWtWkHgFDU+XhsSaLeSXkMSitMNWwMTlrcQ==";
   };
 
   patches = [
@@ -141,6 +141,7 @@ stdenv.mkDerivation rec {
   dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
 
   # validate dynamic linkage
@@ -149,6 +150,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    $out/bin/gsx --version
     pushd examples
     for f in *.{ps,eps,pdf}; do
       echo "Rendering $f"

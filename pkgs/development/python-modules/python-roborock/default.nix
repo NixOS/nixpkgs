@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , aiohttp
+, alexapy
 , async-timeout
 , buildPythonPackage
 , click
@@ -14,27 +15,39 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.23.4";
+  version = "0.35.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8rcttFo1kkx0JfySjcKchlPc0RjutF6MuA/DVSpclKo=";
+    hash = "sha256-tZUsDBEvcLGTw/CqcxVWlrXwxlGsGdDeQzSym9BurxM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry-core==1.6.1" "poetry-core"
+  '';
+
+  pythonRelaxDeps = [
+    "pycryptodome"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    alexapy
     aiohttp
     async-timeout
     click

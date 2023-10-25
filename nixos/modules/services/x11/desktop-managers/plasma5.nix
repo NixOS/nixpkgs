@@ -172,23 +172,18 @@ in
     (mkIf (cfg.enable || cfg.mobile.enable || cfg.bigscreen.enable) {
 
       security.wrappers = {
-        kscreenlocker_greet = {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${getBin libsForQt5.kscreenlocker}/libexec/kscreenlocker_greet";
-        };
-        start_kdeinit = {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
-        };
         kwin_wayland = {
           owner = "root";
           group = "root";
           capabilities = "cap_sys_nice+ep";
           source = "${getBin plasma5.kwin}/bin/kwin_wayland";
+        };
+      } // mkIf (!cfg.runUsingSystemd) {
+        start_kdeinit = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
         };
       };
 
@@ -314,7 +309,7 @@ in
         "/share"
       ];
 
-      environment.etc."X11/xkb".source = xcfg.xkbDir;
+      environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
       environment.sessionVariables = {
         PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
@@ -332,7 +327,7 @@ in
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
-      fonts.fonts = with pkgs; [ cfg.notoPackage hack-font ];
+      fonts.packages = with pkgs; [ cfg.notoPackage hack-font ];
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
@@ -384,7 +379,7 @@ in
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
 
-      nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+      programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
     })
 
     (mkIf (cfg.kwinrc != {}) {

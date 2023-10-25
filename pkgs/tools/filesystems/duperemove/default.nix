@@ -1,21 +1,36 @@
 { lib, stdenv, fetchFromGitHub, libgcrypt
-, pkg-config, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
+, pkg-config, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite
+, util-linux, testers, duperemove }:
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.11.3";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    sha256 = "sha256-WjUM52IqMDvBzeGHo7p4JcvMO5iPWPVOr8GJ3RSsnUs=";
+    hash = "sha256-D3+p8XgokKIHEwZnvOkn7cionVH1gsypcURF+PBpugY=";
   };
+
+  postPatch = ''
+    substituteInPlace util.c --replace \
+      "lscpu" "${lib.getBin util-linux}/bin/lscpu"
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "VERSION=v${version}"
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = duperemove;
+    command = "duperemove --version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "A simple tool for finding duplicated extents and submitting them for deduplication";

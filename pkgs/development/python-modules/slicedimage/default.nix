@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Library to access sliced imaging data";
     homepage = "https://github.com/spacetx/slicedimage";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

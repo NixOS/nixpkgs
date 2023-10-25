@@ -1,6 +1,6 @@
 { buildPythonPackage
 , callPackage
-, factory_boy
+, factory-boy
 , fetchFromGitHub
 , lib
 , wagtail
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    factory_boy
+    factory-boy
     wagtail
   ];
 

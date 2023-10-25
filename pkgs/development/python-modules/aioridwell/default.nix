@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "2023.01.0";
+  version = "2023.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-enNYzU65QBT/ryCUNwB08U+QiFvVb03fbYzZ5Qk6GTk=";
+    hash = "sha256-psynooRbX34EFYY7FTqy3KdFsv939z/qYfIfyNTVkiM=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,8 @@ buildPythonPackage rec {
     pytz
     titlecase
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

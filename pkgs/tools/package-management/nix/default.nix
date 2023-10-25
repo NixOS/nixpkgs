@@ -1,4 +1,5 @@
 { lib
+, config
 , aws-sdk-cpp
 , boehmgc
 , callPackage
@@ -75,10 +76,10 @@ let
   aws-sdk-cpp-nix = (aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
-  }).overrideAttrs (args: {
+  }).overrideAttrs {
     # only a stripped down version is build which takes a lot less resources to build
     requiredSystemFeatures = [ ];
-  });
+  };
 
 
   common = args:
@@ -111,7 +112,7 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
-in lib.makeExtensible (self: {
+in lib.makeExtensible (self: ({
   nix_2_3 = (common rec {
     version = "2.3.16";
     src = fetchurl {
@@ -122,18 +123,6 @@ in lib.makeExtensible (self: {
       patch-monitorfdhup
     ];
   }).override { boehmgc = boehmgc-nix_2_3; };
-
-  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
-
-  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
-
-  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
-
-  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
-
-  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
-
-  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
 
   nix_2_10 = common {
     version = "2.10.3";
@@ -168,8 +157,8 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_13 = common {
-    version = "2.13.3";
-    hash = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+    version = "2.13.6";
+    hash = "sha256-pd2yGmHWn4njfbrSP6cMJx8qL+yeGieqcbLNICzcRFs=";
   };
 
   nix_2_14 = common {
@@ -178,13 +167,23 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_15 = common {
-    version = "2.15.1";
-    hash = "sha256-o7bxsNeq2LF6/dTl+lT2k50bSItkID80/uoZYVtlxro=";
+    version = "2.15.3";
+    hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
   };
 
   nix_2_16 = common {
-    version = "2.16.1";
-    hash = "sha256-/XCWa2osNFIpPC5MkxlX6qTZf/DaTLwS3LWN0SRFiuU=";
+    version = "2.16.2";
+    hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
+  };
+
+  nix_2_17 = common {
+    version = "2.17.1";
+    hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
+  };
+
+  nix_2_18 = common {
+    version = "2.18.1";
+    hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -204,7 +203,19 @@ in lib.makeExtensible (self: {
     else
       nix;
 
-  stable = self.nix_2_15;
+  stable = self.nix_2_17;
 
-  unstable = self.nix_2_16;
-})
+  unstable = self.nix_2_18;
+} // lib.optionalAttrs config.allowAliases {
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
+
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
+
+  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
+
+  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
+
+  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
+
+  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
+}))

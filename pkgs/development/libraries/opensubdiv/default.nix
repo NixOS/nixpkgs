@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudaSupport ? config.cudaSupport, cudatoolkit
   # For visibility mostly. The whole approach to cuda architectures and capabilities
   # will be reworked soon.
 , cudaArch ? "compute_37"
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensubdiv";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-pYD2HxAszE9Ux1xsSJ7s2R13U8ct5tDo3ZP7H0+F9Rc=";
+    sha256 = "sha256-uDKCT0Uoa5WQekMUFm2iZmzm+oWAZ6IWMwfpchkUZY0=";
   };
 
   outputs = [ "out" "dev" ];

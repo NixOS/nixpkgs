@@ -5,7 +5,7 @@ with pkgs;
 rec {
 
   sourceTarball = args: import ./source-tarball.nix (
-    { inherit stdenv autoconf automake libtool;
+    { inherit lib stdenv autoconf automake libtool;
     } // args);
 
   makeSourceTarball = sourceTarball; # compatibility

@@ -2,6 +2,7 @@
 , fetchPypi
 , pythonOlder
 , lib
+, setuptools
 , setuptools-scm
 , pytestCheckHook
 , typing-extensions
@@ -13,30 +14,39 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.13.3";
+  version = "4.1.5";
+  format = "pyproject";
+
   disabled = pythonOlder "3.5";
-  outputs = [ "out" "doc" ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4";
+    hash = "sha256-6goRO7wRG8/8kHieuyFWJcljQR9wlqfpBi1ORjDBVf0=";
   };
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     glibcLocales
+    setuptools
     setuptools-scm
     sphinxHook
     sphinx-autodoc-typehints
     sphinx-rtd-theme
   ];
 
-  LC_ALL = "en_US.utf-8";
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg --replace " --cov" ""
-  '';
+  env.LC_ALL = "en_US.utf-8";
 
-  nativeCheckInputs = [ pytestCheckHook typing-extensions ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
     # mypy tests aren't passing with latest mypy

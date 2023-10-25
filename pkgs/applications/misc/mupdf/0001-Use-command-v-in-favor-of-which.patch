@@ -1,25 +1,13 @@
-From b2935ed7e2962d73f3b493c38c0bb1e8659c0a60 Mon Sep 17 00:00:00 2001
-From: toonn <toonn@toonn.io>
-Date: Tue, 8 Mar 2022 23:59:19 +0100
-Subject: [PATCH 1/2] Use command -v in favor of which
+Use command -v in favor of which
 
----
- Makerules | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makerules b/Makerules
-index 0fdaecb..6d52cca 100644
 --- a/Makerules
 +++ b/Makerules
-@@ -145,7 +145,7 @@ else ifeq ($(OS),MACOS)
-   LD = xcrun ld
-   RANLIB = xcrun ranlib
- 
--  ifeq (, $(shell which pkg-config))
-+  ifeq (, $(shell command -v pkg-config))
+@@ -170,7 +170,7 @@
+   ifneq ($(ARCHFLAGS),)
+     $(warning "MacOS with ARCHFLAGS set. Assuming we are building for arm64, and setting HAVE_LIBCRYPTO to no.")
+     HAVE_LIBCRYPTO := no
+-  else ifeq (, $(shell which pkg-config))
++  else ifeq (, $(shell command -v pkg-config))
      $(warning "No pkg-config found, install it for proper integration of libcrypto")
    else
      HAVE_LIBCRYPTO := $(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)
--- 
-2.17.2 (Apple Git-113)
-

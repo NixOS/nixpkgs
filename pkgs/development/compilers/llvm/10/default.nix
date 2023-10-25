@@ -131,7 +131,12 @@ let
       inherit llvm_meta;
     };
 
-    lldb = callPackage ./lldb {
+    lldb = callPackage ../common/lldb.nix {
+      src = fetch "lldb" "051p5b04y6z3g730rmc2n2v71lipbw7k69riww3a6sl74myfiaq7";
+      patches = [
+        ./lldb/procfs.patch
+        ./lldb/gnu-install-dirs.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -142,7 +147,7 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -274,5 +279,6 @@ let
       inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

@@ -11,7 +11,7 @@
 , glib-networking
 , buildPackages
 , gobject-introspection
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , libpsl
 , python3
@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
 
   # HSTS tests fail.
   doCheck = false;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs libsoup/

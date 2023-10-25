@@ -649,6 +649,15 @@ in
               '';
             };
 
+            restartIfChanged = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Whether the container should be restarted during a NixOS
+                configuration switch if its definition has changed.
+              '';
+            };
+
             timeoutStartSec = mkOption {
               type = types.str;
               default = "1min";
@@ -800,14 +809,14 @@ in
       # declarative containers
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
           containerConfig = cfg // (
-          if cfg.enableTun then
+          optionalAttrs cfg.enableTun
             {
               allowedDevices = cfg.allowedDevices
                 ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               additionalCapabilities = cfg.additionalCapabilities
                 ++ [ "CAP_NET_ADMIN" ];
             }
-          else {});
+          );
         in
           recursiveUpdate unit {
             preStart = preStartScript containerConfig;
@@ -817,7 +826,7 @@ in
             unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
             environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
           } // (
-          if containerConfig.autoStart then
+          optionalAttrs containerConfig.autoStart
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
@@ -826,9 +835,9 @@ in
                 containerConfig.path
                 config.environment.etc."${configurationDirectoryName}/${name}.conf".source
               ];
-              restartIfChanged = true;
+              restartIfChanged = containerConfig.restartIfChanged;
             }
-          else {})
+          )
       )) config.containers)
     ));
 

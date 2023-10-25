@@ -65,6 +65,8 @@ in import ../make-test-python.nix ({ pkgs, ... }: {
       emptyDiskImages = [ 8192 8192 ];
       useBootLoader = true;
       useEFIBoot = true;
+      # To boot off the LVM disk, we need to have a init script which comes from the Nix store.
+      mountHostNixStore = true;
     };
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;

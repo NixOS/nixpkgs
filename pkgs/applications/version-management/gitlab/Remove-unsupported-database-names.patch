@@ -1,15 +1,15 @@
-From 310245bad66048624e199000a1c7eb9d68ce2b5c Mon Sep 17 00:00:00 2001
+From 054e2e2092e3f20267a5d2046978df6d33c72712 Mon Sep 17 00:00:00 2001
 From: Yaya <mak@nyantec.com>
 Date: Tue, 23 May 2023 13:49:18 +0000
 Subject: [PATCH] Remove unsupported database names
 
 The only supported ones are main, ci, main_clusterwide.
 ---
- config/database.yml.postgresql | 35 ----------------------------------
- 1 file changed, 35 deletions(-)
+ config/database.yml.postgresql | 37 ----------------------------------
+ 1 file changed, 37 deletions(-)
 
 diff --git a/config/database.yml.postgresql b/config/database.yml.postgresql
-index b210b9c412bc..900612080416 100644
+index da9f458ff..2d6d44e37 100644
 --- a/config/database.yml.postgresql
 +++ b/config/database.yml.postgresql
 @@ -26,13 +26,6 @@ production:
@@ -54,8 +54,8 @@ index b210b9c412bc..900612080416 100644
  
  # Warning: The database defined as "test" will be erased and
  # re-generated from your development database when you run "rake".
-@@ -117,17 +96,3 @@ test: &test
-     prepared_statements: false
+@@ -119,19 +98,3 @@ test: &test
+     reaping_frequency: nil
      variables:
        statement_timeout: 15s
 -  geo:
@@ -65,6 +65,7 @@ index b210b9c412bc..900612080416 100644
 -    username: postgres
 -    password:
 -    host: localhost
+-    reaping_frequency: nil
 -  embedding:
 -    adapter: postgresql
 -    encoding: unicode
@@ -72,6 +73,7 @@ index b210b9c412bc..900612080416 100644
 -    username: postgres
 -    password:
 -    host: localhost
+-    reaping_frequency: nil
 -- 
-2.38.4
+2.40.1
 

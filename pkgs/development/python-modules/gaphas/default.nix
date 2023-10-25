@@ -12,22 +12,22 @@
 
 buildPythonPackage rec {
   pname = "gaphas";
-  version = "3.11.1";
+  version = "3.11.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TqrrGu+jk6WNXUnXJao71JHEu7Is27UeHAG29/Jpqb8=";
+    hash = "sha256-NpmNIwZqvWAJDkUEb6+GpfQaRCVtjQk4odkaOd2D2ok=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
   ];
 

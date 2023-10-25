@@ -9,19 +9,18 @@
 , libseccomp
 , libselinux
 , makeWrapper
-, procps
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.7";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    hash = "sha256-reSC9j9ESjRigItBRytef78XBjmMGsqu0o9qcN2AstU=";
+    hash = "sha256-9vNzKoG+0Ze4+dhluNM6QtsUjV8/bpkuvEF8ASBfBRo=";
   };
 
   vendorHash = null;
@@ -45,7 +44,6 @@ buildGoModule rec {
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
     wrapProgram $out/bin/runc \
-      --prefix PATH : ${lib.makeBinPath [ procps ]} \
       --prefix PATH : /run/current-system/systemd/bin
     runHook postInstall
   '';

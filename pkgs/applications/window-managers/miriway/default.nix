@@ -9,15 +9,15 @@
 , libxkbcommon
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "unstable-2023-04-25";
+  version = "unstable-2023-08-30";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "55ef5bd188e2b86dfbd1b9b360d832d4cd454eb7";
-    hash = "sha256-kooyL5up+SBHmnv/eEnsg0ujJlHBqbE+n/YHqmpXscI=";
+    rev = "2c9a0599e1a9b37f2a73a245eacce307a3e5b883";
+    hash = "sha256-VCLl4GyUmzcC/OEfxXV0bI/6lxLP9eIAAOIjANEI1d8=";
   };
 
   strictDeps = true;
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ OPNA2608 ];
   };
-}
+})

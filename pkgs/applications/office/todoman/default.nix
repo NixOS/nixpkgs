@@ -5,19 +5,28 @@
 , installShellFiles
 , jq
 , python3
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.3.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
+    hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "disable-broken-urwid-test.patch";
+      url = "https://github.com/pimutils/todoman/commit/7ff0d2e2e69e24df5d66fecc58f8cd0b4e5ced6d.patch";
+      hash = "sha256-MMNnnIthNqobexd8GaA6lYxzv5gr1l0e9YK+Ygeje2w=";
+    })
+  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -48,14 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
+    pytest-cov
   ];
 
   LC_ALL = "en_US.UTF-8";
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=todoman --cov-report=term-missing" ""
-  '';
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -67,7 +72,6 @@ python3.pkgs.buildPythonApplication rec {
     # Testing of the CLI part and output
     "test_color_due_dates"
     "test_color_flag"
-    "test_datetime_serialization"  # Will be fixed in versions after 4.1.0
     "test_default_command"
     "test_main"
     "test_missing_cache_dir"
@@ -97,6 +101,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars antonmosich ];
+    mainProgram = "todo";
   };
 }

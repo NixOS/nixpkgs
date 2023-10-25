@@ -158,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
     pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''

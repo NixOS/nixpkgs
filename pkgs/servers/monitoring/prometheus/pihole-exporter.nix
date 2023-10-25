@@ -17,6 +17,6 @@ buildGoModule rec {
     description = "Prometheus exporter for PI-Hole's Raspberry PI ad blocker";
     homepage = "https://github.com/eko/pihole-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

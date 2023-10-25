@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dochang SuperSandro2000 ];
+    maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
   };
 

@@ -7,22 +7,24 @@
 , pythonOlder
 , scramp
 , setuptools
+, versioningit
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.29.4";
+  version = "1.30.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dtKqF1ejC8ceAwfa4Yw3TjNqaRI+awRuIGqWYR+iozA=";
+    hash = "sha256-wEKA5mocz7UWbbXBZBZMLhuPYq+u3/0hFFGlMproSik=";
   };
 
   nativeBuildInputs = [
     setuptools
+    versioningit
   ];
 
   propagatedBuildInputs = [
@@ -32,10 +34,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
-
-  postPatch = ''
-    sed '/^\[metadata\]/a version = ${version}' setup.cfg
-  '';
 
   # Tests require a running PostgreSQL instance
   doCheck = false;

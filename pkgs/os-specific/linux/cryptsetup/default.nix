@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl, lvm2, json_c, asciidoctor
 , openssl, libuuid, pkg-config, popt, nixosTests
+, libargon2, withInternalArgon2 ? false
 
+  # Programs enabled by default upstream are implicitly enabled unless
+  # manually set to false.
+, programs ? {}
   # The release tarballs contain precomputed manpage files, so we don't need
   # to run asciidoctor on the man sources. By avoiding asciidoctor, we make
   # the bare NixOS build hash independent of changes to the ruby ecosystem,
@@ -37,21 +41,22 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [
-    "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
   ] ++ lib.optionals (!rebuildMan) [
     "--disable-asciidoc"
+  ] ++ lib.optionals (!withInternalArgon2) [
+    "--enable-libargon2"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-external-tokens"
     # We have to override this even though we're removing token
     # support, because the path still gets included in the binary even
     # though it isn't used.
     "--with-luks2-external-tokens-path=/"
-  ];
+  ] ++ (with lib; mapAttrsToList (flip enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
-  buildInputs = [ lvm2 json_c openssl libuuid popt ];
+  buildInputs = [ lvm2 json_c openssl libuuid popt ] ++ lib.optional (!withInternalArgon2) libargon2;
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.
@@ -76,7 +81,8 @@ stdenv.mkDerivation rec {
     description = "LUKS for dm-crypt";
     changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    mainProgram = "cryptsetup";
+    maintainers = with lib.maintainers; [ raitobezarius ];
     platforms = with lib.platforms; linux;
   };
 }

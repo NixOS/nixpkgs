@@ -10,27 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snagboot";
-  version = "1.0";
+  version = "1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     rev = "v${version}";
-    hash = "sha256-QqGeELm2seX3tIKQvuXp9VsNDah+m9FNcaEVk6TMP0U=";
-  };
-
-  passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
-    };
-
-    tests.version = testers.testVersion {
-      package = snagboot;
-      command = "snagrecover --version";
-      version = "v${version}";
-    };
+    hash = "sha256-OuHY5+2puZAERtwmXduUW5Wjus6KeQLJLcGcl48umLA=";
   };
 
   nativeBuildInputs = [
@@ -56,18 +43,31 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    rules="src/snagrecover/80-snagboot.rules"
+    rules="src/snagrecover/50-snagboot.rules"
     if [ ! -f "$rules" ]; then
         echo "$rules is missing, must update the Nix file."
         exit 1
     fi
 
     mkdir -p "$out/lib/udev/rules.d"
-    cp "$rules" "$out/lib/udev/rules.d/80-snagboot.rules"
+    cp "$rules" "$out/lib/udev/rules.d/50-snagboot.rules"
   '';
 
   # There are no tests
   doCheck = false;
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".(rc|beta).*";
+    };
+
+    tests.version = testers.testVersion {
+      package = snagboot;
+      command = "snagrecover --version";
+      version = "v${version}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/bootlin/snagboot";

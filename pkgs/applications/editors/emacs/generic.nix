@@ -1,10 +1,9 @@
-{ pname ? "emacs"
+{ pname
 , version
-, versionModifier ? ""
-, name ? "emacs-${version}${versionModifier}"
 , variant
 , src
 , patches ? _: [ ]
+, meta
 }:
 
 { lib
@@ -33,6 +32,7 @@
 , libXaw
 , libXcursor
 , libXft
+, libXi
 , libXpm
 , libgccjit
 , libjpeg
@@ -43,7 +43,7 @@
 , libtiff
 , libwebp
 , libxml2
-, llvmPackages_6
+, llvmPackages_14
 , m17n_lib
 , makeWrapper
 , motif
@@ -60,21 +60,12 @@
 , webkitgtk
 , wrapGAppsHook
 
-# macOS dependencies for NS and macPort
-, AppKit
-, Carbon
-, Cocoa
-, GSS
-, IOKit
-, ImageCaptureCore
-, ImageIO
-, OSAKit
-, Quartz
-, QuartzCore
-, WebKit
-
 # Boolean flags
-, nativeComp ? true
+, nativeComp ? null
+, withNativeCompilation ?
+  if nativeComp != null
+  then lib.warn "nativeComp option is deprecated and will be removed; use withNativeCompilation instead" nativeComp
+  else stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , noGui ? false
 , srcRepo ? true
 , withAcl ? false
@@ -84,6 +75,7 @@
 , withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
 , withGconf ? false
+, withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
 , withGpm ? stdenv.isLinux
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , withMotif ? false
@@ -96,7 +88,7 @@
 , withWebP ? lib.versionAtLeast version "29"
 , withX ? !(stdenv.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
-, withXwidgets ? false
+, withXwidgets ? !stdenv.isDarwin && !noGui && (withGTK3 || withPgtk)
 
 # Options
 , siteStart ? ./site-start.el
@@ -106,6 +98,21 @@
   else if withMotif then "motif"
   else if withAthena then "athena"
   else "lucid")
+
+# macOS dependencies for NS and macPort
+, Accelerate
+, AppKit
+, Carbon
+, Cocoa
+, GSS
+, IOKit
+, ImageCaptureCore
+, ImageIO
+, OSAKit
+, Quartz
+, QuartzCore
+, UniformTypeIdentifiers
+, WebKit
 }:
 
 assert (withGTK2 && !withNS && variant != "macport") -> withX;
@@ -120,7 +127,7 @@ assert withGconf -> withX;
 assert withGpm -> stdenv.isLinux;
 assert withNS -> stdenv.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
-assert withXwidgets -> withGTK3;
+assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
 
 let
   libGccJitLibraryPaths = [
@@ -131,17 +138,13 @@ let
   ];
 
   inherit (if variant == "macport"
-           then llvmPackages_6.stdenv
+           then llvmPackages_14.stdenv
            else stdenv) mkDerivation;
 in
-mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
-  env = {
-    NATIVE_FULL_AOT = "1";
-    LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
-  };
-} // {
+mkDerivation (finalAttrs: {
   pname = pname
           + (if noGui then "-nox"
+             else if variant == "macport" then "-macport"
              else if withPgtk then "-pgtk"
              else if withGTK3 then "-gtk3"
              else if withGTK2 then "-gtk2"
@@ -150,7 +153,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
 
   inherit src;
 
-  patches = patches fetchpatch ++ lib.optionals nativeComp [
+  patches = patches fetchpatch ++ lib.optionals withNativeCompilation [
     (substituteAll {
       src = if lib.versionOlder finalAttrs.version "29"
             then ./native-comp-driver-options-28.patch
@@ -240,10 +243,9 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
     gtk3-x11
   ] ++ lib.optionals (withX && withMotif) [
     motif
-  ] ++ lib.optionals (withX && withXwidgets) [
+  ] ++ lib.optionals withGlibNetworking [
     glib-networking
-    webkitgtk
-  ] ++ lib.optionals nativeComp [
+  ] ++ lib.optionals withNativeCompilation [
     libgccjit
   ] ++ lib.optionals withImageMagick [
     imagemagick
@@ -266,7 +268,6 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   ] ++ lib.optionals withX [
     Xaw3d
     cairo
-
     giflib
     libXaw
     libXpm
@@ -274,6 +275,10 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
     libpng
     librsvg
     libtiff
+  ] ++ lib.optionals withXinput2 [
+    libXi
+  ] ++ lib.optionals withXwidgets [
+    webkitgtk
   ] ++ lib.optionals stdenv.isDarwin [
     sigtool
   ] ++ lib.optionals withNS [
@@ -282,6 +287,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
     GSS
     ImageIO
   ] ++ lib.optionals (variant == "macport") [
+    Accelerate
     AppKit
     Carbon
     Cocoa
@@ -289,6 +295,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
     OSAKit
     Quartz
     QuartzCore
+    UniformTypeIdentifiers
     WebKit
     # TODO are these optional?
     GSS
@@ -325,12 +332,21 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   ]
   ++ (lib.optional stdenv.isDarwin (lib.withFeature withNS "ns"))
   ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
-  ++ lib.optional nativeComp "--with-native-compilation"
+  ++ lib.optional withNativeCompilation "--with-native-compilation"
   ++ lib.optional withImageMagick "--with-imagemagick"
   ++ lib.optional withTreeSitter "--with-tree-sitter"
   ++ lib.optional withXinput2 "--with-xinput2"
   ++ lib.optional withXwidgets "--with-xwidgets"
   ;
+
+  env = lib.optionalAttrs withNativeCompilation {
+    NATIVE_FULL_AOT = "1";
+    LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
+  } // lib.optionalAttrs (variant == "macport") {
+    # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
+    # See https://github.com/NixOS/nixpkgs/issues/127902
+    NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
+  };
 
   enableParallelBuilding = true;
 
@@ -356,9 +372,9 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   '' + lib.optionalString withNS ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
-  '' + lib.optionalString (nativeComp && (withNS || variant == "macport")) ''
+  '' + lib.optionalString (withNativeCompilation && (withNS || variant == "macport")) ''
     ln -snf $out/lib/emacs/*/native-lisp $out/Applications/Emacs.app/Contents/native-lisp
-  '' + lib.optionalString nativeComp ''
+  '' + lib.optionalString withNativeCompilation ''
     echo "Generating native-compiled trampolines..."
     # precompile trampolines in parallel, but avoid spawning one process per trampoline.
     # 1000 is a rough lower bound on the number of trampolines compiled.
@@ -379,50 +395,16 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   '';
 
   passthru = {
-    inherit nativeComp;
-    treeSitter = withTreeSitter;
+    inherit withNativeCompilation;
+    inherit withTreeSitter;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
+    # Backwards compatibility aliases. Remove this at some point before 23.11 release cut-off.
+    nativeComp = builtins.trace "emacs.passthru: nativeComp was renamed to withNativeCompilation and will be removed in 23.11" withNativeCompilation;
+    treeSitter = builtins.trace "emacs.passthru: treeSitter was renamed to withTreeSitter and will be removed in 23.11" withTreeSitter;
   };
 
-  meta = {
-    homepage = if variant == "macport"
-               then "https://bitbucket.org/mituharu/emacs-mac/"
-               else "https://www.gnu.org/software/emacs/";
-    description = "The extensible, customizable GNU text editor"
-                  + lib.optionalString (variant == "macport") " - with macport patches";
-    longDescription = ''
-      GNU Emacs is an extensible, customizable text editor—and more. At its
-      core is an interpreter for Emacs Lisp, a dialect of the Lisp programming
-      language with extensions to support text editing.
-
-      The features of GNU Emacs include: content-sensitive editing modes,
-      including syntax coloring, for a wide variety of file types including
-      plain text, source code, and HTML; complete built-in documentation,
-      including a tutorial for new users; full Unicode support for nearly all
-      human languages and their scripts; highly customizable, using Emacs Lisp
-      code or a graphical interface; a large number of extensions that add other
-      functionality, including a project planner, mail and news reader, debugger
-      interface, calendar, and more. Many of these extensions are distributed
-      with GNU Emacs; others are available separately.
-    ''
-    + lib.optionalString (variant == "macport") ''
-
-      This release is built from Mitsuharu Yamamoto's patched, MacOS X-specific
-      source code.
-    '';
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      AndersonTorres
-      adisbladis
-      atemu
-      jwiegley
-      lovek323
-      matthewbauer
-    ];
-    platforms = if variant == "macport"
-                then lib.platforms.darwin
-                else lib.platforms.all;
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  meta = meta // {
+    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
-}))
+})

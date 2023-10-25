@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Django app that makes registration and authentication easy";
     homepage = "https://github.com/Tivix/django-rest-auth";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

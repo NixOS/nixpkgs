@@ -12,6 +12,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       systemd.services.check-flush = {
         requiredBy = ["multi-user.target"];
         before = ["network-pre.target" "multi-user.target"];
+        wants = ["network-pre.target"];
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
         path = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];

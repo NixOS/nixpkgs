@@ -1,31 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , requests
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
-  version = "2.5.2";
+  version = "3.1.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mirumee";
     repo = "google-i18n-address";
     rev = "refs/tags/${version}";
-    hash = "sha256-7t5sNpEVajdwcW8+xTNZQKZVgxhUzfbVbEVgn7JJ2MY=";
+    hash = "sha256-dW/1wwnFDjYpym1ZaSZ7mOLpkHxsvuAHC8zBRekxWaw=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  pythonImportsCheck = [ "i18naddress" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "i18naddress"
+  ];
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
     homepage = "https://github.com/mirumee/google-i18n-address";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

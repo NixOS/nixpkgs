@@ -49,14 +49,15 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
-  version = "1.3-beta2";
+  version = "1.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tenacityteam";
     repo = pname;
+    fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-9gWoqFa87neIvRnezWI3RyCAOU4wKEHPn/Hgj3/fol0=";
+    hash = "sha256-JgmAuCfXP345xgg5jac8Sa0cBSsWJbtoYmVV0DLcIkk=";
   };
 
   postPatch = ''
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    rm $out/audacity
+    rm $out/tenacity
     wrapProgram "$out/bin/tenacity" \
       --suffix AUDACITY_PATH : "$out/share/tenacity" \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/tenacity/modules" \

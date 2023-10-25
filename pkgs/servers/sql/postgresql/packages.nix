@@ -30,6 +30,8 @@ self: super: {
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
+    pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
+
     pgvector = super.callPackage ./ext/pgvector.nix { };
 
     plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };
@@ -47,6 +49,8 @@ self: super: {
     pg_cron = super.callPackage ./ext/pg_cron.nix { };
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
+
+    pg_net = super.callPackage ./ext/pg_net.nix { };
 
     pgtap = super.callPackage ./ext/pgtap.nix { };
 

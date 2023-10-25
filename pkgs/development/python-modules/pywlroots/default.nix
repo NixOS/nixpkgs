@@ -20,19 +20,19 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.15.24";
+  version = "0.16.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TvYhxiAbK+mpcEE9y79WH96dzeDnvI0xPaUxSYQqyHE=";
+    hash = "sha256-ITf1uALQ0ZJMeZ4wbC7VqEL9LdoK67vqRpXD6LTWjUE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
-  buildInputs = [ libinput libxkbcommon pixman xorg.libxcb udev wayland wlroots ];
+  buildInputs = [ libinput libxkbcommon pixman xorg.libxcb xorg.xcbutilwm udev wayland wlroots ];
   propagatedBuildInputs = [ cffi pywayland xkbcommon ];
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,14 +1,17 @@
 { lib
 , writeShellScriptBin
-, buildGoPackage
+, buildGoModule
 , makeWrapper
 , fetchFromGitHub
-, fetchpatch
 , coreutils
 , nettools
-, dmidecode
 , util-linux
+, stdenv
+, dmidecode
 , bashInteractive
+, nix-update-script
+, testers
+, ssm-agent
 , overrideEtc ? true
 }:
 
@@ -25,21 +28,28 @@ let
       -r) echo "''${VERSION:-unknown}";;
     esac
   '';
+
+  binaries = {
+    "core" = "amazon-ssm-agent";
+    "agent" = "ssm-agent-worker";
+    "cli-main" = "ssm-cli";
+    "worker" = "ssm-document-worker";
+    "logging" = "ssm-session-logger";
+    "sessionworker" = "ssm-session-worker";
+  };
 in
-buildGoPackage rec {
+buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.0.755.0";
-
-  goPackagePath = "github.com/aws/${pname}";
-
-  nativeBuildInputs = [ makeWrapper ];
+  version = "3.2.1630.0";
 
   src = fetchFromGitHub {
-    rev = version;
     owner = "aws";
     repo = "amazon-ssm-agent";
-    hash = "sha256-yVQJL1MJ1JlAndlrXfEbNLQihlbLhSoQXTKzJMRzhao=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0tN0rBfz2VZ4UkYLFDGg9218O9vyyRT2Lrppu9TETao=";
   };
+
+  vendorHash = null;
 
   patches = [
     # Some tests use networking, so we skip them.
@@ -48,88 +58,100 @@ buildGoPackage rec {
     # They used constants from another package that I couldn't figure
     # out how to resolve, so hardcoded the constants.
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
-
-    (fetchpatch {
-      name = "CVE-2022-29527.patch";
-      url = "https://github.com/aws/amazon-ssm-agent/commit/0fe8ae99b2ff25649c7b86d3bc05fc037400aca7.patch";
-      sha256 = "sha256-5g14CxhsHLIgs1Vkfw8FCKEJ4AebNqZKf3ZzoAN/T9U=";
-    })
   ];
 
-  preConfigure = ''
-    rm -r ./Tools/src/goreportcard
+  nativeBuildInputs = [ makeWrapper ];
+
+  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1630.0/makefile#L120-L138
+  # The updater is not built because it cannot work on NixOS
+  subPackages = [
+    "core"
+    "agent"
+    "agent/cli-main"
+    "agent/framework/processor/executer/outofproc/worker"
+    "agent/session/logging"
+    "agent/framework/processor/executer/outofproc/sessionworker"
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
+  postPatch = ''
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
-        --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
-        --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-        --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
-
-    substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
-        --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
+      --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
+      --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+      --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-        --replace '"script"' '"${util-linux}/bin/script"'
+      --replace '"script"' '"${util-linux}/bin/script"'
+
+    substituteInPlace agent/rebooter/rebooter_unix.go \
+      --replace "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
   '' + lib.optionalString overrideEtc ''
     substituteInPlace agent/appconfig/constants_unix.go \
       --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
+      --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';
 
   preBuild = ''
-    cp -r go/src/${goPackagePath}/vendor/src go
-
-    pushd go/src/${goPackagePath}
-
     # Note: if this step fails, please patch the code to fix it! Please only skip
     # tests if it is not feasible for the test to pass in a sandbox.
     make quick-integtest
 
     make pre-release
     make pre-build
-
-    popd
   '';
 
-  postBuild = ''
-    pushd go/bin
+  installPhase = ''
+    runHook preInstall
 
-    rm integration-cli versiongenerator generator
+    declare -A map=(${builtins.concatStringsSep " " (lib.mapAttrsToList (name: value: "[\"${name}\"]=\"${value}\"") binaries)})
 
-    mv core amazon-ssm-agent
-    mv agent ssm-agent-worker
-    mv cli-main ssm-cli
-    mv worker ssm-document-worker
-    mv logging ssm-session-logger
-    mv sessionworker ssm-session-worker
+    for key in ''${!map[@]}; do
+      install -D -m 0555 -T "$GOPATH/bin/''${key}" "$out/bin/''${map[''${key}]}"
+    done
 
-    popd
-  '';
+    # These templates retain their `.template` extensions on installation. The
+    # amazon-ssm-agent.json.template is required as default configuration when an
+    # amazon-ssm-agent.json isn't present. Here, we retain the template to show
+    # we're using the default configuration.
 
-  # These templates retain their `.template` extensions on installation. The
-  # amazon-ssm-agent.json.template is required as default configuration when an
-  # amazon-ssm-agent.json isn't present. Here, we retain the template to show
-  # we're using the default configuration.
+    # seelog.xml isn't actually required to run, but it does ship as a template
+    # with debian packages, so it's here for reference. Future work in the nixos
+    # module could use this template and substitute a different log level.
 
-  # seelog.xml isn't actually required to run, but it does ship as a template
-  # with debian packages, so it's here for reference. Future work in the nixos
-  # module could use this template and substitute a different log level.
-  postInstall = ''
-    mkdir -p $out/etc/amazon/ssm
-    cp go/src/${goPackagePath}/amazon-ssm-agent.json.template $out/etc/amazon/ssm/amazon-ssm-agent.json.template
-    cp go/src/${goPackagePath}/seelog_unix.xml $out/etc/amazon/ssm/seelog.xml.template
+    install -D -m 0444 -t $out/etc/amazon/ssm amazon-ssm-agent.json.template
+    install -D -m 0444 -T seelog_unix.xml $out/etc/amazon/ssm/seelog.xml.template
+
+    runHook postInstall
   '';
 
   postFixup = ''
     wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = ssm-agent;
+      command = "amazon-ssm-agent --version";
+    };
+  };
+
   meta = with lib; {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
+    changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin manveru ];
+    maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
+
+    # Darwin support is broken
+    broken = stdenv.isDarwin;
   };
 }

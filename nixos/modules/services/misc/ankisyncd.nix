@@ -9,22 +9,16 @@ let
 
   stateDir = "/var/lib/${name}";
 
-  authDbPath = "${stateDir}/auth.db";
+  toml = pkgs.formats.toml {};
 
-  sessionDbPath = "${stateDir}/session.db";
-
-  configFile = pkgs.writeText "ankisyncd.conf" (lib.generators.toINI {} {
-    sync_app = {
+  configFile = toml.generate "ankisyncd.conf" {
+    listen = {
       host = cfg.host;
       port = cfg.port;
-      data_root = stateDir;
-      auth_db_path = authDbPath;
-      session_db_path = sessionDbPath;
-
-      base_url = "/sync/";
-      base_media_url = "/msync/";
     };
-  });
+    paths.root_dir = stateDir;
+    # encryption.ssl_enable / cert_file / key_file
+  };
 in
   {
     options.services.ankisyncd = {
@@ -59,8 +53,6 @@ in
     config = mkIf cfg.enable {
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-      environment.etc."ankisyncd/ankisyncd.conf".source = configFile;
-
       systemd.services.ankisyncd = {
         description = "ankisyncd - Anki sync server";
         after = [ "network.target" ];
@@ -71,7 +63,7 @@ in
           Type = "simple";
           DynamicUser = true;
           StateDirectory = name;
-          ExecStart = "${cfg.package}/bin/ankisyncd";
+          ExecStart = "${cfg.package}/bin/ankisyncd --config ${configFile}";
           Restart = "always";
         };
       };

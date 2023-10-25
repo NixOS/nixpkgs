@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
-  version = "0.6.3";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     rev = version;
-    hash = "sha256-GefuMsMFmNyAn+xmnRqUjyWFHqiF/kIzqBCF6mk3vx0=";
+    hash = "sha256-mi9mEyb25fb3W6X07TX36fW6T2SOPOkDvpIXQn5sg8Q=";
   };
 
   nativeBuildInputs = [
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     breakpad
   ];
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
     "-DSENTRY_BREAKPAD_SYSTEM=On"
   ];
 

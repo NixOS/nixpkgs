@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
+  # ./configure does not support autoconf-style --build=/--host=.
+  # We use $CC instead.
+  configurePlatforms = [ ];
+
   nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
 
   strictDeps = true;

@@ -4,6 +4,7 @@
   "date": "2022-06-22T09:39:24-04:00",
   "path": "/nix/store/v8by7ilv9fyv20rp714xq7vhwwi7vz0g-tree-sitter-fennel",
   "sha256": "02ja5narbahc02f6gmnr5j2sg5sbjcc71hbny6n0nd57kcnapfgd",
+  "hash": "sha256-7bmrLJunNAus8XbBcBiTS5enhSzZ1mecAAyqlZUtSgo=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

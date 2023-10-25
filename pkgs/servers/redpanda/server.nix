@@ -1,4 +1,4 @@
-{ abseil-cpp
+{ abseil-cpp_202206
 , avro-cpp
 , callPackage
 , ccache
@@ -91,7 +91,7 @@ llvmPackages_14.stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    abseil-cpp
+    abseil-cpp_202206
     avro-cpp
     base64
     crc32c
@@ -109,6 +109,7 @@ llvmPackages_14.stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "Kafka-compatible streaming platform.";
     license = licenses.bsl11;
     longDescription = ''

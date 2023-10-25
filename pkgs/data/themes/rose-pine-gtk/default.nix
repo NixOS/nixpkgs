@@ -32,11 +32,13 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/themes
-    mv gtk3/rose-pine-gtk $out/share/themes/rose-pine
-    mv gtk3/rose-pine-moon-gtk $out/share/themes/rose-pine-moon
-    mv gtk3/rose-pine-dawn-gtk $out/share/themes/rose-pine-dawn
-    mv gnome_shell/moon/gnome-shell $out/share/themes/rose-pine-moon
+    mkdir -p $out/share/themes/rose-pine{,-dawn,-moon}/gtk-4.0
+
+    variants=("rose-pine" "rose-pine-dawn" "rose-pine-moon")
+    for n in "''${variants[@]}"; do
+      cp -r $src/gtk3/"''${n}"-gtk/* $out/share/themes/"''${n}"
+      cp -r $src/gtk4/"''${n}".css $out/share/themes/"''${n}"/gtk-4.0/gtk.css
+    done
 
     runHook postInstall
   '';

@@ -208,7 +208,7 @@ def test_attr_span_escaping() -> None:
               content='\\[a]{#bar}', markup='', info='', meta={}, block=True, hidden=False,
               children=[
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
-                        content='[a]{#bar}', markup='', info='', meta={}, block=False, hidden=False)
+                        content='[a]{#bar}', markup='\\[', info='escape', meta={}, block=False, hidden=False)
               ]),
         Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup='', info='', meta={}, block=True, hidden=False)
@@ -220,7 +220,7 @@ def test_attr_span_escaping() -> None:
               content='\\\\[a]{#bar}', markup='', info='', meta={}, block=True, hidden=False,
               children=[
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
-                        content='\\', markup='', info='', meta={}, block=False, hidden=False),
+                        content='\\', markup='\\\\', info='escape', meta={}, block=False, hidden=False),
                   Token(type='attr_span_begin', tag='span', nesting=1, attrs={'id': 'bar'}, map=None, level=0,
                         children=None, content='', markup='', info='', meta={}, block=False, hidden=False),
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=1, children=None,
@@ -237,7 +237,7 @@ def test_attr_span_escaping() -> None:
         Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
               children=[
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
-                        content='\\[a]{#bar}', markup='', info='', meta={}, block=False, hidden=False)
+                        content='\\[a]{#bar}', markup='\\\\', info='escape', meta={}, block=False, hidden=False)
               ],
               content='\\\\\\[a]{#bar}', markup='', info='', meta={}, block=True, hidden=False),
         Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
@@ -501,3 +501,28 @@ def test_example() -> None:
     with pytest.raises(RuntimeError) as exc:
         c._parse("::: {.example}\n### foo\n### bar\n:::")
     assert exc.value.args[0] == 'unexpected non-title heading in example in line 3'
+
+def test_footnotes() -> None:
+    c = Converter({})
+    assert c._parse("text [^foo]\n\n[^foo]: bar") == [
+        Token(type='paragraph_open', tag='p', nesting=1, map=[0, 1], block=True),
+        Token(type='inline', tag='', nesting=0, map=[0, 1], level=1, content='text [^foo]', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='text '),
+                  Token(type='footnote_ref', tag='', nesting=0, attrs={'id': 'foo.__back.0'},
+                        meta={'id': 0, 'subId': 0, 'label': 'foo', 'target': 'foo'})
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, block=True),
+        Token(type='footnote_block_open', tag='', nesting=1),
+        Token(type='footnote_open', tag='', nesting=1, attrs={'id': 'foo'}, meta={'id': 0, 'label': 'foo'}),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[2, 3], level=1, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, map=[2, 3], level=2, content='bar', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='bar')
+              ]),
+        Token(type='footnote_anchor', tag='', nesting=0,
+              meta={'id': 0, 'label': 'foo', 'subId': 0, 'target': 'foo.__back.0'}),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='footnote_close', tag='', nesting=-1),
+        Token(type='footnote_block_close', tag='', nesting=-1),
+    ]

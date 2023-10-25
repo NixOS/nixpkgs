@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , cmake, pkg-config, perl, go, python3
 , protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
 }:
@@ -15,6 +15,19 @@ stdenv.mkDerivation rec {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
     hash = "sha256-YCNOy8oZoXp+L0akWBlg1kW3xVuHDZJKIUlMdqb1SOw=";
   };
+
+  patches = [
+    # Fix building with newer protobuf versions.
+    (fetchurl {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/android-tools/-/raw/295ad7d5cb1e3b4c75bd40281d827f9168bbaa57/protobuf-23.patch";
+      hash = "sha256-KznGgZdYT6e5wG3gtfJ6i93bYfp/JFygLW/ZzvXUA0Y=";
+    })
+  ];
+
+  # Fix linking with private abseil-cpp libraries.
+  postPatch = ''
+    sed -i '/^find_package(Protobuf REQUIRED)$/i find_package(protobuf CONFIG)' vendor/CMakeLists.txt
+  '';
 
   nativeBuildInputs = [ cmake pkg-config perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];

@@ -4,6 +4,7 @@
 , libbsd
 , pkg-config
 , rustPlatform
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,6 +30,9 @@ rustPlatform.buildRustPackage rec {
     description = "Monitor XInput events and run arbitrary scripts on hierarchy change events";
     homepage = "https://github.com/andrewshadura/inputplug";
     license = licenses.mit;
+    platforms = platforms.unix;
+    # `daemon(3)` is deprecated on macOS and `pidfile-rs` needs updating
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ jecaro ];
   };
 }

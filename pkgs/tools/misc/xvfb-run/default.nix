@@ -60,5 +60,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ maintainers.artturin ];
+    mainProgram = "xvfb-run";
   };
 }

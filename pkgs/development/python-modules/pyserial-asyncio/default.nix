@@ -20,6 +20,8 @@ buildPythonPackage rec {
     pyserial
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [
     "serial_asyncio"
   ];
@@ -29,6 +31,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
   };
 }

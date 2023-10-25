@@ -13,7 +13,7 @@
 , libgcrypt
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , gi-docgen
 , gnome
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.isLinux && withIntrospection;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs ./tool/test-*.sh

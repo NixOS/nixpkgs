@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Aloxaf";
     repo = "silicon";
     rev = "v${version}";
-    sha256 = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
+    hash = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
   };
 
   patches = [

@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_ZLIB=ON"
   ];
 
+  # it caused build failure
+  hardeningDisable = [ "fortify3" ];
+
   installPhase = ''
     runHook preInstall
 

@@ -1,9 +1,9 @@
-{ mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, fetchpatch, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib, libjxl
-, openjpeg, opencolorio_1, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
+, openjpeg, opencolorio, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
 , version
@@ -21,13 +21,21 @@ mkDerivation rec {
     inherit sha256;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "exiv2-0.28.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/krita/-/raw/acd9a818660e86b14a66fceac295c2bab318c671/exiv2-0.28.patch";
+      hash = "sha256-iD2pyid513ThJVeotUlVDrwYANofnEiZmWINNUm/saw=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib libjxl
-    openjpeg opencolorio_1 poppler curl ilmbase libmypaint libwebp
+    openjpeg opencolorio poppler curl ilmbase libmypaint libwebp
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
     xsimd
@@ -47,10 +55,11 @@ mkDerivation rec {
       --replace 'PYTHONPATH=''${_krita_python_path}' 'PYTHONPATH=${pythonPath}'
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
     "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
   preInstall = ''

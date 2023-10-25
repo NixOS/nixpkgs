@@ -11,7 +11,7 @@
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
 lib.makeOverridable (
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
+{ url, rev ? "HEAD", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? []
@@ -56,9 +56,7 @@ lib.makeOverridable (
 assert deepClone -> leaveDotGit;
 assert nonConeMode -> (sparseCheckout != []);
 
-if md5 != "" then
-  throw "fetchgit does not support md5 anymore, please use sha256"
-else if hash != "" && sha256 != "" then
+if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else if builtins.isString sparseCheckout then
   # Changed to throw on 2023-06-04

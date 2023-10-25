@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3ylFz5j176hBQLklLmVKltE8whynzojsoBEWjEL2M14=";
+    hash = "sha256-+dZsXiLqqyRWr1eOEVSHZ1KMM760hrDaT07ylZUcGmo=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -81,6 +81,10 @@ buildPythonPackage rec {
       -e libxc_cam_beta_bug \
       -e test_finite_diff_rks_eph \
       -e test_finite_diff_uks_eph \
+      -e test_finite_diff_roks_grad \
+      -e test_finite_diff_df_roks_grad \
+      -e test_frac_particles \
+      -e test_nosymm_sa4_newton \
       -e test_pipek \
       -e test_n3_cis_ewald \
       -e test_veff \

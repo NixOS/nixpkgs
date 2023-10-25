@@ -2,20 +2,20 @@
 
 buildNpmPackage rec {
   pname = "vieb";
-  version = "9.7.1";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    hash = "sha256-1G3hhqWMClxdwt3aOmnAbEV+n2ui5X6Cgf30391OVi0=";
+    hash = "sha256-eopsDwgyWshZOppkODGKT8UGnj4vvc7ssEzVAhZeDTA=";
   };
 
   postPatch = ''
     sed -i '/"electron"/d' package.json
   '';
 
-  npmDepsHash = "sha256-t8fKbh9M63CCkxwlXj3zGvP8y5uLMqbyNd8BimBhIBc=";
+  npmDepsHash = "sha256-9tnLlKzOy8ze4m2beS/pI34IiEa5TdNNr+Rmm2TFgfk=";
   dontNpmBuild = true;
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isAarch64 python3;

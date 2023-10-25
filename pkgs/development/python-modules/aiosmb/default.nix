@@ -3,6 +3,7 @@
 , asysocks
 , buildPythonPackage
 , colorama
+, cryptography
 , fetchPypi
 , minikerberos
 , prompt-toolkit
@@ -16,20 +17,21 @@
 
 buildPythonPackage rec {
   pname = "aiosmb";
-  version = "0.4.6";
+  version = "0.4.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y0Z76YP1cWcfMKZOn2L6z4B+hAdibxJOYBzT3WV6FcY=";
+    hash = "sha256-ELB0VeowRbd8yZ0m28KeRY3IcCEL+wmOxiqaZhYXHdk=";
   };
 
   propagatedBuildInputs = [
     asyauth
     asysocks
     colorama
+    cryptography
     minikerberos
     prompt-toolkit
     pycryptodomex

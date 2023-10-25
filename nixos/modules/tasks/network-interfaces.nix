@@ -190,9 +190,11 @@ let
         type = types.nullOr types.bool;
         default = null;
         description = lib.mdDoc ''
-          Whether this interface should be configured with dhcp.
-          Null implies the old behavior which depends on whether ip addresses
-          are specified or not.
+          Whether this interface should be configured with DHCP. Overrides the
+          default set by {option}`networking.useDHCP`. If `null` (the default),
+          DHCP is enabled if the interface has no IPv4 addresses configured
+          with {option}`networking.interfaces.<name>.ipv4.addresses`, and
+          disabled otherwise.
         '';
       };
 
@@ -326,6 +328,24 @@ let
           type = types.bool;
           default = false;
           description = lib.mdDoc "Whether to enable wol on this interface.";
+        };
+        policy = mkOption {
+          type = with types; listOf (
+            enum ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"]
+          );
+          default = ["magic"];
+          description = lib.mdDoc ''
+            The [Wake-on-LAN policy](https://www.freedesktop.org/software/systemd/man/systemd.link.html#WakeOnLan=)
+            to set for the device.
+
+            The options are
+            - `phy`: Wake on PHY activity
+            - `unicast`: Wake on unicast messages
+            - `multicast`: Wake on multicast messages
+            - `broadcast`: Wake on broadcast messages
+            - `arp`: Wake on ARP
+            - `magic`: Wake on receipt of a magic packet
+          '';
         };
       };
     };
@@ -622,9 +642,7 @@ in
           } ];
         };
       description = lib.mdDoc ''
-        The configuration for each network interface.  If
-        {option}`networking.useDHCP` is true, then every
-        interface not listed here will be configured using DHCP.
+        The configuration for each network interface.
 
         Please note that {option}`systemd.network.netdevs` has more features
         and is better maintained. When building new things, it is advised to
@@ -1286,8 +1304,8 @@ in
       default = true;
       description = lib.mdDoc ''
         Whether to use DHCP to obtain an IP address and other
-        configuration for all network interfaces that are not manually
-        configured.
+        configuration for all network interfaces that do not have any manually
+        configured IPv4 addresses.
       '';
     };
 
@@ -1326,7 +1344,10 @@ in
 
   config = {
 
-    warnings = concatMap (i: i.warnings) interfaces;
+    warnings = (concatMap (i: i.warnings) interfaces) ++ (lib.optional
+      (config.systemd.network.enable && cfg.useDHCP && !cfg.useNetworkd) ''
+        The combination of `systemd.network.enable = true`, `networking.useDHCP = true` and `networking.useNetworkd = false` can cause both networkd and dhcpcd to manage the same interfaces. This can lead to loss of networking. It is recommended you choose only one of networkd (by also enabling `networking.useNetworkd`) or scripting (by disabling `systemd.network.enable`)
+      '');
 
     assertions =
       (forEach interfaces (i: {
@@ -1385,30 +1406,6 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
-    security.wrappers = {
-      ping = {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
-    };
-    security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
-      /run/wrappers/bin/ping {
-        include <abstractions/base>
-        include <nixos/security.wrappers>
-        rpx /run/wrappers/wrappers.*/ping,
-      }
-      /run/wrappers/wrappers.*/ping {
-        include <abstractions/base>
-        include <nixos/security.wrappers>
-        r /run/wrappers/wrappers.*/ping.real,
-        mrpx ${config.security.wrappers.ping.source},
-        capability net_raw,
-        capability setpcap,
-      }
-    '');
-
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
     # since it may have been set by dhcpcd in the meantime.
@@ -1443,6 +1440,16 @@ in
         pkgs.iw
       ]
       ++ bridgeStp;
+
+    # Wake-on-LAN configuration is shared by the scripted and networkd backends.
+    systemd.network.links = pipe interfaces [
+      (filter (i: i.wakeOnLan.enable))
+      (map (i: nameValuePair "40-${i.name}" {
+        matchConfig.OriginalName = i.name;
+        linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+      }))
+      listToAttrs
+    ];
 
     # The network-interfaces target is kept for backwards compatibility.
     # New modules must NOT use it.
@@ -1496,7 +1503,7 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
+            ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

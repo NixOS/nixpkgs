@@ -42,14 +42,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
-  version = "2.6.1"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
-    hash = "sha256-h54miRSZWT1mG63k7imJfQU1fdVr3Zc2gcyuP5511EQ=";
+    hash = "sha256-ydzGaUQ43vvQqU9xvhPJqHG/2PUtBbASIVpZCDnsR60=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -70,6 +70,11 @@ python.pkgs.buildPythonApplication rec {
     okta
     pyjwt
   ];
+
+  preCheck = ''
+    # Disable using platform's keyring unavailable in sandbox
+    export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
+  '';
 
   checkInputs = with python.pkgs; [
     pytestCheckHook
@@ -93,9 +98,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = gimme-aws-creds;
       command = ''touch tmp.conf && OKTA_CONFIG="tmp.conf" gimme-aws-creds --version'';

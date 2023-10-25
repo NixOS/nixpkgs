@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
 , gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
-, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid , alsa-lib, udev, libjack2
+, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid
+, alsa-lib, udev, libjack2, freetype, libva, libvdpau
 }:
 let
   fullPath = lib.makeLibraryPath [
@@ -20,18 +21,21 @@ let
     alsa-lib
     libjack2
     udev
+    freetype
+    libva
+    libvdpau
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "2022.1.1";
-    rev = "132926";
+    version = "2023.1";
+    rev = "141770";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
-          sha256 = "sha256-f2lxfv0sFESpDnINDKlfVcR0pySAueMeOMbkgBWzz7Q=";
+          sha256 = "sha256-QRbghrZQbprl2wUBKNMJVBeW0Ek6nWvo4006jyPYIBg=";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
@@ -87,7 +91,7 @@ in buildFHSEnv {
     homepage = "https://www.lwks.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ antonxy vojta001 ];
+    maintainers = with lib.maintainers; [ antonxy vojta001 kashw2 ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -10,7 +10,7 @@
 , configText ? ""
 }:
 let
-  version = "2303";
+  version = "2306";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -39,23 +39,23 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART24FQ1_LIN_2303_TARBALL/VMware-Horizon-Client-Linux-2303-8.9.0-21435420.tar.gz";
-      sha256 = "a4dcc6afc0be7641e10e922ccbbab0a10adbf8f2a83e4b5372dfba095091fb78";
+      url = "https://download3.vmware.com/software/CART24FQ2_LIN_2306_TARBALL/VMware-Horizon-Client-Linux-2306-8.10.0-21964631.tar.gz";
+      sha256 = "6051f6f1617385b3c211b73ff42dad27e2d22362df6ffd2f3d9f559d0b5743ea";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
-      mkdir ext $out
+      mkdir ext
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
-      mv ext/bin ext/lib ext/share "$out"/
+
+      chmod -R u+w ext/usr/lib
+      mv ext/usr $out
+      cp -r ext/bin ext/lib $out/
 
       # Horizon includes a copy of libstdc++ which is loaded via $LD_LIBRARY_PATH
       # when it cannot detect a new enough version already present on the system.
       # The checks are distribution-specific and do not function correctly on NixOS.
       # Deleting the bundled library is the simplest way to force it to use our version.
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
-
-      # This library causes the program to core-dump occasionally. Use ours instead.
-      rm -r $out/lib/vmware/view/crtbora
 
       # This opensc library is required to support smartcard authentication during the
       # initial connection to Horizon.
@@ -76,6 +76,7 @@ let
       atk
       cairo
       dbus
+      file
       fontconfig
       freetype
       gdk-pixbuf

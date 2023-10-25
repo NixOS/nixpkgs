@@ -2,28 +2,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.10.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WLuMG9gC2kSdyrYa0CNnInjetXph0OL/Jmjskih4tuw=";
+    sha256 = "sha256-bVy3/Ot4cb2Tr+wEDtWD3W2FYlXQVQ6tYC8DDyCiivY=";
   };
 
-  cargoHash = "sha256-A651PTooQjITjxCLKPhnFSCxa27uesTOP8ZbAlRbOUk=";
+  cargoHash = "sha256-lCpp1VM6G36mFCm3u+4trsdFszd8SbUEgK1iIm/LwQ4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
-  # Some tests need network
+  dontUseCargoParallelTests = true;
+
   checkFlags = [
+    # requires internet access
     "--skip=paste::tests::test_paste_data"
-    "--skip=server::tests::test_upload_file"
     "--skip=server::tests::test_upload_remote_file"
-    "--skip=util::tests::test_get_expired_files"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A minimal file upload/pastebin service";

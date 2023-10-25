@@ -7,15 +7,17 @@
 , gtest
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "UHDM";
-  version = "1.57";
+  # When updating this package, also consider updating science/logic/surelog
+  version = "1.76";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-z3vURlKXCW5W2naVwJjBXcn94u80JsBxlUOIy9ylsJw=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Q/u5lvILYDT5iScES3CTPIm/B5apoOHXOQmCsZ73NlU=";
+    fetchSubmodules = false;  # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
@@ -43,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.all;
   };
-}
+})

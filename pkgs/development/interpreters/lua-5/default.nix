@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
 
 
 let
@@ -23,7 +23,7 @@ let
         # - imports lua-packages.nix
         # - adds spliced package sets to the package set
         # - applies overrides from `packageOverrides`
-        ({ lua, overrides, callPackage, makeScopeWithSplicing }: let
+        ({ lua, overrides, callPackage, makeScopeWithSplicing' }: let
           luaPackagesFun = callPackage ../../../top-level/lua-packages.nix {
             lua = self;
           };
@@ -39,18 +39,21 @@ let
             selfHostHost = luaOnHostForHost.pkgs;
             selfTargetTarget = luaOnTargetForTarget.pkgs or {};
           };
-          keep = self: { };
-          extra = spliced0: {};
+
+          aliases = final: prev:
+            lib.optionalAttrs config.allowAliases
+              (import ../../lua-modules/aliases.nix lib final prev);
+
           extensions = lib.composeManyExtensions [
+            aliases
             generatedPackages
             overriddenPackages
             overrides
           ];
-        in makeScopeWithSplicing
-          otherSplices
-          keep
-          extra
-          (lib.extends extensions luaPackagesFun))
+        in makeScopeWithSplicing' {
+          inherit otherSplices;
+          f = lib.extends extensions luaPackagesFun;
+        })
         {
           overrides = packageOverrides;
           lua = self;

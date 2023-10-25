@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsass";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchCrate {
     pname = "rsass-cli";
     inherit version;
-    sha256 = "sha256-IaXfxccRRY868waEPI7qbWp1SSAhJlRqgeEiRNddC/c=";
+    hash = "sha256-hBYZB/Jyzd89dylZn2tYdHr0IXCFgJi9TnvuoVqCR1A=";
   };
 
-  cargoSha256 = "sha256-2owdX9ePHcAXpE43Svan252lAa5ICk0/DrDeADegZ6U=";
+  cargoHash = "sha256-nVTYTjmHB/z5M5AyojbsuZNCa3JCiADWrgV5eb3bcUE=";
 
   meta = with lib; {
     description = "Sass reimplemented in rust with nom";

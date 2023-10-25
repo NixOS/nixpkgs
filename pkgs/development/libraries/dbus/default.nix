@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.14.6";
+  version = "1.14.10";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-/SvfG7idw2WkZTG/9jFTbyKw0cbVzixcXlm1UmWz1ms=";
+    sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;

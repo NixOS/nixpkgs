@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
     license = with licenses; [ mit bsd2 ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -5,16 +5,14 @@
 }:
 
 buildDunePackage rec {
-  version = "3.11";
+  version = "3.12";
   pname = "containers";
-
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = "v${version}";
-    hash = "sha256-tGAsg98/T6VKvG95I4qioabWM3TEKrDKlsrfUJqxCyM=";
+    hash = "sha256-15Wd6k/NvjAvTmxlPlZPClODBtFXM6FG3VxniC66u88=";
   };
 
   buildInputs = [ dune-configurator ];

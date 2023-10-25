@@ -19,7 +19,9 @@
 }:
 
 let
-  inherit (unwrapped.srcs.primary) major minor;
+  inherit (unwrapped) version;
+  major = lib.versions.major version;
+  minor = lib.versions.minor version;
 
   makeWrapperArgs = builtins.concatStringsSep " " ([
     "--set" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.moduleDir}.cache"

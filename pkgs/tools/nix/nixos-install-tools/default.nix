@@ -20,8 +20,7 @@ in
     inherit (config.system.build)
       nixos-install nixos-generate-config nixos-enter;
 
-    # Required for --help.
-    inherit (config.system.build.manual) manpages;
+    inherit (config.system.build.manual) nixos-configuration-reference-manpage;
   };
 
   extraOutputsToInstall = ["man"];
@@ -63,7 +62,7 @@ in
       touch $out
     '';
   };
-}).overrideAttrs (o: {
+}).overrideAttrs {
   inherit version;
   pname = "nixos-install-tools";
-})
+}

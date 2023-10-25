@@ -26,6 +26,15 @@ in
       '';
     };
 
+    webhookUrl = mkOption {
+      type = types.str;
+      default = "";
+      description = lib.mdDoc ''
+        WEBHOOK_URL for n8n, in case we're running behind a reverse proxy.
+        This cannot be set through configuration and must reside in an environment variable.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -44,6 +53,7 @@ in
         N8N_USER_FOLDER = "/var/lib/n8n";
         HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
+        WEBHOOK_URL = "${cfg.webhookUrl}";
 
         # Don't phone home
         N8N_DIAGNOSTICS_ENABLED = "false";

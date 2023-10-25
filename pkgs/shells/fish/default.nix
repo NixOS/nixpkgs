@@ -79,7 +79,7 @@ let
     # note that this is required:
     #   1. For all shells, not just login shells (mosh needs this as do some other command-line utilities)
     #   2. Before the shell is initialized, so that config snippets can find the commands they use on the PATH
-    builtin status --is-login
+    builtin status is-login
     or test -z "$__fish_nixos_env_preinit_sourced" -a -z "$ETC_PROFILE_SOURCED" -a -z "$ETC_ZSHENV_SOURCED"
     ${if fishEnvPreInit != null then ''
     and begin
@@ -210,6 +210,12 @@ let
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
+    # Fish’s test suite needs to be able to look up process information and send signals.
+    sandboxProfile = lib.optionalString stdenv.isDarwin ''
+      (allow mach-lookup mach-task-name)
+      (allow signal (target children))
+    '';
+
     # The optional string is kind of an inelegant way to get fish to cross compile.
     # Fish needs coreutils as a runtime dependency, and it gets put into
     # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
@@ -293,6 +299,7 @@ let
       license = licenses.gpl2;
       platforms = platforms.unix;
       maintainers = with maintainers; [ cole-h winter srapenne ];
+      mainProgram = "fish";
     };
 
     passthru = {

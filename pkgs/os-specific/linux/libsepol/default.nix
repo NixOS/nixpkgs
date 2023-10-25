@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
+    pkgConfigModules = [ "libselinux" ];
   };
 }

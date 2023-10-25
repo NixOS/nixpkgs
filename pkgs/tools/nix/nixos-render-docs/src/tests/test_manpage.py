@@ -2,9 +2,8 @@ import nixos_render_docs as nrd
 
 from sample_md import sample1
 
-from typing import Mapping, Optional
+from typing import Mapping
 
-import markdown_it
 
 class Converter(nrd.md.Converter[nrd.manpage.ManpageRenderer]):
     def __init__(self, manpage_urls: Mapping[str, str], options_by_id: dict[str, str] = {}):

@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , etcd3
 , hiro
+, importlib-resources
 , packaging
 , pymemcache
 , pymongo
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.2.0";
+  version = "3.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,11 +34,12 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-zMU2MU7MFTWSig2j1PaBLPtKM5/7gNkFajKXw3A+fIQ=";
+    hash = "sha256-VLfFWFcwLgEEvPUKQ00QjEq1HN28OpE6Eu1eyF+TwXU=";
   };
 
   propagatedBuildInputs = [
     deprecated
+    importlib-resources
     packaging
     setuptools
     typing-extensions

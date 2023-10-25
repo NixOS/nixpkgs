@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , blis
 , buildPythonPackage
 , callPackage
@@ -17,6 +18,7 @@
 , pytest
 , python
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , setuptools
 , spacy-legacy
@@ -28,7 +30,6 @@
 , typing-extensions
 , wasabi
 , writeScript
-, stdenv
 , nix
 , git
 , nix-update
@@ -36,15 +37,23 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.5.2";
+  version = "3.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IsH/qrKFt0dwA9S1sDhBTMMkaKaQ1HkBW5ppjFMcgTs=";
+    hash = "sha256-YyOphwauLVVhaUsDqLC1dRiHoAKQOkiU5orrKcxnIWY=";
   };
+
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     blis
@@ -70,11 +79,9 @@ buildPythonPackage rec {
     wasabi
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ];
-
-  postPatch = ''
+  ];  postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
+      --replace "thinc>=8.1.8,<8.2.0" "thinc>=8.1.8"
   '';
 
   nativeCheckInputs = [
@@ -82,6 +89,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;
+
   checkPhase = ''
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';

@@ -182,7 +182,7 @@ in
         example = "770";
         description = lib.mdDoc ''
           If not `null`, is used as the permissions
-          set by `systemd.activationScripts.transmission-daemon`
+          set by `system.activationScripts.transmission-daemon`
           on the directories [](#opt-services.transmission.settings.download-dir),
           [](#opt-services.transmission.settings.incomplete-dir).
           and [](#opt-services.transmission.settings.watch-dir).

@@ -9,6 +9,7 @@
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsa-lib
+, pulseaudio
 , libcap
 , pciutils
 , systemd
@@ -30,7 +31,6 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config python which gn nodejs
   ] ++ lib.optional stdenv.isDarwin xcbuild;
@@ -57,6 +57,12 @@ qtModule {
 
       # TODO: be more precise
       patchShebangs .
+
+      # Fix compatibility with python3.11
+      substituteInPlace tools/metrics/ukm/ukm_model.py \
+        --replace "r'^(?i)(|true|false)$'" "r'(?i)^(|true|false)$'"
+      substituteInPlace tools/grit/grit/util.py \
+        --replace "mode = 'rU'" "mode = 'r'"
     )
   ''
   # Prevent Chromium build script from making the path to `clang` relative to
@@ -126,6 +132,8 @@ qtModule {
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
+    qtdeclarative qtquickcontrols qtlocation qtwebchannel
+
     # Image formats
     libjpeg libpng libtiff libwebp
 
@@ -145,6 +153,7 @@ qtModule {
 
     # Audio formats
     alsa-lib
+    pulseaudio
 
     # Text rendering
     fontconfig freetype

@@ -3,9 +3,10 @@
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
+, extraBwrapArgs ? [ ] # extra arguments to pass to bubblewrap
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
-, withGameSpecificLibraries ? true # exclude game specific libraries
+, withGameSpecificLibraries ? true # include game specific libraries
 }:
 
 let
@@ -60,6 +61,9 @@ let
 
 in buildFHSEnv rec {
   name = "steam";
+
+  # Steam still needs 32bit and various native games do too
+  multiArch = true;
 
   targetPkgs = pkgs: with pkgs; [
     steam
@@ -137,6 +141,7 @@ in buildFHSEnv rec {
 
     # SteamVR
     udev
+    dbus
 
     # Other things from runtime
     glib
@@ -168,6 +173,13 @@ in buildFHSEnv rec {
     librsvg
     xorg.libXft
     libvdpau
+
+    # required by coreutils stuff to run correctly
+    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
+    # very old versions of stuff from the runtime.
+    # FIXME: how do we even fix this correctly
+    attr
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -181,6 +193,8 @@ in buildFHSEnv rec {
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
+    ncurses # Crusader Kings III
+    openssl
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
@@ -188,7 +202,6 @@ in buildFHSEnv rec {
 
     # screeps dependencies
     gtk3
-    dbus
     zlib
     atk
     cairo
@@ -203,6 +216,7 @@ in buildFHSEnv rec {
     alsa-lib
 
     # Loop Hero
+    # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
     libidn2
     libpsl
     nghttp2.lib
@@ -264,6 +278,8 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
+  inherit extraBwrapArgs;
+
   meta =
     if steam != null
     then
@@ -274,21 +290,11 @@ in buildFHSEnv rec {
       description = "Steam dependencies (dummy package, do not use)";
     };
 
-  # allows for some gui applications to share IPC
-  # this fixes certain issues where they don't render correctly
-  unshareIpc = false;
-
-  # Some applications such as Natron need access to MIT-SHM or other
-  # shared memory mechanisms. Unsharing the pid namespace
-  # breaks the ability for application to reference shared memory.
-  unsharePid = false;
-
   passthru.run = buildFHSEnv {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
-    inherit multiPkgs profile extraInstallCommands;
-    inherit unshareIpc unsharePid;
+    inherit multiArch multiPkgs profile extraInstallCommands extraBwrapArgs;
 
     runScript = writeShellScript "steam-run" ''
       run="$1"

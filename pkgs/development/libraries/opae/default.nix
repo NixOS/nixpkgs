@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];
+    # Needs a major update, not compatible with gcc-11.
+    broken = true;
   };
 }

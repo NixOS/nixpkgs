@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , ipython
-, ipython_genutils
+, ipython-genutils
 , pandas
 , prettytable
 , pytest
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ipython
-    ipython_genutils
+    ipython-genutils
     prettytable
     sqlalchemy
     sqlparse

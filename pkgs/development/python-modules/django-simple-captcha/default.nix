@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
-  version = "0.5.17";
+  version = "0.5.20";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lknmbatOce+sv+8C9IuDuRaEiYNSoatW8Whs5xAzsyg=";
+    hash = "sha256-ICcwCae+tEKX6fbHpr0hraPS+pPDFNL2v145TO62opc=";
   };
 
   nativeCheckInputs = [

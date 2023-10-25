@@ -35,3 +35,19 @@ index dd80b1e46e..8e54517765 100644
        if (!devToolsDir.existsSync()) {
          throw Exception('Could not find directory at ${devToolsDir.path}');
        }
+diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
+index 1c31c1b5db..76c7210d3b 100644
+--- a/packages/flutter_tools/lib/src/cache.dart
++++ b/packages/flutter_tools/lib/src/cache.dart
+@@ -529,6 +529,11 @@ class Cache {
+ 
+   /// Return the top-level directory in the cache; this is `bin/cache`.
+   Directory getRoot() {
++    const Platform platform = LocalPlatform();
++    if (platform.environment.containsKey('FLUTTER_CACHE_DIR')) {
++      return _fileSystem.directory(platform.environment['FLUTTER_CACHE_DIR']);
++    }
++
+     if (_rootOverride != null) {
+       return _fileSystem.directory(_fileSystem.path.join(_rootOverride!.path, 'bin', 'cache'));
+     } else {

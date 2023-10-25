@@ -23,13 +23,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent hwloc munge zlib ];
 
   configureFlags = [
-    "--with-libevent=${libevent.dev}"
+    "--with-libevent=${lib.getDev libevent}"
     "--with-munge=${munge}"
-    "--with-hwloc=${hwloc.dev}"
+    "--with-hwloc=${lib.getDev hwloc}"
   ];
 
   preConfigure = ''
     ./autogen.pl
+  '';
+
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
   '';
 
   enableParallelBuilding = true;

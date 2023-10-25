@@ -6,6 +6,7 @@
 , callPackage
 , neovimUtils
 , vimUtils
+, perl
 }:
 neovim:
 
@@ -19,6 +20,7 @@ let
     , withPython2 ? false
     , withPython3 ? true,  python3Env ? python3
     , withNodeJs ? false
+    , withPerl ? false
     , rubyEnv ? null
     , vimAlias ? false
     , viAlias ? false
@@ -32,16 +34,14 @@ let
     # entry to load in packpath
     , packpathDirs
     , ...
-  }@args:
+  }:
   let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-    # "--add-flags" (lib.escapeShellArgs flags)
-    # wrapper args used both when generating the manifest and in the final neovim executable
-    commonWrapperArgs = (lib.optionals (lib.isList wrapperArgs) wrapperArgs)
+    commonWrapperArgs =
       # vim accepts a limited number of commands so we join them all
-          ++ [
+          [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
             # (lib.intersperse "|" hostProviderViml)
           ] ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
@@ -50,8 +50,10 @@ let
           ]
           ;
 
-    providerLuaRc = neovimUtils.generateProviderRc args;
-    # providerLuaRc = "toto";
+    providerLuaRc = neovimUtils.generateProviderRc {
+      inherit withPython3 withNodeJs withPerl;
+      withRuby = rubyEnv != null;
+    };
 
     # If configure != {}, we can't generate the rplugin.vim file with e.g
     # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -65,6 +67,8 @@ let
       ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ++ commonWrapperArgs
       ;
+
+    perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
@@ -85,6 +89,9 @@ let
       ''
       + lib.optionalString withNodeJs ''
         ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
+      ''
+      + lib.optionalString withPerl ''
+        ln -s ${perlEnv}/bin/perl $out/bin/nvim-perl
       ''
       + lib.optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim

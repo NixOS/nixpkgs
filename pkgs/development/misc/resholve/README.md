@@ -44,7 +44,6 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 { lib
 , fetchFromGitHub
 , resholve
-, substituteAll
 , bash
 , coreutils
 , goss
@@ -154,7 +153,7 @@ that the `resholve` CLI expects. Here's an overview:
 |--------|------|------------|
 | scripts | `<list>` | scripts to resolve (`$out`-relative paths) |
 | interpreter | `"none"` `<path>` | The absolute interpreter `<path>` for the script's shebang. The special value `none` ensures there is no shebang. |
-| inputs | `<packages>` | Packages to resolve external dependencies from. |
+| inputs | `<packages>` `<paths>` | A list of packages and string paths to directories/files to resolve external dependencies from. |
 | fake | `<directives>` | pretend some commands exist |
 | fix | `<directives>` | fix things we can't auto-fix/ignore |
 | keep | `<directives>` | keep things we can't auto-fix/ignore |
@@ -204,7 +203,7 @@ more copies of their specification/behavior than I like, and continuing to
 add more at this early date will only ensure that I spend more time updating
 docs and less time filling in feature gaps.
 
-Full documentation may be greatly accellerated if someone can help me sort out
+Full documentation may be greatly accelerated if someone can help me sort out
 single-sourcing. See: https://github.com/abathur/resholve/issues/19
 -->
 

@@ -1,21 +1,20 @@
 { lib
-, python3
 , fetchPypi
+, python3
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
-  version = "2.0.67";
+  version = "2.0.69";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFxAMjglQZXCySr83PtvStU6hw2ucQu+rSjIHo1yZBk=";
+    hash = "sha256-gkO6XYiPMkU/zRLvc0yd3jJXVcAgAkR1W1ELTSN461o=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"openrgb-python~=0.2.10",' "" \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
       --replace '"sentry-sdk==1.14.0",' "" \
       --replace "~=" ">="
@@ -31,7 +30,7 @@ python3.pkgs.buildPythonPackage rec {
     icmplib
     multidict
     numpy
-    # openrgb-python # not packaged
+    openrgb-python
     paho-mqtt
     pillow
     psutil
@@ -53,7 +52,7 @@ python3.pkgs.buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "LedFx is a network based LED effect controller with support for advanced real-time audio effects";
+    description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
     changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
     license = licenses.gpl3Only;

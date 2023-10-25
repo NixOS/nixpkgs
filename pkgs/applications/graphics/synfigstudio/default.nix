@@ -39,7 +39,7 @@ let
     pname = "ETL";
     inherit version src;
 
-    sourceRoot = "source/ETL";
+    sourceRoot = "${src.name}/ETL";
 
     nativeBuildInputs = [
       pkg-config
@@ -54,7 +54,7 @@ let
     pname = "synfig";
     inherit version src;
 
-    sourceRoot = "source/synfig-core";
+    sourceRoot = "${src.name}/synfig-core";
 
     configureFlags = [
       "--with-boost=${boost.dev}"
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
   pname = "synfigstudio";
   inherit version src;
 
-  sourceRoot = "source/synfig-studio";
+  sourceRoot = "${src.name}/synfig-studio";
 
   postPatch = ''
     patchShebangs images/splash_screen_development.sh

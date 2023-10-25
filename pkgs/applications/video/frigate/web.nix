@@ -7,7 +7,7 @@ buildNpmPackage {
   pname = "frigate-web";
   inherit version src;
 
-  sourceRoot = "source/web";
+  sourceRoot = "${src.name}/web";
 
   postPatch = ''
     substituteInPlace package.json \

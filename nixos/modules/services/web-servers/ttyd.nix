@@ -78,11 +78,12 @@ in
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExpression ''{
-          fontSize = "16";
-          fontFamily = "Fira Code";
-
-        }'';
+        example = literalExpression ''
+          {
+            fontSize = "16";
+            fontFamily = "Fira Code";
+          }
+        '';
         description = lib.mdDoc ''
           Attribute set of client options for xtermjs.
           <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>

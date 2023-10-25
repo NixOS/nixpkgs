@@ -9,9 +9,13 @@
 , enableUnstable ? false
 }:
 
+let
+  stableVersion = "1.4.0";
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "ath9k-htc-blobless-firmware";
-  version = if enableUnstable then "unstable-2022-05-22" else "1.4.0";
+  version = if enableUnstable then "unstable-2022-05-22" else stableVersion;
 
   src = fetchFromGitHub ({
     owner = "qca";
@@ -61,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/lib/firmware/ath9k_htc/ target_firmware/*.fw
+    install -Dt "$out/lib/firmware/ath9k_htc/" target_firmware/*.fw
+    # make symlinks so that firmware will be automatically found
+    ln -s htc_7010.fw "$out/lib/firmware/ath9k_htc/htc_7010-${stableVersion}.fw"
+    ln -s htc_9271.fw "$out/lib/firmware/ath9k_htc/htc_9271-${stableVersion}.fw"
     runHook postInstall
   '';
 

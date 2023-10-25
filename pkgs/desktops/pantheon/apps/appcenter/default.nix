@@ -15,9 +15,7 @@
 , libxml2
 , meson
 , ninja
-, packagekit
 , pkg-config
-, python3
 , vala
 , polkit
 , wrapGAppsHook
@@ -25,27 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "7.2.1";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jtNPRsq33bIn3jy3F63UNrwrhaTBYbRYLDxyxgAXjIc=";
+    sha256 = "sha256-L6MGbzzujr4tEB2Cpd7IU+3mOtSCt2hLPw4mOfZ4TkQ=";
   };
-
-  patches = [
-    # Having a working nix packagekit backend will supersede this.
-    # https://github.com/NixOS/nixpkgs/issues/177946
-    ./disable-packagekit-backend.patch
-  ];
 
   nativeBuildInputs = [
     dbus # for pkg-config
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -61,19 +52,16 @@ stdenv.mkDerivation rec {
     libhandy
     libsoup
     libxml2
-    packagekit
     polkit
   ];
 
   mesonFlags = [
+    # We don't have a working nix packagekit backend yet.
+    "-Dpackagekit_backend=false"
+    "-Dubuntu_drivers_backend=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

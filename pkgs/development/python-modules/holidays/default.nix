@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , hijri-converter
 , korean-lunar-calendar
+, polib
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -11,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.25";
+  version = "0.32";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dr-prodigy";
     repo = "python-holidays";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-D6MCLbuNnafWMDyEc/jeyfOs0VVV92AndtNsjyFDgEg=";
+    hash = "sha256-YAh5gR4KcUgXzeXy3xyGeokDFsyd9FqRQ5j1TC6wCQY=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    polib
     pytestCheckHook
   ];
 

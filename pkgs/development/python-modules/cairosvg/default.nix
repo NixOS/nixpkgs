@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://cairosvg.org";
     license = licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

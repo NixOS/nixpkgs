@@ -2,7 +2,7 @@
   "owner": "zammad",
   "repo": "zammad",
   "rev": "643aba6ba4ba66c6127038c8cc2cc7a20b912678",
-  "sha256": "vLLn989M5ZN+jTh60BopEKbuaxOBfDsk6PiM+gHFClo=",
+  "hash": "sha256-vLLn989M5ZN+jTh60BopEKbuaxOBfDsk6PiM+gHFClo=",
   "fetchSubmodules": true
 }
 

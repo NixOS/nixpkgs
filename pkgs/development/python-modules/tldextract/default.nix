@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , filelock
 , idna
 , pytest-mock
@@ -9,22 +9,28 @@
 , requests
 , requests-file
 , responses
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
-  version = "3.4.2";
-  format = "setuptools";
+  pname = "tldextract";
+  version = "5.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mONrCqOm2P0ITYDXWuE3LaAgJ++1VsFGpZ39FEVwcbo=";
+  src = fetchFromGitHub {
+    owner = "john-kurkowski";
+    repo = "tldextract";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+JZnSIjG1avQ14NxbYF5on2ukJtTWTq+hVIqYCvPjsQ=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -41,11 +47,6 @@ buildPythonPackage rec {
     responses
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --pylint" ""
-  '';
-
   pythonImportsCheck = [
     "tldextract"
   ];
@@ -57,6 +58,7 @@ buildPythonPackage rec {
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
+    changelog = "https://github.com/john-kurkowski/tldextract/blob/${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

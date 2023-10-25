@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableVideo [
     wrapGAppsHook
     wrapQtAppsHook
+    qtbase
   ];
 
   buildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "stefantalpalaru";
     repo = "w_scan2";
     rev = version;
-    sha256 = "sha256-fDFAJ4EMwu4X1Go3jkRjwA66xDY4tJ5wCKlEdZUT4qQ=";
+    hash = "sha256-fDFAJ4EMwu4X1Go3jkRjwA66xDY4tJ5wCKlEdZUT4qQ=";
   };
 
   meta = {

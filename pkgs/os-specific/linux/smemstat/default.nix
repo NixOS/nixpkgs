@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smemstat";
-  version = "0.02.11";
+  version = "0.02.12";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-RvHBrcyNB/zqxEY27twgMsjHNg8kzJryqnIAM7+vpg8=";
+    hash = "sha256-5gO26F80nZvZ6RIqX8o7bDSNo38EL8XywR8wMPFqHA8=";
   };
 
   buildInputs = [ ncurses ];

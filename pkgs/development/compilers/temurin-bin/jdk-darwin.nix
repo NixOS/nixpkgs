@@ -19,4 +19,7 @@ in
 
   jdk-19 = common { sourcePerArch = sources.jdk.openjdk19; };
   jre-19 = common { sourcePerArch = sources.jre.openjdk19; };
+
+  jdk-20 = common { sourcePerArch = sources.jdk.openjdk20; };
+  jre-20 = common { sourcePerArch = sources.jre.openjdk20; };
 }

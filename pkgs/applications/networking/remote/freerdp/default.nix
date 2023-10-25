@@ -8,7 +8,7 @@
 , alsa-lib
 , faac
 , faad2
-, ffmpeg
+, ffmpeg_5 # Depends on deprecated libav features
 , glib
 , openh264
 , openssl
@@ -76,13 +76,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.10.0";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "sha256-4sq3LblFRWCBREudtzg+o9wjstm58gPzBq7QAwlWvEg=";
+    sha256 = "sha256-buInsfjzpY4EF7bSojy42YNXssbNriSQGYBFE/DUJ7A=";
   };
 
   postPatch = ''
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     cairo
     cups
     faad2
-    ffmpeg
+    ffmpeg_5
     glib
     gst-plugins-base
     gst-plugins-good

@@ -1,19 +1,19 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , pkg-config
+, ffmpeg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.11.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    sha256 = "sha256-sPsq/hntNqOdPJcoob1jrDUrLLiBEnfRoDANyFUjOuM=";
+    hash = "sha256-KiedPhlPcFkTiZZfOBlTKqtzU2ND1HXdsfhq+F1MtdU=";
   };
 
   cargoLock = {
@@ -23,15 +23,26 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
-  # error: the crate `gifski` is compiled with the panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
-  doCheck = !stdenv.isDarwin;
+  buildInputs = [
+    ffmpeg
+  ];
 
-  # error: linker `/usr/bin/x86_64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config.toml;
-  '';
+  buildFeatures = [ "video" ];
+
+  # When the default checkType of release is used, we get the following error:
+  #
+  #   error: the crate `gifski` is compiled with the panic strategy `abort` which
+  #   is incompatible with this crate's strategy of `unwind`
+  #
+  # It looks like https://github.com/rust-lang/cargo/issues/6313, which does not
+  # outline a solution.
+  #
+  checkType = "debug";
 
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";
@@ -39,5 +50,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ figsoda marsam ];
+    mainProgram = "gifski";
   };
 }

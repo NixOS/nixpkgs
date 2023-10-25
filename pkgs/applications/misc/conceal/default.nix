@@ -1,14 +1,14 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, testers, conceal }:
 
 rustPlatform.buildRustPackage rec {
   pname = "conceal";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "NKAp15mm/pH4g3+fPCxI6U8Y4qdAhV9CLkmII76oGrw=";
+    sha256 = "sha256-zrG4AE8I1nVvEGNvi7tOsqn6yNOqpRmhJzbuJINnJBw=";
   };
 
   cargoLock = {
@@ -26,14 +26,20 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/{cnc/_cnc,conceal/_conceal}
   '';
 
-  # There are no any tests in source project.
+  # There are not any tests in source project.
   doCheck = false;
+
+  passthru.tests = testers.testVersion {
+    package = conceal;
+    command = "conceal --version";
+    version = "conceal ${version}";
+  };
 
   meta = with lib; {
     description = "A trash collector written in Rust";
     homepage = "https://github.com/TD-Sky/conceal";
     license = licenses.mit;
-    maintainers = with maintainers; [ jedsek ];
+    maintainers = with maintainers; [ jedsek kashw2 ];
     broken = stdenv.isDarwin;
   };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tesseract";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "sha256-Glpu6CURCL3kI8MAeXbF9OWCRjonQZvofWsv1wVWz08=";
+    sha256 = "sha256-/aGzwm2+0y8fheOnRi/OJXZy3o0xjY1cCq+B3GTzfos=";
   };
 
   enableParallelBuilding = true;
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anselmschueler ];
     platforms = lib.platforms.unix;
+    mainProgram = "tesseract";
   };
 }

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , lit
@@ -12,9 +13,17 @@ let
   llvmMajor = lib.versions.major llvm.version;
   isROCm = lib.hasPrefix "rocm" llvm.pname;
 
-  # ROCm will always be at the latest version
+  # ROCm, if actively updated will always be at the latest version
   branch =
-    if llvmMajor == "15" || isROCm then rec {
+    if llvmMajor == "17" || isROCm then rec {
+      version = "17.0.0";
+      rev = "v${version}";
+      hash = "sha256-Rzm5Py9IPFtS9G7kME+uSwZ/0gPGW6MlL35ZWk4LfHM=";
+    } else if llvmMajor == "16" then rec {
+      version = "16.0.0";
+      rev = "v${version}";
+      hash = "sha256-EUabcYqSjXshbPmcs1DRLvCSL1nd9rEdpqELBrItCW8=";
+    } else if llvmMajor == "15" then rec {
       version = "15.0.0";
       rev = "v${version}";
       hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";
@@ -37,6 +46,14 @@ stdenv.mkDerivation {
     repo = "SPIRV-LLVM-Translator";
     inherit (branch) rev hash;
   };
+
+  patches = lib.optionals (llvmMajor == "16")[
+    # Fixes builds that link against external LLVM dynamic library
+    (fetchpatch {
+      url = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator/commit/f3b9b604d7eda18d0d1029d94a6eebd33aa3a3fe.patch";
+      hash = "sha256-opDjyZcy7O4wcSfm/A51NCIiDyIvbcmbv9ns1njdJbc=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config cmake spirv-tools ]
     ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
@@ -62,6 +79,9 @@ stdenv.mkDerivation {
 
   postInstall = ''
     install -D tools/llvm-spirv/llvm-spirv $out/bin/llvm-spirv
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool $out/bin/llvm-spirv \
+      -change @rpath/libLLVMSPIRVLib.dylib $out/lib/libLLVMSPIRVLib.dylib
   '';
 
   meta = with lib; {

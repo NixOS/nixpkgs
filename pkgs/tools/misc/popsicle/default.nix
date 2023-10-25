@@ -1,40 +1,41 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cargo
 , rustPlatform
-, rustc
+, cargo
 , glib
 , pkg-config
+, rustc
+, wrapGAppsHook
 , gdk-pixbuf
 , gtk3
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "popsicle";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "popsicle";
     rev = version;
-    sha256 = "sha256-NqzuZmVabQ5WHOlBEsJhL/5Yet3TMSuo/gofSabCjTY=";
+    hash = "sha256-2RkptzUX0G17HJMTHVqjbRHIIc8+NcSRUvE+S9nmtLs=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dbus-udisks2-0.3.0" = "sha256-VtwUUXVPyqvcOtphBH42CkRmW5jI+br9oDJ9wY40hsE=";
-      "iso9660-0.1.0" = "sha256-A2C7DbtyJhOW+rjtAcO9YufQ5VjMfdypJAAmBlHpwn4=";
+      "iso9660-0.1.1" = "sha256-amegb0ULjYHGTHJoyXlqkyhky10JjmoR1iR4grKzyHY=";
     };
   };
 
   nativeBuildInputs = [
+    cargo
     glib
     pkg-config
+    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
-    cargo
     rustc
     wrapGAppsHook
   ];

@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs, print-reexports }:
+{ stdenv, fetchurl, libxml2, xar, cpio, pkgs, python3Minimal, pbzx, lib, darwin-stubs, print-reexports }:
 
 let
+  xarMinimal = xar.override {
+    libxml2 = libxml2.override { pythonSupport = false; };
+  };
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     pname = "MacOS_SDK";
@@ -16,7 +19,7 @@ let
       sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    nativeBuildInputs = [ xar cpio python3 pbzx ];
+    nativeBuildInputs = [ xarMinimal cpio python3Minimal pbzx ];
 
     outputs = [ "out" "dev" "man" ];
 

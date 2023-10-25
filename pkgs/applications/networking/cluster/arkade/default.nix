@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.9.18";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    sha256 = "sha256-Pu5kWvIbIYKnjv9p6atsrmjUnnaeX6E0Wkk/HSIfW8g=";
+    hash = "sha256-Lu/itKaF7mSG/jwg2sA4wNkbzBWdDY4pfwHB0elI1Bc=";
   };
 
   CGO_ENABLED = 0;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-r3bhqTI+DXSw21sjNJkO8cNA5JJitB+UcUwm/u5I0tY=";
+  vendorHash = null;
 
   # Exclude pkg/get: tests downloading of binaries which fail when sandbox=true
   subPackages = [
@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/alexellis/arkade";
     description = "Open Source Kubernetes Marketplace";
     license = licenses.mit;
-    maintainers = with maintainers; [ welteki techknowlogick ];
+    maintainers = with maintainers; [ welteki techknowlogick qjoly ];
   };
 }

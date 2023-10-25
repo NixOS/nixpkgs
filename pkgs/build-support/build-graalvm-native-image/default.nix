@@ -13,6 +13,7 @@
 , nativeImageBuildArgs ? [
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
     "-H:Name=${executable}"
+    "-march=compatibility"
     "--verbose"
   ]
   # Extra arguments to be passed to the native-image
@@ -71,7 +72,5 @@ stdenv.mkDerivation ({
     platforms = graalvmDrv.meta.platforms;
     # default to executable name
     mainProgram = executable;
-    # need to have native-image-installable-svm available
-    broken = !(builtins.any (p: (p.product or "") == "native-image-installable-svm") graalvmDrv.products);
   } // meta;
 } // extraArgs)

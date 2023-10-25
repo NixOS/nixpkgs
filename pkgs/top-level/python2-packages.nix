@@ -7,6 +7,8 @@ self: super:
 with self; with super; {
   attrs = callPackage ../development/python2-modules/attrs { };
 
+  backports-functools-lru-cache = callPackage ../development/python2-modules/backports-functools-lru-cache { };
+
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
   cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
@@ -34,6 +36,10 @@ with self; with super; {
   mock = callPackage ../development/python2-modules/mock { };
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
+
+  # ninja python stub was created to help simplify python builds using PyPA's
+  # build tool in Python 3, but it does not yet support Python 2
+  ninja = pkgs.buildPackages.ninja;
 
   packaging = callPackage ../development/python2-modules/packaging { };
 
@@ -71,8 +77,6 @@ with self; with super; {
 
   scandir = callPackage ../development/python2-modules/scandir { };
 
-  sequoia = disabled super.sequoia;
-
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
@@ -82,6 +86,10 @@ with self; with super; {
   six = super.six.overridePythonAttrs (_: {
     doCheck = false;  # circular dependency with pytest
   });
+
+  wcwidth = callPackage ../development/python2-modules/wcwidth {
+    inherit wcwidth;
+  };
 
   wheel = callPackage ../development/python2-modules/wheel { };
 

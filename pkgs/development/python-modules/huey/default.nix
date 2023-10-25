@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "huey";
-  version = "2.4.5";
+  version = "2.5.0";
 
   format = "pyproject";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7ZMkA5WzWJKSwvpOoZYQO9JgedCdxNGrkFuPmYm4aRE=";
+    hash = "sha256-t767eqZ6U12mG8nWEYC9Hoq/jW2yfrPkCxB3/xLKQww=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "A little task queue for python";
     homepage = "https://github.com/coleifer/huey";
     license = licenses.mit;
-    maintainers = [ maintainers.globin ];
+    maintainers = [];
   };
 }

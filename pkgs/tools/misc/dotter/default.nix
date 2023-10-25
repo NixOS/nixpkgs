@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchFromGitHub
 , nix-update-script
 , rustPlatform
@@ -10,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.12.15";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
     rev = "v${version}";
-    hash = "sha256-quMEwg/B4ey6zoxDZO2ce3/s1FX5xxmJfyAlt4YvFqE=";
+    hash = "sha256-mAvTy/11a9RGSQpElhpKMzsMC7vA7cbeHsNRy9MnIjw=";
   };
 
-  cargoHash = "sha256-D8H95dE+th1mMzlLmd+fqU5VdlxdOSBHKSjvh21JhnE=";
+  cargoHash = "sha256-XsDp/ssoNVdTHDTPm2ucgBeYmFgbeBIxQ/NsGjCl5Qg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

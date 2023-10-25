@@ -14,7 +14,7 @@ bundlerApp {
     description = "A network device configuration backup tool. It's a RANCID replacement!";
     homepage    = "https://github.com/ytti/oxidized";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ willibutz nicknovitski netali ];
+    maintainers = with maintainers; [ nicknovitski netali ];
     platforms   = platforms.linux;
   };
 }

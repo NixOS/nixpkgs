@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "4.2.0";
+  version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z5XRyhObREj38BWnexQnwHS1y2Ewyv5/KPkl/ybHvUE=";
+    hash = "sha256-vlPAAGY6h/nV9bNOUXharm1aeKfaL7ImzbvAPlpMV5k=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildPythonPackage rec {
     ical
     pydantic
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     freezegun

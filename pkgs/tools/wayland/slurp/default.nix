@@ -47,11 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ (lib.mesonEnable "man-pages" buildDocs) ];
 
   meta = with lib; {
-    homepage = "https://github.com/emersion/slurp";
-    description = "Select a region in a Wayland compositor";
     changelog = "https://github.com/emersion/slurp/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ buffet ];
+    description = "Select a region in a Wayland compositor";
     inherit (wayland.meta) platforms;
+    homepage = "https://github.com/emersion/slurp";
+    license = licenses.mit;
+    mainProgram = "slurp";
+    maintainers = with maintainers; [ buffet ];
   };
 })

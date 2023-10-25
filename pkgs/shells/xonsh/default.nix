@@ -1,24 +1,25 @@
 { lib
 , fetchFromGitHub
-, python3Packages
+, python3
 , glibcLocales
 , coreutils
 , git
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.13.4";
+  version = "0.14.0";
+  format = "pyproject";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-/u8jA7sLy3N8483uIzqBeSxEAGhX7+XS4D14n+15JHU=";
+    hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
@@ -29,20 +30,12 @@ python3Packages.buildPythonApplication rec {
     find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
-
-    substituteInPlace scripts/xon.sh \
-      --replace 'python' "${python3Packages.python}/bin/python"
-
   '';
 
-  makeWrapperArgs = [
-    "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/xonsh \
-      $makeWrapperArgs
-  '';
 
   disabledTests = [
     # fails on sandbox
@@ -76,9 +69,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [ glibcLocales git ] ++
-    (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+    (with python3.pkgs; [ pip pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
-  propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
+  propagatedBuildInputs = with python3.pkgs; [ ply prompt-toolkit pygments ];
 
   meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";
@@ -90,5 +83,6 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     shellPath = "/bin/xonsh";
+    python = python3;
   };
 }

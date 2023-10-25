@@ -18,13 +18,14 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'rich = "^10.1.0"' 'rich = "*"' \
-      --replace 'PyYAML = "^5.4.1"' 'PyYAML = "*"'
-  '';
+  pythonRelaxDeps = [
+    "rich"
+    "more-itertools"
+    "PyYAML"
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

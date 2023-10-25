@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "butane";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
     rev = "v${version}";
-    hash = "sha256-HkvDJVSGve6t1gEek8FvfIK20r5TOHRJ71KsGUj95fM=";
+    hash = "sha256-v3HJpkfzGFii4hUfKRiFwcBcAObL1ItYw/9t8FO9gss=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -30,6 +30,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/coreos/butane";
     maintainers = with maintainers; [ elijahcaine ruuda ];
-    platforms = platforms.unix;
   };
 }

@@ -101,24 +101,61 @@ genericBuild
 
 ### Building a `stdenv` package in `nix-shell` {#sec-building-stdenv-package-in-nix-shell}
 
-To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), use
+To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), enter a shell, find the [phases](#sec-stdenv-phases) you wish to build, then invoke `genericBuild` manually:
+
+Go to an empty directory, invoke `nix-shell` with the desired package, and from inside the shell, set the output variables to a writable directory:
 
 ```bash
+cd "$(mktemp -d)"
 nix-shell '<nixpkgs>' -A some_package
-eval "${unpackPhase:-unpackPhase}"
-cd $sourceRoot
-eval "${patchPhase:-patchPhase}"
-eval "${configurePhase:-configurePhase}"
-eval "${buildPhase:-buildPhase}"
+export out=$(pwd)/out
+```
+
+Next, invoke the desired parts of the build.
+First, run the phases that generate a working copy of the sources, which will change directory to the sources for you:
+
+```bash
+phases="${prePhases[*]:-} unpackPhase patchPhase" genericBuild
+```
+
+Then, run more phases up until the failure is reached.
+For example, if the failure is in the build phase, the following phases would be required:
+
+```bash
+phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase" genericBuild
+```
+
+Re-run a single phase as many times as necessary to examine the failure like so:
+
+```bash
+phases="buildPhase" genericBuild
 ```
 
 To modify a [phase](#sec-stdenv-phases), first print it with
+
+```bash
+echo "$buildPhase"
+```
+
+Or, if that is empty, for instance, if it is using a function:
 
 ```bash
 type buildPhase
 ```
 
 then change it in a text editor, and paste it back to the terminal.
+
+::: {.note}
+This method may have some inconsistencies in environment variables and behaviour compared to a normal build within the [Nix build sandbox](https://nixos.org/manual/nix/unstable/language/derivations#builder-execution).
+The following is a non-exhaustive list of such differences:
+
+- `TMP`, `TMPDIR`, and similar variables likely point to non-empty directories that the build might conflict with files in.
+- Output store paths are not writable, so the variables for outputs need to be overridden to writable paths.
+- Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
+
+If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+:::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
 
@@ -180,7 +217,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
+    hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
@@ -286,7 +323,7 @@ This is where “sum-like” comes in from above: We can just sum all of the hos
 
 Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
 
-Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the dependending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforagable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
 #### Variables specifying dependencies {#variables-specifying-dependencies}
 
@@ -425,6 +462,16 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
   };
   ```
 
+::: {.tip}
+A common pattern is to use the [`nix-update-script`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+
+```nix
+passthru.updateScript = nix-update-script { };
+```
+
+For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released. The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set. While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+:::
+
 ##### How update scripts are executed? {#var-passthru-updateScript-execution}
 
 Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
@@ -464,10 +511,8 @@ The commit object contains the following values:
 
 If the returned array contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
-```{=docbook}
-<example>
-<title>Standard output of an update script using commit feature</title>
-```
+::: {.example #var-passthru-updateScript-example-commit}
+# Standard output of an update script using commit feature
 
 ```json
 [
@@ -481,10 +526,7 @@ If the returned array contains exactly one object (e.g. `[{}]`), all values are 
   }
 ]
 ```
-
-```{=docbook}
-</example>
-```
+:::
 
 ### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
@@ -619,13 +661,18 @@ The list of source files or directories to be unpacked or copied. One of these m
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
-After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
+After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSourceRoot` are set, `unpackPhase` of the generic builder checks that the unpacking produced a single directory and moves the current working directory into it.
 
-By default the `sourceRoot` is set to `"source"`. If you want to point to a sub-directory inside your project, you therefore need to set `sourceRoot = "source/my-sub-directory"`.
+If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
+You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
+
+For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
 Alternatively to setting `sourceRoot`, you can set `setSourceRoot` to a shell command to be evaluated by the unpack phase after the sources have been unpacked. This command must set `sourceRoot`.
+
+For example, if you are using `fetchurl` on an archive file that gets unpacked into a single directory the name of which changes between package versions, and you want your build to start in its sub-directory, you need to set `setSourceRoot = "sourceRoot=$(echo */my-sub-directory)";`, or in the case of multiple sources, you could use something more specific, like `setSourceRoot = "sourceRoot=$(echo ${pname}-*/my-sub-directory)";`.
 
 ##### `preUnpack` {#var-stdenv-preUnpack}
 
@@ -927,6 +974,28 @@ Like `stripDebugList`, but only applies to packages’ target platform. By defau
 
 Flags passed to the `strip` command applied to the files in the directories listed in `stripDebugList`. Defaults to `-S` (i.e. `--strip-debug`).
 
+##### `stripExclude` {#var-stdenv-stripExclude}
+
+A list of filenames or path patterns to avoid stripping. A file is excluded if its name _or_ path (from the derivation root) matches.
+
+This example prevents all `*.rlib` files from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "*.rlib" ]
+}
+```
+
+This example prevents files within certain paths from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "lib/modules/*/build/* ]
+}
+```
+
 ##### `dontPatchELF` {#var-stdenv-dontPatchELF}
 
 If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries. Only applies to Linux.
@@ -959,19 +1028,63 @@ Hook executed at the end of the fixup phase.
 
 If set to `true`, the standard environment will enable debug information in C/C++ builds. After installation, the debug information will be separated from the executables and stored in the output named `debug`. (This output is enabled automatically; you don’t need to set the `outputs` attribute explicitly.) To be precise, the debug information is stored in `debug/lib/debug/.build-id/XX/YYYY…`, where \<XXYYYY…\> is the \<build ID\> of the binary — a SHA-1 hash of the contents of the binary. Debuggers like GDB use the build ID to look up the separated debug information.
 
-For example, with GDB, you can add
+:::{.example #ex-gdb-debug-symbols-socat}
 
-```
-set debug-file-directory ~/.nix-profile/lib/debug
+# Enable debug symbols for use with GDB
+
+To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
+
+```nix
+let
+  pkgs = import ./. {
+    config = {};
+    overlays = [
+      (final: prev: {
+        ncurses = prev.ncurses.overrideAttrs { separateDebugInfo = true; };
+        readline = prev.readline.overrideAttrs { separateDebugInfo = true; };
+      })
+    ];
+  };
+
+  myDebugInfoDirs = pkgs.symlinkJoin {
+    name = "myDebugInfoDirs";
+    paths = with pkgs; [
+      glibc.debug
+      ncurses.debug
+      openssl.debug
+      readline.debug
+    ];
+  };
+in
+  pkgs.mkShell {
+
+    NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+
+    packages = [
+      pkgs.gdb
+      pkgs.socat
+    ];
+
+    shellHook = ''
+      ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+    '';
+  }
 ```
 
-to `~/.gdbinit`. GDB will then be able to find debug information installed via `nix-env -i`.
+This setup works as follows:
+- Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
+- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+
+:::
 
 ### The installCheck phase {#ssec-installCheck-phase}
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
-It is often better to add tests that are not part of the source distribution to `passthru.tests` (see <xref linkend="var-meta-tests"/>). This avoids adding overhead to every build and enables us to run them independently.
+It is often better to add tests that are not part of the source distribution to `passthru.tests` (see
+[](#var-meta-tests)). This avoids adding overhead to every build and enables us to run them independently.
 
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
@@ -1168,7 +1281,7 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
-Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
+Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
@@ -1234,7 +1347,7 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
 
-::: note
+::: {.note}
 The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
 :::
 
@@ -1272,7 +1385,7 @@ patchShebangs --build configure
 
 Interpreter paths that point to a valid Nix store location are not changed.
 
-::: note
+::: {.note}
 A script file must be marked as executable, otherwise it will not be
 considered.
 :::
@@ -1445,7 +1558,7 @@ This flag can break dynamic shared object loading. For instance, the module syst
 
 #### `bindnow` {#bindnow}
 
-Adds the `-z bindnow` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
+Adds the `-z now` linker option. During program load, all dynamic symbols are resolved, allowing for the complete GOT to be marked read-only (due to `relro`). This prevents GOT overwrite attacks. For very large applications, this can incur some performance loss during initial load while symbols are resolved, but this shouldn’t be an issue for daemons.
 
 This flag can break dynamic shared object loading. For instance, the module systems of Xorg and PHP are incompatible with this flag. Programs incompatible with this flag often fail at runtime due to missing symbols, like:
 

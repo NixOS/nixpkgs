@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ sikmir ];
     mainProgram = "t_rex";
     platforms = platforms.unix;
+    broken = true;  # https://github.com/t-rex-tileserver/t-rex/issues/302
   };
 }

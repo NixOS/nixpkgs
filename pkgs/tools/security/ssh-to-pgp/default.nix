@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ssh-to-pgp";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-pgp";
     rev = version;
-    sha256 = "sha256-5Wg0ItAkAb0zlhzcuDT9o0XIIbG9kqk4mIYb6hSJlsI=";
+    sha256 = "sha256-3R/3YPYLdirK3QtiRNO2tpJRO2DKgN+K4txb9xwnQvQ=";
   };
 
-  vendorSha256 = "sha256-OMWiJ1n8ynvIGcmotjuGGsRuAidYgVo5Y5JjrAw8fpc=";
+  vendorHash = "sha256-RCz2+IZdgmPnEakKxn/C3zFfRyWnMLB51Nm8VGOxBkc=";
 
   nativeCheckInputs = [ gnupg ];
   checkPhase = ''

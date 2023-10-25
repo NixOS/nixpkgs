@@ -38,20 +38,19 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
     cudaPackages.autoAddOpenGLRunpathHook
-    patchelf
   ];
 
-  buildInputs = with cudaPackages; [
+  buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
     # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
     # libnvToolsExt-$hash.so.1
     cuda_nvtx
-  ];
+  ]);
 
-  autoPatchelfIgnoreMissingDeps = [
+  autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.isLinux [
     # This is the hardware-dependent userspace driver that comes from
     # nvidia_x11 package. It must be deployed at runtime in
     # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
@@ -79,7 +78,7 @@ in buildPythonPackage {
     rm -rf $out/bin
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
 
     patchelf $out/${python.sitePackages}/torch/lib/libcudnn.so.8 --add-needed libcudnn_cnn_infer.so.8

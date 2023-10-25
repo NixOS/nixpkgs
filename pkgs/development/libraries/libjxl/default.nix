@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.8.1";
+  version = "0.8.2";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-WWuvUTMrlR6ePbEs01ulLnuMiUqGrh4qELWFh0QMaGU=";
+    hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };

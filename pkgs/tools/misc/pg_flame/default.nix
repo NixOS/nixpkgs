@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "mgartner";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1a03vxqnga83mhjp7pkl0klhkyfaby7ncbwm45xbl8c7s6zwhnw2";
+    hash = "sha256-glvIv9GHIbp6IZUvZo9fyvkJ6QR03nMlrAOpZ3HfA6g=";
   };
 
-  vendorSha256 = "1rkx20winh66y2m7i7q13jpr83044i2d1pfd5p5l5kkpsix5mra5";
+  vendorHash = "sha256-ReVaetR3zkLLLc3d0EQkBAyUrxwBn3iq8MZAGzkQfeY=";
 
   meta = with lib; {
     description = "Flamegraph generator for Postgres EXPLAIN ANALYZE output";

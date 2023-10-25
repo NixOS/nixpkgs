@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     description = "Post-processing tool for scanned sheets of paper";
     license = licenses.gpl2;
     platforms = platforms.all;
+    mainProgram = "unpaper";
     maintainers = [ maintainers.rycee ];
   };
 }

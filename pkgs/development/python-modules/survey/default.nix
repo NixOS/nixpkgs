@@ -2,22 +2,23 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, wrapio
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "3.4.3";
+  version = "4.5.4";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TK89quY3bpNIEz1n3Ecew4FnTH6QgeSLdDNV86gq7+I=";
+    hash = "sha256-wjpO1+9AXi75uPXOTE5/owEiZgtffkkMAaZ+gDO0t5I=";
   };
 
-  propagatedBuildInputs = [
-    wrapio
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   doCheck = false;

@@ -20,7 +20,7 @@ buildGoModule rec {
     hash = "sha256-jurZvEtiaTjWeDkmCJDIFlTzR5EVglfoDxkFgOilo8s=";
   };
 
-  # patching must be done in prebuild, so it is shared with go-modules
+  # patching must be done in prebuild, so it is shared with goModules
   # see https://github.com/NixOS/nixpkgs/issues/208036
   preBuild = ''
     for file in `find -name Makefile -type f`; do

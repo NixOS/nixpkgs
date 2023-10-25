@@ -6,20 +6,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
     rev = version;
-    sha256 = "sha256-ZAlX8Vu4JAwQlwBOHT435Bz3g3qqK5ePm9v0cDqP8Q4=";
+    sha256 = "sha256-SjEp0gQHwq3Omhx/EPnyLeQJ50Ov0rHDxmYVWBwIDBs=";
   };
 
-  cargoSha256 = "sha256-nn/P9ZZNf1Zts4JiJ2kXWAAG/HT1GnlYHXcPijYiBlU=";
-
-  cargoPatches = [
-    ./0001-patch-version.patch
-  ];
+  cargoSha256 = "sha256-kdGqnfzO+Ev9QeZcZqISPTehEXZzCWT5S8p6JbTBreE=";
 
   buildInputs = rpathLibs;
 
@@ -32,7 +28,6 @@ rustPlatform.buildRustPackage rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A tiling window manager for the adventurer";
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;

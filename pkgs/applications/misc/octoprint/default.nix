@@ -80,13 +80,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.9.0";
+              version = "1.9.3";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-gTWQSqgksZMxdaZ7V3hmnqXlZ+OMI86RX0lC8z1AEzI=";
+                hash = "sha256-71uE8JvcS++xH8WSVWj5x0+9s3XIwf3A64c6YtxpSRc=";
               };
 
               propagatedBuildInputs = with self; [
@@ -100,7 +100,7 @@ let
                 filetype
                 flask
                 flask-babel
-                flask_assets
+                flask-assets
                 flask-login
                 flask-limiter
                 frozendict
@@ -114,7 +114,6 @@ let
                 netifaces
                 octoprint-filecheck
                 octoprint-firmwarecheck
-                octoprint-pisupport
                 passlib
                 pathvalidate
                 pkginfo
@@ -142,6 +141,8 @@ let
                 pydantic
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
+              ] ++ lib.optionals (!stdenv.isDarwin) [
+                octoprint-pisupport
               ];
 
               nativeCheckInputs = with self; [

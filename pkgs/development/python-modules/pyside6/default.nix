@@ -1,8 +1,8 @@
 { lib
 , stdenv
+, fetchpatch2
 , cmake
 , ninja
-, qt6
 , python
 , moveBuildTree
 , shiboken6
@@ -14,7 +14,16 @@ stdenv.mkDerivation rec {
 
   inherit (shiboken6) version src;
 
-  sourceRoot = "pyside-setup-everywhere-src-${lib.versions.majorMinor version}/sources/${pname}";
+  sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
+
+  patches = [
+    # Needed to build against qt 6.5.3, until pyside 6.5.3 is released
+    (fetchpatch2 {
+      url = "https://code.qt.io/cgit/pyside/pyside-setup.git/patch/sources/pyside6?id=63ef7628091c8827e3d0d688220d3ae165587eb2";
+      hash = "sha256-TN1xdBkrzZhNontShMC1SKyJK6a8fOk/Di3zX3kv5+I=";
+      stripLen = 2;
+    })
+  ];
 
   # FIXME: cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
@@ -34,9 +43,12 @@ stdenv.mkDerivation rec {
     moveBuildTree
   ];
 
-  buildInputs = with qt6; [
+  buildInputs = with python.pkgs.qt6; [
     # required
     qtbase
+    python.pkgs.ninja
+    python.pkgs.packaging
+    python.pkgs.setuptools
   ] ++ lib.optionals stdenv.isLinux [
     # optional
     qt3d
@@ -68,6 +80,12 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapQtApps = true;
+
+  postInstall = ''
+    cd ../../..
+    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=pyside6
+    cp -r PySide6.egg-info $out/${python.sitePackages}/
+  '';
 
   meta = with lib; {
     description = "Python bindings for Qt";

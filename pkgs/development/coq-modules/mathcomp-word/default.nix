@@ -16,7 +16,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-    { cases = [ (range "8.12" "8.17") (isGe "1.12") ]; out = "2.1"; }
+    { cases = [ (range "8.12" "8.18") (isGe "1.12") ]; out = "2.1"; }
   ] null;
 
   propagatedBuildInputs = [ mathcomp.algebra mathcomp.ssreflect mathcomp.fingroup ];

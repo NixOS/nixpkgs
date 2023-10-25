@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  sourceRoot = "source/libgeotiff";
+  sourceRoot = "${src.name}/libgeotiff";
 
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"

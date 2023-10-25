@@ -4,7 +4,7 @@
 
 import multiprocessing
 
-from typing import Any, Callable, ClassVar, Iterable, Optional, TypeVar
+from typing import Any, Callable, Iterable, Optional, TypeVar
 
 R = TypeVar('R')
 S = TypeVar('S')

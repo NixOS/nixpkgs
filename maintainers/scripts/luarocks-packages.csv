@@ -34,7 +34,6 @@ loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,1.6.0,,
-lpty,,,,,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
@@ -72,6 +71,7 @@ lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
+luarocks-build-rust-mlua,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
@@ -86,10 +86,13 @@ luuid,,,,,,
 luv,,,,1.44.2-1,,
 lush.nvim,https://github.com/rktjmp/lush.nvim,,,,,teto
 lyaml,,,,,,lblasc
+magick,,,,,,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
+middleclass,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
+nui-nvim,,,,,,mrcjkb
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
@@ -97,6 +100,7 @@ plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 rest.nvim,,,,,5.1,teto
 readline,,,,,,
+rustaceanvim,,,,,,mrcjkb
 say,https://github.com/Olivine-Labs/say.git,,,,,
 serpent,,,,,,lockejan
 sqlite,,,,,,
@@ -107,5 +111,7 @@ teal-language-server,,,http://luarocks.org/dev,,,
 telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
 tl,,,,,,mephistophiles
+toml,,,,,,mrcjkb
+toml-edit,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda

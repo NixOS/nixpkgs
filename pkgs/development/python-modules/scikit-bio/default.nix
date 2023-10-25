@@ -20,13 +20,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.8";
+  version = "0.5.9";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1VqDw+XyyhEydE4UCSM/th2a8MWpXet7KR5uNAcSuGs=";
+    hash = "sha256-euBE3IvuIxkAJIrcOoZZB352FA1WrJ9CvQH7eYEBSRA=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

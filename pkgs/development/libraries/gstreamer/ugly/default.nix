@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.22.3";
+  version = "1.22.6";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-PcmO1cIpM2izxObOVdib6DSgpi6b+I7xeSjPA7fVo2A=";
+    hash = "sha256-PjFFTJjLL39tLTVezrkzqJL6Dx3Am8NsmryTDY4pykg=";
   };
 
   nativeBuildInputs = [

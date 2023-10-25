@@ -72,6 +72,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   alkimia = callPackage ../development/libraries/alkimia { };
 
+  applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
+
   applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
 
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
@@ -154,7 +156,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
-  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
+  mlt = pkgs.mlt.override {
+    enableQt = true;
+  };
 
   phonon = callPackage ../development/libraries/phonon { };
 
@@ -205,7 +209,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
+    inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
   };
 
   qtmpris = callPackage ../development/libraries/qtmpris { };
@@ -217,6 +222,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qwt = callPackage ../development/libraries/qwt/default.nix { };
 

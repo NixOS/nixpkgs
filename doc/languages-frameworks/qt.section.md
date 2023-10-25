@@ -10,36 +10,21 @@ pure and explicit at build-time, at the cost of introducing an extra indirection
 
 ## Nix expression for a Qt package (default.nix) {#qt-default-nix}
 
-```{=docbook}
-<programlisting>
-{ stdenv, lib, qtbase, wrapQtAppsHook }: <co xml:id='qt-default-nix-co-1' />
+```nix
+{ stdenv, lib, qtbase, wrapQtAppsHook }:
 
 stdenv.mkDerivation {
   pname = "myapp";
   version = "1.0";
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id='qt-default-nix-co-2' />
+  nativeBuildInputs = [ wrapQtAppsHook ];
 }
-</programlisting>
-
- <calloutlist>
-  <callout arearefs='qt-default-nix-co-1'>
-   <para>
-    Import Qt modules directly, that is: <literal>qtbase</literal>, <literal>qtdeclarative</literal>, etc.
-    <emphasis>Do not</emphasis> import Qt package sets such as <literal>qt5</literal>
-    because the Qt versions of dependencies may not be coherent, causing build and runtime failures.
-   </para>
-  </callout>
-  <callout arearefs='qt-default-nix-co-2'>
-    <para>
-      All Qt packages must include <literal>wrapQtAppsHook</literal> in
-      <literal>nativeBuildInputs</literal>, or you must explicitly set
-      <literal>dontWrapQtApps</literal>.
-    </para>
-  </callout>
- </calloutlist>
 ```
+
+It is important to import Qt modules directly, that is: `qtbase`, `qtdeclarative`, etc. *Do not* import Qt package sets such as `qt5` because the Qt versions of dependencies may not be coherent, causing build and runtime failures.
+
+Additionally all Qt packages must include `wrapQtAppsHook` in `nativeBuildInputs`, or you must explicitly set `dontWrapQtApps`.
 
 ## Locating runtime dependencies {#qt-runtime-dependencies}
 

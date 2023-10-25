@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Dockerspawner: A custom spawner for Jupyterhub";
     homepage = "https://jupyter.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

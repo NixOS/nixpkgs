@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch2
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, dbus, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
+, cairo, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
 , wayland-protocols, xcbutilcursor
 
 , demoSupport ? true
@@ -19,12 +19,22 @@
 
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "12.0.1";
+  version = "12.0.2";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-sYWR6rJ4vBkXIPbAkVgEC3lecRivHV3cpqzZqOIDlTU=";
+    hash = "sha256-62hqfPAJkqI7F/GS/KmohzE+ksNG7jXYV1GWmD1la0o=";
   };
+
+  patches = [
+    # ci, backend-vnc: update to Neat VNC 0.7.0
+    # part of https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1051
+    (fetchpatch2 {
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/8895b15f3dfc555a869e310ff6e16ff5dced1336.patch";
+      hash = "sha256-PGAmQhzG8gZcYRaZwhKPlgzfbILIXGAHLSd9dCHAP1A=";
+      excludes = [ ".gitlab-ci.yml" ];
+    })
+  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
@@ -78,6 +88,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.freedesktop.org/wayland/weston";
     license = licenses.mit; # Expat version
     platforms = platforms.linux;
+    mainProgram = "weston";
     maintainers = with maintainers; [ primeos qyliss ];
   };
 }

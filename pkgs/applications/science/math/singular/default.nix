@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.3.2p1";
+  version = "4.3.2p2";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
     rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-fprlqJ/3vhnUBnopOhWi4TWMKjcJ4qDQGq8vaaGzy2E=";
+    sha256 = "sha256-dtZmN8xUCZ9eSgmtBxqfJeWsM4W5Baq7xWXuNAxNLjA=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are

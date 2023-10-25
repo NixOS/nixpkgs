@@ -80,6 +80,9 @@ in {
               "example.com" = "full";
               "@admin:example.com" = "admin";
             };
+            telegram = {
+              connection.use_ipv6 = true;
+            };
           }
         '';
         description = lib.mdDoc ''
@@ -156,7 +159,6 @@ in {
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
             --generate-registration \
-            --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi

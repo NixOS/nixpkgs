@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "sockets";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GNwFLNV1u3UKJp9lhLtCclD2VSKC9Mko1hBoSn5dTpI=";
+    sha256 = "sha256-u5Nb9PVyMoR0lIzXEMtkZntXbBfpyXrtLB8U+dkgYrc=";
   };
 
   meta = with lib; {

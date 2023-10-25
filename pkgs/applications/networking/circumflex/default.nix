@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "circumflex";
-  version = "2.9.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
     rev = version;
-    hash = "sha256-FgmtRARNyvO+Ivhwr2S12GLX+vlTFnsClXv1Y7sTCmU=";
+    hash = "sha256-3cu5Y9Z20CbFN+4/2LLM3pcXofuc8oztoZVPhDzFLas=";
   };
 
-  vendorHash = "sha256-p4lIIu3rkzb1EfJ4GJeXPgQlxGN1dqyTlIC9BOE1o/Y=";
+  vendorHash = "sha256-w9WDbNvnaRgZ/rpI450C7AA244AXRE8u960xZnAiXn4=";
 
   nativeBuildInputs = [ makeWrapper ];
 

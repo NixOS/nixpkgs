@@ -15,7 +15,7 @@ if [ -z "$version" ]; then
 fi
 
 src="https://raw.githubusercontent.com/matrix-org/matrix-hookshot/$version"
-src_hash=$(nix-prefetch-github matrix-org matrix-hookshot --rev ${version} | jq -r .sha256)
+src_hash=$(nix-prefetch-github matrix-org matrix-hookshot --rev ${version} | jq -r .hash)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -32,6 +32,6 @@ cat > pin.json << EOF
   "version": "$version",
   "srcHash": "$src_hash",
   "yarnHash": "$yarn_hash",
-  "cargoHash": "0000000000000000000000000000000000000000000000000000"
+  "cargoHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 }
 EOF

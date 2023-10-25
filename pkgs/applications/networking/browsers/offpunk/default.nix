@@ -14,6 +14,7 @@
 let
   pythonDependencies = with python3Packages; [
     beautifulsoup4
+    chardet
     cryptography
     feedparser
     pillow
@@ -30,8 +31,8 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "offpunk";
-  version = "1.9.2";
-  format = "flit";
+  version = "1.10";
+  format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.7";
 
@@ -39,10 +40,10 @@ python3Packages.buildPythonPackage rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    sha256 = "sha256-CYsuoj5/BaaboDRtcOrGzJoZDCfOLs7ROVWLVjOAnRU=";
+    hash = "sha256-+jGKPPnKZHn+l6VAwuae6kICwR7ymkYJjsM2OHQAEmU=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ python3Packages.flit-core installShellFiles ];
   propagatedBuildInputs = otherDependencies ++ pythonDependencies;
 
   postInstall = ''

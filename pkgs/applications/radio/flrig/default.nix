@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.01";
+  version = "2.0.03";
   pname = "flrig";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TFZZaTtU7TLBPA7jpBTu2JtkZpxjG57Rin8OVFedHwA=";
+    sha256 = "sha256-/5hOryoupl7MYWekx2hL3q+2GMXA6rohjvYy2XTkJBI=";
   };
 
   buildInputs = [

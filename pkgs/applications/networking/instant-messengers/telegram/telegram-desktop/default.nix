@@ -76,14 +76,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.3";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fvg9SFHRHeJVogYQ+vyVqGyLGnOjM5Osi3H0SNGe9fY=";
+    hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
   };
 
   patches = [
@@ -93,6 +93,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
+    })
+    # lib_base: Add missing include for Qt 6.6
+    (fetchpatch {
+      url = "https://github.com/desktop-app/lib_base/commit/5ca91dbb811c84591780236abc31431e313faf39.patch";
+      stripLen = 1;
+      extraPrefix = "Telegram/lib_base/";
+      hash = "sha256-eZkyMnPaAmUFYXiCmPhLRTw2Xdx0lylY+UVOckCsiaA=";
     })
   ];
 
@@ -105,8 +112,6 @@ stdenv.mkDerivation rec {
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
       --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
-    substituteInPlace cmake/external/glib/CMakeLists.txt \
-      --replace 'add_subdirectory(cppgir)' 'add_subdirectory(cppgir EXCLUDE_FROM_ALL)'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -211,5 +216,6 @@ stdenv.mkDerivation rec {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "telegram-desktop";
   };
 }

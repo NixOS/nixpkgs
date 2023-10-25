@@ -4,7 +4,6 @@
 , bencoder
 , pyyaml
 , requests
-, setuptools
 }:
 buildPythonApplication rec {
   pname = "gazelle-origin";

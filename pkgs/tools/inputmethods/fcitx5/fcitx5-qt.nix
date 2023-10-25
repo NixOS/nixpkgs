@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "fcitx5-qt";
-  version = "5.0.17";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pi5Xb7H/h89OcTzYX7X3Xw8FQIczkWd6rMrbwnHr/L4=";
+    sha256 = "sha256-IkaaLFMyPVaL5taRN4e+QxMEsNhhXlA1fWBn/6PeGnI=";
   };
 
   preConfigure = ''

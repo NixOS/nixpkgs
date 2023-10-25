@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/abseil/abseil-cpp/commit/5bfa70c75e621c5d5ec095c8c4c0c050dcb2957e.patch";
       sha256 = "0nhjxqfxpi2pkfinnqvd5m4npf9l1kg39mjx9l3087ajhadaywl5";
     })
+
+    # Bacport gcc-13 fix:
+    #   https://github.com/abseil/abseil-cpp/pull/1187
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/abseil/abseil-cpp/commit/36a4b073f1e7e02ed7d1ac140767e36f82f09b7c.patch";
+      hash = "sha256-aA7mwGEtv/cQINcawjkukmCvfNuqwUeDFssSiNKPdgg=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isLoongArch64 [
     # https://github.com/abseil/abseil-cpp/pull/1110
     (fetchpatch {

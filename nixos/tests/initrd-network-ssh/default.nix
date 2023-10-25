@@ -1,12 +1,10 @@
-import ../make-test-python.nix ({ lib, ... }:
+import ../make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "initrd-network-ssh";
-  meta = with lib.maintainers; {
-    maintainers = [ willibutz emily ];
-  };
+  meta.maintainers = with lib.maintainers; [ willibutz emily ];
 
-  nodes = with lib; {
+  nodes = {
     server =
       { config, ... }:
       {
@@ -17,7 +15,7 @@ import ../make-test-python.nix ({ lib, ... }:
           enable = true;
           ssh = {
             enable = true;
-            authorizedKeys = [ (readFile ./id_ed25519.pub) ];
+            authorizedKeys = [ (lib.readFile ./id_ed25519.pub) ];
             port = 22;
             hostKeys = [ ./ssh_host_ed25519_key ];
           };
@@ -37,12 +35,12 @@ import ../make-test-python.nix ({ lib, ... }:
       {
         environment.etc = {
           knownHosts = {
-            text = concatStrings [
+            text = lib.concatStrings [
               "server,"
-              "${toString (head (splitString " " (
-                toString (elemAt (splitString "\n" config.networking.extraHosts) 2)
+              "${toString (lib.head (lib.splitString " " (
+                toString (lib.elemAt (lib.splitString "\n" config.networking.extraHosts) 2)
               )))} "
-              "${readFile ./ssh_host_ed25519_key.pub}"
+              "${lib.readFile ./ssh_host_ed25519_key.pub}"
             ];
           };
           sshKey = {

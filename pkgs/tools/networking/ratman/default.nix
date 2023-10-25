@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   dashboard = stdenv.mkDerivation rec {
     pname = "ratman-dashboard";
     inherit version src;
-    sourceRoot = "source/ratman/dashboard";
+    sourceRoot = "${src.name}/ratman/dashboard";
 
     yarnDeps = fetchYarnDeps {
       yarnLock = src + "/ratman/dashboard/yarn.lock";

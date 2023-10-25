@@ -7,7 +7,7 @@
 , alembic
 , pystache
 , pytest
-, factory_boy
+, factory-boy
 , python
 , unzip
 }:
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
+    vendorHash = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   # pytest tests fail
   nativeCheckInputs = [
     pytest
-    factory_boy
+    factory-boy
   ];
 
   dontUseSetuptoolsCheck = true;

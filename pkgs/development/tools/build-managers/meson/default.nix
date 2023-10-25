@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch
 , installShellFiles
 , ninja
@@ -18,18 +18,16 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.1.0";
+  version = "1.2.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2WFsRM1sU2if+PBfxpWKaT8uF8NHKo2vg87lXav/gp8=";
+  src = fetchFromGitHub {
+    owner = "mesonbuild";
+    repo = "meson";
+    rev = "refs/tags/${version}";
+    hash = "sha256-x2VN/6Kg/n6BW5S4nLKfG67dYrSR/G+Aowf6d2Vbc+0=";
   };
 
   patches = [
-    # Fix Meson tests that fail when the Nix store is case-sensitive APFS.
-    # https://github.com/mesonbuild/meson/pull/11820
-    ./darwin-case-sensitive-fs.patch
-
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
@@ -76,13 +74,6 @@ python3.pkgs.buildPythonApplication rec {
       excludes = [
         "docs/yaml/objects/dep.yaml"
       ];
-    })
-
-    # Fix regression in precomputing CMAKE_SIZEOF_VOID_P
-    # See https://github.com/mesonbuild/meson/pull/11761
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/7c78c2b5a0314078bdabb998ead56925dc8b0fc0.patch";
-      sha256 = "sha256-vSnHhuOIXf/1X+bUkUmGND5b30ES0O8EDArwb4p2/w4=";
     })
   ];
 

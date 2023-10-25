@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "24.0.1";
+  version = "25.0";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
-    sha256 = "0k14y3iv5l26r820wzkwqxi67kwh26i0yq20ffd72shicjs1d3qc";
+    sha256 = "03w5n3qjha63mgj7zk8q17x5j63la3i4li7bf5i1yw59ijqpmnqg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]

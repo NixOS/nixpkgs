@@ -8,6 +8,7 @@
 , rapidfuzz-capi
 , scikit-build
 , setuptools
+, wheel
 , jarowinkler-cpp
 , hypothesis
 , pytestCheckHook
@@ -16,10 +17,9 @@
 buildPythonPackage rec {
   pname = "jarowinkler";
   version = "1.2.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
@@ -28,6 +28,14 @@ buildPythonPackage rec {
     hash = "sha256-j+ZabVsiVitNkTPhGjDg72XogjvPaL453lTW45ITm90=";
   };
 
+  # We cannot use Cython version 3.0.0 because the code in jarowinkler has not
+  # been adapted for https://github.com/cython/cython/issues/4280 yet
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'scikit-build==' 'scikit-build>=' \
+      --replace 'Cython==3.0.0a11' 'Cython'
+  '';
+
   nativeBuildInputs = [
     cmake
     cython
@@ -35,6 +43,7 @@ buildPythonPackage rec {
     rapidfuzz-capi
     scikit-build
     setuptools
+    wheel
   ];
 
   buildInputs = [

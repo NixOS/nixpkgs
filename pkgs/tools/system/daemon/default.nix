@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "daemon";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchurl {
     url = "http://libslack.org/daemon/download/daemon-${version}.tar.gz";
-    sha256 = "sha256-s0s3VDu6Q70Ibln0t1TIECOArlwXKLmHyJDV2ktM88o=";
+    sha256 = "sha256-+iiFmtNBywoLASwRwnGBT4cEggE7SfcQYAMh03mIfNE=";
   };
 
   makeFlags = [

@@ -13,13 +13,14 @@
 , pythonOlder
 , tabulate
 , typing-extensions
+, abseil-cpp
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
-  version = "1.14.0";
+  version = "1.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -28,12 +29,16 @@ in buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-f+s25Y/jGosaSdoZY6PE3j6pENkfDcD+IQndrbtuzWg=";
+    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
   };
 
   nativeBuildInputs = [
     cmake
     pybind11
+  ];
+
+  buildInputs = [
+    abseil-cpp
   ];
 
   propagatedBuildInputs = [
@@ -61,6 +66,14 @@ in buildPythonPackage rec {
       --replace 'include(googletest)' ""
     substituteInPlace cmake/unittest.cmake \
       --replace 'googletest)' ')'
+  '' + lib.optionalString stdenv.isLinux ''
+      # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
+      substituteInPlace CMakeLists.txt \
+        --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
+  '' + lib.optionalString stdenv.isDarwin ''
+      # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
+      substituteInPlace CMakeLists.txt \
+        --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 14'
   '';
 
   preConfigure = ''

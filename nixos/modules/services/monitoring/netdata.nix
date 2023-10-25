@@ -159,6 +159,15 @@ in {
         '';
       };
 
+      claimTokenFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          If set, automatically registers the agent using the given claim token
+          file.
+        '';
+      };
+
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
@@ -205,6 +214,7 @@ in {
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+        NETDATA_PIPENAME = "/run/netdata/ipc";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
@@ -216,7 +226,7 @@ in {
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
-          while [ "$(${pkgs.netdata}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+          while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
         '';
 
         TimeoutStopSec = cfg.deadlineBeforeStopSec;
@@ -260,7 +270,25 @@ in {
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
-      };
+      } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
+        LoadCredential = [
+          "netdata_claim_token:${cfg.claimTokenFile}"
+        ];
+
+        ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
+          set -euo pipefail
+
+          if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
+            # Already registered
+            exit
+          fi
+
+          exec ${cfg.package}/bin/netdata-claim.sh \
+            -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
+            -url=https://app.netdata.cloud \
+            -daemon-not-running
+        '';
+      });
     };
 
     systemd.enableCgroupAccounting = true;

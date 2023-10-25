@@ -1,24 +1,24 @@
 diff --git a/bin/mangohud.in b/bin/mangohud.in
-index f975224..24936eb 100755
+index 6c3c6e8..8847cdc 100755
 --- a/bin/mangohud.in
 +++ b/bin/mangohud.in
-@@ -8,16 +8,18 @@ if [ "$#" -eq 0 ]; then
+@@ -8,10 +8,10 @@ if [ "$#" -eq 0 ]; then
  	exit 1
  fi
  
--MANGOHUD_LIB_NAME="@ld_libdir_mangohud@libMangoHud.so"
-+MANGOHUD_LIB_NAME="libMangoHud.so"
+-MANGOHUD_LIB_NAME="@ld_libdir_mangohud@libMangoHud_opengl.so"
++MANGOHUD_LIB_NAME="libMangoHud_opengl.so"
  
  if [ "$1" = "--dlsym" ]; then
- 	MANGOHUD_DLSYM=1
 -	MANGOHUD_LIB_NAME="@ld_libdir_mangohud@libMangoHud_dlsym.so:${MANGOHUD_LIB_NAME}"
 +	MANGOHUD_LIB_NAME="libMangoHud_dlsym.so:${MANGOHUD_LIB_NAME}"
  	shift
  fi
  
- # Preload using the plain filenames of the libs, the dynamic linker will
- # figure out whether the 32 or 64 bit version should be used
- LD_PRELOAD="${LD_PRELOAD:+$LD_PRELOAD:}${MANGOHUD_LIB_NAME}"
+@@ -31,5 +31,7 @@ case ":${LD_PRELOAD-}:" in
+         LD_PRELOAD="${LD_PRELOAD:+$LD_PRELOAD:}${MANGOHUD_LIB_NAME}"
+ esac
+ 
 +LD_LIBRARY_PATH="@libraryPath@${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 +XDG_DATA_DIRS="@dataDir@${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
  

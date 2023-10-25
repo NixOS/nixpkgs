@@ -1,5 +1,5 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
+, python3, binutils-unwrapped, findutils, gawk, kmod, pciutils, libraspberrypi
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation rec {
         --prefix PATH : "${lib.makeBinPath ([
           binutils-unwrapped
           findutils
+          gawk
           kmod
           pciutils
           (placeholder "out")

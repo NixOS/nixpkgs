@@ -7,6 +7,7 @@
 , pyparsing
 , python
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -25,14 +26,22 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     bitstruct
-    diskcache
-    prompt-toolkit
     pyparsing
   ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  passthru.optional-depdendencies = {
+    shell = [
+      prompt-toolkit
+    ];
+    cache = [
+      diskcache
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-depdendencies);
+
 
   pythonImportsCheck = [
     "asn1tools"
@@ -42,6 +51,6 @@ buildPythonPackage rec {
     description = "ASN.1 parsing, encoding and decoding";
     homepage = "https://github.com/eerimoq/asn1tools";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

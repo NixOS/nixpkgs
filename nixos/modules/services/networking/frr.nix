@@ -23,6 +23,7 @@ let
     "pbr"
     "bfd"
     "fabric"
+    "mgmt"
   ];
 
   allServices = services ++ [ "zebra" ];

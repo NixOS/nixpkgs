@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -31,6 +32,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-UwIufR3EwbpNVHD1GypV3qNgiqDRllwtxAM0CZPodn0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "link-libwebp-1.3.1.patch";
+      url = "https://github.com/artemsen/swayimg/commit/bd3d6c838c699b876fd8c19b408c475eb47e17b6.patch";
+      hash = "sha256-2aMq/GTqyKw+CQr8o8ij4P4yNjBXYKXShQUknStUb5c=";
+    })
+  ];
 
   strictDeps = true;
 

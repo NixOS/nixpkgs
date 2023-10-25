@@ -6,7 +6,7 @@
 , setuptools-scm
 , importlib-metadata
 , dbus-python
-, jaraco_classes
+, jaraco-classes
 , jeepney
 , secretstorage
 , pytestCheckHook
@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.13.1";
+  version = "24.2.0";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ui4VqbNeIZCNCq9OCkesxS1q4zRE3w2itJ1BpG721ng=";
+    hash = "sha256-ygdGoZ7EISGfTXE/hI+il6ZhqKjBUEhn5Vv7XgkJFQk=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jaraco_classes
+    jaraco-classes
   ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://github.com/jaraco/keyring";
-    changelog   = "https://github.com/jaraco/keyring/blob/v${version}/CHANGES.rst";
+    changelog   = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;

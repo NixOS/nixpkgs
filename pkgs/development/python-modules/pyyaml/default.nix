@@ -3,24 +3,30 @@
 , pythonOlder
 , fetchFromGitHub
 , cython
+, setuptools
 , libyaml
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pyyaml";
-  version = "6.0";
+  version = "6.0.1";
 
   disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";
     rev = version;
-    hash = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
+    hash = "sha256-YjWMyMVDByLsN5vEecaYjHpR1sbBey1L/khn4oH9SPA=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   buildInputs = [ libyaml ];
 

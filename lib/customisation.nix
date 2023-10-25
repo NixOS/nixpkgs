@@ -13,16 +13,7 @@ rec {
      scenarios (e.g. in ~/.config/nixpkgs/config.nix).  For instance,
      if you want to "patch" the derivation returned by a package
      function in Nixpkgs to build another version than what the
-     function itself provides, you can do something like this:
-
-       mySed = overrideDerivation pkgs.gnused (oldAttrs: {
-         name = "sed-4.2.2-pre";
-         src = fetchurl {
-           url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-           sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
-         };
-         patches = [];
-       });
+     function itself provides.
 
      For another application, see build-support/vm, where this
      function is used to build arbitrary derivations inside a QEMU
@@ -35,6 +26,19 @@ rec {
 
      You should in general prefer `drv.overrideAttrs` over this function;
      see the nixpkgs manual for more information on overriding.
+
+     Example:
+       mySed = overrideDerivation pkgs.gnused (oldAttrs: {
+         name = "sed-4.2.2-pre";
+         src = fetchurl {
+           url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+           hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
+         };
+         patches = [];
+       });
+
+     Type:
+       overrideDerivation :: Derivation -> ( Derivation -> AttrSet ) -> Derivation
   */
   overrideDerivation = drv: f:
     let
@@ -46,12 +50,6 @@ rec {
       //
       (drv.passthru or {})
       //
-      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
-      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
-        crossDrv = overrideDerivation drv.crossDrv f;
-        nativeDrv = overrideDerivation drv.nativeDrv f;
-      })
-      //
       lib.optionalAttrs (drv ? __spliced) {
         __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
       });
@@ -61,6 +59,10 @@ rec {
      injects `override` attribute which can be used to override arguments of
      the function.
 
+     Please refer to  documentation on [`<pkg>.overrideDerivation`](#sec-pkg-overrideDerivation) to learn about `overrideDerivation` and caveats
+     related to its use.
+
+     Example:
        nix-repl> x = {a, b}: { result = a + b; }
 
        nix-repl> y = lib.makeOverridable x { a = 1; b = 2; }
@@ -71,12 +73,11 @@ rec {
        nix-repl> y.override { a = 10; }
        { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
 
-     Please refer to "Nixpkgs Contributors Guide" section
-     "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
-     related to its use.
+     Type:
+       makeOverridable :: (AttrSet -> a) -> AttrSet -> a
   */
-  makeOverridable = f: origArgs:
-    let
+  makeOverridable = f: lib.setFunctionArgs
+    (origArgs: let
       result = f origArgs;
 
       # Creates a functor with the same arguments as f
@@ -101,7 +102,8 @@ rec {
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
-      else result;
+      else result)
+    (lib.functionArgs f);
 
 
   /* Call the package function in the file `fn` with the required
@@ -110,20 +112,29 @@ rec {
     `autoArgs`.  This function is intended to be partially
     parameterised, e.g.,
 
+      ```nix
       callPackage = callPackageWith pkgs;
       pkgs = {
         libfoo = callPackage ./foo.nix { };
         libbar = callPackage ./bar.nix { };
       };
+      ```
 
     If the `libbar` function expects an argument named `libfoo`, it is
     automatically passed as an argument.  Overrides or missing
     arguments can be supplied in `args`, e.g.
 
+      ```nix
       libbar = callPackage ./bar.nix {
         libfoo = null;
         enableX11 = true;
       };
+      ```
+
+    <!-- TODO: Apply "Example:" tag to the examples above -->
+
+    Type:
+      callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
   */
   callPackageWith = autoArgs: fn: args:
     let
@@ -134,7 +145,7 @@ rec {
       # This includes automatic ones and ones passed explicitly
       allArgs = builtins.intersectAttrs fargs autoArgs // args;
 
-      # A list of argument names that the function requires, but
+      # a list of argument names that the function requires, but
       # wouldn't be passed to it
       missingArgs = lib.attrNames
         # Filter out arguments that have a default value
@@ -181,7 +192,11 @@ rec {
 
   /* Like callPackage, but for a function that returns an attribute
      set of derivations. The override function is added to the
-     individual attributes. */
+     individual attributes.
+
+     Type:
+       callPackagesWith :: AttrSet -> ((AttrSet -> AttrSet) | Path) -> AttrSet -> AttrSet
+  */
   callPackagesWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
@@ -198,7 +213,11 @@ rec {
 
 
   /* Add attributes to each output of a derivation without changing
-     the derivation itself and check a given condition when evaluating. */
+     the derivation itself and check a given condition when evaluating.
+
+     Type:
+       extendDerivation :: Bool -> Any -> Derivation -> Derivation
+  */
   extendDerivation = condition: passthru: drv:
     let
       outputs = drv.outputs or [ "out" ];
@@ -232,7 +251,11 @@ rec {
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
      result to ensure that there are no thunks kept alive to prevent
-     garbage collection. */
+     garbage collection.
+
+     Type:
+       hydraJob :: (Derivation | Null) -> (Derivation | Null)
+  */
   hydraJob = drv:
     let
       outputs = drv.outputs or ["out"];
@@ -270,22 +293,60 @@ rec {
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
      provided by `newScope` and the set provides a `newScope` attribute
-     which can form the parent scope for later package sets. */
+     which can form the parent scope for later package sets.
+
+     Type:
+       makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> AttrSet
+  */
   makeScope = newScope: f:
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          overrideScope = g: lib.warn
-            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
-            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
-          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
+          overrideScope = g: makeScope newScope (lib.fixedPoints.extends g f);
+          # Remove after 24.11 is released.
+          overrideScope' = g: lib.warnIf (lib.isInOldestRelease 2311)
+            "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
+            (makeScope newScope (lib.fixedPoints.extends g f));
           packages = f;
         };
     in self;
 
-  /* Like the above, but aims to support cross compilation. It's still ugly, but
-     hopefully it helps a little bit. */
-  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
+  /* backward compatibility with old uncurried form; deprecated */
+  makeScopeWithSplicing =
+    splicePackages: newScope: otherSplices: keep: extra: f:
+    makeScopeWithSplicing'
+    { inherit splicePackages newScope; }
+    { inherit otherSplices keep extra f; };
+
+  /* Like makeScope, but aims to support cross compilation. It's still ugly, but
+     hopefully it helps a little bit.
+
+     Type:
+       makeScopeWithSplicing' ::
+         { splicePackages :: Splice -> AttrSet
+         , newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+         }
+         -> { otherSplices :: Splice, keep :: AttrSet -> AttrSet, extra :: AttrSet -> AttrSet }
+         -> AttrSet
+
+       Splice ::
+         { pkgsBuildBuild :: AttrSet
+         , pkgsBuildHost :: AttrSet
+         , pkgsBuildTarget :: AttrSet
+         , pkgsHostHost :: AttrSet
+         , pkgsHostTarget :: AttrSet
+         , pkgsTargetTarget :: AttrSet
+         }
+  */
+  makeScopeWithSplicing' =
+    { splicePackages
+    , newScope
+    }:
+    { otherSplices
+    , keep ? (_self: {})
+    , extra ? (_spliced0: {})
+    , f
+    }:
     let
       spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
@@ -301,13 +362,11 @@ rec {
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.
-        overrideScope = g: makeScopeWithSplicing
-          splicePackages
-          newScope
-          otherSplices
-          keep
-          extra
-          (lib.fixedPoints.extends g f);
+        overrideScope = g: (makeScopeWithSplicing'
+          { inherit splicePackages newScope; }
+          { inherit otherSplices keep extra;
+            f = lib.fixedPoints.extends g f;
+          });
         packages = f;
       };
     in self;

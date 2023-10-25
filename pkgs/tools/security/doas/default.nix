@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Duncaen/OpenDoas";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h cstrahan ];
+    maintainers = with maintainers; [ cole-h ];
   };
 }

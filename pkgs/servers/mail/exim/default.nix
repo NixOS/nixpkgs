@@ -1,4 +1,5 @@
 { coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
+, procps, killall
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -10,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.96";
+  version = "4.96.2";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-KZpWknsus0d9qv08W9oCvGflxOWJinrq8nQIdSeM8aM=";
+    hash = "sha256-A44yfo0ek9AFusm7Bv0irsRNUCiTDW2+iBetRLv8HeY=";
   };
 
   enableParallelBuilding = true;
@@ -95,6 +96,11 @@ stdenv.mkDerivation rec {
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
 
+    {
+      echo EXIWHAT_PS_CMD=${procps}/bin/ps
+      echo EXIWHAT_MULTIKILL_CMD=${killall}/bin/killall
+    } >> Local/Makefile
+
     runHook postConfigure
   '';
 
@@ -122,6 +128,7 @@ stdenv.mkDerivation rec {
     homepage = "https://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
+    mainProgram = "exim";
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ajs124 das_j ];
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";

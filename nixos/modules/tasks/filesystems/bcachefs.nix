@@ -6,6 +6,15 @@ let
 
   bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
+  mountCommand = pkgs.runCommand "mount.bcachefs" {} ''
+    mkdir -p $out/bin
+    cat > $out/bin/mount.bcachefs <<EOF
+    #!/bin/sh
+    exec "/bin/bcachefs" mount "\$@"
+    EOF
+    chmod +x $out/bin/mount.bcachefs
+  '';
+
   commonFunctions = ''
     prompt() {
         local name="$1"
@@ -58,13 +67,12 @@ in
 
       boot.initrd.systemd.extraBin = {
         "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
-        "mount.bcachefs" = pkgs.runCommand "mount.bcachefs" {} ''
-          cp -pdv ${pkgs.bcachefs-tools}/bin/.mount.bcachefs.sh-wrapped $out
-        '';
+        "mount.bcachefs" = "${mountCommand}/bin/mount.bcachefs";
       };
 
       boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
+        copy_bin_and_libs ${mountCommand}/bin/mount.bcachefs
       '';
       boot.initrd.extraUtilsCommandsTest = ''
         $out/bin/bcachefs version

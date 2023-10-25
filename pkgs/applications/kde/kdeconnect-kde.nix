@@ -8,6 +8,7 @@
 , kiconthemes
 , kio
 , kirigami2
+, kirigami-addons
 , knotifications
 , kpeople
 , kpeoplevcard
@@ -43,6 +44,7 @@ mkDerivation {
     kiconthemes
     kio
     kirigami2
+    kirigami-addons
     knotifications
     kpeople
     kpeoplevcard
@@ -76,5 +78,6 @@ mkDerivation {
     homepage = "https://community.kde.org/KDEConnect";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ fridh ];
+    mainProgram = "kdeconnect-app";
   };
 }

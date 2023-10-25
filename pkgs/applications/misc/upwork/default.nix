@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.8.0.24";
+  version = "5.8.0.31";
 
   src = requireFile {
     name = "${pname}_${version}_amd64.deb";
     url = "https://www.upwork.com/ab/downloads/os/linux/";
-    sha256 = "sha256-9X1U/ImI8GfCiYLpLD+jICYAYsAr1NJLlOMvecXK7hc=";
+    sha256 = "sha256-tQV6v0U6xxqBl7nQaBhXSrc9iv+7SPHfABTiJJQDnPI=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath buildInputs;
 
   dontWrapGApps = true;
-  dontBuild = true;
-  dontConfigure = true;
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./

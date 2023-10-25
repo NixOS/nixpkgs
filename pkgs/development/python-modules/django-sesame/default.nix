@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "3.1";
+  version = "3.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Pyyhm0th0cNEkM0sd6maCnf4qELsSO82c9CQuqQdn0w=";
+    hash = "sha256-R7ySuop7E1lkxtRSVNFfzyb3Ba1mW0o6PDiTxTztK/Y=";
   };
 
   nativeBuildInputs = [

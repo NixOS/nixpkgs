@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
-  version = "18.3.0";
+  version = "18.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UPdYfHorJSj3NQWBf5Q3rFwdBNV26b4mTS3u/9t0WnY=";
+    hash = "sha256-a2tq4sEescEI469V6qchGw/JGZk1oimmuj4N5RTBK1A=";
   };
 
   propagatedBuildInputs = [

@@ -2,18 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tag-expressions";
-  version = "1.1.0";
+  version = "2.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c0a49c3c0357976822b03c43db8d4a1c5548e16fb07ac939c10bbd5183f529d";
+    hash = "sha256-/6Ym72jlgVdpel4V2W2aCKNtISDT9y5qz7+gTllUuPg=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "tagexpressions"
+  ];
 
   meta = with lib; {
     description = "Package to parse logical tag expressions";

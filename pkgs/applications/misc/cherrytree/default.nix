@@ -14,17 +14,19 @@
 , curl
 , libuchardet
 , spdlog
+, fribidi
+, vte
 }:
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
-  version = "0.99.49";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
-    sha256 = "sha256-p7kiOxy4o0RwmN3LFfLSpkz08KcYYMVxVAEUvAX1KEA=";
+    hash = "sha256-A/4OcsAOECgQnENj2l9BX713KHG+zk5cJE+yyHXw1TM=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     curl
     libuchardet
     spdlog
+    fribidi
+    vte
   ];
 
   meta = with lib; {

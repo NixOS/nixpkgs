@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, CoreServices, graphviz }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, graphviz }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";

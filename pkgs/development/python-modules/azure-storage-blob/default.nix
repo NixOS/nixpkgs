@@ -1,36 +1,29 @@
 { lib
-, azure-common
 , azure-core
-, azure-storage-common
 , buildPythonPackage
 , cryptography
 , fetchPypi
 , isodate
-, msrest
 , pythonOlder
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "12.16.0";
+  version = "12.18.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-Q7RfGaUYpcaJVjLyY7OCXrwjV08lzIS2bhYwphYORm8=";
+    hash = "sha256-4Rk1NImB/8AFuEi1XbJcBPLR+Q4e4zAAZZkGt2PPFMg=";
   };
 
   propagatedBuildInputs = [
-    azure-common
     azure-core
-    azure-storage-common
     cryptography
     isodate
-    msrest
     typing-extensions
   ];
 

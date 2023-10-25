@@ -13,18 +13,15 @@
 
 buildPythonPackage rec {
   pname = "livelossplot";
-  version = "0.5.4";
+  version = "0.5.5";
 
   disabled = pythonOlder "3.6";
-
-  # version number in source is wrong in this release
-  postPatch = ''substituteInPlace ${pname}/version.py --replace "0.5.3" "0.5.4"'';
 
   src = fetchFromGitHub {
     owner  = "stared";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "IV6YAidoqVoKvpy+LNNHTPpobiDoGX59bHqJcBtaydk=";
+    sha256 = "sha256-YU8vX4SubI6txmC/i5fOjcvWfuDFm8+SPmie8Eb1qRs=";
   };
 
   propagatedBuildInputs = [ bokeh ipython matplotlib numpy ];

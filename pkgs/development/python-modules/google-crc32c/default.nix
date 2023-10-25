@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-crc32c";
     description = "Wrapper the google/crc32c hardware-based implementation of the CRC32C hashing algorithm";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ freezeboy SuperSandro2000 ];
+    maintainers = with maintainers; [ freezeboy ];
   };
 }

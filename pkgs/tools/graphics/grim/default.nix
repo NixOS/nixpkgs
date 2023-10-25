@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromSourcehut
-, fetchpatch
 , pixman
 , libpng
 , libjpeg
@@ -16,26 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "grim";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lwJn1Lysv1qLauqmrduUlzdoKUrUM5uBjv+dWSsrM6w=";
+    hash = "sha256-5csJqRLNqhyeXR4dEQtnPUSwuZ8oY+BIt6AVICkm1+o=";
   };
 
   mesonFlags = [
     "-Dwerror=false"
-  ];
-
-  patches = [
-    # Fixes build on 32bit platforms. Patch is upstream, but unreleased
-    (fetchpatch {
-      name = "grim-fix-32bit-printf.patch";
-      url = "https://git.sr.ht/~emersion/grim/commit/89e02e663fabc534b7e7039514f60a8c5d70070d.patch";
-      sha256 = "1gwb060v3q856p84y0mqqpkqmgb9jwn70y4mzv35y4b9xld8inci";
-    })
   ];
 
   nativeBuildInputs = [
@@ -59,6 +49,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emersion/grim";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ buffet ];
+    maintainers = with maintainers; [ buffet eclairevoyant ];
+    mainProgram = "grim";
   };
 }

@@ -50,7 +50,13 @@ in
 , util-linuxMinimal
 , xz
 
-, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? !atLeast24 || (
+    (stdenv.hostPlatform == stdenv.buildPlatform) &&
+    # mdbook errors out on risc-v due to a rustc bug
+    # https://github.com/NixOS/nixpkgs/pull/242019
+    # https://github.com/rust-lang/rust/issues/114473
+    !stdenv.buildPlatform.isRiscV
+  )
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
@@ -75,6 +81,8 @@ self = stdenv.mkDerivation {
     ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
   hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   nativeBuildInputs = [
     pkg-config
@@ -131,6 +139,10 @@ self = stdenv.mkDerivation {
     # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
     (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
   ];
+
+  postPatch = ''
+    patchShebangs --build tests
+  '';
 
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
@@ -237,6 +249,7 @@ self = stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    mainProgram = "nix";
   };
 };
 in self

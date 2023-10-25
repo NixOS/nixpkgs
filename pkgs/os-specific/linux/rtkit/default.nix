@@ -16,13 +16,21 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/heftig/rtkit/commit/7d62095b94f8df3891c984a1535026d2658bb177.patch";
+      name = "meson-actual-use-systemd_systemunitdir.patch";
+      url = "https://github.com/heftig/rtkit/pull/19/commits/7d62095b94f8df3891c984a1535026d2658bb177.patch";
       sha256 = "17acv549zqcgh7sgprfagbf6drqsr0zdwvf1dsqda7wlqc2h9zn7";
     })
 
     (fetchpatch {
-      url = "https://github.com/heftig/rtkit/commit/98f70edd8f534c371cb4308b9720739c5178918d.patch";
+      name = "meson-fix-librt-find_library-check.patch";
+      url = "https://github.com/heftig/rtkit/pull/18/commits/98f70edd8f534c371cb4308b9720739c5178918d.patch";
       sha256 = "18mnjjsdjfr184nkzi01xyphpdngi31ry4bmkv9ysjxf9wilv4nl";
+    })
+
+    (fetchpatch {
+      name = "rtkit-daemon-dont-log-debug-messages-by-default.patch";
+      url = "https://github.com/heftig/rtkit/pull/33/commits/ad649ee491ed1a41537774ad11564a208e598a09.patch";
+      sha256 = "sha256-p+MdJVMv58rFd1uc1UFKtq83RquDSFZ3M6YfaBU12UU=";
     })
   ];
 

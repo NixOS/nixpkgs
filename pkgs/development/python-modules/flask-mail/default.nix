@@ -3,7 +3,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Mail";
+  pname = "flask-mail";
   version = "0.9.1";
 
   meta = {
@@ -13,8 +13,9 @@ buildPythonPackage rec {
   };
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0hazjc351s3gfbhk975j8k65cg4gf31yq404yfy0gx0bjjdfpr92";
+    pname = "Flask-Mail";
+    inherit version;
+    hash = "sha256-IuXrmpQL9Ae88wQQ7MNwjzxWzESynDThcm/oUAaTX0E=";
   };
 
   propagatedBuildInputs = [ blinker flask ];

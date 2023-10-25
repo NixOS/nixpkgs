@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "httplib";
-  version = "0.12.5";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${version}";
-    hash = "sha256-9qCquF6DXpgtrfXVd/hc8n1Eu1nOxf/Lm+R13QI0N9Q=";
+    hash = "sha256-JBs2FvcdAvxysYhzakP0wU/mUCWfKZ8dk5ROWL5sej0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/yhirose/cpp-httplib/releases/tag/v${version}";
     maintainers = with maintainers; [ aidalgol ];
     license = licenses.mit;
+    platforms = platforms.all;
   };
 }

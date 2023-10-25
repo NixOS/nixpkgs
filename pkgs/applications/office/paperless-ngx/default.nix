@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -14,55 +16,23 @@
 , unpaper
 , poppler_utils
 , liberation_ttf
+, xcbuild
 }:
 
 let
-  version = "1.14.4";
+  version = "1.17.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9+8XqENpSdsND6g59oJkVoCe5tJ1Pwo8HD7Cszv/t7o=";
+    hash = "sha256-Kl8AUfHfEiEy40qeDI8x2rxdXcj01mpitw7T/96ibQQ=";
   };
 
   # Use specific package versions required by paperless-ngx
   python = python3.override {
     packageOverrides = self: super: {
       django = super.django_4;
-
-      aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
-        };
-      });
-
-      channels = super.channels.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.5";
-        pname = "channels";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = pname;
-          rev = version;
-          sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ self.daphne ];
-        pytestFlagsArray = [ "--asyncio-mode=auto" ];
-      });
-
-      daphne = super.daphne.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.2";
-        pname = "daphne";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = pname;
-          rev = version;
-          hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
-        };
-      });
-
     };
   };
 
@@ -82,10 +52,12 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-XTk4DpQAU/rI2XoUvLm0KVjuXFWdz2wb2EAg8EBVEdU=";
+    npmDepsHash = "sha256-5Q9NtIO7k/6AiF9Er10HhmEBFyQOP9CiTkTZglUeChg=";
 
     nativeBuildInputs = [
       python3
+    ] ++ lib.optionals stdenv.isDarwin [
+      xcbuild
     ];
 
     postPatch = ''
@@ -98,6 +70,13 @@ let
     npmBuildFlags = [
       "--" "--configuration" "production"
     ];
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+      npm run test
+      runHook postCheck
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -113,12 +92,21 @@ python.pkgs.buildPythonApplication rec {
 
   inherit version src;
 
+  patches = [
+    # https://github.com/paperless-ngx/paperless-ngx/pull/4146
+    (fetchpatch {
+      name = "fix-tests-for-python311.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/73f6c0a056e3859061339e295f57213fd4239b2d.patch";
+      hash = "sha256-sZcRug5T4cw5ppKpGYrrfz9RxtYxnkeNOlXcMgdWT0E=";
+    })
+  ];
+
+
   nativeBuildInputs = [
     gettext
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    aioredis
     amqp
     anyio
     asgiref
@@ -142,7 +130,6 @@ python.pkgs.buildPythonApplication rec {
     concurrent-log-handler
     constantly
     cryptography
-    daphne
     dateparser
     django-celery-results
     django-cors-headers
@@ -150,7 +137,6 @@ python.pkgs.buildPythonApplication rec {
     django-extensions
     django-filter
     django-guardian
-    django-ipware
     django
     djangorestframework-guardian2
     djangorestframework
@@ -159,6 +145,7 @@ python.pkgs.buildPythonApplication rec {
     h11
     hiredis
     httptools
+    httpx
     humanfriendly
     humanize
     hyperlink
@@ -174,12 +161,10 @@ python.pkgs.buildPythonApplication rec {
     msgpack
     mysqlclient
     nltk
-    numpy
     ocrmypdf
     packaging
     pathvalidate
     pdf2image
-    pdfminer-six
     pikepdf
     pillow
     pluggy
@@ -192,6 +177,7 @@ python.pkgs.buildPythonApplication rec {
     pyopenssl
     python-dateutil
     python-dotenv
+    python-ipware
     python-gnupg
     python-magic
     pytz
@@ -209,7 +195,7 @@ python.pkgs.buildPythonApplication rec {
     sniffio
     sqlparse
     threadpoolctl
-    tika
+    tika-client
     tornado
     tqdm
     twisted
@@ -266,12 +252,17 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
-    factory_boy
+    daphne
+    factory-boy
     imagehash
+    pdfminer-six
     pytest-django
     pytest-env
+    pytest-httpx
+    pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
+    reportlab
   ];
 
   pytestFlagsArray = [
@@ -304,6 +295,8 @@ python.pkgs.buildPythonApplication rec {
     "testNormalOperation"
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   passthru = {
     inherit python path frontend;
     tests = { inherit (nixosTests) paperless; };
@@ -314,6 +307,7 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://docs.paperless-ngx.com/";
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
   };
 }

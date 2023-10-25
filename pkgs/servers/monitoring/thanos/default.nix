@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.unix;
   };
 }

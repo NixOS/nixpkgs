@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -7,19 +6,18 @@
 , zlib
 , openssl
 , callPackage
-, stdenvNoCC
 }:
 
 buildDotnetModule rec {
-  pname = "archisteamfarm";
+  pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "5.4.5.2";
+  version = "5.4.12.5";
 
   src = fetchFromGitHub {
-    owner = "justarchinet";
-    repo = pname;
+    owner = "JustArchiNET";
+    repo = "ArchiSteamFarm";
     rev = version;
-    sha256 = "sha256-l3qcdgTTpbI4Jdy1jpzyCiAFglJfzBHkb6hLIZ4hDKQ=";
+    hash = "sha256-iIYA9BnHUfsB4J7VbSLKaRdJHMW/xULJxKfv8atfAd8=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
@@ -58,7 +56,7 @@ buildDotnetModule rec {
     buildPlugin() {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
-        --output $out/lib/${pname}/plugins/$1 --configuration Release \
+        --output $out/lib/archisteamfarm/plugins/$1 --configuration Release \
         -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
         --framework=net7.0
      }
@@ -79,6 +77,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "ArchiSteamFarm";
     maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

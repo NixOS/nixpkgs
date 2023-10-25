@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.12.1";
+  version = "1.12.2";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jsRPMgUuiW/N1JJuuBSjJuOaUEfiUe7HuQVvvZREsPE=";
+    sha256 = "tOmTvYJ+TOtqdwsbXolQ/OO+nIsrDL6yL9+ZKAjdITk=";
   };
 
   patches = [

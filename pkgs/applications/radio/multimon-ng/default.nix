@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpulseaudio, libX11 }:
+{ lib, stdenv, fetchFromGitHub, cmake, libpulseaudio, libX11, makeWrapper, sox }:
 
 stdenv.mkDerivation rec {
   pname = "multimon-ng";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = version;
-    sha256 = "sha256-Qk9zg3aSrEfC16wQqL/EMG6MPobX8dnJ1OLH8EMap0I=";
+    sha256 = "sha256-IJnvOVajkcjaa0DDo8hbkkVvBnDqPKQUN8wJHlafo70=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ libpulseaudio libX11 ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [sox]}"
+  '';
 
   meta = with lib; {
     description = "Multimon is a digital baseband audio protocol decoder";

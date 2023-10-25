@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import html
 import json
 import re
@@ -7,9 +8,8 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple, Optional, Union
+from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple
 
-import markdown_it
 from markdown_it.token import Token
 
 from . import md, options
@@ -17,7 +17,6 @@ from .docbook import DocBookRenderer, Heading, make_xml_id
 from .html import HTMLRenderer, UnresolvedXrefError
 from .manual_structure import check_structure, FragmentType, is_include, TocEntry, TocEntryType, XrefTarget
 from .md import Converter, Renderer
-from .utils import Freezeable
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -209,7 +208,7 @@ class ManualDocBookRenderer(RendererMixin, DocBookRenderer):
                 raise RuntimeError(f"rendering {path}") from e
         return "".join(result)
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.DocBookConverter(self._manpage_urls, self._revision, False, 'fragment',
+        conv = options.DocBookConverter(self._manpage_urls, self._revision, 'fragment',
                                         token.meta['list-id'], token.meta['id-prefix'])
         conv.add_options(token.meta['source'])
         return conv.finalize(fragment=True)
@@ -237,27 +236,48 @@ class HTMLParameters(NamedTuple):
     generator: str
     stylesheets: Sequence[str]
     scripts: Sequence[str]
+    # number of levels in the rendered table of contents. tables are prepended to
+    # the content they apply to (entire document / document chunk / top-level section
+    # of a chapter), setting a depth of 0 omits the respective table.
     toc_depth: int
     chunk_toc_depth: int
+    section_toc_depth: int
+    media_dir: Path
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
+    _in_dir: Path
     _html_params: HTMLParameters
 
     def __init__(self, toplevel_tag: str, revision: str, html_params: HTMLParameters,
                  manpage_urls: Mapping[str, str], xref_targets: dict[str, XrefTarget],
-                 base_path: Path):
+                 in_dir: Path, base_path: Path):
         super().__init__(toplevel_tag, revision, manpage_urls, xref_targets)
-        self._base_path, self._html_params = base_path, html_params
+        self._in_dir = in_dir
+        self._base_path = base_path.absolute()
+        self._html_params = html_params
+
+    def _pull_image(self, src: str) -> str:
+        src_path = Path(src)
+        content = (self._in_dir / src_path).read_bytes()
+        # images may be used more than once, but we want to store them only once and
+        # in an easily accessible (ie, not input-file-path-dependent) location without
+        # having to maintain a mapping structure. hashing the file and using the hash
+        # as both the path of the final image provides both.
+        content_hash = hashlib.sha3_256(content).hexdigest()
+        target_name = f"{content_hash}{src_path.suffix}"
+        target_path = self._base_path / self._html_params.media_dir / target_name
+        target_path.write_bytes(content)
+        return f"./{self._html_params.media_dir}/{target_name}"
 
     def _push(self, tag: str, hlevel_offset: int) -> Any:
-        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset)
+        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir)
         self._hlevel_offset += hlevel_offset
         self._toplevel_tag, self._headings, self._attrspans = tag, [], []
         return result
 
     def _pop(self, state: Any) -> None:
-        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset) = state
+        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir) = state
 
     def _render_book(self, tokens: Sequence[Token]) -> str:
         assert tokens[4].children
@@ -286,6 +306,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     def _file_header(self, toc: TocEntry) -> str:
         prev_link, up_link, next_link = "", "", ""
         prev_a, next_a, parent_title = "", "", "&nbsp;"
+        nav_html = ""
         home = toc.root
         if toc.prev:
             prev_link = f'<link rel="prev" href="{toc.prev.target.href()}" title="{toc.prev.target.title}" />'
@@ -301,41 +322,47 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if toc.next:
             next_link = f'<link rel="next" href="{toc.next.target.href()}" title="{toc.next.target.title}" />'
             next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
+        if toc.prev or toc.parent or toc.next:
+            nav_html = "\n".join([
+                '  <div class="navheader">',
+                '   <table width="100%" summary="Navigation header">',
+                '    <tr>',
+                f'    <th colspan="3" align="center">{toc.target.title}</th>',
+                '    </tr>',
+                '    <tr>',
+                f'    <td width="20%" align="left">{prev_a}&nbsp;</td>',
+                f'    <th width="60%" align="center">{parent_title}</th>',
+                f'    <td width="20%" align="right">&nbsp;{next_a}</td>',
+                '    </tr>',
+                '   </table>',
+                '   <hr />',
+                '  </div>',
+            ])
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
             '  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
             '<html xmlns="http://www.w3.org/1999/xhtml">',
-            ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
+            ' <head>',
+            '  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />',
             f' <title>{toc.target.title}</title>',
             "".join((f'<link rel="stylesheet" type="text/css" href="{html.escape(style, True)}" />'
                      for style in self._html_params.stylesheets)),
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in self._html_params.scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
-            f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />',
+            f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
-            '  <div class="navheader">',
-            '   <table width="100%" summary="Navigation header">',
-            '    <tr>',
-            f'    <th colspan="3" align="center">{toc.target.title}</th>',
-            '    </tr>',
-            '    <tr>',
-            f'    <td width="20%" align="left">{prev_a}&nbsp;</td>',
-            f'    <th width="60%" align="center">{parent_title}</th>',
-            f'    <td width="20%" align="right">&nbsp;{next_a}</td>',
-            '    </tr>',
-            '   </table>',
-            '   <hr />',
-            '  </div>',
+            nav_html,
         ])
 
     def _file_footer(self, toc: TocEntry) -> str:
         # prev, next = self._get_prev_and_next()
         prev_a, up_a, home_a, next_a = "", "&nbsp;", "&nbsp;", ""
         prev_text, up_text, next_text = "", "", ""
+        nav_html = ""
         home = toc.root
         if toc.prev:
             prev_a = f'<a accesskey="p" href="{toc.prev.target.href()}">Prev</a>'
@@ -349,22 +376,26 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
             assert toc.next.target.title
             next_text = toc.next.target.title
+        if toc.prev or toc.parent or toc.next:
+            nav_html = "\n".join([
+                '  <div class="navfooter">',
+                '   <hr />',
+                '   <table width="100%" summary="Navigation footer">',
+                '    <tr>',
+                f'    <td width="40%" align="left">{prev_a}&nbsp;</td>',
+                f'    <td width="20%" align="center">{up_a}</td>',
+                f'    <td width="40%" align="right">&nbsp;{next_a}</td>',
+                '    </tr>',
+                '    <tr>',
+                f'     <td width="40%" align="left" valign="top">{prev_text}&nbsp;</td>',
+                f'     <td width="20%" align="center">{home_a}</td>',
+                f'     <td width="40%" align="right" valign="top">&nbsp;{next_text}</td>',
+                '    </tr>',
+                '   </table>',
+                '  </div>',
+            ])
         return "\n".join([
-            '  <div class="navfooter">',
-            '   <hr />',
-            '   <table width="100%" summary="Navigation footer">',
-            '    <tr>',
-            f'    <td width="40%" align="left">{prev_a}&nbsp;</td>',
-            f'    <td width="20%" align="center">{up_a}</td>',
-            f'    <td width="40%" align="right">&nbsp;{next_a}</td>',
-            '    </tr>',
-            '    <tr>',
-            f'     <td width="40%" align="left" valign="top">{prev_text}&nbsp;</td>',
-            f'     <td width="20%" align="center">{home_a}</td>',
-            f'     <td width="40%" align="right" valign="top">&nbsp;{next_text}</td>',
-            '    </tr>',
-            '   </table>',
-            '  </div>',
+            nav_html,
             ' </body>',
             '</html>',
         ])
@@ -375,7 +406,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return super()._heading_tag(token, tokens, i)
     def _build_toc(self, tokens: Sequence[Token], i: int) -> str:
         toc = TocEntry.of(tokens[i])
-        if toc.kind == 'section':
+        if toc.kind == 'section' and self._html_params.section_toc_depth < 1:
             return ""
         def walk_and_emit(toc: TocEntry, depth: int) -> list[str]:
             if depth <= 0:
@@ -395,34 +426,47 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 if next_level:
                     result.append(f'<dd><dl>{"".join(next_level)}</dl></dd>')
             return result
-        toc_depth = (
-            self._html_params.chunk_toc_depth
-            if toc.starts_new_chunk and toc.kind != 'book'
-            else self._html_params.toc_depth
-        )
-        if not (items := walk_and_emit(toc, toc_depth)):
-            return ""
-        examples = ""
-        if toc.examples:
-            examples_entries = [
-                f'<dt>{i + 1}. <a href="{ex.target.href()}">{ex.target.toc_html}</a></dt>'
-                for i, ex in enumerate(toc.examples)
+        def build_list(kind: str, id: str, lst: Sequence[TocEntry]) -> str:
+            if not lst:
+                return ""
+            entries = [
+                f'<dt>{i}. <a href="{e.target.href()}">{e.target.toc_html}</a></dt>'
+                for i, e in enumerate(lst, start=1)
             ]
-            examples = (
-                '<div class="list-of-examples">'
-                '<p><strong>List of Examples</strong><p>'
-                f'<dl>{"".join(examples_entries)}</dl>'
+            return (
+                f'<div class="{id}">'
+                f'<p><strong>List of {kind}</strong></p>'
+                f'<dl>{"".join(entries)}</dl>'
                 '</div>'
             )
-        return (
-            f'<div class="toc">'
-            f' <p><strong>Table of Contents</strong></p>'
+        # we don't want to generate the "Title of Contents" header for sections,
+        # docbook doesn't and it's only distracting clutter unless it's the main table.
+        # we also want to generate tocs only for a top-level section (ie, one that is
+        # not itself contained in another section)
+        print_title = toc.kind != 'section'
+        if toc.kind == 'section':
+            if toc.parent and toc.parent.kind == 'section':
+                toc_depth = 0
+            else:
+                toc_depth = self._html_params.section_toc_depth
+        elif toc.starts_new_chunk and toc.kind != 'book':
+            toc_depth = self._html_params.chunk_toc_depth
+        else:
+            toc_depth = self._html_params.toc_depth
+        if not (items := walk_and_emit(toc, toc_depth)):
+            return ""
+        figures = build_list("Figures", "list-of-figures", toc.figures)
+        examples = build_list("Examples", "list-of-examples", toc.examples)
+        return "".join([
+            f'<div class="toc">',
+            ' <p><strong>Table of Contents</strong></p>' if print_title else "",
             f' <dl class="toc">'
             f'  {"".join(items)}'
             f' </dl>'
             f'</div>'
+            f'{figures}'
             f'{examples}'
-        )
+        ])
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         # for some reason chapters don't increase the hN nesting count in docbook xslts. duplicate
@@ -459,8 +503,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             # we do not set _hlevel_offset=0 because docbook doesn't either.
         else:
             inner = outer
+        in_dir = self._in_dir
         for included, path in fragments:
             try:
+                self._in_dir = (in_dir / path).parent
                 inner.append(self.render(included))
             except Exception as e:
                 raise RuntimeError(f"rendering {path}") from e
@@ -471,7 +517,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return "".join(outer)
 
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.HTMLConverter(self._manpage_urls, self._revision, False,
+        conv = options.HTMLConverter(self._manpage_urls, self._revision,
                                      token.meta['list-id'], token.meta['id-prefix'],
                                      self._xref_targets)
         conv.add_options(token.meta['source'])
@@ -503,8 +549,9 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         # renderer not set on purpose since it has a dependency on the output path!
 
     def convert(self, infile: Path, outfile: Path) -> None:
-        self._renderer = ManualHTMLRenderer('book', self._revision, self._html_params,
-                                            self._manpage_urls, self._xref_targets, outfile.parent)
+        self._renderer = ManualHTMLRenderer(
+            'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
+            infile.parent, outfile.parent)
         super().convert(infile, outfile)
 
     def _parse(self, src: str) -> list[Token]:
@@ -519,30 +566,31 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             # we use blender-style //path to denote paths relative to the origin file
             # (usually index.html). this makes everything a lot easier and clearer.
             if not into.startswith("//") or '/' in into[2:]:
-                raise RuntimeError(f"html:into-file must be a relative-to-origin //filename", into)
+                raise RuntimeError("html:into-file must be a relative-to-origin //filename", into)
             into = token.meta['include-args']['into-file'] = into[2:]
             if into in self._redirection_targets:
                 raise RuntimeError(f"redirection target {into} in line {token.map[0] + 1} is already in use")
             self._redirection_targets.add(into)
         return tokens
 
-    def _number_examples(self, tokens: Sequence[Token], start: int = 1) -> int:
+    def _number_block(self, block: str, prefix: str, tokens: Sequence[Token], start: int = 1) -> int:
+        title_open, title_close = f'{block}_title_open', f'{block}_title_close'
         for (i, token) in enumerate(tokens):
-            if token.type == "example_title_open":
+            if token.type == title_open:
                 title = tokens[i + 1]
                 assert title.type == 'inline' and title.children
                 # the prefix is split into two tokens because the xref title_html will want
                 # only the first of the two, but both must be rendered into the example itself.
                 title.children = (
                     [
-                        Token('text', '', 0, content=f'Example {start}'),
+                        Token('text', '', 0, content=f'{prefix} {start}'),
                         Token('text', '', 0, content='. ')
                     ] + title.children
                 )
                 start += 1
             elif token.type.startswith('included_') and token.type != 'included_options':
                 for sub, _path in token.meta['included']:
-                    start = self._number_examples(sub, start)
+                    start = self._number_block(block, prefix, sub, start)
         return start
 
     # xref | (id, type, heading inlines, file, starts new file)
@@ -568,8 +616,14 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     result += self._collect_ids(sub, sub_file, subtyp, si == 0 and sub_file != target_file)
             elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
+            elif bt.type == 'figure_open' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append((id, 'figure', tokens[i + 2], target_file, False))
+            elif bt.type == 'footnote_open' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append(XrefTarget(id, "???", None, None, target_file))
+            elif bt.type == 'footnote_ref' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
-                assert bt.children
+                assert bt.children is not None
                 result += self._collect_ids(bt.children, target_file, typ, False)
             elif id := cast(str, bt.attrs.get('id', '')):
                 # anchors and examples have no titles we could use, but we'll have to put
@@ -592,8 +646,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             title = prefix + title_html
             toc_html = f"{n}. {title_html}"
             title_html = f"Appendix&nbsp;{n}"
-        elif typ == 'example':
-            # skip the prepended `Example N. ` from _number_examples
+        elif typ in ['example', 'figure']:
+            # skip the prepended `{Example,Figure} N. ` from numbering
             toc_html, title = self._renderer.renderInline(inlines.children[2:]), title_html
             # xref title wants only the prepended text, sans the trailing colon and space
             title_html = self._renderer.renderInline(inlines.children[0:1])
@@ -608,7 +662,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         return XrefTarget(id, title_html, toc_html, re.sub('<.*?>', '', title), path, drop_fragment)
 
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
-        self._number_examples(tokens)
+        self._number_block('example', "Example", tokens)
+        self._number_block('figure', "Figure", tokens)
         xref_queue = self._collect_ids(tokens, outfile.name, 'book', True)
 
         failed = False
@@ -617,7 +672,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             for item in xref_queue:
                 try:
                     target = item if isinstance(item, XrefTarget) else self._render_xref(*item)
-                except UnresolvedXrefError as e:
+                except UnresolvedXrefError:
                     if failed:
                         raise
                     deferred.append(item)
@@ -629,6 +684,22 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             if len(deferred) == len(xref_queue):
                 failed = True # do another round and report the first error
             xref_queue = deferred
+
+        paths_seen = set()
+        for t in self._xref_targets.values():
+            paths_seen.add(t.path)
+
+        if len(paths_seen) == 1:
+            for (k, t) in self._xref_targets.items():
+                self._xref_targets[k] = XrefTarget(
+                    t.id,
+                    t.title_html,
+                    t.toc_html,
+                    t.title,
+                    t.path,
+                    t.drop_fragment,
+                    drop_target=True
+                )
 
         TocEntry.collect_and_link(self._xref_targets, tokens)
 
@@ -648,6 +719,8 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--script', default=[], action='append')
     p.add_argument('--toc-depth', default=1, type=int)
     p.add_argument('--chunk-toc-depth', default=1, type=int)
+    p.add_argument('--section-toc-depth', default=0, type=int)
+    p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -661,7 +734,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth),
+                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
             json.load(manpage_urls))
         md.convert(args.infile, args.outfile)
 

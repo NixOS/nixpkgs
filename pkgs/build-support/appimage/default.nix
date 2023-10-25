@@ -26,10 +26,11 @@ rec {
     ];
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", src, ... }: pkgs.runCommand "${name}-extracted" {
+  extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
       buildInputs = [ appimage-exec ];
     } ''
       appimage-exec.sh -x $out ${src}
+      ${postExtract}
     '';
 
   # for compatibility, deprecated
@@ -206,6 +207,7 @@ rec {
       libtool.lib # for Synfigstudio
       xorg.libxshmfence # for apple-music-electron
       at-spi2-core
+      pciutils # for FreeCAD
     ];
   };
 }

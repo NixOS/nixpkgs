@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "A lazy-loading, fancy-sliceable iterable";
     homepage = "https://github.com/soft-matter/slicerator";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

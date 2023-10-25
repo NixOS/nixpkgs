@@ -13,13 +13,13 @@
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.9.4";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "Dummerle";
     repo = "Rare";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-+STwVsDdvjP7HaqmaQVug+6h0n0rw/j4LGQQSNdLVQQ=";
+    hash = "sha256-7KER9gCpqjEKikQTVHsvwX6efCb9L0ut6OBjjLBW2tI=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,6 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    ./fix-instance.patch
     # Not able to run pythonRelaxDepsHook because of https://github.com/NixOS/nixpkgs/issues/198342
     ./legendary-gl-version.patch
   ];

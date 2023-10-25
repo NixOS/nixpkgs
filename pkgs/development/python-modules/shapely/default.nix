@@ -5,7 +5,9 @@
 , fetchPypi
 , cython
 , geos
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , pytestCheckHook
 }:
@@ -25,7 +27,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     geos # for geos-config
+    oldest-supported-numpy
     setuptools
+    wheel
   ];
 
   buildInputs = [
@@ -62,6 +66,6 @@ buildPythonPackage rec {
     description = "Manipulation and analysis of geometric objects";
     homepage = "https://github.com/shapely/shapely";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

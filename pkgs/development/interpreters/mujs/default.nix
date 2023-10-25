@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fixDarwinDylibNames
 , readline
 , gitUpdater
 }:
@@ -16,7 +17,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
 
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+
   makeFlags = [ "prefix=$(out)" ];
+
+  installFlags = [ "install-shared" ];
 
   passthru.updateScript = gitUpdater {
     # No nicer place to track releases

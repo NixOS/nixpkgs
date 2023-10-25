@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -41,24 +40,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.13.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ip8p4mjcgmZQJTU4MNvWkTTtSJc+cCL3x1mMDFlZrVY=";
+    hash = "sha256-IEGeZVNxwzHn5GASCyjNuQsnCzzfQBHdC33MWVMeZws=";
   };
-
-  patches = [
-    # Fixes Mir being able to drop first input device on launch
-    # Drop when https://github.com/MirServer/mir/issues/2837 fixed in a release
-    (fetchpatch {
-      name = "0001-mir-Simplify_probing_of_evdev_input_platform.patch";
-      url = "https://github.com/MirServer/mir/commit/7787cfa721934bb43d3255218e7c92e700923fcb.patch";
-      hash = "sha256-9C9qcmngd+K8EAcyOYUJFTdFDu1Nt1MM7Y9TRNOXFB4=";
-    })
-  ];
 
   postPatch = ''
     # Fix scripts that get run in tests

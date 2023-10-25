@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabasic";
-  version = "2.90.3";
+  version = "2.90.4";
 
   src = fetchurl {
     url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ItmlkraNUE0qlq1RghUJcDq4MHb6HRKNoIRylugjboA=";
+    hash = "sha256-td54SC1LnO3z07m3BsVDpiAsmokzB4xn4dbVdfeYH8M=";
   };
 
   buildInputs = [

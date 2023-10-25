@@ -2,8 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , makeBinaryWrapper
-, bash
+, substituteAll
 , age
+, getopt
 , git ? null
 , xclip ? null
 # Used to pretty-print list of all stored passwords, but is not needed to fetch
@@ -21,6 +22,13 @@ stdenv.mkDerivation {
     rev = "1262d308f09db9b243513a428ab4b8fb1c30d31d";
     sha256 = "1val8wl9kzlxj4i1rrh2iiyf97w9akffvr0idvbkdb09hfzz4lz8";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./darwin-getopt-path.patch;
+      inherit getopt;
+    })
+  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

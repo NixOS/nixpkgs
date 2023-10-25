@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, buildPythonApplication, fetchPypi, fusepy, pyserial }:
+{ stdenv, lib, buildPythonApplication, fetchPypi, fusepy, pyserial }:
 
 buildPythonApplication rec {
   pname = "mpy-utils";

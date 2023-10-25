@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     homepage = "https://packages.qa.debian.org/w/whois.html";
     description = "Overfeatured front-end to crypt, from the Debian whois package";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ cstrahan fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
   };
 }

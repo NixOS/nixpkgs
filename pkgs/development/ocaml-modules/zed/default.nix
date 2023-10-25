@@ -5,8 +5,8 @@ let
     if lib.versionAtLeast ocaml.version "4.08"
     then
       {
-        version = "3.2.0";
-        sha256 = "sha256-6yKHE30nVFXo8hGdCx+GO4VYYGbi802aMdN2XuYMJ7w=";
+        version = "3.2.3";
+        sha256 = "sha256-lbhqjZxeUqHdd+yahRO+B6L2mc+h+4T2+qKVgWC2HY8=";
         propagatedBuildInputs = [ react result uchar uutf uucp uuseg ];
       }
     else
@@ -40,7 +40,8 @@ buildDunePackage rec {
 
     To support efficient text edition capabilities, Zed provides macro recording and cursor management facilities.
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-community/zed";
+    changelog = "https://github.com/ocaml-community/zed/blob/${version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.gal_bolle

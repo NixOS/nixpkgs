@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "ufoLib2";
-  version = "0.14.0";
+  version = "0.16.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OdUJfNe3nOQyCf3nT9/5y/C8vZXnSAWiLHvZ8GXMViw=";
+    hash = "sha256-SfDcf3LMrP5/rv4NU9N5cdRWZNiwVj7zaVb6e/pVor0=";
   };
 
   nativeBuildInputs = [

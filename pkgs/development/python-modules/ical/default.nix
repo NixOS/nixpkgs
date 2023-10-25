@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , freezegun
 , tzdata
-, py
 , pyparsing
 , pydantic
 , pytest-asyncio
@@ -13,22 +12,31 @@
 , pytest-golden
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.5.3";
+  version = "5.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CHo6khJ8Bqej/OdQBtcfa/luO1Gj8cu7h//MwPhWrMU=";
+    hash = "sha256-ffNgYtwErt9tzfDWQnt0h7QHQL+gMvFpP8zH6FSoHEM=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "tzdata"
+  ];
 
   propagatedBuildInputs = [
     emoji
@@ -40,7 +48,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    py
     pytest-asyncio
     pytest-benchmark
     pytest-golden

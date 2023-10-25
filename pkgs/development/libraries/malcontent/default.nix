@@ -19,16 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.11.0";
+  version = "0.11.1";
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
-    repo = pname;
+    repo = "malcontent";
     rev = version;
-    sha256 = "sha256-92F30DfdSJvO5C9EmNtiC/H6Fa6qQHecYSx59JKp8vA=";
+    hash = "sha256-NZwVCnQrEG2gecUjuWe1+cyWFR3OdYJCmj87V14Uwjw=";
   };
 
   patches = [

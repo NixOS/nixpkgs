@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  buildInputs = [ openssl zlib ]
+  propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
+  buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   meta = with lib; {

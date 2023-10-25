@@ -1,5 +1,5 @@
-{ fetchurl, lib, stdenv, libxml2, libxslt
-, docbook_xml_dtd_45, docbook_xsl, w3m
+{ fetchurl, fetchpatch, lib, stdenv, libxml2, libxslt
+, docbook_xml_dtd_45, docbook_xsl, flex, w3m
 , bash, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -9,6 +9,20 @@ stdenv.mkDerivation rec {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0xhj8b2pwp4vhl9y16v3dpxpsakkflfamr191mprzsspg4xdyc0i";
   };
+
+  # Note: These patches modify `xmlif/xmlif.l`, which requires `flex` to be rerun.
+  patches = [
+    # Fixes implicit `int` on `main`, which is an error with clang 16.
+    (fetchpatch {
+      url = "https://pagure.io/xmlto/c/8e34f087bf410bcc5fe445933d6ad9bae54f24b5.patch";
+      hash = "sha256-z5riDBZBVuFeBcjI++dAl3nTIgOPau4Gag0MJbYt+cc=";
+    })
+    # Fixes implicit `int` on `ifsense`, which is also an error with clang 16.
+    (fetchpatch {
+      url = "https://pagure.io/xmlto/c/1375e2df75530cd198bd16ac3de38e2b0d126276.patch";
+      hash = "sha256-fM6ZdTigrcC9cbXiKu6oa5Hs71mrREockB1wRlw6nDk=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs xmlif/test/run-test
@@ -23,7 +37,7 @@ stdenv.mkDerivation rec {
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
-  nativeBuildInputs = [ makeWrapper getopt ];
+  nativeBuildInputs = [ makeWrapper flex getopt ];
   buildInputs = [ libxml2 libxslt docbook_xml_dtd_45 docbook_xsl ];
 
   postInstall = ''

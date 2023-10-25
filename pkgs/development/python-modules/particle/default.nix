@@ -1,6 +1,7 @@
 { lib
 , attrs
 , buildPythonPackage
+, deprecated
 , fetchFromGitHub
 , fetchPypi
 , hatch-vcs
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.21.2";
+  version = "0.23.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BDTTmqtPxyvORSoR+CJzb5WTfF9BFrDoMSVOvO9s/Ns=";
+    hash = "sha256-2BD4/CfeuOf9ZBdAF9lgfVBSIknAlzoACOWA+T2xF1A=";
   };
 
   postPatch = ''
@@ -39,6 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
+    deprecated
     hepunits
   ];
 

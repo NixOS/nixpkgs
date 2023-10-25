@@ -27,7 +27,7 @@
 , email-validator
 , flask
 , flask-login
-, flask_principal
+, flask-principal
 , flask-wtf
 , itsdangerous
 , passlib
@@ -46,7 +46,7 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.1.2";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -54,15 +54,20 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
+    hash = "sha256-n12DCRPqxm8YhFeVrl99BEvdDYNq6rzP662rain3k1Q=";
   };
+
+  postPatch = ''
+    # This should be removed after updating to version 5.3.0.
+    sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
+  '';
 
   propagatedBuildInputs = [
     blinker
     email-validator
     flask
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     itsdangerous
     passlib

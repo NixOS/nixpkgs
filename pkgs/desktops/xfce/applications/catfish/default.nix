@@ -16,18 +16,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "4.16.4";
+  version = "4.18.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-hdrEFdBa/4i/PF7VyEI7ObiJXLIRW+RFSe8yGnUpqRc=";
+    sha256 = "sha256-hfbIgSFn48++eGrJXzhXRxhWkrjgTYsr7BX/n0EXhGo=";
   };
 
   nativeBuildInputs = [
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     file
     which
     intltool
@@ -63,6 +63,12 @@ python3Packages.buildPythonApplication rec {
 
   # Disable check because there is no test in the source distribution
   doCheck = false;
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
 

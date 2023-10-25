@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
+  postPatch = ''
+    substituteInPlace Make.defaults \
+      --replace "-Werror" ""
+  '';
+
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.
     url = "https://git.code.sf.net/p/gnu-efi/code";

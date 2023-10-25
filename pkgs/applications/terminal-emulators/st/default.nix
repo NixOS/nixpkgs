@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-82NZeZc06ueFvss3QGPwvoM88i+ItPFpzSUbmTJOCOc=";
   };
 
+  outputs = [ "out" "terminfo" ];
+
   inherit patches;
 
   configFile = lib.optionalString (conf != null)
@@ -51,7 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ extraLibs;
 
   preInstall = ''
-    export TERMINFO=$out/share/terminfo
+    export TERMINFO=$terminfo/share/terminfo
+    mkdir -p $TERMINFO $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
   installFlags = [ "PREFIX=$(out)" ];

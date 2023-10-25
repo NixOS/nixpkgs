@@ -11,7 +11,6 @@ buildNimPackage rec {
     hash = "sha256-jtqn59x2ZRRgrPir6u/frsDHnl4kvTJWpbejxti8aHY=";
   };
 
-  doCheck = true;
 
   meta = with lib;
     src.meta // {

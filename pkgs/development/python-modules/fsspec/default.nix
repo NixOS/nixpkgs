@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2023.4.0";
+  version = "2023.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-qkvhmXJNxA8v+kbZ6ulxJAQr7ReQpb+JkbhOUnL59KM=";
+    hash = "sha256-1ai+/8akUlP9kfzSKYEpDnobBfUC6EAPFPVVxh4jb/0=";
   };
 
   propagatedBuildInputs = [
@@ -146,6 +146,11 @@ buildPythonPackage rec {
     "test_touch"
   ];
 
+  disabledTestPaths = [
+    # JSON decoding issues
+    "fsspec/implementations/tests/test_dbfs.py"
+  ];
+
   pythonImportsCheck = [
     "fsspec"
   ];
@@ -155,6 +160,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fsspec/filesystem_spec";
     changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }
