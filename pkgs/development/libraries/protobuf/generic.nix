@@ -48,17 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./static-executables-have-no-rpath.patch
   ];
 
-  nativeBuildInputs =
-    let
-      protobufVersion = "${lib.versions.major version}_${lib.versions.minor version}";
-    in
-    [
-      cmake
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # protoc of the same version must be available for build. For non-cross builds, it's able to
-      # re-use the executable generated as part of the build
-      buildPackages."protobuf${protobufVersion}"
-    ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # protoc of the same version must be available for build. For non-cross builds, it's able to
+    # re-use the executable generated as part of the build
+    buildPackages."protobuf_${lib.versions.major version}"
+  ];
 
   buildInputs = [
     gtest
