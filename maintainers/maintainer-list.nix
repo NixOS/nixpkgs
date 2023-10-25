@@ -1386,6 +1386,12 @@
     githubId = 59743220;
     name = "Vinícius Müller";
   };
+  arcuru = {
+    email = "patrick@jackson.dev";
+    github = "arcuru";
+    githubId = 160646;
+    name = "Patrick Jackson";
+  };
   ardumont = {
     email = "eniotna.t@gmail.com";
     github = "ardumont";
@@ -13540,12 +13546,6 @@
     github = "pasqui23";
     githubId = 6931743;
     name = "pasqui23";
-  };
-  patricksjackson = {
-    email = "patrick@jackson.dev";
-    github = "patricksjackson";
-    githubId = 160646;
-    name = "Patrick Jackson";
   };
   patryk27 = {
     email = "pwychowaniec@pm.me";
