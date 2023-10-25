@@ -116,7 +116,6 @@
 /maintainers/scripts/update-python-libraries	              @FRidh
 /pkgs/development/interpreters/python                       @FRidh
 /doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
-/pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
