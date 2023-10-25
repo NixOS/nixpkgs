@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyenphase";
-  version = "1.13.1";
+  version = "1.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pyenphase";
     repo = "pyenphase";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8wGGx7ERYm+lKvLW/NUcJeBTqEXPM0jJNOOlkj/UzYk=";
+    hash = "sha256-Eh4OtdOes9ApIlivHkc8zA84pkQ+HBOBp0r+6E8RE8Y=";
   };
 
   postPatch = ''
