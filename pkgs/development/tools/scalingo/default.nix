@@ -8,12 +8,12 @@ buildGoModule rec {
     owner = pname;
     repo = "cli";
     rev = version;
-    sha256 = "sha256-xBf+LIwlpauJd/0xJIQdfEa0rxph3BJPuMY4+0s+Bb4=";
+    hash = "sha256-xBf+LIwlpauJd/0xJIQdfEa0rxph3BJPuMY4+0s+Bb4=";
   };
 
   vendorHash = null;
 
-  preConfigure = ''
+  preCheck = ''
     export HOME=$TMPDIR
   '';
 
