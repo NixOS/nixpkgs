@@ -1,5 +1,4 @@
-{ lib
-, buildGoModule
+{ buildGoModule
 , pulumi
 , python3
 }:
@@ -10,7 +9,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
 
-  vendorHash = "sha256-HlcSkFoLPcHRyp0yH+ojGnL/gubfGyCP1iCK6sOootQ=";
+  vendorHash = "sha256-aLCgAcrgnNH/eYpGkr5Kj4xWjSgP76nz0YoV6998i9M=";
 
   postPatch = ''
     substituteInPlace main_test.go \
