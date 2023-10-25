@@ -19,8 +19,8 @@ rec {
   };
 
   crossfire-maps = callPackage ./crossfire-maps.nix {
-    version = "latest";
-    rev = "22111";
-    sha256 = "1dwfc84acjvbjgjakkb8z8pdlksbsn90j0z8z8rq37lqx0kx1sap";
+    rev = "152b17b1d8976856df441c6f87049dee91edbd4a";
+    hash = "sha256-0rogLKEEOU1NtC8Np3BjlrdDobLjNGqgVZVQFC7hH30=";
+  };
   };
 }
