@@ -16967,6 +16967,7 @@ with pkgs;
       };
     };
   }).overrideAttrs (old: {
+    pname = "rustc-wasm32";
     configureFlags = old.configureFlags ++ ["--set=build.docs=false"];
   });
 
