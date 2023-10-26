@@ -24276,6 +24276,7 @@ with self; {
 
     checkPhase = ''
       patchShebangs ./t ./scripts/yath
+      export AUTOMATED_TESTING=1
       ./scripts/yath test -j $NIX_BUILD_CORES
     '';
 
