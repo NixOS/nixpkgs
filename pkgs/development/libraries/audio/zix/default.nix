@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zix";
-  version = "unstable-2023-02-13";
+  version = "0.4.2";
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = pname;
-    rev = "262d4a1522c38be0588746e874159da5c7bb457d";
-    hash = "sha256-3vuefgnirM4ksK3j9sjBHgOmx0JpL+6tCPb69/7jI00=";
+    rev = "v${version}";
+    hash = "sha256-nMm3Mdqc4ncCae8SoyGxZYURzmXLNcp1GjsSExfB6x4=";
   };
 
   nativeBuildInputs = [
