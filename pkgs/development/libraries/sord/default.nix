@@ -4,21 +4,22 @@
 , fetchFromGitHub
 , meson
 , ninja
-, pcre
+, pcre2
 , pkg-config
 , python3
 , serd
+, zix
 }:
 
 stdenv.mkDerivation rec {
   pname = "sord";
-  version = "0.16.14";
+  version = "0.16.16";
 
   src = fetchFromGitHub {
     owner = "drobilla";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S22Szpg6iXeana5t6EpbOtRstthgrJ4Z2cBrf7a9ZBk=";
+    hash = "sha256-GDs1m8KoEhJDdCf7kacQMZzCNPoZhESJds6KupQvOkU=";
   };
 
   outputs = [ "out" "dev" "doc" "man" ];
@@ -30,8 +31,8 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
   ];
-  buildInputs = [ pcre ];
-  propagatedBuildInputs = [ serd ];
+  buildInputs = [ pcre2 ];
+  propagatedBuildInputs = [ serd zix ];
 
   doCheck = true;
 
