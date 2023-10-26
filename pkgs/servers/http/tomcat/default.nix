@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, nixosTests }:
 
 let
 
@@ -19,6 +19,10 @@ let
         mkdir -p $webapps/webapps
         mv $out/webapps $webapps/
       '';
+
+    passthru.tests = {
+      inherit (nixosTests) tomcat;
+    };
 
     meta = with lib; {
       homepage = "https://tomcat.apache.org/";
