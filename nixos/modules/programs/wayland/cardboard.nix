@@ -9,14 +9,7 @@ in
   options.programs.cardboard = {
     enable = lib.mkEnableOption (lib.mdDoc "cardboard");
 
-    package = lib.mkOption {
-      type = with lib.types; nullOr package;
-      default = pkgs.cardboard;
-      defaultText = lib.literalExpression "pkgs.cardboard";
-      description = lib.mdDoc ''
-        cardboard package to use.
-      '';
-    };
+    package = lib.mkPackageOptionMD pkgs "cardboard" { };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [

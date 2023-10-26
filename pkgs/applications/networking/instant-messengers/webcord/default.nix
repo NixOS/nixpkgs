@@ -62,7 +62,7 @@ buildNpmPackage rec {
     makeWrapper '${lib.getExe electron_27}' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${binPath}" \
-      --add-flags "--ozone-platform-hint=auto" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags $out/lib/node_modules/webcord/
 
     runHook postInstall
@@ -88,7 +88,7 @@ buildNpmPackage rec {
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "webcord";
-    maintainers = with lib.maintainers; [ huantian ];
+    maintainers = with lib.maintainers; [ eclairevoyant huantian ];
     platforms = lib.platforms.linux;
   };
 }
