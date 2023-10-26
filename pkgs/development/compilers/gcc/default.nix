@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -14,6 +14,7 @@
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
+, targetPackages_bintools
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
@@ -173,7 +174,7 @@ let inherit version;
         reproducibleBuild
         staticCompiler
         stdenv
-        targetPackages
+        targetPackages_bintools
         texinfo
         threadsCross
         which

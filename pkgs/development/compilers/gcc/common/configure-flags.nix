@@ -1,5 +1,5 @@
 { lib, stdenv
-, targetPackages
+, targetPackages_bintools
 
 , withoutTargetLibc, libcCross
 , threadsCross
@@ -56,8 +56,8 @@ let
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
-      "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
+      "--with-as=${if targetPackages_bintools.isLLVM then binutils else targetPackages_bintools}/bin/${targetPlatform.config}-as"
+      "--with-ld=${targetPackages_bintools}/bin/${targetPlatform.config}-ld"
     ]
     ++ (if withoutTargetLibc then [
       "--disable-libssp"
