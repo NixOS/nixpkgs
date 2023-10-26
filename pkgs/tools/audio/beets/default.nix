@@ -62,29 +62,27 @@ lib.makeExtensible (self: {
 
   beets-unstable = callPackage ./common.nix {
     inherit python3Packages;
-    version = "unstable-2023-07-05";
+    version = "unstable-2023-10-26";
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "9481402b3c20739ca0b879d19adbfca22ccd6a44";
-      hash = "sha256-AKmozMNVchysoQcUWd90Ic6bQBKQgylVn0E3i85dGb8=";
+      rev = "6655760732100f5387fad2d2890c015ee5039981";
+      hash = "sha256-Nz9BHtacYpJMLmB3f9WFg6GvMa+BuUhiNbJ9cyannek=";
     };
     extraPatches = [
       # Bash completion fix for Nix
       ./patches/unstable-bash-completion-always-print.patch
-      # Pillow 10 compatibility fix, see:
-      # https://github.com/beetbox/beets/pull/4868
-      (fetchpatch {
-        url = "https://github.com/beetbox/beets/commit/c2118a8b9cd8c9c91135c6e178830b89b40867be.patch";
-        hash = "sha256-HWf940WrF10Jnu9iyoHovFDcvj9LY8p7zIlJg1TfKxQ=";
-        # Doesn't apply on this file, and it we don't care.
-        excludes = [ "docs/changelog.rst" ];
-      })
     ];
     pluginOverrides = {
-      # unstable has a new plugin, so we register it here.
+      # unstable has new plugins, so we register them here.
       limit = { builtin = true; };
+      substitute = { builtin = true; };
+      advancedrewrite = { builtin = true; };
+      autobpm = { builtin = true; };
     };
+    extraNativeBuildInputs = [
+      python3Packages.pydata-sphinx-theme
+    ];
   };
 
   alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
