@@ -14,15 +14,19 @@
 , fftw
 , fftwSinglePrec
 , flac
+, fluidsynth
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
 , harvid
+, hidapi
 , itstool
+, kissfft
 , libarchive
 , libjack2
 , liblo
+, libltc
 , libogg
 , libpulseaudio
 , librdf_raptor
@@ -43,6 +47,7 @@
 , perl
 , pkg-config
 , python3
+, qm-dsp
 , readline
 , rubberband
 , serd
@@ -116,12 +121,16 @@ stdenv.mkDerivation rec {
     fftw
     fftwSinglePrec
     flac
+    fluidsynth
     glibmm
     gtkmm2
+    hidapi
     itstool
+    kissfft
     libarchive
     libjack2
     liblo
+    libltc
     libogg
     libpulseaudio
     librdf_raptor
@@ -140,6 +149,7 @@ stdenv.mkDerivation rec {
     pango
     perl
     python3
+    qm-dsp
     readline
     rubberband
     serd
@@ -159,9 +169,8 @@ stdenv.mkDerivation rec {
     "--ptformat"
     "--run-tests"
     "--test"
+    "--use-external-libs"
   ] ++ lib.optional optimize "--optimize";
-  # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
-  # "--use-external-libs"
 
   postInstall = ''
     # wscript does not install these for some reason
