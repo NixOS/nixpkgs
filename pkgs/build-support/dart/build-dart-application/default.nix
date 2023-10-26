@@ -53,8 +53,14 @@
 let
   generators = callPackage ./generators.nix { inherit dart; } { inherit sdkSetupScript; buildDrvArgs = args; };
 
-  depsList = if depsListFile == null then null else lib.importJSON depsListFile;
   generatedDepsList = generators.mkDepsList { inherit pubspecLockFile pubspecLockData packageConfig; };
+
+  depsList =
+    if autoDepsList
+    then lib.importJSON generatedDepsList
+    else if depsListFile == null
+    then null
+    else lib.importJSON depsListFile;
 
   pubspecLockFile = builtins.toJSON pubspecLock;
   pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders; };
@@ -133,10 +139,7 @@ let
   });
 
   packageOverrideRepository = (callPackage ../../../development/compilers/dart/package-overrides { }) // customPackageOverrides;
-  productPackages = builtins.filter (package: package.kind != "dev")
-    (if autoDepsList
-    then lib.importJSON generatedDepsList
-    else if depsList == null then [ ] else depsList);
+  productPackages = builtins.filter (package: package.kind != "dev") (if depsList == null then [ ] else depsList);
 in
 assert !(builtins.isString dartOutputType && dartOutputType != "") ->
 throw "dartOutputType must be a non-empty string";
