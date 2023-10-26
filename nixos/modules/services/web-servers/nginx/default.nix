@@ -35,10 +35,13 @@ let
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
+    "application/javascript"
+    "application/x-javascript"
     "application/json"
     "application/ld+json"
     "application/manifest+json"
     "application/rdf+xml"
+    "application/rss+xml"
     "application/vnd.ms-fontobject"
     "application/wasm"
     "application/x-rss+xml"
@@ -47,11 +50,13 @@ let
     "application/xliff+xml"
     "application/xml"
     "font/collection"
+    "font/eot"
     "font/otf"
     "font/ttf"
     "image/bmp"
     "image/svg+xml"
     "image/vnd.microsoft.icon"
+    "image/x-icon"
     "text/cache-manifest"
     "text/calendar"
     "text/css"
@@ -64,6 +69,7 @@ let
     "text/vtt"
     "text/x-component"
     "text/xml"
+    "text/x-cross-domain-policy"
   ];
 
   defaultFastcgiParams = {
