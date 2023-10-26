@@ -59,14 +59,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "8.0";
+  version = "8.1";
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    hash = "sha256-ZL8aTq2OsCWwLUUx5XYbH4eRN+Xz+oMAj9IS07RfTag=";
+    hash = "sha256-T1o1E5+974dNUwEFW/Pw0RzbGifva2FdJPrCusWMk0E=";
   };
 
   bundledContent = fetchzip {
@@ -198,7 +198,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ardour.org/";
     license = licenses.gpl2Plus;
-    mainProgram = "ardour7";
+    mainProgram = "ardour8";
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };
