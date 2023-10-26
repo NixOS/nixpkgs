@@ -2242,6 +2242,8 @@ self: super: with self; {
 
   compreffor = callPackage ../development/python-modules/compreffor { };
 
+  compressai = callPackage ../development/python-modules/compressai { };
+
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
