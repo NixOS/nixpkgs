@@ -18115,7 +18115,6 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
   ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
 
   starlark = callPackage ../development/interpreters/starlark { };
@@ -38381,8 +38380,6 @@ with pkgs;
   steam-acf = callPackage ../tools/games/steam-acf { };
 
   steamback = python311.pkgs.callPackage ../tools/games/steamback { };
-
-  steamguard-cli = callPackage ../tools/security/steamguard-cli { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;

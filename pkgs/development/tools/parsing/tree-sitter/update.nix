@@ -383,6 +383,10 @@ let
       orga = "winglang";
       repo = "wing";
     };
+    "tree-sitter-wgsl" = {
+      orga = "szebniok";
+      repo = "tree-sitter-wgsl";
+    };
   };
 
   allGrammars =

@@ -4,6 +4,8 @@ self: super: {
 
     apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
 
+    hypopg = super.callPackage ./ext/hypopg.nix { };
+
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };

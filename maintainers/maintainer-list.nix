@@ -17218,6 +17218,12 @@
     githubId = 1901799;
     name = "Nathan van Doorn";
   };
+  taranarmo = {
+    email = "taranarmo@gmail.com";
+    github = "taranarmo";
+    githubId = 11619234;
+    name = "Sergey Volkov";
+  };
   tari = {
     email = "peter@taricorp.net";
     github = "tari";

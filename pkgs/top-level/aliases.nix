@@ -850,6 +850,7 @@ mapAliases ({
   spotify-unwrapped = spotify; # added 2022-11-06
   spring-boot = spring-boot-cli; # added 2020-04-24
   squid4 = throw "'squid4' has been renamed to/replaced by 'squid'"; # Converted to throw 2023-09-10
+  ssm-agent = amazon-ssm-agent; # Added 2023-10-17
   starboard-octant-plugin = throw "starboard-octant-plugin has been dropped due to needing octant which is archived"; # Added 2023-09-29
   steam-run-native = steam-run; # added 2022-02-21
   sumneko-lua-language-server = lua-language-server; # Added 2023-02-07
