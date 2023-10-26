@@ -185,10 +185,12 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
       --set PYTHONPATH $PYTHONPATH
   '';
 
-  # almost the entire test suite requires an azure account setup and networking
-  # ensure that the azure namespaces are setup correctly and that azure.cli can be accessed
-  checkPhase = ''
-    HOME=$TMPDIR $out/bin/az --help > /dev/null
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export HOME=$TMPDIR
+
+    $out/bin/az --version
+    $out/bin/az self-test
   '';
 
   # ensure these namespaces are able to be accessed
