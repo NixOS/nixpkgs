@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl, curl }:
+{ lib, fetchFromGitHub, perlPackages, autoreconfHook, perl, curl }:
 
 let
   myPerl = perl.withPackages (ps: [ ps.JSONPP ]);
