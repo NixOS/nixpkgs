@@ -5969,6 +5969,11 @@
     githubId = 119691;
     name = "Michael Gough";
   };
+  franciscod = {
+    github = "franciscod";
+    githubId = 726447;
+    name = "Francisco Demartino";
+  };
   franzmondlichtmann = {
     name = "Franz Schroepf";
     email = "franz-schroepf@t-online.de";
