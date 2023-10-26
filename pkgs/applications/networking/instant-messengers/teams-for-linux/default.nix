@@ -8,7 +8,7 @@
 , nodejs
 , fetchYarnDeps
 , fixup_yarn_lock
-, electron_24
+, electron
 , libpulseaudio
 , pipewire
 , alsa-utils
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron_24}/libexec/electron \
-      -c.electronVersion=${electron_24.version}
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
-    makeWrapper '${electron_24}/bin/electron' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
