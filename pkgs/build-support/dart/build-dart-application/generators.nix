@@ -50,7 +50,7 @@ let
   name = (if drvArgs ? name then drvArgs.name else "${drvArgs.pname}-${drvArgs.version}");
 
   # Adds the root package to a dependency package_config.json file from pub2nix.
-  linkPackageConfig = packageConfig: stdenvNoCC.mkDerivation (drvArgs // {
+  linkPackageConfig = { packageConfig, extraSetupCommands ? "" }: stdenvNoCC.mkDerivation (drvArgs // {
     name = "${name}-package-config-with-root.json";
 
     nativeBuildInputs = drvArgs.nativeBuildInputs or [ ] ++ args.nativeBuildInputs or [ ] ++ [ jq yq ];
@@ -62,6 +62,7 @@ let
 
       packageName="$(yq --raw-output .name pubspec.yaml)"
       jq --arg name "$packageName" '.packages |= . + [{ name: $name, rootUri: "../", packageUri: "lib/" }]' '${packageConfig}' > "$out"
+      ${extraSetupCommands}
 
       runHook postInstall
     '';

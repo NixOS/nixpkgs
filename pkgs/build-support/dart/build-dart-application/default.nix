@@ -19,6 +19,7 @@
 
 , sdkSetupScript ? ""
 , pubGetScript ? "dart pub get"
+, extraPackageConfigSetup ? ""
 
   # Output type to produce. Can be any kind supported by dart
   # https://dart.dev/tools/dart-compile#types-of-output
@@ -64,21 +65,24 @@ let
 
   pubspecLockFile = builtins.toJSON pubspecLock;
   pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders; };
-  packageConfig = generators.linkPackageConfig (pub2nix.generatePackageConfig {
-    pname = if args.pname != null then "${args.pname}-${args.version}" else null;
+  packageConfig = generators.linkPackageConfig {
+    packageConfig = pub2nix.generatePackageConfig {
+      pname = if args.pname != null then "${args.pname}-${args.version}" else null;
 
-    dependencies =
-      # Ideally, we'd only include the main dependencies and their transitive
-      # dependencies.
-      #
-      # The pubspec.lock file does not contain information about where
-      # transitive dependencies come from, though, and it would be weird to
-      # include the transitive dependencies of dev and override dependencies
-      # without including the dev and override dependencies themselves.
-      builtins.concatLists (builtins.attrValues pubspecLockData.dependencies);
+      dependencies =
+        # Ideally, we'd only include the main dependencies and their transitive
+        # dependencies.
+        #
+        # The pubspec.lock file does not contain information about where
+        # transitive dependencies come from, though, and it would be weird to
+        # include the transitive dependencies of dev and override dependencies
+        # without including the dev and override dependencies themselves.
+        builtins.concatLists (builtins.attrValues pubspecLockData.dependencies);
 
-    inherit (pubspecLockData) dependencySources;
-  });
+      inherit (pubspecLockData) dependencySources;
+    };
+    extraSetupCommands = extraPackageConfigSetup;
+  };
 
   inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 
