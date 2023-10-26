@@ -30754,8 +30754,6 @@ with pkgs;
 
   caerbannog = callPackage ../applications/misc/caerbannog { };
 
-  cardboard = callPackage ../applications/window-managers/cardboard { };
-
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
