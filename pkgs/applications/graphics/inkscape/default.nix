@@ -48,7 +48,11 @@ let
       appdirs
       beautifulsoup4
       cachecontrol
-      filelock
+    ]
+    # CacheControl requires extra runtime dependencies for FileCache
+    # https://gitlab.com/inkscape/extras/extension-manager/-/commit/9a4acde6c1c028725187ff5972e29e0dbfa99b06
+    ++ cachecontrol.optional-dependencies.filecache
+    ++ [
       numpy
       lxml
       packaging
