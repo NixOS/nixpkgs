@@ -7,7 +7,6 @@
 , gdb
 , zlib
 , python3
-, icu
 , lldb
 , dotnet-sdk_7
 , maven
@@ -17,18 +16,20 @@
 , openssl
 , expat
 , libxcrypt-legacy
+, fontconfig
+, libxml2
+, xz
 , vmopts ? null
 }:
 
 let
   platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
-  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" ];
+  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" "aarch64-linux" ];
 
   inherit (stdenv.hostPlatform) system;
 
   versions = builtins.fromJSON (lib.readFile (./versions.json));
-  versionKey = if stdenv.isLinux then "linux" else system;
-  products = versions.${versionKey} or (throw "Unsupported system: ${system}");
+  products = versions.${system} or (throw "Unsupported system: ${system}");
 
   package = if stdenv.isDarwin then ./darwin.nix else ./linux.nix;
   mkJetBrainsProduct = callPackage package { inherit vmopts; };
@@ -59,6 +60,9 @@ let
         openssl.out
         expat
         libxcrypt-legacy
+      ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+        libxml2
+        xz
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
@@ -66,12 +70,12 @@ let
           cd $out/clion
 
           # I think the included gdb has a couple of patches, so we patch it instead of replacing
-          ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
 
-          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
@@ -252,8 +256,6 @@ let
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
       product = "Rider";
-      # icu is required by Rider.Backend
-      extraLdPath = [ icu ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
         inherit description license platforms;
@@ -268,15 +270,31 @@ let
         maintainers = with maintainers; [ raphaelr ];
       };
     }).overrideAttrs (attrs: {
-      postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp \
-          lib/ReSharperHost/linux-x64/Rider.Backend \
-          plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+        autoPatchelfHook
+      ];
+      buildInputs = (attrs.buildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+        stdenv.cc.cc
+        zlib
+        fontconfig  # plugins/dotTrace/DotFiles/linux-*/libSkiaSharp.so
+      ];
+      dontAutoPatchelf = true;
+      postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+        (
+          cd $out/rider
 
-        rm -rf lib/ReSharperHost/linux-x64/dotnet
-        ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-x64/dotnet
-      '');
+          # Remove dotnet copy first so it's not considered by autoPatchElf
+          rm -rf lib/ReSharperHost/linux-*/dotnet
+          autoPatchelf \
+            lib/ReSharperHost/linux-*/ \
+            plugins/dotCommon/DotFiles/linux-*/ \
+            plugins/dotTrace/DotFiles/linux-*/
+
+          for dir in lib/ReSharperHost/linux-*; do
+            ln -s ${dotnet-sdk_7} $dir/dotnet
+          done
+        )
+      '';
     });
 
   buildRubyMine = { pname, version, src, license, description, wmClass, buildNumber, ... }:
@@ -310,6 +328,10 @@ let
         libdbusmenu
         openssl.out
         libxcrypt-legacy
+      ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+        expat
+        libxml2
+        xz
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
@@ -317,12 +339,12 @@ let
           cd $out/rust-rover
 
           # Copied over from clion (gdb seems to have a couple of patches)
-          ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
 
-          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
@@ -330,8 +352,8 @@ let
           autoPatchelf $PWD/bin
 
           interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-          patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
-          chmod +x $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
+          patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
+          chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
         )
       '';
     });

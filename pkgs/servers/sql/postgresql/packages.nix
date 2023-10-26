@@ -4,6 +4,8 @@ self: super: {
 
     apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
 
+    hypopg = super.callPackage ./ext/hypopg.nix { };
+
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
@@ -76,6 +78,8 @@ self: super: {
     pg_relusage = super.callPackage ./ext/pg_relusage.nix { };
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
+
+    pg_uuidv7 = super.callPackage ./ext/pg_uuidv7.nix { };
 
     promscale_extension = super.callPackage ./ext/promscale_extension.nix { };
 

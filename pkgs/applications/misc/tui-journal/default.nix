@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tui-journal";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "AmmarAbouZor";
     repo = "tui-journal";
     rev = "v${version}";
-    hash = "sha256-ASozznbqtQc9bIzxbL94t2CHY2/PeXfR1DKfhTmsX74=";
+    hash = "sha256-LYOWU3ven9g3NCB9HAWFk3oCBFcWAXU5R4T4EIF14q0=";
   };
 
-  cargoHash = "sha256-H+j/i0Gfk7O2TLdw5FYHOrLy/jfMSF4cpzMtQ2XJn2M=";
+  cargoHash = "sha256-MnQ5Y+mQIBh+MMIgL09clkPnOYIwFhNeLSvfEt9Lvsg=";
 
   nativeBuildInputs = [
     pkg-config

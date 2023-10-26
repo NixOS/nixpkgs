@@ -83,42 +83,47 @@ let
   # Copy one Munin plugin into the Nix store with a specific name.
   # This is suitable for use with plugins going directly into /etc/munin/plugins,
   # i.e. munin.extraPlugins.
-  internOnePlugin = name: path:
+  internOnePlugin = { name, path }:
     "cp -a '${path}' '${name}'";
 
   # Copy an entire tree of Munin plugins into a single directory in the Nix
-  # store, with no renaming.
-  # This is suitable for use with munin-node-configure --suggest, i.e.
-  # munin.extraAutoPlugins.
-  internManyPlugins = name: path:
+  # store, with no renaming. The output is suitable for use with
+  # munin-node-configure --suggest, i.e. munin.extraAutoPlugins.
+  # Note that this flattens the input; this is intentional, as
+  # munin-node-configure won't recurse into subdirectories.
+  internManyPlugins = path:
     "find '${path}' -type f -perm /a+x -exec cp -a -t . '{}' '+'";
 
   # Use the appropriate intern-fn to copy the plugins into the store and patch
   # them afterwards in an attempt to get them to run on NixOS.
+  # This is a bit hairy because we can't just fix shebangs; lots of munin plugins
+  # hardcode paths like /sbin/mount rather than trusting $PATH, so we have to
+  # look for and update those throughout the script. At the same time, if the
+  # plugin comes from a package that is already nixified, we don't want to
+  # rewrite paths like /nix/store/foo/sbin/mount.
+  # For now we make the simplifying assumption that no file will contain lines
+  # which mix store paths and FHS paths, and thus run our substitution only on
+  # lines which do not contain store paths.
   internAndFixPlugins = name: intern-fn: paths:
     pkgs.runCommand name {} ''
       mkdir -p "$out"
       cd "$out"
-      ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList intern-fn paths)}
+      ${lib.concatStringsSep "\n" (map intern-fn paths)}
       chmod -R u+w .
-      find . -type f -exec sed -E -i '
-        s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
-      ' '{}' '+'
+      ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -E -i "
+        \%''${NIX_STORE}/%! s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
+      " '{}' '+'
     '';
 
   # TODO: write a derivation for munin-contrib, so that for contrib plugins
   # you can just refer to them by name rather than needing to include a copy
   # of munin-contrib in your nixos configuration.
   extraPluginDir = internAndFixPlugins "munin-extra-plugins.d"
-    internOnePlugin nodeCfg.extraPlugins;
+    internOnePlugin
+    (lib.attrsets.mapAttrsToList (k: v: { name = k; path = v; }) nodeCfg.extraPlugins);
 
   extraAutoPluginDir = internAndFixPlugins "munin-extra-auto-plugins.d"
-    internManyPlugins
-    (builtins.listToAttrs
-      (map
-        (path: { name = baseNameOf path; value = path; })
-        nodeCfg.extraAutoPlugins));
+    internManyPlugins nodeCfg.extraAutoPlugins;
 
   customStaticDir = pkgs.runCommand "munin-custom-static-data" {} ''
     cp -a "${pkgs.munin}/etc/opt/munin/static" "$out"

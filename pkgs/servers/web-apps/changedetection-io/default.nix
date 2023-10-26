@@ -1,26 +1,26 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , python3
 }:
+
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.40.3";
+  version = "0.45.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
-    rev = version;
-    sha256 = "sha256-RYxhkCSL17rU3C4rOArYptmYpdK/CDPw9xfXkKja2xs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QTkkMFGyEGSakvFCiJ36Xr3IiG9K7GDy2dpNGWjUngs=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "apprise~=1.3.0" "apprise" \
+      --replace "apprise~=1.5.0" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
       --replace "dnspython<2.3.0" "dnspython" \
-      --replace "pytest ~=6.2" "" \
+      --replace "pytest ~=7.2" "" \
       --replace "pytest-flask ~=1.2" "" \
       --replace "selenium~=4.1.0" "selenium" \
       --replace "werkzeug~=2.0.0" "werkzeug"
@@ -39,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     flask-compress
     flask-expects-json
     flask-login
+    flask-paginate
     flask-restful
     flask-wtf
     inscriptis
@@ -70,8 +71,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
     homepage = "https://github.com/dgtlmoon/changedetection.io";
-    description = "Simplest self-hosted free open source website change detection tracking, monitoring and notification service";
+    changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

@@ -1,25 +1,29 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  audioSupport ? true,
-  darwin,
-  alsa-lib,
-  pkg-config
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, audioSupport ? true
+, darwin
+, alsa-lib
+
+# passthru.tests.run
+, runCommand
+, uiua
 }:
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "unstable-2023-09-28";
+  version = "0.0.22";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
-    rev = "9b8c65332396f521f170b0ed3ce104b7a8bcf7c0";
-    hash = "sha256-+pleCEEwgRj+p+k9oKIvbsGUWC49qByV/juv76ZdBcc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-x1xZH+AVJqnvwxgBgcVB5LvDb54C+HnPBCTIqZ8Dv7E=";
   };
 
-  cargoHash = "sha256-L8TCMe6eHS3QRy6HuTc1WvMfzsDhKx9YYupAkNeBwpk=";
+  cargoHash = "sha256-gY+KeE2ATsCydpxcRoLtRDeyEvOGv7+I0SskLq8b9rw=";
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
@@ -37,7 +41,11 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = lib.optional audioSupport "audio";
 
-  doCheck = true;
+  passthru.tests.run = runCommand "uiua-test-run" {nativeBuildInputs = [uiua];} ''
+    uiua init;
+    diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+    touch $out;
+  '';
 
   meta = with lib; {
     description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
@@ -49,6 +57,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://www.uiua.org/";
     license = licenses.mit;
     mainProgram = "uiua";
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [ cafkafk tomasajt ];
   };
 }

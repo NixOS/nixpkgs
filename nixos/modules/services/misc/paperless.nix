@@ -36,18 +36,7 @@ let
 
   # Secure the services
   defaultServiceConfig = {
-    TemporaryFileSystem = "/:ro";
-    BindReadOnlyPaths = [
-      "/nix/store"
-      "-/etc/resolv.conf"
-      "-/etc/nsswitch.conf"
-      "-/etc/hosts"
-      "-/etc/localtime"
-      "-/etc/ssl/certs"
-      "-/etc/static/ssl/certs"
-      "-/run/postgresql"
-    ] ++ (optional enableRedis redisServer.unixSocket);
-    BindPaths = [
+    ReadWritePaths = [
       cfg.consumptionDir
       cfg.dataDir
       cfg.mediaDir
@@ -66,11 +55,9 @@ let
     PrivateUsers = true;
     ProtectClock = true;
     # Breaks if the home dir of the user is in /home
-    # Also does not add much value in combination with the TemporaryFileSystem.
     # ProtectHome = true;
     ProtectHostname = true;
-    # Would re-mount paths ignored by temporary root
-    #ProtectSystem = "strict";
+    ProtectSystem = "strict";
     ProtectControlGroups = true;
     ProtectKernelLogs = true;
     ProtectKernelModules = true;
@@ -319,17 +306,6 @@ in
         Type = "oneshot";
         # Enable internet access
         PrivateNetwork = false;
-        # Restrict write access
-        BindPaths = [];
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/ssl/certs"
-          "-/etc/static/ssl/certs"
-          "-/etc/hosts"
-          "-/etc/localtime"
-        ];
         ExecStart = let pythonWithNltk = pkg.python.withPackages (ps: [ ps.nltk ]); in ''
           ${pythonWithNltk}/bin/python -m nltk.downloader -d '${nltkDir}' punkt snowball_data stopwords
         '';

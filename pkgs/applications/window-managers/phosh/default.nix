@@ -36,7 +36,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.31.1";
+  version = "0.32.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-ZdZKymmOzhlJtsFl+ix5kERnfgjCggDpvDhL4vzS4mc=";
+    sha256 = "sha256-4LsB/7zKRkoxNQQVxwrSSIqGP7KQ0WHBnSVY+ClWTxo=";
   };
 
   nativeBuildInputs = [

@@ -204,10 +204,10 @@ in
                 left-handed = xcfg.libinput.mouse.leftHanded;
               };
               keyboard = {
-                keymap_model = xcfg.xkbModel;
-                keymap_layout = xcfg.layout;
-                keymap_variant = xcfg.xkbVariant;
-                keymap_options = xcfg.xkbOptions;
+                keymap_model = xcfg.xkb.model;
+                keymap_layout = xcfg.xkb.layout;
+                keymap_variant = xcfg.xkb.variant;
+                keymap_options = xcfg.xkb.options;
               };
             }; in "${pkgs.weston}/bin/weston --shell=fullscreen-shell.so -c ${westonIni}";
           description = lib.mdDoc "Command used to start the selected compositor";

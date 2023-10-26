@@ -35,9 +35,11 @@ let
           enable = true;
           database = { inherit type; };
           package = giteaPackage;
+          metricsTokenFile = (pkgs.writeText "metrics_secret" "fakesecret").outPath;
           settings.service.DISABLE_REGISTRATION = true;
           settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
           settings.actions.ENABLED = true;
+          settings.metrics.ENABLED = true;
         };
         environment.systemPackages = [ giteaPackage pkgs.gnupg pkgs.jq ];
         services.openssh.enable = true;
@@ -142,6 +144,12 @@ let
           'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
           + '-H "Accept: application/json" | jq length)" = "1"'
       )
+
+      with subtest("Testing metrics endpoint"):
+          server.succeed('curl '
+                         + '-H "Authorization: Bearer fakesecret" '
+                         + 'http://localhost:3000/metrics '
+                         + '| grep gitea_accesses')
 
       with subtest("Testing runner registration"):
           server.succeed(

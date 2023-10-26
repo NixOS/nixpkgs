@@ -3,16 +3,17 @@
 , fetchFromGitHub
 , cmake
 , zlib
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taglib";
   version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "taglib";
     repo = "taglib";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QX0EpHGT36UsgIfRf5iALnwxe0jjLpZvCTbk8vSMFF4=";
   };
 
@@ -28,6 +29,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://taglib.org/";
     description = "A library for reading and editing audio file metadata";
@@ -39,5 +42,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl3 mpl11 ];
     maintainers = with maintainers; [ ttuegel ];
+    pkgConfigModules = [ "taglib" "taglib_c" ];
   };
-}
+})

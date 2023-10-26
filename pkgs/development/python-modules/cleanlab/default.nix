@@ -16,7 +16,7 @@
 }:
 let
   pname = "cleanlab";
-  version = "2.4.0";
+  version = "2.5.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -27,8 +27,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XFrjjBJA0OQEAspnQQiSIW4td0USJDXTp9C/91mobp8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5XQQVrhjpvjwtFM79DqttObmw/GQLkMQVXb5jhiC8e0=";
   };
 
   # postPatch = ''

@@ -49,14 +49,15 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tenacityteam";
     repo = pname;
+    fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "sha256-wesnay+UQiPSDaRuSo86MgHdElN4s0rPIvokZhKM7GI=";
+    hash = "sha256-JgmAuCfXP345xgg5jac8Sa0cBSsWJbtoYmVV0DLcIkk=";
   };
 
   postPatch = ''

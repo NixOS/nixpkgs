@@ -117,6 +117,10 @@ buildPythonPackage rec {
     multimediaEnabled = withMultimedia;
     webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;
+    connectivityEnabled = withConnectivity;
+    locationEnabled = withLocation;
+    serialPortEnabled = withSerialPort;
+    toolsEnabled = withTools;
   };
 
   dontConfigure = true;

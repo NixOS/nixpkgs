@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kamailio";
-  version = "5.7.1";
+  version = "5.7.2";
 
   meta = {
     description = "Fast and flexible SIP server, proxy, SBC, and load balancer";
@@ -18,8 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   src = fetchurl {
-    url = "https://www.kamailio.org/pub/kamailio/5.7.1/src/kamailio-${finalAttrs.version}_src.tar.gz";
-    hash = "sha256-TkrAj5ohwzJ959UvXNwaMmcIwTRowUitP9/UNQ8D1zw=";
+    url = "https://www.kamailio.org/pub/kamailio/5.7.2/src/kamailio-${finalAttrs.version}_src.tar.gz";
+    hash = "sha256-csmgZ9qNb6kg03N9mM1/ZsMh+Ay+EHbi1aOStCJQMSI=";
   };
 
   buildInputs = with pkgs; [

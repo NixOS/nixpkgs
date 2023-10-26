@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "deprecated";
-  version = "1.2.13";
+  version = "1.2.14";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "tantale";
     repo = "deprecated";
-    rev = "v${version}";
-    hash = "sha256-rCDUY/TVmJqhrxDah62lEhqpr05JNZSyiFNTlHvSnmw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
   };
 
   nativeBuildInputs = [

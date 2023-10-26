@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "model-bakery";
-  version = "1.15.0";
+  version = "1.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "model-bakers";
     repo = "model_bakery";
     rev = "refs/tags/${version}";
-    hash = "sha256-gB6lcLymkajRoeOQ70kmZVlBI7oeZgQo1VySfPGeQLQ=";
+    hash = "sha256-pLGSrwRsbxB5no9nQr1THr9wXrtISOMqHrW+FeZ24Bw=";
   };
 
   nativeBuildInputs = [

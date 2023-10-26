@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.4.6";
+  version = "0.4.7";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libgusb";
     rev = "refs/tags/${version}";
-    hash = "sha256-CtB9+5dDs+l05NyIFkKJpS1x3zHSykhLW3HiIM0RUWY=";
+    hash = "sha256-E0H3MqNxYXP40wKMcI1cwLKWGVOnPNazbH6K3TbzpCQ=";
   };
 
   patches = [

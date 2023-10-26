@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru.tests = {
-    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
   };
 

@@ -12,7 +12,9 @@ let
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+    usePostgresql
+    && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]))
+    && config.services.postgresql.enable;
   hasWorkers = cfg.workers != { };
 
   listenerSupportsResource = resource: listener:
@@ -58,7 +60,6 @@ let
     ++ lib.optional (cfg.settings ? oidc_providers) "oidc"
     ++ lib.optional (cfg.settings ? jwt_config) "jwt"
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
-    ++ lib.optional (cfg.settings ? opentracing) "opentracing"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
     ++ lib.optional (cfg.settings ? user_directory) "user-search"
@@ -70,13 +71,12 @@ let
     inherit (cfg) plugins;
   };
 
-  logConfig = logName: {
+  defaultCommonLogConfig = {
     version = 1;
     formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
     handlers.journal = {
       class = "systemd.journal.JournalHandler";
       formatter = "journal_fmt";
-      SYSLOG_IDENTIFIER = logName;
     };
     root = {
       level = "INFO";
@@ -84,33 +84,27 @@ let
     };
     disable_existing_loggers = false;
   };
+
+  defaultCommonLogConfigText = generators.toPretty { } defaultCommonLogConfig;
+
   logConfigText = logName:
-    let
-      expr = ''
-        {
-          version = 1;
-          formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
-          handlers.journal = {
-            class = "systemd.journal.JournalHandler";
-            formatter = "journal_fmt";
-            SYSLOG_IDENTIFIER = "${logName}";
-          };
-          root = {
-            level = "INFO";
-            handlers = [ "journal" ];
-          };
-          disable_existing_loggers = false;
-        };
-      '';
-    in
     lib.literalMD ''
       Path to a yaml file generated from this Nix expression:
 
       ```
-      ${expr}
+      ${generators.toPretty { } (
+        recursiveUpdate defaultCommonLogConfig { handlers.journal.SYSLOG_IDENTIFIER = logName; }
+      )}
       ```
     '';
-  genLogConfigFile = logName: format.generate "synapse-log-${logName}.yaml" (logConfig logName);
+
+  genLogConfigFile = logName: format.generate
+    "synapse-log-${logName}.yaml"
+    (cfg.log // optionalAttrs (cfg.log?handlers.journal) {
+      handlers.journal = cfg.log.handlers.journal // {
+        SYSLOG_IDENTIFIER = logName;
+      };
+    });
 in {
 
   imports = [
@@ -339,7 +333,6 @@ in {
           [
             "cache-memory" # Provide statistics about caching memory consumption
             "jwt"          # JSON Web Token authentication
-            "opentracing"  # End-to-end tracing support using Jaeger
             "oidc"         # OpenID Connect authentication
             "postgres"     # PostgreSQL database backend
             "redis"        # Redis support for the replication stream between worker processes
@@ -391,6 +384,49 @@ in {
         description = lib.mdDoc ''
           The directory where matrix-synapse stores its stateful data such as
           certificates, media and uploads.
+        '';
+      };
+
+      log = mkOption {
+        type = types.attrsOf format.type;
+        defaultText = literalExpression defaultCommonLogConfigText;
+        description = mdDoc ''
+          Default configuration for the loggers used by `matrix-synapse` and its workers.
+          The defaults are added with the default priority which means that
+          these will be merged with additional declarations. These additional
+          declarations also take precedence over the defaults when declared
+          with at least normal priority. For instance
+          the log-level for synapse and its workers can be changed like this:
+
+          ```nix
+          { lib, ... }: {
+            services.matrix-synapse.log.root.level = "WARNING";
+          }
+          ```
+
+          And another field can be added like this:
+
+          ```nix
+          {
+            services.matrix-synapse.log = {
+              loggers."synapse.http.matrixfederationclient".level = "DEBUG";
+            };
+          }
+          ```
+
+          Additionally, the field `handlers.journal.SYSLOG_IDENTIFIER` will be added to
+          each log config, i.e.
+          * `synapse` for `matrix-synapse.service`
+          * `synapse-<worker name>` for `matrix-synapse-worker-<worker name>.service`
+
+          This is only done if this option has a `handlers.journal` field declared.
+
+          To discard all settings declared by this option for each worker and synapse,
+          `lib.mkForce` can be used.
+
+          To discard all settings declared by this option for a single worker or synapse only,
+          [](#opt-services.matrix-synapse.workers._name_.worker_log_config) or
+          [](#opt-services.matrix-synapse.settings.log_config) can be used.
         '';
       };
 
@@ -945,23 +981,6 @@ in {
         '';
       }
       {
-        assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
-        message = ''
-          Cannot deploy matrix-synapse with a configuration for a local postgresql database
-            and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
-            database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
-            further reference).
-
-            If you
-            - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix/synapse.nix>
-            - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
-              to your configuration.
-
-          For further information about this update, please read the release-notes of 20.03 carefully.
-        '';
-      }
-      {
         assertion = hasWorkers -> cfg.settings.redis.enabled;
         message = ''
           Workers for matrix-synapse require configuring a redis instance. This can be done
@@ -1008,6 +1027,8 @@ in {
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
 
+    services.matrix-synapse.log = mapAttrsRecursive (const mkDefault) defaultCommonLogConfig;
+
     users.users.matrix-synapse = {
       group = "matrix-synapse";
       home = cfg.dataDir;
@@ -1034,9 +1055,11 @@ in {
             partOf = [ "matrix-synapse.target" ];
             wantedBy = [ "matrix-synapse.target" ];
             unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
+            requires = optional hasLocalPostgresDB "postgresql.service";
           }
           else {
             after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+            requires = optional hasLocalPostgresDB "postgresql.service";
             wantedBy = [ "multi-user.target" ];
           };
         baseServiceConfig = {
@@ -1070,7 +1093,7 @@ in {
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
             ProtectSystem = "strict";
-            ReadWritePaths = [ cfg.dataDir ];
+            ReadWritePaths = [ cfg.dataDir cfg.settings.media_store_path ];
             RemoveIPC = true;
             RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
             RestrictNamespaces = true;

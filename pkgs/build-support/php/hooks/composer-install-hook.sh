@@ -35,31 +35,33 @@ composerInstallConfigureHook() {
         cp composer.lock $out/
 
         echo
-        echo 'No composer.lock file found, consider adding one to your repository to ensure reproducible builds.'
-        echo "In the meantime, a composer.lock file has been generated for you in $out/composer.lock"
+        echo -e "\e[31mERROR: No composer.lock found\e[0m"
         echo
-        echo 'To fix the issue:'
-        echo "1. Copy the composer.lock file from $out/composer.lock to the project's source:"
-        echo "  cp $out/composer.lock <path>"
-        echo '2. Add the composerLock attribute, pointing to the copied composer.lock file:'
-        echo '  composerLock = ./composer.lock;'
+        echo -e '\e[31mNo composer.lock file found, consider adding one to your repository to ensure reproducible builds.\e[0m'
+        echo -e "\e[31mIn the meantime, a composer.lock file has been generated for you in $out/composer.lock\e[0m"
+        echo
+        echo -e '\e[31mTo fix the issue:\e[0m'
+        echo -e "\e[31m1. Copy the composer.lock file from $out/composer.lock to the project's source:\e[0m"
+        echo -e "\e[31m  cp $out/composer.lock <path>\e[0m"
+        echo -e '\e[31m2. Add the composerLock attribute, pointing to the copied composer.lock file:\e[0m'
+        echo -e '\e[31m  composerLock = ./composer.lock;\e[0m'
         echo
 
         exit 1
     fi
 
     echo "Validating consistency between composer.lock and ${composerRepository}/composer.lock"
-    if [[! @diff@ composer.lock "${composerRepository}/composer.lock"]]; then
+    if ! @cmp@ -s "composer.lock" "${composerRepository}/composer.lock"; then
         echo
-        echo "ERROR: vendorHash is out of date"
+        echo -e "\e[31mERROR: vendorHash is out of date\e[0m"
         echo
-        echo "composer.lock is not the same in $composerRepository"
+        echo -e "\e[31mcomposer.lock is not the same in $composerRepository\e[0m"
         echo
-        echo "To fix the issue:"
-        echo '1. Set vendorHash to an empty string: `vendorHash = "";`'
-        echo '2. Build the derivation and wait for it to fail with a hash mismatch'
-        echo '3. Copy the "got: sha256-..." value back into the vendorHash field'
-        echo '   You should have: vendorHash = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=";'
+        echo -e "\e[31mTo fix the issue:\e[0m"
+        echo -e '\e[31m1. Set vendorHash to an empty string: `vendorHash = "";`\e[0m'
+        echo -e '\e[31m2. Build the derivation and wait for it to fail with a hash mismatch\e[0m'
+        echo -e '\e[31m3. Copy the "got: sha256-..." value back into the vendorHash field\e[0m'
+        echo -e '\e[31m   You should have: vendorHash = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=";\e[0m'
         echo
 
         exit 1
@@ -77,9 +79,9 @@ composerInstallBuildHook() {
     # because the file contains hardcoded nix store paths, we generate it here.
     composer-local-repo-plugin --no-ansi build-local-repo -m "${composerRepository}" .
 
-    # Remove all the repositories of type "composer"
+    # Remove all the repositories of type "composer" and "vcs"
     # from the composer.json file.
-    jq -r -c 'del(try .repositories[] | select(.type == "composer"))' composer.json | sponge composer.json
+    jq -r -c 'del(try .repositories[] | select(.type == "composer" or .type == "vcs"))' composer.json | sponge composer.json
 
     # Configure composer to disable packagist and avoid using the network.
     composer config repo.packagist false
@@ -88,7 +90,6 @@ composerInstallBuildHook() {
 
     # Since the composer.json file has been modified in the previous step, the
     # composer.lock file needs to be updated.
-    COMPOSER_DISABLE_NETWORK=1 \
     COMPOSER_ROOT_VERSION="${version}" \
     composer \
       --lock \
@@ -106,7 +107,26 @@ composerInstallBuildHook() {
 composerInstallCheckHook() {
     echo "Executing composerInstallCheckHook"
 
-    composer validate --no-ansi --no-interaction
+    if ! composer validate --strict --no-ansi --no-interaction --quiet; then
+        if [ ! -z "${composerStrictValidation-}" ]; then
+            echo
+            echo -e "\e[31mERROR: composer files validation failed\e[0m"
+            echo
+            echo -e '\e[31mThe validation of the composer.json and composer.lock failed.\e[0m'
+            echo -e '\e[31mMake sure that the file composer.lock is consistent with composer.json.\e[0m'
+            echo
+            exit 1
+        else
+            echo
+            echo -e "\e[33mWARNING: composer files validation failed\e[0m"
+            echo
+            echo -e '\e[33mThe validation of the composer.json and composer.lock failed.\e[0m'
+            echo -e '\e[33mMake sure that the file composer.lock is consistent with composer.json.\e[0m'
+            echo
+            echo -e '\e[33mThis check is not blocking, but it is recommended to fix the issue.\e[0m'
+            echo
+        fi
+    fi
 
     echo "Finished composerInstallCheckHook"
 }
@@ -118,10 +138,7 @@ composerInstallInstallHook() {
     # the autoloader.
     # The COMPOSER_ROOT_VERSION environment variable is needed only for
     # vimeo/psalm.
-    COMPOSER_CACHE_DIR=/dev/null \
-    COMPOSER_DISABLE_NETWORK=1 \
     COMPOSER_ROOT_VERSION="${version}" \
-    COMPOSER_MIRROR_PATH_REPOS="1" \
     composer \
       --no-ansi \
       --no-interaction \

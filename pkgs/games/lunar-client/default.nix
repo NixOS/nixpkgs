@@ -1,6 +1,7 @@
 { appimageTools
 , fetchurl
 , lib
+, makeWrapper
 }:
 
 let
@@ -19,6 +20,9 @@ appimageTools.wrapType2 rec {
 
   extraInstallCommands = ''
     mv $out/bin/{${pname}-${version},${pname}}
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     install -Dm444 ${appimageContents}/launcher.desktop $out/share/applications/lunar-client.desktop
     install -Dm444 ${appimageContents}/launcher.png $out/share/pixmaps/lunar-client.png
     substituteInPlace $out/share/applications/lunar-client.desktop \

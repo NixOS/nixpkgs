@@ -7,7 +7,7 @@
 , vala
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43

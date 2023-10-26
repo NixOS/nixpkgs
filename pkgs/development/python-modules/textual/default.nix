@@ -1,15 +1,9 @@
 { lib
-, aiohttp
 , buildPythonPackage
-, click
 , fetchFromGitHub
 , importlib-metadata
 , jinja2
-, linkify-it-py
 , markdown-it-py
-, mdit-py-plugins
-, mkdocs-exclude
-, msgpack
 , poetry-core
 , pytest-aiohttp
 , pytestCheckHook
@@ -17,13 +11,14 @@
 , rich
 , syrupy
 , time-machine
+, tree-sitter
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.37.1";
-  format = "pyproject";
+  version = "0.40.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,7 +26,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4ehq36j2n2wRMgos5x4LQ0QeELpWAOgpgTxEWjqFLJs=";
+    hash = "sha256-+3bxc0ryHtbEJkB+EqjJhW+yWJWxMkxlSav4v6D3/gw=";
   };
 
   nativeBuildInputs = [
@@ -39,18 +34,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aiohttp
-    click
     importlib-metadata
-    linkify-it-py
     markdown-it-py
-    mdit-py-plugins
-    mkdocs-exclude
-    msgpack
     rich
-  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
-  ];
+  ] ++ markdown-it-py.optional-dependencies.plugins
+    ++ markdown-it-py.optional-dependencies.linkify;
+
+  passthru.optional-dependencies = {
+    syntax = [
+      tree-sitter
+      # tree-sitter-languages
+    ];
+  };
 
   nativeCheckInputs = [
     jinja2
@@ -58,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     time-machine
-  ];
+  ] ++ passthru.optional-dependencies.syntax;
 
   disabledTestPaths = [
     # snapshot tests require syrupy<4
@@ -69,6 +65,9 @@ buildPythonPackage rec {
     # Assertion issues
     "test_textual_env_var"
     "test_softbreak_split_links_rendered_correctly"
+
+    # requires tree-sitter-languages which is not packaged in nixpkgs
+    "test_register_language"
   ];
 
   pythonImportsCheck = [

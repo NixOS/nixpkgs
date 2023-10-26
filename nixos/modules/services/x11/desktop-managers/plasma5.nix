@@ -309,7 +309,7 @@ in
         "/share"
       ];
 
-      environment.etc."X11/xkb".source = xcfg.xkbDir;
+      environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
       environment.sessionVariables = {
         PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
@@ -379,7 +379,7 @@ in
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
 
-      programs.firefox.wrapperConfig.enablePlasmaBrowserIntegration = true;
+      programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
     })
 
     (mkIf (cfg.kwinrc != {}) {

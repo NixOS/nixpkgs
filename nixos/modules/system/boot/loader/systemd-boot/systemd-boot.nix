@@ -7,14 +7,12 @@ let
 
   efi = config.boot.loader.efi;
 
-  python3 = pkgs.python3.withPackages (ps: [ ps.packaging ]);
-
   systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
 
-    inherit python3;
+    inherit (pkgs) python3;
 
     systemd = config.systemd.package;
 
@@ -52,7 +50,7 @@ let
   };
 
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy python3 ];
+    nativeBuildInputs = [ pkgs.mypy ];
   } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \

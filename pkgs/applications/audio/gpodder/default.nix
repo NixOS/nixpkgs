@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.11.1";
+  version = "3.11.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "Ns03MFhd4ZLtyeQTLTgLWY2Ot6gmrksFMOZm8jFaLIg=";
+    sha256 = "p8BgpvMK1kP4VnRfmcvSMbXmWs5DmWBZ6te7L9b+UJQ=";
   };
 
   patches = [
@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
+    mutagen
   ];
 
   makeFlags = [

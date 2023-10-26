@@ -1,5 +1,6 @@
 # do not add pkgs, it messes up splicing
 { stdenv
+, cargo
 , cmake
 , curl
 , cyrus_sasl
@@ -27,6 +28,7 @@
 , libxcrypt
 , libyaml
 , mariadb
+, magic-enum
 , mpfr
 , neovim-unwrapped
 , openldap
@@ -35,7 +37,10 @@
 , pkg-config
 , postgresql
 , readline
+, rustPlatform
+, sol2
 , sqlite
+, tomlplusplus
 , unbound
 , vimPlugins
 , vimUtils
@@ -139,10 +144,6 @@ with prev;
       nativeBuildInputs = [ pandoc ];
       makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
-  });
-
-  lpty = prev.lpty.overrideAttrs (oa: {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
   });
 
   ldbus = prev.ldbus.overrideAttrs (oa: {
@@ -556,6 +557,29 @@ with prev;
     preConfigure = ''
       make all
     '';
+  });
+
+  toml = prev.toml.overrideAttrs (oa: {
+    patches = [ ./toml.patch ];
+
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ magic-enum sol2 ];
+
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace \
+        "TOML_PLUS_PLUS_SRC" \
+        "${tomlplusplus.src}"
+    '';
+  });
+
+  toml-edit = prev.toml-edit.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-pLAisfnSDoAToQO/kdKTdic6vEug7/WFNtgOfj0bRAE=";
+    };
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

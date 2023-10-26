@@ -3,21 +3,26 @@
 , buildPythonPackage
 , importlib-metadata
 , importlib-resources
+, setuptools
 , traits
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyface";
-  version = "7.4.4";
-  format = "setuptools";
+  version = "8.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0F+qxFOUvVWYWQahIM8AEv58rCxmNJYsBTC2pjUO2yI=";
+    hash = "sha256-fhNhg0e3pkjtIM29T9GlFkj1AQKR815OD/G/cKcgy/g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     importlib-metadata

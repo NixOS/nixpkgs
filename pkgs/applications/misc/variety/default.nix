@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     beautifulsoup4
     configobj
     dbus-python
-    distutils_extra
+    distutils-extra
     httplib2
     lxml
     pillow

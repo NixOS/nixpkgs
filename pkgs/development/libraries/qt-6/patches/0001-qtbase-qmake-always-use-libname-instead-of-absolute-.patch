@@ -1,7 +1,7 @@
-From 69d9faa9e4420d3cb0d1466c1b95ceadb2cd75f3 Mon Sep 17 00:00:00 2001
+From afbe4002948e60ee3b27cb9be9e549ae416373f8 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Thu, 13 Apr 2023 23:42:29 +0800
-Subject: [PATCH 1/6] qtbase: qmake: always use libname instead of absolute
+Subject: [PATCH 01/11] qtbase: qmake: always use libname instead of absolute
  path in qmake files
 
 In generated qmake files, absolute paths to qt libraries are embedded
@@ -46,5 +46,5 @@ index 3ffe354fd8d..441332d4582 100644
          else()
              list(APPEND out_list "${library_path}")
 -- 
-2.39.2
+2.42.0
 

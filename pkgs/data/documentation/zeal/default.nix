@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , cmake
 , extra-cmake-modules
 , pkg-config
@@ -29,6 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-s1FaazHVtWE697BO0hIOgZVowdkq68R9x327ZnJRnlo=";
   };
+
+  patches = [
+    # fix build with qt 6.6.0
+    # treewide: replace deprecated qAsConst with std::as_const()
+    # https://github.com/zealdocs/zeal/pull/1565
+    (fetchpatch2 {
+      url = "https://github.com/zealdocs/zeal/commit/d50a0115d58df2b222ede4c3a76b9686f4716465.patch";
+      hash = "sha256-Ub6RCZGpLSOjvK17Jrm+meZuZGXcC4kI3QYl5HbsLWU=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \

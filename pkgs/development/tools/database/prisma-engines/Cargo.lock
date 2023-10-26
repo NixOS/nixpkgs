@@ -323,6 +323,7 @@ dependencies = [
  "enumflags2",
  "indoc",
  "insta",
+ "query-engine-metrics",
  "query-engine-tests",
  "query-tests-setup",
  "reqwest",
@@ -1047,6 +1048,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "driver-adapters"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bigdecimal",
+ "chrono",
+ "expect-test",
+ "futures",
+ "metrics 0.18.1",
+ "napi",
+ "napi-derive",
+ "num-bigint",
+ "once_cell",
+ "psl",
+ "quaint",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-core",
+ "uuid",
+]
+
+[[package]]
 name = "either"
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1147,18 +1172,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
-]
-
-[[package]]
-name = "enum_dispatch"
-version = "0.3.12"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f33313078bb8d4d05a2733a94ac4c2d8a0df9a2b84424ebf4f33bfc224a890e"
-dependencies = [
- "once_cell",
- "proc-macro2",
- "quote",
- "syn 2.0.28",
 ]
 
 [[package]]
@@ -1882,28 +1895,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af150ab688ff2122fcef229be89cb50dd66af9e01a4ff320cc137eecc9bacc38"
 
 [[package]]
-name = "js-connectors"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bigdecimal",
- "chrono",
- "expect-test",
- "futures",
- "napi",
- "napi-derive",
- "num-bigint",
- "once_cell",
- "psl",
- "quaint",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-core",
-]
-
-[[package]]
 name = "js-sys"
 version = "0.3.61"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2319,9 +2310,9 @@ dependencies = [
 
 [[package]]
 name = "mobc"
-version = "0.8.1"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc79c4a77e312fee9c7bd4b957c12ad1196db73c4a81e5c0b13f02083c4f7f2f"
+checksum = "0bdeff49b387edef305eccfe166af3e1483bb57902dbf369dddc42dc824df23b"
 dependencies = [
  "async-trait",
  "futures-channel",
@@ -3162,7 +3153,7 @@ dependencies = [
 [[package]]
 name = "postgres-native-tls"
 version = "0.5.0"
-source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#429e76047f28e64761ad63bc6cc9335c3d3337b5"
+source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#a1a2dc6d9584deaf70a14293c428e7b6ca614d98"
 dependencies = [
  "native-tls",
  "tokio",
@@ -3173,7 +3164,7 @@ dependencies = [
 [[package]]
 name = "postgres-protocol"
 version = "0.6.4"
-source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#429e76047f28e64761ad63bc6cc9335c3d3337b5"
+source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#a1a2dc6d9584deaf70a14293c428e7b6ca614d98"
 dependencies = [
  "base64 0.13.1",
  "byteorder",
@@ -3190,7 +3181,7 @@ dependencies = [
 [[package]]
 name = "postgres-types"
 version = "0.2.4"
-source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#429e76047f28e64761ad63bc6cc9335c3d3337b5"
+source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#a1a2dc6d9584deaf70a14293c428e7b6ca614d98"
 dependencies = [
  "bit-vec",
  "bytes",
@@ -3625,8 +3616,8 @@ dependencies = [
  "anyhow",
  "async-trait",
  "connection-string",
+ "driver-adapters",
  "futures",
- "js-connectors",
  "napi",
  "napi-build",
  "napi-derive",
@@ -3693,12 +3684,12 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "colored",
- "enum_dispatch",
  "enumflags2",
  "hyper",
  "indexmap 1.9.3",
  "indoc",
  "itertools",
+ "jsonrpc-core",
  "nom",
  "once_cell",
  "parse-hyperlinks",
@@ -3713,6 +3704,7 @@ dependencies = [
  "request-handlers",
  "serde",
  "serde_json",
+ "sql-query-connector",
  "strip-ansi-escapes",
  "thiserror",
  "tokio",
@@ -5171,7 +5163,7 @@ dependencies = [
 [[package]]
 name = "tokio-postgres"
 version = "0.7.7"
-source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#429e76047f28e64761ad63bc6cc9335c3d3337b5"
+source = "git+https://github.com/prisma/rust-postgres?branch=pgbouncer-mode#a1a2dc6d9584deaf70a14293c428e7b6ca614d98"
 dependencies = [
  "async-trait",
  "byteorder",
@@ -5509,7 +5501,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fee6b57c6a41524a810daee9286c02d7752c4253064d0b05472833a438f675"
 dependencies = [
  "cfg-if",
- "rand 0.8.5",
+ "rand 0.7.3",
  "static_assertions",
 ]
 
@@ -5743,9 +5735,9 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.84"
+version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "31f8dcbc21f30d9b8f2ea926ecb58f6b91192c17e9d33594b3df58b2007ca53b"
+checksum = "7706a72ab36d8cb1f80ffbf0e071533974a60d0a308d01a5d0375bf60499a342"
 dependencies = [
  "cfg-if",
  "wasm-bindgen-macro",
@@ -5753,16 +5745,16 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-backend"
-version = "0.2.84"
+version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95ce90fd5bcc06af55a641a86428ee4229e44e07033963a2290a8e241607ccb9"
+checksum = "5ef2b6d3c510e9625e5fe6f509ab07d66a760f0885d858736483c32ed7809abd"
 dependencies = [
  "bumpalo",
  "log",
  "once_cell",
  "proc-macro2",
  "quote",
- "syn 1.0.109",
+ "syn 2.0.28",
  "wasm-bindgen-shared",
 ]
 
@@ -5780,9 +5772,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.84"
+version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c21f77c0bedc37fd5dc21f897894a5ca01e7bb159884559461862ae90c0b4c5"
+checksum = "dee495e55982a3bd48105a7b947fd2a9b4a8ae3010041b9e0faab3f9cd028f1d"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -5790,22 +5782,22 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.84"
+version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2aff81306fcac3c7515ad4e177f521b5c9a15f2b08f4e32d823066102f35a5f6"
+checksum = "54681b18a46765f095758388f2d0cf16eb8d4169b639ab575a8f5693af210c7b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 1.0.109",
+ "syn 2.0.28",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.84"
+version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0046fef7e28c3804e5e38bfa31ea2a0f73905319b677e57ebe37e49358989b5d"
+checksum = "ca6ad05a4870b2bf5fe995117d3728437bd27d7cd5f06f13c17443ef369775a1"
 
 [[package]]
 name = "wasm-logger"

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "butt";
-  version = "0.1.38";
+  version = "0.1.39";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-6c4BknAh+XPaKrEfCz0oHm7lWOLV+9jiJbQx9vvtI4I=";
+    hash = "sha256-dh6NceHiqpN6PVwKIo2jV3qCO17P6E6QHdZGRVyd6/g=";
   };
 
   postPatch = ''

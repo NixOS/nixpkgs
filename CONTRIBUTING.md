@@ -538,7 +538,7 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
   When adding yourself as maintainer, in the same pull request, make a separate
   commit with the message `maintainers: add <handle>`.
   Add the commit before those making changes to the package or module.
-  See [Nixpkgs Maintainers](../maintainers/README.md) for details.
+  See [Nixpkgs Maintainers](./maintainers/README.md) for details.
 
 ### Writing good commit messages
 
@@ -565,7 +565,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
 - Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
 
-- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [](#sec-package-naming).
+- Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [package naming](./pkgs/README.md#package-naming).
 
 - Function calls with attribute set arguments are written as
 

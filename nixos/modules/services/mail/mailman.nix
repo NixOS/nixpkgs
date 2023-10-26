@@ -260,7 +260,7 @@ in {
       };
 
       serve = {
-        enable = mkEnableOption (lib.mdDoc "Automatic nginx and uwsgi setup for mailman-web");
+        enable = mkEnableOption (lib.mdDoc "automatic nginx and uwsgi setup for mailman-web");
 
         virtualRoot = mkOption {
           default = "/";
@@ -314,7 +314,7 @@ in {
         queue_dir = "$var_dir/queue";
         template_dir = "$var_dir/templates";
         log_dir = "/var/log/mailman";
-        lock_dir = "$var_dir/lock";
+        lock_dir = "/run/mailman/lock";
         etc_dir = "/etc";
         pid_file = "/run/mailman/master.pid";
       };
@@ -592,7 +592,7 @@ in {
           # Since the mailman-web settings.py obstinately creates a logs
           # dir in the cwd, change to the (writable) runtime directory before
           # starting uwsgi.
-          ExecStart = "${pkgs.coreutils}/bin/env -C $RUNTIME_DIRECTORY ${pkgs.uwsgi.override { plugins = ["python3"]; }}/bin/uwsgi --json ${uwsgiConfigFile}";
+          ExecStart = "${pkgs.coreutils}/bin/env -C $RUNTIME_DIRECTORY ${pkgs.uwsgi.override { plugins = ["python3"]; python3 = webEnv.python; }}/bin/uwsgi --json ${uwsgiConfigFile}";
           User = cfg.webUser;
           Group = "mailman";
           RuntimeDirectory = "mailman-uwsgi";
@@ -644,7 +644,7 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ lheckemann qyliss ma27 ];
+    maintainers = with lib.maintainers; [ lheckemann qyliss ];
     doc = ./mailman.md;
   };
 

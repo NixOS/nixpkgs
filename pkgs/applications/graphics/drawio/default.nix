@@ -14,19 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "21.7.5";
+  version = "22.0.2";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-hf1sektdnW4c3dySun8sQ9vBrAqTocrLFAIYkemNC3I=";
+    hash = "sha256-L+tbNCokVoiS2KkaPVBjG7H/8cqz1e8dlXC5H8BkPvU=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-FVZq/voCjnRSBLtQtJkJbErGvprEHq+U/VZ9rEwbJsI=";
+    hash = "sha256-d8AquOKdrPQHBhRG9o1GB18LpwlwQK6ZaM1gLAcjilM=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       comment = "draw.io desktop";
       mimeTypes = [ "application/vnd.jgraph.mxfile" "application/vnd.visio" ];
       categories = [ "Graphics" ];
-      startupWMClass = "drawio";
+      startupWMClass = "draw.io";
     })
   ];
 

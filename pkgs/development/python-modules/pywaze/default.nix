@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "eifinger";
     repo = "pywaze";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iuI/tfU2nEX+Y9pWEsm0Nvu6pModHh/5g2eyud8TnB0=";
+    hash = "sha256-r7ROEdgHdjXkveVUbuALHtwCX4IO0lwx9Zo3u6R9I58=";
   };
 
   postPatch = ''

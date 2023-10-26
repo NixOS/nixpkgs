@@ -13,17 +13,17 @@ in
 assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
 mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.9.4";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    hash = "sha256-63UXn1ejL/wDx6S2lugwwthu+C+vJovPypgM0iak78I=";
+    hash = "sha256-xhj7RUurBRq9ZIDAlcq7KyYGnLqc+vTjaf2VMNStpVQ";
   };
 
   mvnParameters = "-Dmaven.test.skip=true";
-  mvnHash = "sha256-7gv++Pc+wqmVYaAMgHhSy7xwChfVBgpDFxExzu3bXO0=";
+  mvnHash = "sha256-XAIwKn8wMqILMQbg9wM4kHAaRSGWQaBx9AXQyJuUO5k=";
 
   preBuild = ''
     VERSION=${version}

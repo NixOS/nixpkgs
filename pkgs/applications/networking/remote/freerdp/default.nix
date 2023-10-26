@@ -8,7 +8,7 @@
 , alsa-lib
 , faac
 , faad2
-, ffmpeg
+, ffmpeg_5 # Depends on deprecated libav features
 , glib
 , openh264
 , openssl
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     cairo
     cups
     faad2
-    ffmpeg
+    ffmpeg_5
     glib
     gst-plugins-base
     gst-plugins-good

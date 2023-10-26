@@ -7,7 +7,7 @@
 , nixosTests
 , pkg-config
 , gettext
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages
 , gobject-introspection
 , gi-docgen

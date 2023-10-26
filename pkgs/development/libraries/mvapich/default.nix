@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-w5pEkvS+UN9hAHhXSLoolOI85FCpQSgYHVFtpXV3Ua4=";
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   nativeBuildInputs = [ pkg-config bison makeWrapper gfortran ];
   propagatedBuildInputs = [ numactl rdma-core zlib opensm ];
   buildInputs = with lib; [

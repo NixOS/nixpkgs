@@ -32,17 +32,14 @@
 , apparmorRulesFromClosure
 }:
 
-let
-  version = "3.00";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  inherit version;
+  version = "3.00";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
@@ -147,4 +144,4 @@ in stdenv.mkDerivation {
     platforms = lib.platforms.unix;
   };
 
-}
+})

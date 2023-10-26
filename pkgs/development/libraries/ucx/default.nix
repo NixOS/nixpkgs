@@ -4,7 +4,7 @@
 , enableCuda ? config.cudaSupport
 , cudatoolkit
 , enableRocm ? false
-, rocm-core, rocm-runtime, rocm-device-libs, hip
+, rocmPackages
 }:
 
 let
@@ -13,9 +13,12 @@ let
     inherit (cudatoolkit) name meta;
     paths = [ cudatoolkit cudatoolkit.lib ];
   };
+
+  rocmList = with rocmPackages; [ rocm-core rocm-runtime rocm-device-libs clr ];
+
   rocm = symlinkJoin {
     name = "rocm";
-    paths = [ rocm-core rocm-runtime rocm-device-libs hip ];
+    paths = rocmList;
   };
 
 in
@@ -30,6 +33,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VxIxrk9qKM6Ncfczl4p2EhXiLNgPaYTmjhqi6/w2ZNY=";
   };
 
+  outputs = [ "out" "doc" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
 
   buildInputs = [
@@ -40,7 +45,7 @@ stdenv.mkDerivation rec {
     rdma-core
     zlib
   ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
+  ++ lib.optionals enableRocm rocmList;
 
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"
@@ -50,6 +55,14 @@ stdenv.mkDerivation rec {
     "--with-verbs=${lib.getDev rdma-core}"
   ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
+
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+    moveToOutput bin/ucx_info $dev
+
+    moveToOutput share/ucx/examples $doc
+  '';
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
 , db, iptables, libelf, libmnl
 , gitUpdater
@@ -6,26 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.4.0";
+  version = "6.5.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TFG43svH5NoVn/sGb1kM+5Pb+a9/+GsWR85Ct8F5onI=";
+    hash = "sha256-pwF5CF+huW08M7BAyAm3XitXVjrcUFpK0F4mCd83NGM=";
   };
-
-  patches = [
-    # To avoid ./configure failing due to invalid arguments:
-    (fetchpatch { # configure: restore backward compatibility
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
-      sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
-    })
-
-    # fix build on musl. applied anywhere to prevent patchrot.
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/iproute2/include.patch?id=bd46efb8a8da54948639cebcfa5b37bd608f1069";
-      sha256 = "sha256-NpNnSXQntuzzpjswE42yzo7nqmrQgI5YcHR2kp9NEwA=";
-    })
-  ];
 
   postPatch = ''
     # Don't try to create /var/lib/arpd:

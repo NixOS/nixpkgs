@@ -4,7 +4,7 @@ mod structure;
 mod utils;
 
 use anyhow::Context;
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -15,14 +15,28 @@ use utils::ErrorWriter;
 /// Program to check the validity of pkgs/by-name
 #[derive(Parser, Debug)]
 #[command(about)]
-struct Args {
+pub struct Args {
     /// Path to nixpkgs
     nixpkgs: PathBuf,
+    /// The version of the checks
+    /// Increasing this may cause failures for a Nixpkgs that succeeded before
+    /// TODO: Remove default once Nixpkgs CI passes this argument
+    #[arg(long, value_enum, default_value_t = Version::V0)]
+    version: Version,
+}
+
+/// The version of the checks
+#[derive(Debug, Clone, PartialEq, PartialOrd, ValueEnum)]
+pub enum Version {
+    /// Initial version
+    V0,
+    /// Empty argument check
+    V1,
 }
 
 fn main() -> ExitCode {
     let args = Args::parse();
-    match check_nixpkgs(&args.nixpkgs, vec![], &mut io::stderr()) {
+    match check_nixpkgs(&args.nixpkgs, args.version, vec![], &mut io::stderr()) {
         Ok(true) => {
             eprintln!("{}", "Validated successfully".green());
             ExitCode::SUCCESS
@@ -53,6 +67,7 @@ fn main() -> ExitCode {
 /// - `Ok(true)` if the structure is valid, nothing will have been written to `error_writer`.
 pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
+    version: Version,
     eval_accessible_paths: Vec<&Path>,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
@@ -75,7 +90,7 @@ pub fn check_nixpkgs<W: io::Write>(
 
         if error_writer.empty {
             // Only if we could successfully parse the structure, we do the semantic checks
-            eval::check_values(&mut error_writer, &nixpkgs, eval_accessible_paths)?;
+            eval::check_values(version, &mut error_writer, &nixpkgs, eval_accessible_paths)?;
             references::check_references(&mut error_writer, &nixpkgs)?;
         }
     }
@@ -86,6 +101,7 @@ pub fn check_nixpkgs<W: io::Write>(
 mod tests {
     use crate::check_nixpkgs;
     use crate::structure;
+    use crate::Version;
     use anyhow::Context;
     use std::fs;
     use std::path::Path;
@@ -174,7 +190,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            check_nixpkgs(&path, vec![&extra_nix_path], &mut writer)
+            check_nixpkgs(&path, Version::V1, vec![&extra_nix_path], &mut writer)
                 .context(format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

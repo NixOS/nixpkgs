@@ -25,16 +25,16 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.42.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-+65R7cbj62UXw3ZYXIK9VcAeGnpP4pLigr21awoPLi4=";
+    hash = "sha256-5voAO3vHygSo7rl9ELdb9BwMNFVZdjEe7x8foyi+a6s=";
   };
 
-  vendorHash = "sha256-O6OjBbrVAxDQd27ar2mmFkU1XyVM2C8SJWJ54rgaf2s=";
+  vendorHash = "sha256-cv8KUXPRXufvbaZlvf/DeFfQCzu7MAlikRVPHWlakx0=";
 
   CGO_ENABLED = 0;
 
@@ -79,7 +79,10 @@ buildGoModule rec {
     install -D shell/* -t $out/share/fzf/
     install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
     mkdir -p $out/share/fish/vendor_conf.d
-    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      status is-interactive; or exit 0
+      fzf_key_bindings
+    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}

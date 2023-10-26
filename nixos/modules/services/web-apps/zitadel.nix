@@ -9,7 +9,7 @@ in
   options.services.zitadel =
     let inherit (lib) mkEnableOption mkOption mkPackageOption types;
     in {
-      enable = mkEnableOption "ZITADEL, a user and identity access management platform.";
+      enable = mkEnableOption "ZITADEL, a user and identity access management platform";
 
       package = mkPackageOption pkgs "ZITADEL" { default = [ "zitadel" ]; };
 

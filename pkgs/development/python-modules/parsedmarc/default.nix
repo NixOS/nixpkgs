@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.4.2";
+  version = "8.6.1";
 
   disabled = pythonOlder "3.7";
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6dP9zQI0jYiE+lUhmFBNp8Sv9povm9Pa4R4TuzAmEQk=";
+    hash = "sha256-lnIhXkBodvLWVeqiwFcnU4M53zwWDmtFz+9TThQY63I=";
   };
 
   postPatch = ''

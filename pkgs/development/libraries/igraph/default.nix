@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     echo "${finalAttrs.version}" > IGRAPH_VERSION
+  ''
+  # https://github.com/igraph/igraph/issues/2340
+  + lib.optionalString stdenv.isDarwin ''
+    sed -i "/safelocale/d" tests/CMakeLists.txt
   '';
 
   outputs = [ "out" "dev" "doc" ];

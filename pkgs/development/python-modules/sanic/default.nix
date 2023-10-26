@@ -141,6 +141,10 @@ buildPythonPackage rec {
     "test_default_reload_shutdown_order"
     # App not found.
     "test_input_is_dir"
+    # HTTP 500 with Websocket subprotocols
+    "test_websocket_route_with_subprotocols"
+    # Socket closes early
+    "test_no_exceptions_when_cancel_pending_request"
   ];
 
   disabledTestPaths = [

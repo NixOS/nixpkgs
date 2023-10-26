@@ -49,10 +49,10 @@
 }:
 
 let
-  tzinfoVersion = "220816";
+  tzinfoVersion = "221202";
   tzinfo = fetchurl {
     url = "https://github.com/lat9nq/tzdb_to_nx/releases/download/${tzinfoVersion}/${tzinfoVersion}.zip";
-    hash = "sha256-yv8ykEYPu9upeXovei0u16iqQ7NasH6873KnQy4+KwI=";
+    hash = "sha256-mRzW+iIwrU1zsxHmf+0RArU8BShAoEMvCz+McXFFK3c=";
   };
 in stdenv.mkDerivation {
   pname = "yuzu-${branch}";

@@ -43,12 +43,8 @@ in
       [ "services" "searx" "settingsFile" ])
   ];
 
-  ###### interface
-
   options = {
-
     services.searx = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -149,8 +145,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.searx;
-        defaultText = literalExpression "pkgs.searx";
+        default = pkgs.searxng;
+        defaultText = literalExpression "pkgs.searxng";
         description = lib.mdDoc "searx package to use.";
       };
 
@@ -190,21 +186,7 @@ in
 
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = (cfg.limiterSettings != { }) -> cfg.package.pname == "searxng";
-        message = "services.searx.limiterSettings requires services.searx.package to be searxng.";
-      }
-      {
-        assertion = cfg.redisCreateLocally -> cfg.package.pname == "searxng";
-        message = "services.searx.redisCreateLocally requires services.searx.package to be searxng.";
-      }
-    ];
-
     environment.systemPackages = [ cfg.package ];
 
     users.users.searx =
@@ -245,10 +227,10 @@ in
       };
     };
 
-    systemd.services.uwsgi = mkIf (cfg.runInUwsgi)
-      { requires = [ "searx-init.service" ];
-        after = [ "searx-init.service" ];
-      };
+    systemd.services.uwsgi = mkIf cfg.runInUwsgi {
+      requires = [ "searx-init.service" ];
+      after = [ "searx-init.service" ];
+    };
 
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
@@ -256,7 +238,7 @@ in
       redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
-    services.uwsgi = mkIf (cfg.runInUwsgi) {
+    services.uwsgi = mkIf cfg.runInUwsgi {
       enable = true;
       plugins = [ "python3" ];
 
@@ -270,6 +252,7 @@ in
         enable-threads = true;
         module = "searx.webapp";
         env = [
+          # TODO: drop this as it is only required for searx
           "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
           # searxng compatibility https://github.com/searxng/searxng/issues/1519
           "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"

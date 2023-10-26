@@ -1,15 +1,16 @@
 { callPackage, fetchFromGitHub, gambit-support }:
 
-callPackage ./build.nix {
-  version = "unstable-2023-08-06";
-  git-version = "4.9.5-5-gf1fbe9aa";
-  stampYmd = 20230806;
-  stampHms = 195822;
+callPackage ./build.nix rec {
+  version = "unstable-2023-10-07";
+  git-version = "4.9.5-59-g342399c7";
+  stampYmd = 20231007;
+  stampHms = 170745;
+  rev = "342399c736ec560c0ff4faeaeb9599b45633f26c";
   src = fetchFromGitHub {
     owner = "gambit";
     repo = "gambit";
-    rev = "f1fbe9aa0f461e89f2a91bc050c1373ee6d66482";
-    sha256 = "0b0gd6cwj8zxwcqglpsnmanysiq4mvma2mrgdfr6qy99avhbhzxm";
+    inherit rev;
+    sha256 = "121pj6lxihjjnfq33lq4m5hi461xbs9f41qd4l46556dr15cyf8f";
   };
   gambit-params = gambit-support.unstable-params;
 }

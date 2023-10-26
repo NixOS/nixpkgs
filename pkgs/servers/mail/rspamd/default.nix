@@ -28,23 +28,14 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.6";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-GuWuJK73RE+cS8451m+bcmpZNQEzmZtexm19xgdDQeU=";
+    hash = "sha256-emxvSqtpTcv0LZjzhMncvnApRLXFDeyFVmkoeSVp6f4=";
   };
-
-  patches = [
-    # Fix leak in `gzip` function
-    # https://github.com/rspamd/rspamd/issues/4564
-    (fetchpatch2 {
-      url = "https://github.com/rspamd/rspamd/commit/ffbab4fbf218514845b8e5209aec044621b1f460.patch";
-      hash = "sha256-ltkC/mZcYmGoSFILaTTRB/UWSn36flEbuJP4Buys05Y=";
-    })
-  ];
 
   hardeningEnable = [ "pie" ];
 

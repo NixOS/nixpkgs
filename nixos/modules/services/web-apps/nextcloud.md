@@ -119,13 +119,7 @@ Auto updates for Nextcloud apps can be enabled using
   - **Server-side encryption.**
     Nextcloud supports [server-side encryption (SSE)](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html).
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
-    to external storage such as S3. Please note that this won't work anymore when using OpenSSL 3
-    for PHP's openssl extension and **Nextcloud 25 or older** because this is implemented using the
-    legacy cipher RC4. For Nextcloud26 this isn't relevant anymore, because Nextcloud has an RC4 implementation
-    written in native PHP and thus doesn't need `ext-openssl` for that anymore.
-    If [](#opt-system.stateVersion) is *above* `22.05`,
-    this is disabled by default. To turn it on again and for further information please refer to
-    [](#opt-services.nextcloud.enableBrokenCiphersForSSE).
+    to external storage such as S3.
 
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 

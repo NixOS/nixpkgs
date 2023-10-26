@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "adafruit-nrfutil";
-  version = "0.5.3.post17";
+  version = "1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_nRF52_nrfutil";
-    rev = version;
-    hash = "sha256-mHHKOQE9AGBX8RAyaPOy+JS3fTs98+AFdq9qsVy7go4=";
+    rev = "refs/tags/appveyor-test-release-${version}";
+    hash = "sha256-wsspDg8XwEtJwJye6Z3TXaIN1TcfI7gYDah3L/xiiLo=";
   };
 
   patches = [

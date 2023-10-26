@@ -13,13 +13,17 @@ let
   llvmMajor = lib.versions.major llvm.version;
   isROCm = lib.hasPrefix "rocm" llvm.pname;
 
-  # ROCm will always be at the latest version
+  # ROCm, if actively updated will always be at the latest version
   branch =
-    if llvmMajor == "16" then rec {
+    if llvmMajor == "17" || isROCm then rec {
+      version = "17.0.0";
+      rev = "v${version}";
+      hash = "sha256-Rzm5Py9IPFtS9G7kME+uSwZ/0gPGW6MlL35ZWk4LfHM=";
+    } else if llvmMajor == "16" then rec {
       version = "16.0.0";
       rev = "v${version}";
       hash = "sha256-EUabcYqSjXshbPmcs1DRLvCSL1nd9rEdpqELBrItCW8=";
-    } else if llvmMajor == "15" || isROCm then rec {
+    } else if llvmMajor == "15" then rec {
       version = "15.0.0";
       rev = "v${version}";
       hash = "sha256-OsDohXRxovtEXaWiRGp8gJ0dXmoALyO+ZimeSO8aPVI=";

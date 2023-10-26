@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ltris";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
-    hash = "sha256-wjziFFTAOJxSl6fvLhTv6ATZQGJefusDhqKXgOwsRvY=";
+    hash = "sha256-EpHGpkLQa57hU6wKLnhVosmD6DnGGPGilN8E2ClSXLA=";
   };
 
   buildInputs = [

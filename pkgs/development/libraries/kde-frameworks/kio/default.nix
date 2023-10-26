@@ -26,6 +26,7 @@ mkDerivation {
     kded
   ];
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
 
@@ -35,4 +36,7 @@ mkDerivation {
       hash = "sha256-4NxI2mD/TdthvrzgatCAlM6VN3N38i3IJUHh0Bs8Fjk=";
     })
  ];
+  meta = {
+    homepage = "https://api.kde.org/frameworks/kio/html/";
+  };
 }

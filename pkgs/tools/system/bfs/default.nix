@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bfs";
-  version = "3.0.1";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     repo = "bfs";
     owner = "tavianator";
     rev = version;
-    sha256 = "sha256-/CiQUK6nmu3MtkG5PMQPn05qIO/M0Oy/LdBI/8oFdqA=";
+    hash = "sha256-45pWJjC2ol89HYGxi3QP8Y9/pFRx7NBNyYCK4RN2SXk=";
   };
 
   buildInputs = [ oniguruma ] ++ lib.optionals stdenv.isLinux [ libcap acl ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tavianator/bfs";
     license = licenses.bsd0;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yesbox ];
+    maintainers = with maintainers; [ yesbox cafkafk ];
+    mainProgram = "bfs";
   };
 }

@@ -2,15 +2,13 @@
 , fetchFromGitHub
 , llvmPackages_15
 , lld_15
-, rocm-device-libs
 , python3
-, rocm-runtime
 , cmake
 , boost
 , libxml2
 , libffi
 , makeWrapper
-, hip
+, rocmPackages
 , rocmSupport ? false
 }:
 let
@@ -40,8 +38,8 @@ stdenv.mkDerivation rec {
     llvmPackages_15.libclang.dev
     llvmPackages_15.llvm
   ] ++ lib.optionals rocmSupport [
-    hip
-    rocm-runtime
+    rocmPackages.clr
+    rocmPackages.rocm-runtime
   ];
 
   # opensycl makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
       --add-flags "-L${llvmPackages_15.openmp}/lib" \
       --add-flags "-I${llvmPackages_15.openmp.dev}/include" \
   '' + lib.optionalString rocmSupport ''
-    --add-flags "--rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
+    --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
   '';
 
   meta = with lib; {

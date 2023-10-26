@@ -20,20 +20,20 @@
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "12";
+        patch = "13";
         suffix = "";
       };
-      hash = "sha256-r7dL8ZEw56R9EDEsj154TyTgUnmB6raOIFRs+4ZYMLg=";
+      hash = "sha256-XIiEhmhkDT4VKzW0U27xwjsspL0slX7x7LsFP1cd0/Y=";
     };
 
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "4";
+        patch = "5";
         suffix = "";
       };
-      hash = "sha256-Lw5AnfKrV6qfxMvd+5dq9E5OVb9vYZ7ua8XCKXJkp/Y=";
+      hash = "sha256-hc0S6c8dbVpF8X96/hzr5+5ijTKCKBxJLoat9jbe+j8=";
     };
   };
 
@@ -103,6 +103,18 @@ in {
     inherit passthruFun;
   };
 
+  python313 = callPackage ./cpython {
+    self = __splicedPackages.python313;
+    sourceVersion = {
+      major = "3";
+      minor = "13";
+      patch = "0";
+      suffix = "a1";
+    };
+    hash = "sha256-8Cgb8izABBQ2HBT8kZcYPn6y6rtylla2lEIiT7tj7ss=";
+    inherit (darwin) configd;
+    inherit passthruFun;
+  };
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (callPackage ./cpython ({
     self = __splicedPackages.python3Minimal;
@@ -127,7 +139,7 @@ in {
     enableOptimizations = false;
     enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python310)).overrideAttrs(old: {
+  } // sources.python311)).overrideAttrs(old: {
     # TODO(@Artturin): Add this to the main cpython expr
     strictDeps = true;
     pname = "python3-minimal";

@@ -4,7 +4,7 @@ use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
     fs,
-    io::{self, Read},
+    io::Write,
     process::{Command, Stdio},
 };
 use tempfile::{tempdir, TempDir};
@@ -106,7 +106,7 @@ impl Package {
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
-                let mut body = util::get_url_with_retry(&hosted)?;
+                let body = util::get_url_body_with_retry(&hosted)?;
 
                 let workdir = tempdir()?;
 
@@ -120,7 +120,7 @@ impl Package {
                     .stdin(Stdio::piped())
                     .spawn()?;
 
-                io::copy(&mut body, &mut cmd.stdin.take().unwrap())?;
+                cmd.stdin.take().unwrap().write_all(&body)?;
 
                 let exit = cmd.wait()?;
 
@@ -154,13 +154,7 @@ impl Package {
 
     pub fn tarball(&self) -> anyhow::Result<Vec<u8>> {
         match &self.specifics {
-            Specifics::Registry { .. } => {
-                let mut body = Vec::new();
-
-                util::get_url_with_retry(&self.url)?.read_to_end(&mut body)?;
-
-                Ok(body)
-            }
+            Specifics::Registry { .. } => Ok(util::get_url_body_with_retry(&self.url)?),
             Specifics::Git { workdir } => Ok(Command::new("tar")
                 .args([
                     "--sort=name",

@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "parany";
-  version = "14.0.0";
+  version = "14.0.1";
 
   minimalOCamlVersion = "4.08";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "UnixJunkie";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-L5jHm3gZ2XIJ7jMUb/KvpSa/bnprEX75/P3BCMSe9Ok=";
+    hash = "sha256-QR3Rq30iKhft+9tVCgJLOq9bwJe7bcay/kMTXjjCLjE=";
   };
 
   propagatedBuildInputs = [ cpu ];

@@ -17,7 +17,7 @@ let
       , version, hash, psqlSchema
 
       # for tests
-      , nixosTests, thisAttr
+      , testers, nixosTests, thisAttr
 
       # JIT
       , jitSupport ? false
@@ -34,10 +34,11 @@ let
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
 
-    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
-  in stdenv'.mkDerivation rec {
     pname = "postgresql";
-    inherit version;
+
+    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
+  in stdenv'.mkDerivation (finalAttrs: {
+    inherit pname version;
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
@@ -110,23 +111,50 @@ let
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
 
-    ] ++ lib.optionals (stdenv'.hostPlatform.isMusl && atLeast "12") [
-      (fetchpatch {
-        url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/icu-collations-hack.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
-        hash = "sha256-Yb6lMBDqeVP/BLMyIr5rmR6OkaVzo68cV/+cL2LOe/M=";
-      })
-    ] ++ lib.optionals (stdenv'.hostPlatform.isMusl && atLeast "13") [
-      (if olderThan "14" then
-        fetchpatch {
-           url = "https://git.alpinelinux.org/aports/plain/main/postgresql13/disable-test-collate.icu.utf8.patch?id=69faa146ec9fff3b981511068f17f9e629d4688b";
-           hash = "sha256-IOOx7/laDYhTz1Q1r6H1FSZBsHCgD4lHvia+/os7CCo=";
-         }
-       else
-         fetchpatch {
-           url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
-           hash = "sha256-pnl+wM3/IUyq5iJzk+h278MDA9R0GQXQX8d4wJcB2z4=";
-         })
-    ] ++ lib.optionals stdenv'.isLinux  [
+    ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
+      let
+        self = {
+          "12" = {
+            icu-collations-hack = fetchurl {
+              url = "https://git.alpinelinux.org/aports/plain/testing/postgresql12/icu-collations-hack.patch?id=d5227c91adda59d4e7f55f13468f0314e8869174";
+              hash = "sha256-wuwjvGHArkRNwFo40g3p43W32OrJohretlt6iSRlJKg=";
+            };
+          };
+          "13" = {
+            inherit (self."14") icu-collations-hack;
+            disable-test-collate-icu-utf8 = fetchurl {
+              url = "https://git.alpinelinux.org/aports/plain/main/postgresql13/disable-test-collate.icu.utf8.patch?id=69faa146ec9fff3b981511068f17f9e629d4688b";
+              hash = "sha256-jS/qxezaiaKhkWeMCXwpz1SDJwUWn9tzN0uKaZ3Ph2Y=";
+            };
+          };
+          "14" = {
+            icu-collations-hack = fetchurl {
+              url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/icu-collations-hack.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
+              hash = "sha256-wuwjvGHArkRNwFo40g3p43W32OrJohretlt6iSRlJKg=";
+            };
+            disable-test-collate-icu-utf8 = fetchurl {
+              url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
+              hash = "sha256-jXe23AxnFjEl+TZQm4R7rStk2Leo08ctxMNmu1xr5zM=";
+            };
+          };
+          "15" = {
+            icu-collations-hack = fetchurl {
+              url = "https://git.alpinelinux.org/aports/plain/main/postgresql15/icu-collations-hack.patch?id=f424e934e6d076c4ae065ce45e734aa283eecb9c";
+              hash = "sha256-HgtmhF4OJYU9macGJbTB9PjQi/yW7c3Akm3U0niWs8I=";
+            };
+          };
+          "16" = {
+            icu-collations-hack = fetchurl {
+              url = "https://git.alpinelinux.org/aports/plain/main/postgresql16/icu-collations-hack.patch?id=08a24be262339fd093e641860680944c3590238e";
+              hash = "sha256-+urQdVIlADLdDPeT68XYv5rljhbK8M/7mPZn/cF+FT0=";
+            };
+          };
+        };
+
+        patchesForVersion = self.${lib.versions.major version} or (throw "no musl patches for postgresql ${version}");
+      in
+        lib.attrValues patchesForVersion
+    ) ++ lib.optionals stdenv'.isLinux  [
       (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
     ];
 
@@ -230,6 +258,8 @@ let
       withJIT = if jitSupport then this else jitToggle;
       withoutJIT = if jitSupport then jitToggle else this;
 
+      dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
+
       pkgs = let
         scope = {
           postgresql = this;
@@ -254,6 +284,7 @@ let
 
       tests = {
         postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
         postgresql-jit = nixosTests.postgresql-jit.${thisAttr};
       };
@@ -266,6 +297,7 @@ let
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
+      pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 
       # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
@@ -280,7 +312,7 @@ let
       # a query, postgres would coredump with `Illegal instruction`.
       broken = jitSupport && (stdenv.hostPlatform != stdenv.buildPlatform);
     };
-  };
+  });
 
   postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
     name = "postgresql-and-plugins-${postgresql.version}";

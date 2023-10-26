@@ -36,10 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp "$out/bin/fs-uae-launcher" \
       --set PYTHONPATH "$PYTHONPATH"
 
-    # fs-uae-launcher search side by side for fs-uae
+    # fs-uae-launcher search side by side for executables and shared files
     # see $src/fsgs/plugins/pluginexecutablefinder.py#find_executable
     ln -s ${fsuae}/bin/fs-uae $out/bin
     ln -s ${fsuae}/bin/fs-uae-device-helper $out/bin
+    ln -s ${fsuae}/share/fs-uae $out/share/fs-uae
   '';
 
   meta = {

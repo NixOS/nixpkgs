@@ -353,6 +353,10 @@ crate_: lib.makeOverridable
           extraRustcOpts buildTests codegenUnits;
       };
       dontStrip = !release;
+
+      # We need to preserve metadata in .rlib, which might get stripped on macOS. See https://github.com/NixOS/nixpkgs/issues/218712
+      stripExclude = [ "*.rlib" ];
+
       installPhase = installCrate crateName metadata buildTests;
 
       # depending on the test setting we are either producing something with bins
@@ -362,6 +366,10 @@ crate_: lib.makeOverridable
 
       meta = {
         mainProgram = crateName;
+        badPlatforms = [
+          # Rust is currently unable to target the n32 ABI
+          lib.systems.inspect.patterns.isMips64n32
+        ];
       };
     } // extraDerivationAttrs
     )

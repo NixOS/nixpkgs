@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3.pkgs.sphinx
     texinfo
+    protobufc
   ];
 
   buildInputs = [
@@ -227,7 +228,8 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ woffs thillux ];
-    platforms = platforms.unix;
+    # adapt to platforms stated in http://docs.frrouting.org/en/latest/overview.html#supported-platforms
+    platforms = (platforms.linux ++ platforms.freebsd ++ platforms.netbsd ++ platforms.openbsd);
   };
 
   passthru.tests = { inherit (nixosTests) frr; };

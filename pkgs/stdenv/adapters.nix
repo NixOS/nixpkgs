@@ -192,18 +192,15 @@ rec {
   useMoldLinker = stdenv: let
     bintools = stdenv.cc.bintools.override {
       extraBuildCommands = ''
-        wrap ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-        wrap ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
       '';
     };
   in stdenv.override (old: {
-    cc = stdenv.cc.override {
-      inherit bintools;
-    };
-    allowedRequisites =
-      lib.mapNullable (rs: rs ++ [ bintools pkgs.mold (lib.getLib pkgs.mimalloc) (lib.getLib pkgs.openssl) ]) (stdenv.allowedRequisites or null);
-      # gcc >12.1.0 supports '-fuse-ld=mold'
-      # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
+    allowedRequisites = null;
+    cc = stdenv.cc.override { inherit bintools; };
+    # gcc >12.1.0 supports '-fuse-ld=mold'
+    # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
     # https://github.com/rui314/mold#how-to-use
     } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
     mkDerivationFromStdenv = extendMkDerivationArgs old (args: {

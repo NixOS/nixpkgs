@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
     popd
   '';
 
+  outputs = [ "out" "dev" "lib" ];
+
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];
 
   buildInputs = [

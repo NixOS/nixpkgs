@@ -8,6 +8,7 @@
 , rdkafka
 , oniguruma
 , zstd
+, rust-jemalloc-sys
 , Security
 , libiconv
 , coreutils
@@ -59,7 +60,7 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
+  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library

@@ -29,7 +29,7 @@
 , protobuf
 }:
 let
-  version = "0.2.28";
+  version = "0.2.30";
 in
 buildPythonPackage {
   pname = "fschat";
@@ -39,8 +39,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "lm-sys";
     repo = "FastChat";
-    rev = "v${version}";
-    hash = "sha256-nTP4zY6mJykzKb6LBWosg77mwE33vq9eiYSpAlZU5NI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SkrdRpmbxnt/Xn8TTmozxhr3fPeAFPP7X0cM9vJC9Sc=";
   };
 
   nativeBuildInputs = [

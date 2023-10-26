@@ -8,7 +8,7 @@ with pkgs;
     llvmTests = let
       pkgSets = lib.pipe pkgNames [
         (filter (lib.hasPrefix "llvmPackages"))
-        (filter (n: n != "llvmPackages_rocm"))
+        (filter (n: n != "rocmPackages.llvm"))
         (filter (n: n != "llvmPackages_latest"))
         (filter (n: n != "llvmPackages_git"))
       ];
@@ -104,6 +104,7 @@ with pkgs;
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
+  fetchFromBittorrent = callPackages ../build-support/fetchbittorrent/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
   fetchpatch2 = callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; };
   fetchDebianPatch = callPackages ../build-support/fetchdebianpatch/tests.nix { };

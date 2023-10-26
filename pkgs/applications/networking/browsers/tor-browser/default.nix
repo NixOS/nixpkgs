@@ -34,8 +34,6 @@
 , mediaSupport ? true
 , ffmpeg
 
-, gmp
-
 # Wrapper runtime
 , coreutils
 , glibcLocales
@@ -88,33 +86,27 @@ lib.warnIf (useHardenedMalloc != null)
     ffmpeg
   ];
 
-  # Library search path for the fte transport
-  fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
-
-  # Upstream source
-  version = "12.5.6";
-
-  lang = "ALL";
+  version = "13.0";
 
   sources = {
     x86_64-linux = fetchurl {
       urls = [
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
-        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
-        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-lZlGhyGDT9Vxox3ghfFSIZd3sazNyL23k0UtipaIGR8=";
+      hash = "sha256-zdmPbmJo5FDoOjob+9TDCvCgKgLHvLi3bOMhcZg8DVM=";
     };
 
     i686-linux = fetchurl {
       urls = [
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
-        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
-        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
-        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
+        "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
+        "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-3Z3S6P3wkZeC/lhgO7XDdDDQ6cpyOX+e3SBuh47aMl8=";
+      hash = "sha256-Hlvx2C4DF/wcHo9ES+g9UUgNFGDokW5OAX3FeOvR+fY=";
     };
   };
 
@@ -343,15 +335,11 @@ stdenv.mkDerivation rec {
     # chance that TBB would continue using old font files.
     rm -rf "\$HOME/.cache/fontconfig"
 
-    # Workaround a bug in 12.0.X that Tor directories are not cleaned up and tor gets confused where its socket is
-    rm -rf \$XDG_RUNTIME_DIR/Tor*
-
     # Manually specify data paths (by default TB attempts to create these in the store)
     {
       echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
       echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
       echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
-      echo "user_pref(\"network.proxy.socks\", \"file://\$XDG_RUNTIME_DIR/Tor/socks.socket\");"
     } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
@@ -467,7 +455,7 @@ stdenv.mkDerivation rec {
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = licenses.free;
+    license = with licenses; [ mpl20 lgpl21Plus lgpl3Plus free ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

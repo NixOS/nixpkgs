@@ -103,11 +103,15 @@ let
   in result;
 
   configFile = if cfg.settingsFile != null then
-    assert cfg.settings == {} && cfg.keyFiles == [];
+    # Note: with extraConfig, the 23.05 compat code did include keyFiles from settingsFile.
+    assert cfg.settings == {} && (cfg.keyFiles == [] || cfg.extraConfig != null);
     cfg.settingsFile
-  else pkgs.writeTextFile {
+  else
+    mkConfigFile yamlConfig;
+
+  mkConfigFile = configString: pkgs.writeTextFile {
     name = "knot.conf";
-    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + yamlConfig;
+    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + configString;
     # TODO: maybe we could do some checks even when private keys complicate this?
     checkPhase = lib.optionalString (cfg.keyFiles == []) ''
       ${cfg.package}/bin/knotc --config=$out conf-check
@@ -174,7 +178,7 @@ in {
         description = lib.mdDoc ''
           As alternative to ``settings``, you can provide whole configuration
           directly in the almost-YAML format of Knot DNS.
-          You might want to utilize ``writeTextFile`` for this.
+          You might want to utilize ``pkgs.writeText "knot.conf" "longConfigString"`` for this.
         '';
       };
 
@@ -189,9 +193,9 @@ in {
     };
   };
   imports = [
-    # Compatibility with NixOS 23.05.  At least partial, as it fails assert if used with keyFiles.
+    # Compatibility with NixOS 23.05.
     (mkChangedOptionModule [ "services" "knot" "extraConfig" ] [ "services" "knot" "settingsFile" ]
-      (config: pkgs.writeText "knot.conf" config.services.knot.extraConfig)
+      (config: mkConfigFile config.services.knot.extraConfig)
     )
   ];
 

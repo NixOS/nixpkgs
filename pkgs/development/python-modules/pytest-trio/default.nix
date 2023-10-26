@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-trio";
-  version = "0.7.0";
+  version = "0.8.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bhh2nknhp14jzsx4zzpqm4qnfaihyi65cjf6kf6qgdhc0ax6nf4";
+    sha256 = "sha256-gUH35Yk/pBD2EdCEt8D0XQKWU8BwmX5xtAW10qRhoYk=";
   };
 
   buildInputs = [ pytest ];

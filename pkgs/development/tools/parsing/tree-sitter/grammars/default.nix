@@ -66,6 +66,7 @@
   tree-sitter-php = lib.importJSON ./tree-sitter-php.json;
   tree-sitter-pioasm = lib.importJSON ./tree-sitter-pioasm.json;
   tree-sitter-prisma = lib.importJSON ./tree-sitter-prisma.json;
+  tree-sitter-proto = lib.importJSON ./tree-sitter-proto.json;
   tree-sitter-pug = lib.importJSON ./tree-sitter-pug.json;
   tree-sitter-python = lib.importJSON ./tree-sitter-python.json;
   tree-sitter-ql = lib.importJSON ./tree-sitter-ql.json;
@@ -101,4 +102,5 @@
   tree-sitter-yaml = lib.importJSON ./tree-sitter-yaml.json;
   tree-sitter-yang = lib.importJSON ./tree-sitter-yang.json;
   tree-sitter-zig = lib.importJSON ./tree-sitter-zig.json;
+  tree-sitter-wgsl = lib.importJSON ./tree-sitter-wgsl.json;
 }

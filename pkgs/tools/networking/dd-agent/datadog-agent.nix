@@ -10,21 +10,23 @@
 , hostname
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , extraTags ? [ ]
+, testers
+, datadog-agent
 }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "5.0.89";
+  payloadVersion = "5.0.97";
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.45.1";
+  version = "7.48.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
-    sha256 = "sha256-bG8wsSQvZcG4/Th6mWVdVX9vpeYBZx8FxwdYXpIdXnU=";
+    hash = "sha256-3PFplTR/L2xJjQ5GEz2ow28SEHWafOmiLjIQHQqAaso=";
   };
   rtloader = stdenv.mkDerivation {
     pname = "datadog-agent-rtloader";
@@ -41,7 +43,7 @@ in buildGoModule rec {
 
   doCheck = false;
 
-  vendorHash = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+  vendorHash = "sha256-o7CTw7IIS5xueW20O1wKDV1Yji7PhGhp+6+i2ymKhxE=";
 
   subPackages = [
     "cmd/agent"
@@ -84,9 +86,9 @@ in buildGoModule rec {
   postPatch = ''
     sed -e "s|PyChecksPath =.*|PyChecksPath = \"$out/${python.sitePackages}\"|" \
         -e "s|distPath =.*|distPath = \"$out/share/datadog-agent\"|" \
-        -i cmd/agent/common/common_nix.go
+        -i cmd/agent/common/path/path_nix.go
     sed -e "s|/bin/hostname|${lib.getBin hostname}/bin/hostname|" \
-        -i pkg/util/hostname_nix.go
+        -i pkg/util/hostname/fqdn_nix.go
   '';
 
   # Install the config files and python modules from the "dist" dir
@@ -102,6 +104,11 @@ in buildGoModule rec {
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
       --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
+
+  passthru.tests.version = testers.testVersion {
+    package = datadog-agent;
+    command = "agent version";
+  };
 
   meta = with lib; {
     description = ''

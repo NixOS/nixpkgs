@@ -36,6 +36,19 @@ in
       '';
     };
 
+    cageArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "-s" ];
+      example = lib.literalExpression
+        ''
+          [ "-s" "-m" "last" ]
+        '';
+      description = lib.mdDoc ''
+        Additional arguments to be passed to
+        [cage](https://github.com/cage-kiosk/cage).
+      '';
+    };
+
     extraCss = lib.mkOption {
       type = lib.types.either lib.types.path lib.types.lines;
       default = "";
@@ -50,7 +63,7 @@ in
   config = lib.mkIf cfg.enable {
     services.greetd = {
       enable = lib.mkDefault true;
-      settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} -s -- ${lib.getExe cfg.package}";
+      settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} ${lib.escapeShellArgs cfg.cageArgs} -- ${lib.getExe cfg.package}";
     };
 
     environment.etc = {

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.21.0";
+  version = "4.22.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-43JeEdgEb6WS7PySW1x08fn02yl9Q/HwwKo6ojaqiH0=";
+    hash = "sha256-nV2aBPZzn7K+QECtCVoLLh5smG31zE2G9jFTKlxh9qM=";
   };
 
   propagatedBuildInputs = [

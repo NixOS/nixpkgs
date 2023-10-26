@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yNWTTjlmMCMTed1SiRep3iUxchQya1GnTVoub1cpR14=";
+    sha256 = "sha256-hmlzv1WaT+KucR7RGPC3bKcIdTxPOvK2s17nDucdu7c=";
   };
 
   strictDeps = true;

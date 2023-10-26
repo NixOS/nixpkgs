@@ -110,7 +110,20 @@ let
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
-  # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
+  # The following two functions, `isGccArchSupported` and
+  # `isGccTuneSupported`, only handle those situations where a flag
+  # (`-march` or `-mtune`) is accepted by one compiler but rejected
+  # by another, and both compilers are relevant to nixpkgs.  We are
+  # not trying to maintain a complete list of all flags accepted by
+  # all versions of all compilers ever in nixpkgs.
+  #
+  # The two main cases of interest are:
+  #
+  # - One compiler is gcc and the other is clang
+  # - One compiler is pkgs.gcc and the other is bootstrap-files.gcc
+  #   -- older compilers (for example bootstrap's GCC 5) fail with
+  #   -march=too-modern-cpu
+
   isGccArchSupported = arch:
     if targetPlatform.isPower then false else # powerpc does not allow -march=
     if isGNU then
@@ -159,6 +172,51 @@ let
     else
       false;
 
+  isGccTuneSupported = tune:
+    # for x86 -mtune= takes the same values as -march, plus two more:
+    if targetPlatform.isx86 then
+      {
+        generic = true;
+        intel = true;
+      }.${tune} or (isGccArchSupported tune)
+    # on arm64, the -mtune= values are specific processors
+    else if targetPlatform.isAarch64 then
+      (if isGNU then
+        {
+          cortex-a53              = versionAtLeast ccVersion "4.8";  # gcc 8c075f
+          cortex-a72              = versionAtLeast ccVersion "5.1";  # gcc d8f70d
+          "cortex-a72.cortex-a53" = versionAtLeast ccVersion "5.1";  # gcc d8f70d
+        }.${tune} or false
+       else if isClang then
+         {
+           cortex-a53             = versionAtLeast ccVersion "3.9"; # llvm dfc5d1
+         }.${tune} or false
+       else false)
+    else if targetPlatform.isPower then
+      # powerpc does not support -march
+      true
+    else if targetPlatform.isMips then
+      # for mips -mtune= takes the same values as -march
+      isGccArchSupported tune
+    else
+      false;
+
+  # Clang does not support as many `-mtune=` values as gcc does;
+  # this function will return the best possible approximation of the
+  # provided `-mtune=` value, or `null` if none exists.
+  #
+  # Note: this function can make use of ccVersion; for example, `if
+  # versionOlder ccVersion "12" then ...`
+  findBestTuneApproximation = tune:
+    let guess = if isClang
+                then {
+                  # clang does not tune for big.LITTLE chips
+                  "cortex-a72.cortex-a53" = "cortex-a72";
+                }.${tune} or tune
+                else tune;
+    in if isGccTuneSupported guess
+       then guess
+       else null;
 
   darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
@@ -469,6 +527,7 @@ stdenv.mkDerivation {
     ''
     + optionalString (libcxx.isLLVM or false) ''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
       echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
     ''
@@ -558,10 +617,12 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.thumb) ''
       echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
     ''
-    + optionalString (targetPlatform ? gcc.tune &&
-                      isGccArchSupported targetPlatform.gcc.tune) ''
-      echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
-    ''
+    + (let tune = if targetPlatform ? gcc.tune
+                  then findBestTuneApproximation targetPlatform.gcc.tune
+                  else null;
+      in optionalString (tune != null) ''
+      echo "-mtune=${tune}" >> $out/nix-support/cc-cflags-before
+    '')
 
     # TODO: categorize these and figure out a better place for them
     + optionalString targetPlatform.isWindows ''

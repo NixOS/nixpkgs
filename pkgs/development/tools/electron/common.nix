@@ -42,13 +42,13 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ [
+  patches = base.patches ++ lib.optional (lib.versionOlder info.version "28")
     (substituteAll {
       name = "version.patch";
       src = if lib.versionAtLeast info.version "27" then ./version.patch else ./version-old.patch;
       inherit (info) version;
     })
-  ];
+  ;
 
   unpackPhase = ''
     runHook preUnpack
@@ -167,6 +167,8 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_check_raw_ptr_fields = false;
   } // lib.optionalAttrs (lib.versionOlder info.version "26")  {
     use_gnome_keyring = false;
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "28")  {
+    override_electron_version = info.version;
   };
 
   installPhase = ''

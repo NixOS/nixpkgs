@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.3.1";
   pyproject = true;
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "welch";

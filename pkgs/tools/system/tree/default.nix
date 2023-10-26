@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "tree";
   };
 }

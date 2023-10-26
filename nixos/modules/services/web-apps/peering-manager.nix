@@ -35,7 +35,15 @@ in {
         Enable Peering Manager.
 
         This module requires a reverse proxy that serves `/static` separately.
-        See this [example](https://github.com/peering-manager-community/peering-manager/blob/develop/contrib/nginx.conf/) on how to configure this.
+        See this [example](https://github.com/peering-manager/contrib/blob/main/nginx.conf on how to configure this.
+      '';
+    };
+
+    enableScheduledTasks = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Set up [scheduled tasks](https://peering-manager.readthedocs.io/en/stable/setup/8-scheduled-tasks/)
       '';
     };
 
@@ -194,32 +202,30 @@ in {
     };
 
     systemd.services = let
-      defaultServiceConfig = {
-        WorkingDirectory = "/var/lib/peering-manager";
-        User = "peering-manager";
-        Group = "peering-manager";
-        StateDirectory = "peering-manager";
-        StateDirectoryMode = "0750";
-        Restart = "on-failure";
-      };
-    in {
-      peering-manager-migration = {
-        description = "Peering Manager migrations";
-        wantedBy = [ "peering-manager.target" ];
-
+      defaults = {
         environment = {
           PYTHONPATH = pkg.pythonPath;
         };
-
-        serviceConfig = defaultServiceConfig // {
+        serviceConfig = {
+          WorkingDirectory = "/var/lib/peering-manager";
+          User = "peering-manager";
+          Group = "peering-manager";
+          StateDirectory = "peering-manager";
+          StateDirectoryMode = "0750";
+          Restart = "on-failure";
+        };
+      };
+    in {
+      peering-manager-migration = lib.recursiveUpdate defaults {
+        description = "Peering Manager migrations";
+        wantedBy = [ "peering-manager.target" ];
+        serviceConfig = {
           Type = "oneshot";
-          ExecStart = ''
-            ${pkg}/bin/peering-manager migrate
-          '';
+          ExecStart = "${pkg}/bin/peering-manager migrate";
         };
       };
 
-      peering-manager = {
+      peering-manager = lib.recursiveUpdate defaults {
         description = "Peering Manager WSGI Service";
         wantedBy = [ "peering-manager.target" ];
         after = [ "peering-manager-migration.service" ];
@@ -228,11 +234,7 @@ in {
           ${pkg}/bin/peering-manager remove_stale_contenttypes --no-input
         '';
 
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
-
-        serviceConfig = defaultServiceConfig // {
+        serviceConfig = {
           ExecStart = ''
             ${pkg.python.pkgs.gunicorn}/bin/gunicorn peering_manager.wsgi \
               --bind ${cfg.listenAddress}:${toString cfg.port} \
@@ -241,45 +243,92 @@ in {
         };
       };
 
-      peering-manager-rq = {
+      peering-manager-rq = lib.recursiveUpdate defaults {
         description = "Peering Manager Request Queue Worker";
         wantedBy = [ "peering-manager.target" ];
         after = [ "peering-manager.service" ];
+        serviceConfig.ExecStart = "${pkg}/bin/peering-manager rqworker high default low";
+      };
 
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
-
-        serviceConfig = defaultServiceConfig // {
-          ExecStart = ''
-            ${pkg}/bin/peering-manager rqworker high default low
-          '';
+      peering-manager-housekeeping = lib.recursiveUpdate defaults {
+        description = "Peering Manager housekeeping job";
+        after = [ "peering-manager.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkg}/bin/peering-manager housekeeping";
         };
       };
 
-      peering-manager-housekeeping = {
-        description = "Peering Manager housekeeping job";
+      peering-manager-peeringdb-sync = lib.recursiveUpdate defaults {
+        description = "PeeringDB sync";
         after = [ "peering-manager.service" ];
-
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
-
-        serviceConfig = defaultServiceConfig // {
+        serviceConfig = {
           Type = "oneshot";
-          ExecStart = ''
-            ${pkg}/bin/peering-manager housekeeping
-          '';
+          ExecStart = "${pkg}/bin/peering-manager peeringdb_sync";
+        };
+      };
+
+      peering-manager-prefix-fetch = lib.recursiveUpdate defaults {
+        description = "Fetch IRR AS-SET prefixes";
+        after = [ "peering-manager.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkg}/bin/peering-manager grab_prefixes";
+        };
+      };
+
+      peering-manager-configuration-deployment = lib.recursiveUpdate defaults {
+        description = "Push configuration to routers";
+        after = [ "peering-manager.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkg}/bin/peering-manager configure_routers";
+        };
+      };
+
+      peering-manager-session-poll = lib.recursiveUpdate defaults {
+        description = "Poll peering sessions from routers";
+        after = [ "peering-manager.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${pkg}/bin/peering-manager poll_bgp_sessions --all";
         };
       };
     };
 
-    systemd.timers.peering-manager-housekeeping = {
-      description = "Run Peering Manager housekeeping job";
-      wantedBy = [ "timers.target" ];
+    systemd.timers = {
+      peering-manager-housekeeping = {
+        description = "Run Peering Manager housekeeping job";
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = "daily";
+      };
 
-      timerConfig = {
-        OnCalendar = "daily";
+      peering-manager-peeringdb-sync = {
+        enable = lib.mkDefault cfg.enableScheduledTasks;
+        description = "Sync PeeringDB at 2:30";
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = "02:30:00";
+      };
+
+      peering-manager-prefix-fetch = {
+        enable = lib.mkDefault cfg.enableScheduledTasks;
+        description = "Fetch IRR AS-SET prefixes at 4:30";
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = "04:30:00";
+      };
+
+      peering-manager-configuration-deployment = {
+        enable = lib.mkDefault cfg.enableScheduledTasks;
+        description = "Push router configuration every hour 5 minutes before full hour";
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = "*:55:00";
+      };
+
+      peering-manager-session-poll = {
+        enable = lib.mkDefault cfg.enableScheduledTasks;
+        description = "Poll peering sessions from routers every hour";
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = "*:00:00";
       };
     };
 

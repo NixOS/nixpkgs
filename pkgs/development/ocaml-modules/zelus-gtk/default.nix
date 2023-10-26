@@ -7,7 +7,7 @@ buildDunePackage {
   pname = "zelus-gtk";
   inherit (zelus) version src postPatch;
 
-  minimalOCamlVersion = "4.08.1";
+  minimalOCamlVersion = "4.10";
 
   nativeBuildInputs = [
     zelus

@@ -10,6 +10,21 @@ let
   settingsFormat = pkgs.formats.json { };
   cleanedConfig = converge (filterAttrsRecursive (_: v: v != null && v != {})) cfg.settings;
 
+  isUnixGui = (builtins.substring 0 1 cfg.guiAddress) == "/";
+
+  # Syncthing supports serving the GUI over Unix sockets. If that happens, the
+  # API is served over the Unix socket as well.  This function returns the correct
+  # curl arguments for the address portion of the curl command for both network
+  # and Unix socket addresses.
+  curlAddressArgs = path: if isUnixGui
+    # if cfg.guiAddress is a unix socket, tell curl explicitly about it
+    # note that the dot in front of `${path}` is the hostname, which is
+    # required.
+    then "--unix-socket ${cfg.guiAddress} http://.${path}"
+    # no adjustements are needed if cfg.guiAddress is a network address
+    else "${cfg.guiAddress}${path}"
+    ;
+
   devices = mapAttrsToList (_: device: device // {
     deviceID = device.id;
   }) cfg.settings.devices;
@@ -36,17 +51,15 @@ let
     # be careful not to leak secrets in the filesystem or in process listings
     umask 0077
 
-    # get the api key by parsing the config.xml
-    while
-        ! ${pkgs.libxml2}/bin/xmllint \
-            --xpath 'string(configuration/gui/apikey)' \
-            ${cfg.configDir}/config.xml \
-            >"$RUNTIME_DIRECTORY/api_key"
-    do sleep 1; done
-
-    (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-
     curl() {
+        # get the api key by parsing the config.xml
+        while
+            ! ${pkgs.libxml2}/bin/xmllint \
+                --xpath 'string(configuration/gui/apikey)' \
+                ${cfg.configDir}/config.xml \
+                >"$RUNTIME_DIRECTORY/api_key"
+        do sleep 1; done
+        (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
         ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
@@ -64,14 +77,14 @@ let
       GET_IdAttrName = "deviceID";
       override = cfg.overrideDevices;
       conf = devices;
-      baseAddress = "${cfg.guiAddress}/rest/config/devices";
+      baseAddress = curlAddressArgs "/rest/config/devices";
     };
     dirs = {
       new_conf_IDs = map (v: v.id) folders;
       GET_IdAttrName = "id";
       override = cfg.overrideFolders;
       conf = folders;
-      baseAddress = "${cfg.guiAddress}/rest/config/folders";
+      baseAddress = curlAddressArgs "/rest/config/folders";
     };
   } [
     # Now for each of these attributes, write the curl commands that are
@@ -100,13 +113,13 @@ let
       the Nix configured list of IDs
       */
       + lib.optionalString s.override ''
-        old_conf_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} --raw-output '.[].${s.GET_IdAttrName}')"
-        for id in ''${old_conf_${conf_type}_ids}; do
-          if echo ${lib.concatStringsSep " " s.new_conf_IDs} | grep -q $id; then
-            continue
-          else
-            curl -X DELETE ${s.baseAddress}/$id
-          fi
+        stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
+          --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
+          --raw-output \
+          '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
+        )"
+        for id in ''${stale_${conf_type}_ids}; do
+          curl -X DELETE ${s.baseAddress}/$id
         done
       ''
     ))
@@ -119,15 +132,14 @@ let
     builtins.attrNames
     (lib.subtractLists ["folders" "devices"])
     (map (subOption: ''
-      curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} \
-        ${cfg.guiAddress}/rest/config/${subOption}
+      curl -X PUT -d ${lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})} ${curlAddressArgs "/rest/config/${subOption}"}
     ''))
     (lib.concatStringsSep "\n")
   ]) + ''
     # restart Syncthing if required
-    if curl ${cfg.guiAddress}/rest/config/restart-required |
+    if curl ${curlAddressArgs "/rest/config/restart-required"} |
        ${jq} -e .requiresRestart > /dev/null; then
-        curl -X POST ${cfg.guiAddress}/rest/system/restart
+        curl -X POST ${curlAddressArgs "/rest/system/restart"}
     fi
   '');
 in {
@@ -653,7 +665,7 @@ in {
           ExecStart = ''
             ${cfg.package}/bin/syncthing \
               -no-browser \
-              -gui-address=${cfg.guiAddress} \
+              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
               -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;

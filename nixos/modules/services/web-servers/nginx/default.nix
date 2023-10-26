@@ -329,7 +329,7 @@ let
         listenString = { addr, port, ssl, proxyProtocol ? false, extraParameters ? [], ... }:
           # UDP listener for QUIC transport protocol.
           (optionalString (ssl && vhost.quic) ("
-            listen ${addr}:${toString port} quic "
+            listen ${addr}${optionalString (port != null) ":${toString port}"} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString (extraParameters != []) (concatStringsSep " "
@@ -338,7 +338,7 @@ let
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
-            listen ${addr}:${toString port} "
+            listen ${addr}${optionalString (port != null) ":${toString port}"} "
           + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "

@@ -16,23 +16,6 @@
 let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
 
-  # TODO: if another package starts using cargo-c (seems likely),
-  # factor this out into a makeCargoChook expression in
-  # pkgs/build-support/rust/hooks/default.nix
-  ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-  cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
-  ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-  cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
-  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
-  setEnvVars = ''
-    env \
-      "CC_${rustBuildPlatform}"="${ccForBuild}" \
-      "CXX_${rustBuildPlatform}"="${cxxForBuild}" \
-      "CC_${rustTargetPlatform}"="${ccForHost}" \
-      "CXX_${rustTargetPlatform}"="${cxxForHost}" \
-  '';
-
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
   version = "0.6.6";
@@ -64,13 +47,11 @@ in rustPlatform.buildRustPackage rec {
   checkType = "debug";
 
   postBuild =  ''
-    ${setEnvVars} \
-    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    ${setEnvVars} \
-    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {

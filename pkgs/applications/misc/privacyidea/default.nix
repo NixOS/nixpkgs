@@ -23,7 +23,7 @@ let
         doCheck = false;
       });
       # version 3.3.0+ does not support SQLAlchemy 1.3
-      factory_boy = super.factory_boy.overridePythonAttrs (oldAttrs: rec {
+      factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
         version = "3.2.1";
         src = oldAttrs.src.override {
           inherit version;
@@ -257,7 +257,7 @@ python3'.pkgs.buildPythonPackage rec {
     description = "Multi factor authentication system (2FA, MFA, OTP Server)";
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
-    maintainers = with maintainers; [ globin ma27 ];
+    maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
   };
 }

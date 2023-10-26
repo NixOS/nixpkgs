@@ -10,7 +10,7 @@
 
 # propagated
 , inflection
-, factory_boy
+, factory-boy
 , typing-extensions
 
 # tests
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    factory_boy
+    factory-boy
     inflection
     typing-extensions
   ];

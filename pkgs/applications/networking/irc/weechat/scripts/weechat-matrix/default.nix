@@ -34,10 +34,19 @@ in buildPythonPackage {
     hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
   };
 
-  patches = fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
-    sha256 = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
-  };
+  patches = [
+    # server: remove set_npn_protocols()
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
+      hash = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
+    })
+    # Fix compatibility with matrix-nio 0.21
+    (fetchpatch {
+      url = "https://github.com/poljar/weechat-matrix/commit/feae9fda26ea9de98da9cd6733980a203115537e.patch";
+      hash = "sha256-MAfxJ85dqz5PNwp/GJdHA2VvXVdWh+Ayx5g0oHiw9rs=";
+      includes = ["matrix/config.py"];
+    })
+  ];
 
   propagatedBuildInputs = [
     pyopenssl

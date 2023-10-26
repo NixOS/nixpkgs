@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.13.3";
+  version = "0.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "GeoAlchemy2";
     inherit version;
-    hash = "sha256-2Fp96qmiMJAXM/dBnWv/VnS4cwZR3hoH8rZCOqSSXQk=";
+    hash = "sha256-Ygsxy/l6NoskhtvPzTbaIIGCfpM9QWO8uUIEO3m1Reg=";
   };
 
   nativeBuildInputs = [

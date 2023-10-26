@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bambinos";
-    repo = pname;
+    repo = "bambi";
     rev = "refs/tags/${version}";
-    hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
+    hash = "sha256-36D8u813v2vWQdNqBWfM8YVnAJuLGvn5vqdHs94odmU=";
   };
 
   nativeBuildInputs = [
@@ -55,16 +55,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_alias_equal_to_name"
     "test_custom_prior"
     "test_data_is_copied"
     "test_distributional_model"
+    "test_extra_namespace"
     "test_gamma_with_splines"
-    "test_non_distributional_model_with_categories"
     "test_non_distributional_model"
     "test_normal_with_splines"
     "test_predict_offset"
-    # Assertion issue
-    "test_custom_likelihood_function"
+    "test_predict_new_groups"
+    "test_predict_new_groups_fail"
+    "test_set_alias_warnings"
   ];
 
   pythonImportsCheck = [
@@ -74,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://bambinos.github.io/bambi";
     description = "High-level Bayesian model-building interface";
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

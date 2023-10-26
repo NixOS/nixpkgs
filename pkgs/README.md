@@ -362,24 +362,16 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
 * `meta.mainProgram` must be set when appropriate.
-* `meta.maintainers` should be set.
+* `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
 ### Import From Derivation
 
-Import From Derivation (IFD) is disallowed in Nixpkgs for performance reasons:
-[Hydra] evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
-
-[Hydra]: https://github.com/NixOS/hydra
+[Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
+[Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
 
 Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
-
-<!-- TODO: remove the following and link to Nix manual once https://github.com/NixOS/nix/pull/7332 is merged -->
-
-See also [NixOS Wiki: Import From Derivation].
-
-[NixOS Wiki: Import From Derivation]: https://nixos.wiki/wiki/Import_From_Derivation
 
 ## Sources
 

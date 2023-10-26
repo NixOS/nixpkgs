@@ -101,6 +101,8 @@ buildPythonPackage rec {
     "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
+    "test_unbounded_response"
+    "CookiesMiddlewareTest"
     # Depends on uvloop
     "test_asyncio_enabled_reactor_different_loop"
     "test_asyncio_enabled_reactor_same_loop"

@@ -54,13 +54,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    hash = "sha256-/biwHOSMGpdnYRGrGlDounKKLVaG2XkBgCmpE0IKR/Y=";
+    hash = "sha256-nnNTZ+c7VVGAqwOBMkBlW3rImNjs08Ne35XRkI3ssGo=";
   };
 
   nativeBuildInputs = [
@@ -105,6 +105,9 @@ stdenv.mkDerivation rec {
 
     # Overwrite script, skipping the download
     echo -e '#!/bin/sh\n cd ga-${versionGA};autoreconf -ivf' > src/tools/get-tools-github
+
+    # /usr/bin/env bash fails in sandbox/Makefile setting
+    substituteInPlace src/config/makefile.h --replace '/usr/bin/env bash' "${stdenv.shell}"
 
     patchShebangs ./
   '';

@@ -208,7 +208,7 @@ in
         end
 
         # if we haven't sourced the login config, do it
-        status --is-login; and not set -q __fish_nixos_login_config_sourced
+        status is-login; and not set -q __fish_nixos_login_config_sourced
         and begin
           ${sourceEnv "loginShellInit"}
 
@@ -220,7 +220,7 @@ in
         end
 
         # if we haven't sourced the interactive config, do it
-        status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
+        status is-interactive; and not set -q __fish_nixos_interactive_config_sourced
         and begin
           ${fishAbbrs}
           ${fishAliases}

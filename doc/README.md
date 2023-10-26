@@ -3,6 +3,7 @@
 This directory houses the sources files for the Nixpkgs manual.
 
 You can find the [rendered documentation for Nixpkgs `unstable` on nixos.org](https://nixos.org/manual/nixpkgs/unstable/).
+The rendering tool is [nixos-render-docs](../pkgs/tools/nix/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
 
 [Docs for Nixpkgs stable](https://nixos.org/manual/nixpkgs/stable/) are also available.
 

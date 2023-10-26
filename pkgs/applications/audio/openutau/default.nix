@@ -2,6 +2,7 @@
 , stdenv
 , buildDotnetModule
 , fetchFromGitHub
+, fetchpatch
 , dotnetCorePackages
 , dbus
 , fontconfig
@@ -21,6 +22,19 @@ buildDotnetModule rec {
     rev = "build/${version}";
     hash = "sha256-/+hlL2sj/juzWrDcb5dELp8Zdg688XK8OnjKz20rx/M=";
   };
+
+  patches = [
+    # Needed until stakira/OpenUtau#836 is merged and released to fix crashing issues. See stakira/OpenUtau#822
+    (fetchpatch {
+      name = "openutau-update-avalonia-to-11.0.4.patch";
+      url = "https://github.com/stakira/OpenUtau/commit/0130d7387fb626a72850305dc61d7c175caccc0f.diff";
+      hash = "sha256-w9PLnfiUtiKY/8+y4qqINeEul4kP72nKEVc5c8p2g7c=";
+      # It looks like fetched files use CRLF but patch comes back with LF
+      decode = "sed -e 's/$/\\r/'";
+    })
+  ];
+  # Needs binary for above patch due to CRLF shenanigans otherwise being ignored
+  patchFlags = [ "-p1" "--binary" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
@@ -47,8 +61,8 @@ buildDotnetModule rec {
   # needed until upstream bumps to dotnet 7
   postPatch = ''
     substituteInPlace OpenUtau/OpenUtau.csproj OpenUtau.Test/OpenUtau.Test.csproj --replace \
-      "<TargetFramework>net6.0</TargetFramework>" \
-      "<TargetFramework>net7.0</TargetFramework>"
+      '<TargetFramework>net6.0</TargetFramework>' \
+      '<TargetFramework>net7.0</TargetFramework>'
   '';
 
   # need to make sure proprietary worldline resampler is copied

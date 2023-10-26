@@ -229,7 +229,7 @@ in
         panelModulePackages = mkOption {
           default = [ pkgs.gnome.gnome-applets ];
           defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
-          type = types.listOf types.path;
+          type = types.listOf types.package;
           description = lib.mdDoc ''
             Packages containing modules that should be made available to `gnome-panel` (usually for applets).
 
@@ -294,8 +294,7 @@ in
           map
             (wm:
               pkgs.gnome.gnome-flashback.mkSessionForWm {
-                inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
-                inherit (cfg.flashback) panelModulePackages;
+                inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
 
@@ -309,7 +308,14 @@ in
 
       environment.systemPackages = with pkgs.gnome; [
         gnome-flashback
-      ];
+        (gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
+      ]
+      # For /share/applications/${wmName}.desktop
+      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (mkIf serviceCfg.core-os-services.enable {

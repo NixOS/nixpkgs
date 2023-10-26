@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "httplib";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${version}";
-    hash = "sha256-NtjgK/8XApEs4iSo9DzyK4Cc/FQJRAEwCwJbD24FP34=";
+    hash = "sha256-JBs2FvcdAvxysYhzakP0wU/mUCWfKZ8dk5ROWL5sej0=";
   };
 
   nativeBuildInputs = [ cmake ];

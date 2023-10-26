@@ -1,7 +1,9 @@
-{ callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
+{ php, callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
 
 let
-  composer = callPackage ./composer-phar.nix { };
+  composer = callPackage ./composer-phar.nix {
+    inherit (php.packages.composer) version pharHash;
+  };
 
   composerKeys = stdenvNoCC.mkDerivation (finalComposerKeysAttrs: {
     pname = "composer-keys";
@@ -69,7 +71,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     composer global config --quiet minimum-stability dev
     composer global config --quiet prefer-stable true
-    composer global config --quiet autoloader-suffix "nixPredictableAutoloaderSuffix"
     composer global config --quiet apcu-autoloader false
     composer global config --quiet allow-plugins.nix-community/composer-local-repo-plugin true
     composer global config --quiet repo.packagist false

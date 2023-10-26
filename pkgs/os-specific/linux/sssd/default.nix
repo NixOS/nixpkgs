@@ -5,21 +5,21 @@
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
   nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
   docbook_xsl, docbook_xml_dtd_44,
-  nixosTests,
+  testers, nix-update-script, nixosTests,
   withSudo ? false }:
 
 let
   docbookFiles = "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml:${docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.1";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "SSSD";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-OafSo28MN92py33foE8oMkPUmV9WUUOkKWJgm0i7MJU=";
+    repo = "sssd";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-CxkEyx9X14x8x9tSSN9d0TBTPKJB2Ip7HTL98uqO0J4=";
   };
 
   postPatch = ''
@@ -96,14 +96,23 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
+  passthru = {
+    tests = {
+      inherit (nixosTests) sssd sssd-ldap;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "sssd --version";
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "System Security Services Daemon";
     homepage = "https://sssd.io/";
-    changelog = "https://sssd.io/release-notes/sssd-${version}.html";
+    changelog = "https://sssd.io/release-notes/sssd-${finalAttrs.version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ illustris ];
   };
-}
+})

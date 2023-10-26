@@ -102,22 +102,6 @@ sub cpuManufacturer {
     return $cpuinfo =~ /^vendor_id\s*:.* $id$/m;
 }
 
-
-# Determine CPU governor to use
-if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
-    my $governors = read_file("/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors");
-    # ondemand governor is not available on sandy bridge or later Intel CPUs
-    my @desired_governors = ("ondemand", "powersave");
-    my $e;
-
-    foreach $e (@desired_governors) {
-        if (index($governors, $e) != -1) {
-            last if (push @attrs, "powerManagement.cpuFreqGovernor = lib.mkDefault \"$e\";");
-        }
-    }
-}
-
-
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";

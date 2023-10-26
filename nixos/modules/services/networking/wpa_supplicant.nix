@@ -530,5 +530,5 @@ in {
     '';
   };
 
-  meta.maintainers = with lib.maintainers; [ globin rnhmjoj ];
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 }

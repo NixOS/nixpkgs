@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
+  version = "3.3.0";
   pname = "xxhash";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Gv1Hr4lVxdtzD2MK1TrnmM9/rgrLZM67PPlNNcR90Ig=";
+    hash = "sha256-w/njIrHr7r1E49nS2bEk4MVQwe9BvVUq/c3XGVFu5Bo=";
   };
 
   nativeBuildInputs = [

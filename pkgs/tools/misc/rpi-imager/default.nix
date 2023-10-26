@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , wrapQtAppsHook
 , cmake
+, pkg-config
 , util-linux
 , curl
 , libarchive
@@ -12,23 +13,26 @@
 , qttools
 , qtquickcontrols2
 , qtgraphicaleffects
+, xz
+, testers
 , nix-update-script
 , enableTelemetry ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpi-imager";
-  version = "1.7.5";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yB+H1zWL40KzxOrBuvg7nBC3zmWilsOgOW7ndiDWuDA=";
+    repo = finalAttrs.pname;
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-drHiZ0eYYvJg6/v3oEozGAbBKm1KLpec+kYZWwpT9yM=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     util-linux
     wrapQtAppsHook
   ];
@@ -48,40 +52,34 @@ stdenv.mkDerivation rec {
     qttools
     qtquickcontrols2
     qtgraphicaleffects
+    xz
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   /* By default, the builder checks for JSON support in lsblk by running "lsblk --json",
     but that throws an error, as /sys/dev doesn't exist in the sandbox.
     This patch removes the check. */
   patches = [ ./lsblkCheckFix.patch ];
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    # Without this, the tests fail because they cannot create the QT Window
-    export QT_QPA_PLATFORM=offscreen
-    $out/bin/rpi-imager --version
-
-    runHook postInstallCheck
-  '';
-
   passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "QT_QPA_PLATFORM=offscreen rpi-imager --version";
+    };
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Raspberry Pi Imaging Utility";
     homepage = "https://www.raspberrypi.com/software/";
-    changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${version}";
+    changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/raspberrypi/rpi-imager/";
     license = licenses.asl20;
+    mainProgram = "rpi-imager";
     maintainers = with maintainers; [ ymarkus anthonyroussel ];
     platforms = platforms.all;
     # does not build on darwin
     broken = stdenv.isDarwin;
   };
-}
+})

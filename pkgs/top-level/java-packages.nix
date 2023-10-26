@@ -8,11 +8,12 @@ let
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
   openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
   openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
+  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
 
   mavenfod = pkgs.maven.buildMavenPackage;
 
 in {
-  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20;
+  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
 
   compiler = let
 
@@ -141,12 +142,12 @@ in {
 
     openjdk8 = mkOpenjdk
       ../development/compilers/openjdk/8.nix
-      ../development/compilers/openjdk/darwin/8.nix
+      ../development/compilers/zulu/8.nix
       { };
 
     openjdk11 = mkOpenjdk
       ../development/compilers/openjdk/11.nix
-      ../development/compilers/openjdk/darwin/11.nix
+      ../development/compilers/zulu/11.nix
       { openjfx = openjfx11; };
 
     openjdk12 = mkOpenjdkLinuxOnly ../development/compilers/openjdk/12.nix {
@@ -172,7 +173,7 @@ in {
 
     openjdk16 = mkOpenjdk
       ../development/compilers/openjdk/16.nix
-      ../development/compilers/openjdk/darwin/16.nix
+      ../development/compilers/zulu/16.nix
       {
         inherit openjdk16-bootstrap;
         openjfx = openjfx15;
@@ -180,7 +181,7 @@ in {
 
     openjdk17 = mkOpenjdk
       ../development/compilers/openjdk/17.nix
-      ../development/compilers/openjdk/darwin/17.nix
+      ../development/compilers/zulu/17.nix
       {
         inherit openjdk17-bootstrap;
         openjfx = openjfx17;
@@ -188,7 +189,7 @@ in {
 
     openjdk18 = mkOpenjdk
       ../development/compilers/openjdk/18.nix
-      ../development/compilers/openjdk/darwin/18.nix
+      ../development/compilers/zulu/18.nix
       {
         inherit openjdk18-bootstrap;
         openjfx = openjfx17;
@@ -196,7 +197,7 @@ in {
 
     openjdk19 = mkOpenjdk
       ../development/compilers/openjdk/19.nix
-      ../development/compilers/openjdk/darwin/19.nix
+      ../development/compilers/zulu/19.nix
       {
         openjdk19-bootstrap = temurin-bin.jdk-19;
         openjfx = openjfx19;
@@ -204,10 +205,18 @@ in {
 
     openjdk20 = mkOpenjdk
       ../development/compilers/openjdk/20.nix
-      ../development/compilers/openjdk/darwin/20.nix
+      ../development/compilers/zulu/20.nix
       {
         openjdk20-bootstrap = temurin-bin.jdk-20;
         openjfx = openjfx20;
+      };
+
+    openjdk21 = mkOpenjdk
+      ../development/compilers/openjdk/21.nix
+      ../development/compilers/zulu/21.nix
+      {
+        openjdk21-bootstrap = temurin-bin.jdk-20;
+        openjfx = openjfx21;
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (

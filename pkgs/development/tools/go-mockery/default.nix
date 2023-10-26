@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-mockery";
-  version = "2.34.1";
+  version = "2.35.2";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
-    sha256 = "sha256-c1imyCv/eqyTEHz6H18McKY+59swG84PcLG6HI1uQmE=";
+    sha256 = "sha256-MsaAITGFDnAylxMU+PGbSl+H/W/Y7pghBbfQyqp31AM=";
   };
 
   preCheck = ''
@@ -24,7 +24,7 @@ buildGoModule rec {
   CGO_ENABLED = false;
 
   proxyVendor = true;
-  vendorHash = "sha256-c8HsrcS3x16x3x/VQjQ2XWxfMVYHJ6pbQWztqFj0ju4=";
+  vendorHash = "sha256-HxxtKtjc1EuONG4bYTZc9i40X6Q75bQzV1Wi6Qb/Id0=";
 
   passthru.tests = {
     generateMock = runCommand "${pname}-test" {

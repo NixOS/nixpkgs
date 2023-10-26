@@ -28,7 +28,7 @@ mkDerivation rec {
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
-    ./0001-fix-instalation-paths.patch
+    ./0001-fix-installation-paths.patch
     ./0002-disable-version-check.patch
   ];
 

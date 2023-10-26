@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "6.6.0";
+  version = "6.6.1";
 
   outputs = [ "out" "examples" ];
 
   src = fetchurl {
     url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
-    hash = "sha256-+QApuNqEbI+v9VMP0fpIRweRiNBAVU9VwdXR4EdD0p0=";
+    hash = "sha256-IfceSu+VsY+VTIu9yQtih3RDlQUz1ZXGgFGrdot2mEs=";
   };
 
   nativeBuildInputs = [

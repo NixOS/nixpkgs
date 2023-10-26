@@ -35,7 +35,7 @@ bash.runCommand "${pname}-${version}" {
 
   passthru.tests.hello-world = result:
     bash.runCommand "${pname}-simple-program-${version}" {
-        nativeBuildInputs = [ gcc binutils ];
+        nativeBuildInputs = [ gcc binutils result ];
       } ''
         cat <<EOF >> test.c
         #include <stdio.h>
@@ -44,7 +44,7 @@ bash.runCommand "${pname}-${version}" {
           return 0;
         }
         EOF
-        gcc -static -B${result}/lib -I${result}/include -o test test.c
+        musl-gcc -o test test.c
         ./test
         mkdir $out
       '';
@@ -67,11 +67,15 @@ bash.runCommand "${pname}-${version}" {
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
-    --host=${hostPlatform.config}
+    --host=${hostPlatform.config} \
+    --syslibdir=$out/lib \
+    --enable-wrapper
 
   # Build
   make -j $NIX_BUILD_CORES
 
   # Install
   make -j $NIX_BUILD_CORES install
+  sed -i 's|/bin/sh|${bash}/bin/bash|' $out/bin/*
+  ln -s ../lib/libc.so $out/bin/ldd
 ''

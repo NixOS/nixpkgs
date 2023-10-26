@@ -29,11 +29,6 @@ let
     sha256 = "1fqqk5zkmdg4vmqzdmip9i42q6b82i3f6yc0n86n9021cr7ms2k9";
   };
 
-  patches = [
-    # Remove hardcoded NATIVE_SYSTEM_HEADER_DIR
-    ./no-system-headers.patch
-  ];
-
   gmpVersion = "4.3.2";
   gmp = fetchurl {
     url = "mirror://gnu/gmp/gmp-${gmpVersion}.tar.gz";
@@ -51,6 +46,11 @@ let
     url = "mirror://gnu/mpc/mpc-${mpcVersion}.tar.gz";
     sha256 = "1hzci2zrrd7v3g1jk35qindq05hbl0bhjcyyisq9z209xb3fqzb1";
   };
+
+  patches = [
+    # Remove hardcoded NATIVE_SYSTEM_HEADER_DIR
+    ./no-system-headers.patch
+  ];
 in
 bash.runCommand "${pname}-${version}" {
   inherit pname version;

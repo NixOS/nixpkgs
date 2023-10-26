@@ -446,7 +446,7 @@ rec {
       '';
 
       postMount = ''
-        mkdir -p mnt/{dev,proc,sys} mnt${storeDir}
+        mkdir -p mnt/{dev,proc,sys,tmp} mnt${storeDir}
 
         # Mount /dev, /sys and the nix store as shared folders.
         mount --rbind /dev mnt/dev

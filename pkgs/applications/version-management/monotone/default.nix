@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "0fzjdv49dx5lzvqhkvk50lkccagwx8h0bfha4a0k6l4qh36f9j7c";
     })
+    ./monotone-1.1-gcc-14.patch
   ];
 
   postPatch = ''

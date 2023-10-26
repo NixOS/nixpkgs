@@ -6,7 +6,9 @@ let
     _coerceMany
     _toSourceFilter
     _unionMany
+    _fileFilter
     _printFileset
+    _intersection
     ;
 
   inherit (builtins)
@@ -18,6 +20,7 @@ let
     ;
 
   inherit (lib.lists)
+    elemAt
     imap0
     ;
 
@@ -39,6 +42,7 @@ let
     ;
 
   inherit (lib.trivial)
+    isFunction
     pipe
     ;
 
@@ -275,6 +279,94 @@ If a directory does not recursively contain any file, it is omitted from the sto
         (_coerceMany "lib.fileset.unions")
         _unionMany
       ];
+
+  /*
+    Filter a file set to only contain files matching some predicate.
+
+    Type:
+      fileFilter ::
+        ({
+          name :: String,
+          type :: String,
+          ...
+        } -> Bool)
+        -> FileSet
+        -> FileSet
+
+    Example:
+      # Include all regular `default.nix` files in the current directory
+      fileFilter (file: file.name == "default.nix") ./.
+
+      # Include all non-Nix files from the current directory
+      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
+
+      # Include all files that start with a "." in the current directory
+      fileFilter (file: hasPrefix "." file.name) ./.
+
+      # Include all regular files (not symlinks or others) in the current directory
+      fileFilter (file: file.type == "regular")
+  */
+  fileFilter =
+    /*
+      The predicate function to call on all files contained in given file set.
+      A file is included in the resulting file set if this function returns true for it.
+
+      This function is called with an attribute set containing these attributes:
+
+      - `name` (String): The name of the file
+
+      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+      Other attributes may be added in the future.
+    */
+    predicate:
+    # The file set to filter based on the predicate function
+    fileset:
+    if ! isFunction predicate then
+      throw "lib.fileset.fileFilter: Expected the first argument to be a function, but it's a ${typeOf predicate} instead."
+    else
+      _fileFilter predicate
+        (_coerce "lib.fileset.fileFilter: second argument" fileset);
+
+  /*
+    The file set containing all files that are in both of two given file sets.
+    See also [Intersection (set theory)](https://en.wikipedia.org/wiki/Intersection_(set_theory)).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      intersection :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Limit the selected files to the ones in ./., so only ./src and ./Makefile
+      intersection ./. (unions [ ../LICENSE ./src ./Makefile ])
+  */
+  intersection =
+    # The first file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset1:
+    # The second file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset2:
+    let
+      filesets = _coerceMany "lib.fileset.intersection" [
+        {
+          context = "first argument";
+          value = fileset1;
+        }
+        {
+          context = "second argument";
+          value = fileset2;
+        }
+      ];
+    in
+    _intersection
+      (elemAt filesets 0)
+      (elemAt filesets 1);
 
   /*
     Incrementally evaluate and trace a file set in a pretty way.

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "xlsxwriter";
-  version = "3.0.3";
+  version = "3.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jmcnamara";
     repo = "XlsxWriter";
     rev = "RELEASE_${version}";
-    hash = "sha256-9fIxNkOdM+Bz1F9AWq02H3LLQnefxGSAtp9kM2OtJ9M=";
+    hash = "sha256-ZOKS9sTZvlopfIYOEhOk/rq4qtcMrNQ4Bwb8lDtKfxs=";
   };
 
   nativeCheckInputs = [

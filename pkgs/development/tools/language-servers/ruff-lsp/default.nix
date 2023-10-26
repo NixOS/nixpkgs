@@ -3,12 +3,12 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , ruff
 , pygls
 , lsprotocol
 , hatchling
 , typing-extensions
+, packaging
 , pytestCheckHook
 , python-lsp-jsonrpc
 , pytest-asyncio
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     pygls
     lsprotocol
     typing-extensions

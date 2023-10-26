@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.32.1";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-aNTmx94fWuwwlMckjZMOoU1hqSW+yUTKjobvRTxJX4s=";
+    hash = "sha256-MnsA7zZ3T0L80dgCUj4F/F9IKTzADs65esM1DdgQeSU=";
   };
 
-  cargoHash = "sha256-MGqQImBEH210IVvjyh/aceQr001T1cMHQfyQI1ZyVw8=";
+  cargoHash = "sha256-xBoTzDeMmkSExOjD588l1vy73lbkzb60V4Fd4zhrU8c=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit

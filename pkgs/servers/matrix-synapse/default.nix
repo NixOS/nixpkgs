@@ -16,20 +16,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.93.0";
+  version = "1.95.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-fmY5xjpbFwzrX47ijPxOUTI0w9stYVPpSV+HRF4GdlA=";
+    hash = "sha256-WYKuWTOP0w9Xtao9vF3+km4mXVTrt/mshcaXuF92voQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-9cCEfDV5X65JublgkUP6NVfMIObPawx+nXTmIG9lg5o=";
+    hash = "sha256-uUu2Hu4a7J49S3rhZ7xsLJQC7seYkVScYYbWaw4Q/rU=";
   };
 
   postPatch = ''
@@ -112,10 +112,6 @@ python3.pkgs.buildPythonApplication rec {
     ];
     sentry = [
       sentry-sdk
-    ];
-    opentracing = [
-      jaeger-client
-      opentracing
     ];
     jwt = [
       authlib

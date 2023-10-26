@@ -6,12 +6,12 @@
 
 buildGoModule {
   pname = "bloat";
-  version = "unstable-2023-09-24";
+  version = "unstable-2023-10-15";
 
   src = fetchgit {
     url = "git://git.freesoftwareextremist.com/bloat";
-    rev = "8e3999fc3d9761f9ce71c35a7154a77c251caa66";
-    hash = "sha256-+JHBTYZETAmxUxb2SBMIuZ5/StU7mHQceHbjDmta+Kw=";
+    rev = "67b13c71baea56eeb15532ca1b1377f6da8d18ac";
+    hash = "sha256-h885uAuVjpVsp5cAAX9pIxfydcBiajBX3ZSmQUr3/4Q=";
   };
 
   vendorHash = null;

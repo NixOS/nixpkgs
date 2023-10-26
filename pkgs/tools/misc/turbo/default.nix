@@ -12,6 +12,7 @@
 , openssl
 , extra-cmake-modules
 , fontconfig
+, rust-jemalloc-sys
 , testers
 , turbo
 , nix-update-script
@@ -78,7 +79,7 @@ let
       libiconv
     ];
 
-    ldFlags = [
+    ldflags = [
       "-s -w"
       "-X main.version=${version}"
       "-X main.commit=${src.rev}"
@@ -149,6 +150,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
     fontconfig
+    rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [
       IOKit
       CoreServices

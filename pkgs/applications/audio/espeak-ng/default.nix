@@ -15,6 +15,9 @@
 , pcaudiolib
 , sonicSupport ? true
 , sonic
+, CoreAudio
+, AudioToolbox
+, AudioUnit
 , alsa-plugins
 , makeWrapper
 }:
@@ -42,9 +45,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional mbrolaSupport mbrola
     ++ lib.optional pcaudiolibSupport pcaudiolib
-    ++ lib.optional sonicSupport sonic;
+    ++ lib.optional sonicSupport sonic
+    ++ lib.optionals stdenv.isDarwin [
+    CoreAudio
+    AudioToolbox
+    AudioUnit
+  ];
 
-  preConfigure = "./autogen.sh";
+  # touch ChangeLog to avoid below error on darwin:
+  # Makefile.am: error: required file './ChangeLog.md' not found
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    touch ChangeLog
+  '' + ''
+    ./autogen.sh
+  '';
 
   configureFlags = [
     "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"

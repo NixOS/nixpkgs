@@ -116,6 +116,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
         networking.firewall.allowedTCPPorts = [ 43210 ];
         services.yggdrasil = {
           enable = true;
+          extraArgs = [ "-loglevel" "error" ];
           denyDhcpcdInterfaces = [ "ygg0" ];
           settings = {
             IfTAPMode = true;

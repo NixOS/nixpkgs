@@ -2,28 +2,30 @@
 , buildGoModule
 , fetchFromGitHub
 , swtpm
+, openssl
 }:
 
 buildGoModule rec {
   pname = "age-plugin-tpm";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
     rev = "v${version}";
-    hash = "sha256-Gp7n2/+vgQbsm/En6PQ1to/W6lvFam4Wh3LHdCZnafc=";
+    hash = "sha256-oTvK8U5j+llHgoChhGb+vcUrUf9doVYxd3d5MEuCNz8=";
   };
 
-  vendorHash = "sha256-oZni/n2J0N3ZxNhf+RlUWyWeOFwL4+6KUIk6DQF8YpA=";
+  proxyVendor = true;
 
-  postConfigure = ''
-    substituteInPlace vendor/github.com/foxboron/swtpm_test/swtpm.go \
-      --replace "/usr/share/swtpm/swtpm-create-user-config-files" "${swtpm}/share/swtpm/swtpm-create-user-config-files"
-  '';
+  vendorHash = "sha256-BSb+8p5+RJMfcYc2+BuT4YbhCWCbcYOt9upesD11Ytw=";
 
   nativeCheckInputs = [
     swtpm
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   ldflags = [

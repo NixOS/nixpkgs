@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "txt2tags";
-  version = "3.8";
+  version = "3.9";
 
   format = "setuptools";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "txt2tags";
     repo = "txt2tags";
     rev = "refs/tags/${version}";
-    hash = "sha256-urLsA2oeQM0WcKNDgaxKJOgBPGohJT6Zq6y6bEYMTxk=";
+    hash = "sha256-PwPGJJg79ny13gEb1WmgIVHcXQppI/j5mhIyOZjR19k=";
   };
 
   postPatch = ''

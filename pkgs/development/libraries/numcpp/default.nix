@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "dpilger26";
     repo = "NumCpp";
     rev = "Version_${finalAttrs.version}";
-    hash = "sha256-IAku1bcaMkawZxpQbvxcS6VX07ogw4UGo1DX2Wa8xwU=";
+    hash = "sha256-HeT2zZbULXZhmgquQTl3qHL0T50IIUf3oAZaEDIcAys=";
   };
 
   nativeCheckInputs = [gtest python3];

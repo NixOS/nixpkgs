@@ -14,12 +14,11 @@
 , makeDesktopItem
 , wrapGAppsHook
 , testers
-, palemoon-bin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.4.0.1";
+  version = "32.4.1";
 
   src = fetchzip {
     urls = [
@@ -27,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
       "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-kGt3pIgCjVeSD6UXRvj5w9opWrMx3q3B/Y0S55kKS08="
+      "sha256-c/rfnMpiLWqlNZppqPRNWXsgAQ1FofAdel5EFnK+mrY="
     else
-      "sha256-kNvUC/ir7TKjvKXYFoEDOPAY75CEgeixmEV1tuB/WIM=";
+      "sha256-27njFdqq2DUctlz/UOtH5tlOduQNpoapuCYS+48K9dk=";
   };
 
   preferLocalBuild = true;
@@ -155,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = palemoon-bin;
+    package = finalAttrs.finalPackage;
   };
 
   meta = with lib; {

@@ -32,16 +32,16 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.15.1";
-  format = "setuptools";
+  version = "0.16.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
-    repo = pname;
+    repo = "arviz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jjA+yltvpPZldIxXXqu1bXCLqpiU5/NBYTPlI9ImGVs=";
+    hash = "sha256-kixWGj0M0flTq5rXSiPB0nfZaGYRvvMBGAJpehdW8KY=";
   };
 
   propagatedBuildInputs = [
@@ -93,6 +93,10 @@ buildPythonPackage rec {
     "test_plot_pair"
     # Array mismatch
     "test_plot_ts"
+    # The following two tests fail in a common venv-based setup.
+    # An issue has been opened upstream: https://github.com/arviz-devs/arviz/issues/2282
+    "test_plot_ppc_discrete"
+    "test_plot_ppc_discrete_save_animation"
   ];
 
   pythonImportsCheck = [

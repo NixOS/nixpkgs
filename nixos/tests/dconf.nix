@@ -14,8 +14,8 @@ import ./make-test-python.nix
         profiles.user.databases = [
           {
             settings = {
-              "test/not/locked" = mkInt32 1;
-              "test/is/locked" = "locked";
+              "test/not".locked = mkInt32 1;
+              "test/is".locked = "locked";
             };
             locks = [
               "/test/is/locked"

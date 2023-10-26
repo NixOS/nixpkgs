@@ -11,15 +11,16 @@
 , tesseract
 , leptonica
 , mujs
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.0";
+  version = "0.4.1";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "0pcjxvlh4hls8mjhjghhhihyy2kza8l27wdx0yq4bkd1g1b5f74c";
+    hash = "sha256-+YKgHWUj+iVmk4EYTAamJe2/15YcvbBxHcz9ucQCrC8=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -39,6 +40,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf.git";
+  };
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";

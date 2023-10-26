@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.52.3";
+  version = "3.53.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    hash = "sha256-5JEnsTvY4PgAuaoIyTHriJVJUPAHMYETgqbhAuAPJcI=";
+    hash = "sha256-P6oR9Aszj2yj2w+2hAjCMDwngJ+uuUNLpgZooYImzyk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

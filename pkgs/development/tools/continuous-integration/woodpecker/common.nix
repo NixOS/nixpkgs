@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
 let
-  version = "1.0.2";
-  srcHash = "sha256-OeOKR9lTGXU2qumyXq3s/CI56IX4XiI/ZTRHNoY6MEI=";
-  vendorHash = "sha256-+2wQKNyCb9xtB1TeE1/oSMEvKoXVX9ARZxsNqE2rfrg=";
-  yarnHash = "sha256-QNeQwWU36A05zaARWmqEOhfyZRW68OgF4wTonQLYQfs=";
+  version = "1.0.3";
+  srcHash = "sha256-P1ODGxHkrh8o+RMxxu7OCuHkShfLyQcF9KVNYw45T5A=";
+  vendorHash = "sha256-j2C66oTv0RY8VGDEivrj/p2PtGAhrDhi9oBvNXATurI=";
+  yarnHash = "sha256-TrcTc5svLLSedRC8gCwIBW7/mtHo+uSNZGImtRiVJ0w=";
 in
 {
   inherit version yarnHash vendorHash;

@@ -88,7 +88,7 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
-, withBootloader ? !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
+, withBootloader ? withEfi && !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -201,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-inherit-systemd-environment-when-calling-generators.patch
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
+    ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -481,7 +482,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
-    "-Dsysusers=false"
     "-Dtimedated=${lib.boolToString withTimedated}"
     "-Dtimesyncd=${lib.boolToString withTimesyncd}"
     "-Duserdb=${lib.boolToString withUserDb}"
@@ -740,7 +740,7 @@ stdenv.mkDerivation (finalAttrs: {
     # To cross compile a derivation that builds a UKI with ukify, we need to wrap
     # ukify with the correct binutils. When wrapping, no splicing happens so we
     # have to explicitly pull binutils from targetPackages.
-    wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
+    wrapProgram $out/lib/systemd/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)

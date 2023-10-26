@@ -416,8 +416,8 @@ let
     };
 
     kea = let
-      controlSocketPathV4 = "/run/kea/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea-dhcp4/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea-dhcp6/dhcp6.sock";
     in
     {
       exporterConfig = {
@@ -512,7 +512,7 @@ let
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep 'knot_server_zone_count 1.0'")
+        succeed("curl -sSf 'localhost:9433' | grep '2\.019031301'")
       '';
     };
 
@@ -963,6 +963,36 @@ let
         wait_for_unit("openvpn-test.service")
         wait_for_unit("prometheus-openvpn-exporter.service")
         succeed("curl -sSf http://localhost:9176/metrics | grep 'openvpn_up{.*} 1'")
+      '';
+    };
+
+    pgbouncer = {
+      exporterConfig = {
+        enable = true;
+        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+      };
+
+      metricProvider = {
+        services.postgresql.enable = true;
+        services.pgbouncer = {
+          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+          ignoreStartupParameters = "extra_float_digits";
+          enable = true;
+          listenAddress = "*";
+          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
+          authType = "any";
+          maxClientConn = 99;
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("postgresql.service")
+        wait_for_unit("pgbouncer.service")
+        wait_for_unit("prometheus-pgbouncer-exporter.service")
+        wait_for_open_port(9127)
+        succeed("curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_up 1'")
+        succeed(
+            "curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_config_max_client_connections 99'"
+        )
       '';
     };
 

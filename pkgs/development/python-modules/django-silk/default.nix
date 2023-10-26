@@ -2,7 +2,7 @@
 , autopep8
 , buildPythonPackage
 , django
-, factory_boy
+, factory-boy
 , fetchFromGitHub
 , fetchpatch
 , freezegun
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     freezegun
     networkx
     pydot
-    factory_boy
+    factory-boy
   ];
 
   pythonImportsCheck = [

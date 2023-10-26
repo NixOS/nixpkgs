@@ -6,7 +6,7 @@
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
-, hipSupport ? false, hip # comes with a significantly larger closure size
+, hipSupport ? false, rocmPackages # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-zFL0GRWAtNC3C+SAspWZmGa8US92EiYQgVfiOsCJRx4=";
+    hash = "sha256-QAHA/pn22HLsfH6VX4Sp7r25raFxAPS1Gergjez38kM=";
   };
 
   patches = [
@@ -103,8 +103,8 @@ stdenv.mkDerivation (finalAttrs: rec {
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
     '') +
     (lib.optionalString hipSupport ''
-      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${hip}/lib/libamdhip64.so"'
-      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${hip}/bin"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
     '');
 
   cmakeFlags =

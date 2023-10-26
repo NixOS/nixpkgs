@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "deap";
-  version = "1.3.3";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h3LxsP/wQtXlFrCuusLHBiQwRap9DejguGWPOAGBzzE=";
+    hash = "sha256-zAHemJLfp9G8mAPasoiS/q0XfwGCyB20c2CiQOrXeP8=";
   };
 
   propagatedBuildInputs = [ numpy matplotlib ];

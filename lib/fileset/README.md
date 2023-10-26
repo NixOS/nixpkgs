@@ -58,7 +58,8 @@ An attribute set with these values:
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
-  This is always a directory.
+  This is always a directory and should be as long as possible.
+  This is used by `lib.fileset.toSource` to check that all files are under the `root` argument
 
 - `_internalBaseRoot` (path):
   The filesystem root of `_internalBase`, same as `(lib.path.splitRoot _internalBase).root`.
@@ -143,9 +144,37 @@ Arguments:
   - (-) Leaves us with no identity element for `union` and no reasonable return value for `unions []`.
     From a set theory perspective, which has a well-known notion of empty sets, this is unintuitive.
 
+### No intersection for lists
+
+While there is `intersection a b`, there is no function `intersections [ a b c ]`.
+
+Arguments:
+- (+) There is no known use case for such a function, it can be added later if a use case arises
+- (+) There is no suitable return value for `intersections [ ]`, see also "Nullary intersections" [here](https://en.wikipedia.org/w/index.php?title=List_of_set_identities_and_relations&oldid=1177174035#Definitions)
+  - (-) Could throw an error for that case
+  - (-) Create a special value to represent "all the files" and return that
+    - (+) Such a value could then not be used with `fileFilter` unless the internal representation is changed considerably
+  - (-) Could return the empty file set
+    - (+) This would be wrong in set theory
+- (-) Inconsistent with `union` and `unions`
+
+### Intersection base path
+
+The base path of the result of an `intersection` is the longest base path of the arguments.
+E.g. the base path of `intersection ./foo ./foo/bar` is `./foo/bar`.
+Meanwhile `intersection ./foo ./bar` returns the empty file set without a base path.
+
+Arguments:
+- Alternative: Use the common prefix of all base paths as the resulting base path
+  - (-) This is unnecessarily strict, because the purpose of the base path is to track the directory under which files _could_ be in the file set. It should be as long as possible.
+    All files contained in `intersection ./foo ./foo/bar` will be under `./foo/bar` (never just under `./foo`), and `intersection ./foo ./bar` will never contain any files (never under `./.`).
+    This would lead to `toSource` having to unexpectedly throw errors for cases such as `toSource { root = ./foo; fileset = intersect ./foo base; }`, where `base` may be `./bar` or `./.`.
+  - (-) There is no benefit to the user, since base path is not directly exposed in the interface
+
 ### Empty directories
 
-File sets can only represent a _set_ of local files, directories on their own are not representable.
+File sets can only represent a _set_ of local files.
+Directories on their own are not representable.
 
 Arguments:
 - (+) There does not seem to be a sensible set of combinators when directories can be represented on their own.
@@ -161,7 +190,7 @@ Arguments:
 
   - `./.` represents all files in `./.` _and_ the directory itself, but not its subdirectories, meaning that at least `./.` will be preserved even if it's empty.
 
-    In that case, `intersect ./. ./foo` should only include files and no directories themselves, since `./.` includes only `./.` as a directory, and same for `./foo`, so there's no overlap in directories.
+    In that case, `intersection ./. ./foo` should only include files and no directories themselves, since `./.` includes only `./.` as a directory, and same for `./foo`, so there's no overlap in directories.
     But intuitively this operation should result in the same as `./foo` – everything else is just confusing.
 - (+) This matches how Git only supports files, so developers should already be used to it.
 - (-) Empty directories (even if they contain nested directories) are neither representable nor preserved when coercing from paths.
@@ -176,7 +205,7 @@ File sets do not support Nix store paths in strings such as `"/nix/store/...-sou
 
 Arguments:
 - (+) Such paths are usually produced by derivations, which means `toSource` would either:
-  - Require IFD if `builtins.path` is used as the underlying primitive
+  - Require [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) if `builtins.path` is used as the underlying primitive
   - Require importing the entire `root` into the store such that derivations can be used to do the filtering
 - (+) The convenient path coercion like `union ./foo ./bar` wouldn't work for absolute paths, requiring more verbose alternate interfaces:
   - `let root = "/nix/store/...-source"; in union "${root}/foo" "${root}/bar"`

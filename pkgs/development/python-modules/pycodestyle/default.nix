@@ -3,11 +3,12 @@
 , fetchPypi
 , lib
 , python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.10.0";
+  version = "2.11.0";
 
   disabled = pythonOlder "3.6";
 
@@ -15,25 +16,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NHGHvbR2Mp2Y9pXCE9cpWoRtEVL/T+m6y4qVkLjucFM=";
+    hash = "sha256-JZvMF4V9ios7SiMnMkt55fAgoTwWB0Zw+cjI+HLqdtA=";
   };
 
-  patches = [
-    # https://github.com/PyCQA/pycodestyle/issues/1151
-    # Applies a modified version of an upstream patch that only applied
-    # to Python 3.12.
-    ./python-3.11.4-compat.patch
+  pythonImportsCheck = [
+    "pycodestyle"
   ];
 
-  # https://github.com/PyCQA/pycodestyle/blob/2.10.0/tox.ini#L13
-  checkPhase = ''
-    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
-    ${python.interpreter} -m pycodestyle --max-doc-length=72 --testsuite testsuite
-    ${python.interpreter} -m pycodestyle --max-doc-length=72 --doctest
-    ${python.interpreter} -m unittest discover testsuite -vv
-  '';
+  nativCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pycodestyle" ];
+  # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
+  postCheck = ''
+    ${python.interpreter} -m pycodestyle --statistics pycodestyle.py
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";

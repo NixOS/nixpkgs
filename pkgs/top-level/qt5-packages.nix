@@ -72,6 +72,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   alkimia = callPackage ../development/libraries/alkimia { };
 
+  applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
+
   applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
 
   appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };

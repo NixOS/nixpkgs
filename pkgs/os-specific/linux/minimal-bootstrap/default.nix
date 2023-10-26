@@ -73,17 +73,6 @@ lib.makeScope
       bootGawk = gawk-mes;
     };
 
-    gcc2 = callPackage ./gcc/2.nix {
-      bash = bash_2_05;
-      gcc = gcc2-mes;
-      glibc = glibc22;
-    };
-    gcc2-mes = callPackage ./gcc/2.nix {
-      bash = bash_2_05;
-      tinycc = tinycc-mes;
-      mesBootstrap = true;
-    };
-
     gcc46 = callPackage ./gcc/4.6.nix {
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
@@ -91,11 +80,29 @@ lib.makeScope
       # FIXME: not sure why new gawk doesn't work
       gawk = gawk-mes;
     };
+    gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
+      gcc = gcc46;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
 
-    inherit (callPackage ./glibc {
-      bash = bash_2_05;
-      gnused = gnused-mes;
-    }) glibc22;
+    gcc8 = callPackage ./gcc/8.nix {
+      gcc = gcc46-cxx;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
+
+    gcc-latest = callPackage ./gcc/latest.nix {
+      gcc = gcc8;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
 
     gnugrep = callPackage ./gnugrep {
       bash = bash_2_05;
@@ -133,6 +140,13 @@ lib.makeScope
       bash = bash_2_05;
       tinycc = tinycc-musl;
       gnused = gnused-mes;
+    };
+
+    # FIXME: better package naming scheme
+    gnutar-latest = callPackage ./gnutar/latest.nix {
+      gcc = gcc46;
+      gnumake = gnumake-musl;
+      gnutarBoot = gnutar-musl;
     };
 
     gzip = callPackage ./gzip {
@@ -196,14 +210,16 @@ lib.makeScope
       echo ${findutils.tests.get-version}
       echo ${gawk-mes.tests.get-version}
       echo ${gawk.tests.get-version}
-      echo ${gcc2.tests.get-version}
-      echo ${gcc2-mes.tests.get-version}
       echo ${gcc46.tests.get-version}
+      echo ${gcc46-cxx.tests.hello-world}
+      echo ${gcc8.tests.hello-world}
+      echo ${gcc-latest.tests.hello-world}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
       echo ${gnutar.tests.get-version}
       echo ${gnutar-musl.tests.get-version}
+      echo ${gnutar-latest.tests.get-version}
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}

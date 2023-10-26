@@ -10,12 +10,13 @@ let
     let
       version = pkg.version or "";
     in
-    lib.optionalString (isPvpVersion version)
+    lib.optionalString (isPvpVersion version && (pkg.meta.hydraPlatforms or null) != lib.platforms.none)
       ''"${name}","${version}","http://hydra.nixos.org/job/nixpkgs/trunk/haskellPackages.${name}.x86_64-linux"'';
   all-haskellPackages = builtins.toFile "all-haskellPackages" (lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.mapAttrsToList pkgLine haskellPackages)));
 in
 runCommand "hackage-package-list" { }
   # This command will make a join between all packages on hackage and haskellPackages.*.
+  # It ignores packages marked as broken (according to hydraPlatforms)
   # It creates a valid csv file which can be uploaded to hackage.haskell.org.
   # The call is wrapped in echo $(...) to trim trailing newline, which hackage requires.
   ''

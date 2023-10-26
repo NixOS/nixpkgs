@@ -12,16 +12,16 @@ let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
 in buildNpmPackage' rec {
   pname = "bitwarden-cli";
-  version = "2023.9.0";
+  version = "2023.9.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-s9jj1qmh4aCvtVY85U4AU7pcc8ABu9essFYqwf64dns=";
+    hash = "sha256-1dyrjEhcZDrA89rEvGg16f/MI8oNPPF4lwgGQQF9huE=";
   };
 
-  npmDepsHash = "sha256-0q3XoC87kfC2PYMsNse4DV8M8OXjckiLTdN3LK06lZY=";
+  npmDepsHash = "sha256-7GgjrH5s09zwGhWPOYHLTIMSKYndq+cAG06jZ0IySOQ=";
 
   nativeBuildInputs = [
     python3

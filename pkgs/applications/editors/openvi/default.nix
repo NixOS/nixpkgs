@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openvi";
-  version = "7.4.23";
+  version = "7.4.24";
 
   src = fetchFromGitHub {
     owner = "johnsonjh";
     repo = "OpenVi";
     rev = version;
-    hash = "sha256-DwecSnByRkjBFqy3gWJ0+1srF2YsNACqKrAITn6wXJw=";
+    hash = "sha256-jfh82Ti8iVqsh7G9BnHbc3cQP8D9dGV71YJ28SBjjgA=";
   };
 
   buildInputs = [ ncurses perl ];

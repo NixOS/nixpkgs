@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, testers
+, goreleaser
 }:
 buildGoModule rec {
   pname = "goreleaser";
@@ -36,6 +38,12 @@ buildGoModule rec {
         --fish <(${emulator} $out/bin/goreleaser completion fish) \
         --zsh  <(${emulator} $out/bin/goreleaser completion zsh)
     '';
+
+  passthru.tests.version = testers.testVersion {
+    package = goreleaser;
+    command = "goreleaser -v";
+    inherit version;
+  };
 
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";

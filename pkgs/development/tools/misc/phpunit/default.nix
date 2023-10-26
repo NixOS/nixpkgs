@@ -1,36 +1,26 @@
-{ stdenv, fetchurl, makeWrapper, lib, php }:
+{ lib, fetchFromGitHub, php }:
 
-let
+php.buildComposerProject (finalAttrs: {
   pname = "phpunit";
-  version = "10.3.3";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "10.4.1";
 
-  src = fetchurl {
-    url = "https://phar.phpunit.de/phpunit-${version}.phar";
-    hash = "sha256-fhgsP/sA2nQXBQ34V2/Zvc+SPiDYWfkEXKKHoD+Heak=";
+  src = fetchFromGitHub {
+    owner = "sebastianbergmann";
+    repo = "phpunit";
+    rev = finalAttrs.version;
+    hash = "sha256-AKUMCa8QuXqE0HrMaxR8SvhdoYjL/CmaTzf5UhszPPw=";
   };
 
-  dontUnpack = true;
+  # TODO: Open a PR against https://github.com/sebastianbergmann/phpunit
+  # Missing `composer.lock` from the repository.
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-xFXf9Nc6OxvZJ4Bt9zFhhdsJY4VwnztfCE4j5tOqQKQ=";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phpunit/phpunit.phar
-    makeWrapper ${php}/bin/php $out/bin/phpunit \
-      --add-flags "$out/libexec/phpunit/phpunit.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";
     description = "PHP Unit Testing framework";
-    license = licenses.bsd3;
     homepage = "https://phpunit.de";
-    changelog = "https://github.com/sebastianbergmann/phpunit/blob/${version}/ChangeLog-${lib.versions.majorMinor version}.md";
-    maintainers = with maintainers; [ onny ] ++ teams.php.members;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.onny ] ++ lib.teams.php.members;
   };
-}
+})

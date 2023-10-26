@@ -1,5 +1,33 @@
+diff --git a/src/cpp/conf/rsession-dev.conf b/src/cpp/conf/rsession-dev.conf
+index d18362b..98cdd4c 100644
+--- a/src/cpp/conf/rsession-dev.conf
++++ b/src/cpp/conf/rsession-dev.conf
+@@ -39,7 +39,7 @@ external-mathjax-path=${RSTUDIO_DEPENDENCIES_MATHJAX_DIR}
+ external-pandoc-path=${RSTUDIO_DEPENDENCIES_PANDOC_DIR}
+ external-quarto-path=${RSTUDIO_DEPENDENCIES_QUARTO_DIR}
+ external-libclang-path=${RSTUDIO_DEPENDENCIES_DIR}/common/libclang
+-external-node-path=${RSTUDIO_DEPENDENCIES_DIR}/common/node/16.14.0/bin/node
++external-node-path=@node@/bin/node
+ 
+ # enable copilot
+ copilot-enabled=1
+diff --git a/src/cpp/server/CMakeLists.txt b/src/cpp/server/CMakeLists.txt
+index 30dd638..cb4a645 100644
+--- a/src/cpp/server/CMakeLists.txt
++++ b/src/cpp/server/CMakeLists.txt
+@@ -250,10 +250,6 @@ if (UNIX AND NOT APPLE)
+            DESTINATION ${RSERVER_SYSTEMD_DIR})
+ 
+    # install node
+-   install(
+-      DIRECTORY "${RSTUDIO_DEPENDENCIES_DIR}/common/node/${RSTUDIO_NODE_VERSION}/"
+-      DESTINATION "${RSTUDIO_INSTALL_BIN}/node"
+-      USE_SOURCE_PERMISSIONS)
+ 
+ elseif(APPLE)
+ 
 diff --git a/src/gwt/build.xml b/src/gwt/build.xml
-index 83e9433..f1ee63d 100644
+index 033d605..f1ee63d 100644
 --- a/src/gwt/build.xml
 +++ b/src/gwt/build.xml
 @@ -87,29 +87,7 @@

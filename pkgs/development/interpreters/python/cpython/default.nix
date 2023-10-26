@@ -58,6 +58,7 @@
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 , noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+, testers
 } @ inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -195,25 +196,22 @@ let
         if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
       else if isx86_32 then "i386"
       else parsed.cpu.name;
-    # Python doesn't distinguish musl and glibc and always prefixes with "gnu"
-    gnuAbiName = replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name;
-    pythonAbiName =
-      # python's build doesn't support every gnu<extension>, and doesn't
-      # differentiate between musl and glibc, so we list those supported in
-      # here:
+
+    pythonAbiName = let
+      # python's build doesn't match the nixpkgs abi in some cases.
       # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
-      # Note: this is an approximation, as it doesn't take into account the CPU
-      # family, or the nixpkgs abi naming conventions.
-      if elem gnuAbiName [
-        "gnux32"
-        "gnueabihf"
-        "gnueabi"
-        "gnuabin32"
-        "gnuabi64"
-        "gnuspe"
-      ]
-      then gnuAbiName
-      else "gnu";
+      nixpkgsPythonAbiMappings = {
+        "gnuabielfv2" = "gnu";
+        "muslabielfv2" = "musl";
+      };
+      pythonAbi = nixpkgsPythonAbiMappings.${parsed.abi.name} or parsed.abi.name;
+    in
+      # Python <3.11 doesn't distinguish musl and glibc and always prefixes with "gnu"
+      if lib.versionOlder version "3.11" then
+        replaceStrings [ "musl" ] [ "gnu" ] pythonAbi
+      else
+        pythonAbi;
+
     multiarch =
       if isDarwin then "darwin"
       else if isWindows then ""
@@ -235,7 +233,7 @@ let
   '';
 
   execSuffix = stdenv.hostPlatform.extensions.executable;
-in with passthru; stdenv.mkDerivation {
+in with passthru; stdenv.mkDerivation (finalAttrs: {
   pname = "python3";
   inherit src version;
 
@@ -305,9 +303,12 @@ in with passthru; stdenv.mkDerivation {
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
     ./3.7/fix-finding-headers-when-cross-compiling.patch
-  ] ++ optionals stdenv.hostPlatform.isLoongArch64 [
+  ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+  ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
+    # backport fix for https://github.com/python/cpython/issues/95855
+    ./platform-triplet-detection.patch
   ] ++ optionals (stdenv.hostPlatform.isMinGW) (let
     # https://src.fedoraproject.org/rpms/mingw-python3
     mingw-patch = fetchgit {
@@ -326,7 +327,7 @@ in with passthru; stdenv.mkDerivation {
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mailcap}"
-  '' + optionalString (x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
@@ -582,6 +583,8 @@ in with passthru; stdenv.mkDerivation {
 
       nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
     };
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   enableParallelBuilding = true;
@@ -607,8 +610,9 @@ in with passthru; stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = licenses.psfl;
+    pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
   };
-}
+})

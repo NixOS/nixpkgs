@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "sbctl";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = pname;
     rev = version;
-    hash = "sha256-kApPb8X1JCP1XfyVFcoCDd+yrytTKSkNWRHKDA3mGaQ=";
+    hash = "sha256-1dA+a8GS4teaLmclatJNKt+OjhabLO4j/+p4Q95yG/s=";
   };
 
-  vendorHash = "sha256-WbPYTETTOzqWH+q6fzyDgm0wMScbLWlksLxkDjopF4E=";
+  vendorHash = "sha256-kVXzHTONPCE1UeAnUiULjubJeZFD0DAxIk+w8/Dqs6c=";
 
   ldflags = [ "-s" "-w" "-X github.com/foxboron/sbctl.DatabasePath=${databasePath}" ];
 

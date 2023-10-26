@@ -74,6 +74,19 @@ let
       };
     };
 
+    options.openssh.authorizedPrincipals = mkOption {
+      type = with types; listOf types.singleLineStr;
+      default = [];
+      description = mdDoc ''
+        A list of verbatim principal names that should be added to the user's
+        authorized principals.
+      '';
+      example = [
+        "example@host"
+        "foo@bar"
+      ];
+    };
+
   };
 
   authKeysFiles = let
@@ -88,6 +101,16 @@ let
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
+
+  authPrincipalsFiles = let
+    mkAuthPrincipalsFile = u: nameValuePair "ssh/authorized_principals.d/${u.name}" {
+      mode = "0444";
+      text = concatStringsSep "\n" u.openssh.authorizedPrincipals;
+    };
+    usersWithPrincipals = attrValues (flip filterAttrs config.users.users (n: u:
+      length u.openssh.authorizedPrincipals != 0
+    ));
+  in listToAttrs (map mkAuthPrincipalsFile usersWithPrincipals);
 
 in
 
@@ -285,6 +308,14 @@ in
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
+            AuthorizedPrincipalsFile = mkOption {
+              type = types.str;
+              default = "none"; # upstream default
+              description = lib.mdDoc ''
+                Specifies a file that lists principal names that are accepted for certificate authentication. The default
+                is `"none"`, i.e. not to use	a principals file.
+              '';
+            };
             LogLevel = mkOption {
               type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
               default = "INFO"; # upstream default
@@ -444,7 +475,7 @@ in
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
-    environment.etc = authKeysFiles //
+    environment.etc = authKeysFiles // authPrincipalsFiles //
       { "ssh/moduli".source = cfg.moduliFile;
         "ssh/sshd_config".source = sshconf;
       };
@@ -540,6 +571,8 @@ in
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
       [ "%h/.ssh/authorized_keys" "/etc/ssh/authorized_keys.d/%u" ];
+
+    services.openssh.settings.AuthorizedPrincipalsFile = mkIf (authPrincipalsFiles != {}) "/etc/ssh/authorized_principals.d/%u";
 
     services.openssh.extraConfig = mkOrder 0
       ''

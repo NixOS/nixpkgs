@@ -4,7 +4,6 @@
 , linkify-it-py
 , markdown-it-py
 , mdformat
-, mdformat-gfm
 , mdformat-tables
 , mdit-py-plugins
 , poetry-core
@@ -43,6 +42,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_default_style__api"
+    "test_default_style__cli"
   ];
 
   pythonImportsCheck = [

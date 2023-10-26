@@ -145,6 +145,9 @@ in
         --replace '@node@' ${nodejs} \
         --replace './lib/quarto' ${quartoSrc}
 
+      substituteInPlace src/cpp/conf/rsession-dev.conf \
+        --replace '@node@' ${nodejs}
+
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
         --replace '@libclang@' ${llvmPackages.libclang.lib} \
         --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so

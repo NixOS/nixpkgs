@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    beautifulsoup4 distutils_extra mpd2 notify-py pygobject3 requests
+    beautifulsoup4 distutils-extra mpd2 notify-py pygobject3 requests
   ];
 
   postInstall = ''

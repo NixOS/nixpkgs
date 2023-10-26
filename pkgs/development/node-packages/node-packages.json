@@ -166,6 +166,7 @@
 , "markdown-link-check"
 , "mastodon-bot"
 , "mathjax"
+, "mathjax-node-cli"
 , "meat"
 , "mocha"
 , "multi-file-swagger"
@@ -188,7 +189,6 @@
 , "peerflix"
 , "peerflix-server"
 , {"pgrok-build-deps": "../../tools/networking/pgrok/build-deps"}
-, "pkg"
 , "pm2"
 , "pnpm"
 , "poor-mans-t-sql-formatter-cli"

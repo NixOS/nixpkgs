@@ -854,7 +854,7 @@ rec {
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
-  /* Create an --{enable,disable}-<feat> string that can be passed to
+  /* Create an --{enable,disable}-<feature> string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -863,11 +863,12 @@ rec {
        enableFeature false "shared"
        => "--disable-shared"
   */
-  enableFeature = enable: feat:
-    assert isString feat; # e.g. passing openssl instead of "openssl"
-    "--${if enable then "enable" else "disable"}-${feat}";
+  enableFeature = flag: feature:
+    assert lib.isBool flag;
+    assert lib.isString feature; # e.g. passing openssl instead of "openssl"
+    "--${if flag then "enable" else "disable"}-${feature}";
 
-  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+  /* Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -876,9 +877,10 @@ rec {
        enableFeatureAs false "shared" (throw "ignored")
        => "--disable-shared"
   */
-  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+  enableFeatureAs = flag: feature: value:
+    enableFeature flag feature + optionalString flag "=${value}";
 
-  /* Create an --{with,without}-<feat> string that can be passed to
+  /* Create an --{with,without}-<feature> string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -887,11 +889,11 @@ rec {
        withFeature false "shared"
        => "--without-shared"
   */
-  withFeature = with_: feat:
-    assert isString feat; # e.g. passing openssl instead of "openssl"
-    "--${if with_ then "with" else "without"}-${feat}";
+  withFeature = flag: feature:
+    assert isString feature; # e.g. passing openssl instead of "openssl"
+    "--${if flag then "with" else "without"}-${feature}";
 
-  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+  /* Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -900,7 +902,8 @@ rec {
        withFeatureAs false "shared" (throw "ignored")
        => "--without-shared"
   */
-  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+  withFeatureAs = flag: feature: value:
+    withFeature flag feature + optionalString flag "=${value}";
 
   /* Create a fixed width string with additional prefix to match
      required width.

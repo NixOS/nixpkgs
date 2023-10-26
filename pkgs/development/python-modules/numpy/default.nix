@@ -1,17 +1,17 @@
 { lib
 , stdenv
 , fetchPypi
-, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
 , hypothesis
-, pytest
+, pytestCheckHook
 , typing-extensions
 , blas
 , lapack
 , writeTextFile
 , cython
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -41,24 +41,17 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.25.1";
+  version = "1.25.2";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-mjqfOmFIDMCGEXtCaovYaGnCE/xAcuYG8BxOS2brkr8=";
+    hash = "sha256-/WCOGcjXxVAh3/1Dv+VJL6uMwQXMiYb4E/jDwEizh2A=";
   };
 
   patches = [
-    # f2py.f90mod_rules generates code with invalid function pointer conversions, which are
-    # clang 16 makes an error by default.
-    (fetchpatch {
-      url = "https://github.com/numpy/numpy/commit/609fee4324f3521d81a3454f5fcc33abb0d3761e.patch";
-      hash = "sha256-6Dbmf/RWvQJPTIjvchVaywHGcKCsgap/0wAp5WswuCo=";
-    })
-
     # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
     # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
     # 80-bit long double complex numbers.
@@ -101,18 +94,40 @@ in buildPythonPackage rec {
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     hypothesis
     typing-extensions
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    pushd "$out"
-    ${python.interpreter} -c 'import numpy, sys; sys.exit(numpy.test("fast", verbose=10) is False)'
-    popd
-    runHook postCheck
+  preCheck = ''
+    cd "$out"
   '';
+
+  # https://github.com/numpy/numpy/blob/a277f6210739c11028f281b8495faf7da298dbef/numpy/_pytesttester.py#L180
+  pytestFlagsArray = [
+    "-m" "not\\ slow" # fast test suite
+  ];
+
+  # https://github.com/numpy/numpy/issues/24548
+  disabledTests = lib.optionals stdenv.isi686 [
+    "test_new_policy" # AssertionError: assert False
+    "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
+    "test_float_remainder_overflow" # AssertionError: FloatingPointError not raised by divmod
+    "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
+  ] ++ lib.optionals stdenv.isAarch32 [
+    "test_impossible_feature_enable" # AssertionError: Failed to generate error
+    "test_features" # AssertionError: Failure Detection
+    "test_new_policy" # AssertionError: assert False
+    "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
+    "test_unary_spurious_fpexception"#  AssertionError: Got warnings: [<warnings.WarningMessage object at 0xd1197430>]
+    "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
+    "test_real" # AssertionError: selectedrealkind(16): expected 10 but got -1
+    "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
+    "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
+    "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "test_big_arrays" # OOM on a 16G machine
+  ];
 
   passthru = {
     # just for backwards compatibility

@@ -7,19 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "datafusion-cli";
-  version = "22.0.0";
+  version = "31.0.0";
 
   src = fetchFromGitHub {
     name = "datafusion-cli-source";
     owner = "apache";
     repo = "arrow-datafusion";
     rev = version;
-    sha256 = "sha256-TWvbtuLmAdYS8otD2TpVlZx2FJS6DF03U2zM28FNsfc=";
+    sha256 = "sha256-Y7T3jFvdQbbvrNz+BITauDoNBsQCoXGV8Sgtgw3Brnc=";
   };
 
   sourceRoot = "${src.name}/datafusion-cli";
 
-  cargoSha256 = "sha256-muWWVJDKm4rbpCK0SS7Zj6umFoMKGMScEAd2ZyZ5An8=";
+  cargoHash = "sha256-hLAfByc5tnRPTE4iydlFgqc098fSrvIauiAykoU09u0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

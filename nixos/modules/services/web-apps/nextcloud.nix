@@ -27,13 +27,7 @@ let
 
   phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
-      (with all;
-        # disable default openssl extension
-        (lib.filter (e: e.pname != "php-openssl") enabled)
-        # use OpenSSL 1.1 for RC4 Nextcloud encryption if user
-        # has acknowledged the brokenness of the ciphers (RC4).
-        # TODO: remove when https://github.com/nextcloud/server/issues/32003 is fixed.
-        ++ (if cfg.enableBrokenCiphersForSSE then [ cfg.phpPackage.extensions.openssl-legacy ] else [ cfg.phpPackage.extensions.openssl ])
+      (with all; enabled
         ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
@@ -66,6 +60,9 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
+  # https://github.com/nextcloud/documentation/pull/11179
+  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2";
+
 in {
 
   imports = [
@@ -87,6 +84,10 @@ in {
       Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
       (which can be opened e.g. by running `nixos-help`).
     '')
+    (mkRemovedOptionModule [ "services" "nextcloud" "enableBrokenCiphersForSSE" ] ''
+      This option has no effect since there's no supported Nextcloud version packaged here
+      using OpenSSL for RC4 SSE.
+    '')
     (mkRemovedOptionModule [ "services" "nextcloud" "disableImagemagick" ] ''
       Use services.nextcloud.enableImagemagick instead.
     '')
@@ -95,39 +96,6 @@ in {
   options.services.nextcloud = {
     enable = mkEnableOption (lib.mdDoc "nextcloud");
 
-    enableBrokenCiphersForSSE = mkOption {
-      type = types.bool;
-      default = versionOlder stateVersion "22.11";
-      defaultText = literalExpression "versionOlder system.stateVersion \"22.11\"";
-      description = lib.mdDoc ''
-        This option enables using the OpenSSL PHP extension linked against OpenSSL 1.1
-        rather than latest OpenSSL (≥ 3), this is not recommended unless you need
-        it for server-side encryption (SSE). SSE uses the legacy RC4 cipher which is
-        considered broken for several years now. See also [RFC7465](https://datatracker.ietf.org/doc/html/rfc7465).
-
-        This cipher has been disabled in OpenSSL ≥ 3 and requires
-        a specific legacy profile to re-enable it.
-
-        If you deploy Nextcloud using OpenSSL ≥ 3 for PHP and have
-        server-side encryption configured, you will not be able to access
-        your files anymore. Enabling this option can restore access to your files.
-        Upon testing we didn't encounter any data corruption when turning
-        this on and off again, but this cannot be guaranteed for
-        each Nextcloud installation.
-
-        It is `true` by default for systems with a [](#opt-system.stateVersion) below
-        `22.11` to make sure that existing installations won't break on update. On newer
-        NixOS systems you have to explicitly enable it on your own.
-
-        Please note that this only provides additional value when using
-        external storage such as S3 since it's not an end-to-end encryption.
-        If this is not the case,
-        it is advised to [disable server-side encryption](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption) and set this to `false`.
-
-        In the future, Nextcloud may move to AES-256-GCM, by then,
-        this option will be removed.
-      '';
-    };
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc "FQDN for the nextcloud instance.";
@@ -225,7 +193,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud25" "nextcloud26" "nextcloud27" ];
+      relatedPackages = [ "nextcloud26" "nextcloud27" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -740,28 +708,7 @@ in {
         '')
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
-        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional cfg.enableBrokenCiphersForSSE ''
-          You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
-          This is only necessary if you're using Nextcloud's server-side encryption.
-          Please keep in mind that it's using the broken RC4 cipher.
-
-          If you don't use that feature, you can switch to OpenSSL 3 and get
-          rid of this warning by declaring
-
-            services.nextcloud.enableBrokenCiphersForSSE = false;
-
-          If you need to use server-side encryption you can ignore this warning.
-          Otherwise you'd have to disable server-side encryption first in order
-          to be able to safely disable this option and get rid of this warning.
-          See <https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#disabling-encryption> on how to achieve this.
-
-          For more context, here is the implementing pull request: https://github.com/NixOS/nixpkgs/pull/198470
-        '')
-        ++ (optional (cfg.enableBrokenCiphersForSSE && versionAtLeast cfg.package.version "26") ''
-          Nextcloud26 supports RC4 without requiring legacy OpenSSL, so
-          `services.nextcloud.enableBrokenCiphersForSSE` can be set to `false`.
-        '');
+        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -1136,10 +1083,6 @@ in {
               }
             '';
           };
-          "/" = {
-            priority = 900;
-            extraConfig = "rewrite ^ /index.php;";
-          };
           "~ ^/store-apps" = {
             priority = 201;
             extraConfig = "root ${cfg.home};";
@@ -1164,15 +1107,23 @@ in {
               try_files $uri $uri/ =404;
             '';
           };
-          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)" = {
+            priority = 450;
+            extraConfig = ''
+              return 404;
+            '';
+          };
+          "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
+            priority = 450;
+            extraConfig = ''
+              return 404;
+            '';
+          };
+          "~ \\.php(?:$|/)" = {
             priority = 500;
             extraConfig = ''
+              # legacy support (i.e. static files and directories in cfg.package)
+              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"}]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1188,19 +1139,30 @@ in {
               fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
-          "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
+          "~ \\.(?:css|js|mjs|svg|gif|png|jpg|jpeg|ico|wasm|tflite|map|html|ttf|bcmap|mp4|webm)$".extraConfig = ''
             try_files $uri /index.php$request_uri;
             expires 6M;
             access_log off;
+            location ~ \.wasm$ {
+              default_type application/wasm;
+            }
           '';
-          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
+          "~ ^\\/(?:updater|ocs-provider${optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"})(?:$|\\/)".extraConfig = ''
             try_files $uri/ =404;
             index index.php;
           '';
-          "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            access_log off;
-          '';
+          "/remote" = {
+            priority = 1500;
+            extraConfig = ''
+              return 301 /remote.php$request_uri;
+            '';
+          };
+          "/" = {
+            priority = 1600;
+            extraConfig = ''
+              try_files $uri $uri/ /index.php$request_uri;
+            '';
+          };
         };
         extraConfig = ''
           index index.php index.html /index.php$request_uri;

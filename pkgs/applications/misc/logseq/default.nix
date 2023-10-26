@@ -14,11 +14,11 @@ stdenv.mkDerivation (finalAttrs: let
 
 in {
   pname = "logseq";
-  version = "0.9.18";
+  version = "0.9.19";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-+2BnVW0qWSJ/PIY3zl1c9qzcP9DZVp6E9B7AI6LqibE=";
+    hash = "sha256-Y3AeeJc+PYJdckpOma5ZDbVtBbjBTfNNDqTip4l02/E=";
     name = "${pname}-${version}.AppImage";
   };
 

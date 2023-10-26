@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "hyppo";
-  version = "0.3.2";
+  version = "0.4.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "neurodata";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DQ5DrQrFBJ3dnGAjD1c/7GCJeR3g+aL2poR4hwOvmPA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QRE3oSxTEobTQ/7DzCAUOdjzIZmWUn9bgPmJWj6JuZg=";
   };
 
   propagatedBuildInputs = [

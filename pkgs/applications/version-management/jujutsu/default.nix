@@ -31,13 +31,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fs1cWhBFp2u3HiEx/mMnbwvgwKo97KmftA/sr4dGsiM=";
 
-  buildNoDefaultFeatures = true;
-  buildFeatures = [
-    # enable 'packaging' feature, which enables extra features such as support
-    # for watchman
-    "packaging"
-  ];
-
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = true; # nextest is the upstream integration framework
   ZSTD_SYS_USE_PKG_CONFIG = "1";    # disable vendored zlib

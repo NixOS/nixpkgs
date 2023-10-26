@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rtthost";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-h/D2LW8tQ2WfVrP+HOLs3Gg7HS2Rd0zXBxbnxvEeiWk=";
+    hash = "sha256-Vp2TXKDr6Mu4CD6RlHjTL04FIShzKXwNZmu0PIqx1FY=";
   };
 
-  cargoHash = "sha256-cEzp33y1wuOrKHJBdAPxWUc1ANpT7Sg1MZmaCno1WKA=";
+  cargoHash = "sha256-XRxijak3kBMYCx9u39OWvqz3tjnKipjcV3DPEUBYrvQ=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
 

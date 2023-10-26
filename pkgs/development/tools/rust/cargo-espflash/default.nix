@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-espflash";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     rev = "v${version}";
-    hash = "sha256-PYW5OM3pbmROeGkbGiLhnVGrYq6xn3B1Z4sbIjtAPlk=";
+    hash = "sha256-Nv2/33VYpCkPYyUhlVDYJR1BkbtEvEPtmgyZXfVn1ug=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     SystemConfiguration
   ];
 
-  cargoHash = "sha256-gTehRP9Ct150n3Kdz+NudJcKGeOCT059McrXURhy2iQ=";
+  cargoHash = "sha256-FpBc92a2JQHRLe5S6yh3l0FpRI8LpkGGEma/4v5X4xs=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -10,7 +10,7 @@
 , ninja
 , curl
 , perl
-, llvm_13
+, llvmPackages_13
 , desktop-file-utils
 , exiv2
 , glib
@@ -53,7 +53,6 @@
 , libheif
 , libaom
 , portmidi
-, fetchpatch
 , lua
 }:
 
@@ -66,7 +65,9 @@ stdenv.mkDerivation rec {
     sha256 = "c11d28434fdf2e9ce572b9b1f9bc4e64dcebf6148e25080b4c32eb51916cfa98";
   };
 
-  nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja llvmPackages_13.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ]
+    # LLVM Clang C compiler version 11.1.0 is too old and is unsupported. Version 12+ is required.
+    ++ lib.optionals stdenv.isDarwin [ llvmPackages_13.clang ];
 
   buildInputs = [
     cairo

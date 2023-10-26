@@ -257,7 +257,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-HiZtNHXkoSl3Q4cAerUs8c138AiDJJxzYNQT3I4+ea8=";
+      hash = "sha256-rwpwB+vli3CXRhUFL+UvyUpPlxRk6P/2zLCn0SL9E6s=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
