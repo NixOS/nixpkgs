@@ -582,6 +582,7 @@ in
 
   mame2016 = mkLibretroCore {
     core = "mame2016";
+    patches = [ ./patches/mame2016-python311.patch ];
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
