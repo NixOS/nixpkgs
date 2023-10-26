@@ -3,14 +3,14 @@
 , fetchFromGitHub
 , cmake
 , openssl
-, protobuf3_21
+, protobuf_21
 , catch2
 , boost181
 , icu
 }:
 let
   boost = boost181.override { enableStatic = true; };
-  protobuf = protobuf3_21.override { enableShared = false; };
+  protobuf = protobuf_21.override { enableShared = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "localproxy";

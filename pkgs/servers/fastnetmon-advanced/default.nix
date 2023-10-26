@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, bzip2 }:
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, bzip2
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.350";
+  version = "2.0.351";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-rd0xdpENsdH8jOoUkQHW8/fXE4zEjQemFT4Q2tXjtT8=";
+    hash = "sha256-gLR4Z5VZyyt6CmoWcqDT75o50KyEJsfsx67Sqpiwh04=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +63,8 @@ stdenv.mkDerivation rec {
     $out/bin/fnm-gobgp --help 2>&1 | grep "Available Commands"
     $out/bin/fnm-gobgpd --help 2>&1 | grep "Application Options"
   '';
+
+  passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
   meta = with lib; {
     description = "A high performance DDoS detector / sensor - commercial edition";

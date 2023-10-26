@@ -134,6 +134,8 @@
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
 , withTests ? false
+  # build only libudev and libsystemd
+, buildLibsOnly ? false
 
   # name argument
 , pname ? "systemd"
@@ -202,6 +204,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
+
+    # Fix for `RuntimeError: ELF .dynamic section is missing.`
+    # https://github.com/systemd/systemd/issues/29381
+    # https://github.com/systemd/systemd/pull/29392
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/commit/cecbb162a3134b43d2ca160e13198c73ff34c3ef.patch";
+      hash = "sha256-hWpUosTDA18mYm5nIb9KnjwOlnzbEHgzha/WpyHoC54=";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -372,7 +382,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
 
   nativeBuildInputs =
     [
@@ -436,7 +446,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
-  #dontAddPrefix = true;
+  mesonBuildType = "release";
 
   mesonFlags = [
     "-Dversion-tag=${version}"
@@ -697,7 +707,9 @@ stdenv.mkDerivation (finalAttrs: {
     export DESTDIR=/
   '';
 
-  postInstall = ''
+  mesonInstallTags = lib.optionals buildLibsOnly [ "devel" "libudev" "libsystemd" ];
+
+  postInstall = lib.optionalString (!buildLibsOnly) ''
     mkdir -p $out/example/systemd
     mv $out/lib/{binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -715,7 +727,7 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
-  '' + lib.optionalString withKmod ''
+  '' + lib.optionalString (withKmod && !buildLibsOnly) ''
     mv $out/lib/modules-load.d $out/example
   '';
 
@@ -740,7 +752,7 @@ stdenv.mkDerivation (finalAttrs: {
     # To cross compile a derivation that builds a UKI with ukify, we need to wrap
     # ukify with the correct binutils. When wrapping, no splicing happens so we
     # have to explicitly pull binutils from targetPackages.
-    wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
+    wrapProgram $out/lib/systemd/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)

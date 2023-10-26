@@ -12,7 +12,7 @@
   zlibSupport ? true, zlib,
   libuniqueSupport ? true, libunique,
   libpngSupport ? true, libpng,
-  openglSupport ? !stdenv.isDarwin
+  openglSupport ? !stdenv.isDarwin, libGL
 }:
 
 let
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with lib;
     [ gtk2 fftw ] ++
-    optional openglSupport gnome2.gtkglext ++
+    optionals openglSupport [ gnome2.gtkglext libGL ] ++
     optional openexrSupport openexr ++
     optional libXmuSupport xorg.libXmu ++
     optional fitsSupport cfitsio ++

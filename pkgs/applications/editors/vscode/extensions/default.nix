@@ -377,8 +377,8 @@ let
         mktplcRef = {
           name = "Millet";
           publisher = "azdavis";
-          version = "0.12.5";
-          sha256 = "sha256-gJIxCdoxWGThalY+qJ930UtRLFkvr34LfaSioAZH9TQ=";
+          version = "0.13.5";
+          sha256 = "sha256-sWM7N+axgu1zOGWexR4JVupVmYhZrd4cZz3pmLxRj8Q=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
@@ -3298,8 +3298,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.4.3";
-          sha256 = "sha256-z1foIJXVKmJ0G4FfO9xsjiQgmq/ZtoB3b6Ch8Nyj1zY=";
+          version = "107.12.0";
+          sha256 = "036ri011fd0cf91iwv59j57m05mxliy27ms4di2y9jlk7jzmr4s2";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -3521,8 +3521,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.19";
-          sha256 = "sha256-Tww1urq6CfLma254Sn5lwOYwbvxAeDZuBuFBQlzks1c=";
+          version = "0.0.21";
+          sha256 = "sha256-u57U/MmxvionFZp/tLK/KpddaxA/SUffeggKBSzmsXo=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

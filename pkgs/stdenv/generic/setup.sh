@@ -16,28 +16,14 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-if [ -f .attrs.sh ]; then
+if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
-else
-    __structuredAttrs=
-fi
 
-if [ -n "$__structuredAttrs" ]; then
     for outputName in "${!outputs[@]}"; do
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-
-    # Before Nix 2.4, $NIX_ATTRS_*_FILE was named differently:
-    # https://github.com/NixOS/nix/commit/27ce722
-    if [[ -n "${ATTRS_JSON_FILE:-}" ]]; then
-        export NIX_ATTRS_JSON_FILE="$ATTRS_JSON_FILE"
-    fi
-
-    if [[ -n "${ATTRS_SH_FILE:-}" ]]; then
-        export NIX_ATTRS_SH_FILE="$ATTRS_SH_FILE"
-    fi
 
     # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
     # https://github.com/NixOS/nix/issues/6736; please keep around until the
@@ -49,6 +35,7 @@ if [ -n "$__structuredAttrs" ]; then
         export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
     fi
 else
+    __structuredAttrs=
     : "${outputs:=out}"
 fi
 

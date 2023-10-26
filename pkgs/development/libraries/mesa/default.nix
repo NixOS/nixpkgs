@@ -223,6 +223,7 @@ self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
     zstd libunwind
+    python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
@@ -319,6 +320,9 @@ self = stdenv.mkDerivation {
         mv $dev/$pc $driversdev/$pc
       fi
     done
+
+    # Don't depend on build python
+    patchShebangs --host --update $out/bin/*
 
     # NAR doesn't support hard links, so convert them to symlinks to save space.
     jdupes --hard-links --link-soft --recurse "$drivers"

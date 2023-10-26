@@ -22,7 +22,7 @@ in {
         ];
       };
 
-    server_lazy =
+    server-lazy =
       { ... }:
 
       {
@@ -34,7 +34,7 @@ in {
         ];
       };
 
-    server_localhost_only =
+    server-localhost-only =
       { ... }:
 
       {
@@ -43,7 +43,7 @@ in {
         };
       };
 
-    server_localhost_only_lazy =
+    server-localhost-only-lazy =
       { ... }:
 
       {
@@ -52,7 +52,7 @@ in {
         };
       };
 
-    server_match_rule =
+    server-match-rule =
       { ... }:
 
       {
@@ -119,11 +119,11 @@ in {
         )
 
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'echo hello world' >&2",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'ulimit -l' | grep 1024",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
             timeout=30
         )
 
@@ -137,7 +137,7 @@ in {
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server_lazy true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
             timeout=30
         )
 
