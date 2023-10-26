@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils }:
+{ lib, stdenv, fetchzip, jdk, makeWrapper, installShellFiles, coreutils, testers, gitUpdater }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spring-boot-cli";
   version = "3.1.5";
 
@@ -24,6 +24,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "${lib.getExe finalAttrs.finalPackage} --version";
+      version = "v${finalAttrs.version}";
+    };
+    updateScript = gitUpdater {
+      url = "https://github.com/spring-projects/spring-boot";
+      ignoredVersions = ".*-(RC|M).*";
+      rev-prefix = "v";
+    };
+  };
+
   meta = with lib; {
     description = ''
       CLI which makes it easy to create spring-based applications
@@ -40,9 +53,10 @@ stdenv.mkDerivation rec {
       a command line tool that runs “spring scripts”.
     '';
     homepage = "https://spring.io/projects/spring-boot";
+    changelog = "https://github.com/spring-projects/spring-boot/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];
   };
-}
+})
