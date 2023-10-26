@@ -985,8 +985,8 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.31";
-      hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
+      rev = "1.32";
+      hash = "sha256-uBZtzh+IvBFNU/9oQ3KmX65Eog2CrI5LYN8sKaqjJhE=";
     };
 
     inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
