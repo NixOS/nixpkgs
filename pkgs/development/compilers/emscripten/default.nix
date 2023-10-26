@@ -54,8 +54,6 @@ stdenv.mkDerivation rec {
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
-    # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
