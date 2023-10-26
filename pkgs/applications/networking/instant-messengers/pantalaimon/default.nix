@@ -1,18 +1,14 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, logbook, peewee, janus,
-  prompt-toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-  setuptools, installShellFiles, nixosTests,
-
-  pytest, faker, pytest-aiohttp, aioresponses,
-
+{ lib, stdenv, python310Packages, fetchFromGitHub,
+  pythonOlder, pythonAtLeast, installShellFiles, nixosTests,
   enableDbusUi ? true
 }:
 
-buildPythonApplication rec {
+# Broken on Python 3.11 because of pydbus-0.6 (unmaintained)
+python310Packages.buildPythonApplication rec {
   pname = "pantalaimon";
   version = "0.10.5";
 
-  disabled = pythonOlder "3.6";
+  disabled = (pythonAtLeast "3.6") || (pythonOlder "3.11");
 
   # pypi tarball miss tests
   src = fetchFromGitHub {
@@ -22,7 +18,7 @@ buildPythonApplication rec {
     sha256 = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs =  with python310Packages; [
     aiohttp
     appdirs
     attrs
@@ -43,7 +39,7 @@ buildPythonApplication rec {
       pydbus
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python310Packages; [
     pytest
     faker
     pytest-aiohttp
