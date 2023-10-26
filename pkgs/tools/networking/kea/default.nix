@@ -5,8 +5,11 @@
 # build time
 , autoreconfHook
 , pkg-config
+, python3Packages
 
 # runtime
+, withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
+, withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
 , boost
 , libmysqlclient
 , log4cplus
@@ -48,9 +51,10 @@ stdenv.mkDerivation rec {
     "--enable-shell"
     "--localstatedir=/var"
     "--with-openssl=${lib.getDev openssl}"
-    "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
-    "--with-pgsql=${postgresql}/bin/pg_config"
-  ];
+  ]
+  ++ lib.optional withPostgres "--with-pgsql=${postgresql}/bin/pg_config"
+  ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
+
   postConfigure = ''
     # Mangle embedded paths to dev-only inputs.
     sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
@@ -59,7 +63,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ] ++ (with python3.pkgs; [
+  ] ++ (with python3Packages; [
     sphinxHook
     sphinx-rtd-theme
   ]);
