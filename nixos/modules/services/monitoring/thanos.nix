@@ -659,14 +659,7 @@ in {
 
   options.services.thanos = {
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.thanos;
-      defaultText = literalExpression "pkgs.thanos";
-      description = lib.mdDoc ''
-        The thanos package that should be used.
-      '';
-    };
+    package = lib.mkPackageOptionMD pkgs "thanos" {};
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption
