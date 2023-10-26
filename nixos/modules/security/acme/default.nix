@@ -938,13 +938,10 @@ in {
             and remove the wildcard from the path.
           '';
         }
-        {
-          assertion = lib.length (lib.filter (x: x != null) [
-            data.dnsProvider
-            data.webroot
-            data.listenHTTP
-            data.s3Bucket
-          ]) != 1;
+        (let exclusiveAttrs = {
+          inherit (data) dnsProvider webroot listenHTTP s3Bucket;
+        }; in {
+          assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
           message = ''
             Exactly one of the options
             `security.acme.certs.${cert}.dnsProvider`,
@@ -952,8 +949,9 @@ in {
             `security.acme.certs.${cert}.listenHTTP` and
             `security.acme.certs.${cert}.s3Bucket`
             is required.
+            Current values: ${(lib.generators.toPretty {} exclusiveAttrs)}.
           '';
-        }
+        })
         {
           assertion = all (hasSuffix "_FILE") (attrNames data.credentialFiles);
           message = ''
