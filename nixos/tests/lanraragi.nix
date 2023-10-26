@@ -10,19 +10,17 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       services.lanraragi = {
         enable = true;
         passwordFile = pkgs.writeText "lrr-test-pass" ''
-          ultra-secure-password
+          Ultra-secure-p@ssword-"with-spec1al\chars
         '';
         port = 4000;
         redis = {
           port = 4001;
           passwordFile = pkgs.writeText "redis-lrr-test-pass" ''
-            still-a-very-secure-password
+            123-redis-PASS
           '';
         };
       };
     };
-
-
   };
 
   testScript = ''
@@ -34,7 +32,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     machine2.wait_for_unit("lanraragi.service")
     machine2.wait_until_succeeds("curl -f localhost:4000")
-    machine2.succeed("[ $(curl -o /dev/null -X post 'http://localhost:4000/login' --data-raw 'password=ultra-secure-password' -w '%{http_code}') -eq 302 ]")
+    machine2.succeed("[ $(curl -o /dev/null -X post 'http://localhost:4000/login' --data-raw 'password=Ultra-secure-p@ssword-\"with-spec1al\\chars' -w '%{http_code}') -eq 302 ]")
   '';
 })
 
