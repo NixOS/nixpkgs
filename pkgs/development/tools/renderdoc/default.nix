@@ -11,8 +11,8 @@
 , vulkan-loader
 , libglvnd
 , xorg
-, python3
-, python3Packages
+, python310
+, python310Packages
 , bison
 , pcre
 , automake
@@ -42,8 +42,8 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
-  ] ++ (with python3Packages; [
+    qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python310
+  ] ++ (with python310Packages; [
     pyside2 pyside2-tools shiboken2
   ])
   ++ lib.optional waylandSupport wayland;
