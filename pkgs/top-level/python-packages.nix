@@ -1440,6 +1440,8 @@ self: super: with self; {
 
   bip-utils = callPackage ../development/python-modules/bip-utils { };
 
+  bip32 = callPackage ../development/python-modules/bip32 { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitbox02 = callPackage ../development/python-modules/bitbox02 { };
