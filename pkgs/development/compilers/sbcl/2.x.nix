@@ -30,30 +30,16 @@ let
   # non-binary-distributed Lisp) can run on any of these systems, that entry
   # should be removed from this list.
   bootstrapBinaries = rec {
-    aarch64-darwin = {
-      version = "2.1.2";
-      system = "arm64-darwin";
-      sha256 = "sha256-H0ALigXcWIypdA+fTf7jERscwbb7QIAfcoxCtGDh0RU=";
-    };
+    # This build segfaults using CLISP.
     x86_64-darwin = {
       version = "2.2.9";
       system = "x86-64-darwin";
       sha256 = "sha256-b1BLkoLIOELAYBYA9eBmMgm1OxMxJewzNP96C9ADfKY=";
     };
-    x86_64-linux = {
-      version = "1.3.16";
-      system = "x86-64-linux";
-      sha256 = "0sq2dylwwyqfwkbdvcgqwz3vay9v895zpb0fyzsiwy31d1x9pr2s";
-    };
     i686-linux = {
       version = "1.2.7";
       system = "x86-linux";
       sha256 = "07f3bz4br280qvn85i088vpzj9wcz8wmwrf665ypqx181pz2ai3j";
-    };
-    aarch64-linux = {
-      version = "1.3.16";
-      system = "arm64-linux";
-      sha256 = "0q1brz9c49xgdljzfx8rpxxnlwhadxkcy5kg0mcd9wnxygind1cl";
     };
     armv7l-linux = {
       version = "1.2.14";
@@ -200,6 +186,12 @@ stdenv.mkDerivation rec {
     homepage = "https://sbcl.org";
     license = licenses.publicDomain; # and FreeBSD
     maintainers = lib.teams.lisp.members;
-    platforms = attrNames bootstrapBinaries;
+    platforms = attrNames bootstrapBinaries ++ [
+      # These aren’t bootstrapped using the binary distribution but compiled
+      # using a separate (lisp) host
+      "x86_64-linux"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
   };
 }
