@@ -45,17 +45,18 @@ Many Dart applications require executables from the `dev_dependencies` section i
 This can be done in `preBuild`, in one of two ways:
 
 1. Packaging the tool with `buildDartApplication`, adding it to Nixpkgs, and running it like any other application
-2. Running the tool from the Pub cache
+2. Running the tool from the package cache
 
 Of these methods, the first is recommended when using a tool that does not need
 to be of a specific version.
 
-To use the second method, first make the derivation accessible within itself (e.g. `let self = ...; in self`), and then run it from the Pub cache in `preBuild`.
+For the second method, the `packageRun` function from the `dartConfigHook` can be used.
+This is an alternative to `dart run` that does not rely on Pub.
 
 e.g., for `build_runner`:
 
 ```bash
-dart --packages=.dart_tool/package_config.json ${self.pubspecLock.dependencySources.build_runner.packagePath}/bin/build_runner.dart build
+packageRun build_runner -- build
 ```
 
 Do _not_ use `dart run <package_name>`, as this will attempt to download dependencies with Pub.
