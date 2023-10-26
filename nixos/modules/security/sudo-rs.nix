@@ -42,7 +42,8 @@ in
     };
 
     enable = mkEnableOption (mdDoc ''
-      the {command}`sudo` command, which allows non-root users to execute commands as root.
+      a memory-safe implementation of the {command}`sudo` command,
+      which allows non-root users to execute commands as root.
     '');
 
     package = mkPackageOption pkgs "sudo-rs" { };
