@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "upx";
-  version = "4.1.0";
+  version = "4.2.0";
   src = fetchFromGitHub {
     owner = "upx";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-pHJypO+sK7+ytM7yJxJpfBJHTYpGc9nr/JiFGd7hlJM=";
+    sha256 = "sha256-PRfIJSjmeXjbslqWnKrHUPdOJfZU08nr4wXoAnP9qm0=";
   };
 
   nativeBuildInputs = [ cmake ];
