@@ -56,7 +56,7 @@ This is an alternative to `dart run` that does not rely on Pub.
 e.g., for `build_runner`:
 
 ```bash
-packageRun build_runner -- build
+packageRun build_runner build
 ```
 
 Do _not_ use `dart run <package_name>`, as this will attempt to download dependencies with Pub.

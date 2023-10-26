@@ -3,6 +3,7 @@
 {
   dartConfigHook = makeSetupHook {
     name = "dart-config-hook";
+    substitutions.yq = "${yq}/bin/yq";
     substitutions.jq = "${jq}/bin/jq";
   } ./dart-config-hook.sh;
   dartBuildHook = makeSetupHook {
