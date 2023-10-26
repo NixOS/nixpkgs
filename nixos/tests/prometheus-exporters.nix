@@ -416,8 +416,8 @@ let
     };
 
     kea = let
-      controlSocketPathV4 = "/run/kea/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea-dhcp4/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea-dhcp6/dhcp6.sock";
     in
     {
       exporterConfig = {
@@ -512,7 +512,7 @@ let
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep 'knot_server_zone_count 1.0'")
+        succeed("curl -sSf 'localhost:9433' | grep '2\.019031301'")
       '';
     };
 

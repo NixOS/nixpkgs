@@ -41,8 +41,9 @@ let
       name = "http_proxy_connect_module_generic";
       owner = "chobits";
       repo = "ngx_http_proxy_connect_module";
-      rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
-      sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
+      # 2023-06-19
+      rev = "dcb9a2c614d376b820d774db510d4da12dfe1e5b";
+      hash = "sha256-AzMhTSzmk3osSYy2q28/hko1v2AOTnY/dP5IprqGlQo=";
     };
 
     patches = [
@@ -303,12 +304,12 @@ let self = {
     };
   };
 
-  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "18";
+  http_proxy_connect_module_v24 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "24";
   };
 
-  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "19";
+  http_proxy_connect_module_v25 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "25";
   };
 
   ipscrub = {

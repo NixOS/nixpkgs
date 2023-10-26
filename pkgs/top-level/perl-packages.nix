@@ -278,6 +278,25 @@ with self; {
     };
   };
 
+  AlienFFI = buildPerlPackage {
+    pname = "Alien-FFI";
+    version = "0.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-FFI-0.27.tar.gz";
+      hash = "sha256-Kbsgg/P5gqOfSFIkP09qEZFpZvIObneGTpkmnRHotl4=";
+    };
+    patches = [ ../development/perl-modules/Alien-FFI-dont-download.patch ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.libffi CaptureTiny Test2Suite NetSSLeay MojoDOM58 IOSocketSSL ];
+    propagatedBuildInputs = [ AlienBuild ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Alien::FFI";
+      description = "Build and make available libffi";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   AlienGMP = buildPerlPackage {
     pname = "Alien-GMP";
     version = "1.16";
@@ -989,6 +1008,61 @@ with self; {
       description = "Validate method/function parameters";
       homepage = "https://metacpan.org/release/Params-Validate";
       license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
+  ArchiveLibarchive = buildPerlPackage {
+    pname = "Archive-Libarchive";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-0.08.tar.gz";
+      hash = "sha256-6ONC1U/T1uXn4xYP4IjBOgpQM8/76JSBodJHHUNyAFk=";
+    };
+    patches = [ ../development/perl-modules/ArchiveLibarchive-set-findlib-path.patch ];
+    postPatch = ''
+      substituteInPlace lib/Archive/Libarchive/Lib.pm --replace "@@libarchive@@" "${pkgs.libarchive.lib}/lib"
+    '';
+    buildInputs = [ FFIC Filechdir PathTiny SubIdentify TermTable Test2Suite Test2ToolsMemoryCycle TestArchiveLibarchive TestScript ];
+    propagatedBuildInputs = [ FFICStat FFICheckLib FFIPlatypus FFIPlatypusTypeEnum FFIPlatypusTypePtrObject RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Archive::Libarchive";
+      description = "Modern Perl bindings to libarchive";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
+  ArchiveLibarchiveExtract = buildPerlPackage {
+    pname = "Archive-Libarchive-Extract";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-Extract-0.03.tar.gz";
+      hash = "sha256-yXfAR0hnIX6zJvte5pA04e9spBQUkWHjEpAblf0SwIE=";
+    };
+    buildInputs = [ Test2Suite TestScript ];
+    propagatedBuildInputs = [ ArchiveLibarchive Filechdir PathTiny RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Archive::Libarchive::Extract";
+      description = "An archive extracting mechanism (using libarchive)";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
+  ArchiveLibarchivePeek = buildPerlPackage {
+    pname = "Archive-Libarchive-Peek";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Archive-Libarchive-Peek-0.04.tar.gz";
+      hash = "sha256-DYhJ4xG2RsozWz6gGodTtAIkK5XOgAo7zNXHCC4nJPo=";
+    };
+    buildInputs = [ Filechdir Test2Suite TestScript ];
+    propagatedBuildInputs = [ ArchiveLibarchive PathTiny RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Archive::Libarchive::Peek";
+      description = "Peek into archives without extracting them";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 
@@ -9187,6 +9261,23 @@ with self; {
     };
   };
 
+  FFIC = buildPerlPackage {
+    pname = "FFI-C";
+    version = "0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-0.15.tar.gz";
+      hash = "sha256-63BgfmZzvMsY3yf0zuRZ+23EGODak+aSzcNVX+QNL04=";
+    };
+    buildInputs = [ CaptureTiny PathTiny Test2Suite ];
+    propagatedBuildInputs = [ ClassInspector FFIPlatypus FFIPlatypusTypeEnum RefUtil SubIdentify SubInstall ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::C";
+      description = "C data types for FFI";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   FFICheckLib = buildPerlPackage {
     pname = "FFI-CheckLib";
     version = "0.27";
@@ -9199,6 +9290,74 @@ with self; {
       description = "Check that a library is available for FFI";
       homepage = "https://metacpan.org/pod/FFI::CheckLib";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  FFICStat = buildPerlPackage {
+    pname = "FFI-C-Stat";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
+      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+    };
+    buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
+    propagatedBuildInputs = [ FFIPlatypus RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::C::Stat";
+      description = "Object-oriented FFI interface to native stat and lstat";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
+  FFIPlatypus = buildPerlPackage {
+    pname = "FFI-Platypus";
+    version = "2.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-2.08.tar.gz";
+      hash = "sha256-EbOrEU7ZY1YxzYWzjSKXhuFEv5Sjr5rAnD17s0M2uSQ=";
+    };
+    buildInputs = [ AlienFFI Test2Suite ];
+    propagatedBuildInputs = [ CaptureTiny FFICheckLib ];
+    meta = {
+      homepage = "https://pl.atypus.org";
+      description = "Write Perl bindings to non-Perl libraries with FFI. No XS required";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
+  FFIPlatypusTypePtrObject = buildPerlPackage {
+    pname = "FFI-Platypus-Type-PtrObject";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-Type-PtrObject-0.03.tar.gz";
+      hash = "sha256-4elJB++QtANgqabAPSlaEwR9T2ybVqyvHfK1TRcwf3Q=";
+    };
+    buildInputs = [ Test2Suite Test2ToolsFFI ];
+    propagatedBuildInputs = [ FFIPlatypus RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::Platypus::Type::PtrObject";
+      description = "Platypus custom type for an object wrapped around an opaque pointer";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
+  FFIPlatypusTypeEnum = buildPerlPackage {
+    pname = "FFI-Platypus-Type-Enum";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-Platypus-Type-Enum-0.06.tar.gz";
+      hash = "sha256-yVSmBPfWkpYk+pQT2NDh2DtL2XfQVifKznPtU6lcd98=";
+    };
+    buildInputs = [ FFIPlatypus Test2Suite ];
+    propagatedBuildInputs = [ RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/FFI::Platypus::Type::Enum";
+      description = "Custom platypus type for dealing with C enumerated types";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 
@@ -9807,6 +9966,21 @@ with self; {
       description = "Locate per-dist and per-module shared files";
       homepage = "https://metacpan.org/release/File-ShareDir";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  FileShareDirDist = buildPerlPackage {
+    pname = "File-ShareDir-Dist";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-ShareDir-Dist-0.07.tar.gz";
+      hash = "sha256-jX/l0O4iNR9B75Wtwi29VsMf+iqbLBmEMA6S/36f6G0=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/pod/File::ShareDir::Dist";
+      description = "Locate per-dist shared files";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 
@@ -14099,6 +14273,21 @@ with self; {
     };
   };
 
+  LogfileRotate = buildPerlPackage {
+    pname = "Logfile-Rotate";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PA/PAULG/Logfile-Rotate-1.04.tar.gz";
+      hash = "sha256-gQ+LfM2GV9Ox71PNR1glR4Rc67WCArBVObNAhjjK2j4=";
+    };
+    meta = {
+      description = "Perl module to rotate logfiles";
+      homepage = "https://metacpan.org/dist/Logfile-Rotate";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   Logger = buildPerlPackage {
     pname = "Log-ger";
     version = "0.037";
@@ -15452,6 +15641,23 @@ with self; {
     };
   };
 
+  MinionBackendRedis = buildPerlModule {
+    pname = "Minion-Backend-Redis";
+    version = "0.003";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DF/DFUG/Minion-Backend-Redis-0.003.tar.gz";
+      hash = "sha256-zXZRIQbfHKmQF75fObSmXgSCawzZQxe3GsAWGzXzI6A=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Minion MojoRedis Mojolicious SortVersions ];
+    meta = {
+      homepage = "https://github.com/Difegue/Minion-Backend-Redis";
+      description = "Redis backend for Minion job queue";
+      license = with lib.licenses; [ artistic2 ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   MinionBackendSQLite = buildPerlModule {
     pname = "Minion-Backend-SQLite";
     version = "5.0.6";
@@ -16258,6 +16464,22 @@ with self; {
     };
   };
 
+  MojoliciousPluginRenderFile = buildPerlPackage {
+    pname = "Mojolicious-Plugin-RenderFile";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KO/KOORCHIK/Mojolicious-Plugin-RenderFile-0.12.tar.gz";
+      hash = "sha256-AT5CoswGvHBBuxPJ3ziK8kAQ5peTqN8PCrHSQKphFz8=";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      description = "\"render_file\" helper for Mojolicious";
+      homepage = "https://github.com/koorchik/Mojolicious-Plugin-RenderFile";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
     version = "1.17";
@@ -16287,6 +16509,23 @@ with self; {
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-syslog";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MojoliciousPluginTemplateToolkit = buildPerlModule {
+    pname = "Mojolicious-Plugin-TemplateToolkit";
+    version = "0.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojolicious-Plugin-TemplateToolkit-0.006.tar.gz";
+      hash = "sha256-dBoFAmtTArtrKc+I3KICC3rv0iNHgWELpZNaqPCXNKY=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ ClassMethodModifiers Mojolicious TemplateToolkit ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Mojolicious-Plugin-TemplateToolkit";
+      description = "Template Toolkit renderer plugin for Mojolicious";
+      license = with lib.licenses; [ artistic2 ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 
@@ -16853,6 +17092,22 @@ with self; {
     meta = {
       description = "A Mouse role for setting attributes from a simple configfile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestArchiveLibarchive = buildPerlPackage {
+    pname = "Test-Archive-Libarchive";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Archive-Libarchive-0.02.tar.gz";
+      hash = "sha256-KxkYZx4F2i2dIiwQx9kXWFpiQYb+r7j4SQhZnDRwJ1E=";
+    };
+    propagatedBuildInputs = [ RefUtil Test2Suite ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Test::Archive::Libarchive";
+      description = "Testing tools for Archive::Libarchive";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 
@@ -17780,6 +18035,20 @@ with self; {
       homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
       license = with licenses; [ gpl1Plus /* or */ artistic1 ];
       maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
+  NetDNSNative = buildPerlPackage {
+    pname = "Net-DNS-Native";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/Net-DNS-Native-0.22.tar.gz";
+      hash = "sha256-EI2d7bq5/69qDQFSVSbeGJSITpUL/YM3F+XNOJBcMNU=";
+    };
+    meta = {
+      description = "Non-blocking system DNS resolver";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 
@@ -19225,6 +19494,22 @@ with self; {
     };
   };
 
+  ParallelLoops = buildPerlPackage {
+    pname = "Parallel-Loops";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.10.tar.gz";
+      hash = "sha256-b5Z7RuejY7FocbmZHDWeFC3Dsigc/psa85kEcEyL0qo=";
+    };
+    propagatedBuildInputs = [ ParallelForkManager ];
+    meta = {
+      description = "Execute loops using parallel forked subprocesses";
+      homepage = "https://github.com/pmorch/perl-Parallel-Loops";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   ParallelPipes = buildPerlModule {
     pname = "Parallel-Pipes";
     version = "0.102";
@@ -19986,10 +20271,10 @@ with self; {
   PerlMagick = ImageMagick; # added 2021-08-02
   ImageMagick = buildPerlPackage rec {
     pname = "Image-Magick";
-    version = "7.1.1-18";
+    version = "7.1.1-20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      hash = "sha256-42mvGP4FkY/YfPOh/jRiUFWdDk+S2oB0Jfqv30AAlxw=";
+      hash = "sha256-oMAwXQBxuV2FgPHBhUi+toNFPVnRLNjZqdP2q+ki6jg=";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
@@ -23128,6 +23413,21 @@ with self; {
     };
   };
 
+  SysCpuAffinity = buildPerlModule {
+    pname = "Sys-CpuAffinity";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MOB/Sys-CpuAffinity-1.12.tar.gz";
+      hash = "sha256-/jLAXz6wWXCMZH8ruFslBFhZHyupBR2Nhm9Uajh+6Eg=";
+    };
+    doCheck = false; # Would run checks for all supported systems
+    meta = {
+      description = "Set CPU affinity for processes";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
   SysHostnameLong = buildPerlPackage {
     pname = "Sys-Hostname-Long";
     version = "1.5";
@@ -23845,6 +24145,40 @@ with self; {
     meta = {
       description = "Distribution with a rich set of tools built upon the Test2 framework";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Test2ToolsFFI = buildPerlPackage {
+    pname = "Test2-Tools-FFI";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test2-Tools-FFI-0.06.tar.gz";
+      hash = "sha256-MA28QKEubG+7y7lv05uQK+bZZXJtrx5qtzuKCv0lLy8=";
+    };
+    buildInputs = [ FileShareDirInstall Test2Suite ];
+    propagatedBuildInputs = [ CaptureTiny FFICheckLib FFIPlatypus FileShareDirDist ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Test2::Tools::FFI";
+      description = "Tools for testing FFI";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
+    };
+  };
+
+  Test2ToolsMemoryCycle = buildPerlPackage {
+    pname = "Test2-Tools-MemoryCycle";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test2-Tools-MemoryCycle-0.01.tar.gz";
+      hash = "sha256-U1s9ylQqMyUVEq3ktafb6+PESNg/iA0ZjkPcEnl5aYs=";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ DevelCycle PadWalker ];
+    meta = {
+      homepage = "https://metacpan.org/pod/Test2::Tools::MemoryCycle";
+      description = "Check for memory leaks and circular memory references";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ tomasajt ];
     };
   };
 

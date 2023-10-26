@@ -15,7 +15,6 @@ cyan,,,,,,
 digestif,https://github.com/astoff/digestif.git,,,,5.3,
 dkjson,,,,,,
 fennel,,,,,,misterio77
-ferris.nvim,,,,,,mrcjkb
 fifo,,,,,,
 fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
@@ -100,6 +99,7 @@ penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 rest.nvim,,,,,5.1,teto
+rustaceanvim,,,,,,mrcjkb
 say,https://github.com/Olivine-Labs/say.git,,,,,
 serpent,,,,,,lockejan
 sqlite,,,,,,

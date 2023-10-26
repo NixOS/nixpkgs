@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-mysql";
-  version = "4.11.0";
-  format = "pyproject";
+  version = "4.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-mysql";
     rev = "refs/tags/${version}";
-    hash = "sha256-4PxJH5P/a4oNigbTjrZa3q+FeDQTdkvCKonUUl4I8m0=";
+    hash = "sha256-AieI6zUPFXQsrvoms5bu/Bb3J+DvfLA4rCCsjhYBEZQ=";
   };
 
   nativeBuildInputs = [

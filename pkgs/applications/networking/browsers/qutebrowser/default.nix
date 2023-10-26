@@ -1,18 +1,17 @@
 { stdenv, lib, fetchurl, fetchzip, python3
 , wrapQtAppsHook, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
-, libxslt, gst_all_1 ? null
+, libxslt
 , withPdfReader      ? true
-, withMediaPlayback  ? true
-, backend            ? "webengine"
 , pipewireSupport    ? stdenv.isLinux
 , pipewire
 , qtwayland
 , qtbase
 , qtwebengine
-, wrapGAppsHook
 , enableWideVine ? false
 , widevine-cdm
+, enableVulkan ? stdenv.isLinux
+, vulkan-loader
 }:
 
 let
@@ -26,20 +25,14 @@ let
   };
 
   pname = "qutebrowser";
-  version = "3.0.0";
+  version = "3.0.2";
 in
-
-assert withMediaPlayback -> gst_all_1 != null;
-assert lib.assertMsg (backend != "webkit") ''
-  Support for the QtWebKit backend has been removed.
-  Please remove the `backend = "webkit"` option from your qutebrowser override.
-'';
 
 python3.pkgs.buildPythonApplication {
   inherit pname version;
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-Oer0p/DwUfOejUCgSCSkMvLLAjNyJx51qgN7bcQQ2Pw=";
+    hash = "sha256-pRiT3koSNRmvuDcjuc7SstmPTKUoUnjIHpvdqR7VvFE=";
   };
 
   # Needs tox
@@ -48,13 +41,10 @@ python3.pkgs.buildPythonApplication {
   buildInputs = [
     qtbase
     glib-networking
-  ] ++ lib.optionals withMediaPlayback (with gst_all_1; [
-    gst-plugins-base gst-plugins-good
-    gst-plugins-bad gst-plugins-ugly gst-libav
-  ]);
+  ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook wrapGAppsHook asciidoc
+    wrapQtAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
     python3.pkgs.pygments
   ];
@@ -74,7 +64,6 @@ python3.pkgs.buildPythonApplication {
     ./fix-restart.patch
   ];
 
-  dontWrapGApps = true;
   dontWrapQtApps = true;
 
   postPatch = ''
@@ -112,9 +101,16 @@ python3.pkgs.buildPythonApplication {
   in
     ''
     makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
+      # Force the app to use QT_PLUGIN_PATH values from wrapper
+      --unset QT_PLUGIN_PATH
       "''${qtWrapperArgs[@]}"
+      # avoid persistant warning on starup
+      --set QT_STYLE_OVERRIDE Fusion
       ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString (enableVulkan) ''
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [vulkan-loader]}
+        --set-default QSG_RHI_BACKEND vulkan
+      ''}
       ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
     )
   '';

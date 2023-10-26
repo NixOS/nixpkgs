@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , pythonRelaxDepsHook
 , build
@@ -52,6 +53,15 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-/OvYT4Vix1t5Yx/Tx0z3E9L9qJ4OdI4maQqUVl8H524=";
   };
+
+  patches = [
+    # Backport patch to fix pypa/build 1.0 incompatibility
+    # FIXME: remove in next release
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry/commit/a16863d1a448ff91a7cc4e48042d3a8669b78b34.patch";
+      hash = "sha256-dWa5W1jFS7h5cTgoFy89o1Rbtmyddvme4sus+lld058=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles

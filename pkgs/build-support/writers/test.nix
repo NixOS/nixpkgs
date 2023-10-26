@@ -7,6 +7,7 @@
 , python3Packages
 , pypy3Packages
 , runCommand
+, testers
 , writers
 , writeText
 }:
@@ -36,14 +37,7 @@ let
     let
       expectedFile = writeText "${file.name}-expected" expected;
     in
-    runCommand "run-${file.name}" {} ''
-      if ! diff -u ${file} ${expectedFile}; then
-        echo 'test ${file.name} failed'
-        exit 1
-      fi
-
-      touch $out
-    '';
+    testers.testEqualContents { expected = expectedFile; actual = file; assertion = "${file.name} matches"; };
 in
 lib.recurseIntoAttrs {
   bin = lib.recurseIntoAttrs {
@@ -261,7 +255,9 @@ lib.recurseIntoAttrs {
 
     toml = expectDataEqual {
       file = writeTOML "data.toml" { hello = "world"; };
-      expected = "hello = 'world'\n";
+      expected = ''
+        hello = "world"
+      '';
     };
 
     yaml = expectDataEqual {

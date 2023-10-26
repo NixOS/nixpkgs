@@ -36,15 +36,18 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.0.5";
+      version = "4.1.0";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-PXLmGwVjHavcKDIxdo+TioVUSyfjH6v+E8V7TfXF47s=";
+        hash = "sha256-AwSC5bjw9pxr/Upja2+m12tkqeweF58auqNbGrONHhA=";
       };
+
+      # Why is this needed? https://github.com/weechat/weechat/issues/2031
+      patches = lib.optional gettext.gettextNeedsLdflags ./gettext-intl.patch;
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 

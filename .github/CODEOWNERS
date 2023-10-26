@@ -149,6 +149,8 @@
 # C compilers
 /pkgs/development/compilers/gcc @amjoseph-nixpkgs
 /pkgs/development/compilers/llvm @RaitoBezarius
+/pkgs/development/compilers/emscripten @raitobezarius
+/doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt
