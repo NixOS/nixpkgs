@@ -15,9 +15,11 @@ buildPythonPackage rec {
 
   patches = [
     # fix build with python 3.9
+    # https://github.com/freach/udatetime/pull/33
     (fetchpatch {
-      url = "https://github.com/freach/udatetime/pull/33.patch";
-      sha256 = "02wm7ivkv1viqn2wflgd10dgpddfqfrwacmrldigb1mwb79n554j";
+      name = "freach-udatetime-pull-33.patch";
+      url = "https://github.com/freach/udatetime/compare/75a07891426364f8bf0b44305b00bb1dd90534ae...2cfbc92cb274a80476a45c6c0d387c19e77a9f6e.patch";
+      sha256 = "pPskJnie+9H3qKqf8X37sxB+CH3lpkj7IYl8HfiuV/4=";
     })
   ];
 

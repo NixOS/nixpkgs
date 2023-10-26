@@ -38,7 +38,7 @@ buildSphinxPhase() {
 
     for __builder in "${__sphinxBuilders[@]}"; do
         echo "Executing sphinx-build with ${__builder} builder"
-        sphinx-build -M "${__builder}" "${__sphinxRoot}" ".sphinx/${__builder}" -v
+        @sphinxBuild@ -M "${__builder}" "${__sphinxRoot}" ".sphinx/${__builder}" -v
     done
 
     runHook postBuildSphinx

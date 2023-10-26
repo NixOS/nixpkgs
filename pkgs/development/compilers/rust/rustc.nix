@@ -66,15 +66,18 @@ in stdenv.mkDerivation rec {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
+    prefixForStdenv = stdenv: "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}";
+    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
+    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
     setBuild  = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
     setHost   = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
     setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
-    ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForTarget  = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
+    ccForBuild  = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
+    cxxForBuild  = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
+    ccForHost  = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
+    cxxForHost  = cxxPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
+    ccForTarget  = ccPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
+    cxxForTarget  = cxxPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
   in [
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
@@ -272,9 +275,8 @@ in stdenv.mkDerivation rec {
       "i686-freebsd13" "x86_64-freebsd13"
       "x86_64-solaris"
       "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
-      "loongarch64-linux" "mipsel-linux" "mips64el-linux"
-      "powerpc64-linux" "powerpc64le-linux" "riscv64-linux"
-      "s390x-linux" "x86_64-linux"
+      "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
+      "riscv64-linux" "s390x-linux" "x86_64-linux"
       "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
       "x86_64-netbsd"
       "i686-openbsd" "x86_64-openbsd"

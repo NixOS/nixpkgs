@@ -13,6 +13,11 @@ let
   # default.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
                                         (stdenv.targetPlatform.config + "-");
+
+  # Bootstrap `fetchurl` needed to build SDK packages without causing an infinite recursion.
+  fetchurlBoot = import ../build-support/fetchurl/boot.nix {
+    inherit (stdenv) system;
+  };
 in
 
 makeScopeWithSplicing' {
@@ -32,10 +37,13 @@ makeScopeWithSplicing' {
   apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk {
     inherit (buildPackages.darwin) print-reexports;
     inherit (self) darwin-stubs;
+    fetchurl = fetchurlBoot;
   };
 
   # macOS 11.0 SDK
-  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
+  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 {
+    fetchurl = fetchurlBoot;
+  };
 
   # Pick an SDK
   apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
