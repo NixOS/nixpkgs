@@ -2,7 +2,6 @@
 , lib
 , pkg-config
 , fetchFromGitLab
-, fetchpatch
 , gitUpdater
 , ffmpeg_6
 
@@ -66,14 +65,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20230619.1";
+  version = "20230922.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-gOl4GtGmEvhM8xtlyFvTwXrUsbocUKULnVy9cnCNAM0=";
+    hash = "sha256-kSgT6kw8j6BUZY5bEuvs02l9o5YA+KwI515Mn8M2sPc=";
     fetchSubmodules = true;
   };
 
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
-      version = "e4b83585a0bdf1523e808a4fc1946ec82ac733d0";
+      version = "97f45c2040c2b0cf6f3349a365b0e900a2267333";
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
@@ -91,15 +90,7 @@ stdenv.mkDerivation rec {
         hash = "sha256-QeD2o6uz9r5vc3Scs1oRKYZ+aNH+01TSxLBj71ssfj4=";
       };
 
-      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches)) ++ [
-        (fetchpatch {
-          name = "CVE-2023-27585.patch";
-          url = "https://github.com/pjsip/pjproject/commit/d1c5e4da5bae7f220bc30719888bb389c905c0c5.patch";
-          hash = "sha256-+yyKKTKG2FnfyLWnc4S80vYtDzmiu9yRmuqb5eIulPg=";
-        })
-      ];
-
-      patchFlags = [ "-p1" "-l" ];
+      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
 
       configureFlags = (readLinesToList ./config/pjsip_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
@@ -108,6 +99,52 @@ stdenv.mkDerivation rec {
   opendht-jami = opendht.override {
     enableProxyServerAndClient = true;
     enablePushNotifications = true;
+  };
+
+  dhtnet = stdenv.mkDerivation {
+    pname = "dhtnet";
+    version = "unstable-2023-09-18";
+
+    src = fetchFromGitLab {
+      domain = "git.jami.net";
+      owner = "savoirfairelinux";
+      repo = "dhtnet";
+      rev = "2f3539bc19cf770cd23912c7eebe63e8d2f80515";
+      hash = "sha256-jDqYVZed047QcaTH+U4jGC8RNT07hH+rZ3I1Lemg05Y=";
+    };
+
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+
+    buildInputs = [
+      asio
+      fmt
+      gnutls
+      http-parser
+      jsoncpp
+      libupnp
+      msgpack
+      opendht-jami
+      openssl
+      pjsip-jami
+      restinio
+    ];
+
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=Off"
+      "-DBUILD_BENCHMARKS=Off"
+      "-DBUILD_TOOLS=Off"
+      "-DBUILD_TESTING=Off"
+    ];
+
+    meta = with lib; {
+      description = "Lightweight Peer-to-Peer Communication Library";
+      license = licenses.gpl3Only;
+      platforms = platforms.linux;
+      maintainers = [ maintainers.linsui ];
+    };
   };
 
   daemon = stdenv.mkDerivation {
@@ -125,6 +162,7 @@ stdenv.mkDerivation rec {
       alsa-lib
       asio
       dbus
+      dhtnet
       sdbus-cpp
       fmt
       ffmpeg_6
@@ -153,11 +191,6 @@ stdenv.mkDerivation rec {
 
     enableParallelBuilding = true;
   };
-
-  postPatch = ''
-    substituteInPlace src/app/commoncomponents/ModalTextEdit.qml \
-      --replace 'required property string placeholderText' 'property string placeholderText: ""'
-  '';
 
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
