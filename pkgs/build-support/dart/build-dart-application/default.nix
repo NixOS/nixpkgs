@@ -51,7 +51,7 @@
 }@args:
 
 let
-  generators = callPackage ./generators.nix { inherit dart; } { inherit sdkSetupScript; buildDrvArgs = args; };
+  generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
 
   generatedDepsList = generators.mkDepsList { inherit pubspecLockFile pubspecLockData packageConfig; };
 
@@ -64,7 +64,7 @@ let
 
   pubspecLockFile = builtins.toJSON pubspecLock;
   pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders; };
-  packageConfig = pub2nix.generatePackageConfig {
+  packageConfig = generators.linkPackageConfig (pub2nix.generatePackageConfig {
     pname = if args.pname != null then "${args.pname}-${args.version}" else null;
 
     dependencies =
@@ -78,7 +78,7 @@ let
       builtins.concatLists (builtins.attrValues pubspecLockData.dependencies);
 
     inherit (pubspecLockData) dependencySources;
-  };
+  });
 
   inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 
