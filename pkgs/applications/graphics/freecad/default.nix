@@ -108,6 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtx11extras
   ];
 
+  patches = [
+    ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+  ];
+
   cmakeFlags = [
     "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
     "-DBUILD_FLAT_MESH:BOOL=ON"
@@ -127,10 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
   '';
 
-  # Their main() removes PYTHONPATH=, and we rely on it.
   preConfigure = ''
-    sed '/putenv("PYTHONPATH/d' -i src/Main/MainGui.cpp
-
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
