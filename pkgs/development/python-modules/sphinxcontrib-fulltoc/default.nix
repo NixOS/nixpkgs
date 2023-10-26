@@ -21,6 +21,8 @@ buildPythonPackage rec {
   # Ensure package importing works
   pythonImportsCheck = [ "sphinxcontrib.fulltoc" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Include a full table of contents in your Sphinx HTML sidebar";
     homepage = "https://sphinxcontrib-fulltoc.readthedocs.org/";

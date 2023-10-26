@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchzip
+, wrapGAppsHook
 , cairo
 , dbus
 , fontconfig
@@ -16,7 +17,6 @@
 , libglvnd
 , libuuid
 , libxcb
-, makeWrapper
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
     hash = "sha256-v63sV0HNHSU9H5rhtJcwZCuIXEGe1+BDyxV0/EqBk2E=";
   };
+
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   sourceRoot = ".";
 
