@@ -26,6 +26,7 @@
 , extraPatches ? [ ]
 , pluginOverrides ? { }
 , disableAllPlugins ? false
+, disabledTests ? []
 
   # tests
 , runCommand
@@ -101,6 +102,7 @@ python3Packages.buildPythonApplication {
   ] ++ pluginWrapperBins;
 
   disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (n: v: v.testPaths ++ [ "test/test_${n}.py" ]) disabledPlugins));
+  inherit disabledTests;
 
   # Perform extra "sanity checks", before running pytest tests.
   preCheck = ''

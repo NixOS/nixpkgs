@@ -45,6 +45,15 @@ lib.makeExtensible (self: {
       # https://github.com/beetbox/beets/pull/4868, which doesn't apply now
       ./patches/fix-pillow10-compat.patch
     ];
+    disabledTests = [
+      # This issue is present on this version alone, and can be removed on the
+      # next stable version version bump. Since this is fixed in branch master,
+      # we don't have a bug ticket open for this. As of writing, it also seems
+      # hard to find a patch that can be backported to v1.6.0 that would fix
+      # the failure, as the master branch has gone through too many changes
+      # now.
+      "test_get_single_item_by_path"
+    ];
   };
 
   beets-minimal = self.beets.override { disableAllPlugins = true; };
