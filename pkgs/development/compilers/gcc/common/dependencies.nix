@@ -77,7 +77,7 @@ in
   ]
   ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
   ++ [
-    stdenv.cc.bintools # For linking code at run-time
+    targetPackages_bintools # For linking code at run-time
   ]
   ++ optionals (lib.versionOlder version "5" && cloog != null) [ cloog ]
   ++ optionals (isl != null) [ isl ]
