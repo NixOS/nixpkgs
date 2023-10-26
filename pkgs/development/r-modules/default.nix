@@ -1378,6 +1378,12 @@ let
       env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
     });
 
+    httpuv = old.httpuv.overrideAttrs (_: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
+
     ijtiff = old.ijtiff.overrideAttrs (_: {
       preConfigure = ''
         patchShebangs configure
