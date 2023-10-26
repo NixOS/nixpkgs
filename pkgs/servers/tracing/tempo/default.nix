@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "tempo";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-23wjD8HTSEGonIMAWCoKORMLIISASxlN4FeY+Bmt/+I=";
+    hash = "sha256-67rANpdIyDi3AXtXdndWLsYftqk4C9ofmMDHhBAwclA=";
   };
 
   patches = [
