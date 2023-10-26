@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   unittestFlagsArray = [ "-s" "tests" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx blockdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
