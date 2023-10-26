@@ -41,6 +41,9 @@ lib.makeExtensible (self: {
       # https://github.com/beetbox/beets/pull/4839
       # The upstream patch does not apply on 1.6.0, as the related code has been refactored since
       ./patches/fix-embedart-imagick-7.1.1-12.patch
+      # Pillow 10 compatibility fix, a backport of
+      # https://github.com/beetbox/beets/pull/4868, which doesn't apply now
+      ./patches/fix-pillow10-compat.patch
     ];
   };
 
@@ -57,6 +60,14 @@ lib.makeExtensible (self: {
     extraPatches = [
       # Bash completion fix for Nix
       ./patches/unstable-bash-completion-always-print.patch
+      # Pillow 10 compatibility fix, see:
+      # https://github.com/beetbox/beets/pull/4868
+      (fetchpatch {
+        url = "https://github.com/beetbox/beets/commit/c2118a8b9cd8c9c91135c6e178830b89b40867be.patch";
+        hash = "sha256-HWf940WrF10Jnu9iyoHovFDcvj9LY8p7zIlJg1TfKxQ=";
+        # Doesn't apply on this file, and it we don't care.
+        excludes = [ "docs/changelog.rst" ];
+      })
     ];
     pluginOverrides = {
       # unstable has a new plugin, so we register it here.
