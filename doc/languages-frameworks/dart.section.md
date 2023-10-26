@@ -38,7 +38,7 @@ buildDartApplication rec {
 }
 ```
 
-### Usage with nix-shell
+### Usage with nix-shell {#ssec-dart-applications-nix-shell}
 
 As `buildDartApplication` provides dependencies instead of `pub get`, Dart needs to be explicitly told where to find them.
 
@@ -75,7 +75,7 @@ flutter.buildFlutterApplication {
   depsListFile = ./deps.json;
 }
 
-### Usage with nix-shell
+### Usage with nix-shell {#ssec-dart-flutter-nix-shell}
 
-See the [Dart documentation](#ssec-dart-applications) nix-shell instructions.
+See the [Dart documentation](#ssec-dart-applications-nix-shell) nix-shell instructions.
 ```
