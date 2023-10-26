@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.services.trust-dns;
+  cfg = config.services.hickory-dns;
   toml = pkgs.formats.toml { };
 
-  configFile = toml.generate "trust-dns.toml" (
+  configFile = toml.generate "hickory-dns.toml" (
     lib.filterAttrsRecursive (_: v: v != null) cfg.settings
   );
 
@@ -26,7 +26,7 @@ let
           - "Forward" (a cached zone where all requests are forwarded to another resolver).
 
           For more details about these zone types, consult the documentation for BIND,
-          though note that trust-dns supports only a subset of BIND's zone types:
+          though note that hickory-dns supports only a subset of BIND's zone types:
           <https://bind9.readthedocs.io/en/v9_18_4/reference.html#type>
         '';
       };
@@ -44,17 +44,26 @@ let
   });
 in
 {
-  meta.maintainers = with lib.maintainers; [ colinsane ];
+  meta.maintainers = with lib.maintainers; [ colinsane juaningan ];
+
+  imports = with lib; [
+    (mkRenamedOptionModule [ "services" "trust-dns" "enable" ] [ "services" "hickory-dns" "enable" ])
+    (mkRenamedOptionModule [ "services" "trust-dns" "package" ] [ "services" "hickory-dns" "package" ])
+    (mkRenamedOptionModule [ "services" "trust-dns" "settings" ] [ "services" "hickory-dns" "settings" ])
+    (mkRenamedOptionModule [ "services" "trust-dns" "quiet" ] [ "services" "hickory-dns" "quiet" ])
+    (mkRenamedOptionModule [ "services" "trust-dns" "debug" ] [ "services" "hickory-dns" "debug" ])
+  ];
+
   options = {
-    services.trust-dns = with lib; {
-      enable = mkEnableOption (lib.mdDoc "trust-dns");
+    services.hickory-dns = with lib; {
+      enable = mkEnableOption (lib.mdDoc "hickory-dns");
       package = mkOption {
         type = types.package;
-        default = pkgs.trust-dns;
-        defaultText = "pkgs.trust-dns";
+        default = pkgs.hickory-dns;
+        defaultText = "pkgs.hickory-dns";
         description = mdDoc ''
-          Trust-dns package to use.
-          Only `bin/trust-dns` need be provided: the other trust-dns utilities (client and resolver) are not needed.
+          Hickory-dns package to use.
+          Only `bin/hickory-dns` need be provided: the other hickory-dns utilities (client and resolver) are not needed.
         '';
       };
       quiet = mkOption {
@@ -77,9 +86,9 @@ in
       };
       settings = mkOption {
         description = lib.mdDoc ''
-          Settings for trust-dns. The options enumerated here are not exhaustive.
+          Settings for hickory-dns. The options enumerated here are not exhaustive.
           Refer to upstream documentation for all available options:
-          - [Example settings](https://github.com/bluejekyll/trust-dns/blob/main/tests/test-data/test_configs/example.toml)
+          - [Example settings](https://github.com/hickory-dns/hickory-dns/blob/main/tests/test-data/test_configs/example.toml)
         '';
         type = types.submodule {
           freeformType = toml.type;
@@ -108,9 +117,9 @@ in
             };
             directory = mkOption {
               type = types.str;
-              default = "/var/lib/trust-dns";
+              default = "/var/lib/hickory-dns";
               description = mdDoc ''
-                The directory in which trust-dns should look for .zone files,
+                The directory in which hickory-dns should look for .zone files,
                 whenever zones aren't specified by absolute path.
               '';
             };
@@ -126,23 +135,23 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.trust-dns = {
-      description = "trust-dns Domain Name Server";
-      unitConfig.Documentation = "https://trust-dns.org/";
+    systemd.services.hickory-dns = {
+      description = "hickory-dns Domain Name Server";
+      unitConfig.Documentation = "https://hickory-dns.org/";
       serviceConfig = {
         ExecStart =
         let
           flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
           flagsStr = builtins.concatStringsSep " " flags;
         in ''
-          ${cfg.package}/bin/trust-dns --config ${configFile} ${flagsStr}
+          ${cfg.package}/bin/hickory-dns --config ${configFile} ${flagsStr}
         '';
         Type = "simple";
         Restart = "on-failure";
         RestartSec = "10s";
         DynamicUser = true;
 
-        StateDirectory = "trust-dns";
+        StateDirectory = "hickory-dns";
         ReadWritePaths = [ cfg.settings.directory ];
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
