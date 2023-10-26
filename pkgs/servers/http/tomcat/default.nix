@@ -37,8 +37,8 @@ let
 in {
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.75";
-    sha256 = "sha256-VWfKg789z+ns1g3hDsCZFYQ+PsdqUEBeBHCihkGZelk=";
+    versionMinor = "0.82";
+    sha256 = "sha256-xvRGXDUkYaHFYacUPg81Xf0xyTbdsc1XP/PmqMR8bQc=";
   };
 
   tomcat10 = common {
