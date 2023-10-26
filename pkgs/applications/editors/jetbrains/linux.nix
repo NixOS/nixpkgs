@@ -120,7 +120,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     item=${desktopItem}
 
     wrapProgram  "$out/$pname/bin/${loName}.sh" \
-      --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git python3 ]}" \
+      --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
       ${lib.concatStringsSep " " extraWrapperArgs} \
       --set-default JDK_HOME "$jdk" \
