@@ -13449,6 +13449,7 @@
   pbsds = {
     name = "Peder Bergebakken Sundt";
     email = "pbsds@hotmail.com";
+    matrix = "@pederbs:pvv.ntnu.no";
     github = "pbsds";
     githubId = 140964;
   };
