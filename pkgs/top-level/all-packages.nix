@@ -17033,7 +17033,12 @@ with pkgs;
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed { };
+  cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed {
+    rustPlatform = makeRustPlatform {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+      inherit rustc cargo;
+    };
+  };
   cargo-component = callPackage ../development/tools/rust/cargo-component { };
   cargo-cranky = callPackage ../development/tools/rust/cargo-cranky { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
