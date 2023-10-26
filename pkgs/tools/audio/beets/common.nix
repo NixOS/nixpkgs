@@ -27,6 +27,7 @@
 , pluginOverrides ? { }
 , disableAllPlugins ? false
 , disabledTests ? []
+, extraNativeBuildInputs ? []
 
   # tests
 , runCommand
@@ -71,7 +72,7 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = [
     gobject-introspection
     sphinxHook
-  ];
+  ] ++ extraNativeBuildInputs;
 
   buildInputs = [
   ] ++ (with gst_all_1; [

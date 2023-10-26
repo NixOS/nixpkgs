@@ -2,6 +2,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchpatch
+, python3Packages
 }:
 /*
 ** To customize the enabled beets plugins, use the pluginOverrides input to the
@@ -20,6 +21,7 @@ lib.makeExtensible (self: {
   beets = self.beets-stable;
 
   beets-stable = callPackage ./common.nix rec {
+    inherit python3Packages;
     version = "1.6.0";
     src = fetchFromGitHub {
       owner = "beetbox";
@@ -59,6 +61,7 @@ lib.makeExtensible (self: {
   beets-minimal = self.beets.override { disableAllPlugins = true; };
 
   beets-unstable = callPackage ./common.nix {
+    inherit python3Packages;
     version = "unstable-2023-07-05";
     src = fetchFromGitHub {
       owner = "beetbox";
