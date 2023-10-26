@@ -38,6 +38,28 @@ buildDartApplication rec {
 }
 ```
 
+### Running executables from dev_dependencies {#ssec-dart-applications-build-tools}
+
+Many Dart applications require executables from the `dev_dependencies` section in `pubspec.yaml` to be run before building them.
+
+This can be done in `preBuild`, in one of two ways:
+
+1. Packaging the tool with `buildDartApplication`, adding it to Nixpkgs, and running it like any other application
+2. Running the tool from the Pub cache
+
+Of these methods, the first is recommended when using a tool that does not need
+to be of a specific version.
+
+To use the second method, first make the derivation accessible within itself (e.g. `let self = ...; in self`), and then run it from the Pub cache in `preBuild`.
+
+e.g., for `build_runner`:
+
+```bash
+dart --packages=.dart_tool/package_config.json ${self.pubspecLock.dependencySources.build_runner.packagePath}/bin/build_runner.dart build
+```
+
+Do _not_ use `dart run <package_name>`, as this will attempt to download dependencies with Pub.
+
 ### Usage with nix-shell {#ssec-dart-applications-nix-shell}
 
 As `buildDartApplication` provides dependencies instead of `pub get`, Dart needs to be explicitly told where to find them.
