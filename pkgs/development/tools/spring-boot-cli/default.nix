@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://spring.io/projects/spring-boot";
     changelog = "https://github.com/spring-projects/spring-boot/releases/tag/v${finalAttrs.version}";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    mainProgram = "spring";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];
