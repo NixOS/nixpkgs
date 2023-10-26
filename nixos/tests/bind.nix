@@ -18,6 +18,10 @@ in
 {
   name = "bind";
 
+  meta = with lib.maintainers; {
+    maintainers = [ sarcasticadmin ];
+  };
+
   nodes.machine = { ... }: {
     services.bind.enable = true;
     services.bind.extraOptions = "empty-zones-enable no;";
