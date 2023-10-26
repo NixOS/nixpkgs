@@ -38,6 +38,18 @@ buildDartApplication rec {
 }
 ```
 
+### Usage with nix-shell
+
+As `buildDartApplication` provides dependencies instead of `pub get`, Dart needs to be explicitly told where to find them.
+
+Run the following commands in the source directory to configure Dart appropriately.
+Do not use `pub` after doing so; it will download the dependencies itself and overwrite these changes.
+
+```bash
+cp --no-preserve=all "$pubspecLockFilePath" pubspec.lock
+mkdir -p .dart_tool && cp --no-preserve=all "$packageConfig" .dart_tool/package_config.json
+```
+
 ## Flutter applications {#ssec-dart-flutter}
 
 The function `buildFlutterApplication` builds Flutter applications.
@@ -62,4 +74,8 @@ flutter.buildFlutterApplication {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   depsListFile = ./deps.json;
 }
+
+### Usage with nix-shell
+
+See the [Dart documentation](#ssec-dart-applications) nix-shell instructions.
 ```
