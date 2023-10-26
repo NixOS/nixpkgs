@@ -341,6 +341,7 @@
   ./services/audio/mpdscribble.nix
   ./services/audio/navidrome.nix
   ./services/audio/networkaudiod.nix
+  ./services/audio/plugins.nix
   ./services/audio/roon-bridge.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
