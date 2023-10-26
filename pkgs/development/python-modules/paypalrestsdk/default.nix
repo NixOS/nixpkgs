@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "paypalrestsdk";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "238713208031e8981bf70b3350b3d7f85ed64d34e0f21e4c1184444a546fee7f";
+    sha256 = "sha256-kZUfNtsw1oW5ceFASYSRo1bPHfjv9xZWYDrKTtcs81o=";
   };
 
   propagatedBuildInputs = [ requests six pyopenssl ];
