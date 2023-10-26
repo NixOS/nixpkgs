@@ -11642,6 +11642,8 @@ self: super: with self; {
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
 
+  pytorch-msssim = callPackage ../development/python-modules/pytorch-msssim { };
+
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
   pytraccar = callPackage ../development/python-modules/pytraccar { };
