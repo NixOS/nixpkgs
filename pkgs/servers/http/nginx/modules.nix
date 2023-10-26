@@ -986,7 +986,11 @@ let self = {
       owner = "kaltura";
       repo = "nginx-vod-module";
       rev = "1.32";
-      hash = "sha256-uBZtzh+IvBFNU/9oQ3KmX65Eog2CrI5LYN8sKaqjJhE=";
+      hash = "sha256-ZpG0oj60D3o7/7uyE8AybCiOtncVe1Jnjaz22sIFypk=";
+      postFetch = ''
+        substituteInPlace $out/vod/media_set.h \
+          --replace "MAX_CLIPS (128)" "MAX_CLIPS (1024)"
+      '';
     };
 
     inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
