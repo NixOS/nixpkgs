@@ -17595,6 +17595,17 @@
     githubId = 74413170;
     name = "Johannes Klein";
   };
+  sivizius = {
+    name = "Sebastian Walz";
+    email = "nixpkgs@sivizius.eu";
+    matrix = "@sivizius:matrix.org";
+    github = "sivizius";
+    githubId = 1690450;
+    keys = [
+      { fingerprint = "6A6A 9F7C 47BA 4CBE DCD5  CB74 7BB4 21C6 84E8 21D8"; }
+      { fingerprint = "CC18 62DD 3726 0C5E F4DA  26C7 9CB0 27E3 30D3 1FB0"; }
+    ];
+  };
   sivteck = {
     email = "sivaram1992@gmail.com";
     github = "sivteck";
