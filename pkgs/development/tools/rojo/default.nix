@@ -12,17 +12,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
-  version = "7.2.1";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "rojo-rbx";
     repo = "rojo";
     rev = "v${version}";
-    sha256 = "sha256-Kmq/lBwayYkFU4mbjExj7M9wpg59OkIiTc+2ZrwpuBc=";
+    sha256 = "sha256-Eh1G0jX9KXVlMZLl8whxULywadblWml232qvcq4JLJ4=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-qx6Ja0DMe4cEmDSpovtY9T3+0nJS9XivR92K3UKgacE=";
+  cargoSha256 = "sha256-aKfgylY9aspL1JpdYa6hOy/6lQoqO54OhZWqSlMPZ8o=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +33,9 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
   ];
+
+  # reqwest's native-tls-vendored feature flag uses vendored openssl. this disables that
+  OPENSSL_NO_VENDOR = "1";
 
   # tests flaky on darwin on hydra
   doCheck = !stdenv.isDarwin;
