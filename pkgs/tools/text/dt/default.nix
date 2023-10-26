@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dt";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "so-dang-cool";
     repo = "dt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-u9MI6mrP+QXr3VDgmXW7GRkHKCiDoA9HlznTEGNsck4=";
+    hash = "sha256-i8oMrsPcINVK5kXzrN+lcPqBfxIeed8W+NF7Qd0crrk=";
   };
 
   nativeBuildInputs = [ zig_0_11.hook ];
