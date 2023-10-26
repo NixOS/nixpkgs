@@ -1,0 +1,70 @@
+diff --git a/API/Controllers/FallbackController.cs b/API/Controllers/FallbackController.cs
+index 9902d28b..49a77882 100644
+--- a/API/Controllers/FallbackController.cs
++++ b/API/Controllers/FallbackController.cs
+@@ -20,7 +20,7 @@ public class FallbackController : Controller
+ 
+     public PhysicalFileResult Index()
+     {
+-        return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
++        return PhysicalFile(Path.Combine("@web_root@", "index.html"), "text/HTML");
+     }
+ }
+ 
+diff --git a/API/Services/DirectoryService.cs b/API/Services/DirectoryService.cs
+index 9b01f2eb..1303a7db 100644
+--- a/API/Services/DirectoryService.cs
++++ b/API/Services/DirectoryService.cs
+@@ -113,7 +113,7 @@ public class DirectoryService : IDirectoryService
+         ExistOrCreate(SiteThemeDirectory);
+         FaviconDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "config", "favicons");
+         ExistOrCreate(FaviconDirectory);
+-        LocalizationDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "I18N");
++        LocalizationDirectory = FileSystem.Path.Join("@i18n_root@", "I18N");
+     }
+ 
+     /// <summary>
+diff --git a/API/Services/LocalizationService.cs b/API/Services/LocalizationService.cs
+index ab3ad3d8..6ab5b596 100644
+--- a/API/Services/LocalizationService.cs
++++ b/API/Services/LocalizationService.cs
+@@ -52,8 +52,7 @@ public class LocalizationService : ILocalizationService
+         else
+         {
+             _localizationDirectoryUi = directoryService.FileSystem.Path.Join(
+-                directoryService.FileSystem.Directory.GetCurrentDirectory(),
+-                "wwwroot", "assets/langs");
++                "@web_root@", "assets/langs");
+         }
+ 
+         _cacheOptions = new MemoryCacheEntryOptions()
+diff --git a/API/Startup.cs b/API/Startup.cs
+index f09e78a3..22950554 100644
+--- a/API/Startup.cs
++++ b/API/Startup.cs
+@@ -36,6 +36,7 @@ using Microsoft.AspNetCore.StaticFiles;
+ using Microsoft.EntityFrameworkCore;
+ using Microsoft.Extensions.Configuration;
+ using Microsoft.Extensions.DependencyInjection;
++using Microsoft.Extensions.FileProviders;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.Extensions.Logging;
+ using Microsoft.Net.Http.Headers;
+@@ -298,9 +299,6 @@ public class Startup
+         app.UsePathBase(basePath);
+         if (!env.IsDevelopment())
+         {
+-            // We don't update the index.html in local as we don't serve from there
+-            UpdateBaseUrlInIndex(basePath);
+-
+             // Update DB with what's in config
+             var dataContext = serviceProvider.GetRequiredService<DataContext>();
+             var setting = dataContext.ServerSetting.SingleOrDefault(x => x.Key == ServerSettingKey.BaseUrl);
+@@ -344,6 +342,7 @@ public class Startup
+ 
+         app.UseStaticFiles(new StaticFileOptions
+         {
++            FileProvider = new PhysicalFileProvider("@web_root@"),
+             ContentTypeProvider = new FileExtensionContentTypeProvider(),
+             HttpsCompression = HttpsCompressionMode.Compress,
+             OnPrepareResponse = ctx =>
