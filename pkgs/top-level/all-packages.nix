@@ -34882,6 +34882,10 @@ with pkgs;
 
   pyrosimple = callPackage ../applications/networking/p2p/pyrosimple { };
 
+  pzip = callPackage ../by-name/pz/pzip/package.nix {
+    buildGoModule = buildGo121Module;
+  };
+
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
     guiSupport = false;
