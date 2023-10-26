@@ -74,13 +74,19 @@ let
   mkSdkDependencySource = name: details:
     (sdkSourceBuilders.${details.description} or (throw "No SDK source builder has been given for ${details.description}!")) name;
 
+  addDependencySourceUtils = dependencySource: dependencySource.overrideAttrs ({ passthru, ... }: {
+    passthru = passthru // {
+      packagePath = dependencySource + "/${dependencySource.packageRoot}";
+    };
+  });
+
   dependencySources = lib.filterAttrs (name: src: src != null) (builtins.mapAttrs
-    (name: details: ({
+    (name: details: addDependencySourceUtils (({
       "hosted" = mkHostedDependencySource;
       "git" = mkGitDependencySource;
       "path" = mkPathDependencySource;
       "sdk" = mkSdkDependencySource;
-    }.${details.source} name) details)
+    }.${details.source} name) details))
     pubspecLock.packages);
 in
 {
