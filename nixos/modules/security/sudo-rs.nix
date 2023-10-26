@@ -41,23 +41,11 @@ in
       '';
     };
 
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = mdDoc ''
-        Whether to enable the {command}`sudo` command, which
-        allows non-root users to execute commands as root.
-      '';
-    };
+    enable = mkEnableOption (mdDoc ''
+      the {command}`sudo` command, which allows non-root users to execute commands as root.
+    '');
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.sudo-rs;
-      defaultText = literalExpression "pkgs.sudo-rs";
-      description = mdDoc ''
-        Which package to use for `sudo`.
-      '';
-    };
+    package = mkPackageOption pkgs "sudo-rs" { };
 
     wheelNeedsPassword = mkOption {
       type = types.bool;
