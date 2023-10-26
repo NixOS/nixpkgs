@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, nixosTests }:
+{ stdenv, lib, fetchurl, nixosTests, testers, jre }:
 
 let
 
-  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
+  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (finalAttrs: {
     pname = "apache-tomcat";
     version = "${versionMajor}.${versionMinor}";
 
     src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
+      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${finalAttrs.version}/bin/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
       inherit sha256;
     };
 
@@ -22,6 +22,10 @@ let
 
     passthru.tests = {
       inherit (nixosTests) tomcat;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "JAVA_HOME=${jre} ${finalAttrs.finalPackage}/bin/version.sh";
+      };
     };
 
     meta = with lib; {
