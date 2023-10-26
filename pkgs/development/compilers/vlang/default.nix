@@ -97,6 +97,7 @@ stdenv.mkDerivation {
     $out/lib/v -v $out/lib/cmd/tools/vdoc
     $out/lib/v -v $out/lib/cmd/tools/vast
     $out/lib/v -v $out/lib/cmd/tools/vvet
+    $out/lib/v -v $out/lib/cmd/tools/vcreate
 
     runHook postInstall
   '';

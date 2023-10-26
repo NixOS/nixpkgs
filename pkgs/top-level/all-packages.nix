@@ -35690,7 +35690,9 @@ with pkgs;
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
-  teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux { };
+  teams-for-linux = callPackage ../applications/networking/instant-messengers/teams-for-linux {
+    electron = electron_27;
+  };
 
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
   teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
@@ -41900,9 +41902,7 @@ with pkgs;
 
   stayrtr = callPackage ../servers/stayrtr { };
 
-  sunshine = callPackage ../servers/sunshine {
-    ffmpeg_5-full = ffmpeg_5-full.override { nv-codec-headers = nv-codec-headers-11; };
-  };
+  sunshine = callPackage ../servers/sunshine { };
 
   sentencepiece = callPackage ../development/libraries/sentencepiece { };
 

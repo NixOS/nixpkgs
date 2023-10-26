@@ -37,6 +37,9 @@ in
             enable = mkEnableOption (mdDoc "Wyoming faster-whisper server");
 
             model = mkOption {
+              # Intersection between available and referenced models here:
+              # https://github.com/rhasspy/models/releases/tag/v1.0
+              # https://github.com/rhasspy/rhasspy3/blob/wyoming-v1/programs/asr/faster-whisper/server/wyoming_faster_whisper/download.py#L17-L27
               type = enum [
                 "tiny"
                 "tiny-int8"
@@ -44,7 +47,6 @@ in
                 "base-int8"
                 "small"
                 "small-int8"
-                "medium"
                 "medium-int8"
               ];
               default = "tiny-int8";
