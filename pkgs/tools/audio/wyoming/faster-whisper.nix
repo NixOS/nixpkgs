@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchPypi
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,6 +17,13 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./faster-whisper-entrypoint.patch
+
+    # fix model retrieval on python3.11+
+    (fetchpatch {
+      url = "https://github.com/rhasspy/rhasspy3/commit/ea55a309e55384e6fd8c9f19534622968f8ed95b.patch";
+      hash = "sha256-V9WXKE3+34KGubBS23vELTHjqU2RCTk3sX8GTjmH+AA=";
+      stripLen = 4;
+    })
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
