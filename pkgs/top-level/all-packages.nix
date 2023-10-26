@@ -31190,8 +31190,6 @@ with pkgs;
     inherit (darwin) cctools;
   };
 
-  docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
-
   dockfmt = callPackage ../development/tools/dockfmt { };
 
   afterburn = callPackage ../tools/admin/afterburn { };
