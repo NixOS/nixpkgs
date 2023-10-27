@@ -20,7 +20,6 @@
 
 (buildDartApplication.override {
   dart = flutter;
-  fetchDartDeps = fetchDartDeps.override { dart = flutter; };
 }) (args // {
   sdkSetupScript = ''
     # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
@@ -44,8 +43,8 @@
     ''}/bin/dart"
 
     export HOME="$NIX_BUILD_TOP"
-    flutter config --no-analytics &>/dev/null # mute first-run
-    flutter config --enable-linux-desktop >/dev/null
+    ${flutter}/bin/flutter config --no-analytics &>/dev/null # mute first-run
+    ${flutter}/bin/flutter config --enable-linux-desktop >/dev/null
   '';
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ wrapGAppsHook ];
