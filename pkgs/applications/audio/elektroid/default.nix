@@ -19,7 +19,7 @@ in
 stdenv.mkDerivation {
   inherit version;
 
-  name = "elektroid";
+  pname = "elektroid";
 
   src = fetchFromGitHub {
     owner = "dagargo";
