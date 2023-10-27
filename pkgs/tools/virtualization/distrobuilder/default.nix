@@ -9,6 +9,7 @@
 , squashfsTools
 , debootstrap
 , callPackage
+, nixosTests
 }:
 
 let
@@ -36,7 +37,6 @@ buildGoModule rec {
 
   buildInputs = bins;
 
-  passthru.generator = callPackage ./generator.nix { inherit src version; };
 
   # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
   doCheck = false;
@@ -49,6 +49,12 @@ buildGoModule rec {
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
   '';
+
+  passthru = {
+    tests.incus = nixosTests.incus.container;
+
+    generator = callPackage ./generator.nix { inherit src version; };
+  };
 
   meta = with lib; {
     description = "System container image builder for LXC and LXD";
