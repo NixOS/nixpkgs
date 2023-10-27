@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.cyrusimap.org";
-    description = "Cyrus IMAP is an email, contacts and calendar server.";
+    description = "Cyrus IMAP is an email, contacts and calendar server";
     license = with licenses; [ bsdOriginal ];
     maintainers = with maintainers; [ pingiun ];
     platforms = platforms.unix;
