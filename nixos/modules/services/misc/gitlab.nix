@@ -164,6 +164,8 @@ let
     };
   };
 
+  configWithSecrets = yaml.configWithSecrets "${cfg.statePath}/config/gitlab.yml" gitlabConfig;
+
   gitlabEnv = cfg.packages.gitlab.gitlabEnv // {
     HOME = "${cfg.statePath}/home";
     PUMA_PATH = "${cfg.statePath}/";
@@ -1381,10 +1383,7 @@ in {
               ''
             }
 
-            ${utils.genJqSecretsReplacementSnippet
-                gitlabConfig
-                "${cfg.statePath}/config/gitlab.yml"
-            }
+            ${configWithSecrets.creationScript}
 
             rm -f '${cfg.statePath}/config/secrets.yml'
 
@@ -1405,7 +1404,7 @@ in {
 
           git config --global core.autocrlf "input"
         '';
-      };
+      } // configWithSecrets.systemdServiceConfig;
     };
 
     systemd.services.gitlab-db-config = {

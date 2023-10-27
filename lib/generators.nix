@@ -44,6 +44,7 @@ rec {
     # here it returns to "", which is even less of a good default
     else if false ==   v then "false"
     else if null  ==   v then "null"
+    else if lib.types.isSecret v then hashString "sha256" v._secret.path
     # if you have lists you probably want to replace this
     else if isList     v then err "lists" v
     # same as for lists, might want to replace

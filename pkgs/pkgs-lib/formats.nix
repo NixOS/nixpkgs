@@ -1,4 +1,26 @@
 { lib, pkgs }:
+let
+  mkSystemdCredentials = baseName: secrets:
+    (builtins.foldl'
+      (state: secret:
+        {
+          credentials =
+            if secret.type == "file-content" || secret.type == "file-path" then {
+              LoadCredential = (state.credentials.LoadCredential or []) ++ [
+                "${baseName}-${toString state.count}:${secret.path}"
+              ];
+            }
+            else if secret.type == "file-content-encrypted" then {
+              LoadCredentialEncrypted = (state.credentials.LoadCredentialEncrypted or []) ++ [
+                "${baseName}-${toString state.count}:${secret.path}"
+              ];
+            }
+            else throw "unrecognized secret type: ${secret.type}";
+          count = state.count + 1;
+        })
+      { count = 1; credentials = {}; }
+      secrets).credentials;
+in
 rec {
 
   /*
@@ -27,6 +49,21 @@ rec {
       # A function for generating a file with a value of such a type
       generate = ...;
 
+      # configWithSecrets :: Path -> Config -> AttrSet
+      # Runtime secret substitution support for the format (optional).
+      # Takes the file's target path and the config to export, and
+      # returns an attribute set with two attributes:
+      # systemdServiceConfig and creationScript. systemdServiceConfig
+      # contains attributes to be merged into a systemd
+      # service's serviceConfig section, e.g. LoadCredential.
+      # creationScript is a script which creates the config at
+      # runtime, with the secrets substituted in, and should be run in
+      # the context of a systemd service.
+      configWithSecrets :: Path -> Config -> {
+        systemdServiceConfig = ...;
+        creationScript = ...;
+      }
+
     });
   */
 
@@ -34,7 +71,7 @@ rec {
   inherit (import ./formats/java-properties/default.nix { inherit lib pkgs; })
     javaProperties;
 
-  json = {}: {
+  json = {}: rec {
 
     type = with lib.types; let
       valueType = nullOr (oneOf [
@@ -43,6 +80,7 @@ rec {
         float
         str
         path
+        secret
         (attrsOf valueType)
         (listOf valueType)
       ]) // {
@@ -58,9 +96,88 @@ rec {
       jq . "$valuePath"> $out
     '') {};
 
+    configWithSecrets = path: config:
+      let /*
+        Recurse into a list or an attrset, searching for secrets, and
+        return an attrset where the names are the corresponding jq
+        path where the attrs were found and the values are the values
+        of the attrs.
+
+        Example:
+          getSecretsWithJqPrefix
+            {
+              example = [
+                {
+                  irrelevant = "not interesting";
+                }
+                {
+                  ignored = "ignored attr";
+                  relevant = {
+                    secret = lib.mkSecret "/path/to/secret";
+                  };
+                }
+              ];
+            }
+            -> { ".example[1].relevant.secret" = "/path/to/secret"; }   */
+        getSecretsWithJqPrefix = item:
+          let
+            escapeName = name: ''"${lib.replaceStrings [''"'' "\\"] [''\"'' "\\\\"] name}"'';
+            recurse = prefix: item:
+              if lib.isSecret item then
+                [ (lib.nameValuePair prefix item._secret) ]
+              else if builtins.isAttrs item then
+                lib.concatLists (
+                  lib.mapAttrsToList
+                    (name: value: recurse (prefix + "." + (escapeName name)) value)
+                    item
+                )
+              else if builtins.isList item then
+                lib.concatLists (
+                  lib.imap0
+                    (index: item: recurse (prefix + "[${toString index}]") item)
+                    item
+                )
+              else
+                [];
+          in lib.listToAttrs (recurse "" item);
+
+        secrets = getSecretsWithJqPrefix config;
+
+        mkSecretReplacement = index: name:
+          let
+            inherit (secrets.${name}) type;
+            credPath = "$CREDENTIALS_DIRECTORY/secret-${builtins.hashString "sha1" path}-${toString index}";
+          in
+          if type == "file-path" then ''
+            ${pkgs.jaq}/bin/jaq --rawfile secret <(echo -n ${credPath}) \
+                                ${lib.escapeShellArg "${name} = $secret"} \
+                                -i ${lib.escapeShellArg path}
+          ''
+          else if type == "file-content" || type == "file-content-encrypted" then ''
+            ${pkgs.jaq}/bin/jaq --rawfile secret ${credPath} \
+                                ${lib.escapeShellArg "${name} = $secret"} \
+                                -i ${lib.escapeShellArg path}
+          ''
+          else throw "unrecognized secret type: ${type}";
+
+        configFile = generate path config;
+      in
+      {
+        systemdServiceConfig = mkSystemdCredentials "secret-${builtins.hashString "sha1" path}" (builtins.attrValues secrets);
+        # Extract secrets from the settings and generate a script which
+        # creates the config file with the secrets substituted in.
+        creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          umask u=rwx,g=,o=
+          cp ${configFile} ${lib.escapeShellArg path}
+          ${lib.concatStringsSep "\n" (lib.imap1 mkSecretReplacement (builtins.attrNames secrets))}
+        '';
+      };
   };
 
-  yaml = {}: {
+  yaml = {}@args: {
 
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
@@ -84,6 +201,23 @@ rec {
       };
     in valueType;
 
+    # Extract secrets from the settings and generate a script which
+    # performs the secret replacements.
+    configWithSecrets = path: config:
+      let
+        configWithSecretsJSON = (json args).configWithSecrets "${path}-tmp" config;
+      in
+      configWithSecretsJSON // {
+        creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          umask u=rwx,g=,o=
+          ${configWithSecretsJSON.creationScript}
+          ${pkgs.remarshal}/bin/json2yaml ${lib.escapeShellArgs [ "${path}-tmp" path ]}
+          rm "${path}-tmp"
+        '';
+      };
   };
 
   ini = {
@@ -95,7 +229,7 @@ rec {
     ...
     }@args:
     assert !listsAsDuplicateKeys || listToValue == null;
-    {
+    rec {
 
     type = with lib.types; let
 
@@ -104,8 +238,9 @@ rec {
         int
         float
         str
+        secret
       ]) // {
-        description = "INI atom (null, bool, int, float or string)";
+        description = "INI atom (null, bool, int, float, string or secret)";
       };
 
       iniAtom =
@@ -133,6 +268,34 @@ rec {
           else value;
       in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
+    # Extract secrets from the settings and generate a script which
+    # performs the secret replacements.
+    configWithSecrets = path: config:
+      let
+        secrets = lib.catAttrs "_secret" (lib.collect lib.isSecret config);
+        configFile = generate path config;
+        mkSecretReplacement = index: secret: ''
+          ${pkgs.replace-secret}/bin/replace-secret \
+             ${builtins.hashString "sha256" secret.path} \
+             ${if secret.type == "file-path" then
+                 ''<(echo "$CREDENTIALS_DIRECTORY/secret-${builtins.hashString "sha1" path}-${toString index}")''
+               else if secret.type == "file-content" || secret.type == "file-content-encrypted" then
+                 ''"$CREDENTIALS_DIRECTORY/secret-${builtins.hashString "sha1" path}-${toString index}"''
+               else throw "unrecognized secret type: ${secret.type}"} \
+             ${lib.escapeShellArg path}
+        '';
+      in
+        {
+          systemdServiceConfig = mkSystemdCredentials "secret-${builtins.hashString "sha1" path}" secrets;
+          creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
+
+            umask u=rwx,g=,o=
+            cp ${configFile} ${path}
+            ${lib.concatStrings (lib.imap1 mkSecretReplacement secrets)}
+          '';
+        };
   };
 
   keyValue = {
@@ -195,7 +358,7 @@ rec {
     generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
   };
 
-  toml = {}: json {} // {
+  toml = {}@args: json args // {
     type = with lib.types; let
       valueType = oneOf [
         bool
@@ -218,6 +381,23 @@ rec {
       json2toml "$valuePath" "$out"
     '') {};
 
+    # Extract secrets from the settings and generate a script which
+    # performs the secret replacements.
+    configWithSecrets = path: config:
+      let
+        configWithSecretsJSON = (json args).configWithSecrets "${path}-tmp" config;
+      in
+      configWithSecretsJSON // {
+        creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          umask u=rwx,g=,o=
+          ${configWithSecretsJSON.creationScript}
+          ${pkgs.remarshal}/bin/json2toml ${lib.escapeShellArgs [ "${path}-tmp" path ]}
+          rm "${path}-tmp"
+        '';
+      };
   };
 
   /* For configurations of Elixir project, like config.exs or runtime.exs
