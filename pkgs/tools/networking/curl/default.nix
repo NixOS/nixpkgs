@@ -64,11 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    CoreServices
-    SystemConfiguration
-  ]);
   nativeBuildInputs = [ pkg-config perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -91,7 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
     optional wolfsslSupport wolfssl ++
     optional rustlsSupport rustls-ffi ++
     optional zlibSupport zlib ++
-    optional zstdSupport zstd;
+    optional zstdSupport zstd ++
+    optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreFoundation
+      CoreServices
+      SystemConfiguration
+    ]);
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
