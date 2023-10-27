@@ -9782,6 +9782,11 @@
     }];
     name = "Joseph LaFreniere";
   };
+  lagoja = {
+    github = "Lagoja";
+    githubId =750845;
+    name = "John Lago";
+  };
   laikq = {
     email = "gwen@quasebarth.de";
     github = "laikq";
