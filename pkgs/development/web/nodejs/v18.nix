@@ -1,8 +1,17 @@
-{ callPackage, fetchpatch, openssl, python3, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, fetchpatch, openssl, python3, enableNpm ? true }:
 
 let
+  # Clang 16+ cannot build Node v14 due to -Wenum-constexpr-conversion errors.
+  # Use an older version of clang with the current libc++ for compatibility (e.g., with icu).
+  ensureCompatibleCC = packages:
+    if packages.stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion packages.stdenv.cc.cc) "16"
+      then packages.llvmPackages_15.stdenv
+      else packages.stdenv;
+
   buildNodejs = callPackage ./nodejs.nix {
     inherit openssl;
+    stdenv = ensureCompatibleCC pkgs;
+    buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
     python = python3;
   };
 in
