@@ -123,6 +123,8 @@ let
   package = config.security.pam.package;
   parentConfig = config;
 
+  pwqualityConf = import ./pwquality/pwquality-conf-format.nix { inherit pkgs lib; };
+
   pamOpts =
     { config, name, ... }:
     let
@@ -200,6 +202,61 @@ let
             {file}`~/.eid/authorized_certificates`
             can be used to log in with the associated PKCS#11 tokens.
           '';
+        };
+
+        pwquality = {
+          enable = lib.mkOption {
+            default = config.security.pam.pwquality.enable;
+            defaultText = lib.literalExpression "config.security.pam.pwquality.enable";
+            type = lib.types.bool;
+            description = ''
+              Enable PAM pwquality system for this service to enforce complex passwords.
+            '';
+          };
+
+          package = lib.mkOption {
+            default = config.security.pwquality.package;
+            defaultText = lib.literalExpression "config.security.pwquality.package";
+            type = lib.types.package;
+            description = ''
+              The libpwquality package to use.
+            '';
+          };
+
+          control = lib.mkOption {
+            default = config.security.pam.pwquality.control;
+            defaultText = lib.literalExpression "config.security.pam.pwquality.control";
+            type = lib.types.enum [
+              "required"
+              "requisite"
+              "sufficient"
+              "optional"
+            ];
+            description = ''
+              This option sets pam "control".
+              If you want to have multi factor authentication, use "required".
+              If you want to use U2F device instead of regular password, use "sufficient".
+
+              Read {manpage}`pam.conf(5)` for better understanding of this option.
+            '';
+          };
+
+          settings = lib.mkOption {
+            default = config.security.pam.pwquality.settings;
+            defaultText = lib.literalExpression "config.security.pam.pwquality.settings";
+            type = pwqualityConf.type;
+            apply = pwqualityConf.pamApply;
+            description = ''
+              Config options for {manpage}`pam_pwquality(8)` for this service.
+
+              Inherits default values from
+              [](#opt-security.pam.pwquality.settings),
+              which itself inherits from [](#opt-security.pwquality.settings).
+              Setting values here exclusively control
+              {manpage}`pam_pwquality(8)` for only this service.
+              See {manpage}`pwquality.conf(5)` man page for available options.
+            '';
+          };
         };
 
         u2fAuth = lib.mkOption {
@@ -1175,12 +1232,23 @@ let
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
               {
+                # before pam_unix.so
+                name = "pwquality";
+                enable = cfg.pwquality.enable;
+                control = cfg.pwquality.control;
+                modulePath = "${lib.getLib cfg.pwquality.package}/lib/security/pam_pwquality.so";
+                settings = cfg.pwquality.settings;
+              }
+              {
                 name = "unix";
                 control = "sufficient";
                 modulePath = "${package}/lib/security/pam_unix.so";
                 settings = {
                   nullok = true;
                   yescrypt = true;
+                  # receive updated password from libpwquality pam (if set)
+                  # https://github.com/libpwquality/libpwquality/blob/c040bf552a1e7fb2541ce018e7f2028758cc16ec/doc/man/pam_pwquality.8.pod#examples
+                  use_authtok = cfg.pwquality.enable;
                 };
               }
               {
@@ -1856,6 +1924,41 @@ in
       };
     };
 
+    security.pam.pwquality = {
+      enable = lib.mkEnableOption "`pam_pwquality` system to enforce complex passwords";
+
+      control = lib.mkOption {
+        default = "required";
+        type = lib.types.enum [
+          "required"
+          "requisite"
+          "sufficient"
+          "optional"
+        ];
+        description = ''
+          This option sets pam "control".
+          If you want to have multi factor authentication, use "required".
+          If you want to use U2F device instead of regular password, use "sufficient".
+
+          Read {manpage}`pam.conf(5)` for better understanding of this option.
+        '';
+      };
+
+      settings = lib.mkOption {
+        default = config.security.pwquality.settings;
+        defaultText = lib.literalExpression "config.security.pwquality.settings";
+        type = pwqualityConf.type;
+        description = ''
+          Config options for {manpage}`pam_pwquality(8)`.
+
+          Inherits default values from [](#opt-security.pwquality.settings) for
+          global common configuration of libpwquality.
+          Setting values here exclusively control {manpage}`pam_pwquality(8)`.
+          See {manpage}`pwquality.conf(5)` for available options.
+        '';
+      };
+    };
+
     security.pam.u2f = {
       enable = lib.mkOption {
         default = false;
@@ -2295,6 +2398,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+      ++ lib.optionals config.security.pam.pwquality.enable [ config.security.pwquality.package ]
       ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
