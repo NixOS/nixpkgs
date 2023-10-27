@@ -14,6 +14,7 @@ let
       nullOr (oneOf [
         bool
         str
+        (listOf str)
         int
         pathInStore
       ])
@@ -201,6 +202,66 @@ let
             can be used to log in with the associated PKCS#11 tokens.
           '';
         };
+
+        pwquality =
+          let
+            pwqualityConf = import ./pwquality/pwquality-conf-format.nix { inherit pkgs lib; };
+          in
+          {
+            enable = lib.mkOption {
+              default = config.security.pwquality.pam.enable;
+              defaultText = lib.literalExpression "config.security.pwquality.pam.enable";
+              type = lib.types.bool;
+              description = ''
+                Enable PAM pwquality system for this service to enforce complex passwords.
+              '';
+            };
+
+            package = lib.mkOption {
+              default = config.security.pwquality.package;
+              defaultText = lib.literalExpression "config.security.pwquality.package";
+              type = lib.types.package;
+              description = ''
+                The libpwquality package to use.
+              '';
+            };
+
+            control = lib.mkOption {
+              default = config.security.pwquality.pam.control;
+              defaultText = lib.literalExpression "config.security.pwquality.pam.control";
+              type = lib.types.enum [
+                "required"
+                "requisite"
+                "sufficient"
+                "optional"
+              ];
+              description = ''
+                This option sets pam "control".
+                If you want to have multi factor authentication, use "required".
+                If you want to use U2F device instead of regular password, use "sufficient".
+
+                Read
+                {manpage}`pam.conf(5)`
+                for better understanding of this option.
+              '';
+            };
+
+            settings = lib.mkOption {
+              default = config.security.pwquality.pam.settings;
+              defaultText = lib.literalExpression "config.security.pwquality.pam.settings";
+              type = pwqualityConf.type;
+              description = ''
+                Config options for libpwquality in PAM for this service.
+
+                Inherits default value from [](#opt-security.pwquality.pam.settings),
+                which itself inherits from [](#opt-security.pwquality.settings),
+                where you should generally configure things. Use this option if
+                PAM config for this server must differ from global PAM
+                libpwqualtiy use.
+                See {manpage}`pwquality.conf(5)` man page for available options.
+              '';
+            };
+          };
 
         u2fAuth = lib.mkOption {
           default = config.security.pam.u2f.enable;
@@ -1175,12 +1236,25 @@ let
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
               {
+                # before pam_unix.so
+                name = "pwquality";
+                enable = cfg.pwquality.enable;
+                control = cfg.pwquality.control;
+                modulePath = "${lib.getLib cfg.pwquality.package}/lib/security/pam_pwquality.so";
+                settings = cfg.pwquality.settings;
+              }
+              {
                 name = "unix";
                 control = "sufficient";
                 modulePath = "${package}/lib/security/pam_unix.so";
                 settings = {
                   nullok = true;
                   yescrypt = true;
+                }
+                // lib.optionalAttrs cfg.pwquality.enable {
+                  # recieve updated password from libpwquality pam
+                  # https://github.com/libpwquality/libpwquality/blob/c040bf552a1e7fb2541ce018e7f2028758cc16ec/doc/man/pam_pwquality.8.pod#examples
+                  use_authtok = true;
                 };
               }
               {
@@ -2295,6 +2369,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
+      ++ lib.optionals config.security.pwquality.pam.enable [ config.security.pwquality.package ]
       ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
