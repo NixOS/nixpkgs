@@ -23,15 +23,15 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.14.0";
+  version = "2.15.0";
   format = "wheel";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-Nmf5dF2ZKAg2rWcwIjYshA9g7Y/v1aPjC/Bx9aj9ABc=";
+    hash = "sha256-wFtNAqOp/UvWwlJlCH1StJt5Cocd35j0+zL+l8u8etA=";
   };
 
   nativeBuildInputs = [
