@@ -30153,6 +30153,10 @@ with pkgs;
 
   unscii = callPackage ../data/fonts/unscii { };
 
+  utterly-nord-plasma = callPackage ../data/themes/utterly-nord-plasma {
+    inherit (libsForQt5) breeze-icons kdeclarative kirigami2 plasma-framework plasma-workspace;
+  };
+
   uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { };
 
   u001-font = callPackage ../data/fonts/u001 { };
