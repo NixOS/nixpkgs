@@ -23,22 +23,10 @@ in
 
         environmentFile = mkOption {
           type = with types; nullOr str;
-          # added on 2021-08-28, s3CredentialsFile should
-          # be removed in the future (+ remember the warning)
-          default = config.s3CredentialsFile;
+          default = null;
           description = lib.mdDoc ''
             file containing the credentials to access the repository, in the
             format of an EnvironmentFile as described by systemd.exec(5)
-          '';
-        };
-
-        s3CredentialsFile = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          description = lib.mdDoc ''
-            file containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-            for an S3-hosted repository, in the format of an EnvironmentFile
-            as described by systemd.exec(5)
           '';
         };
 
@@ -300,7 +288,6 @@ in
   };
 
   config = {
-    warnings = mapAttrsToList (n: v: "services.restic.backups.${n}.s3CredentialsFile is deprecated, please use services.restic.backups.${n}.environmentFile instead.") (filterAttrs (n: v: v.s3CredentialsFile != null) config.services.restic.backups);
     assertions = mapAttrsToList (n: v: {
       assertion = (v.repository == null) != (v.repositoryFile == null);
       message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
