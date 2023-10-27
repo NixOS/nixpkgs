@@ -29,6 +29,18 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
+    enableLogUpload = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Enables upload of logs to the central log collection server at log.tailscale.io.
+        Tailscale will use this logs in case of technical customer support to gather insights on whats happening on a given tailnet.
+        Disabling logging means limited technical support will be available.
+
+        See https://tailscale.com/kb/1011/log-mesh-traffic/#opting-out-of-client-logging for details.
+      '';
+    };
+
     package = lib.mkPackageOptionMD pkgs "tailscale" {};
 
     useRoutingFeatures = mkOption {
@@ -78,7 +90,8 @@ in {
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
       ] ++ (lib.optionals (cfg.permitCertUid != null) [
         "TS_PERMIT_CERT_UID=${cfg.permitCertUid}"
-      ]);
+      ]) ++ (lib.optionals (!cfg.enableLogUpload) [ "TS_NO_LOGS_NO_SUPPORT=true" ]);
+
       # Restart tailscaled with a single `systemctl restart` at the
       # end of activation, rather than a `stop` followed by a later
       # `start`. Activation over Tailscale can hang for tens of
