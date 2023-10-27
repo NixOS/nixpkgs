@@ -3,16 +3,20 @@
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
+, zsh
+, coreutils
+, cryptsetup
+, e2fsprogs
+, file
+, gawk
 , getent
 , gettext
-, zsh
-, pinentry
-, cryptsetup
+, gnugrep
 , gnupg
 , libargon2
 , lsof
+, pinentry
 , util-linux
-, e2fsprogs
 , nix-update-script
 }:
 
@@ -42,7 +46,21 @@ stdenv.mkDerivation rec {
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
     wrapProgram $out/bin/tomb \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup e2fsprogs getent gettext gnupg libargon2 lsof pinentry util-linux ]}
+      --prefix PATH : $out/bin:${lib.makeBinPath [
+          coreutils
+          cryptsetup
+          e2fsprogs
+          file
+          gawk
+          getent
+          gettext
+          gnugrep
+          gnupg
+          libargon2
+          lsof
+          pinentry
+          util-linux
+        ]}
   '';
 
   passthru = {
