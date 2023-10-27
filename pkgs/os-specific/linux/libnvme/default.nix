@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnvme";
-  version = "1.4";
+  version = "1.6";
 
   outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
@@ -25,13 +25,11 @@ stdenv.mkDerivation rec {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${version}";
-    sha256 = "sha256-8DlEQ4LH6UhIHr0znJGqkuCosLHqA6hkJjmiCawNE1k=";
+    hash = "sha256-7bvjsmt16/6RycSDKIECtJ4ES7NTaspU6IMpUw0sViA=";
   };
 
   postPatch = ''
-    patchShebangs meson-vcs-tag.sh
-    chmod +x doc/kernel-doc-check
-    patchShebangs doc/kernel-doc doc/kernel-doc-check doc/list-man-pages.sh
+    patchShebangs scripts
   '';
 
   nativeBuildInputs = [
@@ -65,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = [ maintainers.fogti ];
+    maintainers = with maintainers; [ fogti vifino ];
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;
   };
