@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, buildPackages
 , gnutls
 , guile
 , libtool
@@ -19,16 +20,21 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
   nativeBuildInputs = [
+    gnutls
     guile
+    libtool
+    texinfo
     pkg-config
   ];
 
   buildInputs = [
     gnutls
     guile
-    libtool
-    texinfo
   ];
 
   configureFlags = [
