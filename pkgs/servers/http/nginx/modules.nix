@@ -11,7 +11,7 @@
 , curl
 , expat
 , fdk_aac
-, ffmpeg
+, ffmpeg-headless
 , geoip
 , libbsd
 , libiconv
@@ -971,7 +971,7 @@ let self = {
       hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
     };
 
-    inputs = [ ffmpeg libjpeg ];
+    inputs = [ ffmpeg-headless libjpeg ];
 
     meta = with lib; {
       description = "Extract thumbs from a video file";
@@ -991,7 +991,7 @@ let self = {
       hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
     };
 
-    inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg-headless fdk_aac openssl libxml2 libiconv ];
 
     meta = with lib; {
       description = "VOD packager";
