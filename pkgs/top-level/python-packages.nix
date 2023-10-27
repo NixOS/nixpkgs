@@ -5980,6 +5980,8 @@ self: super: with self; {
 
   krakenex = callPackage ../development/python-modules/krakenex { };
 
+  krfzf-py = callPackage ../development/python-modules/krfzf-py { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   l18n = callPackage ../development/python-modules/l18n { };
