@@ -22,7 +22,6 @@ CORES = {
     "beetle-pcfx": {"repo": "beetle-pcfx-libretro"},
     "beetle-psx": {"repo": "beetle-psx-libretro"},
     "beetle-saturn": {"repo": "beetle-saturn-libretro"},
-    "beetle-snes": {"repo": "beetle-bsnes-libretro"},
     "beetle-supafaust": {"repo": "supafaust"},
     "beetle-supergrafx": {"repo": "beetle-supergrafx-libretro"},
     "beetle-vb": {"repo": "beetle-vb-libretro"},
