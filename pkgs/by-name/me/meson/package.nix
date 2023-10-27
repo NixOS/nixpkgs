@@ -28,25 +28,13 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
-    # Meson is currently inspecting fewer variables than autoconf does, which
-    # makes it harder for us to use setup hooks, etc.  Taken from
-    # https://github.com/mesonbuild/meson/pull/6827
-    ./more-env-vars.patch
-
-    # Unlike libtool, vanilla Meson does not pass any information
-    # about the path library will be installed to to g-ir-scanner,
-    # breaking the GIR when path other than ${!outputLib}/lib is used.
-    # We patch Meson to add a --fallback-library-path argument with
-    # library install_dir to g-ir-scanner.
-    ./gir-fallback-path.patch
-
-    # In common distributions, RPATH is only needed for internal libraries so
+    # In typical distributions, RPATH is only needed for internal libraries so
     # meson removes everything else. With Nix, the locations of libraries
     # are not as predictable, therefore we need to keep them in the RPATH.
     # At the moment we are keeping the paths starting with /nix/store.
     # https://github.com/NixOS/nixpkgs/issues/31222#issuecomment-365811634
     (substituteAll {
-      src = ./fix-rpath.patch;
+      src = ./001-fix-rpath.patch;
       inherit (builtins) storeDir;
     })
 
@@ -56,50 +44,89 @@ python3.pkgs.buildPythonApplication rec {
     # But this can cause much bigger problem for Nix as it can produce
     # cut-in-half-by-\0 store path references.
     # Let’s just clear the whole rpath and hope for the best.
-    ./clear-old-rpath.patch
+    ./002-clear-old-rpath.patch
+
+    # Meson is currently inspecting fewer variables than autoconf does, which
+    # makes it harder for us to use setup hooks, etc.
+    # https://github.com/mesonbuild/meson/pull/6827
+    ./003-more-env-vars.patch
+
+    # Unlike libtool, vanilla Meson does not pass any information about the path
+    # library will be installed to to g-ir-scanner, breaking the GIR when path
+    # other than ${!outputLib}/lib is used.
+    # We patch Meson to add a --fallback-library-path argument with library
+    # install_dir to g-ir-scanner.
+    ./004-gir-fallback-path.patch
 
     # Patch out default boost search paths to avoid impure builds on
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
-    ./boost-Do-not-add-system-paths-on-nix.patch
+    ./005-boost-Do-not-add-system-paths-on-nix.patch
 
     # Nixpkgs cctools does not have bitcode support.
-    ./disable-bitcode.patch
+    ./006-disable-bitcode.patch
 
     # Fix passing multiple --define-variable arguments to pkg-config.
     # https://github.com/mesonbuild/meson/pull/10670
     (fetchpatch {
       url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
-      sha256 = "GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
+      hash = "sha256-GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
       excludes = [
         "docs/yaml/objects/dep.yaml"
       ];
     })
   ];
 
-  setupHook = ./setup-hook.sh;
+  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
+    libxcrypt
+  ];
 
-  nativeCheckInputs = [ ninja pkg-config ];
-  checkInputs = [ zlib ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation OpenGL AppKit Cocoa ];
-  checkPhase = ''
-    runHook preCheck
+  nativeBuildInputs = [ installShellFiles ];
 
-    patchShebangs 'test cases'
-    substituteInPlace 'test cases/native/8 external program shebang parsing/script.int.in' \
-      --replace /usr/bin/env ${coreutils}/bin/env
+  nativeCheckInputs = [
+    ninja
+    pkg-config
+  ];
+
+  checkInputs = [
+    zlib
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Cocoa
+    Foundation
+    OpenGL
+  ];
+
+  checkPhase = lib.concatStringsSep "\n" ([
+    "runHook preCheck"
+    ''
+      patchShebangs 'test cases'
+      substituteInPlace \
+        'test cases/native/8 external program shebang parsing/script.int.in' \
+          --replace /usr/bin/env ${coreutils}/bin/env
+    ''
+  ]
+  # Remove problematic tests
+  ++ (builtins.map (f: ''rm -vr "${f}";'') [
     # requires git, creating cyclic dependency
-    rm -r 'test cases/common/66 vcstag'
+    ''test cases/common/66 vcstag''
     # requires glib, creating cyclic dependency
-    rm -r 'test cases/linuxlike/6 subdir include order'
-    rm -r 'test cases/linuxlike/9 compiler checks with dependencies'
+    ''test cases/linuxlike/6 subdir include order''
+    ''test cases/linuxlike/9 compiler checks with dependencies''
     # requires static zlib, see #66461
-    rm -r 'test cases/linuxlike/14 static dynamic linkage'
+    ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
-    rm -r 'test cases/osx/7 bitcode'
-    HOME="$TMPDIR" python ./run_project_tests.py
+    ''test cases/osx/7 bitcode''
+  ])
+  ++ [
+    ''HOME="$TMPDIR" python ./run_project_tests.py''
+    "runHook postCheck"
+  ]);
 
-    runHook postCheck
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
   '';
 
   postFixup = ''
@@ -117,18 +144,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace "python3 -c " "${python3.interpreter} -c "
   '';
 
-  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
-    libxcrypt
-  ];
+  setupHook = ./setup-hook.sh;
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = ''
-    installShellCompletion --zsh data/shell-completions/zsh/_meson
-    installShellCompletion --bash data/shell-completions/bash/meson
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://mesonbuild.com";
     description = "An open source, fast and friendly build system made in Python";
     longDescription = ''
@@ -140,8 +158,8 @@ python3.pkgs.buildPythonApplication rec {
       second spent waiting for the build system to actually start compiling
       code.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbe AndersonTorres ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 }
