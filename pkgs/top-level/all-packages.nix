@@ -26035,10 +26035,6 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbclBootstrap = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-    faslExt = "fasl";
-  };
   sbcl_2_3_8 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.8"; };
     faslExt = "fasl";
