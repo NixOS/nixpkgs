@@ -642,6 +642,8 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
+  elektroid = callPackage ../applications/audio/elektroid { };
+
   eludris = callPackage ../tools/misc/eludris {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5755,7 +5757,9 @@ with pkgs;
 
   joystickwake = callPackage ../tools/games/joystickwake { };
 
-  juce = darwin.apple_sdk_11_0.callPackage ../development/misc/juce { };
+  juce = callPackage ../development/misc/juce {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   jumppad = callPackage ../tools/virtualization/jumppad { };
 
@@ -17031,7 +17035,12 @@ with pkgs;
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed { };
+  cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed {
+    rustPlatform = makeRustPlatform {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+      inherit rustc cargo;
+    };
+  };
   cargo-component = callPackage ../development/tools/rust/cargo-component { };
   cargo-cranky = callPackage ../development/tools/rust/cargo-cranky { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };

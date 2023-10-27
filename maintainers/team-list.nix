@@ -430,6 +430,7 @@ with lib.maintainers; {
     members = [
       cleeyv
       ryantm
+      lassulus
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";

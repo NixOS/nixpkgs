@@ -5980,6 +5980,8 @@ self: super: with self; {
 
   krakenex = callPackage ../development/python-modules/krakenex { };
 
+  krfzf-py = callPackage ../development/python-modules/krfzf-py { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   l18n = callPackage ../development/python-modules/l18n { };
@@ -13691,7 +13693,7 @@ self: super: with self; {
 
   tensorflow-build = let
     compat = rec {
-      protobufTF = pkgs.protobuf3_21.override {
+      protobufTF = pkgs.protobuf_21.override {
         abseil-cpp = pkgs.abseil-cpp;
       };
       grpcTF = (pkgs.grpc.overrideAttrs (

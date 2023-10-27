@@ -30,6 +30,7 @@
 , openldap
 , openssl_1_1
 , openssl
+, overrideSDK
 , pam
 , pcre2
 , postgresql
@@ -239,6 +240,9 @@ lib.makeScope pkgs.newScope (self: with self; {
     couchbase = callPackage ../development/php-packages/couchbase { };
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace {
+      buildPecl = buildPecl.override {
+        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+      };
       inherit (pkgs) darwin;
     };
 

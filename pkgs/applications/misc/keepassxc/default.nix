@@ -88,7 +88,14 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
+  nativeBuildInputs = [
+    asciidoctor
+    cmake
+    wrapQtAppsHook
+    qttools
+    pkg-config
+  ]
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook;
 
   dontWrapGApps = true;
   preFixup = ''

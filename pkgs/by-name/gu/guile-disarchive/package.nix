@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     guile
+    guile-lzma
     pkg-config
   ];
 

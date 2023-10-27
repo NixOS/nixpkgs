@@ -3,6 +3,7 @@
 , fetchgit
 , avahi
 , gmp
+, buildPackages
 , autoreconfHook
 , pkg-config
 , texinfo
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoreconfHook guile pkg-config texinfo ];
   buildInputs = [ guile ];
   propagatedBuildInputs = [ avahi gmp ];
