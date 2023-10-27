@@ -48,7 +48,7 @@ Disables using Meson’s `installPhase`.
 
 Controls the flags passed to meson install.
 
-### `mesonInstallTags` (#mesoninstalltags)
+### `mesonInstallTags` {#mesoninstalltags}
 
 Tags specified here will be passed to Meson as via `--tags` during
 installation and controls which components will be installed.
