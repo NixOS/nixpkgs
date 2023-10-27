@@ -117,6 +117,25 @@ let
         };
       });
 
+      intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.2";
+        src = fetchFromGitHub {
+          owner = "jeeftor";
+          repo = "intellifire4py";
+          rev = "refs/tags/${version}";
+          hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
+        };
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+        propagatedBuildInputs = with super; [
+          aenum
+          aiohttp
+          pydantic
+        ];
+        doCheck = false; # requires asynctest, which does not work on python 3.11
+      });
+
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.0";
         src = fetchFromGitHub {
