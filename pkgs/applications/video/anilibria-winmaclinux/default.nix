@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "1.2.10";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    sha256 = "sha256-mCDw8V/Uzewm32rj+mkkm5atS5nJAFJ3ry1boTn+gqI=";
+    sha256 = "sha256-N5caLFM6YJtarMaA7Ps5uWXmOtKM2KvHneDkN8ooJpw=";
   };
 
   sourceRoot = "source/src";
