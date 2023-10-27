@@ -3,19 +3,19 @@
 , fetchFromGitHub
 , fetchpatch
 , installShellFiles
+, coreutils
+, darwin
+, libxcrypt
 , ninja
 , pkg-config
 , python3
-, zlib
-, coreutils
 , substituteAll
-, Foundation
-, OpenGL
-, AppKit
-, Cocoa
-, libxcrypt
+, zlib
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation OpenGL;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "1.2.3";

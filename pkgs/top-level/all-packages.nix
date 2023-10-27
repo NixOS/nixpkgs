@@ -5965,10 +5965,6 @@ with pkgs;
 
   merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
-  meson = callPackage ../by-name/me/meson/package.nix {
-    inherit (darwin.apple_sdk.frameworks) Foundation OpenGL AppKit Cocoa;
-  };
-
   # while building documentation meson may want to run binaries for host
   # which needs an emulator
   # example of an error which this fixes
