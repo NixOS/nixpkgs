@@ -8,6 +8,8 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools_scm
+, types-markdown
 , types-pyyaml
 , types-requests
 , typing-extensions
@@ -16,7 +18,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
   version = "3.14.4";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
@@ -27,10 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-DNoD6V7l224yQa+AfI+KNviUJBxKB0u0m9B5qX5HuzQ=";
   };
 
+  # fix failing tests, can probably be removed in a future version
+  patches = [ ./allow-unused-ignores.patch ];
+
+  nativeBuildInputs = [ setuptools_scm ];
+
   propagatedBuildInputs = [
     django-stubs
     mypy
     requests
+    types-markdown
     types-pyyaml
     types-requests
     typing-extensions

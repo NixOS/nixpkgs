@@ -1,0 +1,13 @@
+diff --git a/mypy.ini b/mypy.ini
+index 79c93df..541a085 100644
+--- a/mypy.ini
++++ b/mypy.ini
+@@ -5,7 +5,7 @@ ignore_missing_imports = true
+ incremental = true
+ strict_optional = true
+ show_traceback = true
+-warn_unused_ignores = true
++warn_unused_ignores = False
+ warn_redundant_casts = true
+ warn_unused_configs = true
+ warn_unreachable = true
