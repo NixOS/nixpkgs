@@ -133,6 +133,7 @@
   ./misc/nixops-autoluks.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
+  ./misc/socket-activation.nix
   ./misc/version.nix
   ./misc/wordlist.nix
   ./programs/_1password-gui.nix
