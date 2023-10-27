@@ -39358,6 +39358,12 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
+  gromacsPlumed = lowPrio (gromacs.override {
+    singlePrec = true;
+    enablePlumed = true;
+    fftw = fftwSinglePrec;
+  });
+
   gromacsMpi = lowPrio (gromacs.override {
     singlePrec = true;
     enableMpi = true;
