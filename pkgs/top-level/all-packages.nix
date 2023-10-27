@@ -10948,7 +10948,7 @@ with pkgs;
   mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
-    electron = electron_22;
+    electron = electron_25; # blank screen with electron_26
   };
 
   mosh = callPackage ../tools/networking/mosh { };
