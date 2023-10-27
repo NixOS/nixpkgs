@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = "refs/tags/${version}";
-    hash = "sha256-GVBF2ppyIEvC4rR9IF4gwsdc4fJe1xHS1CyJEwFuVGw=";
+    hash = "sha256-cLkCQQbb/AakDSz1NTrVlHh8LdgoqtjX8OPT+Nb1NA4=";
   };
 
   propagatedBuildInputs = [
