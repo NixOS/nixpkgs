@@ -1,31 +1,24 @@
 { lib, stdenv
-, fetchurl
 , fetchzip
 , autoPatchelfHook
 , makeWrapper
+, maven
 , jdk
 , libsecret
 , webkitgtk
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "Archi";
-  version = "4.7.1";
+  version = "5.1.0";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://www.archimatetool.com/downloads/archi/Archi-Linux64-${version}.tgz";
-        sha256 = "0sd57cfnh5q2p17sd86c8wgmqyipg29rz6iaa5brq8mwn8ps2fdw";
-      }
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchzip {
-        url = "https://www.archimatetool.com/downloads/archi/Archi-Mac-${version}.zip";
-        sha256 = "1h05lal5jnjwm30dbqvd6gisgrmf1an8xf34f01gs9pwqvqfvmxc";
-      }
-    else
-      throw "Unsupported system";
+  src = fetchzip {
+    url = "https://github.com/archimatetool/archi/archive/refs/tags/release_${version}.tar.gz";
+    hash = "sha256-7Z/cSqMNf6DWyrdGWQ1PFNCo93PjWJbfKnNKjPG/2uU=";
+  };
+
+  mvnHash = "sha256-ROLPO6oim7w6RjBgbAyQhfnCerLJwVBwoOMwUqzgRHk=";
 
   buildInputs = [
     libsecret
@@ -36,9 +29,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
+  mvnParameters = lib.escapeShellArgs [
+    "-Pproduct"
+  ];
+
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       ''
+        cd com.archimatetool.editor.product/target/products/com.archimatetool.editor.product/linux/gtk/x86_64/Archi/
         mkdir -p $out/bin $out/libexec
         for f in configuration features p2 plugins Archi.ini; do
           cp -r $f $out/libexec
@@ -49,11 +47,14 @@ stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])} \
           --prefix PATH : ${jdk}/bin
       ''
-    else
+    else if stdenv.hostPlatform.isDarwin then
       ''
+        cd com.archimatetool.editor.product/target/products/com.archimatetool.editor.product/macosx/cocoa/${stdenv.hostPlatform.darwinArch}/
         mkdir -p "$out/Applications"
         mv Archi.app "$out/Applications/"
-      '';
+      ''
+    else
+      throw "Unsupported system";
 
   meta = with lib; {
     description = "ArchiMate modelling toolkit";
