@@ -352,7 +352,7 @@ class Machine:
         timing out.
         """
 
-        def check_active(_: Any) -> bool:
+        def check_active(_last_try: bool) -> bool:
             state = self.get_unit_property(unit, "ActiveState", user)
             if state == "failed":
                 raise Exception(f'unit "{unit}" reached state "{state}"')
@@ -637,7 +637,7 @@ class Machine:
         """
         output = ""
 
-        def check_success(_: Any) -> bool:
+        def check_success(_last_try: bool) -> bool:
             nonlocal output
             status, output = self.execute(command, timeout=timeout)
             return status == 0
@@ -652,7 +652,7 @@ class Machine:
         """
         output = ""
 
-        def check_failure(_: Any) -> bool:
+        def check_failure(_last_try: bool) -> bool:
             nonlocal output
             status, output = self.execute(command, timeout=timeout)
             return status != 0
@@ -712,9 +712,9 @@ class Machine:
         """
         matcher = re.compile(regexp)
 
-        def tty_matches(last: bool) -> bool:
+        def tty_matches(last_try: bool) -> bool:
             text = self.get_tty_text(tty)
-            if last:
+            if last_try:
                 self.log(
                     f"Last chance to match /{regexp}/ on TTY{tty}, "
                     f"which currently contains: {text}"
@@ -739,7 +739,7 @@ class Machine:
         Waits until the file exists in the machine's file system.
         """
 
-        def check_file(_: Any) -> bool:
+        def check_file(_last_try: bool) -> bool:
             status, _ = self.execute(f"test -e {filename}")
             return status == 0
 
@@ -754,7 +754,7 @@ class Machine:
         (default `localhost`).
         """
 
-        def port_is_open(_: Any) -> bool:
+        def port_is_open(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status == 0
 
@@ -774,7 +774,7 @@ class Machine:
             "-uU" if is_datagram else "-U",
         ]
 
-        def socket_is_open(_: Any) -> bool:
+        def socket_is_open(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc {' '.join(nc_flags)} {addr}")
             return status == 0
 
@@ -791,7 +791,7 @@ class Machine:
         (default `localhost`).
         """
 
-        def port_is_closed(_: Any) -> bool:
+        def port_is_closed(_last_try: bool) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status != 0
 
@@ -984,13 +984,13 @@ class Machine:
         :::
         """
 
-        def screen_matches(last: bool) -> bool:
+        def screen_matches(last_try: bool) -> bool:
             variants = self.get_screen_text_variants()
             for text in variants:
                 if re.search(regex, text) is not None:
                     return True
 
-            if last:
+            if last_try:
                 self.log(f"Last OCR attempt failed. Text was: {variants}")
 
             return False
@@ -1008,7 +1008,7 @@ class Machine:
         # to match multiline regexes.
         console = io.StringIO()
 
-        def console_matches(_: Any) -> bool:
+        def console_matches(_last_try: bool) -> bool:
             nonlocal console
             try:
                 # This will return as soon as possible and
@@ -1154,7 +1154,7 @@ class Machine:
         Wait until it is possible to connect to the X server.
         """
 
-        def check_x(_: Any) -> bool:
+        def check_x(_last_try: bool) -> bool:
             cmd = (
                 "journalctl -b SYSLOG_IDENTIFIER=systemd | "
                 + 'grep "Reached target Current graphical"'
