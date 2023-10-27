@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.18.12";
+  version = "1.18.13";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
-    hash = "sha256-Ucs187xTpbRJ7P32hCl8cHPxO3HCs44ZneAas043FXk=";
+    hash = "sha256-1lfm8RdmDJixx4i0ru8Isd9sHrpU6t6lZFKP9tPN5ig=";
   };
 
   # sudo-prompt has hardcoded binary paths on Linux and we patch them here
