@@ -17,17 +17,17 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2023-08-29";
-  GIT_VERSION = "v0.0-3410-g398a8505";
+  GIT_DATE = "2023-10-26";
+  GIT_VERSION = "v0.0-3428-gcfcbb82b";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = "verible";
-    rev = "${GIT_VERSION}";
-    sha256 = "sha256-qi//Dssgg5ITrL5jCpZXpSrhSm2xCqe53D9ctK7SQoU=";
+    repo  = "verible";
+    rev   = "${GIT_VERSION}";
+    hash  = "sha256-snWhOuGyAdtdJDMttcbEjlkwPUO1mdR9vuro0tZt+Z8=";
   };
 
   patches = [
