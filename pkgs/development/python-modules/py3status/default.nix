@@ -6,6 +6,7 @@
 , dbus-python
 , fetchPypi
 , file
+, hatchling
 , i3
 , i3ipc
 , libnotify
@@ -24,11 +25,16 @@
 buildPythonPackage rec {
   pname = "py3status";
   version = "3.53";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-vZrzHERjAg9J004A2dAbq8hKmAUslCTaRdwEAe9JRqU=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     pytz

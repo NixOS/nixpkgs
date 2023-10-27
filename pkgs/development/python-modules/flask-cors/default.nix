@@ -4,19 +4,24 @@
 , flask
 , packaging
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Cors";
+  pname = "flask-cors";
   version = "4.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dRrgSJ5CADM0/VNSMYPPk3CALmyMH18OofrONVEKNMU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-o//ulROKKBv/CBJIGPBFP/+T0TpMHUVjr23Y5g1V05g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     flask

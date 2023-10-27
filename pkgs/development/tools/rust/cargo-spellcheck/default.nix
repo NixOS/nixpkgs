@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   preCheck = "HOME=$(mktemp -d)";
 
