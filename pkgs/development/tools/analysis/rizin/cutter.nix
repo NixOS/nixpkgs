@@ -8,7 +8,7 @@
 # buildInputs
 , graphviz
 , rizin
-, python3
+, python
 , wrapQtAppsHook
 }:
 
@@ -24,9 +24,9 @@ let cutter = mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qmake pkg-config python3 wrapQtAppsHook ];
-  propagatedBuildInputs = [ python3.pkgs.pyside2 ];
-  buildInputs = [ graphviz qtbase qttools qtsvg qtwebengine rizin python3 ];
+  nativeBuildInputs = [ cmake qmake pkg-config python wrapQtAppsHook ];
+  propagatedBuildInputs = [ python.pkgs.pyside2 ];
+  buildInputs = [ graphviz qtbase qttools qtsvg qtwebengine rizin python ];
 
   cmakeFlags = [
     "-DCUTTER_USE_BUNDLED_RIZIN=OFF"

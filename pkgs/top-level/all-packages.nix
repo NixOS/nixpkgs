@@ -19919,7 +19919,10 @@ with pkgs;
 
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
-  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
+  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix {
+    ## as of 2023-10-27: pyside2 is unsupported on python 3.11
+    python = python310;
+  };
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
 
