@@ -17,6 +17,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
 
     # ensure service is not running by default
     machine.fail("systemctl is-active incus.service")
+    machine.fail("systemctl is-active incus-preseed.service")
 
     # access the socket and ensure the service starts
     machine.succeed("incus list")
