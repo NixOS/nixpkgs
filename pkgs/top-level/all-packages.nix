@@ -29996,6 +29996,10 @@ with pkgs;
 
   recursive = callPackage ../data/fonts/recursive { };
 
+  reversal-icon-theme = callPackage ../data/icons/reversal-icon-theme {
+    inherit (gnome) adwaita-icon-theme;
+  };
+
   rubik = callPackage ../data/fonts/rubik { };
 
   rhodium-libre = callPackage ../data/fonts/rhodium-libre { };
