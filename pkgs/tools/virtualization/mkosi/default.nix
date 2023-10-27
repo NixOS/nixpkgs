@@ -39,6 +39,11 @@ let
         url = "https://github.com/systemd/systemd/commit/6bbb893b90e2dcb05fb310ba4608f9c9dc587845.patch";
         hash = "sha256-A6cF2QAeYHGc0u0V1JMxIcV5shzf5x3Q6K+blZOWSn4=";
       })
+      # Set timezone to UTC when invoking mcopy. Remove when upgrading to systemd 255.
+      (fetchpatch {
+        url = "https://github.com/systemd/systemd/commit/b2942c76adc5bb6a3e073aa5cee57834ee3a9813.patch";
+        hash = "sha256-phGln3Gs9p8CsEe+1laGrm9xcUJWVbNBW0W8oR9/7YU=";
+      })
     ];
   })).override {
     withRepart = true;
