@@ -79,6 +79,8 @@ self: super: {
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
+    pg_uuidv7 = super.callPackage ./ext/pg_uuidv7.nix { };
+
     promscale_extension = super.callPackage ./ext/promscale_extension.nix { };
 
     repmgr = super.callPackage ./ext/repmgr.nix { };

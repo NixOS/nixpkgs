@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , stdenvNoCC
+, gcc13Stdenv
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
@@ -9,6 +10,7 @@
 , vencord
 , electron
 , pipewire
+, libpulseaudio
 , libicns
 , jq
 , moreutils
@@ -16,13 +18,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vesktop";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${version}";
-    sha256 = "sha256-Njs3tACxUyRolYUtS/q2lITIQnUBFXVXWZEfQ66HpPM=";
+    hash = "sha256-jSGad3qMhAdiGdwomQO6BIyHIbKrGLRGniGrJN97gN8=";
   };
 
   pnpm-deps = stdenvNoCC.mkDerivation {
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-vInaSLGahRUgvwAeUcI+oV84L+tgNRCmfFpE0aUD4X4=";
+    outputHash = "sha256-lTeL+8QujWzx4ys2T+G55NUP51c8i5lB1vAkUtzkJlA=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +94,12 @@ stdenv.mkDerivation rec {
   # yes, upstream really packages it as "vesktop" but uses "vencorddesktop" file names
   installPhase =
     let
-      libPath = lib.makeLibraryPath [ pipewire ];
+      # this is mainly required for venmic
+      libPath = lib.makeLibraryPath [
+        libpulseaudio
+        pipewire
+        gcc13Stdenv.cc.cc.lib
+      ];
     in
     ''
       runHook preInstall
@@ -132,7 +139,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Vencord/Vesktop";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }
