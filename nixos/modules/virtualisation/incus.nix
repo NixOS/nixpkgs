@@ -194,9 +194,11 @@ in
 
     systemd.services.incus-preseed = lib.mkIf (cfg.preseed != null) {
       description = "Incus initialization with preseed file";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "incus.service" ];
-      after = [ "incus.service" ];
+
+      wantedBy = ["incus.service"];
+      after = ["incus.service"];
+      bindsTo = ["incus.service"];
+      partOf = ["incus.service"];
 
       script = ''
         ${cfg.package}/bin/incus admin init --preseed <${
@@ -206,6 +208,7 @@ in
 
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
       };
     };
 

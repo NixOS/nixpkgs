@@ -49,13 +49,8 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
   };
 
   testScript = ''
-    def wait_for_preseed(_) -> bool:
-      _, output = machine.systemctl("is-active incus-preseed.service")
-      return ("inactive" in output)
-
     machine.wait_for_unit("incus.service")
-    with machine.nested("Waiting for preseed to complete"):
-      retry(wait_for_preseed)
+    machine.wait_for_unit("incus-preseed.service")
 
     with subtest("Verify preseed resources created"):
       machine.succeed("incus profile show nixostest_default")
