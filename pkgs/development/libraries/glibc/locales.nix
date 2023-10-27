@@ -19,11 +19,9 @@
 
   outputs = [ "out" ];
 
-  LOCALEDEF_FLAGS = [
-    (if stdenv.hostPlatform.isLittleEndian
+  env.LOCALEDEF_FLAGS = if stdenv.hostPlatform.isLittleEndian
     then "--little-endian"
-    else "--big-endian")
-  ];
+    else "--big-endian";
 
   preBuild = (previousAttrs.preBuild or "") + ''
       # Awful hack: `localedef' doesn't allow the path to `locale-archive'
