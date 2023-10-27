@@ -1,7 +1,7 @@
 # To enable specific database drivers, override this derivation and pass the
 # driver packages in the drivers argument (e.g. mysql_jdbc, postgresql_jdbc).
 { lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
-, jre
+, jdk17
 , drivers ? []
 }:
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ jre ];
+  buildInputs = [ jdk17 ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     done
     makeWrapper $out/share/squirrel-sql/squirrel-sql.sh $out/bin/squirrel-sql \
       --set CLASSPATH "$cp" \
-      --set JAVA_HOME "${jre}"
+      --set JAVA_HOME "${jdk17}"
     # Make sure above `CLASSPATH` gets picked up
     substituteInPlace $out/share/squirrel-sql/squirrel-sql.sh --replace "-cp \"\$CP\"" "-cp \"\$CLASSPATH:\$CP\""
 
