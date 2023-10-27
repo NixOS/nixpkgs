@@ -14,6 +14,7 @@
 , libsmartcols
 , libsolv
 , libxml2
+, pcre2
 , rpm
 , sdbus-cpp
 , sqlite
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-zQK7RRn2C/6Avu5oPqSW7KVv6JT3s2hrcgBRkP6055U=";
+    hash = "sha256-lALk2cJQekVdddhxn8Picmy+yLqym4l4kJAD+t3VX6Y=";
   };
 
   nativeBuildInputs = [ cmake createrepo_c gettext help2man pkg-config ];
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsmartcols
     libsolv
     libxml2
+    pcre2.dev
     rpm
     sdbus-cpp
     sqlite
@@ -61,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_TESTS=OFF"
     # TODO: fix man installation paths
     "-DWITH_MAN=OFF"
+    "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
