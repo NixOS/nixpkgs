@@ -2242,6 +2242,8 @@ self: super: with self; {
 
   compreffor = callPackage ../development/python-modules/compreffor { };
 
+  compressai = callPackage ../development/python-modules/compressai { };
+
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
   conda = callPackage ../development/python-modules/conda { };
@@ -11641,6 +11643,8 @@ self: super: with self; {
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
+
+  pytorch-msssim = callPackage ../development/python-modules/pytorch-msssim { };
 
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 

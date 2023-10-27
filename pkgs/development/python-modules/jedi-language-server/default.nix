@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.41.0";
+  version = "0.41.1-unstable-2023-10-04";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1ujEhoxWcCM1g640aLE60YGiNQLB+G7t7oLVZXW8AMM=";
+    rev = "c4c470cff67e54593a626b22d1b6b05e56fde3a3";
+    hash = "sha256-qFBni97B/GkabbznnZtWTG4dCHFkOx5UQjuevxq+Uvo=";
   };
 
   pythonRelaxDeps = [
