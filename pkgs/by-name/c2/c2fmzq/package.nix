@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "c2FmZQ";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "c2FmZQ";
     repo = "c2FmZQ";
     rev = "v${version}";
-    hash = "sha256-IYSmGzjTDMBgEMVZsi6CuUz6L7BzpmbrJYVPUhFr7rw=";
+    hash = "sha256-xrQBL/Xjzsg0jZ7cFuDfjCQhmt/dTD8FoCSlw0sX5MQ=";
   };
 
   ldflags = [ "-s" "-w" ];
