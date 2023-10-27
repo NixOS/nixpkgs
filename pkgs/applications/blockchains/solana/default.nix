@@ -12,28 +12,28 @@
 , nix-update-script
 # Taken from https://github.com/solana-labs/solana/blob/master/scripts/cargo-install-all.sh#L84
 , solanaPkgs ? [
-    "solana"
+    "cargo-build-bpf"
+    "cargo-build-sbf"
+    "cargo-test-bpf"
+    "cargo-test-sbf"
+    "rbpf-cli"
     "solana-bench-tps"
+    "solana-dos"
     "solana-faucet"
     "solana-gossip"
+    "solana-install-init"
     "solana-install"
     "solana-keygen"
+    "solana-ledger-tool"
     "solana-log-analyzer"
     "solana-net-shaper"
-    "solana-sys-tuner"
-    "rbpf-cli"
-    "solana-validator"
-    "solana-ledger-tool"
-    "cargo-build-bpf"
-    "cargo-test-bpf"
-    "solana-dos"
-    "solana-install-init"
     "solana-stake-accounts"
     "solana-test-validator"
     "solana-tokens"
+    "solana-validator"
     "solana-watchtower"
-    "cargo-test-sbf"
-    "cargo-build-sbf"
+    "solana"
+
 ] ++ [
     # XXX: Ensure `solana-genesis` is built LAST!
     # See https://github.com/solana-labs/solana/issues/5826
@@ -41,7 +41,7 @@
   ]
 }:
 let
-  version = "1.14.23";
+  version = "1.17.3";
   sha256 = "sha256-NUkkLzLNh8P7PFh/SVtd9JM18w3egDaaK80urGw1SSs=";
   cargoSha256 = "sha256-7t8Quh6T2MzJWEM5Y50CgCyFfx2ZJRAdCpZyyYvJrt4=";
 
