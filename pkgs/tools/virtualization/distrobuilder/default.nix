@@ -8,6 +8,7 @@
 , gnutar
 , squashfsTools
 , debootstrap
+, callPackage
 }:
 
 let
@@ -34,6 +35,8 @@ buildGoModule rec {
   };
 
   buildInputs = bins;
+
+  passthru.generator = callPackage ./generator.nix { inherit src version; };
 
   # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
   doCheck = false;
