@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-lALk2cJQekVdddhxn8Picmy+yLqym4l4kJAD+t3VX6Y=";
+    hash = "sha256-yIv29mwCBk2H1HjJr2IYm/1eZU379jTNEuTuaoIu4TA=";
   };
 
   nativeBuildInputs = [ cmake createrepo_c gettext help2man pkg-config ];
