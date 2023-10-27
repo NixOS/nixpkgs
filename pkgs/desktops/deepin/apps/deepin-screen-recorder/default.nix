@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
   patches = [ ./dont_use_libPath.diff ];
 
   postPatch = ''
-    find . -type f -regex ".*\\.\\(pro\\|service\\|desktop\\)" -exec sed -i -e "s|/usr/|$out/|g" {} \;
+    (
+      shopt -s globstar
+      substituteInPlace **/*.pro **/*.service **/*.desktop \
+        --replace "/usr/" "$out/"
+    )
   '';
 
   nativeBuildInputs = [
