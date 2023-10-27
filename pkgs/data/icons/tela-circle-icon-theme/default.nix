@@ -2,7 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , adwaita-icon-theme
-, libsForQt5
+, breeze-icons
 , gtk3
 , hicolor-icon-theme
 , jdupes
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "il+bYIcwm0BQF6U0J6h6rlzHSGSHYN/O8BezehYIpQ4=";
+    hash = "sha256-il+bYIcwm0BQF6U0J6h6rlzHSGSHYN/O8BezehYIpQ4=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    libsForQt5.breeze-icons
+    breeze-icons
     hicolor-icon-theme
   ];
 

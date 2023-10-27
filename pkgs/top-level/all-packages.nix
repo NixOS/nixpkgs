@@ -30077,6 +30077,7 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (gnome) adwaita-icon-theme;
+    inherit (libsForQt5) breeze-icons;
   };
 
   tela-icon-theme = callPackage ../data/icons/tela-icon-theme { };
