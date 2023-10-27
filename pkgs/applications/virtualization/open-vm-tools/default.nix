@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchFromGitHub
 , makeWrapper
 , autoreconfHook
@@ -88,6 +89,15 @@ stdenv.mkDerivation rec {
     libXrender
     libXrandr
     libXtst
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-34058.patch";
+      url = "https://raw.githubusercontent.com/vmware/open-vm-tools/CVE-2023-34058.patch/CVE-2023-34058.patch";
+      hash = "sha256-KC99LzGcWTXUhtOLQ6UbqxGJ+0Uj4QLWyuRYeGle3a4=";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''
