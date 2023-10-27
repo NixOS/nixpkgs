@@ -30,13 +30,13 @@ let
   jsonConfig = (formats.json {}).generate "jsonConfig" config;
 in
 runCommand name {
-  nativeBuildInputs = [ cacert ] ++ (if (backend == "transmission" ) then [ transmission_noSystemd ] else if (backend == "rqbit") then [ rqbit ] else throw "rqbit or transmission are the only available backends for fetchbittorrent");
+  nativeBuildInputs = [ cacert ] ++ (if (backend == "transmission" ) then [ transmission_noSystemd ] else if (backend == "rqbit") then [ rqbit ] else throw "rqbit or transmission are the only available backends for fetchtorrent");
   outputHashAlgo = if hash != "" then null else "sha256";
   outputHash = hash;
   outputHashMode = if recursiveHash then "recursive" else "flat";
 
   # url will be written to the derivation, meaning it can be parsed and utilized
-  # by external tools, such as tools that may want to seed fetchBittorrent calls
+  # by external tools, such as tools that may want to seed fetchtorrent calls
   # in nixpkgs
   inherit url;
 }
