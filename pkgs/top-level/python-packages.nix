@@ -13691,7 +13691,7 @@ self: super: with self; {
 
   tensorflow-build = let
     compat = rec {
-      protobufTF = pkgs.protobuf3_21.override {
+      protobufTF = pkgs.protobuf_21.override {
         abseil-cpp = pkgs.abseil-cpp;
       };
       grpcTF = (pkgs.grpc.overrideAttrs (
