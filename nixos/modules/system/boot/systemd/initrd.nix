@@ -128,10 +128,6 @@ in {
         stage 2 counterparts such as {option}`systemd.services`,
         except that `restartTriggers` and `reloadTriggers` are not
         supported.
-
-        Note: This is experimental. Some of the `boot.initrd` options
-        are not supported when this is enabled, and the options under
-        `boot.initrd.systemd` are subject to change.
       '';
     };
 
