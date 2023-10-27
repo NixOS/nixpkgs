@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sratom";
-  version = "0.6.14";
+  version = "0.6.16";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-mYL69A24Ou3Zs4UOSZ/s1oUri0um3t5RQBNlXP+soeY=";
+    hash = "sha256-ccFXmRGD5T0FVTk7tCccdcm19dq3Sl7yLyCLsi3jIsQ=";
   };
 
   strictDeps = true;
@@ -42,13 +42,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocs=disabled"
   ];
-
-  postFixup = ''
-    # remove once updated to 0.6.15 or above
-    for f in $dev/lib/pkgconfig/*; do
-      echo "Requires: lv2 >=  1.18.4, serd-0 >=  0.30.10, sord-0 >=  0.16.10" >> "$f"
-    done
-  '';
 
   passthru = {
     updateScript = writeScript "update-sratom" ''
