@@ -31,6 +31,8 @@
 , parameterized
 , git
 , openssh
+, setuptools
+, pythonRelaxDepsHook
 , glibcLocales
 , nixosTests
 , callPackage
@@ -88,6 +90,7 @@ let
       autobahn
       pyjwt
       pyyaml
+      setuptools
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
@@ -108,7 +111,10 @@ let
       git
       openssh
       glibcLocales
+      pythonRelaxDepsHook
     ];
+
+    pythonRelaxDeps = [ "Twisted" ];
 
     patches = [
       # This patch disables the test that tries to read /etc/os-release which
