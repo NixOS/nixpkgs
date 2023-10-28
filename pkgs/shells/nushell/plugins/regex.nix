@@ -1,7 +1,9 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
+, IOKit
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,6 +18,8 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-AACpzSavY6MlYnl1lDYxVlfsEvEpNK0u8SzsoSZbqFc=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   passthru = {
     updateScript = nix-update-script { };

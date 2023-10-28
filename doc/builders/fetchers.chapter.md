@@ -243,21 +243,21 @@ or
 
 ***
 ```
-## `fetchFromBittorrent` {#fetchfrombittorrent}
+## `fetchtorrent` {#fetchtorrent}
 
-`fetchFromBittorrent` expects two arguments. `url` which can either be a Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file. It can also take a `config` argument which will craft a `settings.json` configuration file and give it to `transmission`, the underlying program that is performing the fetch. The available config options for `transmission` can be found [here](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
+`fetchtorrent` expects two arguments. `url` which can either be a Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file. It can also take a `config` argument which will craft a `settings.json` configuration file and give it to `transmission`, the underlying program that is performing the fetch. The available config options for `transmission` can be found [here](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md#options)
 
 ```
-{ fetchFromBittorrent }:
+{ fetchtorrent }:
 
-fetchFromBittorrent {
+fetchtorrent {
   config = { peer-limit-global = 100; };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
   sha256 = "";
 }
 ```
 
-### Parameters {#fetchfrombittorrent-parameters}
+### Parameters {#fetchtorrent-parameters}
 
 - `url`: Magnet URI (Magnet Link) such as `magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c` or an HTTP URL pointing to a `.torrent` file.
 
