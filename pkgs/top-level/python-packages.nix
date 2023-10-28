@@ -912,6 +912,8 @@ self: super: with self; {
 
   autoflake = callPackage ../development/python-modules/autoflake { };
 
+  autogptq = callPackage ../development/python-modules/autogptq { };
+
   autograd = callPackage ../development/python-modules/autograd { };
 
   autograd-gamma = callPackage ../development/python-modules/autograd-gamma { };
