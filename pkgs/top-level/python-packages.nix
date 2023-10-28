@@ -6686,6 +6686,8 @@ self: super: with self; {
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
+  mdtraj = callPackage ../development/python-modules/mdtraj { };
+
   mdurl = callPackage ../development/python-modules/mdurl { };
 
   mdutils = callPackage ../development/python-modules/mdutils { };
