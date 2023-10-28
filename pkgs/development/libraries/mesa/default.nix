@@ -2,7 +2,7 @@
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages_15, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages_16, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
@@ -95,7 +95,7 @@ let
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
-  llvmPackages = llvmPackages_15;
+  llvmPackages = llvmPackages_16;
   # Align all the Mesa versions used. Required to prevent explosions when
   # two different LLVMs are loaded in the same process.
   # FIXME: these should really go into some sort of versioned LLVM package set
