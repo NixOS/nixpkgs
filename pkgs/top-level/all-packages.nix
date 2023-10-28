@@ -17986,10 +17986,6 @@ with pkgs;
 
   poetryPlugins = recurseIntoAttrs poetry.plugins;
 
-  poetry2nix = callPackage ../development/tools/poetry2nix/poetry2nix {
-    inherit pkgs lib;
-  };
-
   poetry2conda = callPackage ../tools/package-management/poetry2conda { };
 
   pip-audit = callPackage ../development/tools/pip-audit { };
@@ -40564,11 +40560,7 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
-  nixops = callPackage ../tools/package-management/nixops { };
-
-  nixops_unstable = lowPrio (callPackage ../applications/networking/cluster/nixops { });
-
-  nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
+  nixops_unstable = callPackage ../applications/networking/cluster/nixops { };
 
   /*
     Evaluate a NixOS configuration using this evaluation of Nixpkgs.
