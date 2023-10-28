@@ -164,16 +164,6 @@ in
     };
   };
 
-  beetle-snes = mkLibretroCore {
-    core = "mednafen-snes";
-    src = getCoreSrc "beetle-snes";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's SNES core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
-
   beetle-supafaust = mkLibretroCore {
     core = "mednafen-supafaust";
     src = getCoreSrc "beetle-supafaust";
