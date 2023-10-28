@@ -143,7 +143,7 @@ let
   });
 
   packageOverrideRepository = (callPackage ../../../development/compilers/dart/package-overrides { }) // customPackageOverrides;
-  productPackages = builtins.filter (package: package.kind != "dev") (if depsList == null then [ ] else depsList);
+  productPackages = if depsList == null then [ ] else depsList;
 in
 assert !(builtins.isString dartOutputType && dartOutputType != "") ->
 throw "dartOutputType must be a non-empty string";
