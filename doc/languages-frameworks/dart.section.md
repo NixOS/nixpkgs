@@ -35,6 +35,14 @@ buildDartApplication rec {
 }
 ```
 
+### Patching dependencies {#ssec-dart-applications-patching-dependencies}
+
+Some Dart packages require patches or build environment changes. Package derivations can be customised with the `customSourceBuilders` argument.
+
+A collection of such customisations can be found in Nixpkgs, in the `development/compilers/dart/package-source-builders` directory.
+
+This allows fixes for packages to be shared between all applications that use them. It is strongly recommended to add to this collection instead of including fixes in your application derivation itself.
+
 ### Running executables from dev_dependencies {#ssec-dart-applications-build-tools}
 
 Many Dart applications require executables from the `dev_dependencies` section in `pubspec.yaml` to be run before building them.
