@@ -253,9 +253,11 @@ rec {
         metadata.files;
 
       installPhase = ''
+        runHook preInstall
         for src in $srcs; do
           install -D $src $out/share/fonts/noto/$(stripHash $src)
         done
+        runHook postInstall
       '';
 
       meta = with lib; {

@@ -146,7 +146,8 @@ stdenv.mkDerivation rec {
                  -fopenmp -ftree-vectorize -funroll-loops \
                  -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
                  -I${lib.getDev sirius}/include/sirius \
-                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include
+                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \

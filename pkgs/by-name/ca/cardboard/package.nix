@@ -71,6 +71,8 @@ stdenv.mkDerivation {
 
   src = allSources.cardboard;
 
+  outputs = [ "out" "dev" "lib" "man" ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -117,13 +119,18 @@ stdenv.mkDerivation {
     (lib.mesonEnable "wlroots:libseat" false)
   ];
 
- # gcc12
+  # gcc12
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ];
+
+  passthru = {
+    providedSessions = [ "cardboard" ];
+  };
 
   meta = {
     homepage = "https://gitlab.com/cardboardwm/cardboard";
     description = "A scrollable, tiling Wayland compositor inspired on PaperWM";
     license = lib.licenses.gpl3Only;
+    mainProgram = "cardboard";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };

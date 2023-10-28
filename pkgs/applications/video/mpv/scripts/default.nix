@@ -9,6 +9,7 @@ lib.recurseIntoAttrs
     autocrop = callPackage ./autocrop.nix { };
     autodeint = callPackage ./autodeint.nix { };
     autoload = callPackage ./autoload.nix { };
+    chapterskip = callPackage ./chapterskip.nix { };
     convert = callPackage ./convert.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
