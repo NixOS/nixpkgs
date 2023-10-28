@@ -12472,6 +12472,8 @@ self: super: with self; {
 
   rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
+  rouge = callPackage ../development/python-modules/rouge { };
+
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
   routeros-api = callPackage ../development/python-modules/routeros-api { };
