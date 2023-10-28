@@ -367,6 +367,7 @@ rec {
         "buildInputs"
         "nativeBuildInputs"
         "propagatedNativeBuildInputs"
+        "propagatedBuildInputs"
       ]);
     });
 }
