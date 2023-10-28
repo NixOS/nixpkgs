@@ -3829,6 +3829,8 @@ self: super: with self; {
 
   fastapi-events = callPackage ../development/python-modules/fastapi-events { };
 
+  fastapi-socketio = callPackage ../development/python-modules/fastapi-socketio { };
+
   fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastbencode = callPackage ../development/python-modules/fastbencode { };
