@@ -7466,6 +7466,12 @@
     githubId = 25505957;
     name = "Ilian";
   };
+  iliayar = {
+    email = "iliayar3@gmail.com";
+    github = "iliayar";
+    githubId = 17529355;
+    name = "Ilya Yaroshevskiy";
+  };
   ilikeavocadoes = {
     email = "ilikeavocadoes@hush.com";
     github = "ilikeavocadoes";
@@ -9781,6 +9787,11 @@
       fingerprint = "0375 DD9A EDD1 68A3 ADA3  9EBA EE23 6AA0 141E FCA3";
     }];
     name = "Joseph LaFreniere";
+  };
+  lagoja = {
+    github = "Lagoja";
+    githubId =750845;
+    name = "John Lago";
   };
   laikq = {
     email = "gwen@quasebarth.de";
