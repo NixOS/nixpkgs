@@ -16,6 +16,7 @@
 , packageRoot ? (lib.removePrefix "/" (lib.removePrefix "source" sourceRoot))
 , gitHashes ? { }
 , sdkSourceBuilders ? { }
+, customSourceBuilders ? { }
 
 , sdkSetupScript ? ""
 , pubGetScript ? "dart pub get"
@@ -52,7 +53,7 @@ let
   generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
 
   pubspecLockFile = builtins.toJSON pubspecLock;
-  pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders; };
+  pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders customSourceBuilders; };
   packageConfig = generators.linkPackageConfig {
     packageConfig = pub2nix.generatePackageConfig {
       pname = if args.pname != null then "${args.pname}-${args.version}" else null;
