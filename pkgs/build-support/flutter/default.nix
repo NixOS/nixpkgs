@@ -79,7 +79,7 @@
     fi
   '';
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ wrapGAppsHook jq yq moreutils ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ wrapGAppsHook ];
   buildInputs = (args.buildInputs or [ ]) ++ [ glib ];
 
   dontDartBuild = true;
