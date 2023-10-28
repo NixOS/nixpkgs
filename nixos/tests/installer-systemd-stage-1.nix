@@ -12,11 +12,11 @@
     btrfsSubvolDefault
     btrfsSubvolEscape
     btrfsSubvols
-    # encryptedFSWithKeyfile
+    encryptedFSWithKeyfile
     # grub1
-    # luksroot
-    # luksroot-format1
-    # luksroot-format2
+    luksroot
+    luksroot-format1
+    luksroot-format2
     # lvm
     separateBoot
     separateBootFat
