@@ -14,10 +14,10 @@ Fixing bit-by-bit reproducibility also has additional advantages, such as avoidi
 ### Steps To Reproduce
 
 ```
-nix-build '<nixpkgs>' -A ... --check --keep-failed
+nix-build '<nixpkgs>' -A ... && nix-build '<nixpkgs>' -A ... --check --keep-failed
 ```
 
-You can use `diffoscope` to analyze the differences in the output of the two builds.
+If this command completes successfully, no differences where found. However, when it ends in `error: derivation '<X>' may not be deterministic: output '<Y>' differs from '<Z>'`, you can use `diffoscope <Y> <Z>` to analyze the differences in the output of the two builds.
 
 To view the build log of the build that produced the artifact in the binary cache:
 
