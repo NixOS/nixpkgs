@@ -110,9 +110,7 @@ let
       jq
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.sigtool
-    ];
-
-    buildInputs =
+    ] ++
       # Ensure that we inherit the propagated build inputs from the dependencies.
       builtins.attrValues pubspecLockData.dependencySources;
 
