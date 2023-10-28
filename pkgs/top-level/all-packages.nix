@@ -16372,7 +16372,7 @@ with pkgs;
   hop = callPackage ../development/compilers/hop { };
 
   hop-cli = callPackage ../tools/admin/hop-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   falcon = callPackage ../development/interpreters/falcon {
