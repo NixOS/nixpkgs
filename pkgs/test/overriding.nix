@@ -313,6 +313,16 @@ let
         p.overridePythonAttrs (previousAttrs: {
           overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
         });
+      checkOverridePythonAttrs = p: p ? overridePythonAttrsFlag;
+      overrideAttrsFooBar =
+        drv:
+        drv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            FOO = "a";
+            BAR = finalAttrs.FOO;
+          }
+        );
+      checkAttrsFooBar = drv: drv.FOO == "a" && drv.BAR == "a";
     in
     {
       overridePythonAttrs = {
@@ -323,6 +333,22 @@ let
         expr =
           (applyOverridePythonAttrs (applyOverridePythonAttrs python-package-stub)).overridePythonAttrsFlag
           == 2;
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = checkAttrsFooBar (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub));
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr = checkOverridePythonAttrs (
+          applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub)
+        );
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr =
+          (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub))
+          == (overrideAttrsFooBar (applyOverridePythonAttrs python-package-stub));
         expected = true;
       };
     };

@@ -14,6 +14,9 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
+  #
+  # Overridings specified through `overridePythonAttrs` will always be applied
+  # before those specified by `overrideAttrs`, even if invoked after them.
   makeOverridablePythonPackage =
     f:
     lib.mirrorFunctionArgs f (
@@ -21,11 +24,14 @@ let
       let
         result = f origArgs;
         overrideWith = newArgs: origArgs // lib.toFunction newArgs origArgs;
+        # Change the result of the function call by applying `transform` to it
+        overrideResult = transform: makeOverridablePythonPackage (args: transform (f args)) origArgs;
       in
       if lib.isAttrs result then
         result
         // {
           overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          overrideAttrs = newArgs': overrideResult (drv: drv.overrideAttrs newArgs');
         }
       else
         result
