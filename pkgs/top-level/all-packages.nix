@@ -19650,7 +19650,11 @@ with pkgs;
 
   mermerd = callPackage ../development/tools/database/mermerd { };
 
-  python-matter-server = with python3Packages; toPythonApplication python-matter-server;
+  python-matter-server = with python3Packages; toPythonApplication (
+    python-matter-server.overridePythonAttrs (oldAttrs: {
+      propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ oldAttrs.passthru.optional-dependencies.server;
+    })
+  );
 
   minify = callPackage ../development/web/minify { };
 
