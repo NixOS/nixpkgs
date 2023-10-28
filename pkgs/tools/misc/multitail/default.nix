@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = "https://github.com/halturin/multitail";
+    homepage = "https://github.com/folkertvanheusden/multitail";
     description = "tail on Steroids";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.asl20;
   };
 }
