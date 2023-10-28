@@ -3434,6 +3434,8 @@ self: super: with self; {
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 
+  easing-functions = callPackage ../development/python-modules/easing-functions { };
+
   easydict = callPackage ../development/python-modules/easydict { };
 
   easyenergy = callPackage ../development/python-modules/easyenergy { };
