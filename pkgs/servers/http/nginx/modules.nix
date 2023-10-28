@@ -11,10 +11,11 @@
 , curl
 , expat
 , fdk_aac
-, ffmpeg
+, ffmpeg-headless
 , geoip
 , libbsd
 , libiconv
+, libjpeg
 , libkrb5
 , libmaxminddb
 , libmodsecurity
@@ -959,17 +960,18 @@ let self = {
     };
   };
 
-  video-thumbextractor = {
+  video-thumbextractor = rec {
     name = "video-thumbextractor";
+    version = "1.0.0";
     src = fetchFromGitHub {
       name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
-      rev = "92b80642538eec4cfc98114dec5917b8d820e912";
-      sha256 = "0a8d9ifryhhnll7k7jcsf9frshk5yhpsgz7zgxdmw81wbz5hxklc";
+      rev = "refs/tags/${version}";
+      hash = "sha256-F2cuzCbJdGYX0Zmz9MSXTB7x8+FBR6pPpXtLlDRCcj8=";
     };
 
-    inputs = [ ffmpeg ];
+    inputs = [ ffmpeg-headless libjpeg ];
 
     meta = with lib; {
       description = "Extract thumbs from a video file";
@@ -993,7 +995,7 @@ let self = {
       '';
     };
 
-    inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
+    inputs = [ ffmpeg-headless fdk_aac openssl libxml2 libiconv ];
 
     meta = with lib; {
       description = "VOD packager";
