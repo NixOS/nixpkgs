@@ -304,8 +304,6 @@ self: super: with self; {
 
   aionanoleaf = callPackage ../development/python-modules/aionanoleaf { };
 
-  aionotify = callPackage ../development/python-modules/aionotify { };
-
   aionotion = callPackage ../development/python-modules/aionotion { };
 
   aiooncue = callPackage ../development/python-modules/aiooncue { };
