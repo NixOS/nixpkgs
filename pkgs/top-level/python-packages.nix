@@ -3428,6 +3428,8 @@ self: super: with self; {
 
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
+  dynamicprompts = callPackage ../development/python-modules/dynamicprompts { };
+
   dynd = callPackage ../development/python-modules/dynd { };
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
