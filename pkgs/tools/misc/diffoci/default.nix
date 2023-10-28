@@ -1,6 +1,9 @@
 { lib
+, stdenv
+, buildPackages
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -21,6 +24,19 @@ buildGoModule rec {
     "-w"
     "-X=github.com/reproducible-containers/diffoci/cmd/diffoci/version.Version=v${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    let
+      diffoci = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.diffoci;
+    in
+    ''
+      installShellCompletion --cmd trivy \
+        --bash <(${diffoci}/bin/diffoci completion bash) \
+        --fish <(${diffoci}/bin/diffoci completion fish) \
+        --zsh <(${diffoci}/bin/diffoci completion zsh)
+    '';
 
   meta = with lib; {
     description = "Diff for Docker and OCI container images";
