@@ -17,6 +17,9 @@
 }:
 
 let
+  # Rust environment variables for cross-compilation guidance
+  # for `cc-rs` and Cargo.
+  RUST_ENV = rust.envVars.setEnv;
   # Create rustc arguments to link against the given list of dependencies
   # and renames.
   #
@@ -338,6 +341,8 @@ crate_: lib.makeOverridable
         lib.optionals (crate ? extraRustcOptsForBuildRs) crate.extraRustcOptsForBuildRs
         ++ extraRustcOptsForBuildRs_
         ++ (lib.optional (edition != null) "--edition ${edition}");
+      # Required to set up properly cross-compilation with the `cc-rs` crate.
+      env = { inherit RUST_ENV; };
 
 
       configurePhase = configureCrate {

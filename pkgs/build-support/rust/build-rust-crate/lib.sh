@@ -10,7 +10,7 @@ build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
 
-  noisily rustc \
+  noisily $RUST_ENV rustc \
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
@@ -41,7 +41,7 @@ build_bin() {
     main_file=$2
   fi
   echo_build_heading $@
-  noisily rustc \
+  noisily $RUST_ENV rustc \
     --crate-name $crate_name_ \
     $main_file \
     --crate-type bin \
@@ -159,7 +159,7 @@ matching_cargo_toml_path() {
   # But to make it more general, we search for a matching
   # crate in all packages and use the manifest path that
   # is referenced there.
-  cargo metadata --no-deps --format-version 1 \
+  $RUST_ENV cargo metadata --no-deps --format-version 1 \
     --manifest-path "$manifest_path" \
     | jq -r '.packages[]
             | select( .name == "'$expected_crate_name'")
