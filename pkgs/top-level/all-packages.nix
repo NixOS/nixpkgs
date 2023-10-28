@@ -31045,6 +31045,8 @@ with pkgs;
 
   dablin = callPackage ../applications/radio/dablin { };
 
+  daktilo = callPackage ../tools/misc/daktilo { };
+
   darcs = haskell.lib.compose.overrideCabal (drv: {
     configureFlags = (lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
   }) (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
