@@ -18,16 +18,16 @@ let
 in
 buildNpmPackage rec {
   pname = "cinny";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-BFovEmT4RgdzlSYi1p0324PW7+2rvw3n5+jKWTV2FF4=";
+    hash = "sha256-GcygxK9NcGlv4rwxQCJqi0BhNlOTFxjGB8mbfTaBMOk=";
   };
 
-  npmDepsHash = "sha256-E+VBs66chBeiK40DZZ1hWTTISKaBN1RA+Uyr1iHqfus=";
+  npmDepsHash = "sha256-4R+To2LhcnEM9x1noo6MhCckyBKgPWiAi7zgDqAmaN0=";
 
   nativeBuildInputs = [
     jq
