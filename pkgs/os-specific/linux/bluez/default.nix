@@ -12,7 +12,7 @@
 , pkg-config
 , python3
 , readline
-, systemdMinimal
+, systemd
 , udev
 , withExperimental ? false
 }: let
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
+      --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
     # Disable some tests:
     # - test-mesh-crypto depends on the following kernel settings:
