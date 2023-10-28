@@ -1,4 +1,4 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{ lib, buildNpmPackage, fetchFromGitHub, mystmd, testers }:
 
 buildNpmPackage rec {
   pname = "mystmd";
@@ -22,6 +22,11 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = mystmd;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Command line tools for working with MyST Markdown";
