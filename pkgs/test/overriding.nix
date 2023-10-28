@@ -309,6 +309,14 @@ let
         p.overridePythonAttrs (previousAttrs: {
           overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
         });
+      overrideAttrsFooBar =
+        drv:
+        drv.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            FOO = "a";
+            BAR = finalAttrs.FOO;
+          }
+        );
     in
     {
       overridePythonAttrs = {
@@ -319,6 +327,37 @@ let
         expr =
           (applyOverridePythonAttrs (applyOverridePythonAttrs python-package-stub)).overridePythonAttrsFlag;
         expected = 2;
+      };
+      overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
+        expr = {
+          inherit (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub))
+            FOO
+            BAR
+            ;
+        };
+        expected = {
+          FOO = "a";
+          BAR = "a";
+        };
+      };
+      overrideAttrs-overridePythonAttrs-test-overridePythonAttrs = {
+        expr =
+          (applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub)) ? overridePythonAttrsFlag;
+        expected = true;
+      };
+      overrideAttrs-overridePythonAttrs-test-commutation = {
+        expr = overrideAttrsFooBar (applyOverridePythonAttrs python-package-stub);
+        expected = applyOverridePythonAttrs (overrideAttrsFooBar python-package-stub);
+      };
+      chain-of-overrides = rec {
+        expr = lib.pipe python-package-stub [
+          (p: p.overrideAttrs { inherit (expected) a; })
+          (p: p.overridePythonAttrs { inherit (expected) b; })
+          (p: p.overrideAttrs { inherit (expected) c; })
+          (p: p.overridePythonAttrs { inherit (expected) d; })
+          (builtins.intersectAttrs expected)
+        ];
+        expected = lib.genAttrs [ "a" "b" "c" "d" ] lib.id;
       };
     };
 
