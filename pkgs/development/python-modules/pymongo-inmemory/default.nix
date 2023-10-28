@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pymongo-inmemory";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "kaizendorks";
     repo = "pymongo_inmemory";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1v36cI6JjDZA/uJE85NSMNnoyKI1VCgDrymfnCkpVqU=";
+    hash = "sha256-h6/yKvAHqvw0L3Z1+PUQi36Ja6yvFiaX7Cn5Ypcg1Zs=";
   };
 
   postPatch = ''
@@ -46,6 +46,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # new test with insufficient monkey patching, try to remove on next bump
+    "tests/unit/test_mongod.py"
   ];
 
   preCheck = ''
