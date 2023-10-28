@@ -1,8 +1,14 @@
-{ buildGoModule
+{ bash
+, buildGoModule
 , fetchFromGitHub
+, getent
 , goss
-, nix-update-script
 , lib
+, makeWrapper
+, nix-update-script
+, nixosTests
+, stdenv
+, systemd
 , testers
 }:
 
@@ -26,17 +32,30 @@ buildGoModule rec {
     "-s" "-w" "-X main.version=v${version}"
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   checkFlags = [
     # Prometheus tests are skipped upstream
     # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
     "-skip" "^TestPrometheus"
   ];
 
+  postInstall = let
+    runtimeDependencies = [ bash getent ]
+      ++ lib.optionals stdenv.isLinux [ systemd ];
+  in ''
+    wrapProgram $out/bin/goss \
+      --prefix PATH : "${lib.makeBinPath runtimeDependencies}"
+  '';
+
   passthru = {
-    tests.version = testers.testVersion {
-      command = "goss --version";
-      package = goss;
-      version = "v${version}";
+    tests = {
+      inherit (nixosTests) goss;
+      version = testers.testVersion {
+        command = "goss --version";
+        package = goss;
+        version = "v${version}";
+      };
     };
     updateScript = nix-update-script { };
   };
@@ -51,7 +70,8 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "goss";
     maintainers = with maintainers; [ hyzual jk anthonyroussel ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

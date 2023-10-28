@@ -329,6 +329,7 @@ in {
   gollum = handleTest ./gollum.nix {};
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
+  goss = handleTest ./goss.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
