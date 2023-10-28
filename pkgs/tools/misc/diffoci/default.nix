@@ -16,7 +16,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-4C35LBxSm6EkcOznQY1hT2vX9bwFfps/q76VqqPKBfI=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/reproducible-containers/diffoci/cmd/diffoci/version.Version=v${version}"
+  ];
 
   meta = with lib; {
     description = "Diff for Docker and OCI container images";
