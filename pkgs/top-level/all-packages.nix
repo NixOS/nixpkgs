@@ -25133,6 +25133,8 @@ with pkgs;
 
   subdl = callPackage ../applications/video/subdl { };
 
+  subs2cia = callPackage ../applications/video/subs2cia { };
+
   subtitleedit = callPackage ../applications/video/subtitleedit { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
