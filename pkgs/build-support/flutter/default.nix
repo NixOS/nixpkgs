@@ -70,8 +70,8 @@
 
   extraPackageConfigSetup = ''
     # https://github.com/flutter/flutter/blob/3.13.8/packages/flutter_tools/lib/src/dart/pub.dart#L755
-    if [ "$(yq '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
-      jq '.packages |= . + [{
+    if [ "$('${yq}/bin/yq' '.flutter.generate // false' pubspec.yaml)" = "true" ]; then
+      '${jq}/bin/jq' '.packages |= . + [{
         name: "flutter_gen",
         rootUri: "flutter_gen",
         languageVersion: "2.12",
