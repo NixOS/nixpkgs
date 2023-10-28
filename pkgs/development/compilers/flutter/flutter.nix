@@ -4,7 +4,6 @@
 , dart
 , src
 , pubspecLock
-, depsListFile
 , lib
 , stdenv
 , callPackage
@@ -19,7 +18,7 @@ let
     inherit dart version;
     flutterSrc = src;
     inherit patches;
-    inherit pubspecLock depsListFile;
+    inherit pubspecLock;
   };
 
   unwrapped =

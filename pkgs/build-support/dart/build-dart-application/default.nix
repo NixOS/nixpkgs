@@ -44,23 +44,12 @@
 
 , runtimeDependencies ? [ ]
 , extraWrapProgramArgs ? ""
-, autoDepsList ? false
-, depsListFile ? null
 , pubspecLock
 , ...
 }@args:
 
 let
   generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
-
-  generatedDepsList = generators.mkDepsList { inherit pubspecLockFile pubspecLockData packageConfig; };
-
-  depsList =
-    if autoDepsList
-    then lib.importJSON generatedDepsList
-    else if depsListFile == null
-    then null
-    else lib.importJSON depsListFile;
 
   pubspecLockFile = builtins.toJSON pubspecLock;
   pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders; };
@@ -117,17 +106,6 @@ let
       ln -sf "$pubspecLockFilePath" pubspec.lock
     '';
 
-    preBuild = args.preBuild or "" + lib.optionalString (!autoDepsList) ''
-      if ! { [ '${lib.boolToString (depsListFile != null)}' = 'true' ] ${lib.optionalString (depsListFile != null) "&& cmp -s <(jq -Sc . '${depsListFile}') <(jq -Sc . deps.json)"}; }; then
-        echo 1>&2 -e '\nThe dependency list file was either not given or differs from the expected result.' \
-                     '\nPlease choose one of the following solutions:' \
-                     '\n - Duplicate the following file and pass it to the depsListFile argument.' \
-                     '\n   ${generatedDepsList}' \
-                     '\n - Set autoDepsList to true (not supported by Hydra or permitted in Nixpkgs)'.
-        exit 1
-      fi
-    '';
-
     # When stripping, it seems some ELF information is lost and the dart VM cli
     # runs instead of the expected program. Don't strip if it's an exe output.
     dontStrip = args.dontStrip or (dartOutputType == "exe");
@@ -136,7 +114,6 @@ let
 
     passthru = {
       pubspecLock = pubspecLockData;
-      depsList = generatedDepsList;
       generatePubspecLock = generators.generatePubspecLock { inherit pubGetScript; };
     } // (args.passthru or { });
 

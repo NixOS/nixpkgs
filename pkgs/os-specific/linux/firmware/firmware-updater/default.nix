@@ -9,7 +9,6 @@ flutter.buildFlutterApplication rec {
   version = "unstable-2023-09-17";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 
   gitHashes = {
     fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";

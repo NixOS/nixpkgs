@@ -29,7 +29,6 @@ buildDartApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 
   nativeBuildInputs = [
     buf
@@ -63,17 +62,18 @@ buildDartApplication rec {
       expected = writeText "expected" ''
         body h1{color:#123}
       '';
-      actual = runCommand "actual" {
-        nativeBuildInputs = [ dart-sass ];
-        base = writeText "base" ''
-          body {
-            $color: #123;
-            h1 {
-              color: $color;
+      actual = runCommand "actual"
+        {
+          nativeBuildInputs = [ dart-sass ];
+          base = writeText "base" ''
+            body {
+              $color: #123;
+              h1 {
+                color: $color;
+              }
             }
-          }
-        '';
-      } ''
+          '';
+        } ''
         dart-sass --style=compressed $base > $out
       '';
     };

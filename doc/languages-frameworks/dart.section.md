@@ -13,8 +13,6 @@ This can be converted to JSON from YAML with something like `yq . pubspec.lock`,
 
 If the package has Git package dependencies, the hashes must be provided in the `gitHashes` set. If a hash is missing, an error message prompting you to add it will be shown.
 
-The `depsListFile` must always be provided when packaging in Nixpkgs. It will be generated and printed if the derivation is attempted to be built without one. Alternatively, `autoDepsList` may be set to `true` only when outside of Nixpkgs, as it relies on import-from-derivation.
-
 The `dart` commands run can be overridden through `pubGetScript` and `dartCompileCommand`, you can also add flags using `dartCompileFlags` or `dartJitFlags`.
 
 Dart supports multiple [outputs types](https://dart.dev/tools/dart-compile#types-of-output), you can choose between them using `dartOutputType` (defaults to `exe`). If you want to override the binaries path or the source path they come from, you can use `dartEntryPoints`. Outputs that require a runtime will automatically be wrapped with the relevant runtime (`dartaotruntime` for `aot-snapshot`, `dart run` for `jit-snapshot` and `kernel`, `node` for `js`), this can be overridden through `dartRuntimeCommand`.
@@ -34,7 +32,6 @@ buildDartApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 }
 ```
 
@@ -95,7 +92,6 @@ flutter.buildFlutterApplication {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 }
 
 ### Usage with nix-shell {#ssec-dart-flutter-nix-shell}

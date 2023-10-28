@@ -67,33 +67,8 @@ let
       runHook postInstall
     '';
   });
-
-  mkDepsDrv = { pubspecLockFile, pubspecLockData, packageConfig }: args: stdenvNoCC.mkDerivation (drvArgs // args // {
-    inherit pubspecLockFile packageConfig;
-
-    nativeBuildInputs = drvArgs.nativeBuildInputs or [ ] ++ args.nativeBuildInputs or [ ] ++ [ dart dartHooks.dartConfigHook ];
-
-    preConfigure = drvArgs.preConfigure or "" + args.preConfigure or "" + ''
-      ln -sf "$pubspecLockFilePath" pubspec.lock
-    '';
-
-    passAsFile = drvArgs.passAsFile or [ ] ++ args.passAsFile or [ ] ++ [ "pubspecLockFile" ];
-  } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
-
-  mkDepsList = args: mkDepsDrv args {
-    name = "${name}-dart-deps-list.json";
-
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-      cp deps.json "$out"
-      runHook postInstall
-    '';
-  };
 in
 {
   inherit
-    linkPackageConfig
-    mkDepsList;
+    linkPackageConfig;
 }

@@ -12,5 +12,4 @@ buildDartApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 }

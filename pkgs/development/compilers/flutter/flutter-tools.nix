@@ -7,7 +7,6 @@
 , flutterSrc
 , patches ? [ ]
 , pubspecLock
-, depsListFile
 }:
 
 buildDartApplication.override { inherit dart; } rec {
@@ -46,5 +45,5 @@ buildDartApplication.override { inherit dart; } rec {
     popd
   '';
 
-  inherit pubspecLock depsListFile;
+  inherit pubspecLock;
 }

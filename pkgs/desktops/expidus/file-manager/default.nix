@@ -15,7 +15,6 @@ flutter.buildFlutterApplication rec {
   ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 
   gitHashes = {
     libtokyo = "sha256-T0+vyfSfijLv7MvM+zt3bkVpb3aVrlDnse2xyNMp9GU=";

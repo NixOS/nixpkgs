@@ -64,9 +64,6 @@ dartConfigHook() {
         packageRunCustom "$name" "$fileName" -- "$@"
     }
 
-    echo "Generating the dependency list"
-    dart pub deps --json | @jq@ .packages > deps.json
-
     echo "Finished dartConfigHook"
 }
 

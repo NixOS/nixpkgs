@@ -16,7 +16,6 @@ buildDartApplication rec {
   sourceRoot = "${src.name}/protoc_plugin";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  depsListFile = ./deps.json;
 
   meta = with lib; {
     description = "Protobuf plugin for generating Dart code";
