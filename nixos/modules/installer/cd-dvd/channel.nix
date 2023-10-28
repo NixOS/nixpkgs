@@ -3,8 +3,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   # This is copied into the installer image, so it's important that it is filtered
   # to avoid including a large .git directory.
@@ -27,7 +25,7 @@ let
       if [ ! -e $out/nixos/nixpkgs ]; then
         ln -s . $out/nixos/nixpkgs
       fi
-      ${optionalString (config.system.nixos.revision != null) ''
+      ${lib.optionalString (config.system.nixos.revision != null) ''
         echo -n ${config.system.nixos.revision} > $out/nixos/.git-revision
       ''}
       echo -n ${config.system.nixos.versionSuffix} > $out/nixos/.version-suffix
@@ -47,14 +45,14 @@ in
 
   # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
   # for nixos-install.
-  boot.postBootCommands = mkAfter
+  boot.postBootCommands = lib.mkAfter
     ''
       if ! [ -e /var/lib/nixos/did-channel-init ]; then
         echo "unpacking the NixOS/Nixpkgs sources..."
         mkdir -p /nix/var/nix/profiles/per-user/root
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels \
           -i ${channelSources} --quiet --option build-use-substitutes false \
-          ${optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
+          ${lib.optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
         mkdir -m 0700 -p /root/.nix-defexpr
         ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
         mkdir -m 0755 -p /var/lib/nixos
