@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.confluent.io/confluent-cli/current/overview.html";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ rguevara84 ];
+    maintainers = with maintainers; [ rguevara84 autophagy ];
 
     # TODO: There's support for i686 systems but I do not have any such system
     # to build it locally on, it's also unfree so I cannot rely on ofborg to
