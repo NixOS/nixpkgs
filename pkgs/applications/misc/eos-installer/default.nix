@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, writeText
 , glib, meson, ninja, pkg-config, python3
-, coreutils, gnome-desktop, gnupg, gtk3, systemdMinimal, udisks
+, coreutils, gnome-desktop, gnupg, gtk3, systemdLibs, udisks
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     glib gnupg meson ninja pkg-config python3
   ];
-  buildInputs = [ gnome-desktop gtk3 systemdMinimal udisks ];
+  buildInputs = [ gnome-desktop gtk3 systemdLibs udisks ];
 
   preConfigure = ''
     patchShebangs tests
