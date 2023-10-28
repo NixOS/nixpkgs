@@ -7,6 +7,7 @@
 , cacert
 , glib
 , flutter
+, pkg-config
 , jq
 , yq
 , moreutils
@@ -79,7 +80,18 @@
     fi
   '';
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ wrapGAppsHook ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+    wrapGAppsHook
+
+    # Flutter requires pkg-config for Linux desktop support, and many plugins
+    # attempt to use it.
+    #
+    # It is available to the `flutter` tool through its wrapper, but it must be
+    # added here as well so the setup hook adds plugin dependencies to the
+    # pkg-config search paths.
+    pkg-config
+  ];
+
   buildInputs = (args.buildInputs or [ ]) ++ [ glib ];
 
   dontDartBuild = true;
