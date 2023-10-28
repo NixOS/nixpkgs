@@ -7,15 +7,15 @@
 let
   isKernelRT = (kernel.structuredExtraConfig ? PREEMPT_RT) && (kernel.structuredExtraConfig.PREEMPT_RT == lib.kernel.yes);
 in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "lkrg";
   version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "lkrg-org";
     repo = "lkrg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-96ubxSc1JcvwYFC273gp9RHlu3+wFbKW3j1vThkNm5w=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.6" || isKernelRT;
   };
-}
+})
