@@ -4129,6 +4129,8 @@ self: super: with self; {
 
   flet-core = callPackage ../development/python-modules/flet-core { };
 
+  flexgen = callPackage ../development/python-modules/flexgen { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
