@@ -1,22 +1,37 @@
 { lib
   # tooling
+, callPackage
 , fetchFromGitHub
 , newScope
 , recurseIntoAttrs
 , runCommandCC
 , stdenv
+, fetchurl
   # inputs
 , Foundation
 , bazel_self
-, distDir
 , lr
-, repoCache
-, runJdk
 , xe
 , bazel-watcher
+, lockfile
+, repoCache
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin;
+
+  testsDistDir = testsRepoCache;
+  testsRepoCache = callPackage ./bazel-repository-cache.nix {
+    # We are somewhat lucky that bazel's own lockfile works for our tests.
+    # Use extraDeps if the tests need things that are not in that lockfile.
+    # But most test dependencies are bazel's builtin deps, so that at least aligns.
+    inherit lockfile;
+
+    # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
+    # but none of the platform-specific binaries, as they are large and useless.
+    requiredDepNamePredicate = name:
+      null == builtins.match ".*(macos|osx|linux|win|apple|android|maven).*" name
+      && null != builtins.match "(platforms|com_google_|protobuf|rules_|bazel_).*" name ;
+  };
 
   runLocal = name: attrs: script:
     let
@@ -109,35 +124,36 @@ let
     hash = "sha256-DaPKp7Sn5uvfZRjdDx6grot3g3B7trqCyL0TRIdwg98=";
   };
 
-  callBazelTest = newScope {
-    inherit runLocal bazelTest bazel-examples distDir;
-    inherit Foundation;
-    extraBazelArgs = ''
-      --repository_cache=${repoCache} \
-    '';
-    bazel = bazel_self;
-  };
+  callBazelTests = args:
+    let
+      callBazelTest = newScope {
+        inherit runLocal bazelTest bazel-examples;
+        inherit Foundation;
+        bazel = bazel_self;
+        distDir = testsDistDir;
+      };
+    in
+    recurseIntoAttrs (
+      (lib.optionalAttrs (!isDarwin) {
+        # `extracted` doesn’t work on darwin
+        shebang = callBazelTest ../shebang-test.nix (args // { inherit extracted; });
+      }) // {
+      bashTools = callBazelTest ../bash-tools-test.nix args;
+      cpp = callBazelTest ../cpp-test.nix args;
+      java = callBazelTest ../java-test.nix args;
+      pythonBinPath = callBazelTest ../python-bin-path-test.nix args;
+      protobuf = callBazelTest ../protobuf-test.nix (args // { repoCache = testsRepoCache; });
+    });
 
   bazelWithNixHacks = bazel_self.override { enableNixHacks = true; };
 
 in
-(lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-  # `extracted` doesn’t work on darwin
-  shebang = callBazelTest ../shebang-test.nix { inherit extracted; };
-}) // {
-  bashTools = callBazelTest ../bash-tools-test.nix { };
-  cpp = callBazelTest ../cpp-test.nix { };
-  java = callBazelTest ../java-test.nix { };
-  # TODO: protobuf tests just fail for now.
-  #protobuf = callBazelTest ../protobuf-test.nix { };
-  pythonBinPath = callBazelTest ../python-bin-path-test.nix { };
+recurseIntoAttrs {
+  distDir = testsDistDir;
+  testsRepoCache = testsRepoCache;
 
-  bashToolsWithNixHacks = callBazelTest ../bash-tools-test.nix { bazel = bazelWithNixHacks; };
-
-  cppWithNixHacks = callBazelTest ../cpp-test.nix { bazel = bazelWithNixHacks; };
-  javaWithNixHacks = callBazelTest ../java-test.nix { bazel = bazelWithNixHacks; };
-  #protobufWithNixHacks = callBazelTest ../protobuf-test.nix { bazel = bazelWithNixHacks; };
-  pythonBinPathWithNixHacks = callBazelTest ../python-bin-path-test.nix { bazel = bazelWithNixHacks; };
+  vanilla = callBazelTests { };
+  withNixHacks = callBazelTests { bazel = bazelWithNixHacks; };
 
   # downstream packages using buildBazelPackage
   # fixed-output hashes of the fetch phase need to be spot-checked manually

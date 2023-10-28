@@ -77,7 +77,7 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
-        --repository_cache=${distDir} \
+        --distdir=${distDir} \
         ${extraBazelArgs} \
         //python:bin
     '';

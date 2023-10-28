@@ -8,9 +8,11 @@
 , requiredDepNamePredicate ? _: true
   # Extra deps in the form of derivations producing a "single file" output path
 , extraDeps ? [ ]
+, canonicalIds ? true
 }:
 let
   modules = builtins.fromJSON (builtins.readFile lockfile);
+  modulesVersion = modules.lockFileVersion;
 
   # a foldl' for json values
   foldlJSON = op: acc: value:
@@ -31,7 +33,10 @@ let
     builtins.seq acc' children;
 
   # remove the "--" prefix, abusing undocumented negative substring length
-  sanitize = builtins.substring 2 (-1);
+  sanitize = str:
+    if modulesVersion < 3
+    then builtins.substring 2 (-1) str
+    else str;
 
   extract_source = f: acc: value:
     # We take any "attributes" object that has a "sha256" field. Every value
@@ -59,6 +64,7 @@ let
           sha256 = hash;
           passthru.sha256 = hash;
           passthru.source_name = name;
+          passthru.urls = urls;
         };
       };
       insert = acc: hash: urls: name:
@@ -76,7 +82,8 @@ let
     if builtins.isAttrs value && value ? attributes
       && (attrs ? sha256 || attrs ? integrity)
       && f attrs.name
-    then accWithNewSource else acc;
+    then accWithNewSource
+    else acc;
 
   requiredSourcePredicate = n: requiredDepNamePredicate (sanitize n);
   requiredDeps = foldlJSON (extract_source requiredSourcePredicate) { } modules;
@@ -89,10 +96,23 @@ let
     (drv: ''
       filename=$(basename "${lib.head drv.urls}")
       echo Bundling $filename ${lib.optionalString (drv?source_name) "from ${drv.source_name}"}
+
+      # 1. --repository_cache format:
+      # 1.a. A file unde a content-hash directory
       hash=$(${rnix-hashes}/bin/rnix-hashes --encoding BASE16 ${drv.sha256} | cut -f 2)
       mkdir -p content_addressable/sha256/$hash
       ln -sfn ${drv} content_addressable/sha256/$hash/file
-      # Expect file name conflicts
+
+      # 1.b. a canonicalId marker based on the download urls
+      # Bazel uses these to avoid reusing a stale hash when the urls have changed.
+      canonicalId="${lib.concatStringsSep " " drv.urls}"
+      canonicalIdHash=$(echo -n "$canonicalId" | sha256sum | cut -d" " -f1)
+      echo -n "$canonicalId" > content_addressable/sha256/$hash/id-$canonicalIdHash
+
+      # 2. --distdir format:
+      # Just a file with the right basename
+      # Mostly to keep old tests happy, and because symlinks cost nothing.
+      # This is brittle because of expected file name conflicts
       ln -sn ${drv} $filename || true
     '')
     (builtins.attrValues requiredDeps ++ extraDeps)
