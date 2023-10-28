@@ -20047,6 +20047,8 @@ with pkgs;
 
   sca2d = callPackage ../development/tools/sca2d {  };
 
+  scons_3_1_2 = callPackage ../development/tools/build-managers/scons/3.1.2.nix { };
+
   sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_latest;
 
