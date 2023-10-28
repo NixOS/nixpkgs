@@ -2,17 +2,28 @@
 , stdenv
 , fetchPypi
 , python
-, buildPythonPackage
-, gfortran
-, hypothesis
-, pytestCheckHook
-, typing-extensions
-, blas
-, lapack
-, writeTextFile
-, cython
 , pythonAtLeast
 , pythonOlder
+, buildPythonPackage
+, writeTextFile
+
+# build-system
+, cython_3
+, gfortran
+, meson-python
+, pkg-config
+, xcbuild
+
+# native dependencies
+, blas
+, lapack
+
+# tests
+, hypothesis
+, pytest-xdist
+, pytestCheckHook
+, setuptools
+, typing-extensions
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -41,14 +52,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.25.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
+  version = "1.26.1";
+  pyproject = true;
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-/WCOGcjXxVAh3/1Dv+VJL6uMwQXMiYb4E/jDwEizh2A=";
+    hash = "sha256-yMbHLUqfgx8yjvsTEmQqHK+vqoiYHZq3Y2jVDQfZPL4=";
   };
 
   patches = [
@@ -70,10 +81,23 @@ in buildPythonPackage rec {
     #   error: option --single-version-externally-managed not recognized
     #   TypeError: dist must be a Distribution instance
     rm numpy/core/tests/test_cython.py
+
+    patchShebangs numpy/_build_utils/*.py
   '';
 
-  nativeBuildInputs = [ gfortran cython ];
-  buildInputs = [ blas lapack ];
+  nativeBuildInputs = [
+    cython_3
+    gfortran
+    meson-python
+    pkg-config
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xcbuild.xcrun
+  ];
+
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
   hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
@@ -83,7 +107,6 @@ in buildPythonPackage rec {
   # see https://github.com/xianyi/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
-    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
   '';
 
@@ -94,8 +117,10 @@ in buildPythonPackage rec {
   enableParallelBuilding = true;
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     hypothesis
+    setuptools
     typing-extensions
   ];
 
@@ -138,9 +163,10 @@ in buildPythonPackage rec {
 
   # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_large_file_support";
+  env.NOSE_EXCLUDE = "test_large_file_support";
 
   meta = {
+    changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
