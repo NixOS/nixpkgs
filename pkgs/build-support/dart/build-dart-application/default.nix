@@ -89,7 +89,7 @@ let
   baseDerivation = stdenv.mkDerivation (finalAttrs: (builtins.removeAttrs args [ "gitHashes" "sdkSourceBuilders" "pubspecLock" ]) // {
     inherit pubspecLockFile packageConfig sdkSetupScript pubGetScript
       dartCompileCommand dartOutputType dartRuntimeCommand dartCompileFlags
-      dartJitFlags runtimeDependencies;
+      dartJitFlags;
 
     outputs = args.outputs or [ ] ++ [ "out" "pubcache" ];
 
@@ -98,7 +98,7 @@ let
       then writeText "entrypoints.json" (builtins.toJSON dartEntryPoints)
       else null;
 
-    runtimeDependencyLibraryPath = lib.makeLibraryPath finalAttrs.runtimeDependencies;
+    runtimeDependencies = map lib.getLib runtimeDependencies;
 
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
       dart
