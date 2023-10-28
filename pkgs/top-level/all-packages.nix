@@ -26567,7 +26567,7 @@ with pkgs;
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver {
-    systemd = systemdMinimal; # in closure already anyway
+    systemd = systemdLibs; # in closure already anyway
   };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
