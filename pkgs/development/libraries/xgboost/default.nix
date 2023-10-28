@@ -45,14 +45,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-HKITioCvBZHZWKFWwe9KbrFP+Nbz8adbZJvQiqApjUQ=";
+    hash = "sha256-tRx6kJwIoVSN701ppuyZpIFUQIFy4LBMFyirLtwApjA=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -144,7 +144,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ abbradar nviets ];
   };
 }
