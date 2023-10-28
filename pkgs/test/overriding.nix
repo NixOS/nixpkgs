@@ -72,6 +72,21 @@ let
         expr = checkOverridePythonAttrs pipOverridden3;
         expected = true;
       })
+      ({
+        name = "overrideAttrs-overridePythonAttrs-test-overrideAttrs";
+        expr = checkAttrsFooBar (applyOverridePythonAttrs (overrideAttrsFooBar pip));
+        expected = true;
+      })
+      ({
+        name = "overrideAttrs-overridePythonAttrs-test-overridePythonAttrs";
+        expr = checkOverridePythonAttrs (applyOverridePythonAttrs (overrideAttrsFooBar pip));
+        expected = true;
+      })
+      ({
+        name = "overrideAttrs-overridePythonAttrs-test-commutation";
+        expr = (applyOverridePythonAttrs (overrideAttrsFooBar pip)) ==  (overrideAttrsFooBar (applyOverridePythonAttrs pip));
+        expected = true;
+      })
     ];
 
   addEntangled = origOverrideAttrs: f:
@@ -151,6 +166,13 @@ let
   pipOverridden2 = applyOverrideSetuptools pip;
   # Test ".override .overridePythonAttrs" only, since ".overridePythonAttrs .override" is known to be break.
   pipOverridden3 = applyOverridePythonAttrs pipOverridden2;
+
+  overrideAttrsFooBar = drv: drv.overrideAttrs (finalAttrs: previousAttrs: {
+    FOO = "a";
+    BAR = finalAttrs.FOO;
+  });
+
+  checkAttrsFooBar = drv: drv.FOO == "a" && drv.BAR == "a";
 in
 
 stdenvNoCC.mkDerivation {
