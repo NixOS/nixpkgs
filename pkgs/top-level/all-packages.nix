@@ -36442,7 +36442,9 @@ with pkgs;
 
   webssh = with python3Packages; toPythonApplication webssh;
 
-  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop { };
+  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {
+    electron = electron_27;
+  };
 
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
 
