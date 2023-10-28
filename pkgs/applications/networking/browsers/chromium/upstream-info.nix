@@ -35,31 +35,31 @@
     };
     deps = {
       gn = {
-        rev = "cc56a0f98bb34accd5323316e0292575ff17a5d4";
         hash = "sha256-SwlET5h5xtDlQvlt8wbG73ZfUWJr4hlWc+uQsBH5x9M=";
+        rev = "cc56a0f98bb34accd5323316e0292575ff17a5d4";
         url = "https://gn.googlesource.com/gn";
         version = "2023-08-10";
       };
     };
-    hash = "sha256-CTkw92TiRD2tkYu5a5dy8fjpR2MMOMCvcbxXhJ36Bp8=";
-    hash_deb_amd64 = "sha256-Y4IUVJIBlt2kcrK5c8SiUyvetC3aBhQQIBTCSaDUKxs=";
-    version = "118.0.5993.88";
+    hash = "sha256-65rN17DIF+9FgZu7ohc9dM8ni6Qmqc9l1oyOcloip44=";
+    hash_deb_amd64 = "sha256-RJcyIA0TdXWRk+K2GVcHSv4OSq5c6Y7InUblao3uusc=";
+    version = "118.0.5993.117";
   };
   ungoogled-chromium = {
     deps = {
       gn = {
-        rev = "cc56a0f98bb34accd5323316e0292575ff17a5d4";
         hash = "sha256-SwlET5h5xtDlQvlt8wbG73ZfUWJr4hlWc+uQsBH5x9M=";
+        rev = "cc56a0f98bb34accd5323316e0292575ff17a5d4";
         url = "https://gn.googlesource.com/gn";
         version = "2023-08-10";
       };
       ungoogled-patches = {
-        rev = "118.0.5993.88-1";
-        hash = "sha256-Tv/DSvVHa/xU5SXNtobaJPOSrbMMwYIu0+okSkw7RJ4=";
+        hash = "sha256-10kSaLteFtvg3nGffslRpAxmc7nFsp0rA8gwm8jqt/8=";
+        rev = "118.0.5993.117-1";
       };
     };
-    hash = "sha256-CTkw92TiRD2tkYu5a5dy8fjpR2MMOMCvcbxXhJ36Bp8=";
-    hash_deb_amd64 = "sha256-Y4IUVJIBlt2kcrK5c8SiUyvetC3aBhQQIBTCSaDUKxs=";
-    version = "118.0.5993.88";
+    hash = "sha256-65rN17DIF+9FgZu7ohc9dM8ni6Qmqc9l1oyOcloip44=";
+    hash_deb_amd64 = "sha256-RJcyIA0TdXWRk+K2GVcHSv4OSq5c6Y7InUblao3uusc=";
+    version = "118.0.5993.117";
   };
 }

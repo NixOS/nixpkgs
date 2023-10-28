@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, ninja, cmake, python3, llvm_14 }:
+{ lib, stdenv, version, runCommand, monorepoSrc, llvm, buildPackages, buildLlvmTools, ninja, cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libclc";
-  version = "16.0.3";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    rev = "llvmorg-${version}";
-    hash = "sha256-paWwnoU3XMqreRgh9JbT1tDMTwq/ZL0ss3SJTteEGL0=";
-  };
-  sourceRoot = "${src.name}/libclc";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
 
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace 'find_program( LLVM_CLANG clang PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                'find_program( LLVM_CLANG clang PATHS "${buildPackages.clang_14.cc}/bin" NO_DEFAULT_PATH )' \
+                'find_program( LLVM_CLANG clang PATHS "${buildLlvmTools.clang.cc}/bin" NO_DEFAULT_PATH )' \
       --replace 'find_program( LLVM_AS llvm-as PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                'find_program( LLVM_AS llvm-as PATHS "${buildPackages.llvm_14}/bin" NO_DEFAULT_PATH )' \
+                'find_program( LLVM_AS llvm-as PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
       --replace 'find_program( LLVM_LINK llvm-link PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                'find_program( LLVM_LINK llvm-link PATHS "${buildPackages.llvm_14}/bin" NO_DEFAULT_PATH )' \
+                'find_program( LLVM_LINK llvm-link PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
       --replace 'find_program( LLVM_OPT opt PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
-                'find_program( LLVM_OPT opt PATHS "${buildPackages.llvm_14}/bin" NO_DEFAULT_PATH )' \
+                'find_program( LLVM_OPT opt PATHS "${buildLlvmTools.llvm}/bin" NO_DEFAULT_PATH )' \
       --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                 'find_program( LLVM_SPIRV llvm-spirv PATHS "${buildPackages.spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja python3 ];
-  buildInputs = [ llvm_14 ];
+  buildInputs = [ llvm ];
   strictDeps = true;
 
   postInstall = ''

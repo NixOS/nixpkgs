@@ -1771,12 +1771,6 @@
     githubId = 1217745;
     name = "Aldwin Vlasblom";
   };
-  aveltras = {
-    email = "romain.viallard@outlook.fr";
-    github = "aveltras";
-    githubId = 790607;
-    name = "Romain Viallard";
-  };
   averelld = {
     email = "averell+nixos@rxd4.com";
     github = "averelld";
@@ -7883,6 +7877,12 @@
     github = "jakubgs";
     githubId = 2212681;
     name = "Jakub Grzgorz Sokołowski";
+  };
+  jakuzure = {
+    email = "shin@posteo.jp";
+    github = "jakuzure";
+    githubId = 11823547;
+    name = "jakuzure";
   };
   jali-clarke = {
     email = "jinnah.ali-clarke@outlook.com";

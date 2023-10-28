@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "keybase";
     repo = "client";
     rev = "v${version}";
-    hash = "sha256-TZBpqpCXtieQpJiAUP+SlldcQparbXqT8CuIMA4E++Y=";
+    hash = "sha256-uZIoFivyFqC+AeFTJaEw2BbP7qoOVF8gtSIdUStxsHU=";
   };
   vendorHash = "sha256-tXEEVEfjoKub2A4m7F3hDc5ABJ+R+axwX1+1j7e3BAM=";
 

@@ -124,6 +124,7 @@ mapAliases ({
   ### C ###
 
   callPackage_i686 = pkgsi686Linux.callPackage;
+  cadence = throw "cadence has been removed from nixpkgs, as it was archived upstream"; # Added 2023-10-28
   cask = emacs.pkgs.cask; # Added 2022-11-12
   cargo-embed = throw "cargo-embed is now part of the probe-rs package"; # Added 2023-07-03
   cargo-flash = throw "cargo-flash is now part of the probe-rs package"; # Added 2023-07-03
@@ -434,6 +435,7 @@ mapAliases ({
   libbencodetools = bencodetools; # Added 2022-07-30
   libbpf_1 = libbpf; # Added 2022-12-06
   libcap_pam = throw "'libcap_pam' has been replaced with 'libcap'"; # Converted to throw 2023-09-10
+  libclc = llvmPackages_latest.libclc; # Added 2023-10-28
   libgme = game-music-emu; # Added 2022-07-20
   libgpgerror = libgpg-error; # Added 2021-09-04
   libheimdal = heimdal; # Added 2022-11-18
