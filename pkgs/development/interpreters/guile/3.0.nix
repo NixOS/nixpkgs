@@ -131,6 +131,9 @@ builder rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
+
   setupHook = ./setup-hook-3.0.sh;
 
   passthru = rec {
