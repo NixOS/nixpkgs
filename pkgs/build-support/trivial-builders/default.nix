@@ -646,11 +646,7 @@ rec {
     }:
     script:
     runCommand name
-      (substitutions // {
-        # TODO(@Artturin:) substitutions should be inside the env attrset
-        # but users are likely passing non-substitution arguments through substitutions
-        # turn off __structuredAttrs to unbreak substituteAll
-        __structuredAttrs = false;
+      ({
         inherit meta;
         inherit depsTargetTargetPropagated;
         propagatedBuildInputs =
@@ -659,6 +655,7 @@ rec {
             (lib.warnIf (deps != [ ]) "'deps' argument to makeSetupHook is deprecated and will be removed in release 23.11., Please use propagatedBuildInputs instead. content of deps: ${toString deps}"
               propagatedBuildInputs ++ (if lib.isList deps then deps else [ deps ]));
         strictDeps = true;
+        env = substitutions;
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
           // optionalAttrs (substitutions?passthru)
