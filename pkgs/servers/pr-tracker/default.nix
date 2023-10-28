@@ -1,6 +1,6 @@
 { rustPlatform
 , lib
-, fetchurl
+, fetchzip
 , openssl
 , pkg-config
 , systemd
@@ -10,9 +10,9 @@ rustPlatform.buildRustPackage rec {
   pname = "pr-tracker";
   version = "1.2.0";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://git.qyliss.net/pr-tracker/snapshot/pr-tracker-${version}.tar.xz";
-    sha256 = "sha256-Tru9DsitRQLiO4Ln70J9LvkEqcj2i4A+eArBvIhd/ls=";
+    hash = "sha256-fUEmxD50Ymnql5vnDt8DUlIztAJ9XNeKxA+FLY68Fkw=";
   };
 
   cargoSha256 = "0q3ibxnzw8gngvrgfkv4m64dr411c511xkvb6j9k63vhy9vwarz7";
