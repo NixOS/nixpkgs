@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";
-  version = "12.1q";
+  version = "12.1x";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     rev = "v${version}";
-    sha256 = "sha256-dYkeAQBpnETbJiXZSejFPJVhXt3kJBBv6qBKPb7t9fU=";
+    sha256 = "sha256-MzeTNjGFL8l+8afndjpMqbEKD872ic+AqnpgY2VAPRA=";
   };
 
   CXXFLAGS = [
