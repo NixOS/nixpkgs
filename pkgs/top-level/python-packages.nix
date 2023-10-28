@@ -1874,6 +1874,8 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+  controlnet-aux = callPackage ../development/python-modules/controlnet-aux { };
+
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
