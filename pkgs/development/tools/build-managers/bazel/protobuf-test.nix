@@ -13,35 +13,34 @@
 , writeScript
 , writeText
 , distDir
+, Foundation
+, callPackage
+, libtool
+, lndir
+, repoCache
+, tree
 }:
 
 let
 
-  # Use builtins.fetchurl to avoid IFD, in particular on hydra
-  lockfile =
-    let version = "7.0.0-pre.20230917.3";
-    in builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/bazelbuild/bazel/${version}/MODULE.bazel.lock";
-      sha256 = "0z6mlz8cn03qa40mqbw6j6kd6qyn4vgb3bb1kyidazgldxjhrz6y";
-    };
+  lockfile = ./bazel_7/tests.MODULE.bazel.lock;
+
+  protocbufRepoCache = callPackage ./bazel_7/bazel-repository-cache.nix {
+    # We are somewhat lucky that bazel's own lockfile works for our tests.
+    # Use extraDeps if the tests need things that are not in that lockfile.
+    # But most test dependencies are bazel's builtin deps, so that at least aligns.
+    inherit lockfile;
+
+    # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
+    # but none of the platform-specific binaries, as they are large and useless.
+    requiredDepNamePredicate = name:
+      null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name;
+  };
 
   MODULE = writeText "MODULE.bazel" ''
-    #bazel_dep(name = "bazel_skylib", version = "1.4.1")
-    #bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
-    bazel_dep(name = "protobuf", version = "21.7")
-    #bazel_dep(name = "grpc", version = "1.48.1.bcr.1", repo_name = "com_github_grpc_grpc")
-    #bazel_dep(name = "platforms", version = "0.0.7")
-    #bazel_dep(name = "rules_pkg", version = "0.9.1")
-    #bazel_dep(name = "stardoc", version = "0.5.3", repo_name = "io_bazel_skydoc")
-    #bazel_dep(name = "zstd-jni", version = "1.5.2-3.bcr.1")
-    #bazel_dep(name = "blake3", version = "1.3.3.bcr.1")
-    #bazel_dep(name = "zlib", version = "1.3")
-    #bazel_dep(name = "rules_cc", version = "0.0.8")
-    #bazel_dep(name = "rules_java", version = "6.3.1")
     bazel_dep(name = "rules_proto", version = "5.3.0-21.7")
-    #bazel_dep(name = "rules_jvm_external", version = "5.2")
-    #bazel_dep(name = "rules_python", version = "0.24.0")
-    #bazel_dep(name = "rules_testing", version = "0.0.4")
+    bazel_dep(name = "protobuf", version = "21.7")
+    bazel_dep(name = "zlib", version = "1.3")
   '';
 
   WORKSPACE = writeText "WORKSPACE" ''
@@ -106,38 +105,59 @@ let
     # See: https://github.com/bazelbuild/bazel/issues/4231
     export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 
+    export HOMEBREW_RUBY_PATH="foo"
+
     exec "$BAZEL_REAL" "$@"
   '';
 
   workspaceDir = runLocal "our_workspace" { } (''
     mkdir $out
-    cp ${MODULE} $out/MODULE.bazel
-    cp ${lockfile} $out/MODULE.bazel.lock
-    cp ${WORKSPACE} $out/WORKSPACE
+    cp --no-preserve=all ${MODULE} $out/MODULE.bazel
+    cp --no-preserve=all ${./bazel_7/tests.MODULE.bazel.lock} $out/MODULE.bazel.lock
+    #cp ${WORKSPACE} $out/WORKSPACE
+    touch $out/WORKSPACE
     touch $out/BUILD.bazel
     mkdir $out/person
-    cp ${personProto} $out/person/person.proto
-    cp ${personBUILD} $out/person/BUILD.bazel
+    cp --no-preserve=all ${personProto} $out/person/person.proto
+    cp --no-preserve=all ${personBUILD} $out/person/BUILD.bazel
   ''
   + (lib.optionalString stdenv.isDarwin ''
+    echo 'tools bazel created'
     mkdir $out/tools
-    cp ${toolsBazel} $out/tools/bazel
+    install ${toolsBazel} $out/tools/bazel
   ''));
 
   testBazel = bazelTest {
     name = "bazel-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
+    buildInputs = [
+      (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
+      tree
+      bazel
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      darwin.objc4
+    ];
+
     bazelScript = ''
+      # Augment bundled repository_cache with our extra paths
+      mkdir -p $PWD/.repository_cache/content_addressable
+      cp -r --no-preserve=all ${repoCache}/content_addressable/* \
+        $PWD/.repository_cache/content_addressable
+      cp -r --no-preserve=all ${protocbufRepoCache}/content_addressable/* \
+        $PWD/.repository_cache/content_addressable
+
+      tree $PWD/.repository_cache
+
       ${bazel}/bin/bazel \
         build \
+        --repository_cache=$PWD/.repository_cache \
+        --enable_bzlmod \
+        --lockfile_mode=error \
+        -s \
         --verbose_failures \
-        --curses=no \
-        --sandbox_debug \
-        --strict_java_deps=off \
-        --strict_proto_deps=off \
-        ${extraBazelArgs} \
         //... \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
       --host_javabase='@local_jdk//:jdk' \
@@ -147,6 +167,18 @@ let
       --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
       --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
     '';
+      #--cxxopt=-framework --cxxopt=Foundation \
+      #--linkopt=-F${Foundation}/Library/Frameworks \
+      #--host_linkopt=-F${Foundation}/Library/Frameworks \
+
+        #--distdir=$PWD/.repository_cache \
+        #--verbose_failures \
+        #--curses=no \
+        #--sandbox_debug \
+        #--strict_java_deps=off \
+        #--strict_proto_deps=off \
+        #--repository_cache=${repoCache} \
+        #--distdir=${repoCache} \
   };
 
 in

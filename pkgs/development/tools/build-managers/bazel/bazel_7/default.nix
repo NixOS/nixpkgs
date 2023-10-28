@@ -58,37 +58,30 @@
 }@args:
 
 let
-  version = "7.0.0-pre.20230917.3";
+  version = "7.0.0-pre.20231011.2";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-sxITaivcJRrQrL+zZtdZohesNgmDtQysIG3BS8SFZd4=";
+    hash = "sha256-3kwNnFPGyRLBKSSzsa+pTNAHowH+fLjtwxiSY8RkbQc=";
   };
 
   # Use builtins.fetchurl to avoid IFD, in particular on hydra
   lockfile = builtins.fetchurl {
     url = "https://raw.githubusercontent.com/bazelbuild/bazel/${version}/MODULE.bazel.lock";
-    sha256 = "0z6mlz8cn03qa40mqbw6j6kd6qyn4vgb3bb1kyidazgldxjhrz6y";
+    sha256 = "sha256:0wdwkfq3mrg4dxvmq2prdsj1i5jyql8jc2wf3wx948cnc10pbfy7";
   };
 
   # Two-in-one format
   distDir = repoCache;
   repoCache = callPackage ./bazel-repository-cache.nix {
     inherit lockfile;
-    # We use the release tarball that already has everything bundled,
-    # But we need one extra dep required by our nonprebuilt java toolchains.
+
+    # We use the release tarball that already has everything bundled so we
+    # should not need any extra external deps. But our nonprebuilt java
+    # toolchains hack needs just one non bundled dep.
     requiredDepNamePredicate = name:
       null != builtins.match "rules_java~.*~toolchains~remote_java_tools" name;
-  };
-
-  # Two-in-one format
-  testRepoCache = callPackage ./bazel-repository-cache.nix {
-    inherit lockfile;
-    # We use the release tarball that already has everything bundled,
-    # But we need one extra dep required by our nonprebuilt java toolchains.
-    requiredDepNamePredicate = name:
-      null == builtins.match ".*(macos|osx|linux|win|apple|android).*" name;
   };
 
   defaultShellUtils =
@@ -379,8 +372,10 @@ stdenv.mkDerivation rec {
           -e "/bazel_build /a\  --experimental_strict_java_deps=off \\\\" \
           -e "/bazel_build /a\  --strict_proto_deps=off \\\\" \
           -e "/bazel_build /a\  --toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type' \\\\" \
-          -e "/bazel_build /a\  --tool_java_runtime_version=local_jdk \\\\" \
-          -e "/bazel_build /a\  --java_runtime_version=local_jdk \\\\" \
+          -e "/bazel_build /a\  --tool_java_runtime_version=local_jdk_17 \\\\" \
+          -e "/bazel_build /a\  --java_runtime_version=local_jdk_17 \\\\" \
+          -e "/bazel_build /a\  --tool_java_language_version=17 \\\\" \
+          -e "/bazel_build /a\  --java_language_version=17 \\\\" \
           -e "/bazel_build /a\  --extra_toolchains=@bazel_tools//tools/jdk:all \\\\" \
 
         # Also build parser_deploy.jar with bootstrap bazel
@@ -593,13 +588,11 @@ stdenv.mkDerivation rec {
     #
     # in the nixpkgs checkout root to exercise them locally.
     tests = callPackage ./tests.nix {
-      inherit Foundation bazel_self runJdk;
-      distDir = testRepoCache;
-      repoCache = testRepoCache;
+      inherit Foundation bazel_self lockfile repoCache;
     };
 
     updater = throw "TODO";
 
-    inherit distDir repoCache testRepoCache;
+    inherit distDir repoCache;
   };
 }

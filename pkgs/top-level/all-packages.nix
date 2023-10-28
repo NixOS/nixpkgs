@@ -18601,7 +18601,7 @@ with pkgs;
   bazel_7 = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_7 {
     inherit (darwin) cctools sigtool;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation IOKit;
-    buildJdk = jdk11_headless;
+    buildJdk = jdk17_headless;
     runJdk = jdk17_headless;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv
       else if stdenv.cc.isClang then llvmPackages.stdenv
