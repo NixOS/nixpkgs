@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, pkg-config, libusb1, systemdMinimal }:
+{ lib, stdenv, fetchzip, pkg-config, libusb1, udev }:
 let
   binDirPrefix = if stdenv.isDarwin then "osx_" else "linux_";
 in
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libusb1
-    systemdMinimal # libudev
+    udev
   ];
 
   installPhase = ''
