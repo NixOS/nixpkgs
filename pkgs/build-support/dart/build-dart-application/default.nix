@@ -44,7 +44,6 @@
 
 , runtimeDependencies ? [ ]
 , extraWrapProgramArgs ? ""
-, customPackageOverrides ? { }
 , autoDepsList ? false
 , depsListFile ? null
 , pubspecLock
@@ -143,25 +142,7 @@ let
 
     meta = (args.meta or { }) // { platforms = args.meta.platforms or dart.meta.platforms; };
   });
-
-  packageOverrideRepository = (callPackage ../../../development/compilers/dart/package-overrides { }) // customPackageOverrides;
-  productPackages = if depsList == null then [ ] else depsList;
 in
 assert !(builtins.isString dartOutputType && dartOutputType != "") ->
 throw "dartOutputType must be a non-empty string";
-builtins.foldl'
-  (prev: package:
-  if packageOverrideRepository ? ${package.name}
-  then
-    prev.overrideAttrs
-      (packageOverrideRepository.${package.name} {
-        inherit (package)
-          name
-          version
-          kind
-          source
-          dependencies;
-      })
-  else prev)
-  baseDerivation
-  productPackages
+baseDerivation

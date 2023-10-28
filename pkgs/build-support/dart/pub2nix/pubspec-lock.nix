@@ -1,4 +1,5 @@
 { lib
+, callPackage
 , fetchurl
 , fetchgit
 , runCommand
@@ -22,6 +23,14 @@
   # Functions to generate SDK package sources.
   # The function names should match the SDK names, and the package name is given as an argument.
 , sdkSourceBuilders ? { }
+
+  # Functions that create custom package source derivations.
+  #
+  # The function names should match the package names, and the package version,
+  # source, and source files are given in an attribute set argument.
+  #
+  # The passthru of the source derivation should be propagated.
+, customSourceBuilders ? { }
 }:
 
 let
@@ -77,20 +86,22 @@ let
   addDependencySourceUtils = dependencySource: details: dependencySource.overrideAttrs ({ passthru, ... }: {
     passthru = passthru // {
       inherit (details) version;
-      packagePath = dependencySource + "/${dependencySource.packageRoot}";
     };
   });
 
+  sourceBuilders = callPackage ../../../development/compilers/dart/package-source-builders { } // customSourceBuilders;
+
   dependencySources = lib.filterAttrs (name: src: src != null) (builtins.mapAttrs
     (name: details:
-      addDependencySourceUtils
-        (({
+      (sourceBuilders.${name} or ({ src, ... }: src)) {
+        inherit (details) version source;
+        src = ((addDependencySourceUtils (({
           "hosted" = mkHostedDependencySource;
           "git" = mkGitDependencySource;
           "path" = mkPathDependencySource;
           "sdk" = mkSdkDependencySource;
-        }.${details.source} name) details)
-        details)
+        }.${details.source} name) details)) details);
+      })
     pubspecLock.packages);
 in
 {
