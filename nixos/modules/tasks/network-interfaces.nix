@@ -1406,18 +1406,12 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
-    # Set the host and domain names in the activation script.  Don't
-    # clear it if it's not configured in the NixOS configuration,
-    # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname = let
-        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
-      in optionalString (effectiveHostname != "") ''
-        hostname "${effectiveHostname}"
-      '';
-    system.activationScripts.domain =
-      optionalString (cfg.domain != null) ''
-        domainname "${cfg.domain}"
-      '';
+    systemd.services.domainname = lib.mkIf (cfg.domain != null) {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.ExecStart = ''domainname "${cfg.domain}"'';
+    };
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };
