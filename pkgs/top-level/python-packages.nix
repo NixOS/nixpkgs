@@ -12556,6 +12556,8 @@ self: super: with self; {
 
   ruyaml = callPackage ../development/python-modules/ruyaml { };
 
+  rwkv = callPackage ../development/python-modules/rwkv { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   rxv = callPackage ../development/python-modules/rxv { };
