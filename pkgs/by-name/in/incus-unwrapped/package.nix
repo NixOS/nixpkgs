@@ -10,21 +10,21 @@
 , sqlite
 , udev
 , installShellFiles
-, gitUpdater
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "incus-unwrapped";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
     rev = "refs/tags/incus-${version}";
-    hash = "sha256-DCNMhfSzIpu5Pdg2TiFQ7GgLEScqt/Xqm2X+VSdeaME=";
+    hash = "sha256-WhprzGzTeB8sEMMTYN5j1Zrwg0GiGLlXTqCkcPq0XVo=";
   };
 
-  vendorHash = "sha256-Pk0/SfGCqXdXvNHbokSV8ajFHeOv0+Et0JytRCoBLU4=";
+  vendorHash = "sha256-4fxQHtvRULTyKJTGdo42qwWQUSIWqbqOO1Wf8daBP/s=";
 
   postPatch = ''
     substituteInPlace internal/usbid/load.go \
@@ -54,10 +54,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
   tags = [ "libsqlite3" ];
 
-  preBuild = ''
-    # required for go-cowsql.
-    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
-  '';
+  # required for go-cowsql.
+  CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
 
   postBuild = ''
     make incus-agent incus-migrate
@@ -81,9 +79,11 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "incus-";
-    };
+    updateScript = nix-update-script {
+       extraArgs = [
+        "-vr" "incus-\(.*\)"
+       ];
+     };
   };
 
   meta = {
