@@ -1,5 +1,15 @@
 { stdenv, lib, fetchurl, testers, infisical, installShellFiles }:
 
+# this expression is mostly automated, and you are STRONGLY
+# RECOMMENDED to use to nix-update for updating this expression when new
+# releases come out, which runs the sibling `update.sh` script.
+#
+# from the root of the nixpkgs git repository, run:
+#
+#    nix-shell maintainers/scripts/update.nix \
+#      --argstr commit true \
+#      --argstr package infisical
+
 let
   # build hashes, which correspond to the hashes of the precompiled binaries procured by GitHub Actions.
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
