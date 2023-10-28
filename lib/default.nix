@@ -149,6 +149,7 @@ let
       isOptionType mkOptionType;
     inherit (self.asserts)
       assertMsg assertOneOf;
+    inherit (self.cli) toGNUCommandLineShell toGNUCommandLine;
     inherit (self.debug) traceIf traceVal traceValFn
       traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceFnSeqN
