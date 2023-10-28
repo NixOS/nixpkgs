@@ -14,15 +14,15 @@ let
   archive_fmt = "tar.gz";
 
   sha256 = {
-    x86_64-linux = "e85c5f2ddca89caa6b44c61554c1dffeacdabc96c25a7e6881dc5722515270d1";
-    x86_64-darwin = "eddbcde10271f791eb1473ba00b85b442aa059cdfee38021b8f8880f33754821";
-    aarch64-linux = "9793a6db476492802ffec7f933d7f8f107a1c89fee09c8eb6bdb975b1fccecea";
-    aarch64-darwin = "46c8a82a71da5731c108d24b4a960a507af66d91bba7b7246dd3a3415afaf7d3";
+    x86_64-linux = "b137f0a2830de5c91d6b1a5de11df242f0c4613ee6b98653c85126d1ec4cdf73";
+    x86_64-darwin = "07de3e985e56bb4a47288a3c0ae1c06eba2bcc8c4ad94eb8369dc91654dcd649";
+    aarch64-linux = "786b8a9c2ea1d583d6d14758e7070285b892cc04c071298767a98a048dac47cd";
+    aarch64-darwin = "b38b3595ad7ae5c439236f7a642796dd923261aa537d1c5adb441d6665ef89da";
   }.${system} or throwSystem;
 in
   stdenv.mkDerivation (finalAttrs: {
     pname = "infisical";
-    version = "0.14.2";
+    version = "0.14.3";
 
     src = fetchurl {
       url = "https://github.com/Infisical/infisical/releases/download/infisical-cli%2Fv${finalAttrs.version}/infisical_${finalAttrs.version}_${plat}.tar.gz";
