@@ -11780,8 +11780,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
   };
 
-  owncloud-client = libsForQt5.callPackage ../applications/networking/owncloud-client { };
-
   oxefmsynth = callPackage ../applications/audio/oxefmsynth { };
 
   oxidized = callPackage ../tools/admin/oxidized { };

@@ -1,38 +1,49 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, mkDerivation
 , pkg-config
 , cmake
 , extra-cmake-modules
-, callPackage
-, qtbase
-, qtkeychain
-, wrapQtAppsHook
-, qttools
+, qt6
+, qt6Packages
 , sqlite
 , libsecret
+, libre-graph-api-cpp-qt-client
+, kdsingleapplication
+# darwin only:
+, libinotify-kqueue
+, sparkleshare
 }:
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "4.2.0";
-
-  libregraph = callPackage ./libre-graph-api-cpp-qt-client.nix { };
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dPNVp5DxCI4ye8eFjHoLGDlf8Ap682o1UB0k2VNr2rs=";
+    hash = "sha256-SSMNmWrCT1sGa38oY8P84QNedNkQPcIRWrV9B65B5X8=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake extra-cmake-modules wrapQtAppsHook qttools ];
-  buildInputs = [ qtbase qtkeychain sqlite libsecret libregraph ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    extra-cmake-modules
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
 
-  cmakeFlags = [
-    "-UCMAKE_INSTALL_LIBDIR"
-    "-DNO_SHIBBOLETH=1"
+  buildInputs = [
+    sqlite
+    libsecret
+    qt6.qtbase
+    qt6.qtsvg # Needed for the systray icon
+    qt6Packages.qtkeychain
+    libre-graph-api-cpp-qt-client
+    kdsingleapplication
+  ] ++ lib.optionals stdenv.isDarwin [
+    libinotify-kqueue sparkleshare
   ];
 
   meta = with lib; {
@@ -40,7 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://owncloud.org";
     maintainers = with maintainers; [ qknight hellwolf ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
     license = licenses.gpl2Plus;
     changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
   };
