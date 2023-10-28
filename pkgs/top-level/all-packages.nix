@@ -20049,12 +20049,9 @@ with pkgs;
 
   scons = scons_4_5_2;
   scons_3_1_2 = callPackage ../development/tools/build-managers/scons/3.1.2.nix { };
-
   scons_4_1_0 = callPackage ../development/tools/build-managers/scons/4.1.0.nix { };
-
   scons_4_5_2 = callPackage ../development/tools/build-managers/scons/4.5.2.nix { };
 
-  sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   mill = callPackage ../development/tools/build-managers/mill { };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
