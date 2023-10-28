@@ -3056,6 +3056,8 @@ self: super: with self; {
 
   django-prometheus = callPackage ../development/python-modules/django-prometheus { };
 
+  django-pwa = callPackage ../development/python-modules/django-pwa { };
+
   django-q = callPackage ../development/python-modules/django-q { };
 
   django-scheduler = callPackage ../development/python-modules/django-scheduler { };
