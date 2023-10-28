@@ -31,6 +31,14 @@ in
       '';
     };
 
+    mount_postgresql = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Should we automatically mount /var/run/postgresql for a local postgresql server?
+      '';
+    };
+
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
@@ -70,7 +78,7 @@ in
     systemd.services.dex = {
       description = "dex identity provider";
       wantedBy = [ "multi-user.target" ];
-      after = [ "networking.target" ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
+      after = [ "networking.target" ] ++ optional cfg.mount_postgresql "postgresql.service";
       path = with pkgs; [ replace-secret ];
       serviceConfig = {
         ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";
@@ -90,7 +98,7 @@ in
           "-/etc/resolv.conf"
           "-/etc/ssl/certs/ca-certificates.crt"
         ];
-        BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
+        BindPaths = optional cfg.mount_postgresql "/var/run/postgresql";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
