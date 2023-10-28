@@ -15,9 +15,16 @@
 , makeDesktopItem
 }:
 
+let
+  wxGTK32' = wxGTK32.overrideAttrs (old: {
+    configureFlags = old.configureFlags ++ [
+      "--disable-exceptions"
+    ];
+  });
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.0";
+  version = "13.1";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -26,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-E0lYKNCVtkdnhI3NPx8828Fz6sfmIm18KSC0NSWgHfQ=";
+    hash = "sha256-xuJQOegmZHPsCmJU2akTD4nQh05M+rpnjQVEer33SCk=";
   };
 
   sourceRoot = ".";
@@ -63,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libssh2
     openssl
-    wxGTK32
+    wxGTK32'
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
