@@ -14168,6 +14168,8 @@ self: super: with self; {
     openai-triton = self.openai-triton-bin;
   };
 
+  torch-grammar = callPackage ../development/python-modules/torch-grammar.nix { };
+
   torchWithCuda = self.torch.override {
     magma = pkgs.magma-cuda-static;
     openai-triton = self.openai-triton-cuda;
