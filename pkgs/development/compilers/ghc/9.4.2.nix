@@ -205,6 +205,7 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
       sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
     })
+    ./docs-sphinx-7.patch
   ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
