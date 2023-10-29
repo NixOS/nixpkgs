@@ -3,7 +3,6 @@
 , python3Packages
 }:
 let
-  pythonPackages = python3Packages;
   writeCheckedBashBin = name:
     let
       interpreter = "${bash}/bin/bash";
