@@ -19665,6 +19665,20 @@ with self; {
     };
   };
 
+  ParseEDID = buildPerlPackage {
+    pname = "Parse-Edid";
+    version = "1.0.7";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GROUSSE/Parse-EDID-1.0.7.tar.gz";
+      hash = "sha256-GtwPEFoyGYoqK02lsOD5hfBe/tmc42YZCnkOFl1nW/E=";
+    };
+    buildInputs = [ TestWarn ];
+    meta = {
+      description = "Extended display identification data (EDID) parser";
+      license = lib.licenses.gpl3Plus;
+    };
+  };
+
   ParseDebControl = buildPerlPackage {
     pname = "Parse-DebControl";
     version = "2.005";
