@@ -91,6 +91,10 @@ rec {
     isMusl         = with abis; map (a: { abi = a; }) [ musl musleabi musleabihf muslabin32 muslabi64 ];
     isUClibc       = with abis; map (a: { abi = a; }) [ uclibc uclibceabi uclibceabihf ];
 
+    isEfiEnvironment = [
+      { kernel = kernels.uefi; }
+    ];
+
     isEfi = [
       { cpu = { family = "arm"; version = "6"; }; }
       { cpu = { family = "arm"; version = "7"; }; }

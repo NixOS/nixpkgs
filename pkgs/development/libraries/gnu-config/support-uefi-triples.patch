@@ -1,0 +1,66 @@
+This commit causes gnu-config to recognize the *-*-uefi triples.
+
+These triples describe binaries which use the PE object file format
+and UEFI calling "convention" (which is actually a family of
+completely unrelated calling conventions, one per CPU architecture):
+
+- https://uefi.org/specs/UEFI/2.9_A/02_Overview.html#detailed-calling-convention
+- 
+https://uefi.org/specs/UEFI/2.9_A/02_Overview.html#detailed-calling-convention-1
+- 
+https://uefi.org/specs/UEFI/2.9_A/02_Overview.html#detailed-calling-convention-2
+- https://wiki.osdev.org/UEFI#Calling_Conventions
+
+This is in contrast to the *-w64-mingw32 triple of GNU-EFI, which
+uses the ELF format and cdecl calling convention:
+
+- https://wiki.osdev.org/UEFI#Calling_Conventions
+
+Because *-*-uefi uses a different object file format (everywhere)
+and calling convention (everywhere except x86_32) from
+*-w64-mingw32, the resulting binaries cannot be linked against each
+other.  This is the primary justification for introducing a new
+triple.
+
+Since gnu-config does not yet have triples for these builds, we
+might as well use the same ones already selected by LLVM.  It
+considers uefi to be an operating system:
+
+- https://reviews.llvm.org/D131594
+
+* config.sub (*-*-uefi): Recognize.
+
+Signed-off-by: Adam Joseph <adam@westernsemico.com>
+X-Disclaimer: This commit shall not be construed as the author's approval of 
+the UEFI boondoggle in any way, shape or form.
+---
+ config.sub                | 9 +++++++++
+ 1 files changed, 9 insertions(+)
+
+diff --git i/config.sub w/config.sub
+index defe52c..b2078d9 100755
+--- i/config.sub
++++ w/config.sub
+@@ -1772,6 +1772,13 @@ case $os in
+ 	sco3.2v2 | sco3.2v[4-9]* | sco5v6*)
+ 		# Don't forget version if it is 3.2v4 or newer.
+ 		;;
++       # This refers to builds using the UEFI calling convention
++       # (which depends on the architecture) and PE file format.
++       # Note that this is both a different calling convention and
++       # different file format than that of GNU-EFI
++       # (x86_64-w64-mingw32).
++       uefi)
++               ;;
+ 	none)
+ 		;;
+ 	kernel* | msvc* )
+@@ -1859,6 +1866,8 @@ case $kernel-$os-$obj in
+ 		# None (no kernel, i.e. freestanding / bare metal),
+ 		# can be paired with an machine code file format
+ 		;;
++       -uefi)
++               ;;
+ 	-*-)
+ 		# Blank kernel with real OS is always fine.
+ 		;;
