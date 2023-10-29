@@ -43,7 +43,7 @@
 , libevent
 , openssl
 , alsa-lib
-, pulseaudio
+, pulseaudioSupport ? stdenv.hostPlatform.isLinux, pulseaudio
 , libcap
 , pciutils
 , systemd
@@ -129,7 +129,9 @@ qtModule {
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
 
+  ] ++ lib.optionals pulseaudioSupport [
     ../patches/qtwebengine-link-pulseaudio.patch
+  ] ++ [
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
@@ -241,7 +243,9 @@ qtModule {
 
     # Audio formats
     alsa-lib
+  ] ++ lib.optionals pulseaudioSupport [
     pulseaudio
+  ] ++ [
 
     # Text rendering
     fontconfig
