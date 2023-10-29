@@ -83,8 +83,8 @@ let
     ${wrapFactorScript { from = "./factor"; inherit runtimeLibs; }}
     ln -sf factor.image .factor-wrapped.image
   '';
-  rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";
-  version = "0.98";
+  rev = "e10b64dbc53a8583098e73580a1eb9ff4ce0c709";
+  version = "0.99";
 
 in
 stdenv.mkDerivation {
@@ -93,12 +93,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://downloads.factorcode.org/releases/${version}/factor-src-${version}.zip";
-    sha256 = "01ip9mbnar4sv60d2wcwfz62qaamdvbykxw3gbhzqa25z36vi3ri";
+    sha256 = "f5626bb3119bd77de9ac3392fdbe188bffc26557fab3ea34f7ca21e372a8443e";
   };
 
   patches = [
-    ./staging-command-line-0.98-pre.patch
-    ./workdir-0.98-pre.patch
+    ./staging-command-line-0.99-pre.patch
+    ./workdir-0.99-pre.patch
     ./adjust-paths-in-unit-tests.patch
   ];
 
@@ -150,11 +150,6 @@ stdenv.mkDerivation {
       done)> $out/lib/factor/ld.so.cache
 
     make -j$NIX_BUILD_CORES linux-x86-64
-    printf "First build from upstream boot image\n" >&2
-    ./build.sh bootstrap
-    printf "Rebuild boot image\n" >&2
-    ./factor -script -e='"unix-x86.64" USING: system bootstrap.image memory ; make-image save 0 exit'
-    printf "Second build from local boot image\n" >&2
     ./build.sh bootstrap
     runHook postBuild
   '';
@@ -219,6 +214,5 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra spacefrogg ];
     platforms = lib.intersectLists platforms.x86_64 platforms.linux;
-    mainProgram = "factor";
   };
 }
