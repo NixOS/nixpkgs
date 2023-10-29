@@ -2,13 +2,13 @@
 
 let
   pname = "beekeeper-studio";
-  version = "3.6.2";
+  version = "4.0.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    hash = "sha512-an4Gqx2mx/rnkLe/LUAz3qRdrqWBcrWcdCiNi8Hz1OKBp1SWN3acU8RppIM0uwlrcBkjnigbbM5DZ2o+svA23A==";
+    hash = "sha256-P2HlCb0dai4cJlKcT9LLQ+njViD+oHS3KI2YdR5jR44=";
   };
 
   appimageContents = appimageTools.extractType2 {
