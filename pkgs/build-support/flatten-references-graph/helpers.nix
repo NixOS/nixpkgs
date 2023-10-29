@@ -15,7 +15,7 @@ let
 
   # Helpers used during build/development.
   lint = writeCheckedBashBin "lint" ''
-    ${pythonPackages.flake8}/bin/flake8 --show-source ''${@}
+    ${python3Packages.flake8}/bin/flake8 --show-source ''${@}
   '';
 
   unittest = writeCheckedBashBin "unittest" ''
@@ -23,11 +23,11 @@ let
       set -- discover -p '*_test.py'
     fi
 
-    ${pythonPackages.python}/bin/python -m unittest "''${@}"
+    ${python3Packages.python}/bin/python -m unittest "''${@}"
   '';
 
   format = writeCheckedBashBin "format" ''
-    ${pythonPackages.autopep8}/bin/autopep8 -r -i . "''${@}"
+    ${python3Packages.autopep8}/bin/autopep8 -r -i . "''${@}"
   '';
 in
 {
