@@ -468,6 +468,7 @@ class Editor:
             "--input-names",
             "-i",
             dest="input_file",
+            type=Path,
             default=self.default_in,
             help="A list of plugins in the form owner/repo",
         )
@@ -476,6 +477,7 @@ class Editor:
             "-o",
             dest="outfile",
             default=self.default_out,
+            type=Path,
             help="Filename to save generated nix code",
         )
         common.add_argument(
@@ -787,10 +789,17 @@ def update_plugins(editor: Editor, args):
 
     if autocommit:
         from datetime import date
-        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        updated = date.today().strftime('%m-%d-%Y')
 
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: updated the {updated}", [args.outfile])
+        try:
+            repo = git.Repo(os.getcwd())
+            updated = date.today().strftime('%m-%d-%Y')
+            print(args.outfile)
+            commit(repo,
+                   f"{editor.attr_path}: updated the {updated}", [args.outfile]
+                   )
+        except git.InvalidGitRepositoryError as e:
+            print(f"Not in a git repository: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if redirects:
         update()
