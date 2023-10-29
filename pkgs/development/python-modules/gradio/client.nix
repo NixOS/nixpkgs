@@ -17,7 +17,7 @@
 , typing-extensions
 , websockets
 # checkInputs
-, pytestCheckHook
+, pytestCheckXfailHook
 , pytest-asyncio
 , pydub
 , gradio
@@ -76,8 +76,8 @@ buildPythonPackage rec {
     websockets
   ];
 
-  nativeCheckInputs =[
-    pytestCheckHook
+  nativeCheckInputs = [
+    pytestCheckXfailHook
     pytest-asyncio
     pydub
     gradio'
@@ -86,10 +86,12 @@ buildPythonPackage rec {
     gradio' # ensuring we don't propagate this intermediate build
   ];
 
-  # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
+  pytestExtraXfailExceptions = [
+    "builtins:FileNotFoundError"
+  ];
+
   preCheck = ''
     export HOME=$TMPDIR
-    cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
   pytestFlagsArray = [

@@ -38,7 +38,7 @@
 , websockets
 
 # check
-, pytestCheckHook
+, pytestCheckXfailHook
 , boto3
 , ffmpeg
 , ipython
@@ -107,7 +107,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytestCheckXfailHook
     boto3
     ffmpeg
     ipython
@@ -121,11 +121,12 @@ buildPythonPackage rec {
     vega_datasets
   ];
 
-  # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
-  # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
+  pytestExtraXfailExceptions = [
+    "builtins:FileNotFoundError"
+  ];
+
   preCheck = ''
     export HOME=$TMPDIR
-    cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
   disabledTests = [
