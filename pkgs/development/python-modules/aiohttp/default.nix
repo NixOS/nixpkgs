@@ -18,9 +18,7 @@
 , aiodns
 , brotli
 , faust-cchardet
-, asynctest
 , typing-extensions
-, idna-ssl
 # tests_require
 , async-generator
 , freezegun
@@ -75,11 +73,6 @@ buildPythonPackage rec {
     aiodns
     brotli
     faust-cchardet
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    idna-ssl
   ];
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.

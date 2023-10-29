@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , bottle
 , importlib-resources
 , proxy_tools
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pywebview";
   version = "4.3.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools-scm
     qt5.wrapQtAppsHook
   ];
 
@@ -47,6 +49,8 @@ buildPythonPackage rec {
     qtpy
     xvfb-run
   ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   checkPhase = ''
     # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED

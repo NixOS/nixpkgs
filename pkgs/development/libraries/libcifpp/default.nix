@@ -10,23 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcifpp";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = "libcifpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-9je4oj5XvclknD14Nh0LnBONHMeO40nY0+mZ9ACQYmY=";
+    hash = "sha256-+OVfMXkBALT8v/30JU8v2gTsw12FM5n1I2COV/b5vGY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/PDB-REDO/libcifpp/issues/51
-      name = "fix-build-on-darwin.patch";
-      url = "https://github.com/PDB-REDO/libcifpp/commit/641f06a7e7c0dc54af242b373820f2398f59e7ac.patch";
-      hash = "sha256-eWNfp9nA/+2J6xjZR6Tj+5OM3L5MxdfRi0nBzyaqvS0=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

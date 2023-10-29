@@ -31,14 +31,9 @@ in
       services.opensearch.dataDir = "/var/opensearch_test";
       services.opensearch.user = "open_search";
       services.opensearch.group = "open_search";
-      system.activationScripts.createDirectory = {
-        text = ''
-          mkdir -p "/var/opensearch_test"
-          chown open_search:open_search /var/opensearch_test
-          chmod 0700 /var/opensearch_test
-        '';
-        deps = [ "users" "groups" ];
-      };
+      systemd.tmpfiles.rules = [
+        "d /var/opensearch_test 0700 open_search open_search -"
+      ];
       users = {
         groups.open_search = {};
         users.open_search = {

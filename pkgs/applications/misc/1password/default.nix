@@ -2,22 +2,22 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-  fetch = srcPlatform: sha256: extension:
+  fetch = srcPlatform: hash: extension:
     let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
-        inherit sha256;
+        inherit hash;
       } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
     in
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.21.0";
+  version = "2.22.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-pXGBlduNOvxpPMd/BObHVXXGQ0ZTlIkqZ3jYyoGXnqA=" "zip";
-    i686-linux = fetch "linux_386" "sha256-iePA4nzwBtAlYWybmQdV7Zvvnv+jPqrndB4aabf/JMM=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-wevv0KYe01ZL70zL4BNti/oCcAzNJ3EO97QIU1BYQRE=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-AViR53q1/jZtzpFZ7FaBwoZAGuXsGHfULEIuIrTqgSs=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-MWNbwCJ5ltAV1qmy8LPYkb6VTH0UVi2S5QEZZfpcnGM=" "zip";
+    i686-linux = fetch "linux_386" "sha256-lqwEm7fCiM2WNZvlAt/HeqI2zxnal/OMbTMGvvmXkvY=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-GfQ441a5mIgCTtxnk6L9UXodNGXek7f/jxJXWYJUb+0=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-yF0dy4MUgvSJUremXFfxCIHcGmYrCcjofcv1sBD9qyI=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;

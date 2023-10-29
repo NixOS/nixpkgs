@@ -13,5 +13,6 @@
   "elm-optimize-level-2",
   "elm-pages",
   "elm-review",
-  "elm-git-install"
+  "elm-git-install",
+  "@dillonkearns/elm-graphql"
 ]

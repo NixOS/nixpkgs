@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
+
   meta = with lib; {
     description = "A lightweight package management system based upon ipkg";
     homepage = "https://git.yoctoproject.org/cgit/cgit.cgi/opkg/";

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , bzip2
@@ -21,16 +20,6 @@ stdenv.mkDerivation rec {
     rev = "uuu_${version}";
     sha256 = "sha256-f9Nt303xXZzLSu3GtOEpyaL91WVFUmKO7mxi8UNX3go=";
   };
-
-  patches = [
-    # Backport upstream fix for gcc-13 support:
-    #   https://github.com/nxp-imx/mfgtools/pull/360
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/nxp-imx/mfgtools/commit/24fd043225903247f71ac10666d820277c0b10b1.patch";
-      hash = "sha256-P7n6+Tiz10GIQ7QOd/qQ3BI7Wo5/66b0EwjFSpOUSJg=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 

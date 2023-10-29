@@ -197,6 +197,15 @@ in lib.makeScope pkgs.newScope (self: with self; {
       };
     };
 
+    elm-graphql =
+      nodePkgs."@dillonkearns/elm-graphql" // {
+        meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
+          description = " Autogenerate type-safe GraphQL queries in Elm.";
+          license = licenses.bsd3;
+          maintainers = [ maintainers.pedrohlc ];
+        };
+      };
+
     elm-review =
       nodePkgs.elm-review // {
         meta = with lib; nodePkgs.elm-review.meta // {
