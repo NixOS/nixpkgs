@@ -1486,9 +1486,11 @@ dont-distribute-packages:
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
+ - ghc-lib_9_8_1_20231009
  - ghc-mod
  - ghc-plugs-out
  - ghc-session
+ - ghc_9_8_1
  - ghci-pretty
  - ghcide-bench
  - ghcjs-dom-hello
@@ -2035,7 +2037,7 @@ dont-distribute-packages:
  - hesql
  - heterolist
  - hetzner
- - hetzner_0_4_0_1
+ - hetzner_0_5_0_0
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2547,6 +2549,7 @@ dont-distribute-packages:
  - liquid-prelude
  - liquid-vector
  - liquidhaskell
+ - liquidhaskell-boot
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
@@ -3569,7 +3572,6 @@ dont-distribute-packages:
  - shady-gen
  - shady-graphics
  - shake-bindist
- - shake-futhark
  - shake-minify-css
  - shakebook
  - shaker
@@ -4034,6 +4036,7 @@ dont-distribute-packages:
  - universe-dependent-sum
  - universe-th
  - unix-fcntl
+ - unleash-client-haskell
  - unpacked-these
  - unpacked-validation
  - unparse-attoparsec

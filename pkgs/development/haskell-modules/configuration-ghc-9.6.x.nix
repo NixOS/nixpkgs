@@ -65,7 +65,7 @@ self: super: {
   # Version deviations from Stackage LTS
   #
 
-  doctest = doDistribute super.doctest_0_22_1;
+  doctest = doDistribute super.doctest_0_22_2;
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
   some = doDistribute self.some_1_0_5;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
@@ -91,8 +91,8 @@ self: super: {
   # https://github.com/mokus0/th-extras/pull/21
   th-extras = doJailbreak super.th-extras;
 
-  ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
+  ghc-lib = doDistribute self.ghc-lib_9_6_3_20231014;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231014;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
   # Tests fail due to the newly-build fourmolu not being in PATH
