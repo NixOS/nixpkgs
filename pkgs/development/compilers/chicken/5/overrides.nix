@@ -68,7 +68,10 @@ in
   scheme2c-compatibility = old:
     addToNativeBuildInputs (lib.optionals (stdenv.system == "x86_64-darwin") [ pkgs.memorymappingHook ])
       (addPkgConfig old);
-  sdl-base = addToBuildInputs pkgs.SDL;
+  sdl-base = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL old) //
+      # needed for sdl-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL old));
   sdl2 = old:
     ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old) //
       # needed for sdl2-config to be in PATH
