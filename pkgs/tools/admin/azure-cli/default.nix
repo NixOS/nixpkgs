@@ -1,7 +1,5 @@
 { lib
-, stdenv
-, python3
-, fetchPypi
+, callPackage
 , fetchFromGitHub
 , installShellFiles
 }:
@@ -18,9 +16,7 @@ let
   };
 
   # put packages that needs to be overridden in the py package scope
-  py = import ./python-packages.nix {
-    inherit stdenv src version python3 fetchPypi;
-  };
+  py = callPackage ./python-packages.nix { inherit src version; };
 in
 
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {

@@ -364,6 +364,8 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
+  bloom = qt6Packages.callPackage ../development/tools/bloom { };
+
   bloodhound-py = callPackage ../tools/security/bloodhound-py { };
 
   bodyclose = callPackage ../development/tools/bodyclose { };
@@ -13247,7 +13249,7 @@ with pkgs;
   sixpair = callPackage ../tools/misc/sixpair { };
 
   sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Carbon CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
   };
 
   sketchybar-app-font = callPackage ../data/fonts/sketchybar-app-font { };
