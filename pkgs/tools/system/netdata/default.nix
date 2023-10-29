@@ -118,6 +118,10 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
+    # remove once https://github.com/netdata/netdata/pull/16300 merged
+    substituteInPlace $out/bin/netdata-claim.sh \
+      --replace /bin/echo echo
+
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
