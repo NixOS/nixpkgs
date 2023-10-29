@@ -227,6 +227,9 @@ in {
   sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ pythonForBuild.pkgs.sphinx installShellFiles ];
+      propagatedBuildInputs = [ installShellFiles ];
+      substitutions = {
+        sphinxBuild = "${pythonForBuild.pkgs.sphinx}/bin/sphinx-build";
+      };
     } ./sphinx-hook.sh) {};
 }

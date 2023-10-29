@@ -16,5 +16,7 @@ buildNodejs {
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
     ./trap-handler-backport.patch
+    # Fix for enum width error when compiling with clang 16.
+    ./enum-width-fix-backport.patch
   ];
 }

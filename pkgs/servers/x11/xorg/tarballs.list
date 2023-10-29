@@ -1,4 +1,4 @@
-https://invisible-mirror.net/archives/luit/luit-20190106.tgz
+https://invisible-mirror.net/archives/luit/luit-20230201.tgz
 mirror://xorg/individual/xcb/libpthread-stubs-0.5.tar.xz
 mirror://xorg/individual/xcb/xcb-util-0.4.1.tar.xz
 mirror://xorg/individual/xcb/xcb-util-cursor-0.1.4.tar.xz
@@ -74,7 +74,7 @@ mirror://xorg/individual/app/xwininfo-1.1.6.tar.xz
 mirror://xorg/individual/app/xwud-1.0.6.tar.xz
 mirror://xorg/individual/data/xbitmaps-1.1.3.tar.xz
 mirror://xorg/individual/data/xcursor-themes-1.0.7.tar.xz
-mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.39.tar.xz
+mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.40.tar.xz
 mirror://xorg/individual/doc/xorg-docs-1.7.2.tar.gz
 mirror://xorg/individual/doc/xorg-sgml-doctools-1.12.tar.gz
 mirror://xorg/individual/driver/xf86-input-evdev-2.10.6.tar.bz2
@@ -89,7 +89,7 @@ mirror://xorg/individual/driver/xf86-video-amdgpu-23.0.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-apm-1.3.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.6.tar.xz
 mirror://xorg/individual/driver/xf86-video-ast-1.1.6.tar.xz
-https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/archive/5eba006e4129e8015b822f9e1d2f1e613e252cda/xf86-video-ati-5eba006e4129e8015b822f9e1d2f1e613e252cda.tar.bz2
+mirror://xorg/individual/driver/xf86-video-ati-22.0.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-chips-1.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.6.0.tar.xz
 mirror://xorg/individual/driver/xf86-video-dummy-0.4.1.tar.xz
@@ -195,7 +195,7 @@ mirror://xorg/individual/lib/libXmu-1.1.4.tar.xz
 mirror://xorg/individual/lib/libXp-1.0.4.tar.xz
 mirror://xorg/individual/lib/libXpm-3.5.17.tar.xz
 mirror://xorg/individual/lib/libXpresent-1.0.1.tar.xz
-mirror://xorg/individual/lib/libXrandr-1.5.3.tar.xz
+mirror://xorg/individual/lib/libXrandr-1.5.4.tar.xz
 mirror://xorg/individual/lib/libXrender-0.9.11.tar.xz
 mirror://xorg/individual/lib/libXres-1.2.2.tar.xz
 mirror://xorg/individual/lib/libXScrnSaver-1.2.4.tar.xz

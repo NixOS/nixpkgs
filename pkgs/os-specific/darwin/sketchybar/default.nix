@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , AppKit
+, Carbon
 , CoreAudio
 , CoreWLAN
 , CoreVideo
@@ -21,17 +22,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.17.1";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QilZurp4QkwOo4jbYXMs4SesqyXXsEgF8dDwt/Kv94s=";
+    hash = "sha256-GeFB+eE/NW9ZopwVSmSfMK3WiJLCJNXOdmQpYc3m8WE=";
   };
 
   buildInputs = [
     AppKit
+    Carbon
     CoreAudio
     CoreWLAN
     CoreVideo

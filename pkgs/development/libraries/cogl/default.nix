@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
     "--enable-wayland-egl-server"
     "--enable-gles1"
     "--enable-gles2"
+    # Force linking against libGL.
+    # Otherwise, it tries to load it from the runtime library path.
+    "LIBS=-lGL"
   ] ++ lib.optionals stdenv.isDarwin [
     "--disable-glx"
     "--without-x"

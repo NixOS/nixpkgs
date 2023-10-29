@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , mkDerivation
 , qtbase
-, qtquick1
 , qmltermwidget
 , qtquickcontrols2
 , qtgraphicaleffects
@@ -28,7 +27,6 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase
-    qtquick1
     qmltermwidget
     qtquickcontrols2
     qtgraphicaleffects

@@ -54,7 +54,8 @@ let
     LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-XChXujA2XpnkybrraN3FIJA/QkxLCfX97id2jMFzFJk=";
+      # FIXME: tensorflow is currently marked as broken, update the hash once it's fixed
+      sha256 = "sha256-0ChXujA2XpnkybrraN3FIJA/QkxLCfX97id2jMFzFJk=";
     };
 
     buildAttrs = {

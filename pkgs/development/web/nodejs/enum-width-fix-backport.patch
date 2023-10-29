@@ -1,0 +1,126 @@
+See https://github.com/v8/v8/commit/d15d49b09dc7aef9edcc4cf6a0cb2b77a0db203f.
+
+v8 doesn’t compile with clang 16 due to an error regarding integer values being outside the enum
+range. This is fixed in v8 upstream. This patch is a backport of the fix.
+
+Note that this patch is only needed for node.js v18. It is not needed for node v20.
+
+
+diff --git a/include/v8-internal.h b/include/v8-internal.h
+index a27f3a34480..5fb0f2ac16d 100644
+--- a/deps/v8/include/v8-internal.h
++++ b/deps/v8/include/v8-internal.h
+@@ -574,7 +574,7 @@ class Internals {
+ 
+   static const int kNodeClassIdOffset = 1 * kApiSystemPointerSize;
+   static const int kNodeFlagsOffset = 1 * kApiSystemPointerSize + 3;
+-  static const int kNodeStateMask = 0x7;
++  static const int kNodeStateMask = 0x3;
+   static const int kNodeStateIsWeakValue = 2;
+ 
+   static const int kFirstNonstringType = 0x80;
+diff --git a/src/ast/ast.h b/src/ast/ast.h
+index 32438f9b249..8473f7fb67e 100644
+--- a/deps/v8/src/ast/ast.h
++++ b/deps/v8/src/ast/ast.h
+@@ -1006,7 +1006,7 @@ class Literal final : public Expression {
+   friend class AstNodeFactory;
+   friend Zone;
+ 
+-  using TypeField = Expression::NextBitField<Type, 4>;
++  using TypeField = Expression::NextBitField<Type, 3>;
+ 
+   Literal(int smi, int position) : Expression(position, kLiteral), smi_(smi) {
+     bit_field_ = TypeField::update(bit_field_, kSmi);
+diff --git a/src/base/bit-field.h b/src/base/bit-field.h
+index 9a66468d4e0..ccfc23a065d 100644
+--- a/deps/v8/src/base/bit-field.h
++++ b/deps/v8/src/base/bit-field.h
+@@ -40,6 +40,11 @@ class BitField final {
+   static constexpr U kNumValues = U{1} << kSize;
+ 
+   // Value for the field with all bits set.
++  // If clang complains
++  // "constexpr variable 'kMax' must be initialized by a constant expression"
++  // on this line, then you're creating a BitField for an enum with more bits
++  // than needed for the enum values. Either reduce the BitField size,
++  // or give the enum an explicit underlying type.
+   static constexpr T kMax = static_cast<T>(kNumValues - 1);
+ 
+   template <class T2, int size2>
+diff --git a/src/compiler/backend/instruction-codes.h b/src/compiler/backend/instruction-codes.h
+index 1add351b422..2fe2cd1a74f 100644
+--- a/deps/v8/src/compiler/backend/instruction-codes.h
++++ b/deps/v8/src/compiler/backend/instruction-codes.h
+@@ -198,7 +198,7 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
+   V(None)                       \
+   TARGET_ADDRESSING_MODE_LIST(V)
+ 
+-enum AddressingMode {
++enum AddressingMode : uint8_t {
+ #define DECLARE_ADDRESSING_MODE(Name) kMode_##Name,
+   ADDRESSING_MODE_LIST(DECLARE_ADDRESSING_MODE)
+ #undef DECLARE_ADDRESSING_MODE
+@@ -309,7 +309,7 @@ using MiscField = base::BitField<int, 22, 10>;
+ // LaneSizeField and AccessModeField are helper types to encode/decode a lane
+ // size, an access mode, or both inside the overlapping MiscField.
+ using LaneSizeField = base::BitField<int, 22, 8>;
+-using AccessModeField = base::BitField<MemoryAccessMode, 30, 2>;
++using AccessModeField = base::BitField<MemoryAccessMode, 30, 1>;
+ // TODO(turbofan): {HasMemoryAccessMode} is currently only used to guard
+ // decoding (in CodeGenerator and InstructionScheduler). Encoding (in
+ // InstructionSelector) is not yet guarded. There are in fact instructions for
+diff --git a/src/compiler/backend/instruction.h b/src/compiler/backend/instruction.h
+index bed43dc6363..64b9063bcf8 100644
+--- a/deps/v8/src/compiler/backend/instruction.h
++++ b/deps/v8/src/compiler/backend/instruction.h
+@@ -591,8 +591,8 @@ class LocationOperand : public InstructionOperand {
+   }
+ 
+   STATIC_ASSERT(KindField::kSize == 3);
+-  using LocationKindField = base::BitField64<LocationKind, 3, 2>;
+-  using RepresentationField = base::BitField64<MachineRepresentation, 5, 8>;
++  using LocationKindField = base::BitField64<LocationKind, 3, 1>;
++  using RepresentationField = LocationKindField::Next<MachineRepresentation, 8>;
+   using IndexField = base::BitField64<int32_t, 35, 29>;
+ };
+ 
+diff --git a/src/handles/global-handles.cc b/src/handles/global-handles.cc
+index 536059f3115..ae9e70b3a85 100644
+--- a/deps/v8/src/handles/global-handles.cc
++++ b/deps/v8/src/handles/global-handles.cc
+@@ -652,7 +652,7 @@ class GlobalHandles::Node final : public NodeBase<GlobalHandles::Node> {
+ 
+   // This stores three flags (independent, partially_dependent and
+   // in_young_list) and a State.
+-  using NodeState = base::BitField8<State, 0, 3>;
++  using NodeState = base::BitField8<State, 0, 2>;
+   using IsInYoungList = NodeState::Next<bool, 1>;
+   using NodeWeaknessType = IsInYoungList::Next<WeaknessType, 2>;
+ 
+diff --git a/src/maglev/maglev-ir.h b/src/maglev/maglev-ir.h
+index 95aadfb5e14..f07f9fecf8c 100644
+--- a/deps/v8/src/maglev/maglev-ir.h
++++ b/deps/v8/src/maglev/maglev-ir.h
+@@ -315,7 +315,7 @@ class OpProperties {
+     return kNeedsRegisterSnapshotBit::decode(bitfield_);
+   }
+   constexpr bool is_pure() const {
+-    return (bitfield_ | kPureMask) == kPureValue;
++    return (bitfield_ & kPureMask) == kPureValue;
+   }
+   constexpr bool is_required_when_unused() const {
+     return can_write() || non_memory_side_effects();
+diff --git a/src/wasm/wasm-code-manager.h b/src/wasm/wasm-code-manager.h
+index f8329424777..81c7cce62e8 100644
+--- a/deps/v8/src/wasm/wasm-code-manager.h
++++ b/deps/v8/src/wasm/wasm-code-manager.h
+@@ -487,7 +487,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
+   int trap_handler_index_ = -1;
+ 
+   // Bits encoded in {flags_}:
+-  using KindField = base::BitField8<Kind, 0, 3>;
++  using KindField = base::BitField8<Kind, 0, 2>;
+   using ExecutionTierField = KindField::Next<ExecutionTier, 2>;
+   using ForDebuggingField = ExecutionTierField::Next<ForDebugging, 2>;
+ 

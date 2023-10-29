@@ -2,7 +2,7 @@
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages_15, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages_16, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
@@ -64,7 +64,6 @@
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
-, libclc
 , jdupes
 , rustc
 , rust-bindgen
@@ -95,7 +94,7 @@ let
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
-  llvmPackages = llvmPackages_15;
+  llvmPackages = llvmPackages_16;
   # Align all the Mesa versions used. Required to prevent explosions when
   # two different LLVMs are loaded in the same process.
   # FIXME: these should really go into some sort of versioned LLVM package set
@@ -223,9 +222,10 @@ self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
     zstd libunwind
+    python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
+    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
@@ -319,6 +319,9 @@ self = stdenv.mkDerivation {
         mv $dev/$pc $driversdev/$pc
       fi
     done
+
+    # Don't depend on build python
+    patchShebangs --host --update $out/bin/*
 
     # NAR doesn't support hard links, so convert them to symlinks to save space.
     jdupes --hard-links --link-soft --recurse "$drivers"

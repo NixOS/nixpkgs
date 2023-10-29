@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, autoreconfHook
 , gnutls, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
@@ -14,6 +14,15 @@ stdenv.mkDerivation rec {
     rev = "release-${version}";
     sha256 = "sha256-ErjFfSJDIgZq0qy0Zn5uZ9bZS2AtJq4FuBVuUuQgPTI=";
   };
+
+  patches = [
+    # Fixes build errors clang 16 because `std::unary_function` and `std::binary_function`
+    # were removed in C++17, which is the default with clang 16.
+    (fetchpatch {
+      url = "https://github.com/aria2/aria2/commit/8956c58d126a4e57e114f69ba6a5961724b7a817.patch";
+      hash = "sha256-bwcR0YHlkxUdz1AKHq1m2bYI9vDVMv4x3WPsR8QEHtk=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];

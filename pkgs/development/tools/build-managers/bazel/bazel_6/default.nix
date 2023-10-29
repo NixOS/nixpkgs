@@ -25,12 +25,12 @@
 }:
 
 let
-  version = "6.3.2";
+  version = "6.4.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-jNf+rFgZO+K8ukUbpmiKRoJNN8pjWf9Y4NROuY8EKUg=";
+    hash = "sha256-vYj/YCyLuynugroqaxKtCS1R7GaMZXf5Yo8Y5I/05R4=";
   };
 
   # Update with
@@ -330,6 +330,8 @@ stdenv.mkDerivation rec {
     installPhase = ''
       runHook preInstall
 
+      # prevent bazel version check failing in the updater
+      rm .bazelversion
       cp -r . "$out"
 
       runHook postInstall

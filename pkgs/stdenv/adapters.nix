@@ -60,12 +60,13 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else (mkDerivationSuper args).overrideAttrs(finalAttrs: {
-        NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "") + " -static";
-      } // lib.optionalAttrs (!(finalAttrs.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (finalAttrs.configureFlags or []) ++ [
-            "--disable-shared" # brrr...
-          ];
+      else (mkDerivationSuper args).overrideAttrs (args: {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+        configureFlags = (args.configureFlags or []) ++ [
+          "--disable-shared" # brrr...
+        ];
+        cmakeFlags = (args.cmakeFlags or []) ++ ["-DCMAKE_SKIP_INSTALL_RPATH=On"];
       }));
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
@@ -244,5 +245,104 @@ rec {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}"; };
       });
+    });
+
+  # Overriding the SDK changes the Darwin SDK used to build the package, which:
+  # * Ensures that the compiler and bintools have the correct Libsystem version; and
+  # * Replaces any SDK references with those in the SDK corresponding to the requested SDK version.
+  #
+  # `sdkVersion` can be any of the following:
+  # * A version string indicating the requested SDK version; or
+  # * An attrset consisting of either or both of the following fields: darwinSdkVersion and darwinMinVersion.
+  overrideSDK = stdenv: sdkVersion:
+    let
+      inherit (
+        { inherit (stdenv.hostPlatform) darwinMinVersion darwinSdkVersion; }
+        // (if lib.isAttrs sdkVersion then sdkVersion else { darwinSdkVersion = sdkVersion; })
+      ) darwinMinVersion darwinSdkVersion;
+
+      sdk = pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
+
+      isSDKFramework = pkg: lib.hasPrefix "apple-framework-" (lib.getName pkg);
+
+      replacePropagatedFrameworks = pkg:
+        let
+          propagatedFrameworks = lib.filter isSDKFramework pkg.propagatedBuildInputs;
+          env = {
+            inherit (pkg) outputs;
+            # Map the old frameworks to new and the package’s outputs to their original outPaths.
+            # The mappings are rendered into tab-separated files to be read back with `read`.
+            frameworks = lib.concatMapStrings (pkg: "${pkg}\t${mapPackageToSDK pkg}\n") propagatedFrameworks;
+            pkgOutputs = lib.concatMapStrings (output: "${output}\t${(lib.getOutput output pkg).outPath}\n") pkg.outputs;
+            passAsFile = [ "frameworks" "pkgOutputs" ];
+          };
+        in
+        if lib.length propagatedFrameworks > 0
+          then pkgs.runCommand pkg.name env ''
+            # Iterate over the outputs in the package being replaced to make sure the proxy is
+            # a fully functional replacement. This is like `symlinkJoin` except for outputs and
+            # the contents of `nix-support`, which will be customized for the requested SDK.
+            while IFS=$'\t\n' read -r outputName pkgOutputPath; do
+              mkdir -p "''${!outputName}"
+
+              for targetPath in "$pkgOutputPath"/*; do
+                targetName=$(basename "$targetPath")
+
+                # `nix-support` is special-cased because any propagated inputs need their SDK
+                # frameworks replaced with those from the requested SDK.
+                if [ "$targetName" == "nix-support" ]; then
+                  mkdir "''${!outputName}/nix-support"
+
+                  for file in "$targetPath"/*; do
+                    fileName=$(basename "$file")
+
+                    if [ "$fileName" == "propagated-build-inputs" ]; then
+                      cp "$file" "''${!outputName}/nix-support/$fileName"
+
+                      while IFS=$'\t\n' read -r oldFramework newFramework; do
+                        substituteInPlace "''${!outputName}/nix-support/$fileName" \
+                          --replace "$oldFramework" "$newFramework"
+                      done < "$frameworksPath"
+                    fi
+                  done
+                else
+                  ln -s "$targetPath" "''${!outputName}/$targetName"
+                fi
+              done
+            done < "$pkgOutputsPath"
+          ''
+        else pkg;
+
+      # Remap a framework from one SDK version to another.
+      mapPackageToSDK = pkg:
+        let
+          name = lib.getName pkg;
+          framework = lib.removePrefix "apple-framework-" name;
+        in
+        if isSDKFramework pkg
+          then sdk.frameworks."${framework}"
+          else replacePropagatedFrameworks pkg;
+
+      mapInputsToSDK = inputs: args:
+        lib.genAttrs inputs (input: map mapPackageToSDK (args."${input}" or [ ]));
+
+      mkCC = cc: cc.override {
+        bintools = cc.bintools.override { libc = sdk.Libsystem; };
+        libc = sdk.Libsystem;
+      };
+    in
+    # TODO: make this work across all input types and not just propagatedBuildInputs
+    stdenv.override (old: {
+      buildPlatform = old.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+      hostPlatform = old.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+      targetPlatform = old.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+
+      allowedRequisites = null;
+      cc = mkCC old.cc;
+
+      extraBuildInputs = [sdk.frameworks.CoreFoundation ];
+      mkDerivationFromStdenv = extendMkDerivationArgs old (mapInputsToSDK [
+        "buildInputs"
+      ]);
     });
 }

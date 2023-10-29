@@ -81,7 +81,7 @@ in buildFHSEnv rec {
     xorg.libXfixes
     libGL
     libva
-    pipewire.lib
+    pipewire
 
     # steamwebhelper
     harfbuzz

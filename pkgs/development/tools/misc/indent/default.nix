@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ texinfo ];
   buildInputs = [ libintl ];
-  pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-implicit-function-declaration"

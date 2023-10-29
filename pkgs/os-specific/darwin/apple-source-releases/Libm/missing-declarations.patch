@@ -1,0 +1,292 @@
+--- a/Source/Intel/math.h	2023-10-20 09:43:42.640416006 -0400
++++ b/Source/Intel/math.h	2023-10-20 09:47:59.743127003 -0400
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2002 Apple Computer, Inc. All rights reserved.
++ * Copyright (c) 2002-2015 Apple Inc. All rights reserved.
+  *
+  * @APPLE_LICENSE_HEADER_START@
+  * 
+@@ -27,14 +27,17 @@
+ *     Contains: typedefs, prototypes, and macros germane to C99 floating point.*
+ *                                                                              *
+ *******************************************************************************/
++#ifndef __MATH_H__
++#define __MATH_H__
++
+ #ifndef __MATH__
+ #define __MATH__
++#endif
+ 
+-#include <sys/cdefs.h> /* For definition of __DARWIN_UNIX03 et al */
++#include <sys/cdefs.h>
++#include <Availability.h>
+ 
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
++__BEGIN_DECLS
+ 
+ /******************************************************************************
+ *       Floating point data types                                             *
+@@ -87,14 +90,26 @@
+ #define FP_SUBNORMAL    5
+ #define FP_SUPERNORMAL  6 /* meaningful only on PowerPC */
+ 
+-/* fma() *function call* is more costly than equivalent (in-line) multiply and add operations    */
+-/* For single and double precision, the cost isn't too bad, because we can fall back on higher   */
+-/* precision hardware, with the necessary range to handle infinite precision products. However,  */
+-/* expect the long double fma to be at least an order of magnitude slower than a simple multiply */
+-/* and an add.                                                                                   */
+-#undef FP_FAST_FMA
+-#undef FP_FAST_FMAF
+-#undef FP_FAST_FMAL
++#if defined __arm64__ || defined __ARM_VFPV4__
++/*  On these architectures, fma(), fmaf( ), and fmal( ) are generally about as
++    fast as (or faster than) separate multiply and add of the same operands.  */
++#   define FP_FAST_FMA     1
++#   define FP_FAST_FMAF    1
++#   define FP_FAST_FMAL    1
++#elif (defined __i386__ || defined __x86_64__) && (defined __FMA__)
++/*  When targeting the FMA ISA extension, fma() and fmaf( ) are generally
++    about as fast as (or faster than) separate multiply and add of the same
++    operands, but fmal( ) may be more costly.                                 */
++#   define FP_FAST_FMA     1
++#   define FP_FAST_FMAF    1
++#   undef  FP_FAST_FMAL
++#else
++/*  On these architectures, fma( ), fmaf( ), and fmal( ) function calls are
++    significantly more costly than separate multiply and add operations.      */
++#   undef  FP_FAST_FMA
++#   undef  FP_FAST_FMAF
++#   undef  FP_FAST_FMAL
++#endif
+ 
+ /* The values returned by `ilogb' for 0 and NaN respectively. */
+ #define FP_ILOGB0	(-2147483647 - 1)
+@@ -191,6 +206,23 @@
+ 	static __inline__  int __inline_isnormalf( float __x ) { float fabsf = __builtin_fabsf(__x); if( __x != __x ) return 0; return fabsf < __builtin_inff() && fabsf >= __FLT_MIN__; }  
+ 	static __inline__  int __inline_isnormald( double __x ) { double fabsf = __builtin_fabs(__x); if( __x != __x ) return 0; return fabsf < __builtin_inf() && fabsf >= __DBL_MIN__; }  
+ 	static __inline__  int __inline_isnormal( long double __x ) { long double fabsf = __builtin_fabsl(__x); if( __x != __x ) return 0; return fabsf < __builtin_infl() && fabsf >= __LDBL_MIN__; }  
++
++#if defined __i386__ || defined __x86_64__
++__header_always_inline int __inline_signbitl(long double __x) {
++    union {
++        long double __ld;
++        struct{ unsigned long long __m; unsigned short __sexp; } __p;
++    } __u;
++    __u.__ld = __x;
++    return (int)(__u.__p.__sexp >> 15);
++}
++#else
++__header_always_inline int __inline_signbitl(long double __x) {
++    union { long double __f; unsigned long long __u;} __u;
++    __u.__f = __x;
++    return (int)(__u.__u >> 63);
++}
++#endif
+ 	
+ #else
+ 
+@@ -509,7 +541,112 @@
+ extern long double  __infl( void );
+ extern float  		__nan( void ); /* 10.3 (and later) must retain in ABI for backward compatability */
+ 
+-#if !defined(_ANSI_SOURCE)
++
++/******************************************************************************
++ *  Apple extensions to the C standard                                        *
++ ******************************************************************************/
++
++/*  Because these functions are not specified by any relevant standard, they
++    are prefixed with __, which places them in the implementor's namespace, so
++    they should not conflict with any developer or third-party code.  If they
++    are added to a relevant standard in the future, un-prefixed names may be
++    added to the library and they may be moved out of this section of the
++    header.                                                                   
++ 
++    Because these functions are non-standard, they may not be available on non-
++    Apple platforms.                                                          */
++
++/*  __exp10(x) returns 10**x.  Edge cases match those of exp( ) and exp2( ).  */
++extern float __exp10f(float) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++extern double __exp10(double) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++
++/*  __sincos(x,sinp,cosp) computes the sine and cosine of x with a single
++    function call, storing the sine in the memory pointed to by sinp, and
++    the cosine in the memory pointed to by cosp. Edge cases match those of
++    separate calls to sin( ) and cos( ).                                      */
++__header_always_inline void __sincosf(float __x, float *__sinp, float *__cosp);
++__header_always_inline void __sincos(double __x, double *__sinp, double *__cosp);
++
++/*  __sinpi(x) returns the sine of pi times x; __cospi(x) and __tanpi(x) return
++    the cosine and tangent, respectively.  These functions can produce a more
++    accurate answer than expressions of the form sin(M_PI * x) because they
++    avoid any loss of precision that results from rounding the result of the
++    multiplication M_PI * x.  They may also be significantly more efficient in
++    some cases because the argument reduction for these functions is easier
++    to compute.  Consult the man pages for edge case details.                 */
++extern float __cospif(float) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++extern double __cospi(double) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++extern float __sinpif(float) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++extern double __sinpi(double) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++extern float __tanpif(float) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++extern double __tanpi(double) __OSX_AVAILABLE_STARTING(__MAC_10_9, __IPHONE_7_0);
++
++#if (defined __MAC_OS_X_VERSION_MIN_REQUIRED && __MAC_OS_X_VERSION_MIN_REQUIRED < 1090) || \
++    (defined __IPHONE_OS_VERSION_MIN_REQUIRED && __IPHONE_OS_VERSION_MIN_REQUIRED < 70000)
++/*  __sincos and __sincosf were introduced in OSX 10.9 and iOS 7.0.  When
++    targeting an older system, we simply split them up into discrete calls
++    to sin( ) and cos( ).                                                     */
++__header_always_inline void __sincosf(float __x, float *__sinp, float *__cosp) {
++  *__sinp = sinf(__x);
++  *__cosp = cosf(__x);
++}
++
++__header_always_inline void __sincos(double __x, double *__sinp, double *__cosp) {
++  *__sinp = sin(__x);
++  *__cosp = cos(__x);
++}
++#else
++/*  __sincospi(x,sinp,cosp) computes the sine and cosine of pi times x with a
++    single function call, storing the sine in the memory pointed to by sinp,
++    and the cosine in the memory pointed to by cosp.  Edge cases match those
++    of separate calls to __sinpi( ) and __cospi( ), and are documented in the
++    man pages.
++ 
++    These functions were introduced in OSX 10.9 and iOS 7.0.  Because they are
++    implemented as header inlines, weak-linking does not function as normal,
++    and they are simply hidden when targeting earlier OS versions.            */
++__header_always_inline void __sincospif(float __x, float *__sinp, float *__cosp);
++__header_always_inline void __sincospi(double __x, double *__sinp, double *__cosp);
++
++/*  Implementation details of __sincos and __sincospi allowing them to return
++    two results while allowing the compiler to optimize away unnecessary load-
++    store traffic.  Although these interfaces are exposed in the math.h header
++    to allow compilers to generate better code, users should call __sincos[f]
++    and __sincospi[f] instead and allow the compiler to emit these calls.     */
++struct __float2 { float __sinval; float __cosval; };
++struct __double2 { double __sinval; double __cosval; };
++
++extern struct __float2 __sincosf_stret(float);
++extern struct __double2 __sincos_stret(double);
++extern struct __float2 __sincospif_stret(float);
++extern struct __double2 __sincospi_stret(double);
++
++__header_always_inline void __sincosf(float __x, float *__sinp, float *__cosp) {
++    const struct __float2 __stret = __sincosf_stret(__x);
++    *__sinp = __stret.__sinval; *__cosp = __stret.__cosval;
++}
++
++__header_always_inline void __sincos(double __x, double *__sinp, double *__cosp) {
++    const struct __double2 __stret = __sincos_stret(__x);
++    *__sinp = __stret.__sinval; *__cosp = __stret.__cosval;
++}
++
++__header_always_inline void __sincospif(float __x, float *__sinp, float *__cosp) {
++    const struct __float2 __stret = __sincospif_stret(__x);
++    *__sinp = __stret.__sinval; *__cosp = __stret.__cosval;
++}
++
++__header_always_inline void __sincospi(double __x, double *__sinp, double *__cosp) {
++    const struct __double2 __stret = __sincospi_stret(__x);
++    *__sinp = __stret.__sinval; *__cosp = __stret.__cosval;
++}
++#endif
++
++/******************************************************************************
++ *  POSIX/UNIX extensions to the C standard                                   *
++ ******************************************************************************/
++
++#if __DARWIN_C_LEVEL >= 199506L
+ extern double j0 ( double );
+ 
+ extern double j1 ( double );
+@@ -543,14 +680,32 @@
+ extern int signgam;     /* required for unix 2003 */
+ 
+ 
+-#endif /* !defined(_ANSI_SOURCE) */
++#endif /* __DARWIN_C_LEVEL >= 199506L */
+ 
+-#if !defined(__NOEXTENSIONS__) && (!defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE))
+-#define __WANT_EXTENSIONS__
+-#endif
++/*  Long-double versions of M_E, etc for convenience on Intel where long-
++    double is not the same as double.  Define __MATH_LONG_DOUBLE_CONSTANTS
++    to make these constants available.                                        */
++#if defined __MATH_LONG_DOUBLE_CONSTANTS
++#define M_El        0xa.df85458a2bb4a9bp-2L
++#define M_LOG2El    0xb.8aa3b295c17f0bcp-3L
++#define M_LOG10El   0xd.e5bd8a937287195p-5L
++#define M_LN2l      0xb.17217f7d1cf79acp-4L
++#define M_LN10l     0x9.35d8dddaaa8ac17p-2L
++#define M_PIl       0xc.90fdaa22168c235p-2L
++#define M_PI_2l     0xc.90fdaa22168c235p-3L
++#define M_PI_4l     0xc.90fdaa22168c235p-4L
++#define M_1_PIl     0xa.2f9836e4e44152ap-5L
++#define M_2_PIl     0xa.2f9836e4e44152ap-4L
++#define M_2_SQRTPIl 0x9.06eba8214db688dp-3L
++#define M_SQRT2l    0xb.504f333f9de6484p-3L
++#define M_SQRT1_2l  0xb.504f333f9de6484p-4L
++#endif /* defined __MATH_LONG_DOUBLE_CONSTANTS */
+ 
+-#ifdef __WANT_EXTENSIONS__
++/******************************************************************************
++ *  Legacy BSD extensions to the C standard                                   *
++ ******************************************************************************/
+ 
++#if __DARWIN_C_LEVEL >= __DARWIN_C_FULL
+ #define FP_SNAN		FP_NAN
+ #define FP_QNAN		FP_NAN
+ 
+@@ -560,11 +715,6 @@
+ /* Legacy API: please use C99 lround() instead. */
+ extern long int roundtol ( double );
+ 
+-/*
+- * XOPEN/SVID
+- */
+-#if !defined(_ANSI_SOURCE) && (!defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE))
+-#if (!defined(_XOPEN_SOURCE) || defined(_DARWIN_C_SOURCE))
+ #if !defined(__cplusplus)
+ /* used by matherr below */
+ struct exception {
+@@ -592,19 +742,12 @@
+ #define	TLOSS		5
+ #define	PLOSS		6
+ 
+-#endif /* (!_XOPEN_SOURCE || _DARWIN_C_SOURCE) */
+-#endif /* !_ANSI_SOURCE && (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
+-
+-#if !defined( __STRICT_ANSI__) && !defined(_ANSI_SOURCE) && (!defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE))
+-    
+ /* Legacy API: please use C99 isfinite() instead. */
+ extern int finite ( double );
+     
+ /* Legacy API: please use C99 tgamma() instead. */
+ extern double gamma ( double );
+ 
+-#if (!defined(_XOPEN_SOURCE) || defined(_DARWIN_C_SOURCE))
+-
+ #if !defined(__cplusplus)
+ extern int matherr ( struct exception * );
+ #endif
+@@ -633,14 +776,8 @@
+ 	extern double lgamma_r ( double, int * ) AVAILABLE_MAC_OS_X_VERSION_10_6_AND_LATER;
+ 	extern long double lgammal_r ( long double, int * ) AVAILABLE_MAC_OS_X_VERSION_10_6_AND_LATER;
+ #endif /* _REENTRANT */
+-	
+-#endif /* (!_XOPEN_SOURCE || _DARWIN_C_SOURCE) */
+-#endif /* !_ANSI_SOURCE && (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
+-
+-#endif /* __WANT_EXTENSIONS__ */
+ 
+-#ifdef __cplusplus
+-}
+-#endif
++#endif /* __DARWIN_C_LEVEL >= __DARWIN_C_FULL */
+ 
+-#endif /* __MATH__ */
++__END_DECLS
++#endif /* __MATH_H__ */
