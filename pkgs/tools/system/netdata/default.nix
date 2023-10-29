@@ -13,6 +13,7 @@
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
+, withSystemdJournal ? (!stdenv.isDarwin), systemd
 , withDebug ? false
 }:
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ lib.optionals withConnPrometheus [ snappy ]
     ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
+    ++ lib.optionals withSystemdJournal [ systemd ]
     ++ lib.optionals withSsl [ openssl ];
 
   patches = [
@@ -93,6 +95,10 @@ stdenv.mkDerivation rec {
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+    ${lib.optionalString withSystemdJournal ''
+      mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+         $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+    ''}
     ${lib.optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
@@ -109,6 +115,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
+  ] ++ lib.optionals (withSystemdJournal) [
+    "--enable-plugin-systemd-journal"
   ] ++ lib.optionals (!withDBengine) [
     "--disable-dbengine"
   ] ++ lib.optionals (!withCloud) [
