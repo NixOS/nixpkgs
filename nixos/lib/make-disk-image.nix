@@ -311,7 +311,7 @@ let format' = format; in let
       config.system.build.nixos-install
       config.system.build.nixos-enter
       nix
-      systemdMinimal
+      systemd
     ]
     ++ lib.optional deterministic gptfdisk
     ++ stdenv.initialPath);
