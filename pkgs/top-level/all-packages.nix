@@ -12391,8 +12391,6 @@ with pkgs;
 
   pypass = with python3Packages; toPythonApplication pypass;
 
-  pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
-
   teapot = callPackage ../applications/office/teapot { };
 
   ticktick = callPackage ../applications/office/ticktick { };
