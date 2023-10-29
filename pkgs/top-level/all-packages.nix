@@ -5139,6 +5139,8 @@ with pkgs;
 
   dtools = callPackage ../development/tools/dtools { };
 
+  dlang-dfmt = callPackage ../development/tools/misc/dlang-dfmt { };
+
   dwt1-shell-color-scripts = callPackage ../tools/misc/dwt1-shell-color-scripts { };
 
   dtrx = callPackage ../tools/compression/dtrx { };
