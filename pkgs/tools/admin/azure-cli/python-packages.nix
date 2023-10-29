@@ -1,6 +1,7 @@
 { stdenv
 , python3
 , fetchPypi
+, fetchpatch
 , src
 , version
 }:
@@ -27,6 +28,20 @@ let
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
         inherit version src;
+
+        patches = [
+          (fetchpatch {
+            name = "fix-python311.patch";
+            url = "https://github.com/Azure/azure-cli/commit/a5198b578b17de934e15b1c92e369e45323e9658.patch";
+            hash = "sha256-qbyKF6Vvtz8QwY78sG7ptTVcbM2IR+phntOKqsrWetE=";
+            stripLen = 2;
+            includes = [
+              "azure/cli/core/tests/test_command_registration.py"
+              "azure/cli/core/tests/test_help.py"
+              "azure/cli/core/tests/test_parser.py"
+            ];
+          })
+        ];
 
         sourceRoot = "${src.name}/src/azure-cli-core";
 
