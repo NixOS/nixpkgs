@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchFromGitLab {
     owner = "azelpg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/shmLdZ4mCBZAeUuqJtCiUjeI8B5f/8dIGPqmXMjZ1I=";
+    hash = "sha256-RlsiN9pefpTYUh4M8j4Ty/Ipi9StoVcNcICd7QDirhI=";
   };
 
   nativeBuildInputs = [
