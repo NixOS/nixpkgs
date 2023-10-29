@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nodejs
 , nixosTests
+, ...
 }:
 
 let
