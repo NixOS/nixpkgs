@@ -798,7 +798,7 @@ def update_plugins(editor: Editor, args):
                    f"{editor.attr_path}: updated the {updated}", [args.outfile]
                    )
         except git.InvalidGitRepositoryError as e:
-            print("Not in a git repository:", e)
+            print(f"Not in a git repository: {e}", file=sys.stderr)
             sys.exit(1)
 
     if redirects:
