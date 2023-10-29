@@ -27,20 +27,13 @@ let stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "v${version}";
-    sha256 = "sha256-36njngcGmRtYh/U3wkZUAU6ivPQ8qP8zVj1JzI9TuDY=";
-
-    # The source contains both test/end-to-end/targets and
-    # test/end-to-end/TARGETS, causing issues on case-insensitive filesystems.
-    # Remove them, since we're not running end-to-end tests.
-    postFetch = ''
-      rm -rf $out/test/end-to-end/targets $out/test/end-to-end/TARGETS
-    '';
+    sha256 = "sha256-2gW/GCGc1+0znJ1UqoJJ/rTAOciSZGuEymTWgYyrOTk=";
   };
 
   bazelapi = fetchurl {
@@ -142,7 +135,7 @@ stdenv.mkDerivation rec {
     # Bootstrap just
     export PACKAGE=YES
     export NON_LOCAL_DEPS='[ "google_apis", "bazel_remote_apis" ]'
-    export JUST_BUILD_CONF=`echo $PATH | jq -R '{ ENV: { PATH: . }, "ADD_CFLAGS": ["-Wno-error=pedantic"], "ADD_CXXFLAGS": ["-Wno-error=pedantic", "-D__unix__", "-DFMT_HEADER_ONLY"], "ARCH": "'$(uname -m)'" }'`
+    export JUST_BUILD_CONF=`echo $PATH | jq -R '{ ENV: { PATH: . }, "ADD_CXXFLAGS": ["-D__unix__", "-DFMT_HEADER_ONLY"], "ARCH": "'$(uname -m)'" }'`
 
     mkdir ../build
     python3 ./bin/bootstrap.py `pwd` ../build "`pwd`/.distfiles"
