@@ -6,7 +6,7 @@
 , pythonOlder
 , substituteAll
 , cython
-, pytestCheckHook
+, pytestCheckXfailHook
 , mock
 , certifi
 , numpy
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytestCheckXfailHook
     mock
     numpy
     shapely
@@ -63,25 +63,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # The following tests try to access network and end up with a URLError
-    "test__load_grid_geojson_old_file"
-    "test_get_transform_grid_list"
-    "test_get_transform_grid_list__area_of_use"
-    "test_get_transform_grid_list__bbox__antimeridian"
-    "test_get_transform_grid_list__bbox__out_of_bounds"
-    "test_get_transform_grid_list__contains"
-    "test_get_transform_grid_list__file"
-    "test_get_transform_grid_list__source_id"
+    # Runs shell command 'sync' which requires network
     "test_sync__area_of_use__list"
     "test_sync__bbox__list"
     "test_sync__bbox__list__exclude_world_coverage"
-    "test_sync__download_grids"
     "test_sync__file__list"
     "test_sync__source_id__list"
-    "test_sync_download"
-    "test_sync_download__directory"
-    "test_sync_download__system_directory"
-    "test_transformer_group__download_grids"
   ];
 
   pythonImportsCheck = [
