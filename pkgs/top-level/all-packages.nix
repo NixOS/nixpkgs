@@ -3991,7 +3991,9 @@ with pkgs;
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
-  livebook = callPackage ../servers/web-apps/livebook { };
+  livebook = callPackage ../servers/web-apps/livebook {
+    elixir = elixir_1_15;
+  };
 
   lsix = callPackage ../tools/graphics/lsix { };
 
