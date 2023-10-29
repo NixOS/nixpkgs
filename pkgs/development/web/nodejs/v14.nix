@@ -1,4 +1,4 @@
-{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python3, enableNpm ? true }:
+{ callPackage, lib, overrideCC, pkgs, buildPackages, openssl, python310, enableNpm ? true }:
 
 let
   # Clang 16+ cannot build Node v14 due to -Wenum-constexpr-conversion errors.
@@ -12,7 +12,7 @@ let
     inherit openssl;
     stdenv = ensureCompatibleCC pkgs;
     buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
-    python = python3;
+    python = python310;
   };
 in
   buildNodejs {
