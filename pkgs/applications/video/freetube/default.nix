@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_22 }:
+{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_27 }:
 
 stdenv.mkDerivation rec {
   pname = "freetube";
@@ -35,9 +35,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # Electron version is set to 22 in order to match upstream
   postFixup = ''
-    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_27}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar
   '';
 
@@ -46,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://freetubeapp.io/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ryneeverett alyaeanyx ];
-    inherit (electron_22.meta) platforms;
+    inherit (electron_27.meta) platforms;
   };
 }
