@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "2.0.32";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-Uwgtex0MWC/pOmEr8itHMIa4wxd97c/tsTzcLgV8D0I=";
+    hash = "sha256-/lj1UFQ+73LyBA35G0r/HDPAQy0rTVZ0TxUjjzrJ7Cg=";
   };
 
   nativeBuildInputs = [
