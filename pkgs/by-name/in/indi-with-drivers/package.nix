@@ -1,7 +1,8 @@
-{ buildEnv, makeBinaryWrapper, indilib ? indilib, pname ? "indi-with-drivers", version ? null, extraDrivers ? null }:
+{ buildEnv, makeBinaryWrapper, indilib ? indilib, pname ? "indi-with-drivers", version ? indilib.version, extraDrivers ? [] }:
 
 buildEnv {
   name = "${pname}-${version}";
+
   paths = [
     indilib
   ]
