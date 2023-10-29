@@ -92,6 +92,8 @@ let self = rec {
 
   steam-library = callPackage ../applications/video/kodi/addons/steam-library { };
 
+  somafm = callPackage ../applications/video/kodi/addons/somafm { };
+
   pdfreader = callPackage ../applications/video/kodi/addons/pdfreader { };
 
   pvr-hts = callPackage ../applications/video/kodi/addons/pvr-hts { };
