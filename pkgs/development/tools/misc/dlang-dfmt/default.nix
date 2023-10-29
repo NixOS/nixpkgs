@@ -1,5 +1,14 @@
-{ pkgs, dcompiler ? pkgs.ldc, fetchFromGitHub }:
-with (import ./mkDub.nix { inherit pkgs dcompiler; });
+{ pkgs
+, dcompiler ? pkgs.ldc
+, fetchFromGitHub 
+, makeWrapper
+, cacert
+, nix-prefetch-git
+, stdenv
+, lib
+}:
+with (import ./mkDub.nix { inherit dcompiler; });
+
 mkDubDerivation {
   src = fetchFromGitHub {
     owner = "dlang-community";
@@ -7,9 +16,9 @@ mkDubDerivation {
     rev = "v0.15.0";
     hash = "sha256-JC/6XZxMT/2JY14SkrTBntlO5gPhteZN+k112DKrCIc=";
   };
-  buildInputs = [ pkgs.makeWrapper pkgs.cacert pkgs.nix-prefetch-git ];
+  buildInputs = [ makeWrapper cacert nix-prefetch-git ];
   postFixup = ''
-    wrapProgram $out/bin/dfmt --prefix PATH : ${pkgs.nix-prefetch-git}/bin
+    wrapProgram $out/bin/dfmt --prefix PATH : ${nix-prefetch-git}/bin
   '';
   deps = [{
     fetch = {
@@ -25,7 +34,7 @@ mkDubDerivation {
     };
   }];
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dlang-community/dfmt";
   };
 

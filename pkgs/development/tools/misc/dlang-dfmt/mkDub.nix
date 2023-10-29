@@ -1,6 +1,26 @@
-{ pkgs ? import <nixpkgs> { }, stdenv ? pkgs.stdenv, lib ? pkgs.lib
-, dtools ? pkgs.dtools or pkgs.rdmd, dmd ? pkgs.dmd, dcompiler ? dmd
-, dub ? pkgs.dub }:
+# { lib
+# , stdenv
+# , dtools
+# , dmd 
+# , dcompiler ? dmd
+# , dub 
+# , fetchgit
+# , removeReferencesTo
+# }:
+
+
+{ pkgs ? import <nixpkgs> { }
+, stdenv ? pkgs.stdenv
+, lib ? pkgs.lib
+, dtools ? pkgs.dtools or pkgs.rdmd
+, dmd ? pkgs.dmd
+, dcompiler ? dmd
+, dub ? pkgs.dub 
+, fetchgit ? pkgs.fetchgit
+, removeReferencesTo ? pkgs.removeReferencesTo
+}:
+
+
 
 let
   # Filter function to remove the .dub package folder from src
@@ -12,7 +32,7 @@ let
   rev-to-version = builtins.replaceStrings [ "v" "refs/tags/v" ] [ "" "" ];
 
   dep2src = dubDep:
-    pkgs.fetchgit { inherit (dubDep.fetch) url rev sha256 fetchSubmodules; };
+    fetchgit { inherit (dubDep.fetch) url rev sha256 fetchSubmodules; };
 
   # Fetch a dependency (source only for now)
   fromDub = dubDep:
@@ -29,13 +49,6 @@ let
         runHook postBuild
       '';
 
-      # outputs = [ "lib" ];
-
-      # installPhase = ''
-      #   runHook preInstall
-      #   mkdir -p $out/bin
-      #   runHook postInstall
-      # '';
     };
 
   # Adds a local package directory (e.g. a git repository) to Dub
@@ -82,11 +95,11 @@ in {
 
         pname = package.name;
 
-        nativeBuildInputs = [ dcompiler dtools dub pkgs.removeReferencesTo ]
+        nativeBuildInputs = [ dcompiler dtools dub removeReferencesTo ]
           ++ nativeBuildInputs;
         disallowedReferences = disallowedReferences deps;
 
-        passthru = passthru // { inherit dub dcompiler dtools pkgs; };
+        passthru = passthru // { inherit dub dcompiler dtools; };
 
         src = lib.cleanSourceWith {
           filter = filterDub;
