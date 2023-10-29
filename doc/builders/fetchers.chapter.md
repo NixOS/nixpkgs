@@ -10,7 +10,7 @@ The following table shows an overview of the differences:
 | Fetchers | Download | Output | Cache |
 |-|-|-|-|
 | `builtins.fetch*` | evaluation time | store path | `~/.cache/nix` |
-| `lib.fetch*` | build time | fixed output derivation | `/nix/store` |
+| `pkgs.fetch*` | build time | fixed output derivation | `/nix/store` |
 
 This significantly reduces the time needed to evaluate the entirety of Nixpkgs, and allows [Hydra](https://nixos.org/hydra) to retain sources used by Nixpkgs in the [public binary cache](https://cache.nixos.org).
 For these reasons, built-in fetchers are not allowed in Nixpkgs source code.
