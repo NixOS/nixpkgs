@@ -76,14 +76,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.4";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
+    hash = "sha256-tWUdSFr93plCuQkA8SE+GZeAyZcYPUoFd0sIOyEuobs=";
   };
 
   patches = [
@@ -93,13 +93,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
-    # lib_base: Add missing include for Qt 6.6
-    (fetchpatch {
-      url = "https://github.com/desktop-app/lib_base/commit/5ca91dbb811c84591780236abc31431e313faf39.patch";
-      stripLen = 1;
-      extraPrefix = "Telegram/lib_base/";
-      hash = "sha256-eZkyMnPaAmUFYXiCmPhLRTw2Xdx0lylY+UVOckCsiaA=";
     })
   ];
 
