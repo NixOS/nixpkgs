@@ -13,7 +13,7 @@
 , lvm2
 , mdadm
 , smartmontools
-, systemdMinimal
+, systemd
 , util-linux
 , btrfs-progs
 , dosfstools
@@ -42,7 +42,7 @@ let
     lvm2
     mdadm
     smartmontools
-    systemdMinimal
+    systemd
     util-linux
 
     btrfs-progs
