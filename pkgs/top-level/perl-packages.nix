@@ -28093,6 +28093,24 @@ with self; {
     };
   };
 
+  XMLEntities = buildPerlPackage {
+    pname = "XML-Entities";
+    version = "1.0002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIXTEASE/XML-Entities-1.0002.tar.gz";
+      hash = "sha256-wyqk8wlXPXZIqy5Bb2K2sgZS8q2c/T7sgv1REB/nMQ0=";
+    };
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    propagatedBuildInputs = [ LWP ];
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/download-entities.pl
+    '';
+    meta = {
+      description = "Mapping of XML entities to Unicode";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   XMLDOM = buildPerlPackage {
     pname = "XML-DOM";
     version = "1.46";
