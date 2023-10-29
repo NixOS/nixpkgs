@@ -12950,6 +12950,7 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.17.tar.gz";
       hash = "sha256-pfGoMCC8W13WwbVw9Ix1RuCo9/rBCgaHQLA5Ja2eFOg=";
     };
+    patches = [ ../development/perl-modules/IO-Tty-fix-makefile.patch ];
     doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
     meta = {
       description = "Low-level allocate a pseudo-Tty, import constants";
