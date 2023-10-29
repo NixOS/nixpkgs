@@ -103,7 +103,7 @@ let
         }
         ${# Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
           # about why to create a subdir for the workspace.
-          '' cp -r ${workspaceDir} wd && chmod u+w wd && cd wd ''
+          '' cp -r ${workspaceDir} wd && chmod ug+rw -R wd && cd wd ''
         }
         ${# run the actual test snippet
           bazelScript
@@ -131,6 +131,9 @@ let
         inherit Foundation;
         bazel = bazel_self;
         distDir = testsDistDir;
+        extraBazelArgs = ''
+          --noenable_bzlmod \
+        '';
       };
     in
     recurseIntoAttrs (
@@ -157,9 +160,8 @@ recurseIntoAttrs {
 
   # downstream packages using buildBazelPackage
   # fixed-output hashes of the fetch phase need to be spot-checked manually
-  # TODO
-  #downstream = recurseIntoAttrs ({
-  #  inherit bazel-watcher;
-  #});
+  downstream = recurseIntoAttrs ({
+    inherit bazel-watcher;
+  });
 }
 
