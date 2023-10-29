@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, stdenvNoCC
+, substituteAll
 
 # build
 , setuptools
@@ -27,6 +29,29 @@
 , pytestCheckHook
 }:
 
+let
+  paaCerts = stdenvNoCC.mkDerivation rec {
+    pname = "matter-server-paa-certificates";
+    version = "1.2.0.1";
+
+    src = fetchFromGitHub {
+      owner = "project-chip";
+      repo = "connectedhomeip";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-p3P0n5oKRasYz386K2bhN3QVfN6oFndFIUWLEUWB0ss=";
+    };
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp $src/credentials/development/paa-root-certs/* $out/
+
+      runHook postInstall
+    '';
+  };
+in
+
 buildPythonPackage rec {
   pname = "python-matter-server";
   version = "5.5.3";
@@ -40,6 +65,13 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-8daAABR5l8ZEX+PR4XrxRHlLllgnOVE4Q9yY/7UQXHw=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./link-paa-root-certs.patch;
+      paacerts = paaCerts;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
