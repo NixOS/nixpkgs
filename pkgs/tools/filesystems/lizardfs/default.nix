@@ -16,7 +16,7 @@
 , judy
 , pam
 , spdlog
-, systemdMinimal
+, systemdLibs
 , zlib # optional
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     db fuse asciidoc libxml2 libxslt docbook_xml_dtd_412 docbook_xsl
-    zlib boost judy pam spdlog python3 systemdMinimal
+    zlib boost judy pam spdlog python3 systemdLibs
   ];
 
   meta = with lib; {
