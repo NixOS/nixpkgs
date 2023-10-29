@@ -30,6 +30,7 @@
 , octave
 , opencv
 , python3
+, openmp ? null
 }:
 
 let blas64_ = blas64; in
@@ -179,6 +180,8 @@ stdenv.mkDerivation rec {
     which
   ];
 
+  buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
+
   depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
@@ -208,7 +211,9 @@ stdenv.mkDerivation rec {
     # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
     # https://github.com/xianyi/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
     MAKE_NB_JOBS = 0;
-  } // (lib.optionalAttrs singleThreaded {
+  } // (lib.optionalAttrs stdenv.cc.isClang {
+    LDFLAGS = "-L${lib.getLib buildPackages.gfortran.cc}/lib"; # contains `libgfortran.so`; building with clang needs this, gcc has it implicit
+  }) // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
     USE_LOCKING = true; # available with openblas >= 0.3.7
