@@ -40,7 +40,7 @@ else
           flatten_references_graph_arg=flatten_references_graph_arg.json
         fi
 
-        ${if debug then "DEBUG=True" else ""} \
+        ${lib.optionalString debug "DEBUG=True"} \
           flatten_references_graph "$flatten_references_graph_arg" > ''${outputs[out]}
       ''
     ;
