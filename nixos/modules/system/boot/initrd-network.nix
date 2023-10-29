@@ -138,7 +138,7 @@ in
         # Bring up all interfaces.
         for iface in ${dhcpIfShellExpr}; do
           echo "bringing up network interface $iface..."
-          ip link set "$iface" up && ifaces="$ifaces $iface"
+          ip link set dev "$iface" up && ifaces="$ifaces $iface"
         done
 
         # Acquire DHCP leases.
@@ -152,8 +152,8 @@ in
 
     boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
       for iface in $ifaces; do
-        ip address flush "$iface"
-        ip link set "$iface" down
+        ip address flush dev "$iface"
+        ip link set dev "$iface" down
       done
     '';
 
