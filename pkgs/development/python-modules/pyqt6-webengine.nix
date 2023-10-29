@@ -51,7 +51,6 @@ buildPythonPackage rec {
     pkg-config
     lndir
     sip
-    qtwebengine
     qmake
     pyqt-builder
   ];
