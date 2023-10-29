@@ -28756,8 +28756,14 @@ with pkgs;
       guiSupport = false;
     };
   };
-  systemdMinimal = systemd.override {
-    pname = "systemd-minimal";
+
+  # This derivation only contains libudev and libsystemd built with
+  # minimal dependencies. This is useful for breaking dependency loops
+  # with pkgs.systemd.
+  systemdLibs = systemd.override {
+    pname = "systemd-minimal-libs";
+    buildLibsOnly = true;
+
     withAcl = false;
     withAnalyze = false;
     withApparmor = false;
@@ -28795,10 +28801,6 @@ with pkgs;
     withUserDb = false;
     withUkify = false;
     withBootloader = false;
-  };
-  systemdLibs = systemdMinimal.override {
-    pname = "systemd-minimal-libs";
-    buildLibsOnly = true;
   };
 
   udev =
