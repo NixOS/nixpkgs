@@ -18303,6 +18303,22 @@ with self; {
     };
   };
 
+  NetCUPS = buildPerlPackage {
+    pname = "Net-CUPS";
+    version = "0.64";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NINE/Net-CUPS-0.64.tar.gz";
+      hash = "sha256-17x3/w9iv4dMhDxZDrEqgLvUR0mi+3Tb7URcNdDoWoU=";
+    };
+    buildInputs = [ pkgs.cups pkgs.cups-filters ];
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
+    meta = {
+      description = "Common Unix Printing System Interface";
+      homepage = "https://github.com/niner/perl-Net-CUPS";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetDBus = buildPerlPackage {
     pname = "Net-DBus";
     version = "1.2.0";
