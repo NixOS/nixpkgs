@@ -266,6 +266,11 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  patches = [
+    (if lib.versionAtLeast version "9.8"
+      then ./docs-sphinx-7-ghc98.patch
+      else ./docs-sphinx-7.patch )
+  ];
   postPatch = ''
     patchShebangs --build .
   '';
