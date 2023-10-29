@@ -11,14 +11,12 @@ runCommand "popularity-contest-layaring-pipeline.json" { inherit maxLayers; } ''
   usedLayers=1
 
   ${
-    if fromImage != null
-    then ''
+    lib.optionalString (fromImage != null) ''
       # subtract number of base image layers
       baseImageLayersCount=$(tar -xOf "${fromImage}" manifest.json | ${lib.getExe jq} '.[0].Layers | length')
 
       (( usedLayers += baseImageLayersCount ))
-    ''
-    else ""
+    '';
   }
 
   if ! (( $usedLayers < $maxLayers )); then
