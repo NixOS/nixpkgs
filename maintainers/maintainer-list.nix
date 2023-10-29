@@ -13604,6 +13604,11 @@
     githubId = 15645854;
     name = "Brad Christensen";
   };
+  paumr = {
+    github = "paumr";
+    name = "Michael Bergmeister";
+    githubId = 53442728;
+  };
   paveloom = {
     email = "paveloom@riseup.net";
     github = "paveloom";

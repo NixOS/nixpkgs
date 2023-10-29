@@ -22,6 +22,11 @@ buildGoModule {
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];
 
+  # Fix error: 'Caught SIGILL in blst_cgo_init'
+  # https://github.com/bnb-chain/bsc/issues/1521
+  CGO_CFLAGS = "-O -D__BLST_PORTABLE__";
+  CGO_CFLAGS_ALLOW = "-O -D__BLST_PORTABLE__";
+
   subPackages = [
     "cmd/erigon"
     "cmd/evm"

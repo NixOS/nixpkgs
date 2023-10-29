@@ -2,11 +2,11 @@
 , stdenv
 , fetchurl
 , autoreconfHook
+, disarchive
 , git
 , glibcLocales
 , guile
 , guile-avahi
-, guile-disarchive
 , guile-gcrypt
 , guile-git
 , guile-gnutls
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    disarchive
     git
     glibcLocales
     guile
     guile-avahi
-    guile-disarchive
     guile-gcrypt
     guile-git
     guile-gnutls
@@ -82,8 +82,8 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    disarchive
     guile-avahi
-    guile-disarchive
     guile-gcrypt
     guile-git
     guile-gnutls
