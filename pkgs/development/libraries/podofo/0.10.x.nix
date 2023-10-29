@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "podofo";
     repo = "podofo";
     rev = finalAttrs.version;
-    hash = "sha256-Y5dpx0otX14Jig/O/oq+Sfdcia1a0bhT/6k8nwg+k5o=";
+    hash = "sha256-BHTfidLn738f9kVIgzRTR4vY6fx5JPPtYNKvD7klyGw=";
   };
 
   outputs = [ "out" "dev" "lib" ];
