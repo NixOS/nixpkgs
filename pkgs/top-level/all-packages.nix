@@ -364,6 +364,8 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
+  bloom = qt6Packages.callPackage ../development/tools/bloom { };
+
   bloodhound-py = callPackage ../tools/security/bloodhound-py { };
 
   bodyclose = callPackage ../development/tools/bodyclose { };
