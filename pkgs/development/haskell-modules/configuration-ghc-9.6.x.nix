@@ -200,8 +200,8 @@ self: super: {
   hw-prim = dontCheck (doJailbreak super.hw-prim);
   stm-containers = dontCheck super.stm-containers;
   regex-tdfa = dontCheck super.regex-tdfa;
-  rebase = doJailbreak super.rebase_1_20;
-  rerebase = doJailbreak super.rerebase_1_20;
+  rebase = doJailbreak super.rebase_1_20_1_1;
+  rerebase = doJailbreak super.rerebase_1_20_1_1;
   hiedb = dontCheck super.hiedb;
   retrie = dontCheck super.retrie;
   # https://github.com/kowainik/relude/issues/436
