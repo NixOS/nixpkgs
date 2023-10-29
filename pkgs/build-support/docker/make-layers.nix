@@ -1,5 +1,6 @@
 { coreutils
 , flattenReferencesGraph
+, lib
 , jq
 , stdenvNoCC
 ,
@@ -40,8 +41,8 @@ else
           flatten_references_graph_arg=flatten_references_graph_arg.json
         fi
 
-        ${lib.optionalString debug "DEBUG=True"} \
-          flatten_references_graph "$flatten_references_graph_arg" > ''${outputs[out]}
+        ${lib.optionalString debug "export DEBUG=True"}
+        flatten_references_graph "$flatten_references_graph_arg" > ''${outputs[out]}
       ''
     ;
   }
