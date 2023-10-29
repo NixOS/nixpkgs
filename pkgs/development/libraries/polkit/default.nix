@@ -21,8 +21,8 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , coreutils
-, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
-, systemdMinimal
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, systemdLibs
 , elogind
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     duktape
   ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
-    (if useSystemd then systemdMinimal else elogind)
+    (if useSystemd then systemdLibs else elogind)
   ];
 
   propagatedBuildInputs = [
