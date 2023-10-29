@@ -22258,8 +22258,6 @@ with pkgs;
 
   jarowinkler-cpp = callPackage ../development/libraries/jarowinkler-cpp { };
 
-  jasper = callPackage ../development/libraries/jasper { };
-
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
   jbig2enc = callPackage ../development/libraries/jbig2enc { };
