@@ -1,10 +1,10 @@
 diff --git a/basis/tools/deploy/backend/backend.factor b/basis/tools/deploy/backend/backend.factor
-index ec86089dbe..b146168ec9 100644
+index cfcca0d..87a2b01 100644
 --- a/basis/tools/deploy/backend/backend.factor
 +++ b/basis/tools/deploy/backend/backend.factor
-@@ -69,7 +69,7 @@ ERROR: can't-deploy-library-file library ;
+@@ -72,7 +72,7 @@ ERROR: can't-deploy-library-file library ;
              [ staging-image-name "-output-image=" prepend , ]
-             [ " " join "-include=" prepend , ] bi
+             [ join-words "-include=" prepend , ] bi
          ] [
 -            input-image-name "-i=" prepend ,
 +            input-image-name resource-path "-i=" prepend ,
