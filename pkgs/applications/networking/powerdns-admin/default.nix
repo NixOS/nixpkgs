@@ -19,6 +19,11 @@ let
     lima lxml passlib pyasn1 pytimeparse pyyaml jinja2 itsdangerous webcolors werkzeug zipp zxcvbn
   ];
 
+  all_post_patch = ''
+    # flask 2.3: 'Blueprint' object has no attribute 'before_app_first_request'
+    substituteInPlace powerdnsadmin/routes/index.py --replace '@index_bp.before_app_first_request' ""
+  '';
+
   assets = mkYarnPackage {
     inherit src version;
     packageJSON = ./package.json;
@@ -37,6 +42,7 @@ let
     nativeBuildInputs = pythonDeps;
     patchPhase = ''
       sed -i -r -e "s|'rcssmin',\s?'cssrewrite'|'rcssmin'|g" powerdnsadmin/assets.py
+      ${all_post_patch}
     '';
     buildPhase = ''
       # The build process expects the directory to be writable
@@ -95,6 +101,16 @@ in stdenv.mkDerivation {
     substituteInPlace powerdnsadmin/__init__.py --replace "sess = Session(app)" "app.config['SESSION_SQLALCHEMY'] = models.base.db; sess = Session(app)"
     # Routes creates session database tables, so it needs a context
     substituteInPlace powerdnsadmin/__init__.py --replace "routes.init_app(app)" "with app.app_context(): routes.init_app(app)"
+
+    # flask 2.3: 'Blueprint' object has no attribute 'before_app_first_request'
+    # Run code before app.run() instead
+    substituteInPlace run.py \
+      --replace 'from powerdnsadmin import create_app' 'from powerdnsadmin import create_app
+    from .powerdnsadmin.routes.index import register_modules' \
+      --replace 'app = create_app()' 'app = create_app()
+        with app.app_context():
+            register_modules()'
+    ${all_post_patch}
   '';
 
   installPhase = ''
