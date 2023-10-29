@@ -90,8 +90,8 @@ in
 
     package = lib.mkPackageOption pkgs "systemd-repart" {
       default = "systemd";
-      example = lib.literalExpression ''
-        pkgs.systemdMinimal.override { withCryptsetup = true; }
+      description = lib.mdDoc ''
+        The systemd package that provides the systemd-repart binary.
       '';
     };
 
