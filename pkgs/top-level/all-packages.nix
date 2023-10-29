@@ -1590,8 +1590,8 @@ with pkgs;
   };
 
   honggfuzz = callPackage ../tools/security/honggfuzz {
-    clang = clang_12;
-    llvm = llvm_12;
+    clang = clang_16;
+    llvm = llvm_16;
   };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
@@ -8850,12 +8850,6 @@ with pkgs;
   grafx2 = callPackage ../applications/graphics/grafx2 { };
 
   grails = callPackage ../development/web/grails { jdk = null; };
-
-  graylog-3_3 = callPackage ../tools/misc/graylog/3.3.nix { };
-
-  graylog-4_0 = callPackage ../tools/misc/graylog/4.0.nix { };
-
-  graylog-4_3 = callPackage ../tools/misc/graylog/4.3.nix { };
 
   graylog-5_0 = callPackage ../tools/misc/graylog/5.0.nix { };
 
@@ -26351,6 +26345,7 @@ with pkgs;
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
   envoy = callPackage ../servers/http/envoy {
+    go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
   };

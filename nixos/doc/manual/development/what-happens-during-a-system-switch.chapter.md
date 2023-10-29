@@ -55,4 +55,5 @@ explained in the next sections.
 ```{=include=} sections
 unit-handling.section.md
 activation-script.section.md
+non-switchable-systems.section.md
 ```

@@ -1410,7 +1410,7 @@ in
       wantedBy = [ "sysinit.target" ];
       before = [ "sysinit.target" ];
       unitConfig.DefaultDependencies = false;
-      serviceConfig.ExecStart = ''domainname "${cfg.domain}"'';
+      serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
     };
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
