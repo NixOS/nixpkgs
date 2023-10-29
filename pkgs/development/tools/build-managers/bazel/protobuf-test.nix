@@ -154,9 +154,8 @@ let
       ${bazel}/bin/bazel \
         build \
         --repository_cache=$PWD/.repository_cache \
+        ${extraBazelArgs} \
         --enable_bzlmod \
-        --lockfile_mode=error \
-        -s \
         --verbose_failures \
         //... \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
