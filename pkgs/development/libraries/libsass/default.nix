@@ -33,5 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ codyopel offline ];
     pkgConfigModules = [ "libsass" ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2022-26592"
+      "CVE-2022-43357"
+      "CVE-2022-43358"
+    ];
   };
 })
