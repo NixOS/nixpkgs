@@ -28,7 +28,7 @@
 , isocodes
 , gtksourceview
 , gtksourceviewmm
-, postgresql_11
+, postgresql_15
 , gobject-introspection
 , yelp-tools
 , wrapGAppsHook
@@ -93,7 +93,7 @@ in stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
     gtksourceview
     gtksourceviewmm
-    postgresql_11 # for pg_config
+    postgresql_15 # for pg_config
   ];
 
   enableParallelBuilding = true;
