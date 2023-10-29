@@ -306,6 +306,7 @@ in {
   forgejo = handleTest ./forgejo.nix { };
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
+  freetube = discoverTests (import ./freetube.nix);
   freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
   freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   frigate = handleTest ./frigate.nix {};
