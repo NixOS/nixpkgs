@@ -1,24 +1,24 @@
-# { lib
-# , stdenv
-# , dtools
-# , dmd 
-# , dcompiler ? dmd
-# , dub 
-# , fetchgit
-# , removeReferencesTo
-# }:
-
-
-{ pkgs ? import <nixpkgs> { }
-, stdenv ? pkgs.stdenv
-, lib ? pkgs.lib
-, dtools ? pkgs.dtools or pkgs.rdmd
-, dmd ? pkgs.dmd
+{ lib
+, stdenv
+, dtools
+, dmd 
 , dcompiler ? dmd
-, dub ? pkgs.dub 
-, fetchgit ? pkgs.fetchgit
-, removeReferencesTo ? pkgs.removeReferencesTo
+, dub 
+, fetchgit
+, removeReferencesTo
 }:
+
+
+# { pkgs ? import <nixpkgs> { }
+# , stdenv ? pkgs.stdenv
+# , lib ? pkgs.lib
+# , dtools ? pkgs.dtools or pkgs.rdmd
+# , dmd ? pkgs.dmd
+# , dcompiler ? dmd
+# , dub ? pkgs.dub 
+# , fetchgit ? pkgs.fetchgit
+# , removeReferencesTo ? pkgs.removeReferencesTo
+# }:
 
 
 
