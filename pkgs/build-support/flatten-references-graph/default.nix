@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication {
   src = nix-gitignore.gitignoreSource [ ] ./src;
 
   propagatedBuildInputs = with pythonPackages; [
-    python-igraph
+    igraph
     toolz
   ];
 
