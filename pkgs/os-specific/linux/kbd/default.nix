@@ -74,18 +74,19 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ check pam ];
-  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
-  passthru.tests = {
-    inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
-  };
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-laudit";
+
   passthru = {
     gzip = gzip;
     updateScript = gitUpdater {
        # No nicer place to find latest release.
        url = "https://github.com/legionus/kbd.git";
        rev-prefix = "v";
+    };
+    tests = {
+      inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
     };
   };
 
