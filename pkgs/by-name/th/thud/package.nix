@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "thud";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "thud";
     rev = version;
-    hash = "sha256-3MxmVKs0huXPnL9mqDniaIarkAvJmwSOMii2ntXtOos=";
+    hash = "sha256-BmrJaZ1IKXjx4/QkBDZyXvTTaalfEOKsBp9ZCW8px7I=";
   };
 
-  cargoHash = "sha256-Hk3HlcA253FAA9hw5p9W+Mvec84zLo7bEmM2/BbmjiM=";
+  cargoHash = "sha256-rmVVdes7GuGV+ClqJGxNIrs7oSwe8/ZHFD6OfP/UW7A=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -25,12 +25,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 assets/thud.thumbnailer $out/share/thumbnailers/thud.thumbnailer
     substituteInPlace $out/share/thumbnailers/thud.thumbnailer --replace "thud" "$out/bin/thud"
 
-    installManPage man/thud.1
+    installManPage target/man/thud.1
 
     installShellCompletion --cmd thud \
-      --bash <(cat completions/thud.bash) \
-      --fish <(cat completions/thud.fish) \
-      --zsh <(cat completions/_thud)
+      --bash <(cat target/completions/thud.bash) \
+      --fish <(cat target/completions/thud.fish) \
+      --zsh <(cat target/completions/_thud)
   '';
 
   meta = with lib; {
