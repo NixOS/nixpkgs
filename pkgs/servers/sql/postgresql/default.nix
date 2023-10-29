@@ -37,6 +37,8 @@ let
     pname = "postgresql";
 
     stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
+
+    majorVersion = lib.versions.major version;
   in stdenv'.mkDerivation (finalAttrs: {
     inherit pname version;
 
@@ -110,8 +112,36 @@ let
         src = ./locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
-
-    ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
+    ] ++ (let
+      llvmJITPatches = {
+        "12" = {
+          rev = "15ddc9725eb73d97a16652c7c90d993302773544";
+          hash = "sha256-3dsaN/YTmc9JfIO/eXTr6tUqxMXHih58yhhtCW6Cz4E=";
+        };
+        "13" = {
+          rev = "f28956b239f19858e7c429d3065678ce79c5104b";
+          hash = "sha256-C31RF6sPYr0iSmGBjKWIq9oPMpLkZ1FIkPGhGANJecU=";
+        };
+        "14" = {
+          rev = "82d9a782a29633a7d2c8c0785e4162a46f93d23b";
+          hash = "sha256-qDStZ2fQyTnng3sjf502aNLIsqRsa59bpaZLY3cE2BY=";
+        };
+        "15" = {
+          rev = "eed1feb3fee1a558b67b04cbd709f31142f071d5";
+          hash = "sha256-IflqFi93Pyr/VfgS+jMdI/lYu4ISrgVlInWKueYqpZc=";
+        };
+        "16" = {
+          rev = "74d19ec096dfbda5782e62892de7e86a104f8265";
+          hash = "sha256-VB1Uc5waS8u5LjtvjLfeZcrHPSxmP2PyRVpMhK9+Xgc=";
+        };
+      };
+    in lib.optional
+      (jitSupport && llvmJITPatches?${majorVersion})
+      (fetchpatch {
+        url = "https://github.com/postgres/postgres/commit/${llvmJITPatches.${majorVersion}.rev}.patch";
+        inherit (llvmJITPatches.${majorVersion}) hash;
+      })
+    ) ++ lib.optionals stdenv'.hostPlatform.isMusl (
       let
         self = {
           "12" = {
@@ -151,7 +181,7 @@ let
           };
         };
 
-        patchesForVersion = self.${lib.versions.major version} or (throw "no musl patches for postgresql ${version}");
+        patchesForVersion = self.${majorVersion} or (throw "no musl patches for postgresql ${version}");
       in
         lib.attrValues patchesForVersion
     ) ++ lib.optionals stdenv'.isLinux  [
