@@ -5,10 +5,7 @@ let
   # Use an older version of clang with the current libc++ for compatibility (e.g., with icu).
   ensureCompatibleCC = packages:
     if packages.stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion packages.stdenv.cc.cc) "16"
-      then overrideCC packages.llvmPackages_15.stdenv (packages.llvmPackages_15.stdenv.cc.override {
-        inherit (packages.llvmPackages) libcxx;
-        extraPackages = [ packages.llvmPackages.libcxxabi ];
-      })
+      then packages.llvmPackages_15.stdenv
       else packages.stdenv;
 
   buildNodejs = callPackage ./nodejs.nix {
