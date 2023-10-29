@@ -515,7 +515,7 @@ let
       enableOCR = true;
       preBootCommands = ''
         machine.start()
-        machine.wait_for_text("Passphrase for")
+        machine.wait_for_text("[Pp]assphrase for")
         machine.send_chars("supersecret\n")
       '';
     };
@@ -781,7 +781,7 @@ in {
         encrypted.enable = true;
         encrypted.blkDev = "/dev/vda3";
         encrypted.label = "crypt";
-        encrypted.keyFile = "/mnt-root/keyfile";
+        encrypted.keyFile = "/${if systemdStage1 then "sysroot" else "mnt-root"}/keyfile";
       };
     '';
   };
