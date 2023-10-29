@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, nix-update-script
+, fetchpatch
 
 , autoreconfHook
 , pkg-config
@@ -11,37 +11,37 @@
 , libjpeg
 , xz
 , zlib
-
-  # for passthru.tests
-, libgeotiff
-, python3Packages
-, imagemagick
-, graphicsmagick
-, gdal
-, openimageio
-, freeimage
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.6.0";
-
-  # if you update this, please consider adding patches and/or
-  # setting `knownVulnerabilities` in libtiff `4.5.nix`
+  version = "4.5.1";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${version}";
-    hash = "sha256-qCg5qjsPPynCHIg0JsPJldwVdcYkI68zYmyNAKUCoyw=";
+    hash = "sha256-qQEthy6YhNAQmdDMyoCIvK8f3Tx25MgqhJZW74CB93E=";
   };
 
   patches = [
+    # cf. https://bugzilla.redhat.com/2224974
+    (fetchpatch {
+      name = "CVE-2023-40745.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/bdf7b2621c62e04d0408391b7d5611502a752cd0.diff";
+      hash = "sha256-HdU02YJ1/T3dnCT+yG03tUyAHkgeQt1yjZx/auCQxyw=";
+    })
+    # cf. https://bugzilla.redhat.com/2224971
+    (fetchpatch {
+      name = "CVE-2023-41175.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/965fa243004e012adc533ae8e38db3055f101a7f.diff";
+      hash = "sha256-Pvg6JfJWOIaTrfFF0YSREZkS9saTG9IsXnsXtcyKILA=";
+    })
     # FreeImage needs this patch
-    ./headers.patch
+    ./headers-4.5.patch
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
-    ./rename-version.patch
+    ./rename-version-4.5.patch
   ];
 
   postPatch = ''
@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
   # sure cross-compilation works first!
   nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
-  # TODO: opengl support (bogus configure detection)
   propagatedBuildInputs = [
     libdeflate
     libjpeg
@@ -73,19 +72,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru = {
-    tests = {
-      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
-      inherit (python3Packages) pillow imread;
-    };
-    updateScript = nix-update-script { };
-  };
-
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "https://libtiff.gitlab.io/libtiff";
     changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
-    maintainers = with maintainers; [ qyliss ];
+    # XXX not enabled for now to keep hydra builds running,
+    # but we have to keep an eye on security updates in supported version
+    #knownVulnerabilities = [ "support for version 4.5 ended in Sept 2023" ];
+    maintainers = with maintainers; [ yarny ];
     license = licenses.libtiff;
     platforms = platforms.unix;
   };
