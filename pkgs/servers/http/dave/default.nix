@@ -22,5 +22,6 @@ buildGoModule rec {
     description = "A totally simple and very easy to configure stand alone webdav server";
     license = licenses.asl20;
     maintainers = with maintainers; [ lunik1 ];
+    broken = true; # unmaintained, to be removed before 24.05
   };
 }
