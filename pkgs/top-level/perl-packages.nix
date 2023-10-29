@@ -14657,6 +14657,21 @@ with self; {
     };
   };
 
+  MacSysProfile = buildPerlPackage {
+    pname = "Mac-SysProfile";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/Mac-SysProfile-0.05.tar.gz";
+      hash = "sha256-QDOXa3dbOcwqaTtyoC1l71p7oDveTU2w3/RuEmx9n2w=";
+    };
+    propagatedBuildInputs = [ MacPropertyList ];
+    meta = {
+      description = "Perl extension for OS X system_profiler";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = lib.platforms.darwin;
+    };
+  };
+
   MailAuthenticationResults = buildPerlPackage {
     pname = "Mail-AuthenticationResults";
     version = "1.20200824.1";
