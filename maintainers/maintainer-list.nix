@@ -8340,6 +8340,12 @@
     githubId = 3081095;
     name = "Jürgen Keck";
   };
+  jl178 = {
+    email = "jeredlittle1996@gmail.com";
+    github = "jl178";
+    githubId = 72664723;
+    name = "Jered Little";
+  };
   jlamur = {
     email = "contact@juleslamur.fr";
     github = "jlamur";
