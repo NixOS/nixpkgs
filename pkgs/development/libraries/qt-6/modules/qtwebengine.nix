@@ -47,7 +47,7 @@
 , libcap
 , pciutils
 , systemd
-, pipewire
+, pipewireSupport ? stdenv.hostPlatform.isLinux, pipewire
 , gn
 , ffmpeg_4
 , lib
@@ -191,7 +191,7 @@ qtModule {
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
     "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals pipewireSupport [
     "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
@@ -265,8 +265,10 @@ qtModule {
     libXi
     xorg.libXext
 
+  ] ++ lib.optionals pipewireSupport [
     # Pipewire
     pipewire
+  ] ++ [
 
     libkrb5
     mesa
