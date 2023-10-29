@@ -1,0 +1,10 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pytest_nixpkgs_xfail_hook"
+version = "1.0.0"
+
+[project.entry-points.pytest11]
+nixpkgs_xfail_hook = "pytest_nixpkgs_xfail_hook"

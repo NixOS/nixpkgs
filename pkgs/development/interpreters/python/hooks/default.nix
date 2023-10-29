@@ -103,6 +103,15 @@ in {
       };
     } ./pytest-check-hook.sh) {};
 
+  pytestCheckXfailHook = callPackage ({ makePythonHook, pytestCheckHook, pytest-nixpkgs-xfail-hook }:
+    makePythonHook {
+      name = "pytest-check-xfail-hook";
+      propagatedBuildInputs = [
+        pytestCheckHook
+        pytest-nixpkgs-network-xfail
+      ];
+    } ./pytest-check-xfail-hook.sh) {};
+
   pythonCatchConflictsHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "python-catch-conflicts-hook";
