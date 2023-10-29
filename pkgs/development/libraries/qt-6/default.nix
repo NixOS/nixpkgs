@@ -15,6 +15,9 @@
   # options
 , developerBuild ? false
 , debug ? false
+
+, splicePackages
+, generateSplicesForMkScope
 }:
 
 let
@@ -174,16 +177,20 @@ let
         } ./hooks/qmake-hook.sh;
     };
 
-  # TODO(@Artturin): convert to makeScopeWithSplicing'
-  # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
-  baseScope = lib.makeScope newScope addPackages;
 
-  bootstrapScope = baseScope.overrideScope'(final: prev: {
+  baseScope = lib.makeScopeWithSplicing' {
+    inherit splicePackages newScope;
+  } {
+    otherSplices = generateSplicesForMkScope "qt6";
+    f = addPackages;
+  };
+
+  bootstrapScope = baseScope.overrideScope (final: prev: {
     qtbase = prev.qtbase.override { qttranslations = null; };
     qtdeclarative = null;
   });
 
-  finalScope = baseScope.overrideScope'(final: prev: {
+  finalScope = baseScope.overrideScope (final: prev: {
     qttranslations = bootstrapScope.qttranslations;
   });
 in finalScope
