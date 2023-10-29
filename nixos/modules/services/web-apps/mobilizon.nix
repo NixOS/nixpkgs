@@ -8,7 +8,7 @@ let
   user = "mobilizon";
   group = "mobilizon";
 
-  settingsFormat = pkgs.formats.elixirConf { elixir = pkgs.elixir_1_14; };
+  settingsFormat = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
 
   configFile = settingsFormat.generate "mobilizon-config.exs" cfg.settings;
 
@@ -309,7 +309,7 @@ in
           genCookie = "IO.puts(Base.encode32(:crypto.strong_rand_bytes(32)))";
 
           evalElixir = str: ''
-            ${pkgs.elixir_1_14}/bin/elixir --eval '${str}'
+            ${cfg.package.elixirPackage}/bin/elixir --eval '${str}'
           '';
         in
         ''

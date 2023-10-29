@@ -172,6 +172,10 @@ beamPackages.mixRelease rec {
   passthru = {
     tests = with nixosTests; { inherit akkoma akkoma-confined; };
     inherit mixNixDeps;
+
+    # Used to make sure the service uses the same version of elixir as
+    # the package
+    elixirPackage = beamPackages.elixir;
   };
 
   meta = with lib; {

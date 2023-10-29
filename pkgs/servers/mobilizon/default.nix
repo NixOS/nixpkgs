@@ -8,6 +8,7 @@
 , cmake
 , nixosTests
 , mobilizon-frontend
+, ...
 }:
 
 let
@@ -126,6 +127,7 @@ mixRelease rec {
       ${mix2nix}/bin/mix2nix $SRC/mix.lock > pkgs/servers/mobilizon/mix.nix
       cat $SRC/js/package.json > pkgs/servers/mobilizon/package.json
     '';
+    elixirPackage = beamPackages.elixir;
   };
 
   meta = with lib; {
