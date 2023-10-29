@@ -84,6 +84,8 @@ let self = rec {
 
   orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
+  radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
+
   svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
   steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
