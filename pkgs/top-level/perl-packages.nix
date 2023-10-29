@@ -14657,6 +14657,21 @@ with self; {
     };
   };
 
+  MacPropertyList = buildPerlPackage {
+    pname = "Mac-PropertyList";
+    version = "1.504";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Mac-PropertyList-1.504.tar.gz";
+      hash = "sha256-aIl96Yw2j76c22iF1H3qADxG7Ho3MmNSPvZkVwc7eq4=";
+    };
+    propagatedBuildInputs = [ XMLEntities ];
+    meta = {
+      description = "Work with Mac plists at a low level";
+      homepage = "https://github.com/briandfoy/mac-propertylist";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   MacSysProfile = buildPerlPackage {
     pname = "Mac-SysProfile";
     version = "0.05";
