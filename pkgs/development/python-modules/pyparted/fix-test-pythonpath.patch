@@ -18,9 +18,9 @@ diff -ur a/Makefile b/Makefile
  	$(COVERAGE) report --include="build/lib.*/parted/*" > coverage-report.log
  
  check: clean
- 	env PYTHON=python3 $(MAKE) ; \
--	env PYTHON=python3 PYTHONPATH=$$(find $$(pwd) -name "*.so" | head -n 1 | xargs dirname):src/parted:src \
-+	env PYTHON=python3 PYTHONPATH=$$(find $$(pwd) -name "*.so" | head -n 1 | xargs dirname):src/parted:src:$$PYTHONPATH \
+ 	$(MAKE) ; \
+-	env PYTHONPATH=$$(find $$(pwd) -name "*.so" | head -n 1 | xargs dirname):src/parted:src \
++	env PYTHONPATH=$$(find $$(pwd) -name "*.so" | head -n 1 | xargs dirname):src/parted:src:$$PYTHONPATH \
  	tests/pylint/runpylint.py
  
  dist:
