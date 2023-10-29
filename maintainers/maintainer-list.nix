@@ -12624,6 +12624,14 @@
     githubId = 7845120;
     name = "Alex Martens";
   };
+  NewDawn0 = {
+    email = "aci.v.i.iv@gmail.com";
+    name = "NewDawn0 (Tom)";
+    github = "NewDawn0";
+    githubId = 92283105;
+    keys =
+      [{ fingerprint = "F7C5 CA01 C222 B098 F4D8  0B95 13DF F282 9750 1A33"; }];
+  };
   ngerstle = {
     name = "Nicholas Gerstle";
     email = "ngerstle@gmail.com";
