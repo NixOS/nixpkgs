@@ -1,18 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, mesa_glu }:
+{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake }:
 
 mkDerivation rec {
   pname = "fstl";
-  version = "0.9.4";
+  version = "0.10.0";
 
-  buildInputs = [qtbase mesa_glu];
-
-  prePatch = ''
-    sed -i "s|/usr/bin|$out/bin|g" qt/fstl.pro
-  '';
-
-  preBuild = ''
-    qmake qt/fstl.pro
-  '';
+  buildInputs = [ cmake ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
@@ -20,15 +12,15 @@ mkDerivation rec {
   '';
 
   src = fetchFromGitHub {
-    owner = "mkeeter";
+    owner = "fstl-app";
     repo = "fstl";
     rev = "v" + version;
-    sha256 = "028hzdv11hgvcpc36q5scf4nw1256qswh37xhfn5a0iv7wycmnif";
+    sha256 = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
   };
 
   meta = with lib; {
     description = "The fastest STL file viewer";
-    homepage = "https://github.com/mkeeter/fstl";
+    homepage = "https://github.com/fstl-app/fstl";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ tweber ];
