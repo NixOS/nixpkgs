@@ -9,7 +9,7 @@ pkgs.mkShell {
     helpers.lint
     helpers.unittest
     # This is needed to plot graphs when DEBUG_PLOT is set to True.
-    pkgs.python39Packages.pycairo
+    pkgs.python3Packages.pycairo
     # This can be used on linux to display the graphs.
     # On other platforms the image viewer needs to be set with
     # DEBUG_PLOT_IMAGE_VIEWER env var.
