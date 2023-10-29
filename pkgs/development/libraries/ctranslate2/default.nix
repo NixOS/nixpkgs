@@ -5,6 +5,9 @@
 , darwin # Accelerate
 , llvmPackages # openmp
 , withMkl ? false, mkl
+, withCUDA ? false
+, withCuDNN ? false
+, cudaPackages
 # Enabling both withOneDNN and withOpenblas is broken
 # https://github.com/OpenNMT/CTranslate2/issues/1294
 , withOneDNN ? false, oneDNN
@@ -33,6 +36,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals withCUDA [
+    cudaPackages.cuda_nvcc
   ];
 
   cmakeFlags = [
@@ -40,6 +45,8 @@ stdenv.mkDerivation rec {
     # https://github.com/OpenNMT/CTranslate2/blob/54810350e662ebdb01ecbf8e4a746f02aeff1dd7/python/tools/prepare_build_environment_linux.sh#L53
     # https://github.com/OpenNMT/CTranslate2/blob/59d223abcc7e636c1c2956e62482bc3299cc7766/python/tools/prepare_build_environment_macos.sh#L12
     "-DOPENMP_RUNTIME=COMP"
+    "-DWITH_CUDA=${cmakeBool withCUDA}"
+    "-DWITH_CUDNN=${cmakeBool withCuDNN}"
     "-DWITH_DNNL=${cmakeBool withOneDNN}"
     "-DWITH_OPENBLAS=${cmakeBool withOpenblas}"
     "-DWITH_RUY=${cmakeBool withRuy}"
@@ -49,6 +56,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals withMkl [
     mkl
+  ] ++ lib.optionals withCUDA [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.libcurand
+  ] ++ lib.optionals withCuDNN [
+    cudaPackages.cudnn
   ] ++ lib.optionals withOneDNN [
     oneDNN
   ] ++ lib.optionals withOpenblas [
