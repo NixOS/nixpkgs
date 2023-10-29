@@ -2,7 +2,6 @@
 , dtools ? pkgs.dtools or pkgs.rdmd, dmd ? pkgs.dmd, dcompiler ? dmd
 , dub ? pkgs.dub }:
 
-with stdenv;
 let
   # Filter function to remove the .dub package folder from src
   filterDub = name: type:
@@ -17,7 +16,7 @@ let
 
   # Fetch a dependency (source only for now)
   fromDub = dubDep:
-    mkDerivation rec {
+    stdenv.mkDerivation rec {
       name = "${src.name}-${version}";
       version = rev-to-version dubDep.fetch.rev;
       nativeBuildInputs = [ dcompiler dtools dub ];
