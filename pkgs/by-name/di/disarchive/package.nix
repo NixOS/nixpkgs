@@ -6,12 +6,13 @@
 , guile-gcrypt
 , guile-lzma
 , guile-quickcheck
+, makeWrapper
 , pkg-config
 , zlib
 }:
 
 stdenv.mkDerivation rec {
-  pname = "guile-disarchive";
+  pname = "disarchive";
   version = "0.5.0";
 
   src = fetchurl {
@@ -24,7 +25,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     guile
+    guile-gcrypt
     guile-lzma
+    makeWrapper
     pkg-config
   ];
 
@@ -38,14 +41,23 @@ stdenv.mkDerivation rec {
     guile-lzma
   ];
 
-  nativeCheckInputs = [ guile-quickcheck ];
-
   doCheck = !stdenv.isDarwin;
+
+  nativeCheckInputs = [
+    guile-quickcheck
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/disarchive \
+      --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+  '';
 
   meta = with lib; {
     description = "Disassemble software into data and metadata";
     homepage = "https://ngyro.com/software/disarchive.html";
     license = licenses.gpl3Plus;
+    mainProgram = "disarchive";
     maintainers = with maintainers; [ foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
