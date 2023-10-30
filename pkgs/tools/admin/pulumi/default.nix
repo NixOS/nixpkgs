@@ -32,8 +32,6 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/pkg";
 
-  nativeBuildInputs = [ installShellFiles ];
-
   # Bundle release metadata
   ldflags = [
     # Omit the symbol table and debug information.
@@ -107,12 +105,19 @@ buildGoModule rec {
     PULUMI_SKIP_UPDATE_CHECK=1 $out/bin/pulumi version | grep v${version} > /dev/null
   '';
 
-  postInstall = ''
+  installPhase = ''
+    install -D -t $out/bin/ *
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
+  '' + ''
     installShellCompletion --cmd pulumi \
       --bash <($out/bin/pulumi gen-completion bash) \
       --fish <($out/bin/pulumi gen-completion fish) \
       --zsh  <($out/bin/pulumi gen-completion zsh)
   '';
+
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   passthru = {
     pkgs = pulumiPackages;
