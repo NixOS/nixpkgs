@@ -75,15 +75,15 @@ let
       }
       ''
         # Bazel needs a real home for self-extraction and internal cache
-        export HOME=$(mktemp -d)
+        mkdir bazel_home
+        export HOME=$PWD/bazel_home
 
         ${# Concurrent bazel invocations have the same workspace path.
-          # On darwin, for some reason, it means they access and corrupt the same execroot.
-          # Having a different workspace path ensures we use different execroots.
-          # A different user seems to be enough for a different bazel cache root.
+          # On darwin, for some reason, it means they access and corrupt the
+          # same outputRoot, outputUserRoot and outputBase
+          # Ensure they use build-local outputRoot by setting TEST_TMPDIR
           lib.optionalString isDarwin ''
-            export USER=$(basename $HOME)
-            # cd $(mktemp --tmpdir=. -d)
+            export TEST_TMPDIR=$HOME/.cache/bazel
           ''
         }
         ${# Speed-up tests by caching bazel extraction.
