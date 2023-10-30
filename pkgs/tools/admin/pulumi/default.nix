@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , installShellFiles
 , git
+, autoPatchelfHook
   # passthru
 , runCommand
 , makeWrapper
