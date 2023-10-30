@@ -65,5 +65,6 @@ buildGoModule {
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
     maintainers = with maintainers; [ stephank ];
     license = licenses.mit;
+    mainProgram = "mailpit";
   };
 }
