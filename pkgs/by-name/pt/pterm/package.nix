@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-0OJvoCOGx/a51Ja7n3fOTeQJEcdyn/GhaJ0NtVCyuC8=";
   };
 
+  patches = [ ./0001-dtnetsubs-remove-null-check.patch ];
+
   preBuild = ''
     substituteInPlace Makefile.common Makefile.wxpterm --replace "/bin/echo" "echo"
     echo "exit 0" > wxversion.py
