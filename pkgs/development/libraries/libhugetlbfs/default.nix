@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    badPlatforms = [
+    badPlatforms = flatten [
       systems.inspect.platformPatterns.isStatic
       systems.inspect.patterns.isMusl
       systems.inspect.patterns.isAarch64
