@@ -558,6 +558,8 @@ let
       PERSISTENT_KEYRINGS              = yes;
       # enable temporary caching of the last request_key() result
       KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
+      # randomized slab caches
+      RANDOM_KMALLOC_CACHES            = whenAtLeast "6.6" yes;
     } // optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
@@ -572,6 +574,8 @@ let
       KVM_AMD_SEV     = yes;
       # AMD SEV-SNP
       SEV_GUEST       = whenAtLeast "5.19" module;
+      # Shadow stacks
+      X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
     };
 
     microcode = {
