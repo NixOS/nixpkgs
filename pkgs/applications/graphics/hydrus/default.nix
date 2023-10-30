@@ -12,20 +12,15 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "544";
+  version = "549";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e3VvkdJAQx5heKDJ1Ms6XpXrXWdzv48f8yu0DHfPy1A=";
+    hash = "sha256-y3WFQhPE8H0198Xu3Dn9YAqaX8YvFJcdt90tebTg7qw=";
   };
-
-  patches = [
-    # Nixpkgs specific, can be removed if upstream makes a more reasonable check
-    ./0001-inform-nixpkgs.patch
-  ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -75,31 +70,35 @@ python3Packages.buildPythonPackage rec {
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
+    runHook preCheck
+
     nosetests $src/hydrus/test  \
-    -e TestClientAPI \
-    -e TestClientConstants \
-    -e TestClientDaemons \
-    -e TestClientData \
-    -e TestClientDB \
-    -e TestClientDBDuplicates \
-    -e TestClientDBTags \
-    -e TestClientImageHandling \
-    -e TestClientImportOptions \
-    -e TestClientListBoxes \
-    -e TestClientMigration \
-    -e TestClientNetworking \
-    -e TestClientTags \
-    -e TestClientThreading \
-    -e TestDialogs \
-    -e TestFunctions \
-    -e TestHydrusNetwork \
-    -e TestHydrusNATPunch \
-    -e TestHydrusSerialisable \
-    -e TestHydrusServer \
-    -e TestHydrusSessions \
-    -e TestServer \
-    -e TestClientMetadataMigration \
-    -e TestClientFileStorage \
+      -e TestClientAPI \
+      -e TestClientConstants \
+      -e TestClientDaemons \
+      -e TestClientData \
+      -e TestClientDB \
+      -e TestClientDBDuplicates \
+      -e TestClientDBTags \
+      -e TestClientImageHandling \
+      -e TestClientImportOptions \
+      -e TestClientListBoxes \
+      -e TestClientMigration \
+      -e TestClientNetworking \
+      -e TestClientTags \
+      -e TestClientThreading \
+      -e TestDialogs \
+      -e TestFunctions \
+      -e TestHydrusNetwork \
+      -e TestHydrusNATPunch \
+      -e TestHydrusSerialisable \
+      -e TestHydrusServer \
+      -e TestHydrusSessions \
+      -e TestServer \
+      -e TestClientMetadataMigration \
+      -e TestClientFileStorage \
+
+    runHook postCheck
   '';
 
   outputs = [ "out" "doc" ];
@@ -112,7 +111,8 @@ python3Packages.buildPythonPackage rec {
     chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
     # Build docs
     mkdocs build -d help
-    mv help $out/doc/
+    mkdir -p $doc/share/doc
+    mv help $doc/share/doc/hydrus
 
     # install the hydrus binaries
     mkdir -p $out/bin
