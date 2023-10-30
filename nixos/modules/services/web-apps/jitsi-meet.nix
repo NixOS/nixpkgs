@@ -232,7 +232,7 @@ in
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
-            admins = { "focus@auth.${cfg.hostName}" }
+            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}" }
           '';
         }
         {
