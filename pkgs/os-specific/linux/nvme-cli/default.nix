@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libnvme
     json_c
     zlib
-  ] ++ lib.optionals (!(stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isMusl)) [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libhugetlbfs) [
     libhugetlbfs
   ];
 
