@@ -29,12 +29,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "2.7.10";
+  version = "2.7.13";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-cvEeV4e19gVgz5vctQUgA4Atj37dgFg3iH789DWtVZU=";
+    sha256 = "sha256-d88BwbovhbAn72y5pVd4No+hVydXbtZYHZpdtpo4RGY=";
   };
 
   outputs = [ "out" "dev" ];
