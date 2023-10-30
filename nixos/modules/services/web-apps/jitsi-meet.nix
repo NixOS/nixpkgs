@@ -220,6 +220,15 @@ in
       extraConfig = lib.mkMerge [ (mkAfter ''
         Component "focus.${cfg.hostName}" "client_proxy"
           target_address = "focus@auth.${cfg.hostName}"
+
+        Component "speakerstats.${cfg.hostName}" "speakerstats_component"
+          muc_component = "conference.${cfg.hostName}"
+
+        Component "conferenceduration.${cfg.hostName}" "conference_duration_component"
+          muc_component = "conference.${cfg.hostName}"
+
+        Component "metadata.${cfg.hostName}" "room_metadata_component"
+          muc_component = "conference.${cfg.hostName}"
         '')
         (mkBefore ''
           cross_domain_websocket = true;
@@ -237,6 +246,11 @@ in
           smacks_hibernation_time = 60
           smacks_max_hibernated_sessions = 1
           smacks_max_old_sessions = 1
+
+          room_metadata_component = "metadata.${cfg.hostName}"
+          main_muc = "conference.${cfg.hostName}"
+          speakerstats_component = "speakerstats.${cfg.hostName}"
+          conference_duration_component = "conferenceduration.${cfg.hostName}"
         '';
         ssl = {
           cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
