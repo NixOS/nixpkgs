@@ -350,7 +350,7 @@ in
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
-    boot.initrd.extraUdevRulesCommands = optionalString (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
+    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
       ''
         cat <<'EOF' > $out/99-local.rules
         ${config.boot.initrd.services.udev.rules}

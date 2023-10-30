@@ -110,10 +110,11 @@ in
           }) earlyEncDevs);
         forceLuksSupportInInitrd = true;
       };
-      postMountCommands =
-        concatMapStrings (dev:
+      # TODO: systemd stage 1
+      postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
+        (concatMapStrings (dev:
           "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
-        ) lateEncDevs;
+        ) lateEncDevs);
     };
   };
 }
