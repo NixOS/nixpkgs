@@ -1,6 +1,6 @@
 # Nixpkgs pkgs/by-name checker
 
-This directory implements a program to check the [validity](#validity-checks) of the `pkgs/by-name` Nixpkgs directory once introduced.
+This directory implements a program to check the [validity](#validity-checks) of the `pkgs/by-name` Nixpkgs directory.
 It is being used by [this GitHub Actions workflow](../../../.github/workflows/check-by-name.yml).
 This is part of the implementation of [RFC 140](https://github.com/NixOS/rfcs/pull/140).
 
@@ -24,7 +24,7 @@ This API may be changed over time if the CI workflow making use of it is adjuste
   - `2`: If an unexpected I/O error occurs
 - Standard error:
   - Informative messages
-  - Error messages if validation is not successful
+  - Detected problems if validation is not successful
 
 ## Validity checks
 
