@@ -1,13 +1,18 @@
+if [ -z "$__structuredAttrs" ]; then
+    pythonPath=(${pythonPath[*]})
+fi
+
 # Wrapper around wrapPythonProgramsIn, below. The $pythonPath
 # variable is passed in from the buildPythonPackage function.
 wrapPythonPrograms() {
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    local pythonPath=("$out" "${pythonPath[@]}")
+    wrapPythonProgramsIn "$out/bin" "${pythonPath[@]}"
 }
 
 # Builds environment variables like PYTHONPATH and PATH walking through closure
 # of dependencies.
 buildPythonPath() {
-    local pythonPath="$1"
+    local pythonPath=("$@")
     local path
 
     # Create an empty table of python paths (see doc on _addToPythonPath
@@ -18,8 +23,8 @@ buildPythonPath() {
     program_PATH=
     pythonPathsSeen["@pythonHost@"]=1
     addToSearchPath program_PATH @pythonHost@/bin
-    for path in $pythonPath; do
-        _addToPythonPath $path
+    for path in "${pythonPath[@]}"; do
+        _addToPythonPath "$path"
     done
 }
 
@@ -41,10 +46,11 @@ patchPythonScript() {
 # suffix).
 wrapPythonProgramsIn() {
     local dir="$1"
-    local pythonPath="$2"
+    shift
+    local pythonPath=("$@")
     local f
 
-    buildPythonPath "$pythonPath"
+    buildPythonPath "${pythonPath[@]}"
 
     # Find all regular files in the output directory that are executable.
     if [ -d "$dir" ]; then
