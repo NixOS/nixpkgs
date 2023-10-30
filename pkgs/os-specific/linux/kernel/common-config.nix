@@ -541,6 +541,9 @@ let
       PERSISTENT_KEYRINGS              = yes;
       # enable temporary caching of the last request_key() result
       KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
+
+      # randomized slab caches
+      RANDOM_KMALLOC_CACHES            = whenAtLeast "6.6" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
@@ -559,6 +562,8 @@ let
       KVM_AMD_SEV     = whenAtLeast "4.16" yes;
       # AMD SEV-SNP
       SEV_GUEST       = whenAtLeast "5.19" module;
+      # Shadow stacks
+      X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
     };
 
     microcode = {
