@@ -75,14 +75,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.16.1";
+  version = "4.18.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-h4AooHHKV/EfN2S1z7CQKqnYW3uA3sKhSW4senlzjxI=";
+    hash = "sha256-qzlQinfr0Grb0XVQiwmTH6QDppKW52FexSxGle2FGAs=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -109,12 +109,15 @@ stdenv.mkDerivation (finalAttrs: {
         xargs -I {} yarn --cwd {} \
           --ignore-scripts --ignore-engines
 
+      # can't find the file that specifies we need this but we do :/
+      yarn add @microsoft/1ds-core-js --ignore-scripts --ignore-engines
+
       runHook postBuild
     '';
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-vkju+oxEYrEXFAnjz/Mf1g0ZhxBALLAaRuWE0swSWwM=";
+    outputHash = "sha256-iqTtwRheyp9A+mi4NGG6w32gviIjm7gBQiDUqCneJoU=";
   };
 
   nativeBuildInputs = [
@@ -193,6 +196,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    echo '--offline true' >> .yarnrc
+
     # install code-server dependencies
     yarn --offline --ignore-scripts
 
@@ -234,7 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fetch packages for vscode
     find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
         xargs -I {} yarn --cwd {} \
-          --frozen-lockfile --ignore-scripts --ignore-engines
+          --frozen-lockfile --ignore-scripts --ignore-engines --offline
 
     # patch shebangs of everything to allow binary packages to build
     patchShebangs .
@@ -262,10 +267,10 @@ stdenv.mkDerivation (finalAttrs: {
         xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
 
     # build code-server
-    yarn build
+    yarn build --offline
 
     # build vscode
-    VERSION=${finalAttrs.version} yarn build:vscode
+    VERSION=${finalAttrs.version} yarn build:vscode --offline
 
     # inject version into package.json
     jq --slurp '.[0] * .[1]' ./package.json <(
@@ -277,13 +282,15 @@ stdenv.mkDerivation (finalAttrs: {
     ) | sponge ./package.json
 
     # create release
-    yarn release
+    yarn release --offline --ignore-scripts
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
+
+    echo '--offline true' >> .yarnrc
 
     mkdir -p $out/libexec/code-server $out/bin
 
