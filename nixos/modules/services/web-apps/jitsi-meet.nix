@@ -215,7 +215,7 @@ in
           #-- muc_room_cache_size = 1000
         }
       ];
-      extraModules = [ "conference_duration" "pubsub" "room_metadata" "speakerstats" ];
+      extraModules = [ "conference_duration" "jitsi_session" "pubsub" "room_metadata" "speakerstats" ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
       extraConfig = lib.mkMerge [ (mkAfter ''
         Component "focus.${cfg.hostName}" "client_proxy"
