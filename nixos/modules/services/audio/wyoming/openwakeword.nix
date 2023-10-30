@@ -22,15 +22,6 @@ let
     toString
     ;
 
-  models = [
-    # wyoming_openwakeword/models/*.tflite
-    "alexa"
-    "hey_jarvis"
-    "hey_mycroft"
-    "hey_rhasspy"
-    "ok_nabu"
-  ];
-
 in
 
 {
@@ -51,15 +42,22 @@ in
     };
 
     models = mkOption {
-      type = listOf (enum models);
-      default = models;
+      type = listOf str;
+      default = [
+        # wyoming_openwakeword/models/*.tflite
+        "alexa"
+        "hey_jarvis"
+        "hey_mycroft"
+        "hey_rhasspy"
+        "ok_nabu"
+      ];
       description = mdDoc ''
         List of wake word models that should be made available.
       '';
     };
 
     preloadModels = mkOption {
-      type = listOf (enum models);
+      type = listOf str;
       default = [
         "ok_nabu"
       ];
