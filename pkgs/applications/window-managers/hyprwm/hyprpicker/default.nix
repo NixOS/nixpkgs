@@ -91,5 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
+    mainProgram = "hyprpicker";
   };
 })
