@@ -21,8 +21,18 @@
 , tree
 }:
 
-let
+# This test uses bzlmod because I could not make it work without it.
+# This is good, because we have at least one test with bzlmod enabled.
+# However, we have to create our own lockfile, wich is quite a big file by
+# itself.
 
+let
+  # To update the lockfile, run
+  #     nix-shell -A bazel_7.tests.vanilla.protobuf
+  #         genericBuild (wait a bit for failure, or kill it)
+  #         rm -rfffffffff MODULE.bazel.lock
+  #         bazel mod deps --lockfile_mode=update
+  #         cp MODULE.bazel.lock $HERE/tests.MODULE.bazel.lock
   lockfile = ./tests.MODULE.bazel.lock;
 
   protocbufRepoCache = callPackage ./bazel-repository-cache.nix {
@@ -43,21 +53,7 @@ let
   '';
 
   WORKSPACE = writeText "WORKSPACE" ''
-    workspace(name = "our_workspace")
-
-    load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-    http_archive(
-        name = "rules_proto",
-        sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
-        strip_prefix = "rules_proto-5.3.0-21.7",
-        urls = [
-            "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
-        ],
-    )
-    load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-    rules_proto_dependencies()
-    rules_proto_toolchains()
+    # Empty, we use bzlmod instead
   '';
 
   personProto = writeText "person.proto" ''
@@ -111,14 +107,14 @@ let
 
   workspaceDir = runLocal "our_workspace" { } (''
     mkdir $out
-    cp --no-preserve=all ${MODULE} $out/MODULE.bazel
-    cp --no-preserve=all ${./tests.MODULE.bazel.lock} $out/MODULE.bazel.lock
+    cp ${MODULE} $out/MODULE.bazel
+    cp ${./tests.MODULE.bazel.lock} $out/MODULE.bazel.lock
     #cp ${WORKSPACE} $out/WORKSPACE
     touch $out/WORKSPACE
     touch $out/BUILD.bazel
     mkdir $out/person
-    cp --no-preserve=all ${personProto} $out/person/person.proto
-    cp --no-preserve=all ${personBUILD} $out/person/BUILD.bazel
+    cp ${personProto} $out/person/person.proto
+    cp ${personBUILD} $out/person/BUILD.bazel
   ''
   + (lib.optionalString stdenv.isDarwin ''
     echo 'tools bazel created'
@@ -143,9 +139,9 @@ let
     bazelScript = ''
       # Augment bundled repository_cache with our extra paths
       mkdir -p $PWD/.repository_cache/content_addressable
-      cp -r --no-preserve=all ${repoCache}/content_addressable/* \
+      ${lndir}/bin/lndir ${repoCache}/content_addressable \
         $PWD/.repository_cache/content_addressable
-      cp -r --no-preserve=all ${protocbufRepoCache}/content_addressable/* \
+      ${lndir}/bin/lndir ${protocbufRepoCache}/content_addressable \
         $PWD/.repository_cache/content_addressable
 
       tree $PWD/.repository_cache
@@ -165,18 +161,6 @@ let
       --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
       --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
     '';
-      #--cxxopt=-framework --cxxopt=Foundation \
-      #--linkopt=-F${Foundation}/Library/Frameworks \
-      #--host_linkopt=-F${Foundation}/Library/Frameworks \
-
-        #--distdir=$PWD/.repository_cache \
-        #--verbose_failures \
-        #--curses=no \
-        #--sandbox_debug \
-        #--strict_java_deps=off \
-        #--strict_proto_deps=off \
-        #--repository_cache=${repoCache} \
-        #--distdir=${repoCache} \
   };
 
 in
