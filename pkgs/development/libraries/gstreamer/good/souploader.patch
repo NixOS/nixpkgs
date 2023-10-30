@@ -1,0 +1,21 @@
+diff --git a/ext/soup/gstsouploader.c b/ext/soup/gstsouploader.c
+index b65cfdab52..1173bf0a4c 100644
+--- a/ext/soup/gstsouploader.c
++++ b/ext/soup/gstsouploader.c
+@@ -235,9 +235,16 @@ gst_soup_load_library (void)
+   len = g_strv_length ((gchar **) libsoup_sonames);
+ 
+   for (guint i = 0; i < len; i++) {
++    /*
++     * calling dlopen will search the rpath of this module for libsoup and make
++     * it available when g_module_open looks for it. Otherwise, the rpath in
++     * libgmodule.so is used instead.
++     */
++    gpointer module_handle = dlopen (libsoup_sonames[i], RTLD_LAZY | RTLD_LOCAL);
+     module =
+         g_module_open (libsoup_sonames[i],
+         G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
++    g_clear_pointer (&module_handle, dlclose);
+     if (module) {
+       GST_DEBUG ("Loaded %s", g_module_name (module));
+       if (g_strstr_len (libsoup_sonames[i], -1, "soup-2")) {

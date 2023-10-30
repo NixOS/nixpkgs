@@ -23,9 +23,10 @@
 , gdk-pixbuf
 , aalib
 , libcaca
-, libsoup
+, libsoup_3
 , libpulseaudio
 , libintl
+, libxml2
 , Cocoa
 , lame
 , mpg123
@@ -100,8 +101,9 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     aalib
     libcaca
-    libsoup
+    libsoup_3
     libshout
+    libxml2
     lame
     mpg123
     twolame
@@ -166,9 +168,18 @@ stdenv.mkDerivation rec {
     "-Drpicamsrc=disabled"
   ]);
 
+  # perform a dlopen on libsoup-xx.so before the call to g_module_open so that
+  # the rpath in libgstsoup.so is used as the search path
+  patches = [ ./souploader.patch ];
+
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+  '';
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf --add-rpath ${lib.getLib libsoup_3}/lib $out/lib/gstreamer-1.0/libgstsoup.so
+    patchelf --add-rpath ${lib.getLib libsoup_3}/lib $out/lib/gstreamer-1.0/libgstadaptivedemux2.so
   '';
 
   NIX_LDFLAGS = [
