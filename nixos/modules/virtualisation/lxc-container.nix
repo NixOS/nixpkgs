@@ -76,6 +76,7 @@ in {
         "/sbin/init s 0555 0 0 ${config.system.build.toplevel}/init"
         "/dev d 0755 0 0"
         "/proc d 0555 0 0"
+        "/run d 0755 0 0"
         "/sys d 0555 0 0"
       ];
     };
