@@ -120,6 +120,19 @@ index 00d9480334e2..cd8523fe2a90 100644
      end
  
      def strip(key)
+diff --git a/lib/gitlab/json_logger.rb b/lib/gitlab/json_logger.rb
+index 7dbedef44ee9..70eaade1846e 100644
+--- a/lib/gitlab/json_logger.rb
++++ b/lib/gitlab/json_logger.rb
+@@ -38,7 +38,7 @@ def cache_key
+       end
+ 
+       def full_log_path
+-        Rails.root.join("log", file_name)
++        File.join(ENV["GITLAB_LOG_PATH"], file_name)
+       end
+     end
+ 
 diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
 index cc172bb9b858..b702f8461792 100644
 --- a/lib/gitlab/logger.rb
