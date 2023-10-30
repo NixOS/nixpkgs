@@ -370,7 +370,10 @@ let
       # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:host";
+    } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+      # setting this for native builds appears to increase the build time
       v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
+    } // {
 
       host_pkg_config = "${pkgsBuildBuild.pkg-config}/bin/pkg-config";
       pkg_config      = "${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config";
