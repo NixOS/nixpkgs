@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, gitUpdater
 , gnome-themes-extra
 , gtk-engine-murrine
 , jdupes
@@ -63,8 +62,6 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A modern and clean Gtk theme";
