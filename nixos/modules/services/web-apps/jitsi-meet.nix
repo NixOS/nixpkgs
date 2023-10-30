@@ -193,7 +193,14 @@ in
           roomDefaultPublicJids = true;
           extraConfig = ''
             storage = "memory"
+            muc_password_whitelist = {
+              "focus@auth.${cfh.hostName}"
+            }
           '';
+          #Note: Configuration is missing "muc_meeting_id", "polls",
+          #      "muc_domain_mapper" and "muc_password_whitelist"
+          #      modules, but Prosody doesn’t provide an extraModules
+          #      key to conviniently add those to the config
         }
         {
           domain = "internal.${cfg.hostName}";
