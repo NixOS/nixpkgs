@@ -102,11 +102,11 @@ in
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
         copy_bin_and_libs ${mountCommand}/bin/mount.bcachefs
       '';
-      boot.initrd.extraUtilsCommandsTest = ''
+      boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         $out/bin/bcachefs version
       '';
 
-      boot.initrd.postDeviceCommands = commonFunctions + concatStrings (mapAttrsToList openCommand bootFs);
+      boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + concatStrings (mapAttrsToList openCommand bootFs));
 
       boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
     })
