@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "ccal";
   version = "2.5.3";
   src = fetchurl {
-    url = "http://ccal.chinesebay.com/ccal/${pname}-${version}.tar.gz";
+    url = "https://ccal.chinesebay.com/${pname}-${version}.tar.gz";
     sha256 = "sha256-PUy9yfkFzgKrSEBB+79/C3oxmuajUMbBbWNuGlpQ35Y=";
   };
 
@@ -25,11 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://ccal.chinesebay.com/ccal.htm";
+    homepage = "https://ccal.chinesebay.com/ccal.htm";
     description = "Command line Chinese calendar viewer, similar to cal";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ sharzy ];
     platforms = lib.platforms.all;
   };
 }
-

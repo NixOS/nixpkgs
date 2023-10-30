@@ -181,7 +181,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/polkit";
+    homepage = "https://gitlab.freedesktop.org/polkit/polkit/";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

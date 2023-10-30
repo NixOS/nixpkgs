@@ -516,17 +516,17 @@ in mkLicense lset) ({
 
   generaluser = {
     fullName = "GeneralUser GS License v2.0";
-    url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
+    url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
   };
 
   gfl = {
     fullName = "GUST Font License";
-    url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-LICENSE.txt";
+    url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
   };
 
   gfsl = {
     fullName = "GUST Font Source License";
-    url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-SOURCE-LICENSE.txt";
+    url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
   };
 
   gpl1Only = {
@@ -613,7 +613,7 @@ in mkLicense lset) ({
   info-zip = {
     spdxId = "Info-ZIP";
     fullName = "Info-ZIP License";
-    url = "http://www.info-zip.org/pub/infozip/license.html";
+    url = "https://infozip.sourceforge.net/license.html";
   };
 
   inria-compcert = {
@@ -1182,7 +1182,7 @@ in mkLicense lset) ({
 
   xfig = {
     fullName = "xfig";
-    url = "http://mcj.sourceforge.net/authors.html#xfig"; # https is broken
+    url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
   zlib = {
