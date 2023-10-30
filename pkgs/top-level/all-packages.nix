@@ -28096,14 +28096,6 @@ with pkgs;
   inherit (callPackages ../os-specific/linux/kernel-headers { inherit (pkgsBuildBuild) elf-header; })
     linuxHeaders makeLinuxHeaders;
 
-  linuxHeaders_5_19 = linuxHeaders.overrideAttrs rec {
-    version = "5.19.16";
-    src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-      hash = "sha256-oeuvZn4QWa4tcqpjdKTW4v68C4zNpqEkaHrMLqlh4I0=";
-    };
-  };
-
   klibc = callPackage ../os-specific/linux/klibc { };
 
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });

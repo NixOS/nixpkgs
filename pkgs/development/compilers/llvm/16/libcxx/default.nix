@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     lib.optionals (!headersOnly) [ cxxabi ]
-    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [ libunwind ];
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false && !stdenv.hostPlatform.isWasm) [ libunwind ];
 
   cmakeFlags = let
     # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+      "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
     ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
     # If we're only building the headers we don't actually *need* a functioning
     # C/C++ compiler:

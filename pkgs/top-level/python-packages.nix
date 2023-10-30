@@ -15668,6 +15668,8 @@ self: super: with self; {
 
   withings-api = callPackage ../development/python-modules/withings-api { };
 
+  withings-sync = callPackage ../development/python-modules/withings-sync { };
+
   wktutils = callPackage ../development/python-modules/wktutils { };
 
   wled = callPackage ../development/python-modules/wled { };
