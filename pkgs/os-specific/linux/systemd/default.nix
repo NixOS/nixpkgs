@@ -94,7 +94,7 @@
 , withCryptsetup ? true
 , withRepart ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi
+, withEfi ? with stdenv.hostPlatform; isArmv6 || isArmv7 || isArmv8 || isRiscV || isx86
 , withFido2 ? true
 , withFirstboot ? false # conflicts with the NixOS /etc management
 , withHomed ? !stdenv.hostPlatform.isMusl
@@ -756,7 +756,7 @@ stdenv.mkDerivation (finalAttrs: {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd withEfi;
 
     tests = {
       inherit (nixosTests) switchTest;

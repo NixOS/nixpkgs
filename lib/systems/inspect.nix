@@ -6,7 +6,7 @@ with lib.lists;
 let abis_ = abis; in
 let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
 
-rec {
+let result = rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
   patterns = rec {
     # The patterns below are lists in sum-of-products form.
@@ -31,9 +31,11 @@ rec {
     ];
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
+    isArmv6        = { cpu = { family = "arm"; version = "6"; }; };
     isArmv7        = map ({ arch, ... }: { cpu = { inherit arch; }; })
                        (lib.filter (cpu: lib.hasPrefix "armv7" cpu.arch or "")
                          (lib.attrValues cpuTypes));
+    isArmv8        = { cpu = { family = "arm"; version = "8"; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isAarch        = { cpu = { family = "arm"; }; };
     isMicroBlaze   = { cpu = { family = "microblaze"; }; };
@@ -114,4 +116,22 @@ rec {
   platformPatterns = mapAttrs (_: p: { parsed = {}; } // p) {
     isStatic = { isStatic = true; };
   };
+};
+
+warnEfiDeprecated = throw "(U)EFI support is a feature of specific motherboards rather than entire architectures or platforms; this predicate has been deprecated because its name is misleading";
+
+in
+result // {
+  patterns = result.patterns // {
+    isEfi = warnEfiDeprecated result.patterns.isEfi;
+  };
+
+  # Unfortunately a strictness bug in lib.systems.equals means that
+  # we can't lib.warn on accesses to boolean values.  If
+  # https://github.com/NixOS/nixpkgs/pull/238331 is merged we can go
+  # back to using Nix `==` and this warning can be enabled.
+  #
+  #predicates = result.predicates // {
+  #  isEfi = argument: warnEfiDeprecated (result.predicates.isEfi argument);
+  #};
 }

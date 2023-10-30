@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
     description = "GNU EFI development toolchain";
     homepage = "https://sourceforge.net/projects/gnu-efi/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = with lib.systems.inspect.patterns; map (pat: pat // isLinux) ([
+      isArmv6 ] ++ isArmv7 ++ [ isArmv8 isRiscV isx86
+    ]);
     maintainers = with maintainers; [ ];
   };
 }
