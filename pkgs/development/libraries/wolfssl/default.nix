@@ -6,6 +6,7 @@
 , autoreconfHook
 , util-linux
 , openssl
+, cacert
 # The primary --enable-XXX variant. 'all' enables most features, but causes build-errors for some software,
 # requiring to build a special variant for that software. Example: 'haproxy'
 , variant ? "all"
@@ -14,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wolfssl-${variant}";
-  version = "5.6.3";
+  version = "5.6.4";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${finalAttrs.version}-stable";
-    hash = "sha256-UN4zs+Rxh/bsLD1BQA+f1YN/UOJ6OB2HduhoetEp10Y=";
+    hash = "sha256-a9a3ca4Zb/XTS5YfPJwnXPYbDjmgD8qylhPQg5pjzJM=";
   };
 
   patches = [
@@ -92,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     openssl
+    cacert
   ];
 
   postInstall = ''
