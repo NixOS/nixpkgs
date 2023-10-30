@@ -2,7 +2,6 @@
 , lib
 , beautifulsoup4
 , blender
-, blender-with-packages
 , boxx
 , bpycv
 , buildPythonPackage
@@ -52,13 +51,8 @@ buildPythonPackage rec {
         hash = "sha256-dGb6KvbXTGTu5f4AqhA+i4AwTqBoR5SdXk0vsMEcD3Q=";
         rev = "6ce0e65c107d572011394da16ffdf851e988dbb4";
       };
-      nativeBuildInputs = [
-        ((blender-with-packages.override {inherit blender python3Packages;}) {
-          packages = [ bpycv ];
-        })
-      ];
     } ''
-      blender-wrapped -b -P ${./bpycv-test.py}
+      ${blender.withPackages (ps: [ps.bpycv])}/bin/blender-wrapped -b -P ${./bpycv-test.py}
     '';
   };
 
