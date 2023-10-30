@@ -198,6 +198,9 @@ in
         {
           domain = "internal.${cfg.hostName}";
           name = "Jitsi Meet Videobridge MUC";
+          restrictRoomCreation = true;
+          roomLocking = false;
+          roomDefaultPublicJids = true;
           extraConfig = ''
             storage = "memory"
             admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}" }
