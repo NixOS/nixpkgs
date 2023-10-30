@@ -287,7 +287,7 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (lib.optionalSttrs (!stdenv.hostPlatform.isDarwin) {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
     }) // {

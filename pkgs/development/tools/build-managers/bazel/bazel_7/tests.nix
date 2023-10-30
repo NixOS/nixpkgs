@@ -145,7 +145,7 @@ let
       cpp = callBazelTest ../cpp-test.nix args;
       java = callBazelTest ../java-test.nix args;
       pythonBinPath = callBazelTest ../python-bin-path-test.nix args;
-      protobuf = callBazelTest ../protobuf-test.nix (args // { repoCache = testsRepoCache; });
+      protobuf = callBazelTest ./protobuf-test.nix (args // { repoCache = testsRepoCache; });
     });
 
   bazelWithNixHacks = bazel_self.override { enableNixHacks = true; };

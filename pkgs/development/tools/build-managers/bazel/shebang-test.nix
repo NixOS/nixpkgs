@@ -22,7 +22,6 @@ let
     bazelPkg = bazel;
     bazelScript = ''
       set -ueo pipefail
-
       FAIL=
       check_shebangs() {
         local dir="$1"

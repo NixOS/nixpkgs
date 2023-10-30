@@ -1,10 +1,10 @@
-{ bazel
+{
+  bazel
 , bazelTest
 , fetchFromGitHub
 , fetchurl
 , stdenv
 , darwin
-, extraBazelArgs ? ""
 , lib
 , openjdk8
 , jdk11_headless
@@ -13,52 +13,89 @@
 , writeScript
 , writeText
 , distDir
-, Foundation
-, callPackage
-, libtool
-, lndir
-, repoCache
-, tree
 }:
 
 let
-
-  lockfile = ./bazel_7/tests.MODULE.bazel.lock;
-
-  protocbufRepoCache = callPackage ./bazel_7/bazel-repository-cache.nix {
-    # We are somewhat lucky that bazel's own lockfile works for our tests.
-    # Use extraDeps if the tests need things that are not in that lockfile.
-    # But most test dependencies are bazel's builtin deps, so that at least aligns.
-    inherit lockfile;
-
-    # Take all the rules_ deps, bazel_ deps and their transitive dependencies,
-    # but none of the platform-specific binaries, as they are large and useless.
-    requiredDepNamePredicate = name:
-      null == builtins.match ".*(macos|osx|linux|win|android|maven).*" name;
+  com_google_protobuf = fetchFromGitHub {
+    owner = "protocolbuffers";
+    repo = "protobuf";
+    rev = "v3.13.0";
+    sha256 = "1nqsvi2yfr93kiwlinz8z7c68ilg1j75b2vcpzxzvripxx5h6xhd";
   };
 
-  MODULE = writeText "MODULE.bazel" ''
-    bazel_dep(name = "rules_proto", version = "5.3.0-21.7")
-    bazel_dep(name = "protobuf", version = "21.7")
-    bazel_dep(name = "zlib", version = "1.3")
-  '';
+  bazel_skylib = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "bazel-skylib";
+    rev = "2ec2e6d715e993d96ad6222770805b5bd25399ae";
+    sha256 = "1z2r2vx6kj102zvp3j032djyv99ski1x1sl4i3p6mswnzrzna86s";
+  };
+
+  rules_python = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_python";
+    rev = "c8c79aae9aa1b61d199ad03d5fe06338febd0774";
+    sha256 = "1zn58wv5wcylpi0xj7riw34i1jjpqahanxx8y9srwrv0v93b6pqz";
+  };
+
+  rules_proto = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_proto";
+    rev = "a0761ed101b939e19d83b2da5f59034bffc19c12";
+    sha256 = "09lqfj5fxm1fywxr5w8pnpqd859gb6751jka9fhxjxjzs33glhqf";
+  };
+
+  net_zlib = fetchurl rec {
+    url = "https://zlib.net/zlib-1.2.11.tar.gz";
+    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
+
+    passthru.sha256 = sha256;
+  };
 
   WORKSPACE = writeText "WORKSPACE" ''
     workspace(name = "our_workspace")
 
+    load("//:proto-support.bzl", "protobuf_deps")
+    protobuf_deps()
+    load("@rules_proto//proto:repositories.bzl", "rules_proto_toolchains")
+    rules_proto_toolchains()
+    '';
+
+  protoSupport = writeText "proto-support.bzl" ''
+    """Load dependencies needed to compile the protobuf library as a 3rd-party consumer."""
+
     load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-    http_archive(
-        name = "rules_proto",
-        sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
-        strip_prefix = "rules_proto-5.3.0-21.7",
-        urls = [
-            "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
-        ],
-    )
-    load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-    rules_proto_dependencies()
-    rules_proto_toolchains()
+    def protobuf_deps():
+        """Loads common dependencies needed to compile the protobuf library."""
+
+        if "zlib" not in native.existing_rules():
+            # proto_library, cc_proto_library, and java_proto_library rules implicitly
+            # depend on @com_google_protobuf for protoc and proto runtimes.
+            # This statement defines the @com_google_protobuf repo.
+            native.local_repository(
+                name = "com_google_protobuf",
+                path = "${com_google_protobuf}",
+            )
+            native.local_repository(
+                name = "bazel_skylib",
+                path = "${bazel_skylib}",
+            )
+            native.local_repository(
+                name = "rules_proto",
+                path = "${rules_proto}",
+            )
+            native.local_repository(
+                name = "rules_python",
+                path = "${rules_python}",
+            )
+
+            http_archive(
+                name = "zlib",
+                build_file = "@com_google_protobuf//:third_party/zlib.BUILD",
+                sha256 = "${net_zlib.sha256}",
+                strip_prefix = "zlib-1.2.11",
+                urls = ["file://${net_zlib}"],
+            )
   '';
 
   personProto = writeText "person.proto" ''
@@ -105,80 +142,46 @@ let
     # See: https://github.com/bazelbuild/bazel/issues/4231
     export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 
-    export HOMEBREW_RUBY_PATH="foo"
-
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" { } (''
+  workspaceDir = runLocal "our_workspace" {} (''
     mkdir $out
-    cp --no-preserve=all ${MODULE} $out/MODULE.bazel
-    cp --no-preserve=all ${./bazel_7/tests.MODULE.bazel.lock} $out/MODULE.bazel.lock
-    #cp ${WORKSPACE} $out/WORKSPACE
-    touch $out/WORKSPACE
+    cp ${WORKSPACE} $out/WORKSPACE
     touch $out/BUILD.bazel
+    cp ${protoSupport} $out/proto-support.bzl
     mkdir $out/person
-    cp --no-preserve=all ${personProto} $out/person/person.proto
-    cp --no-preserve=all ${personBUILD} $out/person/BUILD.bazel
+    cp ${personProto} $out/person/person.proto
+    cp ${personBUILD} $out/person/BUILD.bazel
   ''
   + (lib.optionalString stdenv.isDarwin ''
-    echo 'tools bazel created'
     mkdir $out/tools
-    install ${toolsBazel} $out/tools/bazel
+    cp ${toolsBazel} $out/tools/bazel
   ''));
 
   testBazel = bazelTest {
     name = "bazel-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [
-      (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
-      tree
-      bazel
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      darwin.objc4
-    ];
-
+    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
     bazelScript = ''
-      # Augment bundled repository_cache with our extra paths
-      mkdir -p $PWD/.repository_cache/content_addressable
-      cp -r --no-preserve=all ${repoCache}/content_addressable/* \
-        $PWD/.repository_cache/content_addressable
-      cp -r --no-preserve=all ${protocbufRepoCache}/content_addressable/* \
-        $PWD/.repository_cache/content_addressable
-
-      tree $PWD/.repository_cache
-
       ${bazel}/bin/bazel \
         build \
-        --repository_cache=$PWD/.repository_cache \
-        ${extraBazelArgs} \
-        --enable_bzlmod \
+        --distdir=${distDir} \
         --verbose_failures \
+        --curses=no \
+        --sandbox_debug \
+        --strict_java_deps=off \
+        --strict_proto_deps=off \
         //... \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-      --host_javabase='@local_jdk//:jdk' \
-      --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-      --javabase='@local_jdk//:jdk' \
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
     '' + lib.optionalString (stdenv.isDarwin) ''
-      --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
-      --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
+        --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
+        --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
     '';
-      #--cxxopt=-framework --cxxopt=Foundation \
-      #--linkopt=-F${Foundation}/Library/Frameworks \
-      #--host_linkopt=-F${Foundation}/Library/Frameworks \
-
-        #--distdir=$PWD/.repository_cache \
-        #--verbose_failures \
-        #--curses=no \
-        #--sandbox_debug \
-        #--strict_java_deps=off \
-        #--strict_proto_deps=off \
-        #--repository_cache=${repoCache} \
-        #--distdir=${repoCache} \
   };
 
-in
-testBazel
+in testBazel
