@@ -29,8 +29,6 @@ in buildPythonPackage rec {
     hash = "sha256-sfvVLPTSTXjwyB0a2NyDIONv01FXZ40nHZwwo3oqI90=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -48,28 +46,32 @@ in buildPythonPackage rec {
     nose
   ];
 
-  # TODO: Get the rest of these tests running?
-  NOSE_EXCLUDE = lib.concatStringsSep "," [
-    "test_bluez4" # NixOS ships BlueZ5
-    # These appear to fail because they're expecting to run in an Ubuntu chroot?
-    "test_everything" # BlueZ5 OBEX
-    "test_polkitd"
-    "test_consolekit"
-    "test_api"
-    "test_logind"
-    "test_notification_daemon"
-    "test_ofono"
-    "test_gnome_screensaver"
-    "test_cli"
-    "test_timedated"
-    "test_upower"
-    # needs glib
-    "test_accounts_service"
-    # needs dbus-daemon active
-    "test_systemd"
-    # Very slow, consider disabling?
-    # "test_networkmanager"
-  ];
+  env = {
+    # TODO: Get the rest of these tests running?
+    NOSE_EXCLUDE = lib.concatStringsSep "," [
+      "test_bluez4" # NixOS ships BlueZ5
+      # These appear to fail because they're expecting to run in an Ubuntu chroot?
+      "test_everything" # BlueZ5 OBEX
+      "test_polkitd"
+      "test_consolekit"
+      "test_api"
+      "test_logind"
+      "test_notification_daemon"
+      "test_ofono"
+      "test_gnome_screensaver"
+      "test_cli"
+      "test_timedated"
+      "test_upower"
+      # needs glib
+      "test_accounts_service"
+      # needs dbus-daemon active
+      "test_systemd"
+      # Very slow, consider disabling?
+      # "test_networkmanager"
+    ];
+
+    SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  };
 
   checkPhase = ''
     runHook preCheck
