@@ -10,6 +10,7 @@ file-systems.chapter.md
 x-windows.chapter.md
 wayland.chapter.md
 gpu-accel.chapter.md
+fhs.chapter.md
 xfce.chapter.md
 networking.chapter.md
 linux-kernel.chapter.md
