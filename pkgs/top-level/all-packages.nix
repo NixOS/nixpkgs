@@ -41219,7 +41219,7 @@ with pkgs;
 
   tp-auto-kbbl = callPackage ../tools/system/tp-auto-kbbl { };
 
-  tup = callPackage ../development/tools/build-managers/tup { };
+  tup = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/tup { };
 
   turtle-build = callPackage ../development/tools/build-managers/turtle-build { };
 
