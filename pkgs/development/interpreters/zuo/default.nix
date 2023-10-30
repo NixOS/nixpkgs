@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "zuo";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A Tiny Racket for Scripting";
