@@ -584,17 +584,17 @@ in
       boot.initrd = mkIf inInitrd {
         kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
         extraUtilsCommands =
-          ''
+          mkIf (!config.boot.initrd.systemd.enable) ''
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
             copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
             copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
           '';
-        extraUtilsCommandsTest = mkIf inInitrd
-          ''
+        extraUtilsCommandsTest =
+          mkIf (!config.boot.initrd.systemd.enable) ''
             $out/bin/zfs --help >/dev/null 2>&1
             $out/bin/zpool --help >/dev/null 2>&1
           '';
-        postDeviceCommands = concatStringsSep "\n" ([''
+        postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) (concatStringsSep "\n" ([''
             ZFS_FORCE="${optionalString cfgZfs.forceImportRoot "-f"}"
           ''] ++ [(importLib {
             # See comments at importLib definition.
@@ -623,10 +623,10 @@ in
               else concatMapStrings (fs: ''
                 zfs load-key -- ${escapeShellArg fs}
               '') (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}
-        '') rootPools));
+        '') rootPools)));
 
         # Systemd in stage 1
-        systemd = {
+        systemd = mkIf config.boot.initrd.systemd.enable {
           packages = [cfgZfs.package];
           services = listToAttrs (map (pool: createImportService {
             inherit pool;

@@ -128,10 +128,6 @@ in {
         stage 2 counterparts such as {option}`systemd.services`,
         except that `restartTriggers` and `reloadTriggers` are not
         supported.
-
-        Note: This is experimental. Some of the `boot.initrd` options
-        are not supported when this is enabled, and the options under
-        `boot.initrd.systemd` are subject to change.
       '';
     };
 
@@ -348,6 +344,27 @@ in {
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
+    assertions = map (name: {
+      assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
+      message = ''
+        systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+          convert it to analogous systemd units in 'boot.initrd.systemd'.
+
+            Definitions:
+        ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}") (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations}
+      '';
+    }) [
+      [ "preFailCommands" ]
+      [ "preDeviceCommands" ]
+      [ "preLVMCommands" ]
+      [ "postDeviceCommands" ]
+      [ "postMountCommands" ]
+      [ "extraUdevRulesCommands" ]
+      [ "extraUtilsCommands" ]
+      [ "extraUtilsCommandsTest" ]
+      [ "network" "postCommands" ]
+    ];
+
     system.build = { inherit initialRamdisk; };
 
     boot.initrd.availableKernelModules = [
