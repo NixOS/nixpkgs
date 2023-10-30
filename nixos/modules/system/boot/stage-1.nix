@@ -307,7 +307,7 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit linkUnits udevRules extraUtils modulesClosure;
+    inherit linkUnits udevRules extraUtils;
 
     inherit (config.boot) resumeDevice;
 
@@ -348,6 +348,9 @@ let
     contents =
       [ { object = bootStage1;
           symlink = "/init";
+        }
+        { object = "${modulesClosure}/lib";
+          symlink = "/lib";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
