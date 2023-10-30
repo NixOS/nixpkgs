@@ -42,7 +42,7 @@ let
     else "${k}=${builtins.toJSON v}");
 in
 stdenv.mkDerivation rec {
-  pname = "godot";
+  pname = "godot4";
   version = "4.1.1";
   commitHash = "bd6af8e0ea69167dd0627f3bd54f9105bda0f8b5";
 
