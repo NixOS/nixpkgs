@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
     "--with-gmp"
   ];
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    make check
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "Standard ML compiler and interpreter";
     longDescription = ''
