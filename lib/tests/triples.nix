@@ -101,7 +101,7 @@ in {
       # each triple we want to test)
       + ''
         mkdir results
-        make -j$NIX_BUILD_CORES --no-builtin-rules --keep-going ${lib.concatStringsSep " " filtered-triples}
+        make --silent -j$NIX_BUILD_CORES --no-builtin-rules --keep-going ${lib.concatStringsSep " " filtered-triples}
       ''
 
       # And then dump all the results as a single JSON file.  This
