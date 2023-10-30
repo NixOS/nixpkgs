@@ -19,7 +19,7 @@
 #
 # 1. has an executable (i.e. unambiguous) specification
 # 2. covers a superset of the systems on which nixpkgs could be useful
-# 3. is *not* under nixpkgs' control (bickering/drama avoidance)
+# 3. is *not* under nixpkgs' control, to minimize bikeshedding/debate
 # 4. emanates from an organization (GNU) which understands that
 #    the taxonomy is not merely an implementation detail of one of
 #    their software products, and has demonstrated this
