@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "colloid-kde";
-  version = "unstable-2022-07-13";
+  version = "unstable-2023-07-04";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "eaf6844e997aa60c755af7ea560ffba798e72ff5";
-    hash = "sha256-FNTG5aVvTWHqNVVR23LFG/ykPtXRD7oH5C6eyWaqc60=";
+    rev = "0b79befdad9b442b5a8287342c4b7e47ff87d555";
+    hash = "sha256-AYH9fW20/p+mq6lxR1lcCV1BQ/kgcsjHncpMvYWXnWA=";
   };
 
   postPatch = ''
