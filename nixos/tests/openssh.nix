@@ -82,6 +82,19 @@ in {
         };
       };
 
+    server_allowedusers =
+      { ... }:
+
+      {
+        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
+        users.groups = { alice = { }; bob = { }; carol = { }; };
+        users.users = {
+          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+        };
+      };
+
     client =
       { ... }: { };
 
@@ -147,5 +160,23 @@ in {
 
     with subtest("match-rules"):
         server_match_rule.succeed("ss -nlt | grep '127.0.0.1:22'")
+
+    with subtest("allowed-users"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server_allowedusers true",
+            timeout=30
+        )
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server_allowedusers true",
+            timeout=30
+        )
+        client.fail(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server_allowedusers true",
+            timeout=30
+        )
   '';
 })

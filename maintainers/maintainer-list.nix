@@ -13604,6 +13604,11 @@
     githubId = 15645854;
     name = "Brad Christensen";
   };
+  paumr = {
+    github = "paumr";
+    name = "Michael Bergmeister";
+    githubId = 53442728;
+  };
   paveloom = {
     email = "paveloom@riseup.net";
     github = "paveloom";
@@ -19554,6 +19559,12 @@
     keys = [{
       fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
     }];
+  };
+  yunfachi = {
+    email = "yunfachi@gmail.com";
+    github = "yunfachi";
+    githubId = 73419713;
+    name = "Yunfachi";
   };
   yureien = {
     email = "contact@sohamsen.me";

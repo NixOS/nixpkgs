@@ -361,10 +361,10 @@
       elpaBuild {
         pname = "cider";
         ename = "cider";
-        version = "1.8.3";
+        version = "1.9.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/cider-1.8.3.tar";
-          sha256 = "0c77rlpyda4x05fj3d10cpww0pkbsjcbrvwcwy4gh74c9m9xmq1d";
+          url = "https://elpa.nongnu.org/nongnu/cider-1.9.0.tar";
+          sha256 = "08vc1v4gzh1njvqhg10c07wq28r2s9qq3y7i4b5clrzgy9l872cw";
         };
         packageRequires = [
           clojure-mode
@@ -3001,10 +3001,10 @@
       elpaBuild {
         pname = "sweeprolog";
         ename = "sweeprolog";
-        version = "0.25.5";
+        version = "0.26.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/sweeprolog-0.25.5.tar";
-          sha256 = "1gxy68a26h65rzf8815iifcnr67rpw69ll14d4cbq9qsxvrmy50h";
+          url = "https://elpa.nongnu.org/nongnu/sweeprolog-0.26.0.tar";
+          sha256 = "0pgxz3ckw3qjzqyn6vr8k8y1gdiybsm47ik8j62ybsnqs7ivs208";
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -3307,10 +3307,10 @@
       elpaBuild {
         pname = "web-mode";
         ename = "web-mode";
-        version = "17.3.14";
+        version = "17.3.15";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/web-mode-17.3.14.tar";
-          sha256 = "1a13lra62vqcxr31ivx1r68wj1d59hkbrfxxmy8f7afm1v4aqbz2";
+          url = "https://elpa.nongnu.org/nongnu/web-mode-17.3.15.tar";
+          sha256 = "028p034793pkkwgaqgc3zw23ji39ss5gma5g8fhml6v8pc4ri2w8";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3470,10 +3470,10 @@
       elpaBuild {
         pname = "xah-fly-keys";
         ename = "xah-fly-keys";
-        version = "24.13.20231009115302";
+        version = "24.13.20231025112537";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-24.13.20231009115302.tar";
-          sha256 = "0k530ihjjwcvl24f815nk9jqfnbhzb95xlfm8721dlsbrsmsaiwc";
+          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-24.13.20231025112537.tar";
+          sha256 = "1h7z9g3307w0cg361md8mbhsia2534ncqihdfsasg5qhw9184sib";
         };
         packageRequires = [ emacs ];
         meta = {

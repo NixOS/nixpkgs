@@ -75,15 +75,15 @@ index ff18800..b1cb443 100644
 -}
 -
 diff --git a/src/direwolf.h b/src/direwolf.h
-index efc329b..22eb748 100644
+index 69b0952..6f9ec1a 100644
 --- a/src/direwolf.h
 +++ b/src/direwolf.h
-@@ -294,7 +294,7 @@ char *strcasestr(const char *S, const char *FIND);
- #define HAVE_STRLCPY 1
+@@ -328,7 +328,7 @@ char *strcasestr(const char *S, const char *FIND);
+ #endif
+ #endif
  
+-#define DEBUG_STRL 1	// Extra Debug version when using our own strlcpy, strlcat.
++#define DEBUG_STRL 0	// Extra Debug version when using our own strlcpy, strlcat.
+ 			// Should be ignored if not supplying our own.
  
--#define DEBUG_STRL 1
-+#define DEBUG_STRL 0
- 
- #if DEBUG_STRL
- 
+ #ifndef HAVE_STRLCPY	// Need to supply our own.

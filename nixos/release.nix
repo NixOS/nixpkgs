@@ -398,7 +398,7 @@ in rec {
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault lib.trivial.release;
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;

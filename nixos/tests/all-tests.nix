@@ -90,6 +90,14 @@ in {
     lib-extend = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nixos-test-driver/lib-extend.nix {};
     node-name = runTest ./nixos-test-driver/node-name.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
+    driver-timeout = pkgs.runCommand "ensure-timeout-induced-failure" {
+      failed = pkgs.testers.testBuildFailure ((runTest ./nixos-test-driver/timeout.nix).config.rawTestDerivation);
+    } ''
+      grep -F "timeout reached; test terminating" $failed/testBuildFailure.log
+      # The program will always be terminated by SIGTERM (143) if it waits for the deadline thread.
+      [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
+      touch $out
+    '';
   };
 
   # NixOS vm tests and non-vm unit tests
@@ -582,6 +590,7 @@ in {
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};
+  non-switchable-system = runTest ./non-switchable-system.nix;
   noto-fonts = handleTest ./noto-fonts.nix {};
   noto-fonts-cjk-qt-default-weight = handleTest ./noto-fonts-cjk-qt-default-weight.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};

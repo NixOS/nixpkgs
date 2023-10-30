@@ -364,6 +364,8 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
+  bloom = qt6Packages.callPackage ../development/tools/bloom { };
+
   bloodhound-py = callPackage ../tools/security/bloodhound-py { };
 
   bodyclose = callPackage ../development/tools/bodyclose { };
@@ -1588,8 +1590,8 @@ with pkgs;
   };
 
   honggfuzz = callPackage ../tools/security/honggfuzz {
-    clang = clang_12;
-    llvm = llvm_12;
+    clang = clang_16;
+    llvm = llvm_16;
   };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
@@ -3989,7 +3991,9 @@ with pkgs;
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
-  livebook = callPackage ../servers/web-apps/livebook { };
+  livebook = callPackage ../servers/web-apps/livebook {
+    elixir = elixir_1_15;
+  };
 
   lsix = callPackage ../tools/graphics/lsix { };
 
@@ -7786,7 +7790,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_24;
+    electron = electron_25;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -8846,12 +8850,6 @@ with pkgs;
   grafx2 = callPackage ../applications/graphics/grafx2 { };
 
   grails = callPackage ../development/web/grails { jdk = null; };
-
-  graylog-3_3 = callPackage ../tools/misc/graylog/3.3.nix { };
-
-  graylog-4_0 = callPackage ../tools/misc/graylog/4.0.nix { };
-
-  graylog-4_3 = callPackage ../tools/misc/graylog/4.3.nix { };
 
   graylog-5_0 = callPackage ../tools/misc/graylog/5.0.nix { };
 
@@ -13245,7 +13243,7 @@ with pkgs;
   sixpair = callPackage ../tools/misc/sixpair { };
 
   sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Carbon CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
   };
 
   sketchybar-app-font = callPackage ../data/fonts/sketchybar-app-font { };
@@ -15458,6 +15456,9 @@ with pkgs;
   powerline = with python3Packages; toPythonApplication powerline;
 
   ### DEVELOPMENT / COMPILERS
+
+  temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
+  temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
 
   temurin-bin-20 = javaPackages.compiler.temurin-bin.jdk-20;
   temurin-jre-bin-20 = javaPackages.compiler.temurin-bin.jre-20;
@@ -17764,6 +17765,11 @@ with pkgs;
 
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
+
+  luarocks-packages-updater = callPackage ../development/lua-modules/updater {
+    inherit (python3Packages) buildPythonApplication ;
+  };
+
 
   luau = callPackage ../development/interpreters/luau { };
 
@@ -26339,6 +26345,7 @@ with pkgs;
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
   envoy = callPackage ../servers/http/envoy {
+    go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
   };
@@ -30866,10 +30873,6 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
-  chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
-
-  chromiumDev = lowPrio (chromium.override { channel = "dev"; });
-
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin) DarwinTools;
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel MultitouchSupport;
@@ -32269,10 +32272,6 @@ with pkgs;
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { };
-
-  google-chrome-beta = google-chrome.override { chromium = chromiumBeta; channel = "beta"; };
-
-  google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
   go-graft = callPackage ../applications/networking/go-graft { };
 
@@ -35453,6 +35452,8 @@ with pkgs;
   prusa-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer { };
 
   super-slicer = darwin.apple_sdk_11_0.callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
+
+  super-slicer-beta = super-slicer.beta;
 
   super-slicer-latest = super-slicer.latest;
 
@@ -41943,7 +41944,7 @@ with pkgs;
 
   inherit (callPackage ../applications/misc/zettlr {
     texlive = texlive.combined.scheme-medium;
-  }) zettlr zettlr-beta;
+  }) zettlr;
 
   unpoller = callPackage ../servers/monitoring/unpoller { };
 

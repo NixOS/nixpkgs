@@ -21,9 +21,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           modules = lib.singleton {
             nixpkgs = { inherit (config.nixpkgs) localSystem; };
 
-            containers.foo.config = {
-              system.stateVersion = "18.03";
-            };
+            containers.foo.config = {};
           };
 
           # The system is inherited from the host above.

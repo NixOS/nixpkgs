@@ -767,6 +767,7 @@
   ./services/monitoring/below.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
+  ./services/monitoring/certspotter.nix
   ./services/monitoring/cockpit.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
@@ -1407,6 +1408,7 @@
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/specialisation.nix
+  ./system/activation/switchable-system.nix
   ./system/activation/bootspec.nix
   ./system/activation/top-level.nix
   ./system/boot/binfmt.nix

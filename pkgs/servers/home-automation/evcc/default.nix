@@ -1,5 +1,5 @@
 { lib
-, buildGo121Module
+, buildGoModule
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
@@ -14,15 +14,15 @@
 , stdenv
 }:
 
-buildGo121Module rec {
+buildGoModule rec {
   pname = "evcc";
-  version = "0.121.2";
+  version = "0.121.5";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
-    hash = "sha256-WGce6HszjS/AVwlEmT8KZnFHZieaGzT+yyzxOtqf/zg=";
+    hash = "sha256-KEJh/JhTlSrio4JRQwxz8NbmjzaqW4MUlzAXGvanMmo=";
   };
 
   vendorHash = "sha256-dBJsPv3tOWxLvVlkTG0npKalH2RWfwR3vJRjqb4TYQE=";

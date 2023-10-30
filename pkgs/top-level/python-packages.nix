@@ -2238,6 +2238,8 @@ self: super: with self; {
 
   compiledb = callPackage ../development/python-modules/compiledb { };
 
+  complycube = callPackage ../development/python-modules/complycube { };
+
   compreffor = callPackage ../development/python-modules/compreffor { };
 
   compressai = callPackage ../development/python-modules/compressai { };
@@ -11501,6 +11503,8 @@ self: super: with self; {
   });
 
   python-olm = callPackage ../development/python-modules/python-olm { };
+
+  python-on-whales = callPackage ../development/python-modules/python-on-whales { };
 
   python-opendata-transport = callPackage ../development/python-modules/python-opendata-transport { };
 

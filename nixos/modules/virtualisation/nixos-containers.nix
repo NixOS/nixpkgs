@@ -754,7 +754,7 @@ in
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql_14;
 
-                    system.stateVersion = "21.05";
+                    system.stateVersion = "${lib.trivial.release}";
                   };
               };
           }
@@ -906,4 +906,6 @@ in
       "tun"
     ];
   });
+
+  meta.buildDocsInSandbox = false;
 }

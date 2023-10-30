@@ -1,6 +1,4 @@
-#!/usr/bin/env nix-shell
-#!nix-shell update-luarocks-shell.nix -i python3
-
+#!/usr/bin/env python
 # format:
 # $ nix run nixpkgs#python3Packages.black -- update.py
 # type-check:
@@ -32,12 +30,9 @@ from pluginupdate import update_plugins, FetchConfig, CleanEnvironment
 PKG_LIST = "maintainers/scripts/luarocks-packages.csv"
 TMP_FILE = "$(mktemp)"
 GENERATED_NIXFILE = "pkgs/development/lua-modules/generated-packages.nix"
-LUAROCKS_CONFIG = "maintainers/scripts/luarocks-config.lua"
 
 HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
-Regenerate it with:
-nixpkgs$ ./maintainers/scripts/update-luarocks-packages
-
+Regenerate it with: nix run nixpkgs#update-luarocks-packages
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
 """.format(
@@ -76,6 +71,12 @@ class LuaPlugin:
 
 # rename Editor to LangUpdate/ EcosystemUpdater
 class LuaEditor(pluginupdate.Editor):
+
+    def create_parser(self):
+        parser = super().create_parser()
+        parser.set_defaults(proc=1)
+        return parser
+
     def get_current_plugins(self):
         return []
 
@@ -101,9 +102,8 @@ class LuaEditor(pluginupdate.Editor):
         with tempfile.NamedTemporaryFile("w+") as f:
             f.write(HEADER)
             header2 = textwrap.dedent(
-                # header2 = inspect.cleandoc(
                 """
-                { self, stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
+                { stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
                 final: prev:
                 {
             """
@@ -165,12 +165,7 @@ def generate_pkg_nix(plug: LuaPlugin):
     Our cache key associates "p.name-p.version" to its rockspec
     """
     log.debug("Generating nix expression for %s", plug.name)
-    custom_env = os.environ.copy()
-    custom_env["LUAROCKS_CONFIG"] = LUAROCKS_CONFIG
 
-    # we add --dev else luarocks wont find all the "scm" (=dev) versions of the
-    # packages
-    # , "--dev"
     cmd = ["luarocks", "nix"]
 
     if plug.maintainers:
@@ -201,7 +196,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     log.debug("running %s", " ".join(cmd))
 
-    output = subprocess.check_output(cmd, env=custom_env, text=True)
+    output = subprocess.check_output(cmd, text=True)
     output = "callPackage(" + output.strip() + ") {};\n\n"
     return (plug, output)
 
@@ -211,8 +206,8 @@ def main():
         "lua",
         ROOT,
         "",
-        default_in=ROOT.joinpath(PKG_LIST),
-        default_out=ROOT.joinpath(GENERATED_NIXFILE),
+        default_in=PKG_LIST,
+        default_out=GENERATED_NIXFILE,
     )
 
     editor.run()
@@ -220,5 +215,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#  vim: set ft=python noet fdm=manual fenc=utf-8 ff=unix sts=0 sw=4 ts=4 :
