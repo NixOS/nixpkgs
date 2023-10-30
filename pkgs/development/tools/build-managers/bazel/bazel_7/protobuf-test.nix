@@ -108,7 +108,7 @@ let
   workspaceDir = runLocal "our_workspace" { } (''
     mkdir $out
     cp ${MODULE} $out/MODULE.bazel
-    cp ${./tests.MODULE.bazel.lock} $out/MODULE.bazel.lock
+    cp ${./protobuf-test.MODULE.bazel.lock} $out/MODULE.bazel.lock
     #cp ${WORKSPACE} $out/WORKSPACE
     touch $out/WORKSPACE
     touch $out/BUILD.bazel
