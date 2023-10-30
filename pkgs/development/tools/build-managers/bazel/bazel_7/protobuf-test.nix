@@ -28,12 +28,12 @@
 
 let
   # To update the lockfile, run
-  #     nix-shell -A bazel_7.tests.vanilla.protobuf
-  #         genericBuild (wait a bit for failure, or kill it)
-  #         rm -rfffffffff MODULE.bazel.lock
-  #         bazel mod deps --lockfile_mode=update
-  #         cp MODULE.bazel.lock $HERE/tests.MODULE.bazel.lock
-  lockfile = ./tests.MODULE.bazel.lock;
+  #    $ nix-shell -A bazel_7.tests.vanilla.protobuf
+  #    [nix-shell]$ genericBuild # (wait a bit for failure, or kill it)
+  #    [nix-shell]$ rm -f MODULE.bazel.lock
+  #    [nix-shell]$ bazel mod deps --lockfile_mode=update
+  #    [nix-shell]$ cp MODULE.bazel.lock $HERE/protobuf-test.MODULE.bazel.lock
+  lockfile = ./protobuf-test.MODULE.bazel.lock;
 
   protocbufRepoCache = callPackage ./bazel-repository-cache.nix {
     # We are somewhat lucky that bazel's own lockfile works for our tests.
