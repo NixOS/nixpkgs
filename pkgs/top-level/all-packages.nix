@@ -29374,7 +29374,9 @@ with pkgs;
 
   graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
-  graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
+  graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   greybird = callPackage ../data/themes/greybird { };
 
