@@ -90,9 +90,7 @@ in
 
     package = lib.mkPackageOption pkgs "systemd-repart" {
       default = "systemd";
-      example = lib.literalExpression ''
-        pkgs.systemdMinimal.override { withCryptsetup = true; }
-      '';
+      example = "pkgs.systemdMinimal.override { withCryptsetup = true; }";
     };
 
     partitions = lib.mkOption {
