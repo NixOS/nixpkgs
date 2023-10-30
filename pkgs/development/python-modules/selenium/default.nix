@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , certifi
 , geckodriver
@@ -26,9 +27,17 @@ buildPythonPackage rec {
     hash = "sha256-A2lI40bPSIri/0yp6C3aJZBX5p6ON1fWGfJTcul9/2o=";
   };
 
+  patches = [
+    (fetchpatch {
+      # Fix CONDA_PREFIX access test; https://github.com/SeleniumHQ/selenium/pull/13071
+      url = "https://github.com/SeleniumHQ/selenium/commit/c158a799eae8d1838abfed08532d7fef6612564c.patch";
+      hash = "sha256-lkKSxDKKXVUvDjUhvacH2n5+65mFbkEIt5+yuRbAo4o=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace py/selenium/webdriver/firefox/service.py \
-      --replace 'DEFAULT_EXECUTABLE_PATH = "geckodriver"' 'DEFAULT_EXECUTABLE_PATH = "${geckodriver}/bin/geckodriver"'
+      --replace 'executable_path: str = None,' 'executable_path="${geckodriver}/bin/geckodriver",'
   '';
 
   preConfigure = ''
