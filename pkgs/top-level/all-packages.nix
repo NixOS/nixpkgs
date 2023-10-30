@@ -19927,7 +19927,9 @@ with pkgs;
 
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
-  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
+  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix {
+    python3 = python310;
+  };
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
 
