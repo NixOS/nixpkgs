@@ -31,7 +31,7 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" { } (''
+  workspaceDir = runLocal "our_workspace" {} (''
     cp -r ${bazel-examples}/java-tutorial $out
     find $out -type d -exec chmod 755 {} \;
   ''
@@ -44,34 +44,25 @@ let
     name = "bazel-test-java";
     inherit workspaceDir;
     bazelPkg = bazel;
-    buildInputs = [
-      (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless)
-    ];
+    buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
         --announce_rc \
-        --toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type' \
+        ${lib.optionalString (lib.strings.versionOlder "5.0.0" bazel.version)
+          "--toolchain_resolution_debug='@bazel_tools//tools/jdk:(runtime_)?toolchain_type'"
+        } \
         --distdir=${distDir} \
         --verbose_failures \
         --curses=no \
         --strict_java_deps=off \
         //:ProjectRunner \
     '' + lib.optionalString (lib.strings.versionOlder bazel.version "5.0.0") ''
-      --host_javabase='@local_jdk//:jdk' \
-      --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
-      --javabase='@local_jdk//:jdk' \
+        --host_javabase='@local_jdk//:jdk' \
+        --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
+        --javabase='@local_jdk//:jdk' \
     '' + extraBazelArgs;
   };
 
-        # --repo_env=JAVA_HOME=${jdk11_headless}/${if stdenv.hostPlatform.isDarwin then "/zulu-17.jdk/Contents/Home" else "/lib/openjdk"} \
-        #--java_language_version=17 \
-        #--java_language_version=17 \
-        #--java_runtime_version=local_jdk \
-        # --java_language_version=11 \
-        # --tool_java_runtime_version=local_jdk_17 \
-        # --tool_java_language_version=17 \
-        #--java_runtime_version=local_jdk_11 \
-in
-testBazel
+in testBazel
 
