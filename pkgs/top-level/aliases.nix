@@ -161,7 +161,6 @@ mapAliases ({
   cvs_fast_export = cvs-fast-export; # Added 2021-06-10
 
   # these are for convenience, not for backward compat and shouldn't expire
-  clang5Stdenv = lowPrio llvmPackages_5.stdenv;
   clang6Stdenv = lowPrio llvmPackages_6.stdenv;
   clang7Stdenv = lowPrio llvmPackages_7.stdenv;
   clang8Stdenv = lowPrio llvmPackages_8.stdenv;
