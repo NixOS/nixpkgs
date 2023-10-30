@@ -1,41 +1,41 @@
 diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
-index 845c8b6aa3..3a46235fcd 100644
+index 8e772005cd..6ffa1c919c 100644
 --- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
 +++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
-@@ -171,14 +171,8 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
- 
-     DigestWriter digestWriter = new DigestWriter(directories, repositoryName, rule);
-     if (shouldUseCachedRepos(env, handler, repoRoot, rule)) {
--      // Make sure marker file is up-to-date; correctly describes the current repository state
--      byte[] markerHash = digestWriter.areRepositoryAndMarkerFileConsistent(handler, env);
--      if (env.valuesMissing()) {
--        return null;
--      }
--      if (markerHash != null) {
--        return RepositoryDirectoryValue.builder().setPath(repoRoot).setDigest(markerHash).build();
--      }
-+      // Nix hack: Always consider cached dirs up-to-date
-+      return RepositoryDirectoryValue.builder().setPath(repoRoot).setDigest(digestWriter.writeMarkerFile()).build();
-     }
- 
-     /* At this point: This is a force fetch, a local repository, OR The repository cache is old or
-@@ -513,7 +507,8 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
-       }
-       String content = builder.toString();
+@@ -432,25 +432,7 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+       String content;
        try {
--        FileSystemUtils.writeContent(markerPath, UTF_8, content);
-+        // Nix hack: Do not write these pesky marker files
-+        // FileSystemUtils.writeContent(markerPath, UTF_8, content);
+         content = FileSystemUtils.readContent(markerPath, StandardCharsets.UTF_8);
+-        String markerRuleKey = readMarkerFile(content, markerData);
+-        boolean verified = false;
+-        if (Preconditions.checkNotNull(ruleKey).equals(markerRuleKey)
+-            && Objects.equals(
+-                markerData.get(MANAGED_DIRECTORIES_MARKER),
+-                this.markerData.get(MANAGED_DIRECTORIES_MARKER))) {
+-          verified = handler.verifyMarkerData(rule, markerData, env);
+-          if (env.valuesMissing()) {
+-            return null;
+-          }
+-        }
+-
+-        if (verified) {
+-          return new Fingerprint().addString(content).digestAndReset();
+-        } else {
+-          // So that we are in a consistent state if something happens while fetching the repository
+-          markerPath.delete();
+-          return null;
+-        }
++        return new Fingerprint().addString(content).digestAndReset();
        } catch (IOException e) {
          throw new RepositoryFunctionException(e, Transience.TRANSIENT);
        }
 diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
-index 649647c5f2..64d05b530c 100644
+index c282d57ab6..f9b0c08627 100644
 --- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
 +++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
-@@ -165,7 +165,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
-     }
-     builder.command(argv);
+@@ -146,7 +146,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
+     ProcessBuilder builder = new ProcessBuilder();
+     builder.command(params.getArgv());
      if (params.getEnv() != null) {
 -      builder.environment().clear();
        builder.environment().putAll(params.getEnv());
