@@ -590,7 +590,6 @@ rec {
         cpu = cpu.name;
         vendor = vendor.name;
         kernel = kernelName kernel;
-        #inherit optExecFormat;
         abi = abi.name;
       };
 
