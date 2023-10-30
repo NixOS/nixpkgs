@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ elfutils zlib ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+  makeFlags = [ "PREFIX=$(out)" "-C" "src" ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;

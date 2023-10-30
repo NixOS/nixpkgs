@@ -1,15 +1,13 @@
 # Setup hook for pytest
 echo "Sourcing pytest-check-hook"
 
-declare -ar disabledTests
-declare -a disabledTestPaths
-
 function _concatSep {
     local result
     local sep="$1"
-    local -n arr=$2
+    shift
+    local arr=("$@")
     for index in ${!arr[*]}; do
-        if [ $index -eq 0 ]; then
+        if [ "$index" -eq 0 ]; then
             result="${arr[index]}"
         else
             result+=" $sep ${arr[index]}"
@@ -19,42 +17,71 @@ function _concatSep {
 }
 
 function _pytestComputeDisabledTestsString () {
-    declare -a tests
-    local tests=($1)
+    declare -a tests=("${@}")
     local prefix="not "
     prefixed=( "${tests[@]/#/$prefix}" )
-    result=$(_concatSep "and" prefixed)
+    result=$(_concatSep "and" "${prefixed[@]}")
     echo "$result"
 }
 
-function pytestCheckPhase() {
-    echo "Executing pytestCheckPhase"
-    runHook preCheck
+if [ -n "$__structuredAttrs" ]; then
+    function pytestCheckPhase() {
+        echo "Executing pytestCheckPhase"
+        runHook preCheck
 
-    # Compose arguments
-    args=" -m pytest"
-    if [ -n "$disabledTests" ]; then
-        disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
-      args+=" -k \""$disabledTestsString"\""
-    fi
+        # Compose arguments
+        args=("-m" "pytest")
+        if [ -n "${disabledTests[*]}" ]; then
+          disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
+          args+=("-k" "${disabledTestsString}")
+        fi
 
-    if [ -n "${disabledTestPaths-}" ]; then
-        eval "disabledTestPaths=($disabledTestPaths)"
-    fi
+        for path in "${disabledTestPaths[@]}"; do
+          if [ ! -e "$path" ]; then
+            echo "Disabled tests path \"$path\" does not exist. Aborting"
+            exit 1
+          fi
+          args+=("--ignore=$path")
+        done
+        args+=("${pytestFlagsArray[@]}")
+        @pythonCheckInterpreter@ "${args[@]}"
 
-    for path in ${disabledTestPaths[@]}; do
-      if [ ! -e "$path" ]; then
-        echo "Disabled tests path \"$path\" does not exist. Aborting"
-        exit 1
-      fi
-      args+=" --ignore=\"$path\""
-    done
-    args+=" ${pytestFlagsArray[@]}"
-    eval "@pythonCheckInterpreter@ $args"
+        runHook postCheck
+        echo "Finished executing pytestCheckPhase"
+    }
+else
+    declare -ar disabledTests
+    declare -a disabledTestPaths
 
-    runHook postCheck
-    echo "Finished executing pytestCheckPhase"
-}
+    function pytestCheckPhase() {
+        echo "Executing pytestCheckPhase"
+        runHook preCheck
+
+        # Compose arguments
+        local args=" -m pytest"
+        if [ -n "$disabledTests" ]; then
+            disabledTestsString=$(_pytestComputeDisabledTestsString ${disabledTests[*]})
+          args+=" -k \""$disabledTestsString"\""
+        fi
+
+        if [ -n "${disabledTestPaths-}" ]; then
+            eval "disabledTestPaths=($disabledTestPaths)"
+        fi
+
+        for path in ${disabledTestPaths[@]}; do
+          if [ ! -e "$path" ]; then
+            echo "Disabled tests path \"$path\" does not exist. Aborting"
+            exit 1
+          fi
+          args+=" --ignore=\"$path\""
+        done
+        args+=" ${pytestFlagsArray[*]}"
+        eval "@pythonCheckInterpreter@ $args"
+
+        runHook postCheck
+        echo "Finished executing pytestCheckPhase"
+    }
+fi
 
 if [ -z "${dontUsePytestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using pytestCheckPhase"

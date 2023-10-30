@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
+  env.KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
   strictDeps = true;

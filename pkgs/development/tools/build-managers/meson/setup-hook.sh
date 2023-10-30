@@ -1,26 +1,34 @@
 mesonConfigurePhase() {
     runHook preConfigure
 
+    if [ -z "$__structuredAttrs" ]; then
+        mesonFlags=(${mesonFlags[*]})
+        mesonCheckFlags=(${mesonCheckFlags[*]})
+        mesonInstallFlags=(${mesonInstallFlags[*]})
+    fi
+
     if [ -z "${dontAddPrefix-}" ]; then
-        mesonFlags="--prefix=$prefix $mesonFlags"
+        mesonFlags=("--prefix=$prefix" "${mesonFlags[@]}")
     fi
 
     # See multiple-outputs.sh and meson’s coredata.py
-    mesonFlags="\
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --localedir=${!outputLib}/share/locale \
-        -Dauto_features=${mesonAutoFeatures:-enabled} \
-        -Dwrap_mode=${mesonWrapMode:-nodownload} \
-        $mesonFlags"
+    mesonFlags=(
+        "--libdir=${!outputLib}/lib" "--libexecdir=${!outputLib}/libexec"
+        "--bindir=${!outputBin}/bin" "--sbindir=${!outputBin}/sbin"
+        "--includedir=${!outputInclude}/include"
+        "--mandir=${!outputMan}/share/man" "--infodir=${!outputInfo}/share/info"
+        "--localedir=${!outputLib}/share/locale"
+        "-Dauto_features=${mesonAutoFeatures:-enabled}"
+        "-Dwrap_mode=${mesonWrapMode:-nodownload}"
+        "${mesonFlags[@]}"
+    )
 
-    mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain} $mesonFlags"
+    mesonFlags=("${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-plain}" "${mesonFlags[@]}" "${mesonFlagsArray[@]}")
 
-    echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
+    echo "meson flags: ${mesonFlags[*]}"
 
-    meson setup build $mesonFlags "${mesonFlagsArray[@]}"
+    meson setup build "${mesonFlags[@]}"
+
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then
@@ -41,7 +49,7 @@ mesonConfigurePhase() {
 mesonCheckPhase() {
     runHook preCheck
 
-    local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
+    local flagsArray=("${mesonCheckFlags[@]}" "${mesonCheckFlagsArray[@]}")
 
     echoCmd 'check flags' "${flagsArray[@]}"
     meson test --no-rebuild "${flagsArray[@]}"
@@ -52,10 +60,10 @@ mesonCheckPhase() {
 mesonInstallPhase() {
     runHook preInstall
 
-    # shellcheck disable=SC2086
-    local flagsArray=($mesonInstallFlags "${mesonInstallFlagsArray[@]}")
+    local flagsArray=("${mesonInstallFlags[@]}" "${mesonInstallFlagsArray[@]}")
 
-    if [[ -n "$mesonInstallTags" ]]; then
+    if [ ${#mesonInstallTags[@]} -ne 0 ]; then
+        mesonInstallTags="${mesonInstallTags[*]}"
         flagsArray+=("--tags" "${mesonInstallTags// /,}")
     fi
 
@@ -65,7 +73,7 @@ mesonInstallPhase() {
     runHook postInstall
 }
 
-if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
+if [ -z "${dontUseMesonConfigure-}" ] && [ -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi

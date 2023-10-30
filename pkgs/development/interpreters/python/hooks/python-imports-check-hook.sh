@@ -6,8 +6,10 @@ pythonImportsCheckPhase () {
 
     if [ -n "$pythonImportsCheck" ]; then
         echo "Check whether the following modules can be imported: $pythonImportsCheck"
+        # TODO(globin) use .attrs.json?
+        export pythonImportsCheckStr="${pythonImportsCheck[*]}"
         export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
-        ( cd $out && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheck\"].split()))'" )
+        ( cd $out && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheckStr\"].split()))'" )
     fi
 }
 

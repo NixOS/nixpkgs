@@ -14,8 +14,8 @@ in
       ] ++ lib.optionals (! withoutTargetLibc) [
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);
-    in mkFlags libcCross langD
-       ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null) langD)
+    in toString (mkFlags libcCross langD
+       ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null) langD))
     ;
 
   EXTRA_LDFLAGS_FOR_TARGET = let
@@ -27,7 +27,7 @@ in
           "-Wl,-rpath,${lib.getLib dep}${dep.libdir or "/lib"}"
           "-Wl,-rpath-link,${lib.getLib dep}${dep.libdir or "/lib"}"
       ]));
-    in mkFlags libcCross
-       ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
+    in toString (mkFlags libcCross
+       ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null)))
     ;
 }

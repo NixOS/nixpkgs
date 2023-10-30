@@ -23,7 +23,11 @@ preConfigure() {
         fi
     done
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    if [ -n "$__structuredAttrs" ]; then
+        perl Makefile.PL PREFIX=$out INSTALLDIRS=site "${makeMakerFlags[@]}" PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    else
+        perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    fi
 }
 
 if test -n "$perlPreHook"; then

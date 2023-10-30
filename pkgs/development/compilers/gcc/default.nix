@@ -278,7 +278,6 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     else [ "out" "lib" "man" "info" ];
 
   setOutputFlags = false;
-  NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
 
@@ -372,41 +371,50 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   # https://gcc.gnu.org/PR109898
   enableParallelInstalling = false;
 
-  # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
+  env = {
+    NIX_NO_SELF_RPATH = true;
 
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-  # library headers and binaries, regarless of the language being compiled.
-  #
-  # Note: When building the Java AWT GTK peer, the build system doesn't honor
-  # `--with-gmp' et al., e.g., when building
-  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
-  # them to $CPATH and $LIBRARY_PATH in this case.
-  #
-  # Likewise, the LTO code doesn't find zlib.
-  #
-  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
-  # compiler (after the specs for the cross-gcc are created). Having
-  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+    # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+    # library headers and binaries, regarless of the language being compiled.
+    #
+    # Note: When building the Java AWT GTK peer, the build system doesn't honor
+    # `--with-gmp' et al., e.g., when building
+    # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
+    # them to $CPATH and $LIBRARY_PATH in this case.
+    #
+    # Likewise, the LTO code doesn't find zlib.
+    #
+    # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+    # compiler (after the specs for the cross-gcc are created). Having
+    # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
+    CPATH = toString (optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
+      ++ optional (zlib != null) zlib
+      ++ optional langJava boehmgc
+      ++ optionals javaAwtGtk xlibs
+      ++ optionals javaAwtGtk [ gmp mpfr ]
+    )));
 
-  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
-    ++ optional (zlib != null) zlib
-    ++ optional langJava boehmgc
-    ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]
-  ));
+    LIBRARY_PATH = toString (optionals (targetPlatform == hostPlatform) (makeLibraryPath (
+      optional (zlib != null) zlib
+      ++ optional langJava boehmgc
+      ++ optionals javaAwtGtk xlibs
+      ++ optionals javaAwtGtk [ gmp mpfr ]
+    )));
 
-  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath (
-    optional (zlib != null) zlib
-    ++ optional langJava boehmgc
-    ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]
-  ));
-
-  inherit (callFile ./common/extra-target-flags.nix { })
-    EXTRA_FLAGS_FOR_TARGET
-    EXTRA_LDFLAGS_FOR_TARGET
-    ;
+    inherit (callFile ./common/extra-target-flags.nix { })
+      EXTRA_FLAGS_FOR_TARGET
+      EXTRA_LDFLAGS_FOR_TARGET
+      ;
+  } // optionalAttrs (hostPlatform.system == "x86_64-solaris") {
+    # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+    CC = "gcc -m64";
+  } // optionalAttrs is7 {
+    NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+  } // optionalAttrs (!atLeast7) {
+    langJava = langJava;
+  } // optionalAttrs atLeast6 {
+    NIX_LDFLAGS = lib.optionalString hostPlatform.isSunOS "-lm";
+  };
 
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
@@ -430,12 +438,6 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   } // lib.optionalAttrs (!atLeast11) {
     badPlatforms = if !is49 then [ "aarch64-darwin" ] else lib.platforms.darwin;
   };
-} // optionalAttrs is7 {
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
-} // optionalAttrs (!atLeast7) {
-  env.langJava = langJava;
-} // optionalAttrs atLeast6 {
-  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 } // optionalAttrs (!atLeast8) {
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs enableMultilib {
