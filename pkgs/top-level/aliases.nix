@@ -626,8 +626,10 @@ mapAliases ({
   nodejs-slim_14 = throw "nodejs-slim_14 has been removed as it is EOL."; # Added 2023-10-30
   nodejs-14_x = nodejs_14; # Added 2022-11-06
   nodejs-slim-14_x = nodejs-slim_14; # Added 2022-11-06
+  nodejs_16 = throw "nodejs_16 has been removed as it is EOL."; # Added 2023-10-30
   nodejs-16_x = nodejs_16; # Added 2022-11-06
   nodejs-16_x-openssl_1_1 = throw "nodejs-16_x-openssl_1_1 has been removed."; # Added 2023-02-04
+  nodejs-slim_16 = throw "nodejs-slim_16 has been removed as it is EOL."; # Added 2022-11-06
   nodejs-slim-16_x = nodejs-slim_16; # Added 2022-11-06
   nodejs-18_x = nodejs_18; # Added 2022-11-06
   nodejs-slim-18_x = nodejs-slim_18; # Added 2022-11-06
