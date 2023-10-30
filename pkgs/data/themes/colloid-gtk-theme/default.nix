@@ -22,13 +22,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "all" "black
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-08-12";
+  version = "2023-10-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-Ss6IXd4vYUvIF5/Hn4IVLNvDSaewTY0GNZp7X5Lmz/c=";
+    hash = "sha256-NxIWH3qLW8sEguovAv9wfgnlnmPlTipRJTmMo3rSHNY=";
   };
 
   nativeBuildInputs = [
