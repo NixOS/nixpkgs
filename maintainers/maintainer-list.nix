@@ -13226,6 +13226,13 @@
     githubId = 40049608;
     name = "Andy Chun";
   };
+  noodlez1232 = {
+    email = "contact@nathanielbarragan.xyz";
+    matrix = "@noodlez1232:matrix.org";
+    github = "Noodlez1232";
+    githubId = 12480453;
+    name = "Nathaniel Barragan";
+  };
   nook = {
     name = "Tom Nook";
     email = "0xnook@protonmail.com";
