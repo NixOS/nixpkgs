@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.0.14";
+  version = "0.0.15";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-qvUVS/PjocMX57z27Xu6tlqz5bXpvlTuC9ZF+ndfkW8=";
+    hash = "sha256-zjTJF8yU3Hb8CTzzsPdo2EJI7QriEsjUyXVwprb22xQ=";
   };
 
-  cargoHash = "sha256-KGs9cEDvLXO26oNv867jMzaQs5I9+8go00FFSH6qexY=";
+  cargoHash = "sha256-mRmoCH0VVO9LhFfEd4VfDbCfl5VCpcIKBkaNzU0+9SU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
