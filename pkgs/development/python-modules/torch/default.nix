@@ -34,8 +34,6 @@
   # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
   ninja,
 
-  linuxHeaders_5_19,
-
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorboard, protobuf,
 
@@ -294,7 +292,6 @@ in buildPythonPackage rec {
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [ blas blas.provider pybind11 ]
-    ++ lib.optionals stdenv.isLinux [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
       cuda_cudart # cuda_runtime.h and libraries
