@@ -37436,8 +37436,6 @@ with pkgs;
 
   mar1d = callPackage ../games/mar1d { } ;
 
-  meritous = callPackage ../games/meritous { };
-
   oh-my-git = callPackage ../games/oh-my-git { };
 
   opendune = callPackage ../games/opendune { };
