@@ -5,7 +5,6 @@
 , fetchurl
 , git
 , cctools
-, developer_cmds
 , DarwinTools
 , makeWrapper
 , CoreServices
@@ -38,16 +37,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
-  version = "8.0.34";
+  version = "8.0.35";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-      hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
+      hash = "sha256-kXxe04cE6ZIRGFzkviTjOowZyRJB7XOvQYGm840VdMI=";
     })
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-QY1PmhGw3PhqZ79+H/Xbb9uOvmrBlFQRS7idnV5OXF0=";
+      hash = "sha256-2Dn/RR5BWHMsD/QzKYPo8tqyAQGmHCGwVl2+bzNfy5I=";
     })
   ];
 
@@ -66,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.isDarwin [ cctools developer_cmds DarwinTools ];
+    ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
 
   buildInputs = [
     boost
