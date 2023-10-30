@@ -7,7 +7,7 @@ lib.makeScope newScope (self:
     buildNimPackage = buildNimPackage.override {
       defaultNimVersion =
         if lib.versionAtLeast nim.version "2.0.0" then 2 else 1;
-    };
+    } { };
 
     asciigraph = callPackage ../development/nim-packages/asciigraph { };
 

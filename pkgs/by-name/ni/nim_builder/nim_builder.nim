@@ -133,9 +133,9 @@ proc buildPhase*() =
     if err != 0: quit("build phase failed", err)
 
 proc installPhase*() =
-  ## Install the Nim sources if ``nimBinOnly`` is not
+  ## Install the Nim sources if ``nimCopySources`` is
   ## set in the environment.
-  if not getEnvBool"nimBinOnly":
+  if getEnvBool"nimCopySources":
     let
       nf = getNimbleFilePath()
       srcDir = nf.getNimbleValue("srcDir", ".")

@@ -16811,6 +16811,7 @@ with pkgs;
   nimPackages = recurseIntoAttrs nim1.pkgs;
   nim2Packages = recurseIntoAttrs nim2.pkgs;
   buildNimPackage = callPackage ../development/compilers/nim/build-nim-package.nix { };
+  nimOverrides = callPackage ./nim-overrides.nix { };
 
   nrpl = callPackage ../development/tools/nrpl { };
 
