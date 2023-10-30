@@ -29160,7 +29160,9 @@ with pkgs;
 
   comfortaa = callPackage ../data/fonts/comfortaa { };
 
-  colloid-kde = callPackage ../data/themes/colloid-kde { };
+  colloid-kde = callPackage ../data/themes/colloid-kde {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   comic-mono = callPackage ../data/fonts/comic-mono { };
 
