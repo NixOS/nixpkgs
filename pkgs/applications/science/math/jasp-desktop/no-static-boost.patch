@@ -1,0 +1,95 @@
+diff --git a/Tools/CMake/Libraries.cmake b/Tools/CMake/Libraries.cmake
+index 5382ca6..3bdb0bc 100644
+--- a/Tools/CMake/Libraries.cmake
++++ b/Tools/CMake/Libraries.cmake
+@@ -41,6 +41,7 @@ endif()
+ find_package(ZLIB 1.2 REQUIRED)
+ find_package(Iconv 1.16 REQUIRED)
+ find_package(SQLite3 3.37.0 REQUIRED)
++find_library(LIB_READSTAT NAMES libreadstat.so)
+ 
+ #if(USE_CONAN)
+ #  find_package(jsoncpp 1.9 REQUIRED)
+@@ -67,7 +68,7 @@ if((NOT LibArchive_FOUND) AND (NOT WIN32))
+   endif()
+ endif()
+ 
+-set(Boost_USE_STATIC_LIBS ON)
++add_definitions(-DBOOST_LOG_DYN_LINK)
+ find_package(
+   Boost 1.78 REQUIRED
+   COMPONENTS filesystem
+@@ -174,29 +175,6 @@ if(LINUX)
+     message(FATAL_ERROR "librt is required for building libCommon on Linux")
+   endif()
+ 
+-  if(FLATPAK_USED)
+-    set(LIBREADSTAT_INCLUDE_DIRS /app/include)
+-    set(LIBREADSTAT_LIBRARY_DIRS /app/lib)
+-  else()
+-    set(LIBREADSTAT_INCLUDE_DIRS /usr/local/include /usr/include)
+-    set(LIBREADSTAT_LIBRARY_DIRS /usr/local/lib /usr/lib)
+-  endif()
+-
+-  message(CHECK_START "Looking for libreadstat.so")
+-  find_file(LIBREADSTAT_LIBRARIES libreadstat.so
+-            HINTS ${LIBREADSTAT_LIBRARY_DIRS} REQUIRED)
+-
+-  if(EXISTS ${LIBREADSTAT_LIBRARIES})
+-    message(CHECK_PASS "found")
+-    message(STATUS "  ${LIBREADSTAT_LIBRARIES}")
+-  else()
+-    message(CHECK_FAIL "not found")
+-    message(
+-      FATAL_ERROR
+-        "ReadStat is required for building on Windows, please follow the build instruction before you continue."
+-    )
+-  endif()
+-
+   find_package(PkgConfig)
+   #pkg_check_modules(_PKGCONFIG_LIB_JSONCPP REQUIRED jsoncpp>=1.9)
+ 
+diff --git a/Tools/CMake/R.cmake b/Tools/CMake/R.cmake
+index 4f1db3d..43e4dbb 100644
+--- a/Tools/CMake/R.cmake
++++ b/Tools/CMake/R.cmake
+@@ -582,8 +582,8 @@ elseif(WIN32)
+   set(R_EXECUTABLE "${R_HOME_PATH}/bin/R")
+   set(R_INCLUDE_PATH "${R_HOME_PATH}/include")
+   set(RCPP_PATH "${R_LIBRARY_PATH}/Rcpp")
+-  set(RINSIDE_PATH "${R_LIBRARY_PATH}/RInside")
+-  set(RENV_PATH "${R_LIBRARY_PATH}/renv")
++  #set(RINSIDE_PATH "${R_LIBRARY_PATH}/RInside")
++  #set(RENV_PATH "${R_LIBRARY_PATH}/renv")
+   
+ 
+   # This will be added to the install.packages calls
+@@ -778,8 +778,6 @@ elseif(LINUX)
+   set(R_EXECUTABLE "${R_HOME_PATH}/bin/R")
+   set(RSCRIPT_EXECUTABLE "${R_HOME_PATH}/bin/Rscript")
+   set(RCPP_PATH "${R_LIBRARY_PATH}/Rcpp")
+-  set(RINSIDE_PATH "${R_LIBRARY_PATH}/RInside")
+-  set(RENV_PATH "${R_LIBRARY_PATH}/renv")
+ 
+   set(USE_LOCAL_R_LIBS_PATH ", lib='${R_LIBRARY_PATH}'")
+ 
+@@ -794,7 +792,7 @@ elseif(LINUX)
+       find_file(
+         _R_H
+         NAMES R.h
+-        PATHS /usr/include /usr/include/R /usr/share/R/include)
++        PATHS @r_include@)
+       if(_R_H)
+         get_filename_component(R_INCLUDE_PATH ${_R_H} DIRECTORY)
+         message(CHECK_PASS "found")
+@@ -817,8 +815,8 @@ elseif(LINUX)
+   message(CHECK_START "Checking for 'libR'")
+   find_library(
+     _LIB_R
+-    NAMES R
+-    PATHS ${R_HOME_PATH}/lib
++    NAMES libR.so
++    PATHS ${R_HOME_PATH}/lib/R/lib
+     NO_DEFAULT_PATH NO_CACHE REQUIRED)
+ 
+   if(_LIB_R)
