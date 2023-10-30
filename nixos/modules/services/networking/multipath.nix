@@ -548,9 +548,22 @@ in {
     # to display the multipath mappings in the output of `journalctl -b`.
     boot.initrd.kernelModules = [ "dm-multipath" "dm-service-time" ];
     boot.initrd.postDeviceCommands = ''
+      mkdir -p ${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${cfg.package.name}/lib/
+      ln -s $extraUtils/lib/multipath ${builtins.storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${cfg.package.name}/lib/multipath
       modprobe -a dm-multipath dm-service-time
       multipathd -s
       (set -x && sleep 1 && multipath -ll)
     '';
+
+    boot.initrd.systemd = {
+      packages = [ cfg.package ];
+      extraBin.multipath = "${cfg.package}/bin/multipath";
+      extraBin.multipathd = "${cfg.package}/bin/multipathd";
+      storePaths = [ "${cfg.package}/lib/multipath" ];
+      contents."/etc/multipath.conf".source = config.environment.etc."multipath.conf".source;
+      services.multipathd.wantedBy = [ "sysinit.target" ];
+      services.multipathd.after = [ "systemd-modules-load.service" ];
+      sockets.multipathd.wantedBy = [ "sockets.target" ];
+    };
   };
 }

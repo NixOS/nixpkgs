@@ -100,7 +100,26 @@ in
     networking.useNetworkd = true;
     networking.useDHCP = false; # Required to set useNetworkd = true
 
-    boot.initrd = {
+    boot.initrd = let
+      mkScsidConf = ''
+        (
+          cat /etc/iscsi/iscsid.fragment.conf
+          printf "\n"
+          ${optionalString cfg.loginAll ''echo "node.startup = automatic"''}
+          ${optionalString (cfg.extraConfigFile != null) ''
+            if [ -f "${cfg.extraConfigFile}" ]; then
+              printf "\n# The following is from ${cfg.extraConfigFile}:\n"
+              cat "${cfg.extraConfigFile}"
+            else
+              echo "Warning: boot.iscsi-initiator.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
+            fi
+          ''}
+        ) > /etc/iscsi/iscsid.conf
+        cat << 'EOF' >> /etc/iscsi/iscsid.conf
+        ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
+        EOF
+      '';
+    in {
       network.enable = true;
 
       # By default, the stage-1 disables the network and resets the interfaces
@@ -119,25 +138,13 @@ in
         cp ${config.environment.etc.hosts.source} $out/etc/hosts
         cp ${pkgs.openiscsi}/etc/iscsi/iscsid.conf $out/etc/iscsi/iscsid.fragment.conf
         chmod +w $out/etc/iscsi/iscsid.fragment.conf
-        cat << 'EOF' >> $out/etc/iscsi/iscsid.fragment.conf
-        ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
-        EOF
       '';
 
       extraUtilsCommandsTest = ''
         $out/bin/iscsiadm --version
       '';
 
-      preLVMCommands = let
-        extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
-          if [ -f "${cfg.extraConfigFile}" ]; then
-            printf "\n# The following is from ${cfg.extraConfigFile}:\n"
-            cat "${cfg.extraConfigFile}"
-          else
-            echo "Warning: boot.iscsi-initiator.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
-          fi
-        '';
-      in ''
+      preLVMCommands = ''
         ${optionalString (!config.boot.initrd.network.ssh.enable) ''
         # stolen from initrd-ssh.nix
         echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
@@ -149,12 +156,8 @@ in
         mkdir -p /etc/iscsi /run/lock/iscsi
         echo "InitiatorName=${cfg.name}" > /etc/iscsi/initiatorname.iscsi
 
-        (
-          cat "$extraUtils/etc/iscsi/iscsid.fragment.conf"
-          printf "\n"
-          ${optionalString cfg.loginAll ''echo "node.startup = automatic"''}
-          ${extraCfgDumper}
-        ) > /etc/iscsi/iscsid.conf
+        ln -s "$extraUtils/etc/iscsi/iscsid.fragment.conf" /etc/iscsi/iscsid.fragment.conf
+        ${mkScsidConf}
 
         iscsid --foreground --no-pid-file --debug ${toString cfg.logLevel} &
         iscsiadm --mode discoverydb \
@@ -173,6 +176,52 @@ in
 
         pkill -9 iscsid
       '';
+
+      systemd = {
+        packages = [ pkgs.openiscsi ];
+
+        extraBin = {
+          iscsid = "${pkgs.openiscsi}/sbin/iscsid";
+          iscsiadm = "${pkgs.openiscsi}/sbin/iscsiadm";
+        };
+
+        contents."/etc/iscsi/iscsid.fragment.conf".source = "${pkgs.openiscsi}/etc/iscsi/iscsid.conf";
+        contents."/etc/iscsi/initiatorname.iscsi".text = ''
+          InitiatorName=${cfg.name}
+        '';
+        contents."/etc/hosts".source = config.environment.etc.hosts.source;
+
+        sockets.iscsid = {
+          wantedBy = [ "sockets.target" ];
+          conflicts = [ "initrd-switch-root.target" ];
+          before = [ "initrd-switch-root.target" ];
+        };
+
+        services.iscsid = {
+          wantedBy = [ "initrd.target" ];
+          conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
+          before = [ "initrd.target" "shutdown.target" "initrd-switch-root.target" ];
+          wants = [ "network-online.target" ]; # 'After=network-online.target' is in the package's unit file
+          after = [ "initrd-nixos-copy-secrets.service" ];
+          preStart = ''
+            mkdir -p /run/lock/iscsi
+            ${mkScsidConf}
+          '';
+        };
+
+        # openiscsi's iscsi.service doesn't quite do the same thing here.
+        services.nixos-iscsi = {
+          requiredBy = [ "initrd.target" ];
+          after = [ "network-online.target" "iscsid.service" ];
+          wants = [ "network-online.target" "iscsid.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStartPre = "${pkgs.openiscsi}/bin/iscsiadm --mode discoverydb --type sendtargets --discover --portal ${escapeShellArg cfg.discoverPortal} --debug ${toString cfg.logLevel}";
+            ExecStart = "${pkgs.openiscsi}/bin/iscsiadm --mode node " + (if cfg.loginAll then "--loginall all" else "--targetname ${escapeShellArg cfg.target} --login");
+          };
+        };
+
+      };
     };
 
     services.openiscsi = {
@@ -184,10 +233,6 @@ in
       {
         assertion = cfg.loginAll -> cfg.target == null;
         message = "iSCSI target name is set while login on all portals is enabled.";
-      }
-      {
-        assertion = !config.boot.initrd.systemd.enable;
-        message = "systemd stage 1 does not support iscsi yet.";
       }
     ];
   };
