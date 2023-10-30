@@ -8242,6 +8242,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  lpd8editor = libsForQt5.callPackage ../applications/audio/lpd8editor {};
+
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) cctools autoSignDarwinBinariesHook;
   };
