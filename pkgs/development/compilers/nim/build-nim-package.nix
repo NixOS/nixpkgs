@@ -1,5 +1,13 @@
-{ lib, stdenv, nim1, nim2, nim_builder, defaultNimVersion ? 2 }:
-pkgArgs:
+{ lib
+, buildPackages
+, callPackage
+, stdenv
+, nim1
+, nim2
+, nim_builder
+, defaultNimVersion ? 2
+, nimOverrides
+}:
 
 let
   baseAttrs = {
@@ -30,22 +38,79 @@ let
     meta = { inherit (nim2.meta) maintainers platforms; };
   };
 
-  inputsOverride = { depsBuildBuild ? [ ], nativeBuildInputs ? [ ]
-    , requiredNimVersion ? defaultNimVersion, ... }:
-    (if requiredNimVersion == 1 then {
-      nativeBuildInputs = [ nim1 ] ++ nativeBuildInputs;
-    } else if requiredNimVersion == 2 then {
-      nativeBuildInputs = [ nim2 ] ++ nativeBuildInputs;
-    } else
-      throw "requiredNimVersion ${toString requiredNimVersion} is not valid")
-    // {
-      depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
-    };
+  fodFromLockEntry =
+    let
+      methods = {
+        fetchzip = { url, sha256, ... }:
+          buildPackages.fetchzip {
+            name = "source";
+            inherit url sha256;
+          };
+        git = { fetchSubmodules, leaveDotGit, rev, sha256, url, ... }:
+          buildPackages.fetchgit {
+            inherit fetchSubmodules leaveDotGit rev sha256 url;
+          };
+      };
+    in
+    attrs@{ method, ... }:
+    let fod = methods.${method} attrs;
+    in ''--path:"${fod.outPath}/${attrs.srcDir}"'';
 
+  callAnnotations = { packages, ... }@lockAttrs:
+    map (packageName: nimOverrides.${packageName} or (_: [ ]) lockAttrs)
+      packages;
+
+  asFunc = x: if builtins.isFunction x then x else (_: x);
+
+in
+buildNimPackageArgs:
+let
   composition = finalAttrs:
     let
-      asFunc = x: if builtins.isFunction x then x else (_: x);
-      prev = baseAttrs // (asFunc ((asFunc pkgArgs) finalAttrs)) baseAttrs;
-    in prev // inputsOverride prev;
+      postPkg = baseAttrs
+        // (asFunc ((asFunc buildNimPackageArgs) finalAttrs)) baseAttrs;
 
-in stdenv.mkDerivation composition
+      lockAttrs =
+        lib.attrsets.optionalAttrs (builtins.hasAttr "lockFile" postPkg)
+          (builtins.fromJSON (builtins.readFile postPkg.lockFile));
+
+      lockDepends = lockAttrs.depends or [ ];
+
+      lockFileNimFlags = map fodFromLockEntry lockDepends;
+
+      annotationOverlays = lib.lists.flatten (map callAnnotations lockDepends);
+
+      postLock = builtins.foldl'
+        (prevAttrs: overlay: prevAttrs // (overlay finalAttrs prevAttrs))
+        postPkg
+        annotationOverlays;
+
+      finalOverride =
+        { depsBuildBuild ? [ ]
+        , nativeBuildInputs ? [ ]
+        , nimFlags ? [ ]
+        , requiredNimVersion ? defaultNimVersion
+        , nimCopySources ? (lockAttrs == {}) # TODO: remove when nimPackages is gone
+        , ...
+        }:
+        (if requiredNimVersion == 1 then {
+          depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
+          nativeBuildInputs = [ nim1 ] ++ nativeBuildInputs;
+        } else if requiredNimVersion == 2 then {
+          depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
+          nativeBuildInputs = [ nim2 ] ++ nativeBuildInputs;
+        } else
+          throw
+            "requiredNimVersion ${toString requiredNimVersion} is not valid") // {
+          nimFlags = lockFileNimFlags ++ nimFlags;
+          inherit nimCopySources;
+        };
+
+      attrs = postLock // finalOverride postLock;
+    in
+    lib.trivial.warnIf (builtins.hasAttr "nimBinOnly" attrs)
+      "the nimBinOnly attribute is deprecated for buildNimPackage"
+      attrs;
+
+in
+stdenv.mkDerivation composition
