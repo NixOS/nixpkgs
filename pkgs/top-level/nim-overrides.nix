@@ -4,6 +4,7 @@
 , libsass
 , openssl
 , SDL2
+, xorg
 }:
 
 # The following is list of overrides that take three arguments each:
@@ -29,6 +30,11 @@
   sdl2 = lockAttrs: finalAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ SDL2 ];
+    };
+
+  x11 = lockAttrs: finalAttrs:
+    { buildInputs ? [ ], ... }: {
+      buildInputs = buildInputs ++ (with xorg; [ libX11 libXft libXinerama ]);
     };
 
   zippy = lockAttrs: finalAttrs:

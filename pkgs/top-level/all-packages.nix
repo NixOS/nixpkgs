@@ -34390,8 +34390,6 @@ with pkgs;
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
-  nimdow = callPackage ../applications/window-managers/nimdow { };
-
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
   normcap = callPackage ../applications/graphics/normcap { };
