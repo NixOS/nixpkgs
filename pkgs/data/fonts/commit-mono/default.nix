@@ -4,11 +4,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "commit-mono";
-  version = "1.138";
+  version = "1.139";
 
   src = fetchzip {
-    url = "https://github.com/eigilnikolajsen/commit-mono/releases/download/${version}/CommitMono-${version}.zip";
-    sha256 = "sha256-ae2eeHh57i6d0kDMZ68aXvLGFj+rXhwg1CC8cV3ndAQ=";
+    url = "https://github.com/eigilnikolajsen/commit-mono/releases/download/v${version}/CommitMono-${version}.zip";
+    hash = "sha256-TrXuWQzNlJsFwwOsnLuCCEj/9B9XrTNHSDVES68gIYs=";
     stripRoot = false;
   };
 
@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 -t $out/share/fonts/opentype/ CommitMono-${version}/*.otf
-    install -Dm644 -t $out/share/fonts/truetype/ CommitMono-${version}/ttfautohint/*.ttf
+    install -Dm644 CommitMono-${version}/*.otf             -t $out/share/fonts/opentype
+    install -Dm644 CommitMono-${version}/ttfautohint/*.ttf -t $out/share/fonts/truetype
     runHook postInstall
   '';
 
