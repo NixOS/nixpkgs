@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , SDL2
 }:
 
@@ -13,4 +14,11 @@
       buildInputs = buildInputs ++ [ SDL2 ];
     };
 
+  zippy = lockAttrs: finalAttrs:
+    { nimFlags ? [ ], ... }: {
+      nimFlags = nimFlags ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+        "--passC:-msse4.1"
+        "--passC:-mpclmul"
+      ];
+    };
 }
