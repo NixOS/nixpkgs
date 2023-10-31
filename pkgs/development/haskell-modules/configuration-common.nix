@@ -1423,13 +1423,20 @@ self: super: {
   # upstream: https://github.com/obsidiansystems/which/pull/6
   which = doJailbreak super.which;
 
-  # 2022-09-20: We have overridden lsp to not be the stackage version.
-  # dhall-lsp-server needs the older 1.4.0.0 lsp
-  dhall-lsp-server = super.dhall-lsp-server.override {
-    lsp = dontCheck (super.lsp_1_4_0_0.override {
-      lsp-types = super.lsp-types_1_4_0_1;
-    });
-  };
+  dhall-lsp-server =
+    # 2022-09-20: We have overridden lsp to not be the stackage version.
+    # dhall-lsp-server needs the older 1.4.0.0 lsp
+    let overridden-dhall-lsp-server = super.dhall-lsp-server.override {
+          lsp = dontCheck (super.lsp_1_4_0_0.override {
+            lsp-types = super.lsp-types_1_4_0_1;
+          });
+        };
+    in appendPatch (fetchpatch {
+      # This patch can be removed once the change question is in a tracked release.
+      url = "https://github.com/dhall-lang/dhall-haskell/pull/2539/commits/5dd0f0ba2d836fea3ef499c7aed04e83269c203f.patch";
+      sha256 = "sha256-xjVuLDBptDGfTf7MVmPb0WuuFWRLpgDYX2ybbgjAjzs=";
+      relative = "dhall-lsp-server";
+    }) overridden-dhall-lsp-server;
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
