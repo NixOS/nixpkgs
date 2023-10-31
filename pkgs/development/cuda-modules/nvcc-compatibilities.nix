@@ -116,6 +116,9 @@ let
     "12.2" = attrs."12.1" // {
       clangMaxMajorVersion = "16";
     };
+
+    # No changes from 12.2 to 12.3
+    "12.3" = attrs."12.2";
   };
 in
 attrs
