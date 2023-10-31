@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    "--disable-wifi-coconut"  # Until https://github.com/kismetwireless/kismet/issues/478
   ] ++ lib.optionals (!withNetworkManager) [
     "--disable-libnm"
   ] ++ lib.optionals (!withPython) [
