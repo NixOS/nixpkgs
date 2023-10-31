@@ -1273,6 +1273,7 @@ let
     ocamlformat_0_24_1 = ocamlformat.override { version = "0.24.1"; };
     ocamlformat_0_25_1 = ocamlformat.override { version = "0.25.1"; };
     ocamlformat_0_26_0 = ocamlformat.override { version = "0.26.0"; };
+    ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
 
     ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix {};
 

@@ -1176,7 +1176,6 @@
   ./services/security/opensnitch.nix
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix
-  ./services/security/privacyidea.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
   ./services/security/sshguard.nix
@@ -1531,5 +1530,9 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
-  { documentation.nixos.extraModules = [ ./virtualisation/qemu-vm.nix ]; }
+  { documentation.nixos.extraModules = [
+    ./virtualisation/qemu-vm.nix
+    ./image/repart.nix
+    ];
+  }
 ]

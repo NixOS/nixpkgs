@@ -9510,8 +9510,6 @@ self: super: with self; {
 
   prison = callPackage ../development/python-modules/prison { };
 
-  privacyidea-ldap-proxy = callPackage ../development/python-modules/privacyidea-ldap-proxy { };
-
   proboscis = callPackage ../development/python-modules/proboscis { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };

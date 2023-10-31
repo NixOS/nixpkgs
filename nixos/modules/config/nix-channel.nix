@@ -99,7 +99,7 @@ in
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
       "f /root/.nix-channels -"
-      ''w "/root/.nix-channels" - - - - "${config.system.defaultChannel} nixos\n"''
+      ''w+ "/root/.nix-channels" - - - - ${config.system.defaultChannel} nixos\n''
     ];
   };
 }

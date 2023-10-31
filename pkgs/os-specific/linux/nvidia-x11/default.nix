@@ -27,12 +27,12 @@ rec {
   stable = if stdenv.hostPlatform.system == "i686-linux" then legacy_390 else latest;
 
   production = generic {
-    version = "535.113.01";
-    sha256_64bit = "sha256-KOME2N/oG39en2BAS/OMYvyjVXjZdSLjxwoOjyMWdIE=";
-    sha256_aarch64 = "sha256-mw/p5ELGTNcM4P94soJIGqpLMBJHSPf+z9qsGnISuCk=";
-    openSha256 = "sha256-SePRFb5S2T0pOmkSGflYfJkJBjG3Dx/Z0MjwnWccfcI=";
-    settingsSha256 = "sha256-hiX5Nc4JhiYYt0jaRgQzfnmlEQikQjuO0kHnqGdDa04=";
-    persistencedSha256 = "sha256-V5Wu8a7EhwZarGsflAhEQDE9s9PjuQ3JNMU1nWvNNsQ=";
+    version = "535.129.03";
+    sha256_64bit = "sha256-5tylYmomCMa7KgRs/LfBrzOLnpYafdkKwJu4oSb/AC4=";
+    sha256_aarch64 = "sha256-i6jZYUV6JBvN+Rt21v4vNstHPIu9sC+2ZQpiLOLoWzM=";
+    openSha256 = "sha256-/Hxod/LQ4CGZN1B1GRpgE/xgoYlkPpMh+n8L7tmxwjs=";
+    settingsSha256 = "sha256-QKN/gLGlT+/hAdYKlkIjZTgvubzQTt4/ki5Y+2Zj3pk=";
+    persistencedSha256 = "sha256-FRMqY5uAJzq3o+YdM2Mdjj8Df6/cuUUAnh52Ne4koME=";
   };
 
   latest = selectHighestVersion production (generic {
@@ -93,25 +93,14 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-    version = "470.199.02";
-    sha256_64bit = "sha256-/fggDt8RzjLDW0JiGjr4aV4RGnfEKL8MTTQ4tCjXaP0=";
-    sha256_aarch64 = "sha256-UmF7LszdrO2d+bOaoQYrTVKXUwDqzMy1UDBW5SPuZy4=";
-    settingsSha256 = "sha256-FkKPE4QV5IiVizGYUNUYoEXRpEhojt/cbH/I8iCn3hw=";
-    persistencedSha256 = "sha256-JP71wt3uCNOgheLNlQbW3DqVFQNTC5vj4y4COWKQzAs=";
+    version = "470.223.02";
+    sha256_64bit = "sha256-s2hi1TNsw+br6Ow6tPiFsYPaJY8d+x4FrkBrP2xNRPg=";
+    sha256_aarch64 = "sha256-CFkg2ARlGWqlFQKm8SlbwMH6eLidHKA/q5QGVOpPGuU=";
+    settingsSha256 = "sha256-r6DuIH/rnsCm/y51iRgPNi5/kz+EFMVABREdTjBneZ0=";
+    persistencedSha256 = "sha256-e71fpPBBv8S/aoeXxBXkzKy5bsMMbv8y024cSLc8DYc=";
 
     patchFlags = [ "-p1" "-d" "kernel" ];
-    patches = [
-      # source: https://gist.github.com/joanbm/dfe8dc59af1c83e2530a1376b77be8ba
-      (fetchpatch {
-        url = "https://gist.github.com/joanbm/dfe8dc59af1c83e2530a1376b77be8ba/raw/37ff2b5ccf99f295ff958c9a44ca4ed4f42503b4/nvidia-470xx-fix-linux-6.5.patch";
-        hash = "sha256-s5r7nwuMva0BLy2qJBVKqNtnUN9am5+PptnVwNdzdbk=";
-      })
-      # source: https://gist.github.com/joanbm/2ec3c512a1ac21f5f5c6b3c1a4dbef35
-      (fetchpatch {
-        url = "https://gist.github.com/joanbm/2ec3c512a1ac21f5f5c6b3c1a4dbef35/raw/615feaefed2de3a28bd12fe9783894b84a7c86e4/nvidia-470xx-fix-linux-6.6.patch";
-        hash = "sha256-gdV+a+JFzQX8MzRz9eb4gVbnOfTWN+Ds9sOeyIBN5y0=";
-      })
-    ];
+    patches = [];
   };
 
   # Last one supporting x86

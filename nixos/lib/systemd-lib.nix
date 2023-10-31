@@ -21,11 +21,12 @@ in rec {
         { preferLocalBuild = true;
           allowSubstitutes = false;
           inherit (unit) text;
+          passAsFile = [ "text" ];
         }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname -- "$name")"
-          echo -n "$text" > "$out/$name"
+          mv "$textPath" "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
