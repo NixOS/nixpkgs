@@ -6,6 +6,7 @@
 , requests
 , requests-oauthlib
 , responses
+, six
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     requests-oauthlib
+    six
   ];
 
   nativeCheckInputs = [
