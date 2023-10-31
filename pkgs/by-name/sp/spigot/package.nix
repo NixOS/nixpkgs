@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, callPackage
 , cmake
 , gmp
 , halibut
@@ -31,6 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "man" ];
 
   strictDeps = true;
+
+  passthru.tests = {
+    approximation = callPackage ./tests/approximation.nix {
+      spigot = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
