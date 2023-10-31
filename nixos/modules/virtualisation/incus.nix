@@ -166,6 +166,7 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
         ExecStartPost = "${cfg.package}/bin/incusd waitready --timeout=${cfg.startTimeout}";
+        ExecStop = "${cfg.package}/bin/incus admin shutdown";
 
         KillMode = "process"; # when stopping, leave the containers alone
         Delegate = "yes";
