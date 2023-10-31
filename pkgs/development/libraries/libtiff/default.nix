@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , nix-update-script
 
 , autoreconfHook
@@ -34,6 +35,18 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # cf. https://bugzilla.redhat.com/2224974
+    (fetchpatch {
+      name = "CVE-2023-40745.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/bdf7b2621c62e04d0408391b7d5611502a752cd0.diff";
+      hash = "sha256-HdU02YJ1/T3dnCT+yG03tUyAHkgeQt1yjZx/auCQxyw=";
+    })
+    # cf. https://bugzilla.redhat.com/2224971
+    (fetchpatch {
+      name = "CVE-2023-41175.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/965fa243004e012adc533ae8e38db3055f101a7f.diff";
+      hash = "sha256-Pvg6JfJWOIaTrfFF0YSREZkS9saTG9IsXnsXtcyKILA=";
+    })
     # FreeImage needs this patch
     ./headers.patch
     # libc++abi 11 has an `#include <version>`, this picks up files name
