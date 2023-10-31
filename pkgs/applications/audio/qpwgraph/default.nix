@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kanashimia exi Scrumplex ];
+    mainProgram = "qpwgraph";
   };
 })
