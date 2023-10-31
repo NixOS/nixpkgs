@@ -8,7 +8,7 @@
 , libsodium
 , libtool
 , openssl
-, systemdMinimal
+, systemdLibs
 , libxcrypt
 
 # passthru
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     openssl
   ] ++ lib.optionals (stdenv.isLinux) [
     libxcrypt # causes linking issues on *-darwin
-    systemdMinimal
+    systemdLibs
   ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''

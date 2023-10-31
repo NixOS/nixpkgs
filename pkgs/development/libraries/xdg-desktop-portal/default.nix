@@ -6,7 +6,7 @@
 , flatpak
 , fuse3
 , bubblewrap
-, systemdMinimal
+, systemd
 , geoclue2
 , glib
 , gsettings-desktop-schemas
@@ -61,12 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     flatpak
     fuse3
     bubblewrap
-    systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
     json-glib
     libportal
     pipewire
+
+    # For libsystemd. We could use systemdLibs, but systemd is already
+    # in the closure due to dbus.
+    systemd
 
     # For icon validator
     gdk-pixbuf

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , lib
 , stdenv
-, systemdMinimal
+, systemd
 , withSystemd ? false
 }:
 
@@ -30,14 +30,14 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   # journalctl is required in-$PATH for the journald receiver tests.
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemd ];
 
   # We don't inject the package into propagatedBuildInputs unless
   # asked to avoid hard-requiring a large package. For the journald
   # receiver to work, journalctl will need to be available in-$PATH,
   # so expose this as an option for those who want more control over
   # it instead of trusting the global $PATH.
-  propagatedBuildInputs = lib.optionals withSystemd [ systemdMinimal ];
+  propagatedBuildInputs = lib.optionals withSystemd [ systemd ];
 
   preCheck = "export CGO_ENABLED=1";
 

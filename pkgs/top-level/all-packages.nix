@@ -26568,7 +26568,7 @@ with pkgs;
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver {
-    systemd = systemdMinimal; # in closure already anyway
+    systemd = systemdLibs; # in closure already anyway
   };
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
@@ -28745,8 +28745,14 @@ with pkgs;
       guiSupport = false;
     };
   };
-  systemdMinimal = systemd.override {
-    pname = "systemd-minimal";
+
+  # This derivation only contains libudev and libsystemd built with
+  # minimal dependencies. This is useful for breaking dependency loops
+  # with pkgs.systemd.
+  systemdLibs = systemd.override {
+    pname = "systemd-minimal-libs";
+    buildLibsOnly = true;
+
     withAcl = false;
     withAnalyze = false;
     withApparmor = false;
@@ -28784,10 +28790,6 @@ with pkgs;
     withUserDb = false;
     withUkify = false;
     withBootloader = false;
-  };
-  systemdLibs = systemdMinimal.override {
-    pname = "systemd-minimal-libs";
-    buildLibsOnly = true;
   };
 
   udev =
@@ -41915,8 +41917,6 @@ with pkgs;
 
   jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
     fmt = fmt_9;
-    # TODO: remove once `udev` is `systemdMinimal` everywhere.
-    udev = systemdMinimal;
     jack = libjack2;
   };
 
