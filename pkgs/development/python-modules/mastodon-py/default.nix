@@ -14,24 +14,23 @@
 , pytest-mock
 , pytest-vcr
 , requests-mock
+, setuptools
+, pytest-cov
 }:
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "1.8.1";
+  # tests are broken on last release, check after next release (> 1.8.1)
+  version = "unstable-2023-06-24";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
+    rev = "cd86887d88bbc07de462d1e00a8fbc3d956c0151";
+    hash = "sha256-rJocFvtBPrSSny3lwENuRsQdAzi3u8b+SfDNGloniWI=";
   };
-
-  postPatch = ''
-    sed -i '/^addopts/d' setup.cfg
-  '';
 
   propagatedBuildInputs = [
     blurhash
@@ -49,7 +48,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     pytest-vcr
+    pytest-cov
     requests-mock
+    setuptools
   ];
 
   pythonImportsCheck = [ "mastodon" ];
