@@ -267,13 +267,11 @@ let
     else throw "Invalid Lua value";
 
   settingsToLua = prefix: settings: generators.toKeyValue {
-      listsAsDuplicateKeys = false;
-      mkKeyValue = k:
-        generators.mkKeyValueDefault {
-          mkValueString = toLua;
-        } " = " (prefix + k);
-    }
-    (filterAttrs (k: v: v != null) settings);
+    listsAsDuplicateKeys = false;
+    mkKeyValue = k: generators.mkKeyValueDefault {
+      mkValueString = toLua;
+    } " = " (prefix + k);
+  } (filterAttrs (k: v: v != null) settings);
 
   createSSLOptsStr = o: ''
     ssl = {
