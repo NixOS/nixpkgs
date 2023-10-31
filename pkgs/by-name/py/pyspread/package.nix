@@ -2,19 +2,24 @@
 , python3
 , fetchPypi
 , copyDesktopItems
-, wrapQtAppsHook
-, qtsvg
+, libsForQt5
 , makeDesktopItem
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  # get rid of rec
   pname = "pyspread";
-  version = "2.0.2";
-
+  version = "2.2.2";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rg2T9Y9FU2a+aWg0XM8jyQB9t8zDVlpad3TjUcx4//8=";
+    hash = "sha256-vbBu/dMXQf14F7qWvyHX5T8/AkjeZhaQt1eQ6Nidpsc=";
   };
+  inherit (libsForQt5)
+    qtsvg
+    wrapQtAppsHook;
+in
+python3.pkgs.buildPythonApplication {
+  inherit pname version src;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -35,18 +40,20 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
+  strictDeps = true;
+
   doCheck = false; # it fails miserably with a core dump
 
   pythonImportsCheck = [ "pyspread" ];
 
   desktopItems = [
-    (makeDesktopItem rec {
-      name = pname;
-      exec = name;
-      icon = name;
+    (makeDesktopItem {
+      name = "pyspread";
+      exec = "pyspread";
+      icon = "pyspread";
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
-      comment = meta.description;
+      comment = "A Python-oriented spreadsheet application";
       categories = [ "Office" "Development" "Spreadsheet" ];
     })
   ];
@@ -55,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pyspread.gitlab.io/";
     description = "A Python-oriented spreadsheet application";
     longDescription = ''
@@ -68,8 +75,8 @@ python3.pkgs.buildPythonApplication rec {
       that can be accessed from other cells. These objects can represent
       anything including lists or matrices.
     '';
-    license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; all;
+    license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "pyspread";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

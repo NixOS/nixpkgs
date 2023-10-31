@@ -285,7 +285,7 @@ with pkgs;
   _0x =  callPackage ../tools/misc/0x { };
 
   atuin = callPackage ../tools/misc/atuin {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) AppKit Security SystemConfiguration;
   };
 
   automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
@@ -1084,7 +1084,7 @@ with pkgs;
   mya = callPackage ../applications/misc/mya { };
 
   mysql-shell = callPackage ../development/tools/mysql-shell {
-    inherit (darwin) cctools developer_cmds DarwinTools;
+    inherit (darwin) cctools DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
@@ -12391,8 +12391,6 @@ with pkgs;
 
   pypass = with python3Packages; toPythonApplication pypass;
 
-  pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
-
   teapot = callPackage ../applications/office/teapot { };
 
   ticktick = callPackage ../applications/office/ticktick { };
@@ -20949,7 +20947,11 @@ with pkgs;
 
   cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
 
-  ctranslate2 = callPackage ../development/libraries/ctranslate2 { };
+  ctranslate2 = callPackage ../development/libraries/ctranslate2 {
+    stdenv = if pkgs.config.cudaSupport then gcc11Stdenv else stdenv;
+    withCUDA = pkgs.config.cudaSupport;
+    withCuDNN = pkgs.config.cudaSupport;
+  };
 
   ubus = callPackage ../development/libraries/ubus { };
 
@@ -22257,8 +22259,6 @@ with pkgs;
   jansson = callPackage ../development/libraries/jansson { };
 
   jarowinkler-cpp = callPackage ../development/libraries/jarowinkler-cpp { };
-
-  jasper = callPackage ../development/libraries/jasper { };
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
@@ -32998,12 +32998,15 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 { };
-  k3s_1_25 = callPackage ../applications/networking/cluster/k3s/1_25 { };
-  inherit (callPackage ../applications/networking/cluster/k3s { })
-    k3s_1_26
-    k3s_1_27
-  ;
+  k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 {
+    buildGoModule = buildGo120Module;
+  };
+  k3s_1_25 = callPackage ../applications/networking/cluster/k3s/1_25 {
+    buildGoModule = buildGo120Module;
+  };
+  inherit (callPackage ../applications/networking/cluster/k3s {
+    buildGoModule = buildGo120Module;
+  }) k3s_1_26 k3s_1_27;
   k3s = k3s_1_27;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };

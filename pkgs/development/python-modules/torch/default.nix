@@ -145,10 +145,8 @@ in buildPythonPackage rec {
     ./pthreadpool-disable-gcd.diff
   ] ++ lib.optionals stdenv.isLinux [
     # Propagate CUPTI to Kineto by overriding the search path with environment variables.
-    (fetchpatch {
-      url = "https://github.com/pytorch/pytorch/pull/108847/commits/7ae4d7c0e2dec358b4fe81538efe9da5eb580ec9.patch";
-      hash = "sha256-skFaDg98xcJqJfzxWk+qhUxPLHDStqvd0mec3PgksIg=";
-    })
+    # https://github.com/pytorch/pytorch/pull/108847
+    ./pytorch-pr-108847.patch
   ];
 
   postPatch = lib.optionalString rocmSupport ''

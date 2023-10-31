@@ -8,6 +8,7 @@ let
   cfg = config.services.wyoming.openwakeword;
 
   inherit (lib)
+    concatStringsSep
     concatMapStringsSep
     escapeShellArgs
     mkOption
@@ -15,6 +16,7 @@ let
     mkEnableOption
     mkIf
     mkPackageOptionMD
+    mkRemovedOptionModule
     types
     ;
 
@@ -22,18 +24,13 @@ let
     toString
     ;
 
-  models = [
-    # wyoming_openwakeword/models/*.tflite
-    "alexa"
-    "hey_jarvis"
-    "hey_mycroft"
-    "hey_rhasspy"
-    "ok_nabu"
-  ];
-
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "wyoming" "openwakeword" "models" ] "Configuring models has been removed, they are now dynamically discovered and loaded at runtime")
+  ];
+
   meta.buildDocsInSandbox = false;
 
   options.services.wyoming.openwakeword = with types; {
@@ -50,17 +47,25 @@ in
       '';
     };
 
-    models = mkOption {
-      type = listOf (enum models);
-      default = models;
-      description = mdDoc ''
-        List of wake word models that should be made available.
+    customModelsDirectories = mkOption {
+      type = listOf types.path;
+      default = [];
+      description = lib.mdDoc ''
+        Paths to directories with custom wake word models (*.tflite model files).
       '';
     };
 
     preloadModels = mkOption {
-      type = listOf (enum models);
+      type = listOf str;
       default = [
+        "ok_nabu"
+      ];
+      example = [
+        # wyoming_openwakeword/models/*.tflite
+        "alexa"
+        "hey_jarvis"
+        "hey_mycroft"
+        "hey_rhasspy"
         "ok_nabu"
       ];
       description = mdDoc ''
@@ -114,14 +119,15 @@ in
         DynamicUser = true;
         User = "wyoming-openwakeword";
         # https://github.com/home-assistant/addons/blob/master/openwakeword/rootfs/etc/s6-overlay/s6-rc.d/openwakeword/run
-        ExecStart = ''
-          ${cfg.package}/bin/wyoming-openwakeword \
-            --uri ${cfg.uri} \
-            ${concatMapStringsSep " " (model: "--model ${model}") cfg.models} \
-            ${concatMapStringsSep " " (model: "--preload-model ${model}") cfg.preloadModels} \
-            --threshold ${cfg.threshold} \
-            --trigger-level ${cfg.triggerLevel} ${cfg.extraArgs}
-        '';
+        ExecStart = concatStringsSep " " [
+          "${cfg.package}/bin/wyoming-openwakeword"
+          "--uri ${cfg.uri}"
+          (concatMapStringsSep " " (model: "--preload-model ${model}") cfg.preloadModels)
+          (concatMapStringsSep " " (dir: "--custom-model-dir ${toString dir}") cfg.customModelsDirectories)
+          "--threshold ${cfg.threshold}"
+          "--trigger-level ${cfg.triggerLevel}"
+          "${cfg.extraArgs}"
+        ];
         CapabilityBoundingSet = "";
         DeviceAllow = "";
         DevicePolicy = "closed";

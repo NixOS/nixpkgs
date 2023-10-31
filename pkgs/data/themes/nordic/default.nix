@@ -80,14 +80,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
+  outputs = [ "out" "sddm" ];
+
   nativeBuildInputs = [ jdupes ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-    breeze-icons
-    plasma-framework
-    plasma-workspace
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontWrapQtApps = true;
 
@@ -119,15 +116,18 @@ stdenv.mkDerivation rec {
     rmdir $out/share/themes/Nordic/extras{/wallpapers,}
 
     # move kde related contents to appropriate directories
-    mkdir -p $out/share/{aurorae/themes,color-schemes,Kvantum,plasma,sddm/themes,icons}
+    mkdir -p $out/share/{aurorae/themes,color-schemes,Kvantum,plasma,icons}
     mv -v $out/share/themes/Nordic/kde/aurorae/* $out/share/aurorae/themes/
     mv -v $out/share/themes/Nordic/kde/colorschemes/* $out/share/color-schemes/
     mv -v $out/share/themes/Nordic/kde/konsole $out/share/
     mv -v $out/share/themes/Nordic/kde/kvantum/* $out/share/Kvantum/
     mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
-    mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/
     mv -v $out/share/themes/Nordic/kde/folders/* $out/share/icons/
     mv -v $out/share/themes/Nordic/kde/cursors/*-cursors $out/share/icons/
+
+    mkdir -p $sddm/share/sddm/themes
+    mv -v $out/share/themes/Nordic/kde/sddm/* $sddm/share/sddm/themes/
+
     rm -rf $out/share/themes/Nordic/kde
 
     # Replace duplicate files with symbolic links to the first file in
@@ -135,6 +135,16 @@ stdenv.mkDerivation rec {
     jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    # Propagate sddm theme dependencies to user env otherwise sddm
+    # does find them. Putting them in buildInputs is not enough.
+
+    mkdir -p $sddm/nix-support
+
+    printWords ${breeze-icons} ${plasma-framework} ${plasma-workspace} \
+      >> $sddm/nix-support/propagated-user-env-packages
   '';
 
   meta = with lib; {
