@@ -7,7 +7,7 @@
 , lib
 , libtool
 , netcdf
-, netcdfcxx4
+, netcdf-cxx4
 , stdenv
 , udunits
 , which
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gsl
     netcdf
-    netcdfcxx4
+    netcdf-cxx4
     udunits
   ];
 

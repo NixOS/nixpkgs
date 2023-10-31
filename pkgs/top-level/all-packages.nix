@@ -11094,7 +11094,9 @@ with pkgs;
     hdf5 = hdf5-mpi.override { usev110Api = true; };
   };
 
-  netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
+  netcdf-cxx4 = callPackage ../development/libraries/netcdf-cxx4 {
+    hdf5 = hdf5_1_10;
+  };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
