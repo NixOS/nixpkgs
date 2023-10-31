@@ -427,10 +427,8 @@ let
       httpUploadPath = mkOption {
         type = types.str;
         description = lib.mdDoc ''
-          Directory where the uploaded files will be stored
-          when the http_upload module is used.
-          By default, uploaded files are put in a sub-directory of the
-          default Prosody storage path (usually /var/lib/prosody).
+          Directory where the uploaded files will be stored when the http_upload module is used.
+          By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
         '';
         default = "/var/lib/prosody";
       };
