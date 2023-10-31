@@ -1906,4 +1906,32 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+
+# Meta
+  testGetExe'Output = {
+    expr = getExe' {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+    } "executable";
+    expected = "somelonghash/bin/executable";
+  };
+
+  testGetExeOutput = {
+    expr = getExe {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainProgram = "mainProgram";
+    };
+    expected = "somelonghash/bin/mainProgram";
+  };
+
+  testGetExe'FailureFirstArg = testingThrow (
+    getExe' "not a derivation" "executable"
+  );
+
+  testGetExe'FailureSecondArg = testingThrow (
+    getExe' { type = "derivation"; } "dir/executable"
+  );
 }
