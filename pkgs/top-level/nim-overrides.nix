@@ -1,5 +1,7 @@
 { lib
 , stdenv
+, libsass
+, openssl
 , SDL2
 }:
 
@@ -8,6 +10,15 @@
 # - finalAttrs: - final arguments to the depender package
 # - prevAttrs: - preceding arguments to the depender package
 {
+  jester = lockAttrs: finalAttrs:
+    { buildInputs ? [ ], ... }: {
+      buildInputs = buildInputs ++ [ openssl ];
+    };
+
+  sass = lockAttrs: finalAttrs:
+    { buildInputs ? [ ], ... }: {
+      buildInputs = buildInputs ++ [ libsass ];
+    };
 
   sdl2 = lockAttrs: finalAttrs:
     { buildInputs ? [ ], ... }: {
