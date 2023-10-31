@@ -825,6 +825,10 @@ with pkgs;
 
   octodns = python3Packages.callPackage ../tools/networking/octodns { };
 
+  octodns-providers = recurseIntoAttrs {
+    hetzner = python3Packages.callPackage ../tools/networking/octodns/providers/hetzner { };
+  };
+
   octosuite = callPackage ../tools/security/octosuite { };
 
   octosql = callPackage ../tools/misc/octosql { };
