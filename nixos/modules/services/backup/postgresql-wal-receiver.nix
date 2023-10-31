@@ -7,7 +7,7 @@ let
     options = {
       postgresqlPackage = mkOption {
         type = types.package;
-        example = literalExpression "pkgs.postgresql_11";
+        example = literalExpression "pkgs.postgresql_15";
         description = lib.mdDoc ''
           PostgreSQL package to use.
         '';
@@ -124,7 +124,7 @@ in {
         example = literalExpression ''
           {
             main = {
-              postgresqlPackage = pkgs.postgresql_11;
+              postgresqlPackage = pkgs.postgresql_15;
               directory = /mnt/pg_wal/main/;
               slot = "main_wal_receiver";
               connection = "postgresql://user@somehost";
