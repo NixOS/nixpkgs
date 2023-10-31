@@ -8,5 +8,5 @@ builders/special.md
 builders/images.md
 hooks/index.md
 languages-frameworks/index.md
-builders/packages/index.md
+packages/index.md
 ```
