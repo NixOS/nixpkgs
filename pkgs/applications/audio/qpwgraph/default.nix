@@ -11,7 +11,7 @@
 , pipewire
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpwgraph";
   version = "0.5.3";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-50KaVpNB5/CTLs2bRbXEinYM23AZxZO/ForrVPFDN8U=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ kanashimia exi Scrumplex ];
   };
-}
+})
