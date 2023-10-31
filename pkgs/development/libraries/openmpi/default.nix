@@ -17,6 +17,13 @@
 
 # Enable Fortran support
 , fortranSupport ? true
+
+# AVX/SSE options
+, enableSse3 ? stdenv.hostPlatform.sse3Support
+, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
+, enableAvx ? true #stdenv.hostPlatform.avxSupport
+, enableAvx2 ? stdenv.hostPlatform.avx2Support
+, enableAvx512 ? stdenv.hostPlatform.avx512Support
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +37,19 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./
+
+    # This is dynamically detected. Configure does not provide fine grained options
+    # We just disable the check in the configure script for now
+    ${lib.optionalString (!enableSse3)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_sse3=yes' 'ompi_cv_op_avx_check_sse3=no'"}
+    ${lib.optionalString (!enableSse4_1)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_sse41=yes' 'ompi_cv_op_avx_check_sse41=no'"}
+    ${lib.optionalString (!enableAvx)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_avx=yes' 'ompi_cv_op_avx_check_avx=no'"}
+    ${lib.optionalString (!enableAvx2)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_avx2=yes' 'ompi_cv_op_avx_check_avx2=no'"}
+    ${lib.optionalString (!enableAvx512)
+      "substituteInPlace configure --replace 'ompi_cv_op_avx_check_avx512=yes' 'ompi_cv_op_avx_check_av512=no'"}
   '';
 
   preConfigure = ''
@@ -54,11 +74,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
-    ++ lib.optionals stdenv.isLinux  [
-      "--with-libnl=${lib.getDev libnl}"
-      "--with-pmix=${lib.getDev pmix}"
-      "--with-pmix-libdir=${pmix}/lib"
-    ] ++ lib.optional enableSGE "--with-sge"
+    ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
