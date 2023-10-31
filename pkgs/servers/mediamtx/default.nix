@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "mediamtx";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7kEwP9ohDtFaA1J+IYEspwJ208tFN2es/ubCmBYlEuA=";
+    hash = "sha256-7ZKVj9FYnQ8dkut/A9L/nHAOUvNJCUVDOAJH4VtFXNw=";
   };
 
-  vendorHash = "sha256-fcDyXWy/MzDIvJYfzZZyYLfYkl9tGpyeOsTT2zHxobI=";
+  vendorHash = "sha256-hIQbRl/dxwmWKGH5IgHr+hTlNbVP+PYJM9T1CgfRfI8=";
 
   # Tests need docker
   doCheck = false;
