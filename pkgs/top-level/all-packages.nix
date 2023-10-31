@@ -823,6 +823,8 @@ with pkgs;
 
   oauth2c = callPackage ../tools/security/oauth2c { };
 
+  octodns = python3Packages.callPackage ../tools/networking/octodns { };
+
   octosuite = callPackage ../tools/security/octosuite { };
 
   octosql = callPackage ../tools/misc/octosql { };
