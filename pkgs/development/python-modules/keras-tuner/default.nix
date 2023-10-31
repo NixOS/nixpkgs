@@ -3,7 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , colorama
-, scikitlearn
+, scikit-learn
 , future
 , tqdm
 , scipy
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorama
-    scikitlearn
+    scikit-learn
     future
     tqdm
     scipy
