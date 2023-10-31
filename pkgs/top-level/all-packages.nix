@@ -16806,8 +16806,9 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim
                         { inherit (darwin) Security;  }
-          ) nim-unwrapped nim-unwrapped-2 nim nim2;
-  nimPackages = recurseIntoAttrs nim.pkgs;
+          ) nim-unwrapped-1 nim-unwrapped-2 nim1 nim2;
+  nim = nim1;
+  nimPackages = recurseIntoAttrs nim1.pkgs;
   nim2Packages = recurseIntoAttrs nim2.pkgs;
 
   nrpl = callPackage ../development/tools/nrpl { };
