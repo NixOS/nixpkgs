@@ -7,6 +7,8 @@
 , webkitgtk
 , wrapGAppsHook
 , _7zz
+, archi
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
         mkdir -p "$out/Applications"
         mv Archi.app "$out/Applications/"
       '';
+
+  passthru.tests = { inherit (nixosTests) archi; };
 
   meta = with lib; {
     description = "ArchiMate modelling toolkit";
