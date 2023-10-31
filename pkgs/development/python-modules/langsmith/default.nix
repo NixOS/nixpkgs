@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.49";
+  version = "0.0.53";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vOa9FNzeJB8QgJ6FW+4vxNfDnBbrKtByIwW3sGP8/ho=";
+    hash = "sha256-5w6bCNYoZAIrFkruw7E3Tw0G0no05x/g2hHESC3T2lw=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -44,6 +44,11 @@ buildPythonPackage rec {
   disabledTests = [
     # These tests require network access
     "integration_tests"
+    # due to circular import
+    "test_as_runnable"
+    "test_as_runnable_batch"
+    "test_as_runnable_async"
+    "test_as_runnable_async_batch"
   ];
 
   disabledTestPaths = [
