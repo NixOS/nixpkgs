@@ -323,8 +323,27 @@ rec {
           then sdk.frameworks."${framework}"
           else replacePropagatedFrameworks pkg;
 
+      mapRuntimeToSDK = pkg:
+        # Only remap xcbuild for now, which exports the SDK used to build it.
+        if pkg != null && lib.getName pkg == "xcodebuild"
+          then pkg.override { stdenv = overrideSDK stdenv { inherit darwinMinVersion darwinSdkVersion; }; }
+          else pkg;
+
       mapInputsToSDK = inputs: args:
-        lib.genAttrs inputs (input: map mapPackageToSDK (args."${input}" or [ ]));
+        let
+          runsAtBuild = lib.flip lib.elem [
+            "depsBuildBuild"
+            "depsBuildBuildPropagated"
+            "nativeBuildInputs"
+            "propagatedNativeBuildInputs"
+            "depsBuildTarget"
+            "depsBuildTargetPropagated"
+          ];
+          atBuildInputs = lib.filter runsAtBuild inputs;
+          atRuntimeInputs = lib.subtractLists atBuildInputs inputs;
+        in
+        lib.genAttrs atRuntimeInputs (input: map mapPackageToSDK (args."${input}" or [ ]))
+        // lib.genAttrs atBuildInputs (input: map mapRuntimeToSDK (args."${input}" or [ ]));
 
       mkCC = cc: cc.override {
         bintools = cc.bintools.override { libc = sdk.Libsystem; };
@@ -343,6 +362,8 @@ rec {
       extraBuildInputs = [sdk.frameworks.CoreFoundation ];
       mkDerivationFromStdenv = extendMkDerivationArgs old (mapInputsToSDK [
         "buildInputs"
+        "nativeBuildInputs"
+        "propagatedNativeBuildInputs"
       ]);
     });
 }
