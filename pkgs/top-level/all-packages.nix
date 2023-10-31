@@ -30324,8 +30324,6 @@ with pkgs;
 
   anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
 
-  yggdrasil = callPackage ../tools/networking/yggdrasil { };
-
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
