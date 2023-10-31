@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    # Fix shared library path that will be incorrect on move to "dev" output
-    substituteInPlace "$dev/lib/cmake/LibDataChannel/LibDataChannelTargets-release.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
+    # Fix include path that will be incorrect due to the "dev" output
+    substituteInPlace "$dev/lib/cmake/LibDataChannel/LibDataChannelTargets.cmake" \
+      --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
   meta = with lib; {
