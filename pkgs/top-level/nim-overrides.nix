@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, htslib
 , libsass
 , openssl
 , SDL2
@@ -13,6 +14,11 @@
   jester = lockAttrs: finalAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ openssl ];
+    };
+
+  hts = lockAttrs: finalAttrs:
+    { buildInputs ? [ ], ... }: {
+      buildInputs = buildInputs ++ [ htslib ];
     };
 
   sass = lockAttrs: finalAttrs:
