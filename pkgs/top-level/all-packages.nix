@@ -13418,8 +13418,6 @@ with pkgs;
 
   spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
 
-  spigot = callPackage ../tools/misc/spigot { };
-
   spiped = callPackage ../tools/networking/spiped { };
 
   sqlite3-to-mysql = callPackage ../tools/misc/sqlite3-to-mysql { };
