@@ -1,9 +1,12 @@
 { lib
 , stdenv
+, getdns
 , htslib
 , libsass
 , openssl
+, pkg-config
 , SDL2
+, tkrzw
 , xorg
 }:
 
@@ -22,6 +25,12 @@
       buildInputs = buildInputs ++ [ htslib ];
     };
 
+  getdns = lockAttrs: finalAttrs:
+    { nativeBuildInputs ? [ ], buildInputs ? [ ], ... }: {
+      nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
+      buildInputs = buildInputs ++ [ getdns ];
+    };
+
   sass = lockAttrs: finalAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ libsass ];
@@ -30,6 +39,12 @@
   sdl2 = lockAttrs: finalAttrs:
     { buildInputs ? [ ], ... }: {
       buildInputs = buildInputs ++ [ SDL2 ];
+    };
+
+  tkrzw = lockAttrs: finalAttrs:
+    { nativeBuildInputs ? [ ], buildInputs ? [ ], ... }: {
+      nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
+      buildInputs = buildInputs ++ [ tkrzw ];
     };
 
   x11 = lockAttrs: finalAttrs:
