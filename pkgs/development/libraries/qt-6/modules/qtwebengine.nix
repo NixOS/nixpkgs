@@ -60,7 +60,6 @@
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
-, llvmPackages_14
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -106,7 +105,6 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages_14.clang
     bootstrap_cmds
     cctools
     xcbuild
