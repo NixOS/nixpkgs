@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitLab
-, cmake, pkg-config, wrapQtAppsHook
-, qtbase, qtsvg, qtwayland, alsa-lib, pipewire
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, qtbase
+, qtsvg
+, qtwayland
+, alsa-lib
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
