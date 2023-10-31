@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, perl, libnl
+{ lib, stdenv, fetchurl, gfortran, perl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx, ucc
 , config
@@ -37,14 +37,14 @@ stdenv.mkDerivation rec {
     # https://docs.open-mpi.org/en/v5.0.x/release-notes/general.html#general-notes
     export USER=nixbld
     export HOSTNAME=localhost
+    export SOURCE_DATE_EPOCH=0
   '';
 
   outputs = [ "out" "man" ];
 
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib libevent hwloc ]
     ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ucc ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
