@@ -75,8 +75,6 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
     '';
 
