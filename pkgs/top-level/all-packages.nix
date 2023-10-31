@@ -20088,6 +20088,12 @@ with pkgs;
     inherit (__splicedPackages.haskellPackages) ShellCheck;
   };
 
+
+  # Minimal shellcheck executable for package checks.
+  # Use shellcheck which does not include docs, as
+  # pandoc takes long to build and documentation isn't needed for just running the cli
+  shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
+
   shellharden = callPackage ../development/tools/shellharden { };
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
