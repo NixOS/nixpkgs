@@ -285,7 +285,7 @@ with pkgs;
   _0x =  callPackage ../tools/misc/0x { };
 
   atuin = callPackage ../tools/misc/atuin {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) AppKit Security SystemConfiguration;
   };
 
   automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
@@ -12393,8 +12393,6 @@ with pkgs;
 
   pypass = with python3Packages; toPythonApplication pypass;
 
-  pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
-
   teapot = callPackage ../applications/office/teapot { };
 
   ticktick = callPackage ../applications/office/ticktick { };
@@ -20956,7 +20954,11 @@ with pkgs;
 
   cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
 
-  ctranslate2 = callPackage ../development/libraries/ctranslate2 { };
+  ctranslate2 = callPackage ../development/libraries/ctranslate2 {
+    stdenv = if pkgs.config.cudaSupport then gcc11Stdenv else stdenv;
+    withCUDA = pkgs.config.cudaSupport;
+    withCuDNN = pkgs.config.cudaSupport;
+  };
 
   ubus = callPackage ../development/libraries/ubus { };
 
@@ -22271,8 +22273,6 @@ with pkgs;
   jansson = callPackage ../development/libraries/jansson { };
 
   jarowinkler-cpp = callPackage ../development/libraries/jarowinkler-cpp { };
-
-  jasper = callPackage ../development/libraries/jasper { };
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 

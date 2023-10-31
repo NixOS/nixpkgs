@@ -5,15 +5,15 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "2.0.32";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
-    repo = pname;
-    rev = "version-${version}";
-    hash = "sha256-Uwgtex0MWC/pOmEr8itHMIa4wxd97c/tsTzcLgV8D0I=";
+    repo = "jasper";
+    rev = "version-${finalAttrs.version}";
+    hash = "sha256-v/AFx40JWdbTCa008tDz/n9cXgpAkKv4rSiGJ8yx1YQ=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  cmakeBuildDir = "build-directory";
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://jasper-software.github.io/jasper/";
     description = "Image processing/coding toolkit";
     longDescription = ''
@@ -41,8 +45,8 @@ stdenv.mkDerivation rec {
       was chosen primarily due to the availability of C development environments
       for most computing platforms when JasPer was first developed, circa 1999.
     '';
-    license = licenses.free; # MIT-like
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

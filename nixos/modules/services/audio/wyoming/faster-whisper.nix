@@ -138,6 +138,7 @@ in
               --data-dir $STATE_DIRECTORY \
               --download-dir $STATE_DIRECTORY \
               --uri ${options.uri} \
+              --device ${options.device} \
               --model ${options.model} \
               --language ${options.language} \
               --beam-size ${options.beamSize} ${options.extraArgs}

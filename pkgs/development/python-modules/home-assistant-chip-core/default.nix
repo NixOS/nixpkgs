@@ -37,7 +37,7 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-fR+ea25SqOMksBJXgSjuVvv2xSBoadZmPWP0IwxpiMA=";
+        hash = "sha256-wmavXr7WL9q7u8lnOaEWbRs3rlagBd9ovhxzRbjnrwY=";
       };
       "x86_64-linux" = {
         name = "x86_64";
