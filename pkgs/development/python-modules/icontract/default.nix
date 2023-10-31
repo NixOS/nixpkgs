@@ -50,6 +50,8 @@ buildPythonPackage rec {
     # mypy decorator checks don't pass. For some reason mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
+    # those tests seems to simply re-run some typeguard tests
+    "tests/test_typeguard.py"
   ];
 
   pythonImportsCheck = [ "icontract" ];
