@@ -87,6 +87,7 @@ buildPythonPackage rec {
   ];
 
   # no tests on PyPI, no tags on GitHub
+  # https://github.com/domainaware/parsedmarc/issues/426
   doCheck = false;
 
   pythonImportsCheck = [ "parsedmarc" ];
