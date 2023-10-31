@@ -206,10 +206,7 @@ in
           | tee repart-output.json
       '';
 
-    meta = {
-      maintainers = with lib.maintainers; [ nikstur ];
-      doc = ./repart.md;
-    };
+    meta.maintainers = with lib.maintainers; [ nikstur ];
 
   };
 }
