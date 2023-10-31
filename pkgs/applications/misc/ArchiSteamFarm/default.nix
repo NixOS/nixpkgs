@@ -76,7 +76,6 @@ buildDotnetModule rec {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "ArchiSteamFarm";
     maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
