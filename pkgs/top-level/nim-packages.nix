@@ -24,8 +24,6 @@ lib.makeScope newScope (self:
 
     bumpy = callPackage ../development/nim-packages/bumpy { };
 
-    c2nim = callPackage ../development/nim-packages/c2nim { };
-
     cbor = callPackage ../development/nim-packages/cbor { };
 
     chroma = callPackage ../development/nim-packages/chroma { };
