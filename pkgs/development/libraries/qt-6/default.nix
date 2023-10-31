@@ -9,6 +9,7 @@
 , gst_all_1
 , libglvnd
 , darwin
+, overrideSDK
 , buildPackages
 , python3
 
@@ -148,6 +149,11 @@ let
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        qtModule = qtModule.override {
+          stdenv = if stdenv.isDarwin
+            then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+            else stdenv;
+        };
         xcbuild = buildPackages.xcbuild.override {
           productBuildVer = "20A2408";
         };
