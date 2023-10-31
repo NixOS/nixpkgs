@@ -42,10 +42,9 @@ in
 buildPythonPackage rec {
   pname = "parsedmarc";
   version = "8.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
-
-  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
