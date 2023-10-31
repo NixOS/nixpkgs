@@ -89,12 +89,15 @@ in {
         '';
       };
       pass = mkOption {
-        type = types.path;
+        type = types.str;
         default = pkgs.writeText "unpoller-influxdb-default.password" "unifipoller";
         defaultText = literalExpression "unpoller-influxdb-default.password";
         description = lib.mdDoc ''
-          Path of a file containing the password for influxdb.
-          This file needs to be readable by the unifi-poller user.
+          Path of a file containing the password for influxdb. This can be
+          either a string or a path. In the first case, it represents a path
+          on the host system; that file must be readable by the unifi-poller
+          user. In the second case, note that the password will be
+          world-readable in the Nix store.
         '';
         apply = v: "file://${v}";
       };
@@ -138,12 +141,15 @@ in {
         '';
       };
       pass = mkOption {
-        type = types.path;
+        type = types.str;
         default = pkgs.writeText "unpoller-loki-default.password" "";
         defaultText = "unpoller-influxdb-default.password";
         description = lib.mdDoc ''
-          Path of a file containing the password for Loki.
-          This file needs to be readable by the unifi-poller user.
+          Path of a file containing the password for Loki. This can be
+          either a string or a path. In the first case, it represents a path
+          on the host system; that file must be readable by the unifi-poller
+          user. In the second case, note that the password will be
+          world-readable in the Nix store.
         '';
         apply = v: "file://${v}";
       };
@@ -187,12 +193,15 @@ in {
           '';
         };
         pass = mkOption {
-          type = types.path;
+          type = types.str;
           default = pkgs.writeText "unpoller-unifi-default.password" "unifi";
           defaultText = literalExpression "unpoller-unifi-default.password";
           description = lib.mdDoc ''
-            Path of a file containing the password for the unifi service user.
-            This file needs to be readable by the unifi-poller user.
+            Path of a file containing the password for the Unifi service user.
+            This can be either a string or a path. In the first case, it
+            represents a path on the host system; that file must be readable
+            by the unifi-poller user. In the second case, note that the
+            password will be world-readable in the Nix store.
           '';
           apply = v: "file://${v}";
         };
