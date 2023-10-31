@@ -34926,7 +34926,7 @@ with pkgs;
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
-  qpwgraph = libsForQt5.callPackage ../applications/audio/qpwgraph { };
+  qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
 
   qrcode = callPackage ../tools/graphics/qrcode { };
 

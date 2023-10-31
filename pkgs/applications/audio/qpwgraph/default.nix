@@ -1,9 +1,9 @@
-{ lib, mkDerivation, fetchFromGitLab
-, cmake, pkg-config
-, alsa-lib, pipewire
+{ lib, stdenv, fetchFromGitLab
+, cmake, pkg-config, wrapQtAppsHook
+, qtbase, qtsvg, qtwayland, alsa-lib, pipewire
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qpwgraph";
   version = "0.5.3";
 
@@ -15,9 +15,9 @@ mkDerivation rec {
     sha256 = "sha256-50KaVpNB5/CTLs2bRbXEinYM23AZxZO/ForrVPFDN8U=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
-  buildInputs = [ alsa-lib pipewire ];
+  buildInputs = [ qtbase qtsvg qtwayland alsa-lib pipewire ];
 
   meta = with lib; {
     description = "Qt graph manager for PipeWire, similar to QjackCtl.";
