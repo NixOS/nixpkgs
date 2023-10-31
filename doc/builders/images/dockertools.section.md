@@ -275,7 +275,7 @@ pullImage {
 `nix-prefetch-docker` command can be used to get required image parameters:
 
 ```ShellSession
-$ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
+$ nix run nixpkgs#nix-prefetch-docker -- --image-name mysql --image-tag 5
 ```
 
 Since a given `imageName` may transparently refer to a manifest list of images which support multiple architectures and/or operating systems, you can supply the `--os` and `--arch` arguments to specify exactly which image you want. By default it will match the OS and architecture of the host the command is run on.
