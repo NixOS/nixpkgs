@@ -30027,6 +30027,8 @@ with pkgs;
 
   siji = callPackage ../data/fonts/siji { };
 
+  smc-manjari = callPackage ../data/fonts/smc-manjari { };
+
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
 
   source-code-pro = callPackage ../data/fonts/source-code-pro { };
