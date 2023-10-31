@@ -6,6 +6,7 @@
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, jemalloc
 , rust-jemalloc-sys
 , darwin
 }:
@@ -17,6 +18,11 @@ let
     repo = "polars";
     rev = "refs/tags/py-${version}";
     hash = "sha256-kV30r2wmswpCUmMRaFsCOeRrlTN5/PU0ogaU2JIHq0E=";
+  };
+  rust-jemalloc-sys' = rust-jemalloc-sys.override {
+    jemalloc = jemalloc.override {
+      disableInitExecTls = true;
+    };
   };
 in
 buildPythonPackage {
@@ -51,7 +57,7 @@ buildPythonPackage {
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
   buildInputs = [
-    rust-jemalloc-sys
+    rust-jemalloc-sys'
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
