@@ -1,16 +1,17 @@
 { lib
-, nimPackages
+, buildNimPackage
 , fetchFromGitLab
 , enableShells ? [ "bash" "zsh" "fish" "sh" "posh" "codium" ]
 }:
-nimPackages.buildNimPackage rec{
+
+buildNimPackage (finalAttrs: {
   pname = "swaycwd";
   version = "0.2.1";
 
   src = fetchFromGitLab {
     owner = "cab404";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-R/LnojbA0vBQVivGLaoM0+M4qVJ7vjf4kggB59i896w=";
   };
 
@@ -31,4 +32,4 @@ nimPackages.buildNimPackage rec{
     license = licenses.gpl3Only;
     mainProgram = "swaycwd";
   };
-}
+})
