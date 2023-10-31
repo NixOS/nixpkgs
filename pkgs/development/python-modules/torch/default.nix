@@ -274,6 +274,11 @@ in buildPythonPackage rec {
   # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
   ++ lib.optionals (stdenv.cc.isGNU && lib.versions.major stdenv.cc.version == "12" ) [
     "-Wno-error=free-nonheap-object"
+  ]
+  # .../source/torch/csrc/autograd/generated/python_functions_0.cpp:85:3:
+  # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+  ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16") [
+    "-Wno-error=cast-function-type-strict"
   ]));
 
   nativeBuildInputs = [
