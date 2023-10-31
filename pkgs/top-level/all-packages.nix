@@ -26227,7 +26227,7 @@ with pkgs;
     jre = pkgs.jdk11_headless;
     python = python3;
   };
-  cassandra = cassandra_3_11;
+  cassandra = cassandra_4;
 
   cassandra-cpp-driver = callPackage ../development/libraries/cassandra-cpp-driver/default.nix { };
 
