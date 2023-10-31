@@ -22,7 +22,7 @@
 , mailsuite
 , msgraph-core
 , nixosTests
-, publicsuffix2
+, publicsuffixlist
 , pythonOlder
 , requests
 , tqdm
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     lxml
     mailsuite
     msgraph-core
-    publicsuffix2
+    publicsuffixlist
     requests
     tqdm
     urllib3
