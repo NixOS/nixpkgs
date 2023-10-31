@@ -1,36 +1,33 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchurl
-, lib
-, nixosTests
-, python
-, pythonOlder
-
-# pythonPackages
-, hatchling
-, dnspython
-, expiringdict
-, publicsuffix2
-, xmltodict
-, geoip2
-, urllib3
-, requests
-, imapclient
+{ lib
+, azure-identity
+, boto3
+, buildPythonPackage
 , dateparser
-, mailsuite
+, dnspython
 , elasticsearch
 , elasticsearch-dsl
-, kafka-python
-, tqdm
-, lxml
-, boto3
-, msgraph-core
-, azure-identity
+, expiringdict
+, fetchPypi
+, fetchurl
+, geoip2
 , google-api-core
 , google-api-python-client
 , google-auth
 , google-auth-httplib2
 , google-auth-oauthlib
+, hatchling
+, imapclient
+, kafka-python
+, lxml
+, mailsuite
+, msgraph-core
+, nixosTests
+, publicsuffix2
+, pythonOlder
+, requests
+, tqdm
+, urllib3
+, xmltodict
 }:
 
 let
@@ -61,29 +58,29 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dnspython
-    expiringdict
-    publicsuffix2
-    xmltodict
-    geoip2
-    urllib3
-    requests
-    imapclient
+    azure-identity
+    boto3
     dateparser
-    mailsuite
+    dnspython
     elasticsearch
     elasticsearch-dsl
-    kafka-python
-    tqdm
-    lxml
-    boto3
-    msgraph-core
-    azure-identity
+    expiringdict
+    geoip2
     google-api-core
     google-api-python-client
     google-auth
     google-auth-httplib2
     google-auth-oauthlib
+    imapclient
+    kafka-python
+    lxml
+    mailsuite
+    msgraph-core
+    publicsuffix2
+    requests
+    tqdm
+    urllib3
+    xmltodict
   ];
 
   # no tests on PyPI, no tags on GitHub
