@@ -10276,6 +10276,8 @@ with pkgs;
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  niri = callPackage ../applications/window-managers/niri { };
+
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
   nodenv = callPackage ../development/tools/nodenv { };
