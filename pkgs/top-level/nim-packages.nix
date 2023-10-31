@@ -18,17 +18,11 @@ lib.makeScope newScope (self:
 
     atlas = callPackage ../development/nim-packages/atlas { };
 
-    base32 = callPackage ../development/nim-packages/base32 { };
-
     base45 = callPackage ../development/nim-packages/base45 { };
 
     bumpy = callPackage ../development/nim-packages/bumpy { };
 
-    cbor = callPackage ../development/nim-packages/cbor { };
-
     chroma = callPackage ../development/nim-packages/chroma { };
-
-    coap = callPackage  ../development/nim-packages/coap { };
 
     csvtools = callPackage ../development/nim-packages/csvtools { };
 
@@ -36,16 +30,9 @@ lib.makeScope newScope (self:
 
     docopt = callPackage ../development/nim-packages/docopt { };
 
-    eris = callPackage ../development/nim-packages/eris { };
-
     flatty = callPackage ../development/nim-packages/flatty { };
 
-    freedesktop_org = callPackage ../development/nim-packages/freedesktop_org { };
-
     frosty = callPackage ../development/nim-packages/frosty { };
-
-    getdns = callPackage ../development/nim-packages/getdns {
-      inherit (pkgs) getdns; };
 
     hashlib = callPackage ../development/nim-packages/hashlib { };
 
@@ -87,8 +74,6 @@ lib.makeScope newScope (self:
 
     pixie = callPackage ../development/nim-packages/pixie { };
 
-    preserves = callPackage ../development/nim-packages/preserves { };
-
     redis = callPackage ../development/nim-packages/redis { };
 
     redpool = callPackage ../development/nim-packages/redpool { };
@@ -124,13 +109,7 @@ lib.makeScope newScope (self:
 
     supersnappy = callPackage ../development/nim-packages/supersnappy { };
 
-    syndicate = callPackage ../development/nim-packages/syndicate { };
-
-    taps = callPackage ../development/nim-packages/taps { };
-
     tempfile = callPackage ../development/nim-packages/tempfile { };
-
-    tkrzw = callPackage ../development/nim-packages/tkrzw { inherit (pkgs) tkrzw; };
 
     ui = callPackage ../development/nim-packages/ui { inherit (pkgs) libui; };
 

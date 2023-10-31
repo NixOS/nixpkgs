@@ -1,10 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitea, pkg-config, base32, coap, cbor
-, freedesktop_org, illwill, syndicate, tkrzw }:
+{ lib, buildNimPackage, fetchFromGitea }:
 
 buildNimPackage (final: prev: {
   pname = "eris";
   version = "20230722";
   outputs = [ "bin" "out" ];
+  requiredNimVersion = 1;
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "eris";
@@ -12,9 +12,7 @@ buildNimPackage (final: prev: {
     rev = final.version;
     hash = "sha256-JVl2/PmFVYuD4s9hKoQwVDKUa3PBWK5SBDEmVHVSuig=";
   };
-  propagatedNativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs =
-    [ base32 coap cbor freedesktop_org illwill tkrzw ];
+  lockFile = ./lock.json;
   postInstall = ''
     mkdir -p "$bin/share/recoll/filters"
     mv "$bin/bin/rclerislink" "$bin/share/recoll/filters/"
