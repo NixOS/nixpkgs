@@ -4,6 +4,7 @@ This chapter contains information about how to use and maintain the Nix expressi
 
 ```{=include=} sections
 citrix.section.md
+darwin-builder.section.md
 dlib.section.md
 eclipse.section.md
 elm.section.md
