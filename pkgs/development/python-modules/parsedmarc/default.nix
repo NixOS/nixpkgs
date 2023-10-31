@@ -96,11 +96,11 @@ buildPythonPackage rec {
     tests = nixosTests.parsedmarc;
   };
 
-  meta = {
+  meta = with lib; {
     changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    maintainers = with lib.maintainers; [ talyz ];
-    license = lib.licenses.asl20;
+    maintainers = with maintainers; [ talyz ];
+    license = licenses.asl20;
   };
 }
