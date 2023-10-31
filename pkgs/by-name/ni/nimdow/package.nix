@@ -1,18 +1,20 @@
-{ lib, fetchFromGitHub, nimPackages, libX11, libXft, libXinerama }:
-nimPackages.buildNimPackage rec {
+{ lib, buildNimPackage, fetchFromGitHub, testers }:
+
+buildNimPackage (finalAttrs: {
   pname = "nimdow";
 
   version = "0.7.37";
 
+  requiredNimVersion = 1;
+
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-930wDS0UW65QzpUHHOuM25oi/OhFmG0Q7N05ftu7XlI=";
   };
 
-
-  buildInputs = with nimPackages; [ parsetoml x11 safeseq safeset libX11 libXft libXinerama ];
+  lockFile = ./lock.json;
 
   postInstall = ''
     install -D config.default.toml $out/share/nimdow/config.default.toml
@@ -23,15 +25,16 @@ nimPackages.buildNimPackage rec {
     substituteInPlace src/nimdowpkg/config/configloader.nim --replace "/usr/share/nimdow" "$out/share/nimdow"
   '';
 
-
-
-  doCheck = true;
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
+  };
 
   meta = with lib;
-    src.meta // {
+    finalAttrs.src.meta // {
       description = "Nim based tiling window manager";
       license = [ licenses.gpl2 ];
       maintainers = [ maintainers.marcusramberg ];
       mainProgram = "nimdow";
     };
-}
+})
