@@ -884,7 +884,7 @@ in
             http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
       ''}
 
-      ${ lib.optionalString (cfg.httpFileShare != null) ''
+      ${lib.optionalString (cfg.httpFileShare != null) ''
         Component ${toLua cfg.httpFileShare.domain} "http_file_share"
         ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
       ''}
