@@ -3,8 +3,8 @@
 
   outputs = { self }:
     let
-      lib' = import ./.;
+      lib0 = import ./.;
     in {
-      lib = lib'.extend (import ./__flake-version-info.nix self);
+      lib = lib0.extend (import ./flake-version-info.nix self);
     };
 }

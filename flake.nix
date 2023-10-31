@@ -9,7 +9,7 @@
         nixpkgs = self;
       };
 
-      libVersionInfoOverlay = import ./lib/__flake-version-info.nix self;
+      libVersionInfoOverlay = import ./lib/flake-version-info.nix self;
       lib = (import ./lib).extend libVersionInfoOverlay;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
