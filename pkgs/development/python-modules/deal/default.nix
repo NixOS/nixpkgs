@@ -77,13 +77,19 @@ buildPythonPackage rec {
     "test_scheme_contract_is_satisfied_when_setting_arg"
     "test_scheme_contract_is_satisfied_within_chain"
     "test_scheme_errors_rewrite_message"
-    # broken since pytest > 7.1.3
-    "test_exception_hook"
+    # assert errors
+    "test_doctest"
+    "test_no_violations"
   ];
 
   disabledTestPaths = [
     # needs internet access
     "tests/test_runtime/test_offline.py"
+    # needs update to latest version (4.24.3) to fix typeguard issues,
+    # however upgrading it needs an astroid upgrade to 3.0+
+    # this issue only affects tests and is safe to ignore for now, see:
+    # https://github.com/life4/deal/commit/4821ebc341270af08e05f866d43f9458ba64ba8a
+    "tests/test_testing.py"
   ];
 
   pythonImportsCheck = [ "deal" ];
