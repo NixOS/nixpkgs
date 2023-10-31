@@ -16,8 +16,6 @@ lib.makeScope newScope (self:
 
     asynctools = callPackage ../development/nim-packages/asynctools { };
 
-    atlas = callPackage ../development/nim-packages/atlas { };
-
     bumpy = callPackage ../development/nim-packages/bumpy { };
 
     chroma = callPackage ../development/nim-packages/chroma { };
