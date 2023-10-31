@@ -15,6 +15,7 @@ lib.recurseIntoAttrs
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
+    mpv-youtube-chat = callPackage ./mpv-youtube-chat.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
