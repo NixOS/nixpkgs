@@ -153,7 +153,6 @@
 , "katex"
 , "keyoxide"
 , "lcov-result-merger"
-, "lean-language-server"
 , "lerna"
 , "less"
 , "less-plugin-clean-css"

@@ -17,9 +17,9 @@ PostgreSQL is an advanced, free relational database.
 To enable PostgreSQL, add the following to your {file}`configuration.nix`:
 ```
 services.postgresql.enable = true;
-services.postgresql.package = pkgs.postgresql_11;
+services.postgresql.package = pkgs.postgresql_15;
 ```
-Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_11`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
+Note that you are required to specify the desired version of PostgreSQL (e.g. `pkgs.postgresql_15`). Since upgrading your PostgreSQL version requires a database dump and reload (see below), NixOS cannot provide a default value for [](#opt-services.postgresql.package) such as the most recent release of PostgreSQL.
 
 <!--
 After running {command}`nixos-rebuild`, you can verify
@@ -119,27 +119,27 @@ A complete list of options for the PostgreSQL module may be found [here](#opt-se
 
 ## Plugins {#module-services-postgres-plugins}
 
-Plugins collection for each PostgreSQL version can be accessed with `.pkgs`. For example, for `pkgs.postgresql_11` package, its plugin collection is accessed by `pkgs.postgresql_11.pkgs`:
+Plugins collection for each PostgreSQL version can be accessed with `.pkgs`. For example, for `pkgs.postgresql_15` package, its plugin collection is accessed by `pkgs.postgresql_15.pkgs`:
 ```ShellSession
 $ nix repl '<nixpkgs>'
 
 Loading '<nixpkgs>'...
 Added 10574 variables.
 
-nix-repl> postgresql_11.pkgs.<TAB><TAB>
-postgresql_11.pkgs.cstore_fdw        postgresql_11.pkgs.pg_repack
-postgresql_11.pkgs.pg_auto_failover  postgresql_11.pkgs.pg_safeupdate
-postgresql_11.pkgs.pg_bigm           postgresql_11.pkgs.pg_similarity
-postgresql_11.pkgs.pg_cron           postgresql_11.pkgs.pg_topn
-postgresql_11.pkgs.pg_hll            postgresql_11.pkgs.pgjwt
-postgresql_11.pkgs.pg_partman        postgresql_11.pkgs.pgroonga
+nix-repl> postgresql_15.pkgs.<TAB><TAB>
+postgresql_15.pkgs.cstore_fdw        postgresql_15.pkgs.pg_repack
+postgresql_15.pkgs.pg_auto_failover  postgresql_15.pkgs.pg_safeupdate
+postgresql_15.pkgs.pg_bigm           postgresql_15.pkgs.pg_similarity
+postgresql_15.pkgs.pg_cron           postgresql_15.pkgs.pg_topn
+postgresql_15.pkgs.pg_hll            postgresql_15.pkgs.pgjwt
+postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 ...
 ```
 
 To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 ```
-services.postgresql.package = pkgs.postgresql_11;
-services.postgresql.extraPlugins = with pkgs.postgresql_11.pkgs; [
+services.postgresql.package = pkgs.postgresql_12;
+services.postgresql.extraPlugins = with pkgs.postgresql_12.pkgs; [
   pg_repack
   postgis
 ];
@@ -148,7 +148,7 @@ services.postgresql.extraPlugins = with pkgs.postgresql_11.pkgs; [
 You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
 ```
 self: super: {
-  postgresql_custom = self.postgresql_11.withPackages (ps: [
+  postgresql_custom = self.postgresql_12.withPackages (ps: [
     ps.pg_repack
     ps.postgis
   ]);
@@ -158,9 +158,9 @@ self: super: {
 Here's a recipe on how to override a particular plugin through an overlay:
 ```
 self: super: {
-  postgresql_11 = super.postgresql_11.override { this = self.postgresql_11; } // {
-    pkgs = super.postgresql_11.pkgs // {
-      pg_repack = super.postgresql_11.pkgs.pg_repack.overrideAttrs (_: {
+  postgresql_15 = super.postgresql_15.override { this = self.postgresql_15; } // {
+    pkgs = super.postgresql_15.pkgs // {
+      pg_repack = super.postgresql_15.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";
         src = self.fetchzip {
           url = "https://github.com/reorg/pg_repack/archive/923fa2f3c709a506e111cc963034bf2fd127aa00.tar.gz";
