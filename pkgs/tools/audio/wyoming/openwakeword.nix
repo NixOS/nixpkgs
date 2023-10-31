@@ -1,52 +1,41 @@
 { lib
-, python3
 , python3Packages
 , fetchFromGitHub
 , fetchpatch
 }:
 
-python3.pkgs.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "wyoming-openwakeword";
-  version = "1.5.1";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
-    repo = "rhasspy3";
-    rev = "e16d7d374a64f671db48142c7b635b327660ebcf";
-    hash = "sha256-SbWsRmR1hfuU3yJbuu+r7M43ugHeNwLgu5S8MqkbCQA=";
+    repo = "wyoming-openwakeword";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N/EjdNQLsYLpJ4kOxY/z+/dMMmF1PPAIEEzSHfnZWaM=";
   };
 
   patches = [
     (fetchpatch {
       # import tflite entrypoint from tensorflow
-      url = "https://github.com/rhasspy/rhasspy3/commit/23b1bc9cf1e9aa78453feb11e27d5dafe26de068.patch";
-      hash = "sha256-fjLJ+VI4c8ABBWx1IjZ6nS8MGqdry4rgcThKiaAvz+Q=";
+      url = "https://github.com/rhasspy/wyoming-openwakeword/commit/8f4ba2750d8c545e77549a7230cdee1301dac09a.patch";
+      hash = "sha256-WPvywpGv0sYYVGc7he4bt7APIsa3ziKaWqpFlx3v+V8=";
     })
     (fetchpatch {
       # add commandline entrypoint
-      url = "https://github.com/rhasspy/rhasspy3/commit/7662b82cd85e16817a3c6f4153e855bf57436ac3.patch";
-      hash = "sha256-41CLkVDSAJJpZ5irwIf/Z4wHoCuKDrqFBAjKCx7ta50=";
+      url = "https://github.com/rhasspy/wyoming-openwakeword/commit/f40e5635543b2315217538dd89a9fe40fe817cfe.patch";
+      hash = "sha256-HNlGqt7bMzwyvhx5Hw7mkTHeQmBpgDCU3pUbZzss1bY=";
     })
   ];
 
-  postPatch = ''
-    cd programs/wake/openwakeword-lite/server
-  '';
-
   nativeBuildInputs = with python3Packages; [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    tensorflow-bin
-    webrtc-noise-gain
+    tensorflow
     wyoming
-  ];
-
-  passthru.optional-dependencies.webrtc = with python3Packages; [
-    webrtc-noise-gain
   ];
 
   pythonImportsCheck = [
@@ -54,8 +43,9 @@ python3.pkgs.buildPythonApplication {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/rhasspy/wyoming-openwakeword/blob/v${version}/CHANGELOG.md";
     description = "An open source voice assistant toolkit for many human languages";
-    homepage = "https://github.com/rhasspy/rhasspy3/commit/fe44635132079db74d0c76c6b3553b842aa1e318";
+    homepage = "https://github.com/rhasspy/wyoming-openwakeword";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
     mainProgram = "wyoming-openwakeword";

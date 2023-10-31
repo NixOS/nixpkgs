@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, coin-utils, zlib, osi }:
 
 stdenv.mkDerivation rec {
-  version = "1.17.8";
+  version = "1.17.9";
   pname = "clp";
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Clp";
     rev = "releases/${version}";
-    hash = "sha256-3Z6ysoCcDVB8UePiwbZNqvO/o/jgPcv6XFkpJZBK+Os=";
+    hash = "sha256-kHCDji+yIf5mCoxKB2b/HaATGmwwIAPEV74tthIMeMY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
