@@ -133,6 +133,7 @@ let
       visualizer = callPackage ./visualizer.nix { };
       vr-reversal = callPackage ./vr-reversal.nix { };
       webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
+      youtube-chat = callPackage ./youtube-chat.nix { };
       youtube-upnext = callPackage ./youtube-upnext.nix { };
     };
 
