@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,6 +33,8 @@ rustPlatform.buildRustPackage rec {
       --fish <(cat target/completions/thud.fish) \
       --zsh <(cat target/completions/_thud)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Generate directory thumbnails for GTK-based file browsers from images inside them";
