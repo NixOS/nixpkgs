@@ -1,9 +1,8 @@
-{ lib, nimPackages, fetchFromGitHub, fetchpatch, makeWrapper, pcre, tinycc }:
+{ lib, buildNimPackage, fetchFromGitHub, fetchpatch, makeWrapper, nim, pcre, tinycc }:
 
-nimPackages.buildNimPackage {
+buildNimPackage {
   pname = "nrpl";
   version = "20150522";
-  nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner  = "wheineman";
@@ -27,7 +26,7 @@ nimPackages.buildNimPackage {
 
   postFixup = ''
     wrapProgram $out/bin/nrpl \
-      --prefix PATH : ${lib.makeBinPath [ nimPackages.nim tinycc ]}
+      --prefix PATH : ${lib.makeBinPath [ nim tinycc ]}
   '';
 
   meta = with lib; {
