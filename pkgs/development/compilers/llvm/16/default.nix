@@ -50,7 +50,7 @@ in
       (gitRelease != null)
       (officialRelease != null))
     ("must specify `gitRelease` or `officialRelease`" +
-      (lib.optionalString (gitRelease != null) " — not both"));
+      (lib.optionalString (gitRelease != null) " � not both"));
 let
   monorepoSrc' = monorepoSrc;
 in let
@@ -157,6 +157,51 @@ in let
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      # Treat Darwin’s top-level libc++ as the standard one for the platform. Otherwise, binaries
+      # built with a non-default version of clang can end up linked against multiple versions of
+      # libc++ simultaneously, which can lead to runtime crashes when both dylibs are loaded.
+      # Note that the headers from the requested clang will be used, but the runtime library
+      # will be the default version for Darwin. This is okay because libc++ defaults to building
+      # with the stable API (LIBCXX_ABI_VERSION is 1).
+      else if stdenv.targetPlatform.isDarwin then (
+        let
+          llvmLibcxxVersion = lib.getVersion llvmLibcxx;
+          stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
+
+          stdenvLibcxx = pkgs.stdenv.cc.libcxx;
+          stdenvCxxabi = pkgs.stdenv.cc.libcxx.cxxabi;
+
+          llvmLibcxx = tools.libcxxClang.libcxx;
+          llvmCxxabi = tools.libcxxClang.libcxx.cxxabi;
+
+          libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
+            outputs = [ "out" "dev" ];
+            inherit cxxabi;
+            isLLVM = true;
+          } ''
+            mkdir -p "$dev/nix-support"
+            ln -s '${stdenvLibcxx}' "$out"
+            echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
+            ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
+          '';
+
+          cxxabi = pkgs.runCommand "${stdenvCxxabi.name}-${llvmLibcxxVersion}" {
+            outputs = [ "out" "dev" ];
+            inherit (stdenvCxxabi) libName;
+          } ''
+            mkdir -p "$dev/nix-support"
+            ln -s '${stdenvCxxabi}' "$out"
+            echo '${stdenvCxxabi}' > "$dev/nix-support/propagated-build-inputs"
+            ln -s '${lib.getDev llvmCxxabi}/include' "$dev/include"
+          '';
+        in
+        if llvmLibcxxVersion != stdenvLibcxxVersion
+          then tools.libcxxClang.override {
+            inherit libcxx;
+            extraPackages = [ cxxabi targetLlvmLibraries.compiler-rt ];
+          }
+        else tools.libcxxClang
+      )
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
@@ -226,7 +271,7 @@ in let
     # fully LLVM toolchain from scratch. No GCC toolchain should be
     # pulled in. As a consequence, it is very quick to build different
     # targets provided by LLVM and we can also build for what GCC
-    # doesn’t support like LLVM. Probably we should move to some other
+    # doesn�t support like LLVM. Probably we should move to some other
     # file.
 
     bintools-unwrapped = callPackage ../common/bintools.nix { };

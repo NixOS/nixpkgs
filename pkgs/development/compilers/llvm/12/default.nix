@@ -106,6 +106,51 @@ let
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      # Treat Darwin’s top-level libc++ as the standard one for the platform. Otherwise, binaries
+      # built with a non-default version of clang can end up linked against multiple versions of
+      # libc++ simultaneously, which can lead to runtime crashes when both dylibs are loaded.
+      # Note that the headers from the requested clang will be used, but the runtime library
+      # will be the default version for Darwin. This is okay because libc++ defaults to building
+      # with the stable API (LIBCXX_ABI_VERSION is 1).
+      else if stdenv.targetPlatform.isDarwin then (
+        let
+          llvmLibcxxVersion = lib.getVersion llvmLibcxx;
+          stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
+
+          stdenvLibcxx = pkgs.stdenv.cc.libcxx;
+          stdenvCxxabi = pkgs.stdenv.cc.libcxx.cxxabi;
+
+          llvmLibcxx = tools.libcxxClang.libcxx;
+          llvmCxxabi = tools.libcxxClang.libcxx.cxxabi;
+
+          libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
+            outputs = [ "out" "dev" ];
+            inherit cxxabi;
+            isLLVM = true;
+          } ''
+            mkdir -p "$dev/nix-support"
+            ln -s '${stdenvLibcxx}' "$out"
+            echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
+            ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
+          '';
+
+          cxxabi = pkgs.runCommand "${stdenvCxxabi.name}-${llvmLibcxxVersion}" {
+            outputs = [ "out" "dev" ];
+            inherit (stdenvCxxabi) libName;
+          } ''
+            mkdir -p "$dev/nix-support"
+            ln -s '${stdenvCxxabi}' "$out"
+            echo '${stdenvCxxabi}' > "$dev/nix-support/propagated-build-inputs"
+            ln -s '${lib.getDev llvmCxxabi}/include' "$dev/include"
+          '';
+        in
+        if llvmLibcxxVersion != stdenvLibcxxVersion
+          then tools.libcxxClang.override {
+            inherit libcxx;
+            extraPackages = [ cxxabi targetLlvmLibraries.compiler-rt ];
+          }
+        else tools.libcxxClang
+      )
       else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
