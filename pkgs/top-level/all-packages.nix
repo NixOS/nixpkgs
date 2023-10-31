@@ -34223,7 +34223,6 @@ with pkgs;
   shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
-    opencv = opencv3;
     protobuf = protobuf3_21;
   };
 
