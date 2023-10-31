@@ -1,16 +1,15 @@
-{ lib, nimPackages, fetchFromGitHub }:
-nimPackages.buildNimPackage rec {
+{ lib, buildNimPackage, fetchFromGitHub }:
+buildNimPackage (finalAttrs: {
   pname = "promexplorer";
   version = "0.0.5";
-  nimBinOnly = true;
   src = fetchFromGitHub {
     owner = "marcusramberg";
     repo = "promexplorer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-a+9afqdgLgGf2hOWf/QsElq+CurDfE1qDmYCzodZIDU=";
   };
 
-  buildInputs = with nimPackages; [ illwill illwillwidgets ];
+  lockFile = ./lock.json;
 
   meta = with lib; {
     description = "A simple tool to explore prometheus exporter metrics";
@@ -20,4 +19,4 @@ nimPackages.buildNimPackage rec {
     maintainers = with maintainers; [ marcusramberg ];
     mainProgram = "promexplorer";
   };
-}
+})
