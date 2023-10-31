@@ -2,8 +2,7 @@
 
 buildNimPackage (final: prev: {
   pname = "atlas";
-  version = "unstable=2023-09-22";
-  nimBinOnly = true;
+  version = "unstable-2023-09-22";
   src = fetchFromGitHub {
     owner = "nim-lang";
     repo = "atlas";
@@ -18,6 +17,5 @@ buildNimPackage (final: prev: {
   meta = final.src.meta // {
     description = "Nim package cloner";
     license = [ lib.licenses.mit ];
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 })
