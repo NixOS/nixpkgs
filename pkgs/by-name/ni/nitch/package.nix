@@ -1,8 +1,8 @@
-{ lib, nimPackages, fetchFromGitHub, fetchpatch }:
-nimPackages.buildNimPackage rec {
+{ lib, buildNimPackage, fetchFromGitHub, fetchpatch }:
+
+buildNimPackage {
   pname = "nitch";
   version = "0.1.6";
-  nimBinOnly = true;
   src = fetchFromGitHub {
     owner = "ssleert";
     repo = "nitch";
