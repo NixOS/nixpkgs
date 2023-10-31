@@ -779,10 +779,8 @@ in
           '' + genericErrMsg;}
         { assertion = cfg.uploadHttp != null || cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
           message = ''
-            You need to setup the http_upload or http_file_share modules through
-            config.services.prosody.uploadHttp
-            or config.services.prosody.httpFileShare
-            to comply with XEP-0423.
+            You need to setup the http_upload or http_file_share modules through config.services.prosody.uploadHttp
+            or config.services.prosody.httpFileShare to comply with XEP-0423.
           '' + genericErrMsg;}
       ];
     in errors;
