@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar
+
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+
   '';
 
   meta = with lib; {
