@@ -48,6 +48,8 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
+## Format generators/serializers
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
