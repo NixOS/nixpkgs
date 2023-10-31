@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , ccache
 , fetchFromGitHub
@@ -21,6 +20,9 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-spa3V9KEjqmwnHSuxLLIu9hJk5PrRwNyOw72sfxBVKo=";
   };
+
+  # default lto off for darwin
+  patches = [ ./darwin-lto.patch ];
 
   nativeBuildInputs = [ setuptools ];
   nativeCheckInputs = [ ccache  ];
@@ -44,8 +46,6 @@ buildPythonPackage rec {
   disabled = isPyPy;
 
   meta = with lib; {
-    # tests fail with linker errors on darwin
-    broken = stdenv.isDarwin;
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
     homepage = "https://nuitka.net/";

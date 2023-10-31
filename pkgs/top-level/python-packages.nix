@@ -7041,6 +7041,8 @@ self: super: with self; {
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
+  mpris-server = callPackage ../development/python-modules/mpris-server { };
+
   mpv = callPackage ../development/python-modules/mpv {
     inherit (pkgs) mpv;
   };
@@ -8424,8 +8426,6 @@ self: super: with self; {
   };
 
   openant = callPackage ../development/python-modules/openant { };
-
-  openapi-schema-pydantic = callPackage ../development/python-modules/openapi-schema-pydantic { };
 
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
 

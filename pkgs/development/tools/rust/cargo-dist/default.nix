@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-Y4dCkyOAOQRnaHWMuPTpjgIqlnzYw+sQbTyxp1pO7oo=";
+    hash = "sha256-P1wDsCMg0CfGZ9px1SiEDNT9plYlcrl9UrCLJ0pOra0=";
   };
 
-  cargoHash = "sha256-Fuc5lToojwcRbcKrApQ8vxd8ZdjEJTDQULYfzV4K4GA=";
+  cargoHash = "sha256-sIFe5/2/FZA+vTYxo6wZ0w655ZjB8EThsEP7q1PaJjQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     xz
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
