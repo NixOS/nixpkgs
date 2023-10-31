@@ -57,6 +57,8 @@ python3.pkgs.buildPythonApplication {
     pynacl
     # extensive ad blocking
     adblock
+    # for the qute-bitwarden user script to be able to copy the TOTP token to clipboard
+    pyperclip
   ] ++ lib.optional stdenv.isLinux qtwayland
   );
 
