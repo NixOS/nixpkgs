@@ -1869,7 +1869,6 @@ broken-packages:
   - GiST # failure in job https://hydra.nixos.org/build/233199759 at 2023-09-02
   - gist # failure in job https://hydra.nixos.org/build/233221381 at 2023-09-02
   - git-all # failure in job https://hydra.nixos.org/build/233252935 at 2023-09-02
-  - git-brunch # failure in job https://hydra.nixos.org/build/233250960 at 2023-09-02
   - git-checklist # failure in job https://hydra.nixos.org/build/233203228 at 2023-09-02
   - git-cuk # failure in job https://hydra.nixos.org/build/233211733 at 2023-09-02
   - git-date # failure in job https://hydra.nixos.org/build/233259193 at 2023-09-02
