@@ -160,7 +160,9 @@ let
         --bind-ro=/nix/var/nix/daemon-socket \
         --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
         --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
-        ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
+        ${optionalString (!(cfg.ephemeral && (elem cfg.linkJournal ["try-guest" "guest"])))
+          "--link-journal=${cfg.linkJournal}"
+        } \
         --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
         --setenv HOST_BRIDGE="$HOST_BRIDGE" \
         --setenv HOST_ADDRESS="$HOST_ADDRESS" \
@@ -438,6 +440,7 @@ let
       extraVeths = {};
       additionalCapabilities = [];
       ephemeral = false;
+      linkJournal = "try-guest";
       timeoutStartSec = "1min";
       allowedDevices = [];
       hostAddress = null;
@@ -586,6 +589,16 @@ in
                 This way dhcp client identifier will be stable between the container restarts.
 
                 Note that the container journal will not be linked to the host if this option is enabled.
+              '';
+            };
+
+            linkJournal = mkOption {
+              type = types.enum ["no" "auto" "guest" "host" "try-guest" "try-host"];
+              default = "try-guest";
+              description = lib.mdDoc ''
+                Whether (and how) to link the container's journal with the host.
+
+                See {manpage}`systemd-nspawn(1)` man page for details.
               '';
             };
 
