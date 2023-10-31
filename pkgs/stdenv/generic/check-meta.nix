@@ -152,9 +152,8 @@ let
 
     # flakeNote will be printed in the remediation messages below.
     flakeNote = "
- Note: For `nix shell`, `nix build`, `nix develop` or any other Nix 2.4+
- (Flake) command, `--impure` must be passed in order to read this
- environment variable.
+   Note: When using `nix shell`, `nix build`, `nix develop`, etc with a flake,
+         then pass `--impure` in order to allow use of environment variables.
     ";
 
   remediate_allowlist = allow_attr: rebuild_amendment: attrs:
