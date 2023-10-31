@@ -219,7 +219,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
 # Web servers
-/doc/builders/packages/nginx.section.md @raitobezarius
+/doc/packages/nginx.section.md @raitobezarius
 /pkgs/servers/http/nginx/ @raitobezarius
 /nixos/modules/services/web-servers/nginx/ @raitobezarius
 
