@@ -214,6 +214,10 @@ in {
         SuccessExitStatus = "0 143";
       };
     };
-
   };
+
+  meta.doc = ./kafka.md;
+  meta.maintainers = with lib.maintainers; [
+    srhb
+  ];
 }
