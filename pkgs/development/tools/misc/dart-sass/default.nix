@@ -19,18 +19,17 @@ let
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.69.0";
+  version = "1.69.5";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    hash = "sha256-kn3cwi1k2CkzbS+Q/JaYy8Nq3Ej0GyWifG1Bq5ZEVHA=";
+    hash = "sha256-tf/kBnzEgNKqQsmXh8/9LJid4IOu8JjqaoHJm6neg6E=";
   };
 
-  pubspecLockFile = ./pubspec.lock;
   depsListFile = ./deps.json;
-  vendorHash = "sha256-PQvY+qFXovSXH5wuc60wCrt5RiooKcaGKYzbjKSvqso=";
+  vendorHash = "sha256-4afX/ukTG4OxdXd8eaKjYudAxAIqZlKKOwLPYARUIOg=";
 
   nativeBuildInputs = [
     buf

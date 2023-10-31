@@ -1,7 +1,7 @@
 [
   {
     "name": "sass",
-    "version": "1.69.0",
+    "version": "1.69.5",
     "kind": "root",
     "source": "root",
     "dependencies": [
@@ -863,7 +863,7 @@
   },
   {
     "name": "cli_pkg",
-    "version": "2.5.0",
+    "version": "2.7.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
