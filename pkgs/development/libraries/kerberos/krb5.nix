@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.20.2";
+  version = "1.21.2";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "sha256-fY1ofUKu01DCUly2mk/DqnkWlNpnYdzMHELC7neWtd0=";
+    sha256 = "sha256-lWCUGp2EPAJDpxsXp6xv4xx867W845g9t55Srn6FBJE=";
   };
 
   outputs = [ "out" "dev" ];
