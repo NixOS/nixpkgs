@@ -9924,8 +9924,6 @@ with pkgs;
 
   lhasa = callPackage ../tools/compression/lhasa { };
 
-  libcpuid = callPackage ../tools/misc/libcpuid { };
-
   libcsptr = callPackage ../development/libraries/libcsptr { };
 
   libgovirt = callPackage ../applications/virtualization/libgovirt { };
@@ -13421,8 +13419,6 @@ with pkgs;
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
-
-  spigot = callPackage ../tools/misc/spigot { };
 
   spiped = callPackage ../tools/networking/spiped { };
 
