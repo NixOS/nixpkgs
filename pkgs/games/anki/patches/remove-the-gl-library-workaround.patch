@@ -1,10 +1,10 @@
 diff --git a/qt/aqt/__init__.py b/qt/aqt/__init__.py
-index 352848cfd..3fd5d0769 100644
+index 6f28d2dd0..fcd6a5ee4 100644
 --- a/qt/aqt/__init__.py
 +++ b/qt/aqt/__init__.py
-@@ -402,12 +402,6 @@ def parseArgs(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
- def setupGL(pm: aqt.profiles.ProfileManager) -> None:
-     driver = pm.video_driver()
+@@ -402,12 +402,6 @@ def setupGL(pm: aqt.profiles.ProfileManager) -> None:
+     # RHI errors are emitted multiple times so make sure we only handle them once
+     driver_failed = False
 
 -    # work around pyqt loading wrong GL library
 -    if is_lin:
@@ -15,3 +15,5 @@ index 352848cfd..3fd5d0769 100644
      # catch opengl errors
      def msgHandler(category: Any, ctx: Any, msg: Any) -> None:
          if category == QtMsgType.QtDebugMsg:
+--
+2.42.0
