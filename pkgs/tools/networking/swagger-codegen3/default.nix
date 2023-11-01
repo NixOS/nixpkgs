@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers._1000101 ];
+    mainProgram = "swagger-codegen3";
   };
 }
