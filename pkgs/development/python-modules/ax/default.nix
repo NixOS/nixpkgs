@@ -8,6 +8,7 @@
 , plotly
 , setuptools
 , setuptools-scm
+, sqlalchemy_1_4
 , typeguard
 , wheel
 , hypothesis
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     jinja2
     pandas
     plotly
+    sqlalchemy_1_4 # not compatible with 2.x https://github.com/facebook/Ax/issues/1697
     typeguard
   ];
 
@@ -60,11 +62,7 @@ buildPythonPackage rec {
     "--ignore=ax/telemetry/tests"
     "--ignore=ax/core/tests/test_utils.py"
     "--ignore=ax/early_stopping/tests/test_strategies.py"
-    # broken with sqlalchemy 2
-    "--ignore=ax/service/tests/test_ax_client.py"
     "--ignore=ax/service/tests/test_scheduler.py"
-    "--ignore=ax/service/tests/test_with_db_settings_base.py"
-    "--ignore=ax/storage"
   ];
   disabledTests = [
     # exact comparison of floating points
