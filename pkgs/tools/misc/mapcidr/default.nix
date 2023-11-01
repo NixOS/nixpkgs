@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "mapcidr";
-  version = "1.1.13";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ggfk9ceogvTP0Q1RzA6tZgEj+iVVuGa+MU0zSZfO2ZI=";
+    hash = "sha256-Vhh/OS61dfArsowXMogr/bu/gg354nte9PuobD9lCaU=";
   };
 
   vendorHash = "sha256-wqbAOoRQEE7CDmaH5MRzsSKOdyrxwBY/1wDz3MCfsBc=";
