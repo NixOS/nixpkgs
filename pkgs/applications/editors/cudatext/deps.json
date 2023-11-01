@@ -11,13 +11,13 @@
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.10.02",
-    "hash": "sha256-9oV8xqkqpCfA7rk4UMxWFBIFQQ9slClFbaENRldFb8Q="
+    "rev": "2023.10.30",
+    "hash": "sha256-fuTQnnuWjIsABx457y+n6luLxQf+b9TiZGLXYjNsUrw="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.10.03",
-    "hash": "sha256-dJYpsvJNwQg6/NeXT23cpWFXwcfIYnWkHYoDItiUeOo="
+    "rev": "2023.10.30",
+    "hash": "sha256-xsJ02zGzi7ByFBXql4lLWWLiPVWwtOLXzixmv4AeC2I="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
@@ -36,7 +36,7 @@
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2023.06.29",
+    "rev": "2023.06.30",
     "hash": "sha256-mO8/RNJjy9KtFuDUmV2Y8Ff+Jjm9yRd7GSrI6mOONUc="
   },
   "Emmet-Pascal": {
