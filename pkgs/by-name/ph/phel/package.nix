@@ -16,6 +16,11 @@ php.buildComposerProject (finalAttrs: {
 
   vendorHash = "sha256-83GX/dxHa6w1E34wnJshg7yxlVyRkDT5jmAPCCqPdtA=";
 
+  doInstallCheck = true;
+  postCheckInstall = ''
+    $out/bin/phel --version
+  '';
+
   meta = {
     changelog = "https://github.com/phel-lang/phel-lang/releases/tag/v${finalAttrs.version}";
     description = "Phel is a functional programming language that compiles to PHP. A Lisp dialect inspired by Clojure and Janet.";
