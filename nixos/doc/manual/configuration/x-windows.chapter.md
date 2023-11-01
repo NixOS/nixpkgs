@@ -208,7 +208,7 @@ qt.style = "gtk2";
 
 It is possible to install custom [ XKB
 ](https://en.wikipedia.org/wiki/X_keyboard_extension) keyboard layouts
-using the option `services.xserver.extraLayouts`.
+using the option `services.xserver.xkb.extraLayouts`.
 
 As a first example, we are going to create a layout based on the basic
 US layout, with an additional layer to type some greek symbols by
@@ -235,7 +235,7 @@ xkb_symbols "us-greek"
 A minimal layout specification must include the following:
 
 ```nix
-services.xserver.extraLayouts.us-greek = {
+services.xserver.xkb.extraLayouts.us-greek = {
   description = "US layout with alt-gr greek";
   languages   = [ "eng" ];
   symbolsFile = /yourpath/symbols/us-greek;
@@ -298,7 +298,7 @@ xkb_symbols "media"
 As before, to install the layout do
 
 ```nix
-services.xserver.extraLayouts.media = {
+services.xserver.xkb.extraLayouts.media = {
   description  = "Multimedia keys remapping";
   languages    = [ "eng" ];
   symbolsFile  = /path/to/media-key;
