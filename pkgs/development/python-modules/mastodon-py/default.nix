@@ -7,7 +7,6 @@
 , http-ece
 , python-dateutil
 , python-magic
-, pytz
 , requests
 , six
 , pytestCheckHook
@@ -15,42 +14,60 @@
 , pytest-vcr
 , requests-mock
 , setuptools
-, pytest-cov
 }:
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  # tests are broken on last release, check after next release (> 1.8.1)
-  version = "unstable-2023-06-24";
-
-  format = "pyproject";
+  version = "1.8.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "halcy";
     repo = "Mastodon.py";
-    rev = "cd86887d88bbc07de462d1e00a8fbc3d956c0151";
-    hash = "sha256-rJocFvtBPrSSny3lwENuRsQdAzi3u8b+SfDNGloniWI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
   };
+
+  postPatch = ''
+    sed -i '/addopts/d' setup.cfg
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     blurhash
-    cryptography
     decorator
-    http-ece
     python-dateutil
     python-magic
-    pytz
     requests
     six
   ];
+
+  passthru.optional-dependencies = {
+    blurhash = [
+      blurhash
+    ];
+    webpush = [
+      http-ece
+      cryptography
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-vcr
-    pytest-cov
     requests-mock
     setuptools
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    "test_notifications_dismiss_pre_2_9_2"
+    "test_status_card_pre_2_9_2"
+    "test_stream_user_direct"
+    "test_stream_user_local"
   ];
 
   pythonImportsCheck = [ "mastodon" ];
