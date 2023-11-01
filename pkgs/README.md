@@ -568,7 +568,7 @@ This is how the pull request looks like in this case: [https://github.com/NixOS/
 To run the main types of tests locally:
 
 - Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
-- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTests.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
 - Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
 - See `lib/tests/NAME.nix` for instructions on running specific library tests
 
