@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, makeWrapper
+, go
 , testers
 , terraform-plugin-docs
 , nix-update-script
@@ -19,9 +21,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-AjW6BokLVDkIWXToJ7wNq/g19xKTAfpQ/gVlKCV5qw0=";
 
+  nativeBuildInputs = [ makeWrapper ];
+
   subPackages = [
     "cmd/tfplugindocs"
   ];
+
+  allowGoReference = true;
 
   CGO_ENABLED = 0;
 
@@ -31,6 +37,10 @@ buildGoModule rec {
     "-X main.version=${version}"
     "-X main.commit=${src.rev}"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/tfplugindocs --prefix PATH : ${lib.makeBinPath [ go ]}
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
