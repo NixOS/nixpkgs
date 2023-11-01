@@ -263,21 +263,24 @@ rec {
 
       sdk = pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
 
-      isSDKFramework = pkg: lib.hasPrefix "apple-framework-" (lib.getName pkg);
-
       replacePropagatedFrameworks = pkg:
         let
-          propagatedFrameworks = lib.filter isSDKFramework pkg.propagatedBuildInputs;
+          propagatedInputs = pkg.propagatedBuildInputs;
+          mappedInputs = map mapPackageToSDK propagatedInputs;
+
           env = {
             inherit (pkg) outputs;
-            # Map the old frameworks to new and the package’s outputs to their original outPaths.
-            # The mappings are rendered into tab-separated files to be read back with `read`.
-            frameworks = lib.concatMapStrings (pkg: "${pkg}\t${mapPackageToSDK pkg}\n") propagatedFrameworks;
+            # Map old frameworks to new ones and the package’s outputs to their original outPaths.
+            # Also map any packages that have propagated frameworks to their proxy packages using
+            # the requested SDK version. These mappings are rendered into tab-separated files to be
+            # parsed and read back with `read`.
+            dependencies = lib.concatMapStrings (pair: "${pair.fst}\t${pair.snd}\n") (lib.zipLists propagatedInputs mappedInputs);
             pkgOutputs = lib.concatMapStrings (output: "${output}\t${(lib.getOutput output pkg).outPath}\n") pkg.outputs;
-            passAsFile = [ "frameworks" "pkgOutputs" ];
+            passAsFile = [ "dependencies" "pkgOutputs" ];
           };
         in
-        if lib.length propagatedFrameworks > 0
+        # Only remap the package’s propagated inputs if there are any and if any of them were themselves remapped.
+        if lib.length propagatedInputs > 0 && propagatedInputs != mappedInputs
           then pkgs.runCommand pkg.name env ''
             # Iterate over the outputs in the package being replaced to make sure the proxy is
             # a fully functional replacement. This is like `symlinkJoin` except for outputs and
@@ -302,7 +305,7 @@ rec {
                       while IFS=$'\t\n' read -r oldFramework newFramework; do
                         substituteInPlace "''${!outputName}/nix-support/$fileName" \
                           --replace "$oldFramework" "$newFramework"
-                      done < "$frameworksPath"
+                      done < "$dependenciesPath"
                     fi
                   done
                 else
@@ -319,13 +322,13 @@ rec {
           name = lib.getName pkg;
           framework = lib.removePrefix "apple-framework-" name;
         in
-        if isSDKFramework pkg
-          then sdk.frameworks."${framework}"
-          else replacePropagatedFrameworks pkg;
+        /**/ if pkg == null then pkg
+        else if name != framework then sdk.frameworks."${framework}"
+        else replacePropagatedFrameworks pkg;
 
       mapRuntimeToSDK = pkg:
         # Only remap xcbuild for now, which exports the SDK used to build it.
-        if pkg != null && lib.getName pkg == "xcodebuild"
+        if pkg != null && lib.isAttrs pkg && lib.getName pkg == "xcodebuild"
           then pkg.override { stdenv = overrideSDK stdenv { inherit darwinMinVersion darwinSdkVersion; }; }
           else pkg;
 
@@ -364,6 +367,7 @@ rec {
         "buildInputs"
         "nativeBuildInputs"
         "propagatedNativeBuildInputs"
+        "propagatedBuildInputs"
       ]);
     });
 }

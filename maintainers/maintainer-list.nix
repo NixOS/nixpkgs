@@ -3055,6 +3055,9 @@
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
     githubId = 9590981;
+    keys = [{
+      fingerprint = "4314 3701 154D 9E5F 7051  7ECF 7817 1AD4 6227 E68E";
+    }];
     matrix = "@chayleaf:matrix.pavluk.org";
     name = "Anna Pavlyuk";
   };
@@ -12122,6 +12125,14 @@
     name = "Götz Grimmer";
     github = "MrTarantoga";
     githubId = 53876219;
+  };
+  mrtnvgr = {
+    name = "Egor Martynov";
+    github = "mrtnvgr";
+    githubId = 48406064;
+    keys = [{
+      fingerprint = "6FAD DB43 D5A5 FE52 6835  0943 5B33 79E9 81EF 48B1";
+    }];
   };
   mrVanDalo = {
     email = "contact@ingolf-wagner.de";

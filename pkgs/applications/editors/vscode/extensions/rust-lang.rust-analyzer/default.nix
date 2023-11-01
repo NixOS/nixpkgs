@@ -20,7 +20,7 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2023-07-31";
+  releaseTag = "2023-10-16";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
