@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, terraform-plugin-docs
+, nix-update-script
+}:
 
 buildGoModule rec {
   pname = "terraform-plugin-docs";
@@ -12,6 +18,14 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-qUlyOAiLzLgrtaAfs/aGpAikGmGcQ9PI7QRyp9+Qn4w=";
+
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "tfplugindocs --version";
+      package = terraform-plugin-docs;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Generate and validate Terraform plugin/provider documentation";
