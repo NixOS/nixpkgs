@@ -36,6 +36,9 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  # https://github.com/niccokunzmann/x-wr-timezone/issues/8
+  doCheck = false;
+
   pythonImportsCheck = [ "x_wr_timezone" ];
 
   meta = {
