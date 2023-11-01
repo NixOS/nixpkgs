@@ -14657,6 +14657,36 @@ with self; {
     };
   };
 
+  MacPropertyList = buildPerlPackage {
+    pname = "Mac-PropertyList";
+    version = "1.504";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Mac-PropertyList-1.504.tar.gz";
+      hash = "sha256-aIl96Yw2j76c22iF1H3qADxG7Ho3MmNSPvZkVwc7eq4=";
+    };
+    propagatedBuildInputs = [ XMLEntities ];
+    meta = {
+      description = "Work with Mac plists at a low level";
+      homepage = "https://github.com/briandfoy/mac-propertylist";
+      license = lib.licenses.artistic2;
+    };
+  };
+
+  MacSysProfile = buildPerlPackage {
+    pname = "Mac-SysProfile";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMUEY/Mac-SysProfile-0.05.tar.gz";
+      hash = "sha256-QDOXa3dbOcwqaTtyoC1l71p7oDveTU2w3/RuEmx9n2w=";
+    };
+    propagatedBuildInputs = [ MacPropertyList ];
+    meta = {
+      description = "Perl extension for OS X system_profiler";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = lib.platforms.darwin;
+    };
+  };
+
   MailAuthenticationResults = buildPerlPackage {
     pname = "Mail-AuthenticationResults";
     version = "1.20200824.1";
@@ -18303,6 +18333,22 @@ with self; {
     };
   };
 
+  NetCUPS = buildPerlPackage {
+    pname = "Net-CUPS";
+    version = "0.64";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NINE/Net-CUPS-0.64.tar.gz";
+      hash = "sha256-17x3/w9iv4dMhDxZDrEqgLvUR0mi+3Tb7URcNdDoWoU=";
+    };
+    buildInputs = [ pkgs.cups pkgs.cups-filters ];
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
+    meta = {
+      description = "Common Unix Printing System Interface";
+      homepage = "https://github.com/niner/perl-Net-CUPS";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetDBus = buildPerlPackage {
     pname = "Net-DBus";
     version = "1.2.0";
@@ -19665,6 +19711,20 @@ with self; {
     };
   };
 
+  ParseEDID = buildPerlPackage {
+    pname = "Parse-Edid";
+    version = "1.0.7";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GROUSSE/Parse-EDID-1.0.7.tar.gz";
+      hash = "sha256-GtwPEFoyGYoqK02lsOD5hfBe/tmc42YZCnkOFl1nW/E=";
+    };
+    buildInputs = [ TestWarn ];
+    meta = {
+      description = "Extended display identification data (EDID) parser";
+      license = lib.licenses.gpl3Plus;
+    };
+  };
+
   ParseDebControl = buildPerlPackage {
     pname = "Parse-DebControl";
     version = "2.005";
@@ -20731,6 +20791,35 @@ with self; {
     meta = {
       description = "Perl extension to access the unix process table";
       license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
+  ProcDaemon = buildPerlPackage {
+    pname = "Proc-Daemon";
+    version = "0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AK/AKREAL/Proc-Daemon-0.23.tar.gz";
+      hash = "sha256-NMC4W3lItDHLq8l87lgINeUVzPQ7rb2DOesQlHQIm2k=";
+    };
+    buildInputs = [ ProcProcessTable ];
+    meta = {
+      description = "Run Perl program(s) as a daemon process";
+      homepage = "https://github.com/akreal/Proc-Daemon";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ProcPIDFile = buildPerlPackage {
+    pname = "Proc-PID-File";
+    version = "1.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMITRI/Proc-PID-File-1.29.tar.gz";
+      hash = "sha256-O87aSd8YLT2BaLcMKlGyBW8v1FlQptBCipmS/TVc1KQ=";
+    };
+    meta = {
+      description = "Manage process id files";
+      homepage = "https://github.com/dtikhonov/Proc-PID-File";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -28015,6 +28104,24 @@ with self; {
     propagatedBuildInputs = [ XMLParser ];
     meta = {
       description = "A perl module for parsing XML encoding maps";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XMLEntities = buildPerlPackage {
+    pname = "XML-Entities";
+    version = "1.0002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIXTEASE/XML-Entities-1.0002.tar.gz";
+      hash = "sha256-wyqk8wlXPXZIqy5Bb2K2sgZS8q2c/T7sgv1REB/nMQ0=";
+    };
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    propagatedBuildInputs = [ LWP ];
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/download-entities.pl
+    '';
+    meta = {
+      description = "Mapping of XML entities to Unicode";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

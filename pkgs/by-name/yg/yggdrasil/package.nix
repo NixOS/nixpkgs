@@ -2,28 +2,25 @@
 
 buildGoModule rec {
   pname = "yggdrasil";
-  version = "0.4.7";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "yggdrasil-network";
     repo = "yggdrasil-go";
     rev = "v${version}";
-    sha256 = "sha256-01ciAutRIn4DmqlvDTXhRiuZHTtF8b6js7SUrLOjtAY=";
+    sha256 = "sha256-JeeOT3fb+4+eUyWl7rAXa5+Yf1XCT20xJeCdhBC0oeo=";
   };
 
-  vendorHash = "sha256-hwDi59Yp92eMDqA8OD56nxsKSX2ngxs0lYdmEMLX+Oc=";
-
-  # Change the default location of the management socket on Linux
-  # systems so that the yggdrasil system service unit does not have to
-  # be granted write permission to /run.
-  patches = [ ./change-runtime-dir.patch ];
+  vendorHash = "sha256-yu725RgKDRmpNFNuffBFKZjZOFyzt00kKGuz696JHk0=";
 
   subPackages = [ "cmd/genkeys" "cmd/yggdrasil" "cmd/yggdrasilctl" ];
 
   ldflags = [
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildVersion=${version}"
     "-X github.com/yggdrasil-network/yggdrasil-go/src/version.buildName=${pname}"
-    "-s" "-w"
+    "-X github.com/yggdrasil-network/yggdrasil-go/src/config.defaultAdminListen=unix:///var/run/yggdrasil/yggdrasil.sock"
+    "-s"
+    "-w"
   ];
 
   passthru.tests.basic = nixosTests.yggdrasil;

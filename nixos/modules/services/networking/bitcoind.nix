@@ -3,8 +3,7 @@
 with lib;
 
 let
-
-  eachBitcoind = config.services.bitcoind;
+  eachBitcoind = filterAttrs (bitcoindName: cfg: cfg.enable) config.services.bitcoind;
 
   rpcUserOpts = { name, ... }: {
     options = {

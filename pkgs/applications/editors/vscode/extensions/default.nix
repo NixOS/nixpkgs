@@ -3537,15 +3537,15 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.21";
-          sha256 = "sha256-u57U/MmxvionFZp/tLK/KpddaxA/SUffeggKBSzmsXo=";
+          version = "0.0.22";
+          sha256 = "sha256-fJcSJwwRVofduWEEMa5f2VrSfyONKPkFl9OW+++lSRw=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=uiua-lang.uiua-vscode";
           homepage = "https://github.com/uiua-lang/uiua-vscode";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.wackbyte ];
+          maintainers = with lib.maintainers; [ tomasajt wackbyte ];
         };
       };
 

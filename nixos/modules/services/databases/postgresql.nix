@@ -55,7 +55,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExpression "pkgs.postgresql_11";
+        example = literalExpression "pkgs.postgresql_15";
         description = lib.mdDoc ''
           PostgreSQL package to use.
         '';
@@ -78,7 +78,7 @@ in
       dataDir = mkOption {
         type = types.path;
         defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
-        example = "/var/lib/postgresql/11";
+        example = "/var/lib/postgresql/15";
         description = lib.mdDoc ''
           The data directory for PostgreSQL. If left as the default value
           this directory will automatically be created before the PostgreSQL server starts, otherwise
@@ -387,7 +387,7 @@ in
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExpression "with pkgs.postgresql_11.pkgs; [ postgis pg_repack ]";
+        example = literalExpression "with pkgs.postgresql_15.pkgs; [ postgis pg_repack ]";
         description = lib.mdDoc ''
           List of PostgreSQL plugins. PostgreSQL version for each plugin should
           match version for `services.postgresql.package` value.
@@ -399,7 +399,7 @@ in
         default = {};
         description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          <https://www.postgresql.org/docs/15/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
           for an overview of `postgresql.conf`.
 
           ::: {.note}
@@ -461,7 +461,7 @@ in
         base = if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
             else if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
             else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
-            else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
+            else if versionAtLeast config.system.stateVersion "20.03" then mkThrow "11"
             else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
             else mkThrow "9_5";
     in

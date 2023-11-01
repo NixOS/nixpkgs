@@ -46,7 +46,7 @@ let
     , extraPrefs ? ""
     , extraPrefsFiles ? []
     # For more information about policies visit
-    # https://github.com/mozilla/policy-templates#enterprisepoliciesenabled
+    # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
     , libName ? browser.libName or "firefox" # Important for tor package or the like

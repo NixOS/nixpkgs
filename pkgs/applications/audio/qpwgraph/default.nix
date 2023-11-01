@@ -19,6 +19,8 @@ mkDerivation rec {
 
   buildInputs = [ alsa-lib pipewire ];
 
+  cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
+
   meta = with lib; {
     description = "Qt graph manager for PipeWire, similar to QjackCtl.";
     longDescription = ''

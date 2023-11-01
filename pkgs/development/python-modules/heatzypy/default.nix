@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.1.7";
+  version = "2.1.9";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Cyr-ius";
     repo = "heatzypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-bMhxxVZs6fTKlUWtSO0jfzYCHa1WPf2faEjfrmfUg8E=";
+    hash = "sha256-O2HtCaNtBvjhjlSXLRhEuilI8z7nGgzFa8USYiHfZ+E=";
   };
 
   postPatch = ''
