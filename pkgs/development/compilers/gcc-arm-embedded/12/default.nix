@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "12.3.rel1";
+  version = "13.2.rel1";
 
   platform = {
     aarch64-darwin = "darwin-arm64";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       aarch64-darwin = "sha256-Oy7uC99xwbvrPDt0JPv3vZ1cPw9aOkp4FZyeOtIZ570=";
       aarch64-linux  = "sha256-FMBIfVdT9gcdJOVoiB98fmf4DdgxZd7FFks3MTlK9DE=";
       x86_64-darwin  = "sha256-5u2L+TD62c4z4SCrkLNpV7H3efzKpt5snKmliYLAQpE=";
-      x86_64-linux   = "sha256-EqKBVkQxjrzOr4S+q7Zl0JJLbnniEEhFLFMxpWMyswk=";
+      x86_64-linux   = "sha256-bNG7wdmuVzErzRaa4oMVOpVyvWqOTuri/t+8M7EV/bs=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
