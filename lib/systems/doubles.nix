@@ -53,6 +53,9 @@ let
     # Redox
     "x86_64-redox"
 
+    # UEFI
+    "x86_64-uefi" "i686-uefi" "aarch64-uefi"
+
     # WASI
     "wasm64-wasi" "wasm32-wasi"
 
