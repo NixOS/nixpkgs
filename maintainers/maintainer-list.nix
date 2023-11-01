@@ -16410,6 +16410,12 @@
     githubId = 158321;
     name = "Stewart Mackenzie";
   };
+  sk4rd = {
+    email = "mikolaj.bajtkiewicz@tutanota.de";
+    github = "sk4rd";
+    githubId = 42469640;
+    name = "Mikolaj Bajtkiewicz";
+  };
   skeidel = {
     email = "svenkeidel@gmail.com";
     github = "svenkeidel";
