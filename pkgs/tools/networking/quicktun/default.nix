@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libsodium }:
+{ lib, stdenv, fetchFromGitHub, libsodium, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "quicktun";
@@ -21,6 +21,8 @@ stdenv.mkDerivation {
     rm out/quicktun*tgz
     install -vD out/quicktun* -t $out/bin
   '';
+
+  passthru.tests.quicktun = nixosTests.quicktun;
 
   meta = with lib; {
     broken = stdenv.isDarwin;
