@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, testers, swagger-codegen3 }:
 
 stdenv.mkDerivation rec {
   version = "3.0.50";
@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/${pname}3 \
       --add-flags "-jar $out/share/java/${jarfilename}"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = swagger-codegen3;
+    command = "swagger-codegen3 version";
+  };
 
   meta = with lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
