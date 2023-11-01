@@ -454,8 +454,7 @@ rec {
       '';
 
       # link all binaries in single derivation
-      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
-      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binPackages = lib.catAttrs "out" (lib.attrValues texlive.pkgs);
       binaries = buildEnv { name = "texlive-binaries"; paths = binPackages; };
     in
     runCommand "texlive-test-binaries"
@@ -565,8 +564,7 @@ rec {
 
   # check that all scripts have a Nix shebang
   shebangs = let
-      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
-      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binPackages = lib.catAttrs "out" (lib.attrValues texlive.pkgs);
     in
     runCommand "texlive-test-shebangs" { }
       (''
@@ -615,7 +613,7 @@ rec {
         correctLicenses = scheme: builtins.foldl'
                 (acc: pkg: concatLicenses acc (lib.toList (pkg.meta.license or [])))
                 []
-                scheme.passthru.packages;
+                scheme.passthru.requiredTeXPackages;
         correctLicensesAttrNames = scheme:
           lib.sort lt
             (map licenseToAttrName (correctLicenses scheme));
@@ -648,10 +646,13 @@ rec {
   # this is effectively an eval-time assertion, converted into a derivation for
   # ease of testing
   fixedHashes = with lib; let
-    combine = findFirst (p: (head p.pkgs).pname == "combine") { pkgs = []; } (head texlive.collection-latexextra.pkgs).tlDeps;
-    all = concatLists (map (p: p.pkgs or []) (attrValues (removeAttrs texlive [ "bin" "combine" "combined" "tlpdb" ]))) ++ combine.pkgs;
-    fods = filter (p: isDerivation p && p.tlType != "bin") all;
-    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname + optionalString (p.tlType != "run") ("." + p.tlType)} does not have a fixed output hash\n") fods;
+    fods = lib.concatMap
+      (p: lib.optional (p ? tex) p.tex
+        ++ lib.optional (p ? texdoc) p.texdoc
+        ++ lib.optional (p ? texsource) p.texsource
+        ++ lib.optional (p ? tlpkg) p.tlpkg)
+      (attrValues texlive.pkgs);
+    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n") fods;
   in runCommand "texlive-test-fixed-hashes" {
     inherit errorText;
     passAsFile = [ "errorText" ];
