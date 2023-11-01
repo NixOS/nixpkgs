@@ -29076,6 +29076,8 @@ with pkgs;
 
   arc-theme = callPackage ../data/themes/arc { };
 
+  buuf-icon-theme = callPackage ../data/icons/buuf-icon-theme { };
+
   arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
