@@ -227,6 +227,9 @@ buildPythonPackage rec {
     "test_binops"
     # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
     "test_rolling"
+  ] ++ lib.optional stdenv.is32bit [
+    # https://github.com/pandas-dev/pandas/issues/37398
+    "test_rolling_var_numerical_issues"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions
@@ -251,9 +254,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # https://github.com/pandas-dev/pandas/issues/14866
-    # pandas devs are no longer testing i686 so safer to assume it's broken
-    broken = stdenv.isi686;
+    # pandas devs no longer test i686, it's commonly broken
+    # broken = stdenv.isi686;
     changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Powerful data structures for data analysis, time series, and statistics";
     downloadPage = "https://github.com/pandas-dev/pandas";
