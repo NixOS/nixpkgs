@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, gitUpdater
 , makeWrapper
 , babashka-unwrapped
 }:
@@ -32,6 +33,10 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/babashka/bbin";
