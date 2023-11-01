@@ -5753,6 +5753,8 @@ self: super: with self; {
 
   junitparser = callPackage ../development/python-modules/junitparser { };
 
+  junit2html = callPackage ../development/python-modules/junit2html { };
+
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junos-eznc = callPackage ../development/python-modules/junos-eznc { };
@@ -9125,6 +9127,7 @@ self: super: with self; {
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
+  pycomposefile = callPackage ../development/python-modules/pycomposefile { };
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
   pycookiecheat = callPackage ../development/python-modules/pycookiecheat { };
