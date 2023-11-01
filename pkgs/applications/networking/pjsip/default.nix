@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.13.1";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = "pjproject";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-R1iKIkWyNCRV2PjQgTqKmJYUgHAZrREanD60Jz6MY1Y=";
+    hash = "sha256-PWCeIvnBAOqbcNYPhIY7hykdvLzoD9lssSViCCPNT68=";
   };
 
   patches = [
