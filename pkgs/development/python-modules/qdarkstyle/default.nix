@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "qdarkstyle";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchPypi {
     inherit version;
     pname = "QDarkStyle";
-    hash = "sha256-YAWE1iU0Pg3dEo3gg5PTw1Y3eGpJgn8XTSmqfKqCecE=";
+    hash = "sha256-8vA8S9f7Th6H+PXSM8eDkWVCL0PWeXy+AOC9kZRJ8Sw=";
   };
 
   # No tests available
