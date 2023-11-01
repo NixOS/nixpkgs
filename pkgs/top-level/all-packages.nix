@@ -2057,8 +2057,6 @@ with pkgs;
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
-  tfplugindocs = callPackage ../development/tools/tfplugindocs { };
-
   thumbs = callPackage ../tools/misc/thumbs { };
 
   tnat64 = callPackage ../tools/networking/tnat64 { };

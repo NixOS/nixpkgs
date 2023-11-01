@@ -1,7 +1,7 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  pname = "tfplugindocs";
+  pname = "terraform-plugin-docs";
   version = "0.14.1";
 
   src = fetchFromGitHub {
