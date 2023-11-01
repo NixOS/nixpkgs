@@ -12,6 +12,7 @@
 , libuuid
 , meson-tools
 , ncurses
+, nixosTests
 , openssl
 , swig
 , which
@@ -25,10 +26,10 @@
 }:
 
 let
-  defaultVersion = "2023.07.02";
+  defaultVersion = "2023.10";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
+    hash = "sha256-4A5sbwFOBGEBc50I0G8yiBHOvPWuEBNI9AnLvVXOaQA=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
@@ -40,6 +41,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , passthru ? {}
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -48,7 +50,26 @@ let
     src = if src == null then defaultSrc else src;
 
     patches = [
-      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+      # NixOS and 32-bit specific
+      ./0001-rpi.env-allow-for-bigger-kernels.patch
+
+      # can be dropped after we update from 2023.10
+      # commit 1a075d4e0de7
+      # https://patchwork.ozlabs.org/project/uboot/patch/20230504134255.8510-4-thomas.mittelstaedt@de.bosch.com/
+      (fetchpatch {
+        name = "x86-pxeboot-bugfix-Set-variable-for-size-of-initrd.patch";
+        url = "https://patchwork.ozlabs.org/project/uboot/patch/20230504134255.8510-4-thomas.mittelstaedt@de.bosch.com/raw/";
+        hash = "sha256-TBAA6J+NWQ/GHzNVE8HElruOWnkiy3LI5o0bG6YiepI=";
+      })
+
+      # can be dropped after we update from 2023.10
+      # commit e824d0d0c219
+      # https://patchwork.ozlabs.org/project/uboot/patch/20230923205017.1754340-1-sjg@chromium.org/
+      (fetchpatch {
+        name = "bootstd-Scan-all-bootdevs-in-a-boot_targets-entry.patch";
+        url = "https://patchwork.ozlabs.org/project/uboot/patch/20230923205017.1754340-1-sjg@chromium.org/raw/";
+        hash = "sha256-WBVhWrcvc4sT2bHZ8dPlymmdAcDcmKsDwFBc4dANw1Q=";
+      })
     ] ++ extraPatches;
 
     postPatch = ''
@@ -58,9 +79,10 @@ let
 
     nativeBuildInputs = [
       ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
       bc
       bison
-      dtc
       flex
       installShellFiles
       openssl
@@ -74,18 +96,14 @@ let
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-    buildInputs = [
-      ncurses # tools/kwboot
-      libuuid # tools/mkeficapsule
-      gnutls # tools/mkeficapsule
-    ];
+    strictDeps = true;
 
     hardeningDisable = [ "all" ];
 
     enableParallelBuilding = true;
 
     makeFlags = [
-      "DTC=dtc"
+      "DTC=${dtc}/bin/dtc"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
@@ -117,12 +135,15 @@ let
 
     dontStrip = true;
 
+    inherit passthru;
+
     meta = with lib; {
       homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 sorki ];
     } // extraMeta;
+
   } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
@@ -136,6 +157,13 @@ in {
     extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
 
     outputs = [ "out" "man" ];
+
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+      openssl # tools/mkimage
+    ];
 
     postInstall = ''
       installManPage doc/*.1
@@ -190,7 +218,7 @@ in {
   ubootClearfog = buildUBoot {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-spl.kwb"];
+    filesToInstall = ["u-boot-with-spl.kwb"];
   };
 
   ubootCubieboard2 = buildUBoot {
@@ -437,6 +465,7 @@ in {
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
     '';
+    passthru.tests = nixosTests.uboot;
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
   };

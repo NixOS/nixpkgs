@@ -18,16 +18,6 @@ let
       ];
     }).config.system.build.isoImage;
 
-  sd =
-    (import ../lib/eval-config.nix {
-      inherit system;
-      modules = [
-        ../modules/installer/sd-card/sd-image-x86_64.nix
-        ../modules/testing/test-instrumentation.nix
-        { sdImage.compressImage = false; }
-      ];
-    }).config.system.build.sdImage;
-
   pythonDict = params: "\n    {\n        ${concatStringsSep ",\n        " (mapAttrsToList (name: param: "\"${name}\": \"${param}\"") params)},\n    }\n";
 
   makeBootTest = name: extraConfig:
@@ -119,30 +109,4 @@ in {
     };
 
     biosNetboot = makeNetbootTest "bios" {};
-
-    ubootExtlinux = let
-      sdImage = "${sd}/sd-image/${sd.imageName}";
-      mutableImage = "/tmp/linked-image.qcow2";
-
-      machineConfig = pythonDict {
-        bios = "${pkgs.ubootQemuX86}/u-boot.rom";
-        qemuFlags = "-m 768 -machine type=pc,accel=tcg -drive file=${mutableImage},if=ide,format=qcow2";
-      };
-    in makeTest {
-      name = "boot-uboot-extlinux";
-      nodes = { };
-      testScript = ''
-        import os
-
-        # Create a mutable linked image backed by the read-only SD image
-        if os.system("qemu-img create -f qcow2 -F raw -b ${sdImage} ${mutableImage}") != 0:
-            raise RuntimeError("Could not create mutable linked image")
-
-        machine = create_machine(${machineConfig})
-        machine.start()
-        machine.wait_for_unit("multi-user.target")
-        machine.succeed("nix store verify -r --no-trust --option experimental-features nix-command /run/current-system")
-        machine.shutdown()
-      '';
-    };
 }
