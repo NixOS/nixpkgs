@@ -455,6 +455,7 @@ in {
           "govee_ble"
           "homekit_controller"
           "inkbird"
+          "improv_ble"
           "keymitt_ble"
           "led_ble"
           "medcom_ble"
