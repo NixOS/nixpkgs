@@ -22338,6 +22338,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  lager = callPackage ../development/libraries/lager { };
+
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix {
     inherit pkgs;
   });
@@ -25782,6 +25784,8 @@ with pkgs;
   zitadel-tools = callPackage ../tools/misc/zitadel-tools { };
 
   zix = callPackage ../development/libraries/audio/zix { };
+
+  zug = callPackage ../development/libraries/zug { };
 
   zz = callPackage ../development/compilers/zz { };
 
