@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
-    hash = "sha256-SIGV/Hl5O+xs1DbA25TGasXJVYgCzAP/GCtsDmxKDvI=";
+    hash = "sha256-isrExJeONhIxJUXOsMMq8l9xF9amInBGnb5D+DKuzHw=";
   };
 
-  npmDepsHash = "sha256-ClPcLHO4+CzOswQaItbFYHVlb0W6Y5NZF140jGpoSJ8=";
+  npmDepsHash = "sha256-RTYPxS6uLLCIu4JfQqMQP8y8+S5uwe3KXWNlbe7/A7Q=";
 
   nativeBuildInputs = [
     copyDesktopItems
