@@ -79,6 +79,23 @@ in {
         example = "*.coder.example.com";
       };
 
+      environment = {
+        extra = mkOption {
+          type = types.attrs;
+          description = lib.mdDoc "Extra environment variables to pass run Coder's server with. See Coder documentation.";
+          default = {};
+          example = {
+            CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS = true;
+            CODER_OAUTH2_GITHUB_ALLOWED_ORGS = "your-org";
+          };
+        };
+        file = mkOption {
+          type = types.nullOr types.path;
+          description = lib.mdDoc "Systemd environment file to add to Coder.";
+          default = null;
+        };
+      };
+
       database = {
         createLocally = mkOption {
           type = types.bool;
@@ -159,7 +176,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      environment = {
+      environment = config.environment.extra // {
         CODER_ACCESS_URL = cfg.accessUrl;
         CODER_WILDCARD_ACCESS_URL = cfg.wildcardAccessUrl;
         CODER_PG_CONNECTION_URL = "user=${cfg.database.username} ${optionalString (cfg.database.password != null) "password=${cfg.database.password}"} database=${cfg.database.database} host=${cfg.database.host} ${optionalString (cfg.database.sslmode != null) "sslmode=${cfg.database.sslmode}"}";
@@ -184,6 +201,7 @@ in {
         ExecStart = "${cfg.package}/bin/coder server";
         User = cfg.user;
         Group = cfg.group;
+        EnvironmentFile = lib.mkIf (cfg.environment.file != null) cfg.environment.file;
       };
     };
 
