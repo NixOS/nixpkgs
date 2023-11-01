@@ -1,33 +1,42 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
-, libjpeg
 , nix-update-script
+
+, libjpeg_turbo
 , obs-studio
 }:
 
 buildGoModule rec {
   pname = "obs-teleport";
-  version = "0.6.6";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-teleport";
     rev = version;
-    sha256 = "sha256-fDLe1GbLZb/rXLiTtvcMqfQo2cG1guDCwLOEf3piPcU=";
+    hash = "sha256-r9j9hePA7MFIECCwHJYLHJMUKmYQrHkJ7FM3LhXGFOY=";
   };
 
-  vendorHash = "sha256-GhIFGnGnwDmuDobMlOWCRFpHTbQlRtJrqXSFwxFydG0=";
+  vendorHash = "sha256-d7Wtc4nrVEf2TA8BI96Vj9BPOgTtfY+1dQVcEsED1ww=";
 
   buildInputs = [
-    libjpeg
+    libjpeg_turbo
     obs-studio
   ];
 
   ldflags = [ "-s" "-w" ];
 
-  CGO_CFLAGS = "-I${obs-studio}/include/obs";
-  CGO_LDFLAGS = "-L${obs-studio}/lib -lobs -lobs-frontend-api";
+  env = {
+    CGO_CFLAGS = toString [
+      "-I${libjpeg_turbo.dev}/include"
+      "-I${obs-studio}/include/obs"
+    ];
+    CGO_LDFLAGS = toString [
+      "-L${libjpeg_turbo}/lib -lturbojpeg"
+      "-L${obs-studio}/lib -lobs -lobs-frontend-api"
+    ];
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -37,9 +46,12 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  postInstall = ''
-    mkdir -p $out/lib/obs-plugins
-    mv obs-teleport.so $out/lib/obs-plugins
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m 0644 obs-teleport.so -t $out/lib/obs-plugins
+
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -47,8 +59,8 @@ buildGoModule rec {
   meta = {
     description = "An OBS Studio plugin for an open NDI-like replacement";
     homepage = "https://github.com/fzwoch/obs-teleport";
-    maintainers = [ lib.maintainers.paveloom ];
     license = lib.licenses.gpl2Plus;
     platforms = obs-studio.meta.platforms;
+    maintainers = [ lib.maintainers.paveloom ];
   };
 }
