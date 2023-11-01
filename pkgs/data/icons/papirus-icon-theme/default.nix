@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20230901";
+  version = "20231101";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    hash = "sha256-FcTNZgCdPlYjpheA3PfZBR3apOkDi4+RafQtXdqchGI=";
+    hash = "sha256-0ooHuMqGzlMLVTR/u+kCJLibfqTAtq662EG8i3JIzPA=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "Papirus icon theme";
+    description = "Pixel perfect icon theme for Linux";
     homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
     license = licenses.gpl3Only;
     # darwin gives hash mismatch in source, probably because of file names differing only in case
