@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +17,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-MPqJjCfIwgK8QigWQYfWAYlg9RNMzF4x+0SprS0raKY=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "High precision scientific calculator with full support for physical units";
