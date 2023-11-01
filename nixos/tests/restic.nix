@@ -5,6 +5,7 @@ import ./make-test-python.nix (
     remoteRepository = "/root/restic-backup";
     remoteFromFileRepository = "/root/restic-backup-from-file";
     rcloneRepository = "rclone:local:/root/restic-rclone-backup";
+    uninitializedRepository = "/root/uninitialized";
 
     backupPrepareCommand = ''
       touch /root/backupPrepareCommand
@@ -94,6 +95,11 @@ import ./make-test-python.nix (
               pruneOpts = [ "--keep-last 1" ];
               checkOpts = [ "--some-check-option" ];
             };
+            uninitialized = {
+              inherit passwordFile paths exclude;
+              initialize = false;
+              repository = uninitializedRepository;
+            };
           };
 
           environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -108,6 +114,9 @@ import ./make-test-python.nix (
           'restic-remote-from-file-backup snapshots"',
           "restic-rclonebackup snapshots",
           "grep 'backup.* /opt' /root/fake-restic.log",
+          # test that the service fails with missing repo and `initialize = false`
+          "systemctl start restic-backups-uninitialized.service",
+          "restic-uninitialized snapshots",
       )
       server.succeed(
           # set up
@@ -177,6 +186,12 @@ import ./make-test-python.nix (
           "systemctl start restic-backups-remoteprune.service",
           'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
+          # test that restic-backups-uninitialized works with a manually initialized repository
+          "restic-uninitialized init",
+          "systemctl start restic-backups-uninitialized.service",
+          "mkdir /tmp/restore-uninitialized",
+          "restic-uninitialized restore latest -t /tmp/restore-uninitialized",
+          "diff -ru ${testDir} /tmp/restore-uninitialized/opt",
       )
     '';
   }

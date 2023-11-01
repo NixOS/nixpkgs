@@ -305,6 +305,10 @@ in
               then (pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths))
               else null;
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
+            filesFromFile =
+              if (backup.dynamicFilesFrom != null)
+              then filesFromTmpFile
+              else filesFromStaticPaths;
 
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
@@ -341,7 +345,7 @@ in
             after = [ "network-online.target" ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
+              ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromFile}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
