@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     broken = stdenv.isDarwin;
     description = "Very simple, yet secure VPN software";
     homepage = "http://wiki.ucis.nl/QuickTun";
-    maintainers = [ ];
+    maintainers = with maintainers; [ h7x4 ];
     platforms = platforms.unix;
     license = licenses.bsd2;
   };
