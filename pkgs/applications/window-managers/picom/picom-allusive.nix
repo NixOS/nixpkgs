@@ -2,13 +2,13 @@
 
 picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-allusive";
-  version = "0.3.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "allusive-dev";
     repo = "picom-allusive";
     rev = version;
-    hash = "sha256-1zWntz2QKp/O9ZuOUZy9NkCNXFsBqRRvcd0SAr+7G/o=";
+    hash = "sha256-SeL6wJNYF/v6ddDGTZ1xlUNRZA//YVrQQ21HVkSaJDI=";
   };
 
   nativeBuildInputs = [ installShellFiles ] ++ oldAttrs.nativeBuildInputs;
@@ -19,7 +19,7 @@ picom.overrideAttrs (oldAttrs: rec {
   '' + (lib.optionalString (oldAttrs ? postInstall) oldAttrs.postInstall);
 
   meta = (builtins.removeAttrs oldAttrs.meta [ "longDescription" ]) // {
-    description = "A fork of picom featuring improved animations and other features";
+    description = "The only Picom fork you will ever need. With Animations and More";
     homepage = "https://github.com/allusive-dev/picom-allusive";
     license = with lib.licenses; [ mit mpl20 ];
     maintainers = with lib.maintainers; [ allusive ];
