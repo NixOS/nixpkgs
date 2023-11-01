@@ -13244,6 +13244,8 @@ self: super: with self; {
     texLive = pkgs.texlive.combine { inherit (pkgs.texlive) scheme-small standalone pgfplots; };
   };
 
+  sphinxcontrib-wavedrom = callPackage ../development/python-modules/sphinxcontrib-wavedrom { };
+
   sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
 
   sphinxcontrib-youtube = callPackage ../development/python-modules/sphinxcontrib-youtube { };
