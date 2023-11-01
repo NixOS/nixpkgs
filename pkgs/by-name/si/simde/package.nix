@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "simde";
@@ -11,16 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-pj+zaD5o9XYkTavezcQFzM6ao0IdQP1zjP9L4vcCyEY=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/include
-    cp -a ${pname} $out/include
-
-    install -Dt $out/share/doc/${pname} README.md
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ meson ninja ];
 
   meta = with lib; {
     homepage = "https://simd-everywhere.github.io";
