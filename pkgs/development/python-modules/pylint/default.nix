@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , astroid
 , dill
@@ -24,31 +23,17 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.17.5";
+  version = "3.0.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pylint-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cmH6Q6/XJXx8EXDIsik1Aheu9hYGvvlNvWBUCdmC3P8=";
+    hash = "sha256-q0UZ146jxzWV/ld5I+Zz1SQ4dq+SncoptiXVOX6vI3c=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "update-setuptools.patch";
-      url = "https://github.com/pylint-dev/pylint/commit/1d029b594aa258fa01570632d001e801f9257d60.patch";
-      hash = "sha256-brQwelZVkSX9h0POH8OJeapZuWZ8p7BY/ZzhYzGbiHY=";
-    })
-    # https://github.com/pylint-dev/pylint/pull/8961
-    (fetchpatch {
-      name = "unpin-setuptools.patch";
-      url = "https://github.com/pylint-dev/pylint/commit/a0ac282d6f8df381cc04adc0a753bec66fc4db63.patch";
-      hash = "sha256-15O72LE2WQK590htNc3jghdbVoGLHUIngERDpqT8pK8=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -64,7 +49,7 @@ buildPythonPackage rec {
     tomlkit
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 
@@ -80,11 +65,6 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    # DeprecationWarning: pyreverse will drop support for resolving and
-    # displaying implemented interfaces in pylint 3.0. The
-    # implementation relies on the '__implements__'  attribute proposed
-    # in PEP 245, which was rejected in 2006.
-    "-W" "ignore::DeprecationWarning"
     "-v"
   ];
 
@@ -96,9 +76,6 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/benchmark"
-    # tests miss multiple input files
-    # FileNotFoundError: [Errno 2] No such file or directory
-    "tests/pyreverse/test_writer.py"
   ];
 
   disabledTests = [
