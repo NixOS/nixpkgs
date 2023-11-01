@@ -447,6 +447,10 @@ with pkgs;
 
   ccal = callPackage ../tools/misc/ccal { };
 
+  celeste-classic-pm = pkgs.celeste-classic.override {
+    practiceMod = true;
+  };
+
   cereal = cereal_1_3_0;
   cereal_1_3_0 = callPackage ../development/libraries/cereal/1.3.0.nix { };
   cereal_1_3_2 = callPackage ../development/libraries/cereal/1.3.2.nix { };
