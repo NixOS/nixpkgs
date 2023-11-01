@@ -203,6 +203,7 @@ mapAliases ({
   jaraco_text = jaraco-text; # added 2023-07-14
   jaraco_stream = jaraco-stream; # added 2023-07-14
   JayDeBeApi = jaydebeapi; # added 2023-02-19
+  jinja2_pluralize = jinja2-pluralize; # added 2023-11-01
   jinja2_time = jinja2-time; # added 2022-11-07
   JPype1 = jpype1; # added 2023-02-19
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
