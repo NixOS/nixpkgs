@@ -27,21 +27,21 @@
 
 let
   pname = "anki";
-  version = "2.1.66";
-  rev = "70506aeb99d4afbe73321feaf75a2fabaa011d55";
+  version = "23.10.1";
+  rev = "fac9e0ee1436ba5ac3366c72dd9394a6e692b1cf";
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
-    hash = "sha256-eE64i/jTMvipakbQXzKu/dN+dyim7E4M+eP3d9GZhII=";
+    hash = "sha256-leGdamjCehffv2ByL7JWdaUhxRA4ZEPRKxBphUVzfRw=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "csv-1.1.6" = "sha256-w728ffOVkI+IfK6FbmkGhr0CjuyqgJnPB1kutMJIUYg=";
+      "fsrs-0.1.0" = "sha256-bnLmJk2aaWBdgdsiasRrDG4NiTDMCDCXotCSoc0ldlk=";
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
@@ -49,7 +49,7 @@ let
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-3DUiwGTg7Nzd+bPJlc8aUW8bYrl7BF+CcjqkF6nW0qc=";
+    hash = "sha256-ckpKxALSpZAu5xyBOYzMcNDQDfCMaYAtSGONHTCBhw4=";
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
@@ -121,13 +121,13 @@ in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
 
-  outputs = [ "doc" "man" "out" ];
+  outputs = [ "out" "doc" "man" ];
 
   inherit src;
 
   patches = [
-    ./patches/gl-fixup.patch
-    ./patches/no-update-check.patch
+    ./patches/disable-auto-update.patch
+    ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
   ];
 
