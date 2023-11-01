@@ -1,17 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, jinja2, inflect }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jinja2
+, inflect
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname = "jinja2_pluralize";
+  pname = "jinja2-pluralize";
   version = "0.3.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "071wnzzz20wjb0iw7grxgj1lb2f0kz50qyfbcq54rddr2x82sp6z";
+    pname = "jinja2_pluralize";
+    inherit version;
+    hash = "sha256-31wtUBe5tUwKZst5DMqfwIlFg3w9v8MjWJID8f+3PBw=";
   };
 
   propagatedBuildInputs = [
     jinja2
     inflect
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "jinja2_pluralize"
   ];
 
   meta = with lib; {
