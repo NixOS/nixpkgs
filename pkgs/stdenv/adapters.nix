@@ -328,7 +328,7 @@ rec {
 
       mapRuntimeToSDK = pkg:
         # Only remap xcbuild for now, which exports the SDK used to build it.
-        if pkg != null && lib.getName pkg == "xcodebuild"
+        if pkg != null && lib.isAttrs pkg && lib.getName pkg == "xcodebuild"
           then pkg.override { stdenv = overrideSDK stdenv { inherit darwinMinVersion darwinSdkVersion; }; }
           else pkg;
 
