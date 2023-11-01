@@ -6,7 +6,6 @@ let
   cfg = config.services.quassel;
   opt = options.services.quassel;
   quassel = cfg.package;
-  user = if cfg.user != null then cfg.user else "quassel";
 in
 
 {
@@ -22,10 +21,12 @@ in
       package = lib.mkPackageOptionMD pkgs "quasselDaemon" { };
 
       user = mkOption {
-        default = null;
-        type = types.nullOr types.str;
+        type = types.str;
+        default = "quassel";
         description = lib.mdDoc ''
-          The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
+          The user the Quassel daemon should run as. By default a systemd DynamicUser
+          is used with the name specified here. DynamicUser functionality will be
+          automatically disabled if the specified user already exists.
         '';
       };
 
@@ -73,13 +74,16 @@ in
             };
 
             dataDir = mkOption {
-              default = "/home/${user}/.config/quassel-irc.org";
-              defaultText = literalExpression ''
-                "/home/''${config.${opt.user}}/.config/quassel-irc.org"
-              '';
               type = types.path;
+              default = "/var/lib/quassel";
               description = lib.mdDoc ''
                 The directory holding configuration files, the SQlite database and the SSL Cert.
+                The default directory will be created by systemd using StateDirectory
+
+                ::: {note}
+                If set to a custom directory you might have to create a user and adjust the
+                user used in {option}`services.quassel.user`.
+                :::
               '';
             };
 
@@ -259,7 +263,7 @@ in
                       ```
                       :::
                     '';
-                    default = {};
+                    default = { };
                     type = types.submodule {
                       options = {
                         username = mkOption {
@@ -424,26 +428,6 @@ in
       }
     ];
 
-    users.users = optionalAttrs (cfg.user == null) {
-      quassel = {
-        name = "quassel";
-        description = "Quassel IRC client daemon";
-        group = "quassel";
-        uid = config.ids.uids.quassel;
-      };
-    };
-
-    users.groups = optionalAttrs (cfg.user == null) {
-      quassel = {
-        name = "quassel";
-        gid = config.ids.gids.quassel;
-      };
-    };
-
-    systemd.tmpfiles.rules = [
-      "d '${cfg.settings.dataDir}' - ${user} - - -"
-    ];
-
     systemd.services.quassel =
       {
         description = "Quassel IRC client daemon";
@@ -479,13 +463,17 @@ in
 
             # SSL
             ++ optional cfg.settings.ssl.required "--require-ssl"
-            ++ optional (cfg.settings.ssl.certFile != null) "--ssl-cert=$CREDENTIALS_DIRECTORY/certfile"
-            ++ optional (cfg.settings.ssl.keyFile != null) "--ssl-key=$CREDENTIALS_DIRECTORY/keyfile"
+            ++ optional (cfg.settings.ssl.certFile != null) "--ssl-cert=%d/certfile"
+            ++ optional (cfg.settings.ssl.keyFile != null) "--ssl-key=%d/keyfile"
             ));
 
             LoadCredential =
               optional (cfg.settings.ssl.certFile != null) "certfile:${cfg.settings.ssl.certFile}"
               ++ optional (cfg.settings.ssl.keyFile != null) "keyfile:${cfg.settings.ssl.keyFile}";
+
+            DynamicUser = true;
+            User = cfg.user;
+            StateDirectory = "quassel";
 
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
@@ -509,7 +497,6 @@ in
               "AUTH_LDAP_UID_ATTRIBUTE=${cfg.settings.auth.ldap.uidAttribute}"
             ] ++ optional (cfg.settings.auth.ldap.bindPassword != null) "AUTH_LDAP_BIND_PASSWORD=${cfg.settings.auth.ldap.bindPassword}"
             ));
-            User = user;
           };
       };
   };
