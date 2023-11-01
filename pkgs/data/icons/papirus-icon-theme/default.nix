@@ -1,4 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme, papirus-folders, color ? null }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, pantheon
+, breeze-icons
+, gnome-icon-theme
+, hicolor-icon-theme
+, papirus-folders
+, color ? null
+, gitUpdater
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "papirus-icon-theme";
@@ -11,7 +22,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-FcTNZgCdPlYjpheA3PfZBR3apOkDi4+RafQtXdqchGI=";
   };
 
-  nativeBuildInputs = [ gtk3 papirus-folders ];
+  nativeBuildInputs = [
+    gtk3
+    papirus-folders
+  ];
 
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme
@@ -24,6 +38,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/icons
     mv {,e}Papirus* $out/share/icons
 
@@ -34,6 +49,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Papirus icon theme";
