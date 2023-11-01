@@ -6,20 +6,24 @@
 , pylsqpack
 , pyopenssl
 , pytestCheckHook
+, pythonOlder
+, service-identity
 , setuptools
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "aioquic-mitmproxy";
-  version = "0.9.20.3";
-  format = "pyproject";
+  version = "0.9.21.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "meitinger";
     repo = "aioquic_mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-VcIbtrcA0dBEE52ZD90IbXoh6L3wDUbr2kFJikts6+w=";
+    hash = "sha256-eD3eICE9jS1jyqMgWwcv6w3gkR0EyGcKwgSXhasXNeA=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +36,7 @@ buildPythonPackage rec {
     cryptography
     pylsqpack
     pyopenssl
+    service-identity
   ];
 
   nativeCheckInputs = [
