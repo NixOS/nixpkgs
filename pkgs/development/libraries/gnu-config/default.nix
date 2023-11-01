@@ -23,10 +23,6 @@ in stdenv.mkDerivation {
   pname = "gnu-config";
   version = "2023-09-19";
 
-  patches = [
-    ./support-uefi-triples.patch
-  ];
-
   unpackPhase = ''
     runHook preUnpack
     cp ${configGuess} ./config.guess
