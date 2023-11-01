@@ -16,7 +16,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Generate and validate Terraform plugin/provider documentation";
     homepage = "https://github.com/hashicorp/terraform-plugin-docs";
+    changelog = "https://github.com/hashicorp/terraform-plugin-docs/releases/tag/v${version}";
     license = licenses.mpl20;
+    mainProgram = "tfplugindocs";
     maintainers = with maintainers; [ lewo ];
   };
 }
