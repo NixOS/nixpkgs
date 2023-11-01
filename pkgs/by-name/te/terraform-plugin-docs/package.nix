@@ -8,16 +8,29 @@
 
 buildGoModule rec {
   pname = "terraform-plugin-docs";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
-    rev = "v${version}";
-    sha256 = "sha256-GiMjm7XG/gFGOQXYeXsKbU7WQdrkQ0+J/SvfbLu24bo=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-5vbi69GMgkzvN3aEQbNTbk99rg+kfvAvUrdDsuyIm9s=";
   };
 
-  vendorHash = "sha256-qUlyOAiLzLgrtaAfs/aGpAikGmGcQ9PI7QRyp9+Qn4w=";
+  vendorHash = "sha256-AjW6BokLVDkIWXToJ7wNq/g19xKTAfpQ/gVlKCV5qw0=";
+
+  subPackages = [
+    "cmd/tfplugindocs"
+  ];
+
+  CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
+  ];
 
   passthru = {
     tests.version = testers.testVersion {
