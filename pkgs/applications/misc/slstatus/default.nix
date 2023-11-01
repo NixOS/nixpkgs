@@ -7,29 +7,32 @@
 , libXau
 , libXdmcp
 , conf ? null
-, patches ? []
+, patches ? [ ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "slstatus";
-  version = "unstable-2022-12-19";
+  version = "1.0";
 
   src = fetchgit {
     url = "https://git.suckless.org/slstatus";
-    rev = "c919def84fd4f52f501548e5f7705b9d56dd1459";
-    hash = "sha256-nEIHIO8CAYdtX8GniO6GDEaHj7kEu81b05nCMVdr2SE=";
+    rev = version;
+    hash = "sha256-cFah6EgApslLSlJaOy/5W9ZV9Z1lzfKye/rRh9Om3T4=";
   };
 
-  configFile = lib.optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = ''
-    ${lib.optionalString (conf!=null) "cp ${configFile} config.def.h"}
-    makeFlagsArray+=(LDLIBS="-lX11 -lxcb -lXau -lXdmcp" CC=$CC)
-  '';
+  preBuild =
+    let
+      configFile = if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.def.h" conf;
+    in
+    ''
+      ${lib.optionalString (conf!=null) "cp ${configFile} config.def.h"}
+      makeFlagsArray+=(LDLIBS="-lX11 -lxcb -lXau -lXdmcp" CC=$CC)
+    '';
 
   inherit patches;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXau libXdmcp];
+  buildInputs = [ libX11 libXau libXdmcp ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
