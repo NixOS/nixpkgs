@@ -190,6 +190,8 @@ stdenv.mkDerivation rec {
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=incompatible-function-pointer-types"
   ]);
 
   NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
