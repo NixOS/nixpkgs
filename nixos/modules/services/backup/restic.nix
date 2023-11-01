@@ -299,7 +299,13 @@ in
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
+
+            filesFromStaticPaths =
+              if (backup.paths != null && backup.paths != [])
+              then (pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths))
+              else null;
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
+
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
@@ -353,8 +359,8 @@ in
               ${optionalString (backup.initialize) ''
                 ${resticCmd} snapshots || ${resticCmd} init
               ''}
-              ${optionalString (backup.paths != null && backup.paths != []) ''
-                cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}
+              ${optionalString (filesFromStaticPaths != null) ''
+                cat ${filesFromStaticPaths} >> ${filesFromTmpFile}
               ''}
               ${optionalString (backup.dynamicFilesFrom != null) ''
                 ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
