@@ -292,6 +292,7 @@ let
         GTK GUI - `ghb`
       '';
       license = licenses.gpl2Only;
+      mainProgram = "ghb";
       maintainers = with maintainers; [ Anton-Latukha wmertens ];
       platforms = with platforms; unix;
       broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
