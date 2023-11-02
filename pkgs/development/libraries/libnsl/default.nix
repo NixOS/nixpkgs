@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-f9kNzzR8baf5mLgrh+bKO/rBRZA5ZYc1tJdyLE7Bi1w=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libtirpc ];
 
