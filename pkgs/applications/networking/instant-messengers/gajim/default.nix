@@ -87,5 +87,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ raskin abbradar ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
+    mainProgram = "gajim";
   };
 }
