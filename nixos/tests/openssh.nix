@@ -82,7 +82,7 @@ in {
         };
       };
 
-    server_allowedusers =
+    server-allowedusers =
       { ... }:
 
       {
@@ -167,15 +167,15 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowedusers true",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowedusers true",
             timeout=30
         )
         client.fail(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowedusers true",
             timeout=30
         )
   '';
