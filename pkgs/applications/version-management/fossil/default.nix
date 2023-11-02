@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ maggesi viric ];
     platforms = platforms.all;
+    mainProgram = "fossil";
   };
 })
