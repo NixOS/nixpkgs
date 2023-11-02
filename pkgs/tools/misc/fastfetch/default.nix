@@ -27,6 +27,7 @@
 , xfce
 , yyjson
 , zlib
+, Apple80211
 , AppKit
 , Cocoa
 , CoreDisplay
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals stdenv.isDarwin [
+    Apple80211
     AppKit
     Cocoa
     CoreDisplay
