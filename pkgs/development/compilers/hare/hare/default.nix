@@ -7,6 +7,7 @@
 , qbe
 , scdoc
 , substituteAll
+, tzdata
 }:
 
 let
@@ -39,6 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  patches = [
+    # Replace the hardcoded path of `/usr/share/zoneinfo` to the tzdata.out drv
+    (substituteAll {
+      src = ./tzdata.patch;
+      inherit tzdata;
+    })
+  ];
+
   configurePhase =
     let
       # https://harelang.org/platforms/
@@ -57,15 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
         inherit arch platform hareflags;
       };
     in
-      ''
-        runHook preConfigure
+    ''
+      runHook preConfigure
 
-        export HARECACHE="$NIX_BUILD_TOP/.harecache"
-        export BINOUT="$NIX_BUILD_TOP/.bin"
-        cat ${config-file} > config.mk
+      export HARECACHE="$(mktemp -d)"
+      export BINOUT="$(mktemp -d)"
 
-        runHook postConfigure
-      '';
+      cat ${config-file} > config.mk
+
+      runHook postConfigure
+    '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -81,9 +91,9 @@ stdenv.mkDerivation (finalAttrs: {
         qbe
       ];
     in
-      ''
-        wrapProgram $out/bin/hare --prefix PATH : ${binPath}
-      '';
+    ''
+      wrapProgram $out/bin/hare --prefix PATH : ${binPath}
+    '';
 
   setupHook = ./setup-hook.sh;
 
@@ -92,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     description =
       "A systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres onemoresuza ];
     inherit (harec.meta) platforms badPlatforms;
   };
 })

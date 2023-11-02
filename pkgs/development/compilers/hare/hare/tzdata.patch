@@ -1,0 +1,33 @@
+diff --git a/time/chrono/+freebsd.ha b/time/chrono/+freebsd.ha
+index cdafe82f..191a69e9 100644
+--- a/time/chrono/+freebsd.ha
++++ b/time/chrono/+freebsd.ha
+@@ -2,4 +2,4 @@
+ // (c) 2022 Sebastian <sebastian@sebsite.pw>
+ 
+ def LOCALTIME_PATH: str = "/etc/localtime";
+-def ZONEINFO_PREFIX: str = "/usr/share/zoneinfo/";
++def ZONEINFO_PREFIX: str = "@tzdata@/share/zoneinfo/";
+diff --git a/time/chrono/+linux.ha b/time/chrono/+linux.ha
+index cdafe82f..191a69e9 100644
+--- a/time/chrono/+linux.ha
++++ b/time/chrono/+linux.ha
+@@ -2,4 +2,4 @@
+ // (c) 2022 Sebastian <sebastian@sebsite.pw>
+ 
+ def LOCALTIME_PATH: str = "/etc/localtime";
+-def ZONEINFO_PREFIX: str = "/usr/share/zoneinfo/";
++def ZONEINFO_PREFIX: str = "@tzdata@/share/zoneinfo/";
+diff --git a/time/chrono/leapsec.ha b/time/chrono/leapsec.ha
+index 8d9686ae..6130ae88 100644
+--- a/time/chrono/leapsec.ha
++++ b/time/chrono/leapsec.ha
+@@ -37,7 +37,7 @@ export def SECS_1900_1970: i64 = 2208988800;
+ 
+ // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
+ // leap second data.
+-export def UTC_LEAPSECS_FILE: str = "/usr/share/zoneinfo/leap-seconds.list";
++export def UTC_LEAPSECS_FILE: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
+ 
+ // UTC/TAI leap second data; UTC timestamps and their offsets from TAI.
+ // Sourced from [[UTC_LEAPSECS_FILE]].
