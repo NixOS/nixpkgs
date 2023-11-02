@@ -391,6 +391,7 @@ stdenv.mkDerivation (finalAttrs: ({
   dontStrip = debugSymbols;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
+  env.qtbase_stdenv = stdenv.outPath;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
