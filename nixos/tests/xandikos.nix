@@ -7,12 +7,12 @@ import ./make-test-python.nix (
       meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
       nodes = {
-        xandikos_client = {};
-        xandikos_default = {
+        xandikos-client = {};
+        xandikos-default = {
           networking.firewall.allowedTCPPorts = [ 8080 ];
           services.xandikos.enable = true;
         };
-        xandikos_proxy = {
+        xandikos-proxy = {
           networking.firewall.allowedTCPPorts = [ 80 8080 ];
           services.xandikos.enable = true;
           services.xandikos.address = "localhost";
@@ -47,7 +47,7 @@ import ./make-test-python.nix (
                 "curl -s --fail --location http://localhost:8080/ | grep -i Xandikos"
             )
             xandikos_client.wait_for_unit("network.target")
-            xandikos_client.fail("curl --fail http://xandikos_default:8080/")
+            xandikos_client.fail("curl --fail http://xandikos-default:8080/")
 
         with subtest("Xandikos proxy"):
             xandikos_proxy.wait_for_unit("multi-user.target")
@@ -58,12 +58,12 @@ import ./make-test-python.nix (
                 "curl -s --fail --location http://localhost:8080/ | grep -i Xandikos"
             )
             xandikos_client.wait_for_unit("network.target")
-            xandikos_client.fail("curl --fail http://xandikos_proxy:8080/")
+            xandikos_client.fail("curl --fail http://xandikos-proxy:8080/")
             xandikos_client.succeed(
-                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos_proxy/xandikos/ | grep -i Xandikos"
+                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos-proxy/xandikos/ | grep -i Xandikos"
             )
             xandikos_client.succeed(
-                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos_proxy/xandikos/user/ | grep -i Xandikos"
+                "curl -s --fail -u xandikos:snakeOilPassword -H 'Host: xandikos.local' http://xandikos-proxy/xandikos/user/ | grep -i Xandikos"
             )
       '';
     }
