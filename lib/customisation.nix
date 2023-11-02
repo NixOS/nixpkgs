@@ -343,7 +343,24 @@ rec {
     , newScope
     }:
     { otherSplices
+    # Attrs from `self` which won't be spliced.
+    # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
+    # ex: `keep = (self: { inherit (self) aAttr; })`
     , keep ? (_self: {})
+    # Additional attrs to add to the sets `callPackage`.
+    # When the package is from a subset (but not a subset within a package IS #211340)
+    # within `spliced0` it will be spliced.
+    # When using an package outside the set but it's available from `pkgs`, use the package from `pkgs.__splicedPackages`.
+    # If the package is not available within the set or in `pkgs`, such as a package in a let binding, it will not be spliced
+    # ex:
+    # ```
+    # nix-repl> darwin.apple_sdk.frameworks.CoreFoundation
+    #   «derivation ...CoreFoundation-11.0.0.drv»
+    # nix-repl> darwin.CoreFoundation
+    #   error: attribute 'CoreFoundation' missing
+    # nix-repl> darwin.callPackage ({ CoreFoundation }: CoreFoundation) { }
+    #   «derivation ...CoreFoundation-11.0.0.drv»
+    # ```
     , extra ? (_spliced0: {})
     , f
     }:
