@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    sha256 = "sha256-NUGQmOkdnEZq+wr/VhjSR/IBwF565U4QlTkmpjOYJes=";
+    sha256 = "sha256-Fwt4zuIKwurCx0EriwSOea4zAJ7Bmr8Stt0dQ8Ux0cs=";
     fetchSubmodules = true;
   };
 
@@ -20,7 +20,7 @@ mkDerivation rec {
   dontWrapQtApps = true;
 
   postInstall = ''
-    wrapProgram $out/bin/MiniZincIDE --prefix PATH ":" ${lib.makeBinPath [ minizinc ]}
+    wrapProgram $out/bin/MiniZincIDE --prefix PATH ":" ${lib.makeBinPath [ minizinc ]} --set QT_QPA_PLATFORM_PLUGIN_PATH "${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms"
   '';
 
   meta = with lib; {
