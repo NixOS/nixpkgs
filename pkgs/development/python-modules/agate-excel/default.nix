@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage
-, agate, openpyxl, xlrd, olefile, pytestCheckHook
+{ lib
+, fetchPypi
+, buildPythonPackage
+, agate
+, openpyxl
+, xlrd
+, olefile
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -8,14 +14,23 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IfrbPmQnGh4OMEiWJl16UUfI6X/UWj/p6J2+3Y2DzuM=";
+    hash = "sha256-IfrbPmQnGh4OMEiWJl16UUfI6X/UWj/p6J2+3Y2DzuM=";
   };
 
-  propagatedBuildInputs = [ agate openpyxl xlrd olefile ];
+  propagatedBuildInputs = [
+    agate
+    openpyxl
+    xlrd
+    olefile
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "agate" ];
+  pythonImportsCheck = [
+    "agate"
+  ];
 
   meta = with lib; {
     description = "Adds read support for excel files to agate";
