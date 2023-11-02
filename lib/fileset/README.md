@@ -225,6 +225,9 @@ Arguments:
   This use case makes little sense for files that are already in the store.
   This should be a separate abstraction as e.g. `pkgs.drvLayout` instead, which could have a similar interface but be specific to derivations.
   Additional capabilities could be supported that can't be done at evaluation time, such as renaming files, creating new directories, setting executable bits, etc.
+- (+) An API for filtering/transforming Nix store paths could be much more powerful,
+  because it's not limited to just what is possible at evaluation time with `builtins.path`.
+  Operations such as moving and adding files would be supported.
 
 ### Single files
 
