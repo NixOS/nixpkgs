@@ -28548,6 +28548,8 @@ with pkgs;
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
+  pam_mktemp = callPackage ../os-specific/linux/pam_mktemp { };
+
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
   pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
