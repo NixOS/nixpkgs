@@ -684,6 +684,104 @@ tree=(
 )
 checkFileset 'intersection (unions [ ./a/b ./c/d ./c/e ]) (unions [ ./a ./c/d/f ./c/e ])'
 
+## Difference
+
+# Subtracting something from itself results in nothing
+tree=(
+    [a]=0
+)
+checkFileset 'difference ./. ./.'
+
+# The tree of the second argument should not be evaluated if not needed
+checkFileset 'difference _emptyWithoutBase (_create ./. (abort "This should not be used!"))'
+checkFileset 'difference (_create ./. null) (_create ./. (abort "This should not be used!"))'
+
+# Subtracting nothing gives the same thing back
+tree=(
+    [a]=1
+)
+checkFileset 'difference ./. _emptyWithoutBase'
+checkFileset 'difference ./. (_create ./. null)'
+
+# Subtracting doesn't influence the base path
+mkdir a b
+touch {a,b}/x
+expectEqual 'toSource { root = ./a; fileset = difference ./a ./b; }' 'toSource { root = ./a; fileset = ./a; }'
+rm -rf -- *
+
+# Also not the other way around
+mkdir a
+expectFailure 'toSource { root = ./a; fileset = difference ./. ./a; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
+\s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
+\s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
+rm -rf -- *
+
+# Difference actually works
+# We test all combinations of ./., ./a, ./a/x and ./b
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./. ./.'
+checkFileset 'difference ./a ./.'
+checkFileset 'difference ./a/x ./.'
+checkFileset 'difference ./b ./.'
+checkFileset 'difference ./a ./a'
+checkFileset 'difference ./a/x ./a'
+checkFileset 'difference ./a/x ./a/x'
+checkFileset 'difference ./b ./b'
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b]=1
+    [c]=1
+)
+checkFileset 'difference ./. ./a'
+tree=(
+    [a/x]=1
+    [a/y]=1
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./a ./b'
+tree=(
+    [a/x]=1
+    [a/y]=0
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./a/x ./b'
+tree=(
+    [a/x]=0
+    [a/y]=1
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./a ./a/x'
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b]=1
+    [c]=0
+)
+checkFileset 'difference ./b ./a'
+checkFileset 'difference ./b ./a/x'
+tree=(
+    [a/x]=0
+    [a/y]=1
+    [b]=1
+    [c]=1
+)
+checkFileset 'difference ./. ./a/x'
+tree=(
+    [a/x]=1
+    [a/y]=1
+    [b]=0
+    [c]=1
+)
+checkFileset 'difference ./. ./b'
 
 ## File filter
 
