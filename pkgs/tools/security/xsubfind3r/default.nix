@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "xsubfind3r";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "hueristiq";
     repo = "xsubfind3r";
     rev = "refs/tags/${version}";
-    hash = "sha256-DY9/qcE8Ryue6NEWglM1F+xd669DPBIgt743ta+O//4=";
+    hash = "sha256-Xlxn9IZ9TTDzkEkyBoBwrS9AdQX21mmHngm03w+c4UM=";
   };
 
-  vendorHash = "sha256-dFjyeIiDGdGTlZoZvsW9cwb+urS0NRxBMFf3+Y+rsAE=";
+  vendorHash = "sha256-DkYQkuhBAYnGx9gxi2X/Coh0FYV+z5/4IX1zTfUM6uI=";
 
   ldflags = [
     "-s"
