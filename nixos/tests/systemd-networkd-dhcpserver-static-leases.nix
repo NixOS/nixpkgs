@@ -38,11 +38,16 @@ import ./make-test-python.nix ({ lib, ... }: {
     };
 
     client = {
-      virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+      virtualisation.interfaces.eth1 = {
+        vlan = 1;
+        assignIP = false;
+      };
       networking = {
+        useDHCP = false;
         firewall.enable = false;
         interfaces.eth1 = {
+          useDHCP = true;
           macAddress = "02:de:ad:be:ef:01";
         };
       };
