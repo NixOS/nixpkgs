@@ -98,6 +98,13 @@ stdenv.mkDerivation rec {
       hash = "sha256-KC99LzGcWTXUhtOLQ6UbqxGJ+0Uj4QLWyuRYeGle3a4=";
       stripLen = 1;
     })
+
+    (fetchpatch {
+      name = "CVE-2023-34059.patch";
+      url = "https://raw.githubusercontent.com/vmware/open-vm-tools/CVE-2023-34059.patch/CVE-2023-34059.patch";
+      hash = "sha256-RMQh1DyVdNlHbhUb9oGGUX0a2r6fUWN5urr0HlMlm2c=";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''
