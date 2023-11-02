@@ -4,6 +4,10 @@ let
     networking.useDHCP = false;
     # for a host utility with IPv6 support
     environment.systemPackages = [ pkgs.bind ];
+    # allow querying for root zone
+    services.resolved.extraConfig = ''
+      ResolveUnicastSingleLabel=true
+    '';
   };
 in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "nsd";
@@ -24,6 +28,9 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
 
     clientv6 = { lib, nodes, ... }: {
       imports = [ common ];
+      services.resolved.extraConfig = ''
+        DNSStubListenerExtra=::1
+      '';
       networking.nameservers = lib.mkForce [
         (lib.head nodes.server.config.networking.interfaces.eth1.ipv6.addresses).address
       ];
