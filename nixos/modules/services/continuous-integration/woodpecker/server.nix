@@ -33,7 +33,7 @@ in
       environmentFile = lib.mkOption {
         type = with lib.types; coercedTo path (f: [ f ]) (listOf path);
         default = [ ];
-        example = "/root/woodpecker-server.env";
+        example = [ "/root/woodpecker-server.env" ];
         description = lib.mdDoc ''
           File to load environment variables
           from. This is helpful for specifying secrets.
