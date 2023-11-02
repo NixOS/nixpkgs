@@ -1,0 +1,45 @@
+diff --git a/src/manager.cpp b/src/manager.cpp
+index 0b7c4f5..0ce20c1 100644
+--- a/src/manager.cpp
++++ b/src/manager.cpp
+@@ -70,7 +70,7 @@ NetworkManager::NetworkManagerPrivate::NetworkManagerPrivate()
+     : watcher(DBUS_SERVICE, QDBusConnection::sessionBus(), QDBusServiceWatcher::WatchForUnregistration, this)
+     , iface(NetworkManager::NetworkManagerPrivate::DBUS_SERVICE, NetworkManager::NetworkManagerPrivate::DBUS_DAEMON_PATH, QDBusConnection::sessionBus())
+ #else
+-    : watcher(DBUS_SERVICE, QDBusConnection::systemBus(), QDBusServiceWatcher::WatchForUnregistration, this)
++    : watcher(DBUS_SERVICE, QDBusConnection::systemBus(), QDBusServiceWatcher::WatchForRegistration | QDBusServiceWatcher::WatchForUnregistration, this)
+     , iface(NetworkManager::NetworkManagerPrivate::DBUS_SERVICE, NetworkManager::NetworkManagerPrivate::DBUS_DAEMON_PATH, QDBusConnection::systemBus())
+ #endif
+     , nmState(NetworkManager::Unknown)
+@@ -106,6 +106,7 @@ NetworkManager::NetworkManagerPrivate::NetworkManagerPrivate()
+                                this,
+                                SLOT(dbusInterfacesAdded(QDBusObjectPath, QVariantMap)));
+ 
++    connect(&watcher, &QDBusServiceWatcher::serviceRegistered, this, &NetworkManagerPrivate::daemonRegistered);
+     connect(&watcher, &QDBusServiceWatcher::serviceUnregistered, this, &NetworkManagerPrivate::daemonUnregistered);
+ 
+     init();
+@@ -899,6 +900,11 @@ void NetworkManager::NetworkManagerPrivate::dbusInterfacesAdded(const QDBusObjec
+         return;
+     }
+ 
++    daemonRegistered();
++}
++
++void NetworkManager::NetworkManagerPrivate::daemonRegistered()
++{
+     init();
+     Q_EMIT serviceAppeared();
+ }
+diff --git a/src/manager_p.h b/src/manager_p.h
+index 2b859ff..81d5a39 100644
+--- a/src/manager_p.h
++++ b/src/manager_p.h
+@@ -120,6 +120,7 @@ protected Q_SLOTS:
+     void dbusPropertiesChanged(const QString &interfaceName, const QVariantMap &properties, const QStringList &invalidatedProperties);
+     void propertiesChanged(const QVariantMap &changedProperties);
+     void dbusInterfacesAdded(const QDBusObjectPath &path, const QVariantMap &addedInterfaces);
++    void daemonRegistered();
+     void daemonUnregistered();
+ 
+ private:

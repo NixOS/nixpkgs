@@ -10,4 +10,5 @@ mkDerivation {
   propagatedBuildInputs = [ networkmanager qtbase ];
   outputs = [ "out" "dev" ];
   meta.platforms = lib.platforms.linux;
+  patches = [./nmqt.patch];
 }
