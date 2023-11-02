@@ -1,11 +1,11 @@
-{ python3Packages, runCommand }:
+{ python3Packages, runCommand, attrName }:
 
-runCommand "${python3Packages.opencv4.pname}-libstdcxx-test"
+runCommand "${python3Packages.${attrName}.name}-libstdcxx-test"
 {
   nativeBuildInputs = [
-    (python3Packages.python.withPackages (ps: with ps; [
-      (opencv4.override { enableCuda = true; })
-      scikit-image
+    (python3Packages.python.withPackages (ps: [
+      (ps.${attrName}.override { enableCuda = true; })
+      ps.scikit-image
     ]))
   ];
 } ''

@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchpatch
+, callPackage
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf3_21
 , config
@@ -289,7 +290,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "bindnow" "relro" ];
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
+  passthru = lib.optionalAttrs enablePython { pythonPath = []; } // {
+    tests = lib.optionalAttrs enableCuda {
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv3"; };
+    };
+  };
 
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";

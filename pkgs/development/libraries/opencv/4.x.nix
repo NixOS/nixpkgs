@@ -495,7 +495,7 @@ effectiveStdenv.mkDerivation {
       };
     }
     // lib.optionalAttrs (enableCuda) {
-      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { };
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
