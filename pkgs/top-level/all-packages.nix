@@ -447,6 +447,10 @@ with pkgs;
 
   ccal = callPackage ../tools/misc/ccal { };
 
+  celeste-classic-pm = pkgs.celeste-classic.override {
+    practiceMod = true;
+  };
+
   cereal = cereal_1_3_0;
   cereal_1_3_0 = callPackage ../development/libraries/cereal/1.3.0.nix { };
   cereal_1_3_2 = callPackage ../development/libraries/cereal/1.3.2.nix { };
@@ -2056,8 +2060,6 @@ with pkgs;
   };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
-
-  tfplugindocs = callPackage ../development/tools/tfplugindocs { };
 
   thumbs = callPackage ../tools/misc/thumbs { };
 
@@ -22446,6 +22448,10 @@ with pkgs;
 
   libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
 
+  libaribcaption = callPackage ../by-name/li/libaribcaption/package.nix {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreFoundation CoreGraphics CoreText;
+  };
+
   libasn1c = callPackage ../servers/osmocom/libasn1c/default.nix { };
 
   libasr = callPackage ../development/libraries/libasr { };
@@ -34917,7 +34923,7 @@ with pkgs;
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
-  qpwgraph = libsForQt5.callPackage ../applications/audio/qpwgraph { };
+  qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
 
   qrcode = callPackage ../tools/graphics/qrcode { };
 
@@ -40450,6 +40456,8 @@ with pkgs;
   jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
 
   j2cli = with python3Packages; toPythonApplication j2cli;
+
+  jq-lsp = callPackage ../development/tools/language-servers/jq-lsp { };
 
   jquake = callPackage ../applications/misc/jquake { };
 

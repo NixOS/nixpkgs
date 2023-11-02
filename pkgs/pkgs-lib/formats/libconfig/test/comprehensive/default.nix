@@ -6,12 +6,9 @@ let
     val = 1;
   };
 
-  include_file = (writeText "libconfig-test-include" ''
+  include_file = writeText "libconfig-test-include" ''
     val=1;
-  '').overrideAttrs {
-    outputHashAlgo = "sha256";
-    outputHashMode = "flat";
-  };
+  '';
 
   expression = {
     simple_top_level_attr = "1.0";
@@ -63,12 +60,15 @@ in
 
     doCheck = true;
     checkPhase = ''
-      diff -U3 ${./expected.txt} ${libconfig-test-cfg}
+      cp ${./expected.txt} expected.txt
+      substituteInPlace expected.txt \
+          --subst-var-by include_file "${include_file}"
+      diff -U3 ./expected.txt ${libconfig-test-cfg}
     '';
 
     installPhase = ''
       mkdir $out
-      cp ${./expected.txt} $out/expected.txt
+      cp expected.txt $out
       cp ${libconfig-test-cfg} $out/libconfig-test.cfg
       cp ${libconfig-test-cfg.passthru.json} $out/libconfig-test.json
     '';
