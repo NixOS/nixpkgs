@@ -84,6 +84,8 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
+  enableParallelBuilding = true;
+
   NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
