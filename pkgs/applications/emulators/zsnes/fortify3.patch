@@ -18,12 +18,3 @@ Detected by _FORTIFY_SOURCE=3:
  extern unsigned char SPCRAM[65472];
  unsigned char *SPCState = SPCRAM;
  
-@@ -1456,7 +1456,7 @@ void clearmem()
-   memset(pal16b, 0, 1024);
-   memset(pal16bcl, 0, 1024);
-   memset(pal16bclha, 0, 1024);
--  for (i=0 ; i<1024 ; i+=4)
-+  for (i=0 ; i<1024-4 ; i+=4)
-   {
-     memset(pal16bxcl+i, 255, 2);
-     memset(pal16bxcl+i+2, 0, 2);
