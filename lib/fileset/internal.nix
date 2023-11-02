@@ -651,6 +651,86 @@ rec {
       # In all other cases it's the rhs
       rhs;
 
+  # Compute the set difference between two file sets.
+  # The filesets must already be coerced and validated to be in the same filesystem root.
+  # Type: Fileset -> Fileset -> Fileset
+  _difference = positive: negative:
+    let
+      # The common base components prefix, e.g.
+      # (/foo/bar, /foo/bar/baz) -> /foo/bar
+      # (/foo/bar, /foo/baz) -> /foo
+      commonBaseComponentsLength =
+        # TODO: Have a `lib.lists.commonPrefixLength` function such that we don't need the list allocation from commonPrefix here
+        length (
+          commonPrefix
+            positive._internalBaseComponents
+            negative._internalBaseComponents
+        );
+
+      # We need filesetTree's with the same base to be able to compute the difference between them
+      # This here is the filesetTree from the negative file set, but for a base path that matches the positive file set.
+      # Examples:
+      # For `difference /foo /foo/bar`, `negativeTreeWithPositiveBase = { bar = "directory"; }`
+      #   because under the base path of `/foo`, only `bar` from the negative file set is included
+      # For `difference /foo/bar /foo`, `negativeTreeWithPositiveBase = "directory"`
+      #   because under the base path of `/foo/bar`, everything from the negative file set is included
+      # For `difference /foo /bar`, `negativeTreeWithPositiveBase = null`
+      #   because under the base path of `/foo`, nothing from the negative file set is included
+      negativeTreeWithPositiveBase =
+        if commonBaseComponentsLength == length positive._internalBaseComponents then
+          # The common prefix is the same as the positive base path, so the second path is equal or longer.
+          # We need to _shorten_ the negative filesetTree to the same base path as the positive one
+          # E.g. for `difference /foo /foo/bar` the common prefix is /foo, equal to the positive file set's base
+          # So we need to shorten the base of the tree for the negative argument from /foo/bar to just /foo
+          _shortenTreeBase positive._internalBaseComponents negative
+        else if commonBaseComponentsLength == length negative._internalBaseComponents then
+          # The common prefix is the same as the negative base path, so the first path is longer.
+          # We need to lengthen the negative filesetTree to the same base path as the positive one.
+          # E.g. for `difference /foo/bar /foo` the common prefix is /foo, equal to the negative file set's base
+          # So we need to lengthen the base of the tree for the negative argument from /foo to /foo/bar
+          _lengthenTreeBase positive._internalBaseComponents negative
+        else
+          # The common prefix is neither the first nor the second path.
+          # This means there's no overlap between the two file sets,
+          # and nothing from the negative argument should get removed from the positive one
+          # E.g for `difference /foo /bar`, we remove nothing to get the same as `/foo`
+          null;
+
+      resultingTree =
+        _differenceTree
+        positive._internalBase
+        positive._internalTree
+        negativeTreeWithPositiveBase;
+    in
+    # If the first file set is empty, we can never have any files in the result
+    if positive._internalIsEmptyWithoutBase then
+      _emptyWithoutBase
+    # If the second file set is empty, nothing gets removed, so the result is just the first file set
+    else if negative._internalIsEmptyWithoutBase then
+      positive
+    else
+      # We use the positive file set base for the result,
+      # because only files from the positive side may be included,
+      # which is what base path is for
+      _create positive._internalBase resultingTree;
+
+  # Computes the set difference of two filesetTree's
+  # Type: Path -> filesetTree -> filesetTree
+  _differenceTree = path: lhs: rhs:
+    # If the lhs doesn't have any files, or the right hand side includes all files
+    if lhs == null || isString rhs then
+      # The result will always be empty
+      null
+    # If the right hand side has no files
+    else if rhs == null then
+      # The result is always the left hand side, because nothing gets removed
+      lhs
+    else
+      # Otherwise we always have two attribute sets to recurse into
+      mapAttrs (name: lhsValue:
+        _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)
+      ) (_directoryEntries path lhs);
+
   _fileFilter = predicate: fileset:
     let
       recurse = path: tree:

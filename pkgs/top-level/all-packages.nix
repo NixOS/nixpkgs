@@ -40450,6 +40450,8 @@ with pkgs;
 
   j2cli = with python3Packages; toPythonApplication j2cli;
 
+  jq-lsp = callPackage ../development/tools/language-servers/jq-lsp { };
+
   jquake = callPackage ../applications/misc/jquake { };
 
   jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
