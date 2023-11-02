@@ -15,8 +15,7 @@
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
-, enableCuda      ? config.cudaSupport &&
-                    stdenv.hostPlatform.isx86_64
+, enableCuda      ? config.cudaSupport
 , cudaPackages ? { }
 , enableUnfree    ? false
 , enableIpp       ? false
