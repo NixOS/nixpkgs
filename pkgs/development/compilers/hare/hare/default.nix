@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     description =
       "A systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (harec.meta) platforms badPlatforms;
   };
 })
