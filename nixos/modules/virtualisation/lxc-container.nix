@@ -1,6 +1,8 @@
 { lib, config, pkgs, ... }:
 
 {
+  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+
   imports = [
     ./lxc-instance-common.nix
 
