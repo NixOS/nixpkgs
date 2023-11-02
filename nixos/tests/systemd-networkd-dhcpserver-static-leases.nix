@@ -38,25 +38,17 @@ import ./make-test-python.nix ({ lib, ... }: {
     };
 
     client = {
-      virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-      systemd.network = {
-        enable = true;
-        links."10-eth1" = {
-          matchConfig.OriginalName = "eth1";
-          linkConfig.MACAddress = "02:de:ad:be:ef:01";
-        };
-        networks."40-eth1" = {
-          matchConfig.Name = "eth1";
-          networkConfig = {
-            DHCP = "ipv4";
-            IPv6AcceptRA = false;
-          };
-          # This setting is important to have the router assign the
-          # configured lease based on the client's MAC address. Also see:
-          # https://github.com/systemd/systemd/issues/21368#issuecomment-982193546
-          dhcpV4Config.ClientIdentifier = "mac";
-          linkConfig.RequiredForOnline = "routable";
+      virtualisation.interfaces.eth1 = {
+        vlan = 1;
+        assignIP = false;
+      };
+      networking = {
+        useDHCP = false;
+        firewall.enable = false;
+        interfaces.eth1 = {
+          useDHCP = true;
+          macAddress = "02:de:ad:be:ef:01";
         };
       };
       networking = {
