@@ -15,7 +15,7 @@ branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
 # ENV params
 out=${out:-}
-http_proxy=${http_proxy:-}
+export http_proxy=${http_proxy:-}
 
 # allow overwriting cacert's ca-bundle.crt with a custom one
 # this can be done by setting NIX_GIT_SSL_CAINFO and NIX_SSL_CERT_FILE environment variables for the nix-daemon
@@ -120,7 +120,6 @@ init_remote(){
         git config remote.origin.partialclonefilter "blob:none"
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
-    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
