@@ -6252,7 +6252,7 @@ with pkgs;
   pn = callPackage ../tools/text/pn { };
 
   pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_22;
+    electron = electron_27;
   };
 
   portal = callPackage ../tools/misc/portal { };
@@ -20921,9 +20921,7 @@ with pkgs;
 
   cog = callPackage ../development/web/cog { };
 
-  cosmocc = callPackage ../development/tools/cosmocc { };
-
-  cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
+  inherit (cosmopolitan) cosmocc;
 
   python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
 
@@ -23088,7 +23086,9 @@ with pkgs;
     inherit (lomiri) cmake-extras;
   };
 
-  libre = callPackage ../development/libraries/libre { };
+  libre = callPackage ../development/libraries/libre {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
 
   librecast = callPackage ../development/libraries/librecast { };
 
@@ -30988,6 +30988,8 @@ with pkgs;
   cosmic-applets = callPackage ../applications/window-managers/cosmic/applets { };
 
   cosmic-panel = callPackage ../applications/window-managers/cosmic/panel { };
+
+  cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
@@ -41535,6 +41537,10 @@ with pkgs;
   yamdi = callPackage ../tools/video/yamdi { };
 
   yandex-browser = callPackage ../applications/networking/browsers/yandex-browser { };
+
+  yandex-browser-beta = yandex-browser.override { edition = "beta"; };
+
+  yandex-browser-corporate = yandex-browser.override { edition = "corporate"; };
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 

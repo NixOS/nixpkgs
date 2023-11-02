@@ -320,9 +320,11 @@ let
       FRAMEBUFFER_CONSOLE = yes;
       FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER = yes;
       FRAMEBUFFER_CONSOLE_ROTATION = yes;
+      FRAMEBUFFER_CONSOLE_DETECT_PRIMARY = yes;
       FB_GEODE            = mkIf (stdenv.hostPlatform.system == "i686-linux") yes;
       # On 5.14 this conflicts with FB_SIMPLE.
       DRM_SIMPLEDRM = whenAtLeast "5.14" no;
+      DRM_FBDEV_EMULATION = yes;
     };
 
     fonts = {
@@ -1005,6 +1007,28 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
+      # https://docs.kernel.org/arch/arm/mem_alignment.html
+      # tldr:
+      #  when buggy userspace code emits illegal misaligned LDM, STM,
+      #  LDRD and STRDs, the instructions trap, are caught, and then
+      #  are emulated by the kernel.
+      #
+      #  This is the default on armv7l, anyway, but it is explicitly
+      #  enabled here for the sake of providing context for the
+      #  aarch64 compat option which follows.
+      ALIGNMENT_TRAP = mkIf (stdenv.hostPlatform.system == "armv7l-linux") yes;
+
+      # https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220701135322.3025321-1-ardb@kernel.org/
+      # tldr:
+      #  when encountering alignment faults under aarch64, this option
+      #  makes the kernel attempt to handle the fault by doing the
+      #  same style of misaligned emulation that is performed under
+      #  armv7l (see above option).
+      #
+      #  This minimizes the potential for aarch32 userspace to behave
+      #  differently when run under aarch64 kernels compared to when
+      #  it is run under an aarch32 kernel.
+      COMPAT_ALIGNMENT_FIXUPS = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "6.1" yes);
     } // optionalAttrs (versionAtLeast version "5.4" && (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")) {
       # Required for various hardware features on Chrome OS devices
       CHROME_PLATFORMS = yes;
