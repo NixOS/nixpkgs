@@ -28473,6 +28473,9 @@ with self; {
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
       ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
+    patches = [
+      ../development/perl-modules/XML-LibXML-clang16.patch
+    ];
     # Remove test that fails after LibXML 2.11 upgrade
     postPatch = ''
       rm t/35huge_mode.t
