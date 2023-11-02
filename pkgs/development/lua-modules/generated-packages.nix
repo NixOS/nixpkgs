@@ -1384,6 +1384,35 @@ buildLuarocksPackage {
   };
 }) {};
 
+lua-rtoml = callPackage({ luaOlder, luarocks-build-rust-mlua, buildLuarocksPackage, lua, fetchgit }:
+buildLuarocksPackage {
+  pname = "lua-rtoml";
+  version = "0.2-0";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lblasc/lua-rtoml.git",
+  "rev": "e59ad00f5df8426767ddfb355f4ba6093468a168",
+  "date": "2023-11-02T14:17:41+01:00",
+  "path": "/nix/store/ynn6bvnwyqrackvyxzysxy294gh9prg1-lua-rtoml",
+  "sha256": "1y2ncdl3mpwqc1h5xm0rf9g1ns2vswgqffsj9sqrqidmg984jkr4",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua luarocks-build-rust-mlua ];
+
+  meta = {
+    homepage = "https://github.com/lblasc/lua-rtoml";
+    description = "Lua bindings for the Rust toml crate.";
+    maintainers = with lib.maintainers; [ lblasc ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 lua-subprocess = callPackage({ lua, buildLuarocksPackage, fetchgit, luaOlder }:
 buildLuarocksPackage {
   pname = "subprocess";
