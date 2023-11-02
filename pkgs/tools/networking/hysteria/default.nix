@@ -1,19 +1,19 @@
 { lib
 , fetchFromGitHub
-, buildGo121Module
+, buildGoModule
 }:
-buildGo121Module rec {
+buildGoModule rec {
   pname = "hysteria";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = pname;
     rev = "app/v${version}";
-    hash = "sha256-CvhDOtXyGxnTy8m7qN5lmQxOxwkExfW+1ZT3LrLjsmo=";
+    hash = "sha256-v9W1/1AIcYKYxVnFFXZdwQC50FWJCMQ0OXCmlfmXWQk=";
   };
 
-  vendorHash = "sha256-Io7EN+Cza7drMLB9JF4nRDxq+eVxW5sYj45WWvXtDsY=";
+  vendorHash = "sha256-/lFDCOkwkBKq1GJA1F7Lyhw++X1G1pld6JXNEdKue/E=";
   proxyVendor = true;
 
   ldflags = [
