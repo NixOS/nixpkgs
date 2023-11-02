@@ -36,7 +36,7 @@ lib.optionals (lib.versionAtLeast version "11.0")
 
 (let
   targetPlatformSlash =
-    if hostPlatform.config == targetPlatform.config
+    if hostPlatform == targetPlatform
     then ""
     else "${targetPlatform.config}/";
 
