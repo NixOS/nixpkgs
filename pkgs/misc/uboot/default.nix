@@ -63,7 +63,6 @@ let
       dtc
       flex
       installShellFiles
-      openssl
       (buildPackages.python3.withPackages (p: [
         p.libfdt
         p.setuptools # for pkg_resources
@@ -78,6 +77,7 @@ let
       ncurses # tools/kwboot
       libuuid # tools/mkeficapsule
       gnutls # tools/mkeficapsule
+      openssl # tools
     ];
 
     hardeningDisable = [ "all" ];
