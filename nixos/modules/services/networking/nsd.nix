@@ -941,6 +941,8 @@ in
       description = "NSD authoritative only domain name service";
 
       after = [ "network.target" ];
+      # Ensure that knot can bind port 53 before systemd-resolved's stub resolver attempts to.
+      before = [ "systemd-resolved.service" ];
       wantedBy = [ "multi-user.target" ];
 
       startLimitBurst = 4;
