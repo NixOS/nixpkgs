@@ -101,6 +101,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_SYSTEM_YYJSON=YES"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=uninitialized"
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/fastfetch \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
