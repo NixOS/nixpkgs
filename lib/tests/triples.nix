@@ -79,19 +79,6 @@ let
       # We have been shipping Broadcom VC4 forks of gcc/binutils
       # using nonstandard triples since 4aa1ffae041bb9c65eb3067e9dbaaa70710ed100
       (canonicalize v) != "vc4-elf"
-
-      # These are the triples used by LLVM, and a patch to recognize
-      # them has been submitted to (but not accepted by) gnu-config:
-      #
-      # https://lists.gnu.org/archive/html/config-patches/2023-10/msg00013.html
-      #
-      # In order to not further delay
-      # https://github.com/NixOS/nixpkgs/pull/231951 we are adding
-      # these as exceptions, hoping that a future version-bump of
-      # gnu-config will allow us to remove the exceptions.
-      && (canonicalize v) != "x86_64-unknown-uefi"
-      && (canonicalize v) != "i686-unknown-uefi"
-      && (canonicalize v) != "aarch64-unknown-uefi"
     ))
   ];
 in {

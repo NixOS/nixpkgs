@@ -318,7 +318,6 @@ rec {
     ghcjs    = { execFormat = unknown; families = { }; };
     genode   = { execFormat = elf;     families = { }; };
     mmixware = { execFormat = unknown; families = { }; };
-    uefi     = { execFormat = pe;      families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -397,7 +396,7 @@ rec {
     uclibceabihf = { float = "hard"; inherit (uclibc) kernels; };
     uclibc       = { kernels = [ "linux" ]; };
 
-    "" = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "uefi" "wasi" ]; };
+    "" = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "wasi" ]; };
 
     # in gnu-config triples, this abi is actually the empty string "" rather than "-unknown"
     unknown =
@@ -453,11 +452,6 @@ rec {
       "javascript-unknown-ghcjs".  You tried to create
       "${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}"
       '';
-    assert with components;
-      isUefi components
-      && (!(vendor.name == "unknown" || vendor.name == "") ||
-          !(cpu.name == "aarch64" || isx86_64 components || isx86_32 components))
-        -> throw "{x86_64,i686,aarch64}-unknown-uefi are nixpkgs-specific exceptions; no other uefi triples are currently allowed";
     setType "system" components;
 
   mkSkeletonFromList = l: {
