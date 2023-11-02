@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.24.12";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dB5gpaY6OB/IjMvqLUMH41l6Q/xMookxfVGXRcdhcBM=";
+    hash = "sha256-UJdGbuQfvlZHjCKyHCXPDJ5AdUWJCRUS/vNeTKAwyYI=";
   };
 
   cargoLock = {
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     curl
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
