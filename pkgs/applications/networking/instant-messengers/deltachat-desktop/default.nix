@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_22
+, electron_26
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -33,16 +33,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.40.4";
+  version = "unstable-2023-11-03";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "v${version}";
-    hash = "sha256-cNCM0McWBmHUUutMDa/Cy0qOxhx4NJnhjrW++HRl/nU=";
+    rev = "40152e9543eb773fc27e7a4f96ef1eecebe9310e";
+    hash = "sha256-9GPXFUCu9GKa/bJgO8CIPMLccI6WAJ6PhfoyJ6s/DHE=";
   };
 
-  npmDepsHash = "sha256-CoWa0l2If+SGqD47nP91qsvUlTzOEWP5or5zNUdV7P0=";
+  npmDepsHash = "sha256-g3nkgqZNoq+xuwXbXLHEMVpHH6Sq3792xhITCx7WvOc=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -92,7 +92,7 @@ buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_26}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 
