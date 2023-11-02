@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deltachat-cursed";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat-cursed";
     rev = "v${version}";
-    hash = "sha256-Cv2QT8GsPAcA5TTZGfNvFNwnUITSR0PmQE0QCO1nFNk=";
+    hash = "sha256-1QNhNPa6ZKn0lGQXs/cmfdSFHscwlYwFC/2DpnMoHvY=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,8 @@ python3.pkgs.buildPythonApplication rec {
     emoji
     notify-py
     urwid-readline
+    setuptools
+    appdirs
   ];
 
   doCheck = false; # no tests implemented
