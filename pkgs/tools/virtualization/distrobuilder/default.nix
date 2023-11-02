@@ -56,12 +56,12 @@ buildGoModule rec {
     generator = callPackage ./generator.nix { inherit src version; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ megheaiulian ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ megheaiulian adamcstephens ];
+    platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };
 }
