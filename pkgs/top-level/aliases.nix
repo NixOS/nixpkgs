@@ -977,6 +977,7 @@ mapAliases ({
   xineLib = xine-lib; # Added 2021-04-27
   xineUI = xine-ui; # Added 2021-04-27
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
+  xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = xvfb-run; # Added 2021-05-07
 
   ### Y ###
