@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-KDJ8QmpwGb2lOdwWEl5y62pJiqEvpI59StfQZrN1PPE=";
+    outputHash = {
+      "aarch64-linux" = "sha256-Fkfq8vBfNXdndVb17aZOTvIOAyiccDzyuFvg6kDy7QI=";
+      "x86_64-linux" = "sha256-KDJ8QmpwGb2lOdwWEl5y62pJiqEvpI59StfQZrN1PPE=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -105,7 +108,7 @@ stdenv.mkDerivation rec {
       runHook preInstall
 
       mkdir -p $out/opt/Vesktop/resources
-      cp dist/linux-unpacked/resources/app.asar $out/opt/Vesktop/resources
+      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
 
       pushd build
       ${libicns}/bin/icns2png -x icon.icns
@@ -141,6 +144,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }
