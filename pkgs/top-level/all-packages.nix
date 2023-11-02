@@ -543,6 +543,8 @@ with pkgs;
 
   conserver = callPackage ../tools/misc/conserver { };
 
+  container-diff = callPackage ../development/tools/container-diff { };
+
   containerlab = callPackage ../tools/networking/containerlab { };
 
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
