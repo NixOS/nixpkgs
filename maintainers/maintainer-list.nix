@@ -18095,6 +18095,12 @@
     githubId = 25440339;
     name = "Tom Repetti";
   };
+  tretinha = {
+    email = "gustavo@tretinha.com";
+    github = "tretinha";
+    githubId = 11623571;
+    name = "Gustavo Colombini";
+  };
   trevdev = {
     email = "trev@trevdev.ca";
     matrix = "@trevdev:matrix.org";
