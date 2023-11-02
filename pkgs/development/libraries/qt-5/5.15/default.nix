@@ -52,6 +52,15 @@ let
       # prevent headaches from stale qmlcache data
       ./qtdeclarative-default-disable-qmlcache.patch
     ];
+    qtlocation = lib.optionals stdenv.cc.isClang [
+      # Fix build with Clang 16
+      (fetchpatch {
+        url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/mapbox-gl-native/deps/boost/1.65.1/";
+        hash = "sha256-UEvIXzn387f9BAeBdhheStD/4M7en+rmqX8C6gstl6k=";
+      })
+    ];
     qtmultimedia = lib.optionals stdenv.isDarwin [
       # build patch for qtmultimedia with xcode 15
       (fetchpatch {
