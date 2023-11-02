@@ -495,8 +495,11 @@ stdenv.mkDerivation {
       opencv4-tests = callPackage ./tests.nix {
         inherit enableGStreamer enableGtk2 enableGtk3 runAccuracyTests runPerformanceTests testDataSrc;
         inherit opencv4;
-        };
       };
+    }
+    // lib.optionalAttrs (enableCuda) {
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { };
+    };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
   meta = with lib; {
