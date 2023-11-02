@@ -2655,6 +2655,12 @@
     githubId = 61636;
     name = "Brad Langhorst";
   };
+  bycEEE = {
+    email = "bycEEE@gmail.com";
+    github = "bycEEE";
+    githubId = 8891115;
+    name = "Brian Choy";
+  };
   bzizou = {
     email = "Bruno@bzizou.net";
     github = "bzizou";
