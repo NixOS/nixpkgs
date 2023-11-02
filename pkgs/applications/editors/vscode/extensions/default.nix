@@ -2735,8 +2735,8 @@ let
           publisher = "nvarner";
           # Please update the corresponding binary (typst-lsp) when updating
           # this extension.
-          version = "0.10.1";
-          sha256 = "sha256-+LOw9JPpL5eLNxmP4kyPo9S/w8ZxfPGSaY1oR8THmvI=";
+          version = "0.11.0";
+          sha256 = "sha256-fs+CBg3FwzTn608dm9EvfF2UrI2Sa5hsm0OK/WQyy6o=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
