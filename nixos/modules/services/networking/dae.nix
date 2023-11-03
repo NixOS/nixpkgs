@@ -133,7 +133,7 @@ in
         in
         {
           wantedBy = [ "multi-user.target" ];
-          
+          reloadTriggers = [ configPath ];
           serviceConfig = {
             ExecStartPre = [ "" "${daeBin} validate -c ${configPath}" ]
               ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
