@@ -1,22 +1,22 @@
 { lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
 , atpublic, psutil, pytest-cov, sybil
-, pdm-pep517
+, pdm-backend
 }:
 
 buildPythonPackage rec {
   pname = "flufl-lock";
-  version = "7.1.1";
+  version = "8.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "flufl.lock";
+    pname = "flufl_lock";
     inherit version;
-    hash = "sha256-rxQXKzW7xYaHvQa3DRaT/Y1Iy/D/3n5RphjBSK4kBC0=";
+    hash = "sha256-YcckazTW5VRMih+k2uOW0Q4WzrIzcaMdsi4KKZPQFDI=";
   };
 
-  nativeBuildInputs = [ pdm-pep517 ];
+  nativeBuildInputs = [ pdm-backend ];
   propagatedBuildInputs = [ atpublic psutil ];
   nativeCheckInputs = [ pytestCheckHook pytest-cov sybil ];
 
