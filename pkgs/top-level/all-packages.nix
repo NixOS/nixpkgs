@@ -29303,6 +29303,8 @@ with pkgs;
 
   ferrum = callPackage ../data/fonts/ferrum { };
 
+  fg-virgil = callPackage ../data/fonts/fg-virgil { };
+
   fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
 
   graphs = callPackage ../data/misc/graphs { };
