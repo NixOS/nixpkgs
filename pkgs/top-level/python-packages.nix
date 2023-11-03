@@ -13985,6 +13985,8 @@ self: super: with self; {
 
   tinydb = callPackage ../development/python-modules/tinydb { };
 
+  tinygrad = callPackage ../development/python-modules/tinygrad { };
+
   tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
