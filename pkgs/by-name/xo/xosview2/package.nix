@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       monitor what is going on.
     '';
     license = with licenses; [ gpl2 bsdOriginal ];
+    mainProgram = "xosview2";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
