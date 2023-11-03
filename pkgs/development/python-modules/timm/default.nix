@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "0.9.8";
+  version = "0.9.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "pytorch-image-models";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NB4uj9gB6QGxhnQMoYXN16T8v/o8IZuRMnN7pDXmaj4=";
+    hash = "sha256-mJzKDRc7husSpunlu12gnx9WErI6oEcEyCtrpkKbPBs=";
   };
 
   propagatedBuildInputs = [
