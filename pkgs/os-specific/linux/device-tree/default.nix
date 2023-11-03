@@ -32,7 +32,7 @@ with lib; {
     in ''
       mkdir -p $out
       cd "${base}"
-      find . -type f -name '*.dtb' -print0 \
+      find -L . -type f -name '*.dtb' -print0 \
         | xargs -0 cp -v --no-preserve=mode --target-directory "$out" --parents
 
       for dtb in $(find "$out" -type f -name '*.dtb'); do
