@@ -1,7 +1,7 @@
 { buildPecl, lib, php, fetchFromGitHub }:
 
 let
-  version = "6.0.1";
+  version = "6.0.2";
 in buildPecl {
   inherit version;
   pname = "redis";
@@ -10,7 +10,7 @@ in buildPecl {
     repo = "phpredis";
     owner = "phpredis";
     rev = version;
-    hash = "sha256-0by0TC4TNFIzgMjoyuJG4EavMhkYqmn8TtRaVmgepfc=";
+    hash = "sha256-Ie31zak6Rqxm2+jGXWg6KN4czHe9e+190jZRQ5VoB+M=";
   };
 
   internalDeps = with php.extensions; [
