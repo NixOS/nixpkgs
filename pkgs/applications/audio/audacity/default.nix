@@ -15,6 +15,8 @@
 , lv2
 , lilv
 , mpg123
+, opusfile
+, rapidjson
 , serd
 , sord
 , sqlite
@@ -61,13 +63,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    hash = "sha256-m38Awdv2ew+MKqd68x/ZsRBwidM2KJ3BRykIKgnFSx4=";
+    hash = "sha256-GSc2kCdqSlZivn6ZDBjFH5VCwP1rGW5qu3emnLCW0Hk=";
   };
 
   postPatch = ''
@@ -109,8 +111,10 @@ stdenv.mkDerivation rec {
     lilv
     lv2
     mpg123
+    opusfile
     pcre
     portmidi
+    rapidjson
     serd
     sord
     soundtouch
