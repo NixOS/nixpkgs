@@ -56,8 +56,11 @@ buildPythonPackage rec {
     "deltachat.message"
   ];
 
-  meta = libdeltachat.meta // {
+  meta = {
     description = "Python bindings for the Delta Chat Core library";
     homepage = "https://github.com/deltachat/deltachat-core-rust/tree/master/python";
-  };
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dotlambda srapenne ];
+    platforms = lib.platforms.unix;
+};
 }
