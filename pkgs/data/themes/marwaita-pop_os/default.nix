@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-pop_os";
-  version = "10.3";
+  version = "17.0";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
-    rev = version;
-    sha256 = "1j6d91kx6iw8sy35rhhjvwb3qz60bvf7a7g7q2i0sznzdicrwsq6";
+    rev = "1f3561f1231d0e9e931f93c5d59df19ed2205ce0";
+    hash = "sha256-WbCIMEWF5853TQyhq8aRoWzpsmjObm9hEc4I0pxDNOM=";
   };
 
   buildInputs = [
