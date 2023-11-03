@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pypitoken";
-  version = "7.0.0";
+  version = "7.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ewjoachim";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CjSENkk1VlzrCngwFoJuq31Iai60qTJXBGMoV5QkSsE=";
+    hash = "sha256-1SUR6reZywgFpSdD49E5PjEDNrlvsHH4TK6SkXStUws=";
   };
 
   postPatch = ''
