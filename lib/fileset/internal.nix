@@ -826,6 +826,10 @@ rec {
           fromFile (baseNameOf root) rootType;
       };
 
+  # Support for `builtins.fetchGit` with `submodules = true` was introduced in 2.4
+  # https://github.com/NixOS/nix/commit/55cefd41d63368d4286568e2956afd535cb44018
+  _fetchGitSubmodulesMinver = "2.4";
+
   # Mirrors the contents of a Nix store path relative to a local path as a file set.
   # Some notes:
   # - The store path is read at evaluation time.

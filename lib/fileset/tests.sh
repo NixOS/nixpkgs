@@ -1262,11 +1262,30 @@ expectFailure 'gitTrackedWith {} null' 'lib.fileset.gitTrackedWith: Expected the
 expectFailure 'gitTracked ./.' 'lib.fileset.gitTracked: Expected the argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
 expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the second argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
 
+# recurseSubmodules has to be a boolean
+expectFailure 'gitTrackedWith { recurseSubmodules = null; } ./.' 'lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it'\''s a null instead.'
+
+# recurseSubmodules = true is not supported on all Nix versions
+if [[ "$(nix-instantiate --eval --expr "$prefixExpression (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
+    fetchGitSupportsSubmodules=1
+else
+    fetchGitSupportsSubmodules=
+    expectFailure 'gitTrackedWith { recurseSubmodules = true; } ./.' 'lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version 2.4 and after, but Nix version [0-9.]+ is used.'
+fi
+
 # Checks that `gitTrackedWith` contains the same files as `git ls-files`
 # for the current working directory.
 # If --recurse-submodules is passed, the flag is passed through to `git ls-files`
 # and as `recurseSubmodules` to `gitTrackedWith`
 checkGitTrackedWith() {
+    if [[ "${1:-}" == "--recurse-submodules" ]]; then
+        gitLsFlags="--recurse-submodules"
+        gitTrackedArg="{ recurseSubmodules = true; }"
+    else
+        gitLsFlags=""
+        gitTrackedArg="{ }"
+    fi
+
     # All files listed by `git ls-files`
     expectedFiles=()
     while IFS= read -r -d $'\0' file; do
@@ -1276,9 +1295,9 @@ checkGitTrackedWith() {
         if [[ -f "$file" ]]; then
             expectedFiles+=("$file")
         fi
-    done < <(git ls-files -z)
+    done < <(git ls-files -z $gitLsFlags)
 
-    storePath=$(expectStorePath 'toSource { root = ./.; fileset = gitTrackedWith { } ./.; }')
+    storePath=$(expectStorePath 'toSource { root = ./.; fileset = gitTrackedWith '"$gitTrackedArg"' ./.; }')
 
     # Check that each expected file is also in the store path with the same content
     for expectedFile in "${expectedFiles[@]}"; do
@@ -1299,9 +1318,13 @@ checkGitTrackedWith() {
 }
 
 
-# Runs checkGitTrackedWith, this will make more sense in the next commit
+# Runs checkGitTrackedWith with and without --recurse-submodules
+# Allows testing both variants together
 checkGitTracked() {
     checkGitTrackedWith
+    if [[ -n "$fetchGitSupportsSubmodules" ]]; then
+        checkGitTrackedWith --recurse-submodules
+    fi
 }
 
 createGitRepo() {

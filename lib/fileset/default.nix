@@ -13,14 +13,17 @@ let
     _intersection
     _difference
     _mirrorStorePath
+    _fetchGitSubmodulesMinver
     ;
 
   inherit (builtins)
+    isBool
     isList
     isPath
     pathExists
     seq
     typeOf
+    nixVersion
     ;
 
   inherit (lib.lists)
@@ -35,6 +38,7 @@ let
 
   inherit (lib.strings)
     isStringLike
+    versionOlder
     ;
 
   inherit (lib.filesystem)
@@ -650,14 +654,21 @@ in {
     :::
 
     Type:
-      gitTrackedWith :: { } -> Path -> FileSet
+      gitTrackedWith :: { recurseSubmodules :: Bool ? false } -> Path -> FileSet
 
     Example:
       # Include all files tracked by the Git repository in the current directory
-      gitTracked { } ./.
+      # and any submodules under it
+      gitTracked { recurseSubmodules = true; } ./.
   */
   gitTrackedWith =
     {
+      /*
+        (optional, default: `false`) Whether to recurse into [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to also include their tracked files.
+
+        If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
+      */
+      recurseSubmodules ? false,
     }:
     /*
       The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
@@ -672,9 +683,18 @@ in {
       # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
       fetchResult = builtins.fetchGit {
         url = path;
+
+        # This is the only `fetchGit` parameter that makes sense in this context.
+        # We can't just pass `submodules = recurseSubmodules` here because
+        # this would fail for Nix versions that don't support `submodules`.
+        ${if recurseSubmodules then "submodules" else null} = true;
       };
     in
-    if ! isPath path then
+    if ! isBool recurseSubmodules then
+      throw "lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it's a ${typeOf recurseSubmodules} instead."
+    else if recurseSubmodules && versionOlder nixVersion _fetchGitSubmodulesMinver then
+      throw "lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version ${_fetchGitSubmodulesMinver} and after, but Nix version ${nixVersion} is used."
+    else if ! isPath path then
       throw "lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it's a ${typeOf path} instead."
     # We can identify local working directories by checking for .git,
     # see https://git-scm.com/docs/gitrepository-layout#_description.
