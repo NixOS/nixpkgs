@@ -95,8 +95,9 @@ expectEqual() {
 # Usage: expectStorePath NIX
 expectStorePath() {
     local expr=$1
-    if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace \
+    if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp"/stderr \
         --expr "$prefixExpression ($expr)"); then
+        cat "$tmp/stderr" >&2
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
     # This is safe because we assume to get back a store path in a string
@@ -1249,6 +1250,150 @@ expectEqual 'trace (intersection ./a (fromSource (lib.cleanSourceWith {
     else
       abort "filter should not be called on ${pathString}";
 }))) null' 'trace ./a/b null'
+rm -rf -- *
+
+## lib.fileset.gitTracked/gitTrackedWith
+
+# The first/second argument has to be a path
+expectFailure 'gitTracked null' 'lib.fileset.gitTracked: Expected the argument to be a path, but it'\''s a null instead.'
+expectFailure 'gitTrackedWith {} null' 'lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it'\''s a null instead.'
+
+# The path has to contain a .git directory
+expectFailure 'gitTracked ./.' 'lib.fileset.gitTracked: Expected the argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
+expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the second argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
+
+# Checks that `gitTrackedWith` contains the same files as `git ls-files`
+# for the current working directory.
+# If --recurse-submodules is passed, the flag is passed through to `git ls-files`
+# and as `recurseSubmodules` to `gitTrackedWith`
+checkGitTrackedWith() {
+    # All files listed by `git ls-files`
+    expectedFiles=()
+    while IFS= read -r -d $'\0' file; do
+        # If there are submodules but --recurse-submodules isn't passed,
+        # `git ls-files` lists them as empty directories,
+        # we need to filter that out since we only want to check/count files
+        if [[ -f "$file" ]]; then
+            expectedFiles+=("$file")
+        fi
+    done < <(git ls-files -z)
+
+    storePath=$(expectStorePath 'toSource { root = ./.; fileset = gitTrackedWith { } ./.; }')
+
+    # Check that each expected file is also in the store path with the same content
+    for expectedFile in "${expectedFiles[@]}"; do
+        if [[ ! -e "$storePath"/"$expectedFile" ]]; then
+            die "Expected file $expectedFile to exist in $storePath, but it doesn't.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+        fi
+        if ! diff "$expectedFile" "$storePath"/"$expectedFile"; then
+            die "Expected file $expectedFile to have the same contents as in $storePath, but it doesn't.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+        fi
+    done
+
+    # This is a cheap way to verify the inverse: That all files in the store path are also expected
+    # We just count the number of files in both and verify they're the same
+    actualFileCount=$(find "$storePath" -type f -printf . | wc -c)
+    if [[ "${#expectedFiles[@]}" != "$actualFileCount" ]]; then
+        die "Expected ${#expectedFiles[@]} files in $storePath, but got $actualFileCount.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+    fi
+}
+
+
+# Runs checkGitTrackedWith, this will make more sense in the next commit
+checkGitTracked() {
+    checkGitTrackedWith
+}
+
+createGitRepo() {
+    git init -q "$1"
+    # Only repo-local config
+    git -C "$1" config user.name "Nixpkgs"
+    git -C "$1" config user.email "nixpkgs@nixos.org"
+    # Get at least a HEAD commit, needed for older Nix versions
+    git -C "$1" commit -q --allow-empty -m "Empty commit"
+}
+
+# Go through all stages of Git files
+# See https://www.git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+
+# Empty repository
+createGitRepo .
+checkGitTracked
+
+# Untracked file
+echo a > a
+checkGitTracked
+
+# Staged file
+git add a
+checkGitTracked
+
+# Committed file
+git commit -q -m "Added a"
+checkGitTracked
+
+# Edited file
+echo b > a
+checkGitTracked
+
+# Removed file
+git rm -f -q a
+checkGitTracked
+
+rm -rf -- *
+
+# gitignored file
+createGitRepo .
+echo a > .gitignore
+touch a
+git add -A
+checkGitTracked
+
+# Add it regardless (needs -f)
+git add -f a
+checkGitTracked
+rm -rf -- *
+
+# Directory
+createGitRepo .
+mkdir -p d1/d2/d3
+touch d1/d2/d3/a
+git add d1
+checkGitTracked
+rm -rf -- *
+
+# Submodules
+createGitRepo .
+createGitRepo sub
+
+# Untracked submodule
+git -C sub commit -q --allow-empty -m "Empty commit"
+checkGitTracked
+
+# Tracked submodule
+git submodule add ./sub sub >/dev/null
+checkGitTracked
+
+# Untracked file
+echo a > sub/a
+checkGitTracked
+
+# Staged file
+git -C sub add a
+checkGitTracked
+
+# Committed file
+git -C sub commit -q -m "Add a"
+checkGitTracked
+
+# Changed file
+echo b > sub/b
+checkGitTracked
+
+# Removed file
+git -C sub rm -f -q a
+checkGitTracked
+
 rm -rf -- *
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets

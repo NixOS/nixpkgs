@@ -12,6 +12,7 @@ let
     _printFileset
     _intersection
     _difference
+    _mirrorStorePath
     ;
 
   inherit (builtins)
@@ -596,4 +597,91 @@ in {
       # We could also return the original fileset argument here,
       # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
       actualFileset;
+
+  /*
+    Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
+
+    This function behaves like [`gitTrackedWith { }`](#function-library-lib.fileset.gitTrackedWith) - using the defaults.
+
+    Type:
+      gitTracked :: Path -> FileSet
+
+    Example:
+      # Include all files tracked by the Git repository in the current directory
+      gitTracked ./.
+
+      # Include only files tracked by the Git repository in the parent directory
+      # that are also in the current directory
+      intersection ./. (gitTracked ../.)
+  */
+  gitTracked =
+    /*
+      The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      This directory must contain a `.git` file or subdirectory.
+    */
+    path:
+    # See the gitTrackedWith implementation for more explanatory comments
+    let
+      fetchResult = builtins.fetchGit path;
+    in
+    if ! isPath path then
+      throw "lib.fileset.gitTracked: Expected the argument to be a path, but it's a ${typeOf path} instead."
+    else if ! pathExists (path + "/.git") then
+      throw "lib.fileset.gitTracked: Expected the argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
+    else
+      _mirrorStorePath path fetchResult.outPath;
+
+  /*
+    Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
+    The first argument allows configuration with an attribute set,
+    while the second argument is the path to the Git working tree.
+    If you don't need the configuration,
+    you can use [`gitTracked`](#function-library-lib.fileset.gitTracked) instead.
+
+    This is equivalent to the result of [`unions`](#function-library-lib.fileset.unions) on all files returned by [`git ls-files`](https://git-scm.com/docs/git-ls-files)
+    (which uses [`--cached`](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt--c) by default).
+
+    :::{.warning}
+    Currently this function is based on [`builtins.fetchGit`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchGit)
+    As such, this function causes all Git-tracked files to be unnecessarily added to the Nix store,
+    without being re-usable by [`toSource`](#function-library-lib.fileset.toSource).
+
+    This may change in the future.
+    :::
+
+    Type:
+      gitTrackedWith :: { } -> Path -> FileSet
+
+    Example:
+      # Include all files tracked by the Git repository in the current directory
+      gitTracked { } ./.
+  */
+  gitTrackedWith =
+    {
+    }:
+    /*
+      The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      This directory must contain a `.git` file or subdirectory.
+    */
+    path:
+    let
+      # This imports the files unnecessarily, which currently can't be avoided
+      # because `builtins.fetchGit` is the only function exposing which files are tracked by Git.
+      # With the [lazy trees PR](https://github.com/NixOS/nix/pull/6530),
+      # the unnecessarily import could be avoided.
+      # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
+      fetchResult = builtins.fetchGit {
+        url = path;
+      };
+    in
+    if ! isPath path then
+      throw "lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it's a ${typeOf path} instead."
+    # We can identify local working directories by checking for .git,
+    # see https://git-scm.com/docs/gitrepository-layout#_description.
+    # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
+    # even though `git ls-files` wouldn't return any files in that case.
+    else if ! pathExists (path + "/.git") then
+      throw "lib.fileset.gitTrackedWith: Expected the second argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
+    else
+      _mirrorStorePath path fetchResult.outPath;
 }
