@@ -41790,8 +41790,6 @@ with pkgs;
 
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
 
-  wiremock = callPackage ../tools/networking/wiremock { };
-
   wireworld = callPackage ../games/wireworld { };
 
 
