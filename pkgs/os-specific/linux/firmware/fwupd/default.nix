@@ -18,7 +18,6 @@
 , curl
 , libjcat
 , elfutils
-, libsmbios
 , efivar
 , valgrind
 , meson
@@ -202,8 +201,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcbor
     libqmi
     xz # for liblzma
-  ] ++ lib.optionals haveDell [
-    libsmbios
   ] ++ lib.optionals haveFlashrom [
     flashrom
   ];
