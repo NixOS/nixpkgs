@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "lazr-config";
-  version = "2.2.3";
+  version = "3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lazr.config";
     inherit version;
-    hash = "sha256-t0pz+LY+bcZzL8Hz2I4vI2WW3fCJ724XlOzgYOjPq+E=";
+    hash = "sha256-oU5PbMCa68HUCxdhWK6g7uIlLBQAO40O8LMcfFFMNkQ=";
   };
 
   nativeBuildInputs = [
