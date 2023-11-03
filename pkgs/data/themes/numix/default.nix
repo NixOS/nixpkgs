@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, sass
+, sassc
 , glib
 , libxml2
 , gdk-pixbuf
@@ -10,17 +10,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.6.7";
   pname = "numix-gtk-theme";
+  version = "unstable-2021-06-08";
 
   src = fetchFromGitHub {
     repo = "numix-gtk-theme";
     owner = "numixproject";
-    rev = version;
-    sha256 = "12mw0kr0kkvg395qlbsvkvaqccr90cmxw5rrsl236zh43kj8grb7";
+    rev = "ad4b345cb19edba96bec72d6dc97ed1b568755a8";
+    hash = "sha256-7KX5xC6Gr6azqL2qyc8rYb3q9UhcGco2uEfltsQ+mgo=";
   };
 
-  nativeBuildInputs = [ sass glib libxml2 gdk-pixbuf ];
+  nativeBuildInputs = [ sassc glib libxml2 gdk-pixbuf ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
