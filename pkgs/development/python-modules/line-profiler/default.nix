@@ -4,11 +4,11 @@
 , cython
 , isPyPy
 , ipython
-, python
 , scikit-build
 , cmake
 , pythonOlder
 , pytestCheckHook
+, ubelt
 }:
 
 buildPythonPackage rec {
@@ -30,13 +30,14 @@ buildPythonPackage rec {
     scikit-build
   ];
 
-  propagatedBuildInputs = [
-    ipython
-  ];
+  passthru.optional-dependencies = {
+    ipython = [ ipython ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+    ubelt
+  ] ++ passthru.optional-dependencies.ipython;
 
   dontUseCmakeConfigure = true;
 
@@ -44,8 +45,9 @@ buildPythonPackage rec {
     rm -f _line_profiler.c
   '';
 
-  checkPhase = ''
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH cd tests && ${python.interpreter} -m unittest discover -s .
+  preCheck = ''
+    rm -r line_profiler
+    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [
