@@ -3,22 +3,22 @@
 , fetchPypi
 , pythonOlder
 , atpublic
-, pdm-pep517
+, pdm-backend
 , pytestCheckHook
 , sybil
 }:
 
 buildPythonPackage rec {
   pname = "flufl-i18n";
-  version = "4.1.1";
+  version = "5.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "flufl.i18n";
+    pname = "flufl_i18n";
     inherit version;
-    hash = "sha256-wKz6aggkJ9YBJ+o75XjC4Ddnn+Zi9hlYDnliwTc7DNs=";
+    hash = "sha256-ct6grvDeTIGJ1YuV9y/eFIilVZ/Z2RyoLKgko3CduG4=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "--cov=flufl --cov-report=term --cov-report=xml" ""
   '';
 
-  nativeBuildInputs = [ pdm-pep517 ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [ atpublic ];
 
