@@ -19,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cole";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aiosmtplib";
+    rev = "refs/tags/v${version}";
     hash = "sha256-67Z+k+PBIGP2oGb/52dMtsapUsHufvFcX+wWiMj5Jsg=";
   };
 
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
+    changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
