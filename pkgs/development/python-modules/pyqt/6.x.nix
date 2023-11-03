@@ -19,6 +19,9 @@
 #, withConnectivity ? true
 , withPrintSupport ? true
 , cups
+, buildPackages
+, pkgsBuildTarget
+, pkgsHostTarget
 }:
 
 buildPythonPackage rec {
@@ -65,34 +68,30 @@ buildPythonPackage rec {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = with qt6Packages; [
+  nativeBuildInputs = [
     pkg-config
     lndir
     sip
-    qtbase
-    qtsvg
-    qtdeclarative
-    qtwebchannel
+    buildPackages.stdenv.cc.cc
+  ] ++ (with pkgsBuildTarget.targetPackages.qt6Packages; [
     qmake
-    qtquick3d
-    qtquicktimeline
-  ]
-  # ++ lib.optional withConnectivity qtconnectivity
-  ++ lib.optional withMultimedia qtmultimedia
-  ++ lib.optional withWebSockets qtwebsockets
-  ++ lib.optional withLocation qtlocation
-  ;
+    qtbase
+  ]);
 
   buildInputs = with qt6Packages; [
     dbus
     qtbase
+    qtbase.dev
     qtsvg
     qtdeclarative
     pyqt-builder
     qtquick3d
     qtquicktimeline
+    qtwebchannel
+    qtquicktimeline
   ]
   # ++ lib.optional withConnectivity qtconnectivity
+  ++ lib.optional withMultimedia qtmultimedia
   ++ lib.optional withWebSockets qtwebsockets
   ++ lib.optional withLocation qtlocation
   ;
