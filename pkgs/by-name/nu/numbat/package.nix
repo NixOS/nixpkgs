@@ -1,8 +1,10 @@
 { lib
 , stdenv
+, testers
 , fetchFromGitHub
 , rustPlatform
 , darwin
+, numbat
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +23,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = numbat;
+  };
 
   meta = with lib; {
     description = "High precision scientific calculator with full support for physical units";
