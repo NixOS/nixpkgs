@@ -1,5 +1,6 @@
 { lib
 , azure-identity
+, azure-monitor-ingestion
 , boto3
 , buildPythonPackage
 , dateparser
@@ -59,6 +60,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     azure-identity
+    azure-monitor-ingestion
     boto3
     dateparser
     dnspython
