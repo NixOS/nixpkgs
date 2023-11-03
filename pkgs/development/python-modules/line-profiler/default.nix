@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, cython
+, cython_3
 , isPyPy
 , ipython
 , scikit-build
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "line-profiler";
-  version = "4.0.2";
+  version = "4.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6" || isPyPy;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "line_profiler";
     inherit version;
-    hash = "sha256-JejJ1CSNxIkFgBhR/4p1ucdIJ6CHHRGNEQTY5D1/sPw=";
+    hash = "sha256-qlZXiw/1p1b+GAs/2nvWfCe71Hiz0BJGEtjPAOSiHfI=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
     cmake
     scikit-build
   ];
