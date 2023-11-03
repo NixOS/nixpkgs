@@ -13,7 +13,7 @@ let
   compareTest = { emulator, pkgFun, hostPkgs, crossPkgs, exec, args ? [] }: let
     pkgName = (pkgFun hostPkgs).name;
     args' = lib.concatStringsSep " " args;
-  in crossPkgs.runCommand "test-${pkgName}-${crossPkgs.hostPlatform.config}" {
+  in crossPkgs.runCommand "test-${pkgName}-${crossPkgs.stdenv.hostPlatform.config}" {
     nativeBuildInputs = [ pkgs.dos2unix ];
   } ''
     # Just in case we are using wine, get rid of that annoying extra
@@ -59,12 +59,12 @@ let
       crossSystem = crossSystemFun system;
     };
 
-    emulator = crossPkgs.hostPlatform.emulator pkgs;
+    emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;
 
     # Apply some transformation on windows to get dlls in the right
     # place. Unfortunately mingw doesn’t seem to be able to do linking
     # properly.
-    platformFun = pkg: if crossPkgs.hostPlatform.isWindows then
+    platformFun = pkg: if crossPkgs.stdenv.hostPlatform.isWindows then
       pkgs.buildEnv {
         name = "${pkg.name}-winlinks";
         paths = [pkg] ++ pkg.buildInputs;
@@ -92,7 +92,7 @@ let
     };
 
     pkg-config = {platformFun, crossPkgs, emulator}: crossPkgs.runCommand
-      "test-pkg-config-${crossPkgs.hostPlatform.config}"
+      "test-pkg-config-${crossPkgs.stdenv.hostPlatform.config}"
     {
       depsBuildBuild = [ crossPkgs.pkgsBuildBuild.pkg-config ];
       nativeBuildInputs = [ crossPkgs.pkgsBuildHost.pkg-config crossPkgs.buildPackages.zlib ];
