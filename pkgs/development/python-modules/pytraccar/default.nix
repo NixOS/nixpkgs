@@ -4,7 +4,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pydantic
 , pytestCheckHook
 , pytest-asyncio
 , pythonOlder
@@ -13,14 +12,14 @@
 buildPythonPackage rec {
   pname = "pytraccar";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = version;
+    repo = "pytraccar";
+    rev = "refs/tags/${version}";
     hash = "sha256-7QGgI+DDYbordBx4LbtCvPWyEh6ur2RrSKMuDlwRlTo=";
   };
 
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
   ];
 
   nativeCheckInputs = [
@@ -56,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to handle device information from Traccar";
     homepage = "https://github.com/ludeeus/pytraccar";
+    changelog = "https://github.com/ludeeus/pytraccar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
