@@ -41729,8 +41729,6 @@ with pkgs;
 
   undaemonize = callPackage ../tools/system/undaemonize { };
 
-  wtfis = callPackage ../tools/networking/wtfis { };
-
   houdini = callPackage ../applications/misc/houdini { };
 
   openfst = callPackage ../development/libraries/openfst { };
