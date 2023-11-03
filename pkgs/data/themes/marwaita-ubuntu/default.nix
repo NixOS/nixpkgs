@@ -1,9 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , gdk-pixbuf
 , gtk-engine-murrine
 , gtk_engines
 , librsvg
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     cp -a Marwaita* $out/share/themes
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Ubuntu Style of Marwaita GTK theme";
