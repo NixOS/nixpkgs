@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , fetchpatch
 , zlib
+, kssd
+, runCommand
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,12 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    simple = runCommand "${finalAttrs.pname}-test" { } ''
+      mkdir $out
+      ${lib.getExe kssd} dist -L ${kssd.src}/shuf_file/L3K10.shuf -r ${kssd.src}/test_fna/seqs1 -o $out/reference
+      ${lib.getExe kssd} dist -L ${kssd.src}/shuf_file/L3K10.shuf -o $out/query ${kssd.src}/test_fna/seqs2
+      ${lib.getExe kssd} dist -r $out/reference -o $out/distout $out/query
+    '';
+  };
+
   meta = with lib; {
     description = "K-mer substring space decomposition";
     license     = licenses.asl20;
     homepage    = "https://github.com/yhg926/public_kssd";
     maintainers = with maintainers; [ unode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     mainProgram = "kssd";
   };
 })
