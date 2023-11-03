@@ -29,8 +29,14 @@ in
 
   testScript = ''
     def instance_is_up(_) -> bool:
-      status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
-      return status == 0
+        status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/true")
+        return status == 0
+
+    def set_container(config):
+        machine.succeed(f"incus config set container {config}")
+        machine.succeed("incus restart container")
+        with machine.nested("Waiting for instance to start and be usable"):
+          retry(instance_is_up)
 
     machine.wait_for_unit("incus.service")
 
@@ -49,28 +55,23 @@ in
         machine.succeed("echo true | incus exec container /run/current-system/sw/bin/bash -")
 
     with subtest("Container CPU limits can be managed"):
-        machine.succeed("incus config set container limits.cpu 1")
-        # give container a chance to apply new resource limit
-        machine.sleep(1)
+        set_container("limits.cpu 1")
         cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()
         assert cpuinfo == "1", f"Wrong number of CPUs reported from /proc/cpuinfo, want: 1, got: {cpuinfo}"
 
-        machine.succeed("incus config set container limits.cpu 2")
-        machine.sleep(1)
+        set_container("limits.cpu 2")
         cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()
         assert cpuinfo == "2", f"Wrong number of CPUs reported from /proc/cpuinfo, want: 2, got: {cpuinfo}"
 
     with subtest("Container memory limits can be managed"):
-        machine.succeed("incus config set container limits.memory 64MB")
-        machine.sleep(1)
+        set_container("limits.memory 64MB")
         meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
         meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
         assert meminfo_bytes == "62500 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '62500 kB', got: '{meminfo_bytes}'"
 
-        machine.succeed("incus config set container limits.memory 128MB")
-        machine.sleep(1)
+        set_container("limits.memory 128MB")
         meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
         meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
-        assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '62500 kB', got: '{meminfo_bytes}'"
+        assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
   '';
 })
