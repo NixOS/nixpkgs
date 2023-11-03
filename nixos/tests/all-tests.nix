@@ -394,6 +394,7 @@ in {
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
+  incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; });
   influxdb = handleTest ./influxdb.nix {};
   influxdb2 = handleTest ./influxdb2.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
