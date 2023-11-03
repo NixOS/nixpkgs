@@ -54,7 +54,16 @@ let
     if stdenv.isAarch64 then cc
     else
       cc.override {
-        bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
+        bintools = stdenv.cc.bintools.override {
+          # Override to update the bintools-wrapper with the requested deployment target and SDK.
+          stdenvNoCC = stdenvNoCC.override (old: {
+            targetPlatform = old.targetPlatform // {
+              darwinMinVersion = "10.12";
+              darwinSdkVersion = "11.0";
+            };
+          });
+          libc = packages.Libsystem;
+        };
         libc = packages.Libsystem;
       };
 
