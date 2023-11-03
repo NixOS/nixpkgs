@@ -30692,8 +30692,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
-  blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix { };
-
   blender-hip = blender.override { hipSupport = true; };
 
   blflash = callPackage ../tools/misc/blflash { };
