@@ -7,8 +7,7 @@ let
   common = import ./common.nix;
   inherit (common) outputPath indexPath;
 
-  web-devmode = import ../../../pkgs/tools/nix/web-devmode.nix {
-    inherit pkgs;
+  web-devmode = pkgs.devmode.override {
     buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
     open = "/${outputPath}/${indexPath}";
   };
