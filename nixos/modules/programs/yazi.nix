@@ -6,10 +6,38 @@ let
   settingsFormat = pkgs.formats.toml { };
 
   names = [ "yazi" "theme" "keymap" ];
+
+  bashSetCwd = ''
+    function ya() {
+      tmp="$(mktemp -t "yazi-cwd.XXXXX")"
+      yazi --cwd-file="$tmp"
+      if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        cd -- "$cwd"
+      fi
+      rm -f -- "$tmp"
+    }
+  '';
+
+  fishSetCwd = ''
+    function ya
+      set tmp (mktemp -t "yazi-cwd.XXXXX")
+      yazi --cwd-file="$tmp"
+      if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        cd -- "$cwd"
+      end
+      rm -f -- "$tmp"
+    end
+  '';
 in
 {
   options.programs.yazi = {
     enable = lib.mkEnableOption (lib.mdDoc "yazi terminal file manager");
+
+    enableBashIntegration = lib.mkEnableOption (lib.mdDoc "setting current working dir in bash on exit");
+
+    enableFishIntegration = lib.mkEnableOption (lib.mdDoc "setting current working dir in fish on exit");
+
+    enableZshIntegration = lib.mkEnableOption (lib.mdDoc "setting current working dir in zsh on exit");
 
     package = lib.mkPackageOptionMD pkgs "yazi" { };
 
@@ -43,6 +71,12 @@ in
           "yazi/${name}.toml".source = settingsFormat.generate "${name}.toml" cfg.settings.${name};
         })
         names);
+    };
+
+    programs = {
+      bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration bashSetCwd;
+      fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration bashSetCwd;
+      zsh.interactiveShellInit = lib.mkIf cfg.enableZshIntegration bashSetCwd;
     };
   };
   meta = {
