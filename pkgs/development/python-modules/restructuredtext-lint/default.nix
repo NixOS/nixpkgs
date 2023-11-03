@@ -7,11 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "restructuredtext_lint";
+  pname = "restructuredtext-lint";
   version = "1.4.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "restructuredtext_lint";
+    inherit version;
     hash = "sha256-GyNcDJIjQatsUwOQiS656S+QubdQRgY+BHys+w8FDEU=";
   };
 
