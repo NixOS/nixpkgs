@@ -289,6 +289,7 @@ mapAliases ({
   pyjson5 = json5; # added 2022-08-28
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   PyLD = pyld; # added 2022-06-22
+  pymaging = throw "pymaging has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
   pymaging_png = throw "pymaging_png has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
   pymatgen-lammps = throw "pymatgen-lammps has been removed because it is unmaintained and broken"; # added 2023-06-20
   pymazda = throw "pymazda has been removed, because the upstream repo has been affected by a DCMA claim."; # added 2023-10-16
