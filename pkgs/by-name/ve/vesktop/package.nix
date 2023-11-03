@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-elgoX8z8q0+7uUia9gbcCmpDg+qYRWWUxdRuNV53Puw=";
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
+  pnpmDeps = stdenvNoCC.mkDerivation {
     pname = "${finalAttrs.pname}-pnpm-deps";
     inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
 
-    cp -r ${finalAttrs.pnpm-deps}/* "$STORE_PATH"
+    cp -r ${finalAttrs.pnpmDeps}/* "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
@@ -133,6 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
       keywords = [ "discord" "vencord" "electron" "chat" ];
     })
   ];
+
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+  };
 
   meta = with lib; {
     description = "An alternate client for Discord with Vencord built-in";
