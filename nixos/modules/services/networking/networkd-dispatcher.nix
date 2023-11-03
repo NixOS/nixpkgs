@@ -62,6 +62,15 @@ in {
         });
       };
 
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        description = ''
+          Extra arguments to pass to the networkd-dispatcher command.
+        '';
+        apply = escapeShellArgs;
+      };
+
     };
   };
 
@@ -71,27 +80,28 @@ in {
       packages = [ pkgs.networkd-dispatcher ];
       services.networkd-dispatcher = {
         wantedBy = [ "multi-user.target" ];
-        # Override existing ExecStart definition
-        serviceConfig.ExecStart = let
-          scriptDir = pkgs.symlinkJoin {
-            name = "networkd-dispatcher-script-dir";
-            paths = lib.mapAttrsToList (name: cfg:
-              (map(state:
-                pkgs.writeTextFile {
-                  inherit name;
-                  text = cfg.script;
-                  destination = "/${state}.d/${name}";
-                  executable = true;
-                }
-              ) cfg.onState)
-            ) cfg.rules;
-          };
-        in [
-          ""
-          "${pkgs.networkd-dispatcher}/bin/networkd-dispatcher -v --script-dir ${scriptDir} $networkd_dispatcher_args"
-        ];
+        environment.networkd_dispatcher_args = cfg.extraArgs;
       };
     };
+
+    services.networkd-dispatcher.extraArgs = let
+      scriptDir = pkgs.symlinkJoin {
+        name = "networkd-dispatcher-script-dir";
+        paths = lib.mapAttrsToList (name: cfg:
+          (map(state:
+            pkgs.writeTextFile {
+              inherit name;
+              text = cfg.script;
+              destination = "/${state}.d/${name}";
+              executable = true;
+            }
+          ) cfg.onState)
+        ) cfg.rules;
+      };
+    in [
+      "--verbose"
+      "--script-dir" "${scriptDir}"
+    ];
 
   };
 }
