@@ -1296,8 +1296,6 @@ let
 
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
-    ocamlsdl = callPackage ../development/ocaml-modules/ocamlsdl { };
-
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
