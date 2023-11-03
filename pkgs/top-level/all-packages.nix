@@ -30991,6 +30991,8 @@ with pkgs;
 
   cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
 
+  cosmic-edit = callPackage ../applications/editors/cosmic-edit { };
+
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim { };
