@@ -16,20 +16,20 @@
 , moreutils
 , nodePackages
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
   };
 
   pnpm-deps = stdenvNoCC.mkDerivation {
-    pname = "${pname}-pnpm-deps";
-    inherit src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+    pname = "${finalAttrs.pname}-pnpm-deps";
+    inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
 
     nativeBuildInputs = [
       jq
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
 
-    cp -r ${pnpm-deps}/* "$STORE_PATH"
+    cp -r ${finalAttrs.pnpm-deps}/* "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
@@ -157,4 +157,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
   };
-}
+})
