@@ -42,7 +42,6 @@
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
 , enableCufft ? enableCuda
 , cudaPackages ? {}
-, symlinkJoin
 , nvidia-optical-flow-sdk
 
 , enableLto ? true
@@ -240,22 +239,6 @@ let
   inherit (cudaPackages) cudaFlags cudaVersion;
   inherit (cudaFlags) cudaCapabilities;
 
-  cuda-common-redist = with cudaPackages; [
-    cuda_cudart
-    cuda_cccl # <thrust/*>
-    libnpp # npp.h
-  ] ++ lib.optionals enableCublas [
-    libcublas # cublas_v2.h
-  ] ++ lib.optionals enableCudnn [
-    cudnn # cudnn.h
-  ] ++ lib.optionals enableCufft [
-    libcufft # cufft.h
-  ];
-
-  cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
-    paths = cuda-common-redist;
-   };
 in
 
 effectiveStdenv.mkDerivation {
@@ -345,7 +328,17 @@ effectiveStdenv.mkDerivation {
       bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
     ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
-    ++ lib.optionals enableCuda [ cuda-redist ];
+    ++ lib.optionals enableCuda  (with cudaPackages; [
+      cuda_cudart
+      cuda_cccl # <thrust/*>
+      libnpp # npp.h
+    ] ++ lib.optionals enableCublas [
+      libcublas # cublas_v2.h
+    ] ++ lib.optionals enableCudnn [
+      cudnn # cudnn.h
+    ] ++ lib.optionals enableCufft [
+      libcufft # cufft.h
+  ]);
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
     ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
