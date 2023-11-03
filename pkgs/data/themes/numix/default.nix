@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, sass, glib, libxml2, gdk-pixbuf
+{ lib
+, stdenv
+, fetchFromGitHub
+, sass
+, glib
+, libxml2
+, gdk-pixbuf
 , gtk-engine-murrine
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +28,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
     patchShebangs .
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Modern flat theme with a combination of light and dark elements (GNOME, Unity, Xfce and Openbox)";
