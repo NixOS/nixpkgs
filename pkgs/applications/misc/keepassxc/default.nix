@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jonafato srapenne blankparticle ];
+    maintainers = with maintainers; [ jonafato blankparticle ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

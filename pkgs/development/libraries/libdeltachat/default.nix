@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
     changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda srapenne ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;
   };
 }
