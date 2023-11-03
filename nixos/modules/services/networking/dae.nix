@@ -97,10 +97,14 @@ in
   };
 
   config = lib.mkIf cfg.enable
-
     {
       environment.systemPackages = [ cfg.package ];
       systemd.packages = [ cfg.package ];
+
+      environment.etc."dae/config.dae" = {
+        mode = "0400";
+        source = pkgs.writeText "config.dae" cfg.config;
+      };
 
       networking = lib.mkIf cfg.openFirewall.enable {
         firewall =
@@ -116,10 +120,6 @@ in
         let
           daeBin = lib.getExe cfg.package;
 
-          configPath =
-            if cfg.configFile != null
-            then cfg.configFile else pkgs.writeText "config.dae" cfg.config;
-
           TxChecksumIpGenericWorkaround = with lib;
             (getExe pkgs.writeShellApplication {
               name = "disable-tx-checksum-ip-generic";
@@ -128,14 +128,16 @@ in
                 ${lib.getExe ethtool} -K "$iface" tx-checksum-ip-generic off
               '';
             });
+
+          configPath = if cfg.configFile != null then cfg.configFile else "/etc/dae/config.dae";
         in
         {
           wantedBy = [ "multi-user.target" ];
+          
           serviceConfig = {
-            LoadCredential = [ "config.dae:${configPath}" ];
-            ExecStartPre = [ "" "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae" ]
+            ExecStartPre = [ "" "${daeBin} validate -c ${configPath}" ]
               ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
-            ExecStart = [ "" "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae" ];
+            ExecStart = [ "" "${daeBin} run --disable-timestamp -c ${configPath}" ];
             Environment = "DAE_LOCATION_ASSET=${cfg.assetsPath}";
           };
         };
@@ -167,4 +169,5 @@ in
         }
       ];
     };
+
 }
