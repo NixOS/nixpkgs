@@ -11121,6 +11121,10 @@ with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24993.tar.gz";
       hash = "sha256-ScRDdDsu7+EadoACck9/akxI78lP8806VZ+357aTyWc=";
     };
+    patches = [
+      # Fix incompatible function pointer conversion (assigning `GdkNativeWindow` to `guint32`).
+      ../development/perl-modules/Gtk2-fix-incompatible-pointer-conversion.patch
+    ];
     buildInputs = [ pkgs.gtk2 ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=130742
     # doCheck = !stdenv.isDarwin;
