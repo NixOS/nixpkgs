@@ -349,7 +349,15 @@ rec {
         // lib.genAttrs atBuildInputs (input: map mapRuntimeToSDK (args."${input}" or [ ]));
 
       mkCC = cc: cc.override {
-        bintools = cc.bintools.override { libc = sdk.Libsystem; };
+        bintools = cc.bintools.override {
+          libc = sdk.Libsystem;
+          # Override to update the bintools-wrapper with the requested deployment target and SDK.
+          stdenvNoCC = pkgs.stdenvNoCC.override (old: {
+            buildPlatform = old.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+            hostPlatform = old.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+            targetPlatform = old.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+          });
+        };
         libc = sdk.Libsystem;
       };
     in
