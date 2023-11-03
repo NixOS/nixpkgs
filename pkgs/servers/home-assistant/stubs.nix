@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2023.10.5";
+  version = "2023.11.0";
   format = "pyproject";
 
   disabled = python.version != home-assistant.python.version;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "KapJI";
     repo = "homeassistant-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-QCdNvEs2LFF43lWLLFX+9VMfQFg1oWUCh/cgxdBQV8w=";
+    hash = "sha256-/yiTNsr22X8orQ8sni50/FeWWZL9OyVZvTngeaGv5SI=";
   };
 
   nativeBuildInputs = [

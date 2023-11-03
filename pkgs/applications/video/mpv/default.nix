@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , python3
-, ffmpeg_5
+, ffmpeg
 , freefont_ttf
 , freetype
 , libass
@@ -159,7 +159,7 @@ in stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
-    ffmpeg_5
+    ffmpeg
     freetype
     libass
     libpthreadstubs
