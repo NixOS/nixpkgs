@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pigeon";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mna";
     repo = "pigeon";
     rev = "v${version}";
-    sha256 = "sha256-0Cp/OnFvVZj9UZgl3F5MCzemBaHI4smGWU46VQnhLOg=";
+    sha256 = "sha256-/am9ZcGmWeHub6WWHdXuZH4A/vx/F3nh6kjTp48msY8=";
   };
 
-  vendorHash = "sha256-JbBXRkxnB7LeeWdBLIQvyjvWo0zZ1EOuEUPXxHWiq+E=";
+  vendorHash = "sha256-5zfgc94YN8mq6S+Ms3wDTO2Q2oWa3iTtN6eSnp0BY1Y=";
 
   proxyVendor = true;
 
