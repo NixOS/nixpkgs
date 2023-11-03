@@ -2276,7 +2276,7 @@ checksum = "029d73f573d8e8d63e6d5020011d3255b28c3ba85d6cf870a07184ed23de9284"
 
 [[package]]
 name = "imap"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "ahash 0.8.3",
  "dashmap",
@@ -2460,7 +2460,7 @@ dependencies = [
 
 [[package]]
 name = "jmap"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "aes",
  "aes-gcm",
@@ -2497,6 +2497,7 @@ dependencies = [
  "sequoia-openpgp",
  "serde",
  "serde_json",
+ "sha1",
  "sha2 0.10.8",
  "sieve-rs",
  "smtp",
@@ -2824,7 +2825,7 @@ dependencies = [
 
 [[package]]
 name = "mail-server"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "directory",
  "imap",
@@ -2841,7 +2842,7 @@ dependencies = [
 
 [[package]]
 name = "managesieve"
-version = "0.1.0"
+version = "0.4.2"
 dependencies = [
  "ahash 0.8.3",
  "bincode",
@@ -3031,7 +3032,7 @@ dependencies = [
 
 [[package]]
 name = "nlp"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "ahash 0.8.3",
  "bincode",
@@ -4739,7 +4740,7 @@ checksum = "942b4a808e05215192e39f4ab80813e599068285906cc91aa64f923db842bd5a"
 
 [[package]]
 name = "smtp"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "ahash 0.8.3",
  "blake3",
@@ -5070,7 +5071,7 @@ dependencies = [
 
 [[package]]
 name = "stalwart-cli"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "clap",
  "console",
@@ -5092,7 +5093,7 @@ dependencies = [
 
 [[package]]
 name = "stalwart-install"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "base64 0.21.4",
  "clap",
@@ -5900,7 +5901,7 @@ checksum = "711b9620af191e0cdc7468a8d14e709c3dcdb115b36f838e601583af800a370a"
 
 [[package]]
 name = "utils"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "ahash 0.8.3",
  "chrono",
