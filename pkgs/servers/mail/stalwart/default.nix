@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "0.4.0";
+  version = "0.4.2";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-T61GlSzKdJZiSyRyxyk7PKhm0jmEtrMxoaTyM3FeDCU=";
+    hash = "sha256-Ah53htK38Bm2yGN44IiC6iRWgxkMVRtrNvXXvPh+SJc=";
     fetchSubmodules = true;
   };
 
