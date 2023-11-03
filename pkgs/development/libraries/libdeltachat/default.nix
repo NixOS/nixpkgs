@@ -1,5 +1,4 @@
 { lib
-, rust
 , stdenv
 , fetchFromGitHub
 , cargo
@@ -42,18 +41,6 @@ stdenv.mkDerivation rec {
       "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
     };
   };
-
-  outputs = [ "bin" "out" ];
-
-  preBuild = ''
-    cargo build \
-      --target ${rust.envVars.rustHostPlatformSpec} \
-      --release \
-      -p deltachat-repl \
-      --frozen \
-      -j $NIX_BUILD_CORES \
-      -Z unstable-options --out-dir $bin/bin/
-  '';
 
   nativeBuildInputs = [
     cmake
