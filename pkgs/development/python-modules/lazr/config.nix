@@ -1,14 +1,54 @@
-{ buildPythonPackage, fetchPypi, lazr_delegates }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, lazr_delegates
+, zope_interface
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "lazr-config";
   version = "2.2.3";
-
-  propagatedBuildInputs = [ lazr_delegates ];
+  pyproject = true;
 
   src = fetchPypi {
     pname = "lazr.config";
     inherit version;
-    sha256 = "b74a73f8b63e6dc6732fc1f3d88e2f236596ddf089ef6e1794ece060e8cfabe1";
+    hash = "sha256-t0pz+LY+bcZzL8Hz2I4vI2WW3fCJ724XlOzgYOjPq+E=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    lazr_delegates
+    zope_interface
+  ];
+
+  pythonImportsCheck = [
+    "lazr.config"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # change the directory to avoid a namespace-related problem
+  # ModuleNotFoundError: No module named 'lazr.delegates'
+  preCheck = ''
+    cd $out
+  '';
+
+  pythonNamespaces = [
+    "lazr"
+  ];
+
+  meta = with lib; {
+    description = "Create configuration schemas, and process and validate configurations";
+    homepage = "https://launchpad.net/lazr.config";
+    changelog = "https://git.launchpad.net/lazr.config/tree/NEWS.rst?h=${version}";
+    license = licenses.lgpl3Only;
   };
 }
