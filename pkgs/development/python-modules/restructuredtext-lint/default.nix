@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , docutils
-, nose
-, testtools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "restructuredtext-lint";
   version = "1.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "restructuredtext_lint";
@@ -16,16 +17,29 @@ buildPythonPackage rec {
     hash = "sha256-GyNcDJIjQatsUwOQiS656S+QubdQRgY+BHys+w8FDEU=";
   };
 
-  nativeCheckInputs = [ nose testtools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [ docutils ];
 
-  checkPhase = ''
-    nosetests --nocapture
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "restructuredtext_lint/test/test.py"
+  ];
+
+  pythonImportsCheck = [
+    "restructuredtext_lint"
+  ];
 
   meta = {
     description = "reStructuredText linter";
     homepage = "https://github.com/twolfson/restructuredtext-lint";
+    changelog = "https://github.com/twolfson/restructuredtext-lint/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.unlicense;
+    mainProgram = "rst-lint";
   };
 }
