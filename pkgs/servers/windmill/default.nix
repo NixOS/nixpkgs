@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, autoPatchelfHook
 , buildNpmPackage
 , bash
 , cmake
@@ -98,6 +99,8 @@ rustPlatform.buildRustPackage {
     };
   };
 
+  autoPatchelfIgnoreMissingDeps = true;
+
   patches = [
     ./swagger-cli.patch
     ./run.go.config.proto.patch
@@ -120,6 +123,7 @@ rustPlatform.buildRustPackage {
     openssl
     rustfmt
     lld
+    stdenv.cc.cc.lib
   ];
 
   nativeBuildInputs = [
@@ -127,6 +131,7 @@ rustPlatform.buildRustPackage {
     makeWrapper
     swagger-cli
     cmake # for libz-ng-sys crate
+    autoPatchelfHook
   ];
 
   preBuild = ''
@@ -148,6 +153,7 @@ rustPlatform.buildRustPackage {
 
     wrapProgram "$out/bin/windmill" \
       --prefix PATH : ${lib.makeBinPath [go pythonEnv deno nsjail bash]} \
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
       --set PYTHON_PATH "${pythonEnv}/bin/python3" \
       --set GO_PATH "${go}/bin/go" \
       --set DENO_PATH "${deno}/bin/deno" \
