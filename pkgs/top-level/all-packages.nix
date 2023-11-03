@@ -41498,8 +41498,6 @@ with pkgs;
 
   xosd = callPackage ../misc/xosd { };
 
-  xosview2 = callPackage ../tools/X11/xosview2 { };
-
   xow_dongle-firmware = callPackage ../os-specific/linux/firmware/xow_dongle-firmware { };
 
   xpad = callPackage ../applications/misc/xpad { };
