@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, mkYarnPackage, nixosTests, writeText, python3 }:
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, fetchPypi
+, fetchYarnDeps
+, mkYarnPackage
+, nixosTests
+, writeText
+, python3
+}:
 
 let
   version = "0.4.1";
@@ -9,7 +19,51 @@ let
     hash = "sha256-AwqEcAPD1SF1Ma3wtH03mXlTywM0Q19hciCmTtlr3gk=";
   };
 
-  python = python3;
+  # https://github.com/PowerDNS-Admin/PowerDNS-Admin/issues/1686
+  python = python3.override {
+    self = python;
+    packageOverrides = final: prev: {
+      werkzeug = prev.werkzeug.overridePythonAttrs rec {
+        version = "2.2.3";
+        format = "setuptools";
+        src = fetchPypi {
+          pname = "Werkzeug";
+          inherit version;
+          hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+        };
+      };
+      flask = prev.flask.overridePythonAttrs rec {
+        version = "2.2.5";
+        format = "setuptools";
+        src = fetchPypi {
+          pname = "Flask";
+          inherit version;
+          hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+        };
+      };
+      flask-seasurf = prev.flask-seasurf.overridePythonAttrs {
+        meta.broken = false; # is only broken on flask 2.3+
+      };
+      httpbin = prev.httpbin.overridePythonAttrs (old: rec {
+        version = "0.7.0";
+        format = "setuptools";
+        src = fetchPypi {
+          pname = "httpbin";
+          inherit version;
+          hash = "sha256-y7N3kMkVdfTxV1f0KtQdn3KesifV7b6J5OwXVIbbjfo=";
+        };
+        propagatedBuildInputs = old.propagatedBuildInputs ++ [ prev.brotlipy ];
+        patches = [
+          (fetchpatch {
+            # Replaces BaseResponse class with Response class for Werkezug 2.1.0 compatibility
+            # https://github.com/postmanlabs/httpbin/pull/674
+            url = "https://github.com/postmanlabs/httpbin/commit/5cc81ce87a3c447a127e4a1a707faf9f3b1c9b6b.patch";
+            hash = "sha256-SbEWjiqayMFYrbgAPZtSsXqSyCDUz3z127XgcKOcrkE=";
+          })
+        ];
+      });
+    };
+  };
 
   pythonDeps = with python.pkgs; [
     flask flask-assets flask-login flask-sqlalchemy flask-migrate flask-seasurf flask-mail flask-session flask-session-captcha flask-sslify
