@@ -17,7 +17,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Makes eslint the fastest linter on the planet";
-    homepage = "github.com/mantoni/eslint_d.js";
+    homepage = "https://github.com/mantoni/eslint_d.js";
     license = licenses.mit;
     maintainers = [ maintainers.ehllie ];
     mainProgram = "eslint_d";
