@@ -25,7 +25,7 @@ buildPythonPackage rec {
     click
     dnspython
     falcon
-    flufl_bounce
+    flufl-bounce
     flufl_i18n
     flufl-lock
     gunicorn
