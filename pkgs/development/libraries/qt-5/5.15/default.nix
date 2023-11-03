@@ -339,5 +339,6 @@ let
 
   finalScope = baseScope.overrideScope(final: prev: {
     qttranslations = bootstrapScope.qttranslations;
+    qutebrowser = final.callPackage ../../../../applications/networking/browsers/qutebrowser { };
   });
 in finalScope

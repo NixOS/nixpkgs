@@ -15,6 +15,7 @@
 }:
 
 let
+  isQt6 = lib.versions.major qtbase.version == "6";
   pdfjs = let
     version = "3.9.179";
   in
@@ -50,10 +51,14 @@ python3.pkgs.buildPythonApplication {
   ];
 
   propagatedBuildInputs = with python3.pkgs; ([
-    pyyaml pyqt6-webengine jinja2 pygments
+    pyyaml (if isQt6 then pyqt6-webengine else pyqtwebengine) jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    readability-lxml pykeepass stem
+    readability-lxml pykeepass
+  ] ++ lib.optionals ((builtins.tryEval stem.outPath).success) [
+    # error: stem-1.8.2 not supported for interpreter python3.11
+    stem
+  ] ++ [
     pynacl
     # extensive ad blocking
     adblock
