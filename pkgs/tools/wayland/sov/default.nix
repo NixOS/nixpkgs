@@ -11,6 +11,7 @@
 , libxkbcommon
 , wayland
 , wayland-protocols
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Workspace overview app for sway";
