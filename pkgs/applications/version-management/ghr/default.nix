@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ghr";
-  version = "0.16.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "tcnksm";
     repo = "ghr";
     rev = "v${version}";
-    sha256 = "sha256-swu+hj8fL/xIC3KdhGQ2Ezdt7aj9L8sU/7q/AXM2i98=";
+    sha256 = "sha256-xClqqTVCEGghaf63kN40mwo49lkS8KC4k/36NYIngFI=";
   };
 
   vendorHash = "sha256-Wzzg66yJaHJUCfC2aH3Pk+B0d5l/+L7/bcNhQxo8ro0=";
