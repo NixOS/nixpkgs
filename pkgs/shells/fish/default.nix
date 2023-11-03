@@ -298,7 +298,7 @@ let
       homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ cole-h winter srapenne ];
+      maintainers = with maintainers; [ cole-h winter ];
       mainProgram = "fish";
     };
 
