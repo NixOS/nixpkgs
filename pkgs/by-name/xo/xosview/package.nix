@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.pogo.org.uk/~mark/xosview/";
     description = "A classic system monitoring tool";
     license = licenses.gpl2Plus;
+    mainProgram = "xosview";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
   };
