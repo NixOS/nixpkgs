@@ -5,6 +5,7 @@
 , buildPythonApplication
 , python3
 , pythonRelaxDepsHook
+, installShellFiles
 , androguard
 , babel
 , clint
@@ -53,10 +54,13 @@ buildPythonApplication rec {
   postInstall = ''
     patchShebangs gradlew-fdroid
     install -m 0755 gradlew-fdroid $out/bin
+    installShellCompletion --cmd fdroid \
+      --bash completion/bash-completion
   '';
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    installShellFiles
   ];
 
   buildInputs = [
