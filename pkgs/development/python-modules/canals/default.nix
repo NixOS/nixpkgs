@@ -10,20 +10,21 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "canals";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
-    repo = pname;
+    repo = "canals";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XC4CxvDghz8/LReeYjHEVtd8j2ZN4jd+x7vP6N8BKpc=";
+    hash = "sha256-5pRrpi1qxkFgGqcw7Nfc5rnOTra27H31DLKCglkPf6s=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     networkx
+    typing-extensions
   ];
 
   passthru.optional-dependencies = {
@@ -54,7 +56,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test requires internet connection to mermaid.ink
-    "test/pipelines/integration"
+    "test/pipeline/integration"
   ];
 
   disabledTests = [
