@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
     "-DTARGET_WEBASSEMBLY=OFF"
     # Disable performance tests since they may fail on busy machines
     "-DWITH_TEST_PERFORMANCE=OFF"
+    # Disable fuzzing tests -- this has become the default upstream after the
+    # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
+    # These tests also fail to compile on Darwin because of some missing command line options...
+    "-DWITH_TEST_FUZZ=OFF"
   ];
 
   doCheck = true;
