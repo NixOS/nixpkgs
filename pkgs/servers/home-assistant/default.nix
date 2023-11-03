@@ -67,26 +67,6 @@ let
         ];
       });
 
-      blinkpy = super.blinkpy.overridePythonAttrs (oldAttrs: rec {
-        version = "0.21.0";
-        src = fetchFromGitHub {
-          owner = "fronzbot";
-          repo = "blinkpy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-0sEZlnS6CJj8nMyjtSFZRALRKdmY0Uu5N6sozPiDG6w=";
-        };
-      });
-
-      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
-        version = "0.33";
-        src = fetchFromGitHub {
-          owner = "ndokter";
-          repo = "dsmr_parser";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
-        };
-      });
-
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
         src = fetchFromGitHub {
@@ -385,7 +365,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.10.5";
+  hassVersion = "2023.11.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -401,7 +381,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jVw0Mudb/L4Lw3AodwcOTrNJZctSfEIcXUzxozo7saA=";
+    hash = "sha256-qLs098k/MUvmOl6/tB4SDU55V7KTZ0+T3RUoLH4AQ2Q=";
   };
 
   # Secondary source is git for tests
@@ -409,7 +389,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-wKxAwa4t3JbS4puDAufjpzcVLcvEY9Bk73qmg3JeLPk=";
+    hash = "sha256-I5I/OcVE6nGO7LG3s2I1P/VUbPjPkUc7qj43z99tIRM=";
   };
 
   nativeBuildInputs = with python.pkgs; [

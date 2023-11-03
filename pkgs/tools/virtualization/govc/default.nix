@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "govc";
-  version = "0.32.0";
+  version = "0.33.0";
 
   subPackages = [ "govc" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "sha256-GnMWgN6ZxxGU/tRAPIk2cvpsBiut97iPcU9920wepxM=";
+    sha256 = "sha256-YY/rTrL6zEhZkeaYz2yG/h2s81IefClou4abbmQuDiU=";
   };
 
-  vendorHash = "sha256-mf9ZYZEmqB/47JLHn8N3VDr57SXbFLubXnwfXj682FA=";
+  vendorHash = "sha256-DBcovHOOfIy4dfi8U9zaCUzz5Zz8oIG44JCqMKtdxgg=";
 
   ldflags = [
     "-s"

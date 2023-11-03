@@ -6493,6 +6493,12 @@
     githubId = 1713676;
     name = "Luis G. Torres";
   };
+  giomf = {
+    email = "giomf@mailbox.org";
+    github = "giomf";
+    githubId = 35076723;
+    name = "Guillaume Fournier";
+  };
   giorgiga = {
     email = "giorgio.gallo@bitnic.it";
     github = "giorgiga";
@@ -14075,6 +14081,13 @@
     github = "plumps";
     githubId = 13000278;
     name = "Maksim Bronsky";
+  };
+  plusgut = {
+    name = "Carlo Jeske";
+    email = "carlo.jeske+nixpkgs@webentwickler2-0.de";
+    github = "plusgut";
+    githubId = 277935;
+    matrix = "@plusgut5:matrix.org";
   };
   PlushBeaver = {
     name = "Dmitry Kozlyuk";
