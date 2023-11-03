@@ -15,15 +15,15 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zesarux";
-  version = "10.0";
+  version = "unstable-2023-10-31";
 
   src = fetchFromGitHub {
     owner = "chernandezba";
-    repo = pname;
-    rev = version;
-    hash = "sha256-cxV2dAzGnIzJiCRdq8vN/Cl4AQeJqjmiCAahijIJQ9k=";
+    repo = "zesarux";
+    rev = "02e734b088c3b880b2d260a9812404f029dfc92a";
+    hash = "sha256-1PWFpUNekDKyCUNuV/cNUZ7hWGZBMu0nxswD6pap8pg=";
   };
 
   nativeBuildInputs = [
@@ -43,25 +43,11 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  patches = [
-    # Patch the shell scripts; remove it when the next version arrives
-    (fetchpatch {
-      name = "000-fix-shebangs.patch";
-      url = "https://github.com/chernandezba/zesarux/commit/4493439b38f565c5be7c36239ecaf0cf80045627.diff";
-      sha256 = "sha256-f+21naPcPXdcVvqU8ymlGfl1WkYGOeOBe9B/WFUauTI=";
-    })
+  strictDeps = true;
 
-    # Patch pending upstream release for libcaca-0.99.beta20 support:
-    #  https://github.com/chernandezba/zesarux/pull/1
-    (fetchpatch {
-      name = "libcaca-0.99.beta20.patch";
-      url = "https://github.com/chernandezba/zesarux/commit/542786338d00ab6fcdf712bbd6f5e891e8b26c34.diff";
-      sha256 = "sha256-UvXvBb9Nzw5HNz0uiv2SV1Oeiw7aVCa0jhEbThDRVec=";
-    })
-  ];
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
-    cd src
     patchShebangs ./configure *.sh
   '';
 
@@ -86,12 +72,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/chernandezba/zesarux";
-    description = " ZX Second-Emulator And Released for UniX";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    description = "ZX Second-Emulator And Released for UniX";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
-# TODO: Darwin support
+})
