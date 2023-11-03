@@ -466,6 +466,8 @@ with pkgs;
 
   certgraph = callPackage ../tools/security/certgraph { };
 
+  certinfo = callPackage ../tools/security/certinfo { };
+
   certsync = callPackage ../tools/security/certsync { };
 
   cewl = callPackage ../tools/security/cewl { };
