@@ -40,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     docutils    # only for the man pages
   ];
 
-  buildInputs = [ ];
-
   checkInputs = [
     python3Packages.python
     (lib.getBin openssl)
