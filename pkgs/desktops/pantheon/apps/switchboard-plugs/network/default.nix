@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "unstable-2023-09-05"; # 2.4.4 does not support networkmanager 1.44
+  version = "2.4.4"; # 2.4.4 does not support networkmanager 1.44
 
   src = fetchFromGitHub {
     owner = "elementary";
