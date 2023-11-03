@@ -7,7 +7,6 @@
 , webkitgtk
 , wrapGAppsHook
 , _7zz
-, archi
 , nixosTests
 }:
 
