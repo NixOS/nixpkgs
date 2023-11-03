@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "flufl.i18n";
+  pname = "flufl-i18n";
   version = "4.1.1";
   format = "pyproject";
 
@@ -18,7 +18,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flufl.i18n" ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "flufl.i18n";
+    inherit version;
     hash = "sha256-wKz6aggkJ9YBJ+o75XjC4Ddnn+Zi9hlYDnliwTc7DNs=";
   };
 

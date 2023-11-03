@@ -26,7 +26,7 @@ buildPythonPackage rec {
     dnspython
     falcon
     flufl-bounce
-    flufl_i18n
+    flufl-i18n
     flufl-lock
     gunicorn
     lazr_config

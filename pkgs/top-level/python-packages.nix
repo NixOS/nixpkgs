@@ -4111,7 +4111,7 @@ self: super: with self; {
 
   flufl-bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
 
-  flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
+  flufl-i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
 
   flufl-lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
