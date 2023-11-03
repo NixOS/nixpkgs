@@ -357,7 +357,7 @@ rec {
         pkgsTargetTarget = otherSplices.selfTargetTarget;
       };
       spliced = extra spliced0 // spliced0 // keep self;
-      self = f self // {
+      self = f spliced // {
         newScope = scope: newScope (spliced // scope);
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
