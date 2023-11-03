@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     "-DINSTALL_GTEST=false"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-copy";
+  };
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru.updateScript = gitUpdater {
