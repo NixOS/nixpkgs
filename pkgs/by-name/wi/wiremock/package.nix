@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "wiremock";
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/wiremock/wiremock.git";
+    ignoredVersions = "(alpha|beta|rc).*";
+  };
 
   meta = {
     description = "A flexible tool for building mock APIs";
