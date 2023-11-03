@@ -52,6 +52,7 @@ let
   inherit (lib.trivial)
     isFunction
     pipe
+    inPureEvalMode
     ;
 
 in {
@@ -628,7 +629,9 @@ in {
     let
       fetchResult = builtins.fetchGit path;
     in
-    if ! isPath path then
+    if inPureEvalMode then
+      throw "lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
+    else if ! isPath path then
       throw "lib.fileset.gitTracked: Expected the argument to be a path, but it's a ${typeOf path} instead."
     else if ! pathExists (path + "/.git") then
       throw "lib.fileset.gitTracked: Expected the argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
@@ -690,7 +693,9 @@ in {
         ${if recurseSubmodules then "submodules" else null} = true;
       };
     in
-    if ! isBool recurseSubmodules then
+    if inPureEvalMode then
+      throw "lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
+    else if ! isBool recurseSubmodules then
       throw "lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it's a ${typeOf recurseSubmodules} instead."
     else if recurseSubmodules && versionOlder nixVersion _fetchGitSubmodulesMinver then
       throw "lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version ${_fetchGitSubmodulesMinver} and after, but Nix version ${nixVersion} is used."
