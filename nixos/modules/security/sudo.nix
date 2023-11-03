@@ -6,8 +6,6 @@ let
 
   cfg = config.security.sudo;
 
-  inherit (pkgs) sudo;
-
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
 
@@ -247,7 +245,7 @@ in
       };
     };
 
-    environment.systemPackages = [ sudo ];
+    environment.systemPackages = [ cfg.package ];
 
     security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
 

@@ -90,7 +90,7 @@ in
       description = mdDoc ''
         Group policies to install.
 
-        See [Mozilla's documentation](https://github.com/mozilla/policy-templates/blob/master/README.md)
+        See [Mozilla's documentation](https://mozilla.github.io/policy-templates/)
         for a list of available options.
 
         This can be used to install extensions declaratively! Check out the
