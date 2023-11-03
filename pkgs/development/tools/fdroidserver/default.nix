@@ -27,14 +27,14 @@
 
 buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.2.1";
+  version = "unstable-2023-10-23";
   format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-+Y1YTgELsX834WIrhx/NX34yLMHdkKM+YUNvnHPiC/s=";
+    rev = "f4b10cf83935432d19948dac669964384bef0728";
+    hash = "sha256-GmR6Td5pScwEKK9W6m26xQV4XxBdZ7frN2UvwUGY4Dw=";
   };
 
   pythonRelaxDeps = [
