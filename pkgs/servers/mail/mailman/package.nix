@@ -27,7 +27,7 @@ buildPythonPackage rec {
     falcon
     flufl_bounce
     flufl_i18n
-    flufl_lock
+    flufl-lock
     gunicorn
     lazr_config
     passlib

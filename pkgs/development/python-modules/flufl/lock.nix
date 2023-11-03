@@ -4,12 +4,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "flufl.lock";
+  pname = "flufl-lock";
   version = "7.1.1";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "flufl.lock";
+    inherit version;
     hash = "sha256-rxQXKzW7xYaHvQa3DRaT/Y1Iy/D/3n5RphjBSK4kBC0=";
   };
 

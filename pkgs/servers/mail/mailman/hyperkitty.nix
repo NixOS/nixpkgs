@@ -41,7 +41,7 @@ buildPythonPackage rec {
     django-compressor
     django-extensions
     djangorestframework
-    flufl_lock
+    flufl-lock
     mistune
     networkx
     psycopg2
