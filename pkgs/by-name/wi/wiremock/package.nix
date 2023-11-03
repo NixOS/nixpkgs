@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A flexible tool for building mock APIs";
     homepage = "https://wiremock.org/";
+    changelog = "https://github.com/wiremock/wiremock/releases/tag/${version}";
     maintainers = with lib.maintainers; [ bobvanderlinden anthonyroussel ];
+    mainProgram = "wiremock";
     platforms = jre.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
