@@ -30213,7 +30213,9 @@ with pkgs;
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
-  whitesur-kde = callPackage ../data/themes/whitesur-kde { };
+  whitesur-kde = callPackage ../data/themes/whitesur-kde {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 

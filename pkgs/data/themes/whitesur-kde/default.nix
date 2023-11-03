@@ -1,6 +1,9 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, kdeclarative
+, plasma-framework
+, plasma-workspace
 , gitUpdater
 }:
 
@@ -15,6 +18,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-+Iooj8a7zfLhEWnjLEVoe/ebD9Vew5HZdz0wpWVZxA8=";
   };
 
+  # Propagate sddm theme dependencies to user env otherwise sddm does
+  # not find them. Putting them in buildInputs is not enough.
+  propagatedUserEnvPkgs = [
+    kdeclarative.bin
+    plasma-framework
+    plasma-workspace
+  ];
+
   postPatch = ''
     patchShebangs install.sh
 
@@ -22,6 +33,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace '$HOME/.config' $out/share \
       --replace '$HOME/.local' $out \
       --replace '"$HOME"/.Xresources' $out/doc/.Xresources
+
+    substituteInPlace sddm/*/Main.qml \
+      --replace /usr $out
   '';
 
   installPhase = ''
