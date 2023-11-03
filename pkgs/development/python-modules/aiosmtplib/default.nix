@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cole";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-A9pvHj2riIHCd1F+ve6aLdbtl3tPPDovV1AZeWNeOEo=";
+    hash = "sha256-67Z+k+PBIGP2oGb/52dMtsapUsHufvFcX+wWiMj5Jsg=";
   };
 
   nativeBuildInputs = [
