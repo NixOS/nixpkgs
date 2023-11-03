@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     description = "An alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
+    maintainers = with maintainers; [ getchoo Scrumplex vgskye pluiedev ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
   };
