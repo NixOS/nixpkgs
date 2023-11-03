@@ -1,10 +1,10 @@
 { lib
-, applyPatches
 , buildNpmPackage
+, cargo
+, copyDesktopItems
 , dbus
-, electron_24
+, electron_25
 , fetchFromGitHub
-, fetchpatch
 , glib
 , gnome
 , gtk3
@@ -13,11 +13,12 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
+, napi-rs-cli
 , nodejs_18
 , pkg-config
 , python3
+, rustc
 , rustPlatform
-, wrapGAppsHook
 }:
 
 let
@@ -25,92 +26,50 @@ let
   icon = "bitwarden";
 
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-  electron = electron_24;
-
-  version = "2023.4.0";
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "bitwarden";
-      repo = "clients";
-      rev = "desktop-v${version}";
-      sha256 = "sha256-TTKDl6Py3k+fAy/kcyiMbAAKQdhVnZTyRXV8D/VpKBE=";
-    };
-
-    patches = [
-      # Bump electron to 24 and node to 18
-      (fetchpatch {
-        url = "https://github.com/bitwarden/clients/pull/5205.patch";
-        hash = "sha256-sKSrh8RHXtxGczyZScjTeiGZgTZCQ7f45ULj/j9cp6M=";
-      })
-    ];
-  };
-
-  desktop-native = rustPlatform.buildRustPackage {
-    pname = "bitwarden-desktop-native";
-    inherit src version;
-    sourceRoot = "source-patched/apps/desktop/desktop_native";
-    cargoSha256 = "sha256-VW9DmSh9jvqFCZjH1SAYkydSGjXSVEbv4CmtoJBiw5Y=";
-
-    nativeBuildInputs = [
-      pkg-config
-      wrapGAppsHook
-    ];
-
-    buildInputs = [
-      glib
-      gtk3
-      libsecret
-    ];
-
-    nativeCheckInputs = [
-      dbus
-      (gnome.gnome-keyring.override { useWrappedDaemon = false; })
-    ];
-
-    checkFlags = [
-      "--skip=password::password::tests::test"
-    ];
-
-    checkPhase = ''
-      runHook preCheck
-
-      export HOME=$(mktemp -d)
-      export -f cargoCheckHook runHook _eval _callImplicitHook
-      dbus-run-session \
-        --config-file=${dbus}/share/dbus-1/session.conf \
-        -- bash -e -c cargoCheckHook
-      runHook postCheck
-    '';
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "bitwarden";
-    exec = "bitwarden %U";
-    inherit icon;
-    comment = description;
-    desktopName = "Bitwarden";
-    categories = [ "Utility" ];
-  };
-
-in
-
-buildNpmPackage' {
+  electron = electron_25;
+in buildNpmPackage' rec {
   pname = "bitwarden";
-  inherit src version;
+  version = "2023.9.3";
+
+  src = fetchFromGitHub {
+    owner = "bitwarden";
+    repo = "clients";
+    rev = "desktop-v${version}";
+    hash = "sha256-NiMJmtCx+yD24BCyMgHLpRApNwoIJRps5qmmlVdB0G0=";
+  };
 
   makeCacheWritable = true;
-  npmBuildFlags = [
-    "--workspace apps/desktop"
-  ];
-  npmDepsHash = "sha256-UXDn09qyM8GwfUiWLDhhyrGFZeKtTRmQArstw+tm5iE=";
+  npmWorkspace = "apps/desktop";
+  npmDepsHash = "sha256-HQPxmATA9bUc4NTfvYsL6fGuicU9baySCmNHahs8EF4=";
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${pname}-${version}";
+    inherit src;
+    sourceRoot = "${src.name}/${cargoRoot}";
+    hash = "sha256-mFxvK9cmSBRVnUwEbzADUa5W5TCL51wcUHxuR5JZwLE=";
+  };
+  cargoRoot = "apps/desktop/desktop_native";
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
+    cargo
+    copyDesktopItems
     jq
     makeWrapper
     moreutils
+    napi-rs-cli
+    pkg-config
     python3
+    rustc
+    rustPlatform.cargoCheckHook
+    rustPlatform.cargoSetupHook
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    libsecret
   ];
 
   preBuild = ''
@@ -118,14 +77,13 @@ buildNpmPackage' {
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
-
-    jq 'del(.scripts.postinstall)' apps/desktop/package.json | sponge apps/desktop/package.json
-    jq '.scripts.build = ""' apps/desktop/desktop_native/package.json | sponge apps/desktop/desktop_native/package.json
-    cp ${desktop-native}/lib/libdesktop_native.so apps/desktop/desktop_native/desktop_native.linux-x64-musl.node
   '';
 
   postBuild = ''
     pushd apps/desktop
+
+    # desktop_native/index.js loads a file of that name regarldess of the libc being used
+    mv desktop_native/desktop_native.* desktop_native/desktop_native.linux-x64-musl.node
 
     npm exec electron-builder -- \
       --dir \
@@ -135,7 +93,35 @@ buildNpmPackage' {
     popd
   '';
 
+  doCheck = true;
+
+  nativeCheckInputs = [
+    dbus
+    (gnome.gnome-keyring.override { useWrappedDaemon = false; })
+  ];
+
+  checkFlags = [
+    "--skip=password::password::tests::test"
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    pushd ${cargoRoot}
+    export HOME=$(mktemp -d)
+    export -f cargoCheckHook runHook _eval _callImplicitHook
+    export cargoCheckType=release
+    dbus-run-session \
+      --config-file=${dbus}/share/dbus-1/session.conf \
+      -- bash -e -c cargoCheckHook
+    popd
+
+    runHook postCheck
+  '';
+
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     pushd apps/desktop/dist/linux-unpacked
@@ -149,9 +135,6 @@ buildNpmPackage' {
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-
     pushd apps/desktop/resources/icons
     for icon in *.png; do
       dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
@@ -159,13 +142,27 @@ buildNpmPackage' {
       cp "$icon" "$dir"/${icon}.png
     done
     popd
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bitwarden";
+      exec = "bitwarden %U";
+      inherit icon;
+      comment = description;
+      desktopName = "Bitwarden";
+      categories = [ "Utility" ];
+    })
+  ];
+
+  meta = {
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
     inherit description;
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
-    maintainers = with maintainers; [ amarshall kiwi ];
+    maintainers = with lib.maintainers; [ amarshall kiwi ];
     platforms = [ "x86_64-linux" ];
   };
 }

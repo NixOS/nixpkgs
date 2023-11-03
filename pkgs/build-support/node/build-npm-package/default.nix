@@ -22,7 +22,7 @@
 , npmBuildScript ? "build"
   # Flags to pass to all npm commands.
 , npmFlags ? [ ]
-  # Flags to pass to `npm ci` and `npm prune`.
+  # Flags to pass to `npm ci`.
 , npmInstallFlags ? [ ]
   # Flags to pass to `npm rebuild`.
 , npmRebuildFlags ? [ ]
@@ -30,6 +30,10 @@
 , npmBuildFlags ? [ ]
   # Flags to pass to `npm pack`.
 , npmPackFlags ? [ ]
+  # Flags to pass to `npm prune`.
+, npmPruneFlags ? npmInstallFlags
+  # Value for npm `--workspace` flag and directory in which the files to be installed are found.
+, npmWorkspace ? null
 , ...
 } @ args:
 
