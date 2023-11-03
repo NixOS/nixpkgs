@@ -1,13 +1,13 @@
 { appimageTools, fetchurl, lib }:
-
 let
   pname = "station";
-  version = "1.52.2";
+  version = "v2.5.0";
+  arch = "x86_64";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/getstation/desktop-app-releases/releases/download/${version}/Station-${version}-x86_64.AppImage";
-    sha256 = "0lhiwvnf94is9klvzrqv2wri53gj8nms9lg2678bs4y58pvjxwid";
+    url = "https://github.com/getstation/desktop-app-releases/releases/download/${version}/Station-${arch}.AppImage";
+    sha256 = "72fdb91171712078596faada28135d2ead6cad63780596085d0f5c1b32ee4c1c";
   };
 
   appimageContents = appimageTools.extractType2 {
