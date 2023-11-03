@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A flexible tool for building mock APIs";
     homepage = "https://wiremock.org/";
-    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    maintainers = with lib.maintainers; [ bobvanderlinden anthonyroussel ];
     platforms = jre.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
