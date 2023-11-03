@@ -41692,8 +41692,6 @@ with pkgs;
 
   tora = libsForQt5.callPackage ../development/tools/tora { };
 
-  xulrunner = firefox-unwrapped;
-
   xrq = callPackage ../applications/misc/xrq { };
 
   pynitrokey = callPackage ../tools/security/pynitrokey { };
