@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , cmake
 , glew
 , freeimage
@@ -17,14 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openxray";
-  version = "2088-august-2023-rc1";
+  version = "2188-november-2023-rc1";
 
   src = fetchFromGitHub {
     owner = "OpenXRay";
     repo = "xray-16";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-f9EheVp05BAjjk3FIJjHVfm0piYiMYZJ9U156g2vhac=";
+    hash = "sha256-rRxw/uThACmT2qI8NUwJU+WbJ3BWUss6CH13R5aaHco=";
   };
 
   strictDeps = true;
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/xr_3da ${toString finalAttrs.makeWrapperArgs}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     mainProgram = "xr_3da";
