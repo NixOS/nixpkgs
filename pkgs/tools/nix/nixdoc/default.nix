@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixdoc";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixdoc";
     rev = "v${version}";
-    sha256 = "sha256-cEMehtxkqXAar/fDy3CnzsDEAuC1ABBaYqzqVBGnTrs=";
+    sha256 = "sha256-QgKzpFdzisWD6DZxs1LsKINBr/bSYQILpEu5RdcNgbc=";
   };
 
-  cargoHash = "sha256-QFDHIqXyTWTdqNrLcwWw3plX6EDH/k043nay5opjtws=";
+  cargoHash = "sha256-MztvOV1yAOgpwPYOUUZb7XHKhhhd/fvKPIFbsnMdhAQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.Security ];
 
