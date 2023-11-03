@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell, argbash }:
 
 let
   inherit (lib)
@@ -380,6 +380,59 @@ rec {
           runHook postCheck
         ''
         else checkPhase;
+    };
+
+  /*
+    Similar to writeShellApplication but runs the provided text through argbash
+    to generate an options parser before using writeShellApplication under the hood.
+
+    Example:
+
+    Writes my-file to /nix/store/<store path>/bin/my-file and makes executable.
+
+    > my-file --help
+    A cow greets you from an argbash-generated, nix-packaged script.
+    Usage: my-file [-n|--name <arg>] [-h|--help]
+      -n, --name: The name to greet (default: 'Lev')
+      -h, --help: Prints help
+
+    writeShellApplication {
+      name = "my-file";
+      runtimeInputs = [ cowsay ];
+      text = ''
+        # ARG_OPTIONAL_SINGLE([name], [n], [The name to greet], [Lev])
+        # ARG_HELP([A cow greets you from an argbash-generated, nix-packaged script.])
+        # ARGBASH_GO
+        # [ <-- needed because of Argbash
+
+        cowsay "Hello, $_arg_name!"
+
+        # ] <-- needed because of Argbash
+       '';
+    }
+
+  */
+  writeArgbashShellApplication =
+    { name
+    , text
+    , runtimeInputs ? [ ]
+    , checkPhase ? null
+    }:
+    let
+      templateFile = builtins.toFile "templateSource.m4" text;
+      argbashedText = runCommandLocal "${name}-argbashed"
+        {
+          buildInputs = [ argbash ];
+        } ''
+        # Run argbash on the input
+        argbash -o "$out" "${templateFile}"
+      '';
+    in
+    writeShellApplication {
+      inherit name;
+      inherit runtimeInputs;
+      inherit checkPhase;
+      text = builtins.readFile "${argbashedText}";
     };
 
   # Create a C binary
