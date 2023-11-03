@@ -128,6 +128,7 @@ in python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     autoreconfHook
     installShellFiles
+    python3.pkgs.setuptools
     unzip
   ];
 

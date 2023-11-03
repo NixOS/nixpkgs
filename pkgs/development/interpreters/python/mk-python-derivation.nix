@@ -116,11 +116,13 @@ let
       else
         "other"
     else if format != null then
-      format
+      if format == "setuptools" then
+        lib.warn "[${attrs.pname}] format = setuptools is deprecated" "pyproject"
+      else format
     else
-      "setuptools";
+      "pyproject";
 
-  withDistOutput = lib.elem format' ["pyproject" "setuptools" "wheel"];
+  withDistOutput = lib.elem format' ["pyproject" "wheel"];
 
   name_ = name;
 
@@ -218,8 +220,6 @@ let
       pythonRemoveBinBytecodeHook
     ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
       unzip
-    ] ++ lib.optionals (format' == "setuptools") [
-      setuptoolsBuildHook
     ] ++ lib.optionals (format' == "pyproject") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
@@ -266,7 +266,7 @@ let
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
     nativeInstallCheckInputs = [
-    ] ++ lib.optionals (format' == "setuptools") [
+    ] ++ lib.optionals (format == "setuptools") [
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.
