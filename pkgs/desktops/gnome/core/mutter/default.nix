@@ -67,13 +67,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "45.0";
+  version = "45.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "j7yWMBntqbpS/KL2xMR377xuNutPqT8jF08C/2uQdxU=";
+    sha256 = "LNPF77Itt2x5MRyxiJoaqy/rNbSk3QPzgiqreZnaISw=";
   };
 
   mesonFlags = [
