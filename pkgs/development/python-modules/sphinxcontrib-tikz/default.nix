@@ -3,7 +3,7 @@
 , fetchPypi
 , sphinx
 , pdf2svg
-, texLive
+, texliveSmall
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace sphinxcontrib/tikz.py \
-      --replace "config.latex_engine" "'${texLive}/bin/pdflatex'" \
+      --replace "config.latex_engine" "'${texliveSmall.withPackages (ps: with ps; [ standalone pgfplots ])}/bin/pdflatex'" \
       --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
 
