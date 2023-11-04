@@ -67,6 +67,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    nix.settings.extra-allowed-users = [ "nix-serve" ];
+
     systemd.services.nix-serve = {
       description = "nix-serve binary cache server";
       after = [ "network.target" ];
