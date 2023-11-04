@@ -24,6 +24,15 @@ in {
       propagatedBuildInputs = [];
     } ./conda-unpack-hook.sh) {};
 
+  editableInstallHook = disabledIf (!isPy3k) (callPackage ({ makePythonHook, pip, setuptools, wheel }:
+    makePythonHook {
+      name = "editable-install-hook";
+      propagatedBuildInputs = [ pip setuptools wheel ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./editable-install-hook.sh) {});
+
   eggBuildHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "egg-build-hook.sh";
