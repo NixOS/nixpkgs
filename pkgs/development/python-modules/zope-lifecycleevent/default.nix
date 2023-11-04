@@ -3,7 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
-, zope_event
+, zope-event
 , zope_interface
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ zope_event zope_interface ];
+  propagatedBuildInputs = [ zope-event zope_interface ];
 
   # namespace colides with local directory
   doCheck = false;
