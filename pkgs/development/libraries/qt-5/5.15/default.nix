@@ -338,7 +338,12 @@ let
   });
 
   finalScope = baseScope.overrideScope(final: prev: {
-    qttranslations = bootstrapScope.qttranslations;
+    # qttranslations causes eval-time infinite recursion when
+    # cross-compiling; disabled for now.
+    qttranslations =
+      if stdenv.buildPlatform == stdenv.hostPlatform
+      then bootstrapScope.qttranslations
+      else null;
     qutebrowser = final.callPackage ../../../../applications/networking/browsers/qutebrowser { };
   });
 in finalScope
