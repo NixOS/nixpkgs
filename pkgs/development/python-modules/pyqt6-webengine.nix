@@ -8,7 +8,12 @@
 , qt6Packages
 , pythonOlder
 , pyqt6
+, pyqt6-sip
+, setuptools
 , python
+, pkgsHostTarget
+, pkgsBuildTarget
+, buildPackages
 }:
 
 buildPythonPackage rec {
@@ -41,26 +46,38 @@ buildPythonPackage rec {
   # does not use the enableParallelBuilding flag
   postUnpack = ''
     export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
+    export QT_ADDITIONAL_PACKAGES_PREFIX_PATH+="${qt6Packages.qtwebengine.dev}:${qt6Packages.qtwebengine}"
+    export QMAKEPATH+="${qt6Packages.qtwebengine.dev}:${qt6Packages.qtwebengine}"
   '';
 
   outputs = [ "out" "dev" ];
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = with qt6Packages; [
+  nativeBuildInputs = [
     pkg-config
     lndir
-    sip
-    qmake
-    pyqt-builder
+    buildPackages.python3Packages.sip
+    pkgsHostTarget.qt6Packages.qtbase
+    pkgsHostTarget.qt6Packages.qmake
+    qt6Packages.qtbase
+    qt6Packages.qmake
   ];
 
   buildInputs = with qt6Packages; [
+    qtbase
+    qmake
+    qtdeclarative
     qtwebengine
+    qtwebengine.dev
+    pyqt6
+    pyqt6-sip
+    pyqt-builder
   ];
 
   propagatedBuildInputs = [
-    pyqt6
+    qt6Packages.qtbase
+    setuptools
   ];
 
   passthru = {
