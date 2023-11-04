@@ -1,4 +1,11 @@
-{ lib, mkDerivation, perl, qmake, patches, srcs }:
+{ lib
+, stdenv
+, mkDerivation
+, perl
+, qmake
+, patches
+, srcs
+}:
 
 let inherit (lib) licenses maintainers platforms; in
 
