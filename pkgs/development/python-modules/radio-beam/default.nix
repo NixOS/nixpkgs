@@ -42,11 +42,12 @@ buildPythonPackage rec {
     "radio_beam"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Tools for Beam IO and Manipulation";
     homepage = "http://radio-astro-tools.github.io";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ smaret ];
+    changelog = "https://github.com/radio-astro-tools/radio-beam/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
   };
 }
 
