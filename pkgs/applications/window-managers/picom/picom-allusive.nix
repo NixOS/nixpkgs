@@ -2,13 +2,13 @@
 
 picom.overrideAttrs (oldAttrs: rec {
   pname = "picom-allusive";
-  version = "1.2.5";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "allusive-dev";
     repo = "picom-allusive";
     rev = version;
-    hash = "sha256-yM4TJjoVs+i33m/u/oWlx1TDKJrgwlfiGu72DOL/tl8=";
+    hash = "sha256-negIgVW49RzelkdXRfraD02/QhqVIrhZG2s3Jt0w/Zk=";
   };
 
   nativeBuildInputs = [ installShellFiles ] ++ oldAttrs.nativeBuildInputs;
