@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "radio-beam";
-  version = "0.3.4";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4DIlfxUBMDhz8lHADHSxGIGAeFx5Z3+0RDCY1ReFIwk=";
+    hash = "sha256-U+IjOTt7x9uzUl7IcQRu2s+MBKF/OR+sLddvHmp9hqU=";
   };
 
   nativeBuildInputs = [
