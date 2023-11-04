@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "2023.11.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "omnilib";
