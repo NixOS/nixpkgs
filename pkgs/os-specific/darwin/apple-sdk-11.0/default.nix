@@ -1,5 +1,5 @@
 { stdenvNoCC, fetchurl, newScope, lib, pkgs
-, stdenv, overrideCC
+, stdenv, overrideCC, overrideLibcxx
 , xar, cpio, python3, pbzx }:
 
 let
@@ -75,7 +75,7 @@ let
     (v: {
       name = "llvmPackages_${v}";
       value = pkgs."llvmPackages_${v}" // {
-        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+        stdenv = overrideLibcxx (mkStdenv pkgs."llvmPackages_${v}".stdenv);
         clang = mkCc pkgs."llvmPackages_${v}".clang;
       };
     })
