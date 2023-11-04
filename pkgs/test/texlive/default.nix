@@ -623,7 +623,7 @@ rec {
           (savedLicensesAttrNames scheme) != (correctLicensesAttrNames scheme);
         incorrectSchemes = lib.filterAttrs
           (n: hasLicenseMismatch)
-          texlive.combined;
+          (texlive.combined // texlive.schemes);
         prettyPrint = name: scheme:
           ''
             license info for ${name} is incorrect! Note that order is enforced.
