@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "2.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ebellocchia";
