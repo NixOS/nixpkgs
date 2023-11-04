@@ -19,7 +19,6 @@
 , pkg-config
 , python3
 , scribus
-, texlive
 , zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qt6Support ? false, qtbase ? null
