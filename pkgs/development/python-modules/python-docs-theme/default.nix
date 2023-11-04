@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, flit-core, sphinx }:
 
 buildPythonPackage rec {
-  pname = "python_docs_theme";
+  pname = "python-docs-theme";
   version = "2023.9";
   format = "pyproject";
 
