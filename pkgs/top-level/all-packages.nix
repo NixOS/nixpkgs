@@ -5514,8 +5514,6 @@ with pkgs;
 
   go-2fa = callPackage ../tools/security/2fa { };
 
-  go-dependency-manager = callPackage ../development/tools/gdm { };
-
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
   google-cursor = callPackage ../data/icons/google-cursor { };
