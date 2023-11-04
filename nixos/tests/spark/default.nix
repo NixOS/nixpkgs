@@ -41,6 +41,7 @@ let
       worker.wait_for_unit("spark-worker.service")
       worker.copy_from_host( "${./spark_sample.py}", "/spark_sample.py" )
       assert "<title>Spark Master at spark://" in worker.succeed("curl -sSfkL http://master:8080/")
+      worker.succeed("spark-submit --version | systemd-cat")
       worker.succeed("spark-submit --master spark://master:7077 --executor-memory 512m --executor-cores 1 /spark_sample.py")
     '';
   });

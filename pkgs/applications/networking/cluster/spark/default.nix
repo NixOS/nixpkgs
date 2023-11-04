@@ -3,10 +3,9 @@
 , fetchzip
 , makeWrapper
 , jdk8
-, python3Packages
-, extraPythonPackages ? [ ]
+, python3
+, python310
 , coreutils
-, hadoopSupport ? true
 , hadoop
 , RSupport ? true
 , R
@@ -14,55 +13,43 @@
 }:
 
 let
-  spark = { pname, version, hash, extraMeta ? {} }:
+  spark = { pname, version, hash, extraMeta ? {}, pysparkPython ? python3 }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname version hash;
-      jdk = if hadoopSupport then hadoop.jdk else jdk8;
+      inherit pname version hash hadoop R pysparkPython;
+      inherit (finalAttrs.hadoop) jdk;
       src = fetchzip {
         url = with finalAttrs; "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
         inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ finalAttrs.jdk python3Packages.python ]
-        ++ extraPythonPackages
+      buildInputs = [ finalAttrs.jdk finalAttrs.pysparkPython ]
         ++ lib.optional RSupport R;
 
-      untarDir = with finalAttrs; "${pname}-${version}";
       installPhase = with finalAttrs; ''
-        mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
-        mv * $out/lib/${untarDir}
-
-        cp $out/lib/${untarDir}/conf/log4j.properties{.template,} || \
-          cp $out/lib/${untarDir}/conf/log4j2.properties{.template,}
-
-        cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
-        export JAVA_HOME="${jdk}"
-        export SPARK_HOME="$out/lib/${untarDir}"
-      '' + lib.optionalString hadoopSupport ''
-        export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
-      '' + ''
-        export PYSPARK_PYTHON="${python3Packages.python}/bin/${python3Packages.python.executable}"
-        export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
-        ${lib.optionalString RSupport ''
-          export SPARKR_R_SHELL="${R}/bin/R"
-          export PATH="\$PATH:${R}/bin"''}
-        EOF
-
-        for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
-          makeWrapper "$n" "$out/bin/$(basename $n)"
-          substituteInPlace "$n" --replace dirname ${coreutils.out}/bin/dirname
+        mkdir -p "$out/opt"
+        mv * $out/
+        for n in $(find $out/bin -type f -executable ! -name "find-spark-home"); do
+          wrapProgram "$n" --set JAVA_HOME "${jdk}" \
+            --run "[ -z SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
+            ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${R}/bin/R"''} \
+            --prefix PATH : "${
+              lib.makeBinPath (
+                [ pysparkPython ] ++
+                (lib.optionals RSupport [ R ])
+              )}"
         done
-        for n in $(find $out/lib/${untarDir}/sbin -type f); do
-          # Spark deprecated scripts with "slave" in the name.
-          # This line adds forward compatibility with the nixos spark module for
-          # older versions of spark that don't have the new "worker" scripts.
-          ln -s "$n" $(echo "$n" | sed -r 's/slave(s?).sh$/worker\1.sh/g') || true
-        done
-        ln -s $out/lib/${untarDir}/lib/spark-assembly-*.jar $out/share/java
+        ln -s ${finalAttrs.hadoop} "$out/opt/hadoop"
+        ${lib.optionalString RSupport ''ln -s ${finalAttrs.R} "$out/opt/R"''}
       '';
 
-      passthru.tests = nixosTests.spark.default.passthru.override {
-        sparkPackage = finalAttrs.finalPackage;
+      passthru = {
+        tests = nixosTests.spark.default.passthru.override {
+          sparkPackage = finalAttrs.finalPackage;
+        };
+        # Add python packages to PYSPARK_PYTHON
+        withPythonPackages = f: finalAttrs.finalPackage.overrideAttrs (old: {
+          pysparkPython = old.pysparkPython.withPackages f;
+        });
       };
 
       meta = {
@@ -90,11 +77,13 @@ in
     pname = "spark";
     version = "3.3.3";
     hash = "sha256-YtHxRYTwrwSle3UpFjRSwKcnLFj2m9/zLBENH/HVzuM=";
+    pysparkPython = python310;
   };
   spark_3_2 = spark rec {
     pname = "spark";
     version = "3.2.4";
     hash = "sha256-xL4W+dTWbvmmncq3/8iXmhp24rp5SftvoRfkTyxCI8E=";
+    pysparkPython = python310;
     extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
   };
 }
