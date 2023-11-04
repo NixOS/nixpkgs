@@ -177,7 +177,7 @@ in {
       name = "setuptools-setup-hook";
       propagatedBuildInputs = [ setuptools wheel ];
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuppy;
+        inherit pythonInterpreter setuppy;
       };
     } ./setuptools-build-hook.sh) {};
 
