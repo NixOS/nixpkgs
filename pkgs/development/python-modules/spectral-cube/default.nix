@@ -11,7 +11,7 @@
 , pytest-astropy
 , pytestCheckHook
 , pythonOlder
-, radio_beam
+, radio-beam
 , setuptools-scm
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     astropy
     casa-formats-io
-    radio_beam
+    radio-beam
     joblib
     dask
   ];

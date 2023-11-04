@@ -12,14 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "radio_beam";
-  version = "0.3.4";
-  format = "pyproject";
+  pname = "radio-beam";
+  version = "0.3.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
-    pname = "radio-beam";
-    sha256 = "e032257f1501303873f251c00c74b1188180785c79677fb4443098d517852309";
+    inherit pname version;
+    hash = "sha256-U+IjOTt7x9uzUl7IcQRu2s+MBKF/OR+sLddvHmp9hqU=";
   };
 
   nativeBuildInputs = [
@@ -39,12 +38,16 @@ buildPythonPackage rec {
     pytest-astropy
   ];
 
-  meta = {
+  pythonImportsCheck = [
+    "radio_beam"
+  ];
+
+  meta = with lib; {
     description = "Tools for Beam IO and Manipulation";
     homepage = "http://radio-astro-tools.github.io";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ smaret ];
+    changelog = "https://github.com/radio-astro-tools/radio-beam/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
   };
 }
 
