@@ -72,14 +72,21 @@ let
     pskString = if opts.psk != null
       then quote opts.psk
       else opts.pskRaw;
+    saeString = if opts.sae != null
+      then quote opts.sae
+      else opts.saeRaw;
 
     options = [
       "ssid=${quote opts.ssid}"
       (if pskString != null || opts.auth != null
         then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
         else "key_mgmt=NONE")
+      (if saeString != null || opts.auth != null
+        then "key_mgmt=${concatStringsSep " " opts.authProtocols}"
+        else "key_mgmt=NONE")
     ] ++ optional opts.hidden "scan_ssid=1"
       ++ optional (pskString != null) "psk=${pskString}"
+      ++ optional (saeString != null) "sae=${saeString}"
       ++ optionals (opts.auth != null) (filter (x: x != "") (splitString "\n" opts.auth))
       ++ optional (opts.priority != null) "priority=${toString opts.priority}"
       ++ optional (opts.extraConfig != "") opts.extraConfig;
@@ -232,7 +239,7 @@ in {
 
           See section "EnvironmentFile=" in {manpage}`systemd.exec(5)` for a syntax reference.
 
-          Secrets (PSKs, passwords, etc.) can be provided without adding them to
+          Secrets (PSKs, SAEs, passwords, etc.) can be provided without adding them to
           the world-readable Nix store by defining them in the environment file and
           referring to them in option {option}`networking.wireless.networks`
           with the syntax `@varname@`. Example:
@@ -240,6 +247,7 @@ in {
           ```
           # content of /run/secrets/wireless.env
           PSK_HOME=mypassword
+          SAE_HOME=mypassword
           PASS_WORK=myworkpassword
           ```
 
@@ -248,6 +256,7 @@ in {
           networking.wireless.environmentFile = "/run/secrets/wireless.env";
           networking.wireless.networks = {
             home.psk = "@PSK_HOME@";
+            home.sae = "@SAE_HOME@";
             work.auth = '''
               eap=PEAP
               identity="my-user@example.com"
@@ -278,6 +287,23 @@ in {
                 :::
               '';
             };
+            sae = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.mdDoc ''
+                The network's pre-shared key in plaintext defaulting
+                to being a network without any authentication.
+
+                ::: {.warning}
+                Be aware that this will be written to the nix store
+                in plaintext! Use an environment variable instead.
+                :::
+
+                ::: {.note}
+                Mutually exclusive with {var}`saeRaw`.
+                :::
+              '';
+            };
 
             pskRaw = mkOption {
               type = types.nullOr types.str;
@@ -293,6 +319,24 @@ in {
 
                 ::: {.note}
                 Mutually exclusive with {var}`psk`.
+                :::
+              '';
+            };
+
+            saeRaw = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.mdDoc ''
+                The network's pre-shared key in hex defaulting
+                to being a network without any authentication.
+
+                ::: {.warning}
+                Be aware that this will be written to the nix store
+                in plaintext! Use an environment variable instead.
+                :::
+
+                ::: {.note}
+                Mutually exclusive with {var}`sae`.
                 :::
               '';
             };
@@ -359,8 +403,8 @@ in {
                 :::
 
                 ::: {.note}
-                Mutually exclusive with {var}`psk` and
-                {var}`pskRaw`.
+                Mutually exclusive with {var}`psk`/`sae` and
+                {var}`pskRaw`/`saeRaw`.
                 :::
               '';
             };
@@ -375,6 +419,7 @@ in {
                 { echelon = {
                     hidden = true;
                     psk = "abcdefgh";
+                    sae = "abcdefgh";
                   };
                 }
               '';
@@ -420,14 +465,17 @@ in {
         example = literalExpression ''
           { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";           # (password will be written to /nix/store!)
+              sae = "abcdefgh";           # (password will be written to /nix/store!)
             };
 
-            echelon = {                   # safe version of the above: read PSK from the
+            echelon = {                   # safe version of the above: read PSK or SAE from the
               psk = "@PSK_ECHELON@";      # variable PSK_ECHELON, defined in environmentFile,
+              sae = "@SAE_ECHELON@";      # variable SAE_ECHELON, defined in environmentFile,
             };                            # this won't leak into /nix/store
 
             "echelon's AP" = {            # SSID with spaces and/or special characters
                psk = "ijklmnop";          # (password will be written to /nix/store!)
+               sae = "ijklmnop";          # (password will be written to /nix/store!)
             };
 
             "free.wifi" = {};             # Public wireless network
@@ -486,8 +534,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = flip mapAttrsToList cfg.networks (name: cfg: {
-      assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
-      message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
+      assertion = with cfg; count (x: x != null) [ psk pskRaw sae saeRaw auth ] <= 1;
+      message = ''options networking.wireless."${name}".{psk,pskRaw,sae,saeRaw,auth} are mutually exclusive'';
     }) ++ [
       {
         assertion = length cfg.interfaces > 1 -> !cfg.dbusControlled;
