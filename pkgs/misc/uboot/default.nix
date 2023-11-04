@@ -30,6 +30,16 @@ let
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
     hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
   };
+
+  # Dependencies for the tools need to be included as either native or cross,
+  # depending on which we're building
+  toolsDeps = [
+    ncurses # tools/kwboot
+    libuuid # tools/mkeficapsule
+    gnutls # tools/mkeficapsule
+    openssl # tools/mkimage
+  ];
+
   buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
@@ -40,6 +50,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , crossTools ? false
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -70,15 +81,9 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
-    ];
+    ] ++ lib.optionals (!crossTools) toolsDeps;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-    buildInputs = [
-      ncurses # tools/kwboot
-      libuuid # tools/mkeficapsule
-      gnutls # tools/mkeficapsule
-      openssl # tools
-    ];
+    buildInputs = lib.optionals crossTools toolsDeps;
 
     hardeningDisable = [ "all" ];
 
@@ -133,7 +138,9 @@ in {
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = lib.platforms.linux;
-    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+
+    crossTools = true;
+    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "NO_SDL=1" "cross_tools" ];
 
     outputs = [ "out" "man" ];
 
