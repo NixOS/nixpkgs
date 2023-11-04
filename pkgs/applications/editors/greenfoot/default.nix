@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "greenfoot";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.greenfoot.org/download/files/Greenfoot-linux-${builtins.replaceStrings ["."] [""] version}.deb";
-    sha256 = "sha256-HDXmgLHS18VZVV+hCA0RgIrKRftOlV7t+fvE0pAHGjk=";
+    sha256 = "sha256-utGSAbP74O1t1iEoN0CwiZVc8HxdCxhozPPMwQCtkEE=";
   };
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
