@@ -41965,9 +41965,7 @@ with pkgs;
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
-  inherit (callPackage ../applications/misc/zettlr {
-    texlive = texlive.combined.scheme-medium;
-  }) zettlr;
+  inherit (callPackage ../applications/misc/zettlr { }) zettlr;
 
   unpoller = callPackage ../servers/monitoring/unpoller { };
 
