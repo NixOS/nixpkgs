@@ -211,7 +211,7 @@ rec {
   };
 
   # check that all languages are available, including synonyms
-  allLanguages = let hyphenBase = lib.head texlive.hyphen-base.pkgs; texLive = texliveFull; in
+  allLanguages = let hyphenBase = texlive.pkgs.hyphen-base; texLive = texliveFull; in
     lib.recurseIntoAttrs {
       # language.def
       etex = mkTeXTest {
@@ -286,7 +286,7 @@ rec {
 
   # test that language files are generated as expected
   hyphen-base = runCommand "texlive-test-hyphen-base" {
-    hyphenBase = lib.head texlive.hyphen-base.pkgs;
+    hyphenBase = texlive.pkgs.hyphen-base;
     schemeFull = texliveFull;
     schemeInfraOnly = texliveInfraOnly;
   } ''
@@ -319,7 +319,7 @@ rec {
 
   # test that fmtutil.cnf is fully regenerated on scheme-full
   fmtutilCnf = runCommand "texlive-test-fmtutil.cnf" {
-    kpathsea = lib.head texlive.kpathsea.pkgs;
+    kpathsea = texlive.pkgs.kpathsea.tex;
     schemeFull = texliveFull;
   } ''
     mkdir -p "$out"
