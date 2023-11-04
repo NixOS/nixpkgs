@@ -30269,7 +30269,7 @@ with pkgs;
 
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
 
-  qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
+  qgis-ltr = callPackage ../applications/gis/qgis { ltrRelease = true; };
 
   qgis = callPackage ../applications/gis/qgis { };
 
