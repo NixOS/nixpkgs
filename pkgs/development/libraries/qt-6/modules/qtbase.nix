@@ -39,6 +39,7 @@
 , libepoxy
 , libiconv
 , dbus
+, dbusSupport ? true
 , fontconfig
 , freetype
 , glib
@@ -68,6 +69,7 @@
 , xcbutilwm
 , zlib
 , at-spi2-core
+, odbcSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , unixODBC
 , unixODBCDrivers
   # darwin
@@ -94,10 +96,49 @@
 , debug ? false
 , developerBuild ? false
 , qttranslations ? null
+, buildPackages
+, pkgsBuildHost
+, writeText
 }:
 
 let
   debugSymbols = debug || developerBuild;
+
+  # Cross Compilation support
+  #
+  # NOTE!  You must use `targetPlatform` instead of `hostPlatform`
+  # almost everywhere in this file.  This is necessary because our
+  # qtbase expression has "the GCC problem": it builds both a
+  # compiler-like tool (qmake) and its target libraries (qtbase) as
+  # part of a single derivation.  We should stop doing this.
+
+  qtPlatformCross = plat: with plat;
+    if isLinux
+    then "linux-generic-g++"
+    else throw "Please add a qtPlatformCross entry for ${plat.config}";
+
+  specsDirName = "nixpkgs-${stdenv.targetPlatform.config}";
+  specsFile = writeText "qmake.conf" (''
+    MAKEFILE_GENERATOR      = UNIX
+    CONFIG                 += incremental
+    QMAKE_INCREMENTAL_STYLE = sublib
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    include(../common/linux.conf)
+  '' + lib.optionalString stdenv.cc.isGNU ''
+    include(../common/gcc-base-unix.conf)
+    include(../common/g++-unix.conf)
+  '' + ''
+    QMAKE_CC                = ${stdenv.cc.targetPrefix}gcc
+    QMAKE_CXX               = ${stdenv.cc.targetPrefix}g++
+    QMAKE_LINK              = ${stdenv.cc.targetPrefix}g++
+    QMAKE_LINK_SHLIB        = ${stdenv.cc.targetPrefix}g++
+    QMAKE_AR                = ${stdenv.cc.targetPrefix}ar cqs
+    QMAKE_OBJCOPY           = ${stdenv.cc.targetPrefix}objcopy
+    QMAKE_NM                = ${stdenv.cc.targetPrefix}nm -P
+    QMAKE_STRIP             = ${stdenv.cc.targetPrefix}strip
+    load(qt_config)
+  '');
+
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
@@ -126,15 +167,18 @@ stdenv.mkDerivation rec {
     double-conversion
     libb2
     md4c
+  ] ++ lib.optionals dbusSupport [
     dbus
+  ] ++ [
     glib
+  ] ++ lib.optionals odbcSupport [
     # unixODBC drivers
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
   ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.targetPlatform.isLinux [
     util-linux
     mtdev
     lksctp-tools
@@ -179,6 +223,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional libGLSupported libGL;
 
   buildInputs = [
+    python3
+  ] ++ lib.optionals dbusSupport [
     at-spi2-core
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libinput
@@ -208,6 +254,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/QtAutoDetect.cmake --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    install -DT ${specsFile}            mkspecs/${specsDirName}/qmake.conf
+    ln -s ../linux-g++/qplatformdefs.h  mkspecs/${specsDirName}/qplatformdefs.h
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
@@ -231,10 +280,24 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_sctp=ON"
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
+    "-DQT_FEATURE_dbus=${if dbusSupport then "ON" else "OFF"}"
   ] ++ lib.optionals stdenv.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
-  ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
+    # Useful: https://raw.githubusercontent.com/qt/qtbase/dev/cmake/configure-cmake-mapping.md
+    #"-DQT_QMAKE_TARGET_MKSPEC=${specsDirName}"
+    #"-DFEATURE_thread=ON"
+    #"-DQT_BUILD_SHARED_LIBS=ON"
+    #"-DQT_FORCE_BUILD_TOOLS=TRUE"
+    "-DQT_QMAKE_TARGET_MKSPEC=devices/${qtPlatformCross stdenv.hostPlatform}"
+    "-DQT_QMAKE_DEVICE_OPTIONS=CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+
+    #"-DQT_INSTALL_PREFIX=${builtins.placeholder "out"}"
+    "-DQT_HOST_PREFIX=${pkgsBuildHost.qt6Packages.qtbase}"
+  ]
+  #++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations"
+  ;
 
   NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
@@ -249,7 +312,11 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
-  '';
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ln -s "${pkgsBuildHost.qt6Packages.qtbase}/libexec/moc" $out/libexec/moc || true
+  ''
+  ;
 
   dontStrip = debugSymbols;
 
