@@ -15590,7 +15590,6 @@ with pkgs;
 
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
-    tex = texlive.combined.scheme-full;
   };
 
   bun = callPackage ../development/web/bun { };
