@@ -329,7 +329,9 @@ let
 
       qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
-        propagatedBuildInputs = [ qtbase.dev ];
+        ${if stdenv.buildPlatform == stdenv.hostPlatform
+          then "propagatedBuildInputs"
+          else "depsTargetTargetPropagated"} = [ qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
