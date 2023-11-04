@@ -1,26 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flit-core, sphinx }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, sphinx
+}:
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
   version = "2023.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-XVwMEfprTNdNnaW38HMCAu4CswdVjBXYtNWBgqXfbno=";
+    hash = "sha256-XVwMEfprTNdNnaW38HMCAu4CswdVjBXYtNWBgqXfbno=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ sphinx ];
+  propagatedBuildInputs = [
+   sphinx
+  ];
 
-  pythonImportsCheck = [ "python_docs_theme" ];
+  pythonImportsCheck = [
+    "python_docs_theme"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/python/python-docs-theme";
     description = "Sphinx theme for CPython project";
+    homepage = "https://github.com/python/python-docs-theme";
     changelog = "https://github.com/python/python-docs-theme/blob/${version}/CHANGELOG.rst";
     license = licenses.psfl;
     maintainers = with maintainers; [ kaction ];
