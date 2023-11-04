@@ -262,6 +262,9 @@ rec {
       ) darwinMinVersion darwinSdkVersion;
 
       sdk = pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
+      # TODO: Make this unconditional after #229210 has been merged,
+      # and the 10.12 SDK is updated to follow the new structure.
+      Libsystem = if darwinSdkVersion == "10.12" then pkgs.darwin.Libsystem else sdk.Libsystem;
 
       replacePropagatedFrameworks = pkg:
         let
@@ -349,8 +352,8 @@ rec {
         // lib.genAttrs atBuildInputs (input: map mapRuntimeToSDK (args."${input}" or [ ]));
 
       mkCC = cc: cc.override {
-        bintools = cc.bintools.override { libc = sdk.Libsystem; };
-        libc = sdk.Libsystem;
+        bintools = cc.bintools.override { libc = Libsystem; };
+        libc = Libsystem;
       };
     in
     # TODO: make this work across all input types and not just propagatedBuildInputs
