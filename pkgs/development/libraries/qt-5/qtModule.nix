@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , mkDerivation
 , perl
 , qmake
@@ -25,6 +26,9 @@ mkDerivation (args // {
   propagatedBuildInputs =
     (lib.warnIf (args ? qtInputs) "qt5.qtModule's qtInputs argument is deprecated" args.qtInputs or []) ++
     (args.propagatedBuildInputs or []);
+} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  depsBuildBuild = [ buildPackages.stdenv.cc ] ++ (args.depsBuildBuild or []);
+} // {
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
