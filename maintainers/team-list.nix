@@ -440,6 +440,7 @@ with lib.maintainers; {
     members = [
       GaetanLepage
       natsukium
+      thomasjm
     ];
     scope = "Maintain Jupyter and related packages.";
     shortName = "Jupyter";
