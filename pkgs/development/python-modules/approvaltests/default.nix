@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "9.0.0";
+  version = "10.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tyUPXeMdFuzlBY/HrGHLDEwYngzBELayaVVfEh92lbE=";
+    hash = "sha256-3KorHpJUeWSJKVN/4IN0AqKOIL0sT5MaxkvQqpeilhw=";
   };
 
   propagatedBuildInputs = [
