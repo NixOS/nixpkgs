@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
+, pythonOlder
 , sphinx
 }:
 
@@ -9,6 +10,8 @@ buildPythonPackage rec {
   pname = "python-docs-theme";
   version = "2023.9";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python";
