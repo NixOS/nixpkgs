@@ -14113,7 +14113,7 @@ self: super: with self; {
 
   torpy = callPackage ../development/python-modules/torpy { };
 
-  torrent_parser = callPackage ../development/python-modules/torrent_parser { };
+  torrent-parser = callPackage ../development/python-modules/torrent-parser { };
 
   torrequest = callPackage ../development/python-modules/torrequest { };
 

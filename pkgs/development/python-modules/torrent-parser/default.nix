@@ -1,7 +1,7 @@
 { buildPythonPackage, lib, fetchFromGitHub }:
 
 buildPythonPackage rec {
-  pname = "torrent_parser";
+  pname = "torrent-parser";
   version = "0.4.1";
 
   # No tarballs on Pypi
