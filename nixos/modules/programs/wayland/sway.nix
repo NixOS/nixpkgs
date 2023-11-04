@@ -46,8 +46,16 @@ in {
       add CAP_SYS_NICE capability on `sway` binary for realtime scheduling
       privileges. This may improve latency and reduce stuttering, specially in
       high load scenarios.
+      
       Will break programs which depend on glibc's `UNSECURE_ENVVARS` set before launching sway
-      <https://codebrowser.dev/glibc/glibc/sysdeps/generic/unsecvars.h.html>'');
+      <https://codebrowser.dev/glibc/glibc/sysdeps/generic/unsecvars.h.html>, and
+      it is known to leak capabilities to other programs run inside Sway.
+      
+      As an alternative, you can set 
+      `security.pam.loginLimits = [{ domain = "@users"; item = "rtprio"; type = "-"; value = 1; }]`
+      in your config. This has none of the downsides described above, however any
+      program running under "users" group will have permission to request real-time
+      capabilities'');
 
     package = mkOption {
       type = with types; nullOr package;
