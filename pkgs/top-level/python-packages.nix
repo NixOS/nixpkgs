@@ -10233,6 +10233,8 @@ self: super: with self; {
 
   pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
 
+  pulsar = callPackage ../development/python-modules/pulsar { };
+
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
