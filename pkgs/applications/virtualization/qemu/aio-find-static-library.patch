@@ -1,0 +1,14 @@
+diff --git a/meson.build b/meson.build
+index 96de1a6ef9..908d841f6a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -420,8 +420,7 @@ zlib = dependency('zlib', required: true, kwargs: static_kwargs)
+ libaio = not_found
+ if not get_option('linux_aio').auto() or have_block
+   libaio = cc.find_library('aio', has_headers: ['libaio.h'],
+-                           required: get_option('linux_aio'),
+-                           kwargs: static_kwargs)
++                           required: get_option('linux_aio'))
+ endif
+ linux_io_uring = not_found
+ if not get_option('linux_io_uring').auto() or have_block
