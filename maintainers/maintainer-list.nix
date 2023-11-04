@@ -4221,6 +4221,12 @@
     githubId = 8864716;
     name = "Duarte David";
   };
+  delta231 = {
+    email = "swstkbaranwal@gmail.com";
+    github = "Delta456";
+    githubId = 28479139;
+    name = "Swastik Baranwal";
+  };
   demin-dmitriy = {
     email = "demindf@gmail.com";
     github = "demin-dmitriy";
