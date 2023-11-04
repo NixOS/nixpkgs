@@ -52,19 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebInfo";
   dontStrip = true;
 
-  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    # Needed because of dlopen module loading code
-    "--prefix LD_LIBRARY_PATH : $out/lib"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Because we work around https://github.com/OpenXRay/xray-16/issues/1224 by using GCC,
-    # we need a followup workaround for Darwin locale stuff when using GCC:
-    # runtime error: locale::facet::_S_create_c_locale name not valid
-    "--run 'export LC_ALL=C'"
-  ];
-
-  postInstall = ''
-    wrapProgram $out/bin/xr_3da ${toString finalAttrs.makeWrapperArgs}
+  # Because we work around https://github.com/OpenXRay/xray-16/issues/1224 by using GCC,
+  # we need a followup workaround for Darwin locale stuff when using GCC:
+  # runtime error: locale::facet::_S_create_c_locale name not valid
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapProgram $out/bin/xr_3da \
+      --run 'export LC_ALL=C'
   '';
+
+  # dlopens its own libraries, relies on rpath not having its prefix stripped
+  dontPatchELF = true;
 
   passthru.updateScript = gitUpdater { };
 
