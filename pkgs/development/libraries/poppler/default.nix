@@ -4,7 +4,6 @@
 , fetchFromGitLab
 , cairo
 , cmake
-, pcre
 , boost
 , cups-filters
 , curl
@@ -66,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   buildInputs = [
     boost
-    pcre
     libiconv
     libintl
   ] ++ lib.optionals withData [
