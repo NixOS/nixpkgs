@@ -201,6 +201,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    QT_HOST_PATH = "${pkgsBuildHost.qt6Packages.qtbase}";
+  } // {
+    qtbase_stdenv = stdenv.outPath;
+  };
+
   inherit patches;
 
   # https://bugreports.qt.io/browse/QTBUG-97568

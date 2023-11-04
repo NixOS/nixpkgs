@@ -1,3 +1,13 @@
+if [[ "x$stdenv" != "x@qtbase_stdenv@" ]]; then
+  echo "skipping qtbase-setup-hook.sh because of mismatch:"
+  echo "  stdenv of current derivation: $stdenv"
+  echo "  stdenv of qtbase.dev dependency: @qtbase_stdenv@"
+  echo "    qtbase = @dev@"
+  return
+fi
+
+echo "running qtbase-setup-hook.sh with hostOffset=$hostOffset targetOffset=$targetOffset: @out@"
+
 if [[ -n "${__nix_qtbase-}" ]]; then
     # Throw an error if a different version of Qt was already set up.
     if [[ "$__nix_qtbase" != "@out@" ]]; then
