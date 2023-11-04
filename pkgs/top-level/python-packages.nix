@@ -8431,6 +8431,8 @@ self: super: with self; {
 
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
+  openapi3 = callPackage ../development/python-modules/openapi3 { };
+
   openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
       openbabel = callPackage ../development/libraries/openbabel { inherit (self) python; };
   };

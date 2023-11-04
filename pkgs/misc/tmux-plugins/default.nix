@@ -580,12 +580,12 @@ in rec {
 
   tilish = mkTmuxPlugin {
     pluginName = "tilish";
-    version = "2020-08-12";
+    version = "unstable-2023-09-20";
     src = fetchFromGitHub {
       owner = "jabirali";
       repo = "tmux-tilish";
-      rev = "73d2404cdc0ef6bd7fbc8982edae0b0e2a4dd860";
-      sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
+      rev = "22f7920837d827dc6cb31143ea916afa677c24c1";
+      sha256 = "wP3c+p/DM6ve7GUhi0QEzggct7NS4XUa78sVQFSKrfo=";
     };
 
     meta = with lib; {

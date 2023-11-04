@@ -36,7 +36,7 @@ lib.optionals (lib.versionAtLeast version "11.0")
 
 (let
   targetPlatformSlash =
-    if hostPlatform.config == targetPlatform.config
+    if hostPlatform == targetPlatform
     then ""
     else "${targetPlatform.config}/";
 
@@ -83,7 +83,7 @@ in
     lib.optionalString (!langC) ''
       rm -f $out/lib/libgcc_s.so*
     ''
-    + lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+    + lib.optionalString (hostPlatform != targetPlatform) ''
       mkdir -p $lib/lib/
       ln -s ${targetPlatformSlash}lib $lib/lib
     ''
