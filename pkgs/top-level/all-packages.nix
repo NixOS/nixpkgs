@@ -39736,7 +39736,9 @@ with pkgs;
 
   btor2tools = callPackage ../applications/science/logic/btor2tools { };
 
-  boolector = callPackage ../applications/science/logic/boolector { };
+  boolector = callPackage ../applications/science/logic/boolector {
+    stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_14.stdenv else stdenv;
+  };
 
   bitwuzla = callPackage ../applications/science/logic/bitwuzla { };
 
