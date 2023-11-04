@@ -45,7 +45,9 @@ in {
     enableRealtime = mkEnableOption (lib.mdDoc ''
       add CAP_SYS_NICE capability on `sway` binary for realtime scheduling
       privileges. This may improve latency and reduce stuttering, specially in
-      high load scenarios'') // { default = true; };
+      high load scenarios.
+      Will break programs which depend on glibc's `UNSECURE_ENVVARS` set before launching sway
+      <https://codebrowser.dev/glibc/glibc/sysdeps/generic/unsecvars.h.html>'');
 
     package = mkOption {
       type = with types; nullOr package;
