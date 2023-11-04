@@ -1,15 +1,22 @@
 { lib
 , buildPythonPackage
-, convertdate
 , fetchFromGitHub
-, hijri-converter
-, importlib-metadata
-, korean-lunar-calendar
-, polib
-, pytestCheckHook
-, python-dateutil
 , pythonOlder
+
+# build-system
 , setuptools
+
+# l10n
+, polib
+, lingua
+, chameleon
+
+# dependencies
+, python-dateutil
+
+# tests
+, importlib-metadata
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -28,14 +35,28 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+
+    # l10n
+    lingua
+    chameleon
+    polib
   ];
 
+  postPatch = ''
+    patchShebangs scripts/l10n/*.py
+  '';
+
+  preBuild = ''
+    # make l10n
+    ./scripts/l10n/generate_po_files.py
+    ./scripts/l10n/generate_mo_files.py
+  '';
+
   propagatedBuildInputs = [
-    convertdate
     python-dateutil
-    hijri-converter
-    korean-lunar-calendar
   ];
+
+  doCheck = false;
 
   nativeCheckInputs = [
     importlib-metadata
