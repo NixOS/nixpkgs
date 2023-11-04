@@ -2,7 +2,6 @@
 , stdenv
 , aplpy
 , astropy
-, astropy-helpers
 , buildPythonPackage
 , casa-formats-io
 , dask
@@ -17,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.6.2";
+  version = "0.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0Fr9PvUShi04z8SUsZE7zHuXZWg4rxt6gwSBb6lr2Pc=";
+    hash = "sha256-7wfvsravSkAGkTtuPE01wPW7wEHKVWT8kYQn93Q2B4M=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
