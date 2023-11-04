@@ -760,7 +760,7 @@ in
     # causes redefinition of _FORTIFY_SOURCE
     hardeningDisable = [ "fortify3" ];
 
-    postBuild = "cd $NIX_BUILD_TOP/source/build/pcsx2";
+    postBuild = "cd pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";
       license = lib.licenses.gpl3Plus;
