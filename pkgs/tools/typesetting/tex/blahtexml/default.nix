@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, libiconv, texlive, xercesc }:
+{ fetchFromGitHub, lib, stdenv, libiconv, texliveFull, xercesc }:
 
 stdenv.mkDerivation rec {
   pname = "blahtexml";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ texlive.combined.scheme-full ]; # scheme-full needed for ucs package
+  nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildFlags =
