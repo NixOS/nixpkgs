@@ -21,6 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/python/python-docs-theme";
     description = "Sphinx theme for CPython project";
+    changelog = "https://github.com/python/python-docs-theme/blob/${version}/CHANGELOG.rst";
     license = licenses.psfl;
     maintainers = with maintainers; [ kaction ];
   };
