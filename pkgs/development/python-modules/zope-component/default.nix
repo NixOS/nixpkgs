@@ -4,7 +4,7 @@
 , zope_configuration
 , zope-deferredimport
 , zope-deprecation
-, zope_event
+, zope-event
 , zope-hookable
 , zope-i18nmessageid
 , zope_interface
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     zope_configuration
     zope-deferredimport
     zope-deprecation
-    zope_event
+    zope-event
     zope-hookable
     zope-i18nmessageid
     zope_interface

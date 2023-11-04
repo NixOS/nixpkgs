@@ -444,6 +444,7 @@ mapAliases ({
   zope_component = zope-component; # added 2023-07-28
   zope_contenttype = zope-contenttype; # added 2023-10-11
   zope_deprecation = zope-deprecation; # added 2023-10-07
+  zope_event = zope-event; # added 2023-11-04
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
   zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
   zope_proxy = zope-proxy; # added 2023-10-07

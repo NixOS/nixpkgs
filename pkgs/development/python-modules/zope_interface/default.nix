@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_event
+, zope-event
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-v+4fP/YhQ4GUmeNI9bin86oCWfmspeDdrnOR0Fnc5nE=";
   };
 
-  propagatedBuildInputs = [ zope_event ];
+  propagatedBuildInputs = [ zope-event ];
 
   doCheck = false; # Circular deps.
 
