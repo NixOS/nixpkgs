@@ -5406,10 +5406,10 @@ with self; {
 
   CryptOpenSSLAES = buildPerlPackage {
     pname = "Crypt-OpenSSL-AES";
-    version = "0.15";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.15.tar.gz";
-      hash = "sha256-UKgfTFaJ6a0tf251RuxXURPD7vH6fFl+cSE5YMpb6+U=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.17.tar.gz";
+      hash = "sha256-7+GBsYxtIqc/LlNWOQ6Fdyes5UY2JeIhHdhgIyvtO7c=";
     };
     buildInputs = [ CryptOpenSSLGuess FileWhich pkgs.openssl ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
