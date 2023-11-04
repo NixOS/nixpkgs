@@ -10,13 +10,13 @@
 let
   tusc = stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tusc-sh";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "adhocore";
     repo = "tusc.sh";
     rev = finalAttrs.version;
-    hash = "sha256-9bTv6ih9N3nPtY5fioZvUCSvCHHB0+yVpxA++z8uGWY=";
+    hash = "sha256-EKlcE+rsVh5lUd8dQzAwXDjiUvrrud5yWfF6JWSZQFE=";
   };
 
   dontConfigure = true;

@@ -267,6 +267,7 @@
   ./programs/udevil.nix
   ./programs/usbtop.nix
   ./programs/vim.nix
+  ./programs/virt-manager.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/river.nix
@@ -1506,6 +1507,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/ecs-agent.nix
   ./virtualisation/hyperv-guest.nix
+  ./virtualisation/incus.nix
   ./virtualisation/kvmgt.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix

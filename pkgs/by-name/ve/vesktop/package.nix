@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vesktop";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${version}";
-    hash = "sha256-elgoX8z8q0+7uUia9gbcCmpDg+qYRWWUxdRuNV53Puw=";
+    hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
   };
 
   pnpm-deps = stdenvNoCC.mkDerivation {
@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-KDJ8QmpwGb2lOdwWEl5y62pJiqEvpI59StfQZrN1PPE=";
+    outputHash = {
+      "aarch64-linux" = "sha256-OcAQbUi+wpBAumncYxP3qtTzjyxiHL69kbQefwaeBfg=";
+      "x86_64-linux" = "sha256-R5/2MSH/jXHrj2x1Ap2OoOFLBLQp3Sq91o01uW8hWOw=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -105,7 +108,7 @@ stdenv.mkDerivation rec {
       runHook preInstall
 
       mkdir -p $out/opt/Vesktop/resources
-      cp dist/linux-unpacked/resources/app.asar $out/opt/Vesktop/resources
+      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
 
       pushd build
       ${libicns}/bin/icns2png -x icon.icns
@@ -138,9 +141,8 @@ stdenv.mkDerivation rec {
     description = "An alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
+    maintainers = with maintainers; [ getchoo Scrumplex vgskye pluiedev ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }
