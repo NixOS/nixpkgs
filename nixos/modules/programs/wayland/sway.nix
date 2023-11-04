@@ -45,7 +45,9 @@ in {
     enableRealtime = mkEnableOption (lib.mdDoc ''
       add CAP_SYS_NICE capability on `sway` binary for realtime scheduling
       privileges. This may improve latency and reduce stuttering, specially in
-      high load scenarios'') // { default = true; };
+      high load scenarios.
+      Enabling this option will allow any program run by the "users" group to
+      request real-time priority'');
 
     package = mkOption {
       type = with types; nullOr package;
@@ -154,14 +156,13 @@ in {
             "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
           };
         };
-        security.wrappers = mkIf (cfg.enableRealtime && cfg.package != null) {
-          sway = {
-            owner = "root";
-            group = "root";
-            source = "${cfg.package}/bin/sway";
-            capabilities = "cap_sys_nice+ep";
-          };
-        };
+
+        # Enabled without checking for `(cfg.package != null)` here because
+        # this also works in Home-Manager.
+        security.pam.loginLimits = mkIf (cfg.enableRealtime) [
+          { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
+        ];
+
         # To make a Sway session available if a display manager like SDDM is enabled:
         services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ]; }
       (import ./wayland-session.nix { inherit lib pkgs; })

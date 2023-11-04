@@ -66,7 +66,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       fi
     '';
 
-    programs.sway.enable = true;
+    programs.sway = {
+      enable = true;
+      enableRealtime = true;
+    };
 
     # To test pinentry via gpg-agent:
     programs.gnupg.agent.enable = true;
