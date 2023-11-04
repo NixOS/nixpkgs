@@ -178,12 +178,12 @@ let
   # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
   baseScope = lib.makeScope newScope addPackages;
 
-  bootstrapScope = baseScope.overrideScope'(final: prev: {
+  bootstrapScope = baseScope.overrideScope(final: prev: {
     qtbase = prev.qtbase.override { qttranslations = null; };
     qtdeclarative = null;
   });
 
-  finalScope = baseScope.overrideScope'(final: prev: {
+  finalScope = baseScope.overrideScope(final: prev: {
     qttranslations = bootstrapScope.qttranslations;
   });
 in finalScope
