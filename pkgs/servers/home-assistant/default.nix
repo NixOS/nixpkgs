@@ -87,16 +87,6 @@ let
         };
       });
 
-      holidays = super.holidays.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28";
-        src = fetchFromGitHub {
-          owner = "dr-prodigy";
-          repo = "python-holidays";
-          rev = "refs/tags/v.${version}";
-          hash = "sha256-JHj7fSE8p3TLViDSegl6gm35u53D9NvN7Oa2TBjN9t4=";
-        };
-      });
-
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
         version = "2.2.2";
         src = fetchFromGitHub {
@@ -365,7 +355,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.11.0";
+  hassVersion = "2023.11.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -381,7 +371,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qLs098k/MUvmOl6/tB4SDU55V7KTZ0+T3RUoLH4AQ2Q=";
+    hash = "sha256-4OIvY6blun++7JDY+B0Cjrr4yNgnjTd8G55SWkhS3Cs=";
   };
 
   # Secondary source is git for tests
@@ -389,7 +379,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-I5I/OcVE6nGO7LG3s2I1P/VUbPjPkUc7qj43z99tIRM=";
+    hash = "sha256-Z/CV1sGdJsdc4OxUZulC0boHaMP7WpajbY8Y6R9Q//I=";
   };
 
   nativeBuildInputs = with python.pkgs; [
