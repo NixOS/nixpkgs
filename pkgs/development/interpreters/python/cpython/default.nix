@@ -581,7 +581,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
         mv $out/share/doc/* $out/share/doc/python${pythonVersion}-${version}
       '';
 
-      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
+      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python-docs-theme ];
     };
 
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
