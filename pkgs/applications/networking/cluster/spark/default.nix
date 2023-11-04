@@ -30,7 +30,7 @@ let
         mv * $out/
         for n in $(find $out/bin -type f -executable ! -name "find-spark-home"); do
           wrapProgram "$n" --set JAVA_HOME "${jdk}" \
-            --run "[ -z SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
+            --run "[ -z $SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
             ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${R}/bin/R"''} \
             --prefix PATH : "${
               lib.makeBinPath (
@@ -78,12 +78,5 @@ in
     version = "3.3.3";
     hash = "sha256-YtHxRYTwrwSle3UpFjRSwKcnLFj2m9/zLBENH/HVzuM=";
     pysparkPython = python310;
-  };
-  spark_3_2 = spark rec {
-    pname = "spark";
-    version = "3.2.4";
-    hash = "sha256-xL4W+dTWbvmmncq3/8iXmhp24rp5SftvoRfkTyxCI8E=";
-    pysparkPython = python310;
-    extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
   };
 }
