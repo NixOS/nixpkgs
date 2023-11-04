@@ -1,16 +1,16 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, ecdsa
-, coincurve
-, pynacl
-, crcmod
-, ed25519-blake2b
-, py-sr25519-bindings
 , cbor2
+, coincurve
+, crcmod
+, ecdsa
+, ed25519-blake2b
+, fetchFromGitHub
+, py-sr25519-bindings
 , pycryptodome
+, pynacl
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -26,11 +26,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-FW3ni7kPB0VeVK/uWjDEeWgilP9dNiuvSaboUpG5DLo=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "coincurve>=15.0.1,<18.0.0" "coincurve"
-  '';
 
   propagatedBuildInputs = [
     ecdsa
