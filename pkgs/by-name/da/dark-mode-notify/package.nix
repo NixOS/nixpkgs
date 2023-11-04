@@ -36,5 +36,6 @@ stdenv.mkDerivation (final: {
     platforms = [ "aarch64-darwin" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ YorikSar ];
+    mainProgram = "dark-mode-notify";
   };
 })
