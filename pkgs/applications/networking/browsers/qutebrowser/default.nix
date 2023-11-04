@@ -12,6 +12,7 @@
 , widevine-cdm
 , enableVulkan ? stdenv.isLinux
 , vulkan-loader
+, buildPackages
 }:
 
 let
@@ -85,7 +86,7 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${python3}/bin/python3 \
+      PYTHON=${buildPackages.python3}/bin/python3 \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
