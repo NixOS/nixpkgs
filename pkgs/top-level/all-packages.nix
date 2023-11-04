@@ -21827,13 +21827,9 @@ with pkgs;
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
   grpc = callPackage ../development/libraries/grpc {
-    stdenv = if (stdenv.isDarwin && stdenv.isx86_64) then
-      # Work around Clang check for 10.13 when using aligned allocations with C++17.
-      stdenv.override (old: {
-        hostPlatform = old.hostPlatform // { darwinMinVersion = "10.13"; };
-        buildPlatform = old.buildPlatform // { darwinMinVersion = "10.13"; };
-        targetPlatform = old.targetPlatform // { darwinMinVersion = "10.13"; };
-      })
+    # Work around Clang check for 10.13 when using aligned allocations with C++17.
+    stdenv = if stdenv.isDarwin && stdenv.isx86_64
+      then overrideSDK stdenv { darwinMinVersion = "10.13"; }
       else stdenv;
   };
 
