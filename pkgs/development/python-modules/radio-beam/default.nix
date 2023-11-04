@@ -12,13 +12,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "radio_beam";
+  pname = "radio-beam";
   version = "0.3.4";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit version;
-    pname = "radio-beam";
+    inherit pname version;
     sha256 = "e032257f1501303873f251c00c74b1188180785c79677fb4443098d517852309";
   };
 
