@@ -46,6 +46,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Tests must be run in the build directory.
+  preCheck = ''
+    cd build/lib
+  '';
+
   # On x86_darwin, this test fails with "Fatal Python error: Aborted"
   # when sandbox = true.
   disabledTestPaths = lib.optionals stdenv.isDarwin [
@@ -62,7 +67,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ smaret ];
-    # Tests fail to start, according to Hydra
-    broken = true;
   };
 }
