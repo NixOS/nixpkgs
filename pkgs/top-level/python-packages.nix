@@ -1898,6 +1898,8 @@ self: super: with self; {
 
   certvalidator = callPackage ../development/python-modules/certvalidator { };
 
+  cf-xarray = callPackage ../development/python-modules/cf-xarray { };
+
   cffi = callPackage ../development/python-modules/cffi { };
 
   cffsubr = callPackage ../development/python-modules/cffsubr { };
