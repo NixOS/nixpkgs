@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     gnome.adwaita-icon-theme
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     pycairo
   ];
