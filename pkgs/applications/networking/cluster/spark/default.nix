@@ -22,20 +22,20 @@ let
         inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ finalAttrs.jdk finalAttrs.pysparkPython ]
-        ++ lib.optional RSupport R;
+      buildInputs = with finalAttrs; [ jdk pysparkPython ]
+        ++ lib.optional RSupport finalAttrs.R;
 
-      installPhase = with finalAttrs; ''
+      installPhase = ''
         mkdir -p "$out/opt"
         mv * $out/
         for n in $(find $out/bin -type f -executable ! -name "find-spark-home"); do
-          wrapProgram "$n" --set JAVA_HOME "${jdk}" \
+          wrapProgram "$n" --set JAVA_HOME "${finalAttrs.jdk}" \
             --run "[ -z $SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
-            ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${R}/bin/R"''} \
+            ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${finalAttrs.R}/bin/R"''} \
             --prefix PATH : "${
               lib.makeBinPath (
-                [ pysparkPython ] ++
-                (lib.optionals RSupport [ R ])
+                [ finalAttrs.pysparkPython ] ++
+                (lib.optionals RSupport [ finalAttrs.R ])
               )}"
         done
         ln -s ${finalAttrs.hadoop} "$out/opt/hadoop"
