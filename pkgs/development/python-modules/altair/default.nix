@@ -17,7 +17,7 @@
 , anywidget
 , ipython
 , pytestCheckHook
-, vega_datasets
+, vega-datasets
 , sphinx
 }:
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     anywidget
     ipython
     sphinx
-    vega_datasets
+    vega-datasets
     pytestCheckHook
   ];
 
