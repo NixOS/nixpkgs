@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-   pytestCheckHook
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "test/test.py" ];
@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kislyuk/yq";
     license = licenses.asl20;
     maintainers = with maintainers; [ womfoo SuperSandro2000 ];
+    mainProgram = "yq";
   };
 }
