@@ -1,6 +1,8 @@
 { newScope
 , lib
 , stdenv
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
 , fetchurl
 , fetchpatch
 , fetchpatch2
@@ -12,6 +14,7 @@
 , overrideSDK
 , buildPackages
 , python3
+, config
 
   # options
 , developerBuild ? false
@@ -178,11 +181,17 @@ let
             fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
           };
         } ./hooks/qmake-hook.sh;
+    } // lib.optionalAttrs config.allowAliases {
+      # Convert to a throw on 03-01-2023 and backport the change.
+      # Warnings show up in various cli tool outputs, throws do not.
+      # Remove completely before 24.05
+      overrideScope' = lib.warnIf (lib.isInOldestRelease 2311) "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
     };
 
-  # TODO(@Artturin): convert to makeScopeWithSplicing'
-  # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
-  baseScope = lib.makeScope newScope addPackages;
+  baseScope = makeScopeWithSplicing' {
+    otherSplices = generateSplicesForMkScope "qt6";
+    f = addPackages;
+  };
 
   bootstrapScope = baseScope.overrideScope(final: prev: {
     qtbase = prev.qtbase.override { qttranslations = null; };
