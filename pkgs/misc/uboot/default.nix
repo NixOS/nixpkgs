@@ -64,7 +64,7 @@ let
 
     postPatch = ''
       patchShebangs tools
-      patchShebangs arch/arm/mach-rockchip
+      patchShebangs scripts
     '';
 
     nativeBuildInputs = [
