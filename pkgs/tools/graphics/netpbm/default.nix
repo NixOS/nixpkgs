@@ -95,6 +95,10 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
+
   installPhase = ''
     runHook preInstall
 
