@@ -47,7 +47,7 @@ let
           Enhancing productivity for every C and C++
           developer on Linux, macOS and Windows.
         '';
-        maintainers = with maintainers; [ edwtjo mic92 tymscar ];
+        maintainers = with maintainers; [ edwtjo tymscar ];
       };
     }).overrideAttrs (attrs: {
       nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
