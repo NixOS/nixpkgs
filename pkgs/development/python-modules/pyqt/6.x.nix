@@ -22,7 +22,10 @@
 , buildPackages
 , pkgsBuildTarget
 , pkgsHostTarget
+, pkgs
 }:
+
+assert withWebSockets;
 
 buildPythonPackage rec {
   pname = "PyQt6";
@@ -43,6 +46,9 @@ buildPythonPackage rec {
     # ./pyqt5-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Adapted from Void Linux
+    ./pyproject-cross.patch
   ];
 
   # be more verbose
@@ -76,25 +82,28 @@ buildPythonPackage rec {
   ] ++ (with pkgsBuildTarget.targetPackages.qt6Packages; [
     qmake
     qtbase
+    qtdeclarative
+    qtwebchannel
   ]);
 
-  buildInputs = with qt6Packages; [
+  buildInputs = lib.optionals dbusSupport [
     dbus
+  ] ++ (with qt6Packages; [
     qtbase
     qtbase.dev
     qtsvg
     qtdeclarative
     pyqt-builder
     qtquick3d
-    qtquicktimeline
     qtwebchannel
+    qtwebchannel.dev
     qtquicktimeline
   ]
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withMultimedia qtmultimedia
   ++ lib.optional withWebSockets qtwebsockets
   ++ lib.optional withLocation qtlocation
-  ;
+  );
 
   propagatedBuildInputs = [
     dbus-python
@@ -124,6 +133,7 @@ buildPythonPackage rec {
     "PyQt6.QtWidgets"
     "PyQt6.QtGui"
     "PyQt6.QtQuick"
+    "PyQt6.QtWebChannel"
   ]
   ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
@@ -131,8 +141,16 @@ buildPythonPackage rec {
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
 
-  # fix build with qt 6.6
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  env = {
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " ([
+      # fix build with qt 6.6
+      "-fpermissive"
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "-Wno-cast-function-type"
+    ]);
+  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    EMULATOR = stdenv.hostPlatform.emulator buildPackages;
+  };
 
   meta = with lib; {
     description = "Python bindings for Qt6";

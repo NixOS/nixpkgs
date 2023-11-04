@@ -1,0 +1,19 @@
+Index: PyQt6-6.1.0/project.py
+===================================================================
+--- PyQt6-6.1.0.orig/project.py
++++ PyQt6-6.1.0/project.py
+@@ -49,6 +49,14 @@ class PyQt(PyQtProject):
+         #   QtNfc, QtPositioning, QtLocation, QtRemoteObjects, QtSensors,
+         #   QtSerialPort, QtTextToSpeech, QtWebChannel, QtWebSockets
+ 
++    def run_command(self, args, *, fatal=True):
++        """ Run a command and display the output if requested. """
++        emulator = os.environ.get("EMULATOR")
++        builddir = os.environ.get("NIX_BUILD_TOP")
++        if emulator and args[0].startswith(builddir):
++            args.insert(0, emulator)
++        super().run_command(args, fatal=fatal)
++
+     def apply_user_defaults(self, tool):
+         """ Set default values where needed. """
+ 
