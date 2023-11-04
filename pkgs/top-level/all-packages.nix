@@ -35480,9 +35480,7 @@ with pkgs;
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
-  routedns = callPackage ../tools/networking/routedns {
-    buildGoModule = buildGo119Module; # build fails with 1.20
-  };
+  routedns = callPackage ../tools/networking/routedns { };
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
 
