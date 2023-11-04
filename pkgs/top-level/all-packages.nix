@@ -19201,9 +19201,7 @@ with pkgs;
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
-  nuweb = callPackage ../development/tools/literate-programming/nuweb {
-    tex = texlive.combined.scheme-medium;
-  };
+  nuweb = callPackage ../development/tools/literate-programming/nuweb { };
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
