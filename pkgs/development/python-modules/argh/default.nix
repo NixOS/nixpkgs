@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "argh";
-  version = "0.29.4";
+  version = "0.30.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aVwK5FNCcMriaXhBtKVvQ0qZBpSgAmTqEOu7zcAsE/c=";
+    hash = "sha256-aKJ2v+ZwxliggO7bP2VswqF3KmVoGDltWA3HUqGNMck=";
   };
 
   nativeBuildInputs = [
