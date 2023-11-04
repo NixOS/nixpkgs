@@ -104,9 +104,6 @@ builder rec {
     # See below.
     "--without-threads"
   ]
-  # Disable JIT on Apple Silicon, as it is not yet supported
-  # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=44505";
-  ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "--enable-jit=no"
   # At least on x86_64-darwin '-flto' autodetection is not correct:
   #  https://github.com/NixOS/nixpkgs/pull/160051#issuecomment-1046193028
   ++ lib.optional (stdenv.isDarwin) "--disable-lto";
