@@ -24,13 +24,15 @@
 
 let
   pname = "windmill";
-  version = "1.188.1";
+  version = "1.200.0";
 
   fullSrc = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-IiCIiP5KYRw10aPlR40RPW0ynXq5itf0LLtpDtxCNE4=";
+    # hash = "sha256-IiCIiP5KYRw10aPlR40RPW0ynXq5itf0LLtpDtxCNE4=";
+    hash = "sha256-TceIbFwyxQM2QwUpjK/5fVld5XO8dfhJSBG7CnA0+Hc=";
+    # hash = "sha256-6Bv6TcA8JOgUHb17VWGz/dd16iP9HcGI0ToQZMY0SK0=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
@@ -43,7 +45,7 @@ let
 
     sourceRoot = "${fullSrc.name}/frontend";
 
-    npmDepsHash = "sha256-TgAv3iUD0kP2mOvMVOW4yYCDCsf2Cr8IfXK+V+f35uw";
+    npmDepsHash = "sha256-53WIMo9uEsv85CqyMLJNw++V3fGwCVXXhNW7QXCiVRY=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
@@ -89,12 +91,14 @@ rustPlatform.buildRustPackage {
         };
       };
   };
-
+  cargoHash = "";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
       "tinyvector-0.1.0" = "sha256-NYGhofU4rh+2IAM+zwe04YQdXY8Aa4gTmn2V2HtzRfI=";
+      "archiver-rs-0.5.1" = "sha256-ZIik0mMABmhdx/ullgbOrKH5GAtqcOKq5A6vB7aBSjk=";
+      "pg-embed-0.7.2" = "sha256-R/SrlzNK7aAOyXVTQ/WPkiQb6FyMg9tpsmPTsiossDY=";
     };
   };
 
