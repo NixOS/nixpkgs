@@ -1,8 +1,10 @@
-{ qtModule
+{ lib
+, stdenv
+, qtModule
 , qtbase
 }:
 
 qtModule {
   pname = "qtshadertools";
-  propagatedBuildInputs = [ qtbase ];
+  buildInputs = [ qtbase ];
 }
