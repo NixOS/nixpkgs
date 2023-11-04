@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, autoPatchelfHook
 , buildNpmPackage
 , bash
 , cmake
@@ -99,8 +98,6 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  autoPatchelfIgnoreMissingDeps = true;
-
   patches = [
     ./swagger-cli.patch
     ./run.go.config.proto.patch
@@ -131,7 +128,6 @@ rustPlatform.buildRustPackage {
     makeWrapper
     swagger-cli
     cmake # for libz-ng-sys crate
-    autoPatchelfHook
   ];
 
   preBuild = ''
