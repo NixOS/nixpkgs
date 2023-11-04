@@ -48,5 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
+
+    # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling.
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
