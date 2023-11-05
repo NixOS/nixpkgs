@@ -33,7 +33,7 @@ in buildPythonPackage (rec {
   ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     sip
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    buildPackages.python3Packages.sip
+    python.pythonOnBuildForHost.pkgs.sip
   ] ++ [
     qtbase
     qtsvg
