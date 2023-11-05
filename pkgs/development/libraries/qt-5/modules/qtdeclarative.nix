@@ -23,10 +23,4 @@ qtModule {
     "bin/qmlscene"
     "bin/qmltestrunner"
   ];
-  postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    mv $dev/bin/qmlformat $bin/bin/qmlformat
-    mv $dev/bin/qmltyperegistrar $bin/bin/qmltyperegistrar
-    ln -s $bin/bin/qmlformat $dev/bin/qmlformat
-    ln -s $bin/bin/qmltyperegistrar $dev/bin/qmltyperegistrar
-  '';
 }
