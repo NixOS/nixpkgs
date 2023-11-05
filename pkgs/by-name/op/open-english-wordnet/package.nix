@@ -42,14 +42,14 @@ stdenvNoCC.mkDerivation (self: {
     python scripts/merge.py
 
     echo Compressing
-    gzip --best --no-name ./wn.xml
+    gzip --best --no-name --stdout ./wn.xml > 'oewn:${self.version}.xml.gz'
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/share/wordnet wn.xml.gz
+    install -Dt $out/share/wordnet 'oewn:${self.version}.xml.gz'
     runHook postInstall
   '';
 
