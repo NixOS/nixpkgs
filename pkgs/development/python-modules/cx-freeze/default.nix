@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "6.15.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "cx_Freeze";
