@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
 , python3
+, testers
+, jrnl
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,6 +51,11 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "jrnl"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = jrnl;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
