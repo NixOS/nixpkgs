@@ -4,12 +4,12 @@
 , numpy
 , pillow
 , pybind11
-, zxing-cpp
+, libzxing-cpp
 }:
 
 buildPythonPackage rec {
-  pname = "zxing_cpp";
-  inherit (zxing-cpp) src version meta;
+  pname = "zxing-cpp";
+  inherit (libzxing-cpp) src version meta;
 
   sourceRoot = "${src.name}/wrappers/python";
 
