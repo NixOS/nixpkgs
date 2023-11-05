@@ -644,7 +644,7 @@ rec {
   # ease of testing
   fixedHashes = with lib; let
     fods = lib.concatMap
-      (p: lib.optional (p ? tex) p.tex
+      (p: lib.optional (p ? tex && isDerivation p.tex) p.tex
         ++ lib.optional (p ? texdoc) p.texdoc
         ++ lib.optional (p ? texsource) p.texsource
         ++ lib.optional (p ? tlpkg) p.tlpkg)
