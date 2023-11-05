@@ -8,11 +8,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sdcc";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "sha256-tJuuHSO81gV6gsT/5WE/nNDLz9HpQOnYTEv+nfCowFM=";
+    sha256 = "sha256-Km/A8CEIAQPa85OsDv6ozg9en+IUDc4wuZkoLIHIk80=";
   };
 
   enableParallelBuilding = true;
