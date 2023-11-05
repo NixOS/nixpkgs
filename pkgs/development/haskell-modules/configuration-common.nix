@@ -2676,4 +2676,8 @@ self: super: {
 
   # Too strict bounds on base
   kewar = doJailbreak super.kewar;
+
+  # Workaround for Cabal failing to find nonexistent SDL2 library?!
+  # https://github.com/NixOS/nixpkgs/issues/260863
+  sdl2-gfx = overrideCabal { __propagatePkgConfigDepends = false; } super.sdl2-gfx;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
