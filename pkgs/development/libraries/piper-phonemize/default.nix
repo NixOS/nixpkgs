@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build
 , cmake
@@ -22,6 +23,10 @@ let
     };
 
     patches = [
+      (fetchpatch {
+        url = "https://github.com/espeak-ng/espeak-ng/commit/497c6217d696c1190c3e8b992ff7b9110eb3bedd.patch";
+        hash = "sha256-KfzqnRyQfz6nuMKnsHoUzb9rn9h/Pg54mupW1Cr+Zx0=";
+      })
       ./espeak-mbrola.patch
     ];
   });
