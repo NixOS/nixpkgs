@@ -13820,6 +13820,8 @@ self: super: with self; {
     sudachidict = pkgs.sudachidict.override { dict-type = "small"; };
   };
 
+  sudachipy = callPackage ../development/python-modules/sudachipy { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
