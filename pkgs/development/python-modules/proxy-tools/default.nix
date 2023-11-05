@@ -1,17 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "proxy-tools";
   version = "0.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "proxy_tools";
     inherit version;
     hash = "sha256-zLN1H1KcBH4tilhEDYayBTA88P6BRveE0cvNlPCigBA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # no tests in pypi
   doCheck = false;
