@@ -175,82 +175,74 @@ in
     services.prosody = mkIf cfg.prosody.enable {
       enable = mkDefault true;
       xmppComplianceSuite = mkDefault false;
-      modules = {
-        admin_adhoc = mkDefault false;
-        bosh = mkDefault true;
-        ping = mkDefault true;
-        roster = mkDefault true;
-        saslauth = mkDefault true;
-        smacks = mkDefault true;
-        tls = mkDefault true;
-        websocket = mkDefault true;
+
+      settings = {
+        modules_enabled = [ "bosh" "pubsub" ];
+        modules_disabled = [ "admin_adhoc" ];
+        plugin_paths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
+
+        cross_domain_websocket = true;
+        consider_websocket_secure = true;
       };
-      muc = [
-        {
-          domain = "conference.${cfg.hostName}";
+
+      components."conference.${cfg.hostName}" = {
+        module = "muc";
+        settings = {
           name = "Jitsi Meet MUC";
-          roomLocking = false;
-          roomDefaultPublicJids = true;
-          extraConfig = ''
-            storage = "memory"
-          '';
-        }
-        {
-          domain = "internal.${cfg.hostName}";
+          muc_room_locking = false;
+          muc_room_default_public_jids = true;
+          storage = "memory";
+        };
+      };
+
+      components."internal.${cfg.hostName}" = {
+        module = "muc";
+        settings = {
           name = "Jitsi Meet Videobridge MUC";
-          extraConfig = ''
-            storage = "memory"
-            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}" }
-          '';
-          #-- muc_room_cache_size = 1000
-        }
-      ];
-      extraModules = [ "pubsub" "smacks" ];
-      extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
-      extraConfig = lib.mkMerge [ (mkAfter ''
-        Component "focus.${cfg.hostName}" "client_proxy"
-          target_address = "focus@auth.${cfg.hostName}"
-        '')
-        (mkBefore ''
-          cross_domain_websocket = true;
-          consider_websocket_secure = true;
-        '')
-      ];
+          storage = "memory";
+          admins = [ "focus@auth.${cfg.hostName}" "jvb@auth.${cfg.hostName}" ];
+          # muc_room_cache_size = 1000;
+        };
+      };
+
+      components."focus.${cfg.hostName}" = {
+        module = "client_proxy";
+        settings = {
+          target_address = "focus@auth.${cfg.hostName}";
+        };
+      };
+
       virtualHosts.${cfg.hostName} = {
-        enabled = true;
-        domain = cfg.hostName;
-        extraConfig = ''
-          authentication = "anonymous"
-          c2s_require_encryption = false
-          admins = { "focus@auth.${cfg.hostName}" }
-          smacks_max_unacked_stanzas = 5
-          smacks_hibernation_time = 60
-          smacks_max_hibernated_sessions = 1
-          smacks_max_old_sessions = 1
-        '';
-        ssl = {
-          cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
-          key = "/var/lib/jitsi-meet/jitsi-meet.key";
+        settings = {
+          authentication = "anonymous";
+          c2s_require_encryption = false;
+          admins = [ "focus@auth.${cfg.hostName}" ];
+          smacks_max_unacked_stanzas = 5;
+          smacks_hibernation_time = 60;
+          smacks_max_hibernated_sessions = 1;
+          smacks_max_old_sessions = 1;
+
+          ssl = {
+            certificate = "/var/lib/jitsi-meet/jitsi-meet.crt";
+            key = "/var/lib/jitsi-meet/jitsi-meet.key";
+          };
         };
       };
       virtualHosts."auth.${cfg.hostName}" = {
-        enabled = true;
-        domain = "auth.${cfg.hostName}";
-        extraConfig = ''
-          authentication = "internal_plain"
-        '';
-        ssl = {
-          cert = "/var/lib/jitsi-meet/jitsi-meet.crt";
-          key = "/var/lib/jitsi-meet/jitsi-meet.key";
+        settings = {
+          authentication = "internal_plain";
+
+          ssl = {
+            certificate = "/var/lib/jitsi-meet/jitsi-meet.crt";
+            key = "/var/lib/jitsi-meet/jitsi-meet.key";
+          };
         };
       };
       virtualHosts."recorder.${cfg.hostName}" = {
-        enabled = true;
-        domain = "recorder.${cfg.hostName}";
-        extraConfig = ''
-          authentication = "internal_plain"
-          c2s_require_encryption = false
-        '';
+        settings = {
+          authentication = "internal_plain";
+          c2s_require_encryption = false;
+        };
       };
     };
     systemd.services.prosody = mkIf cfg.prosody.enable {

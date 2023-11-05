@@ -28,20 +28,21 @@ endpoint will look like this:
 ```
 services.prosody = {
   enable = true;
-  admins = [ "root@example.org" ];
-  ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
-  ssl.key = "/var/lib/acme/example.org/key.pem";
-  virtualHosts."example.org" = {
-      enabled = true;
-      domain = "example.org";
-      ssl.cert = "/var/lib/acme/example.org/fullchain.pem";
-      ssl.key = "/var/lib/acme/example.org/key.pem";
+  openFirewall = true;
+  settings = {
+    admins = [ "root@example.org" ];
   };
-  muc = [ {
-      domain = "conference.example.org";
-  } ];
-  uploadHttp = {
-      domain = "upload.example.org";
+  virtualHosts."example.org" = {
+    useACMEHost = "example.org";
+  };
+  components."conference.example.org" = {
+    module = "muc";
+    settings = {
+      modules_enabled = [ "vcard_muc" ];
+    };
+  };
+  components."upload.example.org" = {
+    module = "http_upload";
   };
 };
 ```
