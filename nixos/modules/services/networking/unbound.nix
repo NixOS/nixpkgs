@@ -249,6 +249,10 @@ in {
           "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW" # needed if ip-transparent is set to true
         ];
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
+          "CAP_NET_RAW"
+        ];
 
         User = cfg.user;
         Group = cfg.group;
@@ -261,15 +265,19 @@ in {
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ProtectKernelLogs = true;
+        ProtectKernelTunables = true;
         RuntimeDirectory = "unbound";
         ConfigurationDirectory = "unbound";
         StateDirectory = "unbound";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @resources @privileged"
-        ];
+        SystemCallFilter = [ "@system-service" ];
         RestrictNamespaces = true;
         LockPersonality = true;
         RestrictSUIDSGID = true;
