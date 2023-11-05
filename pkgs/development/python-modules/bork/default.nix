@@ -33,6 +33,12 @@ buildPythonPackage rec {
     wheel
   ];
 
+  pythonImportsCheck = [
+    "bork"
+    "bork.api"
+    "bork.cli"
+  ];
+
   meta = with lib; {
     description = "Python build and release management tool";
     homepage = "https://github.com/duckinator/bork";
