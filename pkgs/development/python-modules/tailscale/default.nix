@@ -3,8 +3,9 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, mashumaro
+, orjson
 , poetry-core
-, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "tailscale";
-  version = "0.3.0";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,13 +23,13 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-tailscale";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gGDsVGsCBZi/pxD0cyH3+xrvHVBC+wJCcl/NGqsTqiE=";
+    hash = "sha256-wO6yMMU5fxk8GQ0e4ZCse2atlR4wrzulZOFXkVKAsmU=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
       --replace "--cov" ""
   '';
 
@@ -38,7 +39,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    mashumaro
+    orjson
     yarl
   ];
 
