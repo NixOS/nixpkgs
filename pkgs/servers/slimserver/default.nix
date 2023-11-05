@@ -1,5 +1,6 @@
 { faad2
 , fetchFromGitHub
+, fetchurl
 , flac
 , lame
 , lib
@@ -33,7 +34,15 @@ perlPackages.buildPerlPackage rec {
   buildInputs = [ perlPackages.CryptOpenSSLRSA perlPackages.IOSocketSSL ];
 
   prePatch = ''
+    # remove vendored binaries
     rm -rf Bin
+
+    # remove modules for other versions of perl
+    for x in $(ls CPAN/arch); do
+      if [ "$x" != "${lib.versions.majorMinor perlPackages.perl.version}" ]; then
+        rm -rf "CPAN/arch/$x"
+      fi
+    done
 
     ${lib.optionalString (!enableUnfreeFirmware) ''
       # remove unfree firmware
