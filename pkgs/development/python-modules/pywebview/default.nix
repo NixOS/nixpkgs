@@ -4,7 +4,7 @@
 , setuptools-scm
 , bottle
 , importlib-resources
-, proxy_tools
+, proxy-tools
 , pygobject3
 , pyqtwebengine
 , pytest
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bottle
     pyqtwebengine
-    proxy_tools
+    proxy-tools
     six
   ] ++ lib.optionals (pythonOlder "3.7") [
     importlib-resources
