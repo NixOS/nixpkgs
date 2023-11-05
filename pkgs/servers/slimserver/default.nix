@@ -58,7 +58,7 @@ perlPackages.buildPerlPackage rec {
     cp -r . $out
     wrapProgram $out/slimserver.pl \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ]}" \
-      --prefix PATH : "${lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
+      --prefix PATH : "${lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio))}"
     mkdir $out/bin
     ln -s $out/slimserver.pl $out/bin/slimserver
   '';
@@ -78,5 +78,6 @@ perlPackages.buildPerlPackage rec {
     mainProgram = "slimserver";
     maintainers = with maintainers; [ adamcstephens jecaro ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
