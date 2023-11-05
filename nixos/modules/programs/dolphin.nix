@@ -83,14 +83,7 @@ in
         "/share/konsole"
       ];
 
-      systemPackages = [
-        pkgs.dolphin-stylized
-        libsForQt5.konsole # for terminal panel
-      ] ++ cfg.extraPackages
-      ++ cfg.stylePackages;
-    };
-
     # for mounting hard drives
-    services.udisks2.enable = true;
+    services.udisks2.enable = lib.mkDefault true;
   };
 }
