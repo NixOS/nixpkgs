@@ -3,7 +3,8 @@
 , fetchPypi
 , nix-update-script
 , pysimplesoap
-, pytest , pytest-xdist
+, pytest
+, pytest-xdist
 , pythonOlder
 , setuptools
 }:
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   version = "4.0.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
   passthru.updateScript = nix-update-script { };
 
   src = fetchPypi {
