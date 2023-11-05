@@ -1273,6 +1273,10 @@ configurePhase() {
                 prependToVar configureFlags --disable-static
             fi
         fi
+
+        if [ -z "${dontPatchShebangsInConfigure:-}" ]; then
+            patchShebangs --build "$configureScript"
+        fi
     fi
 
     if [ -n "$configureScript" ]; then
