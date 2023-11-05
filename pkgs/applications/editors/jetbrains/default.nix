@@ -374,6 +374,20 @@ let
       };
     });
 
+  buildWriterside = { pname, version, src, license, description, wmClass, buildNumber, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk buildNumber;
+      product = "Writerside";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/writerside/";
+        inherit description license platforms;
+        longDescription = ''
+          The most powerful development environment – now adapted for writing documentation
+        '';
+        maintainers = with maintainers; [ jopejoe1 ];
+      };
+    });
+
 in
 
 {
@@ -593,6 +607,20 @@ in
     };
     wmClass = "jetbrains-webstorm";
     update-channel = products.webstorm.update-channel;
+  };
+
+  writerside = buildWriterside rec {
+    pname = "writerside";
+    version = products.writerside.version;
+    buildNumber = products.writerside.build_number;
+    description = "The most powerful development environment – now adapted for writing documentation";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.writerside.url;
+      sha256 = products.writerside.sha256;
+    };
+    wmClass = "jetbrains-writerside";
+    update-channel = products.writerside.update-channel;
   };
 
   plugins = callPackage ./plugins { };
