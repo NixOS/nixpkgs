@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
 
-    cp -r ${finalAttrs.pnpmDeps}/* "$STORE_PATH"
+    cp -Tr "$pnpmDeps" "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
