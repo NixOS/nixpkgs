@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.14.1";
+  version = "1.15.0";
   outputs = [ "out" "doc" ];
   format = "setuptools";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "GrahamDumpleton";
     repo = pname;
     rev = version;
-    hash = "sha256-nXwDuNo4yZxgjnkus9bVwIZltPaSH93D+PcZMGT2nGM=";
+    hash = "sha256-1hEhVoW3Bp5lD6+8m0Q9OhT8IPnlYWXp+zYDVNm+oao=";
   };
 
   nativeCheckInputs = [
