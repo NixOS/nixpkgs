@@ -1,17 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   version = "1.4";
   pname = "x11-hash";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "x11_hash";
     inherit version;
-    sha256 = "172skm9xbbrivy1p4xabxihx9lsnzi53hvzryfw64m799k2fmp22";
+    hash = "sha256-QtzqxEzpVGK48/lvOEr8VtPUYexLdXKD3zGv1VOdWpw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  # pypi's source doesn't include tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "x11_hash"
+  ];
 
   meta = with lib; {
     description = "Binding for X11 proof of work hashing";
@@ -19,5 +33,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ np ];
   };
-
 }
