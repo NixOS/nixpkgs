@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nix-update-script
 , pysimplesoap
-, pytest
+, pytestCheckHook
 , pytest-xdist
 , pythonOlder
 , setuptools
@@ -12,21 +11,32 @@
 buildPythonPackage rec {
   pname = "python-debianbts";
   version = "4.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
-  passthru.updateScript = nix-update-script { };
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JbPb0lZND96XLZNU97wMuT9iGNXVN2KTsZC2St6FfuU=";
+    hash = "sha256-JbPb0lZND96XLZNU97wMuT9iGNXVN2KTsZC2St6FfuU=";
   };
 
-  buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ pysimplesoap ];
-  checkInputs = [
-    pytest
-    pytest-xdist
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    pysimplesoap
+  ];
+
+  # Most tests require network access
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "debianbts"
   ];
 
   meta = with lib; {
@@ -35,6 +45,6 @@ buildPythonPackage rec {
     downloadPage = "https://pypi.org/project/python-debianbts/";
     changelog = "https://github.com/venthur/python-debianbts/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.nicoo ];
+    maintainers = with maintainers; [ nicoo ];
   };
 }
