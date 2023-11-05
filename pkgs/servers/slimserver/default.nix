@@ -5,13 +5,16 @@
 , lib
 , makeWrapper
 , monkeysAudio
-, perlPackages
+, perl536Packages
 , sox
 , stdenv
 , wavpack
 , zlib
 }:
 
+let
+  perlPackages = perl536Packages;
+in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
   version = "8.3.1";
