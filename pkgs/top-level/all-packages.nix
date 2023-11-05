@@ -21512,7 +21512,9 @@ with pkgs;
 
   geomyidae = callPackage ../applications/networking/gopher/geomyidae { };
 
-  geos = callPackage ../development/libraries/geos { };
+  geos = callPackage ../development/libraries/geos {
+    stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_14.stdenv else stdenv;
+  };
 
   geos39 = callPackage ../development/libraries/geos/3.9.nix { };
 
