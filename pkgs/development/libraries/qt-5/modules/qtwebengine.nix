@@ -306,7 +306,6 @@ qtModule ({
         isAarch64
         (patternLogicalAnd isMips isLittleEndian)
       ]);
-    broken = stdenv.isDarwin && stdenv.isx86_64;
 
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
