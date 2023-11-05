@@ -5,11 +5,21 @@ with lib;
 let
   cfg = config.programs.dolphin;
 
-  # This is needed to select the custom theme
-  dolphin-stylized = pkgs.writeShellScriptBin "dolphin" ''
-    export QT_STYLE_OVERRIDE="${cfg.style}"
-    exec -a ${lib.getExe pkgs.libsForQt5.dolphin}
-  '';
+  dolphin-stylized = pkgs.libsForQt5.dolphin.overrideAttrs (finalAttrs: previousAttrs: {
+    buildInputs = (previousAttrs.buildInputs or []) ++ [
+      pkgs.libsForQt5.konsole # for terminal panel
+    ] ++ cfg.extraPackages
+    ++ cfg.stylePackages;
+
+    nativeBuildInputs = (previousAttrs.nativeBuildInputs or []) ++ [
+      pkgs.makeBinaryWrapper
+    ];
+
+    # This is needed to select the custom theme
+    postInstall = ''
+      wrapProgram $out/bin/dolphin --set-default QT_STYLE_OVERRIDE "${cfg.style}"
+    '';
+  });
 in
 {
   meta.maintainers = with maintainers; [ MakiseKurisu ];
@@ -77,11 +87,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment = {
-      # This is needed to have Konsole colorscheme files available in Dolphin
-      pathsToLink = [
-        "/share/konsole"
-      ];
+
+    environment.systemPackages = [
+      dolphin-stylized
+    ];
 
     # for mounting hard drives
     services.udisks2.enable = lib.mkDefault true;
