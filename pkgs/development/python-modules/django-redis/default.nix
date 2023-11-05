@@ -1,8 +1,8 @@
 { lib
 , fetchFromGitHub
-, pythonAtLeast
 , pythonOlder
 , buildPythonPackage
+, setuptools
 
 # propagated
 , django
@@ -24,7 +24,8 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -37,6 +38,10 @@ buildPythonPackage {
   postPatch = ''
     sed -i '/-cov/d' setup.cfg
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     django
