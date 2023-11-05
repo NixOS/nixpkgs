@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python promises";
     homepage = "https://github.com/celery/vine";
+    changelog = "https://github.com/celery/vine/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
