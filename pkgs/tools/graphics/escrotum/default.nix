@@ -1,4 +1,5 @@
 { lib, python3Packages, fetchFromGitHub
+, ffmpeg-full
 , gtk3
 , pango
 , gobject-introspection
@@ -32,6 +33,8 @@ with python3Packages; buildPythonApplication {
   strictDeps = false;
 
   outputs = [ "out" "man" ];
+
+  makeWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}"];
 
   postInstall = ''
     mkdir -p $man/share/man/man1

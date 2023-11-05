@@ -832,7 +832,7 @@ let
       };
 
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
-    })).overrideScope' liftJaneStreet;
+    })).overrideScope liftJaneStreet;
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
       self = self.janeStreet_0_9_0;
@@ -1967,7 +1967,7 @@ in let inherit (pkgs) callPackage; in rec
   # *and* non-JS OCaml libraries can pull in the same version of JS transitive
   # dependencies. Remove this once ligo and stanc can be compiled against
   # janestreet 0.16 libraries.
-  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope' (self: super: super // super.janeStreet_0_15);
+  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope (self: super: super // super.janeStreet_0_15);
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

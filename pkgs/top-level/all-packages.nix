@@ -5514,8 +5514,6 @@ with pkgs;
 
   go-2fa = callPackage ../tools/security/2fa { };
 
-  go-dependency-manager = callPackage ../development/tools/gdm { };
-
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
   google-cursor = callPackage ../data/icons/google-cursor { };
@@ -16385,7 +16383,7 @@ with pkgs;
   hop = callPackage ../development/compilers/hop { };
 
   hop-cli = callPackage ../tools/admin/hop-cli {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   falcon = callPackage ../development/interpreters/falcon {
@@ -24564,7 +24562,6 @@ with pkgs;
   });
 
   poppler_min = poppler.override { # TODO: maybe reduce even more
-    # this is currently only used by texlive.bin.
     minimal = true;
     suffix = "min";
   };
@@ -28547,6 +28544,8 @@ with pkgs;
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
+
+  pam_mktemp = callPackage ../os-specific/linux/pam_mktemp { };
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
