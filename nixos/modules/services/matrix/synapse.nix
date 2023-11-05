@@ -296,6 +296,18 @@ in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
 
+      serviceUnit = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+        description = lib.mdDoc ''
+          The systemd unit (a service or a target) for other services to depend on if they
+          need to be started after matrix-synapse.
+
+          This option is useful as the actual parent unit for all matrix-synapse processes
+          changes when configuring workers.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         readOnly = true;
@@ -1021,6 +1033,7 @@ in {
       port = 9093;
     });
 
+    services.matrix-synapse.serviceUnit = if hasWorkers then "matrix-synapse.target" else "matrix-synapse.service";
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
 
