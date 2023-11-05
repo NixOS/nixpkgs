@@ -969,7 +969,7 @@ let
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
       };
 
       metricProvider = {
