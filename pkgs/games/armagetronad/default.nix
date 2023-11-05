@@ -79,6 +79,20 @@ let
   };
 
   mkArmagetron = { version, src, dedicatedServer ? false, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ] }@params:
+  let
+    # Split the version into the major and minor parts
+    versionParts = lib.splitString "-" version;
+    splitVersion = lib.splitString "." (builtins.elemAt versionParts 0);
+    majorVersion = builtins.concatStringsSep "." (lib.lists.take 2 splitVersion);
+
+    minorVersionPart =  parts: sep: expectedSize:
+      if builtins.length parts > expectedSize then
+        sep + (builtins.concatStringsSep sep (lib.lists.drop expectedSize parts))
+      else
+        "";
+
+    minorVersion = (minorVersionPart splitVersion "." 2) + (minorVersionPart versionParts "-" 1) + "-nixpkgs";
+  in
     stdenv.mkDerivation rec {
       pname = if dedicatedServer then "armagetronad-dedicated" else "armagetronad";
       inherit version src;
@@ -90,6 +104,11 @@ let
       preConfigure = ''
         patchShebangs .
 
+        # Create the version.
+        echo "${majorVersion}" > major_version
+        echo "${minorVersion}" > minor_version
+
+        echo "Bootstrapping version: $(<major_version)$(<minor_version)" >&2
         ./bootstrap.sh
       '';
 
@@ -115,9 +134,16 @@ let
       installCheckPhase = ''
         export XDG_RUNTIME_DIR=/tmp
         bin="$out/bin/${pname}"
+        version="$("$bin" --version || true)"
         prefix="$("$bin" --prefix || true)"
         rubber="$("$bin" --doc | grep -m1 CYCLE_RUBBER)"
-        if [ "$prefix" != "$out" ] || \
+
+        echo "Version: $version" >&2
+        echo "Prefix: $prefix" >&2
+        echo "Docstring: $rubber" >&2
+
+        if [[ "$version" != *"${version}"* ]] || \
+           [ "$prefix" != "$out" ] || \
            [[ ! "$rubber" =~ ^CYCLE_RUBBER[[:space:]]+Niceness[[:space:]]factor ]]; then
           exit 1
         fi
