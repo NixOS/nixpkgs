@@ -2833,8 +2833,6 @@ with pkgs;
 
   yapesdl = callPackage ../applications/emulators/yapesdl { };
 
-  zesarux = callPackage ../applications/emulators/zesarux { };
-
   zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
   zsnes2 = pkgsi686Linux.callPackage ../applications/emulators/zsnes/2.x.nix { };
 
@@ -41755,8 +41753,6 @@ with pkgs;
   hss = callPackage ../tools/networking/hss { };
 
   undaemonize = callPackage ../tools/system/undaemonize { };
-
-  wtfis = callPackage ../tools/networking/wtfis { };
 
   houdini = callPackage ../applications/misc/houdini { };
 

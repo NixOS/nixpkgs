@@ -48,7 +48,7 @@
 , torch
 , tqdm
 , transformers
-, vega_datasets
+, vega-datasets
 }:
 
 buildPythonPackage rec {
@@ -118,7 +118,7 @@ buildPythonPackage rec {
     torch
     tqdm
     transformers
-    vega_datasets
+    vega-datasets
   ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
