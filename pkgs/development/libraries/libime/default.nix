@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-0+NVGxujFOJvxX+Tk4mVYsk2Nl7WK6hjl0oylrT6PXU=";
+    sha256 = "sha256-C34hcea0htc9ayytjqy/t08yA2xMC18sAkDc9PK/Hhc=";
     fetchSubmodules = true;
   };
 
