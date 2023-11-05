@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, pythonPackages, mopidy }:
+{ lib, fetchFromGitHub, pythonPackages, mopidy, unstableGitUpdater }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
@@ -21,6 +21,8 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "mopidy_spotify" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/mopidy/mopidy-spotify";
