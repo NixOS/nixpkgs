@@ -10,6 +10,7 @@
 , stdenv
 , wavpack
 , zlib
+, enableUnfreeFirmware ? false
 }:
 
 let
@@ -32,6 +33,12 @@ perlPackages.buildPerlPackage rec {
 
   prePatch = ''
     rm -rf Bin
+
+    ${lib.optionalString (!enableUnfreeFirmware) ''
+      # remove unfree firmware
+      rm -rf Firmware
+    ''}
+
     touch Makefile.PL
   '';
 
@@ -49,9 +56,9 @@ perlPackages.buildPerlPackage rec {
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
-    # the firmware is not under a free license!
+    # the firmware is not under a free license, but not included in the default package
     # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
-    license = licenses.unfree;
+    license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
     maintainers = with maintainers; [ adamcstephens jecaro ];
     platforms = platforms.unix;
   };
