@@ -36,8 +36,8 @@ let
 in
 openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk-jcef";
-  javaVersion = "17.0.7";
-  build = "829.16";
+  javaVersion = "17.0.8.1";
+  build = "1080.1";
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
@@ -50,7 +50,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    hash = "sha256-b3wW52knkYUeG8h4naTQLGUedhAMiPnUsn3zFAiJCwM=";
+    hash = "sha256-YLW/KX0aGgeWRJDKAv/DqSgtTxyz9xwg+2cGOn6OMnY=";
   };
 
   BOOT_JDK = openjdk17-bootstrap.home;
@@ -64,8 +64,8 @@ openjdk17.overrideAttrs (oldAttrs: rec {
   buildPhase = ''
     runHook preBuild
 
-    mkdir -p jcef_linux_${arch}/jmods
-    cp ${jetbrains.jcef}/* jcef_linux_${arch}/jmods
+    mkdir -p jcef_linux_${arch}/
+    cp -r ${jetbrains.jcef}/* jcef_linux_${arch}/
 
     sed \
         -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \

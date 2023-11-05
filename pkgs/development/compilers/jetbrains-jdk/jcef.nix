@@ -93,11 +93,11 @@ inherit (arches) depsArch projectArch targetArch;
 
 in stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "1ac1c682c497f2b864f86050796461f22935ea64";
+  rev = "3cc44b679366d3a62c2c30fb2ea2c941cfe08bc6";
   # This is the commit number
-  # Currently from the branch: https://github.com/JetBrains/jcef/tree/232
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/233
   # Run `git rev-list --count HEAD`
-  version = "672";
+  version = "691";
 
   nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja ];
   buildInputs = [ libX11 libXdamage nss nspr ];
@@ -106,7 +106,7 @@ in stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-3HuW8upR/bZoK8euVti2KpCZh9xxfqgyHmgoG1NjxOI=";
+    hash = "sha256-2rnK9AjHcaj8J5BiixmvrSRACR/9WA1DYwpidxrw1fs=";
   };
   cef-bin = let
     name = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_${platform}_minimal";
@@ -236,12 +236,15 @@ in stdenv.mkDerivation rec {
   dontStrip = debugBuild;
 
   postFixup = ''
+    mkdir $out/jmods
+    # create jcef.version file
+    bash "$JB_TOOLS_DIR"/common/create_version_file.sh $out/
     cd $unpacked/gluegen
-    jmod create --class-path gluegen-rt.jar --libs lib $out/gluegen.rt.jmod
+    jmod create --class-path gluegen-rt.jar --libs lib $out/jmods/gluegen.rt.jmod
     cd ../jogl
-    jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jogl.all.jmod
+    jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
     cd ../jcef
-    jmod create --module-path . --class-path jcef.jar --libs lib $out/jcef.jmod
+    jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
   '';
 
   meta = {
