@@ -27,7 +27,7 @@ let
     lxqt-session = callPackage ./lxqt-session {};
     lxqt-sudo = callPackage ./lxqt-sudo {};
     lxqt-themes = callPackage ./lxqt-themes {};
-    pavucontrol-qt = libsForQt5.callPackage ./pavucontrol-qt {};
+    pavucontrol-qt = callPackage ./pavucontrol-qt {};
     qtermwidget = callPackage ./qtermwidget {};
 
     ### CORE 2
