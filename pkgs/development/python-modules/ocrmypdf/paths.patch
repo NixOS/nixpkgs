@@ -1,8 +1,8 @@
 diff --git a/src/ocrmypdf/_exec/ghostscript.py b/src/ocrmypdf/_exec/ghostscript.py
-index e28d23e9..183cd918 100644
+index 92b73a0a..9f04555c 100644
 --- a/src/ocrmypdf/_exec/ghostscript.py
 +++ b/src/ocrmypdf/_exec/ghostscript.py
-@@ -67,7 +67,7 @@ log.addFilter(DuplicateFilter(log))
+@@ -58,7 +58,7 @@ log.addFilter(DuplicateFilter(log))
  
  
  # Ghostscript executable - gswin32c is not supported
@@ -12,7 +12,7 @@ index e28d23e9..183cd918 100644
  
  def version() -> Version:
 diff --git a/src/ocrmypdf/_exec/jbig2enc.py b/src/ocrmypdf/_exec/jbig2enc.py
-index 28d3dd1c..477a7d6c 100644
+index 5a34a95a..5ee1b333 100644
 --- a/src/ocrmypdf/_exec/jbig2enc.py
 +++ b/src/ocrmypdf/_exec/jbig2enc.py
 @@ -14,7 +14,7 @@ from ocrmypdf.subprocess import get_version, run
@@ -26,27 +26,27 @@ index 28d3dd1c..477a7d6c 100644
  def available():
 @@ -27,7 +27,7 @@ def available():
  
- def convert_group(*, cwd, infiles, out_prefix, threshold):
+ def convert_group(cwd, infiles, out_prefix, threshold):
      args = [
 -        'jbig2',
 +        '@jbig2@',
          '-b',
          out_prefix,
          '--symbol-mode',  # symbol mode (lossy)
-@@ -50,7 +50,7 @@ def convert_group_mp(args):
+@@ -44,7 +44,7 @@ def convert_group(cwd, infiles, out_prefix, threshold):
  
  
- def convert_single(*, cwd, infile, outfile, threshold):
+ def convert_single(cwd, infile, outfile, threshold):
 -    args = ['jbig2', '--pdf', '-t', str(threshold), infile]
 +    args = ['@jbig2@', '--pdf', '-t', str(threshold), infile]
      with open(outfile, 'wb') as fstdout:
          proc = run(args, cwd=cwd, stdout=fstdout, stderr=PIPE)
      proc.check_returncode()
 diff --git a/src/ocrmypdf/_exec/pngquant.py b/src/ocrmypdf/_exec/pngquant.py
-index 8425caec..a027f041 100644
+index 5b8600d0..fcad771b 100644
 --- a/src/ocrmypdf/_exec/pngquant.py
 +++ b/src/ocrmypdf/_exec/pngquant.py
-@@ -18,7 +18,7 @@ from ocrmypdf.subprocess import get_version, run
+@@ -15,7 +15,7 @@ from ocrmypdf.subprocess import get_version, run
  
  
  def version() -> Version:
@@ -55,9 +55,9 @@ index 8425caec..a027f041 100644
  
  
  def available():
-@@ -45,7 +45,7 @@ def input_as_png(input_file: Path):
- def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max: int):
-     with input_as_png(input_file) as input_stream:
+@@ -37,7 +37,7 @@ def quantize(input_file: Path, output_file: Path, quality_min: int, quality_max:
+     """
+     with open(input_file, 'rb') as input_stream:
          args = [
 -            'pngquant',
 +            '@pngquant@',
@@ -65,10 +65,10 @@ index 8425caec..a027f041 100644
              '--skip-if-larger',
              '--quality',
 diff --git a/src/ocrmypdf/_exec/tesseract.py b/src/ocrmypdf/_exec/tesseract.py
-index 4eac3470..61315d14 100644
+index fab92bb1..78b634a7 100644
 --- a/src/ocrmypdf/_exec/tesseract.py
 +++ b/src/ocrmypdf/_exec/tesseract.py
-@@ -114,7 +114,7 @@ class TesseractVersion(Version):
+@@ -95,7 +95,7 @@ class TesseractVersion(Version):
  
  
  def version() -> Version:
@@ -77,7 +77,7 @@ index 4eac3470..61315d14 100644
  
  
  def has_thresholding() -> bool:
-@@ -132,7 +132,7 @@ def get_languages() -> set[str]:
+@@ -113,7 +113,7 @@ def get_languages() -> set[str]:
          msg += output
          return msg
  
@@ -86,7 +86,7 @@ index 4eac3470..61315d14 100644
      try:
          proc = run(
              args_tess,
-@@ -154,7 +154,7 @@ def get_languages() -> set[str]:
+@@ -135,7 +135,7 @@ def get_languages() -> set[str]:
  
  
  def tess_base_args(langs: list[str], engine_mode: int | None) -> list[str]:
@@ -96,10 +96,10 @@ index 4eac3470..61315d14 100644
          args.extend(['-l', '+'.join(langs)])
      if engine_mode is not None:
 diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
-index 2944b4f4..55a36140 100644
+index 493d9b3a..578c2dda 100644
 --- a/src/ocrmypdf/_exec/unpaper.py
 +++ b/src/ocrmypdf/_exec/unpaper.py
-@@ -69,7 +69,7 @@ class UnpaperImageTooLargeError(Exception):
+@@ -70,7 +70,7 @@ class UnpaperImageTooLargeError(Exception):
  
  
  def version() -> Version:
@@ -107,8 +107,8 @@ index 2944b4f4..55a36140 100644
 +    return Version(get_version('@unpaper@'))
  
  
- SUPPORTED_MODES = {'1', 'L', 'RGB'}
-@@ -123,7 +123,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
+ @contextmanager
+@@ -92,7 +92,7 @@ def _setup_unpaper_io(input_file: Path) -> Iterator[tuple[Path, Path, Path]]:
  def run_unpaper(
      input_file: Path, output_file: Path, *, dpi: DecFloat, mode_args: list[str]
  ) -> None:
