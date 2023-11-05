@@ -1411,6 +1411,12 @@
     githubId = 58516559;
     name = "Alexander Rezvov";
   };
+  argrat = {
+    email = "n.bertazzo@protonmail.com";
+    github = "argrat";
+    githubId = 98821629;
+    name = "Nicolò Bertazzo";
+  };
   arian-d = {
     email = "arianxdehghani@gmail.com";
     github = "arian-d";
@@ -19178,6 +19184,12 @@
     github = "wjlroe";
     githubId = 43315;
     name = "William Roe";
+  };
+  wladmis = {
+    email = "dev@wladmis.org";
+    github = "wladmis";
+    githubId = 5000261;
+    name = "Wladmis";
   };
   wldhx = {
     email = "wldhx+nixpkgs@wldhx.me";
