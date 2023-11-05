@@ -6,7 +6,7 @@ let
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/getstation/desktop-app-releases/releases/download/v${version}/Station-x86_64.AppImage";
+    url = "https://github.com/getstation/desktop-app/releases/download/v${version}/Station-x86_64.AppImage";
     hash = "sha256-cv25EXFxIHhZb6raKBNdLq1srWN4BZYIXQ9cGzLuTBw=";
   };
 
