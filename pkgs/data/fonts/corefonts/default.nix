@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cabextract }:
+{ lib, stdenv, fetchurl, cabextract, rename }:
 
 let
   fonts = [
@@ -30,46 +30,48 @@ stdenv.mkDerivation {
     inherit sha256;
   }) fonts;
 
-  nativeBuildInputs = [ cabextract ];
+  nativeBuildInputs = [ cabextract rename ];
 
   buildCommand = ''
     for i in $exes; do
       cabextract --lowercase $i
     done
     cabextract --lowercase viewer1.cab
+    # Fix issue on case insensitive file systems
+    rename 's/\.ttf$/.ttf.tmp/' *.ttf
 
     # rename to more standard names
-    mv andalemo.ttf  Andale_Mono.ttf
-    mv ariblk.ttf    Arial_Black.ttf
-    mv arial.ttf     Arial.ttf
-    mv arialbd.ttf   Arial_Bold.ttf
-    mv arialbi.ttf   Arial_Bold_Italic.ttf
-    mv ariali.ttf    Arial_Italic.ttf
-    mv comic.ttf     Comic_Sans_MS.ttf
-    mv comicbd.ttf   Comic_Sans_MS_Bold.ttf
-    mv cour.ttf      Courier_New.ttf
-    mv courbd.ttf    Courier_New_Bold.ttf
-    mv couri.ttf     Courier_New_Italic.ttf
-    mv courbi.ttf    Courier_New_Bold_Italic.ttf
-    mv georgia.ttf   Georgia.ttf
-    mv georgiab.ttf  Georgia_Bold.ttf
-    mv georgiai.ttf  Georgia_Italic.ttf
-    mv georgiaz.ttf  Georgia_Bold_Italic.ttf
-    mv impact.ttf    Impact.ttf
-    mv tahoma.ttf    Tahoma.ttf
-    mv times.ttf     Times_New_Roman.ttf
-    mv timesbd.ttf   Times_New_Roman_Bold.ttf
-    mv timesbi.ttf   Times_New_Roman_Bold_Italic.ttf
-    mv timesi.ttf    Times_New_Roman_Italic.ttf
-    mv trebuc.ttf    Trebuchet_MS.ttf
-    mv trebucbd.ttf  Trebuchet_MS_Bold.ttf
-    mv trebucit.ttf  Trebuchet_MS_Italic.ttf
-    mv trebucbi.ttf  Trebuchet_MS_Italic.ttf
-    mv verdana.ttf   Verdana.ttf
-    mv verdanab.ttf  Verdana_Bold.ttf
-    mv verdanai.ttf  Verdana_Italic.ttf
-    mv verdanaz.ttf  Verdana_Bold_Italic.ttf
-    mv webdings.ttf  Webdings.ttf
+    mv andalemo.ttf.tmp  Andale_Mono.ttf
+    mv ariblk.ttf.tmp    Arial_Black.ttf
+    mv arial.ttf.tmp     Arial.ttf
+    mv arialbd.ttf.tmp   Arial_Bold.ttf
+    mv arialbi.ttf.tmp   Arial_Bold_Italic.ttf
+    mv ariali.ttf.tmp    Arial_Italic.ttf
+    mv comic.ttf.tmp     Comic_Sans_MS.ttf
+    mv comicbd.ttf.tmp   Comic_Sans_MS_Bold.ttf
+    mv cour.ttf.tmp      Courier_New.ttf
+    mv courbd.ttf.tmp    Courier_New_Bold.ttf
+    mv couri.ttf.tmp     Courier_New_Italic.ttf
+    mv courbi.ttf.tmp    Courier_New_Bold_Italic.ttf
+    mv georgia.ttf.tmp   Georgia.ttf
+    mv georgiab.ttf.tmp  Georgia_Bold.ttf
+    mv georgiai.ttf.tmp  Georgia_Italic.ttf
+    mv georgiaz.ttf.tmp  Georgia_Bold_Italic.ttf
+    mv impact.ttf.tmp    Impact.ttf
+    mv tahoma.ttf.tmp    Tahoma.ttf
+    mv times.ttf.tmp     Times_New_Roman.ttf
+    mv timesbd.ttf.tmp   Times_New_Roman_Bold.ttf
+    mv timesbi.ttf.tmp   Times_New_Roman_Bold_Italic.ttf
+    mv timesi.ttf.tmp    Times_New_Roman_Italic.ttf
+    mv trebuc.ttf.tmp    Trebuchet_MS.ttf
+    mv trebucbd.ttf.tmp  Trebuchet_MS_Bold.ttf
+    mv trebucit.ttf.tmp  Trebuchet_MS_Italic.ttf
+    mv trebucbi.ttf.tmp  Trebuchet_MS_Italic.ttf
+    mv verdana.ttf.tmp   Verdana.ttf
+    mv verdanab.ttf.tmp  Verdana_Bold.ttf
+    mv verdanai.ttf.tmp  Verdana_Italic.ttf
+    mv verdanaz.ttf.tmp  Verdana_Bold_Italic.ttf
+    mv webdings.ttf.tmp  Webdings.ttf
 
     install -m444 -Dt $out/share/fonts/truetype *.ttf
 
