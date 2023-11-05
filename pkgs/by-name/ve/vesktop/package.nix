@@ -27,49 +27,51 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
   };
 
-  pnpmDeps = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-pnpm-deps";
-    inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+  # NOTE: This requires pnpm 8.10.0 or newer
+  # https://github.com/pnpm/pnpm/pull/7214
+  pnpmDeps =
+    assert lib.versionAtLeast nodePackages.pnpm.version "8.10.0";
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-pnpm-deps";
+      inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
 
-    nativeBuildInputs = [
-      jq
-      moreutils
-      nodePackages.pnpm
-    ];
+      nativeBuildInputs = [
+        jq
+        moreutils
+        nodePackages.pnpm
+      ];
 
-    # NOTE: This requires pnpm 8.10.0 or newer
-    # https://github.com/pnpm/pnpm/pull/7214
-    pnpmPatch = builtins.toJSON {
-      pnpm.supportedArchitectures = {
-        os = [ "linux" ];
-        cpu = [ "x64" "arm64" ];
+      pnpmPatch = builtins.toJSON {
+        pnpm.supportedArchitectures = {
+          os = [ "linux" ];
+          cpu = [ "x64" "arm64" ];
+        };
       };
+
+      postPatch = ''
+        mv package.json package.json.orig
+        jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
+      '';
+
+      # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
+      installPhase = ''
+        export HOME=$(mktemp -d)
+
+        pnpm config set store-dir $out
+        pnpm install --frozen-lockfile --ignore-script
+
+        rm -rf $out/v3/tmp
+        for f in $(find $out -name "*.json"); do
+          sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
+          jq --sort-keys . $f | sponge $f
+        done
+      '';
+
+      dontBuild = true;
+      dontFixup = true;
+      outputHashMode = "recursive";
+      outputHash = "sha256-nNXe0vSQiQTkiRqgScKlpkpG/BJc2eIY2ueAd9sk36c=";
     };
-
-    postPatch = ''
-      mv package.json package.json.orig
-      jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
-    '';
-
-    # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-    installPhase = ''
-      export HOME=$(mktemp -d)
-
-      pnpm config set store-dir $out
-      pnpm install --frozen-lockfile --ignore-script
-
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
-
-    dontBuild = true;
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = "sha256-nNXe0vSQiQTkiRqgScKlpkpG/BJc2eIY2ueAd9sk36c=";
-  };
 
   nativeBuildInputs = [
     copyDesktopItems
