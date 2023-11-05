@@ -67,6 +67,11 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # ModuleNotFoundError: No module named 'test_cache_options'
     "test_custom_key_function"
