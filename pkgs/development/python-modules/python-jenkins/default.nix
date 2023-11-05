@@ -7,7 +7,7 @@
 , pyyaml
 , setuptools
 , six
-, multi_key_dict
+, multi-key-dict
 , testscenarios
 , requests
 , requests-mock
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
+  propagatedBuildInputs = [ pbr pyyaml setuptools six multi-key-dict requests ];
 
   __darwinAllowLocalNetworking = true;
 
