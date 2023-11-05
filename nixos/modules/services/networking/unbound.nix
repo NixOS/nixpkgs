@@ -273,14 +273,7 @@ in {
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@clock"
-          "@cpu-emulation"
-          "@debug"
-          "@keyring"
-          "@module"
-          "mount"
-          "@obsolete"
-          "@resources"
+          "~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources"
         ];
         RestrictNamespaces = true;
         LockPersonality = true;
