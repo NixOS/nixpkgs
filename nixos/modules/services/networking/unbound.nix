@@ -166,7 +166,7 @@ in {
     services.unbound.settings = {
       server = {
         directory = mkDefault cfg.stateDir;
-        username = cfg.user;
+        username = ''""'';
         chroot = ''""'';
         pidfile = ''""'';
         # when running under systemd there is no need to daemonize
@@ -245,14 +245,9 @@ in {
         NotifyAccess = "main";
         Type = "notify";
 
-        # FIXME: Which of these do we actually need, can we drop the chroot flag?
         AmbientCapabilities = [
           "CAP_NET_BIND_SERVICE"
-          "CAP_NET_RAW"
-          "CAP_SETGID"
-          "CAP_SETUID"
-          "CAP_SYS_CHROOT"
-          "CAP_SYS_RESOURCE"
+          "CAP_NET_RAW" # needed if ip-transparent is set to true
         ];
 
         User = cfg.user;
@@ -273,7 +268,7 @@ in {
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [
-          "~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources"
+          "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @resources @privileged"
         ];
         RestrictNamespaces = true;
         LockPersonality = true;
