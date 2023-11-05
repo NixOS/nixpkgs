@@ -154,6 +154,13 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=unused-but-set-variable"
+    ];
+  };
+
   doCheck = true;
 
   postPatch = ''
