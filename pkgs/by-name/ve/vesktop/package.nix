@@ -37,6 +37,20 @@ stdenv.mkDerivation rec {
       nodePackages.pnpm
     ];
 
+    # NOTE: This requires pnpm 8.10.0 or newer
+    # https://github.com/pnpm/pnpm/pull/7214
+    pnpmPatch = builtins.toJSON {
+      pnpm.supportedArchitectures = {
+        os = [ "linux" ];
+        cpu = [ "x64" "arm64" ];
+      };
+    };
+
+    postPatch = ''
+      mv package.json package.json.orig
+      jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
+    '';
+
     # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
     installPhase = ''
       export HOME=$(mktemp -d)
@@ -51,12 +65,10 @@ stdenv.mkDerivation rec {
       done
     '';
 
+    dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = {
-      "aarch64-linux" = "sha256-OcAQbUi+wpBAumncYxP3qtTzjyxiHL69kbQefwaeBfg=";
-      "x86_64-linux" = "sha256-R5/2MSH/jXHrj2x1Ap2OoOFLBLQp3Sq91o01uW8hWOw=";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    outputHash = "sha256-nNXe0vSQiQTkiRqgScKlpkpG/BJc2eIY2ueAd9sk36c=";
   };
 
   nativeBuildInputs = [
