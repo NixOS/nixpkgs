@@ -5194,6 +5194,12 @@
     githubId = 1330683;
     name = "Danielle Lancashire";
   };
+  eneoli = {
+    email = "oliver@eneoli.de";
+    github = "eneoli";
+    githubId = 23139864;
+    name = "Oliver Enes";
+  };
   enorris = {
     name = "Eric Norris";
     email = "erictnorris@gmail.com";
