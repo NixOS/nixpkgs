@@ -29,7 +29,7 @@ in
       description = mdDoc ''
         Set the style for Dolphin.
 
-        This option should be used with `stylePackages` together.
+        This option should be used together with {option}`stylePackages`.
       '';
     };
 
@@ -48,7 +48,7 @@ in
       description = mdDoc ''
         Style packages for Dolphin.
 
-        This option should be used with `style` together.
+        This option should be used together with {option}`style`.
       '';
     };
 
