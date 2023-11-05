@@ -4,7 +4,6 @@
 , pythonOlder
 
 , build
-, click
 , coloredlogs
 , packaging
 , toml
@@ -27,7 +26,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     build
-    click
     coloredlogs
     packaging
     toml
