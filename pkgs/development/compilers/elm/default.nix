@@ -274,6 +274,17 @@ in lib.makeScope pkgs.newScope (self: with self; {
         }
       );
 
+      elm-land = nodePkgs."elm-land".overrideAttrs (
+        old: {
+          meta = with lib; nodePkgs."elm-land".meta // {
+            description = "A production-ready framework for building Elm applications.";
+            homepage = "https://elm.land/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.zupo ];
+          };
+        }
+      );
+
       lamdera = callPackage ./packages/lamdera.nix {};
 
       elm-doc-preview = nodePkgs."elm-doc-preview".overrideAttrs (old: {
