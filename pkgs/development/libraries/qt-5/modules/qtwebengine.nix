@@ -63,11 +63,12 @@ qtModule ({
   pname = "qtwebengine";
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config python which gn nodejs
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     perl
-    lndir (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
+    lndir
+    (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
     pkgsBuildBuild.pkg-config
     (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     pkg-config-wrapped-without-prefix
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   doCheck = true;
@@ -164,13 +165,15 @@ qtModule ({
     "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
   };
 
+  configurePlatforms = [ ];
+
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
 
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+
     export QMAKE_CC=$CC
     export QMAKE_CXX=$CXX
     export QMAKE_LINK=$CXX
@@ -180,6 +183,13 @@ qtModule ({
   qmakeFlags = [ "--" "-system-ffmpeg" ]
     ++ lib.optional (pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
+
+  depsBuildBuild = [
+    pkgsBuildBuild.stdenv
+    zlib
+    nss
+    nspr
+  ];
 
   propagatedBuildInputs = [
     qtdeclarative qtquickcontrols qtlocation qtwebchannel
@@ -276,7 +286,12 @@ qtModule ({
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  # to get progress output in `nix-build` and `nix build -L`
+  preBuild = ''
+    export TERM=dumb
+  '';
+
+  postInstall = ''
     mkdir -p $out/libexec
   '' + lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
@@ -311,18 +326,5 @@ qtModule ({
     # This build takes a long time; particularly on slow architectures
     timeout = 24 * 3600;
   };
-
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-  configurePlatforms = [ ];
-  # to get progress output in `nix-build` and `nix build -L`
-  preBuild = ''
-    export TERM=dumb
-  '';
-  depsBuildBuild = [
-    pkgsBuildBuild.stdenv
-    zlib
-    nss
-    nspr
-  ];
 
 })

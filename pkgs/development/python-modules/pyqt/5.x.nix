@@ -115,16 +115,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    libsForQt5.qmake
-  ] ++ [
     setuptools
     lndir
     sip
   ] ++ (with pkgsBuildTarget.targetPackages.libsForQt5; [
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     qmake
-  ] ++ [
     qtbase
     qtsvg
     qtdeclarative
@@ -141,9 +136,6 @@ buildPythonPackage rec {
 
   buildInputs = with libsForQt5; [
     dbus
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    qtbase
-  ] ++ [
     qtsvg
     qtdeclarative
     pyqt-builder

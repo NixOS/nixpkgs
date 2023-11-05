@@ -30,17 +30,12 @@ in buildPythonPackage (rec {
   nativeBuildInputs = [
     pkg-config
     qmake
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    sip
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     buildPackages.python3Packages.sip
-  ] ++ [
     qtbase
     qtsvg
     qtwebengine
     pyqt-builder
     pythonPackages.setuptools
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     qtdeclarative
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
@@ -51,7 +46,6 @@ in buildPythonPackage (rec {
     qtbase
     qtsvg
     qtwebengine
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     qtwebchannel
     qtdeclarative
   ];

@@ -88,12 +88,12 @@ stdenv.mkDerivation (finalAttrs: ({
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    # `qtbase` expects to find `cc` (with no prefix) in the
-    # `$PATH`, so the following is needed even if
-    # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
-  } // {
+  # `qtbase` expects to find `cc` (with no prefix) in the
+  # `$PATH`, so the following is needed even if
+  # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    buildPackages.stdenv.cc
+  ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
       ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
     ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+
     NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
       "-Wno-warn=free-nonheap-object"
       "-Wno-free-nonheap-object"
@@ -241,9 +241,8 @@ stdenv.mkDerivation (finalAttrs: ({
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
   configurePlatforms = [ ];
-  } // {
+
   # TODO Remove obsolete and useless flags once the build will be totally mastered
   configureFlags = [
     "-plugindir $(out)/$(qtPluginPrefix)"
