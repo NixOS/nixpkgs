@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.3.3";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4WXY7XfZVYaJD63y7fPB6tCsc+wGAsgnFlgtFbX5IK0=";
+    hash = "sha256-bQKcS8vktvD62zvSeaBtoJw36TSpo0gEpKm0HI3AuXg=";
   };
 
   nativeBuildInputs = [
