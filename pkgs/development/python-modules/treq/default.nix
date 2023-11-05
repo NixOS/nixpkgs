@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "22.2.0";
+  version = "23.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-33V+PxQfx4Lt4HamBFIRlP/LQPomRc9I5aNwYDB/Uuw=";
+    hash = "sha256-CRT/kp/RYyzhZ5cjUmD4vBnSD/fEWcHeq9ZbjGjL6sU=";
   };
 
   propagatedBuildInputs = [
