@@ -5,10 +5,11 @@
 
 buildPythonPackage rec {
   version = "1.4";
-  pname = "x11_hash";
+  pname = "x11-hash";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "x11_hash";
+    inherit version;
     sha256 = "172skm9xbbrivy1p4xabxihx9lsnzi53hvzryfw64m799k2fmp22";
   };
 
