@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "cobs";
-  version = "1.2.0";
+  version = "1.2.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2TsQtTcNyIaJYK77cK2x9zpOYQexaRgwekru79PtuPY=";
+    hash = "sha256-Kvf4eRzeGufGuTb10MNf4p/rEN4l95wVsK8NZyl4PMA=";
   };
 
   checkPhase = ''
