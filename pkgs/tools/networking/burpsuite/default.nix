@@ -1,15 +1,15 @@
 { lib, fetchurl, jdk, buildFHSEnv, unzip, makeDesktopItem, proEdition ? false }:
 let
-  version = "2023.10.1.1";
+  version = "2023.10.2.4";
 
   product = if proEdition then {
     productName = "pro";
     productDesktop = "Burp Suite Professional Edition";
-    hash = "sha256-xyEQVrfI9CS6div7vZuluKkIm36B9XqKZ9rH+1DjeD4=";
+    hash = "sha256-H5/nxVvAoGzRIAOchv9tAYyFgrodh7XugCTn2oUV9Tw=";
   } else {
     productName = "community";
     productDesktop = "Burp Suite Community Edition";
-    hash = "sha256-lV1V92sxCiZ7AGjUNJHO9fkh3aUgt0+oISh7efBaOUA=";
+    hash = "sha256-en+eay+XL09Vk6H011fYvxGluMAndedtqCo4dQZvbBM=";
   };
 
   src = fetchurl {
