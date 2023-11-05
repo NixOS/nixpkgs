@@ -18,12 +18,9 @@
 , pytestCheckHook
 }:
 
-let
+buildPythonPackage rec {
   pname = "django-redis";
   version = "5.4.0";
-in
-buildPythonPackage {
-  inherit pname version;
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -45,11 +42,16 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     django
-    hiredis
     lz4
     msgpack
     redis
   ];
+
+  passthru.optional-dependencies = {
+    hiredis = [
+      redis
+    ] ++ redis.optional-dependencies.hiredis;
+  };
 
   pythonImportsCheck = [
     "django_redis"
@@ -70,7 +72,7 @@ buildPythonPackage {
     pytest-django
     pytest-mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     "-W"
