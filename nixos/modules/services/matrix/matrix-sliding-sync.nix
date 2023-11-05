@@ -83,7 +83,7 @@ in
     systemd.services.matrix-sliding-sync = rec {
       after =
         lib.optional cfg.createDatabase "postgresql.service"
-        ++ lib.optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
       wants = after;
       wantedBy = [ "multi-user.target" ];
       environment = cfg.settings;
