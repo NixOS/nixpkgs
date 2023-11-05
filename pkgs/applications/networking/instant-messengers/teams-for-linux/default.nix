@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.14";
+  version = "1.3.18";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2H7j8e2wPMd4cHXDKxSmyC2Ng/B3jb3/tGVTpUOU3XM=";
+    hash = "sha256-evOwjHUmeGw8AUpXSig8zVW2cpJbWkNTH/RUuNipFsQ=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-zB6H14VAf13pAHQmsWC51d/qqyfRmAEbltyLD5ucG4Y=";
+    hash = "sha256-tMC8/qHYli7+OTdxVWRDEyCNzrkYA+zKlHJXlTsl+W0=";
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
