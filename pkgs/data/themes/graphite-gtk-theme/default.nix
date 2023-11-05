@@ -63,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
 
     ${lib.optionalString wallpapers ''
       mkdir -p $out/share/backgrounds
-      cp -a wallpaper/Graphite-normal/*.png $out/share/backgrounds/
+      cp -a wallpaper/Graphite/*.png $out/share/backgrounds/
       ${lib.optionalString (builtins.elem "nord" tweaks) ''
         cp -a wallpaper/Graphite-nord/*.png $out/share/backgrounds/
       ''}
