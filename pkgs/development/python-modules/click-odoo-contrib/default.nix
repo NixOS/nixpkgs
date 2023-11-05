@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "click-odoo-contrib";
-  version = "1.17.0";
+  version = "1.18.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-my6dWmAqvelihtB9SzFje01dZenkkNneKqcgwKtbOuA=";
+    hash = "sha256-dLvrj3yTgfdlW3kEmZtXri3zGlBGQZhsPHzO0rf7foQ=";
   };
 
   nativeBuildInputs = [
