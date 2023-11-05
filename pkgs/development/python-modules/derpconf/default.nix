@@ -2,15 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "derpconf";
   version = "0.8.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-66MOqcWIiqJrORJDgAH5iUblHyqJvuf9DIBN56XjKwU=";
+    hash = "sha256-66MOqcWIiqJrORJDgAH5iUblHyqJvuf9DIBN56XjKwU=";
   };
 
   propagatedBuildInputs = [
