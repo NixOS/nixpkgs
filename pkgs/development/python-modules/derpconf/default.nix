@@ -14,6 +14,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "derpconf abstracts loading configuration files for your app";
     homepage = "https://github.com/globocom/derpconf";
+    changelog = "https://github.com/globocom/derpconf/releases/tag/${version}";
     license = licenses.mit;
   };
 }
