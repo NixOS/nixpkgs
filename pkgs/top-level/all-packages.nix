@@ -17295,10 +17295,6 @@ with pkgs;
 
   scryer-prolog = callPackage ../development/compilers/scryer-prolog { };
 
-  sdcc = callPackage ../development/compilers/sdcc {
-    gputils = null;
-  };
-
   seren = callPackage ../applications/networking/instant-messengers/seren { };
 
   serialdv = callPackage ../development/libraries/serialdv {  };
