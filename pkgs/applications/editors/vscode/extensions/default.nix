@@ -1752,7 +1752,7 @@ let
           sha256 = "sha256-zAy8o5d2pK5ra/dbwoLgPAQAYfRQtUYQjisWYgIhsXA=";
         };
         meta = {
-          description = "Visual Studio Code extension providing syntax support for VHS .tape files.";
+          description = "Visual Studio Code extension providing syntax support for VHS .tape files";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=griimick.vhs";
           homepage = "https://github.com/griimick/vscode-vhs";
           license = lib.licenses.mit;
