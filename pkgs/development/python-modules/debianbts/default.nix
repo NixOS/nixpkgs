@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-debianbts";
-  version = "4.0.1";
+  version = "4.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b0817d593ccdfb58a5f37b8cb3873bd0b2268b434f2798dc75b206d7550fdf04";
+    sha256 = "sha256-JbPb0lZND96XLZNU97wMuT9iGNXVN2KTsZC2St6FfuU=";
   };
 
   buildInputs = [ setuptools ];
