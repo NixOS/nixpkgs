@@ -38,7 +38,10 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./default-icc-profile.patch;
-      inherit colord;
+      srgbProfile = if stdenv.isDarwin then
+        "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
+      else
+        "${colord}/share/color/icc/colord/sRGB.icc";
     })
     (fetchpatch {
       # https://gitlab.mister-muffin.de/josch/img2pdf/issues/178
@@ -55,6 +58,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pikepdf
     pillow
+  ];
+
+  # FIXME: Only add "sRGB Profile.icc" to __impureHostDeps once
+  # https://github.com/NixOS/nix/issues/9301 is fixed.
+  __impureHostDeps = lib.optionals stdenv.isDarwin [
+    "/System/Library/ColorSync/Profiles"
   ];
 
   nativeCheckInputs = [
