@@ -21508,7 +21508,9 @@ with pkgs;
 
   geomyidae = callPackage ../applications/networking/gopher/geomyidae { };
 
-  geos = callPackage ../development/libraries/geos { };
+  geos = callPackage ../development/libraries/geos {
+    stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_14.stdenv else stdenv;
+  };
 
   geos39 = callPackage ../development/libraries/geos/3.9.nix { };
 
@@ -24614,7 +24616,9 @@ with pkgs;
 
   primesieve = callPackage ../applications/science/math/primesieve { };
 
-  proj = callPackage ../development/libraries/proj { };
+  proj = callPackage ../development/libraries/proj {
+    stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_13.stdenv else stdenv;
+  };
 
   proj_7 = callPackage ../development/libraries/proj/7.nix { };
 
