@@ -96,6 +96,7 @@ buildFHSEnv {
     libsoup
     libtheora
     libtiff
+    libunwind
     libusb1
     libv4l
     libva
