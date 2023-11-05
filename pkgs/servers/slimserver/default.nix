@@ -59,6 +59,8 @@ perlPackages.buildPerlPackage rec {
     wrapProgram $out/slimserver.pl \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ]}" \
       --prefix PATH : "${lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
+    mkdir $out/bin
+    ln -s $out/slimserver.pl $out/bin/slimserver
   '';
 
   outputs = [ "out" ];
@@ -73,6 +75,7 @@ perlPackages.buildPerlPackage rec {
     # the firmware is not under a free license, but not included in the default package
     # https://github.com/Logitech/slimserver/blob/public/8.3/License.txt
     license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
+    mainProgram = "slimserver";
     maintainers = with maintainers; [ adamcstephens jecaro ];
     platforms = platforms.unix;
   };
