@@ -5,6 +5,7 @@
 , lib
 , makeWrapper
 , monkeysAudio
+, nixosTests
 , perl536Packages
 , sox
 , stdenv
@@ -52,6 +53,10 @@ perlPackages.buildPerlPackage rec {
   '';
 
   outputs = [ "out" ];
+
+  passthru.tests = {
+    inherit (nixosTests) slimserver;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Logitech/slimserver";
