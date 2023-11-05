@@ -45,6 +45,9 @@ in stdenv.mkDerivation rec {
     ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    # Fix reg add infinite loop
+    # Submitted upstream: https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3210
+    ./fix-infinite-loop.patch
   ];
 
   postPatch = ''
