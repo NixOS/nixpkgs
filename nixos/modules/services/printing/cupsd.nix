@@ -108,6 +108,13 @@ let
   containsGutenprint = pkgs: length (filterGutenprint pkgs) > 0;
   getGutenprint = pkgs: head (filterGutenprint pkgs);
 
+  parsePorts = addresses: let
+    splitAddress = addr: lib.strings.splitString ":" addr;
+    extractPort = addr: builtins.elemAt (builtins.tail (splitAddress addr)) 0;
+    toInt = str: lib.strings.toInt str;
+  in
+    builtins.map (address: toInt (extractPort address)) addresses;
+
 in
 
 {
@@ -169,6 +176,15 @@ in
         apply = concatMapStringsSep "\n" (x: "Allow ${x}");
         description = lib.mdDoc ''
           From which hosts to allow unconditional access.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for TCP/UDP ports specified in
+          listenAdrresses option.
         '';
       };
 
@@ -462,6 +478,13 @@ in
       '';
 
     security.pam.services.cups = {};
+
+    networking.firewall = let
+      listenPorts = parsePorts cfg.listenAddresses;
+    in mkIf cfg.openFirewall {
+      allowedTCPPorts = listenPorts;
+      allowedUDPPorts = listenPorts;
+    };
 
   };
 

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tailspin";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     rev = "refs/tags/${version}";
-    hash = "sha256-yzG8wFTd4DYnmd+fbBdjZ0fr1iEoL4ZqXr59kX/a0Gs=";
+    hash = "sha256-NGPwdTkgzowdchUjuoJ9iVrkmAjXvyijHmUfb5cAUKY=";
   };
 
-  cargoHash = "sha256-v6aOPfQyxqaoxKvT7ak91GvL68h88WfNjlnyU1vH/kY=";
+  cargoHash = "sha256-Pi8JiToF56a6zaUpGTAF6Bw8W8elSzLQimfMDua83Nk=";
 
   meta = with lib; {
     description = "A log file highlighter";
@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/bensadeh/tailspin/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "spin";
+    mainProgram = "tspin";
   };
 }

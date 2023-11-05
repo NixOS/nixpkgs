@@ -1,20 +1,21 @@
 { lib, stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "meritous";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitLab {
     owner = "meritous";
     repo = "meritous";
-    rev = "314af46d84d2746eec4c30a0f63cbc2e651d5303";
-    sha256 = "1hrwm65isg5nwzydyd8gvgl3p36sbj09rsn228sppr8g5p9sm10x";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-6KK2anjX+fPsYf4HSOHQ0EQBINqZiVbxo1RmBR6pslg=";
   };
 
   prePatch = ''
     substituteInPlace Makefile \
-      --replace "CPPFLAGS +=" "CPPFLAGS += -DSAVES_IN_HOME -DDATADIR=\\\"$out/share/meritous\\\"" \
-      --replace sld-config ${lib.getDev SDL}/bin/sdl-config
+      --replace "prefix=/usr/local" "prefix=$out" \
+      --replace sdl-config ${lib.getDev SDL}/bin/sdl-config
+
     substituteInPlace src/audio.c \
       --replace "filename[64]" "filename[256]"
   '';
@@ -31,10 +32,11 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Action-adventure dungeon crawl game";
-    homepage = "http://www.asceai.net/meritous/";
-    license = licenses.gpl3;
+    homepage = "https://gitlab.com/meritous/meritous";
+    changelog = "https://gitlab.com/meritous/meritous/-/blob/master/NEWS";
+    license = licenses.gpl3Only;
+    mainProgram = "meritous";
     maintainers = [ maintainers.alexvorobiev ];
     platforms = platforms.linux;
   };
-}
-
+})

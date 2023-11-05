@@ -267,6 +267,7 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
@@ -437,6 +438,7 @@ mapAliases ({
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   WSME = wsme; # added 2023-02-19
+  x11_hash = x11-hash; # added 2023-11-05
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   Yapsy = yapsy; # added 2023-02-19
