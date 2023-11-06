@@ -3628,6 +3628,19 @@ with self; {
     };
   };
 
+  ClassMember = buildPerlPackage {
+    pname = "Class-Member";
+    version = "1.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OP/OPI/Class-Member-1.6.tar.gz";
+      hash = "sha256-p1KK8in6OhIF3NJakd59dKxvp9lSgbmTtV6Lb0+HuZE=";
+    };
+    meta = {
+      description = "A set of modules to make the module developement easier";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassMethodMaker = buildPerlPackage {
     pname = "Class-MethodMaker";
     version = "2.24";
