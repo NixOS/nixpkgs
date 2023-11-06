@@ -285,8 +285,6 @@ package-maintainers:
   maralorn:
     - cabal-fmt
     - clay
-    - ema
-    - emanote
     - eventlog2html
     - generic-optics
     - ghc-debug-brick
