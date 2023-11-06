@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , buildPackages
+, ncurses
 , pkg-config
 , abiVersion ? "6"
 , enableStatic ? stdenv.hostPlatform.isStatic
@@ -55,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   depsBuildBuild = [
-    buildPackages.stdenv.cc
+    stdenv
   ];
 
   nativeBuildInputs = [
     pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    buildPackages.ncurses
+    ncurses
   ];
 
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
