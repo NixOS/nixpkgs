@@ -9,8 +9,6 @@
 , ninja
 , python3
 , gobject-introspection
-, wrapGAppsHook
-, wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
 , qtwayland
@@ -52,8 +50,6 @@
 , libXtst
 , libthai
 , libdatrie
-, xdg-utils
-, xorg
 , libsysprof-capture
 , libpsl
 , brotli
@@ -103,7 +99,7 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  pname = "telegram-desktop";
+  pname = "telegram-desktop-unwrapped";
   version = "4.11.3";
 
   src = fetchFromGitHub {
@@ -135,8 +131,7 @@ stdenv.mkDerivation rec {
       --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
   '';
 
-  # We want to run wrapProgram manually (with additional parameters)
-  dontWrapGApps = true;
+  # This is an unwrapped package
   dontWrapQtApps = true;
 
   nativeBuildInputs = [
@@ -145,8 +140,6 @@ stdenv.mkDerivation rec {
     ninja
     python3
     gobject-introspection
-    wrapGAppsHook
-    wrapQtAppsHook
     extra-cmake-modules
   ];
 
@@ -209,16 +202,6 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # for cppgir to locate gir files
     export GI_GIR_PATH="$XDG_DATA_DIRS"
-  '';
-
-  postFixup = ''
-    # This is necessary to run Telegram in a pure environment.
-    # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/telegram-desktop \
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   passthru = {
