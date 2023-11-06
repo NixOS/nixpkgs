@@ -3,15 +3,18 @@
 , fetchFromGitHub
 , niapy
 , nltk
+, numpy
 , pandas
 , poetry-core
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.3";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +23,19 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaARM";
     rev = "refs/tags/${version}";
-    hash = "sha256-kWOJfADqtC8YdZUlifKeiaS2a2cgcsMgCf0IHJt4NKY=";
+    hash = "sha256-E5G1uVDSErqwxTBNQ7qselemW9A3W8sr3ExPEh+1les=";
   };
 
+   pythonRelaxDeps = [
+    "nltk"
+    "niapy"
+    "numpy"
+    "pandas"
+    "tomli"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     poetry-core
   ];
 
@@ -31,6 +43,7 @@ buildPythonPackage rec {
     niapy
     nltk
     pandas
+    tomli
   ];
 
   disabledTests = [
