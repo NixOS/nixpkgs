@@ -1,15 +1,14 @@
-{ lib, buildGoModule, fetchFromGitea, mage, writeShellScriptBin, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, mage, writeShellScriptBin, nixosTests }:
 
 buildGoModule rec {
   pname = "vikunja-api";
-  version = "0.20.4";
+  version = "0.21.0";
 
-  src = fetchFromGitea {
-    domain = "kolaente.dev";
-    owner = "vikunja";
+  src = fetchFromGitHub {
+    owner = "go-vikunja";
     repo = "api";
     rev = "v${version}";
-    hash = "sha256-SkZf8LFU4/HFEWVEEj7Gl2jVwIL834GRwyua4cw9nh4=";
+    hash = "sha256-QRqAj7/TZ5jPgkX3xCn3sUglKXFwVSk4hrzlyXySDuM=";
   };
 
   nativeBuildInputs =
