@@ -16,6 +16,7 @@
 , formats
 , lib
 , nix
+, nixosTests
 , python3Packages
 , makeWrapper
 , runCommand
@@ -38,6 +39,9 @@ runCommand pname
   ];
   passthru = {
     inherit allowedPatterns;
+    tests = {
+      inherit (nixosTests) nix-required-mounts;
+    };
   };
   meta.mainProgram = pname;
 } ''
