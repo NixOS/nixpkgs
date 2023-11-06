@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoconf
 , automake
 , libtool
@@ -24,24 +23,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.46.0";
+  version = "1.47.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Lrsyh4qd3OkTw1cSPfahzfSGNt6+pRN1X21iiv1SsFo=";
+    hash = "sha256-J6qvq///A/tr+/vNRVCwCc80/VHKWQTYF6Mt1I+dBCU=";
   };
-
-  patches = [
-    # Disable io_uring close on selected kernels. Remove on next release
-    # https://github.com/libuv/libuv/pull/4141
-    (fetchpatch {
-      url = "https://github.com/libuv/libuv/commit/c811169f91b2101f7302e96de3d2dc366ade3a25.patch";
-      hash = "sha256-7vk6XGXwJcwYUQPqIJ3JPd/fPIGrjE5WRDSJCMQfKeU=";
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 
@@ -50,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
       "tcp_connect_timeout" # tries to reach out to 8.8.8.8
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
-      "getaddrinfo_fail" "getaddrinfo_fail_sync"
+      "getaddrinfo_fail" "getaddrinfo_fail_sync" "tcp_connect6_link_local"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
       "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
