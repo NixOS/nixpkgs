@@ -41,6 +41,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           };
           networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
         };
+        nginx-scale.configuration = {
+          services.invidious = {
+            nginx.enable = true;
+            domain = "invidious.example.com";
+            serviceScale = 3;
+          };
+          services.nginx.virtualHosts."invidious.example.com" = {
+            forceSSL = false;
+            enableACME = false;
+          };
+          networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+        };
         postgres-tcp.configuration = {
           services.invidious = {
             database = {
@@ -75,6 +87,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     activate_specialisation("nginx")
     machine.wait_for_open_port(80)
     curl_assert_status_code("http://invidious.example.com/search", 200)
+
+    activate_specialisation("nginx-scale")
+    machine.wait_for_open_port(80)
+    # this depends on nginx round-robin behaviour for the upstream servers
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    machine.succeed("journalctl -eu invidious.service | grep -o '200 GET /search'")
+    machine.succeed("journalctl -eu invidious-1.service | grep -o '200 GET /search'")
+    machine.succeed("journalctl -eu invidious-2.service | grep -o '200 GET /search'")
 
     postgres_tcp.wait_for_unit("postgresql.service")
     activate_specialisation("postgres-tcp")
