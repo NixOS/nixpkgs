@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20230918";
+  version = "20231106";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wBAanFVEIIzTcoX40P9eI26UdEu0SC/xuife/zi2Xho=";
+    hash = "sha256-kpQ3q2dMts6OzEx9qjFp7PZvZ47Se6+nzImqBhExiWw=";
   };
 
   patches = [
@@ -56,17 +56,6 @@ buildPythonPackage rec {
     openai-triton
     torchWithCuda
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "tiktoken==0.3.3" "tiktoken>=0.3.3"
-  ''
-  # openai-triton is only needed for CUDA support.
-  # triton needs CUDA to be build.
-  # -> by making it optional, we can build whisper without unfree packages enabled
-  + lib.optionalString (!cudaSupport) ''
-    sed -i '/if sys.platform.startswith("linux") and platform.machine() == "x86_64":/{N;d}' setup.py
-  '';
 
   preCheck = ''
     export HOME=$TMPDIR
