@@ -14320,6 +14320,8 @@ self: super: with self; {
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
+  typeguard3 = callPackage ../development/python-modules/typeguard3 { };
+
   typepy = callPackage ../development/python-modules/typepy { };
 
   typer = callPackage ../development/python-modules/typer { };

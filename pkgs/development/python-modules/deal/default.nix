@@ -12,7 +12,7 @@
 , vaa
 , deal-solver
 , pygments
-, typeguard
+, typeguard3
 , urllib3
 , flake8
 }:
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     astroid
     deal-solver
     pygments
-    typeguard
+    typeguard3
   ];
 
   nativeCheckInputs = [
