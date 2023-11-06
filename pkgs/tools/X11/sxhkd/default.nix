@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ vyp AndersonTorres ncfavier ];
     platforms = platforms.linux;
+    mainProgram = "sxhkd";
   };
 })
