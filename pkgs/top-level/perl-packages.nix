@@ -1169,6 +1169,20 @@ with self; {
     };
   };
 
+  AsyncUtil = buildPerlPackage {
+    pname = "Async-Util";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WH/WHITNEY/Async-Util-0.01.tar.gz";
+      hash = "sha256-jzKxHKvFD2Xjh79W8mWBV6IsNah5Nmbhtfis/hMQkQY=";
+    };
+    buildInputs = [ AnyEvent ListMoreUtils ];
+    meta = {
+      description = "Utilities for doing common async operations";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ArchiveCpio = buildPerlPackage {
     pname = "Archive-Cpio";
     version = "0.10";
