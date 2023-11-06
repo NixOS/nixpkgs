@@ -22,7 +22,7 @@
 , blaze
 , cppcheck
 , rocm-device-libs
-, texlive
+, texliveSmall
 , doxygen
 , sphinx
 , docutils
@@ -33,8 +33,7 @@
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     latexmk
     tex-gyre
     fncychap
@@ -45,8 +44,8 @@ let
     tabulary
     varwidth
     titlesec
-    epstopdf;
-  };
+    epstopdf
+  ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
   version = "5.7.1";
