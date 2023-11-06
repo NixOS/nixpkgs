@@ -169,6 +169,7 @@ in buildFHSEnv rec {
     libcaca
     libcanberra
     libgcrypt
+    libunwind
     libvpx
     librsvg
     xorg.libXft

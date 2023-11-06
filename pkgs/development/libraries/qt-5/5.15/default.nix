@@ -313,7 +313,9 @@ let
 
       qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
-        propagatedBuildInputs = [ qtbase.dev ];
+        ${if stdenv.buildPlatform == stdenv.hostPlatform
+          then "propagatedBuildInputs"
+          else "depsTargetTargetPropagated"} = [ qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
@@ -338,6 +340,12 @@ let
   });
 
   finalScope = baseScope.overrideScope(final: prev: {
-    qttranslations = bootstrapScope.qttranslations;
+    # qttranslations causes eval-time infinite recursion when
+    # cross-compiling; disabled for now.
+    qttranslations =
+      if stdenv.buildPlatform == stdenv.hostPlatform
+      then bootstrapScope.qttranslations
+      else null;
+    qutebrowser = final.callPackage ../../../../applications/networking/browsers/qutebrowser { };
   });
 in finalScope

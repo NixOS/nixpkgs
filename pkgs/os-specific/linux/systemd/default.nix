@@ -773,6 +773,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
     priority = 10;
-    maintainers = with maintainers; [ flokli kloenk mic92 ];
+    maintainers = with maintainers; [ flokli kloenk ];
   };
 })
