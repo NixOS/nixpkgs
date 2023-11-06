@@ -45,11 +45,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=state::tests::test_has_write_permission"
   ];
 
-  # Cargo.lock is outdated
-  postConfigure = ''
-    cargo metadata --offline
-  '';
-
   meta = with lib; {
     description = "A tui file manager with vim-like key mapping";
     homepage = "https://github.com/kyoheiu/felix";
