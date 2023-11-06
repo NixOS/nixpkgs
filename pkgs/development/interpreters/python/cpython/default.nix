@@ -92,7 +92,7 @@ let
   openssl' = if openssl != null then openssl_legacy else null;
 
   buildPackages = pkgsBuildHost;
-  inherit (passthru) pythonForBuild;
+  inherit (passthru) pythonOnBuildForHost;
 
   inherit (darwin.apple_sdk.frameworks) Cocoa;
 
@@ -127,7 +127,7 @@ let
     nukeReferences
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
-    pythonForBuild
+    pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
   ];
@@ -148,9 +148,9 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
-  else pythonForBuild.interpreter;
+  else pythonOnBuildForHost.interpreter;
 
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
@@ -388,7 +388,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
     "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
-    "--with-build-python=${pythonForBuildInterpreter}"
+    "--with-build-python=${pythonOnBuildForHostInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
@@ -511,9 +511,9 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
     # is not reproducible yet. https://bugs.python.org/issue29708
     # Not creating bytecode will result in a large performance loss however, so we do build it.
-    find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
-    find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+    find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
     '' + ''
     # *strip* shebang from libpython gdb script - it should be dual-syntax and
     # interpretable by whatever python the gdb in question is using, which may
@@ -561,7 +561,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
-    pythonForBuild buildPackages.bash
+    pythonOnBuildForHost buildPackages.bash
   ];
 
   separateDebugInfo = true;

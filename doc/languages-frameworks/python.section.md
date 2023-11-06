@@ -142,7 +142,7 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the [`buildPhase`](#build-phase), it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
+* In the [`buildPhase`](#build-phase), it calls `${python.pythonOnBuildForHost.interpreter} setup.py bdist_wheel` to
   build a wheel binary zipfile.
 * In the [`installPhase`](#ssec-install-phase), it installs the wheel file using `pip install *.whl`.
 * In the [`postFixup`](#var-stdenv-postFixup) phase, the `wrapPythonPrograms` bash function is called to
@@ -1682,7 +1682,7 @@ of such package using the feature is `pkgs/tools/X11/xpra/default.nix`.
 As workaround install it as an extra `preInstall` step:
 
 ```shell
-${python.pythonForBuild.interpreter} setup.py install_data --install-dir=$out --root=$out
+${python.pythonOnBuildForHost.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data\_files/d' setup.py
 ```
 

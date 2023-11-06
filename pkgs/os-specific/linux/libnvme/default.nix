@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl # for kernel-doc
     pkg-config
-    python3.pythonForBuild
+    python3.pythonOnBuildForHost
     swig
   ];
 

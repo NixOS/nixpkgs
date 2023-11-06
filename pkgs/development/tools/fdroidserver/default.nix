@@ -47,7 +47,7 @@ buildPythonApplication rec {
   '';
 
   preConfigure = ''
-    ${python3.pythonForBuild.interpreter} setup.py compile_catalog
+    ${python3.pythonOnBuildForHost.interpreter} setup.py compile_catalog
   '';
 
   postInstall = ''

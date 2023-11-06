@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
-    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection

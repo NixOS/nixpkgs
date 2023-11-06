@@ -113,8 +113,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     touch cookbook/static/themes/bootstrap.min.css.map
     touch cookbook/static/css/bootstrap-vue.min.css.map
 
-    ${python.pythonForBuild.interpreter} manage.py collectstatic_js_reverse
-    ${python.pythonForBuild.interpreter} manage.py collectstatic
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic_js_reverse
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic
 
     runHook postBuild
   '';

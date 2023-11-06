@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${python.pythonForBuild.interpreter} ${src}/test.py
+    ${python.pythonOnBuildForHost.interpreter} ${src}/test.py
   '';
   pythonImportsCheck = ["asyncinotify"];
 
