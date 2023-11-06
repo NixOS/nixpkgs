@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-RvjYd8iD6JkGhh6TDy/Qo+UzLxbhPvIJvhl/Rw14lbk=";
   };
 
-  postPatch = ''
-    patchShebangs ./configure
-  '';
-
   configureFlags = [ "--datadir=${placeholder "out"}/share" ];
 
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
