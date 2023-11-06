@@ -6,7 +6,7 @@
 , python-dateutil
 , x-wr-timezone
 , pytestCheckHook
-, restructuredtext_lint
+, restructuredtext-lint
 , pygments
 , tzdata
 }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    restructuredtext_lint
+    restructuredtext-lint
     pygments
     tzdata
   ];
