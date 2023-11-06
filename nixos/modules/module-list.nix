@@ -739,6 +739,7 @@
   ./services/misc/sonarr.nix
   ./services/misc/sourcehut
   ./services/misc/spice-autorandr.nix
+  ./services/misc/spice-vdagent.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/spice-webdavd.nix
   ./services/misc/ssm-agent.nix
