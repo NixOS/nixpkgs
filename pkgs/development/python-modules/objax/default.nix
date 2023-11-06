@@ -16,21 +16,14 @@
 
 buildPythonPackage rec {
   pname = "objax";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "objax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1/XmxFZfU+XMD0Mlcv4xTUYZDwltAx1bZOlPuKWQQC0=";
+    hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
-
-  patches = [
-    (fetchpatch {  # https://github.com/google/objax/pull/266
-      url = "https://github.com/google/objax/pull/266/commits/a1bcb71ebd92c94fec98222349d7cd57048e541d.patch";
-      hash = "sha256-MO9/LAxbghjhRU8sbYWm3xa4RPuU+5m74YU3n3hJ09s=";
-    })
-  ];
 
   # Avoid propagating the dependency on `jaxlib`, see
   # https://github.com/NixOS/nixpkgs/issues/156767
