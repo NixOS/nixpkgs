@@ -243,6 +243,12 @@ in
   ./6/gnat-glibc234.patch
 ]
 
+# The clang-based assembler used in darwin.cctools-llvm (LLVM >11) does not support piping input.
+# Fortunately, it does not exhibit the problem GCC has with the cctools assembler.
+# This patch can be dropped should darwin.cctools-llvm ever implement support.
+++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
+
+
 ## gcc 4.9 and older ##############################################################################
 
 ++ optional (!atLeast6) ./parallel-bconfig.patch
