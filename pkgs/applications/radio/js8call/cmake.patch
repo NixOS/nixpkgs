@@ -48,12 +48,6 @@ index 75b80b3..7c04265 100644
  
  # if (UNIX)
  #   if (NOT WSJT_SKIP_MANPAGES)
-@@ -1292,3 +1292,5 @@ configure_file ("${PROJECT_SOURCE_DIR}/CMakeCPackOptions.cmake.in"
- set (CPACK_PROJECT_CONFIG_FILE "${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake")
- 
- include (CPack)
-+
-+add_definitions (-DJS8_USE_HAMLIB_THREE)
 diff --git a/Configuration.cpp b/Configuration.cpp
 index 8258f97..63a29bb 100644
 --- a/Configuration.cpp

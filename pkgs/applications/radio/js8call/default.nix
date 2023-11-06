@@ -3,7 +3,7 @@
 , fetchFromBitbucket
 , wrapQtAppsHook
 , pkg-config
-, hamlib
+, hamlib_4-wsjtx
 , libusb1
 , cmake
 , gfortran
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    hamlib
+    hamlib_4-wsjtx
     libusb1
     fftw
     fftwFloat
@@ -49,7 +49,10 @@ stdenv.mkDerivation rec {
         --replace "/usr/bin/" "$out/bin"
   '';
 
-  patches = [ ./cmake.patch ];
+  patches = [
+    ./cmake.patch
+    ./qt-fixes.patch
+  ];
 
   meta = with lib; {
     description = "Weak-signal keyboard messaging for amateur radio";

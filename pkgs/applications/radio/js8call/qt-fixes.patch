@@ -1,0 +1,13 @@
+diff --git a/qt_helpers.hpp b/qt_helpers.hpp
+index bc3ce74..31927e4 100644
+--- a/qt_helpers.hpp
++++ b/qt_helpers.hpp
+@@ -99,7 +99,7 @@ public:
+ 
+   static QVariant asQVariant(T * ptr)
+   {
+-    return qVariantFromValue (reinterpret_cast<void *> (ptr));
++    return QVariant::fromValue (reinterpret_cast<void *> (ptr));
+   }
+ };
+ 
