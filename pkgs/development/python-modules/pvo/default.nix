@@ -4,16 +4,17 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pydantic
+, mashumaro
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, syrupy
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "2.0.0";
+  version = "2.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-pvoutput";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SvsrvGwIAlj/8hdk90+rxigVrx6n3YInvF/4eux2H04=";
+    hash = "sha256-Js8oPEMxJyWK1E6GDm1xwm2BilnV3WBM6Hibf6oFOKE=";
   };
 
   postPatch = ''
@@ -38,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    mashumaro
     yarl
   ];
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [
