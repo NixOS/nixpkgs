@@ -18,6 +18,7 @@
 , nodejs
 , ocamlPackages
 , python3
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -106,12 +107,14 @@ stdenv.mkDerivation (finalAttrs: {
     python-pyuv = python3.pkgs.pyuv;
     python-uvloop = python3.pkgs.uvloop;
     static = pkgsStatic.libuv;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
+    pkgConfigModules = [ "libuv" ];
     maintainers = with maintainers; [ marsam ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
