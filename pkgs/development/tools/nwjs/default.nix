@@ -128,7 +128,7 @@ stdenv.mkDerivation {
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ maintainers.offline ];
+    maintainers = [ maintainers.mikaelfangel ];
     license = licenses.bsd3;
   };
 }
