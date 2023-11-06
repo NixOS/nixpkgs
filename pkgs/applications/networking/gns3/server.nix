@@ -32,7 +32,6 @@ python3.pkgs.buildPythonApplication {
     aiohttp-cors
     async-generator
     distro
-    importlib-resources
     jinja2
     jsonschema
     multidict
@@ -45,6 +44,8 @@ python3.pkgs.buildPythonApplication {
     truststore
     yarl
     zipstream
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
