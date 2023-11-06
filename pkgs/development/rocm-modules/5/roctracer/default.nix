@@ -3,14 +3,13 @@
 , fetchFromGitHub
 , rocmUpdateScript
 , cmake
-, clang
 , clr
 , rocm-device-libs
-, rocprofiler
 , libxml2
 , doxygen
 , graphviz
 , gcc-unwrapped
+, libbacktrace
 , rocm-runtime
 , python3Packages
 , buildDocs ? false # Nothing seems to be generated, so not making the output
@@ -19,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -38,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    clang
     clr
   ] ++ lib.optionals buildDocs [
     doxygen
@@ -46,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocprofiler
     libxml2
+    libbacktrace
     python3Packages.python
     python3Packages.cppheaderparser
   ];

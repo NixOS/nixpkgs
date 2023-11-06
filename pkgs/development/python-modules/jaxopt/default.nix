@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "jaxopt";
-  version = "0.8.1";
+  version = "0.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-5+GfRFzXyc1Ukp86NeK0qstTq9fkx+eDb4iXvxzRoKs=";
+    repo = "jaxopt";
+    rev = "refs/tags/jaxopt-v${version}";
+    hash = "sha256-uVOd3knoku5fKBNXOhCikGtjDuW3TtRqev94OM/8Pgk=";
   };
 
   propagatedBuildInputs = [

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "bbox";
-  version = "0.9.2";
+  version = "0.9.4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ucR7mg9eubEefjC7ratEgrb9h++a26z8KV38n3N2kcw=";
+    hash = "sha256-GGQhKkdwmrYPEhtldPY3WUInSniU/B40NZvt1gXEuzg=";
   };
 
   propagatedBuildInputs = [ pyquaternion numpy ];

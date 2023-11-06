@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 77fb7ae14f17fd7f4851bca87e0c28c704797591
-  ref: refs/tags/6.3.39
+  revision: e4a23dc9d09f5b6b1b82768770e8063014a940bb
+  ref: refs/tags/6.3.40
   specs:
-    metasploit-framework (6.3.39)
+    metasploit-framework (6.3.40)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -462,4 +462,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.19
+   2.4.20

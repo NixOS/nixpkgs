@@ -3,7 +3,21 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # autosuspend is incompatible with tzlocal v5
+      # See https://github.com/regebro/tzlocal#api-change
+      tzlocal = super.tzlocal.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "4.3.1";
+          hash = "sha256-7jLvjCCAPBmpbtNmrd09SnKe9jCctcc1mgzC7ut/pGo=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
   version = "6.0.0";
 
@@ -21,27 +35,28 @@ python3.pkgs.buildPythonApplication rec {
       --replace '--cov-config=setup.cfg' ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
+    dbus-python
+    icalendar
+    jsonpath-ng
+    lxml
+    mpd2
     portalocker
     psutil
-    dbus-python
-  ];
-
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-    python-dbusmock
-    pytest-httpserver
-    dateutils
-    freezegun
-    pytest-mock
+    python-dateutil
+    pytz
     requests
     requests-file
-    icalendar
     tzlocal
-    jsonpath-ng
-    mpd2
-    lxml
+  ];
+
+  nativeCheckInputs = with python.pkgs; [
+    freezegun
     pytest-datadir
+    pytest-httpserver
+    pytest-mock
+    pytestCheckHook
+    python-dbusmock
   ];
 
   # Disable tests that need root

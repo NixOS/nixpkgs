@@ -78,9 +78,9 @@ in {
     server = {
       disableRegistration = mkOption {
         default = true;
-        type = types.bool;
+        type = types.enum [true false "invite_only"];
         description = lib.mdDoc ''
-          Whether to prohibit creating an account in plausible's UI.
+          Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
       };
       secretKeybaseFile = mkOption {
@@ -209,7 +209,7 @@ in {
             # Configuration options from
             # https://plausible.io/docs/self-hosting-configuration
             PORT = toString cfg.server.port;
-            DISABLE_REGISTRATION = boolToString cfg.server.disableRegistration;
+            DISABLE_REGISTRATION = if isBool cfg.server.disableRegistration then boolToString cfg.server.disableRegistration else cfg.server.disableRegistration;
 
             RELEASE_TMP = "/var/lib/plausible/tmp";
             # Home is needed to connect to the node with iex

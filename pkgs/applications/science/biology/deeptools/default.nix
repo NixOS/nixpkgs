@@ -2,14 +2,16 @@
 with python.pkgs;
 buildPythonApplication rec {
   pname = "deepTools";
-  version = "3.5.1";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
     rev = version;
-    sha256 = "07v8vb2x4b0mgw0mvcj91vj1fqbcwizwsniysl2cvmv93gad8gbp";
+    sha256 = "sha256-A8YdlMptmJyxWW0EYLjXFIWjIO/mttEC7VYdlCe9MaI=";
   };
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     numpy
@@ -21,9 +23,10 @@ buildPythonApplication rec {
     matplotlib
     plotly
     deeptoolsintervals
+    importlib-metadata
   ];
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     homepage = "https://deeptools.readthedocs.io/en/develop";
@@ -36,7 +39,7 @@ buildPythonApplication rec {
       publication-ready visualizations to identify enrichments and for functional
       annotations of the genome.
     '';
-    license = licenses.gpl3;
+    license = with licenses; [ mit bsd3 ];
     maintainers = with maintainers; [ scalavision ];
   };
 }

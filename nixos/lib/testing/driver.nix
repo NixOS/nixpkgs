@@ -94,6 +94,7 @@ let
         wrapProgram $out/bin/nixos-test-driver \
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
+          --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
           ${lib.escapeShellArgs (lib.concatMap (arg: ["--add-flags" arg]) config.extraDriverArgs)}
       '';
@@ -121,6 +122,18 @@ in
       type = types.package;
       default = hostPkgs.qemu_test;
       defaultText = "hostPkgs.qemu_test";
+    };
+
+    globalTimeout = mkOption {
+      description = mdDoc ''
+        A global timeout for the complete test, expressed in seconds.
+        Beyond that timeout, every resource will be killed and released and the test will fail.
+
+        By default, we use a 1 hour timeout.
+      '';
+      type = types.int;
+      default = 60 * 60;
+      example = 10 * 60;
     };
 
     enableOCR = mkOption {

@@ -79,7 +79,7 @@ let
       libiconv
     ];
 
-    ldFlags = [
+    ldflags = [
       "-s -w"
       "-X main.version=${version}"
       "-X main.commit=${src.rev}"

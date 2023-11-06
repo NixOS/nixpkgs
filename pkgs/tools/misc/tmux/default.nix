@@ -103,6 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
-    maintainers = with lib.maintainers; [ thammers fpletz srapenne ];
+    maintainers = with lib.maintainers; [ thammers fpletz ];
   };
 })

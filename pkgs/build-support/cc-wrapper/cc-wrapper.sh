@@ -31,7 +31,6 @@ cxxLibrary=1
 cInclude=1
 
 expandResponseParams "$@"
-linkType=$(checkLinkType "${params[@]}")
 
 declare -ag positionalArgs=()
 declare -i n=0
@@ -175,6 +174,7 @@ extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_
 extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
+    linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "${params[@]}" ${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)
 
     # Add the flags that should only be passed to the compiler when
     # linking.

@@ -32,8 +32,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.11.2";
-  srcHash = "sha256-7FE740/yKUXtujVX60fQB/xvCZFfV69FRihvSi6+UWo=";
+  version = "1.11.3";
+  srcHash = "sha256-swxRfFjTcKjKQv6GFdWNR6IKhdJQYhZSR7UWLtcnrXw=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -79,8 +79,9 @@ in buildPythonPackage {
   # Relax deps a bit
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'meson-python>=0.12.1,<0.14.0' 'meson-python' \
       --replace 'numpy==' 'numpy>=' \
-      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0" \
+      --replace "pybind11>=2.10.4,<2.11.1" "pybind11>=2.10.4,<2.12.0" \
       --replace 'wheel<0.41.0' 'wheel'
   '';
 
@@ -214,6 +215,7 @@ in buildPythonPackage {
 
   meta = with lib; {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
+    downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh doronbehar ];

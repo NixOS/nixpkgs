@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 }:
 
@@ -10,10 +11,10 @@ let
       click = super.click.overridePythonAttrs (oldAttrs: rec {
         version = "7.1.2";
 
-        src = oldAttrs.src.override {
+        src = fetchPypi {
+          pname = "click";
           inherit version;
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
-          sha256 = "";
         };
         disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
       });

@@ -40,10 +40,13 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install-docs" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "library and utilities for Linux hugepages";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    badPlatforms = flatten [
+      systems.inspect.platformPatterns.isStatic
+      systems.inspect.patterns.isMusl
+    ];
   };
 }

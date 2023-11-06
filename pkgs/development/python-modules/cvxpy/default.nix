@@ -67,6 +67,8 @@ buildPythonPackage rec {
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+    # https://github.com/cvxpy/cvxpy/issues/2174
+    "test_scipy_mi_time_limit_reached"
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_ecos_bb_mi_lp_2" # https://github.com/cvxpy/cvxpy/issues/1241#issuecomment-780912155
   ];

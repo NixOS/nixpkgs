@@ -546,8 +546,9 @@ in {
     # We do not have systemd in stage-1 boot so must invoke `multipathd`
     # with the `-1` argument which disables systemd calls. Invoke `multipath`
     # to display the multipath mappings in the output of `journalctl -b`.
+    # TODO: Implement for systemd stage 1
     boot.initrd.kernelModules = [ "dm-multipath" "dm-service-time" ];
-    boot.initrd.postDeviceCommands = ''
+    boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       modprobe -a dm-multipath dm-service-time
       multipathd -s
       (set -x && sleep 1 && multipath -ll)

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "4.0.7";
+  version = "4.0.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6mfBenzUrjWPj0bDswTEBpi8BCNzLj8nMyHuFBIyyL4=";
+    hash = "sha256-PB9eRtwRZt/UCkLWhealE5b9NP+Hh0Kj5HxvDMSio4U=";
   };
 
   nativeBuildInputs = [

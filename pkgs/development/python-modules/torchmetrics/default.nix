@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, numpy
+, lightning-utilities
 , cloudpickle
 , scikit-learn
 , scikit-image
@@ -15,7 +18,7 @@
 
 let
   pname = "torchmetrics";
-  version = "0.11.4";
+  version = "1.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,10 +27,14 @@ buildPythonPackage {
     owner = "PyTorchLightning";
     repo = "metrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K8QLdDpnS4N8s3zXsifFloRXW/QXEm36mJXXKEBEJBs=";
+    hash = "sha256-g5JuTbiRd8yWx2nM3UE8ejOhuZ0XpAQdS5AC9AlrSFY=";
   };
 
+  disabled = pythonOlder "3.8";
+
   propagatedBuildInputs = [
+    numpy
+    lightning-utilities
     packaging
     py-deprecate
   ];

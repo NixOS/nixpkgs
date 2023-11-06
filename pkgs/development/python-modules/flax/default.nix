@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.6.5";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
+    hash = "sha256-i48omag/1Si3mCCGfsUD9qeejyeCLWzvvwKJqH8vm8k=";
   };
 
   nativeBuildInputs = [ jaxlib pythonRelaxDepsHook ];

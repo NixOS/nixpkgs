@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "upbound";
-  version = "0.19.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "up";
     rev = "v${version}";
-    sha256 = "sha256-Dr6EKpKVy2DLhivJ42Bx+WJL2L710sQlXroaAm66Gpo=";
+    sha256 = "sha256-SvnmdpsdXbPSC+4inoMvu55az33Zucqf4c3yQ0g6EMw=";
   };
 
-  vendorHash = "sha256-J7rZAvEx0jgkhJIEE19rV2WdBCIvkqYzB72ZiABs56U=";
+  vendorHash = "sha256-ai+Mro/ooUElJJq8BbnCo9PupIAwlanDeh+oe5otJJ4=";
 
   subPackages = [ "cmd/docker-credential-up" "cmd/up" ];
 

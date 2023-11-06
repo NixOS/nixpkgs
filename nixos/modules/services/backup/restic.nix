@@ -23,22 +23,10 @@ in
 
         environmentFile = mkOption {
           type = with types; nullOr str;
-          # added on 2021-08-28, s3CredentialsFile should
-          # be removed in the future (+ remember the warning)
-          default = config.s3CredentialsFile;
+          default = null;
           description = lib.mdDoc ''
             file containing the credentials to access the repository, in the
             format of an EnvironmentFile as described by systemd.exec(5)
-          '';
-        };
-
-        s3CredentialsFile = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          description = lib.mdDoc ''
-            file containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-            for an S3-hosted repository, in the format of an EnvironmentFile
-            as described by systemd.exec(5)
           '';
         };
 
@@ -113,12 +101,15 @@ in
         };
 
         paths = mkOption {
+          # This is nullable for legacy reasons only. We should consider making it a pure listOf
+          # after some time has passed since this comment was added.
           type = types.nullOr (types.listOf types.str);
-          default = null;
+          default = [ ];
           description = lib.mdDoc ''
-            Which paths to backup.  If null or an empty array, no
-            backup command will be run.  This can be used to create a
-            prune-only job.
+            Which paths to backup, in addition to ones specified via
+            `dynamicFilesFrom`.  If null or an empty array and
+            `dynamicFilesFrom` is also null, no backup command will be run.
+             This can be used to create a prune-only job.
           '';
           example = [
             "/var/lib/postgresql"
@@ -231,7 +222,7 @@ in
           description = lib.mdDoc ''
             A script that produces a list of files to back up.  The
             results of this command are given to the '--files-from'
-            option.
+            option. The result is merged with paths specified via `paths`.
           '';
           example = "find /home/matt/git -type d -name .git";
         };
@@ -297,7 +288,6 @@ in
   };
 
   config = {
-    warnings = mapAttrsToList (n: v: "services.restic.backups.${n}.s3CredentialsFile is deprecated, please use services.restic.backups.${n}.environmentFile instead.") (filterAttrs (n: v: v.s3CredentialsFile != null) config.services.restic.backups);
     assertions = mapAttrsToList (n: v: {
       assertion = (v.repository == null) != (v.repositoryFile == null);
       message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
@@ -310,10 +300,7 @@ in
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
-            backupPaths =
-              if (backup.dynamicFilesFrom == null)
-              then optionalString (backup.paths != null) (concatStringsSep " " backup.paths)
-              else "--files-from ${filesFromTmpFile}";
+            doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
               (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
@@ -348,7 +335,7 @@ in
             after = [ "network-online.target" ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
+              ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
@@ -366,8 +353,11 @@ in
               ${optionalString (backup.initialize) ''
                 ${resticCmd} snapshots || ${resticCmd} init
               ''}
+              ${optionalString (backup.paths != null && backup.paths != []) ''
+                cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}
+              ''}
               ${optionalString (backup.dynamicFilesFrom != null) ''
-                ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} > ${filesFromTmpFile}
+                ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
               ''}
             '';
           } // optionalAttrs (backup.dynamicFilesFrom != null || backup.backupCleanupCommand != null) {

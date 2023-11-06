@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pycognito";
-  version = "2022.12.0";
+  version = "2023.5.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WepDna9f3Z3dBxWdE6G7nbl3yPK5vMG+7X1rxbZwdjE=";
+    hash = "sha256-2Aqid2bd5BAnWQ+Wtji0zXjLAmSpyJNGqJ0VroGi6lY=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +46,11 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [ "tests.py" ];
+
+  disabledTests = [
+    # requires network access
+    "test_srp_requests_http_auth"
+  ];
 
   pythonImportsCheck = [ "pycognito" ];
 

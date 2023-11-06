@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.73";
+  version = "9.2.75";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-D6ZMZzuWoCSKSAEnVqU5iM4ttpeBNojofMW/vsV8gVw=";
+    hash = "sha256-t8kxGwLEVVp1WMFA+yFLMAPJBT46m0ZFG2lhWMxoolw=";
   };
 
   nativeBuildInputs = [

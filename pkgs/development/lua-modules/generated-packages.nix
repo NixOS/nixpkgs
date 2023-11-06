@@ -478,30 +478,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-ferris-nvim = callPackage({ fetchzip, buildLuarocksPackage, lua, luaOlder }:
-buildLuarocksPackage {
-  pname = "ferris.nvim";
-  version = "2.0.0-1";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/ferris.nvim-2.0.0-1.rockspec";
-    sha256 = "00d3x2hbs8625ky50r2w08c6idcx3bkrk0rks5qd8yh7v61nj53h";
-  }).outPath;
-  src = fetchzip {
-    url    = "https://github.com/mrcjkb/ferris.nvim/archive/2.0.0.zip";
-    sha256 = "1fb18k0ylb06h4ifs9k6lfc42y74xpavzwkqy55lfdkmlbc7jmhy";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "https://github.com/mrcjkb/ferris.nvim";
-    description = "Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
-    maintainers = with lib.maintainers; [ mrcjkb ];
-    license.fullName = "GPL-2.0";
-  };
-}) {};
-
 fifo = callPackage({ fetchzip, lua, buildLuarocksPackage }:
 buildLuarocksPackage {
   pname = "fifo";
@@ -1405,6 +1381,35 @@ buildLuarocksPackage {
     description = "Session Library for OpenResty - Flexible and Secure";
     license.fullName = "BSD";
     broken = true; # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
+  };
+}) {};
+
+lua-rtoml = callPackage({ luaOlder, luarocks-build-rust-mlua, buildLuarocksPackage, lua, fetchgit }:
+buildLuarocksPackage {
+  pname = "lua-rtoml";
+  version = "0.2-0";
+
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/lblasc/lua-rtoml.git",
+  "rev": "e59ad00f5df8426767ddfb355f4ba6093468a168",
+  "date": "2023-11-02T14:17:41+01:00",
+  "path": "/nix/store/ynn6bvnwyqrackvyxzysxy294gh9prg1-lua-rtoml",
+  "sha256": "1y2ncdl3mpwqc1h5xm0rf9g1ns2vswgqffsj9sqrqidmg984jkr4",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua luarocks-build-rust-mlua ];
+
+  meta = {
+    homepage = "https://github.com/lblasc/lua-rtoml";
+    description = "Lua bindings for the Rust toml crate.";
+    maintainers = with lib.maintainers; [ lblasc ];
+    license.fullName = "MIT";
   };
 }) {};
 
@@ -2811,6 +2816,30 @@ buildLuarocksPackage {
     description = "A fast Neovim http client written in Lua";
     maintainers = with lib.maintainers; [ teto ];
     license.fullName = "MIT";
+  };
+}) {};
+
+rustaceanvim = callPackage({ lua, luaOlder, buildLuarocksPackage, fetchzip }:
+buildLuarocksPackage {
+  pname = "rustaceanvim";
+  version = "3.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/rustaceanvim-3.0.0-1.rockspec";
+    sha256 = "1v1k08spq3zalgya6q3qny6zpwhn0nb5nl5dn0rkcvnc4imvnyfy";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/mrcjkb/rustaceanvim/archive/3.0.0.zip";
+    sha256 = "1prpklbijr7p890nflr9jixf955dlp3ph9zl2rq3xxyl20ncyqbk";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/mrcjkb/rustaceanvim";
+    description = "Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "GPL-2.0";
   };
 }) {};
 

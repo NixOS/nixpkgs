@@ -6,6 +6,6 @@
 
 qtModule {
   pname = "qtquick3d";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ openssl ];
 }

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.9.0";
+  version = "5.10.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9s3iGpxoz3Vq8CA19y1acjv2B+hi574z7OUFq/Sjutk=";
+    hash = "sha256-9YTqIJJARm5m6R88gap9AEukz3lJkLDHdZOKFUQhfNE=";
   };
 
   nativeBuildInputs = [ hatchling ];

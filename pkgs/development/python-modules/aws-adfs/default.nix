@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.8.1";
+  version = "2.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "venth";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tpCDP924lNSaPJggj3A94U2Ur+TgxTXtV660OyQJEeY=";
+    hash = "sha256-IZeEb87NX3fyw1hENF1LldbgbaXXPG3u2AiCeci6MIw=";
   };
 
   nativeBuildInputs = [

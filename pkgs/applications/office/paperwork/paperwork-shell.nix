@@ -9,9 +9,11 @@
 , openpaperwork-gtk
 , paperwork-backend
 , fabulous
+, rich
 , getkey
 , psutil
 , shared-mime-info
+, setuptools-scm
 
 , pkgs
 }:
@@ -19,6 +21,7 @@
 buildPythonPackage rec {
   pname = "paperwork-shell";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  format = "pyproject";
 
   sourceRoot = "${src.name}/paperwork-shell";
 
@@ -26,10 +29,10 @@ buildPythonPackage rec {
   disabled = !isPy3k && !isPyPy;
 
   patchPhase = ''
-    echo 'version = "${version}"' > src/paperwork_shell/_version.py
     chmod a+w -R ..
     patchShebangs ../tools
   '';
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     openpaperwork-core
@@ -37,6 +40,7 @@ buildPythonPackage rec {
     fabulous
     getkey
     psutil
+    rich
   ];
 
   nativeCheckInputs = [
@@ -44,7 +48,12 @@ buildPythonPackage rec {
     openpaperwork-gtk
   ];
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which ];
+  nativeBuildInputs = [
+    pkgs.gettext
+    pkgs.which
+    setuptools-scm
+  ];
+
   preBuild = ''
     make l10n_compile
   '';

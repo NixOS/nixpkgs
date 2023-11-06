@@ -884,7 +884,7 @@
                     "version": "2023-09-12",
                     "url": "https://gn.googlesource.com/gn",
                     "rev": "991530ce394efb58fcd848195469022fa17ae126",
-                    "sha256": "1zpbaspb2mncbsabps8n1iwzc67nhr79ndc9dnqxx1w1qfvaldg2"
+                    "hash": "sha256-4jWqtsOBh96xbYk1m06G9hj2eQwW6buUXsxWsa5W6/4="
                 }
             }
         },
@@ -1776,7 +1776,7 @@
                     "version": "2023-08-10",
                     "url": "https://gn.googlesource.com/gn",
                     "rev": "cc56a0f98bb34accd5323316e0292575ff17a5d4",
-                    "sha256": "1ly7z48v147bfdb1kqkbc98myxpgqq3g6vgr8bjx1ikrk17l82ab"
+                    "hash": "sha256-SwlET5h5xtDlQvlt8wbG73ZfUWJr4hlWc+uQsBH5x9M="
                 }
             }
         },
@@ -2620,7 +2620,7 @@
                     "version": "2023-06-09",
                     "url": "https://gn.googlesource.com/gn",
                     "rev": "4bd1a77e67958fb7f6739bd4542641646f264e5d",
-                    "sha256": "14h9jqspb86sl5lhh6q0kk2rwa9zcak63f8drp7kb3r4dx08vzsw"
+                    "hash": "sha256-XP+NQG8kjzXPzQ25YaZiPymexZwAGwhpodqgdTWWCZI="
                 }
             }
         },
@@ -3440,7 +3440,7 @@
                     "version": "2023-04-19",
                     "url": "https://gn.googlesource.com/gn",
                     "rev": "5a004f9427a050c6c393c07ddb85cba8ff3849fa",
-                    "sha256": "01xrh9m9m6x8lz0vxwdw2mrhrvnw93zpg09hwdhqakj06agf4jjk"
+                    "hash": "sha256-U0rinjJAToVh4zCBd/9I3O4McxW88b7Bp6ibmmqCuQc="
                 }
             }
         },

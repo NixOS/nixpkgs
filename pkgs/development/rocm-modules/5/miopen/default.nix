@@ -35,7 +35,7 @@
 }:
 
 let
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";

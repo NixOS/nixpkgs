@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "saml2aws";
-  version = "2.36.11";
+  version = "2.36.12";
 
   src = fetchFromGitHub {
     owner = "Versent";
     repo = "saml2aws";
     rev = "v${version}";
-    sha256 = "sha256-Sx/MAgjPcUzg4sX0O3CobAXCZQi2msZu6dKZ9q7/K+k=";
+    sha256 = "sha256-egsAUaGYe06hlPUE4J4acdrfMlDEY/8g0g9KPPJyMlI=";
   };
 
-  vendorHash = "sha256-T5x8C1cKyJaHVJbf2xNabD3XXwde2lOOCa8GHjdFlh0=";
+  vendorHash = "sha256-hdt/XhxMuR6YlvY/Qu2AjY5F75YvYLlv0LfuMwJQkl4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
 

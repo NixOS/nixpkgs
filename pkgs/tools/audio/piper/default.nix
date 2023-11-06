@@ -7,6 +7,7 @@
 , pkg-config
 
 # runtime
+, fmt
 , onnxruntime
 , pcaudiolib
 , piper-phonemize
@@ -18,20 +19,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "piper";
-  version = "1.2.0";
+  version = "2023.9.27-1";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-6WNWqJt0PO86vnf+3iHaRRg2KwBOEj4aicmB+P2phlk=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-U7yOiqNvE0WqZB8qaKf3U7gnTJ6q+9W5lviW79b6h/o=";
   };
-
-  sourceRoot = "${finalAttrs.src.name}/src/cpp";
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ];
+
+  cmakeFlags = [
+    "-DFMT_DIR=${fmt}"
+    "-DSPDLOG_DIR=${spdlog.src}"
+    "-DPIPER_PHONEMIZE_DIR=${piper-phonemize}"
   ];
 
   buildInputs = [

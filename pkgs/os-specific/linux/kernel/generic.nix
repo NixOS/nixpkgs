@@ -25,6 +25,10 @@
   # Additional make flags passed to kbuild
 , extraMakeFlags ? []
 
+, # enables the options in ./common-config.nix; if `false` then only
+  # `structuredExtraConfig` is used
+ enableCommonConfig ? true
+
 , # kernel intermediate config overrides, as a set
  structuredExtraConfig ? {}
 
@@ -183,7 +187,9 @@ let
       moduleStructuredConfig = (lib.evalModules {
         modules = [
           module
+        ] ++ lib.optionals enableCommonConfig [
           { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+        ] ++ [
           { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
         ]
         ++  structuredConfigFromPatches

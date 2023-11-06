@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, git }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, nixosTests, git, bash }:
 
 buildGoModule rec {
   pname = "soft-serve";
@@ -20,9 +20,13 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
+    # Soft-serve generates git-hooks at run-time.
+    # The scripts require git and bash inside the path.
     wrapProgram $out/bin/soft \
-      --prefix PATH : "${lib.makeBinPath [ git ]}"
+      --prefix PATH : "${lib.makeBinPath [ git bash ]}"
   '';
+
+  passthru.tests = nixosTests.soft-serve;
 
   meta = with lib; {
     description = "A tasty, self-hosted Git server for the command line";

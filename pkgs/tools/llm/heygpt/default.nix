@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "heygpt";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "fuyufjh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Gtbb0G7tV+cjbq/74dnZKIwWZgNfSJl0My6F4OmAdhU=";
+    hash = "sha256-gTyjj7NND5IYtnXhc454cWSzhAE+DwfPRGEWrHH+GNM=";
   };
 
-  cargoSha256 = "sha256-ON6+gU+KsI2QFQjwxPRcbMClaAGrjVJ33mVuf0jSro8=";
+  cargoHash = "sha256-yKHAZpELuUD7wlM3Mi7XvxbKgdU1QxD9hsvIFcj3twE=";
 
   nativeBuildInputs = [openssl];
 

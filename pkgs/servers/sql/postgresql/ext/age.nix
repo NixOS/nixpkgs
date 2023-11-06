@@ -6,7 +6,6 @@ let
     "14" = "sha256-w93Q499sZRk4q85A9yqKQjGUd9Pl8UL8K1D3W7mHRTU=";
     "13" = "sha256-Sot7FR0oW7kWA680pNCMCmlflu4RfJTSWZn9mrXrpzw=";
     "12" = "sha256-XezcXoHHLCD1/2OHmKhxome2pdjOsYAfZlpvOoU3aS4=";
-    "11" = "sha256-ZkNAIMO69BxF3knQ+jcUBVuDgcoZXZccF5O+acpZ81M=";
   };
 in
 stdenv.mkDerivation rec {

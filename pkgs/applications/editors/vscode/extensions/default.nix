@@ -377,8 +377,8 @@ let
         mktplcRef = {
           name = "Millet";
           publisher = "azdavis";
-          version = "0.12.5";
-          sha256 = "sha256-gJIxCdoxWGThalY+qJ930UtRLFkvr34LfaSioAZH9TQ=";
+          version = "0.13.5";
+          sha256 = "sha256-sWM7N+axgu1zOGWexR4JVupVmYhZrd4cZz3pmLxRj8Q=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
@@ -532,8 +532,8 @@ let
         mktplcRef = {
           name = "emojisense";
           publisher = "bierner";
-          version = "0.9.1";
-          sha256 = "sha256-bfhImi2qMHWkgKqkoStS0NtbXTfj6GpcLkI0PSMjuvg=";
+          version = "0.10.0";
+          sha256 = "sha256-PD8edYuJu6QHPYIM08kV85LuKh0H0/MIgFmMxSJFK5M=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1229,8 +1229,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.17.1";
-          sha256 = "sha256-WBtIdz+8zsyTl43ovU3Dz+8p154ZGvHp6BA3AQtXN/U=";
+          version = "0.17.5";
+          sha256 = "sha256-2iOyLNLMQ6Snm0gvv7Yl6von/A9UTfLYrH5l1PoJwUc=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1741,6 +1741,22 @@ let
           homepage = "https://github.com/graphql/graphiql/tree/main/packages/vscode-graphql-syntax";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.Enzime ];
+        };
+      };
+
+      griimick.vhs = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vhs";
+          publisher = "griimick";
+          version = "0.0.4";
+          sha256 = "sha256-zAy8o5d2pK5ra/dbwoLgPAQAYfRQtUYQjisWYgIhsXA=";
+        };
+        meta = {
+          description = "Visual Studio Code extension providing syntax support for VHS .tape files";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=griimick.vhs";
+          homepage = "https://github.com/griimick/vscode-vhs";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 
@@ -2735,8 +2751,8 @@ let
           publisher = "nvarner";
           # Please update the corresponding binary (typst-lsp) when updating
           # this extension.
-          version = "0.10.1";
-          sha256 = "sha256-+LOw9JPpL5eLNxmP4kyPo9S/w8ZxfPGSaY1oR8THmvI=";
+          version = "0.11.0";
+          sha256 = "sha256-fs+CBg3FwzTn608dm9EvfF2UrI2Sa5hsm0OK/WQyy6o=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -3298,8 +3314,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.4.3";
-          sha256 = "sha256-z1foIJXVKmJ0G4FfO9xsjiQgmq/ZtoB3b6Ch8Nyj1zY=";
+          version = "107.12.0";
+          sha256 = "036ri011fd0cf91iwv59j57m05mxliy27ms4di2y9jlk7jzmr4s2";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -3478,6 +3494,22 @@ let
         };
       };
 
+      tsandall.opa = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "opa";
+          publisher = "tsandall";
+          version = "0.12.2";
+          sha256 = "sha256-/eJzDhnQyvC9OBr4M03wLIWPiBeVtvX7ztSnO+YoCZM=";
+        };
+        meta = {
+          changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";
+          description = "An extension for VS Code which provides support for OPA";
+          homepage = "https://github.com/open-policy-agent/vscode-opa";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.msanft ];
+        };
+      };
+
       tuttieee.emacs-mcx = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "emacs-mcx";
@@ -3521,15 +3553,15 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.19";
-          sha256 = "sha256-Tww1urq6CfLma254Sn5lwOYwbvxAeDZuBuFBQlzks1c=";
+          version = "0.0.22";
+          sha256 = "sha256-fJcSJwwRVofduWEEMa5f2VrSfyONKPkFl9OW+++lSRw=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=uiua-lang.uiua-vscode";
           homepage = "https://github.com/uiua-lang/uiua-vscode";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.wackbyte ];
+          maintainers = with lib.maintainers; [ tomasajt wackbyte ];
         };
       };
 

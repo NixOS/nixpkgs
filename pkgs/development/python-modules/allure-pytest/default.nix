@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "allure-pytest";
-  version = "2.12.0";
+  version = "2.13.2";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hbc7Hb6ZCLpPhLgBGKk+EEnALdWTIJJg2MHJUM8ob2w=";
+    hash = "sha256-IiQxWejsgc4rUlS0ATgCGYghsbQvEY9p1KKJOWYHx7M=";
   };
 
   buildInputs = [

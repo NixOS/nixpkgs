@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zhubonan";
     repo = "castepxbin";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-6kumVnm4PLRxuKO6Uz0iHzfYuu21hFC7EPRsc3S1kxE=";
   };
 

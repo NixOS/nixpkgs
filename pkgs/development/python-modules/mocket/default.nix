@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.11.0";
+  version = "3.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OIdLP3hHnPZ9MqrHt6G5t2SSO342+jTACgzxM6RjVYM=";
+    hash = "sha256-sEPLUN9nod4AKYcoCNQZ4FBblUCLCPV1dFOrNC6xDWo=";
   };
 
   propagatedBuildInputs = [

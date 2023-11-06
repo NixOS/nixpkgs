@@ -1,41 +1,50 @@
 { lib
-, astroid
 , buildPythonPackage
 , fetchPypi
-, jinja2
-, mock
-, pytestCheckHook
 , pythonOlder
+
+# build-system
+, setuptools
+
+# dependencies
+, astroid
+, anyascii
+, jinja2
 , pyyaml
 , sphinx
-, stdenv
-, typing-extensions
-, unidecode
+
+# tests
+, beautifulsoup4
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "2.0.1";
-  format = "setuptools";
+  version = "2.1.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zfR5aMIIUvT+sMzv0J5BS7ggr4r4+C+rFaJLCaPRuro=";
+    hash = "sha256-+625bnkCDWsOxF2IhRe/gW1rWHotNA++HsMRNeMApsg=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    anyascii
     astroid
     jinja2
     pyyaml
     sphinx
-    unidecode
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
+    beautifulsoup4
     mock
     pytestCheckHook
   ];

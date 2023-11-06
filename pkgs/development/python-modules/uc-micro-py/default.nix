@@ -3,24 +3,34 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "uc-micro-py";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "1.0.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tsutsu3";
     repo = "uc.micro-py";
-    rev = "v${version}";
-    hash = "sha256-23mKwoRGjtxpCOC26V8bAN5QEHLDOoSqPeTlUuIrxZ0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PUeWYG/VyxCfhB7onAcDFow1yYqArjmfMT99+058P7U=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "uc_micro" ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  pythonImportsCheck = [
+    "uc_micro"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Micro subset of unicode data files for linkify-it-py";

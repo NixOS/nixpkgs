@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ergo";
-  version = "2.11.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
     rev = "v${version}";
-    sha256 = "sha256-LBKGwtprhtDHaghnU6YPQ4Pf2fqD8VN7OV9gzvFgLPY=";
+    sha256 = "sha256-n7GJpR/zUsHxTeVmHfBTjMcMAN7ri3FDvJSkKMzPe2I=";
   };
 
   vendorHash = null;

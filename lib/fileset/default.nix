@@ -6,8 +6,10 @@ let
     _coerceMany
     _toSourceFilter
     _unionMany
+    _fileFilter
     _printFileset
     _intersection
+    _difference
     ;
 
   inherit (builtins)
@@ -41,6 +43,7 @@ let
     ;
 
   inherit (lib.trivial)
+    isFunction
     pipe
     ;
 
@@ -279,6 +282,55 @@ If a directory does not recursively contain any file, it is omitted from the sto
       ];
 
   /*
+    Filter a file set to only contain files matching some predicate.
+
+    Type:
+      fileFilter ::
+        ({
+          name :: String,
+          type :: String,
+          ...
+        } -> Bool)
+        -> FileSet
+        -> FileSet
+
+    Example:
+      # Include all regular `default.nix` files in the current directory
+      fileFilter (file: file.name == "default.nix") ./.
+
+      # Include all non-Nix files from the current directory
+      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
+
+      # Include all files that start with a "." in the current directory
+      fileFilter (file: hasPrefix "." file.name) ./.
+
+      # Include all regular files (not symlinks or others) in the current directory
+      fileFilter (file: file.type == "regular")
+  */
+  fileFilter =
+    /*
+      The predicate function to call on all files contained in given file set.
+      A file is included in the resulting file set if this function returns true for it.
+
+      This function is called with an attribute set containing these attributes:
+
+      - `name` (String): The name of the file
+
+      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+      Other attributes may be added in the future.
+    */
+    predicate:
+    # The file set to filter based on the predicate function
+    fileset:
+    if ! isFunction predicate then
+      throw "lib.fileset.fileFilter: Expected the first argument to be a function, but it's a ${typeOf predicate} instead."
+    else
+      _fileFilter predicate
+        (_coerce "lib.fileset.fileFilter: second argument" fileset);
+
+  /*
     The file set containing all files that are in both of two given file sets.
     See also [Intersection (set theory)](https://en.wikipedia.org/wiki/Intersection_(set_theory)).
 
@@ -314,6 +366,58 @@ If a directory does not recursively contain any file, it is omitted from the sto
       ];
     in
     _intersection
+      (elemAt filesets 0)
+      (elemAt filesets 1);
+
+  /*
+    The file set containing all files from the first file set that are not in the second file set.
+    See also [Difference (set theory)](https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      union :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Create a file set containing all files from the current directory,
+      # except ones under ./tests
+      difference ./. ./tests
+
+      let
+        # A set of Nix-related files
+        nixFiles = unions [ ./default.nix ./nix ./tests/default.nix ];
+      in
+      # Create a file set containing all files under ./tests, except ones in `nixFiles`,
+      # meaning only without ./tests/default.nix
+      difference ./tests nixFiles
+  */
+  difference =
+    # The positive file set.
+    # The result can only contain files that are also in this file set.
+    #
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    positive:
+    # The negative file set.
+    # The result will never contain files that are also in this file set.
+    #
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    negative:
+    let
+      filesets = _coerceMany "lib.fileset.difference" [
+        {
+          context = "first argument (positive set)";
+          value = positive;
+        }
+        {
+          context = "second argument (negative set)";
+          value = negative;
+        }
+      ];
+    in
+    _difference
       (elemAt filesets 0)
       (elemAt filesets 1);
 

@@ -17,7 +17,6 @@
 , libtiff
 , ninja
 , nix-update
-, opencv3
 , openexr
 , pkg-config
 , qtbase
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libtiff
     libpng
-    opencv3
     openexr
     graphicsmagick
     curl

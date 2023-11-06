@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "2.6.3";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-ag54ns4lqIGjjHj6n8mDJTalQfBjqLxqSudjyeRRSs4=";
+    hash = "sha256-ZpN+SgBq2vA2p4MjrT07j22VB67FdiXIIl9puGiGJA4=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     outputHashes = {
       # All other crates in the same workspace reuse this hash.
       "tauri-plugin-autostart-0.0.0" = "sha256-wgVsF3H9BT8lBew7tQ308eIQ6cLZT93hD/4eYCDEq98=";
+      "tauri-plugin-sql-0.0.0" = "sha256-e9iwcHwW8MaRzkaAbewrq6b9+n3ZofMTBnvA23ZF2ro=";
     };
   };
 

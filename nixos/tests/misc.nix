@@ -13,6 +13,7 @@ in {
       environment.variables.EDITOR = lib.mkOverride 0 "emacs";
       documentation.nixos.enable = lib.mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
+      systemd.tmpfiles.settings."10-test"."/tmp/somefile".d = {};
       virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
           options = [ "mode=1777" "noauto" ];
@@ -116,6 +117,9 @@ in {
               "systemctl start systemd-tmpfiles-clean",
           )
           machine.fail("[ -e /tmp/foo ]")
+
+      with subtest("whether systemd-tmpfiles settings works"):
+          machine.succeed("[ -e /tmp/somefile ]")
 
       with subtest("whether automounting works"):
           machine.fail("grep '/tmp2 tmpfs' /proc/mounts")

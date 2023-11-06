@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.64.1";
+  version = "1.64.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JaUsclhAZpmVi3K9VdRfAber++ghiEfzmJDmeku9IXA=";
+    hash = "sha256-gOFOcqCgFAiTc6W3v8Z917hGCzxluswqnuOoUht73GA=";
   };
 
   vendorHash = "sha256-eYIGVCTvUfGbsIMFthEfD0r6aeA7Ly9xJ8PJ6hR2SjA=";
@@ -63,6 +63,7 @@ buildGoModule rec {
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
+    mainProgram = "rclone";
     maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

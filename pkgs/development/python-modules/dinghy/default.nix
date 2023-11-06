@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dinghy";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "nedbat";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xtcNcykfgcWvifso0xaeMT31+G5x4HCp+tLAIEEq4cw=";
+    hash = "sha256-a1CHbPSoiR3JbuAXYPJc1EsSq13DbrOttk9zLFF9+cM=";
   };
 
   propagatedBuildInputs = [

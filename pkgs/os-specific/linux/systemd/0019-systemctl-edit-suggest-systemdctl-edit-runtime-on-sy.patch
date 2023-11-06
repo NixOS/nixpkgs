@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Fri, 1 Sep 2023 09:57:02 +0200
+Subject: [PATCH] systemctl-edit: suggest `systemdctl edit --runtime` on system
+ scope
+
+This is a NixOS-specific change. When trying to modify a unit with
+`systemctl edit` on NixOS, it'll fail with "Read-only file system":
+
+    $ systemctl edit libvirtd
+    Failed to open "/etc/systemd/system/libvirtd.service.d/.#override.conffa9825a0c9a249eb": Read-only file system
+
+This is because `/etc/systemd/system` is a symlink into the store. In
+fact, I'd consider this a feature rather than a bug since this ensures I
+don't introduce state imperatively.
+
+However, people wrongly assume that it's not possible to edit units
+ad-hoc and re-deploy their system for quick&dirty debugging where this
+would be absolutely fine (and doable with `--runtime` which adds a
+transient and non-persistent unit override in `/run`).
+
+To make sure that people learn about it quicker, this patch
+throws an error which suggests using `--runtime` when running
+`systemctl edit` on the system scope.
+
+For the user scope this isn't needed because user-level unit overrides
+are written into `$XDG_CONFIG_HOME/systemd/user`.
+---
+ src/systemctl/systemctl-edit.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/systemctl/systemctl-edit.c b/src/systemctl/systemctl-edit.c
+index e3f25d52d5..81c9c6f6b7 100644
+--- a/src/systemctl/systemctl-edit.c
++++ b/src/systemctl/systemctl-edit.c
+@@ -323,6 +323,9 @@ int verb_edit(int argc, char *argv[], void *userdata) {
+         sd_bus *bus;
+         int r;
+ 
++        if (!arg_runtime && arg_runtime_scope == RUNTIME_SCOPE_SYSTEM)
++                return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "The unit-directory '/etc/systemd/system' is read-only on NixOS, so it's not possible to edit system-units directly. Use 'systemctl edit --runtime' instead.");
++
+         if (!on_tty())
+                 return log_error_errno(SYNTHETIC_ERRNO(EINVAL), "Cannot edit units if not on a tty.");
+ 

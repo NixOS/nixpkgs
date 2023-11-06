@@ -35,6 +35,7 @@ let
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
+    "application/javascript" # Deprecated by IETF RFC 9239, but still widely used
     "application/json"
     "application/ld+json"
     "application/manifest+json"

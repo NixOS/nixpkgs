@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cargo
 , cmake
+, deltachat-repl
 , openssl
 , perl
 , pkg-config
@@ -17,30 +18,32 @@
 , libiconv
 }:
 
-stdenv.mkDerivation rec {
+let
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "email-0.0.21" = "sha256-u4CsK/JqFgq5z3iJGxxGtb7QbSkOAqmOvrmagsqfXIU=";
+      "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
+      "iroh-0.4.1" = "sha256-oLvka1nV2yQPzlcaq5CXqXRRu7GkbMocV6GoIlxQKlo=";
+      "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
+    };
+  };
+in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.121.0";
+  version = "1.128.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-QefBchXitDcbn1o7jgmvWdacLT8OP+W/dL32+pYsaEA=";
+    hash = "sha256-kujPkKKobn4/J0rCdZfnlNZzGM0SUVtOWOhyDawYiqw=";
   };
 
   patches = [
     ./no-static-lib.patch
   ];
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "email-0.0.21" = "sha256-Ys47MiEwVZenRNfenT579Rb17ABQ4QizVFTWUq3+bAY=";
-      "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
-      "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
-      "quinn-proto-0.9.2" = "sha256-N1gD5vMsBEHO4Fz4ZYEKZA8eE/VywXNXssGcK6hjvpg=";
-    };
-  };
+  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   nativeBuildInputs = [
     cmake
@@ -67,8 +70,12 @@ stdenv.mkDerivation rec {
     cargoCheckHook
   ];
 
-  passthru.tests = {
-    python = python3.pkgs.deltachat;
+  passthru = {
+    inherit cargoLock;
+    tests = {
+      inherit deltachat-repl;
+      python = python3.pkgs.deltachat;
+    };
   };
 
   meta = with lib; {
@@ -76,7 +83,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
     changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda srapenne ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;
   };
 }

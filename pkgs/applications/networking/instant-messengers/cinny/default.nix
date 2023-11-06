@@ -1,23 +1,46 @@
-{ lib, buildNpmPackage, fetchFromGitHub, writeText, jq, conf ? { } }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, writeText
+, jq
+, python3
+, pkg-config
+, pixman
+, cairo
+, pango
+, stdenv
+, darwin
+, conf ? { }
+}:
 
 let
   configOverrides = writeText "cinny-config-overrides.json" (builtins.toJSON conf);
 in
 buildNpmPackage rec {
   pname = "cinny";
-  version = "2.2.6";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-Da/gbq9piKvkIMiamoafcRrqxF7128GXoswk2C43An8=";
+    hash = "sha256-GcygxK9NcGlv4rwxQCJqi0BhNlOTFxjGB8mbfTaBMOk=";
   };
 
-  npmDepsHash = "sha256-3wgB/dQmLtwxbRsk+OUcyfx98vpCvhvseEOCrJIFohY=";
+  npmDepsHash = "sha256-4R+To2LhcnEM9x1noo6MhCckyBKgPWiAi7zgDqAmaN0=";
 
   nativeBuildInputs = [
     jq
+    python3
+    pkg-config
+  ];
+
+  buildInputs = [
+    pixman
+    cairo
+    pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreText
   ];
 
   installPhase = ''
@@ -32,7 +55,7 @@ buildNpmPackage rec {
   meta = with lib; {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with maintainers; [ abbe ];
+    maintainers = with maintainers; [ abbe ashkitten ];
     license = licenses.agpl3Only;
     platforms = platforms.all;
   };

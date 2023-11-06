@@ -8,7 +8,7 @@ applyPatches {
   src = fetchFromGitHub {
     owner = "mastodon";
     repo = "mastodon";
-    rev = "${version}";
+    rev = "v${version}";
     hash = "sha256-xpE/mg2AeioW6NThUjLS+SBxGavG4w1xtp3BOMADfYo=";
   };
   patches = [];

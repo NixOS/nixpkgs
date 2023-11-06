@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.22.5";
+  version = "1.23.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyMuPDF";
     inherit version;
-    hash = "sha256-XsjVEGdSKXUp0NaNRs/EzpmRSqvZm+hD8VmaGELWP+k=";
+    hash = "sha256-AhR4rmx26IWSQdu5cGEskIColX2L1pe7oLRTHcHPT4c=";
   };
 
   postPatch = ''

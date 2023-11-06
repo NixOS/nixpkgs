@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pocket-casts";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
-    sha256 = "sha256-WMv2G4b7kYnWy0pz8YyI2eTdefs1mtWau+HQLiRygjE=";
+    sha256 = "sha256-d4uVeHy4/91Ki6Wk6GlOt2lcK6U+M7fOryiOYA7q/x4=";
   };
 
   desktopItems = [

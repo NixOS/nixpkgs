@@ -3,19 +3,17 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools-scm
 , lsprotocol
-, toml
 , typeguard
-, mock
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "1.1.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -23,13 +21,11 @@ buildPythonPackage rec {
     owner = "openlawlibrary";
     repo = "pygls";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ovm897Vu6HRziGee3NioM1BA65mLe3F5Z2k0E+A35Gs=";
+    hash = "sha256-FOuBS/UJpkYbuIu193vkSpN/77gf+UWiS5f/t8BpAk4=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
   nativeBuildInputs = [
-    setuptools-scm
-    toml
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -38,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
     pytestCheckHook
   ];

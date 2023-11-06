@@ -1,39 +1,41 @@
-{ stdenv, fetchFromGitHub, lib, python3, nixosTests }:
+{ lib
+, python3
+, fetchPypi
+, nixosTests
+}:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "knot-exporter";
-  version = "unstable-2021-08-21";
+  version = "3.3.2";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ghedo";
-    repo = "knot_exporter";
-    rev = "b18eb7db735b50280f0815497475f4c7092a6550";
-    sha256 = "sha256-FGzkO/KHDhkM3PA2urNQcrMi3MHADkd0YwAvu1jvfrU=";
+  src = fetchPypi {
+    pname = "knot_exporter";
+    inherit version;
+    hash = "sha256-/TBzq9MhYb664TsSD46Ep7gOkLBmmPSK9d89xlgvbSw=";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [
+    python3.pkgs.hatchling
+  ];
 
-  nativeBuildInputs = [ python3.pkgs.wrapPython ];
-  buildInputs = [ python3 ];
+  propagatedBuildInputs = with python3.pkgs; [
+    libknot
+    prometheus-client
+    psutil
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm0755 knot_exporter $out/bin/knot_exporter
-    patchShebangs $out/bin
-    buildPythonPath ${python3.pkgs.prometheus-client}
-    patchPythonScript $out/bin/knot_exporter
-
-    runHook postInstall
-  '';
+  pythonImportsCheck = [
+    "knot_exporter"
+  ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) knot; };
 
   meta = with lib; {
-    homepage = "https://github.com/ghedo/knot_exporter";
-    description = " Prometheus exporter for Knot DNS";
+    description = "Prometheus exporter for Knot DNS";
+    homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/knot_exporter";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ma27 hexa ];
+    mainProgram = "knot-exporter";
   };
 }

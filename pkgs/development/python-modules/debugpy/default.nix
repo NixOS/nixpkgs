@@ -2,10 +2,8 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, pythonAtLeast
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
 , gdb
 , django
 , flask
@@ -23,7 +21,7 @@ buildPythonPackage rec {
   version = "1.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
@@ -110,13 +108,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # https://github.com/microsoft/debugpy/issues/1241
-    "test_flask_breakpoint_multiproc"
-
-    # DeprecationWarning: pkg_resources is deprecated as an API
-    # Supposedly fixed in https://github.com/microsoft/debugpy/pull/1374,
-    # but still fails for a nix build
-    "test_gevent"
+    # testsuite gets stuck at this one
+    "test_attach_pid_client"
   ];
 
   pythonImportsCheck = [

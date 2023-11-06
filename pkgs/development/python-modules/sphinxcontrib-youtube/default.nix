@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-youtube";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "pyproject";
 
   nativeBuildInputs = [ flit-core ];
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-contrib";
     repo = "youtube";
-    rev = "v${version}";
-    hash = "sha256-SUnnrzYJ6cOktE0IdnRWTvPGcL/eVS9obtHBMpS2s4A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/mu/OGMc+iP7DV36fmE8pb5y6MMOQ0fmzT8R7RP/tjM=";
   };
 
   propagatedBuildInputs = [ sphinx requests ];

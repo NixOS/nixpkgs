@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
+, fetchurl
 , fetchpatch
+, fetchpatch2
 , callPackage
 , pkg-config
 , cmake
@@ -26,6 +28,7 @@
 , libopus
 , alsa-lib
 , libpulseaudio
+, perlPackages
 , pipewire
 , range-v3
 , tl-expected
@@ -55,6 +58,7 @@
 , libpsl
 , brotli
 , microsoft-gsl
+, mm-common
 , rlottie
 , stdenv
 , nix-update-script
@@ -73,17 +77,41 @@ let
       cxxStandard = "20";
     };
   };
+  glibmm = glibmm_2_68.overrideAttrs (attrs: {
+    version = "2.78.0";
+    src = fetchurl {
+      url = "mirror://gnome/sources/glibmm/2.78/glibmm-2.78.0.tar.xz";
+      hash = "sha256-XS6HJWSZbwKgbYu6w2d+fDlK+LAN0VJq69R6+EKj71A=";
+    };
+    patches = [
+      # Revert "Glib, Gio: Add new API from glib 2.77.0"
+      (fetchpatch2 {
+        url = "https://github.com/GNOME/glibmm/commit/5b9032c0298cbb49c3ed90d5f71f2636751fa638.patch";
+        revert = true;
+        hash = "sha256-UzrzIOnXh9pxuTDQsp6mnunDNNtc86hE9tCe1NgKsyo=";
+      })
+    ];
+    mesonFlags = [
+      "-Dmaintainer-mode=true"
+      "-Dbuild-documentation=false"
+    ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      mm-common
+      perlPackages.perl
+      perlPackages.XMLParser
+    ];
+  });
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.4";
+  version = "4.11.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
+    hash = "sha256-Xjb8um3TA2yIPrCdEV1BJ10keyAqTnlU20ZZ0T3P3ls=";
   };
 
   patches = [
@@ -93,13 +121,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
-    # lib_base: Add missing include for Qt 6.6
-    (fetchpatch {
-      url = "https://github.com/desktop-app/lib_base/commit/5ca91dbb811c84591780236abc31431e313faf39.patch";
-      stripLen = 1;
-      extraPrefix = "Telegram/lib_base/";
-      hash = "sha256-eZkyMnPaAmUFYXiCmPhLRTw2Xdx0lylY+UVOckCsiaA=";
     })
   ];
 
@@ -150,7 +171,7 @@ stdenv.mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm_2_68
+    glibmm
     webkitgtk_6_0
     jemalloc
     rnnoise

@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "marksman";
-  version = "2023-07-25";
+  version = "2023-10-30";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     rev = version;
-    sha256 = "sha256-DxubrZAj2MOF7gUMDl8rW1jGHaw70KGe5Nit1SBQBW8=";
+    sha256 = "sha256-dAyZIqc9YGuhGydT17s4D1q4CKH6uK5CYW0c0ZJwJAI=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";
@@ -52,7 +52,7 @@ buildDotnetModule rec {
     '';
     homepage = "https://github.com/artempyanykh/marksman";
     license = licenses.mit;
-    maintainers = with maintainers; [ stasjok ];
+    maintainers = with maintainers; [ stasjok plusgut ];
     platforms = dotnet-sdk.meta.platforms;
   };
 }

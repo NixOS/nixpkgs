@@ -416,8 +416,8 @@ let
     };
 
     kea = let
-      controlSocketPathV4 = "/run/kea/dhcp4.sock";
-      controlSocketPathV6 = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea-dhcp4/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea-dhcp6/dhcp6.sock";
     in
     {
       exporterConfig = {
@@ -471,7 +471,7 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
-          extraConfig = ''
+          settingsFile = pkgs.writeText "knot.conf" ''
             server:
               listen: 127.0.0.1@53
 
@@ -512,7 +512,7 @@ let
         wait_for_unit("knot.service")
         wait_for_unit("prometheus-knot-exporter.service")
         wait_for_open_port(9433)
-        succeed("curl -sSf 'localhost:9433' | grep 'knot_server_zone_count 1.0'")
+        succeed("curl -sSf 'localhost:9433' | grep '2\.019031301'")
       '';
     };
 
@@ -969,7 +969,7 @@ let
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
       };
 
       metricProvider = {

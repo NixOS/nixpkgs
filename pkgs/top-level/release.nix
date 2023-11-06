@@ -200,6 +200,7 @@ let
               jobs.vim.aarch64-darwin
               jobs.inkscape.aarch64-darwin
               jobs.qt5.qtmultimedia.aarch64-darwin
+              jobs.darwin.linux-builder.aarch64-darwin
               /* consider adding tests, as suggested above for x86_64-darwin */
             ];
         };

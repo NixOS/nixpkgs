@@ -77,6 +77,14 @@ def main() -> None:
         help="vlans to span by the driver",
     )
     arg_parser.add_argument(
+        "--global-timeout",
+        type=int,
+        metavar="GLOBAL_TIMEOUT",
+        action=EnvDefault,
+        envvar="globalTimeout",
+        help="Timeout in seconds for the whole test",
+    )
+    arg_parser.add_argument(
         "-o",
         "--output_directory",
         help="""The path to the directory where outputs copied from the VM will be placed.
@@ -103,6 +111,7 @@ def main() -> None:
         args.testscript.read_text(),
         args.output_directory.resolve(),
         args.keep_vm_state,
+        args.global_timeout,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()

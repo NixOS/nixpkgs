@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry-core
+, hatchling
 , anyio
 , distro
 , httpx
@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.3.11";
-  format = "pyproject";
+  version = "0.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,11 +25,11 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bjagT0I0/N76CGf1b8EBNyOTzPBWybr2I2yO5NWO3po=";
+    hash = "sha256-+EiFp55tPsILl6uuTh9qmeQDMKlUzegn3xUo6BupN2E=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    hatchling
   ];
 
   propagatedBuildInputs = [

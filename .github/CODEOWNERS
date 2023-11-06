@@ -48,6 +48,8 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
+## Format generators/serializers
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
@@ -116,7 +118,6 @@
 /maintainers/scripts/update-python-libraries	              @FRidh
 /pkgs/development/interpreters/python                       @FRidh
 /doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
-/pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
@@ -149,6 +150,8 @@
 # C compilers
 /pkgs/development/compilers/gcc @amjoseph-nixpkgs
 /pkgs/development/compilers/llvm @RaitoBezarius
+/pkgs/development/compilers/emscripten @raitobezarius
+/doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt

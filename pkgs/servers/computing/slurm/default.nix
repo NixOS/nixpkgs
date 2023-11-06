@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     # increase string length to allow for full
     # path of 'echo' in nix store
     ./common-env-echo.patch
-    # Required for configure to pick up the right dlopen path
-    ./pmix-configure.patch
   ];
 
   prePatch = ''
@@ -72,6 +70,7 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
       "--with-bpf=${libbpf}"
+      "--without-rpath" # Required for configure to pick up the right dlopen path
     ] ++ (optional enableGtk2  "--disable-gtktest")
       ++ (optional (!enableX11) "--disable-x11");
 

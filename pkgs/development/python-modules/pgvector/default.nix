@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.2";
+  version = "0.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qvLDFnrTYibdhjSeeIFI4YdpPRsvNBnQ23uqsLCblEo=";
+    hash = "sha256-KQROG0cHvKmdWssr7Git3JH0YguRPno/ZzYiQL7VhwU=";
   };
 
   propagatedBuildInputs = [

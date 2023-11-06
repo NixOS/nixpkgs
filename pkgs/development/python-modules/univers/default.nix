@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "univers";
-  version = "30.10.0";
+  version = "30.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IJeM9Nzfqs1B0xP43i6u65XSEVPdiGhXWuORglbNARI=";
+    hash = "sha256-xyrg8B+C5xUN8zHLrMbAe/MWjZb8fCL0MIAz2w4B7/U=";
   };
 
   nativeBuildInputs = [

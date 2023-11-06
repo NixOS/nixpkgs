@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "2023.04.25";
+  version = "2023.09.03";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    hash = "sha256-LF8eXi/es337QJ2fs5u9pLqegJkh1kDLjK8p4CcSGGc=";
+    hash = "sha256-ymoP5DvaLdrdwJcnhZnLEvwNxUFzhkICajPyK4lvacc=";
   };
 
   strictDeps = true;
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     stdint
     yojson
     fileutils
+    memtrace
     menhirLib
     pprint
     sedlex

@@ -2,7 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , asgiref
+, blinker
 , click
+, flit-core
 , importlib-metadata
 , itsdangerous
 , jinja2
@@ -19,16 +21,21 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.2.5";
+  version = "2.3.3";
+  format = "pyproject";
 
   src = fetchPypi {
-    pname = "Flask";
-    inherit version;
-    hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+    inherit pname version;
+    hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     click
+    blinker
     itsdangerous
     jinja2
     werkzeug

@@ -33,6 +33,7 @@
 
 # tests
 , freezegun
+, py-partiql-parser
 , pytestCheckHook
 , pytest-xdist
 , sure
@@ -40,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.1.3";
+  version = "4.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yCAMyqlEDC6dqgvV4L12inGdtaLILqjXgvDj+gmjxeI=";
+    hash = "sha256-7jTEw/U5ANlTGAlGkgyduhJ6SD4u1A5tv5PUri52Dnw=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +84,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    py-partiql-parser
     pytestCheckHook
     sure
   ];
@@ -105,12 +107,21 @@ buildPythonPackage rec {
     "--deselect=tests/test_iotdata/test_iotdata.py::test_basic"
     "--deselect=tests/test_iotdata/test_iotdata.py::test_delete_field_from_device_shadow"
     "--deselect=tests/test_iotdata/test_iotdata.py::test_publish"
-    "--deselect=tests/test_s3/test_server.py::test_s3_server_bucket_versioning"
+    "--deselect=tests/test_moto_api/recorder/test_recorder.py::TestRecorder::test_s3_upload_data"
+    "--deselect=tests/test_moto_api/recorder/test_recorder.py::TestRecorder::test_s3_upload_file_using_requests"
     "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
+    "--deselect=tests/test_s3/test_s3.py::test_presigned_put_url_with_approved_headers"
+    "--deselect=tests/test_s3/test_s3.py::test_presigned_put_url_with_custom_headers"
+    "--deselect=tests/test_s3/test_s3.py::test_put_chunked_with_v4_signature_in_body"
+    "--deselect=tests/test_s3/test_s3.py::test_upload_from_file_to_presigned_url"
+    "--deselect=tests/test_s3/test_server.py::test_s3_server_bucket_versioning"
+    "--deselect=tests/test_s3/test_server.py::test_s3_server_post_cors_multiple_origins"
 
     # Disable tests that require docker daemon
+    "--deselect=tests/test_core/test_docker.py::test_docker_is_running_and_available"
     "--deselect=tests/test_events/test_events_lambdatriggers_integration.py::test_creating_bucket__invokes_lambda"
     "--deselect=tests/test_s3/test_s3_lambda_integration.py::test_objectcreated_put__invokes_lambda"
+    "--deselect=tests/test_sqs/test_sqs_integration.py"
 
     # json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
     "--deselect=tests/test_cloudformation/test_cloudformation_stack_integration.py::test_lambda_function"

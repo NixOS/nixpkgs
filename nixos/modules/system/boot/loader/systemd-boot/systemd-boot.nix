@@ -49,7 +49,7 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommandLocal "systemd-boot" {
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
     nativeBuildInputs = [ pkgs.mypy ];
   } ''
     install -m755 ${systemdBootBuilder} $out
@@ -66,6 +66,8 @@ let
     ${cfg.extraInstallCommands}
   '';
 in {
+
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
 
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])

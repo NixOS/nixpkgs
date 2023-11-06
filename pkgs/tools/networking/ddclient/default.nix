@@ -1,11 +1,11 @@
-{ lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl, curl }:
+{ lib, fetchFromGitHub, perlPackages, autoreconfHook, perl, curl }:
 
 let
   myPerl = perl.withPackages (ps: [ ps.JSONPP ]);
 in
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.11.0_1";
+  version = "3.11.1";
 
   outputs = [ "out" ];
 
@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
     owner = "ddclient";
     repo = "ddclient";
     rev = "v${version}";
-    sha256 = "sha256-pl1kbzY5nUIvx1QiDdL9TP4vKtQnnv3RWklE4gbxXCw=";
+    sha256 = "sha256-OM+JW3HP0llzyJNqmP5PLZ30TOvC2nA1bWwOspTbZZM=";
   };
 
   postPatch = ''
