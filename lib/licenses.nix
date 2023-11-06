@@ -943,6 +943,8 @@ in mkLicense lset) ({
     spdxId = "Parity-7.0.0";
     fullName = "Parity Public License 7.0.0";
     url = "https://paritylicense.com/versions/7.0.0.html";
+    free = false;
+    redistributable = true;
   };
 
   php301 = {
