@@ -3,6 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , python311
 , substituteAll
 , ffmpeg-headless
@@ -398,6 +399,13 @@ in python.pkgs.buildPythonApplication rec {
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
+    })
+    (fetchpatch {
+      # freeze time in litterrobot tests
+      # https://github.com/home-assistant/core/pull/103444
+      name = "home-assistant-litterrobot-freeze-test-time.patch";
+      url = "https://github.com/home-assistant/core/commit/806205952ff863e2cf1875be406ea0254be5f13a.patch";
+      hash = "sha256-OVbmJWy275nYWrif9awAGIYlgZqrRPcYBhB0Vil8rmk=";
     })
   ];
 
