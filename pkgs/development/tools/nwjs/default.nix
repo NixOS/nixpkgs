@@ -21,7 +21,6 @@
 , libuuid
 , libxcb
 , libxkbcommon
-, makeWrapper
 , mesa
 , nspr
 , nss
@@ -84,10 +83,11 @@ let
     extraOutputsToInstall = [ "lib" "out" ];
   };
 
-in
-stdenv.mkDerivation rec {
-  pname = "nwjs";
   version = "0.82.0";
+in
+stdenv.mkDerivation {
+  pname = "nwjs";
+  inherit version;
 
   src =
     let flavor = if sdk then "sdk-" else "";
@@ -101,48 +101,33 @@ stdenv.mkDerivation rec {
       }."${flavor + bits}";
     };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-  runtimeDependencies = [ sqlite libuuid udev ];
+  nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = [ nwEnv ];
+  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [ nwEnv stdenv.cc.libc stdenv.cc.cc ];
 
-  installPhase =
-    let ccPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-    in
-    ''
+  installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/nwjs
       cp -R * $out/share/nwjs
       find $out/share/nwjs
 
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
-
       ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
-
-      libpath="$out/share/nwjs/lib/"
-      for f in "$libpath"/*.so; do
-        patchelf --set-rpath "${nwEnv}/lib:${ccPath}:$libpath" "$f"
-      done
-      patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${ccPath}:$libpath" $out/share/nwjs/nw
-      # check, whether all RPATHs are correct (all dependencies found)
-      checkfile=$(mktemp)
-      for f in "$libpath"/*.so "$out/share/nwjs/nw"; do
-         (echo "$f:";
-          ldd "$f"  ) > "$checkfile"
-      done
-      if <"$checkfile" grep -e "not found"; then
-        cat "$checkfile"
-        exit 1
-      fi
 
       mkdir -p $out/bin
       ln -s $out/share/nwjs/nw $out/bin
 
       mkdir $out/lib
       ln -s $out/share/nwjs/lib/libnw.so $out/lib/libnw.so
+
+      runHook postInstall
     '';
 
   meta = with lib; {
     description = "An app runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = [ maintainers.offline ];
     license = licenses.bsd3;
   };
