@@ -17985,6 +17985,20 @@ with self; {
     };
   };
 
+  MP3CutGapless = buildPerlPackage {
+    pname = "MP3-Cut-Gapless";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/MP3-Cut-Gapless-0.03.tar.gz";
+      hash = "sha256-PoS3OdHx4902FvhR3GV14WXTKEZ/AySGB5UOWVH+pPM=";
+    };
+    propagatedBuildInputs = [ AudioCuefileParser ];
+    meta = {
+      description = "Split an MP3 file without gaps (based on pcutmp3)";
+      license = with lib.licenses; [ artistic1 ];
+    };
+  };
+
   MP3Info = buildPerlPackage {
     pname = "MP3-Info";
     version = "1.26";
