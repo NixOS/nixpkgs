@@ -5,6 +5,7 @@
 , xdg-utils
 , xorg
 , symlinkJoin
+, xcursorHack ? true
 }:
 
 let
@@ -28,11 +29,17 @@ in symlinkJoin {
   postBuild = ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
-    wrapProgram $out/bin/telegram-desktop \
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
+    wrapperArgs=(
+      "''${gappsWrapperArgs[@]}"
+      "''${qtWrapperArgs[@]}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      ${lib.optionalString xcursorHack ''
+        # Hack to load libXcursor on some setups
+        # https://github.com/NixOS/nixpkgs/issues/181176
+        --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib"
+      ''}
+    )
+    wrapProgram $out/bin/telegram-desktop "''${wrapperArgs[@]}"
   '';
 
   passthru = {
