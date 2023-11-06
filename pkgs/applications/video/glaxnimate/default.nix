@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "glaxnimate";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     owner = "mattbas";
     repo = "${pname}";
     rev = version;
-    sha256 = "G4ykcOvXXnVIQZUYpRIrALtDSsGqxMvDtcmobjjtlKw=";
+    sha256 = "ueZSyKvYPArDdrQSKtYWEd0uoXXDOWqhpJZu8ZY1IUk=";
     fetchSubmodules = true;
   };
 
