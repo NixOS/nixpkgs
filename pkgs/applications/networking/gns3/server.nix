@@ -85,5 +85,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ anthonyroussel ];
+    mainProgram = "gns3server";
   };
 }
