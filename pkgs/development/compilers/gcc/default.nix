@@ -33,6 +33,7 @@
 , nukeReferences
 , callPackage
 , majorMinorVersion
+, darwin
 
 # only for gcc<=6.x
 , langJava ? false
@@ -412,6 +413,11 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   };
 } // optionalAttrs is7 {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+} // lib.optionalAttrs (!atLeast10 && stdenv.hostPlatform.isDarwin) {
+  # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
+  preBuild = ''
+    makeFlagsArray+=('STRIP=${lib.getBin darwin.cctools-port}/bin/${stdenv.cc.targetPrefix}strip')
+  '';
 } // optionalAttrs (!atLeast7) {
   env.langJava = langJava;
 } // optionalAttrs atLeast6 {
