@@ -5,8 +5,6 @@
 , automake
 , libtool
 , pkg-config
-, ApplicationServices
-, CoreServices
 , pkgsStatic
 
 # for passthru.tests
@@ -81,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
