@@ -19920,7 +19920,9 @@ with pkgs;
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
   cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix {
-    ## as of 2023-10-27: pyside2 is unsupported on python 3.11
+    ## as of 2023-11-06: cutter does not compile on python 3.11:
+    ##  include/shiboken2/pep384impl.h:337:3: error: #error Please check the buffer compatibility for this python version!
+    ##  https://github.com/NixOS/nixpkgs/pull/263951#discussion_r1382380743
     python = python310;
   };
 
