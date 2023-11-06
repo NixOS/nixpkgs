@@ -91,9 +91,10 @@ in rec {
     pythonAtLeast = lib.versionAtLeast pythonVersion;
     pythonOlder = lib.versionOlder pythonVersion;
     inherit hasDistutilsCxxPatch;
-    # TODO: deprecate
-    # Not done immediately because its likely used outside Nixpkgs.
-    pythonForBuild = pythonOnBuildForHost_overridden;
+    # Remove after 24.11 is released.
+    pythonForBuild =
+      lib.warnIf (lib.isInOldestRelease 2311) "`pythonForBuild` (from `python*`) has been renamed to `pythonOnBuildForHost`"
+        pythonOnBuildForHost_overridden;
     pythonOnBuildForHost = pythonOnBuildForHost_overridden;
 
     tests = callPackage ./tests.nix {
