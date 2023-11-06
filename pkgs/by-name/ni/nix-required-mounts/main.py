@@ -64,7 +64,7 @@ def entrypoint():
     if not Path(drv_path).exists():
         print(
             f"[E] {drv_path} doesn't exist."
-            " This may happen with the remote builds."
+            " Cf. https://github.com/NixOS/nix/issues/9272"
             " Exiting the hook",
             file=stderr,
         )
