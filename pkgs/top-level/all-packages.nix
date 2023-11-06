@@ -26459,6 +26459,11 @@ with pkgs;
 
   home-assistant = callPackage ../servers/home-assistant { };
 
+  buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
+  home-assistant-custom-components = lib.recurseIntoAttrs
+    (callPackage ../servers/home-assistant/custom-components {
+      inherit (home-assistant.python.pkgs) callPackage;
+    });
   home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
     (callPackage ../servers/home-assistant/custom-lovelace-modules {});
 
