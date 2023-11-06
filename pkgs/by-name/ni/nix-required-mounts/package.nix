@@ -28,27 +28,38 @@ let
     inherit allowedPatterns;
     nixExe = lib.getExe nix;
   };
-  pname = "nix-required-mounts";
+  attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
+  pname = attrs.project.name;
+  inherit (attrs.project) version;
 in
 
-runCommand pname
+python3Packages.buildPythonApplication
 {
+  inherit pname version;
+  pyproject = true;
+
+  src = lib.cleanSource ./.;
+
   nativeBuildInputs = [
     makeWrapper
-    python3Packages.wrapPython
+    python3Packages.setuptools
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/${pname} --add-flags "--config ${confPath}"
+  '';
+
   passthru = {
     inherit allowedPatterns;
     tests = {
       inherit (nixosTests) nix-required-mounts;
     };
   };
-  meta.mainProgram = pname;
-} ''
-  ${lib.getExe buildPackages.python3.pkgs.flake8} ${./main.py}
-
-  mkdir -p $out/bin
-  install ${./main.py} $out/bin/${pname}
-  wrapProgram $out/bin/${pname} --add-flags "--config ${confPath}"
-  wrapPythonPrograms
-''
+  meta = {
+    inherit (attrs.project) description;
+    homepage = attrs.project.urls.Homepage;
+    license = lib.licenses.mit;
+    mainProgram = attrs.project.name;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
+  };
+}
