@@ -14402,6 +14402,12 @@
     githubId = 18549627;
     name = "Proglodyte";
   };
+  proglottis = {
+    email = "proglottis@gmail.com";
+    github = "proglottis";
+    githubId = 74465;
+    name = "James Fargher";
+  };
   progval = {
     email = "progval+nix@progval.net";
     github = "progval";
