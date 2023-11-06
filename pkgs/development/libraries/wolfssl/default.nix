@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-bigcache"
 
     # Use WolfSSL's Single Precision Math with timing-resistant cryptography.
-    "--enable-sp=yes${lib.optionalString (!stdenv.isx86_32) ",asm"}"
+    "--enable-sp=yes${lib.optionalString (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch) ",asm"}"
     "--enable-sp-math-all"
     "--enable-harden"
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
