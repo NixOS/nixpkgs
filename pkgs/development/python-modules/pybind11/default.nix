@@ -17,7 +17,7 @@
     name = "pybind11-setup-hook";
     substitutions = {
       out = placeholder "out";
-      pythonInterpreter = python.pythonForBuild.interpreter;
+      pythonInterpreter = python.pythonOnBuildForHost.interpreter;
       pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
