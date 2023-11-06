@@ -1,30 +1,33 @@
 { lib
-, buildPythonPackage
 , fetchFromGitHub
-, aiohttp
-, matplotlib
+, buildPythonPackage
+, pythonOlder
+
+# Build deps
+, anyio
+, distro
+, hatchling
+, httpx
 , numpy
-, openpyxl
 , pandas
 , pandas-stubs
-, plotly
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, scikit-learn
-, tenacity
+, pydantic
 , tqdm
 , typing-extensions
-, wandb
+
+# Check deps
+, pytestCheckHook
+, dirty-equals
+, pytest-asyncio
+, respx
+
 , withOptionalDependencies ? false
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.28.1";
-  format = "setuptools";
+  version = "1.3.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7.1";
 
@@ -32,35 +35,26 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-liJyeGxnYIC/jUQKdeATHpVJb/12KGbeM94Y2YQphfY=";
+    hash = "sha256-bXJYPJ7t9lDvu79K7My0jXP2FYJSSefHrDJPcRLEZfI=";
   };
 
+  nativeBuildInputs = [ hatchling ];
+
   propagatedBuildInputs = [
-    aiohttp
-    requests
+    anyio
+    distro
+    httpx
+    pydantic
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ] ++ lib.optionals withOptionalDependencies (builtins.attrValues {
-    inherit (passthru.optional-dependencies) embeddings wandb;
-  });
+  ] ++ lib.optionals withOptionalDependencies passthru.optional-dependencies.datalib;
 
   passthru.optional-dependencies = {
     datalib = [
       numpy
-      openpyxl
       pandas
       pandas-stubs
     ];
-    embeddings = [
-      matplotlib
-      plotly
-      scikit-learn
-      tenacity
-    ] ++ passthru.optional-dependencies.datalib;
-    wandb = [
-      wandb
-    ] ++ passthru.optional-dependencies.datalib;
   };
 
   pythonImportsCheck = [
@@ -69,23 +63,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    dirty-equals
     pytest-asyncio
-    pytest-mock
+    respx
   ];
-
-  pytestFlagsArray = [
-    "openai/tests"
-  ];
-
-  OPENAI_API_KEY = "sk-foo";
 
   disabledTestPaths = [
-    # Requires a real API key
-    "openai/tests/test_endpoints.py"
-    "openai/tests/asyncio/test_endpoints.py"
-    # openai: command not found
-    "openai/tests/test_file_cli.py"
-    "openai/tests/test_long_examples_validator.py"
+    # Tests that require network access
+    "tests/api_resources"
   ];
 
   meta = with lib; {
