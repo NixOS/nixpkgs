@@ -15,7 +15,7 @@ let
   configFile = pkgs.writeTextFile {
     name = "AdGuardHome.yaml";
     text = builtins.toJSON cfg.settings;
-    checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
+    checkPhase = "${lib.getExe pkgs.adguardhome} -c $out --check-config";
   };
   defaultBindPort = 3000;
 
@@ -150,8 +150,13 @@ in
       preStart = optionalString (cfg.settings != null) ''
         if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
            && [ "${toString cfg.mutableSettings}" = "1" ]; then
+          # First run a schema_version update on the existing configuration
+          # This ensures that both the new config and the existing one have the same schema_version
+          # Note: --check-config has the side effect of modifying the file at rest!
+          ${lib.getExe pkgs.adguardhome} -c "$STATE_DIRECTORY/AdGuardHome.yaml" --check-config
+
           # Writing directly to AdGuardHome.yaml results in empty file
-          ${pkgs.yaml-merge}/bin/yaml-merge "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
+          ${lib.getExe pkgs.yaml-merge} "$STATE_DIRECTORY/AdGuardHome.yaml" "${configFile}" > "$STATE_DIRECTORY/AdGuardHome.yaml.tmp"
           mv "$STATE_DIRECTORY/AdGuardHome.yaml.tmp" "$STATE_DIRECTORY/AdGuardHome.yaml"
         else
           cp --force "${configFile}" "$STATE_DIRECTORY/AdGuardHome.yaml"
@@ -161,7 +166,7 @@ in
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.adguardhome}/bin/adguardhome ${args}";
+        ExecStart = "${lib.getExe pkgs.adguardhome} ${args}";
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";
         RestartSec = 10;
