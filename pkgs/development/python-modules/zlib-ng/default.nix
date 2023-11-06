@@ -50,6 +50,16 @@ buildPythonPackage rec {
     rm -rf src
   '';
 
+  disabledTests = [
+    # commandline tests fail to find the built module
+    "test_compress_fast_best_are_exclusive"
+    "test_compress_infile_outfile"
+    "test_compress_infile_outfile_default"
+    "test_decompress_cannot_have_flags_compression"
+    "test_decompress_infile_outfile"
+    "test_decompress_infile_outfile_error"
+  ];
+
   meta = with lib; {
     description = "A drop-in replacement for Python's zlib and gzip modules using zlib-ng";
     homepage = "https://github.com/pycompression/python-zlib-ng";
