@@ -209,7 +209,8 @@ rec {
    *   > setBuildTarget "server" (callCabal2nix "thePackageName" thePackageSrc {})
    *
    */
-  setBuildTargets = xs: overrideCabal (drv: { buildTarget = lib.concatStringsSep " " xs; });
+  setBuildTargets = xs: justStaticExecutables
+     (dontCheck (overrideCabal (drv: { buildTarget = lib.concatStringsSep " " xs; })));
   setBuildTarget = x: setBuildTargets [x];
 
   doHyperlinkSource = overrideCabal (drv: { hyperlinkSource = true; });

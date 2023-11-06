@@ -14,3 +14,8 @@ executable bar
   main-is:             Bar.hs
   build-depends:       base
   default-language:    Haskell2010
+
+test-suite tests
+  main-is:             Test.hs
+  build-depends:       base
+  default-language:    Haskell2010
