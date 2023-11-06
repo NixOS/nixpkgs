@@ -8,6 +8,8 @@
 , fetchFromGitHub
 , pkgsStatic
 , stdenv
+, testers
+, gns3-server
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -72,6 +74,11 @@ python3.pkgs.buildPythonApplication {
     # Rerun failed tests up to three times (flaky tests)
     "--reruns 3"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = gns3-server;
+    command = "${lib.getExe gns3-server} --version";
+  };
 
   meta = with lib; {
     description = "Graphical Network Simulator 3 server (${channel} release)";
