@@ -36,6 +36,9 @@ runCommand pname
     makeWrapper
     python3Packages.wrapPython
   ];
+  passthru = {
+    inherit allowedPatterns;
+  };
   meta.mainProgram = pname;
 } ''
   ${lib.getExe buildPackages.python3.pkgs.flake8} ${./main.py}

@@ -2,33 +2,39 @@
 
 let
   cfg = config.programs.nix-required-mounts;
-  hook =
-    pkgs.nix-required-mounts.override { inherit (cfg) allowedPatterns; };
+  package = pkgs.nix-required-mounts;
+  overridenPackage = package.override { inherit (cfg) allowedPatterns; };
 
-  patternType = with lib.types; submodule ({ config, name, ... }: {
-    options.onFeatures = lib.mkOption {
-      type = listOf str;
-      description = "Which requiredSystemFeatures should trigger relaxation of the sandbox";
-      default = [ name ];
-    };
-    options.paths = lib.mkOption {
-      type = listOf path;
-      description = "A list of glob patterns, indicating which paths to expose to the sandbox";
-    };
-  });
+  Pattern = with lib.types;
+    submodule ({ config, name, ... }: {
+      options.onFeatures = lib.mkOption {
+        type = listOf str;
+        description =
+          "Which requiredSystemFeatures should trigger relaxation of the sandbox";
+        default = [ name ];
+      };
+      options.paths = lib.mkOption {
+        type = listOf path;
+        description =
+          "A list of glob patterns, indicating which paths to expose to the sandbox";
+      };
+    });
+
+  driverPaths = [
+    # symlinks in /run/opengl-driver/lib:
+    pkgs.addOpenGLRunpath.driverLink
+
+    # mesa:
+    config.hardware.opengl.package
+
+    # nvidia_x11, etc:
+  ] ++ config.hardware.opengl.extraPackages; # nvidia_x11
 
   defaults = {
-    opengl.onFeatures = [ "opengl" ];
-    opengl.paths = [
-      "/dev/video*"
-      "/dev/dri"
-
-      pkgs.addOpenGLRunpath.driverLink
-      # /run/opengl-driver/lib only contains symlinks
-      config.hardware.opengl.package
-    ] ++ config.hardware.opengl.extraPackages;
-    cuda.onFeatures = [ "cuda" ];
-    cuda.paths = defaults.opengl.paths ++ [ "/dev/nvidia*" ];
+    opengl.onFeatures = package.allowedPatterns.opengl.onFeatures;
+    opengl.paths = package.allowedPatterns.opengl.paths ++ driverPaths;
+    cuda.onFeatures = package.allowedPatterns.cuda.onFeatures;
+    cuda.paths = package.allowedPatterns.cuda.paths ++ driverPaths;
   };
 in
 {
@@ -49,8 +55,9 @@ in
     '';
     allowedPatterns = with lib.types;
       lib.mkOption rec {
-        type = attrsOf patternType;
-        description = "The hook config, describing which paths to mount for which system features";
+        type = attrsOf Pattern;
+        description =
+          "The hook config, describing which paths to mount for which system features";
         default = { inherit (defaults) opengl; };
         defaultText = lib.literalExpression ''
           {
@@ -62,13 +69,12 @@ in
             ];
           }
         '';
-        example.require-ipfs = [ "/ipfs" ];
+        example.require-ipfs.paths = [ "/ipfs" ];
+        example.require-ipfs.onFeatures = [ "ifps" ];
       };
   };
   config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      nix.settings.pre-build-hook = lib.getExe hook;
-    }
+    { nix.settings.pre-build-hook = lib.getExe overridenPackage; }
     (lib.mkIf cfg.presets.opengl.enable {
       nix.settings.system-features = [ "opengl" ];
       programs.nix-required-mounts.allowedPatterns = {
