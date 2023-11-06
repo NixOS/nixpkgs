@@ -320,6 +320,8 @@ let
       ''${MODULES[@]}
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
+    # TODO: split building and signing into separate derivations, and
+    # wrap the signing derivation in one that verifies the signature.
     ${if (config.secureboot.signingCertificate == null) then ''
         cp grub-unsigned.efi $bootefi_path
       '' else ''
@@ -330,8 +332,6 @@ let
           ${optionalString (config.secureboot.privateKeyFile != null) "--key ${config.secureboot.privateKeyFile}"} \
           grub-unsigned.efi
         cp ${config.secureboot.shim} $bootefi_path
-        chmod u+w $bootefi_path
-        echo foo >> $bootefi_path
         set +x
     ''}
 
