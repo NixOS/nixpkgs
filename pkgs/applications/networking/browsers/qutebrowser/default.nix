@@ -12,7 +12,6 @@
 , widevine-cdm
 , enableVulkan ? stdenv.isLinux
 , vulkan-loader
-, buildPackages
 }:
 
 let
@@ -56,10 +55,7 @@ python3.pkgs.buildPythonApplication {
     # scripts and userscripts libs
     tldextract beautifulsoup4
     readability-lxml pykeepass
-  ] ++ lib.optionals ((builtins.tryEval stem.outPath).success) [
-    # error: stem-1.8.2 not supported for interpreter python3.11
     stem
-  ] ++ [
     pynacl
     # extensive ad blocking
     adblock
@@ -86,7 +82,7 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${buildPackages.python3}/bin/python3 \
+      PYTHON=${python3.pythonOnBuildForHost.interpreter} \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
