@@ -67,11 +67,8 @@ stdenv.mkDerivation rec {
 
   # Note: disable mullapudi2016_fibonacci because it requires too much
   # parallelism for remote builders
-  ctestArgs = "--output-on-failure -E 'mullapudi2016_fibonacci'";
-  checkPhase = ''
-    runHook preCheck
-    ctest ${ctestArgs}
-    runHook postCheck
+  preCheck = ''
+    checkFlagsArray+=("ARGS=-E 'mullapudi2016_fibonacci'")
   '';
 
   # Note: only openblas and not atlas part of this Nix expression
