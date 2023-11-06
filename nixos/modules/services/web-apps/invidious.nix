@@ -123,6 +123,8 @@ let
         # Not needed because peer authentication is enabled
         password = lib.mkIf (cfg.database.host == null) "";
       };
+
+      host_binding = cfg.address;
     } // (lib.optionalAttrs (cfg.domain != null) {
       inherit (cfg) domain;
     });
@@ -175,12 +177,15 @@ let
       external_port = 80;
     };
 
-    services.nginx = {
+    services.nginx = let
+      ip = if cfg.address == "0.0.0.0" then "127.0.0.1" else cfg.address;
+    in
+    {
       enable = true;
       virtualHosts.${cfg.domain} = {
         locations."/".proxyPass =
           if cfg.serviceScale == 1 then
-            "http://127.0.0.1:${toString cfg.port}"
+            "http://${ip}:${toString cfg.port}"
           else "http://upstream-invidious";
 
         enableACME = lib.mkDefault true;
@@ -189,7 +194,7 @@ let
       upstreams = lib.mkIf (cfg.serviceScale > 1) {
         "upstream-invidious".servers = builtins.listToAttrs (builtins.genList
           (scaleIndex: {
-            name = "127.0.0.1:${toString (cfg.port + scaleIndex)}";
+            name = "${ip}:${toString (cfg.port + scaleIndex)}";
             value = { };
           })
           cfg.serviceScale);
@@ -265,6 +270,16 @@ in
         The FQDN Invidious is reachable on.
 
         This is used to configure nginx and for building absolute URLs.
+      '';
+    };
+
+    address = lib.mkOption {
+      type = types.str;
+      # default from https://github.com/iv-org/invidious/blob/master/config/config.example.yml
+      default = if cfg.nginx.enable then "127.0.0.1" else "0.0.0.0";
+      defaultText = lib.literalExpression ''if config.services.invidious.nginx.enable then "127.0.0.1" else "0.0.0.0"'';
+      description = lib.mdDoc ''
+        The IP address Invidious should bind to.
       '';
     };
 
