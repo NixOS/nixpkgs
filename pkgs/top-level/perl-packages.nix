@@ -1267,6 +1267,18 @@ with self; {
     };
   };
 
+  AudioCuefileParser = buildPerlPackage {
+    pname = "Audio-Cuefile-Parser";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTK/Audio-Cuefile-Parser-0.02.tar.gz";
+      hash = "sha256-ulbQcMhz2WxoatmoH99P6JuETkPrSd/gAL+c70PFtmk=";
+    };
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AudioFLACHeader = buildPerlPackage {
     pname = "Audio-FLAC-Header";
     version = "2.4";
