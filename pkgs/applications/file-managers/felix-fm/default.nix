@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , pkg-config
 , bzip2
+, libgit2
+, zlib
 , zstd
 , zoxide
 }:
@@ -24,10 +26,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     bzip2
+    libgit2
+    zlib
     zstd
   ];
 
   nativeCheckInputs = [ zoxide ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   buildFeatures = [ "zstd/pkg-config" ];
 
