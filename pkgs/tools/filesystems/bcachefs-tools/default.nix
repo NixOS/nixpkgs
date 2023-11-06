@@ -23,16 +23,17 @@
 , fuseSupport ? false
 }:
 let
-  rev = "cfa816bf3f823a3bedfedd8e214ea929c5c755fe";
-in stdenv.mkDerivation {
+  version = "1.3.1";
+in
+stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-2023-06-28";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    inherit rev;
-    hash = "sha256-XgXUwyZV5N8buYTuiu1Y1ZU3uHXjZ/OZ1kbZ9d6Rt5I=";
+    rev = "v${version}";
+    hash = "sha256-4TmH6YOW6ktISVA6RLo7JRl8/SnRzGMrdbyCr+mDkqY=";
   };
 
   # errors on fsck_err function. Maybe miss-detection?
@@ -75,7 +76,7 @@ in stdenv.mkDerivation {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=${lib.strings.substring 0 7 rev}"
+    "VERSION=${version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
 
