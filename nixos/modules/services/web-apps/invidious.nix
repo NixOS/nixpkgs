@@ -171,6 +171,34 @@ let
     };
   };
 
+  ytproxyConfig = lib.mkIf cfg.http3-ytproxy.enable {
+    systemd.services.http3-ytproxy = {
+      description = "HTTP3 ytproxy for Invidious";
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+
+      script = ''
+        mkdir -p socket
+        exec ${lib.getExe cfg.http3-ytproxy.package};
+      '';
+
+      serviceConfig = {
+        RestartSec = "2s";
+        DynamicUser = true;
+        User = lib.mkIf cfg.nginx.enable config.services.nginx.user;
+        RuntimeDirectory = "http3-ytproxy";
+        WorkingDirectory = "/run/http3-ytproxy";
+      };
+    };
+
+    services.nginx.virtualHosts.${cfg.domain} = lib.mkIf cfg.nginx.enable {
+      locations."~ (^/videoplayback|^/vi/|^/ggpht/|^/sb/)" = {
+        proxyPass = "http://unix:/run/http3-ytproxy/socket/http-proxy.sock";
+      };
+    };
+  };
+
   nginxConfig = lib.mkIf cfg.nginx.enable {
     services.invidious.settings = {
       https_only = config.services.nginx.virtualHosts.${cfg.domain}.forceSSL;
@@ -348,11 +376,28 @@ in
         which can also be used to disable AMCE and TLS.
       '';
     };
+
+    http3-ytproxy = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to enable http3-ytproxy for faster loading of images and video playback.
+
+          If {option}`services.invidious.nginx.enable` is used, nginx will be configured automatically. If not, you
+          need to configure a reverse proxy yourself according to
+          https://docs.invidious.io/improve-public-instance/#3-speed-up-video-playback-with-http3-ytproxy.
+        '';
+      };
+
+      package = lib.mkPackageOptionMD pkgs "http3-ytproxy" { };
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     serviceConfig
     localDatabaseConfig
     nginxConfig
+    ytproxyConfig
   ]);
 }

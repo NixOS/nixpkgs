@@ -53,6 +53,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           };
           networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
         };
+        nginx-scale-ytproxy.configuration = {
+          services.invidious = {
+            nginx.enable = true;
+            http3-ytproxy.enable = true;
+            domain = "invidious.example.com";
+            serviceScale = 3;
+          };
+          services.nginx.virtualHosts."invidious.example.com" = {
+            forceSSL = false;
+            enableACME = false;
+          };
+          networking.hosts."127.0.0.1" = [ "invidious.example.com" ];
+        };
         postgres-tcp.configuration = {
           services.invidious = {
             database = {
@@ -97,6 +110,15 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("journalctl -eu invidious.service | grep -o '200 GET /search'")
     machine.succeed("journalctl -eu invidious-1.service | grep -o '200 GET /search'")
     machine.succeed("journalctl -eu invidious-2.service | grep -o '200 GET /search'")
+
+    activate_specialisation("nginx-scale-ytproxy")
+    machine.wait_for_unit("http3-ytproxy.service")
+    machine.wait_for_open_port(80)
+    machine.wait_until_succeeds("ls /run/http3-ytproxy/socket/http-proxy.sock")
+    curl_assert_status_code("http://invidious.example.com/search", 200)
+    # this should error out as no internet connectivity is available in the test
+    curl_assert_status_code("http://invidious.example.com/vi/dQw4w9WgXcQ/mqdefault.jpg", 502)
+    machine.succeed("journalctl -eu http3-ytproxy.service | grep -o 'dQw4w9WgXcQ'")
 
     postgres_tcp.wait_for_unit("postgresql.service")
     activate_specialisation("postgres-tcp")
