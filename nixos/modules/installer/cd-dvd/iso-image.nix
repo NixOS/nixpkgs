@@ -236,7 +236,7 @@ let
   #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
   #    will get white-on-black console-like text on sub-menus. *sigh*
   efiDir = pkgs.runCommand "efi-directory" {
-    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi pkgs.sbsigntool ];
     strictDeps = true;
   } ''
     mkdir -p $out/EFI/boot/
@@ -309,15 +309,31 @@ let
       fi
     done
 
+    bootefi_path=$out/EFI/boot/boot${targetArch}.efi
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
-      -o $out/EFI/boot/boot${targetArch}.efi \
+      -o grub-unsigned.efi \
       -p /EFI/boot \
       -O ${grubPkgs.grub2_efi.grubTarget} \
       ''${MODULES[@]}
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
+
+    ${if (config.secureboot.signingCertificate == null) then ''
+        cp grub-unsigned.efi $bootefi_path
+      '' else ''
+        set -x
+        sbsign \
+          --cert ${config.secureboot.signingCertificate} \
+          --output $out/EFI/boot/grub${targetArch}.efi \
+          ${optionalString (config.secureboot.privateKeyFile != null) "--key ${config.secureboot.privateKeyFile}"} \
+          grub-unsigned.efi
+        cp ${config.secureboot.shim} $bootefi_path
+        chmod u+w $bootefi_path
+        echo foo >> $bootefi_path
+        set +x
+    ''}
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -702,6 +718,42 @@ in
         This is useful for validating that graphics mode usage is not at the root cause of a problem with the iso image.
 
         If text mode is required off-handedly (e.g. for serial use) you can use the `T` key, after being prompted, to use text mode for the current boot.
+      '';
+    };
+
+    secureboot.signingCertificate = mkOption {
+      default = null;
+      type = types.nullOr types.pathInStore;
+      description = lib.mdDoc ''
+        Certificate file to use for signing EFI binaries for Secure Boot.
+
+        For official NixOS installer images, this will be the NixOS
+        vendor certificate.
+
+        This should usually correspond to a Machine Owner Key (MOK)
+        enrolled on the machine being booted.
+      '';
+    };
+
+    secureboot.privateKeyFile = mkOption {
+      default = null;
+      type = types.nullOr types.pathInStore;
+      description = lib.mdDoc ''
+        Private key file to use for signing EFI binaries for Secure Boot.
+
+        This is insecure (leaks the private key to the world-readable
+        Nix store) and should only be used for testing!
+      '';
+    };
+
+    secureboot.shim = mkOption {
+      type = types.pathInStore;
+      description = ''
+        Path to a signed shim binary.
+
+        For most use cases, this should be the one signed with the
+        official NixOS keys, which will allow booting on systems with
+        Secure Boot enabled and only Microsoft keys trusted.
       '';
     };
 
