@@ -159,8 +159,9 @@ stdenv.mkDerivation rec {
 
   # Make sure PyXML modules can be found at run-time.
   postInstall = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
-    install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
+    for f in $out/lib/inkscape/*.dylib; do
+      ln -s $f $out/lib/$(basename $f)
+    done
   '';
 
   meta = with lib; {
