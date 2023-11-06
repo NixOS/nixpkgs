@@ -200,12 +200,20 @@ in
 ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
 ++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
 
+# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
+# which is not supported by the clang integrated assembler used by default on Darwin.
+++ optional (is9 && hostPlatform.isDarwin) ./9/gcc9-darwin-as-gstabs.patch
+
 
 ## gcc 8.0 and older ##############################################################################
 
 # for 49 this is applied later
 ++ optional (atLeast49 && !is49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
 ++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+
+# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
+# which is not supported by the clang integrated assembler used by default on Darwin.
+++ optional (is8 && hostPlatform.isDarwin) ./8/gcc8-darwin-as-gstabs.patch
 
 
 ## gcc 7.0 and older ##############################################################################
