@@ -133,22 +133,6 @@ let
       '';
     };
 
-    systemd.services.invidious-db-clean = {
-      description = "Invidious database cleanup";
-      documentation = [ "https://docs.invidious.io/Database-Information-and-Maintenance.md" ];
-      startAt = lib.mkDefault "weekly";
-      path = [ config.services.postgresql.package ];
-      after = [ "postgresql.service" ];
-      script = ''
-        psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "DELETE FROM nonces * WHERE expire < current_timestamp"
-        psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "TRUNCATE TABLE videos"
-      '';
-      serviceConfig = {
-        DynamicUser = true;
-        User = "invidious";
-      };
-    };
-
     systemd.services.invidious = {
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
