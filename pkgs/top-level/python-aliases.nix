@@ -450,4 +450,5 @@ mapAliases ({
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
   zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
   zope_proxy = zope-proxy; # added 2023-10-07
+  zxing_cpp = zxing-cpp; # added 2023-11-05
 })
