@@ -9,7 +9,6 @@
 , SDL2
 , lttng-ust
 , numactl
-, dotnetCorePackages
 , libglvnd
 , xorg
 , udev
@@ -84,7 +83,7 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ oxalica thiagokokada ];
+    maintainers = with maintainers; [ thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };
