@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , python3
 , groff
 , less
 , fetchFromGitHub
+, installShellFiles
 , nix-update-script
 , testers
 , awscli2
@@ -59,6 +61,7 @@ with py.pkgs; buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    installShellFiles
     flit-core
   ];
 
@@ -87,15 +90,10 @@ with py.pkgs; buildPythonApplication rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/${python3.sitePackages}/awscli/data
-    ${python3.interpreter} scripts/gen-ac-index --index-location $out/${python3.sitePackages}/awscli/data/ac.index
-
-    mkdir -p $out/share/bash-completion/completions
-    echo "complete -C $out/bin/aws_completer aws" > $out/share/bash-completion/completions/aws
-
-    mkdir -p $out/share/zsh/site-functions
-    mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
-
+    installShellCompletion --cmd aws \
+      --bash <(echo "complete -C $out/bin/aws_completer aws") \
+      --zsh $out/bin/aws_zsh_completer.sh
+  '' + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/aws.cmd
   '';
 
