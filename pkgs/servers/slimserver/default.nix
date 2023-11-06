@@ -1,13 +1,12 @@
 { faad2
 , fetchFromGitHub
-, fetchurl
 , flac
 , lame
 , lib
 , makeWrapper
 , monkeysAudio
 , nixosTests
-, perl536Packages
+, perl538Packages
 , sox
 , stdenv
 , wavpack
@@ -16,7 +15,7 @@
 }:
 
 let
-  perlPackages = perl536Packages;
+  perlPackages = perl538Packages;
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
@@ -31,18 +30,93 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ perlPackages.CryptOpenSSLRSA perlPackages.IOSocketSSL ];
+  buildInputs = with perlPackages; [
+    AnyEvent
+    ArchiveZip
+    AsyncUtil
+    AudioScan
+    CarpClan
+    CGI
+    ClassAccessor
+    ClassAccessorChained
+    ClassC3
+    # ClassC3Componentised # Error: DBIx::Class::Row::throw_exception(): DBIx::Class::Relationship::BelongsTo::belongs_to(): Can't infer join condition for track
+    ClassDataInheritable
+    ClassInspector
+    ClassISA
+    ClassMember
+    ClassSingleton
+    ClassVirtual
+    ClassXSAccessor
+    CompressRawZlib
+    CryptOpenSSLRSA
+    DataDump
+    DataPage
+    DataURIEncode
+    DBDSQLite
+    DBI
+    # DBIxClass # https://github.com/Logitech/slimserver/issues/138
+    DigestSHA1
+    EncodeDetect
+    EV
+    ExporterLite
+    FileBOM
+    FileCopyRecursive
+    FileNext
+    FileReadBackwards
+    FileSlurp
+    FileWhich
+    HTMLParser
+    HTTPCookies
+    HTTPDaemon
+    HTTPMessage
+    ImageScale
+    IOAIO
+    IOInterface
+    IOSocketSSL
+    IOString
+    JSONXS
+    JSONXSVersionOneAndTwo
+    # LogLog4perl # Internal error: Root Logger not initialized.
+    LWP
+    LWPProtocolHttps
+    MP3CutGapless
+    NetHTTP
+    NetHTTPSNB
+    PathClass
+    ProcBackground
+    # SQLAbstract # DBI Exception: DBD::SQLite::db prepare_cached failed: no such function: ARRAY
+    SQLAbstractLimit
+    SubName
+    TemplateToolkit
+    TextUnidecode
+    TieCacheLRU
+    TieCacheLRUExpires
+    TieRegexpHash
+    TimeDate
+    URI
+    URIFind
+    UUIDTiny
+    XMLParser
+    XMLSimple
+    YAMLLibYAML
+  ]
+  # ++ (lib.optional stdenv.isDarwin perlPackages.MacFSEvents)
+  ++ (lib.optional stdenv.isLinux perlPackages.LinuxInotify2);
 
   prePatch = ''
     # remove vendored binaries
     rm -rf Bin
 
-    # remove modules for other versions of perl
-    for x in $(ls CPAN/arch); do
-      if [ "$x" != "${lib.versions.majorMinor perlPackages.perl.version}" ]; then
-        rm -rf "CPAN/arch/$x"
-      fi
-    done
+    # remove most vendored modules, keeping necessary ones
+    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL
+    rm -r CPAN/SQL/Abstract/Limit.pm
+    cp -rv CPAN/Class/C3/Componentised.pm CPAN_used/Class/C3/
+    cp -rv CPAN/DBIx CPAN_used/
+    cp -rv CPAN/Log CPAN_used/
+    cp -rv CPAN/SQL/* CPAN_used/SQL/
+    rm -r CPAN
+    mv CPAN_used CPAN
 
     ${lib.optionalString (!enableUnfreeFirmware) ''
       # remove unfree firmware
