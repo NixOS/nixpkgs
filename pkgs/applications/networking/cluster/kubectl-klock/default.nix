@@ -2,21 +2,21 @@
 
 buildGo121Module rec {
   pname = "kubectl-klock";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "jillejr";
+    owner = "applejag";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HO9/hr/CBmJkrbNdX8tp2pNRfZDaWNW8shyCR46G77A=";
+    sha256 = "sha256-fR97rTMFwtqVH9wqKy1+EzKKg753c18v8VDCQ2Y69+s=";
   };
 
-  vendorHash = "sha256-QvD5yVaisq5Zz/M81HAMKpgQJRB5qPCYveLgldHHGf0=";
+  vendorHash = "sha256-AkYKKM4PR/msG44MwdSq6XAf6EvdtJHoXyw7Xj7MXso=";
 
   meta = with lib; {
     description = "A kubectl plugin to render watch output in a more readable fashion";
-    homepage = "https://github.com/jillejr/kubectl-klock";
-    changelog = "https://github.com/jillejr/kubectl-klock/releases/tag/v${version}";
+    homepage = "https://github.com/applejag/kubectl-klock";
+    changelog = "https://github.com/applejag/kubectl-klock/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.scm2342 ];
   };

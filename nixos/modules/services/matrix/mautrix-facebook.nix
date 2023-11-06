@@ -145,7 +145,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [
         "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable "matrix-synapse.service"
+      ] ++ optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         ++ optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
