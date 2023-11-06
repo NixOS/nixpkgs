@@ -20,7 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-EQm9+b3nqbMqUAejAsh4MD/2UYi2QiWsdKMomkxUi90=";
   };
 
-  patches = [ ./use-template-for-taskwarrior-install-path.patch ];
+  patches = [
+    ./use-template-for-taskwarrior-install-path.patch
+    # Remove when https://github.com/ralphbean/taskw/pull/151 is merged.
+    ./support-relative-path-in-taskrc.patch
+  ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
       --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
