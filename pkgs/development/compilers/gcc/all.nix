@@ -34,9 +34,6 @@ let
               else            /* "4.8" */   isl_0_14;
       } // lib.optionalAttrs (majorMinorVersion == "4.8") {
         texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
-      } // lib.optionalAttrs (majorMinorVersion == "4.9") {
-        # Build fails on Darwin with clang
-        stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
       } // lib.optionalAttrs (!(atLeast "6")) {
         cloog = if stdenv.isDarwin
                 then null
