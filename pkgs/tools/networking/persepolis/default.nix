@@ -13,7 +13,7 @@
 , setuptools
 , sound-theme-freedesktop
 , wrapQtAppsHook
-, youtube-dl
+, yt-dlp
 }:
 
 buildPythonApplication rec {
@@ -30,11 +30,21 @@ buildPythonApplication rec {
   # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
   doCheck = false;
 
-  preBuild=''
+  preBuild=
+  # Make setup automatic
+  ''
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
+  '' +
+  # Replace abandoned youtube-dl with maintained fork yt-dlp. Fixes https://github.com/persepolisdm/persepolis/issues/930,
+  # can be removed if that issue is fixed and/or https://github.com/persepolisdm/persepolis/pull/936 is merged
+  ''
+    substituteInPlace setup.py ./persepolis/scripts/video_finder_addlink.py --replace \
+        "import youtube_dl" "import yt_dlp as youtube_dl"
   '';
 
   patches = lib.optionals stdenv.isDarwin [
+    # Upstream is abandonware, the last commit to master was on 2021-08-26.
+    # If it is forked or picked up again, consider upstreaming these patches.
     ./0001-Allow-building-on-darwin.patch
     ./0002-Fix-startup-crash-on-darwin.patch
     ./0003-Search-PATH-for-aria2c-on-darwin.patch
@@ -69,7 +79,7 @@ buildPythonApplication rec {
     setproctitle
     setuptools
     sound-theme-freedesktop
-    youtube-dl
+    yt-dlp
   ];
 
   meta = with lib; {
