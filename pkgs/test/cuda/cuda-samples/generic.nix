@@ -2,7 +2,7 @@
 , cudaPackages
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, autoAddOpenGLRunpathHook
 , cudatoolkit
 , pkg-config
 , sha256
@@ -20,7 +20,7 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config addOpenGLRunpath glfw3 freeimage ];
+  nativeBuildInputs = [ pkg-config autoAddOpenGLRunpathHook glfw3 freeimage ];
 
   buildInputs = [ cudatoolkit ];
 
@@ -44,12 +44,6 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
     install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    for exe in $out/bin/*; do
-      addOpenGLRunpath $exe
-    done
   '';
 
   meta = {
