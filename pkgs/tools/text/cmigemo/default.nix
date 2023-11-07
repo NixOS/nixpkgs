@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , iconv, nkf, perl, which
-, skk-dicts
+, skkDictionaries
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ iconv nkf perl which ];
 
   postUnpack = ''
-    cp ${skk-dicts}/share/SKK-JISYO.L source/dict/
+    cp ${skkDictionaries.l}/share/skk/SKK-JISYO.L source/dict/
   '';
 
   patches = [ ./no-http-tool-check.patch ];
