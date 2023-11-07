@@ -85,8 +85,7 @@ buildGoModule {
   '';
 
   preBuild = ''
-    chmod -R u+w vendor
-    mv -t . vendor/go.{mod,sum}
+    cp -t . vendor/go.{mod,sum}
   '';
 
   preCheck = ''
