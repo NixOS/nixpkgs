@@ -45,7 +45,8 @@ let
           caddy fmt --overwrite $out/Caddyfile
         '';
       in
-      "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
+      "${if cfg.formatCaddyfile && pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
+         then Caddyfile-formatted else Caddyfile}/Caddyfile";
 
   etcConfigFile = "caddy/caddy_config";
 
@@ -146,6 +147,20 @@ in
         Configuration for the default logger. See
         <https://caddyserver.com/docs/caddyfile/options#log>
         for details.
+      '';
+    };
+
+    formatCaddyfile = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Format the generated caddyfile using `caddy fmt` if `caddy` is available
+        (i.e. if buildPlatform = hostPlatform) (defaults to true to match behaviour
+        in earlier versions of this module).
+
+        Caddy fmt does not handle all valid Caddyfiles. For example, see
+        <https://github.com/caddyserver/caddy/issues/5930> for the lack of heredoc
+        support.
       '';
     };
 
