@@ -9,14 +9,14 @@
 , glfw3
 , freeimage
 }:
-cudaPackages.backendStdenv.mkDerivation rec {
+cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     inherit sha256;
   };
 
@@ -25,7 +25,7 @@ cudaPackages.backendStdenv.mkDerivation rec {
   buildInputs = [ cudatoolkit ];
 
   # See https://github.com/NVIDIA/cuda-samples/issues/75.
-  patches = lib.optionals (version == "11.3") [
+  patches = lib.optionals (finalAttrs.version == "11.3") [
     (fetchpatch {
       url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
       sha256 = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
@@ -58,4 +58,4 @@ cudaPackages.backendStdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
   };
-}
+})
