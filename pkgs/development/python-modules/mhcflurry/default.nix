@@ -67,10 +67,6 @@ buildPythonPackage rec {
     "test_run_serial"
     "test_speed_allele_specific"
     "test_speed_pan_allele"
-
-    # See https://github.com/openvax/mhcflurry/issues/217
-    "test_more"
-    "test_small"
   ];
 
   disabledTestPaths = [
