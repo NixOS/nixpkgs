@@ -8,6 +8,7 @@
 , zlib
 , unzip
 , nixosTests
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -45,8 +46,13 @@ stdenv.mkDerivation rec {
     sed -i 's@/bin/@@g' $out/etc/objects/commands.cfg
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) nagios;
+  passthru = {
+    tests = {
+      inherit (nixosTests) nagios;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "nagios-(.*)" ];
+    };
   };
 
   meta = {
