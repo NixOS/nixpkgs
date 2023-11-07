@@ -12,7 +12,7 @@
 , vaa
 , deal-solver
 , pygments
-, typeguard
+, typeguard3
 , urllib3
 , flake8
 }:
@@ -43,21 +43,23 @@ buildPythonPackage rec {
     flit-core
   ];
 
+
+  # Check this file for new additions under 'all'
+  # https://github.com/life4/deal/blob/master/pyproject.toml
   propagatedBuildInputs = [
     astroid
     deal-solver
+    hypothesis
     pygments
-    typeguard
+    typeguard3
+    vaa
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-
     docstring-parser
     marshmallow
     sphinx
-    hypothesis
-    vaa
     urllib3
     flake8
   ];
