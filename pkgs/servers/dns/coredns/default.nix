@@ -43,8 +43,7 @@ in buildGoModule rec {
   '';
 
   preBuild = ''
-    chmod -R u+w vendor
-    mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
+    cp -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
     GOOS= GOARCH= go generate
   '';
