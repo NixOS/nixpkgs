@@ -103,7 +103,12 @@ in {
   testScript = ''
     start_all()
 
-    server.wait_for_unit("sshd")
+    server.wait_for_unit("sshd", timeout=30)
+    server_localhost_only.wait_for_unit("sshd", timeout=30)
+    server_match_rule.wait_for_unit("sshd", timeout=30)
+
+    server_lazy.wait_for_unit("sshd.socket", timeout=30)
+    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
 
     with subtest("manual-authkey"):
         client.succeed("mkdir -m 700 /root/.ssh")
