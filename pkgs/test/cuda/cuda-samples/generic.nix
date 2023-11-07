@@ -1,5 +1,6 @@
 { lib
 , backendStdenv
+, cmake
 , fetchFromGitHub
 , fetchpatch
 , autoAddOpenGLRunpathHook
@@ -21,7 +22,20 @@ backendStdenv.mkDerivation (finalAttrs: {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config autoAddOpenGLRunpathHook glfw3 freeimage ];
+  nativeBuildInputs = [
+    pkg-config
+    autoAddOpenGLRunpathHook
+    glfw3
+    freeimage
+  ]
+  # CMake has to run as a native, build-time dependency for libNVVM samples.
+  ++ lib.lists.optionals (lib.strings.versionAtLeast finalAttrs.version "12.2") [
+    cmake
+  ];
+
+  # CMake is not the primary build tool -- that's still make.
+  # As such, we disable CMake's build system.
+  dontUseCmakeConfigure = true;
 
   buildInputs = [ cudatoolkit ];
 
