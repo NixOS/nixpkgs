@@ -21,7 +21,18 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pnameBase = "catboost";
-  pname = lib.optionalString rLibrary "r-" + pnameBase;
+  pname = lib.optionalString rLibrary "r-" + finalAttrs.pnameBase;
+  # The R package build results in a special catboost.so file
+  # that contains a subset of the .so file use for the CLI
+  # and python version. Catboost is not available from CRAN, so
+  # the rLibrary option follows the same steps as r-modules.
+  # Build with:
+  # nix-build -E "with (import $NIXPKGS{}); \
+  #   let \
+  #     catboost = catboost.override{rLibrary = true; doCheck = false;}; \
+  #   in \
+  #   rWrapper.override{ packages = [ catboost ]; }"
+  # An overlay would also work fine.
   version = "1.2.2";
 
   src = fetchFromGitHub {
