@@ -53,7 +53,6 @@
 , libthai
 , libdatrie
 , xdg-utils
-, xorg
 , libsysprof-capture
 , libpsl
 , brotli
@@ -217,7 +216,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
