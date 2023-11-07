@@ -2,6 +2,7 @@
 , stdenv
 , python3
 , fetchFromGitHub
+, fetchpatch
 , fetchPypi
 , nix-update-script
 , runtimeShell
@@ -39,6 +40,16 @@ buildPythonApplication rec {
     inherit pname version;
     hash = "sha256-ziJJWVr59hsJJqCJljLfSbHHESYegFak+uFLU/k9kZM=";
   };
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/265883
+    # https://github.com/pdm-project/pdm/pull/2379
+    (fetchpatch {
+      name = "fix-template-permission.patch";
+      url = "https://github.com/pdm-project/pdm/commit/f0efdcefe589bc58c28ccf6ce2d23cad9a81dccc.patch";
+      hash = "sha256-NnHDSz2N63JzSzh2t9a5f/QQWM6Hyd5Cn5JY2zem6Ac=";
+    })
+  ];
 
   nativeBuildInputs = [
     pdm-backend
@@ -106,5 +117,6 @@ buildPythonApplication rec {
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "pdm";
   };
 }
