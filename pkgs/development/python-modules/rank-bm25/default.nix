@@ -5,7 +5,7 @@
 , numpy
 }:
 let
-  pname = "rank_bm25";
+  pname = "rank-bm25";
   version = "0.2.2";
 in
 buildPythonPackage {
