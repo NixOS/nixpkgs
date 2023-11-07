@@ -181,7 +181,8 @@ rec {
           ${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} (${toString value}) is a path that does not exist.''
+        ${context} (${toString value}) is a path that does not exist.
+            To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.''
     else
       _singleton value;
 
