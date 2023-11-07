@@ -32,13 +32,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.10.0";
+  version = "2.10.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ziJJWVr59hsJJqCJljLfSbHHESYegFak+uFLU/k9kZM=";
+    hash = "sha256-0WZTHGWfxJBZM1RlRN0uFs9kjCum2JjIISatakIReoE=";
   };
 
   patches = [
@@ -112,7 +112,7 @@ buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://pdm.fming.dev";
+    homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "A modern Python package manager with PEP 582 support";
     license = licenses.mit;
