@@ -4,39 +4,43 @@
 , makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
-, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
-, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
-, seccompSupport ? stdenv.isLinux, libseccomp
-, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
-, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
-, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner, pipewire
-, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
-, jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? !nixosTestRunner, libjpeg, libpng
-, smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? true && !nixosTestRunner, spice, spice-protocol
-, ncursesSupport ? !nixosTestRunner, ncurses
+, guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !toolsOnly
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32 && !toolsOnly, numactl
+, seccompSupport ? stdenv.isLinux && !toolsOnly, libseccomp
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !toolsOnly
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libpulseaudio
+, pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, pipewire
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, SDL2, SDL2_image
+, jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libjack2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook
+, vncSupport ? !nixosTestRunner && !toolsOnly, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner && !toolsOnly, libcacard
+, spiceSupport ? true && !nixosTestRunner && !toolsOnly, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner && !toolsOnly, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
-, libiscsiSupport ? true, libiscsi
+, libiscsiSupport ? !toolsOnly, libiscsi
 , smbdSupport ? false, samba
-, tpmSupport ? true
+, tpmSupport ? !toolsOnly
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
-, capstoneSupport ? true, capstone
+, capstoneSupport ? !toolsOnly, capstone
 , enableDocs ? true
 , hostCpuOnly ? false
-, hostCpuTargets ? (if hostCpuOnly
+, hostCpuTargets ? (if toolsOnly
+                    then [ ]
+                    else if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
+, toolsOnly ? false
 , gitUpdater
+, qemu-utils # for tests attribute
 }:
 
 let
@@ -47,7 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
-    + lib.optionalString nixosTestRunner "-for-vm-tests";
+    + lib.optionalString nixosTestRunner "-for-vm-tests"
+    + lib.optionalString toolsOnly "-utils";
   version = "8.1.2";
 
   src = fetchurl {
@@ -239,14 +244,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
-  postInstall = ''
+  postInstall = lib.optionalString (!toolsOnly) ''
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
-    tests = {
+    tests = lib.optionalAttrs (!toolsOnly) {
       qemu-tests = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      qemu-utils-builds = qemu-utils;
     };
     updateScript = gitUpdater {
       # No nicer place to find latest release.
@@ -261,10 +267,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://www.qemu.org/";
-    description = "A generic and open source machine emulator and virtualizer";
+    description =
+      if toolsOnly
+      then "Support tools for qemu, a machine emulator and virtualizer"
+      else "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    mainProgram = "qemu-kvm";
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
+  }
+  # toolsOnly: Does not have qemu-kvm and there's no main support tool
+  // lib.optionalAttrs (!toolsOnly) {
+    mainProgram = "qemu-kvm";
   };
 })
