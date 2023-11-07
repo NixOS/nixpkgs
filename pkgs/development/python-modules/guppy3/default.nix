@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "guppy3";
   version = "3.1.4.post1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
