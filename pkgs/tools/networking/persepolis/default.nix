@@ -3,6 +3,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , aria
+, ffmpeg
 , libnotify
 , pulseaudio
 , psutil
@@ -37,6 +38,7 @@ buildPythonApplication rec {
     ./0001-Allow-building-on-darwin.patch
     ./0002-Fix-startup-crash-on-darwin.patch
     ./0003-Search-PATH-for-aria2c-on-darwin.patch
+    ./0004-Search-PATH-for-ffmpeg-on-darwin.patch
   ];
 
   postPatch = ''
@@ -55,7 +57,7 @@ buildPythonApplication rec {
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ aria libnotify ]}"
+    "--prefix PATH : ${lib.makeBinPath [ aria ffmpeg libnotify ]}"
     "\${qtWrapperArgs[@]}"
   ];
 
