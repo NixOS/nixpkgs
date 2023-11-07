@@ -35,23 +35,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Fn0I3pzA9yIYs3myPNflbH9u4Y19VZUS2lGjvWfzjm4=";
   };
 
-  # Of all the files in the source and data archives, there doesn't seem to be
-  # a decent icon :-)
-  iconsrc = fetchurl {
-    url = "https://wiki.flightgear.org/w/images/6/62/FlightGear_logo.png";
-    sha256 = "1ikz413jia55vfnmx8iwrlxvx8p16ggm81mbrj66wam3q7s2dm5p";
-  };
-
-  desktopItem = makeDesktopItem {
-    name = "flightgear";
-    exec = "fgfs";
-    icon = iconsrc;
-    comment = "FlightGear Flight Simulator";
-    desktopName = "FlightGear";
-    genericName = "Flight simulator";
-    categories = [ "Game" "Simulation" ];
-  };
-
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
     freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
@@ -59,11 +42,6 @@ stdenv.mkDerivation rec {
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
     glew qtdeclarative curl
   ];
-
-  postInstall = ''
-    mkdir -p "$out/share/applications/"
-    cp "${desktopItem}"/share/applications/* "$out/share/applications/" #*/
-  '';
 
   qtWrapperArgs = [
     "--set FG_ROOT ${data}/share/FlightGear"
