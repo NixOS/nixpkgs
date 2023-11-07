@@ -5,7 +5,6 @@
 , buildPythonPackage
 , dacite
 , fetchFromGitHub
-, orjson
 , pytest-asyncio
 , pytest-error-for-skips
 , pytestCheckHook
@@ -30,7 +29,6 @@ buildPythonPackage rec {
     aiohttp
     aqipy-atmotech
     dacite
-    orjson
   ];
 
   nativeCheckInputs = [
