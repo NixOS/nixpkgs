@@ -32,7 +32,7 @@ let
       homepage = "https://tomcat.apache.org/";
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
       platforms = platforms.all;
-      maintainers = [ ];
+      maintainers = with maintainers; [ anthonyroussel ];
       license = [ licenses.asl20 ];
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
