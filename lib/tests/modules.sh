@@ -513,6 +513,10 @@ checkConfigOutput '^{}$' config.value.mkmerge ./types-anything/mk-mods.nix
 checkConfigOutput '^true$' config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput '^1$' config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput '^"baz"$' config.value.nested.bar.baz ./types-anything/mk-mods.nix
+# Function reflection works
+checkConfigOutput '^{"p":1,"q":2}$' 'config.applied.merging-args.value' ./types-anything/functions.nix
+checkConfigOutput '^{"a":false,"b":false}$' 'config.applied.merging-args.args' ./types-anything/functions.nix
+
 
 ## types.functionTo
 checkConfigOutput '^"input is input"$' config.result ./functionTo/trivial.nix
