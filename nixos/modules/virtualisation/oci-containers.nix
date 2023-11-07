@@ -252,11 +252,10 @@ let
       text = ''
         ${cfg.backend} rm -f ${name} || true
         ${optionalString (isValidLogin container.login) ''
-          cat ${container.login.passwordFile} | \
           ${cfg.backend} login \
           ${container.login.registry} \
           --username ${container.login.username} \
-          --password-stdin
+          --password-stdin < ${container.login.passwordFile}
         ''}
         ${optionalString (container.imageFile != null) ''
           ${cfg.backend} load -i ${container.imageFile}
