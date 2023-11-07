@@ -1,4 +1,7 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub
+{ lib
+, stdenv
+, buildPythonApplication
+, fetchFromGitHub
 , aria
 , libnotify
 , pulseaudio
@@ -30,6 +33,12 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
   '';
 
+  patches = lib.optionals stdenv.isDarwin [
+    ./0001-Allow-building-on-darwin.patch
+    ./0002-Fix-startup-crash-on-darwin.patch
+    ./0003-Search-PATH-for-aria2c-on-darwin.patch
+  ];
+
   postPatch = ''
     sed -i 's|/usr/share/sounds/freedesktop/stereo/|${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/|' setup.py
     sed -i "s|'persepolis = persepolis.__main__'|'persepolis = persepolis.scripts.persepolis:main'|" setup.py
@@ -46,7 +55,7 @@ buildPythonApplication rec {
 
   # feed args to wrapPythonApp
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [aria libnotify ]}"
+    "--prefix PATH : ${lib.makeBinPath [ aria libnotify ]}"
     "\${qtWrapperArgs[@]}"
   ];
 
@@ -64,7 +73,6 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Persepolis Download Manager is a GUI for aria2";
     homepage = "https://persepolisdm.github.io/";
-    broken = stdenv.isDarwin; # Upstream’s build scripts check and fail on Darwin.
     license = licenses.gpl3;
     maintainers = [ ];
   };
