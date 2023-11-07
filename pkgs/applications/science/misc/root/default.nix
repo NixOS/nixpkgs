@@ -110,18 +110,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-    # glibc >=2.38 already has strlcat implemented.
-    # merged upstream, remove on next package bump.
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/8fb0e35446ed67c9d56639b4708c8f05459b7f84.patch";
-      hash = "sha256-7EabmYanqlQsYSQsi+S9eWs1v1pY6MncopL420Y3D4w=";
-    })
-  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
-    # Fix build against Python 3.11
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
-      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
-    })
   ];
 
   preConfigure = ''
