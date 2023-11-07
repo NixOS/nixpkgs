@@ -1,12 +1,20 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, makeWrapper, xorg, jre, }:
+{ lib
+, stdenv
+, makeDesktopItem
+, fetchurl
+, makeWrapper
+, xorg
+, jre
+,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "runelite";
-  version = "2.6.8";
+  version = "2.6.9";
 
   jar = fetchurl {
     url = "https://github.com/runelite/launcher/releases/download/${finalAttrs.version}/RuneLite.jar";
-    hash = "sha256-reqTRYXmpfxwo5MkxQFdifldFpTY0ascTPXA4mSvluM=";
+    hash = "sha256-91iBBviXM3tJN/jRgcOzUuTAr9VrKnW55uYrNW7eB5Q=";
   };
 
   icon = fetchurl {
