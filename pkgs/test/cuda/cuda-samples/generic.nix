@@ -1,17 +1,18 @@
 { lib
-, cudaPackages
+, backendStdenv
 , fetchFromGitHub
 , fetchpatch
 , autoAddOpenGLRunpathHook
 , cudatoolkit
+, cudaVersion
 , pkg-config
 , sha256
 , glfw3
 , freeimage
 }:
-cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
   pname = "cuda-samples";
-  version = lib.versions.majorMinor cudatoolkit.version;
+  version = cudaVersion;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -41,7 +42,7 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${backendStdenv.hostPlatform.parsed.cpu.name}/${backendStdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';
