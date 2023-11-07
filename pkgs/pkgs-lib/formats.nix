@@ -122,9 +122,26 @@ rec {
         else
           singleIniAtom;
 
+      iniSection = attrsOf iniAtom // { description = "section of an INI file (attrset of " + iniAtom.description + ")"; };
+      iniSections = attrsOf iniSection // { description = "sections of an INI file (attrset of " + iniSection.description + ")"; };
+
+      globalIni = { ... }: {
+        options = {
+          sections = lib.mkOption {
+            type = iniSections;
+            default = {};
+            description = iniSections.description;
+          };
+          globalSection = lib.mkOption {
+            type = iniSection;
+            default = {};
+            description = "global section of an INI file (" + iniSection.description + ")";
+          };
+        };
+      };
     in
-      if withGlobalSection then attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)))
-      else attrsOf (attrsOf iniAtom);
+      if withGlobalSection then types.submodule globalIni
+      else iniSections;
 
     generate = name: value:
       let
