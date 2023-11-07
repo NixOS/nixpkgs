@@ -1,8 +1,8 @@
 self: dontUse: with self;
 
 let
-  inherit (python) pythonForBuild;
-  pythonInterpreter = pythonForBuild.interpreter;
+  inherit (python) pythonOnBuildForHost;
+  pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
@@ -68,10 +68,10 @@ in {
       #   set, but in downstream projects that build packages depending on other
       #   versions of this hook's dependencies.
       passthru.tests = import ./pypa-build-hook-tests.nix {
-        inherit pythonForBuild runCommand;
+        inherit pythonOnBuildForHost runCommand;
       };
     } ./pypa-build-hook.sh) {
-      inherit (pythonForBuild.pkgs) build;
+      inherit (pythonOnBuildForHost.pkgs) build;
     };
 
   pipInstallHook = callPackage ({ makePythonHook, pip }:
@@ -91,7 +91,7 @@ in {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pypa-install-hook.sh) {
-      inherit (pythonForBuild.pkgs) installer;
+      inherit (pythonOnBuildForHost.pkgs) installer;
     };
 
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
@@ -227,6 +227,6 @@ in {
   sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ pythonForBuild.pkgs.sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }

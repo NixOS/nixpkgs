@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" ];
 
   postBuild =  ''
-    ${python3Packages.python.pythonForBuild.interpreter} setup.py build_sphinx -b html,man
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build_sphinx -b html,man
   '';
 
   postInstall = ''

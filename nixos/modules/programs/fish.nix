@@ -268,7 +268,7 @@ in
             ''
               mkdir -p $out
               if [ -d $package/share/man ]; then
-                find $package/share/man -type f | xargs ${pkgs.python3.pythonForBuild.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                find $package/share/man -type f | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
               fi
             '';
         in

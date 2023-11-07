@@ -31,11 +31,11 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext
   '';
 
   installPhase = ''
-    ${python.pythonForBuild.interpreter} setup.py install --prefix=$out --single-version-externally-managed
+    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;

@@ -224,13 +224,13 @@ python.pkgs.buildPythonApplication rec {
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
     # for files in `python.sitePackages`
-    ${python.pythonForBuild.interpreter} -OO -m compileall src
+    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall src
 
     # Collect static files
-    ${python.pythonForBuild.interpreter} src/manage.py collectstatic --clear --no-input
+    ${python.pythonOnBuildForHost.interpreter} src/manage.py collectstatic --clear --no-input
 
     # Compile string translations using gettext
-    ${python.pythonForBuild.interpreter} src/manage.py compilemessages
+    ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
   installPhase = ''

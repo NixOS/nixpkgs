@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} make_sync.py
+    ${python.pythonOnBuildForHost.interpreter} make_sync.py
   '';
 
   nativeCheckInputs = [
