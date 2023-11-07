@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , cmake
 , ninja
 , p7zip
@@ -47,22 +46,12 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.3.5";
+  version  = "4.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-AdYI9vljjhTXyFffQK0znBv8IHoF2q/nFXrYZSo0BcM=";
+    hash = "sha256-Ul77OihJWIH9H6FUpibGDjqX1BY4DWDQ3bR4lRDY9+U=";
   };
-
-  patches = [
-    # Upstream patch for curl-8.4 support,
-    # TODO: remove on next release.
-    (fetchpatch {
-      name = "curl-8.4.patch";
-      url = "https://github.com/Warzone2100/warzone2100/commit/db1cf70950d4fa6630f37a7bf85f548b48ed53cd.patch";
-      hash = "sha256-/jRan5pi7CamZaCaRdfugFmtCbWTKmCt63q0NBuTrFk=";
-    })
-  ];
 
   buildInputs = [
     SDL2
