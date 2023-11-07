@@ -5740,7 +5740,6 @@ broken-packages:
   - unix-handle # failure in job https://hydra.nixos.org/build/233233273 at 2023-09-02
   - unix-process-conduit # failure in job https://hydra.nixos.org/build/233191509 at 2023-09-02
   - unix-recursive # failure in job https://hydra.nixos.org/build/233194742 at 2023-09-02
-  - unleash-client-haskell-core # failure in job https://hydra.nixos.org/build/237229757 at 2023-10-21
   - unlifted-list # failure in job https://hydra.nixos.org/build/233205239 at 2023-09-02
   - unlift # failure in job https://hydra.nixos.org/build/233217875 at 2023-09-02
   - unliftio-messagebox # failure in job https://hydra.nixos.org/build/233200633 at 2023-09-02

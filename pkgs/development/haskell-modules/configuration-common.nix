@@ -2676,4 +2676,7 @@ self: super: {
 
   # Too strict bounds on base
   kewar = doJailbreak super.kewar;
+
+  # Tests rely on (missing) submodule
+  unleash-client-haskell-core = dontCheck super.unleash-client-haskell-core;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
