@@ -49,5 +49,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/borisdayma/dalle-mini";
     license = licenses.asl20;
     maintainers = with maintainers; [ r-burns ];
+    # incompatible with recent versions of JAX
+    broken = true;
   };
 }
