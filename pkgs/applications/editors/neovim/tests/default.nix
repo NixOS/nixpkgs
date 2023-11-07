@@ -107,6 +107,7 @@ rec {
   nvim_with_aliases = neovim.override {
     extraName = "-with-aliases";
     vimAlias = true;
+    vimdiffAlias = true;
     viAlias = true;
   };
 
@@ -208,6 +209,7 @@ rec {
       folder=${nvim_with_aliases}/bin
       assertFileExists "$folder/vi"
       assertFileExists "$folder/vim"
+      assertFileExists "$folder/vimdiff"
   '';
 
   # having no RC generated should autodisable init.vim wrapping

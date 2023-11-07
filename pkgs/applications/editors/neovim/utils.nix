@@ -135,6 +135,7 @@ let
     , withNodeJs ? false
     , withRuby ? true
     , vimAlias ? false
+    , vimdiffAlias ? false
     , viAlias ? false
     , configure ? {}
     , extraName ? ""
@@ -153,7 +154,7 @@ let
         inherit withPython3;
         inherit extraPython3Packages;
         inherit extraLuaPackages;
-        inherit withNodeJs withRuby viAlias vimAlias;
+        inherit withNodeJs withRuby viAlias vimAlias vimdiffAlias;
         customRC = configure.customRC or "";
         inherit plugins;
         inherit extraName;

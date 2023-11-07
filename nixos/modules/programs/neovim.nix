@@ -46,6 +46,14 @@ in
       '';
     };
 
+    vimdiffAlias = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Create a proxy {command}`vimdiff` to {command}`nvim -d` binary.
+      '';
+    };
+
     withRuby = mkOption {
       type = types.bool;
       default = true;
@@ -170,7 +178,7 @@ in
       cfg.runtime));
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby configure;
+      inherit (cfg) viAlias vimAlias vimdiffAlias withPython3 withNodeJs withRuby configure;
     };
   };
 }
