@@ -50,6 +50,6 @@ buildGoModule rec {
     homepage = "https://github.com/thanos-io/thanos";
     changelog = "https://github.com/thanos-io/thanos/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ basvandijk ];
+    maintainers = with maintainers; [ basvandijk anthonyroussel ];
   };
 }
