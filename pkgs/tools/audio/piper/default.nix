@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "piper";
-  version = "2023.9.27-1";
+  version = "2023.11.6-1";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-U7yOiqNvE0WqZB8qaKf3U7gnTJ6q+9W5lviW79b6h/o=";
+    hash = "sha256-9y7HuVgbI8if5XrgQGnEZV1lOw8oMXTFRUTvy/kTGfs=";
   };
 
   nativeBuildInputs = [

@@ -8,7 +8,7 @@
 , blas-ilp64
 , hdf5-cpp
 , python3
-, texlive
+, texliveMinimal
 , armadillo
 , libxc
 , makeWrapper
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     perl
     gfortran
     cmake
-    texlive.combined.scheme-minimal
+    texliveMinimal
     makeWrapper
     autoPatchelfHook
   ];

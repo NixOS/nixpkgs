@@ -13,7 +13,7 @@
 , gettext
 , gobject-introspection
 , gdk-pixbuf
-, texlive
+, texliveSmall
 , imagemagick
 , perlPackages
 , writeScript
@@ -21,9 +21,7 @@
 
 let
   documentation_deps = [
-    (texlive.combine {
-      inherit (texlive) scheme-small wrapfig gensymb;
-    })
+    (texliveSmall.withPackages (ps: with ps; [ wrapfig gensymb ]))
     xvfb-run
     imagemagick
     perlPackages.Po4a

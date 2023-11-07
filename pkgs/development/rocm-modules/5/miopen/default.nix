@@ -22,7 +22,7 @@
 , bzip2
 , lbzip2
 , nlohmann_json
-, texlive
+, texliveSmall
 , doxygen
 , sphinx
 , zlib
@@ -71,8 +71,7 @@ let
     '';
   };
 
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     latexmk
     tex-gyre
     fncychap
@@ -82,8 +81,8 @@ let
     needspace
     tabulary
     varwidth
-    titlesec;
-  };
+    titlesec
+  ]));
 
   gfx900 = runCommand "miopen-gfx900.kdb" { preferLocalBuild = true; } ''
     ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/gfx900.kdb.bz2 > $out
