@@ -14673,6 +14673,7 @@ with pkgs;
   html2text = callPackage ../tools/text/html2text { };
 
   html-tidy = callPackage ../tools/text/html-tidy { };
+  html-tidy_5_6 = callPackage ../tools/text/html-tidy/5.6.nix { };
 
   html-xml-utils = callPackage ../tools/text/xml/html-xml-utils { };
 
@@ -28567,7 +28568,13 @@ with pkgs;
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
-  prayer = callPackage ../servers/prayer { };
+  prayer = callPackage ../servers/prayer {
+    # 2023-07-11: prayer uses internal functions of html-tidy which have become
+    # hidden after version 5.6. There are no public equivalents of all the
+    # internal functions used by pray, so using an older version of html-tidy is
+    # the only way to keep prayer alive.
+    html-tidy = html-tidy_5_6;
+  };
 
   procps = if stdenv.isLinux
     then callPackage ../os-specific/linux/procps-ng { }
