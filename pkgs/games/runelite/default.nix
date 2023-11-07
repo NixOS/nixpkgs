@@ -1,50 +1,48 @@
 { lib
-, stdenv
+, fetchFromGitHub
 , makeDesktopItem
-, fetchurl
 , makeWrapper
-, xorg
+, maven
 , jre
-,
+, xorg
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+maven.buildMavenPackage rec {
   pname = "runelite";
   version = "2.6.9";
 
-  jar = fetchurl {
-    url = "https://github.com/runelite/launcher/releases/download/${finalAttrs.version}/RuneLite.jar";
-    hash = "sha256-91iBBviXM3tJN/jRgcOzUuTAr9VrKnW55uYrNW7eB5Q=";
+  src = fetchFromGitHub {
+    owner = "runelite";
+    repo = "launcher";
+    rev = version;
+    hash = "sha256-wU97uiotKZfui0ir7rmO1WLN3G6lTMxqF6vTyrlax1Q=";
   };
-
-  icon = fetchurl {
-    url = "https://github.com/runelite/launcher/raw/${finalAttrs.version}/appimage/runelite.png";
-    hash = "sha256-gcts59jEuRVOmECrnSk40OYjTyJwSfAEys+Qck+VzBE=";
-  };
-  dontUnpack = true;
+  mvnHash = "sha256-iGnoAZcJvaVoACi9ozG/f+A8tjvDuwn22bMRyuUU5Jg=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";
     type = "Application";
     exec = "runelite";
-    icon = finalAttrs.icon;
+    icon = "runelite";
     comment = "Open source Old School RuneScape client";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
     categories = [ "Game" ];
   };
 
+  # tests require internet :(
+  mvnParameters = "-Dmaven.test.skip";
   nativeBuildInputs = [ makeWrapper ];
-  installPhase = ''
-    mkdir -p $out/share/runelite
-    mkdir -p $out/share/applications
 
-    ln -s ${finalAttrs.jar} $out/share/runelite/RuneLite.jar
-    ln -s ${finalAttrs.desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
+  installPhase = ''
+    mkdir -p $out/share/icons
+
+    cp target/RuneLite.jar $out/share
+    cp appimage/runelite.png $out/share/icons
 
     makeWrapper ${jre}/bin/java $out/bin/runelite \
       --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
-      --add-flags "-jar $out/share/runelite/RuneLite.jar"
+      --add-flags "-jar $out/share/RuneLite.jar"
   '';
 
   meta = {
@@ -55,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       binaryNativeCode
     ];
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ kmeakin ];
+    maintainers = with lib.maintainers; [ kmeakin moody ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "runelite";
   };
-})
+}
