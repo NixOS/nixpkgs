@@ -5406,10 +5406,10 @@ with self; {
 
   CryptOpenSSLAES = buildPerlPackage {
     pname = "Crypt-OpenSSL-AES";
-    version = "0.15";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.15.tar.gz";
-      hash = "sha256-UKgfTFaJ6a0tf251RuxXURPD7vH6fFl+cSE5YMpb6+U=";
+      url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.17.tar.gz";
+      hash = "sha256-7+GBsYxtIqc/LlNWOQ6Fdyes5UY2JeIhHdhgIyvtO7c=";
     };
     buildInputs = [ CryptOpenSSLGuess FileWhich pkgs.openssl ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
@@ -11121,6 +11121,10 @@ with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24993.tar.gz";
       hash = "sha256-ScRDdDsu7+EadoACck9/akxI78lP8806VZ+357aTyWc=";
     };
+    patches = [
+      # Fix incompatible function pointer conversion (assigning `GdkNativeWindow` to `guint32`).
+      ../development/perl-modules/Gtk2-fix-incompatible-pointer-conversion.patch
+    ];
     buildInputs = [ pkgs.gtk2 ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=130742
     # doCheck = !stdenv.isDarwin;

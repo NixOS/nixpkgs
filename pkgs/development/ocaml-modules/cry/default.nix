@@ -11,6 +11,10 @@ buildDunePackage rec {
     sha256 = "sha256-1Omp3LBKGTPVwEBd530H0Djn3xiEjOHLqso6S8yIJSQ=";
   };
 
+  postPatch = ''
+    substituteInPlace src/dune --replace bytes ""
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-cry";
     description = "OCaml client for the various icecast & shoutcast source protocols";

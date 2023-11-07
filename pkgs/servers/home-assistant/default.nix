@@ -3,6 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , python311
 , substituteAll
 , ffmpeg-headless
@@ -94,16 +95,6 @@ let
         src = fetchPypi {
           inherit pname version;
           hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
-        };
-      });
-
-      holidays = super.holidays.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28";
-        src = fetchFromGitHub {
-          owner = "dr-prodigy";
-          repo = "python-holidays";
-          rev = "refs/tags/v.${version}";
-          hash = "sha256-JHj7fSE8p3TLViDSegl6gm35u53D9NvN7Oa2TBjN9t4=";
         };
       });
 
@@ -365,7 +356,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.11.0";
+  hassVersion = "2023.11.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -381,7 +372,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qLs098k/MUvmOl6/tB4SDU55V7KTZ0+T3RUoLH4AQ2Q=";
+    hash = "sha256-4OIvY6blun++7JDY+B0Cjrr4yNgnjTd8G55SWkhS3Cs=";
   };
 
   # Secondary source is git for tests
@@ -389,7 +380,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-I5I/OcVE6nGO7LG3s2I1P/VUbPjPkUc7qj43z99tIRM=";
+    hash = "sha256-Z/CV1sGdJsdc4OxUZulC0boHaMP7WpajbY8Y6R9Q//I=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -408,6 +399,13 @@ in python.pkgs.buildPythonApplication rec {
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
+    })
+    (fetchpatch {
+      # freeze time in litterrobot tests
+      # https://github.com/home-assistant/core/pull/103444
+      name = "home-assistant-litterrobot-freeze-test-time.patch";
+      url = "https://github.com/home-assistant/core/commit/806205952ff863e2cf1875be406ea0254be5f13a.patch";
+      hash = "sha256-OVbmJWy275nYWrif9awAGIYlgZqrRPcYBhB0Vil8rmk=";
     })
   ];
 

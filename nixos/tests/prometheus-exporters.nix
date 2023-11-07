@@ -471,7 +471,7 @@ let
         services.knot = {
           enable = true;
           extraArgs = [ "-v" ];
-          extraConfig = ''
+          settingsFile = pkgs.writeText "knot.conf" ''
             server:
               listen: 127.0.0.1@53
 
@@ -969,7 +969,7 @@ let
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
       };
 
       metricProvider = {

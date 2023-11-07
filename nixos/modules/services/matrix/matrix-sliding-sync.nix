@@ -80,8 +80,11 @@ in
       } ];
     };
 
-    systemd.services.matrix-sliding-sync = {
-      after = lib.optional cfg.createDatabase "postgresql.service";
+    systemd.services.matrix-sliding-sync = rec {
+      after =
+        lib.optional cfg.createDatabase "postgresql.service"
+        ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
+      wants = after;
       wantedBy = [ "multi-user.target" ];
       environment = cfg.settings;
       serviceConfig = {
@@ -90,6 +93,8 @@ in
         ExecStart = lib.getExe cfg.package;
         StateDirectory = "matrix-sliding-sync";
         WorkingDirectory = "%S/matrix-sliding-sync";
+        Restart = "on-failure";
+        RestartSec = "1s";
       };
     };
   };

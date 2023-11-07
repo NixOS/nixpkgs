@@ -4,7 +4,7 @@
 
 , cairo
 , ffmpeg
-, texlive
+, texliveInfraOnly
 
 , python3
 }:
@@ -21,11 +21,10 @@ let
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
   #
   # these two combined add up to:
-  manim-tinytex = {
-    inherit (texlive)
+  manim-tinytex = texliveInfraOnly.withPackages (ps: with ps; [
 
     # tinytex
-    scheme-infraonly amsfonts amsmath atbegshi atveryend auxhook babel bibtex
+    amsfonts amsmath atbegshi atveryend auxhook babel bibtex
     bigintcalc bitset booktabs cm dehyph dvipdfmx dvips ec epstopdf-pkg etex
     etexcmds etoolbox euenc everyshi fancyvrb filehook firstaid float fontspec
     framed geometry gettitlestring glyphlist graphics graphics-cfg graphics-def
@@ -41,8 +40,8 @@ let
     # manim-latex
     standalone everysel preview doublestroke ms setspace rsfs relsize ragged2e
     fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
-    babel-english gnu-freefont mathastext cbfonts-fd;
-  };
+    babel-english gnu-freefont mathastext cbfonts-fd
+  ]);
 
   python = python3.override {
     packageOverrides = self: super: {
@@ -129,13 +128,13 @@ in python.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [
       ffmpeg
-      (texlive.combine manim-tinytex)
+      manim-tinytex
     ])
   ];
 
   nativeCheckInputs = [
     ffmpeg
-    (texlive.combine manim-tinytex)
+    manim-tinytex
   ] ++ (with python.pkgs; [
     pytest-xdist
     pytestCheckHook

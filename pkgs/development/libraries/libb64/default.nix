@@ -30,6 +30,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libb64/libb64/commit/b5edeafc89853c48fa41a4c16393a1fdc8638ab6.patch";
       hash = "sha256-+bqfOOlT/t0FLQEMHuxW1BxJcx9rk0yYM3wD43mcymo";
     })
+    # Fix build with Clang 16.
+    # https://github.com/libb64/libb64/pull/10
+    (fetchpatch {
+      name = "use-proper-function-prototype-for-main.patch";
+      url = "https://github.com/libb64/libb64/commit/98eaf510f40e384b32c01ad4bd5c3a697fdd8560.patch";
+      hash = "sha256-CGslJUw0og/bBBirLm0J5Q7cf2WW/vniVAkXHlb6lbQ=";
+    })
   ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) (fetchpatch {
     name = "0001-example-Do-not-run-the-tests.patch";
     url = "https://cgit.openembedded.org/meta-openembedded/plain/meta-oe/recipes-support/libb64/libb64/0001-example-Do-not-run-the-tests.patch?id=484e0de1e4ee107f21ae2a5c5f976ed987978baf";

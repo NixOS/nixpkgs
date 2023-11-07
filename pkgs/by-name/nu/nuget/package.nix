@@ -45,6 +45,6 @@ stdenv.mkDerivation (attrs: {
     license = licenses.mit;
     sourceProvenance = [ sourceTypes.binaryBytecode ];
     maintainers = [ maintainers.mdarocha ];
-    platforms = [ "x86_64-linux" ];
+    inherit (mono.meta) platforms;
   };
 })

@@ -248,6 +248,7 @@ mapAliases ({
   Nuitka = nuitka; # added 2023-02-19
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
   openapi-schema-pydantic = throw "openapi-schema-pydantic has been removed, since it is no longer maintained"; # added 2023-10-30
+  opencv3 = throw "opencv3 has been removed as it is obsolete"; # added 2023-10-12
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
@@ -267,6 +268,7 @@ mapAliases ({
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
@@ -335,6 +337,7 @@ mapAliases ({
   pytestrunner = pytest-runner; # added 2021-01-04
   python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
+  python_docs_theme = python-docs-theme; # added 2023-11-04
   python_keyczar = throw "python_keyczar has been removed because it's been archived upstream and deprecated"; # added 2023-05-16
   python-lz4 = lz4; # added 2018-06-01
   python_magic = python-magic; # added 2022-05-07
@@ -359,6 +362,7 @@ mapAliases ({
   Quandl = quandl; # added 2023-02-19
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rabbitpy = throw "rabbitpy has been removed, since it is unmaintained and broken"; # added 2023-07-01
+  radio_beam = radio-beam; # added 2023-11-04
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
   recaptcha_client = throw "recaptcha_client has been removed since it is no longer maintained"; # added 2023-10-20
@@ -367,6 +371,7 @@ mapAliases ({
   repeated_test = repeated-test; # added 2022-11-15
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
+  restructuredtext_lint = restructuredtext-lint; # added 2023-11-04
   rig = throw "rig has been removed because it was pinned to python 2.7 and 3.5, failed to build and is otherwise unmaintained"; # added 2022-11-28
   rl-coach = "rl-coach was removed because the project is discontinued and was archived by upstream"; # added 2023-05-03
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
@@ -422,6 +427,7 @@ mapAliases ({
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
   uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
   validictory = throw "validictory has been removed, since it abandoned"; # added 2023-07-07
+  vega_datasets = vega-datasets; # added 2023-11-04
   ViennaRNA = viennarna; # added 2023-08-23
   virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
   Wand = wand; # added 2022-11-13
@@ -434,6 +440,7 @@ mapAliases ({
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   WSME = wsme; # added 2023-02-19
+  x11_hash = x11-hash; # added 2023-11-05
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   Yapsy = yapsy; # added 2023-02-19
@@ -447,4 +454,5 @@ mapAliases ({
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
   zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
   zope_proxy = zope-proxy; # added 2023-10-07
+  zxing_cpp = zxing-cpp; # added 2023-11-05
 })

@@ -369,7 +369,12 @@ in
   };
 
   iconv = attrs: {
+    dontBuild = false;
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./iconv-fix-incompatible-function-pointer-conversions.patch
+    ];
   };
 
   idn-ruby = attrs: {

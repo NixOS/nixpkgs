@@ -42,6 +42,50 @@ rec {
     stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = (prev.extraBuildInputs or []) ++ pkgs; });
 
 
+  # Override the libc++ dynamic library used in the stdenv to use the one from the platform’s
+  # default stdenv. This allows building packages and linking dependencies with different
+  # compiler versions while still using the same libc++ implementation for compatibility.
+  #
+  # Note that this adapter still uses the headers from the new stdenv’s libc++. This is necessary
+  # because older compilers may not be able to parse the headers from the default stdenv’s libc++.
+  overrideLibcxx = stdenv:
+    assert stdenv.cc.libcxx != null;
+    let
+      llvmLibcxxVersion = lib.getVersion llvmLibcxx;
+      stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
+
+      stdenvLibcxx = pkgs.stdenv.cc.libcxx;
+      stdenvCxxabi = pkgs.stdenv.cc.libcxx.cxxabi;
+
+      llvmLibcxx = stdenv.cc.libcxx;
+      llvmCxxabi = stdenv.cc.libcxx.cxxabi;
+
+      libcxx = pkgs.runCommand "${stdenvLibcxx.name}-${llvmLibcxxVersion}" {
+        outputs = [ "out" "dev" ];
+        inherit cxxabi;
+        isLLVM = true;
+      } ''
+        mkdir -p "$dev/nix-support"
+        ln -s '${stdenvLibcxx}' "$out"
+        echo '${stdenvLibcxx}' > "$dev/nix-support/propagated-build-inputs"
+        ln -s '${lib.getDev llvmLibcxx}/include' "$dev/include"
+      '';
+
+      cxxabi = pkgs.runCommand "${stdenvCxxabi.name}-${llvmLibcxxVersion}" {
+        outputs = [ "out" "dev" ];
+        inherit (stdenvCxxabi) libName;
+      } ''
+        mkdir -p "$dev/nix-support"
+        ln -s '${stdenvCxxabi}' "$out"
+        echo '${stdenvCxxabi}' > "$dev/nix-support/propagated-build-inputs"
+        ln -s '${lib.getDev llvmCxxabi}/include' "$dev/include"
+      '';
+    in
+    overrideCC stdenv (stdenv.cc.override {
+      inherit libcxx;
+      extraPackages = [ cxxabi pkgs.pkgsTargetTarget."llvmPackages_${lib.versions.major llvmLibcxxVersion}".compiler-rt ];
+    });
+
   # Override the setup script of stdenv.  Useful for testing new
   # versions of the setup script without causing a rebuild of
   # everything.
@@ -262,6 +306,9 @@ rec {
       ) darwinMinVersion darwinSdkVersion;
 
       sdk = pkgs.darwin."apple_sdk_${lib.replaceStrings [ "." ] [ "_" ] darwinSdkVersion}";
+      # TODO: Make this unconditional after #229210 has been merged,
+      # and the 10.12 SDK is updated to follow the new structure.
+      Libsystem = if darwinSdkVersion == "10.12" then pkgs.darwin.Libsystem else sdk.Libsystem;
 
       replacePropagatedFrameworks = pkg:
         let
@@ -349,8 +396,8 @@ rec {
         // lib.genAttrs atBuildInputs (input: map mapRuntimeToSDK (args."${input}" or [ ]));
 
       mkCC = cc: cc.override {
-        bintools = cc.bintools.override { libc = sdk.Libsystem; };
-        libc = sdk.Libsystem;
+        bintools = cc.bintools.override { libc = Libsystem; };
+        libc = Libsystem;
       };
     in
     # TODO: make this work across all input types and not just propagatedBuildInputs
