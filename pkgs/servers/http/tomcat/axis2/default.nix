@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Web Services / SOAP / WSDL engine, the successor to the widely used Apache Axis SOAP stack";
     homepage = "https://axis.apache.org/axis2/java/core/";
     changelog = "https://axis.apache.org/axis2/java/core/release-notes/${version}.html";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.anthonyroussel ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
