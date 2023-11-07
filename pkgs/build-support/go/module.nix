@@ -167,7 +167,7 @@ let
         export GOPROXY=file://${goModules}
       '' else ''
         rm -rf vendor
-        cp -r --reflink=auto ${goModules} vendor
+        ln -s ${goModules} vendor
       ''}
     '' + ''
 
