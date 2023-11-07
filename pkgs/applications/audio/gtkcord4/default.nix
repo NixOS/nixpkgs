@@ -59,9 +59,10 @@ buildGoModule rec {
   vendorHash = "sha256-ZQBYi5t6ntukoHP2FtwpZrpFd7b2opPC8tOSU9j3jUM=";
 
   meta = with lib; {
-    description = "GTK4 Discord client in Go, attempt #4.";
+    description = "GTK4 Discord client in Go, attempt #4";
     homepage = "https://github.com/diamondburned/gtkcord4";
     license = licenses.gpl3Only;
+    mainProgram = "gtkcord4";
     maintainers = with maintainers; [ hmenke urandom aleksana ];
   };
 }
