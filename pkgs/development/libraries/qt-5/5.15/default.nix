@@ -11,6 +11,7 @@ Check for any minor version changes.
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
+, llvmPackages_15, overrideSDK, overrideLibcxx
 , darwin
 
   # options
@@ -288,6 +289,18 @@ let
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
       qtwebengine = callPackage ../modules/qtwebengine.nix {
+        # The version of Chromium used by Qt WebEngine 5.15.x does not build with clang 16 due
+        # to the following errors:
+        # * -Wenum-constexpr-conversion: This is a downgradable error in clang 16, but it is planned
+        #   to be made into a hard error in a future version of clang. Patches are not available for
+        #   the version of v8 used by Chromium in Qt WebEngine, and fixing the code is non-trivial.
+        # * -Wincompatible-function-pointer-types: This is also a downgradable error generated
+        #   starting with clang 16. Patches are available upstream that can be backported.
+        # Because the first error is non-trivial to fix and suppressing it risks future breakage,
+        # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
+        stdenv =
+          let stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
+          in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
         python = python3;
         postPatch = ''

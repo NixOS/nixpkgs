@@ -24691,6 +24691,7 @@ with pkgs;
       inherit (__splicedPackages)
         makeScopeWithSplicing' generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
         bison cups dconf harfbuzz libGL perl gtk3 python3
+        llvmPackages_15 overrideSDK overrideLibcxx
         darwin;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
       inherit config;
