@@ -125,9 +125,9 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString (!rLibrary) ''
     mkdir $dev
     cp -r catboost $dev
+  '' + lib.optionalString (!rLibrary) ''
     install -Dm555 catboost/app/catboost -t $out/bin
     install -Dm444 catboost/libs/model_interface/static/lib/libmodel_interface-static-lib.a -t $out/lib
     install -Dm444 catboost/libs/model_interface/libcatboostmodel${stdenv.hostPlatform.extensions.sharedLibrary} -t $out/lib
