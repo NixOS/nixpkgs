@@ -166,7 +166,7 @@ in
       }
     ];
 
-    warnings = lib.optional (config.boot.initrd.systemd.enable -> cfg.shell != null) ''
+    warnings = lib.optional (config.boot.initrd.systemd.enable && cfg.shell != null) ''
       Please set 'boot.initrd.systemd.users.root.shell' instead of 'boot.initrd.network.ssh.shell'
     '';
 
