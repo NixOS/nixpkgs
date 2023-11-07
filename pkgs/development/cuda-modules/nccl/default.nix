@@ -11,7 +11,6 @@
   gitUpdater,
 }:
 let
-
   inherit (cudaPackages)
     autoAddOpenGLRunpathHook
     backendStdenv

@@ -1,4 +1,5 @@
 # NOTE: Check https://developer.nvidia.com/nvidia-tensorrt-8x-download.
+# Version policy is to keep the latest minor release for each major release.
 {
   tensorrt.releases = {
     # jetson
@@ -112,7 +113,7 @@
         version = "8.6.1.6";
         minCudaVersion = "11.0";
         maxCudaVersion = "11.8";
-        cudnnVersion = null;
+        cudnnVersion = "8.9";
         filename = "TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz";
         hash = "sha256-Fb/mBT1F/uxF7McSOpEGB2sLQ/oENfJC2J3KB3gzd1k=";
       }
@@ -120,7 +121,7 @@
         version = "8.6.1.6";
         minCudaVersion = "12.0";
         maxCudaVersion = "12.1";
-        cudnnVersion = null;
+        cudnnVersion = "8.9";
         filename = "TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz";
         hash = "sha256-D4FXpfxTKZQ7M4uJNZE3M1CvqQyoEjnNrddYDNHrolQ=";
       }

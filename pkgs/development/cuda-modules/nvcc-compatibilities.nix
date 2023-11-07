@@ -70,16 +70,22 @@ let
 
     # Added support for Clang 12 and GCC 11
     # https://docs.nvidia.com/cuda/archive/11.4.4/cuda-toolkit-release-notes/index.html#cuda-general-new-features
-    "11.4" = {
+    "11.4" = attrs."11.3" // {
       clangMaxMajorVersion = "12";
-      gccMaxMajorVersion = "11";
+      # NOTE: There is a bug in the version of GLIBC that GCC 11 uses which causes it to fail to compile some CUDA
+      # code. As such, we skip it for this release, and do the bump in 11.6 (skipping 11.5).
+      # https://forums.developer.nvidia.com/t/cuda-11-5-samples-throw-multiple-error-attribute-malloc-does-not-take-arguments/192750/15
+      # gccMaxMajorVersion = "11";
     };
 
     # No changes from 11.4 to 11.5
     "11.5" = attrs."11.4";
 
     # No changes from 11.5 to 11.6
-    "11.6" = attrs."11.5";
+    # However, as mentioned above, we add GCC 11 this release.
+    "11.6" = attrs."11.5" // {
+      gccMaxMajorVersion = "11";
+    };
 
     # Added support for Clang 13
     # https://docs.nvidia.com/cuda/archive/11.7.1/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features

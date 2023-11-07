@@ -86,7 +86,7 @@
     computeCapability = "5.3";
     isJetson = true;
     minCudaVersion = "10.0";
-    dontDefaultAfter = "11.0";
+    dontDefaultAfter = null;
     maxCudaVersion = null;
   }
   {
