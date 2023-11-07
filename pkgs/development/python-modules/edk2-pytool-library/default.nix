@@ -65,5 +65,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/v${version}";
     license = licenses.bsd2Patent;
     maintainers = with maintainers; [ nickcao ];
+    platforms = platforms.linux;
   };
 }
