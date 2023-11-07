@@ -215,7 +215,7 @@ python.pkgs.buildPythonApplication rec {
     whoosh
     zipp
     zope_interface
-    zxing_cpp
+    zxing-cpp
   ]
   ++ redis.optional-dependencies.hiredis
   ++ twisted.optional-dependencies.tls

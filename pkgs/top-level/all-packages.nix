@@ -342,6 +342,8 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
+  bazecor = callPackage ../applications/misc/bazecor { };
+
   bearer = callPackage ../development/tools/bearer { };
 
   benthos = callPackage ../development/tools/benthos { };
@@ -3317,9 +3319,7 @@ with pkgs;
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
-  asymptote = libsForQt5.callPackage ../tools/graphics/asymptote {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2 collection-latexextra; };
-  };
+  asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
 
   async = callPackage ../development/tools/async { };
 
@@ -5441,7 +5441,8 @@ with pkgs;
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
-  texlive = recurseIntoAttrs (callPackage ../tools/typesetting/tex/texlive { });
+  texlive = callPackage ../tools/typesetting/tex/texlive { };
+  inherit (texlive.schemes) texliveBasic texliveBookPub texliveConTeXt texliveFull texliveGUST texliveInfraOnly texliveMedium texliveMinimal texliveSmall texliveTeTeX;
 
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;
@@ -6578,7 +6579,6 @@ with pkgs;
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
     inherit (python3.pkgs) pygments matplotlib numpy aafigure recursivePthLoader;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
     w3m = w3m-batch;
     enableStandardFeatures = false;
   };
@@ -13272,9 +13272,7 @@ with pkgs;
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
-  skribilo = callPackage ../tools/typesetting/skribilo {
-    tex = texlive.combined.scheme-small;
-  };
+  skribilo = callPackage ../tools/typesetting/skribilo { };
 
   skytemple = callPackage ../applications/misc/skytemple { };
 
@@ -13825,7 +13823,6 @@ with pkgs;
 
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    tex = texlive.combined.scheme-small;
     extraFonts = true;
   };
 
@@ -15551,9 +15548,7 @@ with pkgs;
 
   as31 = callPackage ../development/compilers/as31 { };
 
-  asl = callPackage ../development/compilers/asl {
-    tex = texlive.combined.scheme-medium;
-  };
+  asl = callPackage ../development/compilers/asl { };
 
   aspectj = callPackage ../development/compilers/aspectj { };
 
@@ -15587,7 +15582,6 @@ with pkgs;
 
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
-    tex = texlive.combined.scheme-full;
   };
 
   bun = callPackage ../development/web/bun { };
@@ -16802,7 +16796,6 @@ with pkgs;
   mitama-cpp-result = callPackage ../development/libraries/mitama-cpp-result { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; };
     texinfo = texinfo6;
   };
 
@@ -19201,9 +19194,7 @@ with pkgs;
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
-  nuweb = callPackage ../development/tools/literate-programming/nuweb {
-    tex = texlive.combined.scheme-medium;
-  };
+  nuweb = callPackage ../development/tools/literate-programming/nuweb { };
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
 
@@ -19939,9 +19930,7 @@ with pkgs;
 
   randoop = callPackage ../development/tools/analysis/randoop { };
 
-  inherit (callPackages ../development/tools/parsing/ragel {
-      tex = texlive.combined.scheme-small;
-    }) ragelStable ragelDev;
+  inherit (callPackages ../development/tools/parsing/ragel { }) ragelStable ragelDev;
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 
@@ -20093,6 +20082,12 @@ with pkgs;
   shellcheck = callPackage ../development/tools/shellcheck {
     inherit (__splicedPackages.haskellPackages) ShellCheck;
   };
+
+
+  # Minimal shellcheck executable for package checks.
+  # Use shellcheck which does not include docs, as
+  # pandoc takes long to build and documentation isn't needed for just running the cli
+  shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
   shellharden = callPackage ../development/tools/shellharden { };
 
@@ -26093,9 +26088,6 @@ with pkgs;
 
   R = darwin.apple_sdk_11_0.callPackage ../applications/science/math/R {
     # TODO: split docs into a separate output
-    texLive = texlive.combine {
-      inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super rsfs;
-    };
     withRecommendedPackages = false;
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa Foundation;
     inherit (darwin) libobjc;
@@ -30436,7 +30428,6 @@ with pkgs;
 
   apostrophe = callPackage ../applications/editors/apostrophe {
     pythonPackages = python3Packages;
-    texlive = texlive.combined.scheme-medium;
   };
 
   ardour = callPackage ../applications/audio/ardour { };
@@ -31098,6 +31089,8 @@ with pkgs;
   };
 
   denaro = callPackage ../applications/finance/denaro { };
+
+  inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
@@ -32915,7 +32908,6 @@ with pkgs;
 
   ipe = qt6Packages.callPackage ../applications/graphics/ipe {
     ghostscript = ghostscriptX;
-    texlive = texlive.combine { inherit (texlive) scheme-small; };
     lua5 = lua5_3;
   };
 
@@ -34238,7 +34230,6 @@ with pkgs;
   shotcut = libsForQt5.callPackage ../applications/video/shotcut { };
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
-    opencv = opencv3;
     protobuf = protobuf3_21;
   };
 
@@ -34289,8 +34280,6 @@ with pkgs;
   sidplayfp = callPackage ../applications/audio/sidplayfp { };
 
   sndpeek = callPackage ../applications/audio/sndpeek { };
-
-  sxhkd = callPackage ../tools/X11/sxhkd { };
 
   mpop = callPackage ../applications/networking/mpop {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -34889,9 +34878,12 @@ with pkgs;
 
   pyrosimple = callPackage ../applications/networking/p2p/pyrosimple { };
 
-  qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
-  qbittorrent-nox = qbittorrent.override {
-    guiSupport = false;
+  qbittorrent = qt6Packages.callPackage ../applications/networking/p2p/qbittorrent {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+  qbittorrent-nox = qbittorrent.override { guiSupport = false; };
+  qbittorrent-qt5 = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
@@ -37449,8 +37441,6 @@ with pkgs;
 
   ltris = callPackage ../games/lgames/ltris { };
 
-  lunar-client = callPackage ../games/lunar-client { };
-
   maelstrom = callPackage ../games/maelstrom { };
 
   mar1d = callPackage ../games/mar1d { } ;
@@ -39871,7 +39861,7 @@ with pkgs;
     };
   };
 
-  pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
+  pari = callPackage ../applications/science/math/pari { };
   gp2c = callPackage ../applications/science/math/pari/gp2c.nix { };
 
   palp = callPackage ../applications/science/math/palp { };
@@ -41503,10 +41493,6 @@ with pkgs;
 
   xosd = callPackage ../misc/xosd { };
 
-  xosview = callPackage ../tools/X11/xosview { };
-
-  xosview2 = callPackage ../tools/X11/xosview2 { };
-
   xow_dongle-firmware = callPackage ../os-specific/linux/firmware/xow_dongle-firmware { };
 
   xpad = callPackage ../applications/misc/xpad { };
@@ -41963,9 +41949,7 @@ with pkgs;
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
-  inherit (callPackage ../applications/misc/zettlr {
-    texlive = texlive.combined.scheme-medium;
-  }) zettlr;
+  inherit (callPackage ../applications/misc/zettlr { }) zettlr;
 
   unpoller = callPackage ../servers/monitoring/unpoller { };
 

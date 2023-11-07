@@ -6,7 +6,7 @@
 , rocm-cmake
 , clr
 , clblast
-, texlive
+, texliveSmall
 , doxygen
 , sphinx
 , openblas
@@ -17,8 +17,7 @@
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     latexmk
     tex-gyre
     fncychap
@@ -28,8 +27,8 @@ let
     needspace
     tabulary
     varwidth
-    titlesec;
-  };
+    titlesec
+  ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "miopengemm";
   version = "5.5.0";

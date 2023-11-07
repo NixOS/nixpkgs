@@ -117,11 +117,11 @@ while [ "$#" -gt 0 ]; do
         specialisation="$1"
         shift 1
         ;;
-      --build-host|h)
+      --build-host)
         buildHost="$1"
         shift 1
         ;;
-      --target-host|t)
+      --target-host)
         targetHost="$1"
         shift 1
         ;;

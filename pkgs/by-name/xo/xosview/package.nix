@@ -11,10 +11,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "hills";
-    repo = finalAttrs.pname;
+    repo = "xosview";
     rev = finalAttrs.version;
     hash = "sha256-9Pr7voJiCH7oBziMFRHCWxoyuGdndcdRD2POjiNT7yw=";
   };
+
+  outputs = [ "out" "man" ];
 
   dontConfigure = true;
 
@@ -28,12 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     "PLATFORM=linux"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.pogo.org.uk/~mark/xosview/";
     description = "A classic system monitoring tool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xosview";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = with lib.platforms; linux;
   };
 })
-# TODO: generalize to other platforms
+

@@ -11,15 +11,14 @@
 , openssl
 , doxygen
 , graphviz
-, texlive
+, texliveSmall
 , gtest
 , buildDocs ? true
 , buildTests ? false
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
+  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
     changepage
     latexmk
     varwidth
@@ -37,8 +36,8 @@ let
     etoc
     helvetic
     wasy
-    courier;
-  };
+    courier
+  ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
   version = "5.7.1";
