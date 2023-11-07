@@ -2,14 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pytest-snapshot
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "23.8.0";
-  format = "pyproject";
+  version = "23.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -17,22 +18,23 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-7JJNO25UfzLs1jEO7XpqFFuEqpY4UecUk25hpONRjrI=";
+    hash = "sha256-glnM32ha5eXVpoaDkEsbwdH1oiG9qMxFwbtqLx+Kl98=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version
     substituteInPlace pyproject.toml \
       --replace 'version = "0"' 'version = "${version}"'
   '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    pytest-snapshot
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "awesomeversion"
