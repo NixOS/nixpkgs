@@ -13,17 +13,17 @@ in
 assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
 mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    hash = "sha256-xhj7RUurBRq9ZIDAlcq7KyYGnLqc+vTjaf2VMNStpVQ";
+    hash = "sha256-NMNlDEUpwKUywzhXhxlNX7NiE+6wOov2Yt8nTfbKTNI=";
   };
 
   mvnParameters = "-Dmaven.test.skip=true";
-  mvnHash = "sha256-XAIwKn8wMqILMQbg9wM4kHAaRSGWQaBx9AXQyJuUO5k=";
+  mvnHash = "sha256-jIHMUj7ZQFu4XAvWUywj4f0PbmLHGtU5VRG0ZuKm3mA=";
 
   preBuild = ''
     VERSION=${version}
@@ -42,11 +42,13 @@ mavenJdk.buildMavenPackage rec {
       --add-flags "--enable-preview" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
-      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
-      --add-flags "-Dcryptomator.pluginDir='~/.local/share/Cryptomator/plugins'" \
-      --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
-      --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
+      --add-flags "-Dfile.encoding='utf-8'" \
+      --add-flags "-Dcryptomator.logDir='@{userhome}/.local/share/Cryptomator/logs'" \
+      --add-flags "-Dcryptomator.pluginDir='@{userhome}/.local/share/Cryptomator/plugins'" \
+      --add-flags "-Dcryptomator.settingsPath='@{userhome}/.config/Cryptomator/settings.json'" \
+      --add-flags "-Dcryptomator.p12Path='@{userhome}/.config/Cryptomator/key.p12'" \
+      --add-flags "-Dcryptomator.ipcSocketPath='@{userhome}/.config/Cryptomator/ipc.socket'" \
+      --add-flags "-Dcryptomator.mountPointsDir='@{userhome}/.local/share/Cryptomator/mnt'" \
       --add-flags "-Dcryptomator.showTrayIcon=false" \
       --add-flags "-Dcryptomator.buildNumber='nix'" \
       --add-flags "-Dcryptomator.appVersion='${version}'" \
