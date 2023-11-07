@@ -1,10 +1,11 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , perl
 , php
 , gd
 , libpng
+, openssl
 , zlib
 , unzip
 , nixosTests
@@ -13,11 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nagios";
-  version = "4.4.6";
+  version = "4.4.14";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/nagios/nagios-4.x/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1x5hb97zbvkm73q53ydp1gwj8nnznm72q9c4rm6ny7phr995l3db";
+  src = fetchFromGitHub {
+    owner = "NagiosEnterprises";
+    repo = "nagioscore";
+    rev = "refs/tags/nagios-${version}";
+    hash = "sha256-EJKMgU3Nzfefq2VXxBrfDDrQZWZvj7HqKnWR9j75fGI=";
   };
 
   patches = [ ./nagios.patch ];
@@ -28,10 +31,17 @@ stdenv.mkDerivation rec {
     perl
     gd
     libpng
+    openssl
     zlib
   ];
 
-  configureFlags = [ "--localstatedir=/var/lib/nagios" ];
+  configureFlags = [
+    "--localstatedir=/var/lib/nagios"
+    "--with-ssl=${openssl.dev}"
+    "--with-ssl-inc=${openssl.dev}/include"
+    "--with-ssl-lib=${lib.getLib openssl}/lib"
+  ];
+
   buildFlags = [ "all" ];
 
   # Do not create /var directories
