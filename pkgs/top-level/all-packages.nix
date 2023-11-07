@@ -18448,8 +18448,9 @@ with pkgs;
 
   antlr = antlr4;
 
-  apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
-  ant = apacheAnt;
+  inherit (callPackages ../development/tools/build-managers/apache-ant { })
+    ant ant-contrib ant-with-contrib;
+  apacheAnt = ant;
 
   apacheKafka = apacheKafka_3_5;
   apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
