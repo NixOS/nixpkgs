@@ -29,9 +29,9 @@ stdenv.mkDerivation (finalAttrs: rec {
   # Build with:
   # nix-build -E "with (import $NIXPKGS{}); \
   #   let \
-  #     catboost = catboost.override{rLibrary = true; doCheck = false;}; \
+  #     cboost = catboost.override{ rLibrary = true; }; \
   #   in \
-  #   rWrapper.override{ packages = [ catboost ]; }"
+  #   rWrapper.override{ packages = [ cboost ]; }"
   # An overlay would also work fine.
   version = "1.2.2";
 
