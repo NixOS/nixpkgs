@@ -7,7 +7,6 @@
 , nose
 , pandas
 , pytestCheckHook
-, pythonRelaxDepsHook
 , pyyaml
 , scikit-learn
 , tensorflow
@@ -25,13 +24,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-VyPHcNlZYgNJZb2UBFX55x+nE0GnHixkcsiTNjDCju0=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  pythonRemoveDeps = [
-    # See https://github.com/openvax/mhcflurry/issues/216.
-    "np-utils"
-  ];
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
   propagatedBuildInputs = [
