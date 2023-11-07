@@ -41,12 +41,12 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "6.0.27";
+  version = "6.0.30";
 
   src = fetchurl {
     url =
       "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-+nCPLVVBkEu0g2Kxt/XYAt6sYxYm05nPcmPNS2OejRs=";
+    hash = "sha256-4XQZ1xw9Qtk3SzHMsEUk+HuIYtHDAOMgpwzbAd5QQpU=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -153,6 +153,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ i077 ];
-    knownVulnerabilities = [ "CVE-2023-5217" ];
   };
 }
