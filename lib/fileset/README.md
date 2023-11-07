@@ -252,8 +252,3 @@ The `fileFilter` function takes a path, and not a file set, as its second argume
     - (+) That can change depending on which files are included, so if it's used for `fileFilter`
       it would change the `subpath`/`components` value depending on which files are included.
 - (+) If necessary, this restriction can be relaxed later, the opposite wouldn't be possible
-
-## To update in the future
-
-Here's a list of places in the library that need to be updated in the future:
-- If/Once a function exists that can optionally include a path depending on whether it exists, the error message for the path not existing in `_coerce` should mention the new function
