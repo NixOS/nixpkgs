@@ -110,7 +110,7 @@ let
         throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
-        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
+        throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
         else
         a
       ) (lib.optionals usesNixExtensions nixExtensions);
