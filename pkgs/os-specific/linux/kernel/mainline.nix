@@ -6,8 +6,13 @@ let
   inherit (thisKernel) version;
 
   src =
-    # testing kernels are a special case because they don't have tarballs on the CDN
-    if branch == "testing"
+    # -next and testing kernels are a special case because they don't have tarballs on the CDN
+    if lib.hasPrefix "next-" branch
+      then fetchzip {
+        url = "https://git.kernel.org/next/linux-next/t/linux-next-${branch}.tar.gz";
+        inherit (thisKernel) hash;
+      }
+    else if branch == "testing"
       then fetchzip {
         url = "https://git.kernel.org/torvalds/t/linux-${version}.tar.gz";
         inherit (thisKernel) hash;
@@ -20,7 +25,10 @@ let
   args' = (builtins.removeAttrs args ["branch"]) // {
     inherit src version;
 
-    modDirVersion = lib.versions.pad 3 version;
+    modDirVersion =
+      lib.versions.pad 3 version
+      + lib.optionalString (lib.hasPrefix "next-" branch)
+        "-${branch}";
     extraMeta.branch = branch;
   } // (args.argsOverride or {});
 in
