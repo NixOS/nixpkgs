@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
   };
 
+  patches = [
+    # This fix is included upstream, remove with next upgrade
+    ./cmake-h5free.patch
+  ];
+
   preConfigure = ''
     cmakeFlags+="-Dabs_top_srcdir=$(readlink -f ./)"
   '';
