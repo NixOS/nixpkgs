@@ -1,4 +1,5 @@
 { lib, stdenv
+, callPackage
 , fetchFromGitHub
 , fetchurl
 , cmake
@@ -37,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.7.0";
+  version = "1.3.7.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-f7i7gytk3cKeFQD0FR+nrUR2o0FWaJWKG7OpDz9u42E=";
+    hash = "sha256-V9QwWIIEALEsAhFzjloV6nUDomIpQGy+CImrLwJVZcI=";
   };
 
   prePatch = ''
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.impureTests = { vulkan-cts = callPackage ./test.nix {}; };
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";
