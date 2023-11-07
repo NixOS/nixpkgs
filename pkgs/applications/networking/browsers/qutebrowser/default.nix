@@ -10,7 +10,8 @@
 , qtwebengine
 , enableWideVine ? false
 , widevine-cdm
-, enableVulkan ? stdenv.isLinux
+# can cause issues on some graphics chips
+, enableVulkan ? false
 , vulkan-loader
 }:
 
