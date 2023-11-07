@@ -1,0 +1,12 @@
+diff --git a/setup.py b/setup.py
+index d7a37b3..491fcfe 100755
+--- a/setup.py
++++ b/setup.py
+@@ -52,7 +52,6 @@ setuptools.setup(
+     platforms                     = 'any',
+     packages                      = setuptools.find_packages(),
+     install_requires              = ['argcomplete',
+-                                     'argparse',
+                                      'backports.functools_lru_cache; python_version<"3.2"',
+                                      'bottle>=0.12.9',
+                                      'enum34>=1.1.6; python_version<"3.3"',

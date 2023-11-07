@@ -18360,6 +18360,8 @@ with pkgs;
 
   gopls = callPackage ../development/tools/language-servers/gopls { };
 
+  hdl_checker = callPackage ../development/tools/language-servers/hdl_checker { };
+
   helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
 
   javascript-typescript-langserver = callPackage ../development/tools/language-servers/javascript-typescript-langserver { };
