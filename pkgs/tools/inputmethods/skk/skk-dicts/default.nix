@@ -17,7 +17,7 @@ let
     }: {
       name = lib.toLower (builtins.replaceStrings [ "." ] [ "_" ] name);
       value = stdenvNoCC.mkDerivation {
-        pname = lib.toLower name;
+        pname = "skk-jisyo-" + lib.toLower name;
         version = "unstable-2023-02-07";
 
         src = fetchFromGitHub {
