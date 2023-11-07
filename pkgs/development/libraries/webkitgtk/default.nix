@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , runCommand
 , fetchurl
 , perl
@@ -113,8 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     glib # for gdbus-codegen
     unifdef
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland # for wayland-scanner
   ];
 
   buildInputs = [
@@ -190,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
     "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
     "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
