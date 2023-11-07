@@ -3441,6 +3441,8 @@ self: super: with self; {
 
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
+  echo = callPackage ../development/python-modules/echo { };
+
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
   ecos = callPackage ../development/python-modules/ecos { };
