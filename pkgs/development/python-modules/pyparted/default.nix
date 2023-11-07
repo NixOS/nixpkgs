@@ -5,6 +5,7 @@
 , pkgs
 , python
 , six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -30,22 +31,13 @@ buildPythonPackage rec {
       tests/test__ped_ped.py
   '';
 
-  patches = [
-    ./fix-test-pythonpath.patch
-  ];
-
   preConfigure = ''
     PATH="${pkgs.parted}/sbin:$PATH"
   '';
 
   nativeBuildInputs = [ pkgs.pkg-config ];
-  nativeCheckInputs = [ six ];
+  nativeCheckInputs = [ six pytestCheckHook ];
   propagatedBuildInputs = [ pkgs.parted ];
-
-  checkPhase = ''
-    patchShebangs Makefile
-    make test PYTHON=${python.executable}
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/dcantrell/pyparted/";
