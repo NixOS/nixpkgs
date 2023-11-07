@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-readme";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "livioribeiro";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-/ufHHM13L83M3UYi6mjdhIjgXx7bZgzvR/X02Zsx7Fw=";
   };
 
-  cargoSha256 = "sha256-Isd05qOuVBNfXOI5qsaDOhjF7QIKAG5xrZsBFK2PpQQ=";
+  cargoSha256 = "sha256-X0Glv7DmM2e4hEd2Gkt2gSUrR7D/Lc4aKmtBtttxss8=";
 
   patches = [
     (fetchpatch {
