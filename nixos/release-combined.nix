@@ -5,7 +5,7 @@
 { nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "aarch64-linux" "x86_64-linux" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+, limitedSupportedSystems ? [ ]
 }:
 
 let
