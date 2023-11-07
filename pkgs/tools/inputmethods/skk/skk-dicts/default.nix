@@ -74,7 +74,7 @@ let
             SKK Japanese input method.
           '';
           homepage = "https://github.com/skk-dev/dict";
-          maintainers = with maintainers; [ yuriaisaka ];
+          maintainers = with maintainers; [ yuriaisaka midchildan ];
           platforms = platforms.all;
         };
       };
