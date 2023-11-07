@@ -155,6 +155,8 @@ with pkgs;
 
   dotnet = recurseIntoAttrs (callPackages ./dotnet { });
 
+  runInMkShell = callPackage ../build-support/runinmkshell/tests.nix { };
+
   makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 
   makeWrapper = callPackage ./make-wrapper { };
