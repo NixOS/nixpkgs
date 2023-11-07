@@ -15854,10 +15854,8 @@ with pkgs;
   default-gcc-version =
     if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
     else 12;
-  inherit ({
-      gcc = pkgs.${"gcc${toString default-gcc-version}"};
-      gccFun = callPackage ../development/compilers/gcc;
-    }) gcc gccFun;
+  gcc = pkgs.${"gcc${toString default-gcc-version}"};
+  gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
 
   wrapNonDeterministicGcc = stdenv: ccWrapper:
@@ -15982,41 +15980,7 @@ with pkgs;
       extraPackages = [];
   };
 
-  # This expression will be pushed into pkgs/development/compilers/gcc/common
-  # once the top-level gcc/${version}/default.nix files are deduplicated.
-  inherit
-    (lib.listToAttrs (map (majorMinorVersion:
-      let atLeast = lib.versionAtLeast majorMinorVersion;
-          attrName = "gcc${lib.replaceStrings ["."] [""] majorMinorVersion}";
-          pkg = lowPrio (wrapCC (callPackage ../development/compilers/gcc/default.nix ({
-            inherit noSysDirs;
-            inherit majorMinorVersion;
-            reproducibleBuild = true;
-            profiledCompiler = false;
-            libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-            threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor majorMinorVersion else { };
-            isl = if       stdenv.isDarwin then null
-                  else if    atLeast "9"   then isl_0_20
-                  else if    atLeast "7"   then isl_0_17
-                  else if    atLeast "6"   then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
-                  else if    atLeast "4.9" then isl_0_11
-                  else            /* "4.8" */   isl_0_14;
-          } // lib.optionalAttrs (majorMinorVersion == "4.8") {
-            texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
-          } // lib.optionalAttrs (majorMinorVersion == "4.9") {
-            # Build fails on Darwin with clang
-            stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
-          } // lib.optionalAttrs (!(atLeast "6")) {
-            cloog = if stdenv.isDarwin
-                    then null
-                    else if atLeast "4.9" then cloog_0_18_0
-                    else          /* 4.8 */    cloog;
-          } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
-            # gcc 10 is too strict to cross compile gcc <= 8
-            stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
-          })));
-      in lib.nameValuePair attrName pkg
-    ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
+  inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
     gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
 
   gcc_latest = gcc13;
