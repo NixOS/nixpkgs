@@ -1,36 +1,43 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , jaxlib
+, pythonRelaxDepsHook
+, setuptools-scm
+, cloudpickle
 , jax
-, keras
-, lib
 , matplotlib
 , msgpack
 , numpy
 , optax
+, rich
+, tensorstore
+, keras
 , pytest-xdist
 , pytestCheckHook
-, pythonRelaxDepsHook
 , tensorflow
-, tensorstore
-, fetchpatch
-, rich
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.7.4";
+  version = "0.7.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i48omag/1Si3mCCGfsUD9qeejyeCLWzvvwKJqH8vm8k=";
+    hash = "sha256-NDah0ayQbiO1/sTU1DDf/crPq5oLTnSuosV7cFHlTM8=";
   };
 
-  nativeBuildInputs = [ jaxlib pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    jaxlib
+    pythonRelaxDepsHook
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
+    cloudpickle
     jax
     matplotlib
     msgpack
