@@ -96,5 +96,9 @@ stdenv.mkDerivation (finalAttrs: {
     # COPYING.NEWLIB
     # COPYING3
     license = licenses.gpl2Plus;
+    # newlib frequently does ont supply any files on hosted targets like
+    # x86_64-unknown-linux-gnu: https://hydra.nixos.org/log/nv0q296sc06achvd7ljlrsn8x3qh8fg1-newlib-4.3.0.20230120.drv
+    # Let's constrain `newlib` package to bare-metal alone.
+    broken = !stdenv.hostPlatform.isNone;
   };
 })
