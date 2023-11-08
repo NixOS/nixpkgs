@@ -9698,6 +9698,8 @@ self: super: with self; {
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
+  pvextractor = callPackage ../development/python-modules/pvextractor { };
+
   pvlib = callPackage ../development/python-modules/pvlib { };
 
   pvo = callPackage ../development/python-modules/pvo { };
