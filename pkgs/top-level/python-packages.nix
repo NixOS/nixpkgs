@@ -15980,6 +15980,8 @@ self: super: with self; {
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
+  zcbor = callPackage ../development/python-modules/zcbor { };
+
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zcs = callPackage ../development/python-modules/zcs { };
