@@ -9129,7 +9129,8 @@ with pkgs;
     llvmPackages = llvmPackages_14;
   };
 
-  harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
+  harePackages = recurseIntoAttrs (callPackage ./hare-packages.nix { });
+  inherit (harePackages) hare harec;
 
   ham = pkgs.perlPackages.ham;
 
