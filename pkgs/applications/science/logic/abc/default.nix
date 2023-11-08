@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
-, readline, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, readline
+, cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "abc-verifier";
   version = "unstable-2023-09-13";
 
@@ -16,10 +19,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
 
-  installPhase = "mkdir -p $out/bin && mv abc $out/bin";
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 'abc' "$out/bin/abc"
+    runHook postInstall
+  '';
 
   # needed by yosys
-  passthru.rev = src.rev;
+  passthru.rev = finalAttrs.src.rev;
 
   meta = with lib; {
     description = "A tool for squential logic synthesis and formal verification";
@@ -29,4 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "abc";
     platforms   = platforms.unix;
   };
-}
+})
