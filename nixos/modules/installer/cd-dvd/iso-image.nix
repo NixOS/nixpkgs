@@ -310,9 +310,15 @@ let
     done
 
     bootefi_path=$out/EFI/boot/boot${targetArch}.efi
+
+    cat >>sbat.csv <<EOF
+    sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
+    shim,1,UEFI shim,shim,16,https://github.com/rhboot/shim
+    EOF
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
+      --sbat=sbat.csv \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
       -o grub-unsigned.efi \
       -p /EFI/boot \
@@ -326,14 +332,6 @@ let
         cp grub-unsigned.efi $bootefi_path
       '' else ''
         set -x
-        cat >>sbat.csv <<EOF
-        sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
-        shim,1,UEFI shim,shim,16,https://github.com/rhboot/shim
-        EOF
-        cp grub-unsigned.efi $out/EFI/boot/grub-no-sbat.efi
-        # With this command as is, shim seems to be happy to load the SBAT, but
-        # booting it fails ("Section 0 is inside image headers // Malformed section header")
-        #objcopy --set-section-alignment .sbat=512 --set-section-flags .sbat=noload --add-section .sbat=sbat.csv grub-unsigned.efi
         sbsign \
           --cert ${config.secureboot.signingCertificate} \
           --output $out/EFI/boot/grub${targetArch}.efi \
