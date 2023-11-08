@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "nightly-unstable-2023-11-04";
+  version = "nightly-2023-11-04";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
