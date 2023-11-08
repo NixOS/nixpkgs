@@ -146,6 +146,7 @@ in
           CapabilityBoundingSet = "";
           DeviceAllow = if builtins.elem options.device [ "cuda" "auto" ] then [
             # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+            # CUDA not working? Check DeviceAllow and PrivateDevices first!
             "/dev/nvidia0"
             "/dev/nvidia1"
             "/dev/nvidia2"
