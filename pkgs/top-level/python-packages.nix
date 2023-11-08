@@ -5428,6 +5428,8 @@ self: super: with self; {
 
   ionhash = callPackage ../development/python-modules/ionhash { };
 
+  ionoscloud = callPackage ../development/python-modules/ionoscloud { };
+
   iopath = callPackage ../development/python-modules/iopath { };
 
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
