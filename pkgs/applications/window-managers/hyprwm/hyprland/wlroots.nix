@@ -42,8 +42,8 @@ wlroots.overrideAttrs
       domain = "gitlab.freedesktop.org";
       owner = "wlroots";
       repo = "wlroots";
-      rev = "3406c1b17a4a7e6d4e2a7d9c1176affa72bce1bc";
-      hash = "sha256-ecDhdYLXWHsxMv+EWG36mCNDvzRbu9qfjH7dLxL7aGM=";
+      rev = "47bf87ade2bd32395615a385ebde1fefbcdf79a2";
+      hash = "sha256-jU0I6FoCKnj4zIBL4daosFWh81U1fM719Z6cae8PxSY=";
     };
 
     pname =
