@@ -2,1226 +2,1219 @@
 {
   tde-i18n = {
     pname = "tde-i18n";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-b1lJq5rk+WlFz7znSredzvxgcA1EM16czWFt/m/9ZuoSYm4aSTsq/MT7KqwHDUy78C9FLzHC1XeGPS7otZVpPA==";
+    hash = "sha512-cFXfdLGl39wJ5NF8AAzmjAOiktLlyhop/kZV42u2glaCZoDlUFSs+yH3mNumEYLIjVZGYpnkdJr8MZLEUNjD5Q==";
   };
 
   tdeaccessibility = {
     pname = "tdeaccessibility";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-kfO0j1Nh2FD8buSA5ny5+wDfRj0Ua5KRt/TGZ0nZDfdC+GhWLHWXgTmg71sb6OpmjotAQvjZAysmv+1gu1a7pA==";
+    hash = "sha512-TiFdiw3kcLGCC7JR4tnWnrpU6Cj7bZS1Dk9d33T+HoFm3KvEhpS8ukzhHkaozDf7N3SUHvc8lZ8oC4ndxlKAjQ==";
   };
 
   tdeaddons = {
     pname = "tdeaddons";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-rKev9jWaEBV0AE7hFE4tLlvwW2eHAZpPcmby3n8BABbHyu4wFqQ+P7PJ+nq2pIeyrsszmpmARg59A/m+op9wFw==";
+    hash = "sha512-vruWtSYa5gfV5AWrM9/2XBeStbNP24bZbizkM7vpqMl8URTeq2G14JaI1Z8JzX11uBAHwQKfJBLTl5gKlC2RAA==";
   };
 
   tdeadmin = {
     pname = "tdeadmin";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-+3cOHNn50mJdchdp4f7x/TYA8entkLv9U8Ib99qGyRpPRI/Hepsf5fv17KV9ixX3W9CoQ5DHZDrukfKONsyM/A==";
+    hash = "sha512-qHcsG1Metpcsy3t/k5DJ6V0SKpAY8d0p6oPwpsFWhxNoU72Cfdz0Xn8ib+3Q+eqD5DQvpLwMaBbMTJkQpMcSHw==";
   };
 
   tdeartwork = {
     pname = "tdeartwork";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-KVhTQ5P1aVD5BB/1vpxX1iWEsQhSuKzCmuP0V9KifRWEilcUWL/WJDHVRKYfmxzAtOmEhWYGuQVHENMoBL5rIA==";
+    hash = "sha512-dEcyo77WHvpzxsUmUWJbn7TlpSfwuEvyvvam75r/UO3GQc4LjGAb/iC11AO+w0cHFoRDd6Hx7pOD7ueDjawH5g==";
   };
 
   tdebase = {
     pname = "tdebase";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-j8u11Luu/JrK+l0ZJtbyKxwIenr2Pw2eJDjJVzDoLm1ulVWv3zNr0Bwpat7e9WZcVx0AxnONBx7QaSQ9R/MGdA==";
+    hash = "sha512-1zPyBxmgyalJVA6V9NYP4D4JbvvXrFQYfF7pufm2RDGO4t2cj9DS5u7mYPenrYJ+ZrwG+5o2yeVuOuFr3UeRDA==";
   };
 
   tdebindings = {
     pname = "tdebindings";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-a1iCgnBUCrsYm9fxnLvUu23CKghLtlfbkDYwemCzaMzYglz6X5ueU/Yxmo/jhMQsgp1AeithvK4NukIEEqnLbA==";
+    hash = "sha512-8JAHAIZblOrqh2KObu5SHO5cfLK90nBPJf1JxZ5/GQ9fFTOYlHxDW80BQlwvP057o0KZodilZXiKbbLquXftrQ==";
   };
 
   tdeedu = {
     pname = "tdeedu";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-6urN5O0n9FX6qkLXMEd+TvlNArmQLvvYau4/+SH8e/IGn2DGPbfOV7XBiDCHRbpEn3Eer+RmrzsAc0/RdrSlfg==";
+    hash = "sha512-Qhb9sx2zMocrwJYZ/rkSeUQJJJW+TMWG1OM9DfNNBmWPO6R7i6r9M8CPjxp1K6bIyCjxbhVpoLW2WEdzKM0o8g==";
   };
 
   tdegames = {
     pname = "tdegames";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-GZUOAjEMumHro2NUXurmS2wZwVqEziYfJoCKpatNdBt5czxvXcbSz1oARBLHGkSOHVuw3s2e8NVcNwXiU0bbAQ==";
+    hash = "sha512-wbyFHrXRHNABQYI3MM8A5+TL+KZLSXDggQ3dvhGlfAPK2X/DwrOkMCVXxEiERJniaBhBZcd9mfmlqZtCydgSIw==";
   };
 
   tdegraphics = {
     pname = "tdegraphics";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-ug1Lvsvrr5y1wpMua1FAOPM10jLh1yfRdOSqhKlMfv52B0fwQ+puEOjZjpXGWy4q+Ygu5KAw609jJKt01qN7tA==";
+    hash = "sha512-KPXaf1ZAOGRwA5iDhkCtudBU8ipHuBuiK08VjkQdqdcgS0W+kLxzeMACzWlJHJa7ptCr259ypva5iFWZ4CcZfQ==";
   };
 
   tdelibs = {
     pname = "tdelibs";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-GB+K0EUGygTl9NHg3mY/rl8Xvx6gd/98DR2NJn0W2a6qiv1K8+Z1vO474vXZRau+dM03NLDaDA091skapKq9QQ==";
+    hash = "sha512-L39Eg/vo2aS1Ad1EsblmQMy0RI1HVngZxlYxcSlFUK35f9djP8iP5bXw7BWg8/oMtSvNYvvOKwxHWDLU6XZHsQ==";
   };
 
   tdemultimedia = {
     pname = "tdemultimedia";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-yzk2PbcXtKYV7q2X2d8PNLt36mM4+Bi4OrcM3YSGIilzHufgZ409T04BHYm9M343OiycLFHkP8k8UU/hXMZVrQ==";
+    hash = "sha512-dKLPG+agSc/AbeaLb2/gBt6/UWxoxRXe1g1VqxkN/nLgFpx5bgsJl1eWWZNqj/sYB7Q+Co/2Hlx+45O2IFqhCQ==";
   };
 
   tdenetwork = {
     pname = "tdenetwork";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-XOy8NV1bMDrgb1z8X8k5CtTOluwHOGKhinqUH9Ivxde5gdMjqAqyhPDM1mnu7u9EZFrP3g7s/iCjOFS9GbO6pA==";
+    hash = "sha512-OMX30Z6WAYWp96ciIOMn2Nc1KIvMXtBw1xP5ndwX42UvZfdw/KSuJlwVT69ak2GiEEmQ1jzNwvGfICAKR9OnRg==";
   };
 
   tdepim = {
     pname = "tdepim";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-n0J7KsFzZEBhodnQ/e7lLVBNRRTzlki1/9mP+96PhQK7cHNmK9Sg6jOQku1Q/ZlLj5wfIkGi2Jw02WW5fGggHw==";
+    hash = "sha512-TZZYcm0Dp8kUKS+OPkX/I0OoXkW7MI/i/UTTDstEw3xQZTSiXQ1XQa617JVWcFZxWhwVj80vdaO3PREdQlgUbw==";
   };
 
   tdesdk = {
     pname = "tdesdk";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-PZWxvwWSeIfn96J4eFzvnKsE3Y12oxQ2sOjGT+5GJm63XoNUTVvOQoL3t78Yblyg5D7ogjQp5etlDzHcYQVyXw==";
+    hash = "sha512-NK87Lzx71N/3v2DfF3+dHcevhPKgoaPrmiKFSFKoV2K6Ze2gHEeykUbwjFL5elso45qj0uxXsVhLp0pNJ1DYZQ==";
   };
 
   tdetoys = {
     pname = "tdetoys";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-rJReDO7ygOqY0H7kc/rcWxxzK1Lpx4LYRlOUbKEX8nu6rBQHufZ2rUpHwvqEFHhT6iP1q/vM5pGQ9ed/XpCTjA==";
+    hash = "sha512-ap0AqqYXLctD/tx7CT150oiJT1n94gFnh3/U2ALh87M4vRbYWd13y5E4ZY3f5irIBZHhpvvh3uMYx2B0lfYRpg==";
   };
 
   tdeutils = {
     pname = "tdeutils";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-VCjBDxgpVkr1BBpb37h4W0pNmewcHwSf2p7vwzkQDEwwP5zLQSWfDfRZp5aWPmC63a7fdJd9JF5+2h77AeO2hg==";
+    hash = "sha512-rNyH+iIN0g+ups2eh6Rg2oPGNOTlbRzxg1inaMRKI4k1LxU9P6GD+jXQJorUAl8YZ0xxp/M9Ihb0yjdJl2qyjw==";
   };
 
   tdevelop = {
     pname = "tdevelop";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-8RFSLqz/mmpl568ageURgL2bGbYp/k/jvGz1+Lso3cORrZaGxEzR4qe9iHny5ls6RJZzAzmbXvcLrmARdPB9lw==";
+    hash = "sha512-YM7cWtcM+n2BCXW+eujl7zeevW8sZOPZTBcWyRR4AUh+HWB+rBZy1M/eujSl2hdvpO36t9fXFXNwQphvzFwkyg==";
   };
 
   tdewebdev = {
     pname = "tdewebdev";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "core";
-    hash = "sha512-pWTMuQVKunw6qb7DrPcKt7OsJQDwXCzRg4CXSQfIC8+bmnK0ZrK1RmALfz3qDtUJdYn65iSd22P6Nd1+OC/LhA==";
+    hash = "sha512-+cEVFMzzbmOM7wNplMTD3JhDh7BFXqOSdCoyneFCpzhXWg21SgrGGt7J5SU6L31v2pWAf4qm5c7m7dhoqZy5Pw==";
   };
 
   kdbg = {
     pname = "kdbg";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-fnH5J0HqIXTbjJeo9APzjGHkvTdMKfBDWzFgqmHnr8fIO7Yjvr4hlMj+7AFrDGRuEyfjcqhaTjpUiyQzvg125A==";
+    hash = "sha512-R7JIzU8OZ2w9TH4J8g09XZe3CLyUqO0cau4JlFO3K2NPQ3ZI7VDtd/HDXgtTS6AcLRv5VWA+iV4BxYp8wlB2dw==";
   };
 
   kdiff3 = {
     pname = "kdiff3";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-f52KQ0Npmrb8pvxRfjtXR6vTlKUdBu2HE3nzRD7zBSq6Axm1GX45J+cMjdHiTmv3Mnkigqd5fiazcmfi90HIZw==";
+    hash = "sha512-4yTQPh651J2YjPQm548gEnt/JTgNjhXg59HVanvk3cAWQGEn/PLO41/05s1PA4W/gxkPP8cb7if4ooA8mwaxUg==";
   };
 
   kpicosim = {
     pname = "kpicosim";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-NIAsK+c3pqdPCXmqnKD50LpHKNLvRm/AkfiMWtkmnGVQOJCFxf1e0Meznt0lmEYgm2rUTKI2EdGTDPiE5VqT9A==";
+    hash = "sha512-UBAhiTVKePAk0/aktdPqB4gBUJMfevNXfLtKa44pJwcxUS7hrJpeIozYPaUTuRuoPWcjd01igqQaT0zuIvXtkw==";
   };
 
   kscope = {
     pname = "kscope";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-WKJtPAa3HLPHEcsPBigYAGusm0J9FEyKKnRQOq0Ep2Nn2hYWQzro4zEA85x00dM549K2oOlhSjL71XcqcAXUUg==";
+    hash = "sha512-zFctjZwkOBRu0f7AXyTbtRS25HUjMhKv1hmGUtV9xLIAJSWuvwds8jWp2Ir5O5IBTyZCnVyRIyORL43S9frVKA==";
   };
 
   ktechlab = {
     pname = "ktechlab";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-iOUSqVZNwIerzNJQcsjoz5K9YT0iIUYo/jFTpuqOlnzet4KzEyknFL+st4GS3nnImvTpMHEiOfCjXPRgvnDYEw==";
+    hash = "sha512-TFdZWQqQYz71/HdP8n0b9JMN855B2nxzOPgEhUY+NFnrPAQHVdnuulYNiROXcLzPfjdefqEWE8+4YCIwatx21g==";
   };
 
   kxmleditor = {
     pname = "kxmleditor";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-BntVTtV81xZ1v8xsdu0WCNn83+PCjhhKtL3j29boSlP3v7txVdrUDCQIdyIpWtbfeUlgMjLJIPHr5KH869XCTA==";
+    hash = "sha512-KIaMKqwduFEMoNIQwE+q2raqXwomA02LgZez2E9uVBhmqyZ2AYbDIf0QRcrXeOKZF7y2JrlP6cpucDuKfOKoCA==";
   };
 
   piklab = {
     pname = "piklab";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-zg3YPbmMWHiFL6uRoV4n6E4JrFHAacM/rQCuOWZoRSFi71wKNWf6E2RUmWZWx3y822b3vZ/dmkFDmgXNWJh3fg==";
+    hash = "sha512-zQu0KetKKGSfGQRwkgjihjWgDCSdNaNiIKz+oxAd0ru8c5OIhLIjnMbo9syiQPzvzPWUjqWBvFbSBGB7Bu3ZsA==";
   };
 
   tdesvn = {
     pname = "tdesvn";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/development";
-    hash = "sha512-2/0HZrlvQGe940AcsZpp4BB9aaa2SsUcjJV43NMeSeP+r3UYxoalIsTH5i5C1l2F7dtHKTSa3i9h4IWZdx/QCQ==";
+    hash = "sha512-WdsTGJBxeRNWIgZfQ3q6XiAmV/8aLzFYctLYTl2WwvRSZVyAc65cNuaId7WlkF3Ms1ts7rq5qxXflAtzkXyeHA==";
   };
 
   knights = {
     pname = "knights";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/games";
-    hash = "sha512-08VNZCH/wm+kMR+DJCLgFBADFOmhA3poroVSGAotmxqz82GNh9O012QMDyFTbu5otyJt5y6bGdE9+/4YC04QqA==";
+    hash = "sha512-pxE5ghZJM2A1OCzpEU7c7Uxl2woeH9WThtswkFFaQV5LT2/DneHw34aW+0SpAWZyKSm3cJy4xUPIjaFjaZiTMA==";
   };
 
   tdepacman = {
     pname = "tdepacman";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/games";
-    hash = "sha512-IOyA4Qo4qUv2X8hZ6LiRQezl5JSgj3jWL6WcYBqO4rgbOhWqqEhEoBeUu7UXUGcqsfKbvisFxAUaY7sSgolbxw==";
+    hash = "sha512-AzvfNNai1xeU2dg6VFaq5WYVL4/7wwGDL+ClsTwTmiGXEBEM8ZKFhofm+CMvdmqzmvThR5G4lg4nYCRFhGp/Kw==";
   };
 
   digikam = {
     pname = "digikam";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/graphics";
-    hash = "sha512-yjdKkjsBtLHqrNyLwWx+mpzwk/hVFyZmzwlkEMn3VY5h/LYVVDC8WBKska9QZbyYP6aeDrmhFtcG5Ijk8g6N+Q==";
+    hash = "sha512-nYvoY2kbQE3T+7FiPahz4v0S3ijsF1TmJ/PqMuAfQXX55wHK9XhwEyW0GVFS5MVOHx1IaUCyebqGx+hX0+0wfA==";
   };
 
   gwenview-i18n = {
     pname = "gwenview-i18n";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/graphics";
-    hash = "sha512-MzsjUInCTHGDeoamFIF6wxDCV86C+PmN0Ky5XTZeOxD1pmJOxhfq5OsNjNe/ukjiRy63m9KLmzsAUfw5gLLEow==";
+    hash = "sha512-mdmo65KKRXZoTIOZzi772Y0RgSKNHiVd5PIi0YtDLGdgeOj/WBXt/WCif5tbFWAPI4+TdekhTYqsG3ZiTumw8w==";
   };
 
   gwenview = {
     pname = "gwenview";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/graphics";
-    hash = "sha512-CIoPGxk3ZkzgagwvFsvFq1ZfkSyq4VWAbUfLcHuCbDdW80rguv12cN5lHriOKep0qTQyXmvjVXAawmq47zrFBQ==";
+    hash = "sha512-dA6l7Jqt+IHEB2Xjh75GVY20gXQwGTgoNrukREh63/JGxB7uKKse0aG6pHIxLOhDrh7A6EWyerXXHMPfQqIFQg==";
   };
 
   ksquirrel = {
     pname = "ksquirrel";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/graphics";
-    hash = "sha512-r2ujqT59sdq5ZlMzEtL22/k9S3OnSQCV1Mr9cUwXUtGXFFPA7DyGGOQ67BflobvZubpSaSBGhR4sB2UjUdodqg==";
+    hash = "sha512-l4EK/7uO2a3OEomNLdPsZ2wIje8M6M5nhxt/8ojwERY3xrJWzBr4f1iN0Lm4ZqmlTy8XP/NJyYew8Ny/FEQOyg==";
   };
 
   potracegui = {
     pname = "potracegui";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/graphics";
-    hash = "sha512-y4ZT72mpQFCIiPtakBFI/cNbc+Jha+rSErNCD1aZxgTQk1oZowdwRWCX8FiLmuVQiEzs2HAWf7kMHVZVHnx1Vg==";
+    hash = "sha512-41AfscFVokclKCSPjxfGdG+dsPaxY5MBKGyOXyzyMo0Hp2tvXw5qqiGeqv1AMecUsCKma1EcirZazNRmUrjgTw==";
   };
 
   kasablanca = {
     pname = "kasablanca";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-Dx5KFk2PpjQhPEKvPB4JOnTxHX3L0HyW/TN2QpnUtjXxsaJktTb/gI0xY351AvtOd14CGyddkg0E5f+o9/2Q/A==";
+    hash = "sha512-BADvaApVM8P6uB4RW0VLDMaTJDiYbFm7wFgxivHA83dS9uubiJhBjsQDkWxPYgRC1dtDrOWMbp4pJ33ESjIfEA==";
   };
 
   kbiff = {
     pname = "kbiff";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-ePhqQirLuMwEtiKYY8FKzjoWQ6ONdfPdx1QfO0sxhvcodDRaMjfPt9Sh6iv3a8Rx2jaIXNwnKKjWEQrCTfIt4A==";
+    hash = "sha512-CgYfuc7pcLj2ElgtZEAfVGjNHtE8E4PO15NpK9jzqW0ot0e+oQXHyz70JdrT/tRFmt7cEQaz4yToyjs0GP7uYA==";
   };
 
   kftpgrabber = {
     pname = "kftpgrabber";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-nF/DOdai5yYTkCMsYbAv+yXPeNyO5KR2RxMIUhxa0rYtqmVqrcNN30VB1Z1JKCcDUbgk17yGyAqlJD0Z8KgUNQ==";
+    hash = "sha512-yaUuW9nc6AASWs1r490vE+JfGC3NbsY3V1bSX/ZDgaSBi/mzkCjjzlRLcQ026otCPZnwZlCDxZGdQYXjup80+g==";
   };
 
   knmap = {
     pname = "knmap";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-GsdligfzWRxlOvtTZUY84TPq8OgY7CTtD8PR2cFBaoU39MY6cqRzEE9Q8/AKhQ7TT2dLfOPzhVElEJwoBCcWwg==";
+    hash = "sha512-xDqeaVjYWnVdOjKHQweu0sGuKcIPDWP0HzPTdz1Z5YJeL31hDJtPLSuV8mMfgcNpbC4svNqsneZi4dAUzMxsNg==";
   };
 
   konversation = {
     pname = "konversation";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-L87Sp/M8qGcG9mN+Up4d4a+jeP8B/3dyNQWMS20Np4PyOIoNyfF2m2kLPBHyEPr3c5OMJTX0wXPeP7O73Uc3iw==";
+    hash = "sha512-8Ky6lHC0glNvzi1eEB7dn30oOlBtPfJrc/N5xH2v58BIGn3cuMOHcGuMA1kCjrkTCEuqLDvwceiQnSunXWjL/A==";
   };
 
   kopete-otr = {
     pname = "kopete-otr";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-1T+mamzdUSdhth53QXUN7fpnw0ROzapEErH1ShAxG0gNlUgXfb0H+zHCm9EDaYEemnlr6+zQSBoMJBpXFvuIgw==";
+    hash = "sha512-AhJnbenhsWHvdcIhbqVlB6vRiYf+lNhyeGmSCbzkqVsKpKUqNdhx1A6MzIQLR4tArtEhrlnaMIx90GwbDvrjRg==";
   };
 
   kshowmail = {
     pname = "kshowmail";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-Nl84LlIR/R/kuBX4WRjFNy4Yfuih2BKHuXTxzJ6+/lrn83rzCpku9p9UPBhzFR5cfZLbC7VnUg82oWjTcFigaQ==";
+    hash = "sha512-K9t1t0ykRluU8rWR2lWvdNQPrPZN+0RKFq04MNcz1Hd8Hv4iZAtSSnGtxEKdqMKCXMGGpcoe7tKbWmupGQ8Qjg==";
   };
 
   kstreamripper = {
     pname = "kstreamripper";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-z55fXfKbxEkDYS0MvZu6sUFAgN+Bf3P+gWMaCRdzU7AyJXwau0ubjwR/0KwJnBg2Z+bfEt40n4znsDD2nDoChA==";
+    hash = "sha512-2hl6OBAGhSs4TDG+lizMCcGspZ/0tRsWpBsyP3qson7vZGNCLHlwlm1F6RVjzB97AXXvzM14UcCjCrn3FgNeoA==";
   };
 
   ktorrent = {
     pname = "ktorrent";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-xMAs+Gb1xQLWiAd8p6YjHnp779LfTN5z+L1CvPoLLXrkAom+JnAtuvhosEK1k4YvhkdFTTSq8SPNH3xI7l1mSA==";
+    hash = "sha512-29bcI1WRpE132maA1+IZiWM3IrtBJHNya6aYGepe11UF0eE0yAlymud0Z1WO9DrkawzDCrtlt9kVMR2DQAHxGQ==";
   };
 
   kvirc = {
     pname = "kvirc";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-ZVNBUF7e3HFCHvGkLLhuXqjoRSVogEZm/tarTjdnzXyLceKC18OxCmjQK9i9aG/EHhsBPYubAWUmdGfnemSSYw==";
+    hash = "sha512-IHRX5ln1xRYUebzWYICsshYGi5ASXV5J+vTdjnmgXcdQknXoA6hfRVuN6i2H/enSPEFFtf7zLXtuvrSNFUREUA==";
   };
 
   kvpnc = {
     pname = "kvpnc";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-KRsXuVx2E2J+htBTjJBGh3DhfJi+y5qy3RyN9iL7WbyTx7SKWkq7rLFwC+ZzBdj+H5jehXALKXYP2UnrT3jcKw==";
+    hash = "sha512-OwxYHnnkDG2aGp0L5QlWXHUC1wqpBHvhC0quM+KceYyZcixFylJNGNizp42/Sj/Fq8i1T06MMnjDed9a/Awa7A==";
   };
 
   smb4k = {
     pname = "smb4k";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-U0eHyZRi2iLTJCd9EtZqzpW32YgrqWEDI/oQIEAis+ogA1A0dzYvCiHjpOGqbl+j485nW4SG/xzlY0sU8TqspA==";
+    hash = "sha512-WpW+FXCdUwWwVq4fFv1/ibfSsCAq0jTkRBGMrPfdSGT7NjmkXzOVNmYJrsYXa2O6Ej7vaQzSr3KuEDbx0KpV1A==";
   };
 
   tork = {
     pname = "tork";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/internet";
-    hash = "sha512-q19Kyu1XX2PJRfkOIMkJNL32piQAH7OUYjf80Slk/6bNDqVt+LYvzJ/KXDrs6sscq8NuuMQZgRCvKrwbrtn8vQ==";
+    hash = "sha512-luzgRaKxLbenvxJF+F/GYjmoAm/SHI1fb3RCst2d/8dn6TJcXDRN+ZGLexaNYSOdToBsxcAOTEOmqYt4CWe8uQ==";
   };
 
   bibletime = {
     pname = "bibletime";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-WVgeryfEJnJswN1/QxFGnW1CYY7e2SMgoGSreKUGJjw5ooPnlLtIJwYk/FLAh7n0zPiZ214bB7zBC/Dzfpk4GA==";
+    hash = "sha512-8fuB7tMZsVCqEI5VZaGCZwAE9ius3SWJFbnpduXe7/4lPitXt00n+aFslbFrYyKllno6Nsu1U0+kwbmU+BBx5w==";
   };
 
   compizconfig-backend-tdeconfig = {
     pname = "compizconfig-backend-tdeconfig";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-ykqalRAAhASpKWi57Qop8EF0SmsinUKRArlJx0QOMIGLFmXygqTszOhkhluJGieCZ5BxgN8K7z2Ge76h7pT58w==";
+    hash = "sha512-1s/a5fbVCfdJqDE9sQSlzghx3GdVxJblgm0eHdFE6QjnKIUhwQOfocvbQ5Rif0ElcaBaQQ9qpJwYAAWtJm4dDA==";
   };
 
   desktop-effects-tde = {
     pname = "desktop-effects-tde";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-t7fDA5wBBtj/1aLBJ6ou+mzHVO5acJfKfD5HQXmnrOdGr3LvTvzTbBj605obHf2zFmK0sKgnypQ/sFNsWuzgMg==";
+    hash = "sha512-egQrIXEGe56MFoUbtDTqS6hCqC2sl/ub3FmpLTX7z4JdMwDq+HCF2BO3u7NN2ffyObY64OcaoDQNQ1a58Y5dOA==";
   };
 
   kcmldap = {
     pname = "kcmldap";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-xN4063aJvFib+FKCpAsNhFwCgvaSauV1i+6ioEHzgUJa29IQsbo4F2emxtENRhqLw2zcQuYLtRTO8XVUri3NPw==";
+    hash = "sha512-vMIxvMzn1aICHK/izfZVDoNw5vI7/bPnuV4qFir1RNPMnPcetXd4utg9U6c+Yea4/yYFiV90ivCwwnMCIzujbQ==";
   };
 
   kcmldapcontroller = {
     pname = "kcmldapcontroller";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-dLdZi5ukZ93Ntm21A9FtCJyCRLXsCf0/gv5TarPOfR00LTfyIoC2wAs3KmCEXeGpqQYtACqejuGTcsX/lbloOQ==";
+    hash = "sha512-GZmADd2w+XEgROHzYF+cKZ5T8fv209LagiFcf22mZbhQsJe9Usv1+jc+6kLLthhxPvO9eupnD8ZLSUGCIDbtZA==";
   };
 
   kcmldapmanager = {
     pname = "kcmldapmanager";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-rUhoayZHGKmPxAbqavp6m5uIM7vVSRrGnGFLA5ncw+Hq06F9Oe5tzdjPKHdECFqHtrg/uo1tXITlvuGS1VncKA==";
+    hash = "sha512-w9qam1SDF33N0LhErEks/Ytu2FAKI64gq8Zsuq0FJCUyKePNtKd0CojERYDMJMwDmiVUMFw4KGCQXzj6QbsYGw==";
   };
 
   kerberostray = {
     pname = "kerberostray";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-4pSkwP+JLCC52d0QvaBCRDYqU4bvPZ24t6suNVjzEnv7RwLmX7qUkHgfxzRP6N2eaFefTRdYhDH8rxE2KF1Gvg==";
+    hash = "sha512-mqgPwnWuyGmMdvra+2j7eXGmdxiRipEmn3sI2/ydGEZ+O0ONyvgxMrCPvxHqF7iEEvnV0luKR5C2U0QbLsCl4w==";
   };
 
   krecipes = {
     pname = "krecipes";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/misc";
-    hash = "sha512-Hj6kmTiOQG8TyNpZetJ1lkRa5JQ/WtnDcWCfkUv7w3l6GHxuWXVTBwwabOhFsluA9+zdGfHiRl8soxFvPhXzhw==";
+    hash = "sha512-DEQcUZPulbv2CBZRePoZADqa3rRp8eZhXitBz+RS/4jwt58U/6S6qgUqzIohSB1mYnZ6M8WB/DoSa7NZCz/aXw==";
   };
 
   amarok = {
     pname = "amarok";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-W6GPeECIWuMtTQYVPgjM7rk4fs/na20zEKEbh4WsoDJr/GWLRhpYZa9BJhnWfRCVtZabTXkHbzsnR/KCVjLtfQ==";
+    hash = "sha512-rDG5xBF84F6i3s9J9YYYrpiKXlJ6SNdErZnydfZBOaOri495jTtC6MFOhqALg3AFYXhDYalzL9DBz8yEwxGnOQ==";
   };
 
   codeine = {
     pname = "codeine";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-94ilonx6LXyeyeuQZDIlkdst4SIFaa7gBHyRaqtkeM6zTWJhb3oDhbFZb5DISeQFW7mJu4ghj4SM76Tjk6KS+g==";
+    hash = "sha512-SmegSS72xU9fbyC3K3qWaxl2sJtmGd5DipzKn/+sBbTCVLSCnuPjIUyaERNYxTZ3OCPYtefoGvaPfG6g33IDjw==";
   };
 
   k3b-i18n = {
     pname = "k3b-i18n";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-TZnVfzOgybL1v97jQy78/D2g0OC5bMdDnoewmas0f6yOhqEzvsxbZMnBFfURd2PfOtwMTa1VCC+qThdkf9kdJw==";
+    hash = "sha512-I614d6wvhGlGs9JL3D0F2CS3H38JRhfQWVnTJMWVVwVGHPhchUMPhb1Wn4fX4WsYWrKqbeW9F1SDskU2+Iq48A==";
   };
 
   k3b = {
     pname = "k3b";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-Af/ZbOzxVNMNAhaADcbg5A32ovMlkwmGgdivQeGzwcPBvS4qt2RCtOLb113gFp+qyfBk4ps7dGJ9ZRWgGlvOog==";
+    hash = "sha512-/WEXUpxThIv0vZkgx7gLZQogpMy16G2ZuEYrvGUjJPLWzpMCQIybS7TNgssM6MdErdZvrPwQM1W+4hgTPdYs+w==";
   };
 
   k9copy = {
     pname = "k9copy";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-/485R5ySLkkh66/D9Axvv8qWlH70/o2jEfO4r0ksP69qv2QqbJbey1hCPZT20dxgTAuGHTBK3KuWtyyw9x34uw==";
+    hash = "sha512-Ur2Y8kgl1WYUr39l+nDIJKlZVOqAHpiQw8TTPxhxqg+LRu+5bXECkqU1ZdrCbRJ9gFVZtsEbSQ0Rjb5uH04gLA==";
   };
 
   kaffeine-mozilla = {
     pname = "kaffeine-mozilla";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-of8C4NcuYzZVo0ytYoCq+TgIGgvi2B2QxK5+FwvhtQ69Riz0XdiXz5JpRtsMiHyVfvuL2BU/HKAu21NDM+rV+w==";
+    hash = "sha512-HiQ0H9wXO6I+ujy9FThacEZyFRP2Mn4KNG1EqKuI4mkyf6W1XutFhZq7zFvIBJjcXbHOe2bBliZ+OPMh5OcBfw==";
   };
 
   kaffeine = {
     pname = "kaffeine";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-dZA/nzdQdLVyM7svib+Kpq4t7FM6sOO02wur6ELd1szqPGKJxAnFsX2+5lJQ3miSD2qG9TxWzqgg9ClktuRnIw==";
+    hash = "sha512-FWxm1kf5Mqc8RfJmSFeQI1vktFjLM4URpBgToBGWwSIyH00DT1W4KKvfVfQwfeDSph5lEgOT4WvWOFFbvjfKIQ==";
   };
 
   kmplayer = {
     pname = "kmplayer";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-9bSnMANvooJX7ymu6B+/Xd0xtsa1S3BSevnTjUS0Q85l4ZQP7gH9SUFK0aI73d5wM1lfTYNChBRl7+3DMe+5gg==";
+    hash = "sha512-fyHfSqMvauM2d8m85MOjan1KqqcBpiOiragFI913t47OyjVmYsDM+lVqepPu58PzkCJbO1G+7dFXGTDtehEcug==";
   };
 
   kplayer = {
     pname = "kplayer";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-PH+BJtE7pX0BzhGuJ3S0i6pgP/WwdEroph4dZ4GNtQLzE31Q+QG61XyRbpd29hw4wvNm1IhHYmFZdhskUm/LAw==";
+    hash = "sha512-PBPsgBGF5Y1w6bBAtqbWFHNy2PLJ3/6jGNq0Eyq0A3YOGfG19xmluGpyq/OWRVBWHiNk7vf6OPwqxtuiYbXG9g==";
   };
 
   mplayerthumbs = {
     pname = "mplayerthumbs";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-u2QtfYJ61G2gbk1D0Z+pRCPccFaox5uEk/MbcrYXyjYLZ2bbv8qFM3OMU/uhDLxBSWocumt4f0TPOtm3yOEAOA==";
+    hash = "sha512-C1W1el2jw0she6nYBD69vu2YGpMrppVG30ziIg1JQlEaGLRnJCqFQQicS6HJ+OqJFdoP5RtbbCSTnWcCzQywqg==";
   };
 
   rosegarden = {
     pname = "rosegarden";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-PA5biUx3nAvOgmFZO3bC4Ya23nTLDKrgjJLGXViGX5v05vy7NmAQEdhK3yVWM3AJXxjGAx3qp1ayNw/4WBYQSA==";
+    hash = "sha512-oe/uhpSamqqxHZT/CnvVKZHLjWvRwhmKpgS5f5ai1GD7VYa1cdKPerKlXryyBHXZ0fkPiAhAYlR30t9R5n95Sw==";
   };
 
   soundkonverter = {
     pname = "soundkonverter";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-QRz7aQ/ccg6l8ox16Gxva9I3HZsNWGSN+KlEaOEW9SFPYkCZVh20pbJLP8ufBW2vee4DM3+z7rvB3HQWKZw+hA==";
+    hash = "sha512-uWfnsE+HTg6N+3LGyLq8A0RYdneP3uc53Ys9BnsHyQLrnY97rc5A7jloHjVFOioUi2DN2TQzJhYhPvgDM6f5hg==";
   };
 
   tderadio = {
     pname = "tderadio";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/multimedia";
-    hash = "sha512-CQZgak+0cHJLOWESOWwlfIPb6F2x/SKLSRFU1oa02utv4EJzW/l9ffBteUZo6EFexPow/B8RPEjf83NyNUGYZw==";
+    hash = "sha512-ytuE3bQ+gjfE4lM26njlnzT2TySmJoQm1qPKPsDJUnUgiuc7BB1W4Lw2LThxj574wD2Nv31OlSw7vX5TMFG7yQ==";
   };
 
   basket = {
     pname = "basket";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-hVZHqh8yPG2/MkAolQ3axdZvfHVOzryysRhujdt4V3ExJiVfAcJaKs+f8X6e910AjtXJ0fsLCCmTCsDXalXovQ==";
+    hash = "sha512-Xo4OOWYJE3Mk9Wrw6LfxLfn+xHVJKdU+XMzaQdUElaQVbUKlKI8bXTiQTjjNDDtgU9K+4Eoj4yoeoeYctY0cFQ==";
   };
 
   kbibtex = {
     pname = "kbibtex";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-Ydd6VEBYgG31UPhzUfcj4wuVOc3CkA3TTc3g0VAhJwoI0d0XdkQ/hjFog+zS9r5+4ksIFCvhGChcHEawy28JKg==";
+    hash = "sha512-r2RMfwsGJNfB3dNmUAfoLS9ALyIx0Z36nAxBKwWntGdQn4FVtmEHGPdQ0i+ihCnzWKEug0yZtGGjgWi7psbb7g==";
   };
 
   kbookreader = {
     pname = "kbookreader";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-ZUsvwwLehqPOA/sfo+FmyjzGxko7gELpMU6Rwu1xsZvbkgUo35eLQ2ltnKaZgqHT1I+tgOLOsTRe6YPC5eHDyA==";
+    hash = "sha512-pIlGdT6YRSWSnhYTRY/aQA8zckTkkgu4HPcy9aUdL0jn6kqQjlURWwRCJcTLoHDBX1u7SA6/Cm4aLvWknZJZSQ==";
   };
 
   keximdb = {
     pname = "keximdb";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-xTFX0E4yMYueAa31rr5LIZcsZ3t7OSQtyF+q/zrFFKkFl+MHV/HxzolIavjQJ+UgskAzEZ2sIrmNP8EgpjuhbA==";
+    hash = "sha512-aCgEvlGVngLBDCL012IhvYB62IOkV9PvXRyx0tw5bOvpJhZKq/jSSN9PtpudgbPDNuHZt9CMFckr3h2kIyTK/Q==";
   };
 
   kile = {
     pname = "kile";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-/+ThQsuY1da7gJ7yOuZRSTsMWosB7AeS0eZy3ho7G6uKhZ2uCqkWVqxsKC5lvNtpNNz24l+E1sG0mDHuW/zq9g==";
+    hash = "sha512-KHYo3uWRnETPX7rEs4K2t88XJzm1KZfxRrcF0MDVKtAAUpI/o+E45ru+vii0LCnv+5v4r8Xy0h7uxYcJ551bMQ==";
   };
 
   kmymoney = {
     pname = "kmymoney";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-YMBqmp6Pfceq6xMVQqPsz3RiEFQR9A+0TI728l1PoLJX5Ki721ZJhoFqbeYZpJtFKfkql4z1yEwmzuyXH/05uQ==";
+    hash = "sha512-5fRZiUREHtx2R/rm5UNOXu9yqiMxXtfmO+j1+kYQbVdXORJCd8RUHeOGCDzL7lTZ3WmF6i04MRWmQoDfkMkiAQ==";
   };
 
   knowit = {
     pname = "knowit";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-WNYgFpy7IpPwELKYUcbzyK84g3McIyk9KokeFG8TSBw00nbMLRvruoErMsLW7nQUfGFT+8sK8xgn3k96dvOtlA==";
+    hash = "sha512-BYMsUfcBz2N6pyUNdlTNOXc7O8PFOnnG0tQYM4kT/mryXXzr2q0WYtEVrUWpXhowMi4DvD5pIOYIxRvm/o0u3A==";
   };
 
   koffice-i18n = {
     pname = "koffice-i18n";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-cEgUvygYL+68vN+K085SN99hbRhlZuIzg+/Ot4hYqpT38ktCqmVnUQeERrMJfENUH+VmQMUomv53FIsCU7pmgA==";
+    hash = "sha512-ZWi5vzzef0dad1ipGgBV7/0CMhFjKEUVpd3RrmZ3kCC8eblJ/GlCzGu43Pec2AASOYG8Sd2nKoMzKMn4w1zDOw==";
   };
 
   koffice = {
     pname = "koffice";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-Td6B7LMHHgcGT/oxqt/MpnVeR4kE/GbmnyyRQYC2XZeM2Ae0dhBzxITH3djx+ByzEqltjfs9gaXwadsniFohfw==";
+    hash = "sha512-DiUc3AOLs02Qg9KXBO+LCvq4cK7UhaSsoQdroO2CiM9ifZ0k6omOqb57hXDCgl469qSMAd4yu8zxad3e2DYI8g==";
   };
 
   kpilot = {
     pname = "kpilot";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-sASfsSFaWF5YGUtp+EqLaZx/PqckMRIvrs5iEc/1T8JbFyCD78ws1iM4OJEubNI3eyMK8TPBi/2z1ZlmeY2pLw==";
+    hash = "sha512-tHWO5pHAJMje904bs7pmLS1OgRjogh7oIY1jGyJJyWEbL0JlqVBcM62Md4n3SD4YmibBHhUsHj59DmgywD9vKw==";
   };
 
   tellico = {
     pname = "tellico";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/office";
-    hash = "sha512-2vzE3FT89GXx05pwkmo/FxxhMe6tof9Dwi0pHLPzM9ipovT1g3bqWYzad2nOeGg1MywY1ZfhJrDH3tfjHKzVag==";
+    hash = "sha512-VpF6iMQWQdUQ4aNKdm7CGMld+UtnxnzJci/L+YYWrKlbZpPFvIiDqSkB9tkO3SQZEvWpMPGUss/58Hcf0jWD7Q==";
   };
 
   kdpkg = {
     pname = "kdpkg";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-gg8ngA+Q93J3tSXc97QHeyHwj4KF7zvaxZ+hJ1c26wmLvGSpDj+o25w0HPSWQy+s+dD9Ils8W+7Zm0K9O2Km3Q==";
+    hash = "sha512-gscRpD7GUq4nhe1SKoY7yUaNwORSe/pmvGr/MOcUSqtg6nTeEpwXs+fOfzOmRk+IXRbfDmae/aUCxdSwJ0RSJA==";
   };
 
   kima = {
     pname = "kima";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-9Rm2gowiqOgXk3IF0Tm7HuHg0rLAOG02CoJxv86i91p+2FaGZfWAjOFsS3Ta1AC/wAmIPsVL6AuPpaPhqbhzUg==";
+    hash = "sha512-XmqAOnALDl7Zo4kqPWVYAUzYgkvJbF4BGi7CsPBdrnimONU4bg2Zhgn6081D1MqloiB+mi2DUvHwnZS12JrqVA==";
   };
 
   kiosktool = {
     pname = "kiosktool";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-cj0Zq7NGcMEtlbjhS/VEURr2zShX6D3J/nOXpCjoFl0nWHvevdNpNf5XLqNB7xCAzchog+Wam7GUZRK3aieYJA==";
+    hash = "sha512-Xtg9fSSpIf0Dx1jGIiQGpIEZrEnC2IGnWPAcQ6wMIv8jSY86nArpNLh+GXAj60G4Zg9SeAiERY7YtxOdUUB11Q==";
   };
 
   kkbswitch = {
     pname = "kkbswitch";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-iwa2Q5Dq5pdt9+yJz0fTLQcJj4ITujyOlWSlwMQ4PlamhegxsfuPSUVF3Z2xe/fw6F6VmNHA9ohb9WQxptQfyg==";
+    hash = "sha512-5TkY3HX4JZ7W1wJCEoAjQMUr9y79oxy4pde7akJFGiN4znSoNul0fAG7eA3NzgzHOl8mCeu2dGygtyTw3UrEFA==";
   };
 
   klcddimmer = {
     pname = "klcddimmer";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-WbvHXZTsz63DD3AzsK+Vl2R48b/AT+GfoPwM/GLNmbN/gPJJ7zWLJawDTQkWuOLNog5DE9zArxpwX5shVeHDaQ==";
+    hash = "sha512-e98B33T8pnNEV0iHuDpbJ2mdtaI4Y11iWL3qPcG9o2R8V2a4wIvLrvoa92LYOntt+olMasRA0fqlpwIN2sS8ZA==";
   };
 
   kmyfirewall = {
     pname = "kmyfirewall";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-o++ikboxTeV/PFDmDFANnAdq22iv4FtXcHQnUKtlU/yUV48Gq4oWe0YJF1fwROMdocmKNZonBS0byucnT/TcGw==";
-  };
-
-  knetworkmanager8 = {
-    pname = "knetworkmanager8";
-    version = "14.1.0~pre101+e788ad56";
-    group = "applications/settings";
-    hash = "sha512-H930f/KgNyXzxErWd0H0kuLSvr5AqOxFlBoG0ny0O1fLrT84ktncCQ72U6DmRsC+3tEdfM3Mw6ZKNXhxTd7y4g==";
+    hash = "sha512-phdEtg6Wpboo/jHpnYXO2r9wMY+dGw9NGB+HHla+9zb3QFD8sMurTfJue1ZAiQJTVIazski0YzweOEh304zb9A==";
   };
 
   tde-guidance = {
     pname = "tde-guidance";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-Hoa9NogoamWz34BfdPRArwWO2NeHbMBm1Sn1h4SC438v41HQ8UAgY18g0C8THaI6V/omnfK/cVPFHcA206DEsQ==";
+    hash = "sha512-sQxL4DfA/S9350S7WAQJqx8MA+khIpO94/9sfg9QgSsmI9gj//TLh6iAzMevt8j28zSoFMqATSqPAP9n4lutoA==";
   };
 
   tde-systemsettings = {
     pname = "tde-systemsettings";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-QyIDAcRky+3/mJfnh8JMuoGXoyr73N8BWKIy9p4VgXvP+6d4EsQnHwRqaH6zMrwDBbFX64wTdYUcXtAYDIbf3A==";
+    hash = "sha512-xJiKOMfLnEdsYce3YRdFAzuU0oY15xWfP4NiqHmgPYTsI6EC1Ef9utra+9r6AdAcUhxx95E6NWlgPCr1/UQ+2Q==";
   };
 
   tdenetworkmanager = {
     pname = "tdenetworkmanager";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-bls9BCyzGlMdKAAXtB+SUNm3QqKLOASlfJMccaAQWeenrgq5YlQaYMtuF4C2ea0BhA32k0r1L1v2ye7efzy01g==";
+    hash = "sha512-3doIHZQuGxyk8+W4dcB5kS2OgGFf3+/VF7ouBJ4iruxKFDYqtZ0V4sHtzKReL04Ekp2CuctgcTzZ1ASrMs5YgA==";
   };
 
   tdesudo = {
     pname = "tdesudo";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-YEHWcxkG2P+WhQKltqVO1ZkzSCVS4si/p6YRku2IlFpkJw8US4dO4I0by5MOk2k5M3HxySP+xuuqrr6HCHUnRA==";
+    hash = "sha512-JGYtmBukVZtTW+9rGItkKvcbSLT5IXIk9sRmyehoJlG7vIholVr44+IZ4wDOfqy+c833N3rq3gWYNz7vJ2p2MQ==";
   };
 
   wlassistant = {
     pname = "wlassistant";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/settings";
-    hash = "sha512-BrrcI5jEiG17mjZKyGDzAAPr4bsG3oYNNK6A1TNV0H7xu1Nr6hLhZRrEFh1k/6L5PBKiLceqI35y1o8gFySsBQ==";
+    hash = "sha512-5aDigsV8YzBKv9bMoXQwl/jBJBHTJiMjMKUR3Mykyl0a2D+dZwRQmdjqV/siLza2T6PjfPW993EjpT7GD5/BOg==";
   };
 
   dolphin = {
     pname = "dolphin";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-qoOwT9CwPTFQprWqnUsHRiNa+t/ZZtiuW0ZLZ97dqW0cw/KSTIwyw9FMB1QHQmx0SwA9mY3VlnDu0K5qn+Jgqw==";
+    hash = "sha512-K4gQxkltCB7a357Fw1YTtxLahEZ48qN3VGxSLQTaTryBrBlac9vNqjztLAS3uoVxdJqQCTptB1gQygzAnKV/DQ==";
   };
 
   katapult = {
     pname = "katapult";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-f8Sq4GHGoCGlYWPpsK0jz6O5H/y0FdNroZPz4XhGst50E4Zt9201a+mKH98gbQFd4vluYPyTpDtmvm362vfHJA==";
+    hash = "sha512-Jigng7xgL5mFBHX/xPt0FHDyRJv3n5uVbwnixSS0/1HOhcC+g7g7ciEpvBQOwZQmZgq9Q1jdppVGVOMiYyYFMw==";
   };
 
   kbfx = {
     pname = "kbfx";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-e5fGsPklVubCcQdWDJAFsLdRMmwFZ8x3xFsRZqSDvZHAbvV50ifgoAnwKD5yYieKB4KDrLeoNxMTewzu4TKphQ==";
+    hash = "sha512-UsSHUTGAxD2o955GBGqD5rejRIU0rhbQH7hdzjfHAoCBy/IfMarQHV7cEHMMC4XcXmmR/wKuxKH8hGpmT7K4Og==";
   };
 
   kcmautostart = {
     pname = "kcmautostart";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-7N5J97k6EH/xfZvZWktNrb1k32b0vPeAu98d+Z7G29x17+CjoXg+KsIWgkZl0waxAG05CtzIt8o1mFYjQo9Abw==";
+    hash = "sha512-WjjXv6NHZ4w/szjnbXUL7aeutmc6G3Y43MpARhq9uRPhvSu0qXvDzwa0Xe1pZjgUFxDDxPDKaXOccWagFu5WGA==";
   };
 
   kdbusnotification = {
     pname = "kdbusnotification";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-/Rjb3pq8efobkr5GzxGlQKi+mgcMarQN/9N3iS+8UMcdQu7qX22b8j03IKkTJ3f1OXx2VKhS4wIT2foMDN0XHw==";
+    hash = "sha512-GKN0POYRcKtzB4Vk86zCmxdpYtWBZg9bh8ZMq0Wh//Q7No8YU92CH9p/tU65A4IKo/AtHVCvnllMGo2Orh+zAw==";
   };
 
   klamav = {
     pname = "klamav";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-tYZ2e2uztCSfZTefrjsKG47vmkn9rcz4BcIiwsYnlCQ7MZJ+T2Gi81YpR/s+M0Ady7LfzHxyBIF5SQBmNZIU4g==";
+    hash = "sha512-+b/ZzIySfgoDhexVNuw+Gzlues5cU6nNdRJdVOZ+KQEb/o0rMsGmkrQigzYOiczg3pVSoPn0igb+jopZDu4JyA==";
   };
 
   knemo = {
     pname = "knemo";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-0+gtm4ROtrbaAkMC/TjYqAvafcaSbcEliLPs6JFSZTPLvJksGBPXB9VypiRiADE+6na3NU7mR+3SXwUdvZqF6A==";
+    hash = "sha512-MTeYc2E+2NjJ0Pt+g2KZ5yC86lC60bCXsWKi0xP1DF1RWQyokKD7ajPFNH3nEMe6zJc0amPk3xPHZihJsi1wMg==";
   };
 
   knetload = {
     pname = "knetload";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-hBw3L+6iiantzieox/sFXvJIXecKWS2oBLvVcAbZFc3X0rLiEEAtiIqe1wKa9yvdmccFig3sU6kyLfoVYg061w==";
+    hash = "sha512-daq0icbgrR7DL+1SZzvahx6LWy41Jm05FHG68BwHvN9iNBSza19G5kjH74ddkRyNPLIjP+3puyiqKW5ndOx9kQ==";
   };
 
   knetstats = {
     pname = "knetstats";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-l70Z+IvWrS2WxNtdNedo4HUtgumGznj06ZkXUNBWbRHH7WkGAj08LD2OwuLN2OKkj3meDWgp3peA7jUqHtibHg==";
+    hash = "sha512-tUR/BRsAknqcf38WUnzbFVg3VkpoozU9GuKLJv2g7lUc9JQveupI4aKd1oszRP2Ed51Z1I/FLf5Ad0UTBhvDVQ==";
   };
 
   kooldock = {
     pname = "kooldock";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-BeEQSNUZkcciN1uQfR0Ek0+vqBsI0hFmGfIvEuTZrISMssA5/4DTIDENqr+XNApMxl5J9aY8zQ3h28wuQ2NRlw==";
-  };
-
-  kpowersave = {
-    pname = "kpowersave";
-    version = "14.1.0~pre115+0a4dfdc6";
-    group = "applications/system";
-    hash = "sha512-a9n+x5raPMIzStDI+GdJBCY5HcK4HuGEG1MSPqX+dMWwM8EdiEGgzvtNmSkN6YscNeB2bMdUYpTm4AWgWh0Ocw==";
+    hash = "sha512-I36JR70XxMKQJnRLtaZlj17CFsGuahnFQ5xKiZsKjvMCEn8T2j0c76iInDSbkRBxf912Zdp8HekeU69S4DVbtA==";
   };
 
   krusader = {
     pname = "krusader";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-sQ7MMa+g7bouqreHdoV81SUdcpWkf9YWluYaWCgVGyqraQBlz9Wl3aMxLODRWDwMoHSUj/Ku3JyPcjLTDeKeiw==";
+    hash = "sha512-tyu+DR96SiSzbjeMqDNTJWTN3Y2mhNS6Zypgk2bpMx+BKiPoNaxfSu9uqvIpew9Y5CaZ1RwXgcepRqDB52Vezw==";
   };
 
   kshutdown = {
     pname = "kshutdown";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-bNoFmE1CV1wz3QOtAM9CW/YMX/SluMf2Xq/4p2vq9ie4QL2PIcPPYXDyoM9HzaGr9xJ4CNi2rkccDYrZzwhWMA==";
+    hash = "sha512-fctHT8FUasfCdNtwEUJ4WVmvHHLtF+Lr/jGX7dXkl4ZA6RM1b9xuCajZk0nFKl3ebixnJVtkFVVm8kEoGK5kAw==";
   };
 
   ksystemlog = {
     pname = "ksystemlog";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-mxLnghyiWUj6TS7OQFVrnHVk/VLvXdBmOYpFFTIuxBy8rCHMKkltQode5gC64JBHRERecUdr5axt8/ZAMFk8bg==";
+    hash = "sha512-ebNs0tFf3XvU/khMrm8/geov33+HaA1QgGE1WbEnR0Wv1MZ2+t5h/7OEz9ItcFPaAkzNLHbDw2O3XmH9EtDw/Q==";
   };
 
   kvkbd = {
     pname = "kvkbd";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-VwbVkwunJ2DVIpu6r8uPqtmabQXgmk3UeJuiI+o3VwxzcCFqN0BRVBKTtRMHzBhlOx5bPx+oLSUCvsexuIKIHg==";
+    hash = "sha512-ShSqQ7mlYDqBZTrtspSLNSkdylV/RUnN3Jwgd4Hxq4/0z57IXXcuumRmdxofRTqfzqKljnKWL8wU3sjJ5nBF/w==";
   };
 
   polkit-agent-tde = {
     pname = "polkit-agent-tde";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-RI8Cbr9mMeBnn7NU4hmnKHkHeWq5UH358fg/5Biil013FvUQcpiujt/ji/q0bL95A+P/S+ti/X5rAK8RXl8eng==";
+    hash = "sha512-TYRltu4W4bJ79ygPHlAebryqrMkgLK0kpvf+sgISCBQeFHNSmoyBQVlu1uSuC9cqMD2v/5ECLrvIZ9S+phBrdg==";
   };
 
   smartcardauth = {
     pname = "smartcardauth";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-ymV43kAZxBfHMe+ZWVHJUhQ3o0HhHxvia7B45laYCDiPwyCPCnDBUrwQZ2Bu2YFSjFDzePaA9SOBUIHrfjIzWA==";
+    hash = "sha512-NyAg+rE9k2AJp3asBFnBFXdt5gPp7rBXr/mcx2wkmD8bRnjpTWhX2ESEJDhCEVIJyPW9awnfct5j1INUMNJWTg==";
   };
 
   tastymenu = {
     pname = "tastymenu";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-M0nsxz0CXiSh87A4DvRzO3KvGl+UV9IAIQfDzUi/ofXdTZ8vUqbgAL+jTDzB+y4X8wU/+RyTZPbVbWwoB5vF8w==";
+    hash = "sha512-mI4XUO+51eBTiqmvzca/9KYAa7o8pXrGfZCBOyNXJ5v3SulmSoWuSe0uZLosQsYQr0l0Md7DkA8u5YeKeBdAqA==";
   };
 
   tdebluez = {
     pname = "tdebluez";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-1jN0aTADOSVMVu67kAgP1+6iF+HUyTGBkVXIYXu3o/qdpYP3FcKr8ve9rhqwr5ANrnCncw1yWx8XSQpBqpfMzw==";
+    hash = "sha512-Ej2cAj4deHbEsxLBCJD8U5pKI2WRkhfk9/KGM5KRadgLQNNA1DMV83YwLN0LZqk8xOfB/xUDNCb7yO+mTFfcjg==";
   };
 
   tdedocker = {
     pname = "tdedocker";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-HDDDDtQ+bA/r+2eQBl5GYbnFs4KUX56VBbOnHsTu0gkHYIUM99EJYKTW7omINkdGRIWFMQHSNC4Kr94oRNdvsA==";
+    hash = "sha512-lU3YT3cJnAFfXursXMjJ3zlgmMBawttdPNfy5tWqJ4tRF2bBrymRPNH7jCMbWuNPaYX6IxKTF+PVKgmX9U2cpQ==";
   };
 
   tdepowersave = {
     pname = "tdepowersave";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-gPbMVUdM4R+ZhtUXHyxl/q0KtpvvhSb41xP1A1aWSGVd6o++oFGhUQVuwwX0AEeyvcycycpA2RI2ogzF0Z7VEQ==";
+    hash = "sha512-iHFiRL3VlksbXxm1xupvOulFH+GxG8L581YIEFAK55KokCedJ9PynhhMU3uVv2DeRjJPCmmq5nCtDKARLa9XqA==";
   };
 
   tdesshaskpass = {
     pname = "tdesshaskpass";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-jCWCfaMHDJ4Ndne5NQMNpkNppi2dbIjynjtYlSs/iZjSzowb34Zo0zJ3iTPZThVfd69+eoDN3ZxSeV/cxM8/KA==";
+    hash = "sha512-0n1J/dQ6TMg815Sz0WJrNOehH9L3WEk+az91tTio6rU+BGzUZJ13mgrl8Jn6lMmQCT+cSbVjRMBne4rp7TkK4w==";
   };
 
   yakuake = {
     pname = "yakuake";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/system";
-    hash = "sha512-mb5EJqlPfF+kKJ5RgFBaNAVOk6zwCEkYTpucne3153CUVkn5L8ml/DdD3sYUhxs2O857TnuKn+jfP/I8GK705g==";
+    hash = "sha512-NPzd9XBvto3ska3zoLmHOw21D7+jsN4C5Emd3NqFT1WWX4O/1KL7ALqBqgyI13HcsMpVqUwCMvQd6ft8i2vucQ==";
   };
 
   tdeio-appinfo = {
     pname = "tdeio-appinfo";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-GRNxEJFuLvq5FIvBslE6QcZFETMnsdGjxZy0RFlmIjNWBPBAi33HHnFLCrbotckdcNFJZ1mqfpLYNhzr+68h8w==";
+    hash = "sha512-GdVrDuQxD9dAnJFrscBZdHFhEQQS/96n+mKzKv+22tRjpPmei5aXBcbhaLtDhXJETNDsDUK4HuRajdWSLm/Ybw==";
   };
 
   tdeio-apt = {
     pname = "tdeio-apt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-0I4xyqkB8OV5JtyZpSejYPa8/4pdDGTA8UEWO5hYM4eUIdCe2rBekdl3cyjrm1ZoRr7YCOOW5oArFr+UP6mP2A==";
+    hash = "sha512-PuE9X5kU5dIb5N8H0Xcyxc8TPfQFy1silXMRQeJU05o9C7YhV4D7qKjCxuGG3Lrxp5oQkljt0n89YxnA2BZ1zg==";
   };
 
   tdeio-ftps = {
     pname = "tdeio-ftps";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-TMfX+cT7jrzIkfiQCFDQByrwBVDbnHXT3bjJtfdszmEA0NeVtIaWYsCrJ8KwsQ5zhA/AeWYdmp+BhxGz3G4SjA==";
+    hash = "sha512-CkJ+iXV7yQ+0z0c3yN/AkW95Q7IVN3pNi36DBNwNxtPwMJ7/uorpWHYyQN4jS3GrHnoZHQvr02Mg3L+elYJJvg==";
   };
 
   tdeio-gopher = {
     pname = "tdeio-gopher";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-klH+hG2ff7Vo4d7Z+PeB/YGctky3J4s6KvE9zSOvZJX+EMSovUOjy+M9IL9rmZwCfFATfL2ROqgXPPhVRzm9FQ==";
+    hash = "sha512-84I7HDZLXcnOv7jdSkhcyID+F8sk04QNST1kv7qfji6nN2HutyFYlyCkwGBDIpX2H7xVghsJ6j5FGUbjzSnHDA==";
   };
 
   tdeio-locate = {
     pname = "tdeio-locate";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-kWgtsqo19UDNibXNOcc/KXOG6gEwTn2Hge66lxP2BVy5T5Bb5XH+xMX7z5QIDHCelIyJwicyXW5E2S30odpt/Q==";
+    hash = "sha512-Pz1n92Ko5UU8l1UlHNhvp8cice+3jGUvd3zBDNxHgaXYYqOT4YzdA1fIwqogrmRzd1H9Bg5qzQyXxA4I9PBX4Q==";
   };
 
   tdeio-sword = {
     pname = "tdeio-sword";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-7ch5Mylr95BazIb2nf6bJBQg+MuFgXPeJ540VDadVIFwRx0QPp3gGC2UTQ/7r89O6oonpf161nBfKWkSkWsiaQ==";
+    hash = "sha512-lizQyHx/dX7hTAGg4JpBC+7HNXZDC598saBrlIExCwkj20YX2ZCadyj/6lBNhpUJ6kD1utsmOC1v7ft2EX4LeQ==";
   };
 
   tdeio-umountwrapper = {
     pname = "tdeio-umountwrapper";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/tdeio";
-    hash = "sha512-UCfqN7QlCRtDRth7KT+E9Gh6P55cHg90X3n1zYhYgekG6t51F2sS6tokphU5PXDlDmOyfq0EzK0xUOhQmw7GTw==";
+    hash = "sha512-5bCtjFxLi6xUooV6tGwJgfNSCiUOd2xJLaMRq9r24RFa4wl9oo5PXSO5EFE+bHDoy9tFxXF0MMq1hFlif2/HNw==";
   };
 
   gtk-qt-engine = {
     pname = "gtk-qt-engine";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-P/ULFubaLMSfd0X1nZhBNOO4/8tSrDJot0XU0XT9rnLZN4lp7AdyWjJWSUGnvWLmo432CEIXJd0eIQrJBEVM/w==";
+    hash = "sha512-rgc41bLJ4POnJXo4/ckPfYlETGL+U/UePRcnjIrurQ5SvaDCgyEV076MDA+ZbHJamFZ94/pveIXItknjTU2xpQ==";
   };
 
   gtk3-tqt-engine = {
     pname = "gtk3-tqt-engine";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-j30rmjPWz5V9reKkAWowIbxgoCWIq7iMk437oUMYk0cwRDFO9Y3nt95gWAk7vS3XULSIvVaVyb/J3WvmRQBhRg==";
+    hash = "sha512-9x+PrA74mOv1ZwzxZaKUnj5mIATWFbM0eTW1DIoP+NZ7MkvVoDVmb5ynoUf4K7ct1xSQkF7UoqePA+uR5oCEiA==";
   };
 
   kgtk-qt3 = {
     pname = "kgtk-qt3";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-q04PnarZE6PKCjmeEQCdjB3dsZX4T0S6E4S2pXnGFj0keM0AE/L1zPbysnEaAEovQnLCAzbQ/kCW/1osM9QPYA==";
+    hash = "sha512-ZFXUNCQSSmTmIkvbXppkJ8hcP6BaW4ezImEPdeRHb8l05NON6E1Rq6ESVb4UPt4LBHkTqLd785fArKwJT8beSQ==";
   };
 
   ksplash-engine-moodin = {
     pname = "ksplash-engine-moodin";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-/o9L/v9CkCyeAa9sqg6TD7ZzC1SusQQRyrVwTEIgOVkBn81iZW/67D2ljEHzpaFNmUic8+3jDk5xi1w1v32Z2A==";
+    hash = "sha512-Zn80PvVySMzBPPr68wMUfI8WFAOr6XACW9qvJKu4QLyw4FjqNMPM493fFKDEro6qwx+XsGb9i76ZqSePi7v7bg==";
   };
 
   qt4-tqt-theme-engine = {
     pname = "qt4-tqt-theme-engine";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-wjTGLy51R1N0HUYxq/1sE6TknKaE/fxQUwbuUPX3r3ko9HJQUnja9D8t9EaJmNm8MWyNZa4xqKkY9mI2SlF3mg==";
+    hash = "sha512-WNFUvkWdKafdOifSFicP/udG1TRMkSWrCPiJrxRNhCl+g5cbbqzXL5k2vfH0dOn8PdD7ylr3vMqh7QXRssImzw==";
   };
 
   tde-style-baghira = {
     pname = "tde-style-baghira";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-vP2axi6Y4SbcS9aSAk9Bgz7If8/VS3vOyGo7Ri7eA0x0w/p+LpPgkn84fAlOsLVZKResBNeq6tcunOEjwtpPqw==";
+    hash = "sha512-BLdmJlmrgaL00UOi7PfnIIjXUzA50xAt0YVXVXihpmNUtk/6CdX2370UiSyC4CIGDZhall0y9D0Lz2O6ql9jbg==";
   };
 
   tde-style-domino = {
     pname = "tde-style-domino";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-EvmTGyxubMGivDHLF/WutoIe96ELbF6nxG1UUHcb+3ahsZJ105CQTceLtxBU1GWTv0z/D6pdCL94q3x8lwwtug==";
+    hash = "sha512-tm3zMiDpKvf2mr77kDY/P+iezW7aU3TmXWM13/5qsTTqbG0Cz9m4HAaCt3+FDAUQ7Cr5zOl0HUhWLv4MFQvH0w==";
   };
 
   tde-style-ia-ora = {
     pname = "tde-style-ia-ora";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-IGF4dH2cUGT8xrJJjpWtUznkwdV9Nu998ne+N7rUVGgc19eSEAHdRkup+0Mxuff6CdRIBMMNz/Nsea9TxRwcDA==";
+    hash = "sha512-Hlp+gDmEma4W06w+XqnA5vsDqQyXlO2jgGm6nu39Ux8/IXpUiuZ+V8egwT6NL6Li2nXv+JL+hGYyJcAA45RWNg==";
   };
 
   tde-style-lipstik = {
     pname = "tde-style-lipstik";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-adtiGtvQk1mtjlwW/MRc5ETOKdrs2WiTqj2MN+JZzxYwdnwuk0A1Q3RORZcy3Jum+bMlWSDz9l20SlRkN3Wcrg==";
+    hash = "sha512-KhoJ88e1YPbSYgfuGmGCkiQuu6HODdIn5ayYL8FOAkK+H1pqD2AUSv3d4hEe15PZYF6F3oovMjdgrlHT4Veb1A==";
   };
 
   tde-style-qtcurve = {
     pname = "tde-style-qtcurve";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-ZkgYtEX6NAm794N8J3O+I9G/PGwMsokBe1gaHZwSJldtR6Exi2burMZUxHH+HWXAqczWEkJ2slc5teFfz5u+ow==";
+    hash = "sha512-H+8JjSQMjbCXkTbSA4ETGCVwJb1sm6KrI6yuglSpHksTO1Xro4PVt3IWWRQwlCIuv5CIkRAbETFo+IS8zt9dqw==";
   };
 
   tdmtheme = {
     pname = "tdmtheme";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-VlcmmhygjJX1rVmS/Z6hQepN+7n2lramvTFlhWhmuNgd8SxZ3pg3QCETOpb2qQeKlS9dyLtJYhKQmZ+izxnpAg==";
+    hash = "sha512-/HtsH7PpxBRtkqsV2DQMh8Ua0M5ctY824zpcmgrFTlX528678H5WvdcikIpg7pCt11bCqnnXegJ3moss/BU/oA==";
   };
 
   twin-style-crystal = {
     pname = "twin-style-crystal";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-PsVhcoPCWQ90slBP0XTzquU6jaAf7j4iJ6WHrI6rjPLTiHT2AWHZfWP1aNVyZtHv+Ocf7GVgpeBwqGDESq9uow==";
+    hash = "sha512-BGQJFefCjrFlZSgjd1x+a2sSKHDDLJc7k+c7S+zFozLpbKyVgUnMQVtgFycYarbCyd7i2A3fIYhjZkjdGd8eQg==";
   };
 
   twin-style-dekorator = {
     pname = "twin-style-dekorator";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-UzKpZpqbgcAQQdSZzmAfWPNtQZVzc7NnAADnQwAywS2p3mQz3fL+AW3VK6ff9h/t62OsNfpGBF77tPfSd6bndQ==";
+    hash = "sha512-ZavHv0hTsfgxmIi9fuLYAG20lrwU5ENE31ifqjOYzFS2hpoVjcVvk9I9gCp2k6Gmrc3OR3KdqOaZrE60JmWT7A==";
   };
 
   twin-style-machbunt = {
     pname = "twin-style-machbunt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-JquiiC5bgctqFOb08sb7vLCSBAqSqGhhvA2+yGwKHcA/Yr0dMWM3tRH9D0zKrrg0s1Uva7MsnKLFTLxsHn3xow==";
+    hash = "sha512-fTu9AMLmkTwmEMSnEuLe7QcuK5b8P9o3Ke68pSjcPhM5y+Sc5drMO7adqDpPtLq+TPMZRNeARxM0ZXQuJY7/Vg==";
   };
 
   twin-style-suse2 = {
     pname = "twin-style-suse2";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/themes";
-    hash = "sha512-Im4v03vZNOCHnWL8HeQfhYNvqkHU2l+ToyOlxJgxFdj9oJ6mQsXJzPhyrZ0w022qfVg3Ax3CrcSQELXreWSRXA==";
+    hash = "sha512-Nf8VoCfJwYQD5LjhyqzUrq0zhREWF7/oOILf5GJuPN0d/tQtSaSP6pFLY1LUMbkAJO8bBzJU14AbZZhCV8/9Mg==";
   };
 
   abakus = {
     pname = "abakus";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-8237xyFQ+7BEWM7PIkcJWlo6wmITpyDdDQNgCFaWyGskOZr8dy++IZ/1tzE/S123NXWf9zkkGTgHKejzOXjnJA==";
+    hash = "sha512-wKsYPa/COlqTvGvIA/ovChh1EwofnLcBGFdidmQPSof8F432D9ROWBl90F27CPUrHQi4Jgav+Pw5PamYd9zKxw==";
   };
 
   filelight = {
     pname = "filelight";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-bqWoMRKELxEI+Trt3EZYYO+8/Edrj3GntUNFeh5NQAgn8lCZXia4B5LiXpPMkAjuKbfAaQOD2uuliKEpM2K+0w==";
+    hash = "sha512-+tTh5qsjtYjRgz1XkbD32y3nKguRmWIuIOx9+1PK93cERLBC6pgh5UGXuEgkaYGhxG4Xy0bauEOfrtVgkftbEw==";
   };
 
   kbarcode = {
     pname = "kbarcode";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-SVPXDqYlrk/Fc1OvkbiONhfAYedjMaGnXNd/Ru6LHUO2aClKxeXhXRzZimVmUYJSP5Bi0ADF/oppxFPGRJbO1w==";
+    hash = "sha512-YPjQFxao2C+SFaYuoAfvaWCCZPd2fT97fdesu/Ct7QrWYWh2idgqNSfmdVStVl+y7vTuK+h17Mq4y+dnTWXu7g==";
   };
 
   kchmviewer = {
     pname = "kchmviewer";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-qOHwDC84OyOUJsREwcdW+Z0YRk7HLaYZAX/fP15BsShUfRMHTe/UKo4ao6JSmTVIQoGDldklXswT3s//od23SA==";
+    hash = "sha512-BpU7H9X8X/Kbj8bL4KlOt9zsqVsFgpk5Dn32GE6kaWFJv/4qY/6UuuYQwy5/PEb1H0NGLCFM715I7pO27yCVnw==";
   };
 
   kcpuload = {
     pname = "kcpuload";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-S2v/2InaxqIaU7o12KYiMdiR1KZoanuSCo+alv/OMTGcxSV1yE5uCSEDDFr5jHywSCCxKTmhbOQOfrLrgTFZKg==";
+    hash = "sha512-d0SeOm6AJjY4DmEUbTlVAQzg8tcd3ZEsjt84Ub4Ibo0D+67KPTi/1zghXrQS9BfrQyzpTltPIf84wpyzWBALOw==";
   };
 
   kdirstat = {
     pname = "kdirstat";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-iSxhvvyQ2ggkjsj9K0NfiIxx7n8SD7aFghjFQagc4bJ+Ta/z6AmwFgBYHexEWugy0OOjtPhUHxE9mzf4/QZOqg==";
+    hash = "sha512-dxIUXBSinpBnzMyYGoRAsVi1aCvZM9BjjGKjol+9Sq5D0TAEiOLTK3jWiINBEBPA2utzcN0DVCp/z6Lp/ZAiuw==";
   };
 
   keep = {
     pname = "keep";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-H2OL2Dw2Z2HGAVR1vTk3jjpYplgiR5fXkAXocylPHvr/ORHmmjyrxRtZZn4qgxFHUAszOAYnsIHjr7qtQYwzPw==";
+    hash = "sha512-5QrmGMg36s3XcN0NirOZzVfNioUzyNuf7R0Y87S7DLqdb8VyuOl9ubiLH9TLa9FMZTvP5u9uesVwkA33gRBDUA==";
   };
 
   knutclient = {
     pname = "knutclient";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-tIwx9h8Fn3E/j6nnnpLQwTb85uLffVEKthIDMPBKMIjaoPVju4fj7VgaJ9/BZzA4XAGCOwo+Q98Juu2S+1bghA==";
+    hash = "sha512-KbG+SaKv6txqkY5qqOLM8sj0gIu7ah6MRLb1ANxRiCoscD9p94nEWKzQRtMRnbH6DOXEOFYvHavfe5Or0aPDlw==";
+  };
+
+  kommando = {
+    pname = "kommando";
+    version = "14.1.1";
+    group = "applications/utilities";
+    hash = "sha512-oaFzAEJ985OG3wRsMu/DHygUgMKID61O7rqT3ZiCKhxsc5fMFMctA0FGuchZSBEsB8zZM0ZciZDSdY/C5C3Xeg==";
   };
 
   kompose = {
     pname = "kompose";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-bI5cjoVBwgq3OIIKCoazB+TmtSQ4JKVkYJsRm0CpT0LJnKSg8n+MXEMLJmt/KDsyy79jxtZ2taj3vimLEU9OBQ==";
+    hash = "sha512-2u9PPOx64x0v1icIrlTy5sK3YCprx1tk4AXYC6G9BZ73F147+XAdlPGVu+PnofrmygRDV25yJg86Pi5mWWw7eg==";
   };
 
   krename = {
     pname = "krename";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-Fokx18oqX/4EGOf3o/fbOD1G7YR0HjXUxReams2pxvG5yM02m8UUvdyhJLHAo8WxeibzclPo/lso1kaSnfjOtw==";
+    hash = "sha512-zg8Jy8hrW9AOutuYfppwi4mdcRXz8+4W+ClINVr+HxQCNGMkVAfzkkxeTaPw2LXyG8f85u2AHCbaJgFeshszzg==";
   };
 
   ksensors = {
     pname = "ksensors";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-o7mMY8dgek21I9F/nalT6w5yAFD3O18zGLFcY6YssOyUrvnPeCY1qKFVZNtQE7DFN5qEXd7JCx4CQ2RGmlBhYg==";
+    hash = "sha512-f1CmdtCedvxgrj4z3Z5C51pnkiVMxCmgZHOn6cAiodfIDXMfw1aMx+GgH7jFz9pcwJ9hGDhBAF27NpSJzkAeKQ==";
   };
 
   mathemagics = {
     pname = "mathemagics";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-JimqCW2HuObGVDILUaG/RiAK0O8DO0MFi5lbApBMs5dqGpDhfeMJg11lI1qdc1FKtilN6NIsLFee9Zjldk4iZQ==";
+    hash = "sha512-NR6olQ0Q50Mhvk13GmzDQFFIK5/+LYXvctoSvSt9m3jbCVa6FsD7S5cBihE/YBF+nWdvymecXS0z+q142yfCpw==";
   };
 
   qalculate-tde = {
     pname = "qalculate-tde";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "applications/utilities";
-    hash = "sha512-zc6/A4WdXUu6fOTNujg+5W24PoSr1hAB4ovCQbik2Uv3mpcI7kJSKZMkV3BSrBNxqGQZ7aub+TWXrOdOr6mfFQ==";
+    hash = "sha512-NYykCgVjp4CXErCiYM4+u36YWOwQilgciHCje0mkUpzLs2DFsL2Pp2PnmPZ8nHiI5gpeLi44pyWGPLEa63ScRQ==";
   };
 
   akode = {
     pname = "akode";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-JLNJ6T4tOmBhGwlQCH57TA3a7k9KX9N3FYCNN6YtfxFI85EDOtTwjXa9NSKe5b4TG3vn0gv9q0Sz7MG5XVh+Zw==";
+    hash = "sha512-DS/VjXmGenzgcExFWCgcR5uAhwVZINMFrakNuyeRwgNIoRHmyvpTWaGHiBSdpcNunApUIEOXeUedFwcxySwtyg==";
   };
 
   arts = {
     pname = "arts";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-ybuN65FsW1I/FGk/vvXa0MEHSApQPFP5IAdGCrElvPlL1zl0OAhe0l2uVs3XVDtcTwgOMIQuSlFeC8SGGDlXaQ==";
+    hash = "sha512-bmvZtumluVrQ4W1QtaVfcolFlcmRZxjd8hCLA4IY/4asjAhCYNHlRKK2AlRM21telEpDcdcZa64l+VQ9GPdBeQ==";
   };
 
   avahi-tqt = {
     pname = "avahi-tqt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-BuMI4vGfPkFh7oXOgKuwfxE7jFh9QPhMrJJ12Ka12gigQs9+htvvCbfNas+aD2ZhV83mvFFCsWoSwA5zz4OdTA==";
+    hash = "sha512-w0yGB8nee/b5nQjzBoAO/+7qkOLsjiy7kUkqBRz+6DMvXSolsYFn9w8borio4L0WdlrspcFT5jJRdXjRL+m4vA==";
   };
 
   dbus-1-tqt = {
     pname = "dbus-1-tqt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-mwzBf4Pu/fVWlbfsehaItVfaPVpzpkMbMTRP0X5+cqpUlPDjgLyzoDrRKrZ77FZP+/mfVZih+KmiEhSMoDRwmw==";
+    hash = "sha512-yrG+AfMKx4g3LkxCzrr766oue0EOfKEzh1vDqqB3nUMgQaxMDGWlsuazhPQvuJvHyTmE1MkKBcIRDfPEwc96aA==";
   };
 
   dbus-tqt = {
     pname = "dbus-tqt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-mek9CIRO3HmiuNTVRZHyZWKlB9zCsKt0W/4iXhWqfGi7HE+1hp6Yy6bZrRh6tLz4NiXtau8lq4aIHLUqsZOvXQ==";
+    hash = "sha512-mThZc2uW8hCpogaCy4U2llfMgSFmuMczsX0sLb/bTn4FG0RK2mrAwPb7xjwm/pV4L4cpjOpP+WJGwKzl+vIKOw==";
   };
 
   libart-lgpl = {
     pname = "libart-lgpl";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-LZwwSnU/z/BkZO17zEdQoQdGvIKW/gPTDU0tm8XS2i6rWbRomppq2xdRDR7lnF12Hqew2CqDpsS4FmmElaBpLA==";
+    hash = "sha512-B4D6H8YuLeC2LFBJ3JSYdSrI7OdINy3CefQ6R6Op5ch03xEmMFE8KWZ7trxZPW0IkRe7sJh39R2Qys7rlxaKew==";
   };
 
   libcaldav = {
     pname = "libcaldav";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-FBsRdLKReh9lbdlq6JyWSH6mj/4P6GNCS6KKgmoZfXf50qph5i/PyTjhbI2XQ3NN5w4+dYuRbZEAocxaYGaDmw==";
+    hash = "sha512-sYxg2TWrVW6iTASKFTVBAJ6u8ldgyq4iuWQP8T/9CgSOOdT7uU1zugmv5cfurrwiuOGJZpf7A/qV9o/MroQV5g==";
   };
 
   libcarddav = {
     pname = "libcarddav";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-IfgNG8ugph1M3NHYqDl43MQdv1mmeRBU/dLaTPlSX/nAcQdRpDwO80Fg3G7BgbLDb0U9aWSzmtC/6leqW0TbQA==";
+    hash = "sha512-Ww3qCQhwlZ0/IkL84fpzLLAu5hQ/ARe4Y402fhY9wqQEmtmvXh4LOTI6PNa4VeSWayrrqiJNdRYhGimsC/Zhjw==";
   };
 
   libr = {
     pname = "libr";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-21ViPB2gLT2rsHLhUKSxKZuKgrGWkpb+C8j7ufGLGZu2AO4s+wh7ZhOZv28oQezT6LbIYAPWe9W7fJGOH1XDug==";
+    hash = "sha512-geHBpxKzYAQClVpanQREtAjaehTHSCsEwdfGyId7ZrC9cCLjDukh1qHmQZKWiKBnjRATF4Du063veFSdov7Zfg==";
   };
 
   polkit-tqt = {
     pname = "polkit-tqt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-wQzPftFUIJpDTfneZtrDzpXBzJoyVfCC5m9QamZdCZat+riMLaqtmMxoyXEefotFd0gNVQoz5SE2zre4PQXBog==";
+    hash = "sha512-UXtIcPC0+amD+U7HCGV6Cd9p2ytsz54WtI+y5Jgmnb4INi1o7oC7YR8WlWfjWPtDpbJ1M1eATzga96NDRYEQLA==";
   };
 
   pytqt = {
     pname = "pytqt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-jdysm8eeNMn4beW+y5y/Xvpag0sJGrixCOzei59yX60xAZF77Qct5elqUCqaHYXMTBFayJwjQbnW2syg6FLPYA==";
+    hash = "sha512-tNH3S5agp4UfyMcGD55cesPqzgfIejcVJQMTkuvollj+O0SOB0uCPe5zkjaexY1j97R5rY1O/d07UGuPmEXynw==";
   };
 
   sip4-tqt = {
     pname = "sip4-tqt";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-ICEVrVCdoAI+3u0S1ZjJ0ScXnhLWu3CxnWWZMj4xqFq4O8+j86/F5DCfGrXDblpsD7K3lux2rAWmpXn5e40gsg==";
+    hash = "sha512-0YoENZssNC6kaikCpG4c73/fZteGps93lCd8pSCmnGJcmD38aLcad9k2m+SWJU51POXBukGkISn5KGZIssIwWQ==";
   };
 
   tde-cmake = {
     pname = "tde-cmake";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-ibJTN/T+uq/nSJRl59yhnchVRjXkxDNlNn2aqzrII766L9dEAHOqFir8BW83eEH/raw+Cyrbb1MqCpnERUkujA==";
+    hash = "sha512-R4Cw7KPoD90fZKTc8ZdussesDl/emytofPofQA6qbcJCzdaoqilW1FIYe2U3wClRn4A2EuI+eqVtWFg/KpmFHQ==";
   };
 
   tqca = {
     pname = "tqca";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-XltQDi1zpmqOhzUCChPeHPvwiMb+iUW7xlvz+VLyKf1DQq7PPXwYjUfEqrfDFVW3ZSRGPhQNSIYmQXoK8oEfrA==";
+    hash = "sha512-rcJNJcsil739aP0hc7nMUqLoAkKfUznSnUDJRnOeRSBzxxINMxYoJou8SmJvkN3ZPKlUSYQEAK2ddEADH3dnBA==";
   };
 
   tqscintilla = {
     pname = "tqscintilla";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-PdpT1JAfVDk9ReoYZpDFtVrUA8nc+xWF0RnvNLeqEBIor1BelO2DAsdIbfo4dJYqhfAEYv4DcBCT4O+vMGJrEA==";
+    hash = "sha512-1UeZr0zsoOhkrpFp1+HvjNgsKx79VD3sb14Q0g4085+A9S1/Qzr2INjJKfp2JAXrhKRpvduRI1RKgqZ5cF1D6A==";
   };
 
   tqt3 = {
     pname = "tqt3";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-T8NKbl+/2U6HMajctS+ABjqoUT9olrzk6iaJha4FM6JOmzQB39UKYeSMtYvSG1v7S+uC4NQRuXakFja9AjM2jg==";
+    hash = "sha512-NJUTeHjV5jM+ViIK/pc8HlqNanbAfSKVJmr7bF40A5CGswtGuj7sqf2hOOD/gXKbyrm5h+7uuQNUdOWTVyyxtA==";
   };
 
   tqtinterface = {
     pname = "tqtinterface";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "dependencies";
-    hash = "sha512-pb9q650jsJzjPFqWu7fwxrJ9EtBBXSH03LF/STdR4piMLQnrt130WpT1sqtdUoxqgM9ubdHe0oG/miW61KF+3g==";
+    hash = "sha512-VdyV/VVVdI4AL5MsIlXiS5likTyjkPSsOC3Rpo4yPmnlLgaU0eV8cRYxUcSsqse9maSD3ZSY5iMBV0ibGfs2kg==";
   };
 
   kipi-plugins = {
     pname = "kipi-plugins";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-yXGfH0ueHuNhzI1jGtf7to/bgl1dgomKK04WRku3ip58sCYaDwToT9d/HupnJmXTgSEo+2qWKAST0EazMSOTag==";
+    hash = "sha512-70Qf2T/0QUfBNqA3hsAghLmMXHLNx114UJ8zrC0mmokqPr8PBi7NLMTWYSaUJXRbFgcFRnYF20apDOjOdcEkRA==";
   };
 
   libkdcraw = {
     pname = "libkdcraw";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-kQvAagDMJV9EPPJXDwHaKqdmgBuhZXY/B/VTtDPriXGY+I7dmpFhZIyXkQmnKyicxBS9M8HnBl7NM1I2AXLPsw==";
+    hash = "sha512-6e3jGR+BtGTzEpRLbgPee7W0kEW00qKn83Hd19qUKriHcH22C+ODQlis9eBILedrBF3/h872Cb2TrJ7JVwipCg==";
   };
 
   libkexiv2 = {
     pname = "libkexiv2";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-YayA86smlKYnqS3TlroQoIIQ6DPbmrNsgdJw4/lpgrVSo0H4stylLduJ5FudzHSundho7B1NBPSrwf6uddoE8g==";
+    hash = "sha512-fyEISIP+hb/7Zj02o6v45To9taBz7Ults9GgSFG7+pTUR8d1hL268jTySnbsAo/n4DXNz5NeI+nNktEVF9e9yQ==";
   };
 
   libkipi = {
     pname = "libkipi";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-YD2bVCr457JHWDabykcAGpLAftN+81FcTEcINslOCYoA5dNzbJsAaJp3tUnjxiwtkn/1zNPNNgO467dTZorJ0g==";
+    hash = "sha512-fOImBZeS5aOOuaYL0EDMLiMJEqQdaaCNndNgielDyXFp2RrylzLLex+yGZJBMzKVgg3l5v9BsQsA6ixcPbEdCQ==";
   };
 
   libksquirrel = {
     pname = "libksquirrel";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-7c5atr2y9tmhGl5V8w3o772CzcAuPYRnBaJJe51uM1LaglHeYlKaGzk+O/pd2H8GO4jjMWHB3X4CaDCLELr25A==";
+    hash = "sha512-FnfsnrOfB8xx5qZ+DjaTTgGjhndw7//0yH1ZwQ7xeb1LcGfBpfEn5qmz207kowk96Ws+4QtKrdbm0GK4ANDp/g==";
   };
 
   libtdeldap = {
     pname = "libtdeldap";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-/KM12X7Hir+wq/dPSQMXVEhxIl3tMmkLlU3Wtdz5DaDSru+pZKUFR7oHGODz/oFfOYn3RnT33g0C0fZnvTQkVA==";
+    hash = "sha512-KfsKWsbW68SDxtusHFQr+VuFg3rFC6MdURVPMMqBG5HKN1Fiih94TH08MLILuH6YjixU3Wi/Wl0d0wfJoz/icQ==";
   };
 
   libtqt-perl = {
     pname = "libtqt-perl";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-OfSQm65MiyLgHo/9rW3j0eAJxu8jreQgjLjVutiQ8SN4Xf/osA0TsUwbJYyvbTXuGRm4C/oOMey/ClI7n+BFfg==";
+    hash = "sha512-+4zdVuD585p25maF+eUjHoXrrg8eggo0z5M8MjbDeCoqw6eq8oUrjDBY2L2Z9UtBfo8HIJfEQrInibT+8CbnjA==";
   };
 
   pytde = {
     pname = "pytde";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-L0z6T+5Sy6+A0tayXwpzH8DnOPyof6kyBLXZs0F0wBtq7KGHUKUFVFen3xHYUCntAE3Q0+EZvHoGQkgSlHerZg==";
+    hash = "sha512-NO5ZSgGceEgOzuRcLAwsD0t+tyeEQs2jRLyJZ9+allTbw4Grnv/gA2rXWOhFXcLMTt0EYA02kNqFWegEFVUf1g==";
   };
 
   pytdeextensions = {
     pname = "pytdeextensions";
-    version = "14.1.0";
+    version = "14.1.1";
     group = "libraries";
-    hash = "sha512-nRmlLPxE9wNh6cOB8Vc4aN9tmWt2gmKcym3BL84lPuN7zoklbS025JdFjSuG9Fd7l5NMAivQ0c3TbDXRObyQXg==";
+    hash = "sha512-k9dIS8bySdqOrlVQQGhabx8onlklIByi3hq0Ir7F96+Zalc3t/BPvtfUgO/AdxB2kYBD6rlS7wq2U/Do00/jOQ==";
   };
 }
