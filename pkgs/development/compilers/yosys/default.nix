@@ -150,6 +150,6 @@ in stdenv.mkDerivation rec {
     homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice emily ];
+    maintainers = with maintainers; [ shell thoughtpolice emily Luflosi ];
   };
 }
