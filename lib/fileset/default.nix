@@ -122,11 +122,10 @@ in {
       Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
       `root` has to be a directory.
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
-:::{.note}
-Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
-The only way to change which files get added to the store is by changing the `fileset` attribute.
-:::
+      :::{.note}
+      Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
+      The only way to change which files get added to the store is by changing the `fileset` attribute.
+      :::
     */
     root,
     /*
@@ -135,10 +134,9 @@ The only way to change which files get added to the store is by changing the `fi
       This argument can also be a path,
       which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
-:::{.note}
-If a directory does not recursively contain any file, it is omitted from the store path contents.
-:::
+      :::{.note}
+      If a directory does not recursively contain any file, it is omitted from the store path contents.
+      :::
 
     */
     fileset,
