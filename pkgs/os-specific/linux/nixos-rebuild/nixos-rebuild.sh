@@ -9,6 +9,8 @@ shopt -s inherit_errexit
 
 export PATH=@path@:$PATH
 
+source @nixos_apply_sh@
+
 showSyntax() {
     exec man nixos-rebuild
     exit 1
@@ -598,15 +600,14 @@ fi
 # current directory (for "build" and "test").
 if [ -z "$rollback" ]; then
     log "building the system configuration..."
-    if [[ "$action" = switch || "$action" = boot ]]; then
+    if [[ "$action" = test || "$action" = switch || "$action" = boot ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
             pathToConfig="$(nixFlakeBuild "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}")"
         fi
         copyToTarget "$pathToConfig"
-        targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
-    elif [[ "$action" = test || "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
+    elif [[ "$action" = build || "$action" = dry-build || "$action" = dry-activate ]]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
@@ -632,10 +633,10 @@ if [ -z "$rollback" ]; then
         copyToTarget "$pathToConfig"
     fi
 else # [ -n "$rollback" ]
-    if [[ "$action" = switch || "$action" = boot ]]; then
-        targetHostCmd nix-env --rollback -p "$profile"
-        pathToConfig="$profile"
-    elif [[ "$action" = test || "$action" = build ]]; then
+    if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
+        # Handled by nixos_apply_run_action
+        :
+    elif [[ "$action" = build ]]; then
         systemNumber=$(
             targetHostCmd nix-env -p "$profile" --list-generations |
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
@@ -653,57 +654,7 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    # Using systemd-run here to protect against PTY failures/network
-    # disconnections during rebuild.
-    # See: https://github.com/NixOS/nixpkgs/issues/39118
-    cmd=(
-        "systemd-run"
-        "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
-        "-E" "NIXOS_INSTALL_BOOTLOADER"
-        "--collect"
-        "--no-ask-password"
-        "--pty"
-        "--quiet"
-        "--same-dir"
-        "--service-type=exec"
-        "--unit=nixos-rebuild-switch-to-configuration"
-        "--wait"
-    )
-    # Check if we have a working systemd-run. In chroot environments we may have
-    # a non-working systemd, so we fallback to not using systemd-run.
-    # You may also want to explicitly set NIXOS_SWITCH_USE_DIRTY_ENV environment
-    # variable, since systemd-run runs inside an isolated environment and
-    # this may break some post-switch scripts. However keep in mind that this
-    # may be dangerous in remote access (e.g. SSH).
-    if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
-        log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
-        cmd=()
-    elif ! targetHostCmd "${cmd[@]}" true &>/dev/null; then
-        logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
-        cmd=(
-            "env"
-            "-i"
-            "LOCALE_ARCHIVE=$LOCALE_ARCHIVE"
-            "NIXOS_INSTALL_BOOTLOADER=$NIXOS_INSTALL_BOOTLOADER"
-        )
-    else
-        logVerbose "Using systemd-run to switch configuration."
-    fi
-    if [[ -z "$specialisation" ]]; then
-        cmd+=("$pathToConfig/bin/switch-to-configuration")
-    else
-        cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
-
-        if [[ ! -f "${cmd[-1]}" ]]; then
-            log "error: specialisation not found: $specialisation"
-            exit 1
-        fi
-    fi
-
-    if ! targetHostCmd "${cmd[@]}" "$action"; then
-        log "warning: error(s) occurred while switching to the new configuration"
-        exit 1
-    fi
+    nixos_apply_run_action
 fi
 
 
