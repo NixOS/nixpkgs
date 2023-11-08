@@ -125,6 +125,10 @@ self: super: {
   # https://github.com/haskell-crypto/cryptonite/issues/367
   cryptonite = dontCheck super.cryptonite;
 
+  # https://github.com/kazu-yamamoto/crypton/issues/25
+  crypton = dontCheck super.crypton;
+  crypton_0_33 = dontCheck super.crypton_0_33;
+
   # https://github.com/GaloisInc/SHA/issues/16
   SHA = dontCheck super.SHA;
 }
