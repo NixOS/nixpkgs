@@ -923,6 +923,8 @@ in
 
     boot.loader.timeout = 10;
 
+    system.build.efiDir = efiDir;
+
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
