@@ -7,6 +7,7 @@
 , openssl
 , installShellFiles
 , dbus
+, sudo
 , Libsystem
 , Cocoa
 , Kernel
@@ -29,20 +30,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.30.1";
+  version = "0.31.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zjXwiRo6Jw3K0iDf05f04MCtg1qKABah7x07CwvW0/0=";
+    hash = "sha256-VWWuC4T0pyTgqPNm0gNL1j3FShU5b8S157C1dKLon1g=";
   };
 
   goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-KDqzcJbI2f91wlrjVWgUmut4nhXA/rO9q5q3FaDWnfc=";
+    vendorHash = "sha256-OyZAWefSIiLQO0icxMIHWH3BKgNas8HIxLcse/qWKcU=";
   }).goModules;
 
   buildInputs = [
@@ -150,6 +151,9 @@ buildPythonApplication rec {
     bashInteractive
     zsh
     fish
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # integration tests need sudo
+    sudo
   ];
 
   # skip failing tests due to darwin sandbox
