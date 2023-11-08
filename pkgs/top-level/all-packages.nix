@@ -19556,7 +19556,7 @@ with pkgs;
   };
 
   listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
 
   lit = with python3Packages; toPythonApplication lit;
