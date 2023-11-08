@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname   = "abc-verifier";
-  version = "unstable-2023-09-13";
+  version = "unstable-2023-10-13";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo  = "abc";
-    rev   = "daad9ede0137dc58487a0abc126253e671a85b14";
-    hash  = "sha256-5XeFYvdqT08xduFUDC5yK1jEOV1fYzyQD7N9ZmG3mpQ=";
+    rev   = "896e5e7dedf9b9b1459fa019f1fa8aa8101fdf43";
+    hash  = "sha256-ou+E2lvDEOxXRXNygE/TyVi7quqk+CJHRI+HDI0xljE=";
   };
 
   nativeBuildInputs = [ cmake ];
