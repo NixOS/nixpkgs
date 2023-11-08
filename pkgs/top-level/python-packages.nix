@@ -1701,6 +1701,8 @@ self: super: with self; {
 
   bundlewrap-keepass = callPackage ../development/python-modules/bundlewrap-keepass { };
 
+  bundlewrap-pass = callPackage ../development/python-modules/bundlewrap-pass { };
+
   bundlewrap-teamvault = callPackage ../development/python-modules/bundlewrap-teamvault { };
 
   busypie = callPackage ../development/python-modules/busypie { };
