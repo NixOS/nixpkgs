@@ -1805,6 +1805,15 @@
       fingerprint = "4AC4 A28D 7208 FC6F 2B51  5EA9 D126 B13A B555 E16F";
     }];
   };
+  avimitin = {
+    email = "dev@avimit.in";
+    github = "avimitin";
+    githubId = 30021675;
+    name = "Jiongjia Lu";
+    keys = [{
+      fingerprint = "6EAE AA25 973B 8863 CDF7  7E25 FF78 83E3 BF68 35DD";
+    }];
+  };
   avitex = {
     email = "theavitex@gmail.com";
     github = "avitex";
