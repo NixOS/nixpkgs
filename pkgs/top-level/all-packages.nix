@@ -2992,8 +2992,6 @@ with pkgs;
 
   walk = callPackage ../applications/file-managers/walk { };
 
-  worker = callPackage ../applications/file-managers/worker { };
-
   xfe = callPackage ../applications/file-managers/xfe {
     fox = fox_1_6;
   };
