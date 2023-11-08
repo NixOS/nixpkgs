@@ -37,6 +37,27 @@ let
     )
   ;
 
+  signFile = file: let
+    name = baseNameOf file;
+    signDrv = pkgs.runCommand "${name}-signed" { nativeBuildInputs = [ pkgs.buildPackages.sbsigntool ]; } ''
+      mkdir -p $out
+      sbsign \
+        --cert ${config.secureboot.signingCertificate} \
+        --output $out/${name} \
+        ${optionalString (config.secureboot.privateKeyFile != null) "--key ${config.secureboot.privateKeyFile}"} \
+        ${file}
+    '';
+    verifyDrv = pkgs.runCommand "${name}-signed-verified" {
+      nativeBuildInputs = [ pkgs.buildPackages.sbsigntool ];
+      passthru.unsigned = file;
+    } ''
+      sbverify --cert ${config.secureboot.signingCertificate} ${signDrv}/${name}
+      mkdir -p $out
+      cp -L ${signDrv}/${name} $out/
+    '';
+  in "${verifyDrv}/${name}";
+  maybeSignFile = file: if config.secureboot.signingCertificate == null then file else signFile file;
+
   /**
    * Builds the default options.
    */
@@ -878,7 +899,7 @@ in
     # store on the CD.
     isoImage.contents =
       [
-        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+        { source = maybeSignFile (config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile);
           target = "/boot/" + config.system.boot.loader.kernelFile;
         }
         { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;
