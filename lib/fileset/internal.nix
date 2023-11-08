@@ -7,7 +7,6 @@ let
     isString
     pathExists
     readDir
-    seq
     split
     trace
     typeOf
@@ -17,7 +16,6 @@ let
     attrNames
     attrValues
     mapAttrs
-    setAttrByPath
     zipAttrsWith
     ;
 
@@ -28,7 +26,6 @@ let
   inherit (lib.lists)
     all
     commonPrefix
-    drop
     elemAt
     filter
     findFirst
