@@ -24,6 +24,13 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/${pname}/modules";
+
+  postInstall = ''
+    mkdir -p $out/share/${pname}
+    cp -r $src/${pname}/modules $out/share/${pname}/
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = numbat;
   };

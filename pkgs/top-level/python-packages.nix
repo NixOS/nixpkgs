@@ -3787,6 +3787,8 @@ self: super: with self; {
 
   farama-notifications = callPackage ../development/python-modules/farama-notifications { };
 
+  farm-haystack = callPackage ../development/python-modules/farm-haystack { };
+
   fastai = callPackage ../development/python-modules/fastai { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
@@ -12009,7 +12011,7 @@ self: super: with self; {
 
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
 
-  rank_bm25 = callPackage ../development/python-modules/rank_bm25 { };
+  rank-bm25 = callPackage ../development/python-modules/rank-bm25 { };
 
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
 
