@@ -6018,6 +6018,8 @@ self: super: with self; {
 
   lark = callPackage ../development/python-modules/lark { };
 
+  lark-parser = callPackage ../development/python-modules/lark-parser { };
+
   laspy = callPackage ../development/python-modules/laspy { };
 
   laszip = callPackage ../development/python-modules/laszip {
@@ -10321,6 +10323,8 @@ self: super: with self; {
   pylibconfig2 = callPackage ../development/python-modules/pylibconfig2 { };
 
   pylibdmtx = callPackage ../development/python-modules/pylibdmtx { };
+
+  pylibfst = callPackage ../development/python-modules/pylibfst { };
 
   pylibftdi = callPackage ../development/python-modules/pylibftdi {
     inherit (pkgs) libusb1;
@@ -15501,6 +15505,8 @@ self: super: with self; {
   wallbox = callPackage ../development/python-modules/wallbox { };
 
   walrus = callPackage ../development/python-modules/walrus { };
+
+  wal-lang = callPackage ../development/python-modules/wal-lang { };
 
   wand = callPackage ../development/python-modules/wand { };
 
