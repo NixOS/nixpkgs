@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://physics.princeton.edu/pulsar/k1jt/wsjtx.html";
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lasandell numinit ];
+    maintainers = with maintainers; [ lasandell numinit melling ];
   };
 }
