@@ -20,6 +20,7 @@
 , libsoup_3
 , libusb1
 , lz4
+, makeWrapper
 , meson
 , mesonEmulatorHook
 , ninja
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gtk-doc
+    makeWrapper
     meson
     ninja
     perl
@@ -94,14 +96,11 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-  ];
-
   buildInputs = [
     cyrus_sasl
     libepoxy
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gtk3
     json-glib
     libcacard
@@ -150,6 +149,10 @@ stdenv.mkDerivation rec {
       "# meson.add_install_script('../build-aux/setcap-or-suid',"
 
     patchShebangs subprojects/keycodemapdb/tools/keymap-gen
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/spicy --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
   meta = with lib; {
