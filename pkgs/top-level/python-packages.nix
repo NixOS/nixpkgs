@@ -4500,6 +4500,8 @@ self: super: with self; {
 
   glom = callPackage ../development/python-modules/glom { };
 
+  glueviz = callPackage ../development/python-modules/glueviz { };
+
   glymur = callPackage ../development/python-modules/glymur { };
 
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
