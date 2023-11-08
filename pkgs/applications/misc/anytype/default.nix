@@ -34,7 +34,7 @@ appimageTools.wrapType2 {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
