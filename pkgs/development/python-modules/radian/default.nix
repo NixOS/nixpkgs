@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.7";
+  version = "0.6.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MEstbQj1dOcrukgDvMwL330L9INEZcIupebrSYMOrZk=";
+    hash = "sha256-zI6oUHO4rY/BbbHhvzSNIKCpTDRm0cK46rIKN/ISgY0=";
   };
 
   postPatch = ''

@@ -1,10 +1,10 @@
 # darwin.linux-builder {#sec-darwin-builder}
 
-`darwin.linux-builder` provides a way to bootstrap a Linux builder on a macOS machine.
+`darwin.linux-builder` provides a way to bootstrap a Linux remote builder on a macOS machine.
 
 This requires macOS version 12.4 or later.
 
-The builder runs on host port 31022 by default.
+The remote builder runs on host port 31022 by default.
 You can change it by overriding `virtualisation.darwin-builder.hostPort`.
 See the [example](#sec-darwin-builder-example-flake).
 
@@ -15,7 +15,7 @@ words, your `/etc/nix/nix.conf` should have something like:
 extra-trusted-users = <your username goes here>
 ```
 
-To launch the builder, run the following flake:
+To launch the remote builder, run the following flake:
 
 ```ShellSession
 $ nix run nixpkgs#darwin.linux-builder
@@ -57,7 +57,7 @@ builders = ssh-ng://builder@linux-builder ${ARCH}-linux /etc/nix/builder_ed25519
 builders-use-substitutes = true
 ```
 
-To allow Nix to connect to a builder not running on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
+To allow Nix to connect to a remote builder not running on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
 
 ```
 Host linux-builder
@@ -130,11 +130,11 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 }
 ```
 
-## Reconfiguring the builder {#sec-darwin-builder-reconfiguring}
+## Reconfiguring the remote builder {#sec-darwin-builder-reconfiguring}
 
-Initially you should not change the builder configuration else you will not be
-able to use the binary cache. However, after you have the builder running locally
-you may use it to build a modified builder with additional storage or memory.
+Initially you should not change the remote builder configuration else you will not be
+able to use the binary cache. However, after you have the remote builder running locally
+you may use it to build a modified remote builder with additional storage or memory.
 
 To do this, you just need to set the `virtualisation.darwin-builder.*` parameters as
 in the example below and rebuild.

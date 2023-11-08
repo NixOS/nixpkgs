@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "wiremock";
-  version = "2.35.0";
+  version = "3.3.1";
+
   src = fetchurl {
-    url = "mirror://maven/com/github/tomakehurst/wiremock-jre8-standalone/${version}/wiremock-jre8-standalone-${version}.jar";
-    hash = "sha256-rhVq4oEuPPpHDEftBzEA707HeSc3Kk4gPw471THz61c=";
+    url = "mirror://maven/org/wiremock/wiremock-standalone/${version}/wiremock-standalone-${version}.jar";
+    hash = "sha256-VgUJeQJeHNmmX1cS2s5hTljQZ8fIYr9uHYWMXjZjJzY=";
   };
 
   dontUnpack = true;
@@ -20,10 +21,17 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/wiremock/wiremock.jar"
   '';
 
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/wiremock/wiremock.git";
+    ignoredVersions = "(alpha|beta|rc).*";
+  };
+
   meta = {
     description = "A flexible tool for building mock APIs";
     homepage = "https://wiremock.org/";
-    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    changelog = "https://github.com/wiremock/wiremock/releases/tag/${version}";
+    maintainers = with lib.maintainers; [ bobvanderlinden anthonyroussel ];
+    mainProgram = "wiremock";
     platforms = jre.meta.platforms;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;

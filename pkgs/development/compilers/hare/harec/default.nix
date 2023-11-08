@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://harelang.org/";
     description = "Bootstrapping Hare compiler written in C for POSIX systems";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ onemoresuza ];
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/
     # UPDATE: https://github.com/hshq/harelang provides a MacOS port

@@ -46,7 +46,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    ${python.pythonForBuild.interpreter} -m bash_kernel.install --prefix $out
+    ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out
   '';
 
   meta = with lib; {
