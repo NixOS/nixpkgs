@@ -224,23 +224,17 @@ withFileMonitor() {
     fi
 }
 
-# Check whether a file set includes/excludes declared paths as expected, usage:
+
+# Create the tree structure declared in the tree variable, usage:
 #
 # tree=(
-#   [a/b] =1  # Declare that file       a/b should exist and expect it to be included in the store path
-#   [c/a] =   # Declare that file       c/a should exist and expect it to be excluded in the store path
-#   [c/d/]=   # Declare that directory c/d/ should exist and expect it to be excluded in the store path
+#   [a/b] =   # Declare that file       a/b should exist
+#   [c/a] =   # Declare that file       c/a should exist
+#   [c/d/]=   # Declare that directory c/d/ should exist
 # )
-# checkFileset './a' # Pass the fileset as the argument
+# createTree
 declare -A tree
-checkFileset() {
-    # New subshell so that we can have a separate trap handler, see `trap` below
-    local fileset=$1
-
-    # Process the tree into separate arrays for included paths, excluded paths and excluded files.
-    local -a included=()
-    local -a excluded=()
-    local -a excludedFiles=()
+createTree() {
     # Track which paths need to be created
     local -a dirsToCreate=()
     local -a filesToCreate=()
@@ -248,24 +242,9 @@ checkFileset() {
         # If keys end with a `/` we treat them as directories, otherwise files
         if [[ "$p" =~ /$ ]]; then
             dirsToCreate+=("$p")
-            isFile=
         else
             filesToCreate+=("$p")
-            isFile=1
         fi
-        case "${tree[$p]}" in
-            1)
-                included+=("$p")
-                ;;
-            0)
-                excluded+=("$p")
-                if [[ -n "$isFile" ]]; then
-                    excludedFiles+=("$p")
-                fi
-                ;;
-            *)
-                die "Unsupported tree value: ${tree[$p]}"
-        esac
     done
 
     # Create all the necessary paths.
@@ -280,6 +259,43 @@ checkFileset() {
         mkdir -p "${parentsToCreate[@]}"
         touch "${filesToCreate[@]}"
     fi
+}
+
+# Check whether a file set includes/excludes declared paths as expected, usage:
+#
+# tree=(
+#   [a/b] =1  # Declare that file       a/b should exist and expect it to be included in the store path
+#   [c/a] =   # Declare that file       c/a should exist and expect it to be excluded in the store path
+#   [c/d/]=   # Declare that directory c/d/ should exist and expect it to be excluded in the store path
+# )
+# checkFileset './a' # Pass the fileset as the argument
+checkFileset() {
+    # New subshell so that we can have a separate trap handler, see `trap` below
+    local fileset=$1
+
+    # Create the tree
+    createTree
+
+    # Process the tree into separate arrays for included paths, excluded paths and excluded files.
+    local -a included=()
+    local -a excluded=()
+    local -a excludedFiles=()
+    for p in "${!tree[@]}"; do
+        case "${tree[$p]}" in
+            1)
+                included+=("$p")
+                ;;
+            0)
+                excluded+=("$p")
+                # If keys end with a `/` we treat them as directories, otherwise files
+                if [[ ! "$p" =~ /$ ]]; then
+                    excludedFiles+=("$p")
+                fi
+                ;;
+            *)
+                die "Unsupported tree value: ${tree[$p]}"
+        esac
+    done
 
     expression="toSource { root = ./.; fileset = $fileset; }"
 
