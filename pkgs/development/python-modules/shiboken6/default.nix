@@ -61,7 +61,7 @@ stdenv'.mkDerivation rec {
 
   postInstall = ''
     cd ../../..
-    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=shiboken6
+    ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=shiboken6
     cp -r shiboken6.egg-info $out/${python.sitePackages}/
   '';
 
