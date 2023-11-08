@@ -25,19 +25,26 @@
 , enableGL ? true
 , freeglut
 , libGLU
+, enableOcr ? false
+, leptonica
+, tesseract
+, enableCxx ? false
+, python3
+, enablePython ? false
+, which
+, swig
 , xcbuild
 , gitUpdater
 
 # for passthru.tests
 , cups-filters
-, python3
 , zathura
+, mupdf
 }:
-let
 
-  # OpenJPEG version is hardcoded in package source
-  openJpegVersion = with stdenv;
-    lib.versions.majorMinor (lib.getVersion openjpeg);
+assert enablePython -> enableCxx;
+
+let
 
   freeglut-mupdf = freeglut.overrideAttrs (old: rec {
     pname = "freeglut-mupdf";
@@ -52,21 +59,31 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.23.0";
+  version = "1.23.5";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-3kFAaS5pMULDEeAwrBVuOO4XXXq2wb4QxcmuljhGFk4=";
+    sha256 = "sha256-blZ5zfqu+cfoniljlSIM4sEz7T3K1RpHhmczbG6uxwY=";
   };
 
   patches = [ ./0001-Use-command-v-in-favor-of-which.patch
               ./0002-Add-Darwin-deps.patch
+              ./0003-Fix-cpp-build.patch
             ];
 
   postPatch = ''
-    sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
     substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
+
+    patchShebangs scripts/mupdfwrap.py
+
+    # slip in makeFlags when building bindings
+    sed -i -e 's/^\( *make_args *=\)/\1 """ $(echo ''${makeFlagsArray[@]@Q})"""/' scripts/wrap/__main__.py
+
+    # fix libclang unnamed struct format
+    for wrapper in ./scripts/wrap/{cpp,state}.py; do
+      substituteInPlace "$wrapper" --replace 'struct (unnamed' '(unnamed struct'
+    done
   '';
 
   makeFlags = [
@@ -75,10 +92,13 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIBS=yes"
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ] ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
-    ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
+    ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ]
+    ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ];
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
+    ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
+    ++ lib.optionals (enablePython) [ which swig ]
     ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
@@ -86,17 +106,24 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
     ++ lib.optionals enableCurl [ curl openssl ]
     ++ lib.optionals enableGL (
-    if stdenv.isDarwin then
-      with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
-    else
-      [ freeglut-mupdf libGLU ]
-  )
+      if stdenv.isDarwin then
+        with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
+      else
+        [ freeglut-mupdf libGLU ]
+    )
+    ++ lib.optionals enableOcr [ leptonica tesseract ]
   ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
     # Don't remove mujs because upstream version is incompatible
     rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
+  '';
+
+  postBuild = lib.optionalString (enableCxx || enablePython) ''
+    for dir in build/*; do
+      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString (enableCxx) "01"}${lib.optionalString (enablePython) "23"}
+    done
   '';
 
   desktopItems = [
@@ -145,7 +172,16 @@ stdenv.mkDerivation rec {
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
   '' else lib.optionalString (enableX11) ''
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
-  '');
+  '') + (lib.optionalString (enableCxx) ''
+    cp platform/c++/include/mupdf/*.h $out/include/mupdf
+    cp build/*/libmupdfcpp.so $out/lib
+  '') + (lib.optionalString (enablePython) (''
+    mkdir -p $out/${python3.sitePackages}/mupdf
+    cp build/*/_mupdf.so $out/${python3.sitePackages}
+    cp build/*/mupdf.py $out/${python3.sitePackages}/mupdf/__init__.py
+  '' + lib.optionalString (stdenv.isDarwin) ''
+    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/_mupdf.so
+  ''));
 
   enableParallelBuilding = true;
 
@@ -153,6 +189,7 @@ stdenv.mkDerivation rec {
     tests = {
       inherit cups-filters zathura;
       inherit (python3.pkgs) pikepdf pymupdf;
+      mupdf-all = mupdf.override { enableCurl = true; enableGL = true; enableOcr = true; enableCxx = true; enablePython = true; };
     };
 
     updateScript = gitUpdater {
@@ -166,7 +203,7 @@ stdenv.mkDerivation rec {
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     changelog = "https://git.ghostscript.com/?p=mupdf.git;a=blob_plain;f=CHANGES;hb=${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ vrthra fpletz ];
+    maintainers = with maintainers; [ vrthra fpletz lilyinstarlight ];
     platforms = platforms.unix;
     mainProgram = "mupdf";
   };
