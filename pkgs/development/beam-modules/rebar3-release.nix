@@ -84,6 +84,7 @@ let
         runHook postInstall
       '';
 
+      # Release will generate a binary which will cause a read null byte failure, see #261354
       postInstall = lib.optionalString (releaseType == "escript") ''
         for dir in $out/rel/*/erts-*; do
           echo "ERTS found in $dir - removing references to erlang to reduce closure size"
