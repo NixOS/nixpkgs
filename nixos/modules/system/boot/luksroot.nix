@@ -149,6 +149,26 @@ let
            + optionalString (dev.header != null) " --header=${dev.header}";
     cschange = "cryptsetup luksChangeKey ${dev.device} ${optionalString (dev.header != null) "--header=${dev.header}"}";
     fido2luksCredentials = dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
+
+    attemptKey = key: let
+      keyArgs = optionalString (key != null) "--key-file=${key.file}"
+        + optionalString (key.fileSize != null) " --keyfile-size=${toString key.fileSize}"
+        + optionalString (key.fileOffset != null) " --keyfile-offset=${toString key.fileOffset}";
+    in ''
+      if wait_target "key file" ${key.file}; then
+          ${csopen} ${keyArgs}
+          cs_status=$?
+          if [ $cs_status -ne 0 ]; then
+            echo "Key File ${key.file} failed!"
+          fi
+      else
+        echo "${key.file} is unavailable"
+      fi
+    '';
+    # Attempt keys with respect to their priority
+    sortedKeys = sortProperties (mapAttrsToList (k: v: v) dev.keys);
+    keyAttempts = concatStringsSep "\n" (map attemptKey sortedKeys);
+
   in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
@@ -221,33 +241,13 @@ let
 
     # LUKS
     open_normally() {
-        ${if (dev.keyFile != null) then ''
-        if wait_target "key file" ${dev.keyFile}; then
-            ${csopen} --key-file=${dev.keyFile} \
-              ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
-              ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
-            cs_status=$?
-            if [ $cs_status -ne 0 ]; then
-              echo "Key File ${dev.keyFile} failed!"
-              if ! try_empty_passphrase; then
-                ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-                echo " - failing back to interactive password prompt"
-                do_open_passphrase
-              fi
-            fi
-        else
-            # If the key file never shows up we should also try the empty passphrase
-            if ! try_empty_passphrase; then
-               ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-               echo " - failing back to interactive password prompt"
-               do_open_passphrase
-            fi
+        '' + keyAttempts + ''
+        if ! try_empty_passphrase; then
+            ${if dev.fallbackToPassword then
+                 ''echo "Falling back to passphrase"''
+              else ''die "Failed to unlock ${dev.name}"''}
+            do_open_passphrase
         fi
-        '' else ''
-           if ! try_empty_passphrase; then
-              do_open_passphrase
-           fi
-        ''}
     }
 
     ${optionalString (luks.yubikeySupport && (dev.yubikey != null)) ''
@@ -620,22 +620,11 @@ in
             '';
           };
 
-          keyFile = mkOption {
-            default = null;
-            example = "/dev/sdb1";
-            type = types.nullOr types.str;
-            description = lib.mdDoc ''
-              The name of the file (can be a raw device or a partition) that
-              should be used as the decryption key for the encrypted device. If
-              not specified, you will be prompted for a passphrase instead.
-            '';
-          };
-
           tryEmptyPassphrase = mkOption {
             default = false;
             type = types.bool;
             description = lib.mdDoc ''
-              If keyFile fails then try an empty passphrase first before
+              If the key file does not exit then try an empty passphrase first before
               prompting for password.
             '';
           };
@@ -650,30 +639,25 @@ in
             '';
           };
 
-          keyFileSize = mkOption {
-            default = null;
-            example = 4096;
-            type = types.nullOr types.int;
-            description = lib.mdDoc ''
-              The size of the key file. Use this if only the beginning of the
-              key file should be used as a key (often the case if a raw device
-              or partition is used as key file). If not specified, the whole
-              `keyFile` will be used decryption, instead of just
-              the first `keyFileSize` bytes.
+          keys = mkOption {
+            type = types.attrsOf (types.submodule (import ./luks/keys.nix {
+              inherit config lib;
+            }));
+            default = { };
+            example = literalExpression ''
+              {
+                default = {
+                  file = "/dev/sdb1";
+                  size = 4096;
+                  offset = null;
+                  priority = 10;
+                };
+                fallback = {
+                  file = "/dev/sdb2";
+                };
+              };
             '';
-          };
-
-          keyFileOffset = mkOption {
-            default = null;
-            example = 4096;
-            type = types.nullOr types.int;
-            description = lib.mdDoc ''
-              The offset of the key file. Use this in combination with
-              `keyFileSize` to use part of a file as key file
-              (often the case if a raw device or partition is used as a key file).
-              If not specified, the key begins at the first byte of
-              `keyFile`.
-            '';
+            description = lib.mdDoc "Behavior for LUKS key files";
           };
 
           # FIXME: get rid of this option.
