@@ -179,7 +179,7 @@ rec {
           ${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} (${toString value}) does not exist.''
+        ${context} (${toString value}) is a path that does not exist.''
     else
       _singleton value;
 
@@ -208,9 +208,9 @@ rec {
     if firstWithBase != null && differentIndex != null then
       throw ''
         ${functionContext}: Filesystem roots are not the same:
-            ${(head list).context}: root "${toString firstBaseRoot}"
-            ${(elemAt list differentIndex).context}: root "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
-            Different roots are not supported.''
+            ${(head list).context}: Filesystem root is "${toString firstBaseRoot}"
+            ${(elemAt list differentIndex).context}: Filesystem root is "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
+            Different filesystem roots are not supported.''
     else
       filesets;
 

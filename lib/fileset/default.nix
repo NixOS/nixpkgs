@@ -154,7 +154,7 @@ in {
     if ! isPath root then
       if isStringLike root then
         throw ''
-          lib.fileset.toSource: `root` ("${toString root}") is a string-like value, but it should be a path instead.
+          lib.fileset.toSource: `root` (${toString root}) is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
         throw ''
@@ -163,13 +163,13 @@ in {
     # See also ../path/README.md
     else if ! fileset._internalIsEmptyWithoutBase && rootFilesystemRoot != filesetFilesystemRoot then
       throw ''
-        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` ("${toString root}"):
-            `root`: root "${toString rootFilesystemRoot}"
-            `fileset`: root "${toString filesetFilesystemRoot}"
-            Different roots are not supported.''
+        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` (${toString root}):
+            `root`: Filesystem root is "${toString rootFilesystemRoot}"
+            `fileset`: Filesystem root is "${toString filesetFilesystemRoot}"
+            Different filesystem roots are not supported.''
     else if ! pathExists root then
       throw ''
-        lib.fileset.toSource: `root` (${toString root}) does not exist.''
+        lib.fileset.toSource: `root` (${toString root}) is a path that does not exist.''
     else if pathType root != "directory" then
       throw ''
         lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
@@ -221,11 +221,11 @@ in {
     _unionMany
       (_coerceMany "lib.fileset.union" [
         {
-          context = "first argument";
+          context = "First argument";
           value = fileset1;
         }
         {
-          context = "second argument";
+          context = "Second argument";
           value = fileset2;
         }
       ]);
@@ -267,12 +267,13 @@ in {
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
     if ! isList filesets then
-      throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf filesets}."
+      throw ''
+        lib.fileset.unions: Argument is of type ${typeOf filesets}, but it should be a list instead.''
     else
       pipe filesets [
         # Annotate the elements with context, used by _coerceMany for better errors
         (imap0 (i: el: {
-          context = "element ${toString i}";
+          context = "Element ${toString i}";
           value = el;
         }))
         (_coerceMany "lib.fileset.unions")
@@ -323,10 +324,11 @@ in {
     # The file set to filter based on the predicate function
     fileset:
     if ! isFunction predicate then
-      throw "lib.fileset.fileFilter: Expected the first argument to be a function, but it's a ${typeOf predicate} instead."
+      throw ''
+        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function.''
     else
       _fileFilter predicate
-        (_coerce "lib.fileset.fileFilter: second argument" fileset);
+        (_coerce "lib.fileset.fileFilter: Second argument" fileset);
 
   /*
     The file set containing all files that are in both of two given file sets.
@@ -354,11 +356,11 @@ in {
     let
       filesets = _coerceMany "lib.fileset.intersection" [
         {
-          context = "first argument";
+          context = "First argument";
           value = fileset1;
         }
         {
-          context = "second argument";
+          context = "Second argument";
           value = fileset2;
         }
       ];
@@ -406,11 +408,11 @@ in {
     let
       filesets = _coerceMany "lib.fileset.difference" [
         {
-          context = "first argument (positive set)";
+          context = "First argument (positive set)";
           value = positive;
         }
         {
-          context = "second argument (negative set)";
+          context = "Second argument (negative set)";
           value = negative;
         }
       ];
@@ -454,7 +456,7 @@ in {
     let
       # "fileset" would be a better name, but that would clash with the argument name,
       # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.trace: argument" fileset;
+      actualFileset = _coerce "lib.fileset.trace: Argument" fileset;
     in
     seq
       (_printFileset actualFileset)
@@ -501,7 +503,7 @@ in {
     let
       # "fileset" would be a better name, but that would clash with the argument name,
       # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.traceVal: argument" fileset;
+      actualFileset = _coerce "lib.fileset.traceVal: Argument" fileset;
     in
     seq
       (_printFileset actualFileset)
