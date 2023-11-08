@@ -153,7 +153,12 @@ If a directory does not recursively contain any file, it is omitted from the sto
       sourceFilter = _toSourceFilter fileset;
     in
     if ! isPath root then
-      if isStringLike root then
+      if root ? _isLibCleanSourceWith then
+        throw ''
+          lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
+              To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+              Note that this only works for sources created from paths.''
+      else if isStringLike root then
         throw ''
           lib.fileset.toSource: `root` ("${toString root}") is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''

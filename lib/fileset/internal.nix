@@ -170,7 +170,12 @@ rec {
       else
         value
     else if ! isPath value then
-      if isStringLike value then
+      if value ? _isLibCleanSourceWith then
+        throw ''
+          ${context} is a `lib.sources`-based value, but it should be a file set or a path instead.
+              To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+              Note that this only works for sources created from paths.''
+      else if isStringLike value then
         throw ''
           ${context} ("${toString value}") is a string-like value, but it should be a file set or a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''

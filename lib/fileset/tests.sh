@@ -339,6 +339,10 @@ checkFileset() {
 expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \("/nix/store/foobar"\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
+expectFailure 'toSource { root = cleanSourceWith { src = ./.; }; fileset = ./.; }' 'lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
+\s*To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+\s*Note that this only works for sources created from paths.'
+
 # Only paths are accepted as `root`
 expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `root` is of type int, but it should be a path instead.'
 
@@ -376,6 +380,9 @@ rm -rf *
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
 expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a file set or a path instead.
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+expectFailure 'toSource { root = ./.; fileset = cleanSourceWith { src = ./.; }; }' 'lib.fileset.toSource: `fileset` is a `lib.sources`-based value, but it should be a file set or a path instead.
+\s*To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+\s*Note that this only works for sources created from paths.'
 
 # Path coercion errors for non-existent paths
 expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
