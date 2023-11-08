@@ -2,16 +2,16 @@
 
 buildGo121Module rec {
   pname = "netdata-go-plugins";
-  version = "0.56.3";
+  version = "0.56.4";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "go.d.plugin";
     rev = "v${version}";
-    hash = "sha256-T7UB7qrcMTqIFRzBxbXmSqtcEFgZd0/z4EYuH/ydVi4=";
+    hash = "sha256-7dR1TL2Ycb+7yHoFklrKdXXxIG4Tx+fAG5ScAAtbVRw=";
   };
 
-  vendorHash = "sha256-N0p03urHC3d17VQ4TIs7mAemW9ZSpQw20EwwD6lSLLc=";
+  vendorHash = "sha256-Faa+7tT3sPxlT6eQEmFotOJnt9b49ffDPEHt5V7tQa0=";
 
   doCheck = false;
 
