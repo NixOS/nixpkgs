@@ -26,8 +26,10 @@ let
   };
   assertCondition = true;
 in
-lib.extendDerivation
-  assertCondition
-  passthruExtra
+lib.applyToOverridable
+  (lib.extendDerivation
+    assertCondition
+    passthruExtra
+  )
   cudaStdenv
 
