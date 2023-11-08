@@ -364,8 +364,9 @@ rec {
       checkPhase =
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
+        # also shellcheck has broken dependencies on armv7l (see https://github.com/NixOS/nixpkgs/pull/266213)
         let
-          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
+          shellcheckSupported = !stdenv.isAarch32 && lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
           excludeOption = lib.optionalString (excludeShellChecks != [  ]) "--exclude '${lib.concatStringsSep "," excludeShellChecks}'";
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
