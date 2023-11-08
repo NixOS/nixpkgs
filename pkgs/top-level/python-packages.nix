@@ -3795,6 +3795,8 @@ self: super: with self; {
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
+  fast-histogram = callPackage ../development/python-modules/fast-histogram { };
+
   fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastbencode = callPackage ../development/python-modules/fastbencode { };
