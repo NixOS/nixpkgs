@@ -229,7 +229,7 @@ in {
       name = "python${python.pythonVersion}-sphinx-hook";
       propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ];
       substitutions = {
-        sphinxBuild = "${pythonForBuild.pkgs.sphinx}/bin/sphinx-build";
+        sphinxBuild = "${pythonOnBuildForHost.pkgs.sphinx}/bin/sphinx-build";
       };
     } ./sphinx-hook.sh) {};
 }
