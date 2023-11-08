@@ -18301,6 +18301,8 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
+  automatix = python3Packages.toPythonApplication python3Packages.automatix;
+
   ansible = ansible_2_15;
   ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
