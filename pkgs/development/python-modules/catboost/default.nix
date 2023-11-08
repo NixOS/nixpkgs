@@ -38,7 +38,7 @@ buildPythonPackage {
     runHook preBuild
 
     # these arguments must set after bdist_wheel
-    ${python.pythonForBuild.interpreter} setup.py bdist_wheel --no-widget --prebuilt-extensions-build-root-dir=${lib.getDev catboost}
+    ${python.pythonOnBuildForHost.interpreter} setup.py bdist_wheel --no-widget --prebuilt-extensions-build-root-dir=${lib.getDev catboost}
 
     runHook postBuild
   '';

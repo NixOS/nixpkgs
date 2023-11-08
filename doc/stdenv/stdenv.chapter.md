@@ -528,7 +528,7 @@ If the returned array contains exactly one object (e.g. `[{}]`), all values are 
 ```
 :::
 
-### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
+### Fixed-point arguments of `mkDerivation` {#mkderivation-recursive-attributes}
 
 If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
 

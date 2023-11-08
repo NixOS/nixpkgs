@@ -61,7 +61,7 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs make-disk-image
-/doc/builders/images/makediskimage.section.md  @raitobezarius
+/doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
@@ -219,7 +219,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
 # Web servers
-/doc/builders/packages/nginx.section.md @raitobezarius
+/doc/packages/nginx.section.md @raitobezarius
 /pkgs/servers/http/nginx/ @raitobezarius
 /nixos/modules/services/web-servers/nginx/ @raitobezarius
 
@@ -272,7 +272,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Docker tools
 /pkgs/build-support/docker                   @roberth
 /nixos/tests/docker-tools*                   @roberth
-/doc/builders/images/dockertools.section.md  @roberth
+/doc/build-helpers/images/dockertools.section.md  @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood

@@ -24,13 +24,13 @@ let
   };
 
   pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
-    interpreter = pkg.pythonForBuild.interpreter;
+    interpreter = pkg.pythonOnBuildForHost.interpreter;
     path = "plugins/python";
     inputs = [ pkg ncurses ];
     install = ''
       install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-      ${pkg.pythonForBuild.executable} -m compileall $out/${pkg.sitePackages}/
-      ${pkg.pythonForBuild.executable} -O -m compileall $out/${pkg.sitePackages}/
+      ${pkg.pythonOnBuildForHost.executable} -m compileall $out/${pkg.sitePackages}/
+      ${pkg.pythonOnBuildForHost.executable} -O -m compileall $out/${pkg.sitePackages}/
     '';
   };
 

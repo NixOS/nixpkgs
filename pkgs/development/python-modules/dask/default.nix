@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.10.0";
+  version = "2023.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-u7KuZT0uH833zqLNBfqRLU7EcMrUmXgszevYA3Z7G1Y=";
+    hash = "sha256-asD5oLd7XcZ8ZFSrsSCAKgZ3Gsqs6T77nb1qesamgUI=";
   };
 
   nativeBuildInputs = [
@@ -114,7 +114,7 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
     substituteInPlace pyproject.toml \
-      --replace ', "versioneer[toml]==0.28"' "" \
+      --replace ', "versioneer[toml]==0.29"' "" \
       --replace " --durations=10" "" \
       --replace " --cov-config=pyproject.toml" "" \
       --replace "\"-v" "\" "

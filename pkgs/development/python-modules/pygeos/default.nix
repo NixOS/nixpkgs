@@ -30,8 +30,8 @@ buildPythonPackage rec {
   # for the package to function. Therefore override of buildPhase was
   # necessary.
   buildPhase = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext --inplace
-    ${python.pythonForBuild.interpreter} setup.py bdist_wheel
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
+    ${python.pythonOnBuildForHost.interpreter} setup.py bdist_wheel
   '';
 
   nativeCheckInputs = [

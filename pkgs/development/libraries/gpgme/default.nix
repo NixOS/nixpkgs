@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ] ++ lib.optionals pythonSupport [
-    python3.pythonForBuild
+    python3.pythonOnBuildForHost
     ncurses
     swig2
     which

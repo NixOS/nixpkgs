@@ -19657,8 +19657,6 @@ with pkgs;
     '';
   };
 
-  mommy = callPackage ../tools/misc/mommy { };
-
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
@@ -30987,6 +30985,8 @@ with pkgs;
 
   cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
 
+  cosmic-edit = callPackage ../applications/editors/cosmic-edit { };
+
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim { };
@@ -34898,7 +34898,9 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix { };
+  qemu-utils = qemu.override {
+    toolsOnly = true;
+  };
 
   canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
 
@@ -37344,7 +37346,7 @@ with pkgs;
 
   heroic-unwrapped = callPackage ../games/heroic {
     # Match the version used by the upstream package.
-    electron = electron_24;
+    electron = electron_27;
   };
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };

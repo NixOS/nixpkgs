@@ -6,14 +6,14 @@
 
 callPackage ./generic.nix rec {
   pname = "summoning-pixel-dungeon";
-  version = "1.2.5";
+  version = "1.2.5a";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Summoning-Pixel-Dungeon";
     # The GH release is named "$version-$hash", but it's actually a mutable "_latest" tag
-    rev = "fc63a89a0f9bdf9cb86a750dfec65bc56d9fddcb";
-    hash = "sha256-n1YR7jYJ8TQFe654aERgmOHRgaPZ82eXxu0K12/5MGw=";
+    rev = "89ff59e7f42abcc88b7a1f24391f95ddc30f9d29";
+    hash = "sha256-VQcWkbGe/0qyt3M5WWgTxczwC5mE3lRHbYidOwRoukI=";
   };
 
   patches = [(substitute {

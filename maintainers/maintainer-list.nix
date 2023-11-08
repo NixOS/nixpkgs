@@ -540,6 +540,12 @@
     githubId = 732652;
     name = "Andreas Herrmann";
   };
+  ahoneybun = {
+    email = "aaron@system76.com";
+    github = "ahoneybun";
+    githubId = 4884946;
+    name = "Aaron Honeycutt";
+  };
   ahrzb = {
     email = "ahrzb5@gmail.com";
     github = "ahrzb";
@@ -19071,6 +19077,12 @@
     keys = [{
       fingerprint = "640B EDDE 9734 310A BFA3  B257 52ED AE6A 3995 AFAB";
     }];
+  };
+  whiteley = {
+    email = "mattwhiteley@gmail.com";
+    github = "whiteley";
+    githubId = 2215;
+    name = "Matt Whiteley";
   };
   WhittlesJr = {
     email = "alex.joseph.whitt@gmail.com";
