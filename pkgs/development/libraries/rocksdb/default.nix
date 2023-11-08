@@ -7,6 +7,7 @@
 , bzip2
 , lz4
 , snappy
+, gflags
 , zlib
 , zstd
 , windows
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
+  propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd gflags ];
 
   buildInputs = lib.optional enableJemalloc jemalloc
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=${if enableJemalloc then "1" else "0"}"
     "-DWITH_JNI=0"
-    "-DWITH_BENCHMARK_TOOLS=0"
+    "-DWITH_BENCHMARK_TOOLS=1"
     "-DWITH_TESTS=1"
     "-DWITH_TOOLS=0"
     "-DWITH_CORE_TOOLS=1"
@@ -76,10 +77,11 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $tools/bin
     cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
+    cp db_bench${stdenv.hostPlatform.extensions.executable} $tools/bin/
   '' + lib.optionalString stdenv.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major version}.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.isLinux && enableShared) ''
-    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
+    ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib:${lib.makeLibraryPath [bzip2 lz4 snappy zlib zstd]} {}
   '';
 
   # Old version doesn't ship the .pc file, new version puts wrong paths in there.
