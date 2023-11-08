@@ -53,6 +53,7 @@ stdenv.mkDerivation
   patches = [
     ./lxd_socket_path.patch
     ./cmake_no_fetch.patch
+    ./cmake_warning.patch
   ];
 
   postPatch = ''
