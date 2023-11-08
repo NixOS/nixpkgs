@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, nix-update-script
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -52,6 +53,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --cmd owmods \
       dist/cli/completions/owmods.{bash,fish,zsh}
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "CLI version of the mod manager for Outer Wilds Mod Loader";
