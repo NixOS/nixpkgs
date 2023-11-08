@@ -1,15 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, jsonconversion
-, six
 , pytestCheckHook
 , pythonOlder
+, python3Packages
 }:
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.10.0";
+  version = "0.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     repo = "ion-python";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-pCm3jd/dVqO/uIvT5N/w5yoUWU6ni62Pl2A862e+qSk=";
+    hash = "sha256-YUShPcD0KSayhn52jn2qUzjyAH2M1glFKCrd/faztGY=";
   };
 
   postPatch = ''
@@ -28,9 +27,17 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
+    cbor
+    cbor2
+    docopt
     jsonconversion
+    protobuf
+    python-rapidjson
+    simplejson
     six
+    tabulate
+    ujson
   ];
 
   nativeCheckInputs = [
