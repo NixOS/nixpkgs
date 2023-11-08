@@ -188,7 +188,9 @@ in {
         name = "setuptools-rust-setup-hook";
         propagatedBuildInputs = [ setuptools-rust ];
         substitutions = {
+          pyIncludeDir = "${python}/include/${python.libPrefix}";
           pyLibDir = "${python}/lib/${python.libPrefix}";
+          pyBin = python.interpreter;
           cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
           cargoLinkerVar = lib.toUpper (
               builtins.replaceStrings ["-"] ["_"] (
