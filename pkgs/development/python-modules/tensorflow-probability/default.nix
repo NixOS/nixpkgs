@@ -116,6 +116,6 @@ in buildPythonPackage {
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
-    maintainers = with maintainers; [];  # This package is maintainerless.
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }
