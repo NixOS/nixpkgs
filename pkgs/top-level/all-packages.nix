@@ -29363,6 +29363,8 @@ with pkgs;
 
   gruvbox-gtk-theme = callPackage ../data/themes/gruvbox-gtk-theme { };
 
+  gruvbox-plus-icon-pack = callPackage ../data/icons/gruvbox-plus-icon-pack { };
+
   gubbi-font = callPackage ../data/fonts/gubbi { };
 
   gyre-fonts = callPackage ../data/fonts/gyre { };
@@ -37318,7 +37320,7 @@ with pkgs;
 
   heroic-unwrapped = callPackage ../games/heroic {
     # Match the version used by the upstream package.
-    electron = electron_27;
+    electron = electron_24;
   };
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };
