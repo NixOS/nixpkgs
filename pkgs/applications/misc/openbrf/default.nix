@@ -1,6 +1,22 @@
 { mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
 
-
+let
+  # openbrf fails to with newer vcg so use the 2016 one
+  vcg-1_0_1 = vcg.overrideAttrs(final: prev: {
+    version = "1.0.1";
+    src = fetchFromGitHub {
+      owner = "cnr-isti-vclab";
+      repo = "vcglib";
+      rev = "v${final.version}";
+      hash = "sha256-Tvxe88izIxnIZNpTmgfTUExHTsED4JExiiwfmxGTCEo=";
+    };
+    propagatedBuildInputs = [ ];
+    installPhase = ''
+      mkdir -p $out/include
+      cp -r vcg wrap eigenlib $out/include
+    '';
+  });
+in
 mkDerivation {
   pname = "openbrf";
   version = "unstable-2016-01-09";
@@ -12,14 +28,14 @@ mkDerivation {
     sha256 = "16254cnr60ihcn7bki7wl1qm6gkvzb99cn66md1pnb7za8nvzf4j";
   };
 
-  buildInputs = [ qtbase vcg glew ];
+  buildInputs = [ qtbase vcg-1_0_1 glew ];
 
   nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "openBrf.pro" ];
 
   postPatch = ''
-    sed -i 's,^VCGLIB .*,VCGLIB = ${vcg}/include,' openBrf.pro
+    sed -i 's,^VCGLIB .*,VCGLIB = ${vcg-1_0_1}/include,' openBrf.pro
   '';
 
   installPhase = ''
