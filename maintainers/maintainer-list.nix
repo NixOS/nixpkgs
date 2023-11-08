@@ -4245,6 +4245,12 @@
     githubId = 5503422;
     name = "Dmitriy Demin";
   };
+  demine = {
+    email = "riches_tweaks0o@icloud.com";
+    github = "demine0";
+    githubId = 51992962;
+    name = "Nikita Demin";
+  };
   demize = {
     email = "johannes@kyriasis.com";
     github = "kyrias";
