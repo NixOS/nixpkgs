@@ -252,19 +252,10 @@ let
     ''}
   '';
 
-  # The EFI boot image.
-  # Notes about grub:
-  #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
-  #    will get white-on-black console-like text on sub-menus. *sigh*
-  efiDir = pkgs.runCommand "efi-directory" {
-    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi pkgs.buildPackages.sbsigntool pkgs.buildPackages.binutils ];
+  grubImage = pkgs.runCommand "grub.img" {
+    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
     strictDeps = true;
   } ''
-    mkdir -p $out/EFI/boot/
-
-    # Add a marker so GRUB can find the filesystem.
-    touch $out/EFI/nixos-installer-image
-
     # ALWAYS required modules.
     MODULES=(
       # Basic modules for filesystems and partition schemes
@@ -330,36 +321,46 @@ let
       fi
     done
 
-    bootefi_path=$out/EFI/boot/boot${targetArch}.efi
-
     cat >>sbat.csv <<EOF
     sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
     shim,1,UEFI shim,shim,16,https://github.com/rhboot/shim
     EOF
+
+    mkdir -p $out
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
       --sbat=sbat.csv \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
-      -o grub-unsigned.efi \
+      -o $out/grub.efi \
       -p /EFI/boot \
       -O ${grubPkgs.grub2_efi.grubTarget} \
       ''${MODULES[@]}
+  '';
+
+  # The EFI boot image.
+  # Notes about grub:
+  #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
+  #    will get white-on-black console-like text on sub-menus. *sigh*
+  efiDir = pkgs.runCommand "efi-directory" {
+    nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+    strictDeps = true;
+  } ''
+    mkdir -p $out/EFI/boot/
+
+    # Add a marker so GRUB can find the filesystem.
+    touch $out/EFI/nixos-installer-image
+
+
+    bootefi_path=$out/EFI/boot/boot${targetArch}.efi
+
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
-    # TODO: split building and signing into separate derivations, and
-    # wrap the signing derivation in one that verifies the signature.
     ${if (config.secureboot.signingCertificate == null) then ''
-        cp grub-unsigned.efi $bootefi_path
-      '' else ''
-        set -x
-        sbsign \
-          --cert ${config.secureboot.signingCertificate} \
-          --output $out/EFI/boot/grub${targetArch}.efi \
-          ${optionalString (config.secureboot.privateKeyFile != null) "--key ${config.secureboot.privateKeyFile}"} \
-          grub-unsigned.efi
-        cp ${config.secureboot.shim} $bootefi_path
-        set +x
+      cp ${grubImage}/grub.efi $out/EFI/boot/boot${targetArch}.efi
+    '' else ''
+      cp ${signFile "${grubImage}/grub.efi"} $out/EFI/boot/grub${targetArch}.efi
+      cp ${config.secureboot.shim} $bootefi_path
     ''}
 
     cat <<EOF > $out/EFI/boot/grub.cfg
