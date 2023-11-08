@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage rec {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
+    maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
     platforms = platforms.unix;
   };
 }
