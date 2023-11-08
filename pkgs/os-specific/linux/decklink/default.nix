@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =  kernel.moduleBuildDependencies;
 
   postUnpack = ''
-    tar xf Blackmagic_Desktop_Video_Linux_${lib.versions.majorMinor version}/other/${stdenv.hostPlatform.uname.processor}/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}.tar.gz
+    tar xf Blackmagic_Desktop_Video_Linux_${lib.head (lib.splitString "a" version)}/other/${stdenv.hostPlatform.uname.processor}/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}.tar.gz
     moduleRoot=$NIX_BUILD_TOP/desktopvideo-${version}-${stdenv.hostPlatform.uname.processor}/usr/src
   '';
 
