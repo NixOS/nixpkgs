@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
     license = [ licenses.gpl3 ] ;
-    maintainers = with maintainers; [ wamserma ];
+    maintainers = with maintainers; [ wamserma hexchen ];
   };
 }
