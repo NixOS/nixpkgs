@@ -135,9 +135,7 @@ in {
       ensureDatabases = ["mautrix-facebook"];
       ensureUsers = [{
         name = "mautrix-facebook";
-        ensurePermissions = {
-          "DATABASE \"mautrix-facebook\"" = "ALL PRIVILEGES";
-        };
+        ensureDBOwnership = true;
       }];
     };
 

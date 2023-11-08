@@ -242,6 +242,15 @@ in
       } cfg.nginx.virtualHost ];
     };
 
+    assertions = [
+      {
+        assertion = srvCfg.user == srvCfg.postgresql.database;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+        '';
+      }
+    ];
+
     services.postgresql = mkIf cfg.postgresql.enable {
       authentication = ''
         local ${srvCfg.postgresql.database} ${srvCfg.user} trust
@@ -249,7 +258,7 @@ in
       ensureDatabases = [ srvCfg.postgresql.database ];
       ensureUsers = map (name: {
           inherit name;
-          ensurePermissions = { "DATABASE \"${srvCfg.postgresql.database}\"" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }) [srvCfg.user];
     };
 

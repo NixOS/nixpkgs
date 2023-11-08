@@ -74,9 +74,9 @@ in
     services.postgresql = lib.optionalAttrs cfg.createDatabase {
       enable = true;
       ensureDatabases = [ "matrix-sliding-sync" ];
-      ensureUsers = [ rec {
+      ensureUsers = [ {
         name = "matrix-sliding-sync";
-        ensurePermissions."DATABASE \"${name}\"" = "ALL PRIVILEGES";
+        ensureDBOwnership = true;
       } ];
     };
 

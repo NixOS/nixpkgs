@@ -212,6 +212,12 @@ in
         assertion = cfg.nginx.enable -> (cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.ip == settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ]);
         message = "Setting the IP mobilizon listens on is only possible when the nginx config is not used, as it is hardcoded there.";
       }
+      {
+        assertion = isLocalPostgres -> repoSettings.database == repoSettings.username;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+        '';
+      }
     ];
 
     services.mobilizon.settings = {
@@ -372,9 +378,7 @@ in
       ensureUsers = [
         {
           name = dbUser;
-          ensurePermissions = {
-            "DATABASE \"${repoSettings.database}\"" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
       extraPlugins = with postgresql.pkgs; [ postgis ];

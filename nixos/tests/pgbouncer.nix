@@ -24,13 +24,11 @@ in
       services = {
         postgresql = {
           enable = true;
-          ensureDatabases = [ "testdb" ];
+          ensureDatabases = [ "test" ];
           ensureUsers = [
           {
-            name = "testuser";
-            ensurePermissions = {
-              "DATABASE testdb" = "ALL PRIVILEGES";
-            };
+            name = "test";
+            ensureDBOwnership = true;
           }];
           authentication = ''
             local testdb testuser scram-sha-256
@@ -40,7 +38,7 @@ in
         pgbouncer = {
           enable = true;
           listenAddress = "localhost";
-          databases = { testdb = "host=/run/postgresql/ port=5432 auth_user=testuser dbname=testdb"; };
+          databases = { test = "host=/run/postgresql/ port=5432 auth_user=testuser dbname=test"; };
           authType = "scram-sha-256";
           authFile = testAuthFile;
         };
@@ -55,7 +53,7 @@ in
 
     # Test if we can make a query through PgBouncer
     one.wait_until_succeeds(
-        "psql 'postgres://testuser:testpass@localhost:6432/testdb' -c 'SELECT 1;'"
+        "psql 'postgres://testuser:testpass@localhost:6432/test' -c 'SELECT 1;'"
     )
   '';
 })

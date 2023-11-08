@@ -112,12 +112,6 @@ let
     services.postgresql = {
       enable = true;
       ensureDatabases = lib.singleton cfg.settings.db.dbname;
-      ensureUsers = lib.singleton {
-        name = cfg.settings.db.user;
-        ensurePermissions = {
-          "DATABASE ${cfg.settings.db.dbname}" = "ALL PRIVILEGES";
-        };
-      };
       # This is only needed because the unix user invidious isn't the same as
       # the database user. This tells postgres to map one to the other.
       identMap = ''
