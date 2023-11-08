@@ -36332,13 +36332,6 @@ with pkgs;
     inherit (nodePackages) node-gyp;
   };
 
-  code-server = callPackage ../servers/code-server {
-    nodejs = nodejs_16;
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
-    inherit (darwin) cctools;
-    inherit (nodePackages) node-gyp;
-  };
-
   vue = callPackage ../applications/misc/vue { };
 
   vuze = callPackage ../applications/networking/p2p/vuze {
