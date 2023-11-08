@@ -124,4 +124,7 @@ self: super: {
   # KAT/ECB/D2 test segfaults on armv7l
   # https://github.com/haskell-crypto/cryptonite/issues/367
   cryptonite = dontCheck super.cryptonite;
+
+  # https://github.com/GaloisInc/SHA/issues/16
+  SHA = dontCheck super.SHA;
 }
