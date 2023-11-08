@@ -1,89 +1,102 @@
 { stdenv
-, autoPatchelfHook
-, cups
-, dbus
-, fontconfig
-, gccForLibs
-, libX11
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libinput
-, libxcb
-, libxkbcommon
-, nss
-, qttools
-, qtwebengine
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilrenderutil
-, xcbutilwm
+, copyDesktopItems
+, buildFHSEnv
+, makeDesktopItem
+, makeWrapper
 }:
 
 { pname, version, src, meta }:
 let
-  unwrapped = stdenv.mkDerivation {
-    pname = "${pname}-unwrapped";
-    inherit version src meta;
+  fhsEnv = buildFHSEnv {
+    name = "${pname}-fhs-env";
+    runScript = "";
 
-    nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [
-      cups
-      dbus
-      fontconfig
-      gccForLibs
-      libX11
-      libXcomposite
-      libXcursor
-      libXdamage
-      libXext
-      libXi
-      libXrandr
-      libXrender
-      libXtst
-      libinput
-      libxcb
-      libxkbcommon
-      nss
-      qttools
-      qtwebengine
-      xcbutilimage
-      xcbutilkeysyms
-      xcbutilrenderutil
-      xcbutilwm
+    targetPkgs = pkgs: with pkgs; [
+      xkeyboard_config
+      udev
     ];
 
-    dontBuild = true;
-
-    # Don't wrap the Qt apps; upstream has its own wrapper scripts.
-    dontWrapQtApps = true;
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r bin lib $out
-      addAutoPatchelfSearchPath $out/lib
-    '';
+    multiPkgs = pkgs: with pkgs; [
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gccForLibs
+      glib
+      libglvnd
+      libinput
+      libxkbcommon
+      nss
+      nspr
+      xorg.libX11
+      xorg.libxcb
+      xorg.libxkbfile
+      xorg.libxshmfence
+      xorg.xcbutilimage
+      xorg.xcbutilkeysyms
+      xorg.xcbutilrenderutil
+      xorg.xcbutilwm
+      zlib
+    ];
   };
 in
 stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version src meta;
 
-  # Build a "clean" version of the package so that we don't add extra ".bin" or
-  # configuration files to users' PATHs. We can't easily put the unwrapped
-  # package files in libexec (where they belong, probably) because the upstream
-  # wrapper scripts have the bin directory hardcoded.
-  buildCommand = ''
-    mkdir -p $out/bin
-    for f in p4admin p4merge p4v p4vc; do
-      ln -s ${unwrapped}/bin/$f $out/bin
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $out/libexec/$pname $out/share/icons/hicolor/scalable/apps
+    cp -r bin lib $out/libexec/$pname
+
+    for app in p4admin p4merge p4v p4vc; do
+      makeWrapper ${fhsEnv}/bin/${pname}-fhs-env $out/bin/$app \
+        --add-flags $out/libexec/$pname/bin/$app
     done
-  '';
-  preferLocalBuild = true;
 
-  inherit (unwrapped) meta passthru;
+    for app in p4admin p4merge p4v; do
+      cp lib/P4VResources/icons/$app.svg $out/share/icons/hicolor/scalable/apps/
+    done
+
+    runHook postInstall
+  '';
+
+  desktopItems = map
+    ({ name, desktopName, genericName, comment }: makeDesktopItem {
+      inherit name desktopName genericName comment;
+      exec = name;
+      icon = name;
+      categories = [
+        "Development"
+        "RevisionControl"
+      ];
+    })
+    [
+      {
+        name = "p4admin";
+        desktopName = "P4Admin";
+        genericName = "Helix Admin Tool";
+        comment = "Manage and monitor Helix Core users and SCM operations";
+      }
+      {
+        name = "p4merge";
+        desktopName = "P4Merge";
+        genericName = "Helix Visual Merge Tool";
+        comment = "A three-way merging and side-by-side file comparison tool";
+      }
+      {
+        name = "p4v";
+        desktopName = "P4V";
+        genericName = "Helix Visual Client";
+        comment = "Graphical interface to versioned files in Helix Core";
+      }
+    ];
 }
