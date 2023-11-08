@@ -40,15 +40,15 @@
 , i3Support ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polybar";
-  version = "3.6.3";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    hash = "sha256-FKkPSAEMzptnjJq3xTk+fpD8XjASQ3smX5imstDyLNE=";
+    owner = "polybar";
+    repo = "polybar";
+    rev = finalAttrs.version;
+    hash = "sha256-Z1rL9WvEZHr5M03s9KCJ6O6rNuaK7PpwUDaatYuCocI=";
     fetchSubmodules = true;
   };
 
@@ -113,4 +113,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ckie ];
     platforms = platforms.linux;
   };
-}
+})

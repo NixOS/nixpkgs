@@ -2506,6 +2506,8 @@ with pkgs;
 
   gst = callPackage ../applications/version-management/gst { };
 
+  guilt = callPackage ../applications/version-management/guilt { };
+
   gut = callPackage ../applications/version-management/gut { };
 
   hred = callPackage ../development/tools/hred { };
@@ -34174,9 +34176,7 @@ with pkgs;
 
   pnglatex = with python3Packages; toPythonApplication pnglatex;
 
-  polybar = callPackage ../applications/misc/polybar { };
-
-  polybarFull = callPackage ../applications/misc/polybar {
+  polybarFull = polybar.override {
     alsaSupport = true;
     githubSupport = true;
     mpdSupport = true;
@@ -41285,7 +41285,7 @@ with pkgs;
   vazir-code-font = callPackage ../data/fonts/vazir-code-font { };
 
   vaultwarden = callPackage ../tools/security/vaultwarden {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices SystemConfiguration;
   };
   vaultwarden-sqlite = vaultwarden;
   vaultwarden-mysql = vaultwarden.override { dbBackend = "mysql"; };
