@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , niapy
 , nltk
+, numpy
 , pandas
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
@@ -14,7 +16,7 @@ buildPythonPackage rec {
   version = "0.3.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
@@ -30,7 +32,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     niapy
     nltk
+    numpy
     pandas
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   disabledTests = [
