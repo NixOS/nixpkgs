@@ -6,13 +6,13 @@
 
 buildLua rec {
   pname = "mpv-quality-menu";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "christoph-heinrich";
     repo = "mpv-quality-menu";
     rev = "v${version}";
-    hash = "sha256-93WoTeX61xzbjx/tgBgUVuwyR9MkAUzCfVSrbAC7Ddc=";
+    hash = "sha256-yrcTxqpLnOI1Tq3khhflO3wzhyeTPuvKifyH5/P57Ns=";
   };
 
   passthru.scriptName = "quality-menu.lua";
