@@ -131,6 +131,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  checkFlags = [
+    # Skip time dependent/flaky test
+    "-skip=TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked"
+  ];
+
   postFixup = ''
     wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
   '';
