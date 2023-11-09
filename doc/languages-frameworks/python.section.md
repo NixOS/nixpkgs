@@ -262,7 +262,7 @@ python3MyBlas = pkgs.python3.override {
 ```
 
 This is particularly useful for numpy and scipy users who want to gain speed with other blas implementations.
-Note that using simply `scipy = super.scipy.override { blas = super.pkgs.mkl; };` will likely result in
+Note that using `scipy = super.scipy.override { blas = super.pkgs.mkl; };` will likely result in
 compilation issues, because scipy dependencies need to use the same blas implementation as well.
 
 #### `buildPythonApplication` function {#buildpythonapplication-function}
@@ -431,7 +431,7 @@ python3.withPackages (ps: [ ps.pyramid ])
 
 Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
 
-As [`python.withPackages`](#python.withpackages-function) simply uses [`python.buildEnv`](#python.buildenv-function) under the hood, it also
+As [`python.withPackages`](#python.withpackages-function) uses [`python.buildEnv`](#python.buildenv-function) under the hood, it also
 supports the `env` attribute. The `shell.nix` file from the previous section can
 thus be also written like this:
 
@@ -680,7 +680,7 @@ b = np.array([3,4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
-Then we simply execute it, without requiring any environment setup at all!
+Then we execute it, without requiring any environment setup at all!
 
 ```sh
 $ ./foo.py
@@ -1711,7 +1711,7 @@ This is an example of a `default.nix` for a `nix-shell`, which allows to consume
 a virtual environment created by `venv`, and install Python modules through
 `pip` the traditional way.
 
-Create this `default.nix` file, together with a `requirements.txt` and simply
+Create this `default.nix` file, together with a `requirements.txt` and
 execute `nix-shell`.
 
 ```nix
