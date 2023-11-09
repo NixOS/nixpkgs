@@ -1,4 +1,19 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git }@inputs:
+{ stdenv
+, lib
+, elixir
+, erlang
+, hex
+, git
+, rebar
+, rebar3
+, fetchMixDeps
+, findutils
+, makeWrapper
+, coreutils
+, gnused
+, gnugrep
+, gawk
+}@inputs:
 
 { pname
 , version
@@ -60,7 +75,7 @@ stdenv.mkDerivation (overridable // {
     # Mix deps
     (builtins.attrValues mixNixDeps) ++
     # other compile-time deps
-    [ makeWrapper ];
+    [ findutils makeWrapper ];
 
   buildInputs = buildInputs;
 
@@ -148,6 +163,17 @@ stdenv.mkDerivation (overridable // {
   postFixup = ''
     # Remove files for Microsoft Windows
     rm -f "$out"/bin/*.bat
+
+    # Wrap programs in $out/bin with their runtime deps
+    for f in $(find $out/bin/ -type f -executable); do
+      wrapProgram "$f" \
+        --prefix PATH : ${lib.makeBinPath [
+          coreutils
+          gnused
+          gnugrep
+          gawk
+        ]}
+    done
   '' + lib.optionalString removeCookie ''
     if [ -e $out/releases/COOKIE ]; then
       rm $out/releases/COOKIE
