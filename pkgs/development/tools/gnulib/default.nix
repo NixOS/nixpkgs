@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Central location for code to be shared among GNU packages";
     homepage = "https://www.gnu.org/software/gnulib/";
+    changelog = "https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=ChangeLog";
     license = licenses.gpl3Plus;
     mainProgram = "gnulib-tool";
     platforms = platforms.unix;
