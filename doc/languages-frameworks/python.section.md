@@ -9,8 +9,8 @@
 | python27   | python2, python | CPython 2.7 |
 | python38   |                 | CPython 3.8 |
 | python39   |                 | CPython 3.9 |
-| python310  | python3         | CPython 3.10 |
-| python311  |                 | CPython 3.11 |
+| python310  |                 | CPython 3.10 |
+| python311  | python3         | CPython 3.11 |
 | python312  |                 | CPython 3.12 |
 | python313  |                 | CPython 3.13 |
 | pypy27     | pypy2, pypy     | PyPy2.7 |
@@ -64,12 +64,14 @@ sets are
 * `pkgs.python39Packages`
 * `pkgs.python310Packages`
 * `pkgs.python311Packages`
+* `pkgs.python312Packages`
+* `pkgs.python313Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python310Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python311Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
@@ -525,7 +527,7 @@ There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 
 Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
-interpreter, which is currently CPython 3.10. The attribute `python` refers to
+interpreter, which is currently CPython 3.11. The attribute `python` refers to
 CPython 2.7 for backwards-compatibility. It is also possible to refer to
 specific versions, e.g. `python311` refers to CPython 3.11, and `pypy` refers to
 the default PyPy interpreter.
