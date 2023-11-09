@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchNpmDeps, buildPackages, nodejs }:
+{ lib, stdenv, fetchNpmDeps, buildPackages, nodejs } @ topLevelArgs:
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -34,6 +34,7 @@
 , npmPruneFlags ? npmInstallFlags
   # Value for npm `--workspace` flag and directory in which the files to be installed are found.
 , npmWorkspace ? null
+, nodejs ? topLevelArgs.nodejs
 , ...
 } @ args:
 
