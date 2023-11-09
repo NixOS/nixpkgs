@@ -8,9 +8,7 @@
 , nixosTests
 }:
 
-let
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-in buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "bitwarden-cli";
   version = "2023.10.0";
 
@@ -20,6 +18,8 @@ in buildNpmPackage' rec {
     rev = "cli-v${version}";
     hash = "sha256-egXToXWfb9XV7JuCRBYJO4p/e+WOwMncPKz0oBgeALQ=";
   };
+
+  nodejs = nodejs_18;
 
   npmDepsHash = "sha256-iO8ZozVl1vOOqowQARnRJWSFUFnau46+dKfcMSkyU3o=";
 
