@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
 , glib
@@ -12,6 +13,8 @@
 buildPythonPackage rec {
   pname = "pyvips";
   version = "2.2.1";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "libvips";
