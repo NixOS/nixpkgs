@@ -12,6 +12,7 @@ let
     ]
     ++ (lib.optional (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m")
     ++ (lib.optional (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m")
+    ++ cfg.extraJvmOptions
     ++ [ "-jar" "${stateDir}/lib/ace.jar" ]);
 in
 {
@@ -82,6 +83,15 @@ in
       description = lib.mdDoc ''
         Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
+      '';
+    };
+
+    services.unifi.extraJvmOptions = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = lib.literalExpression ''["-Xlog:gc"]'';
+      description = lib.mdDoc ''
+        Set extra options to pass to the JVM.
       '';
     };
 
