@@ -8,13 +8,13 @@
 
 buildLua rec {
   pname = "mpvacious";
-  version = "0.24";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-o0YcoSI+4934HlyIoI5V1h/FalCe+6tXS8Lg6kXWjSg=";
+    sha256 = "sha256-XTnib4cguWFEvZtmsLfkesbjFbkt2YoyYLT587ajyUM=";
   };
 
   postPatch = ''
