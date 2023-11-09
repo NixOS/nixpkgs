@@ -190,6 +190,21 @@ let
       "# No refind for ${targetArch}"
   ;
 
+  uki = pkgs.runCommand "uki" {} ''
+    mkdir $out
+    args=(
+      build
+      --output $out/uki.efi
+      --linux ${config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile}
+      --initrd ${config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile}
+      --cmdline init=${config.system.build.toplevel}/init\ ${escapeShellArg (toString config.boot.kernelParams)}
+      --os-release ${config.system.build.etc}/os-release
+      --stub ${pkgs.systemd}/lib/systemd/boot/efi/linuxx64.efi.stub
+      --sbat ${./sbat.csv}
+    )
+    ${pkgs.buildPackages.ukify}/lib/systemd/ukify "''${args[@]}"
+  '';
+
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
   grubMenuCfg = ''
@@ -324,16 +339,11 @@ let
       fi
     done
 
-    cat >>sbat.csv <<EOF
-    sbat,1,SBAT Version,sbat,1,https://github.com/rhboot/shim/blob/main/SBAT.md
-    shim,1,UEFI shim,shim,16,https://github.com/rhboot/shim
-    EOF
-
     mkdir -p $out
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
     grub-mkimage \
-      --sbat=sbat.csv \
+      --sbat=${./sbat.csv} \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
       -o $out/grub.efi \
       -p /EFI/boot \
@@ -365,6 +375,8 @@ let
       cp ${signFile "${grubImage}/grub.efi"} $out/EFI/boot/grub${targetArch}.efi
       cp ${config.secureboot.shim} $bootefi_path
     ''}
+
+    cp ${maybeSignFile "${uki}/uki.efi"} $out/EFI/boot/uki.efi
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -403,6 +415,10 @@ let
     # Menu entries
     #
 
+    # TODO: get rid of this and make all the entries use the UKI with optional aux binaries for commandline extensions
+    menuentry "Secure Boot" {
+      chainloader /EFI/boot/uki.efi
+    }
     ${buildMenuGrub2}
     submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
       ${grubMenuCfg}
