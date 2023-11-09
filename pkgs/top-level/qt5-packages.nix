@@ -65,7 +65,9 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // ({
+  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
+
+in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
   inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear mauiPackages qt5;
 
@@ -256,9 +258,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
   yuview = callPackage ../applications/video/yuview { };
-} // lib.optionalAttrs pkgs.config.allowAliases {
+}) // lib.optionalAttrs pkgs.config.allowAliases {
   # remove after 23.11 branch-off and backport removal to 23.11
   # 23.11 will have a warning for this in `makeScope` itself
   overrideScope' = lib.warn "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
-})));
+}));
 }
