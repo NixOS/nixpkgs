@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitLab
+{ lib
+, stdenv
+, fetchFromGitLab
 , darwin
 , abseil-cpp
 , meson
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
     abseil-cpp
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Foundation ]);
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
