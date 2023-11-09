@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     description = "Language server for the Odin programming language";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
-    maintainers = with maintainers; [ astavie ];
+    maintainers = with maintainers; [ astavie znaniye ];
     platforms = odin.meta.platforms;
   };
 }
