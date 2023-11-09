@@ -5,6 +5,7 @@
 , maven
 , jre
 , xorg
+, gitUpdater
 }:
 
 maven.buildMavenPackage rec {
@@ -44,6 +45,8 @@ maven.buildMavenPackage rec {
       --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
       --add-flags "-jar $out/share/RuneLite.jar"
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Open source Old School RuneScape client";
