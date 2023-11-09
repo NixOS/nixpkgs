@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
     license = with licenses; [ mit /* or */ ruby ];
+    mainProgram = "gem";
     maintainers = with maintainers; [ zimbatm ];
   };
 }
