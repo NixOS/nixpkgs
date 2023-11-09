@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
-    homepage = "https://libvips.github.io/libvips/";
+    homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
