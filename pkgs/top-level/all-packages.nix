@@ -28566,8 +28566,6 @@ with pkgs;
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
-  prayer = callPackage ../servers/prayer { };
-
   procps = if stdenv.isLinux
     then callPackage ../os-specific/linux/procps-ng { }
     else unixtools.procps;

@@ -1041,7 +1041,6 @@
   ./services/networking/powerdns.nix
   ./services/networking/pppd.nix
   ./services/networking/pptpd.nix
-  ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
   ./services/networking/quassel.nix
