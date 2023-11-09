@@ -1573,6 +1573,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  bork = callPackage ../development/python-modules/bork { };
+
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
   bottombar = callPackage ../development/python-modules/bottombar { };
@@ -15972,6 +15974,8 @@ self: super: with self; {
   zc-buildout = callPackage ../development/python-modules/buildout { };
 
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
+
+  zcbor = callPackage ../development/python-modules/zcbor { };
 
   zconfig = callPackage ../development/python-modules/zconfig { };
 

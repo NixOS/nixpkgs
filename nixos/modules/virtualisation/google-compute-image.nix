@@ -44,10 +44,17 @@ in
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
+    virtualisation.googleComputeImage.efi = mkEnableOption "EFI booting";
   };
 
   #### implementation
   config = {
+    boot.initrd.availableKernelModules = [ "nvme" ];
+    boot.loader.grub = mkIf cfg.efi {
+      device = mkForce "nodev";
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+    };
 
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
@@ -62,6 +69,7 @@ in
       '';
       format = "raw";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      partitionTableType = if cfg.efi then "efi" else "legacy";
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };
