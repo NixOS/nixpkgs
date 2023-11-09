@@ -2,16 +2,17 @@
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = ''
-    @${cfg.jrePackage}/bin/java java \
-        ${lib.optionalString (lib.versionAtLeast (lib.getVersion cfg.jrePackage) "16")
-        ("--add-opens java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED "
-        + "--add-opens java.base/sun.security.util=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED "
-        + "--add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED")} \
-        ${lib.optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
-        ${lib.optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
-        -jar ${stateDir}/lib/ace.jar
-  '';
+  cmd = lib.escapeShellArgs ([ "@${cfg.jrePackage}/bin/java" "java" ]
+    ++ lib.optionals (lib.versionAtLeast (lib.getVersion cfg.jrePackage) "16") [
+      "--add-opens=java.base/java.lang=ALL-UNNAMED"
+      "--add-opens=java.base/java.time=ALL-UNNAMED"
+      "--add-opens=java.base/sun.security.util=ALL-UNNAMED"
+      "--add-opens=java.base/java.io=ALL-UNNAMED"
+      "--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+    ]
+    ++ (lib.optional (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m")
+    ++ (lib.optional (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m")
+    ++ [ "-jar" "${stateDir}/lib/ace.jar" ]);
 in
 {
 
@@ -122,8 +123,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${(lib.removeSuffix "\n" cmd)} start";
-        ExecStop = "${(lib.removeSuffix "\n" cmd)} stop";
+        ExecStart = "${cmd} start";
+        ExecStop = "${cmd} stop";
         Restart = "on-failure";
         TimeoutSec = "5min";
         User = "unifi";
