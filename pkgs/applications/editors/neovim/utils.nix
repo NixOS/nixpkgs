@@ -161,7 +161,7 @@ let
     in
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-      wrapRc = (configure != {});
+      wrapRc = res.customRC != "";
   });
 
   /* Generate vim.g.<LANG>_host_prog lua rc to setup host providers
