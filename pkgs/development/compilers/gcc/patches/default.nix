@@ -178,6 +178,9 @@ in
 # https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
 ++ optional (is11 && stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
 
+# libgcc’s `configure` script misdetects aarch64-darwin, resulting in an invalid deployment target.
+++ optional (is11 && stdenv.isDarwin && stdenv.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
+
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
 ++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
 
@@ -191,11 +194,18 @@ in
   sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
 })
 
+# Fix undefined symbol errors when building older versions with clang
+++ optional (!atLeast11 && stdenv.cc.isClang && stdenv.hostPlatform.isDarwin) ./clang-genconditions.patch
+
 
 ## gcc 9.0 and older ##############################################################################
 
 ++ optional (majorVersion == "9") ./9/fix-struct-redefinition-on-glibc-2.36.patch
 ++ optional (atLeast7 && !atLeast10 && targetPlatform.isNetBSD) ./libstdc++-netbsd-ctypes.patch
+
+# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
+# which is not supported by the clang integrated assembler used by default on Darwin.
+++ optional (is9 && hostPlatform.isDarwin) ./9/gcc9-darwin-as-gstabs.patch
 
 
 ## gcc 8.0 and older ##############################################################################
@@ -203,6 +213,10 @@ in
 # for 49 this is applied later
 ++ optional (atLeast49 && !is49 && !atLeast9) ./libsanitizer-no-cyclades-9.patch
 ++ optional (is7 || is8) ./9/fix-struct-redefinition-on-glibc-2.36.patch
+
+# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
+# which is not supported by the clang integrated assembler used by default on Darwin.
+++ optional (is8 && hostPlatform.isDarwin) ./8/gcc8-darwin-as-gstabs.patch
 
 
 ## gcc 7.0 and older ##############################################################################
@@ -239,6 +253,12 @@ in
   ./gnat-cflags.patch
   ./6/gnat-glibc234.patch
 ]
+
+# The clang-based assembler used in darwin.cctools-llvm (LLVM >11) does not support piping input.
+# Fortunately, it does not exhibit the problem GCC has with the cctools assembler.
+# This patch can be dropped should darwin.cctools-llvm ever implement support.
+++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
+
 
 ## gcc 4.9 and older ##############################################################################
 

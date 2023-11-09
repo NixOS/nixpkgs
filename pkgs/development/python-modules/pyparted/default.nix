@@ -1,11 +1,11 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , buildPythonPackage
 , isPyPy
 , pkgs
 , python
 , six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,30 +31,13 @@ buildPythonPackage rec {
       tests/test__ped_ped.py
   '';
 
-  patches = [
-    ./fix-test-pythonpath.patch
-    (fetchpatch {
-      url = "https://github.com/dcantrell/pyparted/commit/07ba882d04fa2099b53d41370416b97957d2abcb.patch";
-      hash = "sha256-yYfLdy+TOKfN3gtTMgOWPebPTRYyaOYh/yFTowCbdjg=";
-    })
-    (fetchpatch {
-      url = "https://github.com/dcantrell/pyparted/commit/a01b4eeecf63b0580c192c7c2db7a5c406a7ad6d.patch";
-      hash = "sha256-M/8hYiKUBzaTOxPYDFK5BAvCm6WJGx+693qwj3HzdRA=";
-    })
-  ];
-
   preConfigure = ''
     PATH="${pkgs.parted}/sbin:$PATH"
   '';
 
   nativeBuildInputs = [ pkgs.pkg-config ];
-  nativeCheckInputs = [ six ];
+  nativeCheckInputs = [ six pytestCheckHook ];
   propagatedBuildInputs = [ pkgs.parted ];
-
-  checkPhase = ''
-    patchShebangs Makefile
-    make test PYTHON=${python.executable}
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/dcantrell/pyparted/";
