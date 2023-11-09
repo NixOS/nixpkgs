@@ -1,16 +1,16 @@
-{ config
+{ backendStdenv
+, config
 , cuda_cccl
 , cuda_cudart
 , cuda_nvcc
 , cudaVersion
-, backendStdenv
 , fetchFromGitHub
+, gitUpdater
 , lib
-, mpiSupport ? false
 , mpi
+, mpiSupport ? false
 , nccl
 , which
-, gitUpdater
 }:
 
 backendStdenv.mkDerivation (finalAttrs: {
