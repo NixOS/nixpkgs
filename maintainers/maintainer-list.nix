@@ -4181,6 +4181,15 @@
     githubId = 156239;
     name = "D Anzorge";
   };
+  defelo = {
+    name = "Defelo";
+    matrix = "@defelo:matrix.defelo.de";
+    github = "Defelo";
+    githubId = 41747605;
+    keys = [{
+      fingerprint = "6130 3BBA D7D1 BF74 EFA4  4E3B E7FE 2087 E438 0E64";
+    }];
+  };
   deifactor = {
     name = "Ash Zahlen";
     email = "ext0l@riseup.net";
