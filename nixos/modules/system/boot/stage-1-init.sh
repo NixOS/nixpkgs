@@ -495,6 +495,8 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
     fi
 fi
 
+@postResumeCommands@
+
 # If we have a path to an iso file, find the iso and link it to /dev/root
 if [ -n "$isoPath" ]; then
   mkdir -p /findiso
