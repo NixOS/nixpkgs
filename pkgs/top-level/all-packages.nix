@@ -30541,7 +30541,7 @@ with pkgs;
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
+  ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
 
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
