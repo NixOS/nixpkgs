@@ -36,9 +36,10 @@
 , openslide
 , libheif
 , cgif
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
   version = "8.14.5";
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
-    rev = "v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-fG3DTP+3pO7sbqR/H9egJHU3cLKPU4Jad6qxcQ9evNw=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
@@ -109,14 +110,18 @@ stdenv.mkDerivation rec {
   ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
   ;
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
-    changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
     homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
-    pkgConfigModules = [ "vips" ];
+    pkgConfigModules = [ "vips" "vips-cpp" ];
     platforms = platforms.unix;
     mainProgram = "vips";
   };
-}
+})
