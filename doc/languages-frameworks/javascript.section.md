@@ -209,6 +209,7 @@ In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json
 * `npmPackFlags`: Flags to pass to `npm pack`.
 * `npmPruneFlags`: Flags to pass to `npm prune`. Defaults to the value of `npmInstallFlags`.
 * `makeWrapperArgs`: Flags to pass to `makeWrapper`, added to executable calling the generated `.js` with `node` as an interpreter. These scripts are defined in `package.json`.
+* `nodejs`: The `nodejs` package to build against, using the corresponding `npm` shipped with that version of `node`. Defaults to `pkgs.nodejs`.
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
