@@ -847,7 +847,7 @@ checkFileset 'fileFilter (file: abort "this is not needed") ./.'
 
 # The predicate must be able to handle extra attributes
 touch a
-expectFailure 'toSource { root = ./.; fileset = fileFilter ({ name, type }: true) ./.; }' 'called with unexpected argument '\''"lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you'\''re using `\{ name, file \}:`, use `\{ name, file, ... \}:` instead."'\'
+expectFailure 'toSource { root = ./.; fileset = fileFilter ({ name, type, hasExt }: true) ./.; }' 'called with unexpected argument '\''"lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you'\''re using `\{ name, file, hasExt \}:`, use `\{ name, file, hasExt, ... \}:` instead."'\'
 rm -rf -- *
 
 # .name is the name, and it works correctly, even recursively
@@ -894,6 +894,39 @@ expectEqual \
     'toSource { root = ./.; fileset = fileFilter (file: file.type != "unknown") ./.; }' \
     'toSource { root = ./.; fileset = union ./d/a ./d/b; }'
 rm -rf -- *
+
+# Check that .hasExt checks for the file extension
+# The empty extension is the same as a file ending with a .
+tree=(
+    [a]=0
+    [a.]=1
+    [a.b]=0
+    [a.b.]=1
+    [a.b.c]=0
+)
+checkFileset 'fileFilter (file: file.hasExt "") ./.'
+
+# It can check for the last extension
+tree=(
+    [a]=0
+    [.a]=1
+    [.a.]=0
+    [.b.a]=1
+    [.b.a.]=0
+)
+checkFileset 'fileFilter (file: file.hasExt "a") ./.'
+
+# It can check for any extension
+tree=(
+    [a.b.c.d]=1
+)
+checkFileset 'fileFilter (file:
+  all file.hasExt [
+    "b.c.d"
+    "c.d"
+    "d"
+  ]
+) ./.'
 
 # It's lazy
 tree=(
