@@ -89,6 +89,14 @@ in
         The localhost host port to forward TCP to the guest port.
       '';
     };
+    allowRoot = mkOption {
+      default = false;
+      type = types.bool;
+      example = true;
+      description = ''
+        Allow the user to become root.
+      '';
+    };
   };
 
   config = {
@@ -217,7 +225,10 @@ in
 
     users.users."${user}" = {
       isNormalUser = true;
+      extraGroups = lib.mkIf cfg.allowRoot [ "wheel" ];
     };
+
+    security.sudo.wheelNeedsPassword = !cfg.allowRoot;
 
     security.polkit.enable = true;
 
