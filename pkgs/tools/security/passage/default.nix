@@ -48,6 +48,7 @@ stdenv.mkDerivation {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ kaction ];
     platforms   = platforms.unix;
+    mainProgram = "passage";
 
     longDescription = ''
       passage is a fork of password-store (https://www.passwordstore.org) that uses
