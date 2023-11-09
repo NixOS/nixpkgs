@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: e4a23dc9d09f5b6b1b82768770e8063014a940bb
-  ref: refs/tags/6.3.40
+  revision: dccba8b77c15014ff479b439e98a9b69880424c6
+  ref: refs/tags/6.3.41
   specs:
-    metasploit-framework (6.3.40)
+    metasploit-framework (6.3.41)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -35,7 +35,7 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.156)
+      metasploit-payloads (= 2.0.159)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.26)
       mqtt
@@ -252,7 +252,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.156)
+    metasploit-payloads (2.0.159)
     metasploit_data_models (6.0.2)
       activerecord (~> 7.0)
       activesupport (~> 7.0)

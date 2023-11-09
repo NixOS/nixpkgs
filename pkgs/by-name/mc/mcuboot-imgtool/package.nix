@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mfgtool-imgtool";
-  version = "1.10.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "imgtool";
-    hash = "sha256-A7NOdZNKw9lufEK2vK8Rzq9PRT98bybBfXJr0YMQS0A=";
+    hash = "sha256-elQSVeae7B8Sqjjc4fHU/iDYISZ3xoqbbsY0ypGgZhI=";
   };
 
   passthru.updateScript = nix-update-script { };

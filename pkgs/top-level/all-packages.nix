@@ -26606,9 +26606,7 @@ with pkgs;
 
   mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
 
-  mailmanPackages = callPackage ../servers/mail/mailman {
-    python3 = python310;
-  };
+  mailmanPackages = callPackage ../servers/mail/mailman { };
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 

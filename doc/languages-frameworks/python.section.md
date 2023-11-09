@@ -9,8 +9,8 @@
 | python27   | python2, python | CPython 2.7 |
 | python38   |                 | CPython 3.8 |
 | python39   |                 | CPython 3.9 |
-| python310  | python3         | CPython 3.10 |
-| python311  |                 | CPython 3.11 |
+| python310  |                 | CPython 3.10 |
+| python311  | python3         | CPython 3.11 |
 | python312  |                 | CPython 3.12 |
 | python313  |                 | CPython 3.13 |
 | pypy27     | pypy2, pypy     | PyPy2.7 |
@@ -64,12 +64,14 @@ sets are
 * `pkgs.python39Packages`
 * `pkgs.python310Packages`
 * `pkgs.python311Packages`
+* `pkgs.python312Packages`
+* `pkgs.python313Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python310Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python311Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
@@ -278,7 +280,7 @@ the packages with the version of the interpreter. Because this is irrelevant for
 applications, the prefix is omitted.
 
 When packaging a Python application with [`buildPythonApplication`](#buildpythonapplication-function), it should be
-called with `callPackage` and passed `python` or `pythonPackages` (possibly
+called with `callPackage` and passed `python3` or `python3Packages` (possibly
 specifying an interpreter version), like this:
 
 ```nix
@@ -320,7 +322,7 @@ luigi = callPackage ../applications/networking/cluster/luigi { };
 ```
 
 Since the package is an application, a consumer doesn't need to care about
-Python versions or modules, which is why they don't go in `pythonPackages`.
+Python versions or modules, which is why they don't go in `python3Packages`.
 
 #### `toPythonApplication` function {#topythonapplication-function}
 
@@ -336,7 +338,7 @@ the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
 applied to the reference:
 
 ```nix
-youtube-dl = with pythonPackages; toPythonApplication youtube-dl;
+youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 ```
 
 #### `toPythonModule` function {#topythonmodule-function}
@@ -365,8 +367,8 @@ Saving the following as `default.nix`
 ```nix
 with import <nixpkgs> {};
 
-python.buildEnv.override {
-  extraLibs = [ pythonPackages.pyramid ];
+python3.buildEnv.override {
+  extraLibs = [ python3Packages.pyramid ];
   ignoreCollisions = true;
 }
 ```
@@ -496,9 +498,9 @@ Given a `default.nix`:
 ```nix
 with import <nixpkgs> {};
 
-pythonPackages.buildPythonPackage {
+python3Packages.buildPythonPackage {
   name = "myproject";
-  buildInputs = with pythonPackages; [ pyramid ];
+  buildInputs = with python3Packages; [ pyramid ];
 
   src = ./.;
 }
@@ -510,7 +512,7 @@ the package would be built with `nix-build`.
 Shortcut to setup environments with C headers/libraries and Python packages:
 
 ```shell
-nix-shell -p pythonPackages.pyramid zlib libjpeg git
+nix-shell -p python3Packages.pyramid zlib libjpeg git
 ```
 
 ::: {.note}
@@ -525,7 +527,7 @@ There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 
 Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
-interpreter, which is currently CPython 3.10. The attribute `python` refers to
+interpreter, which is currently CPython 3.11. The attribute `python` refers to
 CPython 2.7 for backwards-compatibility. It is also possible to refer to
 specific versions, e.g. `python311` refers to CPython 3.11, and `pypy` refers to
 the default PyPy interpreter.
@@ -543,7 +545,7 @@ however, are in separate sets, with one set per interpreter version.
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Python libraries for this specific
 interpreter. E.g., the `toolz` package corresponding to the default interpreter
-is `python.pkgs.toolz`, and the CPython 3.11 version is `python311.pkgs.toolz`.
+is `python3.pkgs.toolz`, and the CPython 3.11 version is `python311.pkgs.toolz`.
 The main package set contains aliases to these package sets, e.g.
 `pythonPackages` refers to `python.pkgs` and `python311Packages` to
 `python311.pkgs`.
@@ -1835,7 +1837,7 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-`pythonPackages.twisted` is now globally overridden.
+`python3Packages.twisted` is now globally overridden.
 All packages and also all NixOS services that reference `twisted`
 (such as `services.buildbot-worker`) now use the new definition.
 Note that `python-super` refers to the old package set and `python-self`
@@ -1845,7 +1847,7 @@ To modify only a Python package set instead of a whole Python derivation, use
 this snippet:
 
 ```nix
-  myPythonPackages = pythonPackages.override {
+  myPythonPackages = python3Packages.override {
     overrides = self: super: {
       twisted = ...;
     };
@@ -2025,7 +2027,9 @@ The following rules are desired to be respected:
   disabled individually. Try to avoid disabling the tests altogether. In any
   case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python
-  libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
+  libraries, so write for example `python311Packages.numpy: 1.11 -> 1.12`.
+  It is highly recommended to specify the current default version to enable
+  automatic build by ofborg.
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
