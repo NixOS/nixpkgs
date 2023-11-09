@@ -44,9 +44,9 @@ let
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
 
-      # Preemptive Full Tickless Kernel at 500Hz
-      HZ = freeform "500";
-      HZ_500 = yes;
+      # Preemptive Full Tickless Kernel at 250Hz
+      HZ = freeform "250";
+      HZ_250 = yes;
       HZ_1000 = no;
     };
 
