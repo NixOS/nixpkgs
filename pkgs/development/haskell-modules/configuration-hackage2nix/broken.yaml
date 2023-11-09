@@ -4868,7 +4868,6 @@ broken-packages:
   - servant-http-streams # failure in job https://hydra.nixos.org/build/233242852 at 2023-09-02
   - servant-iCalendar # failure in job https://hydra.nixos.org/build/233200493 at 2023-09-02
   - servant-jquery # failure in job https://hydra.nixos.org/build/233238796 at 2023-09-02
-  - servant-JuicyPixels # failure in job https://hydra.nixos.org/build/233222224 at 2023-09-02
   - servant-kotlin # failure in job https://hydra.nixos.org/build/233598190 at 2023-09-02
   - servant-namedargs # failure in job https://hydra.nixos.org/build/233258674 at 2023-09-02
   - servant-nix # failure in job https://hydra.nixos.org/build/233236159 at 2023-09-02
