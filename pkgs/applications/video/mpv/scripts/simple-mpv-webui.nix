@@ -2,17 +2,18 @@
 , fetchFromGitHub }:
 buildLua rec {
   pname = "simple-mpv-ui";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "open-dynaMIX";
     repo = "simple-mpv-webui";
     rev = "v${version}";
-    sha256 = "1z0y8sdv5mbxznxqh43w5592ym688vkvqg7w26p8cinrhf09pbw8";
+    hash = "sha256-I8lwpo3Hfpy3UnPMmHEJCdArVQnNL245NkxsYVmnMF0=";
+    sparseCheckout = [ "main.lua" "webui-page" ];
   };
 
-  scriptPath = "webui.lua";
-  postInstall = "cp -a webui-page $out/share/mpv/scripts/";
+  scriptPath = ".";
+  passthru.scriptName = "webui.lua";
 
   meta = with lib; {
     description = "A web based user interface with controls for the mpv mediaplayer";
