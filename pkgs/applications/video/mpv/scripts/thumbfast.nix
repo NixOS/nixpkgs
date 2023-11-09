@@ -7,8 +7,8 @@ buildLua {
   src = fetchFromGitHub {
     owner = "po5";
     repo = "thumbfast";
-    rev = "6f1d92da25a7b807427f55f085e7ad4d60c4e0d7";
-    hash = "sha256-7CCxMPmZZRDIcWn+YbV4xzZFL80qZS5UFA25E+Y2P2Q=";
+    rev = "4241c7daa444d3859b51b65a39d30e922adb87e9";
+    hash = "sha256-7EnFJVjEzqhWXAvhzURoOp/kad6WzwyidWxug6u8lVw=";
   };
 
   postPatch = ''
