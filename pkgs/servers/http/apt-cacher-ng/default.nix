@@ -12,6 +12,7 @@
 , tcp_wrappers
 , zlib
 , c-ares
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -20,12 +21,18 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ftp.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_${version}.orig.tar.xz";
-    sha256 = "0pwsj9rf6a6q7cnfbpcrfq2gjcy7sylqzqqr49g2zi39lrrh8533";
+    sha256 = "sha256-YxQEc6ZpxC9eIhnjj6nXxzP5BHaZ3eUsO9go43KSml8=";
   };
 
   nativeBuildInputs = [ cmake doxygen pkg-config ];
   buildInputs = [ bzip2 fuse libevent xz openssl systemd tcp_wrappers zlib c-ares ];
-
+  patches = [
+    ( fetchpatch {
+      name = "Adjust HAVE_STRLCPY macro with glib 2.38";
+      url = "https://git.launchpad.net/ubuntu/+source/apt-cacher-ng/plain/debian/patches/0001-Adjust-HAVE_STRLCPY-macro-check.patch";
+      sha256 = "sha256-uhQj+ZcHCV36Tm0pF/+JG59bSaRdTZCrMcKL3YhZTk8=";
+    })
+  ];
   meta = with lib; {
     description = "A caching proxy specialized for Linux distribution files";
     homepage = "https://www.unix-ag.uni-kl.de/~bloch/acng/";
