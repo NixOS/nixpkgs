@@ -22570,6 +22570,8 @@ with pkgs;
 
   libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
 
+  libcomps = callPackage ../tools/package-management/libcomps { python = python3; };
+
   libcpr = callPackage ../development/libraries/libcpr { };
 
   libcredis = callPackage ../development/libraries/libcredis { };
