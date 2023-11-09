@@ -38,9 +38,20 @@ assert mixNixDeps != { } -> mixFodDeps == null;
 assert stripDebug -> !enableDebugInfo;
 
 stdenv.mkDerivation (overridable // {
-  # rg is used as a better grep to search for erlang references in the final release
-  nativeBuildInputs = nativeBuildInputs ++ [ erlang hex elixir makeWrapper git ripgrep ];
-  buildInputs = buildInputs ++ builtins.attrValues mixNixDeps;
+  nativeBuildInputs = nativeBuildInputs ++
+    # Erlang/Elixir deps
+    [ erlang elixir hex git ]
+    # Mix deps
+    ++ (builtins.attrValues mixNixDeps) ++
+    # other compile-time deps
+    [
+      makeWrapper
+
+      # ripgrep(rg) is used as a better grep to search for erlang references in the final release
+      ripgrep
+    ];
+
+  buildInputs = buildInputs;
 
   MIX_ENV = mixEnv;
   MIX_DEBUG = if enableDebugInfo then 1 else 0;
