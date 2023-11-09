@@ -588,6 +588,12 @@
     githubId = 4717906;
     name = "Jakub Skokan";
   };
+  ajaxbits = {
+    email = "contact@ajaxbits.com";
+    github = "ajaxbits";
+    githubId = 45179933;
+    name = "Ajax";
+  };
   ajgrf = {
     email = "a@ajgrf.com";
     github = "ajgrf";

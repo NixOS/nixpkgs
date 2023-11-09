@@ -19,7 +19,7 @@ let
 in
 {
   name = "miniflux";
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ ajaxbits ];
 
   nodes = {
     default =
