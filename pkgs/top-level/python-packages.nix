@@ -6139,6 +6139,13 @@ self: super: with self; {
 
   libcst = callPackage ../development/python-modules/libcst { };
 
+  libdnf = lib.pipe pkgs.libdnf [
+    toPythonModule
+    (p: p.overrideAttrs (super: { meta = super.meta // { outputsToInstall = [ "py" ]; }; }))
+    (p: p.override { inherit python; })
+    (p: p.py)
+  ];
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (pkgs.dtc.override {

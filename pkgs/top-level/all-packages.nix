@@ -22658,7 +22658,7 @@ with pkgs;
 
   libdnet = callPackage ../development/libraries/libdnet { };
 
-  libdnf = callPackage ../tools/package-management/libdnf { };
+  libdnf = callPackage ../tools/package-management/libdnf { python = python3; };
 
   libdovi = callPackage ../development/libraries/libdovi { };
 

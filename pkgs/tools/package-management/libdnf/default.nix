@@ -16,11 +16,17 @@
 , rpm
 , zchunk
 , cppunit
+, python
+, swig
+, glib
+, sphinx
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
   version = "0.72.0";
+
+  outputs = [ "out" "dev" "py" ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -44,6 +50,9 @@ stdenv.mkDerivation rec {
     libyaml
     libmodulemd
     zchunk
+    python
+    swig
+    sphinx
   ];
 
   propagatedBuildInputs = [
@@ -58,17 +67,31 @@ stdenv.mkDerivation rec {
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake cmake/modules/
   '';
 
+  patches = [
+    ./fix-python-install-dir.patch
+  ];
+
   postPatch = ''
     # https://github.com/rpm-software-management/libdnf/issues/1518
     substituteInPlace libdnf/libdnf.pc.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+    substituteInPlace cmake/modules/FindPythonInstDir.cmake \
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
   '';
 
   cmakeFlags = [
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
-    "-DWITH_BINDINGS=OFF"
+    "-DPYTHON_DESIRED=${lib.head (lib.splitString ["."] python.version)}"
   ];
+
+  postInstall = ''
+    rm -r $out/${python.sitePackages}/hawkey/test
+  '';
+
+  postFixup = ''
+    moveToOutput "lib/${python.libPrefix}" "$py"
+  '';
 
   meta = with lib; {
     description = "Package management library";
