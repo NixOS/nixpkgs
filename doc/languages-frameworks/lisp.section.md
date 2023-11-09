@@ -268,7 +268,7 @@ getting an environment variable for `ext:getenv`. This will load the
 
 ### Loading systems {#lisp-loading-systems}
 
-There, you can simply use `asdf:load-system`. This works by setting the right
+There, you can use `asdf:load-system`. This works by setting the right
 values for the `CL_SOURCE_REGISTRY`/`ASDF_OUTPUT_TRANSLATIONS` environment
 variables, so that systems are found in the Nix store and pre-compiled FASLs are
 loaded.
