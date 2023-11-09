@@ -37,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   # flags copied from https://community.arm.com/support-forums/f/compilers-and-libraries-forum/53310/gcc-arm-none-eabi-what-were-the-newlib-compilation-options
   # sort alphabetically
   configureFlags = [
+    "--with-newlib"
     "--host=${stdenv.buildPlatform.config}"
   ] ++ (if !nanoizeNewlib then [
     "--disable-newlib-supplied-syscalls"
