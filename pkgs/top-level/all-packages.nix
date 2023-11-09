@@ -16647,7 +16647,7 @@ with pkgs;
       else if platform.isFreeBSD then 12
       else if platform.isAndroid then 12
       else if platform.isLinux then 16
-      else if platform.isWasm then 12
+      else if platform.isWasm then 16
       else 14;
     # We take the "max of the mins". Why? Since those are lower bounds of the
     # supported version set, this is like intersecting those sets and then
@@ -25020,6 +25020,7 @@ with pkgs;
     sdnotify-wrapper
     skalibs
     skalibs_2_10
+    tipidee
     utmps;
 
   kgt = callPackage ../development/tools/kgt {

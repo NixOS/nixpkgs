@@ -4,23 +4,24 @@
 , removeReferencesTo
 , fetchurl
 , writeScript
+, installShellFiles
 }:
 
 let
   babashka-unwrapped = buildGraalvmNativeImage rec {
     pname = "babashka-unwrapped";
-    version = "1.3.185";
+    version = "1.3.186";
 
     src = fetchurl {
       url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-      sha256 = "sha256-nTW7LpvWoF8hBWtpWOc8VtVvx3v1ISJGvxnnYIvprQk=";
+      sha256 = "sha256-T7inTJHSnUySituU0fcgZ0xWjIY3yb8BlSakqym67ew=";
     };
 
     graalvmDrv = graalvmCEPackages.graalvm-ce;
 
     executable = "bb";
 
-    nativeBuildInputs = [ removeReferencesTo ];
+    nativeBuildInputs = [ removeReferencesTo installShellFiles ];
 
     extraNativeImageBuildArgs = [
       "-H:+ReportExceptionStackTraces"
@@ -42,6 +43,9 @@ let
     # graalvm-ce anyway.
     postInstall = ''
       remove-references-to -t ${graalvmDrv} $out/bin/${executable}
+      installShellCompletion --cmd bb --bash ${./completions/bb.bash}
+      installShellCompletion --cmd bb --zsh ${./completions/bb.zsh}
+      installShellCompletion --cmd bb --fish ${./completions/bb.fish}
     '';
 
     passthru.updateScript = writeScript "update-babashka" ''

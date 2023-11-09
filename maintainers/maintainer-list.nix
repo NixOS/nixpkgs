@@ -12914,6 +12914,11 @@
     githubId = 66913205;
     name = "Rick Sanchez";
   };
+  nix-julia = {
+    name = "nix-julia";
+    github = "nix-julia";
+    githubId = 149073815;
+  };
   nixy = {
     email = "nixy@nixy.moe";
     github = "nixy";
@@ -13931,6 +13936,12 @@
     github = "Philipp-M";
     githubId = 9267430;
     name = "Philipp Mildenberger";
+  };
+  philiptaron = {
+    email = "philip.taron@gmail.com";
+    github = "philiptaron";
+    githubId = 43863;
+    name = "Philip Taron";
   };
   phip1611 = {
     email = "phip1611@gmail.com";
