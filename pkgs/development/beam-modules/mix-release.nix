@@ -156,8 +156,26 @@ stdenv.mkDerivation (overridable // {
     erl -noinput -eval 'lists:foreach(fun(F) -> io:format("Stripping ~p.~n", [F]), beam_lib:strip(F) end, filelib:wildcard("'"$out"'/**/*.beam"))' -s init stop
   '';
 
-  # TODO investigate why the resulting closure still has
-  # a reference to erlang.
-  # uncommenting the following will fail the build
-  # disallowedReferences = [ erlang ];
+  # TODO: remove erlang references in resulting derivation
+  #
+  # # Step 1 - investigate why the resulting derivation still has references to erlang.
+  #
+  # The reason is that the generated binaries contains erlang reference. Here's a repo to
+  # demonstrate the problem - <https://github.com/plastic-gun/nix-mix-release-unwanted-references>.
+  #
+  #
+  # # Step 2 - remove erlang references from the binaries
+  #
+  # As said in above repo, it's hard to remove erlang references from `.beam` binaries.
+  #
+  # We need more experienced developers to resolve this issue.
+  #
+  #
+  # # Tips
+  #
+  # When resolving this issue, it is convenient to fail the build when erlang is referenced,
+  # which can be achieved by using:
+  #
+  #   disallowedReferences = [ erlang ];
+  #
 })
