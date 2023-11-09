@@ -21975,6 +21975,7 @@ with pkgs;
   hamlib = hamlib_3;
   hamlib_3 = callPackage ../development/libraries/hamlib { };
   hamlib_4 = callPackage ../development/libraries/hamlib/4.nix { };
+  hamlib_4-wsjtx = callPackage ../development/libraries/hamlib/wsjtx.nix { };
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
