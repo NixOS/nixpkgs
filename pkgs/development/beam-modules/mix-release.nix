@@ -129,9 +129,9 @@ stdenv.mkDerivation (overridable // {
   '';
 
   postFixup = ''
-    if [ -e "$out/bin/${pname}.bat" ]; then # absent in special cases, i.e. elixir-ls
-      rm "$out/bin/${pname}.bat" # windows file
-    fi
+    # Remove files for Microsoft Windows
+    rm -f "$out"/bin/*.bat
+
     # contains secrets and should not be in the nix store
     # TODO document how to handle RELEASE_COOKIE
     # secrets should not be in the nix store.
