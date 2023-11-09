@@ -22,10 +22,10 @@
 , elixir ? inputs.elixir
 , hex ? inputs.hex.override { inherit elixir; }
 
-# This reduces closure size, but can lead to some hard to understand runtime
-# errors, so use with caution. See e.g.
-# https://github.com/whitfin/cachex/issues/205
-# https://framagit.org/framasoft/mobilizon/-/issues/1169
+  # This reduces closure size, but can lead to some hard to understand runtime
+  # errors, so use with caution. See e.g.
+  # https://github.com/whitfin/cachex/issues/205
+  # https://framagit.org/framasoft/mobilizon/-/issues/1169
 , stripDebug ? false
 
 , ...
