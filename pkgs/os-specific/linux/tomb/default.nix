@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "File encryption on GNU/Linux";
     homepage = "https://www.dyne.org/software/tomb/";
     changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     mainProgram = "tomb";
     maintainers = with maintainers; [ peterhoeg anthonyroussel ];
     platforms = platforms.linux;
