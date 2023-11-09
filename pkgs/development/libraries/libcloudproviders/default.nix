@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libcloudproviders";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libcloudproviders/${lib.versions.majorMinor version}/libcloudproviders-${version}.tar.xz";
-    sha256 = "49cWDD5F/jIWwHx5iLtPyBOXwy0fxhE68O3+hjIDn2U=";
+    sha256 = "uYdFbt2vcVup1iOqK8UBqxtpff/rEaqng6Y3J13xhto=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
