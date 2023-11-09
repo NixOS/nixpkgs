@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
-  version = "2.2.5";
+  version = "2.2.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
-    sha256 = "sha256-Cu1bbLzVOAvPNzTavaMUfW2SCnQHc9mOM+IHAgVHhT4=";
+    sha256 = "sha256-esewCJw4o4SfSst5ALZ90X3XgOuOAsaxytpotvFeHB0=";
   };
 
   postPatch = ''
