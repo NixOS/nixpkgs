@@ -13,6 +13,7 @@ let
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
     ${pgbin}/psql "${dbName}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    ${pgbin}/psql "${dbName}" -c "ALTER DATABASE ${dbName} OWNER TO ${dbUser};"
   '';
 in
 
