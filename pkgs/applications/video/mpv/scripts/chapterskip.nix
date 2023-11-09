@@ -1,11 +1,9 @@
 { lib
 , fetchFromGitHub
-, nix-update-script
-, stdenvNoCC }:
+, buildLua }:
 
-stdenvNoCC.mkDerivation {
+buildLua {
   pname = "chapterskip";
-  passthru.scriptName = "chapterskip.lua";
 
   version = "unstable-2022-09-08";
   src = fetchFromGitHub {
@@ -15,17 +13,8 @@ stdenvNoCC.mkDerivation {
     hash  = "sha256-OTrLQE3rYvPQamEX23D6HttNjx3vafWdTMxTiWpDy90=";
   };
 
-  dontBuild = true;
-  preferLocalBuild = true;
-  installPhase = "install -Dt $out/share/mpv/scripts chapterskip.lua";
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
-  };
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/po5/chapterskip";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ nicoo ];
+    maintainers = with lib.maintainers; [ nicoo ];
   };
 }
