@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
+    pkgConfigModules = [ "vips" ];
     platforms = platforms.unix;
     mainProgram = "vips";
   };
