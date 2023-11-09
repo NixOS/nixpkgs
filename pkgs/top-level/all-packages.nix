@@ -6042,6 +6042,8 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
+  monaspace = callPackage ../data/fonts/monaspace { };
+
   mons = callPackage ../tools/misc/mons { };
 
   monsoon = callPackage ../tools/security/monsoon { };
