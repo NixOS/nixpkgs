@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ malt3 ];
+    maintainers = with lib.maintainers; [ malt3 katexochen ];
     mainProgram = "dnf5";
     platforms = platforms.linux ++ platforms.darwin;
   };
