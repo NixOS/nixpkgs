@@ -36,7 +36,7 @@ buildPythonPackage rec {
     description = "A modern Python REST client for Apache Tika server";
     homepage = "https://github.com/stumpylog/tika-client";
     changelog = "https://github.com/stumpylog/tika-client/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3;
+    license = licenses.mpl20;
     maintainers = with maintainers; [ e1mo ];
   };
 }
