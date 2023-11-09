@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "protege-distribution";
-  version = "5.5.0";
+  version = "5.6.3";
 
   src = fetchurl {
-    url = "https://github.com/protegeproject/protege-distribution/releases/download/v${version}/Protege-${version}-platform-independent.zip";
-    sha256 = "092x22wyisdnhccx817mqq15sxqdfc7iz4whr4mbvzrd9di6ipjq";
+    url = "https://github.com/protegeproject/protege-distribution/releases/download/protege-${version}/Protege-${version}-platform-independent.zip";
+    hash = "sha256-cbCLlUmYQohS+Kpub8knLa4ONbUjufbZSoxxc2wG+SI=";
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems iconConvTools ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     # Move everything else under protege/
     mkdir $out/protege
-    mv {bin,bundles,conf,plugins} $out/protege
+    mv {bundles,conf,plugins} $out/protege
 
     runHook postInstall
   '';
