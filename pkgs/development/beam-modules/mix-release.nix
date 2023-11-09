@@ -1,4 +1,4 @@
-{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git, ripgrep }@inputs:
+{ stdenv, lib, elixir, erlang, findutils, hex, rebar, rebar3, fetchMixDeps, makeWrapper, git }@inputs:
 
 { pname
 , version
@@ -40,16 +40,11 @@ assert stripDebug -> !enableDebugInfo;
 stdenv.mkDerivation (overridable // {
   nativeBuildInputs = nativeBuildInputs ++
     # Erlang/Elixir deps
-    [ erlang elixir hex git ]
+    [ erlang elixir hex git ] ++
     # Mix deps
-    ++ (builtins.attrValues mixNixDeps) ++
+    (builtins.attrValues mixNixDeps) ++
     # other compile-time deps
-    [
-      makeWrapper
-
-      # ripgrep(rg) is used as a better grep to search for erlang references in the final release
-      ripgrep
-    ];
+    [ makeWrapper ];
 
   buildInputs = buildInputs;
 
@@ -133,9 +128,6 @@ stdenv.mkDerivation (overridable // {
     runHook postInstall
   '';
 
-  # Stripping of the binary is intentional
-  # even though it does not affect beam files
-  # it is necessary for NIFs binaries
   postFixup = ''
     if [ -e "$out/bin/${pname}.bat" ]; then # absent in special cases, i.e. elixir-ls
       rm "$out/bin/${pname}.bat" # windows file
@@ -146,20 +138,6 @@ stdenv.mkDerivation (overridable // {
     # This is only used for connecting multiple nodes
     if [ -e $out/releases/COOKIE ]; then # absent in special cases, i.e. elixir-ls
       rm $out/releases/COOKIE
-    fi
-    # removing unused erlang reference from resulting derivation to reduce
-    # closure size
-    if [ -e $out/erts-* ]; then
-      echo "ERTS found in $out - removing references to erlang to reduce closure size"
-      # there is a link in $out/erts-*/bin/start always
-      # TODO:
-      # sometimes there are links in dependencies like bcrypt compiled binaries
-      # at the moment those are not removed since substituteInPlace will
-      # error on binaries
-      for file in $(rg "${erlang}/lib/erlang" "$out" --files-with-matches); do
-        echo "removing reference to erlang in $file"
-        substituteInPlace "$file" --replace "${erlang}/lib/erlang" "$out"
-      done
     fi
   '' + lib.optionalString stripDebug ''
     # strip debug symbols to avoid hardreferences to "foreign" closures actually
