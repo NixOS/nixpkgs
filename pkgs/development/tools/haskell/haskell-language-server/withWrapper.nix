@@ -14,8 +14,10 @@
 # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
 , dynamic ? true
 
-# which formatters are supported. An empty list means “all”.
-, supportedFormatters ? [ ]
+# Which formatters are supported. Pass `[]` to remove all formatters.
+#
+# Maintainers: if a new formatter is added, add it here and down in knownFormatters
+, supportedFormatters ? [ "ormolu" "fourmolu" "floskell" "stylish-haskell" ]
 }:
 
 # make sure the user only sets GHC versions that actually exist
@@ -126,7 +128,7 @@ let
         '';
       }))
       ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
-      (if supportedFormatters != [] then removeUnnecessaryFormatters else lib.id)
+      removeUnnecessaryFormatters
     ]
     ++ lib.optionals (!dynamic) [
       justStaticExecutables
