@@ -28811,6 +28811,11 @@ with pkgs;
     withUkify = false;
     withBootloader = false;
   };
+  ukify = systemdMinimal.override {
+    withBootloader = true;
+    withEfi = true;
+    withUkify = true;
+  };
 
 
   udev =
