@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ kovirobi ];
+    maintainers = with maintainers; [ kovirobi anthonyroussel ];
     pkgConfigModules = [ "vips" "vips-cpp" ];
     platforms = platforms.unix;
     mainProgram = "vips";
