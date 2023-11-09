@@ -13,6 +13,7 @@
 , libspiro
 , lua5
 , qtbase
+, qtsvg
 , texliveSmall
 , wrapQtAppsHook
 , zlib
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     libspiro
     lua5
     qtbase
+    qtsvg
     zlib
   ] ++ (lib.optionals withTeXLive [
     texliveSmall
