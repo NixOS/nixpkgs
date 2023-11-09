@@ -10,6 +10,7 @@
 , icoutils
 , xcbuild
 , protobuf
+, fetchurl
 }:
 
 let
@@ -103,7 +104,16 @@ in stdenv.mkDerivation {
 
   dontStrip = true;
 
-  patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
+  patches = [
+    ./0001-Use-protobuf-gradle-plugin.patch
+    # we use fetchurl since the fetchpatch normalization strips the whole diff
+    # https://github.com/NixOS/nixpkgs/issues/266556
+    (fetchurl {
+      name = "0002-remove-executable-bit.patch";
+      url = "https://github.com/NationalSecurityAgency/ghidra/commit/e2a945624b74e5d42dc85e9c1f992315dd154db1.diff";
+      sha256 = "07mjfl7hvag2akk65g4cknp330qlk07dgbmh20dyg9qxzmk91fyq";
+    })
+  ];
 
   buildPhase = ''
     export HOME="$NIX_BUILD_TOP/home"
