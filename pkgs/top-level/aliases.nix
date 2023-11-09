@@ -793,6 +793,7 @@ mapAliases ({
   rocm-thunk = throw "'rocm-thunk' has been replaced with 'rocmPackages.rocm-thunk'"; # Added 2023-10-08
   rocr-debug-agent = throw "'rocr-debug-agent' has been replaced with 'rocmPackages.rocr-debug-agent'"; # Added 2023-10-08
   rome = throw "rome is no longer maintained, consider using biome instead"; # Added 2023-09-12
+  root5 = throw "'root5' is no longer supported in Nixpkgs, use 'root' instead"; # Added 2023-11-09
   rpiboot-unstable = rpiboot; # Added 2021-07-30
   rr-unstable = rr; # Added 2022-09-17
   rtl8723bs-firmware = throw "rtl8723bs-firmware was added in mainline kernel version 4.12"; # Added 2023-07-03

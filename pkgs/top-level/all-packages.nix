@@ -39946,11 +39946,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
   };
 
-  root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-    stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
-  });
-
   rinetd = callPackage ../servers/rinetd { };
 
   rink = callPackage ../applications/science/misc/rink {
