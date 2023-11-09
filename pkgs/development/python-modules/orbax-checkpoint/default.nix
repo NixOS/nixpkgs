@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.5.5";
+  version = "0.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "orbax_checkpoint";
     inherit version;
-    hash = "sha256-zry5byLxFzah+e52x4yIi6roU3Jox/9mY62cujB2xlU=";
+    hash = "sha256-3hRUm4mSIKT0RUU5Z8GsLXFluBUlM0JYd0YAXwOpgTs=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +60,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "orbax"
+    "orbax.checkpoint"
   ];
 
   disabledTestPaths = [
@@ -73,6 +74,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
     changelog = "https://github.com/google/orbax/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }
