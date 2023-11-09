@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     description = "PS3 Net Server (mod by aldostools)";
     homepage = "https://github.com/aldostools/webMAN-MOD/";
     license = lib.licenses.gpl3;
+    broken = stdenv.isDarwin;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ makefu ];
     mainProgram = "ps3netsrv";
