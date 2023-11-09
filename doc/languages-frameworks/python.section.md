@@ -2027,7 +2027,9 @@ The following rules are desired to be respected:
   disabled individually. Try to avoid disabling the tests altogether. In any
   case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python
-  libraries, so write for example `python3Packages.numpy: 1.11 -> 1.12`.
+  libraries, so write for example `python311Packages.numpy: 1.11 -> 1.12`.
+  It is highly recommended to specify the current default version to enable
+  automatic build by ofborg.
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
