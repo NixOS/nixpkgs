@@ -32,7 +32,7 @@
   #
   # This assumes each dependency is built by buildMix or buildRebar3. Each
   # dependency needs to have a setup hook to add the lib path to $ERL_LIBS.
-  # This is how Mix find dependencies.
+  # This is how Mix finds dependencies.
 , mixNixDeps ? { }
 
 , elixir ? inputs.elixir
