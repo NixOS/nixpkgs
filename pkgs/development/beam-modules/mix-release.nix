@@ -22,6 +22,20 @@
 , elixir ? inputs.elixir
 , hex ? inputs.hex.override { inherit elixir; }
 
+  # Remove releases/COOKIE
+  #
+  # People have different views on the nature of cookies. Some believe that they are
+  # secrets, while others believe they are just ids for clustering nodes.
+  #
+  # If you think cookie is secret, you can set this attr to true, then it will be
+  # removed from nix store. If not, you can set it to false.
+  #
+  # For backward compatibility, it is set to true by default.
+  #
+  # You can always specify a custom cookie by using RELEASE_COOKIE environment
+  # variable, regardless of the value of this attr.
+, removeCookie ? true
+
   # This reduces closure size, but can lead to some hard to understand runtime
   # errors, so use with caution. See e.g.
   # https://github.com/whitfin/cachex/issues/205
@@ -131,12 +145,8 @@ stdenv.mkDerivation (overridable // {
   postFixup = ''
     # Remove files for Microsoft Windows
     rm -f "$out"/bin/*.bat
-
-    # contains secrets and should not be in the nix store
-    # TODO document how to handle RELEASE_COOKIE
-    # secrets should not be in the nix store.
-    # This is only used for connecting multiple nodes
-    if [ -e $out/releases/COOKIE ]; then # absent in special cases, i.e. elixir-ls
+  '' + lib.optionalString removeCookie ''
+    if [ -e $out/releases/COOKIE ]; then
       rm $out/releases/COOKIE
     fi
   '' + lib.optionalString stripDebug ''
