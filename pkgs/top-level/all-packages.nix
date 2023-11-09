@@ -37774,10 +37774,6 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
-  jazz2 = callPackage ../games/jazz2/game.nix { };
-
-  jazz2-content = callPackage ../games/jazz2/content.nix { };
-
   jumpy = callPackage ../games/jumpy { };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
