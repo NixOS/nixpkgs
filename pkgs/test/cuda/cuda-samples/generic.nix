@@ -1,15 +1,15 @@
-{ lib
+{ autoAddOpenGLRunpathHook
 , backendStdenv
 , cmake
-, fetchFromGitHub
-, fetchpatch
-, autoAddOpenGLRunpathHook
 , cudatoolkit
 , cudaVersion
+, fetchFromGitHub
+, fetchpatch
+, freeimage
+, glfw3
+, lib
 , pkg-config
 , sha256
-, glfw3
-, freeimage
 }:
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "cuda-samples";
