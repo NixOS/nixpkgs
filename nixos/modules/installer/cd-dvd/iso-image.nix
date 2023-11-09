@@ -264,6 +264,9 @@ let
       # Allows rebooting into firmware setup interface
       "efifwsetup"
 
+      # Provides `exit`, for passing on to the next thing in the EFI boot order
+      "minicmd"
+
       # EFI Graphics Output Protocol
       "efi_gop"
 
@@ -425,6 +428,9 @@ let
       echo ""
       echo "If you see this message, your EFI system doesn't support this feature."
       echo ""
+    }
+    menuentry 'Next EFI boot entry' {
+      exit
     }
     menuentry 'Shutdown' --class shutdown {
       halt
