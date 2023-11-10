@@ -30254,7 +30254,9 @@ with pkgs;
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
 
-  grass = callPackage ../applications/gis/grass { };
+  grass = callPackage ../applications/gis/grass {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
 
