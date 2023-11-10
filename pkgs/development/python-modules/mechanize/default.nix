@@ -3,12 +3,13 @@
 , fetchPypi
 , html5lib
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mechanize";
   version = "0.4.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -16,6 +17,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-aaXtsJYvkh6LEINzaMIkLYrQSfC5H/aZzn9gG/xDFSE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     html5lib
