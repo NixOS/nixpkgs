@@ -177,7 +177,7 @@ exactly one version. Those versions need to satisfy all the version constraints
 given in the `.cabal` file of your package and all its dependencies.
 
 The [Haskell builder in nixpkgs](#haskell-mkderivation) does no such thing.
-It will simply take as input packages with names off the desired dependencies
+It will take as input packages with names off the desired dependencies
 and just check whether they fulfill the version bounds and fail if they don’t
 (by default, see `jailbreak` to circumvent this).
 
@@ -780,7 +780,7 @@ there instead.
 The top level `pkgs.haskell-language-server` attribute is just a convenience
 wrapper to make it possible to install HLS for multiple GHC versions at the
 same time. If you know, that you only use one GHC version, e.g., in a project
-specific `nix-shell` you can simply use
+specific `nix-shell` you can use
 `pkgs.haskellPackages.haskell-language-server` or
 `pkgs.haskell.packages.*.haskell-language-server` from the package set you use.
 

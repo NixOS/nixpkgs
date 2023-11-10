@@ -91,14 +91,14 @@
 
 buildPythonPackage rec {
   pname = "farm-haystack";
-  version = "1.21.2";
+  version = "1.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
-    rev = "v${version}";
-    hash = "sha256-h+8F1e6fFoxT4Cu0DxtXTyDd+OFXpX1+uk21/k9qcxw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0tRgZqySM9vPhs5lar89Gz/G7/YgRuFZosgTdKuGBH0=";
   };
 
   nativeBuildInputs = [
