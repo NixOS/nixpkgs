@@ -188,6 +188,8 @@ in {
       # instead and ensure we take ownership of /var/lib/fwupd
       services.fwupd-refresh.serviceConfig = {
         StateDirectory = "fwupd";
+        # Better for debugging, upstream sets stderr to null for some reason..
+        StandardError = "inherit";
       };
 
       timers.fwupd-refresh.wantedBy = [ "timers.target" ];
