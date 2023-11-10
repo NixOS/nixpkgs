@@ -102,6 +102,7 @@ let
     testAllTrue
     toBaseDigits
     toHexString
+    fromHexString
     toInt
     toIntBase10
     toShellVars
@@ -284,6 +285,21 @@ runTests {
   testToHexString = {
     expr = toHexString 250;
     expected = "FA";
+  };
+
+  testFromHexStringFirstExample = {
+    expr = fromHexString "FF";
+    expected = 255;
+  };
+
+  testFromHexStringSecondExample = {
+    expr = fromHexString (builtins.hashString "sha256" "test");
+    expected = 9223372036854775807;
+  };
+
+  testFromHexStringWithPrefix = {
+    expr = fromHexString "0Xf";
+    expected = 15;
   };
 
   testToBaseDigits = {

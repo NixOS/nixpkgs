@@ -73,7 +73,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
-      toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
+      fromHexString toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
       genericClosure readFile;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
