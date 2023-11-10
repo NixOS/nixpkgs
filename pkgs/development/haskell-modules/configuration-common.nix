@@ -57,7 +57,7 @@ self: super: {
           # not solvable short of recompiling GHC. Instead of adding
           # allowInconsistentDependencies for all reverse dependencies of hspec-core,
           # just upgrade to an hspec version without the offending dependency.
-          hspec-core = cself.hspec-core_2_11_6;
+          hspec-core = cself.hspec-core_2_11_7;
           hspec-discover = cself.hspec-discover_2_11_6;
           hspec = cself.hspec_2_11_6;
 
@@ -1673,7 +1673,7 @@ self: super: {
   # Give latest hspec correct dependency versions without overrideScope
   hspec_2_11_6 = doDistribute (super.hspec_2_11_6.override {
     hspec-discover = self.hspec-discover_2_11_6;
-    hspec-core = self.hspec-core_2_11_6;
+    hspec-core = self.hspec-core_2_11_7;
   });
   hspec-meta_2_11_6 = doDistribute (super.hspec-meta_2_11_6.override {
     hspec-expectations = self.hspec-expectations_0_8_4;
@@ -1681,9 +1681,9 @@ self: super: {
   hspec-discover_2_11_6 = doDistribute (super.hspec-discover_2_11_6.override {
     hspec-meta = self.hspec-meta_2_11_6;
   });
-  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_6
+  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_7
   # is overlayed to hspec-core.
-  hspec-core_2_11_6 = doDistribute (dontCheck (super.hspec-core_2_11_6.override {
+  hspec-core_2_11_7 = doDistribute (dontCheck (super.hspec-core_2_11_7.override {
     hspec-expectations = self.hspec-expectations_0_8_4;
   }));
 
