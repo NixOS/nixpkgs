@@ -6,8 +6,8 @@
 , pkg-config
 , openssl
 , Security
-, libiconv
 , nix-update-script
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ git pkg-config ];
 
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [ Security libiconv ];
+    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   cargoHash = "sha256-ffnDTGg+m0NUhG2BYjsXb2fWHeQmtDcBGqQDLqwZMWI=";
 
