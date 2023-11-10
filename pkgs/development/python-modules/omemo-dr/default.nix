@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "omemo-dr";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sP5QI+lHoXt0D7ftSqJGEg1vIdgZtYEulN/JVwUgvmE=";
+    hash = "sha256-KoqMdyMdc5Sb3TdSeNTVomElK9ruUstiQayyUcIC02E=";
   };
 
   propagatedBuildInputs = [
