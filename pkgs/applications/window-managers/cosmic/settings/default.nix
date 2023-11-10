@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , rust
 , rustPlatform
-, cargo
 , cmake
+, makeWrapper
+, cosmic-icons
 , just
 , pkg-config
 , libxkbcommon
@@ -19,13 +20,13 @@
 , util-linuxMinimal
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-settings";
   version = "unstable-2023-10-26";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = "cosmic-settings";
+    repo = pname;
     rev = "d15ebbd340dee7adf184831311b5da73faaa80f5";
     hash = "sha256-OlQ2jjT/ygO+hpl5Cc3h8Yp/SVo+pmI/EH7pqvY9GXI=";
   };
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ cmake just pkg-config which lld util-linuxMinimal ];
+  nativeBuildInputs = [ cmake just pkg-config which lld util-linuxMinimal makeWrapper ];
   buildInputs = [ libxkbcommon libinput fontconfig freetype wayland expat udev ];
 
   dontUseJustBuild = true;
@@ -63,6 +64,11 @@ rustPlatform.buildRustPackage {
     "bin-src"
     "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-settings"
   ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/cosmic-settings" \
+      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings";
