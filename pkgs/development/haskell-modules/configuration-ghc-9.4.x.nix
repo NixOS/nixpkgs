@@ -124,7 +124,7 @@ in {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
         # Tests fail due to the newly-build fourmolu not being in PATH
         # https://github.com/fourmolu/fourmolu/issues/231
-        fourmolu = dontCheck super.fourmolu_0_14_0_0;
+        fourmolu = dontCheck super.fourmolu_0_14_1_0;
         ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_3_0);
         hlint = super.hlint_3_6_1;
         stylish-haskell = super.stylish-haskell;
