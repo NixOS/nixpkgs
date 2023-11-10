@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, stdenv
 
 # build-system
 , cmake
@@ -61,6 +62,12 @@ buildPythonPackage rec {
     numpy
     pympler
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optional (stdenv.isDarwin) [
+    # does not crash on darwin for us
+    # https://github.com/bigcat88/pillow_heif/issues/89
+    "test_opencv_crash"
   ];
 
   meta = {
