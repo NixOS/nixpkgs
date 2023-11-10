@@ -18,6 +18,7 @@ import ../make-test-python.nix (
 
         users.users.alice = {
           isNormalUser = true;
+          linger = true;
         };
       };
       dns = { pkgs, ... }: {
@@ -89,10 +90,8 @@ import ../make-test-python.nix (
           rootful.succeed("podman stop sleeping")
           rootful.succeed("podman rm sleeping")
 
-      # start systemd session for rootless
-      rootless.succeed("loginctl enable-linger alice")
-      rootless.succeed(su_cmd("whoami"))
-      rootless.sleep(1)
+      # wait for systemd user session for rootless
+      rootless.wait_for_unit("user@$(id -u alice)")
 
       with subtest("Run container rootless with runc"):
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))

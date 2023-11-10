@@ -13,6 +13,7 @@ import ./make-test-python.nix ({ lib, pkgs, ...} : {
       users.users.alice = {
         uid = 1000;
         isNormalUser = true;
+        linger = true;
       };
     };
   };
@@ -26,10 +27,8 @@ import ./make-test-python.nix ({ lib, pkgs, ...} : {
         "sudo" "--preserve-env=XDG_RUNTIME_DIR,DOCKER_HOST" "-u" "alice"
       ];
     in ''
-      machine.wait_for_unit("multi-user.target")
-
-      machine.succeed("loginctl enable-linger alice")
-      machine.wait_until_succeeds("${sudo} systemctl --user is-active docker.service")
+      machine.wait_for_unit("user@${toString users.uid}")
+      machine.wait_for_unit("docker.service", "${user.name}")
 
       machine.succeed("tar cv --files-from /dev/null | ${sudo} docker import - scratchimg")
       machine.succeed(

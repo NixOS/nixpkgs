@@ -343,8 +343,8 @@ let
       };
 
       linger = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = lib.mdDoc ''
           Whether to enable lingering for this user. If true, systemd user
           units will start at boot, rather than starting at login and stopping
@@ -353,6 +353,9 @@ let
 
           If false, user units will not be started until the user logs in, and
           may be stopped on logout depending on the settings in `logind.conf`.
+
+          If null, no change will be made to the user's current lingering
+          configuration.
         '';
       };
     };
@@ -484,7 +487,7 @@ let
           name uid group description home homeMode createHome isSystemUser
           password hashedPasswordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
-          initialPassword initialHashedPassword expires;
+          initialPassword initialHashedPassword expires linger;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = attrValues cfg.groups;
@@ -687,28 +690,18 @@ in {
 
     system.activationScripts.users = {
       supportsDryActivation = true;
-      text = ''
+      text = let
+        updateUsersGroups = pkgs.runCommand "update-users-groups" {} ''
+          substitute ${./update-users-groups.pl} $out --subst-var-by systemd ${config.systemd.package}
+          chmod +x $out
+        '';
+      in ''
         install -m 0700 -d /root
         install -m 0755 -d /home
 
-        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
-        -w ${./update-users-groups.pl} ${spec}
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl -w ${updateUsersGroups} ${spec}
       '';
     };
-
-    system.activationScripts.update-lingering = let
-      lingerDir = "/var/lib/systemd/linger";
-      lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
-      lingeringUsersFile = builtins.toFile "lingering-users"
-        (concatStrings (map (s: "${s}\n")
-          (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
-    in stringAfter [ "users" ] ''
-      if [ -e ${lingerDir} ] ; then
-        cd ${lingerDir}
-        ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
-        ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
-      fi
-    '';
 
     # Warn about user accounts with deprecated password hashing schemes
     system.activationScripts.hashes = {
