@@ -2,6 +2,7 @@
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python3, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null
+, fapiSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SoHtgZRIYNJg4/w1MIocZAM26mkrM+UOQ+RKCh6nwCk=";
   };
 
-  patches = [ ./version.patch ];
+  patches = [
+    ./version.patch
+    ./graceful-fapi-fail.patch
+  ];
 
   # The preConfigure phase doesn't seem to be working here
   # ./bootstrap MUST be executed as the first step, before all
@@ -24,6 +28,11 @@ stdenv.mkDerivation rec {
     echo ${version} > VERSION
     ./bootstrap
   '';
+
+  configureFlags = lib.optionals (!fapiSupport) [
+    # Note: this will be renamed to with-fapi in next release.
+    "--enable-fapi=no"
+  ];
 
   nativeBuildInputs = [
     pkg-config autoreconfHook autoconf-archive makeWrapper patchelf
