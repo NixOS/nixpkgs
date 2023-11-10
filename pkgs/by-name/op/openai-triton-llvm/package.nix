@@ -22,7 +22,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "triton-llvm";
+  pname = "openai-triton-llvm";
   version = "14.0.6-f28c006a5895";
 
   outputs = [

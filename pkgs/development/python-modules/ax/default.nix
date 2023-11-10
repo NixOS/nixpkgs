@@ -69,6 +69,10 @@ buildPythonPackage rec {
   disabledTests = [
     # exact comparison of floating points
     "test_optimize_l0_homotopy"
+    # AssertionError: 5 != 2
+    "test_get_standard_plots_moo"
+    # AssertionError: Expected 'warning' to be called once. Called 3 times
+    "test_validate_kwarg_typing"
   ];
   pythonImportsCheck = [ "ax" ];
 

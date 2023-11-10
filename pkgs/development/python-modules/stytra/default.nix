@@ -33,8 +33,7 @@
 buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
-  format = "setuptools";
-
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
@@ -42,10 +41,10 @@ buildPythonPackage rec {
     sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
   };
 
-  # crashes python
-  preCheck = ''
-    rm stytra/tests/test_z_experiments.py
-  '';
+  patches = [
+    # https://github.com/portugueslab/stytra/issues/87
+    ./0000-workaround-pyqtgraph.patch
+  ];
 
   propagatedBuildInputs = [
     opencv4
@@ -77,6 +76,11 @@ buildPythonPackage rec {
     nose
     pytestCheckHook
     pyserial
+  ];
+
+  disabledTestPaths = [
+    # Crashes python
+    "stytra/tests/test_z_experiments.py"
   ];
 
   meta = with lib; {
