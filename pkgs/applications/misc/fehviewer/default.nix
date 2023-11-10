@@ -25,6 +25,7 @@ flutter.buildFlutterApplication rec {
   '';
 
   postInstall = ''
+    rm -rf $out/bin/*
     makeWrapper $out/app/fehviewer $out/bin/fehviewer  \
             --prefix LD_LIBRARY_PATH : $out/app/lib
   '';
