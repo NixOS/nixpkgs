@@ -34,7 +34,7 @@ in
         -t ${haskellPackages.warp} \
         $out/bin/pandoc
       remove-references-to \
-        -t ${haskellPackages.pandoc_3_1_8} \
+        -t ${haskellPackages.pandoc_3_1_9} \
         $out/bin/pandoc
     '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
       mkdir -p $out/share/bash-completion/completions
@@ -48,5 +48,5 @@ in
     # lead to a transitive runtime dependency on the whole GHC distribution.
     # This should ideally be fixed in haskellPackages (or even Cabal),
     # but a minimal pandoc is important enough to patch it manually.
-    disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.warp haskellPackages.pandoc_3_1_8 ];
+    disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.warp haskellPackages.pandoc_3_1_9 ];
   })
