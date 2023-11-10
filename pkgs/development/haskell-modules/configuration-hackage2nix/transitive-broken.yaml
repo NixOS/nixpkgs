@@ -22,7 +22,6 @@ dont-distribute-packages:
  - Advise-me
  - AlgoRhythm
  - AlignmentAlgorithms
- - Allure
  - AndroidViewHierarchyImporter
  - Annotations
  - ApplePush
@@ -254,7 +253,6 @@ dont-distribute-packages:
  - LDAPv3
  - LPFP
  - LPPaver
- - LambdaHack
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -1502,6 +1500,7 @@ dont-distribute-packages:
  - gi-ges
  - gi-gstpbutils
  - gi-gtk-declarative-app-simple
+ - gi-gtk_4_0_8
  - git-config
  - git-fmt
  - git-gpush
@@ -1727,8 +1726,6 @@ dont-distribute-packages:
  - gogol-youtube-reporting
  - google-drive
  - google-mail-filters
- - google-maps-geocoding
- - google-static-maps
  - googleplus
  - gore-and-ash-actor
  - gore-and-ash-async
@@ -1894,7 +1891,6 @@ dont-distribute-packages:
  - haskell-pdf-presenter
  - haskell-platform-test
  - haskell-reflect
- - haskell-snake
  - haskell-src-exts-observe
  - haskell-token-utils
  - haskell-tools-ast
@@ -4034,7 +4030,6 @@ dont-distribute-packages:
  - universe-dependent-sum
  - universe-th
  - unix-fcntl
- - unleash-client-haskell
  - unpacked-these
  - unpacked-validation
  - unparse-attoparsec
