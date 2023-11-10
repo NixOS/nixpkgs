@@ -5628,12 +5628,12 @@ final: prev:
 
   molten-nvim = buildVimPlugin {
     pname = "molten-nvim";
-    version = "2023-11-09";
+    version = "2023-11-10";
     src = fetchFromGitHub {
       owner = "benlubas";
       repo = "molten-nvim";
-      rev = "6ff5954ace3a284d3d869cd70ed0d9faf05e6f63";
-      sha256 = "076xl65099k9gfcv4pmx5xlh5sfylfzfjmsdhvsjnymkk9iy3s85";
+      rev = "29763c6d49eaa8d0c9c9093a88fb38db34ba4875";
+      sha256 = "1hxr0grv8fcaik3kbcd323jz5zgqc0k353n7lrrs0ka2qicz94k5";
     };
     meta.homepage = "https://github.com/benlubas/molten-nvim/";
   };
