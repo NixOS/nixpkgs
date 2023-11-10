@@ -14,9 +14,9 @@
 , libstatgrab
 , libsysstat
 , lm_sensors
-, lxmenu-data
 , lxqt-build-tools
 , lxqt-globalkeys
+, lxqt-menu-data
 , gitUpdater
 , menu-cache
 , pcre
@@ -30,19 +30,20 @@
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "tSj7GGIvneYapkyqqgSMJtPGApC1fdpiId2XgQF5xf0=";
+    hash = "sha256-LQq1XOA0dGXXORVr2H/gI+axvCAd4P3nB4zCFYWgagc=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
@@ -57,13 +58,12 @@ mkDerivation rec {
     libstatgrab
     libsysstat
     lm_sensors
-    lxmenu-data
     lxqt-globalkeys
+    lxqt-menu-data
     menu-cache
     pcre
     qtbase
     qtsvg
-    qttools
     qtx11extras
     solid
     xorg.libXdmcp
