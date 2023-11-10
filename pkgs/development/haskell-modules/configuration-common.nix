@@ -498,7 +498,7 @@ self: super: {
   structures = dontCheck super.structures;
 
   # Requires alex >= 3.4
-  jacinda = super.jacinda.override { alex = self.alex_3_4_0_0; };
+  jacinda = super.jacinda.override { alex = self.alex_3_4_0_1; };
 
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
