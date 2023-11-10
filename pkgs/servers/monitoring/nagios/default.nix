@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     mainProgram = "nagios";
-    maintainers = with lib.maintainers; [ immae thoughtpolice relrod ];
+    maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];
   };
 }
