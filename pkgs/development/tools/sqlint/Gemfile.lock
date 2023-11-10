@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     google-protobuf (3.21.2)
-    pg_query (2.1.3)
+    pg_query (4.2.3)
       google-protobuf (>= 3.19.2)
     sqlint (0.2.1)
       pg_query (~> 2)
