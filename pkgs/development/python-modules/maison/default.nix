@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "maison";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dbatten5";
-    repo = pname;
+    repo = "maison";
     rev = "refs/tags/v${version}";
     hash = "sha256-uJW+7+cIt+jnbiC+HvT7KzyNk1enEtELTxtfc4eXAPU=";
   };
