@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 
@@ -54,6 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pillow_heif"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # opencv fails to crash, causing the test to fail.
+    "test_opencv_crash"
   ];
 
   nativeCheckInputs = [
