@@ -3822,6 +3822,8 @@ with pkgs;
 
   fluffychat = callPackage  ../applications/networking/instant-messengers/fluffychat { };
 
+  fehviewer = callPackage ../applications/misc/fehviewer { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   gbl = callPackage ../tools/archivers/gbl {
