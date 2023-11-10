@@ -6,25 +6,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "sha256-f5wi0nIM071yaQCwPkY1agKc7OEQa/IxHJc4V2i0Q9I=";
+    sha256 = "sha256-SoHtgZRIYNJg4/w1MIocZAM26mkrM+UOQ+RKCh6nwCk=";
   };
 
-  patches = lib.singleton (
-    substituteAll {
-      src = ./0001-configure-ac-version.patch;
-      VERSION = version;
-    });
+  patches = [ ./version.patch ];
 
   # The preConfigure phase doesn't seem to be working here
   # ./bootstrap MUST be executed as the first step, before all
   # of the autoreconfHook stuff
   postPatch = ''
+    echo ${version} > VERSION
     ./bootstrap
   '';
 
