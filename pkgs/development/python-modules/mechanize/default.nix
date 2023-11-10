@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "mechanize";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XoasB3c1fgBusEzSj37Z+BHUjf+mA9OJGsbSuSKA3JE=";
+    hash = "sha256-aaXtsJYvkh6LEINzaMIkLYrQSfC5H/aZzn9gG/xDFSE=";
   };
 
   propagatedBuildInputs = [ html5lib ];
