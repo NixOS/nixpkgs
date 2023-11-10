@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "pex";
   version = "2.1.151";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
