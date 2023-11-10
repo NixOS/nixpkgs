@@ -35,7 +35,7 @@ self: super: {
       cabalInstallOverlay = cself: csuper:
         {
           # Needs to be upgraded compared to Stackage LTS 21
-          cabal-install-solver = cself.cabal-install-solver_3_10_1_0;
+          cabal-install-solver = cself.cabal-install-solver_3_10_2_1;
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
