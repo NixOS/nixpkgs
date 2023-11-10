@@ -1,0 +1,23 @@
+diff --git a/build/moz.configure/rust.configure b/build/moz.configure/rust.configure
+index cd77d72b..0c03cab7 100644
+--- a/build/moz.configure/rust.configure
++++ b/build/moz.configure/rust.configure
+@@ -261,7 +261,7 @@ def rust_supported_targets(rustc):
+         data.setdefault(key, []).append(namespace(rust_target=t, target=info))
+     return data
+ 
+-
++@imports("os")
+ def detect_rustc_target(
+     host_or_target, compiler_info, arm_target, rust_supported_targets
+ ):
+@@ -383,7 +383,7 @@ def detect_rustc_target(
+ 
+         return None
+ 
+-    rustc_target = find_candidate(candidates)
++    rustc_target = os.environ["RUST_TARGET"]
+ 
+     if rustc_target is None:
+         die("Don't know how to translate {} for rustc".format(host_or_target.alias))
+

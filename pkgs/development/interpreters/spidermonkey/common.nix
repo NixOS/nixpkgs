@@ -14,6 +14,7 @@
 , pkg-config
 , python3
 , python39
+, rust
 , rustc
 , which
 , zip
@@ -71,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: rec {
       url = "https://src.fedoraproject.org/rpms/mozjs91/raw/rawhide/f/0001-Python-Build-Use-r-instead-of-rU-file-read-modes.patch";
       hash = "sha256-WgDIBidB9XNQ/+HacK7jxWnjOF8PEUt5eB0+Aubtl48=";
     })
+  ] ++ [
+    ./fixed-rust-target.patch
   ];
 
   nativeBuildInputs = [
@@ -131,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     "--host=${stdenv.buildPlatform.config}"
     "--target=${stdenv.hostPlatform.config}"
   ];
+  RUST_TARGET = rust.lib.toRustTarget stdenv.hostPlatform;
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
   # These defaults are bogus for Spidermonkey - avoid passing them by providing an empty list
