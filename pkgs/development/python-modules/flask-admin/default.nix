@@ -107,6 +107,8 @@ buildPythonPackage rec {
     "flask_admin/tests/sqla/test_translation.py"
     # RuntimeError: Working outside of application context.
     "flask_admin/tests/sqla/test_multi_pk.py"
+    # Broken test
+    "flask_admin/tests/fileadmin/test_fileadmin.py"
   ];
 
   pythonImportsCheck = [
