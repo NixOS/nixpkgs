@@ -75,6 +75,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/dgtlmoon/changedetection.io";
     changelog = "https://github.com/dgtlmoon/changedetection.io/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mikaelfangel ];
   };
 }
