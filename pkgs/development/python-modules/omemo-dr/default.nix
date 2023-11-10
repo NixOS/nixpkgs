@@ -28,6 +28,10 @@ buildPythonPackage rec {
     protobuf
   ];
 
+  pythonImportsCheck = [
+    "omemo_dr"
+  ];
+
   meta = with lib; {
     description = "OMEMO Double Ratchet";
     homepage = "https://dev.gajim.org/gajim/omemo-dr/";
