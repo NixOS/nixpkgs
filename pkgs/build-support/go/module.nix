@@ -81,6 +81,7 @@ let
       "GIT_PROXY_COMMAND"
       "SOCKS_SERVER"
       "GOPROXY"
+      "NIX_GIT_SSL_CAINFO"
     ];
 
     configurePhase = args.modConfigurePhase or ''
@@ -105,6 +106,8 @@ let
         echo "vendor folder exists, please set 'vendorHash = null;' in your expression"
         exit 10
       fi
+
+      export GIT_SSL_CAINFO=''${NIX_GIT_SSL_CAINFO:-$GIT_SSL_CAINFO}
 
       ${if proxyVendor then ''
         mkdir -p "''${GOPATH}/pkg/mod/cache/download"
