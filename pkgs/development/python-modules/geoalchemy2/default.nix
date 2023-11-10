@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.14.1";
+  version = "0.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "GeoAlchemy2";
     inherit version;
-    hash = "sha256-Ygsxy/l6NoskhtvPzTbaIIGCfpM9QWO8uUIEO3m1Reg=";
+    hash = "sha256-jKAj3LmjbG0xLztK7mMdZjhSZOL8n+sKsPRG61YJQH0=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,16 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # tests require live postgis database
+    # tests require live databases
     "tests/gallery/test_decipher_raster.py"
     "tests/gallery/test_length_at_insert.py"
+    "tests/gallery/test_insert_raster.py"
+    "tests/gallery/test_orm_mapped_v2.py"
     "tests/gallery/test_summarystatsagg.py"
     "tests/gallery/test_type_decorator.py"
     "tests/test_functional.py"
     "tests/test_functional_postgresql.py"
+    "tests/test_functional_mysql.py"
     "tests/test_alembic_migrations.py"
   ];
 

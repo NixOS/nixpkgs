@@ -487,7 +487,7 @@ let
       cabal-install = lib.subtractLists [
         compilerNames.ghc981
       ] released;
-      Cabal_3_10_1_0 = lib.subtractLists [
+      Cabal_3_10_2_0 = lib.subtractLists [
         compilerNames.ghc981
       ] released;
       Cabal-syntax_3_10_1_0 = lib.subtractLists [

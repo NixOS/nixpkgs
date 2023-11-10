@@ -128,7 +128,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
+  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+  };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 

@@ -1,45 +1,38 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_25, libsecret }:
-
-stdenv.mkDerivation rec {
+{ lib, appimageTools, fetchurl, asar }: let
   pname = "todoist-electron";
-  version = "8.6.0";
+  version = "8.9.3";
 
   src = fetchurl {
     url = "https://electron-dl.todoist.com/linux/Todoist-linux-x86_64-${version}.AppImage";
-    hash = "sha256-LjztKgpPm4RN1Pn5gIiPg8UCO095kzTQ9BTEG5Rlv10=";
+    hash = "sha256-L1uH5bnJ66QxAXs7yywG4H/FaunwTX1l+tVtRe2nxdc=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    name = "${pname}-${version}";
-    inherit src;
-  };
+  appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
+    buildCommand = ''
+      ${oA.buildCommand}
 
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
+      # Get rid of the autoupdater
+      ${asar}/bin/asar extract $out/resources/app.asar app
+      sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
+      ${asar}/bin/asar pack app $out/resources/app.asar
+    '';
+  });
 
-  nativeBuildInputs = [ makeWrapper ];
+in appimageTools.wrapAppImage {
+  inherit pname version;
+  src = appimageContents;
 
-  installPhase = ''
-    runHook preInstall
+  extraPkgs = { pkgs, ... }@args: [
+    pkgs.hidapi
+  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
 
-    mkdir -p $out/bin $out/share/${pname} $out/share/applications $out/share/icons/hicolor/512x512
-
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
-    cp -a ${appimageContents}/todoist.desktop $out/share/applications/${pname}.desktop
-    cp -a ${appimageContents}/usr/share/icons/hicolor/512x512/apps $out/share/icons/hicolor/512x512
-
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-
-    runHook postInstall
-  '';
-
-  postFixup = ''
-    makeWrapper ${electron_25}/bin/electron $out/bin/todoist-electron \
-      --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc libsecret ]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+  extraInstallCommands = ''
+    # Add desktop convencience stuff
+    mv $out/bin/{${pname}-*,${pname}}
+    install -Dm444 ${appimageContents}/todoist.desktop -t $out/share/applications
+    install -Dm444 ${appimageContents}/todoist.png -t $out/share/pixmaps
+    substituteInPlace $out/share/applications/todoist.desktop \
+      --replace 'Exec=AppRun' "Exec=$out/bin/${pname} --"
   '';
 
   meta = with lib; {
@@ -47,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "The official Todoist electron app";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ i077 kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza pokon548 ];
   };
 }

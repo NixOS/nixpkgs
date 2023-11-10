@@ -305,7 +305,7 @@ in buildPythonPackage rec {
   ])
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
-  buildInputs = [ blas blas.provider pybind11 ]
+  buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
       cuda_cudart # cuda_runtime.h and libraries
@@ -357,17 +357,15 @@ in buildPythonPackage rec {
 
     # the following are required for tensorboard support
     pillow six future tensorboard protobuf
+
+    # ROCm build and `torch.compile` requires openai-triton
+    openai-triton
+
+    # torch/csrc requires `pybind11` at runtime
+    pybind11
   ]
   ++ lib.optionals MPISupport [ mpi ]
-  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ]
-  # rocm build requires openai-triton;
-  # openai-triton currently requires cuda_nvcc,
-  # so not including it in the cpu-only build;
-  # torch.compile relies on openai-triton,
-  # so we include it for the cuda build as well
-  ++ lib.optionals (rocmSupport || cudaSupport) [
-    openai-triton
-  ];
+  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;

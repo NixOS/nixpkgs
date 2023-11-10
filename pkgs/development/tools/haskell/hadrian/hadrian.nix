@@ -1,19 +1,18 @@
-{ # GHC source tree to build hadrian from
-  ghcSrc ? null, ghcVersion ? null
-, mkDerivation, base, bytestring, Cabal, containers, directory
+# See also ./make-hadria.nix
+{ mkDerivation, base, bytestring, Cabal, containers, directory
 , extra, filepath, lib, mtl, parsec, shake, text, transformers
 , unordered-containers, cryptohash-sha256, base16-bytestring
-, userSettings ? null
-# Whether to pass --hyperlinked-source to haddock or not. This is a custom
-# workaround as we wait for this to be configurable via userSettings or similar.
-# https://gitlab.haskell.org/ghc/ghc/-/issues/23625
-, enableHyperlinkedSource ? true
 , writeText
+  # Dependencies that are not on Hackage and only used in certain Hadrian versions
+, ghc-platform ? null
+, ghc-toolchain ? null
+  # GHC source tree to build hadrian from
+, ghcSrc
+, ghcVersion
+  # Customization
+, userSettings ? null
+, enableHyperlinkedSource
 }:
-
-if ghcSrc == null || ghcVersion == null
-then throw "hadrian: need to specify ghcSrc and ghcVersion arguments manually"
-else
 
 mkDerivation {
   pname = "hadrian";
@@ -44,7 +43,13 @@ mkDerivation {
     parsec shake text transformers unordered-containers
   ] ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
     cryptohash-sha256 base16-bytestring
+  ] ++ lib.optionals (lib.versionAtLeast ghcVersion "9.9") [
+    ghc-platform ghc-toolchain
   ];
+  passthru = {
+    # Expose »private« dependencies if any
+    inherit ghc-platform ghc-toolchain;
+  };
   description = "GHC build system";
   license = lib.licenses.bsd3;
 }
