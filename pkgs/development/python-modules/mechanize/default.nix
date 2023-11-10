@@ -23,6 +23,10 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  pythonImportsCheck = [
+    "mechanize"
+  ];
+
   meta = with lib; {
     description = "Stateful programmatic web browsing in Python";
     homepage = "https://github.com/python-mechanize/mechanize";
