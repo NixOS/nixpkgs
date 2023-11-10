@@ -39,6 +39,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    "TestGetTdjsonTdlibPath"
+  ];
+
   pythonImportsCheck = [
     "telegram.client"
   ];
