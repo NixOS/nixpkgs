@@ -295,7 +295,7 @@ self: super: {
 
   # Overriding the version pandoc dependency uses as the latest release has version bounds
   # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  patat = super.patat.override { pandoc = self.pandoc_3_1_8; };
+  patat = super.patat.override { pandoc = self.pandoc_3_1_9; };
 
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
@@ -1841,7 +1841,7 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_8;
+      pandoc = self.pandoc_3_1_9;
 
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
@@ -1853,11 +1853,11 @@ self: super: {
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_8 = doDistribute (super.pandoc_3_1_8.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_9 = doDistribute (super.pandoc_3_1_9.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_8
+    pandoc_3_1_9
     pandoc-lua-engine
     ;
 
