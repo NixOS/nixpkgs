@@ -9114,6 +9114,10 @@ with pkgs;
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
   haskell-language-server = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { };
+  haskell-language-server-ghc-9_0 = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { supportedGhcVersions = [ "90" ]; };
+  haskell-language-server-ghc-9_2 = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { supportedGhcVersions = [ "92" ]; };
+  haskell-language-server-ghc-9_4 = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { supportedGhcVersions = [ "94" ]; };
+  haskell-language-server-ghc-9_6 = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { supportedGhcVersions = [ "96" ]; };
 
   hassil = with python3Packages; toPythonApplication hassil;
 
