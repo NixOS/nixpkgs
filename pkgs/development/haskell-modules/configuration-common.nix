@@ -58,14 +58,14 @@ self: super: {
           # allowInconsistentDependencies for all reverse dependencies of hspec-core,
           # just upgrade to an hspec version without the offending dependency.
           hspec-core = cself.hspec-core_2_11_7;
-          hspec-discover = cself.hspec-discover_2_11_6;
+          hspec-discover = cself.hspec-discover_2_11_7;
           hspec = cself.hspec_2_11_6;
 
           # hspec-discover and hspec-core depend on hspec-meta for testing which
           # we need to avoid since it depends on ghc as well. Since hspec*_2_11*
           # are overridden to take the versioned attributes as inputs, we need
           # to make sure to override the versioned attribute with this fix.
-          hspec-discover_2_11_6 = dontCheck csuper.hspec-discover_2_11_6;
+          hspec-discover_2_11_7 = dontCheck csuper.hspec-discover_2_11_7;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -1672,13 +1672,13 @@ self: super: {
 
   # Give latest hspec correct dependency versions without overrideScope
   hspec_2_11_6 = doDistribute (super.hspec_2_11_6.override {
-    hspec-discover = self.hspec-discover_2_11_6;
+    hspec-discover = self.hspec-discover_2_11_7;
     hspec-core = self.hspec-core_2_11_7;
   });
   hspec-meta_2_11_6 = doDistribute (super.hspec-meta_2_11_6.override {
     hspec-expectations = self.hspec-expectations_0_8_4;
   });
-  hspec-discover_2_11_6 = doDistribute (super.hspec-discover_2_11_6.override {
+  hspec-discover_2_11_7 = doDistribute (super.hspec-discover_2_11_7.override {
     hspec-meta = self.hspec-meta_2_11_6;
   });
   # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_7
