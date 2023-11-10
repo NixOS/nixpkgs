@@ -3,8 +3,10 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
+    _singleton
     _coerceMany
     _toSourceFilter
+    _fromSourceFilter
     _unionMany
     _fileFilter
     _printFileset
@@ -152,7 +154,12 @@ in {
       sourceFilter = _toSourceFilter fileset;
     in
     if ! isPath root then
-      if isStringLike root then
+      if root ? _isLibCleanSourceWith then
+        throw ''
+          lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
+              To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+              Note that this only works for sources created from paths.''
+      else if isStringLike root then
         throw ''
           lib.fileset.toSource: `root` (${toString root}) is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
@@ -187,6 +194,75 @@ in {
         src = root;
         filter = sourceFilter;
       };
+
+  /*
+  Create a file set with the same files as a `lib.sources`-based value.
+  This does not import any of the files into the store.
+
+  This can be used to gradually migrate from `lib.sources`-based filtering to `lib.fileset`.
+
+  A file set can be turned back into a source using [`toSource`](#function-library-lib.fileset.toSource).
+
+  :::{.note}
+  File sets cannot represent empty directories.
+  Turning the result of this function back into a source using `toSource` will therefore not preserve empty directories.
+  :::
+
+  Type:
+    fromSource :: SourceLike -> FileSet
+
+  Example:
+    # There's no cleanSource-like function for file sets yet,
+    # but we can just convert cleanSource to a file set and use it that way
+    toSource {
+      root = ./.;
+      fileset = fromSource (lib.sources.cleanSource ./.);
+    }
+
+    # Keeping a previous sourceByRegex (which could be migrated to `lib.fileset.unions`),
+    # but removing a subdirectory using file set functions
+    difference
+      (fromSource (lib.sources.sourceByRegex ./. [
+        "^README\.md$"
+        # This regex includes everything in ./doc
+        "^doc(/.*)?$"
+      ])
+      ./doc/generated
+
+    # Use cleanSource, but limit it to only include ./Makefile and files under ./src
+    intersection
+      (fromSource (lib.sources.cleanSource ./.))
+      (unions [
+        ./Makefile
+        ./src
+      ]);
+  */
+  fromSource = source:
+    let
+      # This function uses `._isLibCleanSourceWith`, `.origSrc` and `.filter`,
+      # which are technically internal to lib.sources,
+      # but we'll allow this since both libraries are in the same code base
+      # and this function is a bridge between them.
+      isFiltered = source ? _isLibCleanSourceWith;
+      path = if isFiltered then source.origSrc else source;
+    in
+    # We can only support sources created from paths
+    if ! isPath path then
+      if isStringLike path then
+        throw ''
+          lib.fileset.fromSource: The source origin of the argument is a string-like value ("${toString path}"), but it should be a path instead.
+              Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.''
+      else
+        throw ''
+          lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fromSource: The source origin (${toString path}) of the argument does not exist.''
+    else if isFiltered then
+      _fromSourceFilter path source.filter
+    else
+      # If there's no filter, no need to run the expensive conversion, all subpaths will be included
+      _singleton path;
 
   /*
     The file set containing all files that are in either of two given file sets.

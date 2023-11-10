@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2016
+# shellcheck disable=SC2317
+# shellcheck disable=SC2192
 
 # Tests lib.fileset
 # Run:
@@ -224,23 +226,17 @@ withFileMonitor() {
     fi
 }
 
-# Check whether a file set includes/excludes declared paths as expected, usage:
+
+# Create the tree structure declared in the tree variable, usage:
 #
 # tree=(
-#   [a/b] =1  # Declare that file       a/b should exist and expect it to be included in the store path
-#   [c/a] =   # Declare that file       c/a should exist and expect it to be excluded in the store path
-#   [c/d/]=   # Declare that directory c/d/ should exist and expect it to be excluded in the store path
+#   [a/b] =   # Declare that file       a/b should exist
+#   [c/a] =   # Declare that file       c/a should exist
+#   [c/d/]=   # Declare that directory c/d/ should exist
 # )
-# checkFileset './a' # Pass the fileset as the argument
+# createTree
 declare -A tree
-checkFileset() {
-    # New subshell so that we can have a separate trap handler, see `trap` below
-    local fileset=$1
-
-    # Process the tree into separate arrays for included paths, excluded paths and excluded files.
-    local -a included=()
-    local -a excluded=()
-    local -a excludedFiles=()
+createTree() {
     # Track which paths need to be created
     local -a dirsToCreate=()
     local -a filesToCreate=()
@@ -248,24 +244,9 @@ checkFileset() {
         # If keys end with a `/` we treat them as directories, otherwise files
         if [[ "$p" =~ /$ ]]; then
             dirsToCreate+=("$p")
-            isFile=
         else
             filesToCreate+=("$p")
-            isFile=1
         fi
-        case "${tree[$p]}" in
-            1)
-                included+=("$p")
-                ;;
-            0)
-                excluded+=("$p")
-                if [[ -n "$isFile" ]]; then
-                    excludedFiles+=("$p")
-                fi
-                ;;
-            *)
-                die "Unsupported tree value: ${tree[$p]}"
-        esac
     done
 
     # Create all the necessary paths.
@@ -280,6 +261,43 @@ checkFileset() {
         mkdir -p "${parentsToCreate[@]}"
         touch "${filesToCreate[@]}"
     fi
+}
+
+# Check whether a file set includes/excludes declared paths as expected, usage:
+#
+# tree=(
+#   [a/b] =1  # Declare that file       a/b should exist and expect it to be included in the store path
+#   [c/a] =   # Declare that file       c/a should exist and expect it to be excluded in the store path
+#   [c/d/]=   # Declare that directory c/d/ should exist and expect it to be excluded in the store path
+# )
+# checkFileset './a' # Pass the fileset as the argument
+checkFileset() {
+    # New subshell so that we can have a separate trap handler, see `trap` below
+    local fileset=$1
+
+    # Create the tree
+    createTree
+
+    # Process the tree into separate arrays for included paths, excluded paths and excluded files.
+    local -a included=()
+    local -a excluded=()
+    local -a excludedFiles=()
+    for p in "${!tree[@]}"; do
+        case "${tree[$p]}" in
+            1)
+                included+=("$p")
+                ;;
+            0)
+                excluded+=("$p")
+                # If keys end with a `/` we treat them as directories, otherwise files
+                if [[ ! "$p" =~ /$ ]]; then
+                    excludedFiles+=("$p")
+                fi
+                ;;
+            *)
+                die "Unsupported tree value: ${tree[$p]}"
+        esac
+    done
 
     expression="toSource { root = ./.; fileset = $fileset; }"
 
@@ -320,6 +338,10 @@ checkFileset() {
 # Absolute paths in strings cannot be passed as `root`
 expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \(/nix/store/foobar\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+
+expectFailure 'toSource { root = cleanSourceWith { src = ./.; }; fileset = ./.; }' 'lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
+\s*To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+\s*Note that this only works for sources created from paths.'
 
 # Only paths are accepted as `root`
 expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `root` is of type int, but it should be a path instead.'
@@ -365,6 +387,9 @@ rm -rf -- *
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
 expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a file set or a path instead.
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+expectFailure 'toSource { root = ./.; fileset = cleanSourceWith { src = ./.; }; }' 'lib.fileset.toSource: `fileset` is a `lib.sources`-based value, but it should be a file set or a path instead.
+\s*To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+\s*Note that this only works for sources created from paths.'
 
 # Path coercion errors for non-existent paths
 expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.'
@@ -993,6 +1018,217 @@ expectedTrace=$work$'\n'$(printf -- '- %s (regular)\n' "${filesToCreate[@]}")
 # We need an excluded file so it doesn't print as `(all files in directory)`
 touch 0 "${filesToCreate[@]}"
 expectTrace 'unions (mapAttrsToList (n: _: ./. + "/${n}") (removeAttrs (builtins.readDir ./.) [ "0" ]))' "$expectedTrace"
+rm -rf -- *
+
+## lib.fileset.fromSource
+
+# Check error messages
+expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+expectFailure 'fromSource (lib.cleanSource "")' 'lib.fileset.fromSource: The source origin of the argument is a string-like value \(""\), but it should be a path instead.
+\s*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
+
+expectFailure 'fromSource (lib.cleanSource null)' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+# fromSource on a path works and is the same as coercing that path
+mkdir a
+touch a/b c
+expectEqual 'trace (fromSource ./.) null' 'trace ./. null'
+rm -rf -- *
+
+# Check that converting to a file set doesn't read the included files
+mkdir a
+touch a/b
+run() {
+    expectEqual "trace (fromSource (lib.cleanSourceWith { src = ./a; })) null" "builtins.trace \"$work/a (all files in directory)\" null"
+    rm a/b
+}
+withFileMonitor run a/b
+rm -rf -- *
+
+# Check that converting to a file set doesn't read entries for directories that are filtered out
+mkdir -p a/b
+touch a/b/c
+run() {
+    expectEqual "trace (fromSource (lib.cleanSourceWith {
+      src = ./a;
+      filter = pathString: type: false;
+    })) null" "builtins.trace \"(empty)\" null"
+    rm a/b/c
+    rmdir a/b
+}
+withFileMonitor run a/b
+rm -rf -- *
+
+# The filter is not needed on empty directories
+expectEqual 'trace (fromSource (lib.cleanSourceWith {
+  src = ./.;
+  filter = abort "filter should not be needed";
+})) null' 'trace _emptyWithoutBase null'
+
+# Single files also work
+touch a b
+expectEqual 'trace (fromSource (cleanSourceWith { src = ./a; })) null' 'trace ./a null'
+rm -rf -- *
+
+# For a tree assigning each subpath true/false,
+# check whether a source filter with those results includes the same files
+# as a file set created using fromSource. Usage:
+#
+# tree=(
+#   [a]=1  # ./a is a file and the filter should return true for it
+#   [b/]=0 # ./b is a directory and the filter should return false for it
+# )
+# checkSource
+checkSource() {
+    createTree
+
+    # Serialise the tree as JSON (there's only minimal savings with jq,
+    # and we don't need to handle escapes)
+    {
+        echo "{"
+        first=1
+        for p in "${!tree[@]}"; do
+            if [[ -z "$first" ]]; then
+                echo ","
+            else
+                first=
+            fi
+            echo "\"$p\":"
+            case "${tree[$p]}" in
+                1)
+                    echo "true"
+                    ;;
+                0)
+                    echo "false"
+                    ;;
+                *)
+                    die "Unsupported tree value: ${tree[$p]}"
+            esac
+        done
+        echo "}"
+    } > "$tmp/tree.json"
+
+    # An expression to create a source value with a filter matching the tree
+    sourceExpr='
+      let
+        tree = importJSON '"$tmp"'/tree.json;
+      in
+      cleanSourceWith {
+        src = ./.;
+        filter =
+          pathString: type:
+          let
+            stripped = removePrefix (toString ./. + "/") pathString;
+            key = stripped + optionalString (type == "directory") "/";
+          in
+          tree.${key} or
+            (throw "tree key ${key} missing");
+      }
+    '
+
+    filesetExpr='
+      toSource {
+        root = ./.;
+        fileset = fromSource ('"$sourceExpr"');
+      }
+    '
+
+    # Turn both into store paths
+    sourceStorePath=$(expectStorePath "$sourceExpr")
+    filesetStorePath=$(expectStorePath "$filesetExpr")
+
+    # Loop through each path in the tree
+    while IFS= read -r -d $'\0' subpath; do
+        if [[ ! -e "$sourceStorePath"/"$subpath" ]]; then
+            # If it's not in the source store path, it's also not in the file set store path
+            if [[ -e "$filesetStorePath"/"$subpath" ]]; then
+                die "The store path $sourceStorePath created by $expr doesn't contain $subpath, but the corresponding store path $filesetStorePath created via fromSource does contain $subpath"
+            fi
+        elif [[ -z "$(find "$sourceStorePath"/"$subpath" -type f)" ]]; then
+            # If it's an empty directory in the source store path, it shouldn't be in the file set store path
+            if [[ -e "$filesetStorePath"/"$subpath" ]]; then
+                die "The store path $sourceStorePath created by $expr contains the path $subpath without any files, but the corresponding store path $filesetStorePath created via fromSource didn't omit it"
+            fi
+        else
+            # If it's non-empty directory or a file, it should be in the file set store path
+            if [[ ! -e "$filesetStorePath"/"$subpath" ]]; then
+                die "The store path $sourceStorePath created by $expr contains the non-empty path $subpath, but the corresponding store path $filesetStorePath created via fromSource doesn't include it"
+            fi
+        fi
+    done < <(find . -mindepth 1 -print0)
+
+    rm -rf -- *
+}
+
+# Check whether the filter is evaluated correctly
+tree=(
+    [a]=
+    [b/]=
+    [b/c]=
+    [b/d]=
+    [e/]=
+    [e/e/]=
+)
+# We fill out the above tree values with all possible combinations of 0 and 1
+# Then check whether a filter based on those return values gets turned into the corresponding file set
+for i in $(seq 0 $((2 ** ${#tree[@]} - 1 ))); do
+    for p in "${!tree[@]}"; do
+        tree[$p]=$(( i % 2 ))
+        (( i /= 2 )) || true
+    done
+    checkSource
+done
+
+# The filter is called with the same arguments in the same order
+mkdir a e
+touch a/b a/c d e
+expectEqual '
+  trace (fromSource (cleanSourceWith {
+    src = ./.;
+    filter = pathString: type: builtins.trace "${pathString} ${toString type}" true;
+  })) null
+' '
+  builtins.seq (cleanSourceWith {
+    src = ./.;
+    filter = pathString: type: builtins.trace "${pathString} ${toString type}" true;
+  }).outPath
+  builtins.trace "'"$work"' (all files in directory)"
+  null
+'
+rm -rf -- *
+
+# Test that if a directory is not included, the filter isn't called on its contents
+mkdir a b
+touch a/c b/d
+expectEqual 'trace (fromSource (cleanSourceWith {
+  src = ./.;
+  filter = pathString: type:
+    if pathString == toString ./a then
+      false
+    else if pathString == toString ./b then
+      true
+    else if pathString == toString ./b/d then
+      true
+    else
+      abort "This filter should not be called with path ${pathString}";
+})) null' 'trace (_create ./. { b = "directory"; }) null'
+rm -rf -- *
+
+# The filter is called lazily:
+# If a later say intersection removes a part of the tree, the filter won't run on it
+mkdir a d
+touch a/{b,c} d/e
+expectEqual 'trace (intersection ./a (fromSource (lib.cleanSourceWith {
+  src = ./.;
+  filter = pathString: type:
+    if pathString == toString ./a || pathString == toString ./a/b then
+      true
+    else if pathString == toString ./a/c then
+      false
+    else
+      abort "filter should not be called on ${pathString}";
+}))) null' 'trace ./a/b null'
 rm -rf -- *
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
