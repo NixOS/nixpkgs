@@ -2,18 +2,24 @@
 , buildPythonPackage
 , fetchPypi
 , html5lib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mechanize";
   version = "0.4.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-aaXtsJYvkh6LEINzaMIkLYrQSfC5H/aZzn9gG/xDFSE=";
   };
 
-  propagatedBuildInputs = [ html5lib ];
+  propagatedBuildInputs = [
+    html5lib
+  ];
 
   doCheck = false;
 
