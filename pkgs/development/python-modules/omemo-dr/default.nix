@@ -14,9 +14,11 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "OMEMO Double Ratchet";
-    license = lib.licenses.lgpl3;
     homepage = "https://dev.gajim.org/gajim/omemo-dr/";
+    changelog = "https://dev.gajim.org/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ ];
   };
 }
