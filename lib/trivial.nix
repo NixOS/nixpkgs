@@ -467,6 +467,17 @@ rec {
     then v
     else k: v;
 
+  /* Convert a hexadecimal string to it's integer representation. For example:
+
+    fromHexString "FF" => 255
+
+    fromHexString (builtins.hashString "sha256" "test") => 9223372036854775807
+  */
+  fromHexString = value:
+  let
+    parsed = builtins.fromTOML "v=0x${value}";
+  in parsed.v;
+
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
 
