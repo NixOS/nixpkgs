@@ -34,7 +34,7 @@ $ nix repl
 map (p: p.name) pkgs.rxvt-unicode.plugins
 ```
 
-Alternatively, if your shell is bash or zsh and have completion enabled, simply type `nixpkgs.rxvt-unicode.plugins.<tab>`.
+Alternatively, if your shell is bash or zsh and have completion enabled, type `nixpkgs.rxvt-unicode.plugins.<tab>`.
 
 In addition to `plugins` the options `extraDeps` and `perlDeps` can be used to install extra packages. `extraDeps` can be used, for example, to provide `xsel` (a clipboard manager) to the clipboard plugin, without installing it globally:
 

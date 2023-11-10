@@ -318,7 +318,7 @@ checkFileset() {
 #### Error messages #####
 
 # Absolute paths in strings cannot be passed as `root`
-expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \("/nix/store/foobar"\) is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \(/nix/store/foobar\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Only paths are accepted as `root`
@@ -328,14 +328,14 @@ expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `r
 mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./foo/mock-root; fileset = ./bar/mock-root; }
-' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \("'"$work"'/foo/mock-root"\):
-\s*`root`: root "'"$work"'/foo/mock-root"
-\s*`fileset`: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \('"$work"'/foo/mock-root\):
+\s*`root`: Filesystem root is "'"$work"'/foo/mock-root"
+\s*`fileset`: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # `root` needs to exist
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a path that does not exist.'
 
 # `root` needs to be a file
 touch a
@@ -367,7 +367,7 @@ expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.to
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
@@ -490,26 +490,26 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = union ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.union: Filesystem roots are not the same:
-\s*first argument: root "'"$work"'/foo/mock-root"
-\s*second argument: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
 ' 'lib.fileset.unions: Filesystem roots are not the same:
-\s*element 0: root "'"$work"'/foo/mock-root"
-\s*element 1: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*Element 0: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Element 1: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument \('"$work"'/b\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: Second argument \('"$work"'/b\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: Element 0 \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: Element 1 \('"$work"'/b\) is a path that does not exist.'
 
 # unions needs a list
-expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
+expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Argument is of type null, but it should be a list instead.'
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files
 tree=()
@@ -603,14 +603,14 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = intersection ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.intersection: Filesystem roots are not the same:
-\s*first argument: root "'"$work"'/foo/mock-root"
-\s*second argument: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: first argument \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: second argument \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: Second argument \('"$work"'/b\) is a path that does not exist.'
 
 # The tree of later arguments should not be evaluated if a former argument already excludes all files
 tree=(

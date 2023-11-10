@@ -65,6 +65,8 @@ in
 
   mu4e = callPackage ./manual-packages/mu4e { };
 
+  notdeft = callPackage ./manual-packages/notdeft { };
+
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };
