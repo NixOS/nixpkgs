@@ -5170,6 +5170,8 @@ self: super: with self; {
 
   hvplot = callPackage ../development/python-modules/hvplot { };
 
+  hwdata = callPackage ../development/python-modules/hwdata { };
+
   hwi = callPackage ../development/python-modules/hwi { };
 
   hy = callPackage ../development/python-modules/hy { };
