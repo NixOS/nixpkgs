@@ -2,12 +2,13 @@
 # Do not edit!
 
 {
-  version = "2023.11.1";
+  version = "2023.11.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
     "abode" = ps: with ps; [
       jaraco-abode
+      jaraco-functools
     ];
     "accuweather" = ps: with ps; [
       accuweather
