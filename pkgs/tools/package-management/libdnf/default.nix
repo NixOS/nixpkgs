@@ -15,6 +15,7 @@
 , libyaml
 , rpm
 , zchunk
+, cppunit
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     check
+    cppunit
     openssl
     json_c
     libsmartcols
@@ -57,11 +59,6 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    # See https://github.com/NixOS/nixpkgs/issues/107428
-    substituteInPlace CMakeLists.txt \
-      --replace "enable_testing()" "" \
-      --replace "add_subdirectory(tests)" ""
-
     # https://github.com/rpm-software-management/libdnf/issues/1518
     substituteInPlace libdnf/libdnf.pc.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
