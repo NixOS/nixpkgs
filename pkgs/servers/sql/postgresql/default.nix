@@ -326,6 +326,7 @@ let
       homepage    = "https://www.postgresql.org";
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
+      changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
