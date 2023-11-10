@@ -1,13 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, cryptography, protobuf }:
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, protobuf
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "omemo-dr";
   version = "1.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-KoqMdyMdc5Sb3TdSeNTVomElK9ruUstiQayyUcIC02E=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
