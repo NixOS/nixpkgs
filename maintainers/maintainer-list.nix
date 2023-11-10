@@ -14841,6 +14841,12 @@
     githubId = 145816;
     name = "David McKay";
   };
+  rayslash = {
+    email = "stevemathewjoy@tutanota.com";
+    github = "rayslash";
+    githubId = 45141270;
+    name = "Steve Mathew Joy";
+  };
   razvan = {
     email = "razvan.panda@gmail.com";
     github = "freeman42x";

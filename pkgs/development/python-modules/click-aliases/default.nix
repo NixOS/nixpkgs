@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "click-aliases";
-  version = "1.0.2";
+  version = "1.0.3";
 
   pyproject = true;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = "click-aliases";
     rev = "v${version}";
-    hash = "sha256-ZrNdxUMLRre0U9xCyyU8HjByNGMSXiuMDVjW9e88eyk=";
+    hash = "sha256-HTjo6ID27W7D4MZjeAJMSy5yVd6oKg0Ed9/kDtQZ7Vw=";
   };
 
   nativeBuildInputs = [

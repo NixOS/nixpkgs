@@ -625,4 +625,18 @@ in package-set { inherit pkgs lib callPackage; } self // {
         else pkg
       ) { };
 
+    /*
+      Modify given Haskell package to force GHC to employ the LLVM
+      codegen backend when compiling. Useful when working around bugs
+      in a native codegen backend GHC defaults to.
+
+      Example:
+        forceLlvmCodegenBackend tls
+
+      Type: drv -> drv
+    */
+    forceLlvmCodegenBackend = haskellLib.overrideCabal (drv: {
+      configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
+      buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    });
   }

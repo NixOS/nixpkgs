@@ -1278,3 +1278,19 @@ class Machine:
     def run_callbacks(self) -> None:
         for callback in self.callbacks:
             callback()
+
+    def switch_root(self) -> None:
+        """
+        Transition from stage 1 to stage 2. This requires the
+        machine to be configured with `testing.initrdBackdoor = true`
+        and `boot.initrd.systemd.enable = true`.
+        """
+        self.wait_for_unit("initrd.target")
+        self.execute(
+            "systemctl isolate --no-block initrd-switch-root.target 2>/dev/null >/dev/null",
+            check_return=False,
+            check_output=False,
+        )
+        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
+        self.connected = False
+        self.connect()

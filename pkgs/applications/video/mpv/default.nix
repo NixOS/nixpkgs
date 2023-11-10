@@ -19,6 +19,7 @@
 , libuchardet
 , libiconv
 , xcbuild
+, sigtool
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -154,7 +155,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     pkg-config
     python3
   ]
-  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ]
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
@@ -203,6 +204,11 @@ in stdenv'.mkDerivation (finalAttrs: {
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
+    # Swap binary and bundle symlink to sign bundle executable as symlinks cannot be signed
+    rm build/mpv.app/Contents/MacOS/mpv-bundle
+    mv build/mpv.app/Contents/MacOS/mpv build/mpv.app/Contents/MacOS/mpv-bundle
+    ln -s mpv-bundle build/mpv.app/Contents/MacOS/mpv
+    codesign --force --sign - build/mpv.app/Contents/MacOS/mpv-bundle
     popd
   '';
 

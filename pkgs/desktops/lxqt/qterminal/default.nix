@@ -13,23 +13,23 @@
 
 mkDerivation rec {
   pname = "qterminal";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "/R/fv8UAOeCVvXXBAXjturTTmN/LeqLKFJjAmEry2WU=";
+    hash = "sha256-nojNx351lYw0jVKEvzAIDP1WrZWcCAlfYMxNG95GcEo=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtermwidget
   ];
