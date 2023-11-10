@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , html5lib
+, pytestCheckHook
 , pythonOlder
 , setuptools
 }:
@@ -26,10 +27,24 @@ buildPythonPackage rec {
     html5lib
   ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "mechanize"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "test/test_urllib2_localnet.py"
+    "test/test_functional.py"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_pickling"
+    "test_password_manager"
   ];
 
   meta = with lib; {
