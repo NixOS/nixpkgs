@@ -21,7 +21,7 @@ buildPythonPackage rec {
     description = "Stateful programmatic web browsing in Python";
     homepage = "https://github.com/python-mechanize/mechanize";
     changelog = "https://github.com/python-mechanize/mechanize/blob/v${version}/ChangeLog";
-    license = "BSD-style";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
 }
