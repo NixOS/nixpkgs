@@ -94,12 +94,15 @@ extra-packages:
   - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
   - ghc-lib == 9.4.*                    # 2023-03-17: preserve for GHC 9.4
+  - ghc-lib == 9.6.*                    # 2023-03-17: preserve for GHC 9.6
   - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
   - ghc-lib-parser == 9.4.*             # 2023-03-17: preserve for GHC 9.4
+  - ghc-lib-parser == 9.6.*             # 2023-10-24: preserve for GHC 9.6
   - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
   - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
+  - ghc-lib-parser-ex == 9.6.*          # 2023-10-24: preserve for GHC 9.6
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
@@ -154,6 +157,8 @@ package-maintainers:
     - hnix-store-remote
   arturcygan:
     - hevm
+  athas:
+    - futhark
   berberman:
     - nvfetcher
     - arch-web
@@ -169,6 +174,7 @@ package-maintainers:
   centromere:
     - nfc
   dalpd:
+    - dhall-lsp-server
     - espial
     - ghc-vis
     - patat
@@ -208,6 +214,9 @@ package-maintainers:
     - vulkan-utils
   erictapen:
     - hakyll
+  evenbrenden:
+    - unleash-client-haskell
+    - unleash-client-haskell-core
   Gabriella439:
     - annah
     - bench
@@ -279,8 +288,6 @@ package-maintainers:
   maralorn:
     - cabal-fmt
     - clay
-    - ema
-    - emanote
     - eventlog2html
     - generic-optics
     - ghc-debug-brick
@@ -323,11 +330,12 @@ package-maintainers:
   ncfavier:
     - lambdabot
   nomeata:
+    - cabal-plan-bounds
     - candid
     - leb128-cereal
-    - tasty-expected-failure
     - lhs2tex
     - rec-def
+    - tasty-expected-failure
   peti:
     - cabal2spec
     - funcmp
@@ -378,6 +386,11 @@ package-maintainers:
     - taffybar
     - arbtt
     - lentil
+  sheepforce:
+    - mpi-hs
+    - mpi-hs-store
+    - mpi-hs-cereal
+    - mpi-hs-binary
   shlok:
     - streamly-archive
     - streamly-lmdb
