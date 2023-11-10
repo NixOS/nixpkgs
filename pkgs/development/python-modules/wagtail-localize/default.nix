@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
-  version = "1.5.2";
+  version = "1.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     repo = pname;
     owner = "wagtail";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7r2FFfWGqjE3Z7wsdf6KwwbUZ+wXqOscsL/2CepSMLY=";
+    hash = "sha256-OrRR5wLTq3icSBq+9m+MxIvkTvJP7yiGR9yzPt53q+k=";
   };
 
   nativeBuildInputs = [

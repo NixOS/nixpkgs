@@ -99,6 +99,7 @@ mapAliases {
   manta = pkgs.node-manta; # Added 2023-05-06
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
+  inherit (pkgs) mathjax-node-cli; # added 2023-11-02
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19

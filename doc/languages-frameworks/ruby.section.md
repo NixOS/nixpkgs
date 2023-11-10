@@ -94,7 +94,7 @@ $ bundle lock
 $ bundix
 ```
 
-If you already have a `Gemfile.lock`, you can simply run `bundix` and it will work the same.
+If you already have a `Gemfile.lock`, you can run `bundix` and it will work the same.
 
 To update the gems in your `Gemfile.lock`, you may use the `bundix -l` flag, which will create a new `Gemfile.lock` in case the `Gemfile` has a more recent time of modification.
 
@@ -251,7 +251,7 @@ source 'https://rubygems.org' do
 end
 ```
 
-If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by simply running the `bundle lock` and `bundix` steps again.
+If you want to package a specific version, you can use the standard Gemfile syntax for that, e.g. `gem 'mdl', '0.5.0'`, but if you want the latest stable version anyway, it's easier to update by running the `bundle lock` and `bundix` steps again.
 
 Now you can also make a `default.nix` that looks like this:
 

@@ -50,7 +50,7 @@ pandoc -f markdown_github -t docbook5 docs.md -o my-section.md
 Pandoc can also quickly convert a single `section.xml` to HTML, which is
 helpful when drafting.
 
-Sometimes writing valid DocBook is simply too difficult. In this case,
+Sometimes writing valid DocBook is too difficult. In this case,
 submit your documentation updates in a [GitHub
 Issue](https://github.com/NixOS/nixpkgs/issues/new) and someone will
 handle the conversion to XML for you.

@@ -5337,6 +5337,13 @@
       fingerprint = "F178 B4B4 6165 6D1B 7C15  B55D 4029 3358 C7B9 326B";
     }];
   };
+  ericthemagician = {
+    email = "eric@ericyen.com";
+    matrix = "@eric:jupiterbroadcasting.com";
+    github = "EricTheMagician";
+    githubId = 323436;
+    name = "Eric Yen";
+  };
   erikarvstedt = {
     email = "erik.arvstedt@gmail.com";
     matrix = "@erikarvstedt:matrix.org";
@@ -12907,6 +12914,11 @@
     githubId = 66913205;
     name = "Rick Sanchez";
   };
+  nix-julia = {
+    name = "nix-julia";
+    github = "nix-julia";
+    githubId = 149073815;
+  };
   nixy = {
     email = "nixy@nixy.moe";
     github = "nixy";
@@ -13924,6 +13936,12 @@
     github = "Philipp-M";
     githubId = 9267430;
     name = "Philipp Mildenberger";
+  };
+  philiptaron = {
+    email = "philip.taron@gmail.com";
+    github = "philiptaron";
+    githubId = 43863;
+    name = "Philip Taron";
   };
   phip1611 = {
     email = "phip1611@gmail.com";
@@ -18857,6 +18875,12 @@
     githubId = 7038383;
     name = "Vojta Káně";
   };
+  volfyd = {
+    email = "lb.nix@lisbethmail.com";
+    github = "volfyd";
+    githubId = 3578382;
+    name = "Leif Huhn";
+  };
   volhovm = {
     email = "volhovm.cs@gmail.com";
     github = "volhovm";
@@ -19933,6 +19957,12 @@
     matrix = "@zmitchell:matrix.org";
     github = "zmitchell";
     githubId = 10246891;
+  };
+  znaniye = {
+    email = "zn4niye@proton.me";
+    github = "znaniye";
+    githubId = 134703788;
+    name = "Samuel Silva";
   };
   znewman01 = {
     email = "znewman01@gmail.com";

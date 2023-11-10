@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";
     homepage = "https://vxl.sourceforge.net/";
-    license = "VXL License";
+    # license appears contradictory; see https://github.com/vxl/vxl/issues/752
+    # (and see https://github.com/InsightSoftwareConsortium/ITK/pull/1920/files for potential patch)
+    license = [ lib.licenses.unfree ];
     maintainers = with lib.maintainers; [viric];
     platforms = with lib.platforms; linux;
   };
