@@ -55,6 +55,7 @@ import ./make-test-python.nix (
               inherit passwordFile paths exclude pruneOpts backupPrepareCommand backupCleanupCommand;
               repository = remoteRepository;
               initialize = true;
+              timerConfig = null; # has no effect here, just checking that it doesn't break the service
             };
             remote-from-file-backup = {
               inherit passwordFile exclude pruneOpts;
