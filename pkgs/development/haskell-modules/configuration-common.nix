@@ -1176,7 +1176,7 @@ self: super: {
         # stack-2.13.1 requires a bunch of the latest packages.
         (drv: drv.overrideScope (hfinal: hprev: {
           ansi-terminal = hprev.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
-          crypton = hprev.crypton_0_33; # needs crypton >= 0.33
+          crypton = hprev.crypton_0_34; # needs crypton >= 0.33
           hedgehog = doJailbreak hprev.hedgehog; # has too strict version bound for ansi-terminal
           hpack = hprev.hpack_0_36_0; # needs hpack == 0.36.0
           http-client-tls = hprev.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
