@@ -2,20 +2,20 @@
 
 buildNpmPackage rec {
   pname = "vieb";
-  version = "10.4.0";
+  version = "10.6.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
-    hash = "sha256-SQQDlOSP1MZeN6BHdahpxpZ0e60lgA4ph0r2jkmTdP8=";
+    hash = "sha256-WVG30wkyGiqd3uEhk2h2MHu4L0yE6DRP6NAKMExjuOs=";
   };
 
   postPatch = ''
     sed -i '/"electron"/d' package.json
   '';
 
-  npmDepsHash = "sha256-yCWSEuhiP6DfcFns6uyUrLBJeQbOK7yJ9QfGhHkTlHI=";
+  npmDepsHash = "sha256-kvC1+odojkSFWqcyNUg2SbeEn1EkA+EdfaVWY9QmPz4=";
   makeCacheWritable = true;
   dontNpmBuild = true;
 
@@ -51,8 +51,6 @@ buildNpmPackage rec {
   '';
 
   distPhase = ":"; # disable useless $out/tarballs directory
-
-  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://vieb.dev/";
