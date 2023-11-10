@@ -6150,6 +6150,10 @@ self: super: with self; {
     pythonSupport = true;
   });
 
+  libfive = toPythonModule (pkgs.libfive.override {
+    inherit python;
+  });
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
