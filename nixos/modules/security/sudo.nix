@@ -41,9 +41,15 @@ in
       '';
     };
 
-    enable = mkEnableOption (mdDoc ''
-      the {command}`sudo` command, which allows non-root users to execute commands as root.
-    '');
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description =
+        lib.mdDoc ''
+          Whether to enable the {command}`sudo` command, which
+          allows non-root users to execute commands as root.
+        '';
+    };
 
     package = mkPackageOption pkgs "sudo" { };
 
