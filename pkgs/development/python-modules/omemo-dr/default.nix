@@ -3,6 +3,7 @@
 , cryptography
 , fetchPypi
 , protobuf
+, pytestCheckHook
 , pythonOlder
 , setuptools
 }:
@@ -26,6 +27,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     protobuf
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
