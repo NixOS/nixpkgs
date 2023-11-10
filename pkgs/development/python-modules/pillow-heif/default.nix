@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.13.0";
+  version = "0.13.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GbOW29rGpLMS7AfShuO6UCzcspdHtFS7hyNKori0otI=";
+    hash = "sha256-Xb70cDhDqKVuavOxgdHjPgNkMeYvlVBHZBmetUwoM6E=";
   };
 
   nativeBuildInputs = [
