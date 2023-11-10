@@ -62,7 +62,6 @@
 assert cargoVendorDir == null && cargoLock == null
     -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
     -> throw "cargoSha256, cargoHash, cargoVendorDir, or cargoLock must be set";
-assert buildType == "release" || buildType == "debug";
 
 let
 
@@ -83,14 +82,9 @@ let
   targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 
-  # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
-  # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
-  shortTarget = if targetIsJSON then
-      (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
-    else target;
-
   sysroot = callPackage ./sysroot { } {
-    inherit target shortTarget;
+    inherit target;
+    shortTarget = rust.lib.toRustTargetSpecShort stdenv.hostPlatform;
     RUSTFLAGS = args.RUSTFLAGS or "";
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
   };
@@ -166,6 +160,10 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       "armv6l-netbsd"
       "x86_64-redox"
       "wasm32-wasi"
+    ];
+    badPlatforms = [
+      # Rust is currently unable to target the n32 ABI
+      lib.systems.inspect.patterns.isMips64n32
     ];
   } // meta;
 })

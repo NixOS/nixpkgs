@@ -253,9 +253,6 @@ done
 @setHostId@
 
 # Load the required kernel modules.
-mkdir -p /lib
-ln -s @modulesClosure@/lib/modules /lib/modules
-ln -s @modulesClosure@/lib/firmware /lib/firmware
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
@@ -497,6 +494,8 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
         echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
     fi
 fi
+
+@postResumeCommands@
 
 # If we have a path to an iso file, find the iso and link it to /dev/root
 if [ -n "$isoPath" ]; then

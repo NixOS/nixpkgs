@@ -117,6 +117,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "test/writer/binary/test_excel_writer.py"
     "test/writer/binary/test_sqlite_writer.py"
+    "test/writer/test_elasticsearch_writer.py"
   ];
 
   meta = with lib; {

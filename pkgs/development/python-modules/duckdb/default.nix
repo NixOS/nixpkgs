@@ -13,17 +13,19 @@
 }:
 
 buildPythonPackage rec {
-  inherit (duckdb) pname version src patches;
+  inherit (duckdb) pname version src;
   format = "setuptools";
 
-  postPatch = ''
+  # 1. let nix control build cores
+  # 2. default to extension autoload & autoinstall disabled
+  # 3. unconstrain setuptools_scm version
+  patches = (duckdb.patches or []) ++ [ ./setup.patch ];
+
+  postPatch = (duckdb.postPatch or "") + ''
     # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
     cd tools/pythonpkg
 
-    # 1. let nix control build cores
-    # 2. unconstrain setuptools_scm version
-    substituteInPlace setup.py \
-      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
+    substituteInPlace setup.py --subst-var NIX_BUILD_CORES
 
     # avoid dependency on mypy
     rm tests/stubs/test_stubs.py
@@ -54,6 +56,8 @@ buildPythonPackage rec {
   disabledTests = [
     # tries to make http request
     "test_install_non_existent_extension"
+    # test is racy and interrupt can be delivered before or after target point
+    "test_connection_interrupt"
   ];
 
   preCheck = ''

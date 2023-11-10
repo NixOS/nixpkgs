@@ -11,6 +11,7 @@
 , libselinux
 , libsepol
 , libthai
+, libxkbcommon
 , pango
 , pcre
 , util-linux
@@ -23,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-k+rG5AZjz47Q6bpVcTK7r4s7Avg3O+1iw+skK+cn0rk=";
+    hash = "sha256-bys8S7wuY9FJRLD5WriktWED5Hi7nCKSiNbs1Rvfk4s=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     libselinux
     libsepol
     libthai
+    libxkbcommon
     pango
     pcre
     wayland
@@ -91,5 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
+    mainProgram = "hyprpicker";
   };
 })

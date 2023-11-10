@@ -6,9 +6,9 @@ let
   cmd = ''
     @${cfg.jrePackage}/bin/java java \
         ${optionalString (lib.versionAtLeast (lib.getVersion cfg.jrePackage) "16")
-        "--add-opens java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED "
+        ("--add-opens java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED "
         + "--add-opens java.base/sun.security.util=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED "
-        + "--add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED"} \
+        + "--add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED")} \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar

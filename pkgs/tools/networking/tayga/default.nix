@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url= "http://www.litech.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1700y121lhvpna49bjpssb7jq1abj9qw5wxgjn8gzp6jm4kpj7rb";
+    hash = "sha256-Kx95J6nS3P+Qla/zwnGSSwUsz9L6ypWIsndDGkTwAJw=";
   };
 
   passthru.tests.tayga = nixosTests.tayga;

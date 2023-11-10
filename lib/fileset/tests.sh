@@ -318,7 +318,7 @@ checkFileset() {
 #### Error messages #####
 
 # Absolute paths in strings cannot be passed as `root`
-expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \("/nix/store/foobar"\) is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \(/nix/store/foobar\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Only paths are accepted as `root`
@@ -328,21 +328,21 @@ expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `r
 mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./foo/mock-root; fileset = ./bar/mock-root; }
-' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \("'"$work"'/foo/mock-root"\):
-\s*`root`: root "'"$work"'/foo/mock-root"
-\s*`fileset`: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
-rm -rf *
+' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \('"$work"'/foo/mock-root\):
+\s*`root`: Filesystem root is "'"$work"'/foo/mock-root"
+\s*`fileset`: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
+rm -rf -- *
 
 # `root` needs to exist
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a path that does not exist.'
 
 # `root` needs to be a file
 touch a
 expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a file, but it should be a directory instead. Potential solutions:
 \s*- If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
 \s*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
-rm -rf *
+rm -rf -- *
 
 # The fileset argument should be evaluated, even if the directory is empty
 expectFailure 'toSource { root = ./.; fileset = abort "This should be evaluated"; }' 'evaluation aborted with the following error message: '\''This should be evaluated'\'
@@ -352,7 +352,14 @@ mkdir a
 expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
 \s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
 \s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
-rm -rf *
+rm -rf -- *
+
+# non-regular and non-symlink files cannot be added to the Nix store
+mkfifo a
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` contains a file that cannot be added to the store: '"$work"'/a
+\s*This file is neither a regular file nor a symlink, the only file types supported by the Nix store.
+\s*Therefore the file set cannot be added to the Nix store as is. Make sure to not include that file to avoid this error.'
+rm -rf -- *
 
 # Path coercion only works for paths
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
@@ -360,7 +367,7 @@ expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.to
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
@@ -483,26 +490,26 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = union ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.union: Filesystem roots are not the same:
-\s*first argument: root "'"$work"'/foo/mock-root"
-\s*second argument: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
 ' 'lib.fileset.unions: Filesystem roots are not the same:
-\s*element 0: root "'"$work"'/foo/mock-root"
-\s*element 1: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
-rm -rf *
+\s*Element 0: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Element 1: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
+rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument \('"$work"'/b\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: Second argument \('"$work"'/b\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: Element 0 \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: Element 1 \('"$work"'/b\) is a path that does not exist.'
 
 # unions needs a list
-expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
+expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Argument is of type null, but it should be a list instead.'
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files
 tree=()
@@ -596,14 +603,14 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = intersection ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.intersection: Filesystem roots are not the same:
-\s*first argument: root "'"$work"'/foo/mock-root"
-\s*second argument: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: first argument \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: second argument \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: Second argument \('"$work"'/b\) is a path that does not exist.'
 
 # The tree of later arguments should not be evaluated if a former argument already excludes all files
 tree=(
@@ -677,6 +684,171 @@ tree=(
 )
 checkFileset 'intersection (unions [ ./a/b ./c/d ./c/e ]) (unions [ ./a ./c/d/f ./c/e ])'
 
+## Difference
+
+# Subtracting something from itself results in nothing
+tree=(
+    [a]=0
+)
+checkFileset 'difference ./. ./.'
+
+# The tree of the second argument should not be evaluated if not needed
+checkFileset 'difference _emptyWithoutBase (_create ./. (abort "This should not be used!"))'
+checkFileset 'difference (_create ./. null) (_create ./. (abort "This should not be used!"))'
+
+# Subtracting nothing gives the same thing back
+tree=(
+    [a]=1
+)
+checkFileset 'difference ./. _emptyWithoutBase'
+checkFileset 'difference ./. (_create ./. null)'
+
+# Subtracting doesn't influence the base path
+mkdir a b
+touch {a,b}/x
+expectEqual 'toSource { root = ./a; fileset = difference ./a ./b; }' 'toSource { root = ./a; fileset = ./a; }'
+rm -rf -- *
+
+# Also not the other way around
+mkdir a
+expectFailure 'toSource { root = ./a; fileset = difference ./. ./a; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
+\s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
+\s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
+rm -rf -- *
+
+# Difference actually works
+# We test all combinations of ./., ./a, ./a/x and ./b
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./. ./.'
+checkFileset 'difference ./a ./.'
+checkFileset 'difference ./a/x ./.'
+checkFileset 'difference ./b ./.'
+checkFileset 'difference ./a ./a'
+checkFileset 'difference ./a/x ./a'
+checkFileset 'difference ./a/x ./a/x'
+checkFileset 'difference ./b ./b'
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b]=1
+    [c]=1
+)
+checkFileset 'difference ./. ./a'
+tree=(
+    [a/x]=1
+    [a/y]=1
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./a ./b'
+tree=(
+    [a/x]=1
+    [a/y]=0
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./a/x ./b'
+tree=(
+    [a/x]=0
+    [a/y]=1
+    [b]=0
+    [c]=0
+)
+checkFileset 'difference ./a ./a/x'
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b]=1
+    [c]=0
+)
+checkFileset 'difference ./b ./a'
+checkFileset 'difference ./b ./a/x'
+tree=(
+    [a/x]=0
+    [a/y]=1
+    [b]=1
+    [c]=1
+)
+checkFileset 'difference ./. ./a/x'
+tree=(
+    [a/x]=1
+    [a/y]=1
+    [b]=0
+    [c]=1
+)
+checkFileset 'difference ./. ./b'
+
+## File filter
+
+# The predicate is not called when there's no files
+tree=()
+checkFileset 'fileFilter (file: abort "this is not needed") ./.'
+checkFileset 'fileFilter (file: abort "this is not needed") _emptyWithoutBase'
+
+# The predicate must be able to handle extra attributes
+touch a
+expectFailure 'toSource { root = ./.; fileset = fileFilter ({ name, type }: true) ./.; }' 'called with unexpected argument '\''"lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you'\''re using `\{ name, file \}:`, use `\{ name, file, ... \}:` instead."'\'
+rm -rf -- *
+
+# .name is the name, and it works correctly, even recursively
+tree=(
+    [a]=1
+    [b]=0
+    [c/a]=1
+    [c/b]=0
+    [d/c/a]=1
+    [d/c/b]=0
+)
+checkFileset 'fileFilter (file: file.name == "a") ./.'
+tree=(
+    [a]=0
+    [b]=1
+    [c/a]=0
+    [c/b]=1
+    [d/c/a]=0
+    [d/c/b]=1
+)
+checkFileset 'fileFilter (file: file.name != "a") ./.'
+
+# `.type` is the file type
+mkdir d
+touch d/a
+ln -s d/b d/b
+mkfifo d/c
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type == "regular") ./.; }' \
+    'toSource { root = ./.; fileset = ./d/a; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type == "symlink") ./.; }' \
+    'toSource { root = ./.; fileset = ./d/b; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type == "unknown") ./.; }' \
+    'toSource { root = ./.; fileset = ./d/c; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type != "regular") ./.; }' \
+    'toSource { root = ./.; fileset = union ./d/b ./d/c; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type != "symlink") ./.; }' \
+    'toSource { root = ./.; fileset = union ./d/a ./d/c; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type != "unknown") ./.; }' \
+    'toSource { root = ./.; fileset = union ./d/a ./d/b; }'
+rm -rf -- *
+
+# It's lazy
+tree=(
+    [b]=1
+    [c/a]=1
+)
+# Note that union evaluates the first argument first if necessary, that's why we can use ./c/a here
+checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)'
+# but here we need to use ./c
+checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
 
 ## Tracing
 

@@ -8,7 +8,7 @@ in
 
   options.services.rustus = {
 
-    enable = mkEnableOption (lib.mdDoc "TUS protocol implementation in Rust.");
+    enable = mkEnableOption (lib.mdDoc "TUS protocol implementation in Rust");
 
     host = mkOption {
       type = types.str;

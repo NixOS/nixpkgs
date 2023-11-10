@@ -36,8 +36,18 @@ buildPythonPackage rec {
     semantic-version
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+  disabledTests = [
+    # https://github.com/maxcountryman/flask-login/issues/747
+    "test_remember_me_accepts_duration_as_int"
+    "test_remember_me_custom_duration_uses_custom_cookie"
+    "test_remember_me_refresh_every_request"
+    "test_remember_me_uses_custom_cookie_parameters"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
     "test_hashable"
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [

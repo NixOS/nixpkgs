@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T62k/dqlwb1ppbopb/2UjMy1da16vlPRSWD1b+Mt1ME=";
+    hash = "sha256-aVdFHlnOUI9hgzVRnFPzDOuItwU9ZfPRZkWf1wjtOLU=";
   };
 
   nativeBuildInputs = [

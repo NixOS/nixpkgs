@@ -266,6 +266,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     meminfo = callPackage ../development/php-packages/meminfo { };
 
+    memprof = callPackage ../development/php-packages/memprof { };
+
     mongodb = callPackage ../development/php-packages/mongodb {
       inherit (pkgs) darwin;
     };

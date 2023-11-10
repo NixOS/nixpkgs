@@ -23,7 +23,6 @@
 let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in phpPackage.buildComposerProject rec {
-  name = pname + "-" + version;
   pname = "librenms";
   version = "23.9.1";
 

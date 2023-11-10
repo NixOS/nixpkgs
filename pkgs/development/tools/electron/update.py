@@ -188,7 +188,7 @@ def get_gn_source(repo):
             "version": datetime.fromisoformat(gn["date"]).date().isoformat(),
             "url": gn["url"],
             "rev": gn["rev"],
-            "sha256": gn["sha256"]
+            "hash": gn["hash"]
         }
     }
 

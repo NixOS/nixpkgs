@@ -112,13 +112,6 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
-  patch-fix-aarch64-darwin-static = fetchpatch {
-    # https://github.com/NixOS/nix/pull/8068
-    name = "fix-aarch64-darwin-static.patch";
-    url = "https://github.com/NixOS/nix/commit/220aa8e0ac9d17de2c9f356a68be43b673d851a1.patch";
-    hash = "sha256-YrmFkVpwPreiig1/BsP+DInpTdQrPmS7bEY0WUGpw+c=";
-  };
-
 in lib.makeExtensible (self: ({
   nix_2_3 = (common rec {
     version = "2.3.16";
@@ -164,11 +157,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_13 = common {
-    version = "2.13.5";
-    hash = "sha256-yHZMgMs/6/aQUwfMwmPUQov17JMGS7squLJsjmucnLc=";
-    patches = [
-      patch-fix-aarch64-darwin-static
-    ];
+    version = "2.13.6";
+    hash = "sha256-pd2yGmHWn4njfbrSP6cMJx8qL+yeGieqcbLNICzcRFs=";
   };
 
   nix_2_14 = common {
@@ -177,18 +167,18 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_15 = common {
-    version = "2.15.2";
-    hash = "sha256-0BxVsvp4JfliYu4EdpZ/zPYOt9Qn5w9Ix5r0sagZZ7o=";
+    version = "2.15.3";
+    hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
   };
 
   nix_2_16 = common {
-    version = "2.16.1";
-    hash = "sha256-/XCWa2osNFIpPC5MkxlX6qTZf/DaTLwS3LWN0SRFiuU=";
+    version = "2.16.2";
+    hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
   };
 
   nix_2_17 = common {
-    version = "2.17.0";
-    hash = "sha256-QMYAkdtU+g9HlZKtoJ+AI6TbWzzovKGnPZJHfZdclc8=";
+    version = "2.17.1";
+    hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
   };
 
   nix_2_18 = common {
@@ -213,9 +203,9 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = self.nix_2_17;
+  stable = self.nix_2_18;
 
-  unstable = self.stable;
+  unstable = self.nix_2_18;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 

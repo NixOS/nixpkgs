@@ -69,7 +69,7 @@ let
       attoparsec = self.attoparsec_0_13_2_5;
 
       # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
-      aeson = self.aeson_1_5_6_0;
+      aeson = doJailbreak self.aeson_1_5_6_0;
 
       # elm-instrument needs this
       indents = self.callPackage ./packages/indents.nix {};
@@ -196,6 +196,15 @@ in lib.makeScope pkgs.newScope (self: with self; {
         maintainers = [ maintainers.turbomack ];
       };
     };
+
+    elm-graphql =
+      nodePkgs."@dillonkearns/elm-graphql" // {
+        meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
+          description = " Autogenerate type-safe GraphQL queries in Elm.";
+          license = licenses.bsd3;
+          maintainers = [ maintainers.pedrohlc ];
+        };
+      };
 
     elm-review =
       nodePkgs.elm-review // {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, fetchpatch, boost, cmake, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libLAS";
@@ -28,10 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-  buildInputs = [ boost gdal libgeotiff libtiff LASzip2 ];
+  buildInputs = [ boost libgeotiff libtiff LASzip2 ];
 
   cmakeFlags = [
-    "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
     "-DWITH_LASZIP=ON"
     # libLAS is currently not compatible with LASzip 3,
     # see https://github.com/libLAS/libLAS/issues/144.

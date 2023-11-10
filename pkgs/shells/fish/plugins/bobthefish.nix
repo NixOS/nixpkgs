@@ -3,15 +3,15 @@
 , fetchFromGitHub
 ,
 }:
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "bobthefish";
-  version = "unstable-2022-08-02";
+  version = "unstable-2023-06-16";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
     repo = "theme-bobthefish";
-    rev = "2dcfcab653ae69ae95ab57217fe64c97ae05d8de";
-    sha256 = "sha256-jBbm0wTNZ7jSoGFxRkTz96QHpc5ViAw9RGsRBkCQEIU=";
+    rev = "c2c47dc964a257131b3df2a127c2631b4760f3ec";
+    sha256 = "sha256-LB4g+EA3C7OxTuHfcxfgl8IVBe5NufFc+5z9VcS0Bt0=";
   };
 
   meta = with lib; {

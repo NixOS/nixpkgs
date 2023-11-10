@@ -165,6 +165,17 @@ let
 
 , ... } @ attrs:
 
+# Policy on acceptable hash types in nixpkgs
+assert attrs ? outputHash -> (
+  let algo =
+    attrs.outputHashAlgo or (lib.head (lib.splitString "-" attrs.outputHash));
+  in
+  if algo == "md5" then
+    throw "Rejected insecure ${algo} hash '${attrs.outputHash}'"
+  else
+    true
+);
+
 let
   # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
   # no package has `doCheck = true`.

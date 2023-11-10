@@ -8,555 +8,561 @@ if ENV.fetch('BUNDLER_CHECKSUM_VERIFICATION_OPT_IN', 'false') != 'false' # this 
   BundlerChecksum.patch!
 end
 
-gem 'bundler-checksum', '~> 0.1.0', path: 'vendor/gems/bundler-checksum', require: false
+# Please see https://docs.gitlab.com/ee/development/feature_categorization/#gemfile
+ignore_feature_category = Module.new do
+  def gem(*arguments, feature_category: nil, **keyword_arguments) # rubocop:disable Lint/UnusedMethodArgument
+    super(*arguments, **keyword_arguments)
+  end
+end
+
+extend ignore_feature_category
+
+gem 'bundler-checksum', '~> 0.1.0', path: 'vendor/gems/bundler-checksum', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
 # NOTE: When incrementing the major or minor version here, also increment activerecord_version
 # in vendor/gems/attr_encrypted/attr_encrypted.gemspec until we resolve
 # https://gitlab.com/gitlab-org/gitlab/-/issues/375713
 #
 # See https://docs.gitlab.com/ee/development/gemfile.html#upgrade-rails for guidelines when upgrading Rails
-gem 'rails', '~> 7.0.6'
+gem 'rails', '~> 7.0.8' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab'
+gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'vite_rails'
+gem 'vite_rails' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'bootsnap', '~> 1.16.0', require: false
+gem 'bootsnap', '~> 1.16.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'openssl', '~> 3.0'
-gem 'ipaddr', '~> 1.2.5'
+gem 'openssl', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'ipaddr', '~> 1.2.5' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'gitlab-safe_request_store', path: 'gems/gitlab-safe_request_store'
+gem 'gitlab-safe_request_store', path: 'gems/gitlab-safe_request_store' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GitLab Monorepo Gems
 group :monorepo do
-  gem 'gitlab-utils', path: 'gems/gitlab-utils'
+  gem 'gitlab-utils', path: 'gems/gitlab-utils' # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
 # Responders respond_to and respond_with
-gem 'responders', '~> 3.0'
+gem 'responders', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'sprockets', '~> 3.7.0'
+gem 'sprockets', '~> 3.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'view_component', '~> 3.5.0'
+gem 'view_component', '~> 3.6.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Supported DBs
-gem 'pg', '~> 1.5.4'
+gem 'pg', '~> 1.5.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'neighbor', '~> 0.2.3'
+gem 'neighbor', '~> 0.2.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'rugged', '~> 1.6'
-gem 'grape-path-helpers', '~> 1.7.1'
+gem 'rugged', '~> 1.6' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'faraday', '~> 1.0'
-gem 'marginalia', '~> 1.11.1'
+gem 'faraday', '~> 1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'marginalia', '~> 1.11.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Authorization
-gem 'declarative_policy', '~> 1.1.0'
+gem 'declarative_policy', '~> 1.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Authentication libraries
-gem 'devise', '~> 4.8.1'
-gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-encryptable'
-gem 'bcrypt', '~> 3.1', '>= 3.1.14'
-gem 'doorkeeper', '~> 5.6', '>= 5.6.6'
-gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.7'
-gem 'rexml', '~> 3.2.6'
-gem 'ruby-saml', '~> 1.15.0'
-gem 'omniauth', '~> 2.1.0'
-gem 'omniauth-auth0', '~> 3.1'
-gem 'omniauth-azure-activedirectory-v2', '~> 2.0'
-gem 'omniauth-azure-oauth2', '~> 0.0.9', path: 'vendor/gems/omniauth-azure-oauth2' # See gem README.md
-gem 'omniauth-dingtalk-oauth2', '~> 1.0'
-gem 'omniauth-alicloud', '~> 2.0.1'
-gem 'omniauth-facebook', '~> 4.0.0'
-gem 'omniauth-github', '2.0.1'
-gem 'omniauth-gitlab', '~> 4.0.0', path: 'vendor/gems/omniauth-gitlab' # See vendor/gems/omniauth-gitlab/README.md
-gem 'omniauth-google-oauth2', '~> 1.1'
-gem 'omniauth-oauth2-generic', '~> 0.2.2'
-gem 'omniauth-saml', '~> 2.1.0'
-gem 'omniauth-shibboleth-redux', '~> 2.0', require: 'omniauth-shibboleth'
-gem 'omniauth-twitter', '~> 1.4'
-gem 'omniauth_crowd', '~> 2.4.0', path: 'vendor/gems/omniauth_crowd' # See vendor/gems/omniauth_crowd/README.md
-gem 'omniauth_openid_connect', '~> 0.6.1'
+gem 'devise', '~> 4.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-encryptable' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'bcrypt', '~> 3.1', '>= 3.1.14' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'doorkeeper', '~> 5.6', '>= 5.6.6' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rexml', '~> 3.2.6' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'ruby-saml', '~> 1.15.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth', '~> 2.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-auth0', '~> 3.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-azure-activedirectory-v2', '~> 2.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-azure-oauth2', '~> 0.0.9', path: 'vendor/gems/omniauth-azure-oauth2' # See gem README.md # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-dingtalk-oauth2', '~> 1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-alicloud', '~> 3.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-facebook', '~> 4.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-github', '2.0.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-gitlab', '~> 4.0.0', path: 'vendor/gems/omniauth-gitlab' # See vendor/gems/omniauth-gitlab/README.md # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-google-oauth2', '~> 1.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-oauth2-generic', '~> 0.2.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-saml', '~> 2.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-shibboleth-redux', '~> 2.0', require: 'omniauth-shibboleth' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-twitter', '~> 1.4' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth_crowd', '~> 2.4.0', path: 'vendor/gems/omniauth_crowd' # See vendor/gems/omniauth_crowd/README.md # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth_openid_connect', '~> 0.6.1' # rubocop:todo Gemfile/MissingFeatureCategory
 # Locked until Ruby 3.0 upgrade since upgrading will pull in an updated net-smtp gem.
 # See https://docs.gitlab.com/ee/development/emails.html#rationale.
-gem 'openid_connect', '= 1.3.0'
-gem 'omniauth-salesforce', '~> 1.0.5', path: 'vendor/gems/omniauth-salesforce' # See gem README.md
-gem 'omniauth-atlassian-oauth2', '~> 0.2.0'
-gem 'rack-oauth2', '~> 1.21.3'
-gem 'jwt', '~> 2.5'
+gem 'openid_connect', '= 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-salesforce', '~> 1.0.5', path: 'vendor/gems/omniauth-salesforce' # See gem README.md # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'omniauth-atlassian-oauth2', '~> 0.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rack-oauth2', '~> 1.21.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'jwt', '~> 2.5' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Kerberos authentication. EE-only
-gem 'gssapi', '~> 1.3.1', group: :kerberos
-gem 'timfel-krb5-auth', '~> 0.8', group: :kerberos
+gem 'gssapi', '~> 1.3.1', group: :kerberos # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'timfel-krb5-auth', '~> 0.8', group: :kerberos # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Spam and anti-bot protection
-gem 'recaptcha', '~> 5.12', require: 'recaptcha/rails'
-gem 'akismet', '~> 3.0'
-gem 'invisible_captcha', '~> 2.1.0'
+gem 'recaptcha', '~> 5.12', require: 'recaptcha/rails' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'akismet', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'invisible_captcha', '~> 2.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Two-factor authentication
-gem 'devise-two-factor', '~> 4.0.2'
-gem 'rqrcode-rails3', '~> 0.1.7'
-gem 'attr_encrypted', '~> 3.2.4', path: 'vendor/gems/attr_encrypted'
+gem 'devise-two-factor', '~> 4.1.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rqrcode', '~> 2.0', feature_category: :system_access
+
+gem 'attr_encrypted', '~> 3.2.4', path: 'vendor/gems/attr_encrypted' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GitLab Pages
-gem 'validates_hostname', '~> 1.0.13'
-gem 'rubyzip', '~> 2.3.2', require: 'zip'
+gem 'validates_hostname', '~> 1.0.13' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rubyzip', '~> 2.3.2', require: 'zip' # rubocop:todo Gemfile/MissingFeatureCategory
 # GitLab Pages letsencrypt support
-gem 'acme-client', '~> 2.0'
+gem 'acme-client', '~> 2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Browser detection
-gem 'browser', '~> 5.3.1'
+gem 'browser', '~> 5.3.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # OS detection for usage ping
-gem 'ohai', '~> 17.9'
+gem 'ohai', '~> 17.9' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GPG
-gem 'gpgme', '~> 2.0.23'
+gem 'gpgme', '~> 2.0.23' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # LDAP Auth
 # GitLab fork with several improvements to original library. For full list of changes
 # see https://github.com/intridea/omniauth-ldap/compare/master...gitlabhq:master
-gem 'gitlab_omniauth-ldap', '~> 2.2.0', require: 'omniauth-ldap'
-gem 'net-ldap', '~> 0.17.1'
+gem 'gitlab_omniauth-ldap', '~> 2.2.0', require: 'omniauth-ldap' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'net-ldap', '~> 0.17.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # API
-gem 'grape', '~> 1.7.1'
-gem 'grape-entity', '~> 0.10.0'
-gem 'rack-cors', '~> 2.0.1', require: 'rack/cors'
-gem 'grape-swagger', '~> 1.6.1', group: [:development, :test]
-gem 'grape-swagger-entity', '~> 0.5.1', group: [:development, :test]
+gem 'grape', '~> 1.7.1', feature_category: :api
+gem 'grape-entity', '~> 0.10.0', feature_category: :api
+gem 'grape-swagger', '~> 1.6.1', group: [:development, :test], feature_category: :api
+gem 'grape-swagger-entity', '~> 0.5.1', group: [:development, :test], feature_category: :api
+gem 'grape-path-helpers', '~> 1.7.1', feature_category: :api
+gem 'rack-cors', '~> 2.0.1', require: 'rack/cors' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GraphQL API
-gem 'graphql', '~> 1.13.19'
-gem 'graphiql-rails', '~> 1.8.0'
-gem 'apollo_upload_server', '~> 2.1.0'
-gem 'graphql-docs', '~> 2.1.0', group: [:development, :test]
-gem 'graphlient', '~> 0.5.0' # Used by BulkImport feature (group::import)
+gem 'graphql', '~> 2.0.27', feature_category: :api
+gem 'graphql-docs', '~> 4.0.0', group: [:development, :test], feature_category: :api
+gem 'graphiql-rails', '~> 1.8.0', feature_category: :api
+gem 'apollo_upload_server', '~> 2.1.0', feature_category: :api
+gem 'graphlient', '~> 0.5.0', feature_category: :importers # Used by BulkImport feature (group::import)
 
 # Generate Fake data
-gem 'ffaker', '~> 2.10'
+gem 'ffaker', '~> 2.10' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'hashie', '~> 5.0.0'
+gem 'hashie', '~> 5.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Pagination
-gem 'kaminari', '~> 1.2.2'
+gem 'kaminari', '~> 1.2.2' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # HAML
-gem 'hamlit', '~> 2.15.0'
+gem 'hamlit', '~> 2.15.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Files attachments
-gem 'carrierwave', '~> 1.3'
-gem 'mini_magick', '~> 4.10.1'
+gem 'carrierwave', '~> 1.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'mini_magick', '~> 4.10.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # for backups
-gem 'fog-aws', '~> 3.18'
+gem 'fog-aws', '~> 3.18' # rubocop:todo Gemfile/MissingFeatureCategory
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
-gem 'fog-core', '= 2.1.0'
-gem 'fog-google', '~> 1.19', require: 'fog/google'
-gem 'fog-local', '~> 0.8'
+gem 'fog-core', '= 2.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'fog-google', '~> 1.19', require: 'fog/google' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'fog-local', '~> 0.8' # rubocop:todo Gemfile/MissingFeatureCategory
 # NOTE:
 # the fog-aliyun gem since v0.4 pulls in aliyun-sdk transitively, which monkey-patches
 # the rest-client gem to drop the Content-Length header field for chunked transfers,
 # which may have knock-on effects on other features using `RestClient`.
 # We may want to update this dependency if this is ever addressed upstream, e.g. via
 # https://github.com/aliyun/aliyun-oss-ruby-sdk/pull/93
-gem 'fog-aliyun', '~> 0.4'
-gem 'gitlab-fog-azure-rm', '~> 1.8.0', require: 'fog/azurerm'
+gem 'fog-aliyun', '~> 0.4' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gitlab-fog-azure-rm', '~> 1.8.0', require: 'fog/azurerm' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # for Google storage
-gem 'google-cloud-storage', '~> 1.44.0'
-gem 'google-apis-core', '~> 0.10.0'
-gem 'google-apis-compute_v1', '~> 0.57.0'
-gem 'google-apis-container_v1', '~> 0.43.0'
-gem 'google-apis-container_v1beta1', '~> 0.43.0'
-gem 'google-apis-cloudbilling_v1', '~> 0.21.0'
-gem 'google-apis-cloudresourcemanager_v1', '~> 0.31.0'
-gem 'google-apis-iam_v1', '~> 0.36.0'
-gem 'google-apis-serviceusage_v1', '~> 0.28.0'
-gem 'google-apis-sqladmin_v1beta4', '~> 0.41.0'
-gem 'google-apis-androidpublisher_v3', '~> 0.34.0'
+gem 'google-cloud-storage', '~> 1.44.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-core', '~> 0.10.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-compute_v1', '~> 0.57.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-container_v1', '~> 0.43.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-container_v1beta1', '~> 0.43.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-cloudbilling_v1', '~> 0.21.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-cloudresourcemanager_v1', '~> 0.31.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-iam_v1', '~> 0.36.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-serviceusage_v1', '~> 0.28.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-sqladmin_v1beta4', '~> 0.41.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'google-apis-androidpublisher_v3', '~> 0.34.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Seed data
-gem 'seed-fu', '~> 2.3.7'
+gem 'seed-fu', '~> 2.3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Search
-gem 'elasticsearch-model', '~> 7.2'
-gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation'
-gem 'elasticsearch-api',   '7.13.3'
-gem 'aws-sdk-core', '~> 3.181.1'
-gem 'aws-sdk-cloudformation', '~> 1'
-gem 'aws-sdk-s3', '~> 1.134.0'
-gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
-gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections
+gem 'elasticsearch-model', '~> 7.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'elasticsearch-api',   '7.13.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-core', '~> 3.185.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-cloudformation', '~> 1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-s3', '~> 1.136.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'faraday_middleware-aws-sigv4', '~>0.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Markdown and HTML processing
-gem 'html-pipeline', '~> 2.14.3'
-gem 'deckar01-task_list', '2.3.3'
-gem 'gitlab-markup', '~> 1.9.0', require: 'github/markup'
-gem 'commonmarker', '~> 0.23.10'
-gem 'kramdown', '~> 2.3.1'
-gem 'RedCloth', '~> 4.3.2'
-gem 'rdoc', '~> 6.3.2'
-gem 'org-ruby', '~> 0.9.12'
-gem 'creole', '~> 0.5.0'
-gem 'wikicloth', '0.8.1'
-gem 'asciidoctor', '~> 2.0.18'
-gem 'asciidoctor-include-ext', '~> 0.4.0', require: false
-gem 'asciidoctor-plantuml', '~> 0.0.16'
-gem 'asciidoctor-kroki', '~> 0.8.0', require: false
-gem 'rouge', '~> 4.1.3'
-gem 'truncato', '~> 0.7.12'
-gem 'nokogiri', '~> 1.15', '>= 1.15.4'
+gem 'html-pipeline', '~> 2.14.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'deckar01-task_list', '2.3.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gitlab-markup', '~> 1.9.0', require: 'github/markup' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'commonmarker', '~> 0.23.10' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'kramdown', '~> 2.3.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'RedCloth', '~> 4.3.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'org-ruby', '~> 0.9.12' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'creole', '~> 0.5.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'wikicloth', '0.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'asciidoctor', '~> 2.0.18' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'asciidoctor-include-ext', '~> 0.4.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'asciidoctor-plantuml', '~> 0.0.16' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'asciidoctor-kroki', '~> 0.8.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rouge', '~> 4.1.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'truncato', '~> 0.7.12' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'nokogiri', '~> 1.15', '>= 1.15.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Calendar rendering
-gem 'icalendar'
+gem 'icalendar' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Diffs
-gem 'diffy', '~> 3.4'
-gem 'diff_match_patch', '~> 0.1.0'
+gem 'diffy', '~> 3.4' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'diff_match_patch', '~> 0.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Application server
-gem 'rack', '~> 2.2.8'
+gem 'rack', '~> 2.2.8' # rubocop:todo Gemfile/MissingFeatureCategory
 # https://github.com/zombocom/rack-timeout/blob/master/README.md#rails-apps-manually
-gem 'rack-timeout', '~> 0.6.3', require: 'rack/timeout/base'
+gem 'rack-timeout', '~> 0.6.3', require: 'rack/timeout/base' # rubocop:todo Gemfile/MissingFeatureCategory
 
 group :puma do
-  gem 'puma', '~> 6.3', '>= 6.3.1', require: false
-  gem 'sd_notify', '~> 0.1.0', require: false
+  gem 'puma', '~> 6.4', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'sd_notify', '~> 0.1.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
 # State machine
-gem 'state_machines-activerecord', '~> 0.8.0'
+gem 'state_machines-activerecord', '~> 0.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # CI domain tags
-gem 'acts-as-taggable-on', '~> 9.0'
+gem 'acts-as-taggable-on', '~> 9.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Background jobs
-gem 'sidekiq', '~> 6.5.7'
-gem 'sidekiq-cron', '~> 1.8.0'
-gem 'redis-namespace', '~> 1.9.0'
-gem 'gitlab-sidekiq-fetcher', path: 'vendor/gems/sidekiq-reliable-fetch', require: 'sidekiq-reliable-fetch'
+gem 'sidekiq', '~> 6.5.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'sidekiq-cron', '~> 1.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'redis-namespace', '~> 1.9.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gitlab-sidekiq-fetcher', path: 'vendor/gems/sidekiq-reliable-fetch', require: 'sidekiq-reliable-fetch' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Cron Parser
-gem 'fugit', '~> 1.8.1'
+gem 'fugit', '~> 1.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # HTTP requests
-gem 'httparty', '~> 0.21.0'
+gem 'httparty', '~> 0.21.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Colored output to console
-gem 'rainbow', '~> 3.0'
+gem 'rainbow', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Progress bar
-gem 'ruby-progressbar', '~> 1.10'
+gem 'ruby-progressbar', '~> 1.10' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Linear-time regex library for untrusted regular expressions
-gem 're2', '2.0.0'
+gem 're2', '2.1.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Misc
 
-gem 'semver_dialects', '~> 1.2.1'
-gem 'version_sorter', '~> 2.3'
-gem 'csv_builder', path: 'gems/csv_builder'
+gem 'semver_dialects', '~> 1.2.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'version_sorter', '~> 2.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'csv_builder', path: 'gems/csv_builder' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Export Ruby Regex to Javascript
-gem 'js_regex', '~> 3.8'
+gem 'js_regex', '~> 3.8' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # User agent parsing
-gem 'device_detector'
+gem 'device_detector' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Redis
-gem 'redis', '~> 4.8.0'
-gem 'connection_pool', '~> 2.0'
+gem 'redis', '~> 4.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'connection_pool', '~> 2.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Redis session store
-gem 'redis-actionpack', '~> 5.3.0'
+gem 'redis-actionpack', '~> 5.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Discord integration
-gem 'discordrb-webhooks', '~> 3.4', require: false
+gem 'discordrb-webhooks', '~> 3.4', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Jira integration
-gem 'jira-ruby', '~> 2.1.4'
-gem 'atlassian-jwt', '~> 0.2.0'
+gem 'jira-ruby', '~> 2.1.4' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'atlassian-jwt', '~> 0.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Slack integration
-gem 'slack-messenger', '~> 2.3.4'
-
-# Hangouts Chat integration
-gem 'hangouts-chat', '~> 0.0.5', require: 'hangouts_chat'
-
-# Asana integration
-gem 'asana', '~> 0.10.13'
+gem 'slack-messenger', '~> 2.3.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # FogBugz integration
-gem 'ruby-fogbugz', '~> 0.3.0'
+gem 'ruby-fogbugz', '~> 0.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Kubernetes integration
-gem 'kubeclient', '~> 4.11.0'
+gem 'kubeclient', '~> 4.11.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # AI
-gem 'ruby-openai', '~> 3.7'
-gem 'circuitbox', '2.0.0'
+gem 'ruby-openai', '~> 3.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'circuitbox', '2.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Sanitize user input
-gem 'sanitize', '~> 6.0.2'
-gem 'babosa', '~> 2.0'
+gem 'sanitize', '~> 6.0.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'babosa', '~> 2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Sanitizes SVG input
-gem 'loofah', '~> 2.21.3'
+gem 'loofah', '~> 2.21.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Used to provide license templates
-gem 'licensee', '~> 9.16'
+gem 'licensee', '~> 9.16' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Detect and convert string character encoding
-gem 'charlock_holmes', '~> 0.7.7'
+gem 'charlock_holmes', '~> 0.7.7' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Detect mime content type from content
-gem 'ruby-magic', '~> 0.6'
+gem 'ruby-magic', '~> 0.6' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Faster blank
-gem 'fast_blank', '~> 1.0.1'
+gem 'fast_blank', '~> 1.0.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Parse time & duration
-gem 'gitlab-chronic', '~> 0.10.5'
-gem 'gitlab_chronic_duration', '~> 0.11'
+gem 'gitlab-chronic', '~> 0.10.5' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gitlab_chronic_duration', '~> 0.12' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'rack-proxy', '~> 0.7.7'
+gem 'rack-proxy', '~> 0.7.7' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'sassc-rails', '~> 2.1.0'
-gem 'autoprefixer-rails', '10.2.5.1'
-gem 'terser', '1.0.2'
+gem 'sassc-rails', '~> 2.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'autoprefixer-rails', '10.2.5.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'terser', '1.0.2' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'click_house-client', path: 'gems/click_house-client', require: 'click_house/client'
-gem 'addressable', '~> 2.8'
-gem 'tanuki_emoji', '~> 0.7'
-gem 'gon', '~> 6.4.0'
-gem 'request_store', '~> 1.5.1'
-gem 'base32', '~> 0.3.0'
+gem 'click_house-client', path: 'gems/click_house-client', require: 'click_house/client' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'addressable', '~> 2.8' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'tanuki_emoji', '~> 0.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gon', '~> 6.4.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'request_store', '~> 1.5.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'base32', '~> 0.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'gitlab-license', '~> 2.3'
+gem 'gitlab-license', '~> 2.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Protect against bruteforcing
-gem 'rack-attack', '~> 6.7.0'
+gem 'rack-attack', '~> 6.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Sentry integration
-gem 'sentry-raven', '~> 3.1'
-gem 'sentry-ruby', '~> 5.8.0'
-gem 'sentry-rails', '~> 5.8.0'
-gem 'sentry-sidekiq', '~> 5.8.0'
+gem 'sentry-raven', '~> 3.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'sentry-ruby', '~> 5.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'sentry-rails', '~> 5.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'sentry-sidekiq', '~> 5.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # PostgreSQL query parsing
 #
-gem 'pg_query', '~> 4.2.3'
+gem 'pg_query', '~> 4.2.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation'
+gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gitlab-http', path: 'gems/gitlab-http' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'premailer-rails', '~> 1.10.3'
+gem 'premailer-rails', '~> 1.10.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'gitlab-labkit', '~> 0.34.0'
-gem 'thrift', '>= 0.16.0'
+gem 'gitlab-labkit', '~> 0.34.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'thrift', '>= 0.16.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # I18n
-gem 'rails-i18n', '~> 7.0'
-gem 'gettext_i18n_rails', '~> 1.11.0'
-gem 'gettext_i18n_rails_js', '~> 1.3'
-gem 'gettext', '~> 3.3', require: false, group: :development
+gem 'rails-i18n', '~> 7.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gettext_i18n_rails', '~> 1.11.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gettext_i18n_rails_js', '~> 1.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gettext', '~> 3.3', require: false, group: :development # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'batch-loader', '~> 2.0.1'
+gem 'batch-loader', '~> 2.0.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Perf bar
-gem 'peek', '~> 1.1'
+gem 'peek', '~> 1.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Google Cloud Profiler support
-gem 'cloud_profiler_agent', '~> 0.0.0', path: 'vendor/gems/cloud_profiler_agent', require: false
+gem 'cloud_profiler_agent', '~> 0.0.0', path: 'vendor/gems/cloud_profiler_agent', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Snowplow events tracking
-gem 'snowplow-tracker', '~> 0.8.0'
+gem 'snowplow-tracker', '~> 0.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Metrics
-gem 'webrick', '~> 1.8.1', require: false
-gem 'prometheus-client-mmap', '~> 0.28', require: 'prometheus/client'
+gem 'webrick', '~> 1.8.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'prometheus-client-mmap', '~> 0.28', '>= 0.28.1', require: 'prometheus/client' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'warning', '~> 1.3.0'
+gem 'warning', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 group :development do
-  gem 'lefthook', '~> 1.4.7', require: false
-  gem 'rubocop'
-  gem 'solargraph', '~> 0.47.2', require: false
+  gem 'lefthook', '~> 1.5.2', require: false, feature_category: :tooling
+  gem 'rubocop', feature_category: :tooling
+  gem 'solargraph', '~> 0.47.2', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'letter_opener_web', '~> 2.0.0'
-  gem 'lookbook', '~> 2.0', '>= 2.0.1'
+  gem 'letter_opener_web', '~> 2.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'lookbook', '~> 2.0', '>= 2.0.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
   # Better errors handler
-  gem 'better_errors', '~> 2.10.1'
+  gem 'better_errors', '~> 2.10.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'sprite-factory', '~> 1.7'
+  gem 'sprite-factory', '~> 1.7' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem "listen", "~> 3.7"
+  gem 'listen', '~> 3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
 group :development, :test do
-  gem 'deprecation_toolkit', '~> 1.5.1', require: false
-  gem 'bullet', '~> 7.0.2'
-  gem 'parser', '~> 3.2', '>= 3.2.2.3'
-  gem 'pry-byebug'
-  gem 'pry-rails', '~> 0.3.9'
-  gem 'pry-shell', '~> 0.6.4'
+  gem 'deprecation_toolkit', '~> 1.5.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'bullet', '~> 7.1.1' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'parser', '~> 3.2', '>= 3.2.2.4' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'pry-byebug' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'pry-rails', '~> 0.3.9' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'pry-shell', '~> 0.6.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'awesome_print', require: false
+  gem 'awesome_print', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'database_cleaner', '~> 1.7.0'
-  gem 'factory_bot_rails', '~> 6.2.0'
-  gem 'rspec-rails', '~> 6.0.3'
+  gem 'database_cleaner', '~> 1.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'factory_bot_rails', '~> 6.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'rspec-rails', '~> 6.0.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
   # Prevent occasions where minitest is not bundled in packaged versions of ruby (see #3826)
-  gem 'minitest', '~> 5.11.0'
+  gem 'minitest', '~> 5.11.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'spring', '~> 4.1.0'
-  gem 'spring-commands-rspec', '~> 1.0.4'
+  gem 'spring', '~> 4.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'spring-commands-rspec', '~> 1.0.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab-styles', '~> 10.1.0', require: false
+  gem 'gitlab-styles', '~> 10.1.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'haml_lint', '~> 0.40.0', require: false
-  gem 'bundler-audit', '~> 0.7.0.1', require: false
+  gem 'haml_lint', '~> 0.40.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'bundler-audit', '~> 0.9.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
   # Benchmarking & profiling
-  gem 'benchmark-ips', '~> 2.11.0', require: false
-  gem 'benchmark-memory', '~> 0.1', require: false
+  gem 'benchmark-ips', '~> 2.11.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'benchmark-memory', '~> 0.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'knapsack', '~> 1.21.1'
-  gem 'crystalball', '~> 0.7.0', require: false
+  # Profiling data from CI/CD pipelines
+  gem 'influxdb-client', '~> 2.9', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'simple_po_parser', '~> 1.1.6', require: false
+  gem 'knapsack', '~> 1.21.1', feature_category: :tooling
+  gem 'crystalball', '~> 0.7.0', require: false, feature_category: :tooling
+  gem 'test_file_finder', '~> 0.1.3', feature_category: :tooling
 
-  gem 'png_quantizator', '~> 0.2.1', require: false
+  gem 'simple_po_parser', '~> 1.1.6', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'parallel', '~> 1.19', require: false
+  gem 'png_quantizator', '~> 0.2.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'test_file_finder', '~> 0.1.3'
+  gem 'parallel', '~> 1.19', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'sigdump', '~> 0.2.4', require: 'sigdump/setup'
+  gem 'sigdump', '~> 0.2.4', require: 'sigdump/setup' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'pact', '~> 1.63'
+  gem 'pact', '~> 1.63' # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 4.0.0', require: false
+  gem 'gitlab-dangerfiles', '~> 4.3.2', require: false, feature_category: :tooling
 end
 
 group :development, :test, :coverage do
-  gem 'simplecov', '~> 0.21', require: false
-  gem 'simplecov-lcov', '~> 0.8.0', require: false
-  gem 'simplecov-cobertura', '~> 2.1.0', require: false
-  gem 'undercover', '~> 0.4.4', require: false
+  gem 'simplecov', '~> 0.21', require: false, feature_category: :tooling
+  gem 'simplecov-lcov', '~> 0.8.0', require: false, feature_category: :tooling
+  gem 'simplecov-cobertura', '~> 2.1.0', require: false, feature_category: :tooling
+  gem 'undercover', '~> 0.4.4', require: false, feature_category: :tooling
 end
 
 # Gems required in omnibus-gitlab pipeline
 group :development, :test, :omnibus do
-  gem 'license_finder', '~> 7.0', require: false
+  gem 'license_finder', '~> 7.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
 # Gems required in various pipelines
 group :development, :test, :monorepo do
-  gem 'gitlab-rspec', path: 'gems/gitlab-rspec'
-  gem 'rspec_flaky', path: 'gems/rspec_flaky'
+  gem 'gitlab-rspec', path: 'gems/gitlab-rspec' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'rspec_flaky', path: 'gems/rspec_flaky' # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
 group :test do
-  gem 'fuubar', '~> 2.2.0'
-  gem 'rspec-retry', '~> 0.6.2'
-  gem 'rspec_profiling', '~> 0.0.6'
-  gem 'rspec-benchmark', '~> 0.6.0'
-  gem 'rspec-parameterized', '~> 1.0', require: false
+  gem 'fuubar', '~> 2.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'rspec-retry', '~> 0.6.2', feature_category: :tooling
+  gem 'rspec_profiling', '~> 0.0.6', feature_category: :tooling
+  gem 'rspec-benchmark', '~> 0.6.0', feature_category: :tooling
+  gem 'rspec-parameterized', '~> 1.0', require: false, feature_category: :tooling
 
-  gem 'capybara', '~> 3.39', '>= 3.39.2'
-  gem 'capybara-screenshot', '~> 1.0.26'
-  gem 'selenium-webdriver', '= 4.12.0'
+  gem 'capybara', '~> 3.39', '>= 3.39.2' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'capybara-screenshot', '~> 1.0.26' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'selenium-webdriver', '~> 4.14' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'graphlyte', '~> 1.0.0'
+  gem 'graphlyte', '~> 1.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'shoulda-matchers', '~> 5.1.0', require: false
-  gem 'email_spec', '~> 2.2.0'
-  gem 'webmock', '~> 3.19.1'
-  gem 'rails-controller-testing'
-  gem 'concurrent-ruby', '~> 1.1'
-  gem 'test-prof', '~> 1.2.2'
-  gem 'rspec_junit_formatter'
-  gem 'guard-rspec'
-  gem 'axe-core-rspec'
+  gem 'shoulda-matchers', '~> 5.1.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'email_spec', '~> 2.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'webmock', '~> 3.19.1' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'rails-controller-testing' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'concurrent-ruby', '~> 1.1' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'test-prof', '~> 1.2.3' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'rspec_junit_formatter' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'guard-rspec' # rubocop:todo Gemfile/MissingFeatureCategory
+  gem 'axe-core-rspec' # rubocop:todo Gemfile/MissingFeatureCategory
 
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
-  gem 'derailed_benchmarks', require: false
+  gem 'derailed_benchmarks', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab_quality-test_tooling', '~> 1.0.0', require: false
+  gem 'gitlab_quality-test_tooling', '~> 1.3.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 end
 
-gem 'octokit', '~> 6.0'
+gem 'octokit', '~> 6.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'gitlab-mail_room', '~> 0.0.23', require: 'mail_room'
+gem 'gitlab-mail_room', '~> 0.0.23', require: 'mail_room' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'email_reply_trimmer', '~> 0.1'
-gem 'html2text'
+gem 'email_reply_trimmer', '~> 0.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'html2text' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'stackprof', '~> 0.2.25', require: false
-gem 'rbtrace', '~> 0.4', require: false
-gem 'memory_profiler', '~> 1.0', require: false
-gem 'activerecord-explain-analyze', '~> 0.1', require: false
+gem 'stackprof', '~> 0.2.25', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'rbtrace', '~> 0.4', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'memory_profiler', '~> 1.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'activerecord-explain-analyze', '~> 0.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
 # OAuth
-gem 'oauth2', '~> 2.0'
+gem 'oauth2', '~> 2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Health check
-gem 'health_check', '~> 3.0'
+gem 'health_check', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # System information
-gem 'vmstat', '~> 2.3.0'
-gem 'sys-filesystem', '~> 1.4.3'
+gem 'vmstat', '~> 2.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'sys-filesystem', '~> 1.4.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # NTP client
-gem 'net-ntp'
+gem 'net-ntp' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # SSH keys support
-gem 'ssh_data', '~> 1.3'
+gem 'ssh_data', '~> 1.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Spamcheck GRPC protocol definitions
-gem 'spamcheck', '~> 1.3.0'
+gem 'spamcheck', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 16.3.0-rc1'
+gem 'gitaly', '~> 16.5.0.pre.rc1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # KAS GRPC protocol definitions
-gem 'kas-grpc', '~> 0.2.0'
+gem 'kas-grpc', '~> 0.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'grpc', '~> 1.55.0'
+gem 'grpc', '~> 1.58.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'google-protobuf', '~> 3.24', '>= 3.24.3'
+gem 'google-protobuf', '~> 3.24', '>= 3.24.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'toml-rb', '~> 2.2.0'
+gem 'toml-rb', '~> 2.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Feature toggles
-gem 'flipper', '~> 0.26.2'
-gem 'flipper-active_record', '~> 0.26.2'
-gem 'flipper-active_support_cache_store', '~> 0.26.2'
-gem 'unleash', '~> 3.2.2'
-gem 'gitlab-experiment', '~> 0.8.0'
+gem 'flipper', '~> 0.26.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'flipper-active_record', '~> 0.26.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'flipper-active_support_cache_store', '~> 0.26.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'unleash', '~> 3.2.2' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'gitlab-experiment', '~> 0.8.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Structured logging
-gem 'lograge', '~> 0.5'
-gem 'grape_logging', '~> 1.8'
+gem 'lograge', '~> 0.5' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'grape_logging', '~> 1.8', feature_category: :api
 
 # DNS Lookup
-gem 'gitlab-net-dns', '~> 0.9.2'
+gem 'gitlab-net-dns', '~> 0.9.2' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Countries list
-gem 'countries', '~> 4.0.0'
+gem 'countries', '~> 4.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'retriable', '~> 3.1.2'
+gem 'retriable', '~> 3.1.2' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # LRU cache
-gem 'lru_redux'
+gem 'lru_redux' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Locked as long as quoted-printable encoding issues are not resolved
 # Monkey-patched in `config/initializers/mail_encoding_patch.rb`
@@ -565,62 +571,62 @@ gem 'lru_redux'
 # `config/initializers/mail_starttls_patch.rb` has also been patched to
 # fix STARTTLS handling until https://github.com/mikel/mail/pull/1536 is
 # released.
-gem 'mail', '= 2.8.1'
-gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: false
+gem 'mail', '= 2.8.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer'
+gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # File encryption
-gem 'lockbox', '~> 1.3.0'
+gem 'lockbox', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Email validation
-gem 'valid_email', '~> 0.1'
+gem 'valid_email', '~> 0.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # JSON
-gem 'jsonb_accessor', '~> 1.3.10'
-gem 'json', '~> 2.6.3'
-gem 'json_schemer', '~> 0.2.18'
-gem 'oj', '~> 3.13.21'
-gem 'oj-introspect', '~> 0.7'
-gem 'multi_json', '~> 1.14.1'
-gem 'yajl-ruby', '~> 1.4.3', require: 'yajl'
+gem 'jsonb_accessor', '~> 1.3.10' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'json', '~> 2.6.3' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'json_schemer', '~> 0.2.18' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'oj', '~> 3.13.21' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'oj-introspect', '~> 0.7' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'multi_json', '~> 1.14.1' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'yajl-ruby', '~> 1.4.3', require: 'yajl' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'webauthn', '~> 3.0'
+gem 'webauthn', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # IPAddress utilities
-gem 'ipaddress', '~> 0.8.3'
+gem 'ipaddress', '~> 0.8.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'parslet', '~> 1.8'
+gem 'parslet', '~> 1.8' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'ipynbdiff', path: 'gems/ipynbdiff', require: 'ipynb_diff'
+gem 'ipynbdiff', path: 'gems/ipynbdiff', require: 'ipynb_diff' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'ed25519', '~> 1.3.0'
+gem 'ed25519', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Error Tracking OpenAPI client
 # See https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/rake_tasks.md#update-openapi-client-for-error-tracking-feature
-gem 'error_tracking_open_api', path: 'gems/error_tracking_open_api'
+gem 'error_tracking_open_api', path: 'gems/error_tracking_open_api' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Vulnerability advisories
-gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite'
+gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Work with RPM packages
-gem 'arr-pm', '~> 0.0.12'
+gem 'arr-pm', '~> 0.0.12' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Remote Development
-gem 'devfile', '~> 0.0.22.pre.alpha1'
+gem 'devfile', '~> 0.0.23.pre.alpha1' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Apple plist parsing
-gem 'CFPropertyList', '~> 3.0.0'
-gem 'app_store_connect'
+gem 'CFPropertyList', '~> 3.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'app_store_connect' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # For phone verification
-gem 'telesignenterprise', '~> 2.2'
+gem 'telesignenterprise', '~> 2.2' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # BufferedIO patch
 # Updating this version will require updating scripts/allowed_warnings.txt
-gem 'net-protocol', '~> 0.1.3'
+gem 'net-protocol', '~> 0.1.3' # rubocop:todo Gemfile/MissingFeatureCategory
 # Lock this until we make DNS rebinding work with the updated net-http:
 # https://gitlab.com/gitlab-org/gitlab/-/issues/413528
-gem 'net-http', '= 0.1.1'
+gem 'net-http', '= 0.1.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'duo_api', '~> 1.3'
+gem 'duo_api', '~> 1.3' # rubocop:todo Gemfile/MissingFeatureCategory

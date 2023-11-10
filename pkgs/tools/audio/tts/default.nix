@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.17.4";
+  version = "0.19.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yZHdPqvYmlq/ZKeinez4MmO9+jCIl9JAD0t/tc/Uz8c=";
+    hash = "sha256-GYVr/Wam1IGCSR2vHMAu5Fg/jRB333L6iNjltnRKh4E=";
   };
 
   postPatch = let
@@ -103,7 +103,7 @@ python.pkgs.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/utils/monotonic_align
-      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
+      ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
     )
   '';
 

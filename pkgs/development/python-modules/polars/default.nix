@@ -3,19 +3,27 @@
 , buildPythonPackage
 , pythonOlder
 , rustPlatform
+, cmake
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, jemalloc
+, rust-jemalloc-sys
 , darwin
 }:
 let
   pname = "polars";
-  version = "0.18.13";
+  version = "0.19.12";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-kV30r2wmswpCUmMRaFsCOeRrlTN5/PU0ogaU2JIHq0E=";
+    hash = "sha256-6tn3Q6oZfMjgQ5l5xCFnGimLSDLOjTWCW5uEbi6yFZY=";
+  };
+  rust-jemalloc-sys' = rust-jemalloc-sys.override {
+    jemalloc = jemalloc.override {
+      disableInitExecTls = true;
+    };
   };
 in
 buildPythonPackage {
@@ -23,6 +31,13 @@ buildPythonPackage {
   format = "pyproject";
   disabled = pythonOlder "3.6";
   src = rootSource;
+
+  patches = [
+    # workaround for apparent rustc bug
+    # remove when we're at Rust 1.73
+    # https://github.com/pola-rs/polars/issues/12050
+    ./all_horizontal.patch
+  ];
 
   # Cargo.lock file is sometimes behind actual release which throws an error,
   # thus the `sed` command
@@ -35,9 +50,7 @@ buildPythonPackage {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "arrow2-0.17.3" = "sha256-pM6lNjMCpUzC98IABY+M23lbLj0KMXDefgBMjUPjDlg=";
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
-      "simd-json-0.10.0" = "sha256-0q/GhL7PG5SLgL0EETPqe8kn6dcaqtyL+kLU9LL+iQs=";
     };
   };
   cargoRoot = "py-polars";
@@ -47,9 +60,20 @@ buildPythonPackage {
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [
+    # needed for libz-ng-sys
+    # TODO: use pkgs.zlib-ng
+    cmake
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
+
+  buildInputs = [
+    rust-jemalloc-sys'
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];

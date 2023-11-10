@@ -31,12 +31,15 @@ with lib;
         options = {
           addr = mkOption {
             type = str;
-            description = lib.mdDoc "IP address.";
+            description = lib.mdDoc "Listen address.";
           };
           port = mkOption {
-            type = port;
-            description = lib.mdDoc "Port number.";
-            default = 80;
+            type = types.nullOr port;
+            description = lib.mdDoc ''
+              Port number to listen on.
+              If unset and the listen address is not a socket then nginx defaults to 80.
+            '';
+            default = null;
           };
           ssl = mkOption {
             type = bool;
@@ -60,6 +63,7 @@ with lib;
       example = [
         { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
+        { addr = "unix:/var/run/nginx.sock"; }
       ];
       description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.

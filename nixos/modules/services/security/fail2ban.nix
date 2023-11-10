@@ -103,9 +103,9 @@ in
       };
 
       bantime = mkOption {
-        default = null;
-        type = types.nullOr types.str;
-        example = "10m";
+        default = "10m";
+        type = types.str;
+        example = "1h";
         description = lib.mdDoc "Number of seconds that a host is banned.";
       };
 

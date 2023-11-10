@@ -164,16 +164,6 @@ in
     };
   };
 
-  beetle-snes = mkLibretroCore {
-    core = "mednafen-snes";
-    src = getCoreSrc "beetle-snes";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's SNES core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
-
   beetle-supafaust = mkLibretroCore {
     core = "mednafen-supafaust";
     src = getCoreSrc "beetle-supafaust";
@@ -568,6 +558,7 @@ in
 
   mame2015 = mkLibretroCore {
     core = "mame2015";
+    patches = [ ./patches/mame2015-python311.patch ];
     makeFlags = [ "PYTHON=python3" ];
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
@@ -581,6 +572,7 @@ in
 
   mame2016 = mkLibretroCore {
     core = "mame2016";
+    patches = [ ./patches/mame2016-python311.patch ];
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib ];
     makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
@@ -768,7 +760,7 @@ in
     # causes redefinition of _FORTIFY_SOURCE
     hardeningDisable = [ "fortify3" ];
 
-    postBuild = "cd $NIX_BUILD_TOP/source/build/pcsx2";
+    postBuild = "cd pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";
       license = lib.licenses.gpl3Plus;

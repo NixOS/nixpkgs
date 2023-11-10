@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
-  version = "0.14.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b58255a78a0bf652224ee22ca83137d75ea77b7eb1ad2d11159b56b6788f6201";
+    sha256 = "5d427eb46de448e4109f68ed435dd38426df8200aea5bb668639aabe1f0b4580";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

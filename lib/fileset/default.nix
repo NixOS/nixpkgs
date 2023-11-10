@@ -6,8 +6,10 @@ let
     _coerceMany
     _toSourceFilter
     _unionMany
+    _fileFilter
     _printFileset
     _intersection
+    _difference
     ;
 
   inherit (builtins)
@@ -41,6 +43,7 @@ let
     ;
 
   inherit (lib.trivial)
+    isFunction
     pipe
     ;
 
@@ -119,11 +122,10 @@ in {
       Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
       `root` has to be a directory.
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
-:::{.note}
-Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
-The only way to change which files get added to the store is by changing the `fileset` attribute.
-:::
+      :::{.note}
+      Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
+      The only way to change which files get added to the store is by changing the `fileset` attribute.
+      :::
     */
     root,
     /*
@@ -132,10 +134,9 @@ The only way to change which files get added to the store is by changing the `fi
       This argument can also be a path,
       which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
-:::{.note}
-If a directory does not recursively contain any file, it is omitted from the store path contents.
-:::
+      :::{.note}
+      If a directory does not recursively contain any file, it is omitted from the store path contents.
+      :::
 
     */
     fileset,
@@ -153,7 +154,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
     if ! isPath root then
       if isStringLike root then
         throw ''
-          lib.fileset.toSource: `root` ("${toString root}") is a string-like value, but it should be a path instead.
+          lib.fileset.toSource: `root` (${toString root}) is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
         throw ''
@@ -162,13 +163,13 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # See also ../path/README.md
     else if ! fileset._internalIsEmptyWithoutBase && rootFilesystemRoot != filesetFilesystemRoot then
       throw ''
-        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` ("${toString root}"):
-            `root`: root "${toString rootFilesystemRoot}"
-            `fileset`: root "${toString filesetFilesystemRoot}"
-            Different roots are not supported.''
+        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` (${toString root}):
+            `root`: Filesystem root is "${toString rootFilesystemRoot}"
+            `fileset`: Filesystem root is "${toString filesetFilesystemRoot}"
+            Different filesystem roots are not supported.''
     else if ! pathExists root then
       throw ''
-        lib.fileset.toSource: `root` (${toString root}) does not exist.''
+        lib.fileset.toSource: `root` (${toString root}) is a path that does not exist.''
     else if pathType root != "directory" then
       throw ''
         lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
@@ -220,11 +221,11 @@ If a directory does not recursively contain any file, it is omitted from the sto
     _unionMany
       (_coerceMany "lib.fileset.union" [
         {
-          context = "first argument";
+          context = "First argument";
           value = fileset1;
         }
         {
-          context = "second argument";
+          context = "Second argument";
           value = fileset2;
         }
       ]);
@@ -266,17 +267,68 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
     if ! isList filesets then
-      throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf filesets}."
+      throw ''
+        lib.fileset.unions: Argument is of type ${typeOf filesets}, but it should be a list instead.''
     else
       pipe filesets [
         # Annotate the elements with context, used by _coerceMany for better errors
         (imap0 (i: el: {
-          context = "element ${toString i}";
+          context = "Element ${toString i}";
           value = el;
         }))
         (_coerceMany "lib.fileset.unions")
         _unionMany
       ];
+
+  /*
+    Filter a file set to only contain files matching some predicate.
+
+    Type:
+      fileFilter ::
+        ({
+          name :: String,
+          type :: String,
+          ...
+        } -> Bool)
+        -> FileSet
+        -> FileSet
+
+    Example:
+      # Include all regular `default.nix` files in the current directory
+      fileFilter (file: file.name == "default.nix") ./.
+
+      # Include all non-Nix files from the current directory
+      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
+
+      # Include all files that start with a "." in the current directory
+      fileFilter (file: hasPrefix "." file.name) ./.
+
+      # Include all regular files (not symlinks or others) in the current directory
+      fileFilter (file: file.type == "regular")
+  */
+  fileFilter =
+    /*
+      The predicate function to call on all files contained in given file set.
+      A file is included in the resulting file set if this function returns true for it.
+
+      This function is called with an attribute set containing these attributes:
+
+      - `name` (String): The name of the file
+
+      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+      Other attributes may be added in the future.
+    */
+    predicate:
+    # The file set to filter based on the predicate function
+    fileset:
+    if ! isFunction predicate then
+      throw ''
+        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function.''
+    else
+      _fileFilter predicate
+        (_coerce "lib.fileset.fileFilter: Second argument" fileset);
 
   /*
     The file set containing all files that are in both of two given file sets.
@@ -304,16 +356,68 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       filesets = _coerceMany "lib.fileset.intersection" [
         {
-          context = "first argument";
+          context = "First argument";
           value = fileset1;
         }
         {
-          context = "second argument";
+          context = "Second argument";
           value = fileset2;
         }
       ];
     in
     _intersection
+      (elemAt filesets 0)
+      (elemAt filesets 1);
+
+  /*
+    The file set containing all files from the first file set that are not in the second file set.
+    See also [Difference (set theory)](https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      union :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Create a file set containing all files from the current directory,
+      # except ones under ./tests
+      difference ./. ./tests
+
+      let
+        # A set of Nix-related files
+        nixFiles = unions [ ./default.nix ./nix ./tests/default.nix ];
+      in
+      # Create a file set containing all files under ./tests, except ones in `nixFiles`,
+      # meaning only without ./tests/default.nix
+      difference ./tests nixFiles
+  */
+  difference =
+    # The positive file set.
+    # The result can only contain files that are also in this file set.
+    #
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    positive:
+    # The negative file set.
+    # The result will never contain files that are also in this file set.
+    #
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    negative:
+    let
+      filesets = _coerceMany "lib.fileset.difference" [
+        {
+          context = "First argument (positive set)";
+          value = positive;
+        }
+        {
+          context = "Second argument (negative set)";
+          value = negative;
+        }
+      ];
+    in
+    _difference
       (elemAt filesets 0)
       (elemAt filesets 1);
 
@@ -352,7 +456,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       # "fileset" would be a better name, but that would clash with the argument name,
       # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.trace: argument" fileset;
+      actualFileset = _coerce "lib.fileset.trace: Argument" fileset;
     in
     seq
       (_printFileset actualFileset)
@@ -399,7 +503,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       # "fileset" would be a better name, but that would clash with the argument name,
       # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.traceVal: argument" fileset;
+      actualFileset = _coerce "lib.fileset.traceVal: Argument" fileset;
     in
     seq
       (_printFileset actualFileset)

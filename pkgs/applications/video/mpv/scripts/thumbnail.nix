@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-thumbnail-script";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "marzzzello";
     repo = "mpv_thumbnail_script";
     rev = version;
-    sha256 = "sha256-6J1eeuSYyUJmWLIl9WsQ4NzQOBJNO3Cnl5jcPEal4vM=";
+    sha256 = "sha256-J24Rou7BTE7zoiPlBkWuO9dtYJiuzkuwB4FROuzXzag=";
   };
 
   nativeBuildInputs = [ python3 ];

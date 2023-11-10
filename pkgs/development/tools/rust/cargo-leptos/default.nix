@@ -15,20 +15,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+qAXBLV+Jn1qWG7TThn4twUBvN7lO4MX2SSo/gdjgFY=";
+    rev = "${version}";
+    hash = "sha256-XoTXVzhBW+oUHu2TBZC+sFqMAVZCOJeuymqmsxTWpZ0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "leptos_hot_reload-0.5.0" = "sha256-huOwadWMYPGGWmZHxztFPPzs4UhIPEmq9rKOB6WPCTE=";
-    };
   };
 
   nativeBuildInputs = optionals (!isDarwin) [ pkg-config ];

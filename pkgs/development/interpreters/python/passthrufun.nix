@@ -67,6 +67,8 @@
       overrides = packageOverrides;
       python = self;
     });
+  pythonOnBuildForHost_overridden =
+    pythonOnBuildForHost.override { inherit packageOverrides; self = pythonOnBuildForHost_overridden; };
 in rec {
     isPy27 = pythonVersion == "2.7";
     isPy37 = pythonVersion == "3.7";
@@ -89,9 +91,11 @@ in rec {
     pythonAtLeast = lib.versionAtLeast pythonVersion;
     pythonOlder = lib.versionOlder pythonVersion;
     inherit hasDistutilsCxxPatch;
-    # TODO: rename to pythonOnBuild
-    # Not done immediately because its likely used outside Nixpkgs.
-    pythonForBuild = pythonOnBuildForHost.override { inherit packageOverrides; self = pythonForBuild; };
+    # Remove after 24.11 is released.
+    pythonForBuild =
+      lib.warnIf (lib.isInOldestRelease 2311) "`pythonForBuild` (from `python*`) has been renamed to `pythonOnBuildForHost`"
+        pythonOnBuildForHost_overridden;
+    pythonOnBuildForHost = pythonOnBuildForHost_overridden;
 
     tests = callPackage ./tests.nix {
       python = self;

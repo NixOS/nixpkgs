@@ -36,6 +36,7 @@ mapAliases ({
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
+  aionotify = throw "aionotify has been removed because is unmaintained and incompatible with python3.11."; # Added 2023-10-27
   aiosenseme = throw "aiosenseme has been removed, because it does no longer work with the latest firmware and has become unmaintained"; # Added 2023-07-05
   amazon_kclpy = amazon-kclpy; # added 2023-08-08
   ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
@@ -128,6 +129,7 @@ mapAliases ({
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   EasyProcess = easyprocess; # added 2023-02-19
   email_validator = email-validator; # added 2022-06-22
+  enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   et_xmlfile = et-xmlfile; # added 2023-10-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
   Fabric = fabric; # addedd 2023-02-19
@@ -201,6 +203,7 @@ mapAliases ({
   jaraco_text = jaraco-text; # added 2023-07-14
   jaraco_stream = jaraco-stream; # added 2023-07-14
   JayDeBeApi = jaydebeapi; # added 2023-02-19
+  jinja2_pluralize = jinja2-pluralize; # added 2023-11-01
   jinja2_time = jinja2-time; # added 2022-11-07
   JPype1 = jpype1; # added 2023-02-19
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
@@ -244,6 +247,9 @@ mapAliases ({
   notifymuch = throw "notifymuch has been promoted to a top-level attribute"; # added 2022-10-02
   Nuitka = nuitka; # added 2023-02-19
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
+  openapi-schema-pydantic = throw "openapi-schema-pydantic has been removed, since it is no longer maintained"; # added 2023-10-30
+  opencv3 = throw "opencv3 has been removed as it is obsolete"; # added 2023-10-12
+  opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   pam = python-pam; # added 2020-09-07.
@@ -258,10 +264,11 @@ mapAliases ({
   poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
-  privacyidea = throw "privacyidea has been renamed to pkgs.privacyidea"; # added 2021-06-20
+  privacyidea-ldap-proxy = throw "privacyidea-ldap-proxy has been removed from nixpkgs"; # added 2023-10-31
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
@@ -289,6 +296,7 @@ mapAliases ({
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
+  pymyq = python-myq; # added 2023-10-20
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyramid_beaker = pyramid-beaker; # added 2023-08-23
   pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
@@ -329,6 +337,7 @@ mapAliases ({
   pytestrunner = pytest-runner; # added 2021-01-04
   python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
+  python_docs_theme = python-docs-theme; # added 2023-11-04
   python_keyczar = throw "python_keyczar has been removed because it's been archived upstream and deprecated"; # added 2023-05-16
   python-lz4 = lz4; # added 2018-06-01
   python_magic = python-magic; # added 2022-05-07
@@ -349,15 +358,20 @@ mapAliases ({
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
+  qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rabbitpy = throw "rabbitpy has been removed, since it is unmaintained and broken"; # added 2023-07-01
+  radio_beam = radio-beam; # added 2023-11-04
+  ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
+  recaptcha_client = throw "recaptcha_client has been removed since it is no longer maintained"; # added 2023-10-20
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
   retworkx = rustworkx; # added 2023-05-14
   repeated_test = repeated-test; # added 2022-11-15
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
+  restructuredtext_lint = restructuredtext-lint; # added 2023-11-04
   rig = throw "rig has been removed because it was pinned to python 2.7 and 3.5, failed to build and is otherwise unmaintained"; # added 2022-11-28
   rl-coach = "rl-coach was removed because the project is discontinued and was archived by upstream"; # added 2023-05-03
   roboschool = throw "roboschool is deprecated in favor of PyBullet and has been removed"; # added 2022-01-15
@@ -381,6 +395,7 @@ mapAliases ({
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
   SPARQLWrapper = sparqlwrapper;
   sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24
+  sphinx_pypi_upload = throw "sphinx_pypi_upload has been removed since it is abandoned."; # added 2023-10-11
   sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03
   sphinxcontrib-autoapi = sphinx-autoapi; # added 2023-02=28
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
@@ -402,6 +417,7 @@ mapAliases ({
   TheanoWithoutCuda = theanoWithoutCuda; # added 2023-02-19
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
+  tvdb_api = tvdb-api; # added 2023-10-20
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
@@ -409,6 +425,7 @@ mapAliases ({
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
   uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
   validictory = throw "validictory has been removed, since it abandoned"; # added 2023-07-07
+  vega_datasets = vega-datasets; # added 2023-11-04
   ViennaRNA = viennarna; # added 2023-08-23
   virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
   Wand = wand; # added 2022-11-13
@@ -421,6 +438,7 @@ mapAliases ({
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   WSME = wsme; # added 2023-02-19
+  x11_hash = x11-hash; # added 2023-11-05
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   Yapsy = yapsy; # added 2023-02-19
@@ -432,5 +450,7 @@ mapAliases ({
   zope_contenttype = zope-contenttype; # added 2023-10-11
   zope_deprecation = zope-deprecation; # added 2023-10-07
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
+  zope_lifecycleevent = zope-lifecycleevent; # added 2023-10-11
   zope_proxy = zope-proxy; # added 2023-10-07
+  zxing_cpp = zxing-cpp; # added 2023-11-05
 })

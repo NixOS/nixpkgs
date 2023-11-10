@@ -22,5 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/a8m/envsubst";
     license = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
+    mainProgram = "envsubst";
   };
 }

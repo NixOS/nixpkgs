@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "webanalyze";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "rverton";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1z4hi9a/OzBXIMBk1f0JpPMV/kRgBnTQAEygIZqV+1w=";
+    hash = "sha256-uDf0p4zw23+AVftMmrKfno+FbMZfGC1B5zvutj8qnPg=";
   };
 
-  vendorHash = "sha256-kXtWYGsZUUhBNvkTOah3Z+ta118k6PXfpBx6MLr/pq0=";
+  vendorHash = "sha256-XPOsC+HoLytgv1fhAaO5HYSvuOP6OhjLyOYTfiD64QI=";
 
   meta = with lib; {
     description = "Tool to uncover technologies used on websites";

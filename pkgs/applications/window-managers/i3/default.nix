@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.22";
+  version = "4.23";
 
   src = fetchurl {
     url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KGOZEeWdlWOfCSZCqYL14d6lkiUMK1zpjtoQCDNRPks=";
+    sha256 = "sha256-YQJqcZbJE50POq3ScZfosyDFduOkUOAddMGspIQETEY=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
-    maintainers = with maintainers; [ modulistic fpletz globin ];
+    maintainers = with maintainers; [ modulistic fpletz ];
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

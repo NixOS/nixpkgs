@@ -1,7 +1,7 @@
 { callPackage, ... }@args:
 callPackage ../generic.nix ({
-  version = "11.3.25";
-  hash = "sha256-KIbRn90BUJp8Uc8GMHuIMMSn5tJQbxzE0ntngx1ELaE=";
+  version = "11.3.27";
+  hash = "sha256-A3EeFQsDOaggfb5S+eyRCe/vm054MabfRrcHPxhO0So=";
   vendorHash = "sha256-hjMv/H4dlinlv3ku7i1km2/b+6uCdbznHtVOMIjDlUc=";
   yarnHash = "sha256-hip0WQVZpx2qfVDmEy4nk4UFYEjX1Xhj8HsIIQ8PF1Y=";
   cargoLock = {

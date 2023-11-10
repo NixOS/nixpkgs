@@ -1,40 +1,47 @@
-{ config
-, cudaPackages
+{ backendStdenv
+, config
+, cuda_cccl
+, cuda_cudart
+, cuda_nvcc
+, cudaVersion
 , fetchFromGitHub
+, gitUpdater
 , lib
-, mpiSupport ? false
 , mpi
-, stdenv
+, mpiSupport ? false
+, nccl
 , which
 }:
 
-cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
 
   pname = "nccl-tests";
-  version = "2.13.6";
+  version = "2.13.8";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3gSBQ0g6mnQ/MFXGflE+BqqrIUoiBgp8+fWRQOvLVkw=";
+    hash = "sha256-dxLoflsTHDBnZRTzoXdm30OyKpLlRa73b784YWALBHg=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    cudaPackages.cuda_nvcc
+    cuda_nvcc
     which
   ];
 
   buildInputs = [
-    cudaPackages.cuda_cudart
-    cudaPackages.nccl
+    cuda_cudart
+    nccl
+  ] ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [
+    cuda_cccl.dev # <nv/target>
   ] ++ lib.optional mpiSupport mpi;
 
   makeFlags = [
-    "CUDA_HOME=${cudaPackages.cuda_nvcc}"
-    "NCCL_HOME=${cudaPackages.nccl}"
+    "CUDA_HOME=${cuda_nvcc}"
+    "NCCL_HOME=${nccl}"
   ] ++ lib.optionals mpiSupport [
     "MPI=1"
   ];
@@ -46,12 +53,17 @@ cudaPackages.backendStdenv.mkDerivation (finalAttrs: {
     cp -r build/* $out/bin/
   '';
 
+  passthru.updateScript = gitUpdater {
+    inherit (finalAttrs) pname version;
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     description = "Tests to check both the performance and the correctness of NVIDIA NCCL operations";
     homepage = "https://github.com/NVIDIA/nccl-tests";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     license = licenses.bsd3;
     broken = !config.cudaSupport || (mpiSupport && mpi == null);
-    maintainers = with maintainers; [ jmillerpdt ];
+    maintainers = with maintainers; [ jmillerpdt ] ++ teams.cuda.members;
   };
 })

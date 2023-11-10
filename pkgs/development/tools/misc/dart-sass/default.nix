@@ -29,6 +29,7 @@ buildDartApplication rec {
   };
 
   pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
   vendorHash = "sha256-PQvY+qFXovSXH5wuc60wCrt5RiooKcaGKYzbjKSvqso=";
 
   nativeBuildInputs = [

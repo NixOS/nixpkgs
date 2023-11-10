@@ -169,6 +169,8 @@ let
       dart pub deps --json | jq .packages > $out
       runHook postBuild
     '';
+
+    dontInstall = true;
   } // (removeAttrs buildDrvInheritArgs [ "name" "pname" ]));
 
   # As of Dart 3.0.0, Pub checks the revision of cached Git-sourced packages.

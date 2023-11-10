@@ -10,6 +10,7 @@
 , fluidsynth
 , game-music-emu
 , gtk3
+, imagemagick
 , libGL
 , libjpeg
 , libsndfile
@@ -26,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.11.1";
+  version = "4.11.3";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
     fetchSubmodules = true;
-    hash = "sha256-7PWaqYK7pa6jgl92+a9dqQVVKuE/lvqtm+7p0nfMTNI=";
+    hash = "sha256-pY+5R3W/9pJGiBoDFkxxpuP0I2ZLb+Q/s5UYU20G748=";
   };
 
   outputs = [ "out" "doc" ];
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     copyDesktopItems
+    imagemagick
     makeWrapper
     ninja
     pkg-config
@@ -81,6 +83,8 @@ stdenv.mkDerivation rec {
       name = "gzdoom";
       exec = "gzdoom";
       desktopName = "GZDoom";
+      comment = meta.description;
+      icon = "gzdoom";
       categories = [ "Game" ];
     })
   ];
@@ -88,6 +92,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/bin/gzdoom $out/share/games/doom/gzdoom
     makeWrapper $out/share/games/doom/gzdoom $out/bin/gzdoom
+
+    for size in 16 24 32 48 64 128; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -background none -resize "$size"x"$size" $src/src/win32/icon1.ico -flatten \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/gzdoom.png
+    done;
   '';
 
   meta = with lib; {

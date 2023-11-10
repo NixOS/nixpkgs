@@ -208,7 +208,7 @@ def test_attr_span_escaping() -> None:
               content='\\[a]{#bar}', markup='', info='', meta={}, block=True, hidden=False,
               children=[
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
-                        content='[a]{#bar}', markup='', info='', meta={}, block=False, hidden=False)
+                        content='[a]{#bar}', markup='\\[', info='escape', meta={}, block=False, hidden=False)
               ]),
         Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup='', info='', meta={}, block=True, hidden=False)
@@ -220,7 +220,7 @@ def test_attr_span_escaping() -> None:
               content='\\\\[a]{#bar}', markup='', info='', meta={}, block=True, hidden=False,
               children=[
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
-                        content='\\', markup='', info='', meta={}, block=False, hidden=False),
+                        content='\\', markup='\\\\', info='escape', meta={}, block=False, hidden=False),
                   Token(type='attr_span_begin', tag='span', nesting=1, attrs={'id': 'bar'}, map=None, level=0,
                         children=None, content='', markup='', info='', meta={}, block=False, hidden=False),
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=1, children=None,
@@ -237,7 +237,7 @@ def test_attr_span_escaping() -> None:
         Token(type='inline', tag='', nesting=0, attrs={}, map=[0, 1], level=1,
               children=[
                   Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
-                        content='\\[a]{#bar}', markup='', info='', meta={}, block=False, hidden=False)
+                        content='\\[a]{#bar}', markup='\\\\', info='escape', meta={}, block=False, hidden=False)
               ],
               content='\\\\\\[a]{#bar}', markup='', info='', meta={}, block=True, hidden=False),
         Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,

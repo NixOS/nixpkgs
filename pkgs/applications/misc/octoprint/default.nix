@@ -3,6 +3,7 @@
 , callPackage
 , lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 , substituteAll
 , nix-update-script
@@ -16,6 +17,30 @@ let
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
+        (
+          # Due to flask > 2.3 the login will not work
+          self: super: {
+            werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
+              version = "2.2.3";
+              format = "setuptools";
+              src = fetchPypi {
+                pname = "Werkzeug";
+                inherit version;
+                hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+              };
+            });
+            flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+              version = "2.2.5";
+              format = "setuptools";
+              src = fetchPypi {
+                pname = "Flask";
+                inherit version;
+                hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+              };
+            });
+          }
+        )
+
         # Built-in dependency
         (
           self: super: {
@@ -86,7 +111,7 @@ let
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-SYN/BrcukHMDwk70XGu/pO45fSPr/KOEyd4wxtz2Fo0=";
+                hash = "sha256-71uE8JvcS++xH8WSVWj5x0+9s3XIwf3A64c6YtxpSRc=";
               };
 
               propagatedBuildInputs = with self; [
@@ -114,7 +139,6 @@ let
                 netifaces
                 octoprint-filecheck
                 octoprint-firmwarecheck
-                octoprint-pisupport
                 passlib
                 pathvalidate
                 pkginfo
@@ -142,6 +166,8 @@ let
                 pydantic
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
+              ] ++ lib.optionals (!stdenv.isDarwin) [
+                octoprint-pisupport
               ];
 
               nativeCheckInputs = with self; [

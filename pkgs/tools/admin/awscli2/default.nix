@@ -17,27 +17,36 @@ let
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
+      urllib3 = prev.urllib3.overridePythonAttrs (prev: {
+        format = "setuptools";
+        src = prev.src.override {
+          version = "1.26.16";
+          hash = "sha256-jxNfZQJ1a95rKpsomJ31++h8mXDOyqaQQe3M5/BYmxQ=";
+        };
+      });
     });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.13.25"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.28"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-8Euc2yOWv0TRz4SgjRAMdTogGQNE4J/XtadPNe5kKKI=";
+    hash = "sha256-rl4gBjuCnXfyJMv/2KIeujK0ouR624+AYaVYn4ri1Nk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
-      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4'
+      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4' \
+      --replace 'docutils>=0.10,<0.20' 'docutils>=0.10' \
+      --replace 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
     substituteInPlace requirements-base.txt \
       --replace "wheel==0.38.4" "wheel>=0.38.4" \

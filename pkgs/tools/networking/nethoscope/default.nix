@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
     owner = "vvilhonen";
     repo = "nethoscope";
     rev = "v${version}";
-    sha256 = "0dsv1f0ncwji8x7q1ix62955qji4jijgjx6xg3hxvl0vvvwqxcdz";
+    hash = "sha256-v7GO+d4b0N3heN10+WSUJEpcShKmx4BPR1FyZoELWzc=";
   };
 
-  cargoSha256 = "0cl0i4m8fxyxfib95x90x6qr284y41wwgwqhflyfa7d3r6qwq8nk";
+  cargoHash = "sha256-0yLMscmjHeU8dRDzx3kgniCRsekg9ZJWdN13hyqJgDI=";
 
   nativeBuildInputs = [
     pkg-config

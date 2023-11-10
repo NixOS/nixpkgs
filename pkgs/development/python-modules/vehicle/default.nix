@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "1.0.1";
+  version = "2.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-vehicle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nN7efkN59FCCjCk3svYCTGGdvr2RSM5VektuUkHy3Vo=";
+    hash = "sha256-EbjrAfbqVY336RHBWq81KM+oHixen+38aUTnWZQ+nCs=";
   };
 
   nativeBuildInputs = [

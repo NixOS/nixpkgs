@@ -60,7 +60,6 @@ let
     ++ lib.optional (cfg.settings ? oidc_providers) "oidc"
     ++ lib.optional (cfg.settings ? jwt_config) "jwt"
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
-    ++ lib.optional (cfg.settings ? opentracing) "opentracing"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
     ++ lib.optional (cfg.settings ? user_directory) "user-search"
@@ -297,6 +296,18 @@ in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
 
+      serviceUnit = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+        description = lib.mdDoc ''
+          The systemd unit (a service or a target) for other services to depend on if they
+          need to be started after matrix-synapse.
+
+          This option is useful as the actual parent unit for all matrix-synapse processes
+          changes when configuring workers.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         readOnly = true;
@@ -334,7 +345,6 @@ in {
           [
             "cache-memory" # Provide statistics about caching memory consumption
             "jwt"          # JSON Web Token authentication
-            "opentracing"  # End-to-end tracing support using Jaeger
             "oidc"         # OpenID Connect authentication
             "postgres"     # PostgreSQL database backend
             "redis"        # Redis support for the replication stream between worker processes
@@ -1023,6 +1033,7 @@ in {
       port = 9093;
     });
 
+    services.matrix-synapse.serviceUnit = if hasWorkers then "matrix-synapse.target" else "matrix-synapse.service";
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
 

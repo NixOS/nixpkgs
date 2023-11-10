@@ -8,7 +8,7 @@ in {
   options = {
     programs.calls = {
       enable = mkEnableOption (lib.mdDoc ''
-        Whether to enable GNOME calls: a phone dialer and call handler.
+        GNOME calls: a phone dialer and call handler
       '');
     };
   };

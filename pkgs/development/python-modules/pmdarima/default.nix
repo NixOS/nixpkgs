@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "pmdarima";
-  version = "2.0.3";
+  version = "2.0.4";
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alkaline-ml";
     repo = "pmdarima";
-    rev = "v${version}";
-    hash = "sha256-uX4iZZ2deYqVWnqVZT6J0Djf2pXo7ug4MsOsPkKjvSU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LHwPgQRB/vP3hBM8nqafoCrN3ZSRIMWLzqTqDOETOEc=";
   };
 
   nativeBuildInputs = [ cython ];

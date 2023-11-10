@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.27.0";
+  version = "0.31.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,17 +31,12 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qT3ZJQY5l1K88llJdKoSkwHvfcWwjH6JysMnHYGknqw=";
+    hash = "sha256-Tq414cEpXX8MQDR0KYyB+J7lFqorbiwP/sGnUFvs7wA=";
   };
 
   nativeBuildInputs = [
     hatchling
   ];
-
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
 
   propagatedBuildInputs = [
     anyio
@@ -79,6 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/encode/starlette/releases/tag/${version}";
+    downloadPage = "https://github.com/encode/starlette";
     homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;

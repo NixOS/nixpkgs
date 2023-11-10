@@ -2,6 +2,7 @@
 , stdenv
 , llvm_meta
 , src
+, fetchpatch
 , cmake
 , llvm
 , targetLlvm
@@ -15,6 +16,16 @@ stdenv.mkDerivation rec {
 
   inherit src;
   sourceRoot = "${src.name}/${pname}";
+
+  patches = [
+    # Fix cross.
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5e2358c781b85a18d1463fd924d2741d4ae5e42e.patch";
+      hash = "sha256-UxIlAifXnexF/MaraPW0Ut6q+sf3e7y1fMdEv1q103A=";
+    })
+  ];
+
+  patchFlags = [ "-p2" ];
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [

@@ -40,7 +40,7 @@ in
       };
 
       allowVideoAccess = lib.mkEnableOption (lib.mdDoc ''
-        Enable access to video devices like cameras on the system.
+        access to video devices like cameras on the system
       '');
     };
   };

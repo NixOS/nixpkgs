@@ -329,23 +329,28 @@ let
     lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
   };
 
-  nkeymaps = build-asdf-system {
+  nkeymaps = build-asdf-system rec {
     pname = "nkeymaps";
-    version = "20230214-git";
-    src = pkgs.fetchzip {
-      url = "http://beta.quicklisp.org/archive/nhooks/2023-02-14/nkeymaps-20230214-git.tgz";
-      sha256 = "197vxqby87vnpgcwchs3dqihk1gimp2cx9cc201pkdzvnbrixji6";
+    version = "1.1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nkeymaps";
+      rev = version;
+      hash = "sha256-ewMu2IgEzCYY72vG91IA7l8X78Ph6jpQvbKeOFZdAyM=";
     };
-    lispLibs = with self; [ alexandria fset trivial-package-local-nicknames ];
+    lispLibs = with self; [ alexandria fset trivial-package-local-nicknames
+                            str ];
   };
 
 
-  history-tree = build-asdf-system {
+  history-tree = build-asdf-system rec {
     pname = "history-tree";
-    version = "20230214-git";
-    src = pkgs.fetchzip {
-      url = "http://beta.quicklisp.org/archive/history-tree/2023-02-14/history-tree-20230214-git.tgz";
-      sha256 = "12kvnc8vcvg7nmgl5iqgbr4pj0vgb8f8avk9l5czz7f2hj91ysdp";
+    version = "0.1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "history-tree";
+      rev = version;
+      hash = "sha256-lOORalyTybdut/If+dBXS4PlZt2AnZrEI/qjQWS03pk=";
     };
     lispLibs = with self; [
       alexandria
@@ -359,7 +364,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.7.0";
+    version = "3.9.0";
 
     lispLibs = (with super; [
       alexandria
@@ -449,8 +454,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.7.0";
-      sha256 = "sha256-viiyO4fX3uyGuvojQ1rYYKBldRdVNzeJX1KYlYwfWVU=";
+      rev = "3.9.0";
+      sha256 = "sha256-bZoAE0FErgXPylOzh6AfMq3befms9dHms8+slbYdctk=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];

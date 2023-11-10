@@ -9,21 +9,21 @@ let
   src = fetchFromGitHub {
     owner = "AaronErhardt";
     repo = "tuxedo-rs";
-    rev = "a77a9f6c64e6dd1ede3511934392cbc16271ef6b";
-    hash = "sha256-bk17vI1gLHayvCWfmZdCMqgmbJFOTDaaCaHcj9cLpMY=";
+    rev = "74b863e6dcb1ec2e6c8fb02c16bb6f23b59e67f6";
+    hash = "sha256-Yujki2vGzaT8Ze5Usk8FPg8bn86MvyyPTiWuWwEw7Xs=";
   };
 
 in
 rustPlatform.buildRustPackage {
   pname = "tuxedo-rs";
-  version = "0.2.2";
+  version = "0.2.3";
 
   inherit src;
 
   # Some of the tests are impure and rely on files in /etc/tailord
   doCheck = false;
 
-  cargoHash = "sha256-vuXqab9W8NSD5U9dk15xM4fM/vd/fGgGdsvReMncWHg=";
+  cargoHash = "sha256-uYt442u/BIzw/lBu18LrsJf5D46oUOFzBJ5pUjCpK6w=";
 
   postInstall = ''
     install -Dm444 tailord/com.tux.Tailor.conf -t $out/share/dbus-1/system.d

@@ -17,8 +17,8 @@ let
     src = fetchFromGitHub {
       owner = "rhasspy";
       repo = "espeak-ng";
-      rev = "61504f6b76bf9ebbb39b07d21cff2a02b87c99ff";
-      hash = "sha256-RBHL11L5uazAFsPFwul2QIyJREXk9Uz8HTZx9JqmyIQ=";
+      rev = "0f65aa301e0d6bae5e172cc74197d32a6182200f";
+      hash = "sha256-2V0D3QO+v9OqffpNmwJQd3NIBd/IFeLkjaJ3Y0HHw7E=";
     };
 
     patches = [
@@ -28,18 +28,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "piper-phonemize";
-  version = "1.1.0";
+  version = "2023.11.6-1";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper-phonemize";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cMer7CSLOXv3jc9huVA3Oy5cjXjOX9XuEXpIWau1BNQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IRvuA03Z6r8Re/ocq2G/r28uwI9RU3xmmNI7S2G40rc=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ];
+
+  cmakeFlags = [
+    "-DONNXRUNTIME_DIR=${onnxruntime.dev}"
+    "-DESPEAK_NG_DIR=${espeak-ng'}"
   ];
 
   buildInputs = [

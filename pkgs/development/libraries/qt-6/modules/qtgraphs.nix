@@ -7,7 +7,7 @@
 
 qtModule {
   pname = "qtgraphs";
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase
     qtdeclarative
     qtquick3d

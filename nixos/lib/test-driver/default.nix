@@ -11,6 +11,7 @@
 , tesseract4
 , vde2
 , extraPythonPackages ? (_ : [])
+, nixosTests
 }:
 
 python3Packages.buildPythonApplication {
@@ -30,6 +31,10 @@ python3Packages.buildPythonApplication {
   ]
     ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ])
     ++ extraPythonPackages python3Packages;
+
+  passthru.tests = {
+    inherit (nixosTests.nixos-test-driver) driver-timeout;
+  };
 
   doCheck = true;
   nativeCheckInputs = with python3Packages; [ mypy ruff black ];

@@ -1,19 +1,22 @@
 { lib
 , buildPythonPackage
-, chevron
 , decorator
 , fetchFromGitHub
+, jinja2
+, jsonschema
 , mypy
+, packaging
 , pytest
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , regex
+, tomlkit
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "1.11.1";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +25,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UlNjqloAl0Qmy3EQ73e+KmsHeJN3eBkkBJxCehpOs48=";
+    hash = "sha256-kIA2tVOsKsav4tRqZiWCMcRgbRnxAEo7SpmxC2pt9B0=";
   };
 
   buildInputs = [
@@ -30,11 +33,18 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    chevron
-    pyyaml
-    mypy
     decorator
+    jinja2
+    jsonschema
+    mypy
+    packaging
+    pyyaml
     regex
+    tomlkit
+  ];
+
+  pythonImportsCheck = [
+    "pytest_mypy_plugins"
   ];
 
   nativeCheckInputs = [
@@ -46,16 +56,8 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "pytest_mypy_plugins"
-  ];
-
-  disabledTests = [
-    # ...TypecheckAssertionError: Invalid output:
-    "with_out"
-    "add_mypypath_env_var_to_package_searc"
-    "error_case"
-    "skip_if_false"
+  disabledTestPaths = [
+    "pytest_mypy_plugins/tests/test_explicit_configs.py"
   ];
 
   meta = with lib; {

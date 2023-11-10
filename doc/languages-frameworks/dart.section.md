@@ -8,9 +8,11 @@ It fetches its Dart dependencies automatically through `fetchDartDeps`, and (thr
 
 If you are packaging a Flutter desktop application, use [`buildFlutterApplication`](#ssec-dart-flutter) instead.
 
-`vendorHash`: is the hash of the output of the dependency fetcher derivation. To obtain it, simply set it to `lib.fakeHash` (or omit it) and run the build ([more details here](#sec-source-hashes)).
+`vendorHash`: is the hash of the output of the dependency fetcher derivation. To obtain it, set it to `lib.fakeHash` (or omit it) and run the build ([more details here](#sec-source-hashes)).
 
 If the upstream source is missing a `pubspec.lock` file, you'll have to vendor one and specify it using `pubspecLockFile`. If it is needed, one will be generated for you and printed when attempting to build the derivation.
+
+The `depsListFile` must always be provided when packaging in Nixpkgs. It will be generated and printed if the derivation is attempted to be built without one. Alternatively, `autoDepsList` may be set to `true` only when outside of Nixpkgs, as it relies on import-from-derivation.
 
 The `dart` commands run can be overridden through `pubGetScript` and `dartCompileCommand`, you can also add flags using `dartCompileFlags` or `dartJitFlags`.
 
@@ -31,6 +33,7 @@ buildDartApplication rec {
   };
 
   pubspecLockFile = ./pubspec.lock;
+  depsListFile = ./deps.json;
   vendorHash = "sha256-Atm7zfnDambN/BmmUf4BG0yUz/y6xWzf0reDw3Ad41s=";
 }
 ```
@@ -39,9 +42,7 @@ buildDartApplication rec {
 
 The function `buildFlutterApplication` builds Flutter applications.
 
-The deps.json file must always be provided when packaging in Nixpkgs. It will be generated and printed if the derivation is attempted to be built without one. Alternatively, `autoDepsList` may be set to `true` when outside of Nixpkgs, as it relies on import-from-derivation.
-
-A `pubspec.lock` file must be available. See the [Dart documentation](#ssec-dart-applications) for more details.
+See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
 ```nix
 {  flutter, fetchFromGitHub }:

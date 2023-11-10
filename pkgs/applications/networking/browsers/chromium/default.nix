@@ -57,7 +57,7 @@ let
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
-          inherit (upstream-info.deps.gn) url rev sha256;
+          inherit (upstream-info.deps.gn) url rev hash;
         };
       });
     });
@@ -80,12 +80,12 @@ let
   chromeSrc =
     let
       # Use the latest stable Chrome version if necessary:
-      version = if chromium.upstream-info.sha256bin64 != null
+      version = if chromium.upstream-info.hash_deb_amd64 != null
         then chromium.upstream-info.version
         else (import ./upstream-info.nix).stable.version;
-      sha256 = if chromium.upstream-info.sha256bin64 != null
-        then chromium.upstream-info.sha256bin64
-        else (import ./upstream-info.nix).stable.sha256bin64;
+      hash = if chromium.upstream-info.hash_deb_amd64 != null
+        then chromium.upstream-info.hash_deb_amd64
+        else (import ./upstream-info.nix).stable.hash_deb_amd64;
     in fetchurl {
       urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
         "https://dl.google.com/linux/chrome/deb/pool/main/g"
@@ -93,7 +93,7 @@ let
         "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
         "http://repo.fdzh.org/chrome/deb/pool/main/g"
       ];
-      inherit sha256;
+      inherit hash;
   };
 
   mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";

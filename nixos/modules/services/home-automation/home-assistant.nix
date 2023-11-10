@@ -12,7 +12,7 @@ let
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
   filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.config or {};
-  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
+  configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
@@ -455,6 +455,7 @@ in {
           "govee_ble"
           "homekit_controller"
           "inkbird"
+          "improv_ble"
           "keymitt_ble"
           "led_ble"
           "medcom_ble"
@@ -588,11 +589,12 @@ in {
           "~@privileged"
         ] ++ optionals (any useComponent componentsUsingPing) [
           "capset"
+          "setuid"
         ];
         UMask = "0077";
       };
       path = [
-        "/run/wrappers" # needed for ping
+        pkgs.unixtools.ping # needed for ping
       ];
     };
 

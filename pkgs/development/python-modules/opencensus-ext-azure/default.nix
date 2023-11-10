@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "opencensus-ext-azure";
-  version = "1.1.9";
+  version = "1.1.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UHYIt36djqq2/9X/EbfOuH9U5KapQMS4FDMbTRsDQVE=";
+    hash = "sha256-IdTU0FGdSCOdBBQskLalH17MBDaE64DPoKcBqiM0YHM=";
   };
 
   propagatedBuildInputs = [

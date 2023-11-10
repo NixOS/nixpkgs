@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.3.8";
   pyproject = true;
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "getmoto";

@@ -1406,40 +1406,12 @@ in
           val = tempaddrValues.${opt}.sysctl;
          in nameValuePair "net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr" val));
 
-    security.wrappers = {
-      ping = {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_net_raw+p";
-        source = "${pkgs.iputils.out}/bin/ping";
-      };
+    systemd.services.domainname = lib.mkIf (cfg.domain != null) {
+      wantedBy = [ "sysinit.target" ];
+      before = [ "sysinit.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.ExecStart = ''${pkgs.nettools}/bin/domainname "${cfg.domain}"'';
     };
-    security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
-      /run/wrappers/bin/ping {
-        include <abstractions/base>
-        include <nixos/security.wrappers/ping>
-        rpx /run/wrappers/wrappers.*/ping,
-      }
-      /run/wrappers/wrappers.*/ping {
-        include <abstractions/base>
-        include <nixos/security.wrappers/ping>
-        capability net_raw,
-        capability setpcap,
-      }
-    '');
-
-    # Set the host and domain names in the activation script.  Don't
-    # clear it if it's not configured in the NixOS configuration,
-    # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname = let
-        effectiveHostname = config.boot.kernel.sysctl."kernel.hostname" or cfg.hostName;
-      in optionalString (effectiveHostname != "") ''
-        hostname "${effectiveHostname}"
-      '';
-    system.activationScripts.domain =
-      optionalString (cfg.domain != null) ''
-        domainname "${cfg.domain}"
-      '';
 
     environment.etc.hostid = mkIf (cfg.hostId != null) { source = hostidFile; };
     boot.initrd.systemd.contents."/etc/hostid" = mkIf (cfg.hostId != null) { source = hostidFile; };

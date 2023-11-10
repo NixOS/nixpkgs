@@ -1,20 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, nixosTests }:
 
 let
   pname = "miniflux";
-  version = "2.0.48";
+  version = "2.0.49";
 
-in buildGoModule {
+in buildGo121Module {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "v2";
     rev = version;
-    sha256 = "sha256-g2Cnkf022aU/kUkb6N8huB+SFY60uNxyI9BVEycl37c=";
+    sha256 = "sha256-MGKQSlpTLqQPmvhACl9fbQkz2Uil8V8btjTwJIcY7g0=";
   };
 
-  vendorHash = "sha256-d4/oDvMRZtetZ7RyCHVnPqA78yPVFyw4UhjfPD1XuMo=";
+  vendorHash = "sha256-J3WHFfmjgE71hK58WP3dq+Px4XxLbluJSGv+eJiIB0E=";
 
   nativeBuildInputs = [ installShellFiles ];
 

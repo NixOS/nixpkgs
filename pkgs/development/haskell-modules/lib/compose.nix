@@ -407,7 +407,9 @@ rec {
 
     self: super:
       let
-        haskellPaths = builtins.attrNames (builtins.readDir directory);
+        haskellPaths =
+          lib.filter (lib.hasSuffix ".nix")
+            (builtins.attrNames (builtins.readDir directory));
 
         toKeyVal = file: {
           name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;

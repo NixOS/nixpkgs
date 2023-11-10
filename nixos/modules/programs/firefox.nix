@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.programs.firefox;
 
-  nmh = cfg.nativeMessagingHosts;
-
   policyFormat = pkgs.formats.json { };
 
   organisationInfo = ''
@@ -17,6 +15,50 @@ let
     given control of your browser, unless of course they also control your
     NixOS configuration.
   '';
+
+  # deprecated per-native-messaging-host options
+  nmhOptions = {
+    browserpass = {
+      name = "Browserpass";
+      package = pkgs.browserpass;
+    };
+    bukubrow = {
+      name = "Bukubrow";
+      package = pkgs.bukubrow;
+    };
+    euwebid = {
+      name = "Web eID";
+      package = pkgs.web-eid-app;
+    };
+    ff2mpv = {
+      name = "ff2mpv";
+      package = pkgs.ff2mpv;
+    };
+    fxCast = {
+      name = "fx_cast";
+      package = pkgs.fx-cast-bridge;
+    };
+    gsconnect = {
+      name = "GSConnect";
+      package = pkgs.gnomeExtensions.gsconnect;
+    };
+    jabref = {
+      name = "JabRef";
+      package = pkgs.jabref;
+    };
+    passff = {
+      name = "PassFF";
+      package = pkgs.passff-host;
+    };
+    tridactyl = {
+      name = "Tridactyl";
+      package = pkgs.tridactyl-native;
+    };
+    ugetIntegrator = {
+      name = "Uget Integrator";
+      package = pkgs.uget-integrator;
+    };
+  };
 in
 {
   options.programs.firefox = {
@@ -48,7 +90,7 @@ in
       description = mdDoc ''
         Group policies to install.
 
-        See [Mozilla's documentation](https://github.com/mozilla/policy-templates/blob/master/README.md)
+        See [Mozilla's documentation](https://mozilla.github.io/policy-templates/)
         for a list of available options.
 
         This can be used to install extensions declaratively! Check out the
@@ -204,50 +246,32 @@ in
       '';
     };
 
-    nativeMessagingHosts = mapAttrs (_: v: mkEnableOption (mdDoc v)) {
-      browserpass = "Browserpass support";
-      bukubrow = "Bukubrow support";
-      euwebid = "Web eID support";
-      ff2mpv = "ff2mpv support";
-      fxCast = "fx_cast support";
-      gsconnect = "GSConnect support";
-      jabref = "JabRef support";
-      passff = "PassFF support";
-      tridactyl = "Tridactyl support";
-      ugetIntegrator = "Uget Integrator support";
-    };
+    nativeMessagingHosts = ({
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = mdDoc ''
+          Additional packages containing native messaging hosts that should be made available to Firefox extensions.
+        '';
+      };
+    }) // (mapAttrs (k: v: mkEnableOption (mdDoc "${v.name} support")) nmhOptions);
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [
-      (cfg.package.override {
-        extraPrefs = cfg.autoConfig;
-        extraNativeMessagingHosts = with pkgs; optionals nmh.ff2mpv [
-          ff2mpv
-        ] ++ optionals nmh.euwebid [
-          web-eid-app
-        ] ++ optionals nmh.gsconnect [
-          gnomeExtensions.gsconnect
-        ] ++ optionals nmh.jabref [
-          jabref
-        ] ++ optionals nmh.passff [
-          passff-host
-        ];
-        cfg = let
-          # copy-pasted from the wrapper; TODO: figure out fix
-          applicationName = cfg.package.binaryName or (lib.getName cfg.package);
+  config = let
+    forEachEnabledNmh = fn: flatten (mapAttrsToList (k: v: lib.optional cfg.nativeMessagingHosts.${k} (fn k v)) nmhOptions);
+  in mkIf cfg.enable {
+    warnings = forEachEnabledNmh (k: v:
+      "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, " +
+      "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
+    );
+    programs.firefox.nativeMessagingHosts.packages = forEachEnabledNmh (_: v: v.package);
 
-          nixpkgsConfig = pkgs.config.${applicationName} or {};
-          optionConfig = cfg.wrapperConfig;
-          nmhConfig = {
-            enableBrowserpass = nmh.browserpass;
-            enableBukubrow = nmh.bukubrow;
-            enableTridactylNative = nmh.tridactyl;
-            enableUgetIntegrator = nmh.ugetIntegrator;
-            enableFXCastBridge = nmh.fxCast;
-          };
-        in nixpkgsConfig // optionConfig // nmhConfig;
-      })
+    environment.systemPackages = [
+      (cfg.package.override (old: {
+        extraPrefsFiles = old.extraPrefsFiles or [] ++ [(pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig)];
+        nativeMessagingHosts = old.nativeMessagingHosts or [] ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or {}) // cfg.wrapperConfig;
+      }))
     ];
 
     environment.etc =

@@ -11,6 +11,8 @@
 , zstd
 
 , buildPackages
+, clangStdenv
+, gccStdenv
 , hello
 , mold
 , mold-wrapped
@@ -21,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.2.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     rev = "v${version}";
-    hash = "sha256-ePX80hzzIzSJdGUX96GyxYWcdbXxXyuyNQqj5RDSkKU=";
+    hash = "sha256-eX76LRzhAk2n96eMtvbnm4Id99jRCDo3gMlrr5hI3Nw=";
   };
 
   nativeBuildInputs = [
@@ -89,11 +91,13 @@ stdenv.mkDerivation rec {
       in
       {
         version = testers.testVersion { package = mold; };
+      } // lib.optionalAttrs stdenv.isLinux {
+        adapter-gcc = helloTest "adapter-gcc" (hello.override (old: { stdenv = useMoldLinker gccStdenv; }));
+        adapter-llvm = helloTest "adapter-llvm" (hello.override (old: { stdenv = useMoldLinker clangStdenv; }));
         wrapped = helloTest "wrapped" (hello.overrideAttrs (previousAttrs: {
           nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ mold-wrapped ];
           NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
         }));
-        adapter = helloTest "adapter" (hello.override (old: { stdenv = useMoldLinker old.stdenv; }));
       };
   };
 

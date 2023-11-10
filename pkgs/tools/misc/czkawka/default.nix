@@ -65,6 +65,18 @@ rustPlatform.buildRustPackage rec {
     command = "czkawka_cli --version";
   };
 
+  postInstall = ''
+    # Install Icons
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
+
+    # Install MetaInfo
+    install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+
+    # Install Desktop Entry
+    install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
+  '';
+
   meta = with lib; {
     changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";

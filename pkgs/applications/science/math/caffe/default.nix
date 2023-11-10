@@ -1,12 +1,13 @@
 { config, stdenv, lib
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , cmake
 , boost
 , gflags
 , glog
 , hdf5-cpp
-, opencv3
+, opencv4
 , protobuf
 , doxygen
 , blas
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 blas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv4 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
@@ -96,6 +97,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
+    (fetchpatch {
+       name = "support-opencv4";
+       url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
+       hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
+     })
   ] ++ lib.optional pythonSupport (substituteAll {
     src = ./python.patch;
     inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
@@ -148,7 +154,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://caffe.berkeleyvision.org/";
     maintainers = with maintainers; [ ];
-    broken = pythonSupport && (python.isPy310);
+    broken = (pythonSupport && (python.isPy310)) || cudaSupport;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

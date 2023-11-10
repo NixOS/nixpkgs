@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, nixosTests
 , pkg-config, openssl
-, libiconv, Security, CoreServices
+, libiconv, Security, CoreServices, SystemConfiguration
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
 let
@@ -9,13 +9,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.29.2";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    hash = "sha256-ByMPS68GBOvjB/RpoLAvgE+NcbbIa1qfU1TQ4yhbH+I=";
+    hash = "sha256-mBKedJvb67FR4e8ZzdL8umg9XTgch1OWhbR1k46Lkn4=";
   };
 
   cargoLock = {
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
+    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 

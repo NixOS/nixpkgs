@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchurl
+, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -57,7 +58,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.28.06";
+  version = "6.28.08";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-rztnO5rKOTpcmuG/huqyZyqvGEG2WMXG56MKuTxYZTM=";
+    hash = "sha256-o+ZLTAH4fNm75X5h75a0FibkmwRGCVBw1B2b+6NSaGI=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];

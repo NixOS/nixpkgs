@@ -3,14 +3,13 @@
 , fetchurl
 , fetchpatch
 , texlive
+, texliveInfraOnly
 , buildPackages
 }:
 
 let
   buildPlatformTools = [ "pse2unic" "adobe2h" ];
-  tex = texlive.combine {
-    inherit (texlive) collection-fontsrecommended;
-  };
+  tex = texliveInfraOnly.withPackages (ps: [ ps.collection-fontsrecommended ]);
 in
 
 stdenv.mkDerivation (finalAttrs: {

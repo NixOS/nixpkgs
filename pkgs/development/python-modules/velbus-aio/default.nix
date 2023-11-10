@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2023.10.0";
+  version = "2023.10.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Cereal2nd";
     repo = pname;
-    rev = version;
-    hash = "sha256-xVELkmucrw1QazSR2XN6ldmzdTya/rWsQd1mRsLTcbU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qRKVjiRrRg1YwwYCSp6KGvaS7QnYLIW5rum3X7vEANM=";
     fetchSubmodules = true;
   };
 

@@ -15,8 +15,8 @@ qtModule {
     llvmPackages.libclang
     llvmPackages.llvm
   ];
-  qtInputs = [ qtbase qtdeclarative ];
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ cups ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ]
+    ++ lib.optionals stdenv.isDarwin [ cups ];
   patches = [
     ../patches/qttools-paths.patch
   ];

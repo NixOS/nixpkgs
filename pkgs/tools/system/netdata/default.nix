@@ -2,23 +2,24 @@
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , netdata-go-plugins
-, bash, curl, jemalloc, libuv, zlib, libyaml
+, bash, curl, jemalloc, json_c, libuv, zlib, libyaml
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
 , withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
-, withCloud ? (!stdenv.isDarwin), json_c
+, withCloud ? false
 , withCloudUi ? false
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
+, withSystemdJournal ? (!stdenv.isDarwin), systemd
 , withDebug ? false
 }:
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.42.4";
+  version = "1.43.2";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-MaU9sOQD+Y03M+yoSWt1GuV+DrBlD7+r/Qm2JJ9s8EU="
-      else "sha256-41QntBt0MoO1hAsDb8LhHgvvNMzt9R1ZdgiPaR7NrPU=";
+      then "sha256-ZhSuU2VTJPFJ3ja5eHx5uTuR19LleoID8Efr9FTyg74="
+      else "sha256-t2awo118mYbuoNiKiAxM5xpRmQSha+/NR5G+shsotek=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
@@ -42,17 +43,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
   # bash is only used to rewrite shebangs
-  buildInputs = [ bash curl jemalloc libuv zlib libyaml ]
+  buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ lib.optionals withCups [ cups ]
     ++ lib.optionals withDBengine [ lz4 ]
     ++ lib.optionals withIpmi [ freeipmi ]
     ++ lib.optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ lib.optionals withCloud [ json_c ]
     ++ lib.optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ lib.optionals withConnPrometheus [ snappy ]
     ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
+    ++ lib.optionals withSystemdJournal [ systemd ]
     ++ lib.optionals withSsl [ openssl ];
 
   patches = [
@@ -94,6 +95,10 @@ stdenv.mkDerivation rec {
        $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
        $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+    ${lib.optionalString withSystemdJournal ''
+      mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
+         $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+    ''}
     ${lib.optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
@@ -110,6 +115,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-ebpf"
     "--with-jemalloc=${jemalloc}"
+  ] ++ lib.optionals (withSystemdJournal) [
+    "--enable-plugin-systemd-journal"
   ] ++ lib.optionals (!withDBengine) [
     "--disable-dbengine"
   ] ++ lib.optionals (!withCloud) [
@@ -119,6 +126,10 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
+    # remove once https://github.com/netdata/netdata/pull/16300 merged
+    substituteInPlace $out/bin/netdata-claim.sh \
+      --replace /bin/echo echo
+
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc

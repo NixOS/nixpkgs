@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyacaia-async";
-  version = "0.0.7";
+  version = "0.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyacaia_async";
     inherit version;
-    hash = "sha256-G3+mp/+skczj/GpvrzI/vSaZ/RC3vQz2d/hiD5WpGzM=";
+    hash = "sha256-hmzsZIIZsswUvy9AMgfXNC2v6H8Wvgdk9Qa4PoYmhCU=";
   };
 
   nativeBuildInputs = [

@@ -18,10 +18,13 @@
 , openpgl
 , mesa
 , runCommand
+, callPackage
 }:
 
 let
-  python = python310Packages.python;
+  pythonPackages = python310Packages;
+  inherit (pythonPackages) python;
+  buildEnv = callPackage ./wrapper.nix {};
   optix = fetchzip {
     # url taken from the archlinux blender PKGBUILD
     url = "https://developer.download.nvidia.com/redist/optix/v7.3/OptiX-7.3.0-Include.zip";
@@ -31,11 +34,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-zFL0GRWAtNC3C+SAspWZmGa8US92EiYQgVfiOsCJRx4=";
+    hash = "sha256-QAHA/pn22HLsfH6VX4Sp7r25raFxAPS1Gergjez38kM=";
   };
 
   patches = [
@@ -189,7 +192,9 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = {
-    inherit python;
+    inherit python pythonPackages;
+
+    withPackages = f: let packages = f pythonPackages; in buildEnv.override { blender = finalAttrs.finalPackage; extraModules = packages; };
 
     tests = {
       render = runCommand "${pname}-test" { } ''

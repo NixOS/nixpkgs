@@ -24,6 +24,7 @@
 , xorg
 , pango
 , systemd
+, pciutils
 }:
 
 version: hashes:
@@ -39,7 +40,7 @@ let
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = optional (versionOlder version "22.0.0" || versions.major version == "23") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "25.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -92,6 +93,7 @@ let
     xorg.libXrandr
     xorg.libxkbfile
     pango
+    pciutils
     stdenv.cc.cc.lib
     systemd
   ]

@@ -37,7 +37,7 @@ buildGoModule rec {
     cp -R cmd/octorpki/tals $out/share/tals
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://github.com/cloudflare/cfrpki#octorpki";

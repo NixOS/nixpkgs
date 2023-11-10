@@ -20,16 +20,16 @@ assert waylandSupport -> stdenv.isLinux;
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.5.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-4SLAUqLMoUxTSi4I/QeHqudO62Gmhpm1XbCGf+3rPlc=";
+    hash = "sha256-DVduZ1qPbcDlH+B5hibC2HUjwEUV+CpDDpMI8GdPwro";
   };
 
-  vendorHash = "sha256-6Yp5OoybFpoBuIKodbwnyX3crLCl8hJ2r4plzo0plsY=";
+  vendorHash = "sha256-Dj6I+gt0gB5HWTWdFXCV5UpLuvg+HhuygRJAdvV/Yp8";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -62,6 +62,7 @@ buildGoModule rec {
     darwin.apple_sdk_11_0.frameworks.Kernel
     darwin.apple_sdk_11_0.frameworks.OpenGL
     darwin.apple_sdk_11_0.frameworks.UserNotifications
+    darwin.apple_sdk_11_0.frameworks.MediaPlayer
   ];
 
   postInstall = ''

@@ -402,6 +402,17 @@ with prev;
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
+  lua-rtoml = prev.lua-rtoml.overrideAttrs (oa: {
+
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      src = oa.src;
+      hash = "sha256-EcP4eYsuOVeEol+kMqzsVHd8F2KoBdLzf6K0KsYToUY=";
+    };
+
+    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
+
+  });
+
   lush-nvim = prev.lush-nvim.overrideAttrs (drv: {
     doCheck = false;
   });

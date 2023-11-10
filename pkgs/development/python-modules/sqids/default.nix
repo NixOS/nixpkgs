@@ -8,21 +8,19 @@
 
 buildPythonPackage rec {
   pname = "sqids";
-  version = "0.3.0";
-  format = "pyproject";
+  version = "0.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qAY41kOp0m+mua/4bvVwuDW5p0EpwY675Ux3W1JsqbE=";
+    hash = "sha256-U9nVpRc9PIM1ZO+bcL3RGIfAdlUMf+uFw/SpPTAjdnA=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
-
-  doCheck = true;
 
   nativeCheckInputs = [
     pytestCheckHook

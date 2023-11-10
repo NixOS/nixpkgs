@@ -8,7 +8,7 @@
 , nodejs
 , fetchYarnDeps
 , fixup_yarn_lock
-, electron_24
+, electron
 , libpulseaudio
 , pipewire
 , alsa-utils
@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.13";
+  version = "1.3.18";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WF2jWP6utopAMZPP/ZWOhqVGZJmACwHyLLE+HQaHJjg=";
+    hash = "sha256-evOwjHUmeGw8AUpXSig8zVW2cpJbWkNTH/RUuNipFsQ=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-vgjPGO5qa4IYfW1svClJ+wP/KtIFFd3P02T2sht69C8=";
+    hash = "sha256-tMC8/qHYli7+OTdxVWRDEyCNzrkYA+zKlHJXlTsl+W0=";
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron_24}/libexec/electron \
-      -c.electronVersion=${electron_24.version}
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
-    makeWrapper '${electron_24}/bin/electron' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \

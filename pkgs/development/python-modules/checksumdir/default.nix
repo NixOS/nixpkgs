@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "1.2.0";
   pyproject = true;
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "to-mc";

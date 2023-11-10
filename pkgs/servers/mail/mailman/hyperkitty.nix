@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchPypi
+, fetchpatch
 }:
 
 with python3.pkgs;
@@ -17,6 +18,10 @@ buildPythonPackage rec {
 
   patches = [
     ./0001-Disable-broken-test_help_output-testcase.patch
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/5bb394662882bfc73c3e877458da44343aa06922.patch";
+      hash = "sha256-9vcY6nu3txDftH6aYpdh9qSrLzZceGjVFxuD1Ux18gw=";
+    })
   ];
 
   postPatch = ''
@@ -66,6 +71,6 @@ buildPythonPackage rec {
     description = "Archiver for GNU Mailman v3";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ globin qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

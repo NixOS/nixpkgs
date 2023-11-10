@@ -54,13 +54,13 @@ in
       description = "TCP port for the WebSocket.";
     };
 
-    openFirewall = lib.mkEnableOption "open up the service ports in the firewall";
+    openFirewall = lib.mkEnableOption "opening up the service ports in the firewall";
 
-    allowRebootSystem = lib.mkEnableOption "allow rebooting the system";
+    allowRebootSystem = lib.mkEnableOption "rebooting the system";
 
-    allowRestartService = lib.mkEnableOption "allow killing/restarting processes";
+    allowRestartService = lib.mkEnableOption "killing/restarting processes";
 
-    allowSetSystemTime = lib.mkEnableOption "allow setting the system time";
+    allowSetSystemTime = lib.mkEnableOption "setting the system time";
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;

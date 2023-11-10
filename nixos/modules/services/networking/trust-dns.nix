@@ -54,7 +54,7 @@ in
         defaultText = "pkgs.trust-dns";
         description = mdDoc ''
           Trust-dns package to use.
-          Only `bin/trust-dns` need be provided: the other trust-dns utilities (client and resolver) are not needed.
+          The package must provide `meta.mainProgram` which names the server binary; any other utilities (client, resolver) are not needed.
         '';
       };
       quiet = mkOption {
@@ -135,7 +135,7 @@ in
           flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
           flagsStr = builtins.concatStringsSep " " flags;
         in ''
-          ${cfg.package}/bin/trust-dns --config ${configFile} ${flagsStr}
+          ${cfg.package}/bin/${cfg.package.meta.mainProgram} --config ${configFile} ${flagsStr}
         '';
         Type = "simple";
         Restart = "on-failure";

@@ -24,10 +24,10 @@
 # Libraries
 /lib                        @edolstra @infinisil
 /lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
-/lib/generators.nix         @edolstra @Profpatsch
-/lib/cli.nix                @edolstra @Profpatsch
-/lib/debug.nix              @edolstra @Profpatsch
-/lib/asserts.nix            @edolstra @Profpatsch
+/lib/generators.nix         @infinisil @edolstra @Profpatsch
+/lib/cli.nix                @infinisil @edolstra @Profpatsch
+/lib/debug.nix              @infinisil @edolstra @Profpatsch
+/lib/asserts.nix            @infinisil @edolstra @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
 /lib/fileset                @infinisil
 /doc/functions/fileset.section.md @infinisil
@@ -48,6 +48,8 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
+## Format generators/serializers
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
@@ -59,7 +61,7 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs make-disk-image
-/doc/builders/images/makediskimage.section.md  @raitobezarius
+/doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
@@ -116,7 +118,6 @@
 /maintainers/scripts/update-python-libraries	              @FRidh
 /pkgs/development/interpreters/python                       @FRidh
 /doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
-/pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
@@ -149,6 +150,8 @@
 # C compilers
 /pkgs/development/compilers/gcc @amjoseph-nixpkgs
 /pkgs/development/compilers/llvm @RaitoBezarius
+/pkgs/development/compilers/emscripten @raitobezarius
+/doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt
@@ -216,7 +219,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
 # Web servers
-/doc/builders/packages/nginx.section.md @raitobezarius
+/doc/packages/nginx.section.md @raitobezarius
 /pkgs/servers/http/nginx/ @raitobezarius
 /nixos/modules/services/web-servers/nginx/ @raitobezarius
 
@@ -269,7 +272,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Docker tools
 /pkgs/build-support/docker                   @roberth
 /nixos/tests/docker-tools*                   @roberth
-/doc/builders/images/dockertools.section.md  @roberth
+/doc/build-helpers/images/dockertools.section.md  @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood

@@ -8,6 +8,7 @@
 , rdkafka
 , oniguruma
 , zstd
+, rust-jemalloc-sys
 , Security
 , libiconv
 , coreutils
@@ -33,7 +34,7 @@
 
 let
   pname = "vector";
-  version = "0.33.0";
+  version = "0.34.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZhRvQQ0MxEd0Ry6sfEWUzYpEN80GhBOzpbEG5ZhCA2E=";
+    hash = "sha256-E9sbpVFDVKJKYqSiqXeC9AItset/bXvVA9mURazTn/I=";
   };
 
   cargoLock = {
@@ -59,7 +60,7 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
+  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library

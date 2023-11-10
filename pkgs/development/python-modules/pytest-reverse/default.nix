@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.7.0";
   format = "pyproject";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adamchainz";

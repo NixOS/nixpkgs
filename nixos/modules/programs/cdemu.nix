@@ -53,6 +53,19 @@ in {
       dbus.packages = [ pkgs.cdemu-daemon ];
     };
 
+    users.groups.${config.programs.cdemu.group} = {};
+
+    # Systemd User service
+    # manually adapted from example in source package:
+    # https://sourceforge.net/p/cdemu/code/ci/master/tree/cdemu-daemon/service-example/cdemu-daemon.service
+    systemd.user.services.cdemu-daemon.description = "CDEmu daemon";
+    systemd.user.services.cdemu-daemon.serviceConfig = {
+      Type = "dbus";
+      BusName = "net.sf.cdemu.CDEmuDaemon";
+      ExecStart = "${pkgs.cdemu-daemon}/bin/cdemu-daemon --config-file \"%h/.config/cdemu-daemon\"";
+      Restart = "no";
+    };
+
     environment.systemPackages =
       [ pkgs.cdemu-daemon pkgs.cdemu-client ]
       ++ optional cfg.gui pkgs.gcdemu

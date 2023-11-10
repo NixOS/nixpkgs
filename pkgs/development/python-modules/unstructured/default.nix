@@ -56,7 +56,7 @@
 , grpcio
 }:
 let
-  version = "0.10.23";
+  version = "0.10.24";
   optional-dependencies = {
     huggingflace = [
       langdetect
@@ -90,7 +90,7 @@ buildPythonPackage {
     owner = "Unstructured-IO";
     repo = "unstructured";
     rev = "refs/tags/${version}";
-    hash = "sha256-MfnMu7YW8G1G0sKNvum4k6hvNMRmpXp9YwaDHEj/mYE=";
+    hash = "sha256-C1rjZRNXFr3syPnq7uhKRYz9Xydmunc/0uQcLxfN6tU=";
   };
 
   propagatedBuildInputs = [
