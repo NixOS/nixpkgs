@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage =  "https://geoalchemy-2.readthedocs.io/";
     changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
