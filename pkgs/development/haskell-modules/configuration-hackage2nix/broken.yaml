@@ -4627,7 +4627,6 @@ broken-packages:
   - reify # failure in job https://hydra.nixos.org/build/233247509 at 2023-09-02
   - relacion # failure in job https://hydra.nixos.org/build/233241624 at 2023-09-02
   - relation # failure in job https://hydra.nixos.org/build/233244581 at 2023-09-02
-  - releaser # failure in job https://hydra.nixos.org/build/233239420 at 2023-09-02
   - relevant-time # failure in job https://hydra.nixos.org/build/233190794 at 2023-09-02
   - reload # failure in job https://hydra.nixos.org/build/233212925 at 2023-09-02
   - remark # failure in job https://hydra.nixos.org/build/233240981 at 2023-09-02
