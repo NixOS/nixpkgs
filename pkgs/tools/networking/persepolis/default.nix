@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub
 , aria
 , libnotify
 , pulseaudio
@@ -64,6 +64,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Persepolis Download Manager is a GUI for aria2";
     homepage = "https://persepolisdm.github.io/";
+    broken = stdenv.isDarwin; # Upstream’s build scripts check and fail on Darwin.
     license = licenses.gpl3;
     maintainers = [ ];
   };
