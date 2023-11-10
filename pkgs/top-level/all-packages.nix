@@ -826,6 +826,8 @@ with pkgs;
 
   ollama = callPackage ../tools/misc/ollama {  };
 
+  ollama-bin = callPackage ../tools/misc/ollama-bin {  };
+
   ots = callPackage ../tools/security/ots {  };
 
   credential-detector = callPackage ../tools/security/credential-detector { };
