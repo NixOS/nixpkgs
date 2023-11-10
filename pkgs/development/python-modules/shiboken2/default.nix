@@ -5,7 +5,7 @@
 , cmake
 , qt5
 , libxcrypt
-, llvmPackages
+, llvmPackages_15
 }:
 
 stdenv.mkDerivation {
@@ -21,12 +21,12 @@ stdenv.mkDerivation {
     cd sources/shiboken2
   '';
 
-  CLANG_INSTALL_DIR = llvmPackages.libclang.out;
+  CLANG_INSTALL_DIR = llvmPackages_15.libclang.out;
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    llvmPackages.libclang
+    llvmPackages_15.libclang
     python
     python.pkgs.setuptools
     qt5.qtbase
