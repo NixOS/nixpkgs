@@ -1,19 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, requests
 , setuptools
 , setuptools-scm
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "pydexcom";
   version = "0.3.2";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gagebenne";
-    repo = pname;
+    repo = "pydexcom";
     rev = "refs/tags/${version}";
     hash = "sha256-46+Ml73F6EUbMwRJB93FD+No/g65RJwnCnFzH4Pb5ek=";
   };
@@ -29,7 +32,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  # tests are interacting with the Dexcom API
+  # Tests are interacting with the Dexcom API
   doCheck = false;
 
   pythonImportsCheck = [
