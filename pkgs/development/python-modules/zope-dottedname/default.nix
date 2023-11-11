@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.dottedname";
+  pname = "zope-dottedname";
   version = "5.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.dottedname";
+    inherit version;
     hash = "sha256-mfWDqAKFhqtMIXlGE+QR0BDNCZF/RdqXa9/udI87++w=";
   };
 
