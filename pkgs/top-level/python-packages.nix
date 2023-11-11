@@ -2330,6 +2330,8 @@ self: super: with self; {
 
   coveralls = callPackage ../development/python-modules/coveralls { };
 
+  cpflows = callPackage ../development/python-modules/cpflows { };
+
   cppe = callPackage ../development/python-modules/cppe {
     inherit (pkgs) cppe;
   };
@@ -4501,6 +4503,8 @@ self: super: with self; {
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   glom = callPackage ../development/python-modules/glom { };
+
+  gluonts = callPackage ../development/python-modules/gluonts { };
 
   glymur = callPackage ../development/python-modules/glymur { };
 
