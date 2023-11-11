@@ -35,11 +35,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pygnmi" ];
+  pythonImportsCheck = [
+    "pygnmi"
+  ];
 
   meta = with lib; {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
     homepage = "https://github.com/akarneliuk/pygnmi";
+    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
