@@ -793,19 +793,19 @@ in
           ${pkgs.sourcehut.gitsrht}/bin/gitsrht-dispatch "$@"
         '';
       };
+      systemd.tmpfiles.settings."10-sourcehut-gitsrht" = mkIf cfg.git.enable (
+        builtins.listToAttrs (map (name: {
+          name = "/var/log/sourcehut/gitsrht-${name}";
+          value.f = {
+            inherit (cfg.git) user group;
+            mode = "0644";
+          };
+        }) [ "keys" "shell" "update-hook" ])
+      );
       systemd.services.sshd = {
-        preStart = concatStringsSep "\n" (
-          optionals cfg.git.enable (map (n: ''
-            touch /var/log/sourcehut/gitsrht-${n} # create if it does not exist yet
-            chown --silent ${cfg.git.user}:${cfg.git.group} /var/log/sourcehut/gitsrht-${n} || true
-          '') [
-            "keys"
-            "shell"
-            "update-hook"
-          ]) ++
-          optional cfg.hg.enable [
-            "chown ${cfg.hg.user}:${cfg.hg.group} /var/log/sourcehut/hgsrht-keys"
-          ]);
+        preStart = mkIf cfg.hg.enable ''
+          chown ${cfg.hg.user}:${cfg.hg.group} /var/log/sourcehut/hgsrht-keys
+        '';
         serviceConfig = {
           LogsDirectory = "sourcehut";
           BindReadOnlyPaths =
