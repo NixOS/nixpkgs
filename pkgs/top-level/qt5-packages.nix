@@ -196,10 +196,11 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
-  qca-qt5 = callPackage ../development/libraries/qca-qt5 {
+  qca = callPackage ../development/libraries/qca {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (libsForQt5) qtbase;
   };
+  qca-qt5 = self.qca;
 
   qcoro = callPackage ../development/libraries/qcoro { };
 
