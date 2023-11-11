@@ -10,7 +10,15 @@ let
       libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
       description = ''
         An allocator designed to mitigate memory corruption attacks, such as
-        those caused by use-after-free bugs.
+        those caused by use-after-free bugs - Default variant.
+      '';
+    };
+
+    graphene-hardened-light = {
+      libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc-light.so";
+      description = ''
+        An allocator designed to mitigate memory corruption attacks, such as
+        those caused by use-after-free bugs - Light variant.
       '';
     };
 
