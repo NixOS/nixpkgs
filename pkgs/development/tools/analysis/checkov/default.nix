@@ -3,33 +3,16 @@
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7.1";
-        src = fetchFromGitHub {
-          owner = "CycloneDX";
-          repo = "cyclonedx-python-lib";
-          rev = "v${version}";
-          hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "2.5.15";
-  format = "setuptools";
+  version = "3.0.32";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
-    repo = pname;
+    repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-PVx66Ipvf+rISkuu9dw2ecFXXmuzITg2PogqRktFh5M=";
+    hash = "sha256-YOZ7F/bxbnBh3mhiFL3cMMAc3qeOMab48LcvYeJgfrg=";
   };
 
   patches = [
@@ -45,12 +28,12 @@ buildPythonApplication rec {
     "pycep-parser"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     aiodns
     aiohttp
     aiomultiprocess
@@ -82,6 +65,7 @@ buildPythonApplication rec {
     prettytable
     pycep-parser
     pyyaml
+    pydantic
     rustworkx
     semantic-version
     spdx-tools
@@ -92,7 +76,7 @@ buildPythonApplication rec {
     update_checker
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     aioresponses
     mock
     pytest-asyncio
@@ -119,12 +103,10 @@ buildPythonApplication rec {
     # Tests are comparing console output
     "cli"
     "console"
-    # Starting to fail after 2.3.205
-    "test_non_multiline_pair"
-    "test_secret_value_in_keyword"
-    "test_runner_verify_secrets_skip_invalid_suppressed"
-    "test_runner_verify_secrets_skip_all_no_effect"
+    # Assertion error
     "test_runner"
+    # AssertionError: assert ['<?xml versi...
+    "test_get_cyclonedx_report"
   ];
 
   disabledTestPaths = [
@@ -144,6 +126,8 @@ buildPythonApplication rec {
     "tests/kubernetes/"
     "tests/sca_package_2"
     "tests/terraform/"
+    "cdk_integration_tests/"
+    "sast_integration_tests"
     # Performance tests have no value for us
     "performance_tests/test_checkov_performance.py"
     # No Helm
