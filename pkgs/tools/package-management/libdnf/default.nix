@@ -99,6 +99,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rb2k ];
+    maintainers = with maintainers; [ rb2k katexochen ];
   };
 }
