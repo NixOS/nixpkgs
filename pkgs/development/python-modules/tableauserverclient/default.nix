@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.26";
+  version = "0.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vn7A7n0Z4kTtrm8MEoUJiv94K3qA/4Kx8lElhDM/LlI=";
+    sha256 = "sha256-jSblDVkuuBBZ7GmPKUYji8wtRoPS7g8r6Ye9EpnjvKA=";
   };
 
   propagatedBuildInputs = [ defusedxml requests packaging ];
