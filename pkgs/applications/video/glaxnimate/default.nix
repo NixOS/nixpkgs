@@ -68,9 +68,7 @@ stdenv.mkDerivation rec {
 
   # Translation needs to be separately compiled
   # https://gitlab.com/mattbas/glaxnimate/-/issues/648
-  postBuild = ''
-    make translations
-  '';
+  buildFlags = ["translations"];
   
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
 
