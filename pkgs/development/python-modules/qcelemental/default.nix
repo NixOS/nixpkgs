@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.27.0";
+  version = "0.27.1";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5VLNGD4glAIGgtt+q8YvwyAQvJU9mfyTpngwVr6gOYg=";
+    hash = "sha256-dlcfIUKAg6yc4S3RXVJ1sKM29E1ZvHY82kjx1CM8/08=";
   };
 
   nativeBuildInputs = [
