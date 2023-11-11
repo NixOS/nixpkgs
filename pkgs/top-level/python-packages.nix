@@ -11693,6 +11693,8 @@ self: super: with self; {
 
   pytricia = callPackage ../development/python-modules/pytricia { };
 
+  pytrydan = callPackage ../development/python-modules/pytrydan { };
+
   pyttsx3 = callPackage ../development/python-modules/pyttsx3 { };
 
   pytube = callPackage ../development/python-modules/pytube { };
