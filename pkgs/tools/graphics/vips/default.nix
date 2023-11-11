@@ -37,6 +37,7 @@
 , libheif
 , cgif
 , testers
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -110,8 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
   ;
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v([0-9.]+)" ];
+    };
   };
 
   meta = with lib; {
