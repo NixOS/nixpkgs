@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "2.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tarpas";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Pytest plug-in which automatically selects and re-executes only tests affected by recent changes";
     homepage = "https://github.com/tarpas/pytest-testmon/";
     changelog = "https://github.com/tarpas/pytest-testmon/releases/tag/v${version}";
-    license = licenses.agpl3Only;
+    license = licenses.mit;
     maintainers = with maintainers; [ dmvianna ];
   };
 }
