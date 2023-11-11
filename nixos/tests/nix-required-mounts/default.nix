@@ -19,10 +19,19 @@ in
     programs.nix-required-mounts.enable = true;
     programs.nix-required-mounts.allowedPatterns.supported-feature = {
       onFeatures = [ "supported-feature" ];
-      paths = [ "/supported-feature-files" ];
+      paths = [
+        "/supported-feature-files"
+        {
+          host = "/usr/lib/imaginary-fhs-drivers";
+          guest = "/run/opengl-driver/lib";
+        }
+      ];
     };
     users.users.person.isNormalUser = true;
-    virtualisation.fileSystems."/supported-feature-files".fsType = "tmpfs";
+    systemd.tmpfiles.rules = [
+      "d /supported-feature-files 0755 person users -"
+      "f /usr/lib/imaginary-fhs-drivers/libcuda.so 0444 root root -"
+    ];
   };
   testScript = ''
     import shlex

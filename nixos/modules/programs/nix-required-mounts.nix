@@ -5,16 +5,23 @@ let
   package = pkgs.nix-required-mounts;
   overridenPackage = package.override { inherit (cfg) allowedPatterns; };
 
+  Mount = with lib; types.submodule {
+    options.host = mkOption { type = types.str; description = "Host path to mount"; };
+    options.guest = mkOption {
+      type = types.str;
+      description = "Location in the sandbox to mount the host path at";
+    };
+  };
   Pattern = with lib.types;
-    submodule ({ config, name, ... }: {
+    types.submodule ({ config, name, ... }: {
       options.onFeatures = lib.mkOption {
-        type = listOf str;
+        type = listOf types.str;
         description =
           "Which requiredSystemFeatures should trigger relaxation of the sandbox";
         default = [ name ];
       };
       options.paths = lib.mkOption {
-        type = listOf path;
+        type = listOf (oneOf [ path Mount ]);
         description =
           "A list of glob patterns, indicating which paths to expose to the sandbox";
       };

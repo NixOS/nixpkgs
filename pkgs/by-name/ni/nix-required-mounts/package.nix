@@ -3,7 +3,7 @@
 , allowedPatterns ? rec {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
-    nvidia-gpu.onFeatures = [ "gpu" "opengl" "vulkan" "cuda" ];
+    nvidia-gpu.onFeatures = [ "gpu" "nvidia-gpu" "opengl" "cuda" ];
     # It exposes these paths in the sandbox:
     nvidia-gpu.paths = [
       # Note that mounting /run/opengl-driver/lib actually isn't sufficient,

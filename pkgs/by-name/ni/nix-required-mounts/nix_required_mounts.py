@@ -8,12 +8,20 @@ from argparse import ArgumentParser
 from itertools import chain
 from pathlib import Path
 from sys import stderr
-from typing import Dict, List, TypedDict
+from typing import Dict, List, Tuple, TypeAlias, TypedDict
+
+Glob: TypeAlias = str
+PathString: TypeAlias = str
+
+
+class Mount(TypedDict):
+    host: PathString
+    guest: PathString
 
 
 class Pattern(TypedDict):
     onFeatures: List[str]
-    paths: List[str]  # List of glob patterns
+    paths: List[Glob | Mount]
 
 
 class HookConfig(TypedDict):
@@ -106,12 +114,21 @@ def entrypoint():
     features = get_strings(drv_env, "requiredSystemFeatures")
     features = list(filter(known_features.__contains__, features))
 
-    patterns = list(
+    patterns: List[PathString | Mount] = list(
         chain.from_iterable(allowed_patterns[f]["paths"] for f in features)
     )  # noqa: E501
 
-    roots = sorted(
-        set(Path(path) for pattern in patterns for path in glob.glob(pattern))
+    # TODO: Would it make sense to preserve the original order instead?
+    roots: List[Tuple[PathString, PathString]] = sorted(
+        set(
+            mnt
+            for pattern in patterns
+            for mnt in (
+                ((path, path) for path in glob.glob(pattern))
+                if isinstance(pattern, PathString)
+                else [(pattern["guest"], pattern["host"])]
+            )
+        )
     )
 
     # the pre-build-hook command
@@ -121,8 +138,7 @@ def entrypoint():
         print("extra-sandbox-paths")
 
     # arguments, one per line
-    for p in roots:
-        guest_path, host_path = p, p
+    for guest_path, host_path in roots:
         print(f"{guest_path}={host_path}")
 
     # terminated by an empty line
