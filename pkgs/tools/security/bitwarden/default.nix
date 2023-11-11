@@ -24,10 +24,8 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
   electron = electron_25;
-in buildNpmPackage' rec {
+in buildNpmPackage rec {
   pname = "bitwarden";
   version = "2023.10.0";
 
@@ -37,6 +35,8 @@ in buildNpmPackage' rec {
     rev = "desktop-v${version}";
     hash = "sha256-egXToXWfb9XV7JuCRBYJO4p/e+WOwMncPKz0oBgeALQ=";
   };
+
+  nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";

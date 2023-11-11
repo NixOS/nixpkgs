@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.0.57";
+  version = "0.0.63";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3P0vB7wz/K3skejyPwtFZN17mFrOw9TGLHTJHvu4m7M=";
+    hash = "sha256-KE+WMnuWAq1stZuuwZkOPOKQ2lZNKtxzNbZMRoOdmz0=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -59,6 +59,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "langsmith"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";

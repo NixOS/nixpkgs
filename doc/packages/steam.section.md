@@ -11,7 +11,7 @@ Nix problems and constraints:
 - The `steam.sh` script in `$HOME` cannot be patched, as it is checked and rewritten by steam.
 - The steam binary cannot be patched, it's also checked.
 
-The current approach to deploy Steam in NixOS is composing a FHS-compatible chroot environment, as documented [here](http://sandervanderburg.blogspot.nl/2013/09/composing-fhs-compatible-chroot.html). This allows us to have binaries in the expected paths without disrupting the system, and to avoid patching them to work in a non FHS environment.
+The current approach to deploy Steam in NixOS is composing a FHS-compatible chroot environment, as documented [here](https://sandervanderburg.blogspot.com/2013/09/composing-fhs-compatible-chroot.html). This allows us to have binaries in the expected paths without disrupting the system, and to avoid patching them to work in a non FHS environment.
 
 ## How to play {#sec-steam-play}
 

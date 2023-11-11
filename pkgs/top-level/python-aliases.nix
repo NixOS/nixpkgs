@@ -212,6 +212,7 @@ mapAliases ({
   jupyter_core = jupyter-core; # added 2023-01-05
   jupyter_server = jupyter-server; # added 2023-01-05
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
+  jupyterlab_launcher = throw "jupyterlab_launcher has been removed as it's abandoned for over 5 years and broken"; # added 2023-11-11
   Kajiki = kajiki; # added 2023-02-19
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
@@ -393,6 +394,7 @@ mapAliases ({
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
   setuptools_scm = setuptools-scm; # added 2021-06-03
+  setuptoolsTrial = setuptools-trial; # added 2023-11-11
   sharkiqpy = sharkiq; # added 2022-05-21
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14

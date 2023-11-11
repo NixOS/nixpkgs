@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
+{ lib, rustPlatform, fetchgit, fetchpatch
+, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
@@ -12,6 +13,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = "PFQc6DNbZ6zIXooYKNSHAkHlDvDk09tgRX5KYRiZ2nA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "test-page-size-fix.patch";
+      url = "https://chromium.googlesource.com/crosvm/crosvm/+/d9bc6e99ff5ac31d7d88b684c938af01a0872fc1%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      includes = [ "src/crosvm/config.rs" ];
+      hash = "sha256-3gfNzp0WhtNr+8CWSISCJau208EMIo3RJhM+4SyeV3o=";
+    })
+  ];
 
   separateDebugInfo = true;
 

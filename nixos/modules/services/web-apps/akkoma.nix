@@ -909,7 +909,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = optionals (!config.security.sudo.enable) [''
+    warnings = optionals (with config.security; (!sudo.enable) && (!sudo-rs.enable)) [''
       The pleroma_ctl wrapper enabled by the installWrapper option relies on
       sudo, which appears to have been disabled through security.sudo.enable.
     ''];

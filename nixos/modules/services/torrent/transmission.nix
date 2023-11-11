@@ -148,7 +148,7 @@ in
             type = types.bool;
             default = true;
             description = lib.mdDoc ''
-              Whether to enable [Micro Transport Protocol (µTP)](http://en.wikipedia.org/wiki/Micro_Transport_Protocol).
+              Whether to enable [Micro Transport Protocol (µTP)](https://en.wikipedia.org/wiki/Micro_Transport_Protocol).
             '';
           };
           options.watch-dir = mkOption {

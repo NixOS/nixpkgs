@@ -62,7 +62,7 @@ where socat is running.
 If your test has only a single VM, you may use e.g.
 
 ```ShellSession
-$ QEMU_NET_OPTS="hostfwd=tcp:127.0.0.1:2222-127.0.0.1:22" ./result/bin/nixos-test-driver
+$ QEMU_NET_OPTS="hostfwd=tcp:127.0.0.1:2222-:22" ./result/bin/nixos-test-driver
 ```
 
 to port-forward a port in the VM (here `22`) to the host machine (here port `2222`).
@@ -72,6 +72,11 @@ since a single port on the host cannot forward to multiple VMs.
 
 If the test defines multiple machines, you may opt to _temporarily_ set
 `virtualisation.forwardPorts` in the test definition for debugging.
+
+Such port forwardings connect via the VM's virtual network interface.
+Thus they cannot connect to ports that are only bound to the VM's
+loopback interface (`127.0.0.1`), and the VM's NixOS firewall
+must be configured to allow these connections.
 
 ## Reuse VM state {#sec-nixos-test-reuse-vm-state}
 
