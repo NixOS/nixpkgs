@@ -8,11 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.configuration";
+  pname = "zope-configuration";
   version = "4.4.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.configuration";
+    inherit version;
     hash = "sha256-giPqSvU5hmznqccwrH6xjlHRfrUVk6p3c7NZPI1tdgg=";
   };
 

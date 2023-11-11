@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_configuration
+, zope-configuration
 , zope-deferredimport
 , zope-deprecation
 , zope_event
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    zope_configuration
+    zope-configuration
     zope-deferredimport
     zope-deprecation
     zope_event

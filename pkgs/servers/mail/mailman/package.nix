@@ -34,7 +34,7 @@ buildPythonPackage rec {
     requests
     sqlalchemy
     zope-component
-    zope_configuration
+    zope-configuration
   ];
 
   checkInputs = [
