@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , zope-i18nmessageid
 , zope_interface
@@ -13,13 +14,15 @@
 
 buildPythonPackage rec {
   pname = "zope-configuration";
-  version = "4.4.1";
+  version = "5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "zope.configuration";
     inherit version;
-    hash = "sha256-giPqSvU5hmznqccwrH6xjlHRfrUVk6p3c7NZPI1tdgg=";
+    hash = "sha256-I0tKGMcfazub9rzyJSZLrgFJrGjeoHsHLw9pmkzsJuc=";
   };
 
   nativeBuildInputs = [
