@@ -676,6 +676,7 @@ unsupported-platforms:
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
   reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
+  rsi-break:                                    [ platforms.darwin ] # depends on monomer
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
   SDL-mixer:                                    [ platforms.darwin ] # depends on mesa
