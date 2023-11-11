@@ -48,7 +48,7 @@ These instructions are also applicable to other versions.
 
 Major PostgreSQL upgrades require a downtime and a few imperative steps to be called. This is the case because
 each major version has some internal changes in the databases' state during major releases. Because of that,
-NixOS places the state into {file}`/var/lib/postgresql/&lt;version&gt;` where each `version`
+NixOS places the state into {file}`/var/lib/postgresql/<version>` where each `version`
 can be obtained like this:
 ```
 $ nix-instantiate --eval -A postgresql_13.psqlSchema
