@@ -70,6 +70,7 @@ let
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
+      iris-named-props = callPackage ../development/coq-modules/iris-named-props {};
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       LibHyps = callPackage ../development/coq-modules/LibHyps {};

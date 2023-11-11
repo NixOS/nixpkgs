@@ -35,5 +35,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.zane ];
+    mainProgram = "protolint";
   };
 }

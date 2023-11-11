@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moonlight-embedded";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-embedded";
     rev = "v${version}";
-    sha256 = "sha256-/gRm3fViTpoTOkIEu6+mrGTVTAFTmwdWV0MKoFF5vkc=";
+    sha256 = "sha256-57gD8vyUk4+eJB+QkD+hZzyzM+Lhvue1mY7xSApYWn8=";
     fetchSubmodules = true;
   };
 

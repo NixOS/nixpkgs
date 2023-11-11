@@ -15,18 +15,19 @@
 
 mkDerivation rec {
   pname = "lxqt-qtplugin";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "/phBrpSru/4m+mcAkn4C6hKm5H2BAXNkbTgU2HmoyBg=";
+    hash = "sha256-0shNkM1AGAjzMQDGLOIP2DFx6goJGoD0U0Gr+rRRFrk=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
@@ -35,7 +36,6 @@ mkDerivation rec {
     libqtxdg
     qtbase
     qtsvg
-    qttools
     qtx11extras
   ];
 

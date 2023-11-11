@@ -216,6 +216,8 @@ mapAliases ({
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  lazr_config = lazr-config; # added 2023-11-03
+  lazr_delegates = lazr-delegates; # added 2023-11-03
   lazy_imports = lazy-imports; # added 2023-10-13
   lektor = throw "lektor has been promoted to a top-level attribute"; # added 2023-08-01
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
@@ -238,6 +240,7 @@ mapAliases ({
   mistune_2_0 = mistune; # added 2022-08-12
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mrkd = throw "mrkd has been promoted to a top-level attribute"; # added 2023-08-01
+  multi_key_dict = multi-key-dict; # added 2023-11-05
   mutmut = throw "mutmut has been promoted to a top-level attribute"; # added 2022-10-02
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
@@ -291,6 +294,8 @@ mapAliases ({
   pyjson5 = json5; # added 2022-08-28
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   PyLD = pyld; # added 2022-06-22
+  pymaging = throw "pymaging has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
+  pymaging_png = throw "pymaging_png has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
   pymatgen-lammps = throw "pymatgen-lammps has been removed because it is unmaintained and broken"; # added 2023-06-20
   pymazda = throw "pymazda has been removed, because the upstream repo has been affected by a DCMA claim."; # added 2023-10-16
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
@@ -415,6 +420,7 @@ mapAliases ({
   Theano = theano; # added 2023-02-19
   TheanoWithCuda = theanoWithCuda; # added 2023-02-19
   TheanoWithoutCuda = theanoWithoutCuda; # added 2023-02-19
+  torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
