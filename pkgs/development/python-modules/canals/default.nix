@@ -6,7 +6,6 @@
 , mkdocs-mermaid2-plugin
 , mkdocstrings
 , networkx
-, pygraphviz
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -16,7 +15,7 @@
 buildPythonPackage rec {
   pname = "canals";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -33,16 +32,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     networkx
+    requests
     typing-extensions
   ];
 
   passthru.optional-dependencies = {
-    graphviz = [
-      pygraphviz
-    ];
-    mermaid = [
-      requests
-    ];
     docs = [
       mkdocs-material
       mkdocs-mermaid2-plugin
