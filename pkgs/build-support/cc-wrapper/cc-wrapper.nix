@@ -1,8 +1,13 @@
+{ lib
+, stdenv
+}:
+
+builtins.toFile "cc-wrapper.sh" ''
 #! @shell@
 set -eu -o pipefail +o posix
 shopt -s nullglob
 
-if (( "${NIX_DEBUG:-0}" >= 7 )); then
+if (( "''${NIX_DEBUG:-0}" >= 7 )); then
     set -x
 fi
 
@@ -34,10 +39,10 @@ expandResponseParams "$@"
 
 declare -ag positionalArgs=()
 declare -i n=0
-nParams=${#params[@]}
+nParams=''${#params[@]}
 while (( "$n" < "$nParams" )); do
-    p=${params[n]}
-    p2=${params[n+1]:-} # handle `p` being last one
+    p=''${params[n]}
+    p2=''${params[n+1]:-} # handle `p` being last one
     n+=1
 
     case "$p" in
@@ -61,8 +66,8 @@ while (( "$n" < "$nParams" )); do
             # interpreted as a "non flag" arg:
             if [[ -v "params[$n]" ]]; then nonFlagArgs=1; fi
 
-            positionalArgs=("${params[@]:$n}")
-            params=("${params[@]:0:$((n - 1))}")
+            positionalArgs=("''${params[@]:$n}")
+            params=("''${params[@]:0:$((n - 1))}")
             break;
             ;;
         -?*) ;;
@@ -80,19 +85,19 @@ if [ "$nonFlagArgs" = 0 ]; then
 fi
 
 # Optionally filter out paths not refering to the store.
-if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
+if [[ "''${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     kept=()
-    nParams=${#params[@]}
+    nParams=''${#params[@]}
     declare -i n=0
     while (( "$n" < "$nParams" )); do
-        p=${params[n]}
-        p2=${params[n+1]:-} # handle `p` being last one
+        p=''${params[n]}
+        p2=''${params[n+1]:-} # handle `p` being last one
         n+=1
 
         skipNext=false
         path=""
         case "$p" in
-            -[IL]/*) path=${p:2} ;;
+            -[IL]/*) path=''${p:2} ;;
             -[IL] | -isystem) path=$p2 skipNext=true ;;
         esac
 
@@ -105,16 +110,16 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
         kept+=("$p")
     done
     # Old bash empty array hack
-    params=(${kept+"${kept[@]}"})
+    params=(''${kept+"''${kept[@]}"})
 fi
 
 # Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+if [ -z "''${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @bintools@/nix-support/add-flags.sh
 fi
 
 # Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+if [ -z "''${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -122,7 +127,7 @@ fi
 if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     kept=()
     # Old bash empty array hack
-    for p in ${params+"${params[@]}"}; do
+    for p in ''${params+"''${params[@]}"}; do
         if [[ "$p" = -m*=native ]]; then
             skip "$p"
         else
@@ -130,7 +135,7 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
         fi
     done
     # Old bash empty array hack
-    params=(${kept+"${kept[@]}"})
+    params=(''${kept+"''${kept[@]}"})
 fi
 
 if [[ "$isCxx" = 1 ]]; then
@@ -170,11 +175,11 @@ fi
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
-extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+extraAfter=(''${hardeningCFlagsAfter[@]+"''${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
+extraBefore=(''${hardeningCFlagsBefore[@]+"''${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
-    linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "${params[@]}" ${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)
+    linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "''${params[@]}" ''${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)
 
     # Add the flags that should only be passed to the compiler when
     # linking.
@@ -189,7 +194,7 @@ if [ "$dontLink" != 1 ]; then
         extraBefore+=("-Wl,-dynamic-linker=$NIX_DYNAMIC_LINKER_@suffixSalt@")
     fi
     for i in $(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@); do
-        if [ "${i:0:3}" = -L/ ]; then
+        if [ "''${i:0:3}" = -L/ ]; then
             extraAfter+=("$i")
         else
             extraAfter+=("-Wl,$i")
@@ -221,19 +226,19 @@ fi
 
 # Finally, if we got any positional args, append them to `extraAfter`
 # now:
-if [[ "${#positionalArgs[@]}" -gt 0 ]]; then
-    extraAfter+=(-- "${positionalArgs[@]}")
+if [[ "''${#positionalArgs[@]}" -gt 0 ]]; then
+    extraAfter+=(-- "''${positionalArgs[@]}")
 fi
 
 # Optionally print debug info.
-if (( "${NIX_DEBUG:-0}" >= 1 )); then
+if (( "''${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
     echo "extra flags before to @prog@:" >&2
-    printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
+    printf "  %q\n" ''${extraBefore+"''${extraBefore[@]}"}  >&2
     echo "original flags to @prog@:" >&2
-    printf "  %q\n" ${params+"${params[@]}"} >&2
+    printf "  %q\n" ''${params+"''${params[@]}"} >&2
     echo "extra flags after to @prog@:" >&2
-    printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
+    printf "  %q\n" ''${extraAfter+"''${extraAfter[@]}"} >&2
 fi
 
 PATH="$path_backup"
@@ -245,17 +250,19 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
     source @out@/nix-support/cc-wrapper-hook
 fi
 
-if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
+if (( "''${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    responseFile=$(mktemp "''${TMPDIR:-/tmp}/cc-params.XXXXXX")
     trap 'rm -f -- "$responseFile"' EXIT
     printf "%q\n" \
-       ${extraBefore+"${extraBefore[@]}"} \
-       ${params+"${params[@]}"} \
-       ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
+       ''${extraBefore+"''${extraBefore[@]}"} \
+       ''${params+"''${params[@]}"} \
+       ''${extraAfter+"''${extraAfter[@]}"} > "$responseFile"
     @prog@ "@$responseFile"
 else
     exec @prog@ \
-       ${extraBefore+"${extraBefore[@]}"} \
-       ${params+"${params[@]}"} \
-       ${extraAfter+"${extraAfter[@]}"}
+       ''${extraBefore+"''${extraBefore[@]}"} \
+       ''${params+"''${params[@]}"} \
+       ''${extraAfter+"''${extraAfter[@]}"}
 fi
+''
+
