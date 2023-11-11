@@ -10,7 +10,7 @@ let
 
   # List of known lighttpd modules, ordered by how the lighttpd documentation
   # recommends them being imported:
-  # http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+  # https://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
   #
   # Some modules are always imported and should not appear in the config:
   # disallowedModules = [ "mod_indexfile" "mod_dirlisting" "mod_staticfile" ];
@@ -84,8 +84,8 @@ let
       # server.modules += () entries in each sub-service extraConfig snippet,
       # read this:
       #
-      #   http://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
-      #   http://redmine.lighttpd.net/issues/2337
+      #   https://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+      #   https://redmine.lighttpd.net/issues/2337
       #
       # Basically, lighttpd doesn't want to load (or even silently ignore) a
       # module for a second time, and there is no way to check if a module has

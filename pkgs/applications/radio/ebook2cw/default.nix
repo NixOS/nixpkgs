@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Convert ebooks to Morse MP3s/OGGs";
-    homepage = "http://fkurz.net/ham/ebook2cw.html";
+    homepage = "https://fkurz.net/ham/ebook2cw.html";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ earldouglas ];

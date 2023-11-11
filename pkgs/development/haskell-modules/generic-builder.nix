@@ -811,5 +811,12 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
 // optionalAttrs (postPhases != [])              { inherit postPhases; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+
+# Ensure libc++abi is linked even when clang is invoked as just `clang` or `cc`.
+# Works around https://github.com/NixOS/nixpkgs/issues/166205.
+# This can be dropped once a fix has been committed to cc-wrapper.
+// lib.optionalAttrs (stdenv.cc.isClang && stdenv.cc.libcxx != null) {
+  env.NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+}
 )
 )

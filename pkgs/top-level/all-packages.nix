@@ -2055,6 +2055,8 @@ with pkgs;
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
 
+  supercronic = callPackage ../tools/system/supercronic { };
+
   supermin = callPackage ../tools/virtualization/supermin { };
 
   sx-go = callPackage ../tools/security/sx-go { };
@@ -4667,8 +4669,6 @@ with pkgs;
   clac = callPackage ../tools/misc/clac { };
 
   map-cmd = callPackage ../tools/misc/map { };
-
-  clash = callPackage ../tools/networking/clash { };
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
@@ -25258,6 +25258,8 @@ with pkgs;
   subtitleedit = callPackage ../applications/video/subtitleedit { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
+
+  subxt = callPackage ../development/tools/subxt { };
 
   suil = darwin.apple_sdk_11_0.callPackage ../development/libraries/audio/suil { };
 

@@ -130,7 +130,7 @@ sub pciCheck {
     debug "\n";
 
     if (defined $module) {
-        # See the bottom of http://pciids.sourceforge.net/pci.ids for
+        # See the bottom of https://pciids.sourceforge.net/pci.ids for
         # device classes.
         if (# Mass-storage controller.  Definitely important.
             $class =~ /^0x01/ ||

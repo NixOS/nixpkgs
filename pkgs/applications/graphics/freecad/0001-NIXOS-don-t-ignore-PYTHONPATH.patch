@@ -24,12 +24,13 @@ diff --git a/src/Base/Interpreter.cpp b/src/Base/Interpreter.cpp
 index 52c47168af..9966bd0013 100644
 --- a/src/Base/Interpreter.cpp
 +++ b/src/Base/Interpreter.cpp
-@@ -554,7 +554,7 @@ void initInterpreter(int argc,char *argv[])
+@@ -554,7 +554,9 @@ void initInterpreter(int argc,char *argv[])
  {
      PyStatus status;
      PyConfig config;
--    PyConfig_InitIsolatedConfig(&config);
-+    PyConfig_InitPythonConfig(&config);
+     PyConfig_InitIsolatedConfig(&config);
++    config.isolated = 0;
++    config.use_environment = 1;
  
      status = PyConfig_SetBytesArgv(&config, argc, argv);
      if (PyStatus_Exception(status)) {

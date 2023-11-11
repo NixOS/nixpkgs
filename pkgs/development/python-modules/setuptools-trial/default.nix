@@ -2,13 +2,14 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , twisted
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-trial";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-FCIPj3YcSLoeJSbwhxlQd89U+tcJizgs4iBCLw/1mxI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     twisted

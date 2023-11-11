@@ -42,7 +42,6 @@
 , librosa
 , lxml
 , manifest-ml
-, markdownify
 , neo4j
 , networkx
 , nlpcloud
@@ -76,8 +75,8 @@
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
-, pytest-vcr
 , pytestCheckHook
+, requests-mock
 , responses
 , syrupy
 , toml
@@ -85,7 +84,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.325";
+  version = "0.0.334";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -94,7 +93,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/bk4RafDDL4nozyFOiikyU4auBSftej21m5/FnEtDog=";
+    hash = "sha256-mXPqc8wF9DhEtITm8h5R9kHBcMJ7AEK4kL5Z7V2p8NE=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -253,21 +252,22 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    markdownify
+    lark
     pandas
     pytest-asyncio
     pytest-mock
     pytest-socket
-    pytest-vcr
     pytestCheckHook
+    requests-mock
     responses
     syrupy
     toml
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
+    "--only-core"
   ];
 
   disabledTests = [
@@ -277,6 +277,10 @@ buildPythonPackage rec {
 
     # these tests have network access
     "test_socket_disabled"
+  ];
+
+  pythonImportsCheck = [
+    "langchain"
   ];
 
   meta = with lib; {

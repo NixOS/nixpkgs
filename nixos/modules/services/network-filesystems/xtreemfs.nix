@@ -176,7 +176,7 @@ in
           description = lib.mdDoc ''
             Configuration of XtreemFS DIR service.
             WARNING: configuration is saved as plaintext inside nix store.
-            For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
+            For more options: https://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
           '';
         };
         replication = {
@@ -218,7 +218,7 @@ in
             description = lib.mdDoc ''
               Configuration of XtreemFS DIR replication plugin.
               WARNING: configuration is saved as plaintext inside nix store.
-              For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
+              For more options: https://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
             '';
           };
         };
@@ -319,7 +319,7 @@ in
           description = lib.mdDoc ''
             Configuration of XtreemFS MRC service.
             WARNING: configuration is saved as plaintext inside nix store.
-            For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
+            For more options: https://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
           '';
         };
         replication = {
@@ -361,7 +361,7 @@ in
             description = lib.mdDoc ''
               Configuration of XtreemFS MRC replication plugin.
               WARNING: configuration is saved as plaintext inside nix store.
-              For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
+              For more options: https://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
             '';
           };
         };
@@ -438,7 +438,7 @@ in
           description = lib.mdDoc ''
             Configuration of XtreemFS OSD service.
             WARNING: configuration is saved as plaintext inside nix store.
-            For more options: http://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
+            For more options: https://www.xtreemfs.org/xtfs-guide-1.5.1/index.html
           '';
         };
       };

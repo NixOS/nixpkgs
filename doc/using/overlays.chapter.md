@@ -77,7 +77,7 @@ In Nixpkgs, we have multiple implementations of the BLAS/LAPACK numerical linear
 
     The Nixpkgs attribute is `openblas` for ILP64 (integer width = 64 bits) and `openblasCompat` for LP64 (integer width = 32 bits).  `openblasCompat` is the default.
 
--   [LAPACK reference](http://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
+-   [LAPACK reference](https://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
 
     The Nixpkgs attribute is `lapack-reference`.
 
