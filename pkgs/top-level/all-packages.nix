@@ -35753,6 +35753,8 @@ with pkgs;
 
   texture-synthesis = callPackage ../tools/graphics/texture-synthesis { };
 
+  texturepacker = qt6.callPackage ../applications/graphics/texturepacker { };
+
   tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
