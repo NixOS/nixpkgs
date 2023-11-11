@@ -78,7 +78,7 @@ let
       apply = s: "<" + toString s;
     };
     api-origin = mkOption {
-      description = lib.mdDoc "Origin URL for API, 100 more than web.";
+      description = lib.mdDoc "Origin URL for the API";
       type = types.str;
       default = "http://${cfg.listenAddress}:${toString (cfg.${srv}.port + 100)}";
       defaultText = lib.literalMD ''
