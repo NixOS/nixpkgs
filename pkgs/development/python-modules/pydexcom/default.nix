@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API to interact with Dexcom Share service";
     homepage = "https://github.com/gagebenne/pydexcom";
+    changelog = "https://github.com/gagebenne/pydexcom/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
