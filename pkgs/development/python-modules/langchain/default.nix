@@ -78,6 +78,7 @@
 , pytest-socket
 , pytest-vcr
 , pytestCheckHook
+, requests-mock
 , responses
 , syrupy
 , toml
@@ -85,7 +86,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.325";
+  version = "0.0.334";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -94,7 +95,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/bk4RafDDL4nozyFOiikyU4auBSftej21m5/FnEtDog=";
+    hash = "sha256-mXPqc8wF9DhEtITm8h5R9kHBcMJ7AEK4kL5Z7V2p8NE=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -260,6 +261,7 @@ buildPythonPackage rec {
     pytest-socket
     pytest-vcr
     pytestCheckHook
+    requests-mock
     responses
     syrupy
     toml
