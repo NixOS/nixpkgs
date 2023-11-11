@@ -1,19 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, cython
+, cython_3
 , isPyPy
 , ipython
-, python
 , scikit-build
 , cmake
 , pythonOlder
 , pytestCheckHook
+, ubelt
 }:
 
 buildPythonPackage rec {
   pname = "line-profiler";
-  version = "4.0.2";
+  version = "4.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6" || isPyPy;
@@ -21,22 +21,23 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "line_profiler";
     inherit version;
-    hash = "sha256-JejJ1CSNxIkFgBhR/4p1ucdIJ6CHHRGNEQTY5D1/sPw=";
+    hash = "sha256-qlZXiw/1p1b+GAs/2nvWfCe71Hiz0BJGEtjPAOSiHfI=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
     cmake
     scikit-build
   ];
 
-  propagatedBuildInputs = [
-    ipython
-  ];
+  passthru.optional-dependencies = {
+    ipython = [ ipython ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+    ubelt
+  ] ++ passthru.optional-dependencies.ipython;
 
   dontUseCmakeConfigure = true;
 
@@ -44,8 +45,9 @@ buildPythonPackage rec {
     rm -f _line_profiler.c
   '';
 
-  checkPhase = ''
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH cd tests && ${python.interpreter} -m unittest discover -s .
+  preCheck = ''
+    rm -r line_profiler
+    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [
