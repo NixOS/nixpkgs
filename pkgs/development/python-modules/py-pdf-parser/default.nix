@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "py-pdf-parser";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GsiGBigvtAgrM0sRffZBG2tVoEaDai+eUxXhMXWNBr0=";
+    hash = "sha256-nMEmzQVz1LR4omHyxhvrjBXDQQE23S62T0wxZeMnXhg=";
   };
 
   nativeBuildInputs = [

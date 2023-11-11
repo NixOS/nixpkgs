@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.9.2";
+  version = "0.9.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ki2s057aqaZa+kOpAlhBYFpZeuDX42+txQXFuBtXd04=";
+    hash = "sha256-1oy0gXHDAoCIPXAitQv6MRb3p2j89zBaZvpUni6wT8A=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
