@@ -17,13 +17,13 @@
 buildPythonPackage rec {
   pname = "nibe";
   version = "2.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yozik04";
-    repo = pname;
+    repo = "nibe";
     rev = "refs/tags/${version}";
     hash = "sha256-PCfodp8gyjOUgb4FthMlbanbEtJuc6axM8DkQJ/ykLg=";
   };
