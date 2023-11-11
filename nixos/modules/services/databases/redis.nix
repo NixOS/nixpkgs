@@ -63,7 +63,7 @@ in {
 
       vmOverCommit = mkEnableOption (lib.mdDoc ''
         setting of vm.overcommit_memory to 1
-        (Suggested for Background Saving: http://redis.io/topics/faq)
+        (Suggested for Background Saving: <https://redis.io/docs/get-started/faq/>)
       '');
 
       servers = mkOption {

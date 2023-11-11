@@ -83,7 +83,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "http://virt-manager.org";
+    homepage = "https://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing

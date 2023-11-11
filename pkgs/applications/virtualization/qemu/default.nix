@@ -266,11 +266,8 @@ stdenv.mkDerivation (finalAttrs: {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    homepage = "http://www.qemu.org/";
-    description =
-      if toolsOnly
-      then "Support tools for qemu, a machine emulator and virtualizer"
-      else "A generic and open source machine emulator and virtualizer";
+    homepage = "https://www.qemu.org/";
+    description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;

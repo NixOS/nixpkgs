@@ -108,7 +108,7 @@ in {
           option.
 
           A detailed description of the supported syntax can be found at-spi2-atk
-          http://bosun.org/configuration.html
+          https://bosun.org/configuration.html
         '';
       };
 

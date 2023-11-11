@@ -54,7 +54,7 @@ in
           only the hosts listed in {var}`dataDir`/remote_hosts.cfg will be allowed to
           connect.
 
-          See also: <http://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access>
+          See also: <https://boinc.berkeley.edu/wiki/Controlling_BOINC_remotely#Remote_access>
         '';
       };
 

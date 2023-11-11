@@ -139,7 +139,7 @@ in
           path.
 
           See
-          <http://www.asterisk.org/community/documentation>
+          <https://www.asterisk.org/community/documentation/>
           for more examples of what is possible here.
         '';
       };
