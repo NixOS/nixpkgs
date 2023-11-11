@@ -663,6 +663,7 @@ unsupported-platforms:
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
   oculus:                                       [ platforms.darwin ]
+  ostree-pin:                                   [ platforms.darwin ] # depends on gi-ostree
   pam:                                          [ platforms.darwin ]
   parport:                                      [ platforms.darwin ]
   persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
