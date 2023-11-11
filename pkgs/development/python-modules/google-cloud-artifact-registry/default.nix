@@ -24,7 +24,9 @@ buildPythonPackage rec {
     grpc-google-iam-v1
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.artifactregistry"
@@ -34,7 +36,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Artifact Registry API client library";
-    homepage = "https://github.com/googleapis/google-cloud-python";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-artifact-registry";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-artifact-registry-v${version}/packages/google-cloud-artifact-registry/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
   };
