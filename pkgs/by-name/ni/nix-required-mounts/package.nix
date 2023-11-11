@@ -1,15 +1,18 @@
 { addOpenGLRunpath
 , cmake
 , allowedPatterns ? rec {
-    opengl.onFeatures = [ "opengl" ];
-    opengl.paths = [
+    # This config is just an example.
+    # When the hook observes either of the following requiredSystemFeatures:
+    nvidia-gpu.onFeatures = [ "gpu" "opengl" "vulkan" "cuda" ];
+    # It exposes these paths in the sandbox:
+    nvidia-gpu.paths = [
+      # Note that mounting /run/opengl-driver/lib actually isn't sufficient,
+      # because it's populated with symlinks. One most also mount their
+      # targets, which is what the NixOS module additionaly does.
       addOpenGLRunpath.driverLink
-      "/dev/video*"
       "/dev/dri"
-    ];
-    cuda.onFeatures = [ "cuda" ];
-    cuda.paths = opengl.paths ++ [
       "/dev/nvidia*"
+      "/dev/video*"
     ];
   }
 , buildPackages
