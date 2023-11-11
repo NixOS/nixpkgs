@@ -27,7 +27,6 @@
 
 # build time
 , autoconf
-, cargo
 , dump_syms
 , makeWrapper
 , mimalloc
@@ -37,7 +36,8 @@
 , pkgsCross # wasm32 rlbox
 , python3
 , runCommand
-, rustc
+, rustPackages_1_69
+, rustPackages_1_70
 , rust-cbindgen
 , rustPlatform
 , unzip
@@ -146,6 +146,13 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 
 let
   inherit (lib) enableFeature;
+
+  rustPackages = if lib.versionAtLeast version "120" then
+    rustPackages_1_70
+  else
+    rustPackages_1_69;
+
+  inherit (rustPackages) cargo rustc;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
