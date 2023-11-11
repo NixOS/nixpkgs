@@ -23648,9 +23648,7 @@ with pkgs;
     else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages_14.libunwind
     else callPackage ../development/libraries/libunwind { };
 
-  libuv = callPackage ../development/libraries/libuv {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-  };
+  libuv = darwin.apple_sdk_11_0.callPackage ../development/libraries/libuv { };
 
   libuvc = callPackage ../development/libraries/libuvc { };
 
