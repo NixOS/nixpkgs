@@ -18,7 +18,6 @@
 , libexif
 , librsvg
 , poppler
-, libgsf
 , libtiff
 , fftw
 , lcms2
@@ -26,7 +25,6 @@
 , libimagequant
 , imagemagick
 , pango
-, orc
 , matio
 , cfitsio
 , libwebp
@@ -36,13 +34,15 @@
 , openslide
 , libheif
 , cgif
+, libarchive
+, libhwy
 , testers
 , nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.14.5";
+  version = "8.15.0";
 
   outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libvips";
     repo = "libvips";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fG3DTP+3pO7sbqR/H9egJHU3cLKPU4Jad6qxcQ9evNw=";
+    hash = "sha256-WfKq+maLcAXyjk1sq66wSU92ALv4MfRDPKe4Mki0KRQ=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     libexif
     librsvg
     poppler
-    libgsf
     libtiff
     fftw
     lcms2
@@ -86,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     libimagequant
     imagemagick
     pango
-    orc
     matio
     cfitsio
     libwebp
@@ -96,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     openslide
     libheif
     cgif
+    libarchive
+    libhwy
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
