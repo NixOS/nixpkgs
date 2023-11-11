@@ -3,48 +3,104 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
+, isPyPy
 , substituteAll
-, imageio-ffmpeg
+
+# build-system
+, setuptools
+
+# native dependencies
+, libGL
+
+# dependencies
 , numpy
 , pillow
+
+# optional-dependencies
+, astropy
+, av
+, imageio-ffmpeg
+, pillow-heif
 , psutil
-, pytestCheckHook
 , tifffile
+
+# tests
+, pytestCheckHook
 , fsspec
-, libGL
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.31.3";
-  format = "setuptools";
+  version = "2.32.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dMaoMtgbetWoqAl23qWO4DPT4rmaVJkMvXibTLCzFGE=";
+    hash = "sha256-5CWtNsYFMI2eptk+2nsJh5JgWbi4YiDhQqWZp5dRKN0=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = [
+    # pillow 10.1.0 compat
+    (fetchpatch {
+      name = "imageio-pillow-10.1.0-compat.patch";
+      url = "https://github.com/imageio/imageio/commit/f58379c1ae7fbd1da8689937b39e499e2d225740.patch";
+      hash = "sha256-jPSl/EUe69Dizkv8CqWpnm+TDPtF3VX2DkHOCEuYTLA=";
+    })
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    imageio-ffmpeg
     numpy
     pillow
   ];
+
+  passthru.optional-dependencies = {
+    bsdf = [];
+    dicom = [];
+    feisem = [];
+    ffmpeg = [
+      imageio-ffmpeg
+      psutil
+    ];
+    fits = lib.optionals (!isPyPy) [
+      astropy
+    ];
+    freeimage = [];
+    lytro = [];
+    numpy = [];
+    pillow = [];
+    simpleitk = [];
+    spe = [];
+    swf = [];
+    tifffile = [
+      tifffile
+    ];
+    pyav = [
+      av
+    ];
+    heif = [
+      pillow-heif
+    ];
+  };
 
   nativeCheckInputs = [
     fsspec
     psutil
     pytestCheckHook
-    tifffile
-  ];
+  ]
+  ++ fsspec.optional-dependencies.github
+  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     "-m 'not needs_internet'"
