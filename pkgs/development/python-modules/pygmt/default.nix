@@ -12,7 +12,7 @@
 , xarray
 , pytest-mpl
 , ipython
-, ghostscript
+, ghostscript_headless
 , pytestCheckHook
 }:
 
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mpl
-    ghostscript
+    ghostscript_headless
     ipython
   ];
 

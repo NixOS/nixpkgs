@@ -10,7 +10,7 @@
 , pillow
 , stdenv
 , exiftool
-, ghostscript
+, ghostscript_headless
 , imagemagick
 , mupdf
 , netpbm
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     exiftool
-    ghostscript
+    ghostscript_headless
     imagemagick
     mupdf
     netpbm

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , deprecation
 , fetchFromGitHub
-, ghostscript
+, ghostscript_headless
 , hypothesis
 , img2pdf
 , importlib-resources
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;
