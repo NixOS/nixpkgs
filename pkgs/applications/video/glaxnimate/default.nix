@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
 
   # Translation needs to be separately compiled
   # https://gitlab.com/mattbas/glaxnimate/-/issues/648
-  buildFlags = ["translations"];
-  
+  buildFlags = [ "translations" ];
+
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
 
   passthru.tests.version = lib.optionalAttrs stdenv.isLinux (testers.testVersion {
