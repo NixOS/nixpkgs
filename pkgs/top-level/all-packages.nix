@@ -2711,6 +2711,10 @@ with pkgs;
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
+  keylime = callPackage ../tools/security/keylime {
+    libssl = openssl;
+  };
+
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
   lambda-delta = callPackage ../applications/emulators/lambda-delta { };
@@ -2797,6 +2801,8 @@ with pkgs;
   rpcemu = callPackage ../applications/emulators/rpcemu { };
 
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
+
+  rust-keylime = callPackage ../tools/security/rust-keylime { };
 
   ruffle = callPackage ../applications/emulators/ruffle { };
 
