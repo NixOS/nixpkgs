@@ -377,6 +377,20 @@ in
         }
         extraService
       ])) extraServices)
+
+      # Work around 'pq: permission denied for schema public' with postgres v15, until a
+      # solution for `services.postgresql.ensureUsers` is found.
+      # See https://github.com/NixOS/nixpkgs/issues/216989
+      # Workaround taken from nixos/forgejo: https://github.com/NixOS/nixpkgs/pull/262741
+      (lib.mkIf (
+          cfg.postgresql.enable
+          && lib.strings.versionAtLeast config.services.postgresql.package.version "15.0"
+        ) {
+          postgresql.postStart = (lib.mkAfter ''
+            $PSQL -tAc 'ALTER DATABASE "${srvCfg.postgresql.database}" OWNER TO "${srvCfg.user}";'
+          '');
+        }
+      )
     ];
 
     systemd.timers = mapAttrs (timerName: timer:
