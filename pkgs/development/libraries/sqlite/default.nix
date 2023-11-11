@@ -5,8 +5,6 @@
 
 # uses readline & ncurses for a better interactive experience if set to true
 , interactive ? false
-# TODO: can be removed since 3.36 since it is the default now.
-, enableDeserialize ? false
 
 , gitUpdater
 }:
@@ -15,14 +13,14 @@ let
   archiveVersion = import ./archive-version.nix lib;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
   version = "3.43.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion finalAttrs.version}.tar.gz";
     hash = "sha256-ORFslOdmMPItVM2Cw86jCFZfFxX3FtGyUn8cnJabpNk=";
   };
 
@@ -36,7 +34,9 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  configureFlags = [ "--enable-threadsafe" ] ++ lib.optional interactive "--enable-readline";
+  configureFlags = [ "--enable-threadsafe" ]
+    # "--enable-cross-thread-connections"
+    ++ lib.optional interactive "--enable-readline";
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -54,9 +54,6 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ] ++ lib.optionals enableDeserialize [
-    # Can be removed in v3.36+, as this will become the default
-    "-DSQLITE_ENABLE_DESERIALIZE"
   ]);
 
   # Test for features which may not be available at compile time
@@ -114,4 +111,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
   };
-}
+})
