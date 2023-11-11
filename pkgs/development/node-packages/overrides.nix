@@ -171,6 +171,9 @@ final: prev: {
 
   node-gyp = prev.node-gyp.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+      pkgs.darwin.cctools
+    ];
     # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
     # This is important when build nodejs packages in sandbox.
     postInstall = ''
