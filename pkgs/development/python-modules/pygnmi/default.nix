@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pygnmi";
-  version = "0.8.12";
+  version = "0.8.13";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "akarneliuk";
     repo = "pygnmi";
-    rev = "v${version}";
-    sha256 = "sha256-5dAjN/HDFKQmJIjhergBjSmHQKhBxqy/Jneh1pLCHrw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-NkByimHk1DoBjMMD7ywplo38VxBpp1pnClYUzhtKwY4=";
   };
 
   propagatedBuildInputs = [
