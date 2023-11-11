@@ -37,6 +37,40 @@ let
         nativeCheckInputs = with super; [ pytestCheckHook mock ];
         disabledTestPaths = [];
       });
+
+      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.1";
+        format = "setuptools";
+        src = fetchPypi {
+          pname = "Flask-SQLAlchemy";
+          inherit version;
+          hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
+        };
+        propagatedBuildInputs = with self; [
+          flask
+          sqlalchemy
+        ];
+      });
+
+      # sourcehut is not (yet) compatible with factory-boy 3.x
+      factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.12.0";
+        src = fetchPypi {
+          pname = "factory_boy";
+          inherit version;
+          hash = "sha256-+vSNYIoXNfDQo8nL9TbWT5EytUfa57pFLE2Zp56Eo3A=";
+        };
+        nativeCheckInputs = (with super; [
+          django
+          flask
+          mongoengine
+          pytestCheckHook
+        ]) ++ (with self; [
+          sqlalchemy
+          flask-sqlalchemy
+        ]);
+        postPatch = "";
+      });
     };
   };
 in
