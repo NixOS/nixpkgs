@@ -285,11 +285,11 @@ specifying an interpreter version), like this:
 
 ```nix
 { lib
-, python3
+, python3Packages
 , fetchPypi
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "luigi";
   version = "2.7.9";
   pyproject = true;
@@ -300,13 +300,13 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
+    python3Packages.setuptools
+    python3Packages.wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    tornado
-    python-daemon
+  propagatedBuildInputs = [
+    python3Packages.tornado
+    python3Packages.python-daemon
   ];
 
   meta = with lib; {

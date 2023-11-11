@@ -89,7 +89,7 @@ guest. For instance, the following will forward host port 2222 to guest
 port 22 (SSH):
 
 ```ShellSession
-$ QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-*-vm
+$ QEMU_NET_OPTS="hostfwd=tcp:127.0.0.1:2222-127.0.0.1:22" ./result/bin/run-*-vm
 ```
 
 allowing you to log in via SSH (assuming you have set the appropriate

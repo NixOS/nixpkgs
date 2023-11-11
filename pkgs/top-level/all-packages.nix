@@ -16256,7 +16256,7 @@ with pkgs;
   gforth = callPackage ../development/compilers/gforth { };
 
   gleam = callPackage ../development/compilers/gleam {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   gmqcc = callPackage ../development/compilers/gmqcc { };
@@ -22904,7 +22904,9 @@ with pkgs;
 
   libfabric = callPackage ../development/libraries/libfabric { };
 
-  libfive = qt6Packages.callPackage ../development/libraries/libfive { };
+  libfive = qt6Packages.callPackage ../development/libraries/libfive {
+    python = python3;
+  };
 
   libfixposix = callPackage ../development/libraries/libfixposix { };
 
@@ -26515,6 +26517,14 @@ with pkgs;
 
   home-assistant = callPackage ../servers/home-assistant { };
 
+  buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
+  home-assistant-custom-components = lib.recurseIntoAttrs
+    (callPackage ../servers/home-assistant/custom-components {
+      inherit (home-assistant.python.pkgs) callPackage;
+    });
+  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
+    (callPackage ../servers/home-assistant/custom-lovelace-modules {});
+
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
   home-assistant-component-tests = recurseIntoAttrs home-assistant.tests.components;
@@ -28609,8 +28619,6 @@ with pkgs;
   powertop = callPackage ../os-specific/linux/powertop { };
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
-
-  prayer = callPackage ../servers/prayer { };
 
   procps = if stdenv.isLinux
     then callPackage ../os-specific/linux/procps-ng { }

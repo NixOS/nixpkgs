@@ -6150,6 +6150,10 @@ self: super: with self; {
     pythonSupport = true;
   });
 
+  libfive = toPythonModule (pkgs.libfive.override {
+    inherit python;
+  });
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
@@ -13686,6 +13690,8 @@ self: super: with self; {
   teletype = callPackage ../development/python-modules/teletype { };
 
   telfhash = callPackage ../development/python-modules/telfhash { };
+
+  telegram-text = callPackage ../development/python-modules/telegram-text { };
 
   temescal = callPackage ../development/python-modules/temescal { };
 
