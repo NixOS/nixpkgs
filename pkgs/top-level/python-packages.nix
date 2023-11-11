@@ -11191,7 +11191,7 @@ self: super: with self; {
 
   pytest-mypy-plugins = callPackage ../development/python-modules/pytest-mypy-plugins { };
 
-  pytest-nixpkgs-network-xfail = callPackage ../development/python-modules/pytest-nixpkgs-network-xfail { };
+  pytest-nixpkgs-xfail-hook = callPackage ../development/python-modules/pytest-nixpkgs-xfail-hook { };
 
   pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
 
