@@ -34,6 +34,7 @@ makeScopeWithSplicing' {
   qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
     inherit (qt6) qtbase qt5compat;
   };
+  packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
 
