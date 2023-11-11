@@ -5,12 +5,15 @@
 , async-timeout
 , pytz
 , xmltodict
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymetno";
   version = "0.12.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
