@@ -82,14 +82,7 @@ buildPythonPackage rec {
     "test_bom_v1_3_with_metadata_component"
     "test_bom_v1_4_with_metadata_component"
     # AssertionError: <ValidationError: "{'algorithm': 'ES256', ...
-    "test_validate_expected_error_06"
-    "test_validate_expected_error_23"
-    "test_validate_expected_error_53"
-    "test_validate_no_none_28"
-    "test_validate_expected_error_06"
-    "test_validate_expected_error_23"
-    "test_validate_expected_error_53"
-    "test_validate_no_none_28"
+    "TestJson"
   ];
 
   disabledTestPaths = [
