@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxext-opengraph";
-  version = "0.8.2";
+  version = "0.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "wpilibsuite";
     repo = "sphinxext-opengraph";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SrZTtVzEp4E87fzisWKHl8iRP49PWt5kkJq62CqXrBc=";
+    hash = "sha256-ZLIxbFgayG+WVvSXu74eZJ/PbSHg6dzkkIr1OBry4DE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
