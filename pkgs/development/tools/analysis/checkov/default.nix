@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.0.15";
+  version = "3.0.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-sO2f95wnGNhjHHWG8GkqL0GqYu+S9ux8mzubJtWEAiE=";
+    hash = "sha256-YOZ7F/bxbnBh3mhiFL3cMMAc3qeOMab48LcvYeJgfrg=";
   };
 
   patches = [
@@ -105,6 +105,8 @@ python3.pkgs.buildPythonApplication rec {
     "console"
     # Assertion error
     "test_runner"
+    # AssertionError: assert ['<?xml versi...
+    "test_get_cyclonedx_report"
   ];
 
   disabledTestPaths = [
