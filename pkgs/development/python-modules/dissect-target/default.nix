@@ -108,6 +108,11 @@ buildPythonPackage rec {
     "test_exec_target_command"
     # Issue with tar file
     "test_tar_sensitive_drive_letter"
+    "test_dpapi_decrypt_blob"
+    "test_notifications_appdb"
+    "test_md"
+    "test_notifications_wpndatabase"
+    "test_nested_md_lvm"
     # Tests compare dates and times
     "yum"
     # Filesystem access, windows defender tests
