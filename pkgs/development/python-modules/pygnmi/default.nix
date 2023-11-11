@@ -6,12 +6,15 @@
 , grpcio
 , protobuf
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pygnmi";
   version = "0.8.13";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "akarneliuk";
