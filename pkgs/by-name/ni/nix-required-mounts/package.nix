@@ -6,14 +6,12 @@
     nvidia-gpu.onFeatures = [ "gpu" "nvidia-gpu" "opengl" "cuda" ];
     # It exposes these paths in the sandbox:
     nvidia-gpu.paths = [
-      # Note that mounting /run/opengl-driver/lib actually isn't sufficient,
-      # because it's populated with symlinks. One most also mount their
-      # targets, which is what the NixOS module additionaly does.
       addOpenGLRunpath.driverLink
       "/dev/dri"
       "/dev/nvidia*"
       "/dev/video*"
     ];
+    nvidia-gpu.unsafeFollowSymlinks = true;
   }
 , buildPackages
 , formats

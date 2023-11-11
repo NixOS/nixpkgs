@@ -5,10 +5,11 @@ import json
 import subprocess
 import textwrap
 from argparse import ArgumentParser
+from collections import deque
 from itertools import chain
 from pathlib import Path
 from sys import stderr
-from typing import Dict, List, Tuple, TypeAlias, TypedDict
+from typing import Deque, Dict, List, Set, Tuple, TypeAlias, TypedDict
 
 Glob: TypeAlias = str
 PathString: TypeAlias = str
@@ -22,6 +23,7 @@ class Mount(TypedDict):
 class Pattern(TypedDict):
     onFeatures: List[str]
     paths: List[Glob | Mount]
+    unsafeFollowSymlinks: bool
 
 
 class HookConfig(TypedDict):
@@ -50,7 +52,11 @@ parser.add_argument(
 def symlink_parents(p: Path) -> List[Path]:
     out = []
     while p.is_symlink() and p not in out:
-        p = p.readlink()
+        parent = p.readlink()
+        if parent.is_relative_to("."):
+            p = p / parent
+        else:
+            p = parent
         out.append(p)
     return out
 
@@ -111,38 +117,59 @@ def entrypoint():
 
     parsed_drv = parsed_drv[canon_drv_path]
     drv_env = parsed_drv.get("env", {})
-    features = get_strings(drv_env, "requiredSystemFeatures")
-    features = list(filter(known_features.__contains__, features))
+    required_features = get_strings(drv_env, "requiredSystemFeatures")
+    required_features = list(filter(known_features.__contains__, required_features))
 
-    patterns: List[PathString | Mount] = list(
-        chain.from_iterable(allowed_patterns[f]["paths"] for f in features)
+    patterns: List[Tuple[PathString | Mount, bool]] = list(
+        (path, pattern["unsafeFollowSymlinks"])
+        for pattern in allowed_patterns.values()
+        for path in pattern["paths"]
+        if any(feature in required_features for feature in pattern["onFeatures"])
     )  # noqa: E501
 
-    # TODO: Would it make sense to preserve the original order instead?
-    roots: List[Tuple[PathString, PathString]] = sorted(
-        set(
+    queue: Deque[Tuple[PathString, PathString, bool]] = deque(
+        (
             mnt
-            for pattern in patterns
+            for (pattern, follow_symlinks) in patterns
             for mnt in (
-                ((path, path) for path in glob.glob(pattern))
+                ((path, path, follow_symlinks) for path in glob.glob(pattern))
                 if isinstance(pattern, PathString)
-                else [(pattern["guest"], pattern["host"])]
+                else [(pattern["guest"], pattern["host"], follow_symlinks)]
             )
         )
     )
 
+    unique_mounts: Set[Tuple[PathString, PathString]] = set()
+    mounts: List[Tuple[PathString, PathString]] = []
+
+    while queue:
+        guest_path, host_path, follow_symlinks = queue.popleft()
+        if (guest_path, host_path) not in unique_mounts:
+            mounts.append((guest_path, host_path))
+            unique_mounts.add((guest_path, host_path))
+
+        if not follow_symlinks:
+            continue
+
+        for parent in symlink_parents(Path(host_path)):
+            parent_str = parent.absolute().as_posix()
+            queue.append((parent_str, parent_str, follow_symlinks))
+
     # the pre-build-hook command
     if args.issue_command == "always" or (
-        args.issue_command == "conditional" and roots
+        args.issue_command == "conditional" and mounts
     ):
         print("extra-sandbox-paths")
+        print_paths = True
+    else:
+        print_paths = False
 
     # arguments, one per line
-    for guest_path, host_path in roots:
+    for guest_path, host_path in mounts if print_paths else []:
         print(f"{guest_path}={host_path}")
 
     # terminated by an empty line
-    something_to_terminate = args.issue_stop == "conditional" and roots
+    something_to_terminate = args.issue_stop == "conditional" and mounts
     if args.issue_stop == "always" or something_to_terminate:
         print()
 

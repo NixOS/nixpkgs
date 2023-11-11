@@ -5,13 +5,17 @@ let
   package = pkgs.nix-required-mounts;
   overridenPackage = package.override { inherit (cfg) allowedPatterns; };
 
-  Mount = with lib; types.submodule {
-    options.host = mkOption { type = types.str; description = "Host path to mount"; };
-    options.guest = mkOption {
-      type = types.str;
-      description = "Location in the sandbox to mount the host path at";
+  Mount = with lib;
+    types.submodule {
+      options.host = mkOption {
+        type = types.str;
+        description = "Host path to mount";
+      };
+      options.guest = mkOption {
+        type = types.str;
+        description = "Location in the sandbox to mount the host path at";
+      };
     };
-  };
   Pattern = with lib.types;
     types.submodule ({ config, name, ... }: {
       options.onFeatures = lib.mkOption {
@@ -25,6 +29,11 @@ let
         description =
           "A list of glob patterns, indicating which paths to expose to the sandbox";
       };
+      options.unsafeFollowSymlinks = lib.mkEnableOption ''
+        Instructs the hook to mount the symlink targets as well, when any of
+        the `paths` contain symlinks. This may not work correctly with glob
+        patterns.
+      '';
     });
 
   driverPaths = [
@@ -40,6 +49,7 @@ let
   defaults = {
     nvidia-gpu.onFeatures = package.allowedPatterns.nvidia-gpu.onFeatures;
     nvidia-gpu.paths = package.allowedPatterns.nvidia-gpu.paths ++ driverPaths;
+    nvidia-gpu.unsafeFollowSymlinks = false;
   };
 in
 {
