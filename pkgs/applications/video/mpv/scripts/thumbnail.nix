@@ -15,7 +15,9 @@ buildLua rec {
   postPatch = "patchShebangs concat_files.py";
   dontBuild = false;
 
-  scriptPath = "mpv_thumbnail_script_{client_osc,server}.lua";
+  scriptPath = "mpv_thumbnail_script_client_osc.lua";
+  extraScripts = [ "mpv_thumbnail_script_server.lua" ];
+  passthru.scriptName = "mpv_thumbnail_script_{client_osc,server}.lua";
 
   meta = with lib; {
     description = "A lua script to show preview thumbnails in mpv's OSC seekbar";
