@@ -16420,6 +16420,12 @@
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
   };
+  simsor = {
+    name = "Simon Garrelou";
+    email = "simon@sixfoisneuf.fr";
+    github = "simsor";
+    githubId = 300958;
+  };
   sioodmy = {
     name = "Antoni Sokołowski";
     github = "sioodmy";
