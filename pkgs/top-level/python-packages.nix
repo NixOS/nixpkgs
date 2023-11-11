@@ -12440,7 +12440,7 @@ self: super: with self; {
 
   reportlab = callPackage ../development/python-modules/reportlab { };
 
-  repoze_lru = callPackage ../development/python-modules/repoze_lru { };
+  repoze-lru = callPackage ../development/python-modules/repoze-lru { };
 
   repoze_sphinx_autointerface = callPackage ../development/python-modules/repoze_sphinx_autointerface { };
 

@@ -15,7 +15,7 @@
 , py
 , pyramid
 , pytestCheckHook
-, repoze_lru
+, repoze-lru
 , setuptools
 , strictyaml
 , waitress
@@ -60,7 +60,7 @@ buildPythonApplication rec {
     platformdirs
     pluggy
     pyramid
-    repoze_lru
+    repoze-lru
     setuptools
     strictyaml
     waitress

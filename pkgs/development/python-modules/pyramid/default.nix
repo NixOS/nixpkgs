@@ -7,7 +7,7 @@
 , pastedeploy
 , plaster
 , plaster-pastedeploy
-, repoze_lru
+, repoze-lru
 , translationstring
 , venusian
 , webob
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pastedeploy
     plaster
     plaster-pastedeploy
-    repoze_lru
+    repoze-lru
     translationstring
     venusian
     webob
