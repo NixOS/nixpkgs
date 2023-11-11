@@ -1248,6 +1248,8 @@ with pkgs;
 
   fetchPypi = callPackage ../build-support/fetchpypi { };
 
+  fetchPypiLegacy = callPackage ../build-support/fetchpypilegacy { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
