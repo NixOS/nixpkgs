@@ -1,11 +1,14 @@
 { stdenv
 , lib
+, openexr
+, jemalloc
+, c-blosc
 , binutils
 , fetchFromGitHub
 , cmake
 , pkg-config
 , wrapGAppsHook
-, boost
+, boost179
 , cereal
 , cgal_5
 , curl
@@ -34,7 +37,7 @@
 , pcre
 , qhull
 , systemd
-, tbb
+, tbb_2021_8
 , webkitgtk
 , wxGTK31
 , xorg
@@ -48,16 +51,19 @@ let
       "--enable-debug=no"
     ];
   });
+  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
+    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
+  });
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.07.06.92";
+  version = "01.08.00.62";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-6GpPBVPXPcdZ/YvG1RNaBS1DMNp7nbRH5IP1/Z4CJCc=";
+    hash = "sha256-Rb8YNf+ZQ8+9jAP/ZLze0PfY/liE7Rr2bJX33AENsbg=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost
+    boost179
     cereal
     cgal_5
     curl
@@ -92,9 +98,9 @@ stdenv.mkDerivation rec {
     mpfr
     nlopt
     opencascade-occt
-    openvdb
+    openvdb_tbb_2021_8
     pcre
-    tbb
+    tbb_2021_8
     webkitgtk
     wxGTK31'
     xorg.libX11
