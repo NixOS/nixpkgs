@@ -67,7 +67,7 @@ self: super: {
 
   doctest = doDistribute super.doctest_0_22_2;
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
-  some = doDistribute self.some_1_0_5;
+  some = doDistribute self.some_1_0_6;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
   th-desugar = doDistribute self.th-desugar_1_15;
   semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
