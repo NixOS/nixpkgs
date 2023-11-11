@@ -1,10 +1,17 @@
 { lib
 , stdenvNoCC }:
 
-let fileName = pathStr: lib.last (lib.splitString "/" pathStr);
+let
+  escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
+  fileName = pathStr: lib.last (lib.splitString "/" pathStr);
+  scriptsDir = "$out/share/mpv/scripts";
 in
 lib.makeOverridable (
-  { pname, scriptPath ? "${pname}.lua", ... }@args:
+  { pname
+  , scriptPath ? "${pname}.lua"
+  , extraScripts ? []
+  , ... }@args:
+
   stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
     dontBuild = true;
     preferLocalBuild = true;
@@ -12,7 +19,8 @@ lib.makeOverridable (
     outputHashMode = "recursive";
     installPhase = ''
       runHook preInstall
-      install -m644 -Dt $out/share/mpv/scripts ${scriptPath}
+      install -m644 -Dt "${scriptsDir}" \
+        ${escapedList ([ scriptPath ] ++ extraScripts)}
       runHook postInstall
     '';
 
