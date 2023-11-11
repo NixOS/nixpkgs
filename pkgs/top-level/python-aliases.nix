@@ -390,6 +390,7 @@ mapAliases ({
   repeated_test = repeated-test; # added 2022-11-15
   repoze_lru = repoze-lru; # added 2023-11-11
   repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
+  repoze_who = repoze-who; # added 2023-11-11
   requests_oauthlib = requests-oauthlib; # added 2022-02-12
   requests_toolbelt = requests-toolbelt; # added 2017-09-26
   restructuredtext_lint = restructuredtext-lint; # added 2023-11-04

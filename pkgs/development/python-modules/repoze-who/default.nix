@@ -6,11 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "repoze.who";
+  pname = "repoze-who";
   version = "3.0.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "repoze.who";
+    inherit version;
     hash = "sha256-6VWt8AwfCwxxXoKJeaI37Ev37nCCe9l/Xhe/gnYNyzA=";
   };
 

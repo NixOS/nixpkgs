@@ -12444,7 +12444,7 @@ self: super: with self; {
 
   repoze-sphinx-autointerface = callPackage ../development/python-modules/repoze-sphinx-autointerface { };
 
-  repoze_who = callPackage ../development/python-modules/repoze_who { };
+  repoze-who = callPackage ../development/python-modules/repoze-who { };
 
   reproject = callPackage ../development/python-modules/reproject { };
 
