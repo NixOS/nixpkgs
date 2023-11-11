@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyvisa-py";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pyvisa";
     repo = "pyvisa-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-wMDO0CUCSSCB8cXvTmIEWD8OGMZRZNhmmRx+fZnK288=";
+    hash = "sha256-zsa4TGDvvPAogOC0ljXC9uwWC9mteldUYprLmwrXNMQ=";
   };
 
   nativeBuildInputs = [
