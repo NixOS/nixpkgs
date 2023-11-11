@@ -112,8 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
   ;
 
   passthru = {
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "vips --version";
+      };
     };
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "v([0-9.]+)" ];
