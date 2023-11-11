@@ -64,6 +64,12 @@ stdenv.mkDerivation rec {
     make -C tools/migration
   '';
 
+  buildFlags = [
+    # don't search for configs in the nix store when running prosodyctl
+    "INSTALLEDCONFIG=/etc/prosody"
+    "INSTALLEDDATA=/var/lib/prosody"
+  ];
+
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
