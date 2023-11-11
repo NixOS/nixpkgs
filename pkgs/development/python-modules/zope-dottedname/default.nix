@@ -1,19 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zope-dottedname";
-  version = "5.0";
+  version = "6.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "zope.dottedname";
     inherit version;
-    hash = "sha256-mfWDqAKFhqtMIXlGE+QR0BDNCZF/RdqXa9/udI87++w=";
+    hash = "sha256-28S4W/vzSx74jasWJSrG7xbZBDnyIjstCiYs9Bnq6QI=";
   };
 
   nativeBuildInputs = [
