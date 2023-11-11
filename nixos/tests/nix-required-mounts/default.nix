@@ -26,11 +26,13 @@ in
           guest = "/run/opengl-driver/lib";
         }
       ];
+      unsafeFollowSymlinks = true;
     };
     users.users.person.isNormalUser = true;
     systemd.tmpfiles.rules = [
       "d /supported-feature-files 0755 person users -"
-      "f /usr/lib/imaginary-fhs-drivers/libcuda.so 0444 root root -"
+      "f /usr/lib/libcuda.so 0444 root root - fakeContent"
+      "L /usr/lib/imaginary-fhs-drivers/libcuda.so 0444 root root - /usr/lib/libcuda.so"
     ];
   };
   testScript = ''

@@ -143,17 +143,24 @@ def entrypoint():
     mounts: List[Tuple[PathString, PathString]] = []
 
     while queue:
-        guest_path, host_path, follow_symlinks = queue.popleft()
-        if (guest_path, host_path) not in unique_mounts:
-            mounts.append((guest_path, host_path))
-            unique_mounts.add((guest_path, host_path))
+        guest_path_str, host_path_str, follow_symlinks = queue.popleft()
+        if (guest_path_str, host_path_str) not in unique_mounts:
+            mounts.append((guest_path_str, host_path_str))
+            unique_mounts.add((guest_path_str, host_path_str))
 
         if not follow_symlinks:
             continue
 
-        for parent in symlink_parents(Path(host_path)):
-            parent_str = parent.absolute().as_posix()
-            queue.append((parent_str, parent_str, follow_symlinks))
+        host_path = Path(host_path_str)
+        if not (host_path.is_dir() or host_path.is_symlink()):
+            continue
+
+        # assert host_path_str == guest_path_str, (host_path_str, guest_path_str)
+
+        for child in host_path.iterdir() if host_path.is_dir() else [host_path]:
+            for parent in symlink_parents(child):
+                parent_str = parent.absolute().as_posix()
+                queue.append((parent_str, parent_str, follow_symlinks))
 
     # the pre-build-hook command
     if args.issue_command == "always" or (
@@ -165,8 +172,8 @@ def entrypoint():
         print_paths = False
 
     # arguments, one per line
-    for guest_path, host_path in mounts if print_paths else []:
-        print(f"{guest_path}={host_path}")
+    for guest_path_str, host_path_str in mounts if print_paths else []:
+        print(f"{guest_path_str}={host_path_str}")
 
     # terminated by an empty line
     something_to_terminate = args.issue_stop == "conditional" and mounts
