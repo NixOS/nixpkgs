@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-artifact-registry";
-  version = "1.8.4";
+  version = "1.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LeulycAGXPji5jxUfpOkkhhn1XJh1X1KdWvhAxUp4ig=";
+    hash = "sha256-NITSosBPrfpIC+FqVU0B5H5MT0taEjzTcl6GW03X8yU=";
   };
 
   propagatedBuildInputs = [
