@@ -89,6 +89,7 @@
 , withX ? !(stdenv.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
 , withXwidgets ? !stdenv.isDarwin && !noGui && (withGTK3 || withPgtk)
+, withSmallJaDic ? false
 
 # Options
 , siteStart ? ./site-start.el
@@ -337,6 +338,7 @@ mkDerivation (finalAttrs: {
   ++ lib.optional withTreeSitter "--with-tree-sitter"
   ++ lib.optional withXinput2 "--with-xinput2"
   ++ lib.optional withXwidgets "--with-xwidgets"
+  ++ lib.optional withSmallJaDic "--with-small-ja-dic"
   ;
 
   env = lib.optionalAttrs withNativeCompilation {
