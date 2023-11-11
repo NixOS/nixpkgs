@@ -8,10 +8,17 @@ let
 in
 lib.makeOverridable (
   { pname
-  , scriptPath ? "${pname}.lua"
   , extraScripts ? []
   , ... }@args:
-
+  let
+    # either passthru.scriptName, inferred from scriptPath, or from pname
+    scriptName = (args.passthru or {}).scriptName or (
+      if args ? scriptPath
+      then fileName args.scriptPath
+      else "${pname}.lua"
+    );
+    scriptPath = args.scriptPath or "./${scriptName}";
+  in
   stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
     dontBuild = true;
     preferLocalBuild = true;
@@ -24,7 +31,7 @@ lib.makeOverridable (
       runHook postInstall
     '';
 
-    passthru.scriptName = fileName scriptPath;
+    passthru = { inherit scriptName; };
     meta.platforms = lib.platforms.all;
   } args)
 )
