@@ -5855,6 +5855,8 @@ self: super: with self; {
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
+  jwt = callPackage ../development/python-modules/jwt { };
+
   jxmlease = callPackage ../development/python-modules/jxmlease { };
 
   k-diffusion = callPackage ../development/python-modules/k-diffusion { };
@@ -8282,8 +8284,6 @@ self: super: with self; {
   nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
-
-  python-jwt = callPackage ../development/python-modules/python-jwt { };
 
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
