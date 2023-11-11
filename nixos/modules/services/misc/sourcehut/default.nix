@@ -807,7 +807,7 @@ in
             "chown ${cfg.hg.user}:${cfg.hg.group} /var/log/sourcehut/hgsrht-keys"
           ]);
         serviceConfig = {
-          LogsDirectory = mkIf (cfg.git.enable || cfg.hg.enable) "sourcehut";
+          LogsDirectory = "sourcehut";
           BindReadOnlyPaths =
             # Note that those /usr/bin/* paths are hardcoded in multiple places in *.sr.ht,
             # for instance to get the user from the [git.sr.ht::dispatch] settings.
