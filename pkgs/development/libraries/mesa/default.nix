@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl, fetchpatch, buildPackages
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
@@ -66,7 +66,6 @@
 , enablePatentEncumberedCodecs ? true
 , jdupes
 , rustc
-, rust-bindgen
 , spirv-llvm-translator
 , zstd
 , directx-headers
@@ -98,9 +97,9 @@ let
   # Align all the Mesa versions used. Required to prevent explosions when
   # two different LLVMs are loaded in the same process.
   # FIXME: these should really go into some sort of versioned LLVM package set
-  rust-bindgen' = rust-bindgen.override {
-    rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
-      clang = llvmPackages.clang;
+  rust-bindgen' = buildPackages.rust-bindgen.override {
+    rust-bindgen-unwrapped = buildPackages.rust-bindgen.unwrapped.override {
+      clang = buildPackages.llvmPackages_15.clang;
     };
   };
   spirv-llvm-translator' = spirv-llvm-translator.override {
@@ -201,7 +200,8 @@ self = stdenv.mkDerivation {
     "-Dglvnd=true"
 
     # Enable RT for Intel hardware
-    "-Dintel-clc=enabled"
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
+    (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
     "-Dgallium-opencl=icd"
@@ -217,7 +217,7 @@ self = stdenv.mkDerivation {
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
   buildInputs = with xorg; [
-    expat llvmPackages.libllvm libglvnd xorgproto
+    expat glslang llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
@@ -225,19 +225,21 @@ self = stdenv.mkDerivation {
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
+    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [ pkg-config ]
+    ++ lib.optional enableOpenCL buildPackages.stdenv.cc;
 
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optional haveWayland wayland-scanner;
+  ] ++ lib.optionals enableOpenCL [ rust-bindgen' rustc ]
+    ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm

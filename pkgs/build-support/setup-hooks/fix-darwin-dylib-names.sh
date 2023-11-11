@@ -36,5 +36,5 @@ fixDarwinDylibNames() {
 
 fixDarwinDylibNamesIn() {
     local dir="$1"
-    fixDarwinDylibNames $(find "$dir" -name "*.dylib")
+    fixDarwinDylibNames $(find "$dir" -name "*.dylib" -o -name "*.so" -o -name "*.so.*")
 }

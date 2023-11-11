@@ -28,7 +28,7 @@ in rec {
   cctools_ = darwin.cctools;
 
   # Avoid debugging larger changes for now.
-  bzip2_ = bzip2.override (args: { linkStatic = true; });
+  bzip2_ = bzip2.override (args: { enableStatic = true; enableShared = false; });
 
   # Avoid messing with libkrb5 and libnghttp2.
   curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });

@@ -1,6 +1,7 @@
 { lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
 , enableButteraugli ? true, libjxl
 , enableVmaf ? true, libvmaf
+, gitUpdater
 }:
 
 let
@@ -8,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    sha256 = "sha256-U7hmKdpjTtqStM4UIjCvgJ2swpZ1x0Px1Q9+gSHbaeQ=";
+    hash = "sha256-Zf0g/CMI73O9Dkn9o7aIvwZ/8wh3lCmVY8nZaPwBp68=";
     stripRoot = false;
   };
 
@@ -63,6 +64,14 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "bin" "dev" "static" ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://aomedia.googlesource.com/aom";
+      rev-prefix = "v";
+      ignoredVersions = "(alpha|beta|rc).*";
+    };
+  };
 
   meta = with lib; {
     description = "Alliance for Open Media AV1 codec library";

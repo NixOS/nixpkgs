@@ -124,7 +124,7 @@
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
-, withSysusers ? false # conflicts with the NixOS user management
+, withSysusers ? true
 , withSysupdate ? true
 , withTimedated ? true
 , withTimesyncd ? true
@@ -729,6 +729,8 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/share/doc
   '' + lib.optionalString (withKmod && !buildLibsOnly) ''
     mv $out/lib/modules-load.d $out/example
+  '' + lib.optionalString withSysusers ''
+    mv $out/lib/sysusers.d $out/example
   '';
 
   # Avoid *.EFI binary stripping. At least on aarch64-linux strip

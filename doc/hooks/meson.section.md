@@ -1,50 +1,83 @@
 # Meson {#meson}
 
-Overrides the configure, check, and install phases to run `meson setup`, `meson test`, and `meson install`.
+[Meson](https://mesonbuild.com/) is an open source meta build system meant to be
+fast and user-friendly.
 
-Meson is a meta-build system so you will need a secondary build system to run the generated build files in build phase. In Nixpkgs context, you will want to accompany Meson with ninja, which provides a [setup hook](#ninja) registering a ninja-based build phase.
+In Nixpkgs, meson comes with a setup hook that overrides the configure, check,
+and install phases.
 
-By default, `enableParallelBuilding` is enabled as Meson supports parallel building almost everywhere.
+Being a meta build system, meson needs an accompanying backend. In the context
+of Nixpkgs, the typical companion backend is [Ninja](#ninja), that provides a
+setup hook registering ninja-based build and install phases.
 
-## Variables controlling Meson {#variables-controlling-meson}
+## Variables controlling Meson {#meson-variables-controlling}
 
-### `mesonFlags` {#mesonflags}
+### Meson Exclusive Variables {#meson-exclusive-variables}
 
-Controls the flags passed to `meson setup`.
+#### `mesonFlags` {#meson-flags}
 
-### `mesonCheckFlags` {#mesoncheckflags}
+Controls the flags passed to `meson setup` during configure phase.
 
-Controls the flags passed to `meson test`.
+#### `mesonWrapMode` {#meson-wrap-mode}
 
-### `mesonInstallFlags` {#mesoninstallflags}
+Which value is passed as
+[`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#core-options)
+to. In Nixpkgs the default value is `nodownload`, so that no subproject will be
+downloaded (since network access is already disabled during deployment in
+Nixpkgs).
 
-Controls the flags passed to `meson install`.
+Note: Meson allows pre-population of subprojects that would otherwise be
+downloaded.
 
-### `mesonInstallTags` {#mesoninstalltags}
+#### `mesonBuildType` {#meson-build-type}
 
-Tags specified here will be passed to Meson as via `--tags` during
-installation and controls which components will be installed.
+Which value is passed as
+[`--buildtype`](https://mesonbuild.com/Builtin-options.html#core-options) to
+`meson setup` during configure phase. In Nixpkgs the default value is `plain`.
 
-### `mesonBuildType` {#mesonbuildtype}
+#### `mesonAutoFeatures` {#meson-auto-features}
 
-Which [`--buildtype`](https://mesonbuild.com/Builtin-options.html#core-options) to pass to `meson setup`. We default to `plain`.
+Which value is passed as
+[`-Dauto_features=`](https://mesonbuild.com/Builtin-options.html#core-options)
+to `meson setup` during configure phase. In Nixpkgs the default value is
+`enabled`, meaning that every feature declared as "auto" by the meson scripts
+will be enabled.
 
-### `mesonAutoFeatures` {#mesonautofeatures}
+#### `mesonCheckFlags` {#meson-check-flags}
 
-What value to set [`-Dauto_features=`](https://mesonbuild.com/Builtin-options.html#core-options) to. We default to `enabled`.
+Controls the flags passed to `meson test` during check phase.
 
-### `mesonWrapMode` {#mesonwrapmode}
+#### `mesonInstallFlags` {#meson-install-flags}
 
-What value to set [`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#core-options) to. We default to `nodownload` as we disallow network access.
+Controls the flags passed to `meson install` during install phase.
 
-### `dontUseMesonConfigure` {#dontusemesonconfigure}
+#### `mesonInstallTags` {#meson-install-tags}
 
-Disables using Meson’s `configurePhase`.
+A list of installation tags passed to Meson's commandline option
+[`--tags`](https://mesonbuild.com/Installing.html#installation-tags) during
+install phase.
 
-### `dontUseMesonCheck` {#dontusemesoncheck}
+Note: `mesonInstallTags` should be a list of strings, that will be converted to
+a comma-separated string that is recognized to `--tags`.
+Example: `mesonInstallTags = [ "emulator" "assembler" ];` will be converted to
+`--tags emulator,assembler`.
 
-Disables using Meson’s `checkPhase`.
+#### `dontUseMesonConfigure` {#dont-use-meson-configure}
 
-### `dontUseMesonInstall` {#dontusemesoninstall}
+When set to true, don't use the predefined `mesonConfigurePhase`.
 
-Disables using Meson’s `installPhase`.
+#### `dontUseMesonCheck` {#dont-use-meson-check}
+
+When set to true, don't use the predefined `mesonCheckPhase`.
+
+#### `dontUseMesonInstall` {#dont-use-meson-install}
+
+When set to true, don't use the predefined `mesonInstallPhase`.
+
+### Honored variables {#meson-honored-variables}
+
+The following variables commonly used by `stdenv.mkDerivation` are honored by
+Meson setup hook.
+
+- `prefixKey`
+- `enableParallelBuilding`

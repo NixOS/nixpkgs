@@ -1,6 +1,7 @@
---- a/Utilities/cmcurl/CMakeLists.txt
-+++ b/Utilities/cmcurl/CMakeLists.txt
-@@ -391,13 +391,6 @@ if(ENABLE_IPV6 AND NOT WIN32)
+diff -Naur cmake-3.27.7/Utilities/cmcurl/CMakeLists.txt cmake-3.27.7-new/Utilities/cmcurl/CMakeLists.txt
+--- cmake-3.27.7/Utilities/cmcurl/CMakeLists.txt	2023-10-06 10:08:35.000000000 -0300
++++ cmake-3.27.7-new/Utilities/cmcurl/CMakeLists.txt	2023-10-22 21:51:09.231609901 -0300
+@@ -414,13 +414,6 @@
  
    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND NOT ENABLE_ARES)
      set(use_core_foundation ON)
@@ -14,9 +15,10 @@
    endif()
  endif()
  
---- a/Utilities/cmcurl/lib/curl_setup.h
-+++ b/Utilities/cmcurl/lib/curl_setup.h
-@@ -257,11 +257,7 @@
+diff -Naur cmake-3.27.7/Utilities/cmcurl/lib/curl_setup.h cmake-3.27.7-new/Utilities/cmcurl/lib/curl_setup.h
+--- cmake-3.27.7/Utilities/cmcurl/lib/curl_setup.h	2023-10-06 10:08:35.000000000 -0300
++++ cmake-3.27.7-new/Utilities/cmcurl/lib/curl_setup.h	2023-10-22 21:52:00.214748294 -0300
+@@ -260,11 +260,7 @@
   * performing this task will result in a synthesized IPv6 address.
   */
  #if defined(__APPLE__) && !defined(USE_ARES)
@@ -28,9 +30,10 @@
  #endif
  
  #ifdef USE_LWIPSOCK
---- a/Utilities/cmcurl/lib/hostip.c
-+++ b/Utilities/cmcurl/lib/hostip.c
-@@ -68,10 +68,6 @@
+diff -Naur cmake-3.27.7/Utilities/cmcurl/lib/hostip.c cmake-3.27.7-new/Utilities/cmcurl/lib/hostip.c
+--- cmake-3.27.7/Utilities/cmcurl/lib/hostip.c	2023-10-06 10:08:35.000000000 -0300
++++ cmake-3.27.7-new/Utilities/cmcurl/lib/hostip.c	2023-10-22 21:53:29.249989934 -0300
+@@ -67,10 +67,6 @@
  #include "curl_memory.h"
  #include "memdebug.h"
  
@@ -38,10 +41,10 @@
 -#include <SystemConfiguration/SCDynamicStoreCopySpecific.h>
 -#endif
 -
- #if defined(CURLRES_SYNCH) && \
-     defined(HAVE_ALARM) && defined(SIGALRM) && defined(HAVE_SIGSETJMP)
- /* alarm-based timeouts can only be used with all the dependencies satisfied */
-@@ -661,23 +657,6 @@ enum resolve_t Curl_resolv(struct Curl_easy *data,
+ #if defined(CURLRES_SYNCH) &&                   \
+   defined(HAVE_ALARM) &&                        \
+   defined(SIGALRM) &&                           \
+@@ -743,23 +739,6 @@
          return CURLRESOLV_ERROR;
      }
  

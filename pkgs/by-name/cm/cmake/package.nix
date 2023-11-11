@@ -16,11 +16,17 @@
 , texinfo
 , xz
 , zlib
-, isBootstrap ? false
-, useOpenSSL ? !isBootstrap
-, useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
+, isBootstrap ? null
+, isMinimalBuild ? (
+  if isBootstrap != null
+  then lib.warn
+    "isBootstrap argument is deprecated and will be removed; use isMinimalBuild instead"
+    isBootstrap
+  else false)
+, useOpenSSL ? !isMinimalBuild
+, useSharedLibraries ? (!isMinimalBuild && !stdenv.isCygwin)
 , uiToolkits ? [] # can contain "ncurses" and/or "qt5"
-, buildDocs ? !(isBootstrap || (uiToolkits == []))
+, buildDocs ? !(isMinimalBuild || (uiToolkits == []))
 , darwin
 , libsForQt5
 }:
@@ -34,17 +40,17 @@ in
 # Accepts only "ncurses" and "qt5" as possible uiToolkits
 assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
 # Minimal, bootstrap cmake does not have toolkits
-assert isBootstrap -> (uiToolkits == []);
+assert isMinimalBuild -> (uiToolkits == []);
 stdenv.mkDerivation (finalAttrs: {
   pname = "cmake"
-    + lib.optionalString isBootstrap "-boot"
+    + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.26.4";
+  version = "3.27.7";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MTtogMKRvU/jHAqlHW5iZZKCpSHmlfMNXMDSWrvVwgg=";
+    hash = "sha256-CPcaEGA2vwUfaSdg75VYwFd8Qqw56Wugl+dmK9QVjY4=";
   };
 
   patches = [
@@ -57,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
-  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./005-remove-systemconfiguration-dep.diff
+  ++ lib.optional (stdenv.isDarwin && isMinimalBuild) ./005-remove-systemconfiguration-dep.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
   ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
 
@@ -90,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional useOpenSSL openssl
   ++ lib.optional cursesUI ncurses
   ++ lib.optional qt5UI qtbase
-  ++ lib.optional (stdenv.isDarwin && !isBootstrap) SystemConfiguration;
+  ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
@@ -104,12 +110,23 @@ stdenv.mkDerivation (finalAttrs: {
     configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
+  # The configuration script is not autoconf-based, although being similar;
+  # triples and other interesting info are passed via CMAKE_* environment
+  # variables and commandline switches
+  configurePlatforms = [ ];
+
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
   ] ++ (if useSharedLibraries
-        then [ "--no-system-jsoncpp" "--system-libs" ]
-        else [ "--no-system-libs" ]) # FIXME: cleanup
+        then [
+          "--no-system-cppdap"
+          "--no-system-jsoncpp"
+          "--system-libs"
+        ]
+        else [
+          "--no-system-libs"
+        ]) # FIXME: cleanup
   ++ lib.optional qt5UI "--qt-gui"
   ++ lib.optionals buildDocs [
     "--sphinx-build=${sphinx}/bin/sphinx-build"
@@ -129,15 +146,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
     # strip. Otherwise they are taken to be relative to the source root of the
     # package being built.
-    "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
-    "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
-    "-DCMAKE_AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
-    "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
-    "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${stdenv.cc.targetPrefix}c++")
+    (lib.cmakeFeature "CMAKE_C_COMPILER" "${stdenv.cc.targetPrefix}cc")
+    (lib.cmakeFeature "CMAKE_AR"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar")
+    (lib.cmakeFeature "CMAKE_RANLIB"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib")
+    (lib.cmakeFeature "CMAKE_STRIP"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip")
 
-    "-DCMAKE_USE_OPENSSL=${if useOpenSSL then "ON" else "OFF"}"
-    # Avoid depending on frameworks.
-    "-DBUILD_CursesDialog=${if cursesUI then "ON" else "OFF"}"
+    (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
+    (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
   ];
 
   # make install attempts to use the just-built cmake
@@ -147,10 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
-
-  # This isn't an autoconf configure script; triples are passed via
-  # CMAKE_SYSTEM_NAME, etc.
-  configurePlatforms = [ ];
 
   doCheck = false; # fails
 
