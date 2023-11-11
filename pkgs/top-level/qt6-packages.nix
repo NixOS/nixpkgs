@@ -29,6 +29,7 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  kdsoap = callPackage ../development/libraries/kdsoap { };
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
 
