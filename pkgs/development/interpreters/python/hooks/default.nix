@@ -108,7 +108,7 @@ in {
       name = "pytest-check-xfail-hook";
       propagatedBuildInputs = [
         pytestCheckHook
-        pytest-nixpkgs-network-xfail
+        pytest-nixpkgs-xfail-hook
       ];
     } ./pytest-check-xfail-hook.sh) {};
 
