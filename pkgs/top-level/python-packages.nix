@@ -10328,6 +10328,10 @@ self: super: with self; {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pylance = callPackage ../development/python-modules/pylance {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreFoundation Security;
+  };
+
   pylast = callPackage ../development/python-modules/pylast { };
 
   pylatexenc = callPackage ../development/python-modules/pylatexenc { };
