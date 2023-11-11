@@ -310,7 +310,7 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "mysql" "postgres" "sqlite" "mssql" "oracle" ];
+          type = types.enum [ "mysql" "postgres" "mssql" "oracle" ];
           default = "mysql";
           description = lib.mdDoc "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
