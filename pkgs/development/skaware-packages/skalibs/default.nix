@@ -1,4 +1,8 @@
-{ skawarePackages, pkgs }:
+{ lib
+, stdenv
+, skawarePackages
+, pkgs
+}:
 
 with skawarePackages;
 
@@ -21,6 +25,17 @@ buildPackage {
     # Empty the default path, which would be "/usr/bin:bin".
     # It would be set when PATH is empty. This hurts hermeticity.
     "--with-default-path="
+
+  ] ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+    # ./configure: sysdep posixspawnearlyreturn cannot be autodetected
+    # when cross-compiling. Please manually provide a value with the
+    # --with-sysdep-posixspawnearlyreturn=yes|no|... option.
+    #
+    # posixspawnearlyreturn: `yes` if the target has a broken
+    # `posix_spawn()` implementation that can return before the
+    # child has successfully exec'ed. That happens with old glibcs
+    # and some virtual platforms.
+    "--with-sysdep-posixspawnearlyreturn=no"
   ];
 
   postInstall = ''

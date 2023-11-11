@@ -503,6 +503,9 @@ buildStdenv.mkDerivation {
 
   preBuild = ''
     cd mozobj
+  '' + lib.optionalString (lib.versionAtLeast version "120") ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   postBuild = ''

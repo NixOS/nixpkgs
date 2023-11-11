@@ -6150,6 +6150,10 @@ self: super: with self; {
     pythonSupport = true;
   });
 
+  libfive = toPythonModule (pkgs.libfive.override {
+    inherit python;
+  });
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
@@ -12800,7 +12804,7 @@ self: super: with self; {
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
-    inherit (pkgs) cmake llvmPackages qt5;
+    inherit (pkgs) cmake llvmPackages_15 qt5;
   });
 
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
@@ -13688,6 +13692,8 @@ self: super: with self; {
   teletype = callPackage ../development/python-modules/teletype { };
 
   telfhash = callPackage ../development/python-modules/telfhash { };
+
+  telegram-text = callPackage ../development/python-modules/telegram-text { };
 
   temescal = callPackage ../development/python-modules/temescal { };
 

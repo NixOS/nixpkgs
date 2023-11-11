@@ -16252,7 +16252,7 @@ with pkgs;
   gforth = callPackage ../development/compilers/gforth { };
 
   gleam = callPackage ../development/compilers/gleam {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   gmqcc = callPackage ../development/compilers/gmqcc { };
@@ -22899,7 +22899,9 @@ with pkgs;
 
   libfabric = callPackage ../development/libraries/libfabric { };
 
-  libfive = qt6Packages.callPackage ../development/libraries/libfive { };
+  libfive = qt6Packages.callPackage ../development/libraries/libfive {
+    python = python3;
+  };
 
   libfixposix = callPackage ../development/libraries/libfixposix { };
 
@@ -26510,6 +26512,14 @@ with pkgs;
 
   home-assistant = callPackage ../servers/home-assistant { };
 
+  buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
+  home-assistant-custom-components = lib.recurseIntoAttrs
+    (callPackage ../servers/home-assistant/custom-components {
+      inherit (home-assistant.python.pkgs) callPackage;
+    });
+  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
+    (callPackage ../servers/home-assistant/custom-lovelace-modules {});
+
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
   home-assistant-component-tests = recurseIntoAttrs home-assistant.tests.components;
@@ -28605,8 +28615,6 @@ with pkgs;
 
   pps-tools = callPackage ../os-specific/linux/pps-tools { };
 
-  prayer = callPackage ../servers/prayer { };
-
   procps = if stdenv.isLinux
     then callPackage ../os-specific/linux/procps-ng { }
     else unixtools.procps;
@@ -30267,7 +30275,9 @@ with pkgs;
 
   dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
 
-  grass = callPackage ../applications/gis/grass { };
+  grass = callPackage ../applications/gis/grass {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
 
@@ -36451,7 +36461,9 @@ with pkgs;
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
-  webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs { };
+  webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
+    stdenv = if stdenv.cc.isClang then gccStdenv else stdenv;
+  };
 
   websploit = python3Packages.callPackage ../tools/security/websploit { };
 

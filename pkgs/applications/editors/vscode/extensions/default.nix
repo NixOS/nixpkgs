@@ -1575,8 +1575,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.126.493";
-          sha256 = "1an7z8z3xz2piw2xz1hdrs6l5rhpyvnjmb650ff2m4k24n01svfy";
+          version = "1.135.544";
+          sha256 = "sha256-OeG1nkQbQAfu8NuDEA+iaWy0ioFyXPe7Qm/CZIKPiX8=";
         };
 
         meta = {
@@ -1592,8 +1592,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.3.2023061502";
-          sha256 = "sha256-sUoKwlPDMz+iQbmIsD2JhyDwmUQzOyCHXaXCUaizQ7k=";
+          version = "0.11.2023111001";
+          sha256 = "sha256-sBDvqqyq0R0ZyS81G61fI9Vd860RIjhNzCqY0bdz1mg=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -3554,8 +3554,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.22";
-          sha256 = "sha256-fJcSJwwRVofduWEEMa5f2VrSfyONKPkFl9OW+++lSRw=";
+          version = "0.0.23";
+          sha256 = "sha256-NauXoYTAka8qXNPYlW5g7r6NNX1x8cnvDRbEGkRsMoY=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
