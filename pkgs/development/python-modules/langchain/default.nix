@@ -42,7 +42,6 @@
 , librosa
 , lxml
 , manifest-ml
-, markdownify
 , neo4j
 , networkx
 , nlpcloud
@@ -76,7 +75,6 @@
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
-, pytest-vcr
 , pytestCheckHook
 , requests-mock
 , responses
@@ -254,22 +252,22 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    markdownify
+    lark
     pandas
     pytest-asyncio
     pytest-mock
     pytest-socket
-    pytest-vcr
     pytestCheckHook
     requests-mock
     responses
     syrupy
     toml
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
+    "--only-core"
   ];
 
   disabledTests = [
@@ -279,6 +277,10 @@ buildPythonPackage rec {
 
     # these tests have network access
     "test_socket_disabled"
+  ];
+
+  pythonImportsCheck = [
+    "langchain"
   ];
 
   meta = with lib; {
