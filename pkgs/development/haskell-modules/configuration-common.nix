@@ -1046,13 +1046,19 @@ self: super: {
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
-  # requires git at test-time *and* runtime, but we'll just rely on users to
-  # bring their own git at runtime. Additionally, sensei passes `-package
-  # hspec-meta` to GHC in the tests, but doesn't depend on it itself.
-  sensei = overrideCabal (drv: {
+  # patch out a flaky test that depends on output from hspec >= v2.11.7.
+  # https://github.com/hspec/sensei/issues/125
+  sensei = appendPatch (fetchpatch {
+    url = "https://github.com/hspec/sensei/commit/5c11026fa48e13ea1c351ab882765eb0966f2e97.patch";
+    sha256 = "0n01paghasqy6q82g37dda9jhgcgk30xpys31b9zrifdk3gdjqff";
+  }) (overrideCabal (drv: {
+    # sensei passes `-package hspec-meta` to GHC in the tests, but doesn't
+    # depend on it itself.
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta ];
+    # requires git at test-time *and* runtime, but we'll just rely on users to
+    # bring their own git at runtime.
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
-  }) super.sensei;
+  }) super.sensei);
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
