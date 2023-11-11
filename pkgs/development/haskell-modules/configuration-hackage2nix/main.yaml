@@ -773,6 +773,7 @@ supported-platforms:
   systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
+  vty-windows:                                  [ platforms.windows ] # depends on Win32
   Win32-console:                                [ platforms.windows ]
   Win32-dhcp-server:                            [ platforms.windows ]
   Win32-errors:                                 [ platforms.windows ]
