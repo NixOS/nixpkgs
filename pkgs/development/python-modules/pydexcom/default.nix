@@ -25,11 +25,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
   # tests are interacting with the Dexcom API
   doCheck = false;
-  pythonImportsCheck = [ "pydexcom" ];
+
+  pythonImportsCheck = [
+    "pydexcom"
+  ];
 
   meta = with lib; {
     description = "Python API to interact with Dexcom Share service";
