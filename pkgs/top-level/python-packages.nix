@@ -12442,7 +12442,7 @@ self: super: with self; {
 
   repoze-lru = callPackage ../development/python-modules/repoze-lru { };
 
-  repoze_sphinx_autointerface = callPackage ../development/python-modules/repoze_sphinx_autointerface { };
+  repoze-sphinx-autointerface = callPackage ../development/python-modules/repoze-sphinx-autointerface { };
 
   repoze_who = callPackage ../development/python-modules/repoze_who { };
 

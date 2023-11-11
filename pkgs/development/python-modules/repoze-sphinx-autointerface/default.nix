@@ -8,12 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "repoze.sphinx.autointerface";
+  pname = "repoze-sphinx-autointerface";
   version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "repoze.sphinx.autointerface";
+    inherit version;
     hash = "sha256-SGvxQjpGlrkVPkiM750ybElv/Bbd6xSwyYh7RsYOKKE=";
   };
 
