@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , aiohttp
 , async-timeout
-, pytz
 , xmltodict
 , pythonOlder
 }:
@@ -25,7 +24,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     async-timeout
-    pytz
     xmltodict
   ];
 
