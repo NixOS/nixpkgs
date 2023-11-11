@@ -11,7 +11,7 @@ in lib.recurseIntoAttrs
     autodeint = callPackage ./autodeint.nix { };
     autoload = callPackage ./autoload.nix { };
     chapterskip = callPackage ./chapterskip.nix { inherit buildLua; };
-    convert = callPackage ./convert.nix { };
+    convert = callPackage ./convert.nix { inherit buildLua; };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { inherit buildLua; };
