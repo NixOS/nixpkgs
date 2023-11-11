@@ -27790,6 +27790,14 @@ with self; {
         hash = "sha256-2lHV8qKZPdM/WnuvNYphCGRAq7UOTdPKH0k56iYtPMI=";
         name = "WWWCurl-curl-7.71.0.patch";
       })
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/macports/macports-ports/62fb4c05790ca7f1f0cd68da9801bca6f1f91206/perl/p5-www-curl/files/constants-ignore-macros.patch";
+        hash = "sha256-zlW3roDVZ+JWEatwrvvXxtYxkCD3p89rQ+5iuqSI/gA=";
+        name = "WWWCurl-constants-ignore-macros.patch";
+
+        # Fix file path in patch
+        decode = "sed -e 's#Makefile.PL.orig#a/Makefile.PL#'";
+      })
     ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
     buildInputs = [ pkgs.curl ];
