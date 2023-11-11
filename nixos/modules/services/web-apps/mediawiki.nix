@@ -608,15 +608,15 @@ in
         ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
-          --dbserver "${dbAddr}" \
+          --dbserver ${lib.escapeShellArg dbAddr} \
           --dbport ${toString cfg.database.port} \
-          --dbname ${cfg.database.name} \
-          ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${cfg.database.tablePrefix}"} \
-          --dbuser ${cfg.database.user} \
-          ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${cfg.database.passwordFile}"} \
-          --passfile ${cfg.passwordFile} \
+          --dbname ${lib.escapeShellArg cfg.database.name} \
+          ${optionalString (cfg.database.tablePrefix != null) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"} \
+          --dbuser ${lib.escapeShellArg cfg.database.user} \
+          ${optionalString (cfg.database.passwordFile != null) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"} \
+          --passfile ${lib.escapeShellArg cfg.passwordFile} \
           --dbtype ${cfg.database.type} \
-          ${cfg.name} \
+          ${lib.escapeShellArg cfg.name} \
           admin
 
         ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
