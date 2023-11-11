@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  # autoreconfHook269 is needed for `bind-locales.patch` above
+  # autoreconfHook269 is needed for `suid-wrapper-path.patch` and
+  # `bind-locales.patch` above.
   # pkg-config-unwrapped is needed for `AC_CHECK_LIB` and `AC_SEARCH_LIBS`
   nativeBuildInputs = [ flex autoreconfHook269 pkg-config-unwrapped ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
