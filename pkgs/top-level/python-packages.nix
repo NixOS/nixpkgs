@@ -6012,6 +6012,8 @@ self: super: with self; {
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
+  lancedb = callPackage ../development/python-modules/lancedb { };
+
   langchain = callPackage ../development/python-modules/langchain { };
 
   langchainplus-sdk = callPackage ../development/python-modules/langchainplus-sdk { };
