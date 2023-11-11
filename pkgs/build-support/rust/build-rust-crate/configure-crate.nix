@@ -7,6 +7,7 @@
 , completeBuildDeps
 , completeDeps
 , crateAuthors
+, crateLinks
 , crateDescription
 , crateHomepage
 , crateFeatures
@@ -134,6 +135,7 @@ in ''
   export CARGO_CFG_TARGET_VENDOR=${stdenv.hostPlatform.parsed.vendor.name}
 
   export CARGO_MANIFEST_DIR=$(pwd)
+  export CARGO_MANIFEST_LINKS=${crateLinks}
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
   export TARGET="${stdenv.hostPlatform.rust.rustcTargetSpec}"
