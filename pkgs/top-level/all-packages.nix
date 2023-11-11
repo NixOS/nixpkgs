@@ -2055,6 +2055,8 @@ with pkgs;
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
 
+  supercronic = callPackage ../tools/system/supercronic { };
+
   supermin = callPackage ../tools/virtualization/supermin { };
 
   sx-go = callPackage ../tools/security/sx-go { };
