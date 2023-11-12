@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     description = "A small but very powerful text-based mail client";
     homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erikryb jfrankenau vrthra ma27 raitobezarius ];
+    maintainers = with maintainers; [ erikryb vrthra ma27 raitobezarius ];
     platforms   = platforms.unix;
   };
 }
