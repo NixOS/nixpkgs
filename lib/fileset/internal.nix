@@ -65,7 +65,7 @@ rec {
   # - Increment this version
   # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 3;
+  _currentVersion = 4;
 
   # Migrations between versions. The 0th element converts from v0 to v1, and so on
   migrations = [
@@ -98,6 +98,16 @@ rec {
         # All v1 file sets are not the new empty file set
         _internalIsEmptyWithoutBase = false;
         _internalVersion = 3;
+      }
+    )
+
+    # Convert v3 into v4: filesetTree's can now have an _internalBase that's a file
+    (
+      filesetV3:
+      filesetV3 // {
+        # This change is backwards compatible but not forwards compatible,
+        # old code can't handle files in _internalBase
+        _internalVersion = 4;
       }
     )
   ];
@@ -179,11 +189,15 @@ rec {
       else
         throw ''
           ${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
-    else if ! pathExists value then
-      throw ''
-        ${context} (${toString value}) is a path that does not exist.''
     else
-      _singleton value;
+      _create value (
+        # Only check for file existence if we need to know the file type
+        if ! pathExists value then
+          throw ''
+            ${context} (${toString value}) is a path that does not exist.''
+        else
+          pathType value
+      );
 
   # Coerce many values to filesets, erroring when any value cannot be coerced,
   # or if the filesystem root of the values doesn't match.
@@ -215,26 +229,6 @@ rec {
             Different filesystem roots are not supported.''
     else
       filesets;
-
-  # Create a file set from a path.
-  # Type: Path -> fileset
-  _singleton = path:
-    let
-      type = pathType path;
-    in
-    if type == "directory" then
-      _create path type
-    else
-      # This turns a file path ./default.nix into a fileset with
-      # - _internalBase: ./.
-      # - _internalTree: {
-      #     "default.nix" = <type>;
-      #   }
-      # See ./README.md#single-files
-      _create (dirOf path)
-        {
-          ${baseNameOf path} = type;
-        };
 
   # Expand a directory representation to an equivalent one in attribute set form.
   # All directory entries are included in the result.
@@ -375,9 +369,16 @@ rec {
   _printFileset = fileset:
     if fileset._internalIsEmptyWithoutBase then
       trace "(empty)" null
-    else
+    else if isAttrs fileset._internalTree || fileset._internalTree == "directory" then
       _printMinimalTree fileset._internalBase
-        (_normaliseTreeMinimal fileset._internalBase fileset._internalTree);
+        (_normaliseTreeMinimal fileset._internalBase fileset._internalTree)
+    else
+      # Pretty-printed file sets should always use a directory as the base path,
+      # since that's what toSource would require and how e.g. fileFilter works
+      _printMinimalTree (dirOf fileset._internalBase)
+        (_normaliseTreeMinimal (dirOf fileset._internalBase) {
+          ${baseNameOf fileset._internalBase} = fileset._internalTree;
+        });
 
   # Turn a fileset into a source filter function suitable for `builtins.path`
   # Only directories recursively containing at least one files are recursed into
@@ -808,7 +809,14 @@ rec {
     in
     if fileset._internalIsEmptyWithoutBase then
       _emptyWithoutBase
-    else
+    else if isAttrs fileset._internalTree || fileset._internalTree == "directory" then
       _create fileset._internalBase
-        (recurse fileset._internalBase fileset._internalTree);
+        (recurse fileset._internalBase fileset._internalTree)
+    else
+      # The recurse function can only handle directories
+      # Single files in the _internalBase need to be turned into a directory with only that file
+      _create (dirOf fileset._internalBase)
+        (recurse (dirOf fileset._internalBase) {
+          ${baseNameOf fileset._internalBase} = fileset._internalTree;
+        });
 }

@@ -404,23 +404,25 @@ expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set i
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
-    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalIsEmptyWithoutBase = false; _internalVersion = 3; _type = "fileset"; }'
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalIsEmptyWithoutBase = false; _internalVersion = 4; _type = "fileset"; }'
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' \
-    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
+    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 4; }'
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2; }' \
-    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
+    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 4; }'
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 3; }' \
+    '{ _type = "fileset"; _internalVersion = 4; }'
 
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 4; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 4
-\s*- Internal version of the library: 3
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 5; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+\s*- Internal version of the file set: 5
+\s*- Internal version of the library: 4
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
   inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 3; }'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 4; }'
 
 #### Resulting store path ####
 
@@ -639,6 +641,12 @@ rm -rf -- *
 expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: First argument \('"$work"'/a\) is a path that does not exist.'
 expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: Second argument \('"$work"'/b\) is a path that does not exist.'
 
+# Files that wouldn't be included anyways don't need to exist
+tree=(
+    [a]=1
+)
+checkFileset 'intersection (union ./a ./b) (union ./a ./c)'
+
 # The tree of later arguments should not be evaluated if a former argument already excludes all files
 tree=(
     [a]=0
@@ -722,6 +730,30 @@ checkFileset 'difference ./. ./.'
 # The tree of the second argument should not be evaluated if not needed
 checkFileset 'difference _emptyWithoutBase (_create ./. (abort "This should not be used!"))'
 checkFileset 'difference (_create ./. null) (_create ./. (abort "This should not be used!"))'
+
+# We can try to remove non-existent files
+tree=(
+    [a]=1
+)
+checkFileset 'difference ./. ./b'
+checkFileset 'difference ./. (difference ./b ./b/d)'
+
+# A double-negative is currently not checked for existence
+# TODO: This behavior is not great, this should give an error instead.
+# Generally all files that would be included in the final result should be checked for existence
+tree=(
+    [a]=1
+    [b/c]=0
+)
+checkFileset 'difference ./. (difference ./b ./b/d)'
+
+# If a double-negative exists, it's included
+tree=(
+    [a]=1
+    [b/c]=0
+    [b/d]=1
+)
+checkFileset 'difference ./. (difference ./b ./b/d)'
 
 # Subtracting nothing gives the same thing back
 tree=(

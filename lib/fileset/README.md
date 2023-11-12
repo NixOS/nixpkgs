@@ -58,7 +58,8 @@ An attribute set with these values:
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
-  This is always a directory and should be as long as possible.
+  This path should be as long as possible.
+  This may be a directory or a file.
   This is used by `lib.fileset.toSource` to check that all files are under the `root` argument
 
 - `_internalBaseRoot` (path):

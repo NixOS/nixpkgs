@@ -3,7 +3,7 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
-    _singleton
+    _create
     _coerceMany
     _toSourceFilter
     _fromSourceFilter
@@ -262,7 +262,7 @@ in {
       _fromSourceFilter path source.filter
     else
       # If there's no filter, no need to run the expensive conversion, all subpaths will be included
-      _singleton path;
+      _create path (pathType path);
 
   /*
     The file set containing all files that are in either of two given file sets.

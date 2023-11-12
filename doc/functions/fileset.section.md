@@ -15,7 +15,8 @@ Such path arguments are implicitly coerced to file sets containing all files und
 - A path to a file turns into a file set containing that single file.
 - A path to a directory turns into a file set containing all files _recursively_ in that directory.
 
-If the path points to a non-existent location, an error is thrown.
+If the path points to a non-existent location, an error is thrown
+only once/if either the file's type or contents are needed.
 
 ::: {.note}
 Just like in Git, file sets cannot represent empty directories.
