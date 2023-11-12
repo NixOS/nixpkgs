@@ -70,7 +70,7 @@ let
 
     # group the specified outputs
     specified = builtins.partition (p: p.outputSpecified or false) all;
-    specifiedOutputs = builtins.groupBy (p: p.tlOutputName or p.outputName) specified.right;
+    specifiedOutputs = lib.groupBy (p: p.tlOutputName or p.outputName) specified.right;
     otherOutputNames = builtins.catAttrs "key" (builtins.genericClosure {
       startSet = map (key: { inherit key; }) (lib.concatLists (builtins.catAttrs "outputs" specified.wrong));
       operator = _: [ ];
