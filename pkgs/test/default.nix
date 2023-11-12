@@ -111,6 +111,7 @@ with pkgs;
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
+  fetchPypiLegacy = callPackages ../build-support/fetchpypilegacy/tests.nix { };
 
   install-shell-files = callPackage ./install-shell-files {};
 

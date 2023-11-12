@@ -14,6 +14,8 @@
   file,
   # SRI hash
   hash,
+  # allow overriding the derivation name
+  name ? null,
 }:
 let
   urls' = urls ++ lib.optional (url != null) url;
@@ -27,17 +29,16 @@ let
 in
 # Assert that we have at least one URL
 assert urls' != [ ]; runCommand file
-  {
+  ({
     nativeBuildInputs = [ python3 ];
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
     outputHashMode = "flat";
-    outputHashAlgo = null;
+    # if hash is empty select a default algo to let nix propose the actual hash.
+    outputHashAlgo = if hash == "" then "sha256" else null;
     outputHash = hash;
     NETRC = netrc_file;
-    passthru = {
-      urls = urls';
-    };
   }
+  // (lib.optionalAttrs (name != null) {inherit name;}))
   ''
     python ${./fetch-legacy.py} ${lib.concatStringsSep " " (map (url: "--url ${lib.escapeShellArg url}") urls')} --pname ${pname} --filename ${file}
     mv ${file} $out
