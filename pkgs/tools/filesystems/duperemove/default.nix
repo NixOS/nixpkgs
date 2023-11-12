@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ bluescreen303 thoughtpolice ];
     platforms = platforms.linux;
+    mainProgram = "duperemove";
   };
 }

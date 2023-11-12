@@ -44,6 +44,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Swordfish90/qmltermwidget";
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; linux ++ darwin;
-    maintainers = with lib.maintainers; [ skeidel ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

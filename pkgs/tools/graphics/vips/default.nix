@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ kovirobi ];
     platforms = platforms.unix;
+    mainProgram = "vips";
   };
 }
