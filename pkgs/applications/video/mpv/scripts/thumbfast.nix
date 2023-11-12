@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
 
   postPatch = ''
     substituteInPlace thumbfast.lua \
-      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getBin mpv-unwrapped}/bin/mpv"'
+      --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getExe mpv-unwrapped}"'
   '';
 
   dontBuild = true;
