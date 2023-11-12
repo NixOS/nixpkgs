@@ -10,7 +10,7 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Whether to enable the service. A service is enabled by default, because you took the effort to import it.
+        Whether to enable the service. A service is enabled by default, because you took the effort to define its attribute.
       '';
     };
     process = mkOption {
@@ -26,6 +26,7 @@ in
           Path to an executable that launches a process in foreground mode.
         '';
         default = config.process;
+        defaultText = literalExpression "config.process";
       };
       args = lib.mkOption {
         type = types.listOf pathOrStr;
@@ -43,6 +44,7 @@ in
           Path to an executable that launches a process in daemon mode.
         '';
         default = config.process;
+        defaultText = literalExpression "config.process";
       };
       args = lib.mkOption {
         type = types.listOf pathOrStr;
