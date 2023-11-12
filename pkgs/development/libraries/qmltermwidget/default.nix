@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , qmake
 , qtbase
 , qtquick1
@@ -30,6 +31,15 @@ stdenv.mkDerivation {
   ] ++ lib.optional stdenv.isDarwin utmp;
 
   patches = [
+    # Changes required to make it compatible with lomiri-terminal-app
+    # QML-exposed colorscheme, scrollbar & clipboard functionality
+    # Remove when https://github.com/Swordfish90/qmltermwidget/pull/39 merged
+    (fetchpatch {
+      name = "0001-qmltermwidget-lomiri-submissions.patch";
+      url = "https://github.com/Swordfish90/qmltermwidget/compare/63228027e1f97c24abb907550b22ee91836929c5..ffc6b2b2a20ca785f93300eca93c25c4b74ece17.patch";
+      hash = "sha256-1GjC2mdfP3NpePDWZaT8zvIq3vwWIZs+iQ9o01iQtD4=";
+    })
+
     # Some files are copied twice to the output which makes the build fails
     ./do-not-copy-artifacts-twice.patch
   ];
