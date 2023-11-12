@@ -1,14 +1,37 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    collect
+    concatLists
+    concatStringsSep
+    flip
+    getAttrFromPath
+    hasPrefix
+    isList
+    length
+    literalExpression
+    literalMD
+    mapAttrsRecursiveCond
+    mapAttrsToList
+    mdDoc
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOptionMD
+    optional
+    optionalAttrs
+    optionalString
+    types
+    ;
+
   cfg = config.services.thanos;
 
   nullOpt = type: description: mkOption {
     type = types.nullOr type;
     default = null;
-    description = lib.mdDoc description;
+    description = mdDoc description;
   };
 
   optionToArgs = opt: v  : optional (v != null)  ''--${opt}="${toString v}"'';
@@ -32,7 +55,7 @@ let
     option = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -41,7 +64,7 @@ let
     option = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -50,7 +73,7 @@ let
     option = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -59,7 +82,7 @@ let
     option = mkOption {
       type = types.str;
       inherit default;
-      description = lib.mdDoc description;
+      description = mdDoc description;
     };
   };
 
@@ -86,7 +109,7 @@ let
     defaultText = literalMD ''
       calculated from `config.services.thanos.${cmd}`
     '';
-    description = lib.mdDoc ''
+    description = mdDoc ''
       Arguments to the `thanos ${cmd}` command.
 
       Defaults to a list of arguments formed by converting the structured
@@ -127,7 +150,7 @@ let
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
           '';
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Path to YAML file that contains tracing configuration.
 
             See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
@@ -192,7 +215,7 @@ let
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
           '';
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Path to YAML file that contains object store configuration.
 
             See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
@@ -231,7 +254,7 @@ let
           type = types.str;
           default = "/var/lib/${config.services.prometheus.stateDir}/data";
           defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Data directory of TSDB.
           '';
         };
@@ -659,56 +682,56 @@ in {
 
   options.services.thanos = {
 
-    package = lib.mkPackageOptionMD pkgs "thanos" {};
+    package = mkPackageOptionMD pkgs "thanos" {};
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos sidecar for Prometheus server");
+        (mdDoc "the Thanos sidecar for Prometheus server");
       arguments = mkArgumentsOption "sidecar";
     };
 
     store = paramsToOptions params.store // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos store node giving access to blocks in a bucket provider.");
+        (mdDoc "the Thanos store node giving access to blocks in a bucket provider.");
       arguments = mkArgumentsOption "store";
     };
 
     query = paramsToOptions params.query // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos query node exposing PromQL enabled Query API " +
+        (mdDoc ("the Thanos query node exposing PromQL enabled Query API " +
          "with data retrieved from multiple store nodes"));
       arguments = mkArgumentsOption "query";
     };
 
     query-frontend = paramsToOptions params.query-frontend // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos query frontend implements a service deployed in front of queriers to
+        (mdDoc ("the Thanos query frontend implements a service deployed in front of queriers to
           improve query parallelization and caching."));
       arguments = mkArgumentsOption "query-frontend";
     };
 
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
+        (mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
         " given Query nodes, exposing Store API and storing old blocks in bucket"));
       arguments = mkArgumentsOption "rule";
     };
 
     compact = paramsToOptions params.compact // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos compactor which continuously compacts blocks in an object store bucket");
+        (mdDoc "the Thanos compactor which continuously compacts blocks in an object store bucket");
       arguments = mkArgumentsOption "compact";
     };
 
     downsample = paramsToOptions params.downsample // {
       enable = mkEnableOption
-        (lib.mdDoc "the Thanos downsampler which continuously downsamples blocks in an object store bucket");
+        (mdDoc "the Thanos downsampler which continuously downsamples blocks in an object store bucket");
       arguments = mkArgumentsOption "downsample";
     };
 
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb"));
+        (mdDoc ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb"));
       arguments = mkArgumentsOption "receive";
     };
   };
