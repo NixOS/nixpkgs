@@ -32,27 +32,47 @@ jobs:
           fetch-depth: 2
       - name: Determining PR git hashes
         run: |
+          # Please don't put any logic here.  To ensure local
+          # reproducibility, this file should only print diagnostics
+          # (`env`, `set -x`) and execute scripts found elsewhere in
+          # nixpkgs.
           env
           set -x
           exec pkgs/test/nixpkgs-check-by-name/workflows/check-by-name/determine-pr-hashes.sh
       - uses: cachix/install-nix-action@v23
       - name: Determining channel to use for dependencies
         run: |
+          # Please don't put any logic here.  To ensure local
+          # reproducibility, this file should only print diagnostics
+          # (`env`, `set -x`) and execute scripts found elsewhere in
+          # nixpkgs.
           env
           set -x
           exec pkgs/test/nixpkgs-check-by-name/workflows/check-by-name/determine-channel-for-dependencies.sh
       - name: Fetching latest version of channel
         run: |
+          # Please don't put any logic here.  To ensure local
+          # reproducibility, this file should only print diagnostics
+          # (`env`, `set -x`) and execute scripts found elsewhere in
+          # nixpkgs.
           env
           set -x
           exec pkgs/test/nixpkgs-check-by-name/workflows/check-by-name/fetch-latest-version-of-channel.sh
       - name: Fetching pre-built nixpkgs-check-by-name from the channel
         run: |
+          # Please don't put any logic here.  To ensure local
+          # reproducibility, this file should only print diagnostics
+          # (`env`, `set -x`) and execute scripts found elsewhere in
+          # nixpkgs.
           env
           set -x
           exec pkgs/test/nixpkgs-check-by-name/workflows/check-by-name/fetch-pre-built-by-name-from-channel.sh
       - name: Running nixpkgs-check-by-name
         run: |
+          # Please don't put any logic here.  To ensure local
+          # reproducibility, this file should only print diagnostics
+          # (`env`, `set -x`) and execute scripts found elsewhere in
+          # nixpkgs.
           env
           set -x
-          exec pkgs/test/nixpkgs-check-by-name/workflows/check-by-name/run-nixpkgs-check-by-name.sh
+          exec pkgs/test/nixpkgs-check-by-name/workflows/check-by-name/reproduce.sh "$baseSha" "$toolingSha" "$headSha"

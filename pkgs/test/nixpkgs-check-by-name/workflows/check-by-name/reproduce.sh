@@ -1,4 +1,28 @@
 #!/usr/bin/env bash
+
+set -e
+# Usage: pkgs/test/nixpkgs-check-by-name/reproduce.sh <base SHA> <tooling SHA> <merged SHA>
+
+# TODO(amjoseph): allow omitting the final argument, since it is
+# often a commit which exists only in github (and is difficult to
+# `git fetch` from github before the PR is merged).
+
+baseSha="$1"
+toolingBinariesSha="$2"
+mergedSha="$3"
+
+nixpkgs_for_tooling_binaries=$(nix-instantiate --eval --expr "builtins.fetchTarball \"https://github.com/nixos/nixpkgs/archive/$toolingBinariesSha.tar.gz\"" | tr -d '"')
+
+nix-store --realise --add-root nixpkgs-for-tooling-binaries $nixpkgs_for_tooling_binaries
+
+echo "Fetching pre-built nixpkgs-check-by-name from channel $channel at revision $toolingBinariesSha"
+nix-build \
+  --option extra-substituters https://cache.nixos.org \
+  --option trusted-public-keys 'cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=' \
+  nixpkgs-for-tooling-binaries \
+  -A tests.nixpkgs-check-by-name \
+  --max-jobs 0
+
 echo "Checking whether the check succeeds on the base branch $GITHUB_BASE_REF"
 git checkout -q "$baseSha"
 if baseOutput=$(result/bin/nixpkgs-check-by-name . 2>&1); then
@@ -70,10 +94,10 @@ resultToEmoji() {
     echo "  - Tooling binaries built at nixpkgs commit: [$toolingBinariesSha](https://github.com/${GITHUB_REPOSITORY}/commit/$toolingBinariesSha)"
     echo "  - Store path: \`$(realpath result)\`"
     echo "- Tested Nixpkgs:"
-    echo "  - Base branch: $GITHUB_BASE_REF"
+    echo "  - Base branch: $BASE_SHA"
     echo "  - Latest base branch commit: [$baseSha](https://github.com/${GITHUB_REPOSITORY}/commit/$baseSha)"
     echo "  - Latest PR commit: [$headSha](https://github.com/${GITHUB_REPOSITORY}/commit/$headSha)"
     echo "  - Merge commit: [$mergedSha](https://github.com/${GITHUB_REPOSITORY}/commit/$mergedSha)"
-} >> "$GITHUB_STEP_SUMMARY"
+} | tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}"
 
 exit "$exitCode"
