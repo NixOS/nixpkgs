@@ -2,13 +2,16 @@
 
 with lib;
 let
-  cfg = config.virtualisation.azureImage;
+  cfg = config.virtualisation.azure.image;
 in
 {
-  imports = [ ./azure-common.nix ];
+  imports = [
+    ./azure.nix
+    ./azure-init.nix
+  ];
 
   options = {
-    virtualisation.azureImage.diskSize = mkOption {
+    virtualisation.azure.image.diskSize = mkOption {
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 2048;
@@ -27,52 +30,36 @@ in
   config = {
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
+
+      # VHD images on Azure [1] must have virtual size aligned to 1MiB.
+      # We check image alignment and convert raw image to fixed size vhd image
       postVM = ''
+        size=$(${pkgs.vmTools.qemu}/bin/qemu-img info -f raw --output json $diskImage | ${pkgs.jq}/bin/jq '."virtual-size"')
+
+        echo "Check that image size is aligned to 1MiB (1024x1024)"
+        if (( size % (1024*1024) )); then
+          echo "ERROR: Image size have to be aligned to 1 MiB (1024x1024 bytes)"
+          exit 1
+        fi
+
+        echo "Convert raw image to vhd image"
         ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
         rm $diskImage
       '';
-      configFile = ./azure-config-user.nix;
+      configFile = builtins.toFile "azure-config-user.nix" ''
+        { modulesPath, ... }: {
+          # Base configuration for nixos on azure vm
+          imports = [ "''${modulesPath}/virtualisation/azure.nix" ];
+        }
+      '';
       format = "raw";
       inherit (cfg) diskSize contents;
       inherit config lib pkgs;
     };
-
-    # Azure metadata is available as a CD-ROM drive.
-    fileSystems."/metadata".device = "/dev/sr0";
-
-    systemd.services.fetch-ssh-keys = {
-      description = "Fetch host keys and authorized_keys for root user";
-
-      wantedBy = [ "sshd.service" "waagent.service" ];
-      before = [ "sshd.service" "waagent.service" ];
-
-      path  = [ pkgs.coreutils ];
-      script =
-        ''
-          eval "$(cat /metadata/CustomData.bin)"
-          if ! [ -z "$ssh_host_ecdsa_key" ]; then
-            echo "downloaded ssh_host_ecdsa_key"
-            echo "$ssh_host_ecdsa_key" > /etc/ssh/ssh_host_ed25519_key
-            chmod 600 /etc/ssh/ssh_host_ed25519_key
-          fi
-
-          if ! [ -z "$ssh_host_ecdsa_key_pub" ]; then
-            echo "downloaded ssh_host_ecdsa_key_pub"
-            echo "$ssh_host_ecdsa_key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
-            chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
-          fi
-
-          if ! [ -z "$ssh_root_auth_key" ]; then
-            echo "downloaded ssh_root_auth_key"
-            mkdir -m 0700 -p /root/.ssh
-            echo "$ssh_root_auth_key" > /root/.ssh/authorized_keys
-            chmod 600 /root/.ssh/authorized_keys
-          fi
-        '';
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = true;
-      serviceConfig.StandardError = "journal+console";
-      serviceConfig.StandardOutput = "journal+console";
-    };
   };
 }
+
+/*
+REFERENCES
+  1. https://docs.microsoft.com/en-us/azure/virtual-machines/linux/create-upload-generic#resizing-vhds
+*/
