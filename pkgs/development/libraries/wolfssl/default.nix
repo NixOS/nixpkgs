@@ -54,10 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Increase TLS session cache from 33 sessions to 20k.
     "--enable-bigcache"
 
+  ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
     # Use WolfSSL's Single Precision Math with timing-resistant cryptography.
     "--enable-sp=yes${lib.optionalString (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch) ",asm"}"
     "--enable-sp-math-all"
+  ] ++ [
     "--enable-harden"
+
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
     # Enable AVX/AVX2/AES-NI instructions, gated by runtime detection via CPUID.
     "--enable-intelasm"
