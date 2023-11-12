@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, setuptools
+, pytestCheckHook
 , numpy
 , pythonOlder
 , six
@@ -10,15 +11,19 @@
 buildPythonPackage rec {
   pname = "py-stringmatching";
   version = "0.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "py_stringmatching";
     inherit version;
-    sha256 = "sha256-khubsWOzEN80HDOCORMgT3sMqfajGfW0UUCDAL03je4=";
+    hash = "sha256-khubsWOzEN80HDOCORMgT3sMqfajGfW0UUCDAL03je4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -26,8 +31,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
   ];
+
+  preCheck = ''
+    cd $out
+  '';
 
   pythonImportsCheck = [
     "py_stringmatching"
