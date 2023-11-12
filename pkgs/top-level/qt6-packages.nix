@@ -31,6 +31,8 @@ makeScopeWithSplicing' {
   # LIBRARIES
   kdsoap = callPackage ../development/libraries/kdsoap { };
 
+  futuresql = callPackage ../development/libraries/futuresql { };
+
   qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
     inherit (qt6) qtbase qt5compat;
   };

@@ -19188,8 +19188,6 @@ with pkgs;
 
   funzzy = callPackage ../development/tools/misc/funzzy { };
 
-  futuresql = libsForQt5.callPackage ../development/libraries/futuresql { };
-
   fzf-make = callPackage ../development/tools/misc/fzf-make { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
