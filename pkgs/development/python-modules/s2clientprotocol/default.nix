@@ -1,19 +1,19 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromGitHub
 , protobuf
 }:
 
 buildPythonPackage rec {
   pname = "s2clientprotocol";
-  version = "3.19.1.58600.0";
+  version = "5.0.10.88500.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "02jqwdfj5zpag4c5nf0707qmwk7sqm98yfgrd19rq6pi58zgl74f";
+  src = fetchFromGitHub {
+    owner = "Blizzard";
+    repo = "s2client-proto";
+    rev = "db142363be5e4da522879b8b43db69c6313bcd57";
+    hash = "sha256-wKbE5s0Xu+IHHrJQhVpWWWVo9UyVM2y9jrwUGnD+Zt0=";
   };
-
-  patches = [ ./pure-version.patch ];
 
   buildInputs = [ protobuf ];
 
