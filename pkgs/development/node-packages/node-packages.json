@@ -149,6 +149,7 @@
 , "json-server"
 , "jsonlint"
 , "jsonplaceholder"
+, "jsrsasign"
 , "kaput-cli"
 , "katex"
 , "keyoxide"
