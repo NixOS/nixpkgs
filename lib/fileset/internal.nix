@@ -381,7 +381,7 @@ rec {
 
   # Turn a fileset into a source filter function suitable for `builtins.path`
   # Only directories recursively containing at least one files are recursed into
-  # Type: Path -> fileset -> (String -> String -> Bool)
+  # Type: fileset -> (String -> String -> Bool)
   _toSourceFilter = fileset:
     let
       # Simplify the tree, necessary to make sure all empty directories are null
@@ -753,9 +753,9 @@ rec {
 
       resultingTree =
         _differenceTree
-        positive._internalBase
-        positive._internalTree
-        negativeTreeWithPositiveBase;
+          positive._internalBase
+          positive._internalTree
+          negativeTreeWithPositiveBase;
     in
     # If the first file set is empty, we can never have any files in the result
     if positive._internalIsEmptyWithoutBase then
