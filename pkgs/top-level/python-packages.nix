@@ -16091,7 +16091,7 @@ self: super: with self; {
 
   zope-deprecation = callPackage ../development/python-modules/zope-deprecation { };
 
-  zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
+  zope-dottedname = callPackage ../development/python-modules/zope-dottedname { };
 
   zope_event = callPackage ../development/python-modules/zope_event { };
 
