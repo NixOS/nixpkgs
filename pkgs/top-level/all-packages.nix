@@ -27572,8 +27572,6 @@ with pkgs;
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
-  tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
-
   alsa-utils = callPackage ../by-name/al/alsa-utils/package.nix {
     fftw = fftwFloat;
   };
