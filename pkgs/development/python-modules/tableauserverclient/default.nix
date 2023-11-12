@@ -1,30 +1,39 @@
 { lib
 , buildPythonPackage
-, python
 , fetchPypi
 , defusedxml
 , requests
 , packaging
 , requests-mock
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
   version = "0.28";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-jSblDVkuuBBZ7GmPKUYji8wtRoPS7g8r6Ye9EpnjvKA=";
   };
 
-  propagatedBuildInputs = [ defusedxml requests packaging ];
+  propagatedBuildInputs = [
+    defusedxml
+    requests
+    packaging
+  ];
 
-  checkInputs = [ requests-mock ];
+  nativeCheckInputs = [
+    requests-mock
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  doCheck = false; # it attempts to create some file artifacts and fails
+  # Tests attempt to create some file artifacts and fails
+  doCheck = false;
 
   meta = with lib; {
     description = "Module for working with the Tableau Server REST API";
