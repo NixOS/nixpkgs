@@ -33,6 +33,7 @@ makeScopeWithSplicing' {
 
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
   qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
     inherit (qt6) qtbase qt5compat;
