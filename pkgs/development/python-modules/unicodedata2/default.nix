@@ -21,6 +21,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "unicodedata2"
+  ];
+
   meta = with lib; {
     description = "Backport and updates for the unicodedata module";
     homepage = "https://github.com/mikekap/unicodedata2";
