@@ -297,6 +297,7 @@ in (buildEnv {
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
     source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
+    texmf_scripts+=' texlive/rungs.lua' # TL2022: file was renamed from rungs.tlu to rungs.lua but not updated in scripts.lst
     for s in $texmf_scripts; do
       [[ -x "$TEXMFDIST/scripts/$s" ]] || continue
       tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
