@@ -26545,6 +26545,8 @@ with pkgs;
 
   kapowbang = callPackage ../servers/kapowbang { };
 
+  karton = callPackage ../servers/karton { };
+
   keycloak = callPackage ../servers/keycloak { };
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
