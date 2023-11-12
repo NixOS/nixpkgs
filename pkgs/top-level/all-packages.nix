@@ -22353,6 +22353,8 @@ with pkgs;
 
   lib3mf = callPackage ../development/libraries/lib3mf { };
 
+  lib7zip = callPackage ../development/libraries/lib7zip { };
+
   libAfterImage = callPackage ../development/libraries/libAfterImage { };
 
   libaacs = callPackage ../development/libraries/libaacs { };
