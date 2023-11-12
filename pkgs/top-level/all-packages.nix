@@ -1880,7 +1880,9 @@ with pkgs;
 
   goflow = callPackage ../tools/networking/goflow { };
 
-  goflow2 = callPackage ../tools/networking/goflow2 { };
+  goflow2-1_x = callPackage ../tools/networking/goflow2/1.x.nix { };
+  goflow2-2_x = callPackage ../tools/networking/goflow2 { };
+  goflow2 = goflow2-1_x;
 
   gofu = callPackage ../applications/misc/gofu { };
 
