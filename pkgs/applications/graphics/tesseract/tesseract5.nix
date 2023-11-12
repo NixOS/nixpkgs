@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , leptonica, libpng, libtiff, icu, pango, opencl-headers, fetchpatch
 , Accelerate, CoreGraphics, CoreVideo
 }:
@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
-    autoconf-archive
+    cmake
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=1"
   ];
 
   buildInputs = [
