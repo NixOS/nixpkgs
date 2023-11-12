@@ -11,9 +11,9 @@
 buildPythonPackage rec {
   pname = "dissect-fat";
   version = "3.6";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
