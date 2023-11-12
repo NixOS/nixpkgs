@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cargo, cmake, rust, rustc
+, darwin, cargo, cmake, rust, rustc, rustfmt
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -24,13 +24,15 @@
 let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
 
   src = fetchurl {
     url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
     inherit sha256;
+    # See https://nixos.org/manual/nixpkgs/stable/#using-git-bisect-on-the-rust-compiler
+    passthru.isReleaseTarball = true;
   };
 
   __darwinAllowLocalNetworking = true;
@@ -79,6 +81,12 @@ in stdenv.mkDerivation rec {
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
+  ] ++ lib.optionals (!(finalAttrs.src.passthru.isReleaseTarball or false)) [
+    # release tarballs vendor the rustfmt source; when
+    # git-bisect'ing from upstream's git repo we must prevent
+    # attempts to download the missing source tarball
+    "--set=build.rustfmt=${rustfmt}/bin/rustfmt"
+  ] ++ [
     "--tools=rustc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
@@ -203,6 +211,14 @@ in stdenv.mkDerivation rec {
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.
     export JEMALLOC_SYS_WITH_LG_VADDR=48
+  '' + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
+    mkdir .cargo
+    cat > .cargo/config <<\EOF
+    [source.crates-io]
+    replace-with = "vendored-sources"
+    [source.vendored-sources]
+    directory = "vendor"
+    EOF
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
@@ -281,4 +297,4 @@ in stdenv.mkDerivation rec {
       "i686-windows" "x86_64-windows"
     ];
   };
-}
+})
