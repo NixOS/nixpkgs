@@ -290,6 +290,24 @@ in buildPythonPackage rec {
   # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
   ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16") [
     "-Wno-error=cast-function-type-strict"
+  # Suppresses the most spammy warnings.
+  # This is mainly to fix https://github.com/NixOS/nixpkgs/issues/266895.
+  ] ++ lib.optionals rocmSupport [
+    "-Wno-#warnings"
+    "-Wno-cpp"
+    "-Wno-unknown-warning-option"
+    "-Wno-ignored-attributes"
+    "-Wno-deprecated-declarations"
+    "-Wno-defaulted-function-deleted"
+    "-Wno-pass-failed"
+  ] ++ [
+    "-Wno-unused-command-line-argument"
+    "-Wno-maybe-uninitialized"
+    "-Wno-uninitialized"
+    "-Wno-array-bounds"
+    "-Wno-stringop-overflow"
+    "-Wno-free-nonheap-object"
+    "-Wno-unused-result"
   ]));
 
   nativeBuildInputs = [
