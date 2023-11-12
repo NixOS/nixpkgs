@@ -1,5 +1,8 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath
 , localSystem ? { system = builtins.currentSystem; }
+# Specify the desired LLVM version in an overlay to avoid the use of
+# mismatching versions.
+, overlays ? [(self: super: { llvmPackages = super.llvmPackages_11; })]
 , crossSystem ? null
 , bootstrapFiles ? null
 }:
@@ -13,11 +16,9 @@ let cross = if crossSystem != null
               in (import "${pkgspath}/pkgs/stdenv/darwin" args');
            }
       else {};
-in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
+in with import pkgspath ({ inherit localSystem overlays; } // cross // custom-bootstrap);
 
-let
-  llvmPackages = llvmPackages_11;
-in rec {
+rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
