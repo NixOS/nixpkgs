@@ -41,7 +41,8 @@ lib.makeOverridable
 
 , passthru ? {}
 , meta ? {}
-}:
+, ...
+}@args:
 
 let
   builder = substituteAll {
@@ -50,7 +51,10 @@ let
   };
 in
 
-runCommand name
+runCommand name ({
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  } // (removeAttrs args [ "extraOutputsToInstall" "name" "passAsFile" "paths" ]) //
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
@@ -70,11 +74,10 @@ runCommand name
           (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
       priority = drv.meta.priority or 5;
     }) paths);
-    preferLocalBuild = true;
-    allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
-    passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
-  }
+    passAsFile = lib.optional (builtins.stringLength pkgs >= 128*1024) "pkgs"
+      ++ (lib.remove "pkgs" args.passAsFile or [ ]);
+  })
   ''
     ${buildPackages.perl}/bin/perl -w ${builder}
     eval "$postBuild"
