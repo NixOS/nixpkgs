@@ -3,6 +3,7 @@
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
+, targetPackages
 }:
 
 let
@@ -42,6 +43,8 @@ let
     ] ++ lib.optionals enablePolly [
       "-DWITH_POLLY=ON"
       "-DLINK_POLLY_INTO_TOOLS=ON"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
+      "-DCLANG_DEFAULT_LINKER=${targetPackages.stdenv.cc.bintools}/bin/${stdenv.targetPlatform.config}-ld"
     ];
 
     patches = [
