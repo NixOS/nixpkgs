@@ -214,6 +214,7 @@ mapAliases ({
   jupyter_server = jupyter-server; # added 2023-01-05
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
   jupyterlab_launcher = throw "jupyterlab_launcher has been removed as it's abandoned for over 5 years and broken"; # added 2023-11-11
+  jupyterlab_server = jupyterlab-server; # added 2023-11-12
   Kajiki = kajiki; # added 2023-02-19
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16

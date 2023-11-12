@@ -19,14 +19,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jupyterlab_server";
+  pname = "jupyterlab-server";
   version = "2.25.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jupyterlab_server";
+    inherit version;
     hash = "sha256-d8Lx8oLWEPleSW4g1b8dKncGgm37exjzN4rihw0nL7c=";
   };
 
