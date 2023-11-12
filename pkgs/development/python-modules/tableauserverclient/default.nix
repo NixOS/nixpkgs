@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jSblDVkuuBBZ7GmPKUYji8wtRoPS7g8r6Ye9EpnjvKA=";
+    hash = "sha256-jSblDVkuuBBZ7GmPKUYji8wtRoPS7g8r6Ye9EpnjvKA=";
   };
 
   propagatedBuildInputs = [ defusedxml requests packaging ];
@@ -26,10 +26,11 @@ buildPythonPackage rec {
 
   doCheck = false; # it attempts to create some file artifacts and fails
 
-  meta = {
-    description = "A Python module for working with the Tableau Server REST API.";
-    homepage = "https://pypi.org/project/tableauserverclient/";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+  meta = with lib; {
+    description = "Module for working with the Tableau Server REST API";
+    homepage = "https://github.com/tableau/server-client-python";
+    changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
