@@ -5,7 +5,9 @@
 , fltk13
 , gtk2
 , gtk3
+, makeWrapper
 , pkg-config
+, psmisc
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
   ];
 
@@ -26,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     fltk13
     gtk2
     gtk3
+    psmisc
   ];
 
   env.TOOLSET = lib.concatStringsSep " " [
@@ -89,6 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     runHook postInstall
+  '';
+
+  fixupPhase = ''
+    runHook preFixup
+
+    wrapProgram $out/bin/hdajackretask \
+      --prefix PATH : ${lib.makeBinPath [ psmisc ]}
+
+    runHook postFixup
   '';
 
   meta = {
