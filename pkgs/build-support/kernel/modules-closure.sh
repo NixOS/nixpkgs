@@ -66,36 +66,41 @@ for module in $rootModules; do
     fi
 done
 
-mkdir -p $out/lib/firmware
-for module in $(cat closure); do
-    # for builtin modules, modinfo will reply with a wrong output looking like:
-    #   $ modinfo -F firmware unix
-    #   name:           unix
-    #
-    # There is a pending attempt to fix this:
-    #   https://github.com/NixOS/nixpkgs/pull/96153
-    #   https://lore.kernel.org/linux-modules/20200823215433.j5gc5rnsmahpf43v@blumerang/T/#u
-    #
-    # For now, the workaround is just to filter out the extraneous lines out
-    # of its output.
-    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:'); do
-        mkdir -p "$out/lib/firmware/$(dirname "$i")"
-        echo "firmware for $module: $i"
-        for name in "$i" "$i.xz" ""; do
-            [ -z "$name" ] && echo "WARNING: missing firmware $i for module $module"
-            if cp "$firmware/lib/firmware/$name" "$out/lib/firmware/$name" 2>/dev/null; then
-                break
+copy_blob() {
+    local sourcefile="$firmware/lib/firmware/$2"
+    local targetfile="$out/lib/firmware/$2"
+    mkdir -p "$out/lib/firmware/$(dirname "$2")"
+    echo "firmware for $1: $2"
+    if [ -e "$sourcefile" ]; then
+        cp -f "$sourcefile" "$targetfile"
+    else # if we already copied an uncompressed version there's no point also copying a compressed one
+        local found=0
+        for extension in "xz" "zstd"; do
+            if [ -e "$sourcefile.$extension" ]; then
+                found=1
+                cp -f "$sourcefile.$extension" "$targetfile.$extension"
             fi
         done
+        [ $found -eq 1 ] || echo "WARNING: missing firmware $2 for module $1"
+    fi
+}
+
+mkdir -p $out/lib/firmware
+# copy firmware for loadable modules
+for module in $(cat closure); do
+    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module); do
+        copy_blob $module "$i"
     done
 done
+# copy firmware for builtin modules
+while IFS=$'\035' read -d '' -r module i; do
+    copy_blob $module "$i"
+done < <(sed --quiet --null-data --regexp-extended 's/^([^=.]*)\.firmware=(.*)/\1\o035\2/p' $kernel/lib/modules/"$version"/modules.builtin.modinfo) # the file contains ~arbitrary strings so we use sed to parse it correctly
 
-# copy module ordering hints for depmod
-cp $kernel/lib/modules/"$version"/modules.order $out/lib/modules/"$version"/.
-cp $kernel/lib/modules/"$version"/modules.builtin $out/lib/modules/"$version"/.
+# copy module hints for depmod
+cp $kernel/lib/modules/"$version"/modules.{order,builtin{,.modinfo}} -t $out/lib/modules/"$version"
 
 depmod -b $out -a $version
 
 # remove original hints from final derivation
-rm $out/lib/modules/"$version"/modules.order
-rm $out/lib/modules/"$version"/modules.builtin
+rm $out/lib/modules/"$version"/modules.{order,builtin{,.modinfo}}
