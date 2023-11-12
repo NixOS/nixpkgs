@@ -528,10 +528,12 @@ expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/
 rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: First argument \('"$work"'/a\) is a path that does not exist.'
-expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: Second argument \('"$work"'/b\) is a path that does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: Element 0 \('"$work"'/a\) is a path that does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: Element 1 \('"$work"'/b\) is a path that does not exist.'
+touch e
+expectFailure 'toSource { root = ./.; fileset = union ./a ./e; }' 'lib.fileset.union: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./e ./b; }' 'lib.fileset.union: Second argument \('"$work"'/b\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./e ]; }' 'lib.fileset.unions: Element 0 \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./e ./b ]; }' 'lib.fileset.unions: Element 1 \('"$work"'/b\) is a path that does not exist.'
+rm -rf -- *
 
 # unions needs a list
 expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Argument is of type null, but it should be a list instead.'
@@ -875,6 +877,16 @@ checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)
 # but here we need to use ./c
 checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
 
+# Make sure single files are filtered correctly
+tree=(
+    [a]=1
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; true) ./a'
+tree=(
+    [a]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; false) ./a'
+
 ## Tracing
 
 # The second trace argument is returned
@@ -977,6 +989,15 @@ expectTrace 'unions [
 - foo (regular)'
 rm -rf -- *
 
+# Trying to trace a non-existent file as a file set doesn't work
+expectFailure 'trace ./a null' 'lib.fileset.trace: Argument \('"$work"'/a\) is a path that does not exist.'
+
+# Tracing a single existing file shows the parent directory
+# Mirroring how it would have to be added into the store
+touch a
+expectTrace './a' "$work (all files in directory)"
+rm  -rf -- *
+
 # For recursively included directories,
 # `(all files in directory)` should only be used if there's at least one file (otherwise it would be `(empty)`)
 # and this should be determined without doing a full search
@@ -1023,12 +1044,17 @@ rm -rf -- *
 ## lib.fileset.fromSource
 
 # Check error messages
-expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
 
+# String-like values are not supported
 expectFailure 'fromSource (lib.cleanSource "")' 'lib.fileset.fromSource: The source origin of the argument is a string-like value \(""\), but it should be a path instead.
 \s*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
 
+# Wrong type
+expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
 expectFailure 'fromSource (lib.cleanSource null)' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+# fromSource on non-existent paths gives an error
+expectFailure 'fromSource ./a' 'lib.fileset.fromSource: The source origin \('"$work"'/a\) of the argument is a path that does not exist.'
 
 # fromSource on a path works and is the same as coercing that path
 mkdir a
