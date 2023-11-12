@@ -14948,17 +14948,7 @@ with pkgs;
 
   wget = callPackage ../tools/networking/wget { };
 
-  wget2 = callPackage ../tools/networking/wget2 {
-    # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs {
-      version = "20210208";
-      src = fetchgit {
-        url = "https://git.savannah.gnu.org/r/gnulib.git";
-        rev = "0b38e1d69f03d3977d7ae7926c1efeb461a8a971";
-        hash = "sha256-9z/Vg3/g5WRWHH9I0QR6BZ5JCJBo+lEMLAM6xpFPchk=";
-      };
-    };
-  };
+  wget2 = callPackage ../tools/networking/wget2 { };
 
   wgpu-utils = callPackage ../tools/graphics/wgpu-utils {
     inherit (darwin.apple_sdk.frameworks) QuartzCore;
@@ -24423,8 +24413,8 @@ with pkgs;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
-  wolfssl = callPackage ../development/libraries/wolfssl {
-    inherit (darwin.apple_sdk.frameworks) Security;
+  wolfssl = darwin.apple_sdk_11_0.callPackage ../development/libraries/wolfssl {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
   openssl = openssl_3;
