@@ -4,12 +4,15 @@
 , setuptools-scm
 , html5tagger
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tracerite";
   version = "1.1.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
