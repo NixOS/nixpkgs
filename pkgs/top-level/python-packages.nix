@@ -534,6 +534,8 @@ self: super: with self; {
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
 
+  anki = callPackage ../development/python-modules/anki { };
+
   annexremote = callPackage ../development/python-modules/annexremote { };
 
   annotated-types = callPackage ../development/python-modules/annotated-types { };
@@ -643,6 +645,8 @@ self: super: with self; {
   apycula = callPackage ../development/python-modules/apycula { };
 
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
+
+  aqt = callPackage ../development/python-modules/aqt { };
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
