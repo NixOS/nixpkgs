@@ -164,7 +164,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ ninjatrappeur yuka kloenk yayayayaka ];
+    maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };
 }

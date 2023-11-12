@@ -25,14 +25,10 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix sklearn 1.2.0 compat; https://github.com/lmcinnes/pynndescent/issues/207
+    # https://github.com/lmcinnes/pynndescent/pull/224
     (fetchpatch {
-      url = "https://github.com/lmcinnes/pynndescent/commit/00444be2107b71169b853847e7b334623c58a4e3.patch";
-      hash = "sha256-mbe01BwroS5q6hENsj3NejmGGhmk2IeX4LD6Iq6PR0c=";
-    })
-    (fetchpatch {
-      url = "https://github.com/lmcinnes/pynndescent/commit/e56b92776a4a05f2dabb80d25479bd37e7ebd88e.patch";
-      hash = "sha256-zVTaW4syGEHh2HAGPyBN3YXqUGe55v/LxKLX/zjXT5Y=";
+      url = "https://github.com/lmcinnes/pynndescent/commit/86e0d716a3a4d5f4e6a0a3c2952f6fe339524e96.patch";
+      hash = "sha256-dfnT5P9Qsn/nSAr4Ysqo/olbLLfoZXvBRz33yzhN3J4=";
     })
   ];
 

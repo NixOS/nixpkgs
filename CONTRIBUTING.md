@@ -353,7 +353,7 @@ In a case a contributor definitively leaves the Nix community, they should creat
 # Flow of merged pull requests
 
 After a pull request is merged, it eventually makes it to the [official Hydra CI](https://hydra.nixos.org/).
-Hydra regularly evaluates and builds Nixpkgs, updating [the official channels](http://channels.nixos.org/) when specific Hydra jobs succeeded.
+Hydra regularly evaluates and builds Nixpkgs, updating [the official channels](https://channels.nixos.org/) when specific Hydra jobs succeeded.
 See [Nix Channel Status](https://status.nixos.org/) for the current channels and their state.
 Here's a brief overview of the main Git branches and what channels they're used for:
 

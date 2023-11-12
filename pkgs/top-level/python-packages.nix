@@ -5823,8 +5823,6 @@ self: super: with self; {
 
   jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
 
-  jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
-
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
@@ -5856,6 +5854,8 @@ self: super: with self; {
   justnimbus = callPackage ../development/python-modules/justnimbus { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
+
+  jwt = callPackage ../development/python-modules/jwt { };
 
   jxmlease = callPackage ../development/python-modules/jxmlease { };
 
@@ -6336,7 +6336,7 @@ self: super: with self; {
 
   lineedit = callPackage ../development/python-modules/lineedit { };
 
-  line_profiler = callPackage ../development/python-modules/line_profiler { };
+  line-profiler = callPackage ../development/python-modules/line-profiler { };
 
   linetable = callPackage ../development/python-modules/linetable { };
 
@@ -8284,8 +8284,6 @@ self: super: with self; {
   nsz = callPackage ../development/python-modules/nsz { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
-
-  python-jwt = callPackage ../development/python-modules/python-jwt { };
 
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
@@ -11695,6 +11693,8 @@ self: super: with self; {
 
   pytricia = callPackage ../development/python-modules/pytricia { };
 
+  pytrydan = callPackage ../development/python-modules/pytrydan { };
+
   pyttsx3 = callPackage ../development/python-modules/pyttsx3 { };
 
   pytube = callPackage ../development/python-modules/pytube { };
@@ -12772,7 +12772,7 @@ self: super: with self; {
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
 
-  setuptoolsTrial = callPackage ../development/python-modules/setuptoolstrial { };
+  setuptools-trial = callPackage ../development/python-modules/setuptools-trial { };
 
   seventeentrack = callPackage ../development/python-modules/seventeentrack { };
 
@@ -15159,6 +15159,8 @@ self: super: with self; {
 
   uasiren = callPackage ../development/python-modules/uasiren { };
 
+  ubelt = callPackage ../development/python-modules/ubelt { };
+
   uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
   ucsmsdk = callPackage ../development/python-modules/ucsmsdk { };
@@ -15788,6 +15790,8 @@ self: super: with self; {
   xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
 
   xdis = callPackage ../development/python-modules/xdis { };
+
+  xdoctest = callPackage ../development/python-modules/xdoctest { };
 
   xdot = callPackage ../development/python-modules/xdot {
     inherit (pkgs) graphviz;

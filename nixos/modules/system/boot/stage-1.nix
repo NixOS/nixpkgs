@@ -284,7 +284,7 @@ let
       # in the NixOS installation CD, so use ID_CDROM_MEDIA in the
       # corresponding udev rules for now.  This was the behaviour in
       # udev <= 154.  See also
-      #   http://www.spinics.net/lists/hotplug/msg03935.html
+      #   https://www.spinics.net/lists/hotplug/msg03935.html
       substituteInPlace $out/60-persistent-storage.rules \
         --replace ID_CDROM_MEDIA_TRACK_COUNT_DATA ID_CDROM_MEDIA
     ''; # */

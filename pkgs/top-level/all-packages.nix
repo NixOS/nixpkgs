@@ -2055,6 +2055,8 @@ with pkgs;
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
 
+  supercronic = callPackage ../tools/system/supercronic { };
+
   supermin = callPackage ../tools/virtualization/supermin { };
 
   sx-go = callPackage ../tools/security/sx-go { };
@@ -2997,8 +2999,6 @@ with pkgs;
 
   walk = callPackage ../applications/file-managers/walk { };
 
-  worker = callPackage ../applications/file-managers/worker { };
-
   xfe = callPackage ../applications/file-managers/xfe {
     fox = fox_1_6;
   };
@@ -3545,10 +3545,6 @@ with pkgs;
   };
 
   bic = callPackage ../development/interpreters/bic { };
-
-  binance = callPackage ../applications/misc/binance {
-    electron = electron_13;
-  };
 
   biscuit-cli = callPackage ../tools/security/biscuit-cli { };
 
@@ -4672,8 +4668,6 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
-  clash = callPackage ../tools/networking/clash { };
-
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
   clash-meta = callPackage ../tools/networking/clash-meta { };
@@ -4892,7 +4886,7 @@ with pkgs;
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
-    electron = electron_11;
+    electron = electron_24;
   };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -17273,10 +17267,6 @@ with pkgs;
 
   scryer-prolog = callPackage ../development/compilers/scryer-prolog { };
 
-  sdcc = callPackage ../development/compilers/sdcc {
-    gputils = null;
-  };
-
   seren = callPackage ../applications/networking/instant-messengers/seren { };
 
   serialdv = callPackage ../development/libraries/serialdv {  };
@@ -24650,7 +24640,7 @@ with pkgs;
     });
 
   libsForQt5 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib pkgs qt5;
+    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope;
   });
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
@@ -25237,6 +25227,8 @@ with pkgs;
   subtitleedit = callPackage ../applications/video/subtitleedit { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
+
+  subxt = callPackage ../development/tools/subxt { };
 
   suil = darwin.apple_sdk_11_0.callPackage ../development/libraries/audio/suil { };
 

@@ -334,6 +334,13 @@ in
     '';
   };
 
+  google-protobuf = attrs:
+    lib.optionalAttrs (lib.versionAtLeast attrs.version "3.25.0") {
+    # Fails on 3.25.0 with:
+    #   convert.c:312:32: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+    hardeningDisable = [ "format" ];
+  };
+
   grpc = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optional stdenv.isDarwin cctools

@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";
-    homepage = "http://www.sqlobject.org/";
+    homepage = "https://www.sqlobject.org/";
     changelog = "https://github.com/sqlobject/sqlobject/blob/${version}/docs/News.rst";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ ];

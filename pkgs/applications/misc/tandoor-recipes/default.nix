@@ -42,6 +42,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   patches = [
     # Allow setting MEDIA_ROOT through environment variable
     ./media-root.patch
+    # https://github.com/TandoorRecipes/recipes/pull/2706
+    (fetchpatch {
+      url = "https://github.com/TandoorRecipes/recipes/commit/8f66f5c3ca61751a80cc133ff4c59019d6fca406.patch";
+      hash = "sha256-oF5YlPg1LEdLvKpxiSqjTmYPbrGquPlRIz6A05031gs=";
+    })
   ];
 
   propagatedBuildInputs = with python.pkgs; [

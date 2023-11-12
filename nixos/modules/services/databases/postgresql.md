@@ -5,7 +5,7 @@
 
 *Source:* {file}`modules/services/databases/postgresql.nix`
 
-*Upstream documentation:* <http://www.postgresql.org/docs/>
+*Upstream documentation:* <https://www.postgresql.org/docs/>
 
 <!-- FIXME: more stuff, like maintainer? -->
 

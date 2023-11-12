@@ -7,7 +7,7 @@
 
 let
   nodejs = nodejs_20;
-in buildNpmPackage.override { nodejs = nodejs_20; } rec {
+in buildNpmPackage rec {
   pname = "whitebophir";
   version = "1.19.1";
 
@@ -17,6 +17,8 @@ in buildNpmPackage.override { nodejs = nodejs_20; } rec {
     rev = "v${version}";
     hash = "sha256-4T7s9WrpyHVPcw0QY0C0sczDJYKzA4bAAfEv8q2pOy4=";
   };
+
+  inherit nodejs;
 
   npmDepsHash = "sha256-mKDkkX7vWrnfEg1D65bqn/MtyUS0DKjTtkDW6ebso7g=";
 
