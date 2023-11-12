@@ -41564,6 +41564,8 @@ with pkgs;
 
   xpad = callPackage ../applications/misc/xpad { };
 
+  xpipe = callPackage ../applications/networking/xpipe { };
+
   xsane = callPackage ../applications/graphics/sane/xsane.nix { };
 
   xsser = python3Packages.callPackage ../tools/security/xsser { };
