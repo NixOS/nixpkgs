@@ -25,7 +25,6 @@
 , quickemu
 , testers
 , installShellFiles
-, fetchpatch
 }:
 let
   runtimePaths = [
@@ -51,22 +50,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "4.9";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    hash = "sha256-ZCHGZb4mdtnNfFBcSqZJRW7fmkTBrWrVko3iwEhO1RY=";
+    hash = "sha256-tWl16dd0a6pDz+cUZx9Ku2ov+LJZabR2cDso5tPbML4=";
   };
-
-  patches = [
-    # https://github.com/quickemu-project/quickemu/pull/815
-    (fetchpatch {
-      url = "https://github.com/quickemu-project/quickemu/commit/2b9d95a746fd85be0cea48e5544b18dc3ae18d27.patch";
-      hash = "sha256-fTJEd3o7LznT1mGwfxXWlW8XM1BmIeId+j8pGjIfIcE=";
-    })
-  ];
 
   postPatch = ''
     sed -i \
