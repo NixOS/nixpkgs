@@ -65,9 +65,9 @@ resultToEmoji() {
     fi
 
     echo "### Details"
-    echo "- nixpkgs-check-by-name tool:"
+    echo "- nixpkgs-check-by-name tool binaries:"
     echo "  - Channel: $channel"
-    echo "  - Nixpkgs commit: [$rev](https://github.com/${GITHUB_REPOSITORY}/commit/$rev)"
+    echo "  - Tooling binaries built at nixpkgs commit: [$toolingBinariesSha](https://github.com/${GITHUB_REPOSITORY}/commit/$toolingBinariesSha)"
     echo "  - Store path: \`$(realpath result)\`"
     echo "- Tested Nixpkgs:"
     echo "  - Base branch: $GITHUB_BASE_REF"
