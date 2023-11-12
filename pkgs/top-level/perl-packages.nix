@@ -1761,6 +1761,8 @@ with self; {
     };
   };
 
+  BioBigFile = callPackage ../development/perl-modules/Bio-BigFile { };
+
   BioPerl = buildPerlPackage {
     pname = "BioPerl";
     version = "1.7.8";
