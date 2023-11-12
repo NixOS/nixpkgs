@@ -17507,6 +17507,11 @@
     githubId = 2084639;
     name = "Manu";
   };
+  tensor5 = {
+    github = "tensor5";
+    githubId = 1545895;
+    name = "Nicola Squartini";
+  };
   teozkr = {
     email = "teo@nullable.se";
     github = "nightkr";
