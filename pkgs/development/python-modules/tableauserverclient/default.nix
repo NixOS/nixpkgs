@@ -35,6 +35,10 @@ buildPythonPackage rec {
   # Tests attempt to create some file artifacts and fails
   doCheck = false;
 
+  pythonImportsCheck = [
+    "tableauserverclient"
+  ];
+
   meta = with lib; {
     description = "Module for working with the Tableau Server REST API";
     homepage = "https://github.com/tableau/server-client-python";
