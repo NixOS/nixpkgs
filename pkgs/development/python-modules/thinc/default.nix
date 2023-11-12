@@ -97,6 +97,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
+    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];
   };
