@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , cmake
 , fuse
@@ -10,14 +9,14 @@
 , qttools
 , wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation (final: {
   pname = "android-file-transfer";
   version = "4.2";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
-    rev = "v${version}";
+    rev = "v${final.version}";
     sha256 = "125rq8ji83nw6chfw43i0h9c38hjqh1qjibb0gnf9wrigar9zc8b";
   };
 
@@ -38,4 +37,4 @@ mkDerivation rec {
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
   };
-}
+})
