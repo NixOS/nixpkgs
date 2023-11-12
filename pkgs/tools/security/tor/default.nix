@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
   configureFlags =
+    # allow inclusion of GPL-licensed code (needed for Proof of Work defense for onion services)
+    # for more details see
+    # https://gitlab.torproject.org/tpo/onion-services/onion-support/-/wikis/Documentation/PoW-FAQ#compiling-c-tor-with-the-pow-defense
+    [ "--enable-gpl" ]
+    ++
     # cross compiles correctly but needs the following
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
     ++
@@ -113,7 +118,7 @@ stdenv.mkDerivation rec {
       the TCP protocol.
     '';
 
-    license = licenses.bsd3;
+    license = with licenses; [ bsd3 gpl3Only ];
 
     maintainers = with maintainers;
       [ thoughtpolice joachifm prusnak ];
