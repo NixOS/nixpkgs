@@ -115,15 +115,10 @@ let
 
       nameArray = builtins.map(a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
-      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
-                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
-
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
-        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
@@ -146,15 +141,13 @@ let
             ret // {
               "${e.extid}" = {
                 installation_mode = "allowed";
+                # We use a placeholder for a non-existent output so it does
+                # *not* get replaced in this build, and we can manually replace
+                # it later with the wrapper’s output path.
+                install_url = "file://${placeholder "ext_install_url"}/${e.extid}.xpi";
               };
             }
           ) {} extensions;
-
-          Extensions = {
-            Install = lib.foldr (e: ret:
-              ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
-            ) [] extensions;
-          };
         } // lib.optionalAttrs smartcardSupport {
           SecurityDevices = {
             "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
@@ -166,11 +159,9 @@ let
       mozillaCfg = ''
         // First line must be a comment
 
-        // Disables addon signature checking
-        // to be able to install addons that do not have an extid
-        // Security is maintained because only user whitelisted addons
-        // with a checksum can be installed
-        ${ lib.optionalString usesNixExtensions ''lockPref("xpinstall.signatures.required", false)'' };
+        // The “app” scope (SCOPE_APPLICATION) is 4; the upstream default is
+        // 15, so 15 ^ 4 = 11. This allows app-scope addons to be auto-enabled.
+        pref("extensions.autoDisableScopes", 11);
       '';
 
       #############################
@@ -373,6 +364,7 @@ let
         POL_PATH="$out/lib/${libName}/distribution/policies.json"
         rm -f "$POL_PATH"
         cat ${policiesJson} >> "$POL_PATH"
+        substituteInPlace "$POL_PATH" --replace ${placeholder "ext_install_url"} ${placeholder "out"}
 
         extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
         for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
@@ -399,7 +391,10 @@ let
         ${extraPrefs}
         EOF
 
-        mkdir -p $out/lib/${libName}/distribution/extensions
+        mkdir -p "$out/lib/${libName}/browser/extensions"
+        ${lib.concatMapStrings (ext: ''
+          ln -s ${ext}/${ext.extid}.xpi "$out/lib/${libName}/browser/extensions"
+        '') extensions}
 
         #############################
         #                           #
