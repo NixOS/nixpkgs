@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://abella-prover.org/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bcdarwin ciil ];
+    maintainers = with lib.maintainers; [ bcdarwin ciil chen ];
     platforms = lib.platforms.unix;
   };
 }
