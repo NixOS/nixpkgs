@@ -7486,6 +7486,13 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
+  iFreilicht = {
+    github = "iFreilicht";
+    githubId = 9742635;
+    matrix = "@ifreilicht:matrix.org";
+    email = "nixpkgs@mail.felix-uhl.de";
+    name = "Felix Uhl";
+  };
   ifurther = {
     github = "ifurther";
     githubId = 55025025;
