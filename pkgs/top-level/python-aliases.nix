@@ -402,6 +402,7 @@ mapAliases ({
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   somecomfort = throw "somecomfort was removed because Home Assistant switched to aiosomecomfort"; # added 2023-02-01
+  sorl_thumbnail = sorl-thumbnail; # added 2023-11-12
   SPARQLWrapper = sparqlwrapper;
   sphinx-jquery = sphinxcontrib-jquery; # added 2023-02-24
   sphinx_pypi_upload = throw "sphinx_pypi_upload has been removed since it is abandoned."; # added 2023-10-11
