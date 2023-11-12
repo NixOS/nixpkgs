@@ -1,0 +1,13 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d1e664f..826eba8 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -205,7 +205,7 @@ install(
+ )
+ 
+ install(
+-	FILES "${CMAKE_BINARY_DIR}/BetterSpades/config.ini" "${CMAKE_BINARY_DIR}/BetterSpades/OpenAL32.dll"
++	FILES "${CMAKE_BINARY_DIR}/BetterSpades/config.ini"
+ 	DESTINATION .
+ 	PERMISSIONS	OWNER_EXECUTE OWNER_WRITE OWNER_READ
+ 				GROUP_EXECUTE GROUP_READ

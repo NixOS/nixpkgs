@@ -37530,6 +37530,8 @@ with pkgs;
 
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix { };
 
+  betterspades = callPackage ../games/betterspades { };
+
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;
   };
