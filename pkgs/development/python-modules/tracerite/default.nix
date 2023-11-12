@@ -40,8 +40,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Tracebacks for Humans (in Jupyter notebooks";
+    description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
+    changelog = "https://github.com/sanic-org/tracerite/releases/tag/v${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ];
   };
