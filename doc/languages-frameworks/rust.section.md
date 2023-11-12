@@ -939,6 +939,7 @@ Fenix also has examples with `buildRustPackage`,
 [crane](https://github.com/ipetkov/crane),
 [naersk](https://github.com/nix-community/naersk),
 and cross compilation in its [Examples](https://github.com/nix-community/fenix#examples) section.
+
 ## Using `git bisect` on the Rust compiler {#using-git-bisect-on-the-rust-compiler}
 
 Sometimes an upgrade of the Rust compiler (`rustc`) will break a
