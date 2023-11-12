@@ -10922,6 +10922,13 @@
     githubId = 1651325;
     name = "maralorn";
   };
+  marble = {
+    email = "marble@computer-in.love";
+    matrix = "@marble:chaos.jetzt";
+    github = "cyber-murmel";
+    githubId = 30078229;
+    name = "marble";
+  };
   marcus7070 = {
     email = "marcus@geosol.com.au";
     github = "marcus7070";

@@ -19162,6 +19162,8 @@ with pkgs;
 
   md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
 
+  minichlink = callPackage ../development/embedded/minichlink { };
+
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
