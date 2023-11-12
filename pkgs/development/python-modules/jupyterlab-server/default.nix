@@ -1,27 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, hatchling
-, jsonschema
 , pythonOlder
-, requests
-, pytestCheckHook
-, json5
+, hatchling
 , babel
+, importlib-metadata
+, jinja2
+, json5
+, jsonschema
 , jupyter-server
-, tomli
+, packaging
+, requests
 , openapi-core
 , pytest-jupyter
+, pytestCheckHook
 , requests-mock
 , ruamel-yaml
 , strict-rfc3339
-, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
   version = "2.25.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -31,62 +32,61 @@ buildPythonPackage rec {
     hash = "sha256-ZJEoOwAAaY6uGjjEhQeTBWDfz3RhrqABU2hpiqs03Zw=";
   };
 
+  postPatch = ''
+    sed -i "/timeout/d" pyproject.toml
+  '';
+
   nativeBuildInputs = [
     hatchling
   ];
 
   propagatedBuildInputs = [
-    requests
-    jsonschema
-    json5
     babel
+    jinja2
+    json5
+    jsonschema
     jupyter-server
-    tomli
+    packaging
+    requests
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
 
-  nativeCheckInputs = [
-    openapi-core
-    pytestCheckHook
-    pytest-jupyter
-    requests-mock
-    ruamel-yaml
-    strict-rfc3339
-  ];
+  passthru.optional-dependencies = {
+    openapi = [
+      openapi-core
+      ruamel-yaml
+    ];
+  };
 
-  postPatch = ''
-    sed -i "/timeout/d" pyproject.toml
-  '';
+  nativeCheckInputs = [
+    pytest-jupyter
+    pytestCheckHook
+    requests-mock
+    strict-rfc3339
+  ] ++ passthru.optional-dependencies.openapi;
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12.
-    # Use setuptools or check PEP 632 for potential alternatives.
-    "-W ignore::DeprecationWarning"
-  ];
-
   disabledTestPaths = [
-    "tests/test_settings_api.py"
-    "tests/test_themes_api.py"
+    # require optional language pack packages for tests
     "tests/test_translation_api.py"
-    "tests/test_workspaces_api.py"
   ];
 
-  disabledTests = [
-    "test_get_listing"
+  pythonImportsCheck = [
+    "jupyterlab_server"
+    "jupyterlab_server.pytest_plugin"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A set of server components for JupyterLab and JupyterLab like applications";
-    homepage = "https://jupyterlab-server.readthedocs.io/";
+    homepage = "https://github.com/jupyterlab/jupyterlab_server";
     changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsdOriginal;
+    license = licenses.bsd3;
     maintainers = lib.teams.jupyter.members;
   };
 }
