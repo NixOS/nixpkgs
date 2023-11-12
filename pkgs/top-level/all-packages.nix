@@ -36990,6 +36990,8 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  bladebit = callPackage ../applications/blockchains/bladebit { };
+
   btcd = callPackage ../applications/blockchains/btcd { };
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
