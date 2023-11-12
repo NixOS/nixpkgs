@@ -8,11 +8,11 @@ import ./make-test-python.nix ({ lib, ... }: {
     };
   };
 
-  testScript = ''
+  testScript = {nodes, ...}: ''
     machine.wait_for_unit("tandoor-recipes.service")
 
     with subtest("Web interface gets ready"):
         # Wait until server accepts connections
-        machine.wait_until_succeeds("curl -fs localhost:8080")
+        machine.wait_until_succeeds("curl -fs ${nodes.machine.services.tandoor-recipes.address}:${toString nodes.machine.services.tandoor-recipes.port}")
   '';
 })
