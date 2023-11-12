@@ -1,5 +1,9 @@
 { lib }:
 
+let
+  inherit (lib) mapAttrs functionArgs setFunctionArgs;
+in
+
 rec {
 
   ## Simple (higher order) functions
@@ -466,6 +470,50 @@ rec {
     if isFunction v
     then v
     else k: v;
+
+  /*
+    Make a function lazy in its argument.
+
+    Normally when you call a function `f` like `{ a, b }: { r = foo a b; }`,
+    the attribute names of the argument must be evaluated before the evaluator
+    can return a the (partially evaluated) function body (`{ r = ...; }`).
+
+    `lazyFunction` wraps this kind of function in such a way that this strict
+    behavior is cancelled out. With the example `f` above, `lazyFunction f` returns
+    `arg: f { a = arg.a; b = arg.b; }`.
+
+    You can see that this wrapper function always satisfies `f`'s parameter
+    attributes `a` and `b`, but the expressions for them may still fail later.
+    For example `arg` may not contain an attribute `a`, or not even be an
+    attribute set.
+
+    Limitations:
+
+    `lazyFunction` only works for functions that are either defined using the
+    "set pattern" Nix syntax, or returned from `lib` functions that preserve
+    function argument metadata
+
+    It is not compatible with ellipsis patterns, `{ ... }:`, because only the
+    explicitly declared parameters are passed through. For example, the
+    following will not work: `lazyFunction(arg@{ a, ... }: arg.b)`;
+    even if the caller provides `b`.
+
+    It also removes the checks against unexpected arguments.
+
+    Example:
+
+        lib.fix (lib.lazyFunction ({ a, b }: { a = b; b = 1; }))
+  */
+  lazyFunction = f:
+    setFunctionArgs
+      (arg:
+        f
+          (mapAttrs
+            (k: _: arg.${k})
+            (functionArgs f)
+          )
+      )
+      (functionArgs f) ;
 
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
