@@ -16117,7 +16117,7 @@ self: super: with self; {
 
   zope-testbrowser = callPackage ../development/python-modules/zope-testbrowser { };
 
-  zope_testing = callPackage ../development/python-modules/zope_testing { };
+  zope-testing = callPackage ../development/python-modules/zope-testing { };
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 

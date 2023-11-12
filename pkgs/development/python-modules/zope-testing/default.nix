@@ -8,11 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.testing";
+  pname = "zope-testing";
   version = "5.0.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.testing";
+    inherit version;
     hash = "sha256-6HzQ2NZmVzza8TOBare5vuyAGmSoZZXBnLX+mS7z1kk=";
   };
 
