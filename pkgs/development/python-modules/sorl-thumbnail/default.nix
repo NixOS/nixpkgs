@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sorl-thumbnail";
-  version = "12.9.0";
+  version = "12.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DLwvUhUufyJm48LLSuXYOv0ulv1eHELlZnNiuqo9LbM=";
+    hash = "sha256-3pWkkhf9/s7SIvo86qAdMS7i+KrVa6NNbHDy3umoSTg=";
   };
 
   nativeBuildInputs = [
