@@ -6141,6 +6141,8 @@ self: super: with self; {
     inherit (pkgs) libasyncns;
   };
 
+  libclang-pip = callPackage ../development/python-modules/libclang-pip { };
+
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libcst = callPackage ../development/python-modules/libcst { };
