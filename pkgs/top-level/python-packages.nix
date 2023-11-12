@@ -8409,6 +8409,8 @@ self: super: with self; {
         pkgs.abseil-cpp_202301.override { cxxStandard = "14"; };
   };
 
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
+
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     inherit (pkgs) protobuf;
   };
