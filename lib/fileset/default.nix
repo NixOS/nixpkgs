@@ -263,7 +263,7 @@ in {
           lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead.''
     else if ! pathExists path then
       throw ''
-        lib.fileset.fromSource: The source origin (${toString path}) of the argument does not exist.''
+        lib.fileset.fromSource: The source origin (${toString path}) of the argument is a path that does not exist.''
     else if isFiltered then
       _fromSourceFilter path source.filter
     else
