@@ -6060,6 +6060,8 @@ self: super: with self; {
 
   lazy = callPackage ../development/python-modules/lazy { };
 
+  lazyarray = callPackage ../development/python-modules/lazyarray { };
+
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
   lazy-imports = callPackage ../development/python-modules/lazy-imports { };
@@ -9199,6 +9201,8 @@ self: super: with self; {
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
 
   pyngrok = callPackage ../development/python-modules/pyngrok { };
+
+  pynn = callPackage ../development/python-modules/pynn { };
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
