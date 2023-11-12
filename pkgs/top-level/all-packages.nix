@@ -6365,8 +6365,6 @@ with pkgs;
 
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
-  shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
-
   shellclear = callPackage ../tools/security/shellclear { };
 
   shellnoob = callPackage ../tools/security/shellnoob { };
