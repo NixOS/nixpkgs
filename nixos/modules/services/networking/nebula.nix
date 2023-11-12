@@ -133,6 +133,24 @@ in
               example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
+            serveDns = mkOption {
+              type = types.bool;
+              default = false;
+              description = lib.mdDoc "Enable or disable the DNS listener. Can only be enabled on lighthouse nodes.";
+            };
+
+            dns.host = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.mdDoc "IP address to serve DNS on.";
+            };
+
+            dns.port = mkOption {
+              type = types.port;
+              default = 53;
+              description = lib.mdDoc "Port number to serve DNS on.";
+            };
+
             settings = mkOption {
               type = format.type;
               default = {};
@@ -143,9 +161,9 @@ in
               '';
               example = literalExpression ''
                 {
-                  lighthouse.dns = {
-                    host = "0.0.0.0";
-                    port = 53;
+                  logging = {
+                    level = "info";
+                    format = "text;"
                   };
                 }
               '';
@@ -171,6 +189,11 @@ in
           lighthouse = {
             am_lighthouse = netCfg.isLighthouse;
             hosts = netCfg.lighthouses;
+            serve_dns = netCfg.serveDns;
+            dns = {
+              host = netCfg.dns.host;
+              port = netCfg.dns.port;
+            };
           };
           relay = {
             am_relay = netCfg.isRelay;
@@ -191,6 +214,7 @@ in
           };
         } netCfg.settings;
         configFile = format.generate "nebula-config-${netName}.yml" settings;
+        needsCapNetBindService = netCfg.listen.port < 1024 || (netCfg.serveDns && netCfg.dns.port < 1024);
         in
         {
           # Create the systemd service for Nebula.
@@ -205,8 +229,8 @@ in
               Restart = "always";
               ExecStart = "${netCfg.package}/bin/nebula -config ${configFile}";
               UMask = "0027";
-              CapabilityBoundingSet = "CAP_NET_ADMIN";
-              AmbientCapabilities = "CAP_NET_ADMIN";
+              CapabilityBoundingSet = [ "CAP_NET_ADMIN" ] ++ optional needsCapNetBindService "CAP_NET_BIND_SERVICE";
+              AmbientCapabilities = [ "CAP_NET_ADMIN" ] ++ optional needsCapNetBindService "CAP_NET_BIND_SERVICE";
               LockPersonality = true;
               NoNewPrivileges = true;
               PrivateDevices = false; # needs access to /dev/net/tun (below)
@@ -234,7 +258,7 @@ in
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      unique (mapAttrsToList (netName: netCfg: netCfg.listen.port) enabledNetworks);
+      unique (flatten (mapAttrsToList (netName: netCfg: [netCfg.listen.port] ++ optional (netCfg.serveDns) netCfg.dns.port) enabledNetworks));
 
     # Create the service users and groups.
     users.users = mkMerge (mapAttrsToList (netName: netCfg:
