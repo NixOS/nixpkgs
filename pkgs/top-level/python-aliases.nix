@@ -58,6 +58,7 @@ mapAliases ({
   backports_tempfile = throw "backports_tempfile has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
   backports_unittest-mock = throw "backports_unittest-mock has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
   backports_weakref = throw "backports_weakref has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
+  bash_kernel = bash-kernel; # added 2023-11-10
   beancount_docverif = beancount-docverif; # added 2023-10-08
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
   bip_utils = bip-utils; # 2023-10-08

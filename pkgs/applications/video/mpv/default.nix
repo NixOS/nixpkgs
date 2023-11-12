@@ -256,6 +256,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
+    mainProgram = "mpv";
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.unix;
   };
