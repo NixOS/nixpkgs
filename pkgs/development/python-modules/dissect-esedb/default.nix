@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "dissect-esedb";
   version = "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
