@@ -21261,7 +21261,9 @@ with pkgs;
 
   fizz = callPackage ../development/libraries/fizz { };
 
-  flann = callPackage ../development/libraries/flann { };
+  flann = callPackage ../development/libraries/flann {
+    inherit (llvmPackages) openmp;
+  };
 
   flatcc = callPackage ../development/libraries/flatcc { };
 

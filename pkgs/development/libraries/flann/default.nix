@@ -1,48 +1,41 @@
 { lib
-, cmake
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, lz4
+, cmake
 , pkg-config
-, python3
-, stdenv
+
+, lz4
 , unzip
+, openmp
+
 , enablePython ? false
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "flann";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "flann-lib";
     repo = "flann";
     rev = version;
-    sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
+    hash = "sha256-5GCz28CbnPDQhEz6axFiQZMmOasd2Rph4a/bMQ53T2Q=";
   };
 
   patches = [
-    # Patch HDF5_INCLUDE_DIR -> HDF_INCLUDE_DIRS.
+    # Add "Requires:" to generated pkg-config file, see https://github.com/flann-lib/flann/pull/481
+    ./pkg-config-requires.patch
+
+    # Patch HDF5_INCLUDE_DIR -> HDF5_INCLUDE_DIRS.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-Updated-fix-cmake-hdf5.patch";
       sha256 = "yM1ONU4mu6lctttM5YcSTg8F344TNUJXwjxXLqzr5Pk=";
     })
-    # Patch no-source library workaround that breaks on CMake > 3.11.
-    (fetchpatch {
-      url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-src-cpp-fix-cmake-3.11-build.patch";
-      sha256 = "REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
-    })
-  ] ++ lib.optionals (!stdenv.cc.isClang) [
-    # Avoid the bundled version of LZ4 and instead use the system one.
-    (fetchpatch {
-      url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0003-Use-system-version-of-liblz4.patch";
-      sha256 = "xi+GyFn9PEjLgbJeAIEmsbp7ut9G9KIBkVulyT3nfsg=";
-    })
+
     # Fix LZ4 string separator issue, see: https://github.com/flann-lib/flann/pull/480
-    (fetchpatch {
-      url = "https://github.com/flann-lib/flann/commit/25eb56ec78472bd419a121c6905095a793cf8992.patch";
-      sha256 = "qt8h576Gn8uR7+T9u9bEBIRz6e6AoTKpa1JfdZVvW9s=";
-    })
+    ./pkg-config-lz4-expand-list.patch
   ];
 
   cmakeFlags = [
@@ -58,16 +51,15 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  # lz4 unbundling broken for llvm, use internal version
-  propagatedBuildInputs = lib.optional (!stdenv.cc.isClang) lz4;
+  propagatedBuildInputs = [ lz4 ];
 
-  buildInputs = lib.optionals enablePython [ python3 ];
+  buildInputs = lib.optional stdenv.cc.isClang openmp ++ lib.optional enablePython python3;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/flann-lib/flann";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
-    maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with maintainers; [ viric tmarkus ];
+    platforms = with platforms; linux ++ darwin;
   };
 }
