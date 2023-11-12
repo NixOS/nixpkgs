@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://zealdocs.org/";
     changelog = "https://github.com/zealdocs/zeal/releases";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ skeidel peterhoeg AndersonTorres ];
+    maintainers = with lib.maintainers; [ peterhoeg AndersonTorres ];
     inherit (qtbase.meta) platforms;
   };
 })

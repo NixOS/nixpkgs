@@ -2999,8 +2999,6 @@ with pkgs;
 
   walk = callPackage ../applications/file-managers/walk { };
 
-  worker = callPackage ../applications/file-managers/worker { };
-
   xfe = callPackage ../applications/file-managers/xfe {
     fox = fox_1_6;
   };
@@ -4888,7 +4886,7 @@ with pkgs;
   clipster = callPackage ../tools/misc/clipster { };
 
   clockify = callPackage ../applications/office/clockify {
-    electron = electron_11;
+    electron = electron_24;
   };
 
   contrast = callPackage ../applications/accessibility/contrast { };
@@ -17268,10 +17266,6 @@ with pkgs;
   scalafmt = callPackage ../development/tools/scalafmt { };
 
   scryer-prolog = callPackage ../development/compilers/scryer-prolog { };
-
-  sdcc = callPackage ../development/compilers/sdcc {
-    gputils = null;
-  };
 
   seren = callPackage ../applications/networking/instant-messengers/seren { };
 

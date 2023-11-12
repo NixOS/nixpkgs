@@ -108,7 +108,7 @@ let
       #SocketBindDeny = "any";
       SystemCallFilter = [
         "@system-service"
-        "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@timer"
+        "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@timer"
         "@chown" "@setuid"
       ];
       SystemCallArchitectures = "native";
@@ -222,6 +222,23 @@ in
             expires 30d;
           '';
         };
+        locations."/query" = mkIf (cfg.settings.${iniKey} ? api-origin) {
+          proxyPass = cfg.settings.${iniKey}.api-origin;
+          extraConfig = ''
+            add_header 'Access-Control-Allow-Origin' '*';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+
+            if ($request_method = 'OPTIONS') {
+              add_header 'Access-Control-Max-Age' 1728000;
+              add_header 'Content-Type' 'text/plain; charset=utf-8';
+              add_header 'Content-Length' 0;
+              return 204;
+            }
+
+            add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+          '';
+        };
       } cfg.nginx.virtualHost ];
     };
 
@@ -235,9 +252,6 @@ in
           ensurePermissions = { "DATABASE \"${srvCfg.postgresql.database}\"" = "ALL PRIVILEGES"; };
         }) [srvCfg.user];
     };
-
-    services.sourcehut.services = mkDefault (filter (s: cfg.${s}.enable)
-      [ "builds" "dispatch" "git" "hg" "hub" "lists" "man" "meta" "pages" "paste" "todo" ]);
 
     services.sourcehut.settings = mkMerge [
       {
@@ -363,6 +377,20 @@ in
         }
         extraService
       ])) extraServices)
+
+      # Work around 'pq: permission denied for schema public' with postgres v15, until a
+      # solution for `services.postgresql.ensureUsers` is found.
+      # See https://github.com/NixOS/nixpkgs/issues/216989
+      # Workaround taken from nixos/forgejo: https://github.com/NixOS/nixpkgs/pull/262741
+      (lib.mkIf (
+          cfg.postgresql.enable
+          && lib.strings.versionAtLeast config.services.postgresql.package.version "15.0"
+        ) {
+          postgresql.postStart = (lib.mkAfter ''
+            $PSQL -tAc 'ALTER DATABASE "${srvCfg.postgresql.database}" OWNER TO "${srvCfg.user}";'
+          '');
+        }
+      )
     ];
 
     systemd.timers = mapAttrs (timerName: timer:
