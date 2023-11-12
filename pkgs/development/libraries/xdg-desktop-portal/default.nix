@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.0";
+  version = "1.18.1";
 
   outputs = [ "out" "installedTests" ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    sha256 = "sha256-zp7HBqnjHVs7y6CI1LyL65/UIdxl8VgmP6DtscWYWWg=";
+    sha256 = "sha256-S4I578gX1ONbixWGcQLY3WqzACoVfAtLuOFBhh36hFY=";
   };
 
   patches = [
@@ -132,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
+    homepage = "https://flatpak.github.io/xdg-desktop-portal/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
