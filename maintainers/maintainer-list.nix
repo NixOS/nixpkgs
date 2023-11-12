@@ -2711,6 +2711,12 @@
     githubId = 150560585;
     name = "Dmitry Ivankov";
   };
+  bonsairobo = {
+    email = "duncanfairbanks6@gmail.com";
+    github = "bonsairobo";
+    githubId = 3229981;
+    name = "Duncan Fairbanks";
+  };
   booklearner = {
     name = "booklearner";
     email = "booklearner@proton.me";

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/KhronosGroup/KTX-Software";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ bonsairobo ];
     platforms = platforms.linux;
   };
 }
