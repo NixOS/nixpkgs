@@ -4,6 +4,30 @@
 { lib, config, hostPlatform }:
 
 let
+  inherit (lib)
+    all
+    attrNames
+    concatMapStrings
+    concatMapStringsSep
+    concatStrings
+    findFirst
+    length
+    mapAttrsToList
+    mergeDefinitions
+    mutuallyExclusive
+    optional
+    optionalAttrs
+    optionalString
+    optionals
+    remove
+    unknownModule
+  ;
+
+  inherit (lib.lists)
+    any
+    toList
+  ;
+
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
@@ -26,7 +50,7 @@ let
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
 
   areLicenseListsValid =
-    if lib.mutuallyExclusive allowlist blocklist then
+    if mutuallyExclusive allowlist blocklist then
       true
     else
       throw "allowlistedLicenses and blocklistedLicenses are not mutually exclusive.";
@@ -35,10 +59,10 @@ let
     attrs ? meta.license;
 
   hasAllowlistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && lib.lists.any (l: builtins.elem l allowlist) (lib.lists.toList attrs.meta.license);
+    hasLicense attrs && any (l: builtins.elem l allowlist) (toList attrs.meta.license);
 
   hasBlocklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && lib.lists.any (l: builtins.elem l blocklist) (lib.lists.toList attrs.meta.license);
+    hasLicense attrs && any (l: builtins.elem l blocklist) (toList attrs.meta.license);
 
   allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
@@ -46,14 +70,14 @@ let
   allowUnsupportedSystem = config.allowUnsupportedSystem
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
-  isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
+  isUnfree = licenses: any (l: !l.free or true) licenses;
 
   hasUnfreeLicense = attrs:
     hasLicense attrs &&
-    isUnfree (lib.lists.toList attrs.meta.license);
+    isUnfree (toList attrs.meta.license);
 
   hasNoMaintainers = attrs:
-    attrs ? meta.maintainers && (lib.length attrs.meta.maintainers) == 0;
+    attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -88,7 +112,7 @@ let
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
 
-  isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
+  isNonSource = sourceTypes: any (t: !t.isSource) sourceTypes;
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
@@ -111,7 +135,7 @@ let
     !allowNonSource &&
     !allowNonSourcePredicate attrs;
 
-  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (lib.lists.toList value));
+  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (toList value));
   showLicense = showLicenseOrSourceType;
   showSourceType = showLicenseOrSourceType;
 
@@ -145,7 +169,7 @@ let
 
       Alternatively you can configure a predicate to allow specific packages:
         { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
-            "${lib.getName attrs}"
+            "${getName attrs}"
           ];
         }
     '';
@@ -176,7 +200,7 @@ let
     ''
 
       Known issues:
-    '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
+    '' + (concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
 
         You can install it anyway by allowing this package, using the
         following methods:
@@ -219,7 +243,7 @@ let
 
       and is missing the following ouputs:
 
-      ${lib.concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
+      ${concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
     '';
 
   handleEvalIssue = { meta, attrs }: { reason , errormsg ? "" }:
@@ -241,15 +265,15 @@ let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
         else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
-      isEnabled = lib.findFirst (x: x == reason) null showWarnings;
+             + (optionalString (remediationMsg != "") "\n${remediationMsg}");
+      isEnabled = findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
   # Deep type-checking. Note that calling `type.check` is not enough: see `lib.mkOptionType`'s documentation.
   # We don't include this in lib for now because this function is flawed: it accepts things like `mkIf true 42`.
   typeCheck = type: value: let
-    merged = lib.mergeDefinitions [ ] type [
-      { file = lib.unknownModule; inherit value; }
+    merged = mergeDefinitions [ ] type [
+      { file = unknownModule; inherit value; }
     ];
     eval = builtins.tryEval (builtins.deepSeq merged.mergedValue null);
   in eval.success;
@@ -320,8 +344,8 @@ let
           lib.generators.toPretty { indent = "    "; } v
         }"
     else
-      "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: lib.optionals config.checkMeta (lib.remove null (lib.mapAttrsToList checkMetaAttr meta));
+      "key 'meta.${k}' is unrecognized; expected one of: \n  [${concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)}]";
+  checkMeta = meta: optionals config.checkMeta (remove null (mapAttrsToList checkMetaAttr meta));
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
@@ -343,7 +367,7 @@ let
     # Check meta attribute types first, to make sure it is always called even when there are other issues
     # Note that this is not a full type check and functions below still need to by careful about their inputs!
     let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n  - " + x) res}\n";
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${concatMapStrings (x: "\n  - " + x) res}\n";
         unfree = false; nonSource = false; broken = false; unsupported = false; insecure = false;
       }
     else {
@@ -421,12 +445,12 @@ let
         let
           hasOutput = out: builtins.elem out outputs;
         in
-        [ (lib.findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
-        ++ lib.optional (hasOutput "man") "man";
+        [ (findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
+        ++ optional (hasOutput "man") "man";
     }
     // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
-    // lib.optionalAttrs (pos != null) {
+    // optionalAttrs (pos != null) {
       position = pos.file + ":" + toString pos.line;
     } // {
       # Expose the result of the checks for everyone to see.
@@ -434,7 +458,7 @@ let
 
       available = validity.valid != "no"
       && (if config.checkMetaRecursively or false
-      then lib.all (d: d.meta.available or true) references
+      then all (d: d.meta.available or true) references
       else true);
     };
 
