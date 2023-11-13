@@ -10,7 +10,7 @@
 }:
 
 let
-  isCross = stdenv.hostPlatform != stdenv.targetPlatform;
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 stdenv.mkDerivation (finalAttrs:  {
   pname = "dxvk";

@@ -19,7 +19,7 @@
 assert !sdl2Support || !glfwSupport;
 
 let
-  isCross = stdenv.hostPlatform != stdenv.targetPlatform;
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
   isWindows = stdenv.hostPlatform.uname.system == "Windows";
 in
 stdenv.mkDerivation (finalAttrs:  {
