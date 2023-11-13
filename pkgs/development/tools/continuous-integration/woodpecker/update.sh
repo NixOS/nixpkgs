@@ -26,12 +26,17 @@ fi
 
 # strip leading "v"
 version="${version#v}"
+sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
 
 # Woodpecker repository
 src_hash=$(nix-prefetch-github woodpecker-ci woodpecker --rev "v${version}" | jq -r .hash)
+src_hash=$(nix hash to-sri --type sha256 "$src_hash")
+sed -i -E -e "s#srcHash = \".*\"#srcHash = \"$src_hash\"#" common.nix
 
 # Go modules
 vendorHash=$(nix-prefetch '{ sha256 }: (callPackage (import ./cli.nix) { }).goModules.overrideAttrs (_: { modHash = sha256; })')
+vendorHash=$(nix hash to-sri --type sha256 "$vendorHash")
+sed -i -E -e "s#vendorHash = \".*\"#vendorHash = \"$vendorHash\"#" common.nix
 
 # Front-end dependencies
 woodpecker_src="https://raw.githubusercontent.com/woodpecker-ci/woodpecker/v$version"
@@ -41,13 +46,5 @@ trap 'rm -rf pnpm-lock.yaml' EXIT
 wget "${TOKEN_ARGS[@]}" "$woodpecker_src/web/pnpm-lock.yaml"
 pnpm-lock-export --schema yarn.lock@v1
 yarn_hash=$(prefetch-yarn-deps yarn.lock)
-
-# Use friendlier hashes
-src_hash=$(nix hash to-sri --type sha256 "$src_hash")
-vendorHash=$(nix hash to-sri --type sha256 "$vendorHash")
 yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
-
-sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
-sed -i -E -e "s#srcHash = \".*\"#srcHash = \"$src_hash\"#" common.nix
-sed -i -E -e "s#vendorHash = \".*\"#vendorHash = \"$vendorHash\"#" common.nix
 sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" common.nix
