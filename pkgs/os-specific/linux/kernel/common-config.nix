@@ -698,7 +698,6 @@ let
       ZRAM_WRITEBACK = option yes;
       ZSWAP          = option yes;
       ZBUD           = option yes;
-      ZSMALLOC       = module;
     };
 
     brcmfmac = {
