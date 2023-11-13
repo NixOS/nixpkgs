@@ -1,0 +1,38 @@
+diff --git a/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake.in b/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake.in
+index 8a91fb8b87..b0f7cac849 100644
+--- a/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake.in
++++ b/tools/qmlcachegen/Qt5QuickCompilerConfig.cmake.in
+@@ -18,11 +18,8 @@ function(QTQUICK_COMPILER_ADD_RESOURCES outfiles)
+ 
+     find_package(Qt5 COMPONENTS Qml Core)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(compiler_path \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}qmlcachegen$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(compiler_path \"$${CMAKE_BIN_DIR}qmlcachegen$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
++    find_program(compiler_path \"qmlcachegen$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
++
+     if(NOT EXISTS \"${compiler_path}\" )
+         message(FATAL_ERROR \"The package \\\"Qt5QuickCompilerConfig\\\" references the file
+    \\\"${compiler_path}\\\"
+diff --git a/tools/qmlimportscanner/Qt5QmlImportScannerConfig.cmake.in b/tools/qmlimportscanner/Qt5QmlImportScannerConfig.cmake.in
+index f92b8d295d..c85ec4d206 100644
+--- a/tools/qmlimportscanner/Qt5QmlImportScannerConfig.cmake.in
++++ b/tools/qmlimportscanner/Qt5QmlImportScannerConfig.cmake.in
+@@ -13,12 +13,9 @@ function(QT5_IMPORT_QML_PLUGINS target)
+ 
+     # Find location of qmlimportscanner.
+     find_package(Qt5 COMPONENTS Core)
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(tool_path
+-        \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}qmlimportscanner$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(tool_path \"$${CMAKE_BIN_DIR}qmlimportscanner$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
++
++    find_program(tool_path \"qmlimportscanner$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
++
+     if(NOT EXISTS \"${tool_path}\" )
+         message(FATAL_ERROR \"The package \\\"Qt5QmlImportScannerConfig\\\" references the file
+    \\\"${tool_path}\\\"
