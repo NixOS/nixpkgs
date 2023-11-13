@@ -81,7 +81,7 @@ qmakePathHook() {
         QMAKEPATH="${QMAKEPATH}${QMAKEPATH:+:}$1"
     fi
 }
-envBuildHostHooks+=(qmakePathHook)
+envHostTargetHooks+=(qmakePathHook)
 
 # Propagate any runtime dependency of the building package.
 # Each dependency is propagated to the user environment and as a build
