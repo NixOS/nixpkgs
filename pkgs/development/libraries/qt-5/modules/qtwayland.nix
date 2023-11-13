@@ -1,10 +1,15 @@
-{ qtModule, qtbase, qtquickcontrols, wayland, wayland-scanner, pkg-config }:
+{ qtModule, lib, stdenv, qtbase, qtdeclarative, wayland, wayland-scanner, pkg-config, qtwayland, buildPackages }:
+
+let
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
+in
 
 qtModule {
   pname = "qtwayland";
-  propagatedBuildInputs = [ qtbase qtquickcontrols ];
-  buildInputs = [ wayland ];
-  nativeBuildInputs = [ pkg-config wayland-scanner ];
+  propagatedBuildInputs = [ qtbase ];
+  buildInputs = [ wayland qtdeclarative ];
+  nativeBuildInputs = [ pkg-config wayland-scanner ]
+    ++ lib.optional isCrossBuild qtwayland.bin;
   outputs = [ "out" "dev" "bin" ];
   patches = [
     # NixOS-specific, ensure that app_id is correctly determined for
@@ -12,4 +17,5 @@ qtModule {
     # context).
     ./qtwayland-app_id.patch
   ];
+  disallowedReferences = lib.optional isCrossBuild buildPackages.qt5.qtwayland.bin;
 }
