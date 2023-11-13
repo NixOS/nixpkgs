@@ -179,7 +179,7 @@ in
           warp-routing = {
             enabled = mkOption {
               type = with types; nullOr bool;
-              default = null;
+              default = false;
               description = lib.mdDoc ''
                 Enable warp routing.
 
@@ -284,6 +284,7 @@ in
             fullConfig = {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
+              warp-routing = tunnel.warp-routing;
               ingress =
                 (map
                   (key: {
