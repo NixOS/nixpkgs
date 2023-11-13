@@ -5,6 +5,7 @@
 , qmake
 , patches
 , srcs
+, qtbase-bootstrap
 }:
 
 let inherit (lib) licenses maintainers platforms; in
@@ -38,6 +39,7 @@ mkDerivation (args // {
     ${args.preConfigure or ""}
 
     fixQtBuiltinPaths . '*.pr?'
+    fixQtBuiltinPaths . '*.cmake.in'
   '' + lib.optionalString (builtins.compareVersions "5.15.0" version <= 0)
   # Note: We use ${version%%-*} to remove any tag from the end of the version
   # string. Version tags are added by Nixpkgs maintainers and not reflected in
@@ -73,6 +75,8 @@ mkDerivation (args // {
 
     ${args.postFixup or ""}
   '';
+
+  disallowedReferences = (args.disallowedReferences or []) ++ [ qtbase-bootstrap.qmake ];
 
   meta = {
     homepage = "https://www.qt.io";
