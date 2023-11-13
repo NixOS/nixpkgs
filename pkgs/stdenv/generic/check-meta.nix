@@ -292,7 +292,9 @@ let
       str
       unspecified
     ;
-  in rec {
+
+    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
+  in {
     # These keys are documented
     description = str;
     mainProgram = str;
@@ -308,7 +310,7 @@ let
     maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
     pkgConfigModules = listOf str;
-    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
+    inherit platforms;
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;
