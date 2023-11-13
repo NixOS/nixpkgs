@@ -7,6 +7,7 @@
   qmake,
   patches,
   srcs,
+  qtbase-bootstrap,
 }:
 
 let
@@ -57,6 +58,7 @@ mkDerivation (
       ${args.preConfigure or ""}
 
       fixQtBuiltinPaths . '*.pr?'
+      fixQtBuiltinPaths . '*.cmake.in'
     ''
     +
       lib.optionalString (builtins.compareVersions "5.15.0" version <= 0)
@@ -94,6 +96,8 @@ mkDerivation (
 
       ${args.postFixup or ""}
     '';
+
+    disallowedReferences = (args.disallowedReferences or [ ]) ++ [ qtbase-bootstrap.qmake ];
 
     meta = {
       homepage = "https://www.qt.io";
