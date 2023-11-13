@@ -53,6 +53,7 @@ let
       ./qtdeclarative.patch
       # prevent headaches from stale qmlcache data
       ./qtdeclarative-default-disable-qmlcache.patch
+      ./qtdeclarative-cross-build.patch
     ];
     qtlocation = lib.optionals stdenv.cc.isClang [
       # Fix build with Clang 16
