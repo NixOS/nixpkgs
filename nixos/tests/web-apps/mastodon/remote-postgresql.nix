@@ -29,6 +29,8 @@ in
 
       services.postgresql = {
         enable = true;
+        # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
+        package = pkgs.postgresql_14;
         enableTCPIP = true;
         authentication = ''
           hostnossl mastodon_local mastodon_test 192.168.2.201/32 md5
