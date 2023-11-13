@@ -13,6 +13,7 @@ rec {
     Run the shell command `buildCommand' to produce a store path named `name'.
 
     The attributes in `env' are added to the environment prior to running the command.
+    Environment variables set by `stdenv.mkDerivation` take precedence.
 
     By default `runCommand` runs in a stdenv with no compiler environment.
     `runCommandCC` uses the default stdenv, `pkgs.stdenv`.
