@@ -49,11 +49,11 @@ As of NixOS 23.11, `services.postgresql.ensureUsers.*.ensurePermissions` has bee
   - https://www.postgresql.org/docs/release/15.0/
   - https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV
 
-### Assigning ownership
+### Assigning ownership {#module-services-postgres-initializing-ownership}
 
 The corresponding system user should be database owner in most cases. This can be done with `services.postgresql.ensureUsers.*.ensureDBOwnership = true;`
 
-### Assigning extra permissions
+### Assigning extra permissions {#module-services-postgres-initializing-extra-permissions}
 
 For many cases, it will be enough to have the database user be the
 owner. Until `services.postgresql.ensureUsers.*.ensurePermissions` has
@@ -63,7 +63,7 @@ one of the following approaches:
 **WARNING:** please steer clear of `services.postgresql.initialScript`
 for this, as that is *only run on first start of PostgreSQL*.
 
-#### Assigning permissions in database `postStart`
+#### Assigning permissions in database `postStart` {#module-services-postgres-initializing-extra-permissions-post-start}
 
 ```nix
     systemd.services.postgresql.postStart = lib.mkAfter ''
@@ -81,7 +81,7 @@ example, `mkAfter` ensures that permissions are assigned after any
 databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
 are already created.
 
-#### Assigning permissions in service `preStart` or intermediate oneshot service
+#### Assigning permissions in service `preStart` or intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-pre-start}
 
 ```nix
     systemd.services."service1".preStart = ''
