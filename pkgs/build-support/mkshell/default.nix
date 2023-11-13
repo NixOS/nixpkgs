@@ -16,6 +16,10 @@
 let
   mergeInputs = name:
     (attrs.${name} or [ ]) ++
+    # 1. get all `{build,nativeBuild,...}Inputs` from the elements of `inputsFrom`
+    # 2. since that is a list of lists, `flatten` that into a regular list
+    # 3. filter out of the result everything that's in `inputsFrom` itself
+    # this leaves actual dependencies of the derivations in `inputsFrom`, but never the derivations themselves
     (lib.subtractLists inputsFrom (lib.flatten (lib.catAttrs name inputsFrom)));
 
   rest = builtins.removeAttrs attrs [
