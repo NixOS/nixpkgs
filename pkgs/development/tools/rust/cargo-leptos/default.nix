@@ -15,13 +15,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
     rev = "${version}";
-    hash = "sha256-XoTXVzhBW+oUHu2TBZC+sFqMAVZCOJeuymqmsxTWpZ0=";
+    hash = "sha256-i2nKtQC63BbZsrYvg+HkdqQfK59f0LzZ9dfmFBaqn14=";
   };
 
   cargoLock = {
@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A build tool for the Leptos web framework";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ benwis ];
   };
