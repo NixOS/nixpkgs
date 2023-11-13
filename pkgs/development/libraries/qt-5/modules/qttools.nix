@@ -1,8 +1,15 @@
-{ qtModule, stdenv, lib, qtbase, qtdeclarative }:
+{ qtModule, stdenv, lib, qtbase, qtdeclarative, qttools }:
+
+let
+  isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
+in
 
 qtModule {
   pname = "qttools";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
+  buildInputs = [ qtbase qtdeclarative ];
+  # We don't need this to build qttools itself, only for the packages that include qttools
+  # in their buildInputs and expect to get not only libs but also runnable tools.
+  propagatedNativeBuildInputs = lib.optional isCrossBuild qttools;
   outputs = [ "out" "dev" "bin" ];
 
   # fixQtBuiltinPaths overwrites a builtin path we should keep
