@@ -11,6 +11,7 @@ let
     concatMapStringsSep
     concatStrings
     findFirst
+    isDerivation
     length
     mapAttrsToList
     mergeDefinitions
@@ -279,7 +280,19 @@ let
   in eval.success;
 
   # TODO make this into a proper module and use the generic option documentation generation?
-  metaTypes = with lib.types; rec {
+  metaTypes = let
+    inherit (lib.types)
+      anything
+      attrsOf
+      bool
+      either
+      int
+      listOf
+      mkOptionType
+      str
+      unspecified
+    ;
+  in rec {
     # These keys are documented
     description = str;
     mainProgram = str;
