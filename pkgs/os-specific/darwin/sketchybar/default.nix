@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.19.1";
+  version = "2.19.2";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ge15Df65fvNJ8ZdJ8giqvYytIivup2IIFPS+Ie3Yl9A=";
+    hash = "sha256-nuK1Ip/B1yGMtKwtRIiQ4ATJU5JEDfpQyq6+WR46EMw=";
   };
 
   buildInputs = [
@@ -42,12 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     MediaRemote
     SkyLight
   ];
-
-  # NOTE: Release didn't bump patch version remove with next release
-  postPatch = ''
-    substituteInPlace src/sketchybar.c \
-      --replace "#define PATCH 0" "#define PATCH 1"
-  '';
 
   makeFlags = [
     target
