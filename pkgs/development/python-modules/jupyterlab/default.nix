@@ -9,7 +9,7 @@
 , ipykernel
 , jupyter-core
 , jupyter-lsp
-, jupyterlab_server
+, jupyterlab-server
 , jupyter-server
 , notebook-shim
 , jinja2
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     ipykernel
     jupyter-core
     jupyter-lsp
-    jupyterlab_server
+    jupyterlab-server
     jupyter-server
     notebook-shim
     jinja2
