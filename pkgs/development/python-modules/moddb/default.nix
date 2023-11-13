@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "moddb";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ClementJ18";
     repo = "moddb";
     rev = "v${version}";
-    hash = "sha256-2t5QQAmSLOrdNCl0XdsFPdP2UF10/qq69DovqeQ1Vt8=";
+    hash = "sha256-dmrrjRy/ByWfwdpu3NrJheR+h1VBkXqK29XFIcKNPCg=";
   };
 
   nativeBuildInputs = [
