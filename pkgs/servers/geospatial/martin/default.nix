@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.9.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
     rev = "v${version}";
-    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
+    hash = "sha256-gcivJsHXc4n9dn/y1CMkEQaJGIALnMqfrK6mSFK7SDE=";
   };
 
-  cargoHash = "sha256-RO9nUH2+0jOCbvGtZ5j802mL85tY+Jz7ygPrNuFeE98=";
+  cargoHash = "sha256-XqCzWbU81p3XpSpU4RpspGBJg3B4QjrXXkMbNEsdmyo=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -59,15 +59,22 @@ rustPlatform.buildRustPackage rec {
     "--skip table_source"
     "--skip tables_tilejson"
     "--skip tables_multiple_geom_ok"
+    "--skip pmt_get_raster"
+    "--skip pmt_get_tilejson_gzip"
+    "--skip pmt_get_catalog"
+    "--skip pmt_get_catalog_gzip"
+    "--skip pmt_get_raster_gzip"
+    "--skip pmt_get_tilejson"
+    "--skip summary"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.maplibre.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = lib.teams.geospatial.members;
   };
 }
