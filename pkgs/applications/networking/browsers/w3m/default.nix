@@ -4,7 +4,7 @@
 , graphicsSupport ? !stdenv.isDarwin, imlib2
 , x11Support ? graphicsSupport, libX11
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses
-, perl, man, pkg-config, buildPackages, w3m
+, pkg-config, buildPackages, w3m
 , testers
 }:
 
@@ -31,10 +31,10 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = lib.optionalString stdenv.isSunOS "-lsocket -lnsl";
 
-  # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
-  # the correct paths.
-  PERL = "${perl}/bin/perl";
-  MAN = "${man}/bin/man";
+  # we must set these otherwise the generated files (e.g. w3mhelp.cgi) contains garbage paths
+  # but we rely on any perl/man from PATH to reduce the rebuild count of man-db
+  PERL = "perl";
+  MAN = "man";
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
