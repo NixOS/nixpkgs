@@ -1,30 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 , psutil
 , unittestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pyperf";
-  version = "2.6.1";
-  format = "setuptools";
+  version = "2.6.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fxrqabjv3mEhDlEhZth2Tndlqcdni3aAUhdLAfNJ8kc=";
+     sha256 = "sha256-ZNj63OanT0ePKYMsHqoqBIVmVev/FyktUjf8gxfDo8U=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-pythonpath-in-tests.patch";
-      url = "https://github.com/psf/pyperf/commit/d373c5e56c0257d2d7abd705b676bea25cf66566.patch";
-      hash = "sha256-2q1fTf+uU3qj3BG8P5otX4f7mSTnQxm4sfmmgIUuszA=";
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [

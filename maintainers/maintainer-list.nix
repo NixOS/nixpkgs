@@ -11720,6 +11720,12 @@
     githubId = 978196;
     name = "Michaël Faille";
   };
+    mikecm = {
+    email = "mikecmcleod@gmail.com";
+    github = "MaxwellDupre";
+    githubId = 14096356;
+    name = "Michael McLeod";
+  };
   mikesperber = {
     email = "sperber@deinprogramm.de";
     github = "mikesperber";
