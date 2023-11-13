@@ -455,19 +455,16 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      {
-        assertion = all
-          ({ name, ensureDBOwnership, ... }: ensureDBOwnership -> builtins.elem name cfg.ensureDatabases)
-          cfg.ensureUsers;
-        message = ''
-          For each database user defined with `services.postgresql.ensureUsers` and
-          `ensureDBOwnership = true;`, a database with the same name must be defined
-          in `services.postgresql.ensureDatabases`.
-        '';
-      }
-    ];
+    assertions = map ({ name, ensureDBOwnership, ... }: {
+      assertion = ensureDBOwnership -> builtins.elem name cfg.ensureDatabases;
+      message = ''
+        For each database user defined with `services.postgresql.ensureUsers` and
+        `ensureDBOwnership = true;`, a database with the same name must be defined
+        in `services.postgresql.ensureDatabases`.
 
+        Offender: ${name} has not been found among databases.
+      '';
+    }) cfg.ensureUsers;
     # `ensurePermissions` is now deprecated, let's avoid it.
     warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
       `services.postgresql.*.ensurePermissions` is used in your expressions,
