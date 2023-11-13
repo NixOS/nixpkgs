@@ -1,0 +1,20 @@
+--- old/test/doctest.h	2019-03-05 18:04:06.143740733 +0300
++++ new/test/doctest.h	2019-03-05 18:04:43.577284916 +0300
+@@ -1307,7 +1307,7 @@
+                                                        __FILE__, __LINE__, #expr, #as);            \
+             try {                                                                                  \
+                 expr;                                                                              \
+-            } catch(as) {                                                                          \
++            } catch(as e) {                                                                          \
+                 _DOCTEST_RB.m_threw    = true;                                                     \
+                 _DOCTEST_RB.m_threw_as = true;                                                     \
+             } catch(...) { _DOCTEST_RB.m_threw = true; }                                           \
+@@ -1332,7 +1332,7 @@
+ #define DOCTEST_REQUIRE_THROWS(expr) DOCTEST_ASSERT_THROWS(expr, DT_REQUIRE_THROWS)
+ 
+ #define DOCTEST_WARN_THROWS_AS(expr, ex) DOCTEST_ASSERT_THROWS_AS(expr, ex, DT_WARN_THROWS_AS)
+-#define DOCTEST_CHECK_THROWS_AS(expr, ex) DOCTEST_ASSERT_THROWS_AS(expr, ex, DT_CHECK_THROWS_AS)
++#define DOCTEST_CHECK_THROWS_AS(expr, ex) DOCTEST_ASSERT_THROWS_AS(expr, const ex &, DT_CHECK_THROWS_AS)
+ #define DOCTEST_REQUIRE_THROWS_AS(expr, ex) DOCTEST_ASSERT_THROWS_AS(expr, ex, DT_REQUIRE_THROWS_AS)
+ 
+ #define DOCTEST_WARN_NOTHROW(expr) DOCTEST_ASSERT_NOTHROW(expr, DT_WARN_NOTHROW)

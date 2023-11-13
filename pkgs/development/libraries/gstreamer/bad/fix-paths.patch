@@ -1,0 +1,48 @@
+diff --git a/gst-libs/gst/cuda/gstcudaloader.c b/gst-libs/gst/cuda/gstcudaloader.c
+index fffcbefd2b..6f738d3af3 100644
+--- a/gst-libs/gst/cuda/gstcudaloader.c
++++ b/gst-libs/gst/cuda/gstcudaloader.c
+@@ -165,6 +165,11 @@ gst_cuda_load_library (void)
+     return TRUE;
+ 
+   module = g_module_open (filename, G_MODULE_BIND_LAZY);
++
++  if (module == NULL) {
++    module = g_module_open ("@driverLink@/lib/" CUDA_LIBNAME, G_MODULE_BIND_LAZY);
++  }
++
+   if (module == NULL) {
+     GST_WARNING ("Could not open library %s, %s", filename, g_module_error ());
+     return FALSE;
+diff --git a/sys/nvcodec/gstcuvidloader.c b/sys/nvcodec/gstcuvidloader.c
+index e957e062e0..004ec2dcd5 100644
+--- a/sys/nvcodec/gstcuvidloader.c
++++ b/sys/nvcodec/gstcuvidloader.c
+@@ -85,6 +85,11 @@ gst_cuvid_load_library (guint api_major_ver, guint api_minor_ver)
+     return TRUE;
+ 
+   module = g_module_open (filename, G_MODULE_BIND_LAZY);
++
++  if (module == NULL) {
++    module = g_module_open ("@driverLink@/lib/" NVCUVID_LIBNAME, G_MODULE_BIND_LAZY);
++  }
++
+   if (module == NULL) {
+     GST_WARNING ("Could not open library %s, %s", filename, g_module_error ());
+     return FALSE;
+diff --git a/sys/nvcodec/gstnvenc.c b/sys/nvcodec/gstnvenc.c
+index 106857a954..3bab9989f0 100644
+--- a/sys/nvcodec/gstnvenc.c
++++ b/sys/nvcodec/gstnvenc.c
+@@ -907,6 +907,11 @@ gst_nvenc_load_library (guint * api_major_ver, guint * api_minor_ver)
+   };
+ 
+   module = g_module_open (NVENC_LIBRARY_NAME, G_MODULE_BIND_LAZY);
++
++  if (module == NULL) {
++    module = g_module_open ("@driverLink@/lib/" NVENC_LIBRARY_NAME, G_MODULE_BIND_LAZY);
++  }
++
+   if (module == NULL) {
+     GST_WARNING ("Could not open library %s, %s",
+         NVENC_LIBRARY_NAME, g_module_error ());

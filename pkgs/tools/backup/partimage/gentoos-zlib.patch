@@ -1,0 +1,33 @@
+http://bugs.gentoo.org/405323
+
+--- a/src/client/imagefile.cpp
++++ b/src/client/imagefile.cpp
+@@ -783,7 +783,7 @@
+   else if (m_options.dwCompression == COMPRESS_GZIP) // Gzip compression
+     {
+       showDebug(1, "open gzip\n");
+-      m_gzImageFile = (gzFile *) gzdopen(m_nFdImage, "wb"); //"wb1h");
++      m_gzImageFile = gzdopen(m_nFdImage, "wb"); //"wb1h");
+       if (m_gzImageFile == NULL)
+ 	{
+ 	  showDebug(1, "error:%d %s\n", errno, strerror(errno));
+@@ -1098,7 +1098,7 @@
+     }
+   else if (m_options.dwCompression == COMPRESS_GZIP) // Gzip compression
+     {
+-      m_gzImageFile = (gzFile *) gzdopen(m_nFdImage, "rb");
++      m_gzImageFile = gzdopen(m_nFdImage, "rb");
+       if (m_gzImageFile == NULL)
+         THROW(ERR_ERRNO, errno);
+       else
+--- a/src/client/imagefile.h
++++ b/src/client/imagefile.h
+@@ -41,7 +41,7 @@
+   COptions m_options;
+ 
+   FILE *m_fImageFile;
+-  gzFile *m_gzImageFile;
++  gzFile m_gzImageFile;
+   BZFILE *m_bzImageFile;
+ 
+   int m_nFdImage;

@@ -1,0 +1,34 @@
+diff --git a/xbase64/xbase64.cpp b/xbase64/xbase64.cpp
+index fc5613d..2449535 100644
+--- a/xbase64/xbase64.cpp
++++ b/xbase64/xbase64.cpp
+@@ -51,6 +51,7 @@
+ #include <xbase64/xbase64.h>
+ #include <ctype.h>
+ #include <string.h>
++#include <cerrno>
+ 
+ //#include <xbase64/xbexcept.h>
+ 
+diff --git a/xbase64/xblock.cpp b/xbase64/xblock.cpp
+index c44cbb9..3554fc1 100644
+--- a/xbase64/xblock.cpp
++++ b/xbase64/xblock.cpp
+@@ -53,6 +53,7 @@
+ #endif
+ 
+ #include <xbase64/xbase64.h>
++#include <cerrno>
+ 
+ #ifdef HAVE_IO_H     // windows locking
+ #include <io.h>
+diff --git a/xbase64/xbnode.cpp b/xbase64/xbnode.cpp
+index 5e688c1..3c652b3 100644
+--- a/xbase64/xbnode.cpp
++++ b/xbase64/xbnode.cpp
+@@ -1,4 +1,4 @@
+-#include "xbNode.h"
++#include "xbnode.h"
+ 
+ void xbNodeLink::AddNode(xbNodeLink* node)
+ {

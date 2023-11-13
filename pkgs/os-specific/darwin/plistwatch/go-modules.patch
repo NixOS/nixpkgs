@@ -1,0 +1,19 @@
+--- a/go.mod
++++ b/go.mod
+@@ -3,1 +3,6 @@
+  go 1.14
++ require(
++   github.com/jessevdk/go-flags v1.5.0
++   howett.net/plist v0.0.0-20200419221736-3b63eb3a43b5
++   gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 // indirect
++ )
+--- a/go.sum
++++ b/go.sum
+@@ -9,1 +9,7 @@
+  howett.net/plist v0.0.0-20200419221736-3b63eb3a43b5/go.mod h1:vMygbs4qMhSZSc4lCUl2OEE+rDiIIJAIdR4m7MiMcm0=
++ gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 h1:POO/ycCATvegFmVuPpQzZFJ+pGZeX22Ufu6fibxDVjU=
++ gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0/go.mod h1:WDnlLJ4WF5VGsH/HVa3CI79GS0ol3YnhVnKP89i0kNg=
++ github.com/jessevdk/go-flags v1.5.0 h1:1jKYvbxEjfUl0fmqTCOfonvskHHXMjBySTLW4y9LFvc=
++ github.com/jessevdk/go-flags v1.5.0/go.mod h1:Fw0T6WPc1dYxT4mKEZRfG5kJhaTDP9pj1c2EWnYs/m4=
++ golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4 h1:EZ2mChiOa8udjfp6rRmswTbtZN/QzUQp4ptM4rnjHvc=
++ golang.org/x/sys v0.0.0-20210320140829-1e4c9ba3b0c4/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
