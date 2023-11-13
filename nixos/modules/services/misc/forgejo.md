@@ -12,6 +12,10 @@ The method of choice for running forgejo used to be with the
 `services.gitea` module. For migrating such a setup to the
 `services.forgejo` module:
 
+**NOTE:** migration is not strictly necessary at this point, since the
+gitea - drop-in method is expected to continue working for the time
+being.
+
 ### for default options
 
 for PostgreSQL, adapt accordingly on other DBs
