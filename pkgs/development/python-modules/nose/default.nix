@@ -5,12 +5,16 @@
 , isPyPy
 , python
 , coverage
-, buildPackages
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   version = "1.3.7";
   pname = "nose";
+
+  # The getargspec() function has been removed from inspect module in 3.11.
+  # See https://github.com/nose-devs/nose/blob/7c26ad1e6b7d308cafa328ad34736d34028c122a/nose/plugins/manager.py#L108.
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
