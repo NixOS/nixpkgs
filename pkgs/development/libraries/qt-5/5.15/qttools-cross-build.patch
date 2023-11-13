@@ -1,0 +1,139 @@
+diff --git a/src/assistant/help/Qt5HelpConfigExtras.cmake.in b/src/assistant/help/Qt5HelpConfigExtras.cmake.in
+index 1f7544b62..bd18710f9 100644
+--- a/src/assistant/help/Qt5HelpConfigExtras.cmake.in
++++ b/src/assistant/help/Qt5HelpConfigExtras.cmake.in
+@@ -2,30 +2,20 @@
+ if (NOT TARGET Qt5::qcollectiongenerator)
+     add_executable(Qt5::qcollectiongenerator IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Help_install_prefix}/$${CMAKE_BIN_DIR}qcollectiongenerator$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qcollectiongenerator$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Help_check_file_exists(${imported_location})
++    find_program(qcollectiongenerator_imported_location \"qcollectiongenerator$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qcollectiongenerator PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qcollectiongenerator_imported_location}
+     )
+ endif()
+ 
+ if (NOT TARGET Qt5::qhelpgenerator)
+     add_executable(Qt5::qhelpgenerator IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Help_install_prefix}/$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qhelpgenerator$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_Help_check_file_exists(${imported_location})
++    find_program(qhelpgenerator_imported_location \"qhelpgenerator$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qhelpgenerator PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qhelpgenerator_imported_location}
+     )
+ endif()
+ 
+diff --git a/src/linguist/Qt5LinguistToolsConfig.cmake.in b/src/linguist/Qt5LinguistToolsConfig.cmake.in
+index 2e99bc762..36af1a596 100644
+--- a/src/linguist/Qt5LinguistToolsConfig.cmake.in
++++ b/src/linguist/Qt5LinguistToolsConfig.cmake.in
+@@ -44,45 +44,30 @@ endmacro()
+ if (NOT TARGET Qt5::lrelease)
+     add_executable(Qt5::lrelease IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5_linguisttools_install_prefix}/$${CMAKE_BIN_DIR}lrelease$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}lrelease$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_LinguistTools_check_file_exists(${imported_location})
++    find_program(lrelease_imported_location \"lrelease$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::lrelease PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${lrelease_imported_location}
+     )
+ endif()
+ 
+ if (NOT TARGET Qt5::lupdate)
+     add_executable(Qt5::lupdate IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5_linguisttools_install_prefix}/$${CMAKE_BIN_DIR}lupdate$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}lupdate$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_LinguistTools_check_file_exists(${imported_location})
++    find_program(lupdate_imported_location \"lupdate$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::lupdate PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${lupdate_imported_location}
+     )
+ endif()
+ 
+ if (NOT TARGET Qt5::lconvert)
+     add_executable(Qt5::lconvert IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5_linguisttools_install_prefix}/$${CMAKE_BIN_DIR}lconvert$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}lconvert$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_LinguistTools_check_file_exists(${imported_location})
++    find_program(lconvert_imported_location \"lconvert$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::lconvert PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${lconvert_imported_location}
+     )
+ endif()
+ 
+diff --git a/src/qdoc/Qt5DocToolsConfig.cmake.in b/src/qdoc/Qt5DocToolsConfig.cmake.in
+index 2a252bb31..6b2555c4d 100644
+--- a/src/qdoc/Qt5DocToolsConfig.cmake.in
++++ b/src/qdoc/Qt5DocToolsConfig.cmake.in
+@@ -43,15 +43,10 @@ endmacro()
+ if (NOT TARGET Qt5::qdoc)
+     add_executable(Qt5::qdoc IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5_qdoctools_install_prefix}/$${CMAKE_BIN_DIR}qdoc$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qdoc$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_DocTools_check_file_exists(${imported_location})
++    find_program(qdoc_imported_location \"qdoc$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qdoc PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qdoc_imported_location}
+     )
+ endif()
+ 
+diff --git a/src/qtattributionsscanner/Qt5AttributionsScannerTools.cmake.in b/src/qtattributionsscanner/Qt5AttributionsScannerTools.cmake.in
+index e99540bfa..85171c76b 100644
+--- a/src/qtattributionsscanner/Qt5AttributionsScannerTools.cmake.in
++++ b/src/qtattributionsscanner/Qt5AttributionsScannerTools.cmake.in
+@@ -43,15 +43,10 @@ endmacro()
+ if (NOT TARGET Qt5::qtattributionsscanner)
+     add_executable(Qt5::qtattributionsscanner IMPORTED)
+ 
+-!!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5_qattributionsscannertools_install_prefix}/$${CMAKE_BIN_DIR}qtattributionsscanner$$CMAKE_BIN_SUFFIX\")
+-!!ELSE
+-    set(imported_location \"$${CMAKE_BIN_DIR}qtattributionsscanner$$CMAKE_BIN_SUFFIX\")
+-!!ENDIF
+-    _qt5_AttributionsScannerTools_check_file_exists(${imported_location})
++    find_program(qtattributionsscanner_imported_location \"qtattributionsscanner$$CMAKE_BIN_SUFFIX\" PATHS ENV PATH NO_DEFAULT_PATH)
+ 
+     set_target_properties(Qt5::qtattributionsscanner PROPERTIES
+-        IMPORTED_LOCATION ${imported_location}
++        IMPORTED_LOCATION ${qtattributionsscanner_imported_location}
+     )
+ endif()
+ 
