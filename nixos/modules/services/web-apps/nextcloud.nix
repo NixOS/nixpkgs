@@ -125,12 +125,7 @@ in {
       '';
       example = literalExpression ''
         {
-          maps = pkgs.fetchNextcloudApp {
-            name = "maps";
-            sha256 = "007y80idqg6b6zk6kjxg4vgw0z8fsxs9lajnv49vv1zjy6jx2i1i";
-            url = "https://github.com/nextcloud/maps/releases/download/v0.1.9/maps-0.1.9.tar.gz";
-            version = "0.1.9";
-          };
+          inherit (pkgs.nextcloud25Packages.apps) mail calendar contact;
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
