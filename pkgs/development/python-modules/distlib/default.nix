@@ -19,7 +19,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  postFixup = lib.optionalString (!stdenv.targetPlatform.isWindows) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     find $out -name '*.exe' -delete
   '';
 

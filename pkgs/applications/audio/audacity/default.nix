@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11.0") ''
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 

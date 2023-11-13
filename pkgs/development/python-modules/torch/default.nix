@@ -189,7 +189,7 @@ in buildPythonPackage rec {
   ''
   # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
   # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
-  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0") ''
+  + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") ''
     substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace '#if __cplusplus >= 201703L
     inline void *aligned_alloc(size_t align, size_t size)' '#if __cplusplus >= 201703L && 0
     inline void *aligned_alloc(size_t align, size_t size)'

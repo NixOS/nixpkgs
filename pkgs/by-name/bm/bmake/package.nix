@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
     platforms = lib.platforms.unix;
     # ofborg: x86_64-linux builds the musl package, aarch64-linux doesn't
-    broken = stdenv.targetPlatform.isMusl && stdenv.buildPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isMusl && stdenv.buildPlatform.isAarch64;
   };
 })
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
