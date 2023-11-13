@@ -39,6 +39,77 @@ By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlS
 services.postgresql.dataDir = "/data/postgresql";
 ```
 
+## Initializing {#module-services-postgres-initializing}
+
+As of NixOS 23.11, `services.postgresql.ensureUsers.*.ensurePermissions` has been deprecated, after a change to default permissions in PostgreSQL 15 invalidated most of its previous use cases:
+
+- In psql < 15, `ALL PERMISSIONS` used to include `CREATE TABLE`, where in psql >= 15 that would be a separate permission
+- psql >= 15 instead gives only the database owner create permissions
+- Even on psql < 15 (or databases migrated to >= 15), it is recommended to manually assign permissions along these lines
+  - https://www.postgresql.org/docs/release/15.0/
+  - https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV
+
+### Assigning ownership
+
+The corresponding system user should be database owner in most cases. This can be done with `services.postgresql.ensureUsers.*.ensureDBOwnership = true;`
+
+### Assigning extra permissions
+
+For many cases, it will be enough to have the database user be the
+owner. Until `services.postgresql.ensureUsers.*.ensurePermissions` has
+been re-thought, if more users need access to the database, please use
+one of the following approaches:
+
+**WARNING:** please steer clear of `services.postgresql.initialScript`
+for this, as that is *only run on first start of PostgreSQL*.
+
+#### Assigning permissions in database `postStart`
+
+```nix
+    systemd.services.postgresql.postStart = lib.mkAfter ''
+      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+```
+
+**Advantage:** compatible with postgres < 15, because it's run
+as the database superuser `postgres`.
+
+**Disadvantage:** need to take care of ordering yourself. In this
+example, `mkAfter` ensures that permissions are assigned after any
+databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
+are already created.
+
+#### Assigning permissions in service `preStart` or intermediate oneshot service
+
+```nix
+    systemd.services."service1".preStart = ''
+      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+```
+
+```nix
+    systemd.services."migrate-service1-db1" = {
+      type = "oneshot";
+      requiredBy = "service1.service";
+      before = "service1.service";
+      after = "postgresql.service";
+      serviceConfig.User = "service1";
+      script = ''
+        $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        # ....
+      '';
+    };
+```
+
+**Advantage:** re-uses systemd's dependency ordering
+
+**Disadvantage:** relies on service user having grant permission. To be combined with `ensureDBOwnership`.
+
 ## Upgrading {#module-services-postgres-upgrading}
 
 ::: {.note}
