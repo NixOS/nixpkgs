@@ -10,8 +10,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "alecthomas";
-    repo = pname;
-    rev = version;
+    repo = "voluptuous";
+    rev = "refs/tags/${version}";
     hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
   };
 
@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python data validation library";
     homepage = "http://alecthomas.github.io/voluptuous/";
+    changelog = "https://github.com/alecthomas/voluptuous/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
