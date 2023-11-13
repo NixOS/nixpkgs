@@ -1830,6 +1830,12 @@ with pkgs;
 
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
+  # This is to workaround gfal2-python broken against Python 3.12 or later.
+  # TODO: Remove these lines after solving the breakage.
+  gfal2-util = callPackage ../by-name/gf/gfal2-util/package.nix (lib.optionalAttrs python3Packages.gfal2-python.meta.broken {
+    python3Packages = python311Packages;
+  });
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gh-actions-cache = callPackage ../tools/misc/gh-actions-cache { };
