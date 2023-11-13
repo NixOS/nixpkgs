@@ -295,10 +295,6 @@ let
         hadolint
         haskell-ci
         haskell-language-server
-        haskell-language-server-ghc-9_0
-        haskell-language-server-ghc-9_2
-        haskell-language-server-ghc-9_4
-        haskell-language-server-ghc-9_6
         hasura-graphql-engine
         hci
         hercules-ci-agent
