@@ -11,6 +11,7 @@
 , glib
 , gst_all_1
 , gtk3
+, libayatana-appindicator
 , libgit2
 , libpulseaudio
 , libsodium
@@ -143,6 +144,10 @@ rustPlatform.buildRustPackage rec {
     cp -a $src/src/ui $out/share/src
 
     install -Dm0644 $src/res/logo.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
+  '';
+
+  postFixup = ''
+    patchelf --add-rpath "${libayatana-appindicator}/lib" "$out/lib/rustdesk/rustdesk"
   '';
 
   env = {
