@@ -315,7 +315,7 @@ let
         ivy-rtags = fix-rtags super.ivy-rtags;
 
         jinx = super.jinx.overrideAttrs (old: let
-          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+          libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
         in {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.pkg-config

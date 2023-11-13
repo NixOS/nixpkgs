@@ -6,7 +6,7 @@
 , alsa-lib
 }:
 let
-  inherit (stdenv.targetPlatform) system;
+  inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 in
 stdenv.mkDerivation rec {

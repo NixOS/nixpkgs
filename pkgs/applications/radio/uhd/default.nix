@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
-    ++ optionals (enableUtils && stdenv.targetPlatform.isLinux) [ "moveUdevRules" ]
+    ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [ "moveUdevRules" ]
   ;
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
