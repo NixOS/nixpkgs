@@ -60,7 +60,7 @@ owner. Until `services.postgresql.ensureUsers.*.ensurePermissions` has
 been re-thought, if more users need access to the database, please use
 one of the following approaches:
 
-**WARNING:** please steer clear of `services.postgresql.initialScript`
+**WARNING:** `services.postgresql.initialScript` is not recommended for `ensurePermissions` replacement as …
 for this, as that is *only run on first start of PostgreSQL*.
 
 #### Assigning permissions in database `postStart` {#module-services-postgres-initializing-extra-permissions-post-start}
