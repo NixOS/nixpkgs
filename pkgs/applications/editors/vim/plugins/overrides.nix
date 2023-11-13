@@ -1040,12 +1040,12 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.7";
+      version = "1.3.8";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
-        rev = "v${version}";
-        hash = "sha256-Lh4S7n+bNbdzjDt4lAL271VeYO3cotMD/kbAbV20C0U=";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-xQb/VZOuwB1J4m6iOs1JMfH1f1rOzJzpvq3D4HHOHAI=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1055,12 +1055,7 @@ self: super: {
           darwin.apple_sdk.frameworks.Security
         ];
 
-        # Cargo.lock is outdated
-        preBuild = ''
-          cargo update --offline
-        '';
-
-        cargoHash = "sha256-N+Okln3irqevUHC+ZUDQgQXhJ767peKMmsnt/sT77o8=";
+        cargoHash = "sha256-6h0P0UVks6dQz2PZ1A/CLa1T8okD3CIUnfrH3vHe4L8=";
 
         nativeBuildInputs = [ makeWrapper ];
 

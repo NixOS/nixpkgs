@@ -6,7 +6,7 @@
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
-, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
+, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, html-tidy, ncurses, zip
 , libfaketime, asymptote, biber-ms, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
@@ -33,7 +33,7 @@ let
         stdenv lib bin tlpdb tlpdbxz tl
         installShellFiles
         coreutils findutils gawk getopt ghostscript_headless gnugrep
-        gnumake gnupg gnused gzip ncurses perl python3 ruby zip;
+        gnumake gnupg gnused gzip html-tidy ncurses perl python3 ruby zip;
     };
   in overrides tlpdb;
 
