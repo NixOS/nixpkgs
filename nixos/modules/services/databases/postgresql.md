@@ -43,7 +43,7 @@ services.postgresql.dataDir = "/data/postgresql";
 
 As of NixOS 23.11, `services.postgresql.ensureUsers.*.ensurePermissions` has been deprecated, after a change to default permissions in PostgreSQL 15 invalidated most of its previous use cases:
 
-- In psql < 15, `ALL PERMISSIONS` used to include `CREATE TABLE`, where in psql >= 15 that would be a separate permission
+- In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where in psql >= 15 that would be a separate permission
 - psql >= 15 instead gives only the database owner create permissions
 - Even on psql < 15 (or databases migrated to >= 15), it is recommended to manually assign permissions along these lines
   - https://www.postgresql.org/docs/release/15.0/
