@@ -34534,9 +34534,7 @@ with pkgs;
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
-  orpie = callPackage ../applications/misc/orpie {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_12;
-  };
+  orpie = callPackage ../applications/misc/orpie { };
 
   osmo = callPackage ../applications/office/osmo { };
 
