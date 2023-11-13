@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
     "-DENABLE_CBLAS_INTERFACES=ON"
     "-DENABLE_EXT_LAPACK_INTERFACE=ON"
   ]
-  ++ lib.optional (!withOpenMP) "ENABLE_MULTITHREADING=OFF"
-  ++ lib.optional blas64 "ENABLE_ILP64=ON"
-  ++ lib.optional withAMDOpt "ENABLE_AMD_OPT=ON";
+  ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
+  ++ lib.optional blas64 "-DENABLE_ILP64=ON"
+  ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
 
   postInstall = ''
     ln -s $out/lib/libflame.so $out/lib/liblapack.so.3
