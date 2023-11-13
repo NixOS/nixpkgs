@@ -5,20 +5,20 @@
 
 buildGoModule rec {
   pname = "hishtory";
-  version = "0.215";
+  version = "0.251";
 
   src = fetchFromGitHub {
     owner = "ddworken";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XDxAzMQjtCfufWnEO5NXP8Zv823a85qYhkZcEZKxIXs=";
+    hash = "sha256-as7OO14S2ia9ty/HRP35Zw9EOvFxBQeCzCluDWo/VnI=";
   };
 
-  vendorHash = "sha256-aXHqPk8iBMbe0NlsY3ZR7iozBGCAKlOOQ23FAD/5hL8=";
+  vendorHash = "sha256-HzHLGrPXUSkyt2Dr7tLjfJrbg/EPBHkljoXIlPWIppU=";
 
-  ldflags = [ "-X github.com/ddworken/hishtory/client/lib.Version=${version}" ];
+  ldflags = [ "-s -w -X github.com/ddworken/hishtory/client/lib.Version=${version} -extldflags '-static'" ];
 
-  excludedPackages = [ "backend/server" ];
+  excludedPackages = [ "backend/server" "client" ];
 
   postInstall = ''
     mkdir -p $out/share/hishtory
@@ -34,4 +34,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ Enzime ];
   };
 }
-
