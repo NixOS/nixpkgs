@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
+, cmake_3_26
 , zlib
 , lz4
 , bzip2
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     clang-tools
-    cmake
+    cmake_3_26
     python3
     doxygen
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
