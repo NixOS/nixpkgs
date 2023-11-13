@@ -126,7 +126,7 @@ in
       activemq = 86;
       gnunet = 87;
       oidentd = 88;
-      quassel = 89;
+      #quassel = 89; # dynamically allocated as of PR#259357
       amule = 90;
       minidlna = 91;
       elasticsearch = 92;
@@ -451,7 +451,7 @@ in
       activemq = 86;
       gnunet = 87;
       oidentd = 88;
-      quassel = 89;
+      #quassel = 89; # dynamically allocated as of PR#259357
       amule = 90;
       minidlna = 91;
       elasticsearch = 92;
