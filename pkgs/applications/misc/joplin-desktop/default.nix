@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, makeWrapper, undmg , imagemagick}:
 
 let
   pname = "joplin-desktop";
-  version = "2.12.18";
+  version = "2.12.19";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,7 +16,7 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "1fwcqgqni7d9x0prdy3p8ccc5lzgn57rhph4498vs1q40kyq8823";
+      x86_64-linux = "sha256-wYuOeVL+uhP5hoBS9kHDEFYUGI0zXWWJM/OeOjuy508=";
       x86_64-darwin = "sha256-atd7nkefLvilTq39nTLbXQhm1zzBCHOLL7MRJwlTSMk=";
       aarch64-darwin = "sha256-xiWXD+ULSVJ80uruYz0uRFkDRT1QOUd6FSWDKK9yLMc=";
     }.${system} or throwSystem;
@@ -25,6 +25,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "An open source note taking and to-do application with synchronisation capabilities";
@@ -57,9 +59,17 @@ let
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
+
+      for size in 16 24 32 48 64 128 256 512; do
+        sz="$size"x"$size"
+        mkdir -p $out/share/icons/hicolor/$sz/apps
+        ${imagemagick}/bin/convert -resize $sz ${appimageContents}/@joplinapp-desktop.png \
+          $out/share/icons/hicolor/$sz/apps/joplinapp-desktop.png
+      done
+
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}' \
-        --replace 'Icon=joplin' "Icon=@joplinapp-desktop"
+        --replace 'Icon=joplin' "Icon=joplinapp-desktop"
     '';
   };
 
