@@ -1,15 +1,23 @@
 {
+  lib,
+  stdenv,
   qtModule,
   python3,
   qtbase,
+  qtdeclarative,
 }:
+
+let
+  isCrossBuild = !(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
+in
 
 qtModule {
   pname = "qtdeclarative";
-  propagatedBuildInputs = [
-    qtbase
-  ];
+  buildInputs = [ qtbase ];
   nativeBuildInputs = [ python3 ];
+  # We need a runnable qmlcachegen to build qtdeclarative itself, and some dependers
+  # of this package also expect to get runnable tools with it.
+  propagatedNativeBuildInputs = lib.optional isCrossBuild qtdeclarative;
   outputs = [
     "out"
     "dev"

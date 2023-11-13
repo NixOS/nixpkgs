@@ -62,6 +62,7 @@ let
       # add version specific QML import path
       ./qtdeclarative-qml-paths.patch
       ./qtdeclarative-gcc15.patch
+      ./qtdeclarative-cross-build.patch
     ];
     qtlocation = lib.optionals stdenv.cc.isClang [
       # Fix build with Clang 16
