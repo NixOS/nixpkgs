@@ -722,7 +722,6 @@ let
       ZSWAP          = option yes;
       ZPOOL          = yes;
       ZBUD           = option yes;
-      ZSMALLOC       = module;
     };
 
     brcmfmac = {
