@@ -40291,8 +40291,6 @@ with pkgs;
 
   eiciel = callPackage ../tools/filesystems/eiciel { };
 
-  apt = callPackage ../tools/package-management/apt { };
-
   apx = callPackage ../tools/package-management/apx { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
