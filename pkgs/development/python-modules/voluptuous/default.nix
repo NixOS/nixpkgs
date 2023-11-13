@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.13.1";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "alecthomas";
     repo = "voluptuous";
     rev = "refs/tags/${version}";
-    hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
+    hash = "sha256-xUVKh9IqOIiZNrGSG87KDQffcBDRMTb1hyfC1OvKK0c=";
   };
 
   nativeCheckInputs = [
