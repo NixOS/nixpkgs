@@ -8,6 +8,8 @@
 , aws-crt-cpp
 , CoreAudio
 , AudioToolbox
+, nix
+, arrow-cpp
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -104,6 +106,12 @@ stdenv.mkDerivation rec {
 
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
+
+  passthru = {
+    tests = {
+      inherit nix arrow-cpp;
+    };
+  };
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
