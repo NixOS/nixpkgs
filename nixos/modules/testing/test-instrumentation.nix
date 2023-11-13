@@ -11,10 +11,6 @@ let
   qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
 
   backdoorService = {
-    wantedBy = [ "sysinit.target" ];
-    unitConfig.DefaultDependencies = false;
-    conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
-    before = [ "shutdown.target" "initrd-switch-root.target" ];
     requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
     after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
     script =
@@ -80,7 +76,12 @@ in
       }
     ];
 
-    systemd.services.backdoor = backdoorService;
+    systemd.services.backdoor = lib.mkMerge [
+      backdoorService
+      {
+        wantedBy = [ "multi-user.target" ];
+      }
+    ];
 
     boot.initrd.systemd = lib.mkMerge [
       {
@@ -104,7 +105,21 @@ in
           "/bin/true"
         ];
 
-        services.backdoor = backdoorService;
+        services.backdoor = lib.mkMerge [
+          backdoorService
+          {
+            # TODO: Both stage 1 and stage 2 should use these same
+            # settings. But a lot of existing tests rely on
+            # backdoor.service having default orderings,
+            # e.g. systemd-boot.update relies on /boot being mounted
+            # as soon as backdoor starts. But it can be useful for
+            # backdoor to start even earlier.
+            wantedBy = [ "sysinit.target" ];
+            unitConfig.DefaultDependencies = false;
+            conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
+            before = [ "shutdown.target" "initrd-switch-root.target" ];
+          }
+        ];
 
         contents."/usr/bin/env".source = "${pkgs.coreutils}/bin/env";
       })

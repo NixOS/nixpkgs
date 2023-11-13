@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.2.0";
+  version = "8.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gsoeeDHjVNdMZ3bth9vXP0qtWe0ljIdGy+hoaIGG/Ek=";
+    hash = "sha256-zX/bPYg6FeaQYlTn+wFi9ph46czdH4UZ22/7/ka/b0k=";
   };
 
   postPatch = ''
@@ -97,6 +97,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
+    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];
   };

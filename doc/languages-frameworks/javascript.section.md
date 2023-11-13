@@ -13,7 +13,7 @@ If you find you are lacking inspiration for packing javascript applications, the
 ### Github {#javascript-finding-examples-github}
 
 - Searching Nix files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+language%3ANix&type=code>
-- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+filename%3Aflake.nix&type=code>
+- Searching just `flake.nix` files for `mkYarnPackage`: <https://github.com/search?q=mkYarnPackage+path%3A**%2Fflake.nix&type=code>
 
 ### Gitlab {#javascript-finding-examples-gitlab}
 

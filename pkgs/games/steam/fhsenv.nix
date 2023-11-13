@@ -315,6 +315,7 @@ in buildFHSEnv rec {
 
     meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
+      mainProgram = "steam-run";
       name = "steam-run";
     };
   };

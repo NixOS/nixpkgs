@@ -214,6 +214,7 @@ mapAliases ({
   jupyter_server = jupyter-server; # added 2023-01-05
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
   jupyterlab_launcher = throw "jupyterlab_launcher has been removed as it's abandoned for over 5 years and broken"; # added 2023-11-11
+  jupyterlab_server = jupyterlab-server; # added 2023-11-12
   Kajiki = kajiki; # added 2023-02-19
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
@@ -226,6 +227,7 @@ mapAliases ({
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
+  ludios_wpull = throw "ludios_wpull has been removed because it's unmaintained and broken"; # added 2023-11-12
   Mako = mako; # added 2023-02-19
   Markups = markups; # added 2022-02-14
   markdownsuperscript = throw "markdownsuperscript is unmaintained, use pymdown-extensions"; # added 2023-06-10
@@ -279,6 +281,7 @@ mapAliases ({
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
   py-radix = throw "py-radix has been removed, since it abandoned"; # added 2023-07-07
+  py_stringmatching = py-stringmatching; # added 2023-11-12
   pyalmond = throw "pyalmond has been removed, since its API endpoints have been shutdown"; # added 2023-02-02
   pyblake2 = throw "pyblake2 is deprecated in favor of hashlib"; # added 2023-04-23
   pyblock = throw "pyblock has been removed, since it is abandoned and broken"; # added 2023-06-20

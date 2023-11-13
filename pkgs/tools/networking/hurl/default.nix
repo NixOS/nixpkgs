@@ -47,5 +47,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ eonpatapon figsoda ];
     license = licenses.asl20;
+    mainProgram = "hurl";
   };
 }

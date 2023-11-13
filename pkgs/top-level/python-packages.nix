@@ -2962,6 +2962,8 @@ self: super: with self; {
 
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
+  django-crontab = callPackage ../development/python-modules/django-crontab { };
+
   django-cryptography = callPackage ../development/python-modules/django-cryptography { };
 
   django-csp = callPackage ../development/python-modules/django-csp { };
@@ -5174,6 +5176,8 @@ self: super: with self; {
 
   hvplot = callPackage ../development/python-modules/hvplot { };
 
+  hwdata = callPackage ../development/python-modules/hwdata { };
+
   hwi = callPackage ../development/python-modules/hwi { };
 
   hy = callPackage ../development/python-modules/hy { };
@@ -5827,7 +5831,7 @@ self: super: with self; {
 
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
-  jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
+  jupyterlab-server = callPackage ../development/python-modules/jupyterlab-server { };
 
   jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
 
@@ -6464,8 +6468,6 @@ self: super: with self; {
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
   luddite = callPackage ../development/python-modules/luddite { };
-
-  ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
@@ -11043,7 +11045,7 @@ self: super: with self; {
 
   pystray = callPackage ../development/python-modules/pystray { };
 
-  py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
+  py-stringmatching = callPackage ../development/python-modules/py-stringmatching { };
 
   pysvg-py3 = callPackage ../development/python-modules/pysvg-py3 { };
 

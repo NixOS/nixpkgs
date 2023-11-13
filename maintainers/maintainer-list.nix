@@ -3692,6 +3692,12 @@
     githubId = 1222362;
     name = "Matías Lang";
   };
+  criyle = {
+    email = "i+nixos@goj.ac";
+    name = "Yang Gao";
+    githubId = 6821729;
+    github = "criyle";
+  };
   CRTified = {
     email = "carl.schneider+nixos@rub.de";
     matrix = "@schnecfk:ruhr-uni-bochum.de";
@@ -4244,6 +4250,12 @@
     github = "demin-dmitriy";
     githubId = 5503422;
     name = "Dmitriy Demin";
+  };
+  demine = {
+    email = "riches_tweaks0o@icloud.com";
+    github = "demine0";
+    githubId = 51992962;
+    name = "Nikita Demin";
   };
   demize = {
     email = "johannes@kyriasis.com";
