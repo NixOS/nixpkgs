@@ -2958,6 +2958,8 @@ self: super: with self; {
 
   django-countries = callPackage ../development/python-modules/django-countries { };
 
+  django-crispy-bootstrap4 = callPackage ../development/python-modules/django-crispy-bootstrap4 { };
+
   django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
 
   django-cryptography = callPackage ../development/python-modules/django-cryptography { };
@@ -5172,6 +5174,8 @@ self: super: with self; {
 
   hvplot = callPackage ../development/python-modules/hvplot { };
 
+  hwdata = callPackage ../development/python-modules/hwdata { };
+
   hwi = callPackage ../development/python-modules/hwi { };
 
   hy = callPackage ../development/python-modules/hy { };
@@ -5825,7 +5829,7 @@ self: super: with self; {
 
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
-  jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
+  jupyterlab-server = callPackage ../development/python-modules/jupyterlab-server { };
 
   jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
 
@@ -6462,8 +6466,6 @@ self: super: with self; {
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
   luddite = callPackage ../development/python-modules/luddite { };
-
-  ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
@@ -11043,7 +11045,7 @@ self: super: with self; {
 
   pystray = callPackage ../development/python-modules/pystray { };
 
-  py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
+  py-stringmatching = callPackage ../development/python-modules/py-stringmatching { };
 
   pysvg-py3 = callPackage ../development/python-modules/pysvg-py3 { };
 
@@ -13094,7 +13096,7 @@ self: super: with self; {
 
   sopel = callPackage ../development/python-modules/sopel { };
 
-  sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
+  sorl-thumbnail = callPackage ../development/python-modules/sorl-thumbnail { };
 
   sortedcollections = callPackage ../development/python-modules/sortedcollections { };
 
@@ -16091,7 +16093,7 @@ self: super: with self; {
 
   zope-deprecation = callPackage ../development/python-modules/zope-deprecation { };
 
-  zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
+  zope-dottedname = callPackage ../development/python-modules/zope-dottedname { };
 
   zope_event = callPackage ../development/python-modules/zope_event { };
 

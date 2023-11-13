@@ -465,7 +465,7 @@ Is the change [acceptable for releases][release-acceptable] and do you wish to h
 - No: Use the `master` branch, do not backport the pull request.
 - Yes: Can the change be implemented the same way on the `master` and release branches?
   For example, a packages major version might differ between the `master` and release branches, such that separate security patches are required.
-  - Yes: Use the `master` branch and [backport the pull request](#backporting-changes).
+  - Yes: Use the `master` branch and [backport the pull request](#how-to-backport-pull-requests).
   - No: Create separate pull requests to the `master` and `release-XX.YY` branches.
 
 Furthermore, if the change causes a [mass rebuild][mass-rebuild], use the appropriate staging branch instead:

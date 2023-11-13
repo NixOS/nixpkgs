@@ -9637,6 +9637,8 @@ with pkgs;
 
   john = callPackage ../tools/security/john { };
 
+  joomscan = callPackage ../tools/security/joomscan { };
+
   joplin = nodePackages.joplin;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
@@ -16221,6 +16223,7 @@ with pkgs;
   gcc-arm-embedded-10 = callPackage ../development/compilers/gcc-arm-embedded/10 { };
   gcc-arm-embedded-11 = callPackage ../development/compilers/gcc-arm-embedded/11 { };
   gcc-arm-embedded-12 = callPackage ../development/compilers/gcc-arm-embedded/12 { };
+  gcc-arm-embedded-13 = callPackage ../development/compilers/gcc-arm-embedded/13 { };
   gcc-arm-embedded = gcc-arm-embedded-12;
 
   # It would be better to match the default gcc so that there are no linking errors
@@ -21740,8 +21743,6 @@ with pkgs;
   gflags = callPackage ../development/libraries/gflags { };
 
   gperftools = callPackage ../development/libraries/gperftools { };
-
-  grab-site = callPackage ../tools/backup/grab-site { };
 
   grilo = callPackage ../development/libraries/grilo { };
 
@@ -30549,7 +30550,7 @@ with pkgs;
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
+  ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
 
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
@@ -40650,7 +40651,7 @@ with pkgs;
   dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_17;
+    nix = nixVersions.nix_2_18;
   };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };

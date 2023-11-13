@@ -1,12 +1,12 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "3.92.0";
+  version = "3.93.0";
   pulumiPkgs = {
     x86_64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.92.0-linux-x64.tar.gz";
-        sha256 = "1242rammgc5wghyasz9ir9x0jff2yrn8c0cjnmdrg3nz7hihl5mb";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-linux-x64.tar.gz";
+        sha256 = "1s081ak1m55jckgrrcnj918smlx79sywqgqfbvf50hkcrk5pwdsj";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-linux-amd64.tar.gz";
@@ -163,8 +163,8 @@
     ];
     x86_64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.92.0-darwin-x64.tar.gz";
-        sha256 = "199qq9j471dw3114kv9dwkpb0bnf3cw6c3khs1kldv8rrh6f3bnv";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-darwin-x64.tar.gz";
+        sha256 = "0gxch1ml2sv66wbzfycsg02f6cagwrv0kl2b437xnn8g86mxi2di";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-darwin-amd64.tar.gz";
@@ -321,8 +321,8 @@
     ];
     aarch64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.92.0-linux-arm64.tar.gz";
-        sha256 = "1d1ynrc13a844fd58dkrva59fqjn2x9inhc4a7887arq1j0qww5p";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-linux-arm64.tar.gz";
+        sha256 = "0xmsn6qyrmiqpgpffr1c0ykpw06ca8lcv4hgsvv12jxzqrasdv6a";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-linux-arm64.tar.gz";
@@ -479,8 +479,8 @@
     ];
     aarch64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.92.0-darwin-arm64.tar.gz";
-        sha256 = "0294zhmxsr3fzd5qz2hlhmcdiyqmncgc8grmhjrlrld1x13rgcxb";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-darwin-arm64.tar.gz";
+        sha256 = "0q59khgglzk0dkz1p81nmj0v7gsgkdfv2109sk3lb7ms5myknkd6";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-darwin-arm64.tar.gz";
