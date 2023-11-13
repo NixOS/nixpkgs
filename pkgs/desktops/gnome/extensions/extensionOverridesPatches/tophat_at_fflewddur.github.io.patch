@@ -1,7 +1,7 @@
-diff --git a/extension.js b/extension.js
-index 60396f8..b044872 100644
---- a/extension.js
-+++ b/extension.js
+diff --git a/tophat@fflewddur.github.io/extension.js b/tophat@fflewddur.github.io/extension.js
+index 400a4cd..25b4456 100644
+--- a/tophat@fflewddur.github.io/extension.js
++++ b/tophat@fflewddur.github.io/extension.js
 @@ -20,6 +20,8 @@
  
  /* exported init, enable, disable */
@@ -11,3 +11,29 @@ index 60396f8..b044872 100644
  let depFailures = [];
  let missingLibs = [];
  
+diff --git a/tophat@fflewddur.github.io/lib/shared.js b/tophat@fflewddur.github.io/lib/shared.js
+index 0f19efa..a3f6e02 100644
+--- a/tophat@fflewddur.github.io/lib/shared.js
++++ b/tophat@fflewddur.github.io/lib/shared.js
+@@ -21,6 +21,8 @@
+ /* exported getProcessList, getProcessName, bytesToHumanString, getPartitions */
+ /* exported roundMax */
+ 
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++
+ const {Gio, GTop} = imports.gi;
+ const ExtensionUtils = imports.misc.extensionUtils;
+ const Me = ExtensionUtils.getCurrentExtension();
+diff --git a/tophat@fflewddur.github.io/prefs.js b/tophat@fflewddur.github.io/prefs.js
+index 4775e18..856545e 100644
+--- a/tophat@fflewddur.github.io/prefs.js
++++ b/tophat@fflewddur.github.io/prefs.js
+@@ -19,6 +19,8 @@
+ 
+ /* exported init, fillPreferencesWindow, buildPrefsWidget */
+ 
++imports.gi.GIRepository.Repository.prepend_search_path('@gtop_path@');
++
+ const {Gdk, Gio, Gtk} = imports.gi;
+ const gtkVersion = Gtk.get_major_version();
+ const ExtensionUtils = imports.misc.extensionUtils;
