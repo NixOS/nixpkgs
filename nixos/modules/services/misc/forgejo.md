@@ -16,7 +16,7 @@ The method of choice for running forgejo used to be with the
 gitea - drop-in method is expected to continue working for the time
 being.
 
-### for default options
+### for default options {#module-forgejo-migration-gitea-default}
 
 for PostgreSQL, adapt accordingly on other DBs
 
@@ -34,7 +34,7 @@ chown -R forgejo:forgejo /var/lib/forgejo
 systemctl restart forgejo
 ```
 
-### impersonating gitea
+### impersonating gitea {#module-forgejo-migration-gitea-impersonate}
 
 Alternatively, instead of renaming the database, the state folder and
 changing the user, the forgejo module can be set up to directly work
