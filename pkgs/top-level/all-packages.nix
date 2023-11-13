@@ -3252,8 +3252,6 @@ with pkgs;
 
   apt-cacher-ng = callPackage ../servers/http/apt-cacher-ng { };
 
-  apt-offline = callPackage ../tools/misc/apt-offline { };
-
   aptly = callPackage ../tools/misc/aptly { };
 
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
