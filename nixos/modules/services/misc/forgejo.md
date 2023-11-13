@@ -16,6 +16,8 @@ The method of choice for running forgejo used to be with the
 
 for PostgreSQL, adapt accordingly on other DBs
 
+**NOTE:** this will also change git url user from `gitea@` to `forgejo@`
+
 ```sh
 systemctl stop gitea
 mv /var/lib/gitea /var/lib/forgejo
