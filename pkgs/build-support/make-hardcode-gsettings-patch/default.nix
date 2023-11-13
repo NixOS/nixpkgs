@@ -28,6 +28,8 @@
     For example, `{ "org.gnome.evolution" = "EVOLUTION_SCHEMA_PATH"; }`
     hardcodes looking for `org.gnome.evolution` into `@EVOLUTION_SCHEMA_PATH@`.
 
+  - `patches`: A list of patches to apply before generating the patch.
+
   Example:
     passthru = {
       hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
@@ -35,29 +37,30 @@
         schemaIdToVariableMapping = {
            ...
         };
-    };
+      };
 
-    updateScript =
-      let
-        updateSource = ...;
-        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
-      in
-      _experimental-update-script-combinators.sequence [
-        updateSource
-        updatePatch
-      ];
+      updateScript =
+        let
+          updateSource = ...;
+          updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "evolution-ews.hardcodeGsettingsPatch" ./hardcode-gsettings.patch;
+        in
+        _experimental-update-script-combinators.sequence [
+          updateSource
+          updatePatch
+        ];
       };
     }
 */
 {
   src,
+  patches ? [ ],
   schemaIdToVariableMapping,
 }:
 
 runCommand
   "hardcode-gsettings.patch"
   {
-    inherit src;
+    inherit src patches;
     nativeBuildInputs = [
       git
       coccinelle
@@ -67,6 +70,7 @@ runCommand
   ''
     unpackPhase
     cd "''${sourceRoot:-.}"
+    patchPhase
     set -x
     cp ${builtins.toFile "glib-schema-to-var.json" (builtins.toJSON schemaIdToVariableMapping)} ./glib-schema-to-var.json
     git init
