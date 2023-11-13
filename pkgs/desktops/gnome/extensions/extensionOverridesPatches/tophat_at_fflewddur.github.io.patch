@@ -1,7 +1,7 @@
 diff --git a/extension.js b/extension.js
 index 400a4cd..25b4456 100644
---- a/tophat@fflewddur.github.io/extension.js
-+++ b/tophat@fflewddur.github.io/extension.js
+--- a/extension.js
++++ b/extension.js
 @@ -20,6 +20,8 @@
  
  /* exported init, enable, disable */
