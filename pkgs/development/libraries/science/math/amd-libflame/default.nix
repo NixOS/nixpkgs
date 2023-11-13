@@ -9,7 +9,7 @@
 
 , withOpenMP ? true
 , blas64 ? false
-, withAMDOpt ? false
+, withAMDOpt ? true
 }:
 
 stdenv.mkDerivation rec {
