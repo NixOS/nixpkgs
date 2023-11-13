@@ -370,6 +370,19 @@ buildImage {
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
 
+When using `buildLayeredImage`, you can put this in `fakeRootCommands` if you `enableFakechroot`:
+```nix
+buildLayeredImage {
+  name = "shadow-layered";
+
+  fakeRootCommands = ''
+    #!${pkgs.runtimeShell}
+    ${pkgs.dockerTools.shadowSetup}
+  '';
+  enableFakechroot = true;
+}
+```
+
 ## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
 
 If your primary goal is providing a basic skeleton for user lookups to work,
