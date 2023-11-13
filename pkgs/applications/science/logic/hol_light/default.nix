@@ -12,10 +12,12 @@ let
     ''
       #!${runtimeShell}
       cd $out/lib/hol_light
+      export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}${camlp5}/lib/ocaml/${ocaml.version}/site-lib/"
       exec ${ocaml}/bin/ocaml \
         -I \`${camlp5}/bin/camlp5 -where\` \
         ${load_num} \
-        -I ${camlp-streams}/lib/ocaml/${ocaml.version}/site-lib/camlp-streams camlp_streams.cma
+        -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ \
+        -I ${camlp-streams}/lib/ocaml/${ocaml.version}/site-lib/camlp-streams camlp_streams.cma \
         -init make.ml
     '';
 in
@@ -25,13 +27,13 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
 
 stdenv.mkDerivation {
   pname = "hol_light";
-  version = "unstable-2023-07-21";
+  version = "unstable-2023-11-03";
 
   src = fetchFromGitHub {
     owner = "jrh13";
     repo = "hol-light";
-    rev = "29b3e114f5c166584f4fbcfd1e1f9b13a25b7349";
-    hash = "sha256-Z5/4dCfLRwLMHBmth3xMdFW1M6NzUT/aPEEwSz1/S2E=";
+    rev = "dcd765c6032f52a0c0bf21fce5da4794a823e880";
+    hash = "sha256-k2RBNDo4tc3eobKB84Y2xr0UQJvef0hv6jyFCaDCQFM=";
   };
 
   patches = [
