@@ -16,12 +16,12 @@
         "hash": "sha256:1v453q4sf0j8708ivs1zmdf645hgimqvxfc8xz7czgnnmipn3zdr"
     },
     "5.15": {
-        "version": "5.15.137",
-        "hash": "sha256:1xxjbxldrhmnh2q6rykpxyfbj8xqgl82q30n8sfavrzr14bb4jcp"
+        "version": "5.15.138",
+        "hash": "sha256:1ajaxy97gx0c9cdxiyxa49ykfsykir22i9abfrcizh71ci0yb15g"
     },
     "5.10": {
-        "version": "5.10.199",
-        "hash": "sha256:1h944syk7n6c4j1djlx19n77alzwbxcdza77c9ykicgfynhpgsm0"
+        "version": "5.10.200",
+        "hash": "sha256:012i41bj8rcqn0vhfxrwq3gg82nb6pp2cwq8n146wj47pwgrcbcx"
     },
     "5.4": {
         "version": "5.4.260",
