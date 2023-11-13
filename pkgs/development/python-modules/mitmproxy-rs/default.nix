@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , rustPlatform
 , darwin
+, libiconv
+, mitmproxy-macos
 }:
 
 buildPythonPackage rec {
@@ -34,13 +36,15 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    libiconv
+    mitmproxy-macos
   ];
 
   pythonImportsCheck = [ "mitmproxy_rs" ];
 
   meta = with lib; {
     description = "The Rust bits in mitmproxy";
-    homepage = " https://github.com/mitmproxy/mitmproxy_rs";
+    homepage = "https://github.com/mitmproxy/mitmproxy_rs";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
