@@ -10,6 +10,7 @@
 , AudioToolbox
 , nix
 , arrow-cpp
+, aws-sdk-cpp
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -110,6 +111,36 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit nix arrow-cpp;
+      cmake-find-package = stdenv.mkDerivation {
+        pname = "aws-sdk-cpp-cmake-find-package-test";
+        version = "0";
+        dontUnpack = true;
+        nativeBuildInputs = [ cmake ];
+        buildInputs = [ aws-sdk-cpp ];
+        buildCommand = ''
+          cat > CMakeLists.txt <<'EOF'
+          find_package(AWSSDK)
+          EOF
+
+          # Intentionally not using 'cmakeConfigurePhase' to test that find_package works without it.
+          mkdir build && cd build
+          if output=$(cmake -Wno-dev .. 2>&1); then
+            if grep -Fw -- "Found AWS" - <<< "$output"; then
+              touch "$out"
+            else
+              echo "'Found AWS' not found in the cmake output!" >&2
+              echo "The output was:" >&2
+              echo "$output" >&2
+              exit 1
+            fi
+          else
+            echo -n "'cmake -Wno-dev ..'" >&2
+            echo " returned a non-zero exit code." >&2
+            echo "$output" >&2
+            exit 1
+          fi
+        '';
+      };
     };
   };
 
