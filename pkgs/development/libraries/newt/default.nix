@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://pagure.io/newt";
     description = "Library for color text mode, widget based user interfaces";
-
+    homepage = "https://pagure.io/newt";
+    changelog = "https://pagure.io/newt/blob/master/f/CHANGES";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.viric ];
+    maintainers = with maintainers; [ viric ];
   };
 }
