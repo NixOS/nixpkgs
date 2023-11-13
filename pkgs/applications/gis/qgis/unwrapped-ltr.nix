@@ -152,11 +152,14 @@ in mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
-    "-DENABLE_TESTS=False"
-  ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    "-DCMAKE_BUILD_TYPE=Release"
+    (lib.cmakeBool "ENABLE_TESTS" false)
+    (lib.cmakeBool "WITH_3D" true)
+    (lib.cmakeBool "WITH_PDAL" true)
+    (lib.cmakeBool "WITH_QTWEBKIT" withWebKit)
+    (lib.cmakeBool "WITH_SERVER" true)
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
@@ -164,14 +167,17 @@ in mkDerivation rec {
 
   dontWrapGApps = true; # wrapper params passed below
 
+  # 1. GRASS has to be availble on the command line even though we baked in
+  # the path at build time using GRASS_PREFIX.
+  # Using wrapGAppsHook also prevents file dialogs from crashing the program
+  # on non-NixOS.
+  # 2. Wrap server CGI binary which is not wrapped by default.
   postFixup = lib.optionalString withGrass ''
-    # GRASS has to be availble on the command line even though we baked in
-    # the path at build time using GRASS_PREFIX.
-    # Using wrapGAppsHook also prevents file dialogs from crashing the program
-    # on non-NixOS.
     wrapProgram $out/bin/qgis \
       "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ grass ]}
+
+    wrapQtApp $out/lib/cgi-bin/qgis_mapserv.fcgi
   '';
 
   meta = with lib; {
