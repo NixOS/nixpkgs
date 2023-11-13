@@ -24,18 +24,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.11.118";
+  version = "1.11.207";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-jqGXh8xLD2gIjV9kSvlldrxA5TxTTXQoC/B66FVprvk=";
+    sha256 = "sha256-IsPDQJo+TZ2noLefroiWl/Jx8fXmrmY73WHNRO41sik=";
   };
-
-  patches = [
-    ./cmake-dirs.patch
-  ];
 
   postPatch = ''
     # Append the dev output to path hints in finding Aws.h to avoid
