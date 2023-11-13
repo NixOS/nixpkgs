@@ -1,15 +1,22 @@
-{ lib, fetchFromGitHub, python3Packages, nix-update-script, gnupg }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+, gnupg
+}:
 
-python3Packages.buildPythonApplication rec {
+let
   pname = "apt-offline";
   version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "rickysarraf";
-    repo = pname;
+    repo = "apt-offline";
     rev = "v${version}";
-    sha256 = "RBf/QG0ewLS6gnQTBXi0I18z8QrxoBAqEXZ7dro9z5A=";
+    hash = "sha256-RBf/QG0ewLS6gnQTBXi0I18z8QrxoBAqEXZ7dro9z5A=";
   };
+in
+python3Packages.buildPythonApplication {
+  inherit pname version src;
 
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
@@ -24,17 +31,15 @@ python3Packages.buildPythonApplication rec {
     rm "$out/bin/apt-offline-gui-pkexec"
   '';
 
-  doCheck = false;
+  doCheck = false; # API incompatibilities, maybe?
 
   pythonImportsCheck = [ "apt_offline_core" ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rickysarraf/apt-offline";
     description = "Offline APT package manager";
-    license = licenses.gpl3;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl3Plus ];
+    mainProgram = "apt-offline";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
