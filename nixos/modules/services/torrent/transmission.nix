@@ -351,10 +351,10 @@ in
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
-        PrivateMounts = true;
+        PrivateMounts = mkDefault true;
         PrivateNetwork = mkDefault false;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = mkDefault true;
         ProtectClock = true;
         ProtectControlGroups = true;
         # ProtectHome=true would not allow BindPaths= to work across /home,
