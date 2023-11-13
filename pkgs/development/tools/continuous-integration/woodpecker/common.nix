@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
 let
-  version = "1.0.5";
-  srcHash = "sha256-tkgkhYuLHfmT42P+UMZ7uNB2wBKo0YGiw0a5RoMAu6M=";
-  vendorHash = "sha256-QTTnTPOgP+FlbqXNCGJc9VuBzQcMujpvFB3+DykYTPY=";
-  yarnHash = "sha256-TrcTc5svLLSedRC8gCwIBW7/mtHo+uSNZGImtRiVJ0w=";
+  version = "2.0.0";
+  srcHash = "sha256-nq8XUZB68WpIKrz4eluJQ96ujGVRvb980QF3CHjO4iA=";
+  vendorHash = "sha256-Nt+5X1cbgoqDiZhHu7I3Ws9GpYys41BVZtAYvDfTlbk=";
+  yarnHash = "sha256-U/JGqXLn6yrdwhO5YontEchTXnuNp9NkTC8qLpzMDu8=";
 in
 {
   inherit version yarnHash vendorHash;
@@ -26,7 +26,7 @@ in
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/woodpecker-ci/woodpecker/version.Version=${version}"
+    "-X go.woodpecker-ci.org/woodpecker/version.Version=${version}"
   ];
 
   meta = with lib; {

@@ -2,14 +2,14 @@
 let
   common = callPackage ./common.nix { };
 
-  esbuild_0_17_19 = buildPackages.esbuild.overrideAttrs (_: rec {
-    version = "0.17.19";
+  esbuild_0_18_20 = buildPackages.esbuild.overrideAttrs (_: rec {
+    version = "0.18.20";
 
     src = fetchFromGitHub {
       owner = "evanw";
       repo = "esbuild";
       rev = "v${version}";
-      hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
+      hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
     };
 
     vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -29,7 +29,13 @@ mkYarnPackage {
     hash = common.yarnHash;
   };
 
-  ESBUILD_BINARY_PATH = lib.getExe esbuild_0_17_19;
+  ESBUILD_BINARY_PATH = lib.getExe esbuild_0_18_20;
+
+  postPatch = ''
+    substituteInPlace vite.config.ts \
+      --replace 'src/' '/build/web/deps/woodpecker-ci/src/' \
+      --replace 'node_modules/' '/build/web/node_modules/'
+  '';
 
   buildPhase = ''
     runHook preBuild
