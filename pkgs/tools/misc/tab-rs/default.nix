@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     mainProgram = "tab";
+    broken = (stdenv.isDarwin && stdenv.isAarch64); # Added 2023-11-13
   };
 }
