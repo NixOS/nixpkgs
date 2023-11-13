@@ -5,7 +5,7 @@ let
 
   inherit (lib) mkOption types;
 
-  podmanPackage = (pkgs.podman.override {
+  podmanPackage = ((cfg.package or pkgs.podman).override {
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
