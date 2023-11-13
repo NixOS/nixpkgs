@@ -60,10 +60,27 @@ owner. Until `services.postgresql.ensureUsers.*.ensurePermissions` has
 been re-thought, if more users need access to the database, please use
 one of the following approaches:
 
-**WARNING:** `services.postgresql.initialScript` is not recommended for `ensurePermissions` replacement as …
-for this, as that is *only run on first start of PostgreSQL*.
+**WARNING:** `services.postgresql.initialScript` is not recommended
+for `ensurePermissions` replacement, as that is *only run on first
+start of PostgreSQL*.
 
-#### Assigning permissions in database `postStart` {#module-services-postgres-initializing-extra-permissions-post-start}
+**NOTE:** all of these methods may be obsoleted, when `ensure*` is
+reworked, but it is expected that they will stay viable for running
+database migrations.
+
+**NOTE:** please make sure that any added migrations are idempotent (re-runnable).
+
+#### as superuser {#module-services-postgres-initializing-extra-permissions-superuser}
+
+**Advantage:** compatible with postgres < 15, because it's run
+as the database superuser `postgres`.
+
+##### in database `postStart` {#module-services-postgres-initializing-extra-permissions-superuser-post-start}
+
+**Disadvantage:** need to take care of ordering yourself. In this
+example, `mkAfter` ensures that permissions are assigned after any
+databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
+are already created.
 
 ```nix
     systemd.services.postgresql.postStart = lib.mkAfter ''
@@ -73,23 +90,44 @@ for this, as that is *only run on first start of PostgreSQL*.
     '';
 ```
 
-**Advantage:** compatible with postgres < 15, because it's run
-as the database superuser `postgres`.
-
-**Disadvantage:** need to take care of ordering yourself. In this
-example, `mkAfter` ensures that permissions are assigned after any
-databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
-are already created.
-
-#### Assigning permissions in service `preStart` or intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-pre-start}
+##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
 
 ```nix
+    systemd.services."migrate-service1-db1" = {
+      type = "oneshot";
+      requiredBy = "service1.service";
+      before = "service1.service";
+      after = "postgresql.service";
+      serviceConfig.User = "postgres";
+      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      path = [ postgresql ];
+      script = ''
+        $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        # ....
+      '';
+    };
+```
+
+#### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
+
+**Advantage:** re-uses systemd's dependency ordering;
+
+**Disadvantage:** relies on service user having grant permission. To be combined with `ensureDBOwnership`.
+
+##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
+
+```nix
+    environment.PSQL = "psql --port=${toString services.postgresql.port}";
+    path = [ postgresql ];
     systemd.services."service1".preStart = ''
       $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
       $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
 ```
+
+##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
 
 ```nix
     systemd.services."migrate-service1-db1" = {
@@ -98,6 +136,8 @@ are already created.
       before = "service1.service";
       after = "postgresql.service";
       serviceConfig.User = "service1";
+      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      path = [ postgresql ];
       script = ''
         $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
         $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
@@ -105,10 +145,6 @@ are already created.
       '';
     };
 ```
-
-**Advantage:** re-uses systemd's dependency ordering
-
-**Disadvantage:** relies on service user having grant permission. To be combined with `ensureDBOwnership`.
 
 ## Upgrading {#module-services-postgres-upgrading}
 
