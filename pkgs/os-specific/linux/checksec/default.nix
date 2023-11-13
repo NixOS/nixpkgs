@@ -3,6 +3,8 @@
 , fetchpatch
 , fetchFromGitHub
 , makeWrapper
+, testers
+, runCommand
 
   # dependencies
 , binutils
@@ -20,6 +22,9 @@
 , sysctl
 , wget
 , which
+
+  # tests
+, checksec
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +42,11 @@ stdenv.mkDerivation rec {
     ./0001-attempt-to-modprobe-config-before-checking-kernel.patch
     # Tool would sanitize the environment, removing the PATH set by our wrapper.
     ./0002-don-t-sanatize-the-environment.patch
+    # Fix the exit code of debug_report command. Check if PR 226 was merged when upgrading version.
+    (fetchpatch {
+      url = "https://github.com/slimm609/checksec.sh/commit/851ebff6972f122fde5507f1883e268bbff1f23d.patch";
+      hash = "sha256-DOcVF+oPGIR9VSbqE+EqWlcNANEvou1gV8qBvJLGLBE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -72,6 +82,18 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/checksec \
         --prefix PATH : ${path}
     '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = checksec;
+      version = "v${version}";
+    };
+    debug-report = runCommand "debug-report" { buildInputs = [ checksec ]; } ''
+      checksec --debug_report || exit 1
+      echo "OK"
+      touch $out
+    '';
+  };
 
   meta = with lib; {
     description = "Tool for checking security bits on executables";
