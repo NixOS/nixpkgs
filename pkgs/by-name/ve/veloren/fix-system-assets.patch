@@ -1,0 +1,29 @@
+commit 1e8efee8e1acce90dc353c100de9c3592cf6e8fa
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Mon Nov 13 13:21:24 2023 +0100
+
+    Fix the system assets path on NixOS
+
+diff --git a/common/assets/src/lib.rs b/common/assets/src/lib.rs
+index ee86ec8..d96db42 100644
+--- a/common/assets/src/lib.rs
++++ b/common/assets/src/lib.rs
+@@ -267,12 +267,12 @@ lazy_static! {
+ 
+             if let Ok(result) = std::env::var("XDG_DATA_DIRS") {
+                 result.split(':').for_each(|x| paths.push(format!("{}/veloren/", x).into()));
+-            } else {
+-                // Fallback
+-                let fallback_paths = vec!["/usr/local/share", "/usr/share"];
+-                for fallback_path in fallback_paths {
+-                    paths.push(format!("{}/veloren/", fallback_path).into());
+-                }
++            }
++
++            // Fallback
++            let fallback_paths = vec!["@assets@/share", "/usr/local/share", "/usr/share"];
++            for fallback_path in fallback_paths {
++                paths.push(format!("{}/veloren/", fallback_path).into());
+             }
+         }
+ 
