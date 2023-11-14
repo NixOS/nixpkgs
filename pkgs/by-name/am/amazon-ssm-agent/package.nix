@@ -40,13 +40,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.2.1705.0";
+  version = "3.2.1798.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-4KhDD5G/fS1rHitQdbYqIz6RSQ3PTMZsUENC202a/Do=";
+    hash = "sha256-A7M8UbOJT9zvbcwlARMwA7a+LGk8KYmo9j31yzh5FDQ=";
   };
 
   vendorHash = null;
@@ -137,7 +137,8 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
+    wrapProgram $out/bin/amazon-ssm-agent \
+      --prefix PATH : "${lib.makeBinPath [ bashInteractive ]}"
   '';
 
   passthru = {
