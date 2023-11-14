@@ -12,6 +12,7 @@
 , withPulseAudio ? false, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -52,6 +53,10 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMPRIS "mpris"
     ++ lib.optional withNotify "notify";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
