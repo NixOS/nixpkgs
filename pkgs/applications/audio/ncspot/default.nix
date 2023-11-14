@@ -13,6 +13,8 @@
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
 , nix-update-script
+, testers
+, ncspot
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,6 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = ncspot; };
   };
 
   meta = with lib; {
