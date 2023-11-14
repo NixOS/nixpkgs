@@ -1438,6 +1438,21 @@ runTests {
       }'';
   };
 
+# MISC
+
+  testAnsiStylizeEmptyInput = {
+    expr = ansi.stylize [ansi.style.bold ansi.color.fg.red] "";
+    expected = "";
+  };
+  testAnsiStylizeError = {
+    expr = ansi.stylizeError "ERROR";
+    expected = "[1m[31mERROR[0m";
+  };
+  testAnsiStylizeWarn = {
+    expr = ansi.stylizeWarn "WARN";
+    expected = "[1m[33mWARN[0m";
+  };
+
 # CLI
 
   testToGNUCommandLine = {
