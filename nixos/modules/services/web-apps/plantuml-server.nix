@@ -8,6 +8,7 @@ let
     mkIf
     mkOption
     mkPackageOptionMD
+    mkRemovedOptionModule
     types
     ;
 
@@ -16,6 +17,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "plantuml-server" "allowPlantumlInclude" ] "This option has been removed from PlantUML.")
+  ];
+
   options = {
     services.plantuml-server = {
       enable = mkEnableOption (mdDoc "PlantUML server");
@@ -86,12 +91,6 @@ in
         default = null;
         description = mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
       };
-
-      allowPlantumlInclude = mkOption {
-        type = types.bool;
-        default = false;
-        description = mdDoc "Enables !include processing which can read files from the server into diagrams. Files are read relative to the current working directory.";
-      };
     };
   };
 
@@ -106,7 +105,6 @@ in
         GRAPHVIZ_DOT = "${cfg.graphvizPackage}/bin/dot";
         PLANTUML_STATS = if cfg.plantumlStats then "on" else "off";
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
-        ALLOW_PLANTUML_INCLUDE = if cfg.allowPlantumlInclude then "true" else "false";
       };
       script = ''
       ${cfg.packages.jdk}/bin/java \
