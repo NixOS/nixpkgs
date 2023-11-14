@@ -56,6 +56,11 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withMPRIS "mpris"
     ++ lib.optional withNotify "notify";
 
+  postInstall = ''
+    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/${pname}.desktop
+    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/${pname}.png
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion { package = ncspot; };
