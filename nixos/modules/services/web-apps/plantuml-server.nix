@@ -162,5 +162,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ truh ];
+  meta.maintainers = with lib.maintainers; [ truh anthonyroussel ];
 }
