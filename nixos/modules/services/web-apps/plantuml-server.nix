@@ -20,26 +20,11 @@ in
     services.plantuml-server = {
       enable = mkEnableOption (mdDoc "PlantUML server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.plantuml-server;
-        defaultText = literalExpression "pkgs.plantuml-server";
-        description = mdDoc "PlantUML server package to use";
-      };
+      package = mkPackageOptionMD pkgs "plantuml-server" { };
 
       packages = {
-        jdk = mkOption {
-          type = types.package;
-          default = pkgs.jdk;
-          defaultText = literalExpression "pkgs.jdk";
-          description = mdDoc "JDK package to use for the server";
-        };
-        jetty = mkOption {
-          type = types.package;
-          default = pkgs.jetty;
-          defaultText = literalExpression "pkgs.jetty";
-          description = mdDoc "Jetty package to use for the server";
-        };
+        jdk = mkPackageOptionMD pkgs "jdk" { };
+        jetty = mkPackageOptionMD pkgs "jetty" { };
       };
 
       user = mkOption {
@@ -78,12 +63,7 @@ in
         description = mdDoc "Limits image width and height.";
       };
 
-      graphvizPackage = mkOption {
-        type = types.package;
-        default = pkgs.graphviz;
-        defaultText = literalExpression "pkgs.graphviz";
-        description = mdDoc "Package containing the dot executable.";
-      };
+      graphvizPackage = mkPackageOptionMD pkgs "graphviz" { };
 
       plantumlStats = mkOption {
         type = types.bool;
