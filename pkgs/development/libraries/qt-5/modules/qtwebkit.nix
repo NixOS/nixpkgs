@@ -26,22 +26,9 @@
   pkg-config,
   python3,
   ruby,
+  hyphen,
 }:
 
-let
-  hyphen = stdenv.mkDerivation rec {
-    pname = "hyphen";
-    version = "2.8.8";
-    src = fetchurl {
-      url = "http://dev-www.libreoffice.org/src/5ade6ae2a99bc1e9e57031ca88d36dad-hyphen-${version}.tar.gz";
-      sha256 = "304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705";
-    };
-    postPatch = ''
-      patchShebangs tests
-    '';
-    buildInputs = [ perl ];
-  };
-in
 qtModule {
   pname = "qtwebkit";
   propagatedBuildInputs = [
