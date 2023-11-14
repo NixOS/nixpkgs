@@ -87527,6 +87527,27 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  node-pty = nodeEnv.buildNodePackage {
+    name = "node-pty";
+    packageName = "node-pty";
+    version = "1.0.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/node-pty/-/node-pty-1.0.0.tgz";
+      sha512 = "wtBMWWS7dFZm/VgqElrTvtfMq4GzJ6+edFI0Y0zyzygUSZMgZdraDUMUhCIvkjhJjme15qWmbyJbtAx4ot4uZA==";
+    };
+    dependencies = [
+      sources."nan-2.18.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Fork pseudoterminals in Node.JS";
+      homepage = "https://github.com/microsoft/node-pty";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   node-red = nodeEnv.buildNodePackage {
     name = "node-red";
     packageName = "node-red";

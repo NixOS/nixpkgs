@@ -179,6 +179,10 @@ final: prev: {
     '';
   };
 
+  node-pty = prev.node-pty.override {
+    buildInputs = [ final.node-gyp-build ];
+  };
+
   node-red = prev.node-red.override {
     buildInputs = [ final.node-pre-gyp ];
   };

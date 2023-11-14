@@ -175,6 +175,7 @@
 , "node-gyp"
 , "node-gyp-build"
 , "node-pre-gyp"
+, "node-pty"
 , "node-red"
 , "node2nix"
 , "nodemon"
