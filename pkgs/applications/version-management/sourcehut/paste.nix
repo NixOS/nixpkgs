@@ -9,20 +9,20 @@
 }:
 
 let
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    sha256 = "sha256-IUFX7/V8AWqN+iuisLAyu7lMNIUCzSMoOfcZiYJTnrM=";
+    sha256 = "sha256-ZZzcd14Jbo1MfET7B56X/fl9xWXpCJ8TuKrGVgJwZfQ=";
   };
 
   pastesrht-api = buildGoModule ({
     inherit src version;
     pname = "pastesrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4";
+    vendorHash = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 in
 buildPythonPackage rec {
