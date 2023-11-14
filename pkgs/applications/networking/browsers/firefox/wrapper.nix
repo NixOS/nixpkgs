@@ -106,8 +106,8 @@ let
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if browser.requireSigning then
-        throw "Nix addons are only supported with signature enforcement disabled"
+      else if browser.requireSigning || !browser.allowAddonSideload then
+        throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
