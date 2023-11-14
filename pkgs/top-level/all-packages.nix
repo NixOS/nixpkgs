@@ -30143,6 +30143,8 @@ with pkgs;
     inherit (libsForQt5) breeze-icons kdeclarative kirigami2 plasma-framework plasma-workspace;
   };
 
+  utterly-round-plasma-style = callPackage ../data/themes/utterly-round-plasma-style { };
+
   uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { };
 
   u001-font = callPackage ../data/fonts/u001 { };
