@@ -356,8 +356,8 @@ in {
   */
   warn =
     if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
-    then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-    else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
+    then msg: builtins.trace (lib.ansi.stylizeError msg) (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+    else msg: builtins.trace (lib.ansi.stylizeError msg);
 
   /*
     Like warn, but only warn when the first argument is `true`.
