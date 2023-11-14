@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     install -Dm755 "$TMP/source/build/hello_debugger" "$out/bin/examples/hello_debugger"
     install -Dm755 "$TMP/source/build/simple_net_client_server" "$out/bin/examples/simple_net_client_server"
   '';
-  
+
   meta = {
     homepage = "https://github.com/google/cppdap";
     description = "C++ library for the Debug Adapter Protocol";

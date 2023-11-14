@@ -13126,17 +13126,17 @@
     githubId = 20391;
     name = "Nahum Shalman";
   };
-  nsnelson = {
-    email = "noah.snelson@protonmail.com";
-    github = "peeley";
-    githubId = 30942198;
-    name = "Noah Snelson";
-  };
   nsidiropoulos = {
     email = "nikolaos@sidiropoulos.dev";
     github = "nsidiropoulos";
     githubId = 144605927;
     name = "Nikolaos Sidiropoulos";
+  };
+  nsnelson = {
+    email = "noah.snelson@protonmail.com";
+    github = "peeley";
+    githubId = 30942198;
+    name = "Noah Snelson";
   };
   nthorne = {
     email = "notrupertthorne@gmail.com";
