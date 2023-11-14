@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication {
     gitpython
     huggingface-hub
     inquirer
+    jinja2
     litellm
     openai
     # pyreadline3 # this is a windows deps
@@ -36,6 +37,7 @@ python3.pkgs.buildPythonApplication {
     rich
     six
     tiktoken
+    tokenizers
     tokentrim
     wget
     yaspin

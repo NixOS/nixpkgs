@@ -7,6 +7,7 @@
 , fetchurl
 , fetchpatch
 , fetchpatch2
+, runCommand
 , Security
 
 , storeDir ? "/nix/store"
@@ -112,6 +113,37 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
+  # Intentionally does not support overrideAttrs etc
+  # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
+  addTestsShallowly = tests: pkg: pkg // {
+    tests = pkg.tests // tests;
+    # In case someone reads the wrong attribute
+    passthru.tests = pkg.tests // tests;
+  };
+
+  addFallbackPathsCheck = pkg: addTestsShallowly
+    { nix-fallback-paths =
+        runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
+          paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
+        } ''
+          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+            echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
+            echo "The following paths are not up to date:"
+            grep -v 'nix-${pkg.version}$' <<< "$paths"
+            echo
+            echo "Fix it by running in nixpkgs:"
+            echo
+            echo "curl https://releases.nixos.org/nix/nix-${pkg.version}/fallback-paths.nix >nixos/modules/installer/tools/nix-fallback-paths.nix"
+            echo
+            exit 1
+          else
+            echo "nix-fallback-paths versions up to date"
+            touch $out
+          fi
+        '';
+    }
+    pkg;
+
 in lib.makeExtensible (self: ({
   nix_2_3 = (common rec {
     version = "2.3.16";
@@ -203,7 +235,7 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = self.nix_2_18;
+  stable = addFallbackPathsCheck self.nix_2_18;
 
   unstable = self.nix_2_18;
 } // lib.optionalAttrs config.allowAliases {

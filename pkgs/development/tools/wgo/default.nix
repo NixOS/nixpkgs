@@ -23,6 +23,12 @@ buildGoModule {
 
   subPackages = [ "." ];
 
+  checkFlags = [
+    # Flaky tests.
+    # See https://github.com/bokwoon95/wgo/blob/e0448e04b6ca44323f507d1aca94425b7c69803c/START_HERE.md?plain=1#L26.
+    "-skip=TestWgoCmd_FileEvent"
+  ];
+
   meta = with lib; {
     description = "Live reload for Go apps";
     homepage = "https://github.com/bokwoon95/wgo";
