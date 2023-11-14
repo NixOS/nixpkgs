@@ -106,19 +106,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.${cfg.user} = {
-      isSystemUser = true;
-      group = cfg.group;
-      home = cfg.home;
-      createHome = true;
-    };
-
-    users.groups.${cfg.group} = {};
-
     systemd.services.plantuml-server = {
       description = "PlantUML server";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.home ];
+
       environment = {
         PLANTUML_LIMIT_SIZE = builtins.toString cfg.plantumlLimitSize;
         GRAPHVIZ_DOT = "${cfg.graphvizPackage}/bin/dot";
@@ -135,10 +127,37 @@ in
           jetty.http.host=${cfg.listenHost} \
           jetty.http.port=${builtins.toString cfg.listenPort}
       '';
+
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = mkIf (cfg.home == "/var/lib/plantuml") "plantuml";
+        StateDirectoryMode = mkIf (cfg.home == "/var/lib/plantuml") "0750";
+
+        # Hardening
+        AmbientCapabilities = [ "" ];
+        CapabilityBoundingSet = [ "" ];
+        DynamicUser = true;
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateNetwork = false;
         PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" ];
       };
     };
   };
