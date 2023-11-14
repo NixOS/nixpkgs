@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchNpmDeps, buildPackages, nodejs } @ topLevelArgs:
+{ lib
+, stdenv
+, fetchNpmDeps
+, buildPackages
+, nodejs
+, darwin
+} @ topLevelArgs:
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -55,7 +61,9 @@ in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook ];
+  nativeBuildInputs = nativeBuildInputs
+    ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook nodejs.python ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;
