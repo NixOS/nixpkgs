@@ -18336,6 +18336,8 @@ with pkgs;
 
   teller = callPackage ../development/tools/teller { };
 
+  yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
+
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
   ansible-language-server = callPackage ../development/tools/language-servers/ansible-language-server { };
@@ -30167,6 +30169,10 @@ with pkgs;
 
   unscii = callPackage ../data/fonts/unscii { };
 
+  utterly-nord-plasma = callPackage ../data/themes/utterly-nord-plasma {
+    inherit (libsForQt5) breeze-icons kdeclarative kirigami2 plasma-framework plasma-workspace;
+  };
+
   uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { };
 
   u001-font = callPackage ../data/fonts/u001 { };
@@ -41265,8 +41271,6 @@ with pkgs;
   urbit = callPackage ../misc/urbit { };
 
   usb-reset = callPackage ../applications/misc/usb-reset { };
-
-  usql = callPackage ../applications/misc/usql { };
 
   utf8cpp = callPackage ../development/libraries/utf8cpp { };
 
