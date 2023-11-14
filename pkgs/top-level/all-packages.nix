@@ -20923,8 +20923,8 @@ with pkgs;
 
   cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
 
-  ctranslate2 = callPackage ../development/libraries/ctranslate2 {
-    stdenv = if pkgs.config.cudaSupport then gcc11Stdenv else stdenv;
+  ctranslate2 = callPackage ../development/libraries/ctranslate2 rec {
+    stdenv = if withCUDA then gcc11Stdenv else pkgs.stdenv;
     withCUDA = pkgs.config.cudaSupport;
     withCuDNN = pkgs.config.cudaSupport;
   };
