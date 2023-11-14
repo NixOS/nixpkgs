@@ -69,7 +69,7 @@ self: super: {
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
   some = doDistribute self.some_1_0_5;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
-  th-desugar = doDistribute self.th-desugar_1_15;
+  th-desugar = doDistribute self.th-desugar_1_16;
   semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
   bifunctors = doDistribute self.bifunctors_5_6_1;
   base-compat = doDistribute self.base-compat_0_13_1;
