@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     # "plantuml -license" says GPLv3 or later
     license = licenses.gpl3Plus;
+    mainProgram = "plantuml";
     maintainers = with maintainers; [ bjornfor Mogria ];
     platforms = platforms.unix;
   };
