@@ -7,6 +7,7 @@
 , applicationName ? "Mozilla Firefox"
 , branding ? null
 , requireSigning ? true
+, allowAddonSideload ? false
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -411,6 +412,7 @@ buildStdenv.mkDerivation {
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
+  ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ [
     (enableFeature alsaSupport "alsa")
     (enableFeature crashreporterSupport "crashreporter")
