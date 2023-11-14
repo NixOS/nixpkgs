@@ -1,6 +1,10 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, nunavut
 , pyserial , pytest, ruamel-yaml}:
 
+# This has been renamed pycyphal, without any API changes; though this package is
+# quite outdated so transition might not be as seemless as it could be
+# See https://uavcan.org/ (which will redirect to https://opencyphal.org/)
+lib.warn "pyuavcan is deprecated and will be removed in 24.05; use pycyphal instead"
  buildPythonPackage rec {
   pname = "pyuavcan";
   version = "1.1.0.dev1";
