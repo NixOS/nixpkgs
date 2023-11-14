@@ -1,17 +1,16 @@
-{ lib, stdenv, fetchgit, curl, gnunet, jansson, libgcrypt, libmicrohttpd_0_9_72
+{ lib, stdenv, fetchgit, curl, gnunet, jansson, libgcrypt, libmicrohttpd_0_9_74
 , qrencode, libsodium, libtool, libunistring, pkg-config, postgresql
 , autoreconfHook, python39, recutils, wget, jq, gettext, texinfo
 }:
 
 let
-  version = "0.9.2";
+  version = "0.9.3";
 
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${version}";
-    sha256 = "sha256-DTnwj/pkowR1b1+N94pnuLykD2O37Nh8AKhUIzY7NaU=";
+    sha256 = "sha256-uwbgIzSjLN+KQCY134VfnCuBEtvCO3a6mEw++HoZDHs=";
   };
-
 in rec {
   taler-exchange = stdenv.mkDerivation rec {
     pname = "taler-exchange";
@@ -20,8 +19,12 @@ in rec {
     src = fetchgit {
       url = "https://git.taler.net/exchange.git";
       rev = "v${version}";
+      # REMOVEME: this should only be a problem for specifically v0.9.3
+      # When fetching submodules without deep clone we get the following error:
+      # "Server does not allow request for unadvertised object"
+      deepClone = true;
       fetchSubmodules = true;
-      sha256 = "sha256-c0cX38hDIZGVhHrD9LgDU70dF2AYuZmsakC8yDyZE54=";
+      sha256 = "sha256-txWwW5vqTblNgVIXdDkpNNZOXpY0udMaz4Wog1GobzE=";
     };
 
     nativeBuildInputs = [
@@ -30,7 +33,7 @@ in rec {
     ];
     buildInputs = [
       libgcrypt
-      libmicrohttpd_0_9_72
+      libmicrohttpd_0_9_74
       jansson
       libsodium
       postgresql
@@ -40,11 +43,13 @@ in rec {
       texinfo # Fix 'makeinfo' is missing on your system.
       libunistring
       python39.pkgs.jinja2
+      # jq is necessary for some tests and is checked by configure script
+      jq
     ];
     propagatedBuildInputs = [ gnunet ];
 
     preConfigure = ''
-      ./contrib/gana-update.sh
+      ./contrib/gana-generate.sh
     '';
 
     enableParallelBuilding = true;
@@ -78,7 +83,8 @@ in rec {
     src = fetchgit {
       url = "https://git.taler.net/merchant.git";
       rev = "v${version}";
-      sha256 = "sha256-NPK8yhuTtZZiWE7OsUMdlb2aycegPzRFud41xHE9IL8=";
+      fetchSubmodules = true;
+      sha256 = "sha256-HewCqyO/7nnIQY9Tgva0k1nTk2LuwLyGK/UUxvx9BG0=";
     };
     postUnpack = ''
       ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
@@ -93,6 +99,14 @@ in rec {
     ];
     propagatedBuildInputs = [ gnunet ];
 
+    # From ./bootstrap
+    preAutoreconf = ''
+      cd contrib
+      find wallet-core/backoffice/ -type f -printf '  %p \\\n' | sort > Makefile.am.ext
+      truncate -s -2 Makefile.am.ext
+      cat Makefile.am.in Makefile.am.ext >> Makefile.am
+      cd ..
+    '';
     configureFlags = [
       "--with-gnunet=${gnunet}"
       "--with-exchange=${taler-exchange}"
