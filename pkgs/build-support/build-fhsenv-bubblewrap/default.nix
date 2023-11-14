@@ -141,7 +141,11 @@ let
         if [[ $path == '/fonts' || $path == '/ssl' ]]; then
           continue
         fi
-        ro_mounts+=(--ro-bind "$i" "/etc$path")
+        if [[ -L $i ]]; then
+          symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "/etc$path")
+        else
+          ro_mounts+=(--ro-bind "$i" "/etc$path")
+        fi
         etc_ignored+=("/etc$path")
       done
     fi
