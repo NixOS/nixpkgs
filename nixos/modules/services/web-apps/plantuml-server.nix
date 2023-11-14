@@ -24,7 +24,17 @@ in
 
       packages = {
         jdk = mkPackageOptionMD pkgs "jdk" { };
-        jetty = mkPackageOptionMD pkgs "jetty" { };
+        jetty = mkPackageOptionMD pkgs "jetty" {
+          default = "jetty_11";
+          extraDescription = ''
+            At the time of writing (v1.2023.12), PlantUML Server does not support
+            Jetty versions higher than 12.x.
+
+            Jetty 12.x has introduced major breaking changes, see
+            <https://github.com/jetty/jetty.project/releases/tag/jetty-12.0.0> and
+            <https://eclipse.dev/jetty/documentation/jetty-12/programming-guide/index.html#pg-migration-11-to-12>
+          '';
+        };
       };
 
       user = mkOption {
@@ -40,7 +50,7 @@ in
       };
 
       home = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/lib/plantuml";
         description = mdDoc "Home directory of the PlantUML server instance.";
       };
