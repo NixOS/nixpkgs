@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl3;
     platforms = platforms.unix;
+    mainProgram = "ditaa";
     maintainers = [ maintainers.bjornfor ];
   };
 }
