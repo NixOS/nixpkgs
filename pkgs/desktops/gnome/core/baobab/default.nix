@@ -36,10 +36,6 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook4
-    # Prevents “error: Package `libadwaita-1' not found in specified Vala API
-    # directories or GObject-Introspection GIR directories” with strictDeps,
-    # even though it should only be a runtime dependency.
-    libadwaita
   ];
 
   buildInputs = [
