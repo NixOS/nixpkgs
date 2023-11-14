@@ -27,26 +27,26 @@ let
   electron = electron_25;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.10.0";
+  version = "2023.10.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-egXToXWfb9XV7JuCRBYJO4p/e+WOwMncPKz0oBgeALQ=";
+    hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
   };
 
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-iO8ZozVl1vOOqowQARnRJWSFUFnau46+dKfcMSkyU3o=";
+  npmDepsHash = "sha256-KN8C9Y0tfhHVagk+CUMpI/bIRChhzxC9M27HkU4aTEc=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-I7wENo4cCxcllEyT/tgAavHNwYPrQkPXxg/oTsl/ClA=";
+    hash = "sha256-Qv4Tq0s+Pmr+ZEqbmbPfaPn/4qKVdzsHoI4wC8x6O48=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
