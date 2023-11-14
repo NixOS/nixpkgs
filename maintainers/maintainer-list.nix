@@ -1888,6 +1888,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  ayes-web = {
+    email = "ayes2022@protonmail.com";
+    github = "ayes-web";
+    githubId = 52951851;
+    name = "ayes-web";
+  };
   aynish = {
     github = "Chickensoupwithrice";
     githubId = 22575913;
