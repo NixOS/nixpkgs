@@ -8,8 +8,9 @@
 , libxml2
 , libffi
 , makeWrapper
+, config
 , rocmPackages
-, rocmSupport ? false
+, rocmSupport ? config.rocmSupport
 }:
 let
   inherit (llvmPackages_15) stdenv;
