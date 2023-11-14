@@ -812,6 +812,12 @@ stdenv.mkDerivation ({
 // optionalAttrs (postPhases != [])              { inherit postPhases; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 
+# Implicit pointer to integer conversions are errors by default since clang 15.
+# Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
+// lib.optionalAttrs stdenv.cc.isClang {
+  NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
+}
+
 # Ensure libc++abi is linked even when clang is invoked as just `clang` or `cc`.
 # Works around https://github.com/NixOS/nixpkgs/issues/166205.
 # This can be dropped once a fix has been committed to cc-wrapper.
