@@ -1,15 +1,16 @@
 { lib
 , beautifulsoup4
 , buildPythonPackage
-, bunch
 , fetchPypi
 , kitchen
 , lockfile
 , munch
+, nose
 , openidc-client
-, paver
+, pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 , six
 , urllib3
 }:
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "python-fedora";
   version = "1.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,20 +27,30 @@ buildPythonPackage rec {
     hash = "sha256-VrnYQaObQDDjiOkMe3fazUefHOXi/5sYw5VNl9Vwmhk=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     beautifulsoup4
-    bunch
     kitchen
     lockfile
     munch
     openidc-client
-    paver
     requests
     six
     urllib3
   ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    nose
+  ];
+
+  disabledTestPaths = [
+    # requires network access
+    "tests/functional/test_openidbaseclient.py"
+  ];
 
   pythonImportsCheck = [
     "fedora"
@@ -48,7 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with the infrastructure of the Fedora Project";
     homepage = "https://github.com/fedora-infra/python-fedora";
-    changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/1.1.1";
+    changelog = "https://github.com/fedora-infra/python-fedora/releases/tag/${version}";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ ];
   };
