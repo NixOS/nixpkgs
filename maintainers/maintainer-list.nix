@@ -16113,6 +16113,11 @@
     githubId = 5104601;
     name = "schnusch";
   };
+  Schweber = {
+    github = "Schweber";
+    githubId = 64630479;
+    name = "Schweber";
+  };
   sciencentistguy = {
     email = "jamie@quigley.xyz";
     name = "Jamie Quigley";
