@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     mainProgram = "numbat";
-    maintainers = with maintainers; [ giomf ];
+    maintainers = with maintainers; [ giomf atemu ];
   };
 }

@@ -696,16 +696,16 @@ It can happen that non-trivial updates include patches or more complex changes.
 
 Reviewing process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit text fits the guidelines.
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information is correct.
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Ensure that the code contains no typos.
-- Building the package locally.
-  - pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
+- Build the package locally.
+  - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
   - It is possible to rebase the changes on nixos-unstable or nixpkgs-unstable for easier review by running the following commands from a nixpkgs clone.
 
     ```ShellSession
@@ -722,7 +722,7 @@ Reviewing process:
     ```ShellSession
     $ nix-shell -p nixpkgs-review --run "nixpkgs-review pr PRNUMBER"
     ```
-- Running every binary.
+- Run every binary.
 
 Sample template for a package update review is provided below.
 
@@ -731,7 +731,7 @@ Sample template for a package update review is provided below.
 
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
@@ -748,18 +748,20 @@ New packages are a common type of pull requests. These pull requests consists in
 
 Review process:
 
-- Ensure that the package versioning fits the guidelines.
-- Ensure that the commit name fits the guidelines.
-- Ensure that the meta fields contain correct information.
+- Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
+- Ensure that the package name and version [fits the guidelines](#package-naming).
+- Ensure that the package versioning [fits the guidelines](#versioning).
+- Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
 - Report detected typos.
 - Ensure the package source:
-  - Uses mirror URLs when available.
+  - Uses `mirror://` URLs when available.
   - Uses the most appropriate functions (e.g. packages from GitHub should use `fetchFromGitHub`).
-- Building the package locally.
-- Running every binary.
+- Build the package locally.
+- Run every binary.
 
 Sample template for a new package review is provided below.
 
@@ -769,7 +771,7 @@ Sample template for a new package review is provided below.
 - [ ] package path fits guidelines
 - [ ] package name fits guidelines
 - [ ] package version fits guidelines
-- [ ] package build on ARCHITECTURE
+- [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
 - [ ] `meta.description` is set and fits guidelines
 - [ ] `meta.license` fits upstream license

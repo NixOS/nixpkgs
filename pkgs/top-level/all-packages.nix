@@ -292,6 +292,8 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
+  db-rest = callPackage ../servers/db-rest { };
+
   fiche = callPackage ../servers/fiche { };
 
   fishnet = callPackage ../servers/fishnet { };
@@ -9636,6 +9638,8 @@ with pkgs;
   go-jira = callPackage ../applications/misc/go-jira { };
 
   john = callPackage ../tools/security/john { };
+
+  joomscan = callPackage ../tools/security/joomscan { };
 
   joplin = nodePackages.joplin;
 
@@ -19552,7 +19556,7 @@ with pkgs;
   };
 
   listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
 
   lit = with python3Packages; toPythonApplication lit;
@@ -21741,8 +21745,6 @@ with pkgs;
   gflags = callPackage ../development/libraries/gflags { };
 
   gperftools = callPackage ../development/libraries/gperftools { };
-
-  grab-site = callPackage ../tools/backup/grab-site { };
 
   grilo = callPackage ../development/libraries/grilo { };
 
@@ -27717,7 +27719,7 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk20.override { enableJavaFX = true; };
+    jdk = jdk21.override { enableJavaFX = true; };
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
@@ -30550,7 +30552,7 @@ with pkgs;
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  AusweisApp2 = libsForQt5.callPackage ../applications/misc/ausweisapp2 { };
+  ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
 
   avidemux = libsForQt5.callPackage ../applications/video/avidemux { };
 
@@ -30956,11 +30958,7 @@ with pkgs;
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
 
-  cosmic-comp = callPackage ../applications/window-managers/cosmic/comp { };
-
   cosmic-applets = callPackage ../applications/window-managers/cosmic/applets { };
-
-  cosmic-panel = callPackage ../applications/window-managers/cosmic/panel { };
 
   cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
 
@@ -31118,7 +31116,7 @@ with pkgs;
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10 docker_24;
 
-  docker = docker_20_10;
+  docker = docker_24;
   docker-client = docker.override { clientOnly = true; };
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
