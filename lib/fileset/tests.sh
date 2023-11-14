@@ -857,6 +857,26 @@ checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)
 # but here we need to use ./c
 checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
 
+# Also lazy, the filter isn't called on a filtered out path
+tree=(
+    [a]=1
+    [b]=0
+    [c]=0
+)
+checkFileset 'fileFilter (file: assert file.name != "c"; file.name == "a") (difference ./. ./c)'
+
+# Make sure single files are filtered correctly
+tree=(
+    [a]=1
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; true) ./a'
+tree=(
+    [a]=0
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; false) ./a'
+
 ## Tracing
 
 # The second trace argument is returned

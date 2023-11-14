@@ -732,29 +732,36 @@ rec {
   # Type: ({ name, type, ... } -> Bool) -> FileSet -> FileSet
   _fileFilter = predicate: fileset:
     let
-      # Check the predicate for a path and a filesetTree, returning a new filesetTree
-      # Type: Path -> filesetTree -> filesetTree
-      recurse = path: tree:
+      # Check the predicate for a single file
+      # Type: String -> String -> filesetTree
+      fromFile = name: type:
+        if
+          predicate {
+            inherit name type;
+            # To ensure forwards compatibility with more arguments being added in the future,
+            # adding an attribute which can't be deconstructed :)
+            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
+          }
+        then
+          type
+        else
+          null;
+
+      # Check the predicate for all files in a directory
+      # Type: Path -> filesetTree
+      fromDir = path: tree:
         mapAttrs (name: subtree:
           if isAttrs subtree || subtree == "directory" then
-            recurse (path + "/${name}") subtree
-          else if
-            predicate {
-              inherit name;
-              type = subtree;
-              # To ensure forwards compatibility with more arguments being added in the future,
-              # adding an attribute which can't be deconstructed :)
-              "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
-            }
-          then
-            subtree
-          else
+            fromDir (path + "/${name}") subtree
+          else if subtree == null then
             null
+          else
+            fromFile name subtree
         ) (_directoryEntries path tree);
     in
     if fileset._internalIsEmptyWithoutBase then
       _emptyWithoutBase
     else
       _create fileset._internalBase
-        (recurse fileset._internalBase fileset._internalTree);
+        (fromDir fileset._internalBase fileset._internalTree);
 }
