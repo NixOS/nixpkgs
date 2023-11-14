@@ -48,6 +48,7 @@ stdenv.mkDerivation {
     homepage = "https://www.umlet.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
+    mainProgram = "umlet";
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;
   };
