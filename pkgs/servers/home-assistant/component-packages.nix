@@ -4144,7 +4144,8 @@
       subarulink
     ];
     "suez_water" = ps: with ps; [
-    ]; # missing inputs: pysuez
+      pysuez
+    ];
     "sun" = ps: with ps; [
     ];
     "supervisord" = ps: with ps; [
