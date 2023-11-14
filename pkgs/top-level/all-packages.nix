@@ -37380,13 +37380,31 @@ with pkgs;
   rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
 
   slade = callPackage ../games/doom-ports/slade {
-    wxGTK = wxGTK32.override {
+    wxGTK = (wxGTK32.overrideAttrs {
+      patches = [
+       (fetchpatch { # required to run slade 3.2.4 on wxGTK 3.2.4, see PR #266945
+         url = "https://github.com/wxWidgets/wxWidgets/commit/425d9455e8307c1267a79d47d77e3dafeb4d86de.patch";
+         excludes = [ "docs/changes.txt" ];
+         revert = true;
+         hash = "sha256-6LOYLDLtVCHxNdHAWv3zhlCsljIpi//RJb9XVLGD5hM=";
+       })
+     ];
+    }).override {
       withWebKit = true;
     };
   };
 
   sladeUnstable = callPackage ../games/doom-ports/slade/git.nix {
-    wxGTK = wxGTK32.override {
+    wxGTK = (wxGTK32.overrideAttrs {
+      patches = [
+       (fetchpatch { # required to run sladeUnstable unstable-2023-09-30 on wxGTK 3.2.4, see PR #266945
+         url = "https://github.com/wxWidgets/wxWidgets/commit/425d9455e8307c1267a79d47d77e3dafeb4d86de.patch";
+         excludes = [ "docs/changes.txt" ];
+         revert = true;
+         hash = "sha256-6LOYLDLtVCHxNdHAWv3zhlCsljIpi//RJb9XVLGD5hM=";
+       })
+     ];
+    }).override {
       withWebKit = true;
     };
   };
