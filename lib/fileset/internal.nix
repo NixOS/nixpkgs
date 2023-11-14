@@ -728,8 +728,12 @@ rec {
         _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)
       ) (_directoryEntries path lhs);
 
+  # Filters all files in a file set based on a predicate
+  # Type: ({ name, type, ... } -> Bool) -> FileSet -> FileSet
   _fileFilter = predicate: fileset:
     let
+      # Check the predicate for a path and a filesetTree, returning a new filesetTree
+      # Type: Path -> filesetTree -> filesetTree
       recurse = path: tree:
         mapAttrs (name: subtree:
           if isAttrs subtree || subtree == "directory" then
