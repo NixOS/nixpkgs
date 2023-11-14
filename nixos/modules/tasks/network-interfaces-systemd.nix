@@ -442,7 +442,7 @@ in
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
               echo "Shutting down internal ${n} interface"
-              ip link set ${n} down || true
+              ip link set dev ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
               echo "Deleting Open vSwitch ${n}"

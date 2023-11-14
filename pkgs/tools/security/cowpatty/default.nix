@@ -2,6 +2,7 @@
 , stdenv
 , clang
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , openssl
 , libpcap
@@ -18,6 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "0fvwwghhd7wsx0lw2dj9rdsjnirawnq3c6silzvhi0yfnzn5fs0s";
   };
 
+  patches = [
+    # Pull upstream fix for parallel builds:
+    #   https://github.com/joswr1ght/cowpatty/pull/5
+    (fetchpatch {
+      name = "fix-parallel.patch";
+      url = "https://github.com/joswr1ght/cowpatty/commit/9c8cc09c4fa90aebee44afcd0ad6a35539178478.patch";
+      hash = "sha256-k0Qht80HcjvPoxVPF6wAXwxN3d2mxBrEyeFGuU7w9eA=";
+    })
+  ];
+
   nativeBuildInputs = [
     clang
     installShellFiles
@@ -27,6 +38,8 @@ stdenv.mkDerivation rec {
     openssl
     libpcap
   ];
+
+  enableParallelBuilding = true;
 
   makeFlags = [
     "DESTDIR=$(out)"

@@ -150,7 +150,7 @@
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
-, hadrian ? bootPkgs.callPackage ../../tools/haskell/hadrian {
+, hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
     ghcSrc = ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;

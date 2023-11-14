@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "wikitextparser";
-  version = "0.54.0";
+  version = "0.55.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "5j9";
     repo = "wikitextparser";
     rev = "v${version}";
-    hash = "sha256-AGQfjUNxeleuTS200QMdZS8CSD2t4ah5NMm9TIYjVHk=";
+    hash = "sha256-cmzyRbq4tCbuyrNnT0UYxoxuwXrFkIcWdrogSTfxSys=";
   };
 
   propagatedBuildInputs = [

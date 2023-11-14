@@ -187,7 +187,7 @@ in
 
     hostPlatform = mkOption {
       type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
@@ -205,7 +205,7 @@ in
     buildPlatform = mkOption {
       type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = cfg.hostPlatform;
-      example = { system = "x86_64-linux"; config = "x86_64-unknown-linux-gnu"; };
+      example = { system = "x86_64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this.
       apply = lib.systems.elaborate;
@@ -228,7 +228,7 @@ in
     localSystem = mkOption {
       type = types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = { inherit (cfg) system; };
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
@@ -262,7 +262,7 @@ in
     crossSystem = mkOption {
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
-      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      example = { system = "aarch64-linux"; };
       description = lib.mdDoc ''
         Systems with a recently generated `hardware-configuration.nix`
         may instead specify *only* {option}`nixpkgs.buildPlatform`,

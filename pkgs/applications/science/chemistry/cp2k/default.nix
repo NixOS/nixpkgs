@@ -28,8 +28,16 @@
 , spfft
 , enableElpa ? false
 , elpa
-, gpuBackend ? "none"
 , cudaPackages
+, rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
 # gpuVersion needs to be set for both CUDA as well as ROCM hardware.
 # gpuArch is only required for the ROCM stack.
 # Change to a value suitable for your target GPU.
@@ -37,7 +45,6 @@
 # and for Nvidia see https://github.com/cp2k/cp2k/blob/master/INSTALL.md#2i-cuda-optional-improved-performance-on-gpu-systems
 , gpuVersion ? "Mi100"
 , gpuArch ? "gfx908"
-, rocmPackages
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -146,7 +153,8 @@ stdenv.mkDerivation rec {
                  -fopenmp -ftree-vectorize -funroll-loops \
                  -I${lib.getDev libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"} \
                  -I${lib.getDev sirius}/include/sirius \
-                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include
+                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
+                 -fallow-argument-mismatch
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \

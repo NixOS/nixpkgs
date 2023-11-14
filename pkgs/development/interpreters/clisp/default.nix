@@ -113,6 +113,8 @@ stdenv.mkDerivation {
     cd builddir
   '';
 
+  doCheck = true;
+
   postInstall =
     lib.optionalString (withModules != [])
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''

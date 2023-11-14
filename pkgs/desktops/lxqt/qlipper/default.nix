@@ -15,16 +15,16 @@ mkDerivation rec {
     owner = "pvanek";
     repo = pname;
     rev = version;
-    sha256 = "0zpkcqfylcfwvadp1bidcrr64d8ls5c7bdnkfqwjjd32sd35ly60";
+    hash = "sha256-wHhaRtNiNCk5dtO2dVjRFDVicmYtrnCb2twx6h1m834=";
   };
 
   nativeBuildInputs = [
     cmake
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
   ];
 
   passthru.updateScript = gitUpdater { };

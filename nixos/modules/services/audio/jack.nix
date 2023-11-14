@@ -225,7 +225,7 @@ in {
         description = "JACK Audio system service user";
         isSystemUser = true;
       };
-      # http://jackaudio.org/faq/linux_rt_config.html
+      # https://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }

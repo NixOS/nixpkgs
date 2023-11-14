@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , hatch-fancy-pypi-readme
 , hatchling
 , awkward-cpp
@@ -23,14 +23,16 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.4.6";
+  version = "2.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MRnrPChX3a26JELh4oH5nefwoQurpvpprZXeNnz1Cwo=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "awkward";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-D+bgKI6olK3smgnRdACvd0gYMWvS6ao6f7nQh3YExXw=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +71,6 @@ buildPythonPackage rec {
   # The following tests have been disabled because they need to be run on a GPU platform.
   disabledTestPaths = [
     "tests-cuda"
-    "tests-cuda-kernels"
   ];
 
   meta = with lib; {

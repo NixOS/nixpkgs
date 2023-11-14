@@ -33,6 +33,7 @@
 , nukeReferences
 , callPackage
 , majorMinorVersion
+, darwin
 
 # only for gcc<=6.x
 , langJava ? false
@@ -47,18 +48,8 @@
 }:
 
 let
-  version = {
-    "13" = "13.2.0";
-    "12" = "12.3.0";
-    "11" = "11.4.0";
-    "10" = "10.5.0";
-    "9"  =  "9.5.0";
-    "8"  =  "8.5.0";
-    "7"  =  "7.5.0";
-    "6"  =  "6.5.0";
-    "4.9"=  "4.9.4";
-    "4.8"=  "4.8.5";
-  }."${majorMinorVersion}";
+  versions = import ./versions.nix;
+  version = versions.fromMajorMinor majorMinorVersion;
 
   majorVersion = lib.versions.major version;
   atLeast13 = lib.versionAtLeast version "13";
@@ -255,18 +246,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
           else if atLeast6
           then "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz"
           else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    ${if is10 || is11 || is13 then "hash" else "sha256"} = {
-      "13.2.0" = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
-      "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
-      "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
-      "10.5.0" = "sha256-JRCVQ/30bzl8NHtdi3osflaUpaUczkucbh6opxyjB8E=";
-      "9.5.0"  = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
-      "8.5.0"  = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
-      "7.5.0"  = "0qg6kqc5l72hpnj4vr6l0p69qav0rh4anlkk3y55540zy3klc6dq";
-      "6.5.0"  = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
-      "4.9.4"  = "14l06m7nvcvb0igkbip58x59w3nq6315k6jcz3wr9ch1rn9d44bc";
-      "4.8.5"  = "08yggr18v373a1ihj0rg2vd6psnic42b518xcgp3r9k81xz1xyr2";
-    }."${version}";
+    ${if is10 || is11 || is13 then "hash" else "sha256"} =
+      versions.srcHashForVersion version;
   };
 
   inherit patches;
@@ -428,10 +409,15 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       maintainers
     ;
   } // lib.optionalAttrs (!atLeast11) {
-    badPlatforms = if !is49 then [ "aarch64-darwin" ] else lib.platforms.darwin;
+    badPlatforms = if !(is48 || is49) then [ "aarch64-darwin" ] else lib.platforms.darwin;
   };
 } // optionalAttrs is7 {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+} // lib.optionalAttrs (!atLeast10 && stdenv.hostPlatform.isDarwin) {
+  # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
+  preBuild = ''
+    makeFlagsArray+=('STRIP=${lib.getBin darwin.cctools-port}/bin/${stdenv.cc.targetPrefix}strip')
+  '';
 } // optionalAttrs (!atLeast7) {
   env.langJava = langJava;
 } // optionalAttrs atLeast6 {

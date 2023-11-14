@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     (enableFeature doCheck "tests")
   ];
 
+  makeFlags = [
+    "AR:=$(AR)"
+  ];
+
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   outputs = [ "out" "dev" ];

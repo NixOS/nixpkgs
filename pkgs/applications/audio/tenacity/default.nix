@@ -49,7 +49,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-JgmAuCfXP345xgg5jac8Sa0cBSsWJbtoYmVV0DLcIkk=";
+    hash = "sha256-UU3iKfab6en4IyGlpNLUhOil3snzaZ2nI6JMqoL6DUs=";
   };
 
   postPatch = ''

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "greeneye-monitor";
-  version = "5.0";
+  version = "5.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jkeljo";
     repo = "greeneye-monitor";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HU+GWO08caKfQZ0tIDmJYAML4CKUM0CPukm7wD6uSEA=";
+    hash = "sha256-zNGizNOuZuPRdz82y8IaVvwrTos4lZSqTP5FwOlnRao=";
   };
 
   nativeBuildInputs = [

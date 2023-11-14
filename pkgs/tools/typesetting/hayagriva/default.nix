@@ -5,16 +5,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hayagriva";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-4HX0X8HDn0/D9mcruCVKeIs9ryCxYagW5eJ/DSqtprY=";
+    hash = "sha256-d4T+GF0bdMjpjwcN56yYpEw4aZCvJ19P1cbPuVhFR0A=";
   };
 
-  cargoHash = "sha256-JvRWdoZ5/jG09ex7avkE3JUcdMGIsfirSx9PDyAtVfU=";
+  cargoHash = "sha256-mRKvCnW4XVXYzOKQ5rASwiwpLdqpEgGlq8W4gB7hHco=";
 
   buildFeatures = [ "cli" ];
+
+  checkFlags = [
+    # requires internet access
+    "--skip=try_archive"
+
+    # requires a separate large repository
+    "--skip=csl::tests::test_csl"
+  ];
 
   meta = with lib; {
     description = "Work with references: Literature database management, storage, and citation formatting";

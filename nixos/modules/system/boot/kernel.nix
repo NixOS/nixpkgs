@@ -269,6 +269,9 @@ in
             "ata_piix"
             "pata_marvell"
 
+            # NVMe
+            "nvme"
+
             # Standard SCSI stuff.
             "sd_mod"
             "sr_mod"

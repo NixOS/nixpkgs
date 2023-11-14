@@ -44,7 +44,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ trio ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_cython
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_cython
   '';
 
   nativeCheckInputs = [

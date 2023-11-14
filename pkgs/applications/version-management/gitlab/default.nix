@@ -160,6 +160,7 @@ stdenv.mkDerivation {
     ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
+    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
   '';
 
   buildPhase = ''

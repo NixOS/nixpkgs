@@ -3,6 +3,7 @@
 , cachetools
 , cytoolz
 , fetchPypi
+, floret
 , jellyfish
 , joblib
 , matplotlib
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   pname = "textacy";
   version = "0.13.0";
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cachetools
     cytoolz
+    floret
     jellyfish
     joblib
     matplotlib

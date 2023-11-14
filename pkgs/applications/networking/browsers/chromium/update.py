@@ -151,10 +151,6 @@ def channel_name_to_attr_name(channel_name):
     """Maps a channel name to the corresponding main Nixpkgs attribute name."""
     if channel_name == 'stable':
         return 'chromium'
-    if channel_name == 'beta':
-        return 'chromiumBeta'
-    if channel_name == 'dev':
-        return 'chromiumDev'
     if channel_name == 'ungoogled-chromium':
         return 'ungoogled-chromium'
     print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
@@ -204,6 +200,10 @@ with urlopen(RELEASES_URL) as resp:
         # If we've already found a newer release for this channel, we're
         # no longer interested in it.
         if channel_name in channels:
+            continue
+
+        # We only look for channels that are listed in our version pin file.
+        if channel_name not in last_channels:
             continue
 
         # If we're back at the last release we used, we don't need to

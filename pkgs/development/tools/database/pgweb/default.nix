@@ -1,14 +1,19 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, pgweb
+}:
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.14.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0wwDye7Iku9+brYoVqlCpnm+A3xsr8tL2dyWaBVvres=";
+    hash = "sha256-gM7hqFriXkcwNO+I3d138kfp1F4YsO/Qbq0NzMszkwM=";
   };
 
   postPatch = ''
@@ -29,7 +34,14 @@ buildGoModule rec {
     in
     [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
+    passthru.tests.version = testers.testVersion {
+      version = "v${version}";
+      package = pgweb;
+      command = "pgweb --version";
+    };
+
   meta = with lib; {
+    changelog = "https://github.com/sosedoff/pgweb/releases/tag/v${version}";
     description = "A web-based database browser for PostgreSQL";
     longDescription = ''
       A simple postgres browser that runs as a web server. You can view data,
@@ -37,6 +49,7 @@ buildGoModule rec {
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
+    mainProgram = "pgweb";
     maintainers = with maintainers; [ zupo luisnquin ];
   };
 }

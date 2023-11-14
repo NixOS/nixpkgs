@@ -344,17 +344,6 @@ let
   };
 
   mkPackages = self: {
-    # TODO: remove ahead of 23.11 branchoff
-    # "PostgreSQL 11 will stop receiving fixes on November 9, 2023"
-    postgresql_11 = self.callPackage generic {
-      version = "11.21";
-      psqlSchema = "11.1"; # should be 11, but changing it is invasive
-      hash = "sha256-B7CDdHHV3XeyUWazRxjzuhCBa2rWHmkeb8VHzz/P+FA=";
-      this = self.postgresql_11;
-      thisAttr = "postgresql_11";
-      inherit self;
-    };
-
     postgresql_12 = self.callPackage generic {
       version = "12.16";
       psqlSchema = "12";

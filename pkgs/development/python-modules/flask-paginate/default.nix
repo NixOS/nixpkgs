@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "flask-paginate";
-  version = "2023.10.8";
+  version = "2023.10.24";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "lixxu";
     repo = "flask-paginate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QXXuXwMY3CwSv1P5zDK6q/LZfh96/BL3fbdbg53BJ6o=";
+    hash = "sha256-9633YLHMF9S1DLK7ZS4qmCOzslXdHLSgpKoJFNvkXlA=";
   };
 
   propagatedBuildInputs = [

@@ -52,25 +52,27 @@ in
     '';
     environment.etc."iscsi/initiatorname.iscsi".text = "InitiatorName=${cfg.name}";
 
-    system.activationScripts.iscsid = let
-      extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
-        if [ -f "${cfg.extraConfigFile}" ]; then
-          printf "\n# The following is from ${cfg.extraConfigFile}:\n"
-          cat "${cfg.extraConfigFile}"
-        else
-          echo "Warning: services.openiscsi.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
-        fi
-      '';
-    in ''
-      (
-        cat ${config.environment.etc."iscsi/iscsid.conf.fragment".source}
-        ${extraCfgDumper}
-      ) > /etc/iscsi/iscsid.conf
-    '';
-
     systemd.packages = [ cfg.package ];
 
-    systemd.services."iscsid".wantedBy = [ "multi-user.target" ];
+    systemd.services."iscsid" = {
+      wantedBy = [ "multi-user.target" ];
+      preStart =
+        let
+          extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
+            if [ -f "${cfg.extraConfigFile}" ]; then
+              printf "\n# The following is from ${cfg.extraConfigFile}:\n"
+              cat "${cfg.extraConfigFile}"
+            else
+              echo "Warning: services.openiscsi.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
+            fi
+          '';
+        in ''
+          (
+            cat ${config.environment.etc."iscsi/iscsid.conf.fragment".source}
+            ${extraCfgDumper}
+          ) > /etc/iscsi/iscsid.conf
+        '';
+    };
     systemd.sockets."iscsid".wantedBy = [ "sockets.target" ];
 
     systemd.services."iscsi" = mkIf cfg.enableAutoLoginOut {

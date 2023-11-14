@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.13.8";
+  version = "0.15.1";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    sha256 = "sha256-Zji9FyYUtsklYz4qyLbtduusteC7WujLCMmvZKcqYis=";
+    sha256 = "sha256-IUFX7/V8AWqN+iuisLAyu7lMNIUCzSMoOfcZiYJTnrM=";
   };
 
   postPatch = ''

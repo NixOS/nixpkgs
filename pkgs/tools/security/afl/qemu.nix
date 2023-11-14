@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   srcs = [
     (fetchurl {
-      url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
+      url = "https://download.qemu.org/qemu-${version}.tar.bz2";
       sha256 = "0j3dfxzrzdp1w21k21fjvmakzc6lcha1rsclaicwqvbf63hkk7vy";
     })
     afl.src
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with lib; {
-    homepage = "http://www.qemu.org/";
+    homepage = "https://www.qemu.org/";
     description = "Fork of QEMU with AFL instrumentation support";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ thoughtpolice ];

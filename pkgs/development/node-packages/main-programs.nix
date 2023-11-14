@@ -60,5 +60,4 @@
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";
   webtorrent-cli = "webtorrent";
-  "@zwave-js/server" = "zwave-server";
 }

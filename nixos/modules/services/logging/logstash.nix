@@ -123,7 +123,7 @@ in
         example = ''
           if [type] == "syslog" {
             # Keep only relevant systemd fields
-            # http://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
+            # https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
             prune {
               whitelist_names => [
                 "type", "@timestamp", "@version",

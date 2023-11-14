@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, defusedxml
 , dissect-cstruct
 , dissect-util
 , fetchFromGitHub
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
   version = "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    defusedxml
     dissect-cstruct
     dissect-util
   ];

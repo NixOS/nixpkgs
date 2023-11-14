@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [ earldouglas paumr ];
   };
 }

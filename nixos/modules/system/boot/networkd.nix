@@ -1020,7 +1020,7 @@ let
           "MulticastToUnicast"
           "NeighborSuppression"
           "Learning"
-          "Hairpin"
+          "HairPin"
           "Isolated"
           "UseBPDU"
           "FastLeave"
@@ -1036,7 +1036,7 @@ let
         (assertValueOneOf "MulticastToUnicast" boolValues)
         (assertValueOneOf "NeighborSuppression" boolValues)
         (assertValueOneOf "Learning" boolValues)
-        (assertValueOneOf "Hairpin" boolValues)
+        (assertValueOneOf "HairPin" boolValues)
         (assertValueOneOf "Isolated" boolValues)
         (assertValueOneOf "UseBPDU" boolValues)
         (assertValueOneOf "FastLeave" boolValues)

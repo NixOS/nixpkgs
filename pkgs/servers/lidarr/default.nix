@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ];
+    mainProgram = "Lidarr";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "blisp";
     homepage = "https://github.com/pine64/blisp";
-    maintainers = [ maintainers.fortuneteller2k ];
+    maintainers = [ maintainers.bdd ];
   };
 })

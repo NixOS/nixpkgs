@@ -11,16 +11,13 @@
 , dataclasses-json
 , jsonpatch
 , langsmith
-, numexpr
 , numpy
-, openapi-schema-pydantic
 , pydantic
 , pyyaml
 , requests
 , sqlalchemy
 , tenacity
   # optional dependencies
-, anthropic
 , atlassian-python-api
 , azure-core
 , azure-cosmos
@@ -45,7 +42,6 @@
 , librosa
 , lxml
 , manifest-ml
-, markdownify
 , neo4j
 , networkx
 , nlpcloud
@@ -56,6 +52,7 @@
 , pgvector
 , pinecone-client
 , psycopg2
+, pymongo
 , pyowm
 , pypdf
 , pytesseract
@@ -65,11 +62,10 @@
 , redis
 , requests-toolbelt
 , sentence-transformers
-, spacy
-, steamship
 , tiktoken
 , torch
 , transformers
+, typer
 , weaviate-client
 , wikipedia
   # test dependencies
@@ -79,8 +75,8 @@
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
-, pytest-vcr
 , pytestCheckHook
+, requests-mock
 , responses
 , syrupy
 , toml
@@ -88,8 +84,8 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.320";
-  format = "pyproject";
+  version = "0.0.334";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -97,7 +93,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Yw3gGt/OvrQ4IYauFUt6pBWOecy+PaWiGXoo5dWev5M=";
+    hash = "sha256-mXPqc8wF9DhEtITm8h5R9kHBcMJ7AEK4kL5Z7V2p8NE=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -117,11 +113,9 @@ buildPythonPackage rec {
     requests
     pyyaml
     numpy
-    openapi-schema-pydantic
     dataclasses-json
     tenacity
     aiohttp
-    numexpr
     langsmith
     anyio
     jsonpatch
@@ -131,18 +125,15 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     llms = [
-      anthropic
       clarifai
       cohere
       openai
-      # openllm
       # openlm
       nlpcloud
       huggingface-hub
       manifest-ml
       torch
       transformers
-      # xinference
     ];
     qdrant = [
       qdrant-client
@@ -180,13 +171,11 @@ buildPythonPackage rec {
       # azure-search-documents
     ];
     all = [
-      anthropic
       clarifai
       cohere
       openai
       nlpcloud
       huggingface-hub
-      # jina
       manifest-ml
       elasticsearch
       opensearch-py
@@ -194,7 +183,6 @@ buildPythonPackage rec {
       faiss
       sentence-transformers
       transformers
-      spacy
       nltk
       wikipedia
       beautifulsoup4
@@ -203,6 +191,8 @@ buildPythonPackage rec {
       jinja2
       pinecone-client
       # pinecone-text
+      # marqo
+      pymongo
       weaviate-client
       redis
       google-api-python-client
@@ -236,7 +226,6 @@ buildPythonPackage rec {
       # O365
       jq
       # docarray
-      steamship
       pdfminer-six
       lxml
       requests-toolbelt
@@ -250,33 +239,35 @@ buildPythonPackage rec {
       # tigrisdb
       # nebula3-python
       # awadb
-      # esprima
-      # octoai-sdk
+      esprima
       rdflib
       # amadeus
-      # xinference
       librosa
       python-arango
+    ];
+    cli = [
+      typer
     ];
   };
 
   nativeCheckInputs = [
     freezegun
-    markdownify
+    lark
     pandas
     pytest-asyncio
     pytest-mock
     pytest-socket
-    pytest-vcr
     pytestCheckHook
+    requests-mock
     responses
     syrupy
     toml
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
+    "--only-core"
   ];
 
   disabledTests = [
@@ -286,6 +277,10 @@ buildPythonPackage rec {
 
     # these tests have network access
     "test_socket_disabled"
+  ];
+
+  pythonImportsCheck = [
+    "langchain"
   ];
 
   meta = with lib; {

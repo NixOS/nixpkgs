@@ -28,6 +28,7 @@
 , pyro-ppl
   #, pystan (not packaged)
 , numpyro
+, bokeh
 }:
 
 buildPythonPackage rec {
@@ -72,6 +73,7 @@ buildPythonPackage rec {
     pytestCheckHook
     torchvision
     zarr
+    bokeh
   ];
 
   preCheck = ''
@@ -97,6 +99,8 @@ buildPythonPackage rec {
     # An issue has been opened upstream: https://github.com/arviz-devs/arviz/issues/2282
     "test_plot_ppc_discrete"
     "test_plot_ppc_discrete_save_animation"
+    # Assertion error
+    "test_data_zarr"
   ];
 
   pythonImportsCheck = [

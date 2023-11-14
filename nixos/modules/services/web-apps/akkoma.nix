@@ -86,7 +86,7 @@ let
   # Erlang/Elixir uses a somewhat special format for IP addresses
   erlAddr = addr: fileContents
     (pkgs.runCommand addr {
-      nativeBuildInputs = with pkgs; [ elixir ];
+      nativeBuildInputs = [ cfg.package.elixirPackage ];
       code = ''
         case :inet.parse_address('${addr}') do
           {:ok, addr} -> IO.inspect addr
@@ -96,7 +96,7 @@ let
       passAsFile = [ "code" ];
     } ''elixir "$codePath" >"$out"'');
 
-  format = pkgs.formats.elixirConf { };
+  format = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
   configFile = format.generate "config.exs"
     (replaceSec
       (attrsets.updateManyAttrsByPath [{
@@ -146,7 +146,7 @@ let
 
   initSecretsScript = writeShell {
     name = "akkoma-init-secrets";
-    runtimeInputs = with pkgs; [ coreutils elixir ];
+    runtimeInputs = with pkgs; [ coreutils cfg.package.elixirPackage ];
     text = let
       key-base = web.secret_key_base;
       jwt-signer = ex.":joken".":default_signer";
@@ -909,7 +909,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = optionals (!config.security.sudo.enable) [''
+    warnings = optionals (with config.security; (!sudo.enable) && (!sudo-rs.enable)) [''
       The pleroma_ctl wrapper enabled by the installWrapper option relies on
       sudo, which appears to have been disabled through security.sudo.enable.
     ''];

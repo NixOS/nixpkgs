@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "infra-arcana";
-  version = "22.0.0";
+  version = "22.1.0";
 
   src = fetchFromGitLab {
     owner = "martin-tornqvist";
     repo = "ia";
     rev = "v${version}";
-    sha256 = "sha256-EFpeuzxhRriQOBtmw0D+SY6sOWGyY8iA5Xnm6PCaMX0=";
+    sha256 = "sha256-MI+wH0+1f41JYXT2hzDs3RrrR3eTfOzgtCa5T6m8oQc=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

@@ -4,7 +4,7 @@
 , appimageTools
 , makeWrapper
 # graphs will not sync without matching upstream's major electron version
-, electron_24
+, electron_25
 , git
 , nix-update-script
 }:
@@ -14,11 +14,11 @@ stdenv.mkDerivation (finalAttrs: let
 
 in {
   pname = "logseq";
-  version = "0.9.19";
+  version = "0.9.20";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-Y3AeeJc+PYJdckpOma5ZDbVtBbjBTfNNDqTip4l02/E=";
+    hash = "sha256-iT0Gc/ePx1tUNTPoE2Ol+dHUmbS4CkneZbyraRBx5Ak=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -57,7 +57,7 @@ in {
 
   postFixup = ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
-    makeWrapper ${electron_24}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_25}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

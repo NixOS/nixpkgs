@@ -67,6 +67,8 @@ let
   '';
 in {
 
+  meta.maintainers = with lib.maintainers; [ julienmalka ];
+
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
     ];

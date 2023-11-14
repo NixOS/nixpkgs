@@ -67,26 +67,6 @@ let
         ];
       });
 
-      blinkpy = super.blinkpy.overridePythonAttrs (oldAttrs: rec {
-        version = "0.21.0";
-        src = fetchFromGitHub {
-          owner = "fronzbot";
-          repo = "blinkpy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-0sEZlnS6CJj8nMyjtSFZRALRKdmY0Uu5N6sozPiDG6w=";
-        };
-      });
-
-      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
-        version = "0.33";
-        src = fetchFromGitHub {
-          owner = "ndokter";
-          repo = "dsmr_parser";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
-        };
-      });
-
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
         src = fetchFromGitHub {
@@ -107,14 +87,23 @@ let
         };
       });
 
-      holidays = super.holidays.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28";
+      intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.2";
         src = fetchFromGitHub {
-          owner = "dr-prodigy";
-          repo = "python-holidays";
-          rev = "refs/tags/v.${version}";
-          hash = "sha256-JHj7fSE8p3TLViDSegl6gm35u53D9NvN7Oa2TBjN9t4=";
+          owner = "jeeftor";
+          repo = "intellifire4py";
+          rev = "refs/tags/${version}";
+          hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
         };
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+        propagatedBuildInputs = with super; [
+          aenum
+          aiohttp
+          pydantic
+        ];
+        doCheck = false; # requires asynctest, which does not work on python 3.11
       });
 
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
@@ -190,6 +179,15 @@ let
           inherit (oldAttrs.src) owner repo;
           rev = "refs/tags/v${version}";
           hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
+        };
+      });
+
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "5.9.6";
+        src = fetchPypi {
+          pname = "psutil";
+          inherit version;
+          hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
         };
       });
 
@@ -310,17 +308,6 @@ let
         doCheck = false;
       });
 
-      # Pinned due to API changes in 0.3.0
-      tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.0";
-        src = fetchFromGitHub {
-          owner = "frenck";
-          repo = "python-tailscale";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -366,7 +353,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.10.5";
+  hassVersion = "2023.11.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -382,7 +369,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jVw0Mudb/L4Lw3AodwcOTrNJZctSfEIcXUzxozo7saA=";
+    hash = "sha256-cnneRq0hIyvgKo0du/52ze0IVs8TgTPNQM3T1kyy03s=";
   };
 
   # Secondary source is git for tests
@@ -390,7 +377,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-wKxAwa4t3JbS4puDAufjpzcVLcvEY9Bk73qmg3JeLPk=";
+    hash = "sha256-OljfYmlXSJVoWWsd4jcSF4nI/FXHqRA8e4LN5AaPVv8=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -406,6 +393,10 @@ in python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    # Follow symlinks in /var/lib/hass/www
+    ./patches/static-symlinks.patch
+
+    # Patch path to ffmpeg binary
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
@@ -529,6 +520,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
     # AssertionError: assert 2 == 1
     "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
+    # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
+    "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
     # tests are located in tests/
     "tests"
   ];

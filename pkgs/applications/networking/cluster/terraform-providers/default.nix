@@ -95,6 +95,7 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
+      fly = archived "fly" "2023/10";
       ksyun = removed "ksyun" "2023/04";
     };
 

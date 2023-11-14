@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     cd ../../..
-    ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=shiboken2
+    ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=shiboken2
     cp -r shiboken2.egg-info $out/${python.sitePackages}/
     rm $out/bin/shiboken_tool.py
   '';

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.pythonForBuild.interpreter} pywayland/ffi_build.py
+    ${python.pythonOnBuildForHost.interpreter} pywayland/ffi_build.py
   '';
 
   # Tests need this to create sockets

@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron yurrriq ];
+    maintainers = with maintainers; [ pierron ];
   };
 }

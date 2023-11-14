@@ -10,6 +10,7 @@
 , libxslt
 , curl
 , libevent
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-PAX2MUyBWWU8kGkaeoCJteidgszh7ipwDJbrLXzVsn0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "update-waf-to-2-0-24.patch";
+      url = "https://github.com/saldl/saldl/commit/360c29d6c8cee5f7e608af42237928be429c3407.patch";
+      hash = "sha256-RBMnsUtd0BaZe/EXypDCK4gpUU0dgucWmOcJRn5/iTA=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

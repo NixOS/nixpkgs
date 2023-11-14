@@ -215,7 +215,7 @@ in {
       ../development/compilers/openjdk/21.nix
       ../development/compilers/zulu/21.nix
       {
-        openjdk21-bootstrap = temurin-bin.jdk-20;
+        openjdk21-bootstrap = temurin-bin.jdk-21;
         openjfx = openjfx21;
       };
 

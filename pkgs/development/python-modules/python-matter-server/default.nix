@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 
 # build
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "3.7.0";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -38,17 +37,8 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-t++7jQreibGpJRjJawicxjFIye5X6R1dpFqiM6yvRf0=";
+    hash = "sha256-zCw5sj+UgY0egjXGzcbOb7VATeLY80+8Mv9owmdA+f0=";
   };
-
-  patches = [
-    # https://github.com/home-assistant-libs/python-matter-server/pull/379
-    (fetchpatch {
-      name = "relax-setuptools-dependency.patch";
-      url = "https://github.com/home-assistant-libs/python-matter-server/commit/1bbc945634db92ea081051645b03c3d9c358fb15.patch";
-      hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools

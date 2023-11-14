@@ -493,6 +493,8 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
+      # https://www.mediawiki.org/wiki/Compatibility
+      phpPackage = pkgs.php81;
       settings = (if (cfg.webserver == "apache") then {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
@@ -552,24 +554,20 @@ in
             deny all;
           '';
           # MediaWiki assets (usually images)
-          "~ ^/w/resources/(assets|lib|src)" = {
-            tryFiles = "$uri =404";
-            extraConfig = ''
-              add_header Cache-Control "public";
-              expires 7d;
-            '';
-          };
+          "~ ^/w/resources/(assets|lib|src)".extraConfig = ''
+            rewrite ^/w(/.*) $1 break;
+            add_header Cache-Control "public";
+            expires 7d;
+          '';
           # Assets, scripts and styles from skins and extensions
-          "~ ^/w/(skins|extensions)/.+\\.(css|js|gif|jpg|jpeg|png|svg|wasm|ttf|woff|woff2)$" = {
-            tryFiles = "$uri =404";
-            extraConfig = ''
-              add_header Cache-Control "public";
-              expires 7d;
-            '';
-          };
+          "~ ^/w/(skins|extensions)/.+\\.(css|js|gif|jpg|jpeg|png|svg|wasm|ttf|woff|woff2)$".extraConfig = ''
+            rewrite ^/w(/.*) $1 break;
+            add_header Cache-Control "public";
+            expires 7d;
+          '';
 
           # Handling for Mediawiki REST API, see [[mw:API:REST_API]]
-          "/w/rest.php".tryFiles = "$uri $uri/ /rest.php?$query_string";
+          "/w/rest.php/".tryFiles = "$uri $uri/ /w/rest.php?$query_string";
 
           # Handling for the article path (pretty URLs)
           "/wiki/".extraConfig = ''

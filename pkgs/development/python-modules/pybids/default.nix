@@ -46,8 +46,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "bids" ];
-  # looks for missing data:
-  disabledTests = [ "test_config_filename" ];
+  disabledTests = [
+    # looks for missing data:
+    "test_config_filename"
+    # regression associated with formulaic >= 0.6.0
+    # (see https://github.com/bids-standard/pybids/issues/1000)
+    "test_split"
+  ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";

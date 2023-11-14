@@ -6,7 +6,7 @@
 , poetry-core
 , pythonOlder
 , substituteAll
-, texlive
+, texliveSmall
 }:
 
 buildPythonPackage rec {
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    texlive.combined.scheme-small
+    texliveSmall
     pandocfilters
   ];
 

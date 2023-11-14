@@ -1,6 +1,6 @@
 { lib
-, fetchPypi
 , buildPythonPackage
+, fetchFromGitHub
 , cython
 , gfortran
 , git
@@ -15,12 +15,13 @@
 buildPythonPackage rec {
   pname = "scikit-misc";
   version = "0.3.0";
-  format = "pyproject";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "scikit_misc";
-    inherit version;
-    hash = "sha256-mom0Ch+b3bViErh9ueVYiGfVz5SQUSqCCcGsBJ7+Nrg=";
+  src = fetchFromGitHub {
+    owner = "has2k1";
+    repo = "scikit-misc";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XV3s+y3JdMr1770S91ek6Y7MqvTg7/2cphLQldUPe5s=";
   };
 
   postPatch = ''

@@ -17,18 +17,18 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.9.2";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-kCvMUhN1kjGb5rV+lkKm1FFYBJUSQGOKTY1DQdiAWLU=";
+    hash = "sha256-umPQIxwIahjbO4QbkKEoeSSeYT2UatsTGRPrLgw5KW8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-kHZL7TENVK58dvr8PBFtWYZ2PSKEYESX4e1xYmMA5+Y=";
+    hash = "sha256-o5ztk4okH21Op1jqHZfranR12M8B1Y/K95aWb10tf5o=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,17 @@ in stdenv.mkDerivation rec {
     ./remove-drm-support.patch
     # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
     ./fix-non-steam-shortcuts.patch
+    # Fix reg add infinite loop
+    # Submitted upstream: https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3210
+    ./fix-infinite-loop.patch
   ];
+
+  postPatch = ''
+    # We are not packaging this as an Electron application bundle, so Electron
+    # reports to the application that is is not "packaged", which causes Heroic
+    # to take some incorrect codepaths meant for development environments.
+    substituteInPlace src/**/*.ts --replace 'app.isPackaged' 'true'
+  '';
 
   configurePhase = ''
     runHook preConfigure

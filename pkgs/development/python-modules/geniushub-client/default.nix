@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "geniushub-client";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "manzanotti";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-amsMZjCsPI8CUfSct4uumn8nVZDESlQFh19LXu3yb7o=";
+    hash = "sha256-Gq2scYos7E8me1a4x7NanHRq2eYWuU2uSUwM+O1TPb8=";
   };
 
   postPatch = ''

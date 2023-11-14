@@ -24,6 +24,7 @@
 , rsync
 , spice-gtk
 , squashfsTools
+, util-linux
 , virtiofsd
 , xz
 }:
@@ -44,6 +45,7 @@ let
     qemu-utils
     rsync
     squashfsTools
+    util-linux
     virtiofsd
     xz
 

@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Easily add emojis to your git commit messages";
     homepage = "https://github.com/zeenix/gimoji";
     license = licenses.mit;
+    mainProgram = "gimoji";
     maintainers = with maintainers; [ a-kenji ];
   };
 }

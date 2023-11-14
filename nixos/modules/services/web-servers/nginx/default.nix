@@ -35,6 +35,7 @@ let
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
+    "application/javascript" # Deprecated by IETF RFC 9239, but still widely used
     "application/json"
     "application/ld+json"
     "application/manifest+json"
@@ -954,7 +955,7 @@ in
         default = {};
         description = lib.mdDoc ''
           Configure a proxy cache path entry.
-          See <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
+          See <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
         '';
       };
 

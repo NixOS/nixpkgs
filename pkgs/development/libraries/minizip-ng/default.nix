@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    sha256 = "sha256-3bCGZupdJWcwp2d+XeqKZG3GxzXFm1UftV/PiN0u5iA=";
+    hash = "sha256-aJ6KYR9DazVQoPuc4w/gClKH9ditNE1JDU/F9dCJOsw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
   ]
   # The build scaffold defaults to c++14 on darwin, even when the compiler uses
   # a more recent c++ version by default [1]. However, downgrades are

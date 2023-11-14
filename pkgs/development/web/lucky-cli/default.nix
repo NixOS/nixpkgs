@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "luckyframework";
     repo = "lucky_cli";
     rev = "v${version}";
-    hash = "sha256-Ky4DmClSyAVBAetpZM5tFnQZ74fchCOgcxBftd+gwlE=";
+    hash = "sha256-mDUx9cQoYpU9kSAls36kzNVYZ8a4aqHEMIWfzS41NBk=";
   };
 
   # the integration tests will try to clone a remote repos
@@ -39,6 +39,6 @@ crystal.buildCrystalPackage rec {
     maintainers = with maintainers; [ peterhoeg ];
     mainProgram = "lucky";
     platforms = platforms.unix;
-    broken = lib.versionOlder crystal.version "0.35.1";
+    broken = lib.versionOlder crystal.version "1.6.0";
   };
 }

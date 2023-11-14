@@ -30,8 +30,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-kVf9+zI9rtEMmS0N4qrN673T/1fnqfcV3hQPnMXMLas=";
   };
 
+  postPatch = ''
+    # exiv2 0.28.1
+    substituteInPlace CMakeLists.txt \
+      --replace "exiv2lib" "exiv2"
+  ''
   # error: no member named 'setlocale' in namespace 'std'; did you mean simply 'setlocale'?
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cplusplus/main.cpp \
       --replace "std::setlocale" "setlocale"
   '';

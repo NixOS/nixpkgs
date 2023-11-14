@@ -1,6 +1,6 @@
 let version = "2.9.11"; in
 { stdenv, lib, buildPackages, fetchurl, zlib, gettext
-, wordlists ? [ (fetchurl {
+, lists ? [ (fetchurl {
   url = "https://github.com/cracklib/cracklib/releases/download/v${version}/cracklib-words-${version}.gz";
   hash = "sha256-popxGjE1c517Z+nzYLM/DU7M+b1/rE0XwNXkVqkcUXo=";
 }) ]
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs util
 
   '' + ''
-    ln -vs ${toString wordlists} dicts/
+    ln -vs ${toString lists} dicts/
   '';
 
   postInstall = ''

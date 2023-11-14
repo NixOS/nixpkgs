@@ -30,14 +30,15 @@
 , gtk4
 , mapnik
 , qt5
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
   version = "7.3.0";
 
   src = fetchurl {
-    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
     hash = "sha256-IHcHiXSaybqEbfM5g9vaItuDbHDZ9dBQy5qlNHCUqPs=";
   };
 
@@ -103,6 +104,9 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit gimp gtk3 gtk4 mapnik;
     inherit (qt5) qtbase;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -112,5 +116,10 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;
     platforms = platforms.unix;
+    pkgConfigModules = [
+      "harfbuzz"
+      "harfbuzz-gobject"
+      "harfbuzz-subset"
+    ];
   };
-}
+})

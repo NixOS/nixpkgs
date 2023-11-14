@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , stdenvNoCC
+, gcc13Stdenv
 , fetchFromGitHub
 , substituteAll
 , makeWrapper
@@ -9,6 +10,7 @@
 , vencord
 , electron
 , pipewire
+, libpulseaudio
 , libicns
 , jq
 , moreutils
@@ -16,13 +18,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vesktop";
-  version = "0.3.3";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${version}";
-    sha256 = "sha256-Njs3tACxUyRolYUtS/q2lITIQnUBFXVXWZEfQ66HpPM=";
+    hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
   };
 
   pnpm-deps = stdenvNoCC.mkDerivation {
@@ -51,7 +53,10 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-vInaSLGahRUgvwAeUcI+oV84L+tgNRCmfFpE0aUD4X4=";
+    outputHash = {
+      "aarch64-linux" = "sha256-OcAQbUi+wpBAumncYxP3qtTzjyxiHL69kbQefwaeBfg=";
+      "x86_64-linux" = "sha256-R5/2MSH/jXHrj2x1Ap2OoOFLBLQp3Sq91o01uW8hWOw=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -92,13 +97,18 @@ stdenv.mkDerivation rec {
   # yes, upstream really packages it as "vesktop" but uses "vencorddesktop" file names
   installPhase =
     let
-      libPath = lib.makeLibraryPath [ pipewire ];
+      # this is mainly required for venmic
+      libPath = lib.makeLibraryPath [
+        libpulseaudio
+        pipewire
+        gcc13Stdenv.cc.cc.lib
+      ];
     in
     ''
       runHook preInstall
 
       mkdir -p $out/opt/Vesktop/resources
-      cp dist/linux-unpacked/resources/app.asar $out/opt/Vesktop/resources
+      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
 
       pushd build
       ${libicns}/bin/icns2png -x icon.icns
@@ -131,8 +141,8 @@ stdenv.mkDerivation rec {
     description = "An alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ getchoo Scrumplex vgskye ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ getchoo Scrumplex vgskye pluiedev ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
   };
 }

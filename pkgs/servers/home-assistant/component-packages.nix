@@ -2,12 +2,13 @@
 # Do not edit!
 
 {
-  version = "2023.10.5";
+  version = "2023.11.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
     "abode" = ps: with ps; [
       jaraco-abode
+      jaraco-functools
     ];
     "accuweather" = ps: with ps; [
       accuweather
@@ -682,6 +683,8 @@
     "cpuspeed" = ps: with ps; [
       py-cpuinfo
     ];
+    "cribl" = ps: with ps; [
+    ];
     "crownstone" = ps: with ps; [
       aiohttp-cors
       crownstone-cloud
@@ -944,6 +947,8 @@
     "eafm" = ps: with ps; [
       aioeafm
     ];
+    "eastron" = ps: with ps; [
+    ];
     "easyenergy" = ps: with ps; [
       easyenergy
     ];
@@ -984,7 +989,6 @@
       pythonegardia
     ];
     "eight_sleep" = ps: with ps; [
-      pyeight
     ];
     "electrasmart" = ps: with ps; [
     ]; # missing inputs: pyElectra
@@ -1245,6 +1249,9 @@
     "fitbit" = ps: with ps; [
       aiohttp-cors
       fitbit
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
     ];
     "fivem" = ps: with ps; [
       fivem-api
@@ -1535,6 +1542,13 @@
       aiohttp-cors
       fnv-hash-fast
       gspread
+      psutil-home-assistant
+      sqlalchemy
+    ];
+    "google_tasks" = ps: with ps; [
+      aiohttp-cors
+      fnv-hash-fast
+      google-api-python-client
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1959,10 +1973,31 @@
       aiohttp-cors
       aioimaplib
     ];
-    "imap_email_content" = ps: with ps; [
+    "improv_ble" = ps: with ps; [
+      aioesphomeapi
       aiohttp-cors
-      aioimaplib
-    ];
+      aioruuvigateway
+      aioshelly
+      async-interrupt
+      bleak
+      bleak-retry-connector
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      esphome-dashboard-api
+      fnv-hash-fast
+      hassil
+      home-assistant-intents
+      ifaddr
+      mutagen
+      psutil-home-assistant
+      pyserial
+      pyudev
+      sqlalchemy
+      webrtc-noise-gain
+      zeroconf
+    ]; # missing inputs: py-improv-ble-client
     "incomfort" = ps: with ps; [
       incomfort-client
     ];
@@ -2369,6 +2404,9 @@
       ifaddr
       psutil-home-assistant
       sqlalchemy
+    ];
+    "local_todo" = ps: with ps; [
+      ical
     ];
     "locative" = ps: with ps; [
       aiohttp-cors
@@ -3241,6 +3279,8 @@
     "poolsense" = ps: with ps; [
       poolsense
     ];
+    "portlandgeneral" = ps: with ps; [
+    ];
     "powerwall" = ps: with ps; [
       tesla-powerwall
     ];
@@ -3331,6 +3371,7 @@
     "pyload" = ps: with ps; [
     ];
     "python_script" = ps: with ps; [
+      restrictedpython
       restrictedpython
     ];
     "qbittorrent" = ps: with ps; [
@@ -3463,6 +3504,21 @@
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
+    ];
+    "recovery_mode" = ps: with ps; [
+      aiohttp-cors
+      fnv-hash-fast
+      hass-nabucasa
+      hassil
+      home-assistant-frontend
+      home-assistant-intents
+      janus
+      mutagen
+      pillow
+      psutil-home-assistant
+      pyturbojpeg
+      sqlalchemy
+      webrtc-noise-gain
     ];
     "recswitch" = ps: with ps; [
     ]; # missing inputs: pyrecswitch
@@ -3616,21 +3672,6 @@
     ]; # missing inputs: pyrympro
     "sabnzbd" = ps: with ps; [
       pysabnzbd
-    ];
-    "safe_mode" = ps: with ps; [
-      aiohttp-cors
-      fnv-hash-fast
-      hass-nabucasa
-      hassil
-      home-assistant-frontend
-      home-assistant-intents
-      janus
-      mutagen
-      pillow
-      psutil-home-assistant
-      pyturbojpeg
-      sqlalchemy
-      webrtc-noise-gain
     ];
     "saj" = ps: with ps; [
       pysaj
@@ -3828,9 +3869,6 @@
       pyserial
       pyudev
       sqlalchemy
-    ];
-    "shiftr" = ps: with ps; [
-      paho-mqtt
     ];
     "shodan" = ps: with ps; [
       shodan
@@ -4107,7 +4145,8 @@
       subarulink
     ];
     "suez_water" = ps: with ps; [
-    ]; # missing inputs: pysuez
+      pysuez
+    ];
     "sun" = ps: with ps; [
     ];
     "supervisord" = ps: with ps; [
@@ -4208,6 +4247,8 @@
     "tailscale" = ps: with ps; [
       tailscale
     ];
+    "tami4" = ps: with ps; [
+    ]; # missing inputs: Tami4EdgeAPI
     "tank_utility" = ps: with ps; [
       tank-utility
     ];
@@ -4389,6 +4430,9 @@
       tmb
     ];
     "tod" = ps: with ps; [
+    ];
+    "todo" = ps: with ps; [
+      aiohttp-cors
     ];
     "todoist" = ps: with ps; [
       todoist-api-python
@@ -4733,6 +4777,7 @@
     ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [
       aiohttp-cors
+      aiowithings
       fnv-hash-fast
       hass-nabucasa
       hassil
@@ -4742,7 +4787,6 @@
       pyturbojpeg
       sqlalchemy
       webrtc-noise-gain
-      withings-api
     ];
     "wiz" = ps: with ps; [
       aiohttp-cors
@@ -5231,6 +5275,7 @@
     "google_mail"
     "google_pubsub"
     "google_sheets"
+    "google_tasks"
     "google_translate"
     "google_travel_time"
     "google_wifi"
@@ -5290,7 +5335,6 @@
     "image_processing"
     "image_upload"
     "imap"
-    "imap_email_content"
     "influxdb"
     "inkbird"
     "input_boolean"
@@ -5347,6 +5391,7 @@
     "local_calendar"
     "local_file"
     "local_ip"
+    "local_todo"
     "locative"
     "lock"
     "logbook"
@@ -5518,6 +5563,7 @@
     "rdw"
     "recollect_waste"
     "recorder"
+    "recovery_mode"
     "reddit"
     "remote"
     "renault"
@@ -5544,7 +5590,6 @@
     "ruuvi_gateway"
     "ruuvitag_ble"
     "sabnzbd"
-    "safe_mode"
     "samsungtv"
     "scene"
     "schedule"
@@ -5657,6 +5702,7 @@
     "time_date"
     "timer"
     "tod"
+    "todo"
     "todoist"
     "tolo"
     "tomato"

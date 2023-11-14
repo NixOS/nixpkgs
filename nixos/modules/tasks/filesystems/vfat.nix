@@ -21,7 +21,7 @@ in
         ln -sv dosfsck $out/bin/fsck.vfat
       '';
 
-    boot.initrd.systemd.extraBin = mkIf inInitrd [ pkgs.dosfstools ];
+    boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.dosfstools ];
 
   };
 }

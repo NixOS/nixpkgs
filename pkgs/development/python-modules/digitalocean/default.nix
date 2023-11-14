@@ -40,6 +40,9 @@ buildPythonPackage rec {
     cd digitalocean
   '';
 
+  # Test tries to access the network
+  disabledTests = ["TestFirewall"];
+
   pythonImportsCheck = [ "digitalocean" ];
 
   meta = with lib; {

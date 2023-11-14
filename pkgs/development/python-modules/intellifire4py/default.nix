@@ -1,50 +1,49 @@
 { lib
 , aenum
-, aiohttp
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, httpx
+, poetry-core
 , pydantic
-, pytest-mock
+, pytest-asyncio
+, pytest-httpx
 , pytestCheckHook
 , pythonOlder
-, requests
+, rich
 }:
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "2.2.2";
-  format = "setuptools";
+  version = "3.1.30";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CIcudKyRPVJX6QvWk6dBbYnO5EULREDhaflJTAfJEvc=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aenum
-    aiohttp
+    httpx
     pydantic
-    requests
-  ];
-
-  nativeCheckInputs = [
-    asynctest
-    pytest-mock
-    pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Test file is missing
-    "test_json_files"
+    rich
   ];
 
   pythonImportsCheck = [
     "intellifire4py"
+  ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
   ];
 
   meta = with lib; {

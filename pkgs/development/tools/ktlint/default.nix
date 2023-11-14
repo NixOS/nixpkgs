@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
     maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    mainProgram = "ktlint";
   };
 }

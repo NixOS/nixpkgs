@@ -28,12 +28,12 @@ let
       SLAVES=$(ip link | grep 'master ${i}' | awk -F: '{print $2}')
       for I in $SLAVES; do
         UPDATED=0
-        ip link set "$I" nomaster
+        ip link set dev "$I" nomaster
       done
       [ "$UPDATED" -eq "1" ] && break
     done
-    ip link set "${i}" down 2>/dev/null || true
-    ip link del "${i}" 2>/dev/null || true
+    ip link set dev "${i}" down 2>/dev/null || true
+    ip link del dev "${i}" 2>/dev/null || true
   '';
 
   # warn that these attributes are deprecated (2017-2-2)
@@ -193,7 +193,7 @@ let
                 state="/run/nixos/network/addresses/${i.name}"
                 mkdir -p $(dirname "$state")
 
-                ip link set "${i.name}" up
+                ip link set dev "${i.name}" up
 
                 ${flip concatMapStrings ips (ip:
                   let
@@ -270,7 +270,7 @@ let
               ip tuntap add dev "${i.name}" mode "${i.virtualType}" user "${i.virtualOwner}"
             '';
             postStop = ''
-              ip link del ${i.name} || true
+              ip link del dev ${i.name} || true
             '';
           };
 
@@ -291,15 +291,15 @@ let
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
-              ip link show dev "${n}" >/dev/null 2>&1 && ip link del "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link del dev "${n}"
 
               echo "Adding bridge ${n}..."
               ip link add name "${n}" type bridge
 
               # Enslave child interfaces
               ${flip concatMapStrings v.interfaces (i: ''
-                ip link set "${i}" master "${n}"
-                ip link set "${i}" up
+                ip link set dev "${i}" master "${n}"
+                ip link set dev "${i}" up
               '')}
               # Save list of enslaved interfaces
               echo "${flip concatMapStrings v.interfaces (i: ''
@@ -316,7 +316,7 @@ let
                     for uri in qemu:///system lxc:///; do
                       for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
                         ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
-                        ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                        ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set dev ',target/@dev,' master ',source/@bridge,';')" | \
                         ${pkgs.bash}/bin/bash
                       done
                     done
@@ -328,23 +328,23 @@ let
                 echo 2 >/sys/class/net/${n}/bridge/stp_state
               ''}
 
-              ip link set "${n}" up
+              ip link set dev "${n}" up
             '';
             postStop = ''
-              ip link set "${n}" down || true
-              ip link del "${n}" || true
+              ip link set dev "${n}" down || true
+              ip link del dev "${n}" || true
               rm -f /run/${n}.interfaces
             '';
             reload = ''
               # Un-enslave child interfaces (old list of interfaces)
               for interface in `cat /run/${n}.interfaces`; do
-                ip link set "$interface" nomaster up
+                ip link set dev "$interface" nomaster up
               done
 
               # Enslave child interfaces (new list of interfaces)
               ${flip concatMapStrings v.interfaces (i: ''
-                ip link set "${i}" master "${n}"
-                ip link set "${i}" up
+                ip link set dev "${i}" master "${n}"
+                ip link set dev "${i}" up
               '')}
               # Save list of enslaved interfaces
               echo "${flip concatMapStrings v.interfaces (i: ''
@@ -395,7 +395,7 @@ let
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
               echo "Shutting down internal ${n} interface"
-              ip link set ${n} down || true
+              ip link set dev ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
               echo "Deleting Open vSwitch ${n}"
@@ -433,10 +433,10 @@ let
               while [ ! -d "/sys/class/net/${n}" ]; do sleep 0.1; done;
 
               # Bring up the bond and enslave the specified interfaces
-              ip link set "${n}" up
+              ip link set dev "${n}" up
               ${flip concatMapStrings v.interfaces (i: ''
-                ip link set "${i}" down
-                ip link set "${i}" master "${n}"
+                ip link set dev "${i}" down
+                ip link set dev "${i}" master "${n}"
               '')}
             '';
             postStop = destroyBond n;
@@ -457,13 +457,13 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add link "${v.interface}" name "${n}" type macvlan \
                 ${optionalString (v.mode != null) "mode ${v.mode}"}
-              ip link set "${n}" up
+              ip link set dev "${n}" up
             '';
             postStop = ''
-              ip link delete "${n}" || true
+              ip link delete dev "${n}" || true
             '';
           });
 
@@ -515,7 +515,7 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add name "${n}" type sit \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
@@ -526,10 +526,10 @@ let
                     optionalString (v.encapsulation.sourcePort != null)
                       "encap-sport ${toString v.encapsulation.sourcePort}"
                   }"}
-              ip link set "${n}" up
+              ip link set dev "${n}" up
             '';
             postStop = ''
-              ip link delete "${n}" || true
+              ip link delete dev "${n}" || true
             '';
           });
 
@@ -549,16 +549,16 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add name "${n}" type ${v.type} \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
                 ${optionalString (v.ttl != null) "${ttlarg} ${toString v.ttl}"} \
                 ${optionalString (v.dev != null) "dev \"${v.dev}\""}
-              ip link set "${n}" up
+              ip link set dev "${n}" up
             '';
             postStop = ''
-              ip link delete "${n}" || true
+              ip link delete dev "${n}" || true
             '';
           });
 
@@ -577,17 +577,17 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete dev "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
 
               # We try to bring up the logical VLAN interface. If the master
               # interface the logical interface is dependent upon is not up yet we will
               # fail to immediately bring up the logical interface. The resulting logical
               # interface will brought up later when the master interface is up.
-              ip link set "${n}" up || true
+              ip link set dev "${n}" up || true
             '';
             postStop = ''
-              ip link delete "${n}" || true
+              ip link delete dev "${n}" || true
             '';
           });
 

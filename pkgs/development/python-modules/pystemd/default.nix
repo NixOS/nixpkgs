@@ -4,6 +4,8 @@
 , python
 , fetchPypi
 , systemd
+, lxml
+, psutil
 , pytest
 , mock
 , pkg-config }:
@@ -22,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  nativeCheckInputs = [ pytest mock ];
+  nativeCheckInputs = [ lxml mock psutil pytest ];
 
   checkPhase = "pytest tests";
 

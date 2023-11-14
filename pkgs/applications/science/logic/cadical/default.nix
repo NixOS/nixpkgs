@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ shnarazk ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = "http://fmv.jku.at/cadical";
+    homepage = "https://fmv.jku.at/cadical/";
   };
 }

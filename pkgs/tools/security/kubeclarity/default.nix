@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kubeclarity";
-  version = "2.21.1";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "openclarity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+kWqw8o5KlVciWIB8cCVkMuiqW0wpIfua5qVgXZG3ww=";
+    hash = "sha256-VpTLf4Z2l9Ix92GzcyJvj4j2j+aff8nc2qW9+2uaPBs=";
   };
 
   vendorHash = "sha256-kYdKCHqzDbfCGMlTMPSHAQkSLyhkCl/OvV7CF5jdyaY=";

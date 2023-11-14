@@ -1,16 +1,19 @@
 mod eval;
+mod nixpkgs_problem;
 mod references;
 mod structure;
 mod utils;
+mod validation;
 
+use crate::structure::check_structure;
+use crate::validation::Validation::Failure;
+use crate::validation::Validation::Success;
 use anyhow::Context;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
-use structure::Nixpkgs;
-use utils::ErrorWriter;
 
 /// Program to check the validity of pkgs/by-name
 #[derive(Parser, Debug)]
@@ -63,8 +66,8 @@ fn main() -> ExitCode {
 ///
 /// # Return value
 /// - `Err(e)` if an I/O-related error `e` occurred.
-/// - `Ok(false)` if the structure is invalid, all the structural errors have been written to `error_writer`.
-/// - `Ok(true)` if the structure is valid, nothing will have been written to `error_writer`.
+/// - `Ok(false)` if there are problems, all of which will be written to `error_writer`.
+/// - `Ok(true)` if there are no problems
 pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
     version: Version,
@@ -76,31 +79,38 @@ pub fn check_nixpkgs<W: io::Write>(
         nixpkgs_path.display()
     ))?;
 
-    // Wraps the error_writer to print everything in red, and tracks whether anything was printed
-    // at all. Later used to figure out if the structure was valid or not.
-    let mut error_writer = ErrorWriter::new(error_writer);
-
-    if !nixpkgs_path.join(structure::BASE_SUBPATH).exists() {
+    let check_result = if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
         eprintln!(
             "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
-            structure::BASE_SUBPATH
+            utils::BASE_SUBPATH
         );
+        Success(())
     } else {
-        let nixpkgs = Nixpkgs::new(&nixpkgs_path, &mut error_writer)?;
-
-        if error_writer.empty {
-            // Only if we could successfully parse the structure, we do the semantic checks
-            eval::check_values(version, &mut error_writer, &nixpkgs, eval_accessible_paths)?;
-            references::check_references(&mut error_writer, &nixpkgs)?;
+        match check_structure(&nixpkgs_path)? {
+            Failure(errors) => Failure(errors),
+            Success(package_names) =>
+            // Only if we could successfully parse the structure, we do the evaluation checks
+            {
+                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths)?
+            }
         }
+    };
+
+    match check_result {
+        Failure(errors) => {
+            for error in errors {
+                writeln!(error_writer, "{}", error.to_string().red())?
+            }
+            Ok(false)
+        }
+        Success(_) => Ok(true),
     }
-    Ok(error_writer.empty)
 }
 
 #[cfg(test)]
 mod tests {
     use crate::check_nixpkgs;
-    use crate::structure;
+    use crate::utils;
     use crate::Version;
     use anyhow::Context;
     use std::fs;
@@ -145,7 +155,7 @@ mod tests {
             return Ok(());
         }
 
-        let base = path.join(structure::BASE_SUBPATH);
+        let base = path.join(utils::BASE_SUBPATH);
 
         fs::create_dir_all(base.join("fo/foo"))?;
         fs::write(base.join("fo/foo/package.nix"), "{ someDrv }: someDrv")?;

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     wrapGAppsNoGuiHook
     gi-docgen
     graphviz
-    (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala

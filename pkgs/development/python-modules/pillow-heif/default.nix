@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 
@@ -61,6 +62,12 @@ buildPythonPackage rec {
     numpy
     pympler
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # https://github.com/bigcat88/pillow_heif/issues/89
+    # not reproducible in nixpkgs
+    "test_opencv_crash"
   ];
 
   meta = {

@@ -1,38 +1,38 @@
 { lib
-, stdenvNoCC
-, fetchFromGitHub
+, callPackage
+, runCommand
 , gtk-engine-murrine
+, gnome-themes-extra
 }:
 
-stdenvNoCC.mkDerivation {
-  pname = "tokyo-night-gtk";
-  version = "2023.01.17";
+let
+  prefix = "tokyo-night-gtk";
 
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Tokyo-Night-GTK-Theme";
-    rev = "f7ae3421ac0d415ca57fb6224e093e12b8a980bb";
-    sha256 = "sha256-90V55pRfgiaP1huhD+3456ziJ2EU24iNQHt5Ro+g+M0=";
-  };
+  packages = lib.mapAttrs' (type: content: {
+    name = type;
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+    value = lib.mapAttrs' (variantName: variant: {
+      name = variantName;
+      value = callPackage ./generic.nix { inherit prefix type variantName variant; };
+    }) content;
+  }) (lib.importJSON ./variants.json);
+in packages // {
+  # Not using `symlinkJoin` because it's massively inefficient in this case
+  full = runCommand "${prefix}_full" {
+    preferLocalBuild = true;
 
-  dontBuild = true;
+    propagatedUserEnvPkgs = [
+      gtk-engine-murrine
+      gnome-themes-extra
+    ];
+  } ''
+    mkdir -p $out/share/{icons,themes,${prefix}}
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
-    runHook postInstall
+    ${lib.concatStrings (lib.forEach (lib.attrValues (lib.attrsets.mergeAttrsList (lib.attrValues packages))) (variant:
+      ''
+        ln -s ${variant}/share/${variant.ptype}/Tokyonight-${variant.pvariant} $out/share/${variant.ptype}/Tokyonight-${variant.pvariant}
+        ln -s ${variant}/share/${prefix}/LICENSE $out/share/${prefix}/LICENSE 2>/dev/null || true
+      ''
+    ))}
   '';
-
-  meta = with lib; {
-    description = "A GTK theme based on the Tokyo Night colour palette.";
-    homepage = "www.pling.com/p/1681315/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with lib.maintainers; [ garaiza-93 ];
-  };
 }

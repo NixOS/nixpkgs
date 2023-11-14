@@ -19,18 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-oUy9HhybNMjRBWoqqal1Mw8cC5RddgN4izxAl0cgnKE=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [ meson ninja python3 ];
 
   postPatch = ''
-    substituteInPlace varlink-wrapper.py \
-      --replace "/usr/bin/env python3" "${python3}/bin/python3"
-
     # test-object: ../lib/test-object.c:129: main: Assertion `setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0' failed.
     # PR that added it https://github.com/varlink/libvarlink/pull/27
     substituteInPlace lib/test-object.c \
       --replace 'assert(setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0);' ""
 
-    patchShebangs lib/test-symbols.sh
+    patchShebangs lib/test-symbols.sh varlink-wrapper.py
   '';
 
   doCheck = true;

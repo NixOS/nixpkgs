@@ -1,54 +1,42 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, docker
 , distrobox
 }:
 
 buildGoModule rec {
   pname = "apx";
-  version = "1.8.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-nBhSl4r7LlgCA5/HCLpOleihE5n/JCJgf43KdCklQbg=";
+    rev = "v${version}";
+    hash = "sha256-3CelqEntpfld0n+Ewg7NCkowVjgCf5b6StfSkYbgV5k=";
   };
 
   vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
-  nativeBuildInputs = [
-    makeWrapper
-    installShellFiles
-  ];
+  postPatch = ''
+    substituteInPlace config/apx.json \
+      --replace "/usr/share/apx/distrobox" "${distrobox}/bin/distrobox" \
+      --replace "/usr/share/apx" "$out/bin/apx"
+    substituteInPlace settings/config.go \
+      --replace "/usr/share/apx/" "$out/share/apx/"
+  '';
 
   postInstall = ''
-    mkdir -p $out/etc/apx
-
-    cat > "$out/etc/apx/config.json" <<EOF
-    {
-      "containername": "apx_managed",
-      "image": "docker.io/library/ubuntu",
-      "pkgmanager": "apt",
-      "distroboxpath": "${distrobox}/bin/distrobox"
-    }
-    EOF
-
-    wrapProgram $out/bin/apx --prefix PATH : ${lib.makeBinPath [ docker distrobox ]}
-
-    installManPage man/de/man1/apx.1 man/es/man1/apx.1 man/fr/man1/apx.1 man/it/man1/apx.1 man/man1/apx.1 man/nl/man1/apx.1 man/pl/man1/apx.1 man/pt/man1/apx.1 man/pt_BR/man1/apx.1 man/ro/man1/apx.1 man/ru/man1/apx.1 man/sv/man1/apx.1 man/tr/man1/apx.1
+    install -D config/apx.json -t $out/share/apx/
+    install -D man/man1/apx.1 -t $out/man/man1/
   '';
 
   meta = with lib; {
     description = "The Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
-    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/${version}";
+    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya jgarcia ];
   };
 }

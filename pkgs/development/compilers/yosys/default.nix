@@ -69,15 +69,15 @@ let
   } // (yosys-symbiflow);
 
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.34";
+  version = "0.35";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "refs/tags/${pname}-${version}";
-    hash  = "sha256-GHDsMBj7DRb9ffESgzd1HzDAA6Cyft5PomidvIMzn9g=";
+    rev   = "refs/tags/${finalAttrs.pname}-${finalAttrs.version}";
+    hash  = "sha256-jB8y7XGDX9rVF6c4FSTLOyvsxPhdjU8Taj6MQeoU4KQ=";
   };
 
   enableParallelBuilding = true;
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
+      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 finalAttrs.src.rev}'
 
     chmod +x ./misc/yosys-config.in
     patchShebangs tests ./misc/yosys-config.in
@@ -120,7 +120,7 @@ in stdenv.mkDerivation rec {
     fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${version}), failing."
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
       exit 1
     fi
   '';
@@ -150,6 +150,6 @@ in stdenv.mkDerivation rec {
     homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice emily ];
+    maintainers = with maintainers; [ shell thoughtpolice emily Luflosi ];
   };
-}
+})

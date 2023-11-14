@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = !isPyPy && !stdenv.isDarwin && !isPy311;
 
   checkPhase = ''
-    ${python.pythonForBuild.interpreter} selftest.py
+    ${python.pythonOnBuildForHost.interpreter} selftest.py
   '';
 
   meta = with lib; {

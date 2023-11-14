@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
@@ -23,13 +24,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1L5D0pzcXbkz3VS7VB6ID8BJEbGeNxjo3xCr71CGcIo=";
   };
 
+  patches = [
+    # mark wayland-scanner as build-time dependency
+    # https://github.com/milgra/sov/pull/45
+    (fetchpatch2 {
+      url = "https://github.com/milgra/sov/commit/8677dcfc47e440157388a8f15bdda9419d84db04.patch";
+      hash = "sha256-P1k1zosHcVO7hyhD1JWbj07h7pQ7ybgDHfoufBinEys=";
+    })
+  ];
+
   strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     wayland-scanner
   ];
+
   buildInputs = [
     freetype
     libglvnd

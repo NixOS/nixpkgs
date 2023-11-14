@@ -4,6 +4,8 @@
 , setuptools
 , ledgercomm
 , packaging
+, bip32
+, coincurve
 , typing-extensions
  }:
 
@@ -25,6 +27,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     ledgercomm
     packaging
+    bip32
+    coincurve
     typing-extensions
   ];
 

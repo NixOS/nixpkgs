@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZHEWG/A3lNwSw3MxguqjvgAOx5IHei43ku7GVJh8tLY=";
+    hash = "sha256-RjZWK7XfyRYu7vNaxPd0/F5nBN/JH01ZwZXloMS0g68=";
   };
 
   nativeBuildInputs = [

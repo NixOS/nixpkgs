@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace setup.py --replace /usr/share/doc/ share/doc/
 
     # see https://github.com/NixOS/nixpkgs/issues/4968
-    ${python3.pythonForBuild.interpreter} setup.py install_data --install-dir=$out --root=$out
+    ${python3.pythonOnBuildForHost.interpreter} setup.py install_data --install-dir=$out --root=$out
   '';
 
   postInstall =

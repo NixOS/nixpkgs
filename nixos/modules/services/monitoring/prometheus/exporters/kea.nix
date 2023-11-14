@@ -15,8 +15,8 @@ in {
       type = types.listOf types.str;
       example = literalExpression ''
         [
-          "/run/kea/kea-dhcp4.socket"
-          "/run/kea/kea-dhcp6.socket"
+          "/run/kea-dhcp4/kea-dhcp4.socket"
+          "/run/kea-dhcp6/kea-dhcp6.socket"
         ]
       '';
       description = lib.mdDoc ''

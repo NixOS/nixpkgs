@@ -3,31 +3,30 @@
 , buildGoModule
 , buildPythonPackage
 , srht
-, asyncpg
 , aiosmtpd
+, asyncpg
 , pygit2
 , emailthreads
-, redis
 , python
 , unzip
 }:
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.51.11";
+  version = "0.57.8";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-Qb70oOazZfmHpC5r0oMYCFdvfAeKbq3mQA8+M56YYnY=";
+    sha256 = "sha256-nQZRSTAyTWxcPHrRVCZ5TgcrNgrlxBFc1vRds0cQwA0=";
   };
 
   listssrht-api = buildGoModule ({
     inherit src version;
     pname = "listssrht-api";
     modRoot = "api";
-    vendorHash = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
+    vendorHash = "sha256-E5Zzft9ANJT/nhhCuenZpdo3t9QYLmA+AyDyrbGectE=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   postPatch = ''
@@ -37,11 +36,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
-    pygit2
-    asyncpg
     aiosmtpd
+    asyncpg
+    pygit2
+    # Unofficial dependency
     emailthreads
-    redis
   ];
 
   preBuild = ''

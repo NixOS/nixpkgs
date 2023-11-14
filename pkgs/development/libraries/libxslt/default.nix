@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "--without-mem-debug"
     "--without-debugger"
     (lib.withFeature pythonSupport "python")
-    (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ] ++ lib.optionals (!cryptoSupport) [
     "--without-crypto"
   ];

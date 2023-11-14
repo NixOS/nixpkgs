@@ -4,6 +4,10 @@ with lib; mkCoqDerivation {
   pname = "vcfloat";
   owner = "VeriNum";
   inherit version;
+  sourceRoot = "source/vcfloat";
+  postPatch = ''
+    coq_makefile -o Makefile -f _CoqProject *.v
+  '';
   defaultVersion = with versions; switch coq.coq-version [
     { case = range "8.16" "8.17"; out = "2.1.1"; }
   ] null;

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.wch-ic.com/";
+    homepage = "https://www.wch-ic.com/";
     downloadPage = "https://www.wch.cn/downloads/CH9344SER_LINUX_ZIP.html";
     description = "WCH CH9344/CH348 UART driver";
     longDescription = ''

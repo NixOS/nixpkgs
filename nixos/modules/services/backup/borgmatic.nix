@@ -81,7 +81,7 @@ in
   config = mkIf cfg.enable {
 
     warnings = []
-      ++ optional (cfg.settings != null && cfg.settings.location != null)
+      ++ optional (cfg.settings != null && cfg.settings ? location)
         "`services.borgmatic.settings.location` is deprecated, please move your options out of sections to the global scope"
       ++ optional (catAttrs "location" (attrValues cfg.configurations) != [])
         "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope"

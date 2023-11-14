@@ -66,7 +66,7 @@ in {
         pgmanage requires at least one PostgreSQL server be defined.
 
         Detailed information about PostgreSQL connection strings is available at:
-        <http://www.postgresql.org/docs/current/static/libpq-connect.html>
+        <https://www.postgresql.org/docs/current/libpq-connect.html>
 
         Note that you should not specify your user name or password. That
         information will be entered on the login screen. If you specify a

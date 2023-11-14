@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , cmake
 , pkg-config
@@ -17,14 +18,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.17.0";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UoyCsmZKpRkO4bQt6RwRAceu3+JPD8I8qSf9/uU5Vm4=";
+    hash = "sha256-x80le9/mkL57NQGgmqAdbixYGxcoKKO3Rl+BlpOzTwc=";
   };
+
+  patches = [
+    # Remove on next release
+    (fetchpatch {
+      url = "https://github.com/skyjake/lagrange/commit/e8295f0065e8ecddab2e291e420098ac7981e0a9.patch";
+      hash = "sha256-s8Ryace6DOjw4C4h1Kb2ti5oygvsAAs/MF9pC3eQbAM=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config zip ];
 

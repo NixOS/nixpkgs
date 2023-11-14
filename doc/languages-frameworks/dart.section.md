@@ -8,7 +8,7 @@ It fetches its Dart dependencies automatically through `fetchDartDeps`, and (thr
 
 If you are packaging a Flutter desktop application, use [`buildFlutterApplication`](#ssec-dart-flutter) instead.
 
-`vendorHash`: is the hash of the output of the dependency fetcher derivation. To obtain it, simply set it to `lib.fakeHash` (or omit it) and run the build ([more details here](#sec-source-hashes)).
+`vendorHash`: is the hash of the output of the dependency fetcher derivation. To obtain it, set it to `lib.fakeHash` (or omit it) and run the build ([more details here](#sec-source-hashes)).
 
 If the upstream source is missing a `pubspec.lock` file, you'll have to vendor one and specify it using `pubspecLockFile`. If it is needed, one will be generated for you and printed when attempting to build the derivation.
 

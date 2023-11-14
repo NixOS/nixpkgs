@@ -1,6 +1,8 @@
 import os
 import re
+import signal
 import tempfile
+import threading
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
@@ -41,6 +43,8 @@ class Driver:
     vlans: List[VLan]
     machines: List[Machine]
     polling_conditions: List[PollingCondition]
+    global_timeout: int
+    race_timer: threading.Timer
 
     def __init__(
         self,
@@ -49,9 +53,12 @@ class Driver:
         tests: str,
         out_dir: Path,
         keep_vm_state: bool = False,
+        global_timeout: int = 24 * 60 * 60 * 7,
     ):
         self.tests = tests
         self.out_dir = out_dir
+        self.global_timeout = global_timeout
+        self.race_timer = threading.Timer(global_timeout, self.terminate_test)
 
         tmp_dir = get_tmp_dir()
 
@@ -82,6 +89,7 @@ class Driver:
 
     def __exit__(self, *_: Any) -> None:
         with rootlog.nested("cleanup"):
+            self.race_timer.cancel()
             for machine in self.machines:
                 machine.release()
 
@@ -144,6 +152,10 @@ class Driver:
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
+        rootlog.info(
+            f"Test will time out and terminate in {self.global_timeout} seconds"
+        )
+        self.race_timer.start()
         self.test_script()
         # TODO: Collect coverage data
         for machine in self.machines:
@@ -161,6 +173,19 @@ class Driver:
         with rootlog.nested("wait for all VMs to finish"):
             for machine in self.machines:
                 machine.wait_for_shutdown()
+            self.race_timer.cancel()
+
+    def terminate_test(self) -> None:
+        # This will be usually running in another thread than
+        # the thread actually executing the test script.
+        with rootlog.nested("timeout reached; test terminating..."):
+            for machine in self.machines:
+                machine.release()
+            # As we cannot `sys.exit` from another thread
+            # We can at least force the main thread to get SIGTERM'ed.
+            # This will prevent any user who caught all the exceptions
+            # to swallow them and prevent itself from terminating.
+            os.kill(os.getpid(), signal.SIGTERM)
 
     def create_machine(self, args: Dict[str, Any]) -> Machine:
         tmp_dir = get_tmp_dir()

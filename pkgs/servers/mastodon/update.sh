@@ -90,7 +90,7 @@ applyPatches {
   src = fetchFromGitHub {
     owner = "$OWNER";
     repo = "$REPO";
-    rev = "\${version}";
+    rev = "v\${version}";
     hash = "$HASH";
   };
   patches = [$PATCHES];

@@ -21,7 +21,8 @@ in
         };
 
         security.sudo = {
-          enable = true;
+          # Explicitly _not_ defining 'enable = true;' here, to check that sudo is enabled by default
+
           wheelNeedsPassword = false;
 
           extraConfig = ''

@@ -102,4 +102,5 @@
   tree-sitter-yaml = lib.importJSON ./tree-sitter-yaml.json;
   tree-sitter-yang = lib.importJSON ./tree-sitter-yang.json;
   tree-sitter-zig = lib.importJSON ./tree-sitter-zig.json;
+  tree-sitter-wgsl = lib.importJSON ./tree-sitter-wgsl.json;
 }

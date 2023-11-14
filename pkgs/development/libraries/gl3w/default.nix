@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gl3w";
-  version = "unstable-2022-03-24";
+  version = "unstable-2023-10-10";
 
   src = fetchFromGitHub {
     owner = "skaslev";
     repo = pname;
-    rev = "5f8d7fd191ba22ff2b60c1106d7135bb9a335533";
-    hash = "sha256-qV/PZmaP5iCHhIzTA2bE4d1RMB6LzRbTsB5gWVvi9bU=";
+    rev = "3a33275633ce4be433332dc776e6a5b3bdea6506";
+    hash = "sha256-kEm5QItpasSFJQ32YBHPpc+itz/nQ8bQMCavbOTGT/w=";
   };
 
   nativeBuildInputs = [ python3 cmake ];

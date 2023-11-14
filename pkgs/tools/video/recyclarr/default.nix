@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/recyclarr/recyclarr/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ josephst ];
+    mainProgram = "recyclarr";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

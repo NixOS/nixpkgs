@@ -25,7 +25,7 @@ in
           under `/boot/extlinux.conf`.  For instance,
           U-Boot's generic distro boot support uses this file format.
 
-          See [U-boot's documentation](http://git.denx.de/?p=u-boot.git;a=blob;f=doc/README.distro;hb=refs/heads/master)
+          See [U-boot's documentation](https://u-boot.readthedocs.io/en/latest/develop/distro.html)
           for more information.
         '';
       };

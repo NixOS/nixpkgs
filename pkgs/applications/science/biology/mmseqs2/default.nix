@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mmseqs2";
-  version = "14-7e284";
+  version = "15-6f452";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pVryZGblgMEqJl5M20CHxav269yGY6Y4ci+Gxt6SHOU=";
+    sha256 = "sha256-L+zOWrGkCLz/wqpBuji8H4/93sDFpcfnDOE8FHq1j84=";
   };
 
   nativeBuildInputs = [ cmake xxd perl installShellFiles ];

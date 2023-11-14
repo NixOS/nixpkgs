@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pythonForBuild.pkgs.sphinx
+    meson ninja pkg-config desktop-file-utils python3.pythonOnBuildForHost.pkgs.sphinx
     gettext wrapGAppsHook libxml2 appstream-glib
   ];
 

@@ -12,7 +12,6 @@ Check for any minor version changes.
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
-, buildPackages
 
   # options
 , developerBuild ? false
@@ -202,32 +201,24 @@ let
     qttools = [ ./qttools.patch ];
   };
 
-  addPackages = self: with self;
+  addPackages = self:
     let
-      qtModule =
-        import ../qtModule.nix
-        {
-          inherit perl;
-          inherit lib;
-          # Use a variant of mkDerivation that does not include wrapQtApplications
-          # to avoid cyclic dependencies between Qt modules.
-          mkDerivation =
-            import ../mkDerivation.nix
-            { inherit lib; inherit debug; wrapQtAppsHook = null; }
-            stdenv.mkDerivation;
-        }
-        { inherit self srcs patches; };
+      qtModule = callPackage ../qtModule.nix {
+        inherit patches;
+        # Use a variant of mkDerivation that does not include wrapQtApplications
+        # to avoid cyclic dependencies between Qt modules.
+        mkDerivation =
+          (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
+      };
 
       callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
 
-      mkDerivationWith =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
+      mkDerivationWith = callPackage ../mkDerivation.nix { };
 
-      mkDerivation = mkDerivationWith stdenv.mkDerivation;
+      mkDerivation = callPackage ({ mkDerivationWith }: mkDerivationWith stdenv.mkDerivation) { };
 
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
@@ -309,7 +300,9 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
       env = callPackage ../qt-env.nix {};
-      full = env "qt-full-${qtbase.version}" ([
+      full = callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
+      # `with self` is ok to use here because having these spliced is unnecessary
+      (with self; [
         qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
@@ -318,20 +311,22 @@ let
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
-      qmake = makeSetupHook {
+      qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
-        propagatedBuildInputs = [ self.qtbase.dev ];
+        ${if stdenv.buildPlatform == stdenv.hostPlatform
+          then "propagatedBuildInputs"
+          else "depsTargetTargetPropagated"} = [ qtbase.dev ];
         substitutions = {
           inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
-      } ../hooks/qmake-hook.sh;
+      } ../hooks/qmake-hook.sh) { };
 
-      wrapQtAppsHook = makeSetupHook {
+      wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
         name = "wrap-qt5-apps-hook";
-        propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeBinaryWrapper ]
-          ++ lib.optional stdenv.isLinux self.qtwayland.dev;
-      } ../hooks/wrap-qt-apps-hook.sh;
+        propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
+          ++ lib.optional stdenv.isLinux qtwayland.dev;
+      } ../hooks/wrap-qt-apps-hook.sh) { };
     };
 
   baseScope = makeScopeWithSplicing' {
@@ -345,6 +340,12 @@ let
   });
 
   finalScope = baseScope.overrideScope(final: prev: {
-    qttranslations = bootstrapScope.qttranslations;
+    # qttranslations causes eval-time infinite recursion when
+    # cross-compiling; disabled for now.
+    qttranslations =
+      if stdenv.buildPlatform == stdenv.hostPlatform
+      then bootstrapScope.qttranslations
+      else null;
+    qutebrowser = final.callPackage ../../../../applications/networking/browsers/qutebrowser { };
   });
 in finalScope

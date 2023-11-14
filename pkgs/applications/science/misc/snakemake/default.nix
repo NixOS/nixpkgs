@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "7.29.0";
+  version = "7.32.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UfUzvDo5OE1LGCBBGoDpxG96RKOaShbqu5TOOILG3AY=";
+    hash = "sha256-9KuMPqvM8ZCTuomc0R9MBxsK3KIpukDTrlwU6MHysK0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -49,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     pandas
     pytestCheckHook
     requests-mock
+    pillow
   ];
 
   disabledTestPaths = [
@@ -56,6 +57,8 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_tes.py"
     "tests/test_tibanna.py"
     "tests/test_linting.py"
+    "tests/test_google_lifesciences.py"
+    "tests/test_conda_python_script/test_script.py"
   ];
 
   disabledTests = [

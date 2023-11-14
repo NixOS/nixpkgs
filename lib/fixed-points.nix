@@ -45,7 +45,7 @@ rec {
     }
     ```
 
-    This is where `fix` comes in, it contains the syntactic that's not in `f` anymore.
+    This is where `fix` comes in, it contains the syntactic recursion that's not in `f` anymore.
 
     ```nix
     nix-repl> fix = f:

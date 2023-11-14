@@ -1342,4 +1342,24 @@ self: super: builtins.intersectAttrs super {
       gi-webkit2
       gi-webkit2webextension
       ;
+
+  # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
+  # Also adds required test dependencies for checks to pass
+  mpi-hs =
+    let validMpi = [ "openmpi" "mpich" "mvapich" ];
+        mpiImpl = pkgs.mpi.pname;
+        disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
+     in lib.pipe
+          (super.mpi-hs_0_7_3_0.override { ompi = pkgs.mpi; })
+          ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
+            ++ disableUnused
+            ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
+          );
+  inherit (lib.mapAttrs (_: addTestToolDepends
+    [ pkgs.openssh pkgs.mpiCheckPhaseHook ]
+    ) super)
+    mpi-hs-store
+    mpi-hs-cereal
+    mpi-hs-binary
+    ;
 }

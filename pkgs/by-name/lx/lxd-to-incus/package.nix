@@ -1,32 +1,36 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 }:
 
 buildGoModule rec {
   pname = "lxd-to-incus";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "incus";
-    # use commit which fixes 0.1 versioning, use tags for > 0.1
-    rev = "253a06bd8506bf42628d32ccbca6409d051465ec";
-    hash = "sha256-LXCTrZEDnFTJpqVH+gnG9HaV1wcvTFsVv2tAWabWYmg=";
+    rev = "refs/tags/incus-${version}";
+    hash = "sha256-WhprzGzTeB8sEMMTYN5j1Zrwg0GiGLlXTqCkcPq0XVo=";
   };
+
+  patches = [
+    ./d7f7ae55a54437616174f80fb8faa80ae4ffcda4.patch
+  ];
 
   modRoot = "cmd/lxd-to-incus";
 
-  vendorHash = "sha256-Kk5sx8UYuip/qik5ez/pxi+DmzjkPIHNYUHVvBm9f9g=";
+  vendorHash = "sha256-J95b4fm+VwndoxS8RQF8V8ufI3RjclqzAskEd3ut4bU=";
 
-  # required for go-cowsql.
-  CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
+  CGO_ENABLED = 0;
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "incus-";
-    };
+    updateScript = nix-update-script {
+       extraArgs = [
+        "-vr" "incus-\(.*\)"
+       ];
+     };
   };
 
   meta = {

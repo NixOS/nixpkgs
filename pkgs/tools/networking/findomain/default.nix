@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "9.0.2";
+  version = "9.0.3";
 
   src = fetchFromGitHub {
     owner = "findomain";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CFnjZHTga70+b7XUdxGC/ycqY2snkLvFKPApTRlN11s=";
+    hash = "sha256-M6i62JI4HjaM0C2rSK8P5O19JeugFP5xIy1E6vE8KP4=";
   };
 
   cargoLock = {

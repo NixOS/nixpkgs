@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    rufo (0.12.0)
+    rufo (0.16.2)
 
 PLATFORMS
   ruby
@@ -10,4 +10,4 @@ DEPENDENCIES
   rufo
 
 BUNDLED WITH
-   2.1.4
+   2.4.20

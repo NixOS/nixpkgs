@@ -7,26 +7,26 @@
 , scdoc
 , wayland
 , wayland-protocols
-, zig_0_10
+, zig_0_11
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ifreund";
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jl4jSDWvJB6OfBbVXfVQ7gv/aDkN6bBy+/yK+AQDQL0=";
+    hash = "sha256-Q1FlahawsnJ77gP6QVs9AR058rhMU92iueRPudPf+sE=";
   };
 
   nativeBuildInputs = [
     pkg-config
     scdoc
     wayland
-    zig_0_10.hook
+    zig_0_11.hook
   ];
 
   buildInputs = [

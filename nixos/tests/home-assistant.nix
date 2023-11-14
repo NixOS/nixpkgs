@@ -9,13 +9,13 @@ in {
   nodes.hass = { pkgs, ... }: {
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ "hass" ];
-      ensureUsers = [{
-        name = "hass";
-        ensurePermissions = {
-          "DATABASE hass" = "ALL PRIVILEGES";
-        };
-      }];
+
+      # FIXME: hack for https://github.com/NixOS/nixpkgs/issues/216989
+      # Should be replaced with ensureUsers again when a solution for that is found
+      initialScript = pkgs.writeText "hass-setup-db.sql" ''
+        CREATE ROLE hass WITH LOGIN;
+        CREATE DATABASE hass WITH OWNER hass;
+      '';
     };
 
     services.home-assistant = {
@@ -41,6 +41,16 @@ in {
       # provide package for postgresql support
       extraPackages = python3Packages: with python3Packages; [
         psycopg2
+      ];
+
+      # test loading custom components
+      customComponents = with pkgs.home-assistant-custom-components; [
+        prometheus-sensor
+      ];
+
+      # test loading lovelace modules
+      customLovelaceModules = with pkgs.home-assistant-custom-lovelace-modules; [
+        mini-graph-card
       ];
 
       config = {
@@ -114,6 +124,14 @@ in {
       inheritParentConfig = true;
       configuration.services.home-assistant.config.backup = {};
     };
+
+    specialisation.removeCustomThings = {
+      inheritParentConfig = true;
+      configuration.services.home-assistant = {
+        customComponents = lib.mkForce [];
+        customLovelaceModules = lib.mkForce [];
+      };
+    };
   };
 
   testScript = { nodes, ... }: let
@@ -161,6 +179,14 @@ in {
         hass.wait_for_open_port(8123)
         hass.succeed("curl --fail http://localhost:8123/lovelace")
 
+    with subtest("Check that custom components get installed"):
+        hass.succeed("test -f ${configDir}/custom_components/prometheus_sensor/manifest.json")
+        hass.wait_until_succeeds("journalctl -u home-assistant.service | grep -q 'We found a custom integration prometheus_sensor which has not been tested by Home Assistant'")
+
+    with subtest("Check that lovelace modules are referenced and fetchable"):
+        hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
+        hass.succeed("curl --fail http://localhost:8123/local/nixos-lovelace-modules/mini-graph-card-bundle.js")
+
     with subtest("Check that optional dependencies are in the PYTHONPATH"):
         env = get_unit_property("Environment")
         python_path = env.split("PYTHONPATH=")[1].split()[0]
@@ -199,6 +225,13 @@ in {
         journal = get_journal_since(cursor)
         for domain in ["backup"]:
             assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
+
+    with subtest("Check custom components and custom lovelace modules get removed"):
+        cursor = get_journal_cursor()
+        hass.succeed("${system}/specialisation/removeCustomThings/bin/switch-to-configuration test")
+        hass.fail("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
+        hass.fail("test -f ${configDir}/custom_components/prometheus_sensor/manifest.json")
+        wait_for_homeassistant(cursor)
 
     with subtest("Check that no errors were logged"):
         hass.fail("journalctl -u home-assistant -o cat | grep -q ERROR")

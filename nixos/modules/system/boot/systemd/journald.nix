@@ -28,6 +28,15 @@ in {
       '';
     };
 
+    services.journald.storage = mkOption {
+      default = "persistent";
+      type = types.enum [ "persistent" "volatile" "auto" "none" ];
+      description = mdDoc ''
+        Controls where to store journal data. See
+        {manpage}`journald.conf(5)` for further information.
+      '';
+    };
+
     services.journald.rateLimitBurst = mkOption {
       default = 10000;
       type = types.int;
@@ -100,7 +109,7 @@ in {
     environment.etc = {
       "systemd/journald.conf".text = ''
         [Journal]
-        Storage=persistent
+        Storage=${cfg.storage}
         RateLimitInterval=${cfg.rateLimitInterval}
         RateLimitBurst=${toString cfg.rateLimitBurst}
         ${optionalString (cfg.console != "") ''

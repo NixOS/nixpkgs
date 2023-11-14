@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.24.0";
+  version = "1.24.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fS7NrUGl9zuyuBPzBhpM9HySRiEQWo7RN1hvy52Pgn4=";
+    hash = "sha256-qglyiEs8b97FPZoL0VwS5b17cawbZtdG9U0Shwnz+Pg=";
   };
 
   propagatedBuildInputs = [

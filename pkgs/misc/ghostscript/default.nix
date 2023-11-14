@@ -122,7 +122,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # don't build/install statically linked bin/gs
-  buildFlags = [ "so" ];
+  buildFlags = [ "so" ]
+    # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
+    # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+    ++ lib.optional (x11Support && stdenv.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''

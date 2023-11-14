@@ -45,17 +45,17 @@ stdenv.mkDerivation rec {
 
     echo "Building setuptools wheel..."
     pushd setuptools
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
+    ${python.pythonOnBuildForHost.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
     echo "Building wheel wheel..."
     pushd wheel
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
+    ${python.pythonOnBuildForHost.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
     echo "Building pip wheel..."
     pushd pip
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
+    ${python.pythonOnBuildForHost.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
   '';
 

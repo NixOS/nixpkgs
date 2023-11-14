@@ -339,7 +339,7 @@ in
           See the
           [
           GRUB source code
-          ](http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/commands/nativedisk.c?h=grub-2.04#n326)
+          ](https://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/commands/nativedisk.c?h=grub-2.04#n326)
           for which disk modules are available.
 
           The list elements are passed directly as `argv`

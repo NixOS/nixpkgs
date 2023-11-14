@@ -54,13 +54,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    hash = "sha256-nnNTZ+c7VVGAqwOBMkBlW3rImNjs08Ne35XRkI3ssGo=";
+    hash = "sha256-BcYRqPaPR24OTRY0MJgBxi46HvUG4uFaY0unZmu5b9k=";
   };
 
   nativeBuildInputs = [

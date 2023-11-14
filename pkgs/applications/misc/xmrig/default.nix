@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
     platforms = platforms.unix;
     maintainers = with maintainers; [ kim0 ];
   };

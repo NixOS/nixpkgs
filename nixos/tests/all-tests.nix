@@ -90,6 +90,14 @@ in {
     lib-extend = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nixos-test-driver/lib-extend.nix {};
     node-name = runTest ./nixos-test-driver/node-name.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
+    driver-timeout = pkgs.runCommand "ensure-timeout-induced-failure" {
+      failed = pkgs.testers.testBuildFailure ((runTest ./nixos-test-driver/timeout.nix).config.rawTestDerivation);
+    } ''
+      grep -F "timeout reached; test terminating" $failed/testBuildFailure.log
+      # The program will always be terminated by SIGTERM (143) if it waits for the deadline thread.
+      [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
+      touch $out
+    '';
   };
 
   # NixOS vm tests and non-vm unit tests
@@ -153,6 +161,7 @@ in {
   budgie = handleTest ./budgie.nix {};
   buildbot = handleTest ./buildbot.nix {};
   buildkite-agents = handleTest ./buildkite-agents.nix {};
+  c2fmzq = handleTest ./c2fmzq.nix {};
   caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cage = handleTest ./cage.nix {};
@@ -265,6 +274,8 @@ in {
   esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-var = runTest ./activation/var.nix;
+  activation-nix-channel = runTest ./activation/nix-channel.nix;
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
@@ -288,12 +299,14 @@ in {
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
+  floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   forgejo = handleTest ./forgejo.nix { };
   freenet = handleTest ./freenet.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
+  freetube = discoverTests (import ./freetube.nix);
   freshrss-sqlite = handleTest ./freshrss-sqlite.nix {};
   freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   frigate = handleTest ./frigate.nix {};
@@ -327,6 +340,7 @@ in {
   gollum = handleTest ./gollum.nix {};
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
+  goss = handleTest ./goss.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
@@ -358,6 +372,7 @@ in {
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
+  livebook-service = handleTest ./livebook-service.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
   odoo = handleTest ./odoo.nix {};
   odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
@@ -379,6 +394,7 @@ in {
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
   incron = handleTest ./incron.nix {};
+  incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; });
   influxdb = handleTest ./influxdb.nix {};
   influxdb2 = handleTest ./influxdb2.nix {};
   initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
@@ -432,6 +448,7 @@ in {
   kubo = import ./kubo { inherit recurseIntoAttrs runTest; };
   ladybird = handleTest ./ladybird.nix {};
   languagetool = handleTest ./languagetool.nix {};
+  lanraragi = handleTest ./lanraragi.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
   lemmy = handleTest ./lemmy.nix {};
@@ -557,7 +574,6 @@ in {
   nginx-njs = handleTest ./nginx-njs.nix {};
   nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
-  nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nginx-status-page = handleTest ./nginx-status-page.nix {};
   nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
@@ -576,6 +592,7 @@ in {
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
   non-default-filesystems = handleTest ./non-default-filesystems.nix {};
+  non-switchable-system = runTest ./non-switchable-system.nix;
   noto-fonts = handleTest ./noto-fonts.nix {};
   noto-fonts-cjk-qt-default-weight = handleTest ./noto-fonts-cjk-qt-default-weight.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
@@ -668,7 +685,6 @@ in {
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   printing-socket = handleTest ./printing.nix { socket = true; };
   printing-service = handleTest ./printing.nix { socket = false; };
-  privacyidea = handleTest ./privacyidea.nix {};
   privoxy = handleTest ./privoxy.nix {};
   prometheus = handleTest ./prometheus.nix {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
@@ -747,6 +763,7 @@ in {
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
   sslh = handleTest ./sslh.nix {};
+  ssh-audit = handleTest ./ssh-audit.nix {};
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix {};
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix {};
   stalwart-mail = handleTest ./stalwart-mail.nix {};
@@ -846,6 +863,7 @@ in {
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
+  tsja = handleTest ./tsja.nix {};
   tsm-client-gui = handleTest ./tsm-client-gui.nix {};
   txredisapi = handleTest ./txredisapi.nix {};
   tuptime = handleTest ./tuptime.nix {};
@@ -916,4 +934,5 @@ in {
   zram-generator = handleTest ./zram-generator.nix {};
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
+  zwave-js = handleTest ./zwave-js.nix {};
 }

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dns_lexicon";
-  version = "3.16.0";
+  version = "3.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Analogj";
     repo = "lexicon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GUYsTZPvsqGemViSqgEvYhyjTEut42akMq2ZK2P1fX0=";
+    hash = "sha256-79/zz0TOCpx26TEo6gi9JDBQeVW2azWnxAjWr/FGRLA=";
   };
 
   nativeBuildInputs = [

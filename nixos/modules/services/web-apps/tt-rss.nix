@@ -430,7 +430,7 @@ let
           background processes while not running tt-rss, this method is generally
           viable to keep your feeds up to date.
           Still, there are more robust (and recommended) updating methods
-          available, you can read about them here: http://tt-rss.org/wiki/UpdatingFeeds
+          available, you can read about them here: <https://tt-rss.org/wiki/UpdatingFeeds>
         '';
       };
 

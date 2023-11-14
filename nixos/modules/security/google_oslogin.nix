@@ -42,6 +42,10 @@ in
     security.sudo.extraConfig = ''
       #includedir /run/google-sudoers.d
     '';
+    security.sudo-rs.extraConfig = ''
+      #includedir /run/google-sudoers.d
+    '';
+
     systemd.tmpfiles.rules = [
       "d /run/google-sudoers.d 750 root root -"
       "d /var/google-users.d 750 root root -"

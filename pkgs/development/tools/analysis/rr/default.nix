@@ -4,23 +4,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.6.0";
+  version = "5.7.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "H39HPkAQGubXVQV3jCpH4Pz+7Q9n03PrS70utk7Tt2k=";
+    hash = "sha256-n1Jbhr77bI0AXncY/RquNVSwwnnAXt31RmKtAa1/oHg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-flexible-array-member.patch";
-      url = "https://github.com/rr-debugger/rr/commit/2979c60ef8bbf7c940afd90172ddc5d8863f766e.diff";
-      sha256 = "cmdCJetQr3ELPOyWl37h1fGfG/xvaiJpywxIAnqb5YY=";
-    })
-  ];
+  patches = [ ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
@@ -54,7 +48,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   # FIXME
-  #doCheck = true;
+  doCheck = false;
 
   preCheck = "export HOME=$TMPDIR";
 

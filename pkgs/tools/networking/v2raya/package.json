@@ -8,6 +8,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "resolutions": {
+    "@achrinza/node-ipc": "^10.1.9"
+  },
   "dependencies": {
     "@mdi/font": "^5.8.55",
     "@nuintun/qrcode": "^3.3.0",

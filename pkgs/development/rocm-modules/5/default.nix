@@ -105,8 +105,8 @@ in rec {
 
   # Needs GCC
   rocprofiler = callPackage ./rocprofiler {
+    inherit rocmUpdateScript clr rocm-core rocm-thunk rocm-device-libs roctracer rocdbgapi rocm-smi hsa-amd-aqlprofile-bin;
     inherit (llvm) clang;
-    inherit rocmUpdateScript clr rocm-thunk roctracer rocm-smi hsa-amd-aqlprofile-bin;
   };
 
   # Needs GCC

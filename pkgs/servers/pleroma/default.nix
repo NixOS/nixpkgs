@@ -7,14 +7,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.5";
+  version = "2.6.0";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-9gD39eHIQEd59UNlz/Sw7V7ekBvk/pHETfo8HzfdQDQ=";
+    sha256 = "sha256-VFyFQ3c4EEbQAj3bUgjWbmpCyugcpfz0phgBz0ZUB/Q=";
   };
 
   patches = [
@@ -26,17 +26,6 @@ beamPackages.mixRelease rec {
     overrides = final: prev: {
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
-      gettext = beamPackages.buildMix rec {
-        name = "gettext";
-        version = "0.19.1";
-
-        src = fetchFromGitHub {
-          owner = "tusooa";
-          repo = "gettext";
-          rev = "72fb2496b6c5280ed911bdc3756890e7f38a4808";
-          sha256 = "sha256-V0qmE+LcAbVoWsJmWE4fwrduYFIZ5BzK/sGzgLY3eH0=";
-        };
-      };
       prometheus_ex = beamPackages.buildMix rec {
         name = "prometheus_ex";
         version = "3.0.5";
@@ -175,7 +164,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ ninjatrappeur yuka kloenk yayayayaka ];
+    maintainers = with maintainers; [ picnoir yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };
 }

@@ -20,12 +20,16 @@ in rec {
       pkgs.runCommand "unit-${mkPathSafeName name}"
         { preferLocalBuild = true;
           allowSubstitutes = false;
-          inherit (unit) text;
+          # unit.text can be null. But variables that are null listed in
+          # passAsFile are ignored by nix, resulting in no file being created,
+          # making the mv operation fail.
+          text = optionalString (unit.text != null) unit.text;
+          passAsFile = [ "text" ];
         }
         ''
           name=${shellEscape name}
           mkdir -p "$out/$(dirname -- "$name")"
-          echo -n "$text" > "$out/$name"
+          mv "$textPath" "$out/$name"
         ''
     else
       pkgs.runCommand "unit-${mkPathSafeName name}-disabled"
@@ -372,24 +376,23 @@ in rec {
 
   serviceToUnit = name: def:
     { inherit (def) aliases wantedBy requiredBy enable overrideStrategy;
-      text = commonUnitText def +
-        ''
-          [Service]
-          ${let env = cfg.globalEnvironment // def.environment;
-            in concatMapStrings (n:
-              let s = optionalString (env.${n} != null)
-                "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
-              # systemd max line length is now 1MiB
-              # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
-              in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env)}
-          ${if def ? reloadIfChanged && def.reloadIfChanged then ''
-            X-ReloadIfChanged=true
-          '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
-            X-RestartIfChanged=false
-          '' else ""}
-          ${optionalString (def ? stopIfChanged && !def.stopIfChanged) "X-StopIfChanged=false"}
-          ${attrsToSection def.serviceConfig}
-        '';
+      text = commonUnitText def + ''
+        [Service]
+      '' + (let env = cfg.globalEnvironment // def.environment;
+        in concatMapStrings (n:
+          let s = optionalString (env.${n} != null)
+            "Environment=${builtins.toJSON "${n}=${env.${n}}"}\n";
+          # systemd max line length is now 1MiB
+          # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
+          in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env))
+      + (if def ? reloadIfChanged && def.reloadIfChanged then ''
+        X-ReloadIfChanged=true
+      '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
+        X-RestartIfChanged=false
+      '' else "")
+       + optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
+         X-StopIfChanged=false
+      '' + attrsToSection def.serviceConfig;
     };
 
   socketToUnit = name: def:

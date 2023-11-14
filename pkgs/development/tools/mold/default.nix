@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     rev = "v${version}";
-    hash = "sha256-SahpgmkeGVXqQebtw36IjFwHcbvi0JeiEWkNV3hk3lM=";
+    hash = "sha256-eX76LRzhAk2n96eMtvbnm4Id99jRCDo3gMlrr5hI3Nw=";
   };
 
   nativeBuildInputs = [

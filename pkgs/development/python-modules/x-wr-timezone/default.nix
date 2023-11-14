@@ -4,13 +4,13 @@
 , icalendar
 , pytz
 , pytestCheckHook
-, restructuredtext_lint
+, restructuredtext-lint
 , pygments
 }:
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "0.0.5";
+  version = "0.0.6";
 
   format = "setuptools";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
     rev = "v${version}";
-    hash = "sha256-vUhAq6b5I0gYbXmbElxSSL6Mu9BSLs0uT5gb8zXdmpg=";
+    hash = "sha256-9B1gXabpZsJSHYUHLu6bBGidO3C5m/I0oOc5U/mbX0I=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    restructuredtext_lint
+    restructuredtext-lint
     pygments
   ];
 
@@ -36,9 +36,13 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  # https://github.com/niccokunzmann/x-wr-timezone/issues/8
+  doCheck = false;
+
   pythonImportsCheck = [ "x_wr_timezone" ];
 
   meta = {
+    changelog = "https://github.com/niccokunzmann/x-wr-timezone/blob/${src.rev}/README.rst#changelog";
     description = "Convert calendars using X-WR-TIMEZONE to standard ones";
     homepage = "https://github.com/niccokunzmann/x-wr-timezone";
     license = lib.licenses.lgpl3Plus;

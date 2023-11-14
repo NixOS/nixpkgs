@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitHub
 , fetchurl
 , fetchpatch
 , aqbanking
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     # Upstream uploaded a -1 tarball on the same release, remove on next release
-    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}-1.tar.bz2";
+    url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}-1.tar.bz2";
     hash = "sha256-d0EWXW1lLqe0oehJjPQ5pWuBpcyLZTKRpZBU8jYqv8w=";
   };
 
@@ -97,12 +98,29 @@ stdenv.mkDerivation rec {
   enableParallelChecking = true;
   checkTarget = "check";
 
+  passthru.docs = stdenv.mkDerivation {
+    pname = "gnucash-docs";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "Gnucash";
+      repo = "gnucash-docs";
+      rev = version;
+      hash = "sha256-aPxQEcpo8SPv8lPQbxMl1wg8ijH9Rz0oo4K5lp3C/bw=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ libxml2 libxslt ];
+  };
+
   preFixup = ''
     gappsWrapperArgs+=(
+      # documentation
+      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
       # gsettings schema location on Nix
-      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+      --set GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath "$out" "gnucash-${version}"}
     )
   '';
 

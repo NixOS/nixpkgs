@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://virt-manager.org/download.html";
+      downloadPage = "https://virt-manager.org/download.html";
     };
   };
 }
