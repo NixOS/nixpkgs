@@ -1,12 +1,15 @@
+{ version, hash }:
+
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "jetty";
-  version = "12.0.3";
+
+  inherit version;
 
   src = fetchurl {
     url = "mirror://maven/org/eclipse/jetty/jetty-home/${version}/jetty-home-${version}.tar.gz";
-    hash = "sha256-Z/jJKKzoqTPZnoFOMwbpSd/Kd1w+rXloKH+aw6aNrKs=";
+    inherit hash;
   };
 
   dontBuild = true;
