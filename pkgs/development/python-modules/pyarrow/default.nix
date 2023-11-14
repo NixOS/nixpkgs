@@ -33,6 +33,16 @@ buildPythonPackage rec {
 
   sourceRoot = "apache-arrow-${version}/python";
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-47248.patch";
+      url = "https://github.com/apache/arrow/commit/f14170976372436ec1d03a724d8d3f3925484ecf.patch";
+      includes = [ "pyarrow/types.pxi" ];
+      stripLen = 1;
+      hash = "sha256-+4Fa+X7xylWiBCX9lh4PQ0zIIr3BAIV1VTzcXspBjWU=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     cython
