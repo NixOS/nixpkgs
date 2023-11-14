@@ -41,17 +41,29 @@ services.postgresql.dataDir = "/data/postgresql";
 
 ## Initializing {#module-services-postgres-initializing}
 
-As of NixOS 23.11, `services.postgresql.ensureUsers.*.ensurePermissions` has been deprecated, after a change to default permissions in PostgreSQL 15 invalidated most of its previous use cases:
+As of NixOS 23.11,
+`services.postgresql.ensureUsers.*.ensurePermissions` has been
+deprecated, after a change to default permissions in PostgreSQL 15
+invalidated most of its previous use cases:
 
-- In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where in psql >= 15 that would be a separate permission
+- In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where
+  in psql >= 15 that would be a separate permission
 - psql >= 15 instead gives only the database owner create permissions
-- Even on psql < 15 (or databases migrated to >= 15), it is recommended to manually assign permissions along these lines
+- Even on psql < 15 (or databases migrated to >= 15), it is
+  recommended to manually assign permissions along these lines
   - https://www.postgresql.org/docs/release/15.0/
   - https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV
 
 ### Assigning ownership {#module-services-postgres-initializing-ownership}
 
-The corresponding system user should be database owner in most cases. This can be done with `services.postgresql.ensureUsers.*.ensureDBOwnership = true;`
+Usually, the database owner should be a database user of the same
+name. This can be done with
+`services.postgresql.ensureUsers.*.ensureDBOwnership = true;`.
+
+If the database user name equals the connecting system user name,
+postgres by default will accept a passwordless connection via unix
+domain socket. This makes it possible to run many postgres-backed
+services without creating any database secrets at all
 
 ### Assigning extra permissions {#module-services-postgres-initializing-extra-permissions}
 
