@@ -2691,4 +2691,9 @@ self: super: {
   sdl2-gfx = overrideCabal { __propagatePkgConfigDepends = false; } super.sdl2-gfx;
   sdl2-ttf = overrideCabal { __onlyPropagateKnownPkgConfigModules = true; } super.sdl2-ttf;
 
+  # Needs git for compile-time insertion of commit hash into --version string.
+  kmonad = overrideCabal (drv: {
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.git];
+  }) super.kmonad;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
