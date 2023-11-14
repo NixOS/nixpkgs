@@ -6,16 +6,16 @@
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-j";
     rev = "refs/tags/${version}";
-    hash = "sha256-ssh6v2h/Ikl2Ulim6lSJ45avjKSCh3Vmtg+LPOgONRU=";
+    hash = "sha256-JuMm01ihgVoKpe8wyuUIDyzSxMODRg7dQpTCyVA/K10=";
   };
 
-  mvnHash = "sha256-MizBoFlpYxwwcU7rOac1h2VPJoXv3eRQgWRgsTh8Xno=";
+  mvnHash = "sha256-Px4Qxb1tTvRKZum1xfe0mdX+EyimnyyfzrydiaDaYRo=";
 
   # Disable tests because they require networking
   mvnParameters = "-DskipTests";
