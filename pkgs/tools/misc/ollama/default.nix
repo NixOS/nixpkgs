@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ollama";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-rzcuRU2qcYTMo/GxiSHwJYnvA9samfWlztMEhOGzbRg=";
+    hash = "sha256-pc3lDBh3e49k9PKe8cEvjcHvDuTyhRjTulxReRqqu7s=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ buildGoModule rec {
       --subst-var-by llamaCppServer "${llama-cpp}/bin/llama-cpp-server"
   '';
 
-  vendorHash = "sha256-Qt5QVqRkwK61BJPVhFWtox6b9E8BpAIseNB0yhh+/90=";
+  vendorHash = "sha256-NrRj+YmsNgehxgPL/fzG4sH1CCt42KMkhpNyifiyDWM=";
 
   ldflags = [
     "-s"
