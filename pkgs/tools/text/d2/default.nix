@@ -50,6 +50,7 @@ buildGoModule rec {
     description = "A modern diagram scripting language that turns text to diagrams";
     homepage = "https://d2lang.com";
     license = licenses.mpl20;
+    mainProgram = "d2";
     maintainers = with maintainers; [ dit7ya kashw2 ];
   };
 }
