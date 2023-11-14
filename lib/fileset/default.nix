@@ -188,7 +188,7 @@ in {
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
             - Set `fileset` to a file set that cannot contain files outside the `root` (${toString root}). This could change the files included in the result.''
     else
-      builtins.seq sourceFilter
+      seq sourceFilter
       cleanSourceWith {
         name = "source";
         src = root;
