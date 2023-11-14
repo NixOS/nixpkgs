@@ -13132,6 +13132,12 @@
     githubId = 30942198;
     name = "Noah Snelson";
   };
+  nsidiropoulos = {
+    email = "nikolaos@sidiropoulos.dev";
+    github = "nsidiropoulos";
+    githubId = 144605927;
+    name = "Nikolaos Sidiropoulos";
+  };
   nthorne = {
     email = "notrupertthorne@gmail.com";
     github = "nthorne";
