@@ -245,8 +245,8 @@ in
     # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.22";
-      hash = "sha256-PiOGu17iWo3c0hz/xIx2CX5cpBpuSgmPay7kASsNY44=";
+      version = "10.5.23";
+      hash = "sha256-P3wzsgjLeZ2wFKh09WcY6t/yLulXgfo2Cqa8aWEJrP4=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
