@@ -30966,8 +30966,6 @@ with pkgs;
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
 
-  cosmic-applets = callPackage ../applications/window-managers/cosmic/applets { };
-
   cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
 
   cosmic-edit = callPackage ../applications/editors/cosmic-edit { };
