@@ -10,6 +10,7 @@ in
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
   requireSigning = false;
+  allowAddonSideload = true;
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
