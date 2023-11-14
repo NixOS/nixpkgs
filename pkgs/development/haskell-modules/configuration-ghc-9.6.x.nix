@@ -74,7 +74,7 @@ self: super: {
   bifunctors = doDistribute self.bifunctors_5_6_1;
   base-compat = doDistribute self.base-compat_0_13_1;
   base-compat-batteries = doDistribute self.base-compat-batteries_0_13_1;
-  fgl = doDistribute self.fgl_5_8_1_1;
+  fgl = doDistribute self.fgl_5_8_2_0;
 
   # Because we bumped the version of th-abstraction above.^
   aeson = doJailbreak super.aeson;
