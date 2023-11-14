@@ -241,7 +241,4 @@ Arguments:
 ## To update in the future
 
 Here's a list of places in the library that need to be updated in the future:
-- > The file set library is currently somewhat limited but is being expanded to include more functions over time.
-
-  in [the manual](../../doc/functions/fileset.section.md)
 - If/Once a function exists that can optionally include a path depending on whether it exists, the error message for the path not existing in `_coerce` should mention the new function
