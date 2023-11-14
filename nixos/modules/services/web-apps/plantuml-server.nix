@@ -1,8 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    literalExpression
+    mdDoc
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOptionMD
+    types
+    ;
 
   cfg = config.services.plantuml-server;
 
@@ -11,13 +18,13 @@ in
 {
   options = {
     services.plantuml-server = {
-      enable = mkEnableOption (lib.mdDoc "PlantUML server");
+      enable = mkEnableOption (mdDoc "PlantUML server");
 
       package = mkOption {
         type = types.package;
         default = pkgs.plantuml-server;
         defaultText = literalExpression "pkgs.plantuml-server";
-        description = lib.mdDoc "PlantUML server package to use";
+        description = mdDoc "PlantUML server package to use";
       };
 
       packages = {
@@ -25,75 +32,75 @@ in
           type = types.package;
           default = pkgs.jdk;
           defaultText = literalExpression "pkgs.jdk";
-          description = lib.mdDoc "JDK package to use for the server";
+          description = mdDoc "JDK package to use for the server";
         };
         jetty = mkOption {
           type = types.package;
           default = pkgs.jetty;
           defaultText = literalExpression "pkgs.jetty";
-          description = lib.mdDoc "Jetty package to use for the server";
+          description = mdDoc "Jetty package to use for the server";
         };
       };
 
       user = mkOption {
         type = types.str;
         default = "plantuml";
-        description = lib.mdDoc "User which runs PlantUML server.";
+        description = mdDoc "User which runs PlantUML server.";
       };
 
       group = mkOption {
         type = types.str;
         default = "plantuml";
-        description = lib.mdDoc "Group which runs PlantUML server.";
+        description = mdDoc "Group which runs PlantUML server.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/plantuml";
-        description = lib.mdDoc "Home directory of the PlantUML server instance.";
+        description = mdDoc "Home directory of the PlantUML server instance.";
       };
 
       listenHost = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "Host to listen on.";
+        description = mdDoc "Host to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8080;
-        description = lib.mdDoc "Port to listen on.";
+        description = mdDoc "Port to listen on.";
       };
 
       plantumlLimitSize = mkOption {
         type = types.int;
         default = 4096;
-        description = lib.mdDoc "Limits image width and height.";
+        description = mdDoc "Limits image width and height.";
       };
 
       graphvizPackage = mkOption {
         type = types.package;
         default = pkgs.graphviz;
         defaultText = literalExpression "pkgs.graphviz";
-        description = lib.mdDoc "Package containing the dot executable.";
+        description = mdDoc "Package containing the dot executable.";
       };
 
       plantumlStats = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
+        description = mdDoc "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
       };
 
       httpAuthorization = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
+        description = mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
       };
 
       allowPlantumlInclude = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enables !include processing which can read files from the server into diagrams. Files are read relative to the current working directory.";
+        description = mdDoc "Enables !include processing which can read files from the server into diagrams. Files are read relative to the current working directory.";
       };
     };
   };
