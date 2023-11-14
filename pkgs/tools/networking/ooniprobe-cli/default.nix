@@ -4,6 +4,7 @@
 }:
 
 buildGoModule rec {
+  # pinned to buildGo120Module in all-packages.nix
   pname = "ooniprobe-cli";
   version = "3.19.0";
 
