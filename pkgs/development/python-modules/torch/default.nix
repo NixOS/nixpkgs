@@ -42,8 +42,9 @@
   pythonOlder,
 
   # ROCm dependencies
-  rocmSupport ? false,
-  gpuTargets ? [ ], rocmPackages
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
+  gpuTargets ? [ ]
 }:
 
 let

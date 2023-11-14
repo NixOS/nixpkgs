@@ -14070,7 +14070,6 @@ self: super: with self; {
   toposort = callPackage ../development/python-modules/toposort { };
 
   torch = callPackage ../development/python-modules/torch {
-    inherit (pkgs.config) cudaSupport;
     magma =
       if pkgs.config.cudaSupport
       then pkgs.magma-cuda-static
