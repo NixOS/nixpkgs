@@ -76,19 +76,22 @@ rec {
      Type:
        makeOverridable :: (AttrSet -> a) -> AttrSet -> a
   */
-  makeOverridable = f: lib.setFunctionArgs
-    (origArgs: let
+  makeOverridable = f:
+    let
+      # Creates a functor with the same arguments as f
+      mirrorArgs = lib.mirrorFunctionArgs f;
+    in
+    mirrorArgs (origArgs:
+    let
       result = f origArgs;
 
-      # Creates a functor with the same arguments as f
-      copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
       # Changes the original arguments with (potentially a function that returns) a set of new attributes
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
       # Re-call the function but with different arguments
-      overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
+      overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
       # Change the result of the function call by applying g to it
-      overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
+      overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
     in
       if builtins.isAttrs result then
         result // {
@@ -102,8 +105,7 @@ rec {
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
-      else result)
-    (lib.functionArgs f);
+      else result);
 
 
   /* Call the package function in the file `fn` with the required
