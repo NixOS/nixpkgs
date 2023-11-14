@@ -233,6 +233,7 @@ in {
   croc = handleTest ./croc.nix {};
   darling = handleTest ./darling.nix {};
   dae = handleTest ./dae.nix {};
+  db-rest = handleTest ./db-rest.nix {};
   dconf = handleTest ./dconf.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
