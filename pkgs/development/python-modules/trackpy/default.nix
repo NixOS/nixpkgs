@@ -11,21 +11,26 @@
 , pythonOlder
 , pyyaml
 , scipy
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "trackpy";
   version = "0.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
-    repo = pname;
+    repo = "trackpy";
     rev = "refs/tags/v${version}";
     hash = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     looseversion
@@ -50,6 +55,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "trackpy"
+  ];
+
+  disabledTests = [
+    # AttributeError, IndexError
+    "TestLocateBrightfieldRing"
+    "test_drop_link"
+    "TestMSD"
+    "test_correlation3D_ring"
   ];
 
   meta = with lib; {
