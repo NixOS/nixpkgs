@@ -1,4 +1,8 @@
-{ lib, maven, fetchFromGitHub }:
+{ lib
+, maven
+, fetchFromGitHub
+, nix-update-script
+}:
 
 maven.buildMavenPackage rec {
   pname = "mariadb-connector-java";
@@ -21,6 +25,8 @@ maven.buildMavenPackage rec {
     install -m444 -D target/mariadb-java-client-${version}.jar $out/share/java/mariadb-java-client.jar
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases";
