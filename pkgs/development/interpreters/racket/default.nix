@@ -50,7 +50,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.10"; # always change at once with ./minimal.nix
+  version = "8.11"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-Dklj2iwX5/bVdCi9odz2Ttp0N+Lya7bMSLR/QXo9k6M=";
+    sha256 = "sha256-lIrXmTyTnk7n54zOvl7qN8CkbiKgYj66k3fgEolk93w=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -97,6 +97,10 @@ stdenv.mkDerivation rec {
         --replace /bin/rm ${coreutils}/bin/rm \
         --replace /bin/true ${coreutils}/bin/true
     done
+
+    # Remove QuickScript register.rkt because it breaks on sandbox
+    # https://github.com/Metaxal/quickscript/issues/73
+    rm -f share/pkgs/quickscript/register.rkt
 
     # The configure script forces using `libtool -o` as AR on Darwin. But, the
     # `-o` option is only available from Apple libtool. GNU ar works here.
