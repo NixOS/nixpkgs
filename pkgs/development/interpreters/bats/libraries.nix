@@ -25,12 +25,12 @@
 
   bats-file = stdenv.mkDerivation rec {
     pname = "bats-file";
-    version = "0.3.0";
+    version = "0.4.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-file";
       rev = "v${version}";
-      sha256 = "sha256-3xevy0QpwNZrEe+2IJq58tKyxQzYx8cz6dD2nz7fYUM=";
+      sha256 = "sha256-NJzpu1fGAw8zxRKFU2awiFM2Z3Va5WONAD2Nusgrf4o=";
     };
     dontBuild = true;
     installPhase = ''
