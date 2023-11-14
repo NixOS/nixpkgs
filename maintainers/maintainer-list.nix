@@ -16513,6 +16513,11 @@
     githubId = 158321;
     name = "Stewart Mackenzie";
   };
+  skovati = {
+    github = "skovati";
+    githubId = 49844593;
+    name = "skovati";
+  };
   skykanin = {
     github = "skykanin";
     githubId = 3789764;
