@@ -159,6 +159,16 @@ runTests {
     expected = "FA";
   };
 
+  testFromHexStringFirstExample = {
+    expr = fromHexString "FF";
+    expected = 255;
+  };
+
+  testFromHexStringSecondExample = {
+    expr = fromHexString (builtins.hashString "sha256" "test");
+    expected = 9223372036854775807;
+  };
+
   testToBaseDigits = {
     expr = toBaseDigits 2 6;
     expected = [ 1 1 0 ];
