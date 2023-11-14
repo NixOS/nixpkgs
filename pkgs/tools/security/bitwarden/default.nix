@@ -5,6 +5,7 @@
 , dbus
 , electron_25
 , fetchFromGitHub
+, fetchpatch2
 , glib
 , gnome
 , gtk3
@@ -36,6 +37,14 @@ in buildNpmPackage rec {
     hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/bitwarden/clients/issues/6812#issuecomment-1806830091
+      url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
+      hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
+    })
+  ];
+
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
@@ -44,9 +53,10 @@ in buildNpmPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
-    inherit src;
+    inherit patches src;
+    patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-Qv4Tq0s+Pmr+ZEqbmbPfaPn/4qKVdzsHoI4wC8x6O48=";
+    hash = "sha256-AmtdmOR3aZJTZiFbkwRXjeTOJdcN40bTmWx4Ss3JNJ8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
