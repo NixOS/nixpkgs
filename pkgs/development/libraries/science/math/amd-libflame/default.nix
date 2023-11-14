@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ amd-blis aocl-utils ];
 
   cmakeFlags = [
-    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib"
+    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
     "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
     "-DENABLE_CBLAS_INTERFACES=ON"
