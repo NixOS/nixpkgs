@@ -44,7 +44,7 @@ in
     gzip
   ]) ++ [
     config.nix.package
-  ] ++ cfg.extraPackages;
+  ] ++ cfg.extraPackages ++ (if (cfg.githubApp != null) then (with pkgs; [ jwt-cli jq curl ]) else [ ]);
 
   serviceConfig = mkMerge [
     {
@@ -79,6 +79,9 @@ in
           newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
           currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
           newConfigTokenPath = "$STATE_DIRECTORY/.new-token";
+          # The .pem file extension is significant here, as `jwt-cli` uses it to detect the key type.
+          privateKeyPath = "$STATE_DIRECTORY/.gh-app-private-key.pem";
+          jwtPath = "$STATE_DIRECTORY/.token.jwt";
           currentConfigTokenPath = "$STATE_DIRECTORY/${currentConfigTokenFilename}";
 
           runnerCredFiles = [
@@ -93,9 +96,35 @@ in
               # Also copy current file to allow for a diff on the next start
               install --mode=600 ${escapeShellArg cfg.tokenFile} "${currentConfigTokenPath}"
             }
+            generate_tokens() {
+              # From https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app
+              install --mode=600 ${escapeShellArg cfg.githubApp.privateKeyFile} "${privateKeyPath}"
+              echo "Generating JWT for Github App based authentication"
+              jwt encode --exp=$((`date +%s` + 60)) --iss ${toString cfg.githubApp.appId} --alg RS256 --secret "@${privateKeyPath}" '{}' > "${jwtPath}"
+              chmod 600 "${jwtPath}"
+              rm "${privateKeyPath}"
+
+              echo "Generating install token for Github App based authentication"
+              curl -s --request POST \
+                --url "https://api.github.com/app/installations/${toString cfg.githubApp.installationId}/access_tokens" \
+                --header "Accept: application/vnd.github+json" \
+                --header "Authorization: Bearer $(cat "${jwtPath}")" \
+                --header "X-GitHub-Api-Version: 2022-11-28" | jq -r .token > "${newConfigTokenPath}"
+
+              chmod 666 "${newConfigTokenPath}"
+              rm "${jwtPath}"
+              echo "Generated."
+
+              # Also copy current file to allow for a diff on the next start
+              install --mode=600 "${newConfigTokenPath}" "${currentConfigTokenPath}"
+            }
             clean_state() {
               find "$STATE_DIRECTORY/" -mindepth 1 -delete
-              copy_tokens
+              if [[ "${optionalString (cfg.githubApp != null) "1"}" ]]; then
+                generate_tokens
+              else
+                copy_tokens
+              fi
             }
             diff_config() {
               changed=0
@@ -123,7 +152,11 @@ in
               diff_config
             else
               # The state directory is entirely empty which indicates a first start
-              copy_tokens
+              if [[ "${optionalString (cfg.githubApp != null) "1"}" ]]; then
+                generate_tokens
+              else
+                copy_tokens
+              fi
             fi
             # Always clean workDir
             find -H "$WORK_DIRECTORY" -mindepth 1 -delete
@@ -191,12 +224,15 @@ in
       StateDirectoryMode = "0700";
       WorkingDirectory = workDir;
 
-      InaccessiblePaths = [
+      InaccessiblePaths = (if (cfg.tokenFile != null) then [
         # Token file path given in the configuration, if visible to the service
         "-${cfg.tokenFile}"
+      ] else [ ]) ++ [
         # Token file in the state directory
         "${stateDir}/${currentConfigTokenFilename}"
-      ];
+      ] ++ (if (cfg.githubApp != null) then [
+        "-${cfg.githubApp.privateKeyFile}"
+      ] else [ ]);
 
       KillSignal = "SIGINT";
 

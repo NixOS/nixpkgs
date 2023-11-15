@@ -38,8 +38,55 @@ with lib;
     example = "https://github.com/nixos/nixpkgs";
   };
 
+  githubApp = mkOption {
+    description = lib.mdDoc ''
+      As an alternative to passing a Github token directly via `tokenFile`, you can also pass
+      details for a Github App. This allows you to grant organisation level
+      agent management (creation/deletion of runners, for the `ephemeral` use
+      case) via the more fine grained `organization_self_hosted_runners`
+      permission, rather than needing to pass a PAT for an org-level admin user
+      account.
+
+      If you pass this option, on startup, the service will:
+      - Create a JWT for the Github App
+      - Request an installation token for the Github App (valid for 1 hour).
+      - Use the installation token to register the agent, and get the registration token to pass to the runner itself.
+
+      If this option is passed, `tokenFile` should be omitted, as the token is generated automatically.
+
+      The instructions on this page are useful for setting up the Github App itself correctly: https://nix-community.github.io/srvos/github_actions_runner/
+    '';
+    type = types.nullOr (types.submodule {
+      options = {
+        appId = mkOption {
+          type = types.int;
+          description = lib.mdDoc ''
+            The Github App ID. You can get this from the app settings page.
+          '';
+          example = 123456;
+        };
+
+        installationId = mkOption {
+          type = types.int;
+          description = lib.mdDoc ''
+            The Github App Installation ID. After an app has been 'installed' to an organization, you can get the installation ID from the URL when you click on the app at https://github.com/organizations/YOUR_ORG/settings/installations/.
+          '';
+          example = 12345678;
+        };
+
+        privateKeyFile = mkOption {
+          description = lib.mdDoc ''
+            Required for authorization to make requests to Github on behalf of the app.
+          '';
+          type = types.path;
+          example = "/run/secrets/github-runner/github-app-private-key.pem";
+        };
+      };
+    });
+  };
+
   tokenFile = mkOption {
-    type = types.path;
+    type = types.nullOr types.path;
     description = lib.mdDoc ''
       The full path to a file which contains either
 
@@ -79,25 +126,29 @@ with lib;
       so these are not recommended.
     '';
     example = "/run/secrets/github-runner/nixos.token";
+    default = null;
   };
 
-  name = let
-    # Same pattern as for `networking.hostName`
-    baseType = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
-  in mkOption {
-    type = if includeNameDefault then baseType else types.nullOr baseType;
-    description = lib.mdDoc ''
-      Name of the runner to configure. Defaults to the hostname.
+  name =
+    let
+      # Same pattern as for `networking.hostName`
+      baseType = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
+    in
+    mkOption
+      {
+        type = if includeNameDefault then baseType else types.nullOr baseType;
+        description = lib.mdDoc ''
+          Name of the runner to configure. Defaults to the hostname.
 
-      Changing this option triggers a new runner registration.
-    '';
-    example = "nixos";
-  } // (if includeNameDefault then {
-    default = config.networking.hostName;
-    defaultText = literalExpression "config.networking.hostName";
-  } else {
-    default = null;
-  });
+          Changing this option triggers a new runner registration.
+        '';
+        example = "nixos";
+      } // (if includeNameDefault then {
+      default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
+    } else {
+      default = null;
+    });
 
   runnerGroup = mkOption {
     type = types.nullOr types.str;
@@ -146,7 +197,7 @@ with lib;
     example = {
       GIT_CONFIG = "/path/to/git/config";
     };
-    default = {};
+    default = { };
   };
 
   serviceOverrides = mkOption {
@@ -158,7 +209,7 @@ with lib;
       ProtectHome = false;
       RestrictAddressFamilies = [ "AF_PACKET" ];
     };
-    default = {};
+    default = { };
   };
 
   package = mkOption {
