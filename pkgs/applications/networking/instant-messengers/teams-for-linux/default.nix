@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
