@@ -10,18 +10,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.15.2";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-SJypezOTQr+TiG/rePXxgjrspeErqj6qw9TBen41e4Q=";
+    hash = "sha256-XfzCJOr0lOkimUKbOW0+qFNQMmYc0DBgi+0ItmEOjwE=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-i2lH6ajRmfJHsh7nzCjt7mi3issA4kSBdG42w67pOC4=";
+  vendorHash = "sha256-sijt6YOp1pFNhaxLIOLH90Z5ODVbWFj/mp8Csx8n+ac=";
   proxyVendor = true;
 
   # Exclude broken genji, hive & impala drivers (bad group)
@@ -35,7 +35,7 @@ buildGoModule rec {
     "impala"
   ];
 
-  # These tags and flags are copied from build-release.sh
+  # These tags and flags are copied from build.sh
   tags = [
     "most"
     "sqlite_app_armor"
@@ -46,7 +46,6 @@ buildGoModule rec {
     "sqlite_stat4"
     "sqlite_userauth"
     "sqlite_vtable"
-    "sqlite_icu"
     "no_adodb"
   ];
 

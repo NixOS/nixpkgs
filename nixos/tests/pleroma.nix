@@ -25,6 +25,18 @@
 
 import ./make-test-python.nix ({ pkgs, ... }:
   let
+  # Fix for https://github.com/ihabunek/toot/pull/405. Includes
+  # https://github.com/ihabunek/toot/pull/405. TOREMOVE when
+  # toot > 0.38.1
+  patched-toot = pkgs.toot.overrideAttrs (old: {
+    version = "unstable-24-09-2023";
+    src = pkgs.fetchFromGitHub {
+      owner = "ihabunek";
+      repo = "toot";
+      rev = "30857f570d64a26da80d0024227a8259f7cb65b5";
+      sha256 = "sha256-BxrI7UY9bfqPzS+VLqCFSmu4PkIkvhntcEeNJb1AzOs=";
+    };
+  });
   send-toot = pkgs.writeScriptBin "send-toot" ''
     set -eux
     # toot is using the requests library internally. This library
@@ -164,9 +176,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
   '';
 
   tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=pleroma.nixos.test' -days 36500
     mkdir -p $out
-    cp key.pem cert.pem $out
+    openssl req -x509 \
+      -subj '/CN=pleroma.nixos.test/' -days 49710 \
+      -addext 'subjectAltName = DNS:pleroma.nixos.test' \
+      -keyout "$out/key.pem" -newkey ed25519 \
+      -out "$out/cert.pem" -noenc
   '';
 
   hosts = nodes: ''
@@ -180,7 +195,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       environment.systemPackages = with pkgs; [
-        toot
+        patched-toot
         send-toot
       ];
     };

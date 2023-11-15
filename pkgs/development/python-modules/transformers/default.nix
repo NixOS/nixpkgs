@@ -51,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.35.0";
+  version = "4.35.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f66Y6kcAm//Z2UyCl/iEBDP+6nm3QJ5EtwpAnBn4gbc=";
+    hash = "sha256-ayHx3U/Jpo8K189M6qjRvRbFa9QEpx2uqG85hB8zC/Y=";
   };
 
   propagatedBuildInputs = [

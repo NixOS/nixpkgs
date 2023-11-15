@@ -4,7 +4,7 @@
 , semgrep
 }:
 let
-  version = "0.1.7";
+  version = "0.1.11";
 in
 python3.pkgs.buildPythonApplication {
   pname = "open-interpreter";
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication {
     owner = "KillianLucas";
     repo = "open-interpreter";
     rev = "v${version}";
-    hash = "sha256-U+GKvlFY9vkjXaPI0H5RsoMFLlLq1+IuSy/cOj/LNSw=";
+    hash = "sha256-viUMGUBy5UNWag6P8tXE4TcJIx53Q/tASNV3bmCCK0g=";
   };
 
   nativeBuildInputs = [

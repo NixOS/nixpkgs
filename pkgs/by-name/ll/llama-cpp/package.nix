@@ -10,7 +10,7 @@
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 
-, rocmSupport ? false
+, rocmSupport ? config.rocmSupport
 , rocmPackages ? { }
 
 , openclSupport ? false

@@ -2,6 +2,7 @@
 , writeShellScriptBin
 , buildGoModule
 , makeWrapper
+, darwin
 , fetchFromGitHub
 , coreutils
 , nettools
@@ -40,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.2.1705.0";
+  version = "3.2.1798.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-4KhDD5G/fS1rHitQdbYqIz6RSQ3PTMZsUENC202a/Do=";
+    hash = "sha256-A7M8UbOJT9zvbcwlARMwA7a+LGk8KYmo9j31yzh5FDQ=";
   };
 
   vendorHash = null;
@@ -60,7 +61,11 @@ buildGoModule rec {
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.DarwinTools
+  ];
 
   # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1630.0/makefile#L120-L138
   # The updater is not built because it cannot work on NixOS
@@ -137,7 +142,8 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
+    wrapProgram $out/bin/amazon-ssm-agent \
+      --prefix PATH : "${lib.makeBinPath [ bashInteractive ]}"
   '';
 
   passthru = {
@@ -148,6 +154,8 @@ buildGoModule rec {
     };
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
     changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
@@ -155,8 +163,5 @@ buildGoModule rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
-
-    # Darwin support is broken
-    broken = stdenv.isDarwin;
   };
 }

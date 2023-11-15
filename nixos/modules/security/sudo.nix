@@ -192,10 +192,12 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [
-      { assertion = cfg.package.pname != "sudo-rs";
-        message = "The NixOS `sudo` module does not work with `sudo-rs` yet."; }
-    ];
+    assertions = [ {
+      assertion = cfg.package.pname != "sudo-rs";
+      message = ''
+        NixOS' `sudo` module does not support `sudo-rs`; see `security.sudo-rs` instead.
+      '';
+    } ];
 
     security.sudo.extraRules =
       let
