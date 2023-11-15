@@ -1,4 +1,4 @@
-{ lib, maven, fetchFromGitHub, jre, makeWrapper }:
+{ lib, maven, fetchFromGitHub, jre, makeWrapper, nix-update-script }:
 
 maven.buildMavenPackage rec {
   pname = "h2";
@@ -29,6 +29,9 @@ maven.buildMavenPackage rec {
     cp -r h2/src/docsrc/* $doc/share/doc/h2
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "^version-([0-9.]+)$" ];
+  };
 
   meta = with lib; {
     description = "The Java SQL database";
