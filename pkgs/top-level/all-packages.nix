@@ -37680,6 +37680,9 @@ with pkgs;
 
   deliantra-server = callPackage ../games/deliantra/server.nix {
     stdenv = gcc10StdenvCompat;
+    # perl538 defines 'struct object' in sv.h. many conflicts result
+    perl = perl536;
+    perlPackages = perl536Packages;
   };
   deliantra-arch = callPackage ../games/deliantra/arch.nix {
     stdenv = gcc10StdenvCompat;
