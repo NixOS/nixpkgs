@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <ImplicitUsings>true</ImplicitUsings>
+        <PublishReadyToRun>true</PublishReadyToRun>
+    </PropertyGroup>
+</Project>
