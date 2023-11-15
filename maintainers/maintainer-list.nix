@@ -6453,6 +6453,12 @@
     githubId = 10353047;
     name = "Tobias Happ";
   };
+  gesperon = {
+    email = "gesperon@mac.com";
+    github = "gesperon";
+    githubid = 117491118;
+    name = "Gabor Esperon";
+  };
   getchoo = {
     email = "getchoo@tuta.io";
     github = "getchoo";
