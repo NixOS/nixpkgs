@@ -170,10 +170,13 @@ let
         --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
-        ${optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
+        ${optionalString (cfg.additionalCapabilities != [])
           ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"''
         } \
-        ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
+        ${optionalString (cfg.systemCallFilter != [])
+          ''--system-call-filter="${concatStringsSep " " cfg.systemCallFilter}"''
+        } \
+        ${optionalString (cfg.tmpfs != [])
           ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
@@ -437,6 +440,7 @@ let
     {
       extraVeths = {};
       additionalCapabilities = [];
+      systemCallFilter = [];
       ephemeral = false;
       timeoutStartSec = "1min";
       allowedDevices = [];
@@ -444,7 +448,7 @@ let
       hostAddress6 = null;
       localAddress = null;
       localAddress6 = null;
-      tmpfs = null;
+      tmpfs = [];
     };
 
 in
@@ -539,9 +543,19 @@ in
               default = [];
               example = [ "CAP_NET_ADMIN" "CAP_MKNOD" ];
               description = lib.mdDoc ''
-                Grant additional capabilities to the container.  See the
+                Grant additional capabilities to the container. See the
                 capabilities(7) and systemd-nspawn(1) man pages for more
                 information.
+              '';
+            };
+
+            systemCallFilter = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "add_key" "keyctl" "bpf" ];
+              description = lib.mdDoc ''
+                Set the system call filter for the container. See the
+                {manpage}`systemd-nspawn(1)` man page for more information.
               '';
             };
 
