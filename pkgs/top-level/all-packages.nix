@@ -15261,7 +15261,9 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
-  zincsearch = callPackage ../servers/search/zincsearch { };
+  zincsearch = callPackage ../servers/search/zincsearch {
+    buildGoModule = buildGo120Module;
+  };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
