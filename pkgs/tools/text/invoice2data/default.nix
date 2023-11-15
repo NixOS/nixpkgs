@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pdfminer-six
     pillow
     pyyaml
+    setuptools
   ];
 
   makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [
