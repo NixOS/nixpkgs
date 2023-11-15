@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch2
 , cargo
 , desktop-file-utils
 , itstool
@@ -22,21 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "loupe";
-  version = "45.0";
+  version = "45.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major version}/loupe-${version}.tar.xz";
-    hash = "sha256-TWSP47a/6lUpmGWW1qRQp205fx3wqNju3s8BBAYiFHE=";
+    hash = "sha256-nX+ieKEASHKUQZoopvCo1ZGL2XnRy0tGqF6Pfe0U0+w=";
   };
 
   patches = [
-    # Enable glycin sandbox
-    # https://gitlab.gnome.org/GNOME/loupe/-/issues/252
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/loupe/-/commit/aa2b4d59409c92ee402c6a86cb7c02f06854bb8d.patch";
-      hash = "sha256-zKvXrPeIDGbK0RXcZoMkf2FAk+Do099kY7pt6KhFMEs=";
-    })
-
     # Fix paths in glycin library
     glycin-loaders.passthru.glycinPathsPatch
   ];
