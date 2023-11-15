@@ -2,21 +2,19 @@
 
 { lib
 , dotnet-sdk
+, TargetFramework
 , buildDotnetModule
 , runCommand
 }:
 
 let
-  # Specify the TargetFramework via an environment variable so that we don't
-  # have to update the .csproj files when updating dotnet-sdk
-  TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
-
   application = buildDotnetModule {
     name = "simple-build-test-application";
     src = ./application;
     nugetDeps = ./nuget-deps.nix;
 
-    inherit TargetFramework;
+    inherit TargetFramework dotnet-sdk;
+    dotnet-runtime = dotnet-sdk;
   };
 in
 

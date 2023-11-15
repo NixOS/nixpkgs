@@ -2,15 +2,12 @@
 
 { lib
 , dotnet-sdk
+, TargetFramework
 , buildDotnetModule
 , runCommand
 }:
 
 let
-  # Specify the TargetFramework via an environment variable so that we don't
-  # have to update the .csproj files when updating dotnet-sdk
-  TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
-
   application = buildDotnetModule {
     name = "publish-trimmed-test-application";
     src = ./application;
@@ -21,7 +18,7 @@ let
     # the PublishTrimmed property to avoid errors.
     selfContainedBuild = true;
 
-    inherit TargetFramework;
+    inherit TargetFramework dotnet-sdk;
   };
 in
 

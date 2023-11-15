@@ -4,6 +4,7 @@
 
 { lib
 , dotnet-sdk
+, TargetFramework
 , buildDotnetModule
 , runCommand
 }:
@@ -11,14 +12,10 @@
 let
   nugetDeps = ./nuget-deps.nix;
 
-  # Specify the TargetFramework via an environment variable so that we don't
-  # have to update the .csproj files when updating dotnet-sdk
-  TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
-
   library = buildDotnetModule {
     name = "project-references-test-library";
     src = ./library;
-    inherit nugetDeps TargetFramework;
+    inherit nugetDeps TargetFramework dotnet-sdk;
 
     packNupkg = true;
   };
@@ -26,7 +23,8 @@ let
   application = buildDotnetModule {
     name = "project-references-test-application";
     src = ./application;
-    inherit nugetDeps TargetFramework;
+    inherit nugetDeps TargetFramework dotnet-sdk;
+    dotnet-runtime = dotnet-sdk;
 
     projectReferences = [ library ];
   };
