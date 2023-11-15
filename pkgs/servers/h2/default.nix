@@ -35,9 +35,11 @@ maven.buildMavenPackage rec {
 
   meta = with lib; {
     description = "The Java SQL database";
-    homepage = "http://www.h2database.com/html/main.html";
+    homepage = "https://h2database.com/html/main.html";
+    changelog = "https://h2database.com/html/changelog.html";
     license = licenses.mpl20;
     platforms = lib.platforms.linux;
     maintainers = with maintainers; [ mahe anthonyroussel ];
+    mainProgram = "h2";
   };
 }
