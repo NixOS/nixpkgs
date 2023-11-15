@@ -143,9 +143,40 @@ let
           {manpage}`systemd.nspawn(5)` for details.
         '';
       };
+
+      extraDrvConfig = mkOption {
+        type = types.nullOr types.package;
+        default = null;
+        description = ''
+          Extra config for an nspawn-unit that is generated via `nix-build`.
+          This is necessary since nspawn doesn't support overrides in
+          `/etc/systemd/nspawn` natively and sometimes a derivation
+          is needed for configs (e.g. to determine all needed store-paths to bind-mount
+          into a machine).
+        '';
+      };
     };
 
   };
+
+  makeUnit' = name: def:
+    if def.extraDrvConfig == null || !def.enable
+      then pkgs.runCommand "nspawn-inst" { } ("cat ${makeUnit name def}/${shellEscape name} > $out")
+    else pkgs.runCommand "nspawn-${mkPathSafeName name}-custom"
+      { preferLocalBuild = true;
+        allowSubstitutes = false;
+      } (let
+        name' = shellEscape name;
+      in ''
+        if [ ! -f "${def.extraDrvConfig}" ]; then
+          echo "systemd.nspawn.${name}.extraDrvConfig is not a file!"
+          exit 1
+        fi
+
+        touch $out
+        cat ${makeUnit name def}/${name'} > $out
+        cat ${def.extraDrvConfig} >> $out
+      '');
 
   instanceToUnit =
     name: def:
@@ -161,9 +192,9 @@ let
           [Network]
           ${attrsToSection def.networkConfig}
         '';
-      } // def;
-    in
-    base // { unit = makeUnit name base; };
+      } // (filterAttrs (n: const (elem n optWhitelist)) def);
+      optWhitelist = [ "extraDrvConfig" "enable" ];
+    in makeUnit' name base;
 
 in
 {
@@ -180,29 +211,20 @@ in
 
   config =
     let
-      units = mapAttrs' (
-        n: v:
-        let
-          nspawnFile = "${n}.nspawn";
-        in
-        nameValuePair nspawnFile (instanceToUnit nspawnFile v)
-      ) cfg;
+      units = mapAttrs' (name: value: {
+        name = "systemd/nspawn/${name}.nspawn";
+        value.source = instanceToUnit "${name}.nspawn" value;
+      }) cfg;
     in
-    mkMerge [
-      (mkIf (cfg != { }) {
-        environment.etc."systemd/nspawn".source = mkIf (cfg != { }) (generateUnits {
-          allowCollisions = false;
-          type = "nspawn";
-          inherit units;
-          upstreamUnits = [ ];
-          upstreamWants = [ ];
-        });
-      })
-      {
-        systemd.targets.multi-user.wants = [ "machines.target" ];
-        systemd.services."systemd-nspawn@".environment = {
-          SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = mkDefault "1";
-        };
-      }
-    ];
+      mkMerge [
+        (mkIf (cfg != {}) {
+          environment.etc = units;
+        })
+        {
+          systemd.targets.multi-user.wants = [ "machines.target" ];
+          systemd.services."systemd-nspawn@".environment = {
+            SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = mkDefault "1";
+          };
+        }
+      ];
 }
