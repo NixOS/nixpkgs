@@ -1,178 +1,83 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
 
-with utils.systemdUtils.unitOptions;
-with utils.systemdUtils.lib;
-with lib;
-
 let
   cfg = config.systemd.nspawn;
-
-  checkExec = checkUnitConfig "Exec" [
-    (assertOnlyFields [
-      "Boot"
-      "ProcessTwo"
-      "Parameters"
-      "Environment"
-      "User"
-      "WorkingDirectory"
-      "PivotRoot"
-      "Capability"
-      "DropCapability"
-      "NoNewPrivileges"
-      "KillSignal"
-      "Personality"
-      "MachineID"
-      "PrivateUsers"
-      "NotifyReady"
-      "SystemCallFilter"
-      "LimitCPU"
-      "LimitFSIZE"
-      "LimitDATA"
-      "LimitSTACK"
-      "LimitCORE"
-      "LimitRSS"
-      "LimitNOFILE"
-      "LimitAS"
-      "LimitNPROC"
-      "LimitMEMLOCK"
-      "LimitLOCKS"
-      "LimitSIGPENDING"
-      "LimitMSGQUEUE"
-      "LimitNICE"
-      "LimitRTPRIO"
-      "LimitRTTIME"
-      "OOMScoreAdjust"
-      "CPUAffinity"
-      "Hostname"
-      "ResolvConf"
-      "Timezone"
-      "LinkJournal"
-      "Ephemeral"
-      "AmbientCapability"
-    ])
-    (assertValueOneOf "Boot" boolValues)
-    (assertValueOneOf "ProcessTwo" boolValues)
-    (assertValueOneOf "NotifyReady" boolValues)
-  ];
-
-  checkFiles = checkUnitConfig "Files" [
-    (assertOnlyFields [
-      "ReadOnly"
-      "Volatile"
-      "Bind"
-      "BindReadOnly"
-      "TemporaryFileSystem"
-      "Overlay"
-      "OverlayReadOnly"
-      "PrivateUsersChown"
-      "BindUser"
-      "Inaccessible"
-      "PrivateUsersOwnership"
-    ])
-    (assertValueOneOf "ReadOnly" boolValues)
-    (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
-    (assertValueOneOf "PrivateUsersChown" boolValues)
-    (assertValueOneOf "PrivateUsersOwnership" [
-      "off"
-      "chown"
-      "map"
-      "auto"
-    ])
-  ];
-
-  checkNetwork = checkUnitConfig "Network" [
-    (assertOnlyFields [
-      "Private"
-      "VirtualEthernet"
-      "VirtualEthernetExtra"
-      "Interface"
-      "MACVLAN"
-      "IPVLAN"
-      "Bridge"
-      "Zone"
-      "Port"
-    ])
-    (assertValueOneOf "Private" boolValues)
-    (assertValueOneOf "VirtualEthernet" boolValues)
-  ];
+  inherit (utils.systemdUtils.unitOptions) unitOption;
 
   instanceOptions = {
-    options = (getAttrs [ "enable" ] sharedOptions) // {
-      execConfig = mkOption {
-        default = { };
-        example = {
-          Parameters = "/bin/sh";
-        };
-        type = types.addCheck (types.attrsOf unitOption) checkExec;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Exec]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
+    imports = [
+      (lib.mkRenamedOptionModule [ "execConfig" ] [ "settings" "Exec" ])
+      (lib.mkRenamedOptionModule [ "filesConfig" ] [ "settings" "Files" ])
+      (lib.mkRenamedOptionModule [ "networkConfig" ] [ "settings" "Network" ])
+    ];
+
+    options = {
+      enable = lib.mkOption {
+        default = true;
+        type = lib.types.bool;
+        description = "If set to false, this instance's configuration file will not be generated.";
       };
 
-      filesConfig = mkOption {
+      settings = lib.mkOption {
         default = { };
-        example = {
-          Bind = [ "/home/alice" ];
-        };
-        type = types.addCheck (types.attrsOf unitOption) checkFiles;
         description = ''
-          Each attribute in this set specifies an option in the
-          `[Files]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
+          Settings for this nspawn instance, organized by section.
+          See {manpage}`systemd.nspawn(5)` for available options.
         '';
-      };
+        type = lib.types.submodule {
+          options.Exec = lib.mkOption {
+            default = { };
+            example = {
+              Parameters = "/bin/sh";
+            };
+            type = lib.types.attrsOf unitOption;
+            description = ''
+              Options for the `[Exec]` section.
+              See {manpage}`systemd.nspawn(5)` for details.
+            '';
+          };
 
-      networkConfig = mkOption {
-        default = { };
-        example = {
-          Private = false;
+          options.Files = lib.mkOption {
+            default = { };
+            example = {
+              Bind = [ "/home/alice" ];
+            };
+            type = lib.types.attrsOf unitOption;
+            description = ''
+              Options for the `[Files]` section.
+              See {manpage}`systemd.nspawn(5)` for details.
+            '';
+          };
+
+          options.Network = lib.mkOption {
+            default = { };
+            example = {
+              Private = false;
+            };
+            type = lib.types.attrsOf unitOption;
+            description = ''
+              Options for the `[Network]` section.
+              See {manpage}`systemd.nspawn(5)` for details.
+            '';
+          };
         };
-        type = types.addCheck (types.attrsOf unitOption) checkNetwork;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Network]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
       };
     };
-
   };
-
-  instanceToUnit =
-    name: def:
-    let
-      base = {
-        text = ''
-          [Exec]
-          ${attrsToSection def.execConfig}
-
-          [Files]
-          ${attrsToSection def.filesConfig}
-
-          [Network]
-          ${attrsToSection def.networkConfig}
-        '';
-      }
-      // def;
-    in
-    base // { unit = makeUnit name base; };
 
 in
 {
 
   options = {
 
-    systemd.nspawn = mkOption {
+    systemd.nspawn = lib.mkOption {
       default = { };
-      type = with types; attrsOf (submodule instanceOptions);
+      type = lib.types.attrsOf (lib.types.submodule instanceOptions);
       description = "Definition of systemd-nspawn configurations.";
     };
 
@@ -180,28 +85,19 @@ in
 
   config =
     let
-      units = mapAttrs' (
-        n: v:
-        let
-          nspawnFile = "${n}.nspawn";
-        in
-        nameValuePair nspawnFile (instanceToUnit nspawnFile v)
-      ) cfg;
+      enabledInstances = lib.filterAttrs (_: v: v.enable) cfg;
     in
-    mkMerge [
-      (mkIf (cfg != { }) {
-        environment.etc."systemd/nspawn".source = mkIf (cfg != { }) (generateUnits {
-          allowCollisions = false;
-          type = "nspawn";
-          inherit units;
-          upstreamUnits = [ ];
-          upstreamWants = [ ];
-        });
+    lib.mkMerge [
+      (lib.mkIf (enabledInstances != { }) {
+        environment.etc = lib.mapAttrs' (name: value: {
+          name = "systemd/nspawn/${name}.nspawn";
+          value.text = utils.systemdUtils.lib.settingsToSections value.settings;
+        }) enabledInstances;
       })
       {
         systemd.targets.multi-user.wants = [ "machines.target" ];
         systemd.services."systemd-nspawn@".environment = {
-          SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = mkDefault "1";
+          SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = lib.mkDefault "1";
         };
       }
     ];

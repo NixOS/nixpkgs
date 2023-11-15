@@ -90,20 +90,20 @@ in
         systemd.nspawn."${unitName}" = {
           enable = true;
 
-          execConfig = optionsToConfig execOptions // {
+          settings.Exec = optionsToConfig execOptions // {
             Boot = true;
             ProcessTwo = true;
             NotifyReady = true;
           };
 
-          filesConfig = optionsToConfig filesOptions // {
+          settings.Files = optionsToConfig filesOptions // {
             ReadOnly = true;
             Volatile = "state";
             PrivateUsersChown = true;
             PrivateUsersOwnership = "auto";
           };
 
-          networkConfig = optionsToConfig networkOptions // {
+          settings.Network = optionsToConfig networkOptions // {
             Private = true;
             VirtualEthernet = true;
           };
