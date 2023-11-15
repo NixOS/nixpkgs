@@ -3,7 +3,7 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
-  inherit (lib.trivial) compare min id;
+  inherit (lib.trivial) compare min id pipe;
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -197,41 +197,11 @@ rec {
       The list to filter using the predicate.
     */
     input:
-    let
-      # Whether each element in the input list is included
-      includeList = imap0 ipred input;
-
-      # The length of output
-      outputLength = count id includeList;
-
-      # Return the next included input index that's equal to or larger to the
-      # given starting index
-      nextIncludedInputIndex = i:
-        if elemAt includeList i then i
-        else nextIncludedInputIndex (i + 1);
-
-      # The list of all input indices that are included in the output
-      includedInputIndices = genList (o:
-        # For the first included index start searching at 0
-        if o == 0 then nextIncludedInputIndex 0
-
-        # For the next included index,
-        #                            get the previous included index
-        #                            v
-        else nextIncludedInputIndex (elemAt includedInputIndices (o - 1) + 1)
-        #    ^                                       go to the next index ^
-        #    And start searching for the next one from there
-        #
-        # This makes it so that `nextIncludedInputIndex` is called exactly once for every input index
-
-      ) outputLength;
-
-      # The output
-    in genList (o:
-      # Get the included input index for the given output index
-      # And then get that input index from the input list
-      elemAt input (elemAt includedInputIndices o)
-    ) outputLength;
+    pipe input [
+      (imap0 (i: v: { inherit i v; }))
+      (filter ({ i, v }: ipred i v))
+      (map ({ v, ... }: v))
+    ];
 
   /* Map and concatenate the result.
 
