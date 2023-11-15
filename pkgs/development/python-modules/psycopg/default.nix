@@ -50,6 +50,14 @@ let
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
+
+    # https://github.com/psycopg/psycopg/pull/669
+    # mark some tests as timing remove on next version update
+    (fetchpatch {
+      name = "mark_tests_as_timing.patch";
+      url = "https://github.com/psycopg/psycopg/commit/00a3c640dd836328ba15931b400b012171f648c2.patch";
+      hash = "sha256-DoVZv1yy9gHOKl0AdVLir+C+UztJZVjboLhS5af2944=";
+    })
   ];
 
   baseMeta = {
