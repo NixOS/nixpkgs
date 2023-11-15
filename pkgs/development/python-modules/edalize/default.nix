@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "olofk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jsrJr/iuezh9/KL0PykWB1XKev4Wr5QeDh0ZWNMZSp8=";
+    hash = "sha256-foq1CwIe86d+s7PlhLlGpnJCwrpOyr+uf5/RMLASSJU=";
   };
 
   postPatch = ''
