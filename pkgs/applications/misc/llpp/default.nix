@@ -5,22 +5,14 @@ assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "41";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "criticic";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Doj0zLYI1pi7eK01+29xFLYPtc8+fWzj10292+PmToE=";
+    hash = "sha256-B/jKvBtBwMOErUVmGFGXXIT8FzMl1DFidfDCHIH41TU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "system-makedeps-and-ocaml5.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-makedeps-and-ocaml5.patch?h=llpp&id=32955e115f914bb96348d288f9af9c6e3e80a02b";
-      hash = "sha256-3rcPsR+M8Jx7M8GHUIsw0WNBvp6aE7BcPr4yk2vT9Ik=";
-    })
-  ];
 
   postPatch = ''
     sed -i "2d;s/ver=.*/ver=${version}/" build.bash
