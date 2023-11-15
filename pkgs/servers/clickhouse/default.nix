@@ -152,6 +152,10 @@ in mkDerivation rec {
     popd
 
     cargoSetupPostPatchHook() { true; }
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Make sure Darwin invokes lld.ld64 not lld.
+    substituteInPlace cmake/tools.cmake \
+      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
   '';
 
   cmakeFlags = [
@@ -159,6 +163,12 @@ in mkDerivation rec {
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
+    # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+  };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
   hardeningDisable = [ "fortify" ];
