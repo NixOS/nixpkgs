@@ -786,9 +786,9 @@ rec {
         _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)
       ) (_directoryEntries path lhs);
 
-  # Filters all files in a file set based on a predicate
-  # Type: ({ name, type, ... } -> Bool) -> FileSet -> FileSet
-  _fileFilter = predicate: fileset:
+  # Filters all files in a path based on a predicate
+  # Type: ({ name, type, ... } -> Bool) -> Path -> FileSet
+  _fileFilter = predicate: root:
     let
       # Check the predicate for a single file
       # Type: String -> String -> filesetTree
@@ -807,19 +807,22 @@ rec {
 
       # Check the predicate for all files in a directory
       # Type: Path -> filesetTree
-      fromDir = path: tree:
-        mapAttrs (name: subtree:
-          if isAttrs subtree || subtree == "directory" then
-            fromDir (path + "/${name}") subtree
-          else if subtree == null then
-            null
+      fromDir = path:
+        mapAttrs (name: type:
+          if type == "directory" then
+            fromDir (path + "/${name}")
           else
-            fromFile name subtree
-        ) (_directoryEntries path tree);
+            fromFile name type
+        ) (readDir path);
+
+      rootType = pathType root;
     in
-    if fileset._internalIsEmptyWithoutBase then
-      _emptyWithoutBase
+    if rootType == "directory" then
+      _create root (fromDir root)
     else
-      _create fileset._internalBase
-        (fromDir fileset._internalBase fileset._internalTree);
+      # Single files are turned into a directory containing that file or nothing.
+      _create (dirOf root) {
+        ${baseNameOf root} =
+          fromFile (baseNameOf root) rootType;
+      };
 }

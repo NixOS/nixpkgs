@@ -366,7 +366,7 @@ in {
           type :: String,
           ...
         } -> Bool)
-        -> FileSet
+        -> Path
         -> FileSet
 
     Example:
@@ -397,14 +397,24 @@ in {
       Other attributes may be added in the future.
     */
     predicate:
-    # The file set to filter based on the predicate function
-    fileset:
+    # The path whose files to filter
+    path:
     if ! isFunction predicate then
       throw ''
         lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
+    else if ! isPath path then
+      if path._type or "" == "fileset" then
+        throw ''
+          lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
+              If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
+      else
+        throw ''
+          lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
     else
-      _fileFilter predicate
-        (_coerce "lib.fileset.fileFilter: Second argument" fileset);
+      _fileFilter predicate path;
 
   /*
     The file set containing all files that are in both of two given file sets.
