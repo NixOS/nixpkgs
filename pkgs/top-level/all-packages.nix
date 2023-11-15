@@ -13920,8 +13920,6 @@ with pkgs;
 
   tinycbor = callPackage ../development/libraries/tinycbor { };
 
-  tinycompress = callPackage ../development/libraries/tinycompress { };
-
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn { };
 
   tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
@@ -24660,7 +24658,7 @@ with pkgs;
     });
 
   libsForQt5 = recurseIntoAttrs (import ./qt5-packages.nix {
-    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsBuildHost;
+    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
   });
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
@@ -26627,7 +26625,10 @@ with pkgs;
 
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
-  mastodon = callPackage ../servers/mastodon { };
+  mastodon = callPackage ../servers/mastodon {
+    nodejs-slim = nodejs-slim_20;
+    ruby = ruby_3_2;
+  };
 
   gotosocial = callPackage ../servers/gotosocial { };
 
@@ -27614,19 +27615,9 @@ with pkgs;
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
-  tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
-
-  alsa-project = callPackage ../os-specific/linux/alsa-project { };
-  inherit (alsa-project)
-    alsa-firmware
-    alsa-lib
-    alsa-oss
-    alsa-plugins
-    alsa-plugins-wrapper
-    alsa-tools
-    alsa-topology-conf
-    alsa-ucm-conf
-    alsa-utils;
+  alsa-utils = callPackage ../by-name/al/alsa-utils/package.nix {
+    fftw = fftwFloat;
+  };
 
   apparency = callPackage ../os-specific/darwin/apparency { };
 

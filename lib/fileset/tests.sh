@@ -810,6 +810,13 @@ checkFileset 'difference ./. ./b'
 
 ## File filter
 
+# The first argument needs to be a function
+expectFailure 'fileFilter null (abort "this is not needed")' 'lib.fileset.fileFilter: First argument is of type null, but it should be a function instead.'
+
+# The second argument can be a file set or an existing path
+expectFailure 'fileFilter (file: abort "this is not needed") null' 'lib.fileset.fileFilter: Second argument is of type null, but it should be a file set or a path instead.'
+expectFailure 'fileFilter (file: abort "this is not needed") ./a' 'lib.fileset.fileFilter: Second argument \('"$work"'/a\) is a path that does not exist.'
+
 # The predicate is not called when there's no files
 tree=()
 checkFileset 'fileFilter (file: abort "this is not needed") ./.'
@@ -874,6 +881,26 @@ tree=(
 checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)'
 # but here we need to use ./c
 checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
+
+# Also lazy, the filter isn't called on a filtered out path
+tree=(
+    [a]=1
+    [b]=0
+    [c]=0
+)
+checkFileset 'fileFilter (file: assert file.name != "c"; file.name == "a") (difference ./. ./c)'
+
+# Make sure single files are filtered correctly
+tree=(
+    [a]=1
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; true) ./a'
+tree=(
+    [a]=0
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; false) ./a'
 
 ## Tracing
 

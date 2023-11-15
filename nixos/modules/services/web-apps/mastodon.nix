@@ -17,9 +17,6 @@ let
     WEB_CONCURRENCY = toString cfg.webProcesses;
     MAX_THREADS = toString cfg.webThreads;
 
-    # mastodon-streaming concurrency.
-    STREAMING_CLUSTER_NUM = toString cfg.streamingProcesses;
-
     DB_USER = cfg.database.user;
 
     REDIS_HOST = cfg.redis.host;
@@ -141,7 +138,43 @@ let
     })
   ) cfg.sidekiqProcesses;
 
+  streamingUnits = builtins.listToAttrs
+      (map (i: {
+        name = "mastodon-streaming-${toString i}";
+        value = {
+          after = [ "network.target" "mastodon-init-dirs.service" ]
+            ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+            ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+          requires = [ "mastodon-init-dirs.service" ]
+            ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
+            ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
+          wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
+          description = "Mastodon streaming ${toString i}";
+          environment = env // { SOCKET = "/run/mastodon-streaming/streaming-${toString i}.socket"; };
+          serviceConfig = {
+            ExecStart = "${cfg.package}/run-streaming.sh";
+            Restart = "always";
+            RestartSec = 20;
+            EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
+            WorkingDirectory = cfg.package;
+            # Runtime directory and mode
+            RuntimeDirectory = "mastodon-streaming";
+            RuntimeDirectoryMode = "0750";
+            # System Call Filtering
+            SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@memlock" "@resources" ])) "pipe" "pipe2" ];
+          } // cfgService;
+        };
+      })
+      (lib.range 1 cfg.streamingProcesses));
+
 in {
+
+  imports = [
+    (lib.mkRemovedOptionModule
+      [ "services" "mastodon" "streamingPort" ]
+      "Mastodon currently doesn't support streaming via TCP ports. Please open a PR if you need this."
+    )
+  ];
 
   options = {
     services.mastodon = {
@@ -191,18 +224,13 @@ in {
         default = "mastodon";
       };
 
-      streamingPort = lib.mkOption {
-        description = lib.mdDoc "TCP port used by the mastodon-streaming service.";
-        type = lib.types.port;
-        default = 55000;
-      };
       streamingProcesses = lib.mkOption {
         description = lib.mdDoc ''
-          Processes used by the mastodon-streaming service.
-          Defaults to the number of CPU cores minus one.
+          Number of processes used by the mastodon-streaming service.
+          Recommended is the amount of your CPU cores minus one.
         '';
-        type = lib.types.nullOr lib.types.int;
-        default = null;
+        type = lib.types.ints.positive;
+        example = 3;
       };
 
       webPort = lib.mkOption {
@@ -603,6 +631,12 @@ in {
       after = [ "network.target" ];
     };
 
+    systemd.targets.mastodon-streaming = {
+      description = "Target for all Mastodon streaming services";
+      wantedBy = [ "multi-user.target" "mastodon.target" ];
+      after = [ "network.target" ];
+    };
+
     systemd.services.mastodon-init-dirs = {
       script = ''
         umask 077
@@ -688,33 +722,6 @@ in {
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service";
     };
 
-    systemd.services.mastodon-streaming = {
-      after = [ "network.target" "mastodon-init-dirs.service" ]
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      requires = [ "mastodon-init-dirs.service" ]
-        ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
-        ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
-      wantedBy = [ "mastodon.target" ];
-      description = "Mastodon streaming";
-      environment = env // (if cfg.enableUnixSocket
-        then { SOCKET = "/run/mastodon-streaming/streaming.socket"; }
-        else { PORT = toString(cfg.streamingPort); }
-      );
-      serviceConfig = {
-        ExecStart = "${cfg.package}/run-streaming.sh";
-        Restart = "always";
-        RestartSec = 20;
-        EnvironmentFile = [ "/var/lib/mastodon/.secrets_env" ] ++ cfg.extraEnvFiles;
-        WorkingDirectory = cfg.package;
-        # Runtime directory and mode
-        RuntimeDirectory = "mastodon-streaming";
-        RuntimeDirectoryMode = "0750";
-        # System Call Filtering
-        SystemCallFilter = [ ("~" + lib.concatStringsSep " " (systemCallsList ++ [ "@memlock" "@resources" ])) "pipe" "pipe2" ];
-      } // cfgService;
-    };
-
     systemd.services.mastodon-web = {
       after = [ "network.target" "mastodon-init-dirs.service" ]
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
@@ -780,9 +787,19 @@ in {
         };
 
         locations."/api/v1/streaming/" = {
-          proxyPass = (if cfg.enableUnixSocket then "http://unix:/run/mastodon-streaming/streaming.socket" else "http://127.0.0.1:${toString(cfg.streamingPort)}/");
+          proxyPass = "http://mastodon-streaming";
           proxyWebsockets = true;
         };
+      };
+      upstreams.mastodon-streaming = {
+        extraConfig = ''
+          least_conn;
+        '';
+        servers = builtins.listToAttrs
+          (map (i: {
+            name = "unix:/run/mastodon-streaming/streaming-${toString i}.socket";
+            value = { };
+          }) (lib.range 1 cfg.streamingProcesses));
       };
     };
 
@@ -819,7 +836,7 @@ in {
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
   }
-  { systemd.services = sidekiqUnits; }
+  { systemd.services = lib.mkMerge [ sidekiqUnits streamingUnits ]; }
   ]);
 
   meta.maintainers = with lib.maintainers; [ happy-river erictapen ];

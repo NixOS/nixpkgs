@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     description = "Free and Open Source 2D and 3D game engine";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ twey shiryel ];
+    maintainers = with maintainers; [ shiryel ];
     mainProgram = "godot4";
   };
 }
