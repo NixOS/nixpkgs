@@ -20,8 +20,6 @@ mkCoqDerivation {
     { case = "8.9";  out = "0.6.5"; }
     { case = "8.8";  out = "0.6.3"; }
     { case = "8.7";  out = "0.6.2"; }
-    { case = "8.6";  out = "0.6.1"; }
-    { case = "8.5";  out = "0.6"; }
   ] null;
 
   release."1.0+8.18".sha256 = "sha256-z14MI1VSYzPqmF1PqDXzymXWRMYoTlQAfR/P3Pdf7fI=";
