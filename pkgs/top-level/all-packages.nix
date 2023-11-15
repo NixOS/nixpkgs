@@ -31440,8 +31440,6 @@ with pkgs;
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
 
-  keepass = callPackage ../applications/misc/keepass { };
-
   keepass-charactercopy = callPackage ../applications/misc/keepass-plugins/charactercopy { };
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
