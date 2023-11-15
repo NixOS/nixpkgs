@@ -19535,6 +19535,12 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  yannip = {
+    email = "yPapandreou7@gmail.com";
+    github = "YanniPapandreou";
+    githubId = 15948162;
+    name = "Yanni Papandreou";
+  };
   yarny = {
     github = "Yarny0";
     githubId = 41838844;
