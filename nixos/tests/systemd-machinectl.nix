@@ -176,17 +176,17 @@ in
         "d /var/lib/machines/shared-decl/usr 0755 root root - -"
       ];
       systemd.nspawn.shared-decl = {
-        execConfig = {
+        settings.Exec = {
           Boot = false;
           Parameters = "${containerSystem}/init";
         };
-        filesConfig = {
+        settings.Files = {
           BindReadOnly = "/nix/store";
         };
       };
 
       systemd.nspawn.${containerName} = {
-        filesConfig = {
+        settings.Files = {
           # workaround to fix kernel namespaces; needed for Nix sandbox
           # https://github.com/systemd/systemd/issues/27994#issuecomment-1704005670
           Bind = "/proc:/run/proc";
