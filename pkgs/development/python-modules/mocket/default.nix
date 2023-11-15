@@ -10,8 +10,9 @@
 , httpx
 , isPy3k
 , pook
+, pytest-asyncio
 , pytest-mock
-, pytestCheckHook
+, pytestCheckXfailHook
 , python-magic
 , pythonOlder
 , redis
@@ -51,8 +52,9 @@ buildPythonPackage rec {
     fastapi
     gevent
     httpx
+    pytest-asyncio
     pytest-mock
-    pytestCheckHook
+    pytestCheckXfailHook
     redis
     requests
     sure
@@ -64,21 +66,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires a live Redis instance
     "tests/main/test_redis.py"
-  ];
-
-  disabledTests = [
-    # tests that require network access (like DNS lookups)
-    "test_truesendall"
-    "test_truesendall_with_chunk_recording"
-    "test_truesendall_with_gzip_recording"
-    "test_truesendall_with_recording"
-    "test_wrongpath_truesendall"
-    "test_truesendall_with_dump_from_recording"
-    "test_truesendall_with_recording_https"
-    "test_truesendall_after_mocket_session"
-    "test_real_request_session"
-    "test_asyncio_record_replay"
-    "test_gethostbyname"
+    # 100% network tests
+    "tests/main/test_httpretty.py"
   ];
 
   pythonImportsCheck = [

@@ -12,7 +12,7 @@
 , pytest-freezegun
 , pytest-httpx
 , pytest-mock
-, pytestCheckHook
+, pytestCheckXfailHook
 , pythonAtLeast
 , pythonOlder
 , pythonRelaxDepsHook
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytestCheckXfailHook
   ];
 
   checkInputs = [
@@ -82,18 +82,13 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Tests require network access
+    # requires env.TEST_QUANTUM_PROCESSOR
     "test/e2e/"
     "test/unit/test_api.py"
-    "test/unit/test_engagement_manager.py"
+    # nearly 100% network tests
     "test/unit/test_operator_estimation.py"
-    "test/unit/test_wavefunction_simulator.py"
     "test/unit/test_compatibility_v2_operator_estimation.py"
-    "test/unit/test_compatibility_v2_quantum_computer.py"
     "test/unit/test_compatibility_v2_qvm.py"
-    "test/unit/test_quantum_computer.py"
-    "test/unit/test_qvm.py"
-    "test/unit/test_reference_wavefunction.py"
     # Out-dated
     "test/unit/test_qpu_client.py"
     "test/unit/test_qvm_client.py"
