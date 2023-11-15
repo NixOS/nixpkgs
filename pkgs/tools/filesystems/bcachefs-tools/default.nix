@@ -24,10 +24,6 @@
 }:
 let
   version = "1.3.1";
-in
-stdenv.mkDerivation {
-  pname = "bcachefs-tools";
-  inherit version;
 
   src = fetchFromGitHub {
     owner = "koverstreet";
@@ -35,6 +31,10 @@ stdenv.mkDerivation {
     rev = "v${version}";
     hash = "sha256-4TmH6YOW6ktISVA6RLo7JRl8/SnRzGMrdbyCr+mDkqY=";
   };
+in
+stdenv.mkDerivation {
+  pname = "bcachefs-tools";
+  inherit version src;
 
   # errors on fsck_err function. Maybe miss-detection?
   NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   cargoRoot = "rust-src";
   cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+    lockFile = "${src}/rust-src/Cargo.lock";
     outputHashes = {
       "bindgen-0.64.0" = "sha256-GNG8as33HLRYJGYe0nw6qBzq86aHiGonyynEM7gaEE4=";
     };
