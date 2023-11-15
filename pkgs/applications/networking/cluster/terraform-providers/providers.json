@@ -1288,13 +1288,13 @@
     "vendorHash": null
   },
   "wavefront": {
-    "hash": "sha256-FvRrX8T9PDz5gJZuE9sARfa9ERaEFMk0vmX4xDcrbVY=",
+    "hash": "sha256-yNNtOkodzwxKvHQq9GZlUicezGW6u2ih6ry/cOtJQGM=",
     "homepage": "https://registry.terraform.io/providers/vmware/wavefront",
     "owner": "vmware",
     "repo": "terraform-provider-wavefront",
-    "rev": "v5.0.4",
+    "rev": "v5.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-GuOdD1m3elBj9k7YfUYbyqJNzIwmZZ1O1lplpBUPH+g="
+    "vendorHash": "sha256-GRnVhGpVgFI83Lg34Zv1xgV5Kp8ioKTFV5uaqS80ATg="
   },
   "yandex": {
     "hash": "sha256-t4NvehAHS0U9kPQsA6otAga9YQWZ0rJrm3YFi9SgKQY=",
