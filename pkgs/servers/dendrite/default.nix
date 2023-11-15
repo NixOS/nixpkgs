@@ -1,5 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script
-, nixosTests, postgresql, postgresqlTestHook }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, postgresql
+, postgresqlTestHook
+}:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
@@ -43,6 +50,9 @@ buildGoModule rec {
     # it passes in upstream CI and requires further investigation
     rm roomserver/internal/input/input_test.go
   '';
+
+  # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
+  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
 
   passthru.tests = {
     inherit (nixosTests) dendrite;
