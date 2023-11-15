@@ -60,14 +60,14 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "18";
+  version = "19";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-bnd2P6lq1XqKed3m4hDYrR9IcdrPaJxNBL2Z6jCruV4=";
+    hash = "sha256-KjJM+KZCgUnsaEN2ZorhH0AR5nmiV2h3i7Vb3KdGFtI=";
   };
 
   # Fix ctypes finding library
