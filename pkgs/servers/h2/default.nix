@@ -38,7 +38,7 @@ maven.buildMavenPackage rec {
     homepage = "https://h2database.com/html/main.html";
     changelog = "https://h2database.com/html/changelog.html";
     license = licenses.mpl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ mahe anthonyroussel ];
     mainProgram = "h2";
   };
