@@ -43,7 +43,7 @@
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps # frei0r video filtering
 , withFribidi ? withFullDeps # Needed for drawtext filter
-, withGlslang ? withFullDeps && !stdenv.isDarwin
+, withGlslang ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
