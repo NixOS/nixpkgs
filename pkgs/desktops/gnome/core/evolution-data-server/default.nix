@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchurl
 , substituteAll
 , pkg-config
 , gnome
@@ -55,16 +55,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  src = fetchzip {
+  src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "7TXEArGpnOxfQGnMtacYwHjCyH15RAjJW09lvVo1uDI=";
-
-    postFetch = ''
-      # Very dirty hack to make update script happy.
-      substituteInPlace $out/src/calendar/libecal/e-reminder-watcher.c \
-        --replace "settings = g_settings_new (schema_id)" "settings = NULL" \
-        --replace 'e_reminder_watcher_load_settings_tentative ("' 'g_settings_new ("'
-    '';
+    sha256 = "kfT/w4objS/ok5g0RJrFQcC/9KObRE7cKpUpNEoo6Yo=";
   };
 
   patches = [
@@ -72,6 +65,10 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+
+    # Avoid using wrapper function, which the hardcode gsettings
+    # patch generator cannot handle.
+    ./drop-tentative-settings-constructor.patch
   ];
 
   prePatch = ''
@@ -169,7 +166,7 @@ stdenv.mkDerivation rec {
         "org.gnome.evolution-data-server" = "EDS";
         "org.gnome.desktop.interface" = "GDS";
       };
-      inherit src;
+      inherit src patches;
     };
     updateScript =
       let

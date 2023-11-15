@@ -202,10 +202,10 @@ index 2525856..7ecc1a8 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index 2dbdd99..a6cf45c 100644
+index c01e8b2..59fb4c4 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
-@@ -2646,8 +2646,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+@@ -2626,8 +2626,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
  
  	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
  	watcher->priv->cancellable = g_cancellable_new ();
