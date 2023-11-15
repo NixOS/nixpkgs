@@ -1,0 +1,17 @@
+diff --git a/tools/cpp/osx_cc_wrapper.sh.tpl b/tools/cpp/osx_cc_wrapper.sh.tpl
+index 8264090c29..6e38c9df50 100644
+--- a/tools/cpp/osx_cc_wrapper.sh.tpl
++++ b/tools/cpp/osx_cc_wrapper.sh.tpl
+@@ -80,10 +80,10 @@ function get_library_path() {
+ # and multi-level symlinks.
+ function get_realpath() {
+     local previous="$1"
+-    local next=$(readlink "${previous}")
++    local next=$(readlink "${previous}" || true)
+     while [ -n "${next}" ]; do
+         previous="${next}"
+-        next=$(readlink "${previous}")
++        next=$(readlink "${previous}" || true)
+     done
+     echo "${previous}"
+ }

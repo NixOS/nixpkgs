@@ -204,6 +204,9 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # Fix "set -e" handling of some bash versions on darwin cpp targets
+    ../bazel_cpp_darwin_bash_set_e.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.

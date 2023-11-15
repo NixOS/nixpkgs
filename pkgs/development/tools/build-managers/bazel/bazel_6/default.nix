@@ -187,6 +187,9 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # Fix "set -e" handling of some bash versions on darwin cpp targets
+    ../bazel_cpp_darwin_bash_set_e.patch
+
     # Force usage of the _non_ prebuilt java toolchain.
     # the prebuilt one does not work in nix world.
     ./java_toolchain.patch
