@@ -28378,7 +28378,9 @@ with pkgs;
 
   goconst = callPackage ../development/tools/goconst { };
 
-  goconvey = callPackage ../development/tools/goconvey { };
+  goconvey = callPackage ../development/tools/goconvey {
+    buildGoModule = buildGo120Module;
+  };
 
   go-callvis = callPackage ../development/tools/go-callvis { };
 
