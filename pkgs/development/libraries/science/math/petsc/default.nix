@@ -6,11 +6,15 @@
 , python3
 , blas
 , lapack
+, mpiSupport ? true
 , mpi                   # generic mpi dependency
 , openssh               # required for openmpi tests
-, petsc-withp4est ? true
+, petsc-withp4est ? false
 , p4est
 , zlib                  # propagated by p4est but required by petsc
+, petsc-optimized ? false
+, petsc-scalar-type ? "real"
+, petsc-precision ? "double"
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
@@ -18,14 +22,14 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.19.2";
+  version = "3.19.4";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "sha256-EU82P3ebsWg5slwOcPiwrg2UfVDnL3xs3csRsAEHmxY=";
+    sha256 = "sha256-fJQbcb5Sw7dkIU5JLfYBCdEvl/fYVMl6RN8MTZWLOQY=";
   };
 
-  mpiSupport = !withp4est || p4est.mpiSupport;
+  inherit mpiSupport;
   withp4est = petsc-withp4est;
 
   strictDeps = true;
@@ -49,7 +53,6 @@ stdenv.mkDerivation rec {
   patches = [ ./filter_mpi_warnings.patch ];
 
   preConfigure = ''
-    export FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
     patchShebangs ./lib/petsc/bin
     configureFlagsArray=(
       $configureFlagsArray
@@ -68,6 +71,14 @@ stdenv.mkDerivation rec {
       ''}
       "--with-blas=1"
       "--with-lapack=1"
+      "--with-scalar-type=${petsc-scalar-type}"
+      "--with-precision=${petsc-precision}"
+      ${lib.optionalString petsc-optimized ''
+        "--with-debugging=0"
+        COPTFLAGS='-g -O3'
+        FOPTFLAGS='-g -O3'
+        CXXOPTFLAGS='-g -O3'
+      ''}
     )
   '';
 
