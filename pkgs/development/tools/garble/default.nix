@@ -6,23 +6,32 @@
 }:
 buildGoModule rec {
   pname = "garble";
-  version = "0.8.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
+    hash = "sha256-7HWE5OyeUkXJ66xYpeRbBT966vz8FC1BhXRahzNzcfs=";
   };
 
-  vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
-
-  # Used for some of the tests.
-  nativeCheckInputs = [git];
+  vendorHash = "sha256-su3rl3kINP9rQejs0u2x7JVksEK54xoeOL2GBz08FTM=";
 
   preBuild = lib.optionalString (!stdenv.isx86_64) ''
     # The test assumex amd64 assembly
     rm testdata/script/asm.txtar
+  '';
+
+  # Used for some of the tests.
+  nativeCheckInputs = [ git ];
+
+  checkFlags = [
+    # See https://github.com/burrowers/garble/issues/609.
+    "-skip=TestScript/gogarble"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
   '';
 
   meta = {
@@ -30,6 +39,5 @@ buildGoModule rec {
     homepage = "https://github.com/burrowers/garble/";
     maintainers = with lib.maintainers; [ davhau ];
     license = lib.licenses.bsd3;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/garble.x86_64-darwin
   };
 }
