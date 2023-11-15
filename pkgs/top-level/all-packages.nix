@@ -37033,7 +37033,9 @@ with pkgs;
 
   dcrctl = callPackage ../applications/blockchains/dcrctl { };
   dcrd = callPackage ../applications/blockchains/dcrd { };
-  dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
+  dcrwallet = callPackage ../applications/blockchains/dcrwallet {
+    buildGoModule = buildGo120Module;
+  };
 
   dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
     withGui = true;
