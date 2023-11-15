@@ -1,0 +1,28 @@
+diff --git a/src/barebone/generate-script-runtime.py b/src/barebone/generate-script-runtime.py
+index 588f96ba..986c2a78 100755
+--- a/src/barebone/generate-script-runtime.py
++++ b/src/barebone/generate-script-runtime.py
+@@ -23,7 +23,8 @@ def generate_runtime(input_dir, output_dir):
+ 
+     npm = os.environ.get("NPM", make_script_filename("npm"))
+     try:
+-        subprocess.run([npm, "install"], capture_output=True, cwd=output_dir, check=True)
++        pass
++        #subprocess.run([npm, "install"], capture_output=True, cwd=output_dir, check=True)
+     except Exception as e:
+         message = "\n".join([
+             "",
+diff --git a/src/compiler/generate-agent.py b/src/compiler/generate-agent.py
+index 6c3ae111..7f535a14 100755
+--- a/src/compiler/generate-agent.py
++++ b/src/compiler/generate-agent.py
+@@ -31,7 +31,8 @@ def generate_agent(input_dir, output_dir, host_os_family, host_arch, host_cpu_mo
+         shutil.copyfile(input_dir / name, output_dir / name)
+ 
+     try:
+-        subprocess.run([npm, "install"], capture_output=True, cwd=output_dir, check=True)
++        pass
++        #subprocess.run([npm, "install"], capture_output=True, cwd=output_dir, check=True)
+         #subprocess.run([npm, "link", "/Users/oleavr/src/frida-compile"], capture_output=True, cwd=output_dir, check=True)
+     except Exception as e:
+         message = "\n".join([
