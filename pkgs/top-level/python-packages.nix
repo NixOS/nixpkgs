@@ -3412,6 +3412,8 @@ self: super: with self; {
 
   dynd = callPackage ../development/python-modules/dynd { };
 
+  e3-core = callPackage ../development/python-modules/e3-core { };
+
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 
   easydict = callPackage ../development/python-modules/easydict { };
