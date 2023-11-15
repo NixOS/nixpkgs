@@ -15374,6 +15374,8 @@ self: super: with self; {
 
   vaa = callPackage ../development/python-modules/vaa { };
 
+  vaderSentiment = callPackage ../development/python-modules/vaderSentiment { };
+
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validators = callPackage ../development/python-modules/validators { };
