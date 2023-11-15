@@ -45,6 +45,7 @@
   tests = [ nixosTests.floorp ];
 }).override {
   privacySupport = true;
+  webrtcSupport = true;
   enableOfficialBranding = false;
 }).overrideAttrs (prev: {
   MOZ_REQUIRE_SIGNING = "";
