@@ -2,11 +2,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elm-test-rs";
-  version = "2.0";
+  version = "3.0";
 
   src = fetchurl {
     url = "https://github.com/mpizenberg/elm-test-rs/archive/v${version}.tar.gz";
-    sha256 = "sha256:1manr42w613r9vyji7pxx5gb08jcgkdxv29qqylrqlwxa8d5dcid";
+    sha256 = "sha256-nrX+jb/fKwoQSmQTim3sew0uGg5+nscL22YP5lkFyls=";
   };
 
   buildInputs = lib.optionals (!stdenv.isDarwin) [
@@ -16,8 +16,12 @@ rustPlatform.buildRustPackage rec {
     CoreServices
   ]);
 
-  cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
-
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+         "pubgrub-dependency-provider-elm-0.1.0" = "sha256-00J5XZfmuB4/fgB06aaXrRjdmOpOsSwA3dC3Li1m2Cc=";
+       };
+  };
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
 
@@ -26,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "elm-test-rs";
     homepage = "https://github.com/mpizenberg/elm-test-rs";
     license = licenses.bsd3;
-    maintainers = [ maintainers.jpagex ];
+    maintainers = [ maintainers.jpagex maintainers.zupo ];
   };
 }
