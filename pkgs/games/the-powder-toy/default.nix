@@ -38,8 +38,9 @@ stdenv.mkDerivation rec {
     install -Dm 755 powder $out/bin/powder
 
     mkdir -p $out/share/applications
-    mv ./resources/powder.desktop $out/share/applications
     mv ../resources $out/share
+  '' + lib.optionalString stdenv.isLinux ''
+    mv ./resources/powder.desktop $out/share/applications
   '';
 
   meta = with lib; {
