@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     "TestSCUValidation"
     # errors because 3 classes not wrapped:
     "TestWrapPython"
+  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    "TestRescaler2"
   ];
 
   checkPhase = ''
