@@ -26587,7 +26587,10 @@ with pkgs;
 
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
-  mastodon = callPackage ../servers/mastodon { };
+  mastodon = callPackage ../servers/mastodon {
+    nodejs-slim = nodejs-slim_20;
+    ruby = ruby_3_2;
+  };
 
   gotosocial = callPackage ../servers/gotosocial { };
 
