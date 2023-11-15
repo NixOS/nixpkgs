@@ -164,16 +164,38 @@ rec {
   */
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
-  /* Like `filter`, but with an index. O(n) complexity.
+  /*
+    Filter a list for elements that satisfy a predicate function.
+    The predicate function is called with both the index and value for each element.
+    It must return `true`/`false` to include/exclude a given element in the result.
+    This function is strict in the result of the predicate function for each element.
+    This function has O(n) complexity.
 
-     Type: filter :: (int -> a -> bool) -> [a] -> [a]
+    Also see [`builtins.filter`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
+    which can be used instead when the index isn't needed.
 
-     Example:
-       ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ]
-       => [ 1 3 ]
+    :::{.warning}
+    Just like `builtins.filter`, a stack overflow can occur when filtering many elements.
+    :::
+
+    Type: ifilter0 :: (int -> a -> bool) -> [a] -> [a]
+
+    Example:
+      ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ]
+      => [ 1 3 ]
   */
   ifilter0 =
+    /*
+      The predicate function, it takes two arguments:
+      - 1. (int): the index of the element.
+      - 2. (a): the value of the element.
+
+      It must return `true`/`false` to include/exclude a given element from the result.
+    */
     ipred:
+    /*
+      The list to filter using the predicate.
+    */
     input:
     let
       # Whether each element in the input list is included
