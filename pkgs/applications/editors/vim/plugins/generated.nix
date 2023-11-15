@@ -6455,6 +6455,18 @@ final: prev:
     meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
   };
 
+  nerdy-nvim = buildVimPlugin {
+    pname = "nerdy.nvim";
+    version = "2023-10-09";
+    src = fetchFromGitHub {
+      owner = "2KAbhishek";
+      repo = "nerdy.nvim";
+      rev = "061b0c8b5d56dcc9d3aba90be94593070f299878";
+      sha256 = "06ihrqkcp4ayms656rkv8c9wabvdzxy2a3kmdsdcyq3lb0ryx8sm";
+    };
+    meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
+  };
+
   netman-nvim = buildVimPlugin {
     pname = "netman.nvim";
     version = "2023-04-19";
@@ -16020,18 +16032,6 @@ final: prev:
       sha256 = "025rqfs0n2ryi7xwzpq5h2r7jhvxbrb2gjp6fqa072hapgqr0igb";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  nerdy-nvim = buildVimPlugin {
-    pname = "nerdy.nvim";
-    version = "2023-10-09";
-    src = fetchFromGitHub {
-      owner = "2KAbhishek";
-      repo = "nerdy.nvim";
-      rev = "061b0c8b5d56dcc9d3aba90be94593070f299878";
-      sha256 = "06ihrqkcp4ayms656rkv8c9wabvdzxy2a3kmdsdcyq3lb0ryx8sm";
-    };
-    meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
   };
 
   catppuccin-nvim = buildVimPlugin {
