@@ -14245,6 +14245,8 @@ with pkgs;
 
   typst-live = callPackage ../tools/typesetting/typst-live { };
 
+  typst-preview = callPackage ../tools/typesetting/typst-preview { };
+
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
@@ -24410,9 +24412,10 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_6
-    libressl_3_7;
+    libressl_3_7
+    libressl_3_8;
 
-  libressl = libressl_3_7;
+  libressl = libressl_3_8;
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
