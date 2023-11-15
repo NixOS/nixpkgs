@@ -19,7 +19,7 @@
 
 let
   # PyMuPDF needs the C++ bindings generated
-  mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; };
+  mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
 in buildPythonPackage rec {
   pname = "pymupdf";
   version = "1.23.6";
