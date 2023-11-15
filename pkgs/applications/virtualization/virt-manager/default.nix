@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
-, e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
-, desktopToDarwinBundle, stdenv
+, e2fsprogs, findutils, gzip, cdrtools, xorriso
+, desktopToDarwinBundle, stdenv, gst_all_1
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -21,12 +21,14 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
+    wrapGAppsHook
   ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ] ++ lib.optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3.pkgs; [
