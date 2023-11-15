@@ -12,7 +12,6 @@
 , darwin
 , findutils
 
-# currently for BLAKE3 hash function
 , rustSupport ? true
 
 , corrosion
