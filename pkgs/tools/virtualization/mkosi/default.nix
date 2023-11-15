@@ -89,10 +89,6 @@ buildPythonApplication rec {
     wheel
   ];
 
-  makeWrapperArgs = [
-    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
-  ];
-
   propagatedBuildInputs = [
     systemdForMkosi
     bubblewrap
@@ -100,13 +96,13 @@ buildPythonApplication rec {
     qemu
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/mkosi \
-      --prefix PYTHONPATH : "$PYTHONPATH"
-  '';
-
   checkInputs = [
     pytestCheckHook
+  ];
+
+  makeWrapperArgs = [
+    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
+    "--prefix PYTHONPATH : \"$PYTHONPATH\""
   ];
 
   meta = with lib; {
