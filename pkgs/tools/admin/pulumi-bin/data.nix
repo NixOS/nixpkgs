@@ -1,12 +1,12 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
-  version = "3.93.0";
+  version = "3.94.0";
   pulumiPkgs = {
     x86_64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-linux-x64.tar.gz";
-        sha256 = "1s081ak1m55jckgrrcnj918smlx79sywqgqfbvf50hkcrk5pwdsj";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.94.0-linux-x64.tar.gz";
+        sha256 = "1yn97xxqwgrcd5psrrimcz1gjv34s7mri40nwb2mgmqj7xs4hyi3";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-linux-amd64.tar.gz";
@@ -61,8 +61,8 @@
         sha256 = "1r1sfxngwkf89lni0l8zalh2vz5a7m9ap4p15cs4bc98zmkin762";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.4-linux-amd64.tar.gz";
-        sha256 = "01zckkhkji8579r6b18mc6h36ap5qm8pa5kjf3mzgy1j1v1mhlww";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.5-linux-amd64.tar.gz";
+        sha256 = "1m44dwr8q8w60s5clm4n1hini1bm5bqc7p7h1gvbh5zg1482hn5q";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-linux-amd64.tar.gz";
@@ -163,8 +163,8 @@
     ];
     x86_64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-darwin-x64.tar.gz";
-        sha256 = "0gxch1ml2sv66wbzfycsg02f6cagwrv0kl2b437xnn8g86mxi2di";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.94.0-darwin-x64.tar.gz";
+        sha256 = "0v854xz9imq9kxslvyx3km20jzcia8m6wkq6ga1gxlsrbx3ajgrn";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-darwin-amd64.tar.gz";
@@ -219,8 +219,8 @@
         sha256 = "0iymy2rjyxya49w7awrjns4pnj4m2m66iqf59f1a6ww4i5qmx5f1";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.4-darwin-amd64.tar.gz";
-        sha256 = "10w91x51by096blmvgdyci1xan9xw7yh9ky7ajpz3mmr3y3npqn8";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.5-darwin-amd64.tar.gz";
+        sha256 = "0g8rcdbfbpmsw3wqx9jy5kz6pcmr9im2njisi3rlkkyfazm7fmqd";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-darwin-amd64.tar.gz";
@@ -321,8 +321,8 @@
     ];
     aarch64-linux = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-linux-arm64.tar.gz";
-        sha256 = "0xmsn6qyrmiqpgpffr1c0ykpw06ca8lcv4hgsvv12jxzqrasdv6a";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.94.0-linux-arm64.tar.gz";
+        sha256 = "075pyjjinc77283cqd81745sdjxlcrdn02nx17jis28w4gp7y88n";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-linux-arm64.tar.gz";
@@ -377,8 +377,8 @@
         sha256 = "11q7cnncwdmjp8klk74wrnm6674ap5lrdjfq7413ps8rbdjpyvhl";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.4-linux-arm64.tar.gz";
-        sha256 = "0rl4ckrna59qgyhzmrzzlhl08c13979gjfx0pbhk6m6ahcm6whyc";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.5-linux-arm64.tar.gz";
+        sha256 = "1dxam51n9r2nmkw29fdwl5b0664ll2a1qczva0fgh1wpdslisp8s";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-linux-arm64.tar.gz";
@@ -479,8 +479,8 @@
     ];
     aarch64-darwin = [
       {
-        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.93.0-darwin-arm64.tar.gz";
-        sha256 = "0q59khgglzk0dkz1p81nmj0v7gsgkdfv2109sk3lb7ms5myknkd6";
+        url = "https://get.pulumi.com/releases/sdk/pulumi-v3.94.0-darwin-arm64.tar.gz";
+        sha256 = "05yyw5pjbmzgqimcd72xidwzqsvvkj7ayafwy701smmxdpck31b0";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-aiven-v6.7.2-darwin-arm64.tar.gz";
@@ -535,8 +535,8 @@
         sha256 = "1glpfbinny7cm7bk3q5y7g7lyrzmhdlsfjyiaxqwpkwx2960p5iv";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.4-darwin-arm64.tar.gz";
-        sha256 = "0xh2r364xkfxq4dlxskxm449d2iqrc2105y72km6w6wrmdvazpn7";
+        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-docker-v4.4.5-darwin-arm64.tar.gz";
+        sha256 = "0kcivc4bs720s7cdjphjcy1sss7pfsands37c8gikhiq0cnl39mb";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-equinix-metal-v3.2.1-darwin-arm64.tar.gz";
