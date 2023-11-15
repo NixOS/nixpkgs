@@ -38,6 +38,6 @@ maven.buildMavenPackage rec {
     homepage = "http://www.h2database.com/html/main.html";
     license = licenses.mpl20;
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ mahe ];
+    maintainers = with maintainers; [ mahe anthonyroussel ];
   };
 }
