@@ -33547,7 +33547,9 @@ with pkgs;
 
   markscribe = callPackage ../tools/text/markscribe { };
 
-  magnetico = callPackage ../applications/networking/p2p/magnetico { };
+  magnetico = callPackage ../applications/networking/p2p/magnetico {
+    buildGoModule = buildGo120Module;
+  };
 
   mastodon-bot = nodePackages.mastodon-bot;
 
