@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "unidata-blocks";
-  version = "0.0.6";
+  version = "0.0.8";
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "unidata_blocks";
     inherit version;
-    hash = "sha256-YtIqd5Z4lQdPMNHhQYIdSi741ruXJlqLHLw1pxXhjWc=";
+    hash = "sha256-Y7OSFuPHgzNc/KtmBWwdVqH7Xy4v4w2UGHBUF9pIuSU=";
   };
 
   format = "pyproject";
