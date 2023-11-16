@@ -5,6 +5,7 @@
 , pkg-config
 , wget
 , unzip
+, mawk
 , sqlite
 , which
 , lua5_3
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rhaberkorn/openrussian-cli/commit/984e555acbadbd1aed7df17ab53e2c586a2f8f68.patch";
       hash = "sha256-/z4YrEeuejtCtwiFXksFREwgQoWvtI0Kl9w75KDQfF8=";
     })
+    # Work around https://github.com/dumblob/mysql2sqlite/issues/75
+    ./use-mawk.patch
   ];
 
   nativeBuildInputs = [
@@ -40,6 +43,7 @@ stdenv.mkDerivation rec {
     which
     installShellFiles
     makeWrapper
+    mawk
   ];
 
   buildInputs = [ luaEnv ];
@@ -77,7 +81,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3Only mit cc-by-sa-40 ];
     maintainers = with maintainers; [ zane ];
     mainProgram = "openrussian";
-    broken = stdenv.isDarwin; # FIXME: The mysql2sqlite script hangs on Darwin.
     platforms = platforms.unix;
   };
 }
