@@ -6,20 +6,14 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/githubnext/monaspace/releases/download/v${version}/monaspace-v${version}.zip";
-    sha256 = "sha256-0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+    sha256 = "sha256-H8NOS+pVkrY9DofuJhPR2OlzkF4fMdmP2zfDBfrk83A=";
     stripRoot = false;
   };
-
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  doCheck = false;
-  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 -t $out/share/fonts/opentype/ *.otf
+    install -D -t $out/share/fonts/opentype/ $(find $src -type f -name '*.otf')
 
     runHook postInstall
   '';
@@ -27,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "An innovative superfamily of fonts for code";
     homepage = "https://github.com/githubnext/monaspace";
-    license = [ licenses.sil ];
+    license = [ licenses.ofl ];
     maintainers = [ maintainers.x0ba ];
     platforms = platforms.all;
   };
