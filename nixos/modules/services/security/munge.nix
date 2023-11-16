@@ -45,7 +45,13 @@ in
 
     systemd.services.munged = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wants = [
+        "network-online.target"
+      ];
+      after = [
+        "network-online.target"
+        "time-sync.target"
+      ];
 
       path = [ pkgs.munge pkgs.coreutils ];
 
@@ -58,6 +64,7 @@ in
         Group = "munge";
         StateDirectory = "munge";
         StateDirectoryMode = "0711";
+        Restart = "on-abort";
         RuntimeDirectory = "munge";
       };
 
