@@ -371,13 +371,21 @@ in
       wants = [ "network-online.target" ];
 
       serviceConfig = {
-        Type = "forking";
-        KillMode = "process";
-        ExecStart = "${wrappedSlurm}/bin/slurmd";
-        PIDFile = "/run/slurmd.pid";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        LimitMEMLOCK = "infinity";
         Delegate="Yes";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        # The 23.02.06.01 release assumes slurm*d run as Type = "simple",
+        # with the `-D` flag ensuring the daemons stay in foreground.
+        # Already in 23.11.0.0-rc1 the template .service files
+        # suggest to use Type = "notify", and introduce the `--systemd`
+        # flag instead of `-D`. We'll want to update this line with the release:
+        ExecStart = "${wrappedSlurm}/bin/slurmd -D";
+        KillMode = "process";
+        LimitMEMLOCK = "infinity";
+        LimitNOFILE = 131072;
+        LimitSTACK = "infinity";
+        RuntimeDirectoryMode = "0755";
+        RuntimeDirectory = "slurm";
+        Type = "simple";
       };
     };
 
@@ -392,14 +400,14 @@ in
         ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "munged.service" ];
+      after = [ "network-online.target" "munged.service" ];
       requires = [ "munged.service" ];
 
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${wrappedSlurm}/bin/slurmctld";
-        PIDFile = "/run/slurmctld.pid";
+        Type = "simple";
+        ExecStart = "${wrappedSlurm}/bin/slurmctld -D";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LimitNOFILE = 65536;
       };
     };
 
@@ -410,7 +418,11 @@ in
       path = with pkgs; [ wrappedSlurm munge coreutils ];
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "munged.service" "mysql.service" ];
+      after = [
+        "network-online.target"
+        "munged.service"
+        "mysql.service"
+      ];
       requires = [ "munged.service" "mysql.service" ];
 
       preStart = ''
@@ -429,8 +441,8 @@ in
       serviceConfig = {
         RuntimeDirectory = "slurmdbd";
         Type = "simple";
-        PIDFile = "/run/slurmdbd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LimitNOFILE = 65536;
       };
     };
 
