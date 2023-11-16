@@ -7,7 +7,6 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     url = "https://github.com/githubnext/monaspace/releases/download/v${version}/monaspace-v${version}.zip";
     sha256 = "sha256-H8NOS+pVkrY9DofuJhPR2OlzkF4fMdmP2zfDBfrk83A=";
-    stripRoot = false;
   };
 
   installPhase = ''
