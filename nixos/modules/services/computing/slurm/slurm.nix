@@ -343,11 +343,17 @@ in
     services.munge.enable = mkDefault true;
 
     # use a static uid as default to ensure it is the same on all nodes
-    users.users.slurm = mkIf (cfg.user == defaultUser) {
-      name = defaultUser;
-      group = "slurm";
-      uid = config.ids.uids.slurm;
-    };
+    users.users.slurm = mkMerge [
+      (mkIf (cfg.user == defaultUser) {
+        name = defaultUser;
+        group = "slurm";
+        uid = config.ids.uids.slurm;
+      })
+      (mkIf cfg.server.enable {
+        createHome = true;
+        home = cfg.stateSaveLocation;
+      })
+    ];
 
     users.groups.slurm.gid = config.ids.uids.slurm;
 
@@ -395,11 +401,6 @@ in
         PIDFile = "/run/slurmctld.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
-
-      preStart = ''
-        mkdir -p ${cfg.stateSaveLocation}
-        chown -R ${cfg.user}:slurm ${cfg.stateSaveLocation}
-      '';
     };
 
     systemd.services.slurmdbd = let
