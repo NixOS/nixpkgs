@@ -30,13 +30,15 @@ let
     PAPERCLIP_ROOT_PATH = "/var/lib/mastodon/public-system";
     PAPERCLIP_ROOT_URL = "/system";
     ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
-    ES_HOST = cfg.elasticsearch.host;
-    ES_PORT = toString(cfg.elasticsearch.port);
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
   // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) { DB_PORT = toString cfg.database.port; }
   // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN  = cfg.smtp.user; }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PORT = toString(cfg.elasticsearch.port); }
+  // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PRESET = cfg.elasticsearch.preset; }
+  // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; }
   // cfg.extraConfig;
 
   systemCallsList = [ "@cpu-emulation" "@debug" "@keyring" "@ipc" "@mount" "@obsolete" "@privileged" "@setuid" ];
@@ -513,6 +515,31 @@ in {
           type = lib.types.port;
           default = 9200;
         };
+
+        preset = lib.mkOption {
+          description = lib.mdDoc ''
+            It controls the ElasticSearch indices configuration (number of shards and replica).
+          '';
+          type = lib.types.enum [ "single_node_cluster" "small_cluster" "large_cluster" ];
+          default = "single_node_cluster";
+          example = "large_cluster";
+        };
+
+        user = lib.mkOption {
+          description = lib.mdDoc "Used for optionally authenticating with Elasticsearch.";
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "elasticsearch-mastodon";
+        };
+
+        passwordFile = lib.mkOption {
+          description = lib.mdDoc ''
+            Path to file containing password for optionally authenticating with Elasticsearch.
+          '';
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          example = "/var/lib/mastodon/secrets/elasticsearch-password";
+        };
       };
 
       package = lib.mkOption {
@@ -665,6 +692,8 @@ in {
         DB_PASS="$(cat ${cfg.database.passwordFile})"
       '' + lib.optionalString cfg.smtp.authenticate ''
         SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
+      '' + lib.optionalString (cfg.elasticsearch.passwordFile != null) ''
+        ES_PASS="$(cat ${cfg.elasticsearch.passwordFile})"
       '' + ''
         EOF
       '';

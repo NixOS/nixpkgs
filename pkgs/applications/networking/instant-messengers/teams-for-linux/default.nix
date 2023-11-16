@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.18";
+  version = "1.3.19";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-evOwjHUmeGw8AUpXSig8zVW2cpJbWkNTH/RUuNipFsQ=";
+    hash = "sha256-+n26VTNRymPdzMbSz8AZsQ73xOHizOFAstw6toKfZQM=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-tMC8/qHYli7+OTdxVWRDEyCNzrkYA+zKlHJXlTsl+W0=";
+    hash = "sha256-SxUdTzk8WngkKwT05U8HJsK8+8ezcJWdiT/ettxpeEE=";
   };
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly chvp ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

@@ -65,8 +65,7 @@ in buildFHSEnv rec {
     progs_to_wrap=(
       "${unwrapped}"/quartus/bin/*
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
-      # Should we install all executables?
-      "${unwrapped}"/modelsim_ase/bin/{vsim,vlog,vlib,vcom,vdel,vmap}
+      "${unwrapped}"/modelsim_ase/bin/*
       "${unwrapped}"/modelsim_ase/linuxaloem/lmutil
     )
 

@@ -21,18 +21,18 @@
 , fuseSupport ? false
 }:
 let
-  rev = "6b175a022496572416918bd38d083120c23ba5f2";
+  version = "1.3.1";
 in
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-2023-09-29";
+  inherit version;
 
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    inherit rev;
-    hash = "sha256-qC6Bq2zdO8Tj+bZbIUvcVBqvuKccqDEX3HIeOXsEloQ=";
+    rev = "v${version}";
+    hash = "sha256-4TmH6YOW6ktISVA6RLo7JRl8/SnRzGMrdbyCr+mDkqY=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=${lib.strings.substring 0 7 rev}"
+    "VERSION=${version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
 
