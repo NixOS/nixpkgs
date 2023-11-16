@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pb";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "parseablehq";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jnMGBwwsQJnbvTTLxhpwORQ5m8xZxLA0PQVhW/MjMto=";
+    hash = "sha256-ckRvtEtagyYpXJ0hh8jsgpE/16bu7b9IdNn2stvb2iI=";
   };
 
-  vendorHash = "sha256-jC3P0b8fLZbL1hyWTnA/w3Uk4uqWSxpWDs6nQv55/0c=";
+  vendorHash = "sha256-dNSr0bQz7XdC2fTD82TI8tfmwKBuAcbxjaMC9KAjxlI=";
 
   ldflags = [
     "-s"

@@ -726,6 +726,15 @@ runTests {
     expected = 7;
   };
 
+  testAllUnique_true = {
+    expr = allUnique [ 3 2 4 1 ];
+    expected = true;
+  };
+  testAllUnique_false = {
+    expr = allUnique [ 3 2 3 4 ];
+    expected = false;
+  };
+
 # ATTRSETS
 
   testConcatMapAttrs = {

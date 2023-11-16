@@ -11,9 +11,6 @@
 # This also holds true for GitHub teams. Since almost none of our teams have write
 # permissions, you need to list all members of the team with commit access individually.
 
-# This file
-/.github/CODEOWNERS @edolstra
-
 # GitHub actions
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/merge-staging @FRidh
@@ -22,12 +19,12 @@
 /.editorconfig @Mic92 @zowoq
 
 # Libraries
-/lib                        @edolstra @infinisil
+/lib                        @infinisil
 /lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
-/lib/generators.nix         @infinisil @edolstra @Profpatsch
-/lib/cli.nix                @infinisil @edolstra @Profpatsch
-/lib/debug.nix              @infinisil @edolstra @Profpatsch
-/lib/asserts.nix            @infinisil @edolstra @Profpatsch
+/lib/generators.nix         @infinisil @Profpatsch
+/lib/cli.nix                @infinisil @Profpatsch
+/lib/debug.nix              @infinisil @Profpatsch
+/lib/asserts.nix            @infinisil @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
 /lib/fileset                @infinisil
 /doc/functions/fileset.section.md @infinisil

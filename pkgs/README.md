@@ -114,6 +114,25 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
 7. Optionally commit the new package and open a pull request [to nixpkgs](https://github.com/NixOS/nixpkgs/pulls), or use [the Patches category](https://discourse.nixos.org/t/about-the-patches-category/477) on Discourse for sending a patch without a GitHub account.
 
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- Format the commit messages in the following way:
+
+  ```
+  (pkg-name): (from -> to | init at version | refactor | etc)
+
+  (Motivation for change. Link to release notes. Additional information.)
+  ```
+
+  Examples:
+
+  * nginx: init at 2.0.1
+  * firefox: 54.0.1 -> 55.0
+
+    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+
 ## Category Hierarchy
 [categories]: #category-hierarchy
 
