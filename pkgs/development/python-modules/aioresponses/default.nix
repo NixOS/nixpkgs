@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.7.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -45,10 +45,10 @@ buildPythonPackage rec {
     "aioresponses"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rvl ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ rvl ];
   };
 }
