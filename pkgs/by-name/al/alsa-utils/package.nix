@@ -17,7 +17,7 @@
 }:
 
 let
-  plugin-packages = [ alsa-plugins ] ++ lib.optional withPipewireLib pipewire.lib;
+  plugin-packages = [ alsa-plugins ] ++ lib.optional withPipewireLib pipewire;
 
   # Create a directory containing symlinks of all ALSA plugins.
   # This is necessary because ALSA_PLUGIN_DIR must reference only one directory.
