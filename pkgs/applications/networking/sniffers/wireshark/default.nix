@@ -87,30 +87,30 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    bcg729
+    c-ares
     gettext
-    pcre2
-    libpcap
-    lua5
-    libssh
-    nghttp2
-    openssl
+    glib
+    gnutls
     libgcrypt
     libgpg-error
-    gnutls
+    libkrb5
     libmaxminddb
     libopus
-    bcg729
-    spandsp3
-    libkrb5
-    speexdsp
+    libpcap
     libsmi
+    libssh
+    lua5
     lz4
-    snappy
-    zstd
     minizip
-    c-ares
-    glib
+    nghttp2
+    openssl
+    pcre2
+    snappy
+    spandsp3
+    speexdsp
     zlib
+    zstd
   ] ++ lib.optionals withQt (with qt6; [
     qt5compat
     qtbase
@@ -133,21 +133,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
-    "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     "-DLEMON_C_COMPILER=cc"
     "-DUSE_qt6=ON"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
     "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
+    "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
   ];
 
   # Avoid referencing -dev paths because of debug assertions.
   env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
   dontFixCmake = true;
-  # Prevent double-wrapping, inject wrapper args manually instead.
   dontWrapGApps = true;
 
   shellHook = ''
