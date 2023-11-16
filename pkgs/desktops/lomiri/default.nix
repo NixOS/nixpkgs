@@ -9,6 +9,7 @@ let
   in {
     #### Data
     lomiri-schemas = callPackage ./data/lomiri-schemas { };
+    suru-icon-theme = callPackage ./data/suru-icon-theme { };
 
     #### Development tools / libraries
     cmake-extras = callPackage ./development/cmake-extras { };
