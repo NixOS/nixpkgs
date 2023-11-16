@@ -8087,6 +8087,8 @@ self: super: with self; {
     withPython = true;
   });
 
+  nglview = callPackage ../development/python-modules/nglview { };
+
   nh3 = callPackage ../development/python-modules/nh3 { };
 
   niaaml = callPackage ../development/python-modules/niaaml { };
