@@ -11,8 +11,13 @@ srv:
 }:
 { config, lib, pkgs, ... }:
 
-with lib;
 let
+  inherit (lib) types;
+  inherit (lib.attrsets) mapAttrs optionalAttrs;
+  inherit (lib.lists) optional;
+  inherit (lib.modules) mkBefore mkDefault mkForce mkIf mkMerge;
+  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib.strings) concatStringsSep hasSuffix optionalString;
   inherit (config.services) postgresql;
   redis = config.services.redis.servers."sourcehut-${srvsrht}";
   inherit (config.users) users;
