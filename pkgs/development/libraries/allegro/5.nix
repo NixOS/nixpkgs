@@ -16,6 +16,7 @@
 , libpulseaudio
 , libtheora
 , libvorbis
+, libwebp
 , libX11
 , libXcursor
 , libXdmcp
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     libpng
     libtheora
     libvorbis
+    libwebp
     openal
     pcre
     physfs
