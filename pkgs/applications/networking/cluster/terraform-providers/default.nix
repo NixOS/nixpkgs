@@ -46,6 +46,8 @@ let
           name = "source-${rev}";
           inherit owner repo rev hash;
         };
+        # nixpkgs-update: no auto update
+        # easier to update all providers together
 
         meta = {
           inherit homepage;
