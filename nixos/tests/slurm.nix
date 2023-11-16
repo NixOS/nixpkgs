@@ -155,6 +155,8 @@ in {
   with subtest("can_start_slurmd"):
       for node in [node1, node2, node3]:
           node.succeed("systemctl restart slurmd.service")
+
+      for node in [node1, node2, node3]:
           node.wait_for_unit("slurmd")
 
   # Test that the cluster works and can distribute jobs;
