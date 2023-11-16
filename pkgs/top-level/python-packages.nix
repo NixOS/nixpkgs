@@ -4363,6 +4363,8 @@ self: super: with self; {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  generate-chroma = callPackage ../development/python-modules/generate-chroma { };
+
   generic = callPackage ../development/python-modules/generic { };
 
   geniushub-client = callPackage ../development/python-modules/geniushub-client { };
