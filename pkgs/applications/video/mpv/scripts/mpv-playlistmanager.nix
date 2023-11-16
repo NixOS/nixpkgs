@@ -2,13 +2,13 @@
 
 buildLua rec {
   pname = "mpv-playlistmanager";
-  version = "unstable-2023-08-09";
+  version = "unstable-2023-11-16";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "e479cbc7e83a07c5444f335cfda13793681bcbd8";
-    sha256 = "sha256-Nh4g8uSkHWPjwl5wyqWtM+DW9fkEbmCcOsZa4eAF6Cs=";
+    rev = "cd5242996247a4b0d1fde7e7907d0b6e60a815ac";
+    sha256 = "sha256-qjkh3Q/78c4TfSSH/xQqQndRY6JwfLuYftci+sEqMWo=";
   };
 
   postPatch = ''
