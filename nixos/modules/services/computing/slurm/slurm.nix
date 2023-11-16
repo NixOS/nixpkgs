@@ -467,6 +467,7 @@ in
         Type = "simple";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitNOFILE = 65536;
+        User = cfg.user;
       };
     };
 
