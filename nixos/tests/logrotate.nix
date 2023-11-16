@@ -16,8 +16,11 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
   };
 
   nodes = {
-    defaultMachine = { ... }: { };
+    defaultMachine = { ... }: {
+      services.logrotate.enable = true;
+    };
     failingMachine = { ... }: {
+      services.logrotate.enable = true;
       services.logrotate.configFile = pkgs.writeText "logrotate.conf" ''
         # self-written config file
         su notarealuser notagroupeither
@@ -26,6 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
     machine = { config, ... }: {
       imports = [ importTest ];
 
+      services.logrotate.enable = true;
       services.logrotate.settings = {
         # remove default frequency header and add another
         header = {
