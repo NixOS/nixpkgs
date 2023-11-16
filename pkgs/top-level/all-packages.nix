@@ -26569,7 +26569,9 @@ with pkgs;
 
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
 
-  jetty = callPackage ../servers/http/jetty { };
+  jetty = jetty_12;
+  jetty_12 = callPackage ../servers/http/jetty/12.x.nix { };
+  jetty_11 = callPackage ../servers/http/jetty/11.x.nix { };
 
   jibri = callPackage ../servers/jibri { };
 
@@ -34245,10 +34247,6 @@ with pkgs;
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
 
-  rqbit = callPackage ../applications/networking/p2p/rqbit {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
@@ -36478,7 +36476,9 @@ with pkgs;
 
   webssh = with python3Packages; toPythonApplication webssh;
 
-  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop { };
+  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {
+    electron = electron_27;
+  };
 
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
 
@@ -39829,6 +39829,8 @@ with pkgs;
     stable = false;
     with3d = false;
   };
+
+  kicadAddons = recurseIntoAttrs (callPackage ../applications/science/electronics/kicad/addons {});
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 

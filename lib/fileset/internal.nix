@@ -825,4 +825,27 @@ rec {
         ${baseNameOf root} =
           fromFile (baseNameOf root) rootType;
       };
+
+  # Support for `builtins.fetchGit` with `submodules = true` was introduced in 2.4
+  # https://github.com/NixOS/nix/commit/55cefd41d63368d4286568e2956afd535cb44018
+  _fetchGitSubmodulesMinver = "2.4";
+
+  # Mirrors the contents of a Nix store path relative to a local path as a file set.
+  # Some notes:
+  # - The store path is read at evaluation time.
+  # - The store path must not include files that don't exist in the respective local path.
+  #
+  # Type: Path -> String -> FileSet
+  _mirrorStorePath = localPath: storePath:
+    let
+      recurse = focusedStorePath:
+        mapAttrs (name: type:
+          if type == "directory" then
+            recurse (focusedStorePath + "/${name}")
+          else
+            type
+        ) (builtins.readDir focusedStorePath);
+    in
+    _create localPath
+      (recurse storePath);
 }
