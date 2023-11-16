@@ -12,6 +12,7 @@
 , pythonOlder
 , typing-extensions
 , wagtail
+, wagtail-modeladmin
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     wagtail
     polib
     typing-extensions
+    wagtail-modeladmin
   ];
 
   nativeCheckInputs = [
