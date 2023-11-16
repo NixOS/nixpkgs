@@ -26,7 +26,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
@@ -788,14 +788,12 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
-        from datetime import date
-
         try:
             repo = git.Repo(os.getcwd())
-            updated = date.today().strftime('%m-%d-%Y')
+            updated = datetime.now(tz=UTC).strftime('%Y-%m-%d')
             print(args.outfile)
             commit(repo,
-                   f"{editor.attr_path}: updated the {updated}", [args.outfile]
+                   f"{editor.attr_path}: update on {updated}", [args.outfile]
                    )
         except git.InvalidGitRepositoryError as e:
             print(f"Not in a git repository: {e}", file=sys.stderr)
