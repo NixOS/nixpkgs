@@ -243,6 +243,18 @@ let
     (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
+      # Build selected packages (HLS) for multiple Haskell compilers to rebuild
+      # the cache after a staging merge
+      haskell.packages = lib.genAttrs [
+        # TODO: share this list between release.nix and release-haskell.nix
+        "ghc90"
+        "ghc92"
+        "ghc94"
+        "ghc96"
+      ] (compilerName: {
+        inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+          haskell-language-server;
+      });
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
