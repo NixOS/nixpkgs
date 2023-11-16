@@ -78,6 +78,12 @@ in
       dbdserver = {
         enable = mkEnableOption (lib.mdDoc "SlurmDBD service");
 
+        waitUntilReady = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc "Prevent slurmdbd.service from reporting as ready until localhost:6819 is open";
+        };
+
         dbdHost = mkOption {
           type = types.str;
           default = config.networking.hostName;
@@ -447,6 +453,13 @@ in
       script = ''
         export SLURM_CONF=${configPath}
         exec ${cfg.package}/bin/slurmdbd -D
+      '';
+
+      postStart = ''
+        for i in $(seq 128) ; do
+          ${pkgs.netcat-gnu}/bin/nc -z localhost 6819 && exit 0
+        done
+        exit 1
       '';
 
       serviceConfig = {
