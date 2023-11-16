@@ -109,6 +109,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
       # uses property syntax in one place. The first patch is necessary only with older
       # versions of Wine. The second is needed on all versions of Wine.
       (lib.optional (lib.versionOlder version "8.12") ./darwin-metal-compat-pre8.12.patch)
+      (lib.optional (lib.versionOlder version "8.18") ./darwin-metal-compat-pre8.19.patch)
       ./darwin-metal-compat.patch
       # Wine requires `qos.h`, which is not included by default on the 10.12 SDK in nixpkgs.
       ./darwin-qos.patch
