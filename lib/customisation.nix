@@ -76,7 +76,9 @@ rec {
      Type:
        makeOverridable :: (AttrSet -> a) -> AttrSet -> a
   */
-  makeOverridable = f:
+  makeOverridable = f: makeOverridable' { inherit f; };
+
+  makeOverridable' = { f, untouchedArgs ? {} }:
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = lib.mirrorFunctionArgs f;
@@ -89,7 +91,7 @@ rec {
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
       # Re-call the function but with different arguments
-      overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
+      overrideArgs = mirrorArgs (newArgs: makeOverridable' {inherit f; untouchedArgs = newArgs;} (overrideWith newArgs));
       # Change the result of the function call by applying g to it
       overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
     in
@@ -99,11 +101,15 @@ rec {
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
             overrideResult (x: x.overrideAttrs fdrv);
+          origF = f;
+          inherit untouchedArgs;
         }
       else if lib.isFunction result then
         # Transform the result into a functor while propagating its arguments
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
+          origF = f;
+          inherit untouchedArgs;
         }
       else result);
 
@@ -189,7 +195,7 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg (lib.head missingArgs);
 
-    in if missingArgs == [] then makeOverridable f allArgs else abort error;
+    in if missingArgs == [] then makeOverridable' { inherit f; untouchedArgs = args; } allArgs else abort error;
 
 
   /* Like callPackage, but for a function that returns an attribute
