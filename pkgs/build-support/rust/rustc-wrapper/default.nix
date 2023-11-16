@@ -1,4 +1,4 @@
-{ lib, runCommand, rustc-unwrapped }:
+{ lib, runCommand, rustc-unwrapped, sysroot ? null }:
 
 runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
   preferLocalBuild = true;
@@ -7,6 +7,7 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
 
   env = {
     prog = "${rustc-unwrapped}/bin/rustc";
+    sysroot = lib.optionalString (sysroot != null) "--sysroot ${sysroot}";
   };
 
   passthru = {

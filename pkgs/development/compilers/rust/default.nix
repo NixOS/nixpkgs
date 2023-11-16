@@ -18,7 +18,7 @@
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildBuild
 , makeRustPlatform
-, wrapRustc
+, wrapRustcWith
 }:
 
 let
@@ -76,7 +76,10 @@ in
         # Use boot package set to break cycle
         inherit (bootstrapRustPackages) cargo rustc rustfmt;
       });
-      rustc = wrapRustc self.rustc-unwrapped;
+      rustc = wrapRustcWith {
+        inherit (self) rustc-unwrapped;
+        sysroot = if fastCross then self.rustc-unwrapped else null;
+      };
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;
         inherit (self.buildRustPackages) rustc;
