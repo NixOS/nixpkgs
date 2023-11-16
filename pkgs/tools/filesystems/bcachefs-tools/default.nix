@@ -21,7 +21,7 @@
 , fuseSupport ? false
 }:
 let
-  version = "1.3.1";
+  version = "1.3.3";
 in
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${version}";
-    hash = "sha256-4TmH6YOW6ktISVA6RLo7JRl8/SnRzGMrdbyCr+mDkqY=";
+    hash = "sha256-73vgwgBqyRLQ/Tts7bl6DhZMOs8ndIOiCke5tN89Wps=";
   };
 
   nativeBuildInputs = [
