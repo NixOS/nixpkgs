@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcmis";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "tdf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E2A4uJUayqMMxVifzeAeYKLL+FiV2vShNNdXe5ZLXZ4=";
+    sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config docbook2x ];
