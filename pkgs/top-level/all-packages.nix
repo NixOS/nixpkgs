@@ -33681,7 +33681,7 @@ with pkgs;
   };
 
   sapling = callPackage ../applications/version-management/sapling {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreGraphics CoreServices Security WebKit;
   };
 
   mercurialFull = mercurial.override { fullBuild = true; };
