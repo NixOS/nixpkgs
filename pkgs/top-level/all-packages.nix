@@ -2735,8 +2735,6 @@ with pkgs;
 
   hatari = callPackage ../applications/emulators/hatari { };
 
-  hercules = callPackage ../applications/emulators/hercules { };
-
   hostapd-mana = callPackage ../tools/networking/hostapd-mana { };
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
