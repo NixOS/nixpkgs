@@ -7781,6 +7781,12 @@
     githubId = 4458;
     name = "Ivan Kozik";
   };
+  ivan770 = {
+    email = "ivan@ivan770.me";
+    github = "ivan770";
+    githubId = 14003886;
+    name = "Ivan Leshchenko";
+  };
   ivan-babrou = {
     email = "nixpkgs@ivan.computer";
     name = "Ivan Babrou";
