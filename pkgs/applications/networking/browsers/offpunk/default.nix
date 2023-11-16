@@ -1,5 +1,6 @@
 {
   fetchFromSourcehut,
+  file,
   installShellFiles,
   less,
   lib,
@@ -23,6 +24,7 @@ let
     setproctitle
   ];
   otherDependencies = [
+    file
     less
     timg
     xdg-utils
@@ -31,7 +33,7 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "offpunk";
-  version = "1.10";
+  version = "2.0";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -40,10 +42,10 @@ python3Packages.buildPythonPackage rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-+jGKPPnKZHn+l6VAwuae6kICwR7ymkYJjsM2OHQAEmU=";
+    hash = "sha256-6ftc2goCNgvXf5kszvjeSHn24Hn73jq26Irl5jiN6pk=";
   };
 
-  nativeBuildInputs = [ python3Packages.flit-core installShellFiles ];
+  nativeBuildInputs = [ python3Packages.hatchling installShellFiles ];
   propagatedBuildInputs = otherDependencies ++ pythonDependencies;
 
   postInstall = ''
@@ -57,6 +59,6 @@ python3Packages.buildPythonPackage rec {
     homepage = src.meta.homepage;
     maintainers = with maintainers; [ DamienCassou ];
     platforms = platforms.linux;
-    license = licenses.bsd2;
+    license = licenses.agpl3Plus;
   };
 }
