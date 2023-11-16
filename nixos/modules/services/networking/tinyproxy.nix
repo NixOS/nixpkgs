@@ -49,12 +49,12 @@ in
         default = { };
         example = literalExpression ''
           {
-            Port 8888;
-            Listen 127.0.0.1;
-            Timeout 600;
-            Allow 127.0.0.1;
-            Anonymous = ['"Host"' '"Authorization"'];
-            ReversePath = '"/example/" "http://www.example.com/"';
+            Port = 8888;
+            Listen = "127.0.0.1";
+            Timeout = 600;
+            Allow = "127.0.0.1";
+            Anonymous = ["\"Host\"" "\"Authorization\""];
+            ReversePath = "\"/example/\"" "\"http://www.example.com/\"";
           }
         '';
         type = types.submodule (
