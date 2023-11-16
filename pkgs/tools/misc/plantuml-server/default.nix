@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 let
   version = "1.2023.12";
@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/webapps"
     cp "$src" "$out/webapps/plantuml.war"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) plantuml-server;
+  };
 
   meta = with lib; {
     description = "A web application to generate UML diagrams on-the-fly.";

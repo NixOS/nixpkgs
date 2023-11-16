@@ -1,11 +1,15 @@
+{ version, hash }:
+
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "jetty";
-  version = "12.0.2";
+
+  inherit version;
+
   src = fetchurl {
     url = "mirror://maven/org/eclipse/jetty/jetty-home/${version}/jetty-home-${version}.tar.gz";
-    hash = "sha256-DtlHTXjbr31RmK6ycDdiWOL7jIpbWNh0la90OnOhzvM=";
+    inherit hash;
   };
 
   dontBuild = true;
@@ -17,10 +21,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Web server and javax.servlet container";
-    homepage = "https://www.eclipse.org/jetty/";
+    homepage = "https://eclipse.dev/jetty/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = with licenses; [ asl20 epl10 ];
-    maintainers = with maintainers; [ emmanuelrosa ];
+    maintainers = with maintainers; [ emmanuelrosa anthonyroussel ];
   };
 }
