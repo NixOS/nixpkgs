@@ -400,8 +400,19 @@ in
         ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "munged.service" ];
-      requires = [ "munged.service" ];
+      after = [
+        "network-online.target"
+        "munged.service"
+      ] ++ lib.optionals cfg.dbdserver.enable [
+        # If slurmdbd runs on the same server, start it first
+        "slurmdbd.service"
+      ];
+
+      requires = [
+        "munged.service"
+      ] ++ lib.optionals cfg.dbdserver.enable [
+        "slurmdbd.service"
+      ];
 
       serviceConfig = {
         Type = "simple";
