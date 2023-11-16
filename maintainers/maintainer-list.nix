@@ -115,6 +115,11 @@
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
   };
+  _0z13 = {
+    name = "Jonathan Zielinski";
+    github = "0z13";
+    githubId = 81558841;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
