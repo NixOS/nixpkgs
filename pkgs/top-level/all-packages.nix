@@ -11621,10 +11621,6 @@ with pkgs;
 
   openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
-  openrussian-cli = callPackage ../misc/openrussian-cli {
-    lua = lua5_3;
-  };
-
   opensbi = callPackage ../misc/opensbi { };
 
   opensc = callPackage ../tools/security/opensc {
