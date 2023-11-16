@@ -14506,9 +14506,7 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
-  vtm = callPackage ../tools/misc/vtm {
-    stdenv = if stdenv.isDarwin then llvmPackages_16.stdenv else stdenv;
-  };
+  vtm = callPackage ../tools/misc/vtm { };
 
   witness = callPackage ../tools/security/witness { };
 
