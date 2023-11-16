@@ -53,6 +53,11 @@ in
               default = false;
               description = lib.mdDoc "Whether new users can register on this server.";
             };
+            global.registration_token = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.mdDoc "Token required during registration.";
+            };
             global.allow_encryption = mkOption {
               type = types.bool;
               default = true;
