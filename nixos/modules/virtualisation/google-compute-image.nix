@@ -56,6 +56,11 @@ in
       efiInstallAsRemovable = true;
     };
 
+    fileSystems."/boot" = mkIf cfg.efi {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
+    };
+
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
       postVM = ''
