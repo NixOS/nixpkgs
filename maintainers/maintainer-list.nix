@@ -19397,6 +19397,13 @@
     githubId = 3992240;
     name = "Elijah Rum";
   };
+  x0ba = {
+    email = "daniel.xu.dev@gmail.com";
+    name = "Daniel Xu";
+    github = "x0ba";
+    githubId = 64868985;
+  };
+
   x3ro = {
     name = "^x3ro";
     email = "nix@x3ro.dev";
