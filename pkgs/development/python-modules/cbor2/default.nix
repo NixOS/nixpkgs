@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, hypothesis
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
@@ -9,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.4.6";
-  format = "setuptools";
+  version = "5.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uJNQDbD+Az5XDDrclWr27vxX4oACa9LYb9U9qfHllNc=";
+    hash = "sha256-+eGS9GGp+PYILfKMA1sAbRU5BCE9yGQL7Ypy1yu8lHU=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
   ];
 
@@ -45,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python CBOR (de)serializer with extensive tag support";
     homepage = "https://github.com/agronholm/cbor2";
+    changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ taneb ];
   };
