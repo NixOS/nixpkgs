@@ -3657,6 +3657,8 @@ self: super: with self; {
 
   et-xmlfile = callPackage ../development/python-modules/et-xmlfile { };
 
+  euclid3 = callPackage ../development/python-modules/euclid3 { };
+
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
   evaluate = callPackage ../development/python-modules/evaluate { };
@@ -8843,6 +8845,8 @@ self: super: with self; {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
 
+  pcbnew-transition = callPackage ../development/python-modules/pcbnew-transition { };
+
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
   pcpp = callPackage ../development/python-modules/pcpp { };
@@ -9008,6 +9012,10 @@ self: super: with self; {
   pinecone-client = callPackage ../development/python-modules/pinecone-client { };
 
   psrpcore = callPackage ../development/python-modules/psrpcore { };
+
+  pybars3 = callPackage ../development/python-modules/pybars3 { };
+
+  pymeta3 = callPackage ../development/python-modules/pymeta3 { };
 
   pypemicro = callPackage ../development/python-modules/pypemicro { };
 

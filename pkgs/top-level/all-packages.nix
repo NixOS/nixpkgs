@@ -39794,6 +39794,8 @@ with pkgs;
     with3d = false;
   };
 
+  kicadAddons = recurseIntoAttrs (callPackage ../applications/science/electronics/kicad/addons {});
+
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = libngspice.override {
