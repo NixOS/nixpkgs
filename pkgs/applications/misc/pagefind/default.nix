@@ -24,21 +24,21 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "pagefind";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vQbLaZug3gySMIbMdNqU7XcL4GZ7XqZ3ZkwdDBC5T9o=";
+    hash = "sha256-IN+l5Wq89tjppE0xCcvczQSkJc1CLymEFeieJhvQQ54=";
   };
 
-  cargoHash = "sha256-ubuzO/67HguWPqd3y/IapO07L2pg2Q4vo1yTpEthdoU=";
+  cargoHash = "sha256-T7DBuqfpqaEmu9iItnFYsJVnEFxG1r9uXEkfqJp1mD8=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";
     src = "${src}/pagefind_web_js";
-    hash = "sha256-pGE4lUFZ4dA++8kBklcMBoaN/1Z92dfOzQKhukbuEyc=";
+    hash = "sha256-1gdVBCxxLEGFihIxoSSgxw/tMyVgwe7HFG/JjEfYVnQ=";
   };
   env.npmDeps_ui_default = fetchNpmDeps {
     name = "npm-deps-ui-default";
