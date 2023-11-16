@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.61";
+  version = "0.9.62";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-kVADlW5XqKAuQ2n0lmEin67CXGkhTVWgJaPMKpvS5Gs=";
+    hash = "sha256-GxDURkXmZvxaX9RLq/hlqtX1woWm2JKtv5x5goCY4ZU=";
   };
 
-  cargoHash = "sha256-IU2oW00VzEV8p3BpqIJZwXvdcaeweAF9nGHwtX+98vY=";
+  cargoHash = "sha256-zQB8sPeKT43qC5JjrHa7E41NyDyiQ3PGvBqgszs+tBI=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
