@@ -126,6 +126,9 @@ in {
 
   testScript =
   ''
+  # There's currently no way for slurmdbd to signal its readyness to slurmctld.
+  # If slurmctld happens to start before slurmdbd, it errors out.
+  dbd.wait_for_unit("slurmdbd.service")
   control.wait_for_unit("slurmctld.service")
   submit.wait_for_unit("network-online.target")
 
