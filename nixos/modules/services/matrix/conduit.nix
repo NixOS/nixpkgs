@@ -50,6 +50,11 @@ in
             default = false;
             description = "Whether new users can register on this server.";
           };
+          global.registration_token = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            description = "Token required during registration.";
+          };
           global.allow_encryption = lib.mkOption {
             type = lib.types.bool;
             default = true;
