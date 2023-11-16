@@ -1369,5 +1369,5 @@ in
   ];
 
   meta.doc = ./default.md;
-  meta.maintainers = with maintainers; [ tomberek ];
+  meta.maintainers = with maintainers; [ tomberek nessdoor ];
 }
