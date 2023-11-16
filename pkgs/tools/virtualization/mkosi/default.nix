@@ -108,6 +108,10 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "mkosi"
+  ];
+
   postInstall = ''
     mkdir -p $out/share/man/man1
     mv mkosi/resources/mkosi.1 $out/share/man/man1/
