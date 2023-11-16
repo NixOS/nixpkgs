@@ -19403,7 +19403,6 @@
     github = "x0ba";
     githubId = 64868985;
   };
-
   x3ro = {
     name = "^x3ro";
     email = "nix@x3ro.dev";
