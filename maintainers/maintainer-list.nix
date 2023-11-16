@@ -371,6 +371,15 @@
     githubId = 124545;
     name = "Anthony Cowley";
   };
+  acuteenvy = {
+    matrix = "@acuteenvy:matrix.org";
+    github = "acuteenvy";
+    githubId = 126529524;
+    name = "Lena";
+    keys = [{
+      fingerprint = "CE85 54F7 B9BC AC0D D648  5661 AB5F C04C 3C94 443F";
+    }];
+  };
   adamcstephens = {
     email = "happy.plan4249@valkor.net";
     matrix = "@adam:valkor.net";
