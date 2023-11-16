@@ -81,6 +81,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ccForTarget  = ccPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
     cxxForTarget  = cxxPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
   in [
+    "--sysconfdir=${placeholder "out"}/etc"
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
@@ -177,14 +178,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '' else null;
-
-  # The bootstrap.py will generated a Makefile that then executes the build.
-  # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
-  # to the bootstrap builder.
-  postConfigure = ''
-    substituteInPlace Makefile \
-      --replace 'BOOTSTRAP_ARGS :=' 'BOOTSTRAP_ARGS := --jobs $(NIX_BUILD_CORES)'
-  '';
 
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;
