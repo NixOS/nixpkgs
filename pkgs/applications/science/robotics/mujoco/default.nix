@@ -129,13 +129,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = pname;
     rev = version;
-    hash = "sha256-zHK1uYtWkKFWBMqkw/NwuBlLoXyiZJeNC/sSXwSfgW4=";
+    hash = "sha256-UXE+7KDti8RarpoJoo9Ei3TgW/Qdnj3ASRo8uTWhGrU=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
