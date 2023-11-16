@@ -685,6 +685,8 @@ with pkgs;
 
   frece = callPackage ../development/tools/frece { };
 
+  freephite = callPackage ../development/tools/freephite { };
+
   frida-tools = callPackage ../tools/security/frida-tools { };
 
   frink = callPackage ../development/tools/frink { };
