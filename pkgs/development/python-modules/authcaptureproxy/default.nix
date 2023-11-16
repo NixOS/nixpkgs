@@ -44,6 +44,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # test fails with frequency 1/200
+    # https://github.com/alandtse/auth_capture_proxy/issues/25
+    "test_return_timer_countdown_refresh_html"
+  ];
+
+  pythonImportsCheck = [
+    "authcaptureproxy"
+  ];
+
   meta = with lib; {
     changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
     description = "A proxy to capture authentication information from a webpage";

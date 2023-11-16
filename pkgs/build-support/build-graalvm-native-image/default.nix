@@ -3,7 +3,6 @@
 , glibcLocales
   # The GraalVM derivation to use
 , graalvmDrv
-, name ? "${args.pname}-${args.version}"
 , executable ? args.pname
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
@@ -15,13 +14,13 @@
     "-H:Name=${executable}"
     "-march=compatibility"
     "--verbose"
+    "-J-Dsun.stdout.encoding=UTF-8"
+    "-J-Dsun.stderr.encoding=UTF-8"
   ]
   # Extra arguments to be passed to the native-image
 , extraNativeImageBuildArgs ? [ ]
   # XMX size of GraalVM during build
 , graalvmXmx ? "-J-Xmx6g"
-  # Locale to be used by GraalVM compiler
-, LC_ALL ? "en_US.UTF-8"
 , meta ? { }
 , ...
 } @ args:
@@ -41,7 +40,7 @@ let
   ];
 in
 stdenv.mkDerivation ({
-  inherit dontUnpack LC_ALL jar;
+  inherit dontUnpack jar;
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
 
