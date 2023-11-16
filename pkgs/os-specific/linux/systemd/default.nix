@@ -5,7 +5,6 @@
 , nixosTests
 , pkgsCross
 , fetchFromGitHub
-, fetchpatch
 , fetchzip
 , buildPackages
 , makeBinaryWrapper
@@ -20,7 +19,6 @@
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
 , glib
-, substituteAll
 , gettext
 , python3Packages
 
@@ -52,7 +50,6 @@
 , intltool
 , bzip2
 , pcre2
-, e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gnutls
