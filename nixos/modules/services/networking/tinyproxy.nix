@@ -9,33 +9,28 @@ with lib;
 
 let
   cfg = config.services.tinyproxy;
+
   mkValueStringTinyproxy =
-    with lib;
     v:
     if true == v then
       "yes"
     else if false == v then
       "no"
-    else if types.path.check v then
-      ''"${v}"''
     else
       generators.mkValueStringDefault { } v;
-  mkKeyValueTinyproxy =
-    {
-      mkValueString ? mkValueStringDefault { },
-    }:
-    sep: k: v:
-    if null == v then "" else "${lib.strings.escape [ sep ] k}${sep}${mkValueString v}";
 
   settingsFormat = (
     pkgs.formats.keyValue {
-      mkKeyValue = mkKeyValueTinyproxy {
+      mkKeyValue = generators.mkKeyValueDefault {
         mkValueString = mkValueStringTinyproxy;
       } " ";
       listsAsDuplicateKeys = true;
     }
   );
-  configFile = settingsFormat.generate "tinyproxy.conf" cfg.settings;
+
+  configFile = settingsFormat.generate "tinyproxy.conf" (
+    lib.filterAttrs (k: v: v != null) cfg.settings
+  );
 
 in
 {
@@ -45,7 +40,7 @@ in
       enable = mkEnableOption "Tinyproxy daemon";
       package = mkPackageOption pkgs "tinyproxy" { };
       settings = mkOption {
-        description = "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
+        description = "Configuration for [tinyproxy](https://tinyproxy.github.io/). Note that whether a string-like value needs to double-quoted varies for each configuration option, and, unless specified explicitly here needs to be manually wrapped.";
         default = { };
         example = literalExpression ''
           {
@@ -86,8 +81,9 @@ in
               Filter = mkOption {
                 type = types.nullOr types.path;
                 default = null;
+                apply = val: if val != null then "\"${val}\"" else val;
                 description = ''
-                  Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.
+                  Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line. The filename will be quoted.
                 '';
               };
             };
