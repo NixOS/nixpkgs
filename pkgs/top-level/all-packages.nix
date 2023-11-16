@@ -34213,10 +34213,6 @@ with pkgs;
   roxctl = callPackage ../applications/networking/cluster/roxctl {
   };
 
-  rqbit = callPackage ../applications/networking/p2p/rqbit {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
   scudcloud = callPackage ../applications/networking/instant-messengers/scudcloud { };
