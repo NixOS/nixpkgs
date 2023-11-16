@@ -14,12 +14,14 @@ let
   py = python3 // {
     pkgs = python3.pkgs.overrideScope (final: prev: {
       ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        version = "0.17.21";
         src = prev.src.override {
           version = "0.17.21";
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
       urllib3 = prev.urllib3.overridePythonAttrs (prev: {
+        version = "1.26.18";
         format = "setuptools";
         src = prev.src.override {
           version = "1.26.18";
