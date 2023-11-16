@@ -29,7 +29,9 @@
 , makeWrapper
 , minizip
 , nghttp2
+, nghttp3
 , ninja
+, opencore-amr
 , openssl
 , pcre2
 , perl
@@ -52,7 +54,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.0.10";
+  version = "4.2.0";
 
   outputs = [ "out" "dev" ];
 
@@ -60,11 +62,11 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-R8CoatIZC7vkKn4UZ3G7h5qBexfKMdJJ0swi+IxAjG0=";
+    hash = "sha256-0ny2x5sGG/T7q8RehCKVH/vrSihWytvUDVYiMnfhh9s=";
   };
 
   patches = [
-    ./wireshark-lookup-dumpcap-in-path.patch
+    ./patches/lookup-dumpcap-in-path.patch
   ];
 
   depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -104,6 +106,8 @@ stdenv.mkDerivation rec {
     lz4
     minizip
     nghttp2
+    nghttp3
+    opencore-amr
     openssl
     pcre2
     snappy
@@ -137,7 +141,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     "-DLEMON_C_COMPILER=cc"
-    "-DUSE_qt6=ON"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
     "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
@@ -159,10 +162,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # to remove "cycle detected in the references"
-    mkdir -p $dev/lib/wireshark
-    mv $out/lib/wireshark/cmake $dev/lib/wireshark
-  '' + (if stdenv.isDarwin && withQt then ''
+    cmake --install . --prefix "''${!outputDev}" --component Development
+  '' + lib.optionalString (stdenv.isDarwin && withQt) ''
     mkdir -p $out/Applications
     mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
 
@@ -171,21 +172,7 @@ stdenv.mkDerivation rec {
             install_name_tool -change "$dylib" "$out/lib/$dylib" "$f"
         done
     done
-  '' else
-    lib.optionalString withQt ''
-      pwd
-
-      mkdir -pv $dev/include/{epan/{wmem,ftypes,dfilter},wsutil/wmem,wiretap}
-
-      cp config.h $dev/include/wireshark/
-      cp ../epan/*.h $dev/include/epan/
-      cp ../epan/ftypes/*.h $dev/include/epan/ftypes/
-      cp ../epan/dfilter/*.h $dev/include/epan/dfilter/
-      cp ../include/ws_*.h $dev/include/
-      cp ../wiretap/*.h $dev/include/wiretap/
-      cp ../wsutil/*.h $dev/include/wsutil/
-      cp ../wsutil/wmem/*.h $dev/include/wsutil/wmem/
-    '');
+  '';
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
