@@ -3,6 +3,7 @@
   "elm-coverage",
   "elm-doc-preview",
   "@elm-tooling/elm-language-server",
+  "elm-land",
   "elm-live",
   "elm-spa",
   "elm-test",
