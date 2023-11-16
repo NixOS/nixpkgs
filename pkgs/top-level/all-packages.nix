@@ -41605,6 +41605,8 @@ with pkgs;
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
 
+  discord-screenaudio = libsForQt5.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
+
   golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah { };
 
   golden-cheetah-bin = callPackage ../applications/misc/golden-cheetah-bin {};
