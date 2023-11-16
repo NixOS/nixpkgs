@@ -40379,6 +40379,8 @@ with pkgs;
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
+  universal-android-debloater = callPackage ../by-name/un/universal-android-debloater/package.nix { };
+
   utsushi = callPackage ../misc/drivers/utsushi { };
 
   utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
