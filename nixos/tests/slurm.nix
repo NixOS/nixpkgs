@@ -126,7 +126,13 @@ in {
 
   testScript =
   ''
+  control.wait_for_unit("slurmctld.service")
+  submit.wait_for_unit("network-online.target")
+
   start_all()
+
+  with subtest("run_PMIx_mpitest"):
+      submit.succeed("srun --wait=0 -N 3 --mpi=pmix mpitest | grep size=3")
 
   # Make sure DBD is up after DB initialzation
   with subtest("can_start_slurmdbd"):
@@ -136,9 +142,7 @@ in {
 
   # there needs to be an entry for the current
   # cluster in the database before slurmctld is restarted
-  with subtest("add_account"):
-      control.succeed("sacctmgr -i add cluster default")
-      # check for cluster entry
+  with subtest("default_account_exists"):
       control.succeed("sacctmgr list cluster | awk '{ print $1 }' | grep default")
 
   with subtest("can_start_slurmctld"):
