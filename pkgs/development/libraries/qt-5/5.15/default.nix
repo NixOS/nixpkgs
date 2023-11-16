@@ -203,6 +203,7 @@ let
       # See: https://bugreports.qt.io/browse/QTBUG-124375
       # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
       ./qtwebengine-ninja-1.12.patch
+      ./qtwebengine-cross-build.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
@@ -339,7 +340,6 @@ let
         stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
         inherit (srcs.qtwebengine) version;
         inherit (darwin) bootstrap_cmds;
-        python = python3;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
       qtwebkit = callPackage ../modules/qtwebkit.nix { };
