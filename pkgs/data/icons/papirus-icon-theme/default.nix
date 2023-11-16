@@ -2,12 +2,12 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gtk3
-, pantheon
 , breeze-icons
-, gnome-icon-theme
+, elementary-icon-theme
 , hicolor-icon-theme
 , papirus-folders
 , color ? null
+, withElementary ? false
 , gitUpdater
 }:
 
@@ -28,10 +28,10 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    pantheon.elementary-icon-theme
     breeze-icons
-    gnome-icon-theme
     hicolor-icon-theme
+  ] ++ lib.optional withElementary [
+    elementary-icon-theme
   ];
 
   dontDropIconThemeCache = true;
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/icons
-    mv {,e}Papirus* $out/share/icons
+    mv ${lib.optionalString withElementary "{,e}"}Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
       ${lib.optionalString (color != null) "${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}"}

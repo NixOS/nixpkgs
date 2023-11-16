@@ -29267,6 +29267,8 @@ with pkgs;
 
   eduli = callPackage ../data/fonts/eduli { };
 
+  epapirus-icon-theme = papirus-icon-theme.override { withElementary = true; };
+
   moeli = eduli;
 
   edusong = callPackage ../data/fonts/edusong { };
@@ -29800,6 +29802,7 @@ with pkgs;
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   papirus-icon-theme = callPackage ../data/icons/papirus-icon-theme {
+    inherit (pantheon) elementary-icon-theme;
     inherit (plasma5Packages) breeze-icons;
   };
 
