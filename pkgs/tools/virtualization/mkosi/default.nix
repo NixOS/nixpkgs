@@ -5,6 +5,7 @@
 , python3
 , bubblewrap
 , systemd
+, pandoc
 
   # Python packages
 , setuptools
@@ -63,6 +64,8 @@ buildPythonApplication rec {
   version = "19";
   format = "pyproject";
 
+  outputs = [ "out" "man" ];
+
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
@@ -84,6 +87,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    pandoc
     setuptools
     setuptools-scm
     wheel
@@ -96,9 +100,18 @@ buildPythonApplication rec {
     qemu
   ];
 
+  postBuild = ''
+    ./tools/make-man-page.sh
+  '';
+
   checkInputs = [
     pytestCheckHook
   ];
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    mv mkosi/resources/mkosi.1 $out/share/man/man1/
+  '';
 
   makeWrapperArgs = [
     "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
