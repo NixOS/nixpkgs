@@ -56,7 +56,7 @@ buildNpmPackage {
     description = "Streaming torrent app for Mac, Windows, and Linux";
     homepage = "https://webtorrent.io/desktop";
     license = licenses.mit;
-    maintainers = [ maintainers.flokli maintainers.bendlas ];
+    maintainers = [ maintainers.bendlas ];
   };
 
 }
