@@ -439,6 +439,7 @@ else let
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
+            bindgen_clang_arguments = ['-target', '${stdenv.targetPlatform.config}']
             needs_exe_wrapper = ${boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
 
             [host_machine]
@@ -449,6 +450,7 @@ else let
 
             [binaries]
             llvm-config = 'llvm-config-native'
+            rust = ['rustc', '--target', '${stdenv.targetPlatform.rust.rustcTargetSpec}']
           '';
           crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
         in crossFlags ++ mesonFlags;

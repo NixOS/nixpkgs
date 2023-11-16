@@ -452,6 +452,7 @@ mapAliases ({
   libbencodetools = bencodetools; # Added 2022-07-30
   libbpf_1 = libbpf; # Added 2022-12-06
   libcap_pam = throw "'libcap_pam' has been replaced with 'libcap'"; # Converted to throw 2023-09-10
+  libclc = llvmPackages_latest.libclc; # Added 2023-10-28
   libgme = game-music-emu; # Added 2022-07-20
   libgpgerror = libgpg-error; # Added 2021-09-04
   libheimdal = heimdal; # Added 2022-11-18
@@ -727,6 +728,9 @@ mapAliases ({
   prometheus-speedtest-exporter = throw "prometheus-speedtest-exporter was removed as unmaintained"; # Added 2023-07-31
   protobuf3_17 = throw "protobuf3_17 does not receive updates anymore and has been removed"; # Added 2023-05-21
   protobuf3_19 = throw "protobuf3_19 does not receive updates anymore and has been removed"; # Added 2023-10-01
+  protobuf3_24 = protobuf_24;
+  protobuf3_23 = protobuf_23;
+  protobuf3_21 = protobuf_21;
   protonup = protonup-ng; # Added 2022-11-06
   proxmark3-rrg = proxmark3; # Added 2023-07-25
   proxmark3-unstable = throw "removed in favor of rfidresearchgroup fork"; # Added 2023-07-25

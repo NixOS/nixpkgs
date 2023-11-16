@@ -16,8 +16,9 @@ let
 
   patches = [
     # gradle 7 support
+    # https://github.com/freenet/fred/pull/827
     (fetchpatch {
-      url = "https://github.com/freenet/fred/pull/827.patch";
+      url = "https://github.com/freenet/fred/commit/8991303493f2c0d9933f645337f0a7a5a979e70a.patch";
       sha256 = "sha256-T1zymxRTADVhhwp2TyB+BC/J4gZsT/CUuMrT4COlpTY=";
     })
   ];

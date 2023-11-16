@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSOUFFLE_GIT=OFF" ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
+
   postInstall = ''
     wrapProgram "$out/bin/souffle" --prefix PATH : "${toolsPath}"
   '';

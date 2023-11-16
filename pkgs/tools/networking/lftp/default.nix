@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.isDarwin "format";
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Required to build with clang 16 or `configure` will fail to detect several standard functions.
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   configureFlags = [
     "--with-openssl"
     "--with-readline=${readline.dev}"

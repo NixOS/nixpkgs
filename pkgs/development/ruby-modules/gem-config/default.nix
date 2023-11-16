@@ -22,7 +22,7 @@
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
+, cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
@@ -76,7 +76,7 @@ in
   cairo-gobject = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ cairo pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
+    buildInputs = [ cairo expat pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   charlock_holmes = attrs: {
@@ -376,7 +376,12 @@ in
   };
 
   iconv = attrs: {
+    dontBuild = false;
     buildFlags = lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    patches = [
+      # Fix incompatible function pointer conversion errors with clang 16
+      ./iconv-fix-incompatible-function-pointer-conversions.patch
+    ];
   };
 
   idn-ruby = attrs: {

@@ -29,6 +29,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''

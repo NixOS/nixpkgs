@@ -1518,11 +1518,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXrandr = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXrender, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXrandr";
-    version = "1.5.3";
+    version = "1.5.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXrandr-1.5.3.tar.xz";
-      sha256 = "0a5l9q37c9m6gfdchlj43a9j3mw2avfwasfn0ivlkqbq980kjxl9";
+      url = "mirror://xorg/individual/lib/libXrandr-1.5.4.tar.xz";
+      sha256 = "1lxlqd9ffjr1myfpyk91594n1h07ck6121m6ba8qajjz6xjv1m8s";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1919,11 +1919,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   luit = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "luit";
-    version = "20190106";
+    version = "20230201";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://invisible-mirror.net/archives/luit/luit-20190106.tgz";
-      sha256 = "081rrajj5hpgx3pvm43grqzscnq5kl320q0wq6zzhf6wrijhz41b";
+      url = "https://invisible-mirror.net/archives/luit/luit-20230201.tgz";
+      sha256 = "0vy5fqp26pnrdn0hmgnmar6m2y06syrz188jqh03vqkyphfqsapf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2859,11 +2859,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-ati";
-    version = "5eba006e4129e8015b822f9e1d2f1e613e252cda";
+    version = "22.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/archive/5eba006e4129e8015b822f9e1d2f1e613e252cda/xf86-video-ati-5eba006e4129e8015b822f9e1d2f1e613e252cda.tar.bz2";
-      sha256 = "0gmymk8207fd9rjliq05l2gvx220h432rj3h75hv2ylr3k9vmp2b";
+      url = "mirror://xorg/individual/driver/xf86-video-ati-22.0.0.tar.xz";
+      sha256 = "0vdznwx78alhbb05paw2xd65hcsila2kqflwwnbpq8pnsdbbpj68";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3899,11 +3899,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xkeyboard-config";
-    version = "2.39";
+    version = "2.40";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.39.tar.xz";
-      sha256 = "10m6mbjymi7qf30g5yd400kqijdjg7ym9qjzh0bc3c7pxwrzbias";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.40.tar.xz";
+      sha256 = "1qrakn6gyj701mxwbrlhjv4gd73ws51140ns68a1kivxxhdvlgbs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

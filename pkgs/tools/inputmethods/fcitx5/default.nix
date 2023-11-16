@@ -8,6 +8,7 @@
 , extra-cmake-modules
 , cairo
 , pango
+, expat
 , fribidi
 , fmt
 , wayland
@@ -29,6 +30,7 @@
 , libdatrie
 , xcbutilkeysyms
 , pcre
+, xcbutil
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    expat
     fmt
     isocodes
     cairo
@@ -84,6 +87,7 @@ stdenv.mkDerivation rec {
     libXdmcp
     libxkbcommon
     pcre
+    xcbutil
     xcbutilwm
     xcbutilkeysyms
     xcb-imdkit

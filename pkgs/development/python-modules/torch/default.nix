@@ -34,8 +34,6 @@
   # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
   ninja,
 
-  linuxHeaders_5_19,
-
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorboard, protobuf,
 
@@ -288,6 +286,29 @@ in buildPythonPackage rec {
   # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
   ++ lib.optionals (stdenv.cc.isGNU && lib.versions.major stdenv.cc.version == "12" ) [
     "-Wno-error=free-nonheap-object"
+  ]
+  # .../source/torch/csrc/autograd/generated/python_functions_0.cpp:85:3:
+  # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+  ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16") [
+    "-Wno-error=cast-function-type-strict"
+  # Suppresses the most spammy warnings.
+  # This is mainly to fix https://github.com/NixOS/nixpkgs/issues/266895.
+  ] ++ lib.optionals rocmSupport [
+    "-Wno-#warnings"
+    "-Wno-cpp"
+    "-Wno-unknown-warning-option"
+    "-Wno-ignored-attributes"
+    "-Wno-deprecated-declarations"
+    "-Wno-defaulted-function-deleted"
+    "-Wno-pass-failed"
+  ] ++ [
+    "-Wno-unused-command-line-argument"
+    "-Wno-maybe-uninitialized"
+    "-Wno-uninitialized"
+    "-Wno-array-bounds"
+    "-Wno-stringop-overflow"
+    "-Wno-free-nonheap-object"
+    "-Wno-unused-result"
   ]));
 
   nativeBuildInputs = [
@@ -304,7 +325,6 @@ in buildPythonPackage rec {
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [ blas blas.provider ]
-    ++ lib.optionals stdenv.isLinux [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
       cuda_cudart # cuda_runtime.h and libraries

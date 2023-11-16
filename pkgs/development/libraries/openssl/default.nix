@@ -18,14 +18,14 @@
 # files.
 
 let
-  common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
+  common = { version, hash, patches ? [], withDocs ? false, extraMeta ? {} }:
    stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
     inherit version;
 
     src = fetchurl {
       url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     inherit patches;
@@ -219,9 +219,11 @@ let
 
     meta = with lib; {
       homepage = "https://www.openssl.org/";
+      changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       mainProgram = "openssl";
+      maintainers = with maintainers; [ thillux ];
       pkgConfigModules = [
         "libcrypto"
         "libssl"
@@ -238,7 +240,7 @@ in {
   # and backport this to stable release (23.05).
   openssl_1_1 = common {
     version = "1.1.1w";
-    sha256 = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
+    hash = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -255,8 +257,32 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.11";
-    sha256 = "sha256-s0JdO7SiIY0Gl+tB9/wM3t4BbtGcpJ0Wi3jo2UeIf1U=";
+    version = "3.0.12";
+    hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
+
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./use-etc-ssl-certs-darwin.patch
+       else ./use-etc-ssl-certs.patch)
+    ];
+
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
+  };
+
+  openssl_3_1 = common {
+    version = "3.1.4";
+    hash = "sha256-hAr1Nmq5tSK95SWCa+PvD7Cvgcap69hMqmAP6hcx7uM=";
+
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

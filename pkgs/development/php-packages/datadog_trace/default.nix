@@ -47,9 +47,8 @@ buildPecl rec {
     curl
     pcre2
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.Libsystem
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.Security
     libiconv
   ];
 

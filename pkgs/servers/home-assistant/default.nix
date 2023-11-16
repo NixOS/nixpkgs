@@ -40,6 +40,16 @@ let
         };
       });
 
+      # https://github.com/home-assistant/core/pull/101913
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.8.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+        };
+      });
+
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -287,16 +297,6 @@ let
           repo = "python-vultr";
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
-      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.1";
-        src = fetchFromGitHub {
-          owner = "aaugustin";
-          repo = "websockets";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
         };
       });
 

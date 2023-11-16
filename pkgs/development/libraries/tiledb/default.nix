@@ -65,6 +65,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mkdir -p build/externals/src/ep_catch
     ln -sf ${catch2}/include/catch2 build/externals/src/ep_catch/single_include
+
+    sed -i '38i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
+      cmake/Modules/FindOpenSSL_EP.cmake
   '';
 
   doCheck = true;

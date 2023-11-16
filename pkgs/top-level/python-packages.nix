@@ -2492,10 +2492,10 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/Cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
-    version = "3.0.2";
+    version = "3.0.3";
     src = old.src.override {
       inherit version;
-      hash = "sha256-lZSBjcqLsirmWAxSItorxcwyM0NQvS0pSgDYZpvMYbU=";
+      hash = "sha256-MnMJMBsB9ynxc6lFEcsigMh7oDyJ7UKOiPkT93gkUDA=";
     };
     patches = [ ];
   });
@@ -6140,12 +6140,14 @@ self: super: with self; {
   };
 
   libarcus = callPackage ../development/python-modules/libarcus {
-    protobuf = pkgs.protobuf3_21;
+    protobuf = pkgs.protobuf_21;
   };
 
   libasyncns = callPackage ../development/python-modules/libasyncns {
     inherit (pkgs) libasyncns;
   };
+
+  libclang = callPackage ../development/python-modules/libclang { };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -6957,7 +6959,9 @@ self: super: with self; {
 
   mobly = callPackage ../development/python-modules/mobly { };
 
-  mocket = callPackage ../development/python-modules/mocket { };
+  mocket = callPackage ../development/python-modules/mocket {
+    redis-server = pkgs.redis;
+  };
 
   mock = callPackage ../development/python-modules/mock { };
 
@@ -8407,12 +8411,7 @@ self: super: with self; {
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
   onnx = callPackage ../development/python-modules/onnx {
-    # in linux c++ defaults to 17
-    # on darwin clang is on an old version so c++ defaults to 11
-    abseil-cpp = if stdenv.isLinux then
-        pkgs.abseil-cpp_202301
-      else
-        pkgs.abseil-cpp_202301.override { cxxStandard = "14"; };
+    abseil-cpp = pkgs.abseil-cpp_202301;
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
@@ -9592,11 +9591,11 @@ self: super: with self; {
   # Protobuf 4.x
   protobuf = callPackage ../development/python-modules/protobuf {
     # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-    inherit (pkgs) protobuf;
+    protobuf = pkgs.protobuf;
   };
 
   # Protobuf 3.x
-  protobuf3 = callPackage ../development/python-modules/protobuf {
+  protobuf3 = callPackage ../development/python-modules/protobuf/3.nix {
     protobuf = pkgs.protobuf3_20;
   };
 
@@ -9625,6 +9624,7 @@ self: super: with self; {
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = callPackage ../development/python-modules/psutil {
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 
@@ -12835,7 +12835,7 @@ self: super: with self; {
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
-    inherit (pkgs) cmake llvmPackages qt5;
+    inherit (pkgs) cmake llvmPackages_15 qt5;
   });
 
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
@@ -13258,7 +13258,7 @@ self: super: with self; {
 
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp { };
 
-  sphinxcontrib_httpdomain = callPackage ../development/python-modules/sphinxcontrib_httpdomain { };
+  sphinxcontrib-httpdomain = callPackage ../development/python-modules/sphinxcontrib-httpdomain { };
 
   sphinxcontrib-jquery = callPackage ../development/python-modules/sphinxcontrib-jquery { };
 
@@ -13274,7 +13274,7 @@ self: super: with self; {
 
   sphinxcontrib-nwdiag = callPackage ../development/python-modules/sphinxcontrib-nwdiag { };
 
-  sphinxcontrib_newsfeed = callPackage ../development/python-modules/sphinxcontrib_newsfeed { };
+  sphinxcontrib-newsfeed = callPackage ../development/python-modules/sphinxcontrib-newsfeed { };
 
   sphinxcontrib-openapi = callPackage ../development/python-modules/sphinxcontrib-openapi { };
 
@@ -13754,7 +13754,7 @@ self: super: with self; {
 
   tensorflow-build = let
     compat = rec {
-      protobufTF = pkgs.protobuf3_21.override {
+      protobufTF = pkgs.protobuf_21.override {
         abseil-cpp = pkgs.abseil-cpp;
       };
       grpcTF = (pkgs.grpc.overrideAttrs (

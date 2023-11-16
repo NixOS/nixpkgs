@@ -249,7 +249,9 @@ self: super: {
 
   # Fix ghc-9.6.x build errors.
   libmpd = appendPatch
-    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+    # https://github.com/vimus/libmpd-haskell/pull/138
+    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/compare/95d3b3bab5858d6d1f0e079d0ab7c2d182336acb...5737096a339edc265a663f51ad9d29baee262694.patch";
+                       name = "vimus-libmpd-haskell-pull-138.patch";
                        sha256 = "sha256-CvvylXyRmoCoRJP2MzRwL0SBbrEzDGqAjXS+4LsLutQ=";
                      })
     super.libmpd;
@@ -259,8 +261,9 @@ self: super: {
     editedCabalFile = null;
     buildDepends = drv.buildDepends or [] ++ [ self.HUnit ];
     patches = [(pkgs.fetchpatch {
+      # https://github.com/jgoerzen/configfile/pull/12
       name = "ConfigFile-pr-12.patch";
-      url = "https://github.com/jgoerzen/configfile/pull/12.patch";
+      url = "https://github.com/jgoerzen/configfile/compare/d0a2e654be0b73eadbf2a50661d00574ad7b6f87...83ee30b43f74d2b6781269072cf5ed0f0e00012f.patch";
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;

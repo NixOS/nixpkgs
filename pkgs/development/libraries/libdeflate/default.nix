@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libdeflate";
-  version = "1.18";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${version}";
-    sha256 = "sha256-dWSDAYn36GDtkghmouGhHzxpa6EVwCslIPqejlLMZNM=";
+    sha256 = "sha256-HgZ2an1PCPhiLsd3ZA7tgZ1wVTOdHzDr8FHrqJhEbQw=";
   };
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];

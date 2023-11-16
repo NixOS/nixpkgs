@@ -10,6 +10,7 @@
 , git
 , hyprland-protocols
 , jq
+, libGL
 , libdrm
 , libexecinfo
 , libinput
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       cairo
       git
       hyprland-protocols
+      libGL
       libdrm
       libinput
       libxkbcommon

@@ -80,7 +80,8 @@ buildPythonPackage rec {
     python-jose
     trio
     sqlalchemy
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ passthru.optional-dependencies.all
+  ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
