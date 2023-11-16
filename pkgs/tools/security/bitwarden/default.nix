@@ -5,6 +5,7 @@
 , dbus
 , electron_25
 , fetchFromGitHub
+, fetchpatch2
 , glib
 , gnome
 , gtk3
@@ -27,26 +28,35 @@ let
   electron = electron_25;
 in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.10.0";
+  version = "2023.10.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-egXToXWfb9XV7JuCRBYJO4p/e+WOwMncPKz0oBgeALQ=";
+    hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/bitwarden/clients/issues/6812#issuecomment-1806830091
+      url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
+      hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
+    })
+  ];
 
   nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-iO8ZozVl1vOOqowQARnRJWSFUFnau46+dKfcMSkyU3o=";
+  npmDepsHash = "sha256-KN8C9Y0tfhHVagk+CUMpI/bIRChhzxC9M27HkU4aTEc=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
-    inherit src;
+    inherit patches src;
+    patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-I7wENo4cCxcllEyT/tgAavHNwYPrQkPXxg/oTsl/ClA=";
+    hash = "sha256-AmtdmOR3aZJTZiFbkwRXjeTOJdcN40bTmWx4Ss3JNJ8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

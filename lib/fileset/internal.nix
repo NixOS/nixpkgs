@@ -786,29 +786,43 @@ rec {
         _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)
       ) (_directoryEntries path lhs);
 
-  _fileFilter = predicate: fileset:
+  # Filters all files in a path based on a predicate
+  # Type: ({ name, type, ... } -> Bool) -> Path -> FileSet
+  _fileFilter = predicate: root:
     let
-      recurse = path: tree:
-        mapAttrs (name: subtree:
-          if isAttrs subtree || subtree == "directory" then
-            recurse (path + "/${name}") subtree
-          else if
-            predicate {
-              inherit name;
-              type = subtree;
-              # To ensure forwards compatibility with more arguments being added in the future,
-              # adding an attribute which can't be deconstructed :)
-              "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
-            }
-          then
-            subtree
+      # Check the predicate for a single file
+      # Type: String -> String -> filesetTree
+      fromFile = name: type:
+        if
+          predicate {
+            inherit name type;
+            # To ensure forwards compatibility with more arguments being added in the future,
+            # adding an attribute which can't be deconstructed :)
+            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
+          }
+        then
+          type
+        else
+          null;
+
+      # Check the predicate for all files in a directory
+      # Type: Path -> filesetTree
+      fromDir = path:
+        mapAttrs (name: type:
+          if type == "directory" then
+            fromDir (path + "/${name}")
           else
-            null
-        ) (_directoryEntries path tree);
+            fromFile name type
+        ) (readDir path);
+
+      rootType = pathType root;
     in
-    if fileset._internalIsEmptyWithoutBase then
-      _emptyWithoutBase
+    if rootType == "directory" then
+      _create root (fromDir root)
     else
-      _create fileset._internalBase
-        (recurse fileset._internalBase fileset._internalTree);
+      # Single files are turned into a directory containing that file or nothing.
+      _create (dirOf root) {
+        ${baseNameOf root} =
+          fromFile (baseNameOf root) rootType;
+      };
 }
