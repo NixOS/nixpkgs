@@ -9112,6 +9112,8 @@ self: super: with self; {
 
   pixelmatch = callPackage ../development/python-modules/pixelmatch { };
 
+  pixel-ring = callPackage ../development/python-modules/pixel-ring { };
+
   pjsua2 = (toPythonModule (pkgs.pjsip.override {
     pythonSupport = true;
     python3 = self.python;
