@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
-    sha256 = "sha256-RJ2uc/GIWU/fDJijSzYS8GdL7zUkeExOLWXtTbi8ZLk=";
+    hash = "sha256-gBgDC+GH948JMsjzo/SOpWDzJXu0g58YX1VW28PeorI=";
   };
 
   buildInputs = [ which ];
