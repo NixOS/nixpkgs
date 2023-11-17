@@ -1042,7 +1042,7 @@ in {
         ensureDatabases = [ cfg.config.dbname ];
         ensureUsers = [{
           name = cfg.config.dbuser;
-          ensurePermissions = { "DATABASE ${cfg.config.dbname}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }];
       };
 
