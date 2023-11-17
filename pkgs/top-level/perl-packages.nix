@@ -23062,10 +23062,10 @@ with self; {
 
   StringBinaryInterpolation = buildPerlPackage {
     pname = "String-Binary-Interpolation";
-    version = "1.0.0";
+    version = "1.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/String-Binary-Interpolation-1.0.0.tar.gz";
-      hash = "sha256-2lXYmCTBrdniqpWP8OpILyaCLkJI7TOo1rT7vXdYivE=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/String-Binary-Interpolation-1.0.1.tar.gz";
+      hash = "sha256-wjcN0W6ipozmRpPnXnDw1VIqyyAPWTmehxBcR1gKy2Q=";
     };
     meta = {
       description = "Make it easier to interpolate binary bytes into a string";
