@@ -1150,6 +1150,7 @@
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
+  ./services/search/opensearch-dashboards.nix
   ./services/search/qdrant.nix
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
