@@ -26693,10 +26693,10 @@ with self; {
 
   TextMultiMarkdown = buildPerlPackage {
     pname = "Text-MultiMarkdown";
-    version = "1.001";
+    version = "1.002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Text-MultiMarkdown-1.001.tar.gz";
-      hash = "sha256-UB1ErH2lSUSZzqhR6bL7UlOAgLDB6TYjDIwm1n4EhDM=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Text-MultiMarkdown-1.002.tar.gz";
+      hash = "sha256-yzVbO1pGt8oGGU1+iJ1ZPg8gnmm7eMyTPV5/hci0tnc=";
     };
     buildInputs = [ ListMoreUtils TestException ];
     propagatedBuildInputs = [ HTMLParser TextMarkdown ];
