@@ -22233,10 +22233,10 @@ with self; {
 
   ScalarType = buildPerlPackage {
     pname = "Scalar-Type";
-    version = "0.3.2";
+    version = "1.0.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Scalar-Type-0.3.2.tar.gz";
-      hash = "sha256-WQyv6gz1RZmSoEiFYsDb1vnfdYtfAH8OQ6uhMLRe7oY=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Scalar-Type-1.0.0.tar.gz";
+      hash = "sha256-RZKyc41pU0lGlJjmSuTiwjSYTtIjmQZeYcDb19VZdpc=";
     };
     propagatedBuildInputs = [ CaptureTiny TestException ];
     meta = {
