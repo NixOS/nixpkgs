@@ -3772,6 +3772,8 @@ self: super: with self; {
 
   facedancer = callPackage ../development/python-modules/facedancer { };
 
+  facexlib = callPackage ../development/python-modules/facexlib { };
+
   face-recognition = callPackage ../development/python-modules/face-recognition { };
 
   face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
