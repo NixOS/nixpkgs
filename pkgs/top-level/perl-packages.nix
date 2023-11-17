@@ -26574,10 +26574,10 @@ with self; {
 
   TextLayout = buildPerlPackage {
     pname = "Text-Layout";
-    version = "0.031";
+    version = "0.032";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.031.tar.gz";
-      hash = "sha256-EQ4ObbzKIFhKcckNpxBYAdRrXXYd+QmsTfYQbDM3B34=";
+      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.032.tar.gz";
+      hash = "sha256-em3iICQurst9ZJWIFD1P4VHzQ7VtPXPBkyn8csc34yE=";
     };
     buildInputs = [ IOString PDFAPI2 ];
     meta = {
