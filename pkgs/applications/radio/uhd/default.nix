@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
   #
-  version = "4.5.0.0";
+  version = "4.6.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -63,14 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     # The updateScript relies on the `src` using `hash`, and not `sha256. To
     # update the correct hash for the `src` vs the `uhdImagesSrc`
-    hash = "sha256-0EqMBaQiNr8PE542YNkPvX3o1HhnhrO0Kz1euphY6Ps=";
+    hash = "sha256-9ZGt0ZrGbprCmpAuOue6pg2gliu4MvlRFHGxyMJeKAc=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     # Please don't convert this to a hash, in base64, see comment near src's
     # hash.
-    sha256 = "13cn41wv7vldk4vx7vy3jbb3wb3a5vpfg3ay893klpi6vzxc1dly";
+    sha256 = "17g503mhndaabrdl7qai3rdbafr8xx8awsyr7h2bdzwzprzmh4m3";
   };
   passthru = {
     updateScript = [
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
-    ++ optionals (enableUtils && stdenv.targetPlatform.isLinux) [ "moveUdevRules" ]
+    ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [ "moveUdevRules" ]
   ;
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`

@@ -37557,6 +37557,8 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
+  animatch = callPackage ../games/animatch { };
+
   anki = callPackage ../games/anki {
     inherit (darwin.apple_sdk.frameworks) AVKit CoreAudio;
   };
@@ -38341,7 +38343,6 @@ with pkgs;
   scid-vs-pc = callPackage ../games/scid-vs-pc { };
 
   scummvm = callPackage ../games/scummvm {
-    stdenv = if (stdenv.isDarwin && stdenv.isAarch64) then llvmPackages_14.stdenv else stdenv;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) Cocoa AudioToolbox Carbon CoreMIDI AudioUnit;
   };

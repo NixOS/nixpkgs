@@ -59,7 +59,7 @@ mkYarnPackage rec {
   buildPhase = ''
     runHook preBuild
     cd deps/${pname}
-    napi build --target ${stdenv.targetPlatform.rust.rustcTargetSpec} --dts ../src/libRs.d.ts --release ./lib
+    napi build --target ${stdenv.hostPlatform.rust.rustcTargetSpec} --dts ../src/libRs.d.ts --release ./lib
     yarn run build:app:fix-defs
     yarn run build:app
     yarn run build:web
