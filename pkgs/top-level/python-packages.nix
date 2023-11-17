@@ -1492,6 +1492,8 @@ self: super: with self; {
 
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
 
+  blendmodes = callPackage ../development/python-modules/blendmodes { };
+
   bless = callPackage ../development/python-modules/bless { };
 
   blessed = callPackage ../development/python-modules/blessed { };
