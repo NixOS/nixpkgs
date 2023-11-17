@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch2
 , gettext
 , meson
 , ninja
@@ -51,11 +50,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.78.0";
+  version = "2.78.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "ROqri3IId84wPFVAtlexJvEtyUly2YgLUpWfQ/tTezA=";
+    sha256 = "kVvD0PhQfWUOrTgy4vj7Zw/OWarE13VKfatvHm/teLI=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -97,13 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable flaky test.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
-
-    # Fix protentional NetworkManager crashes.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/3105
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/82c764ce2e42f0d1032627dabcbd742d5f2bd8fa.patch";
-      hash = "sha256-HALd5kv+dwZQJA75rG9IbAMr+DwR99Lm+8+HHg7eBBc=";
-    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
