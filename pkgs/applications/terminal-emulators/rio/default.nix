@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, darwin
 , fetchFromGitHub
 , rustPlatform
 , nixosTests
@@ -14,18 +16,21 @@
 , vulkan-loader
 , libxkbcommon
 
-, withX11 ? true
+, withX11 ? !stdenv.isDarwin
 , libX11
 , libXcursor
 , libXi
 , libXrandr
 , libxcb
 
-, withWayland ? true
+, withWayland ? !stdenv.isDarwin
 , wayland
 }:
 let
-  rlinkLibs = [
+  rlinkLibs = if stdenv.isDarwin then [
+    darwin.libobjc
+    darwin.apple_sdk.frameworks.AppKit
+  ] else [
     (lib.getLib gcc-unwrapped)
     fontconfig
     libGL
@@ -55,9 +60,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-XD+/DaaJEJ9jHZITTUma/wfsbduPUTc/SralPOx46Yo=";
 
   nativeBuildInputs = [
-    autoPatchelfHook
     ncurses
+  ] ++ lib.optionals stdenv.isLinux [
     pkg-config
+    autoPatchelfHook
   ];
 
   runtimeDependencies = rlinkLibs;
@@ -67,10 +73,9 @@ rustPlatform.buildRustPackage rec {
   outputs = [ "out" "terminfo" ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    (lib.optionalString withX11 "x11")
-    (lib.optionalString withWayland "wayland")
-  ];
+  buildFeatures = [ ]
+    ++ lib.optional withX11 "x11"
+    ++ lib.optional withWayland "wayland";
 
   checkFlags = [
     # Fail to run in sandbox environment.
@@ -86,6 +91,11 @@ rustPlatform.buildRustPackage rec {
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications/
+    mv misc/osx/Rio.app/ $out/Applications/
+    mkdir $out/Applications/Rio.app/Contents/MacOS/
+    ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
   '';
 
   passthru = {
