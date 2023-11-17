@@ -27419,10 +27419,10 @@ with self; {
 
   TimeOut = buildPerlPackage {
     pname = "Time-Out";
-    version = "0.11";
+    version = "0.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PA/PATL/Time-Out-0.11.tar.gz";
-      hash = "sha256-k5baaY/UUtnOYNZCzaIQjxHyDtdsiWF3muEbiXroFdI=";
+      url = "mirror://cpan/authors/id/S/SV/SVW/Time-Out-0.24.tar.gz";
+      hash = "sha256-KDk7rrlDI2EyWVuhuHk6fGrN3qRMVTEzRHu240zSZc0=";
     };
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFatal TestNeeds ];
     propagatedBuildInputs = [ TryTiny ];
