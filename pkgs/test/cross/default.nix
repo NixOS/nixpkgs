@@ -153,6 +153,8 @@ let
     # x86_64-linux buildPlatform.
     pkgs.pkgsMusl.pkgsCross.gnu64.hello
 
+    pkgs.pkgsCross.musl64.crosvm
+
     # Two web browsers -- exercises almost the entire packageset
     pkgs.pkgsCross.aarch64-multiplatform.qt5.qutebrowser
     pkgs.pkgsCross.aarch64-multiplatform.firefox
