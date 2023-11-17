@@ -6,17 +6,18 @@
 , withDocs ? true
 , doxygen
 , graphviz-nox
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Pe1h8dHS+wWql0oimfPlLHvXbgLEo2kiRNKMD8EvNZ0=";
+    hash = "sha256-tYDVQ3165k1L0tJZxZtm/en6pn9m1MvuDHgs0KBsfnY=";
   };
 
   patches = [
@@ -40,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   checkInputs = [ gtest ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/eProsima/Fast-CDR";
