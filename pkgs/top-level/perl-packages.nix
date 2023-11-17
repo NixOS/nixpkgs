@@ -8757,10 +8757,10 @@ with self; {
 
   EncodeJIS2K = buildPerlPackage {
     pname = "Encode-JIS2K";
-    version = "0.03";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.03.tar.gz";
-      hash = "sha256-HshNcts53rTa1vypWs/MIQM/RaJNNHwg+aGmlolsNcw=";
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.05.tar.gz";
+      hash = "sha256-Ai8fPWhpdCs3GMJ7/MpvfJas7/rAoiZ9FAu/ZT18CsI=";
     };
     outputs = [ "out" ];
     meta = {
