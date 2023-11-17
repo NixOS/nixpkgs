@@ -3,7 +3,7 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudatoolkit
-, enableRocm ? false
+, enableRocm ? config.rocmSupport
 , rocmPackages
 }:
 

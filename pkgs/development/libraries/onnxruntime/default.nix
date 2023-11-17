@@ -17,7 +17,7 @@
 , microsoft-gsl
 , iconv
 , gtest
-, protobuf3_21
+, protobuf_21
 , pythonSupport ? true
 }:
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     python3Packages.python
-    protobuf3_21
+    protobuf_21
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     setuptools
     wheel
@@ -154,6 +154,13 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=unused-but-set-variable"
+    ];
+  };
+
   doCheck = true;
 
   postPatch = ''
@@ -177,7 +184,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };

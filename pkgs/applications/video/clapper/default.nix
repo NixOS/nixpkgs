@@ -17,6 +17,7 @@
 , gjs
 , gtk4
 , gst_all_1
+, libGL
 , libadwaita
 , appstream-glib
 , libsoup
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gtk4
+    libGL
     libadwaita
     libsoup
     wayland

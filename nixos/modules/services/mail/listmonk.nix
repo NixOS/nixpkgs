@@ -168,7 +168,7 @@ in {
 
       ensureUsers = [{
         name = "listmonk";
-        ensurePermissions = { "DATABASE listmonk" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
 
       ensureDatabases = [ "listmonk" ];

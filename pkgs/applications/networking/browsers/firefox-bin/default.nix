@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     pciutils
   ];
   appendRunpaths = [
-    "${pipewire.lib}/lib"
+    "${pipewire}/lib"
   ];
 
   installPhase =

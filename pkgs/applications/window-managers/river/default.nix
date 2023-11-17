@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       adamcstephens
-      fortuneteller2k
+      moni
       rodrgz
     ];
     mainProgram = "river";

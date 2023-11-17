@@ -22,6 +22,7 @@
 , file
 , substituteAll
 , writeTextFile
+, writeShellApplication
 }:
 
 let
@@ -127,6 +128,17 @@ let
     ];
 
   defaultShellPath = lib.makeBinPath defaultShellUtils;
+
+  bashWithDefaultShellUtils = writeShellApplication {
+    name = "bash";
+    runtimeInputs = defaultShellUtils;
+    text = ''
+      if [[ "$PATH" == "/no-such-path" ]]; then
+        export PATH=${defaultShellPath}
+      fi
+      exec ${bash}/bin/bash "$@"
+    '';
+  };
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
@@ -420,8 +432,8 @@ stdenv.mkDerivation rec {
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
         substituteInPlace "$path" \
-          --replace /bin/bash ${bash}/bin/bash \
-          --replace "/usr/bin/env bash" ${bash}/bin/bash \
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash \
+          --replace "/usr/bin/env bash" ${bashWithDefaultShellUtils}/bin/bash \
           --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
@@ -436,17 +448,17 @@ stdenv.mkDerivation rec {
 
       # bazel test runner include references to /bin/bash
       substituteInPlace tools/build_rules/test_rules.bzl \
-        --replace /bin/bash ${bash}/bin/bash
+        --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
 
       for i in $(find tools/cpp/ -type f)
       do
         substituteInPlace $i \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
       done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
-          --replace /bin/bash ${bash}/bin/bash
+          --replace /bin/bash ${bashWithDefaultShellUtils}/bin/bash
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
@@ -523,7 +535,7 @@ stdenv.mkDerivation rec {
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
 
-  buildInputs = [buildJdk] ++ defaultShellUtils;
+  buildInputs = [buildJdk bashWithDefaultShellUtils] ++ defaultShellUtils;
 
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.

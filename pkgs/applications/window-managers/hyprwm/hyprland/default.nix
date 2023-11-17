@@ -10,6 +10,7 @@
 , git
 , hyprland-protocols
 , jq
+, libGL
 , libdrm
 , libexecinfo
 , libinput
@@ -40,13 +41,13 @@ assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been renam
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.32.0";
+  version = "0.32.3";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HrnlCdZBqqE37gFORapfSGEGcqhCyhX2aSMRnDEmR0k=";
+    hash = "sha256-8PP26+ybmScq5WpFd2JPqUDzG2VggYOvD6/rzY9/CJ4=";
   };
 
   patches = [
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       cairo
       git
       hyprland-protocols
+      libGL
       libdrm
       libinput
       libxkbcommon

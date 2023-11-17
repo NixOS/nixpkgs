@@ -9,7 +9,7 @@
 , libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , alsa-lib
-, x11Support ? !stdenv.targetPlatform.isWindows && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isAndroid
 , libX11
 , xorgproto
 , libICE
@@ -58,13 +58,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.28.3";
+  version = "2.28.4";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-/kQ2IyvAfmZ+zIUt1WuEIeX0nYPGXDlAQk2qDsQnFFs=";
+    hash = "sha256-1+1m0s3pBCTu924J/4aIu4IHk/N88x2djWDEsDpAJn4=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-oss"
   ] ++ lib.optional (!x11Support) "--without-x"
   ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
-  ++ lib.optional stdenv.targetPlatform.isWindows "--disable-video-opengles"
+  ++ lib.optional stdenv.hostPlatform.isWindows "--disable-video-opengles"
   ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   # We remove libtool .la files when static libs are requested,

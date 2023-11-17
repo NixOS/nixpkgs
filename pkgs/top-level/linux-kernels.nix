@@ -203,15 +203,9 @@ in {
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = callPackage ../os-specific/linux/kernel/mainline.nix {
-        branch = "6.4";
-      };
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.dell_xps_regression
-      ];
-    };
+      kernel = linux_6_5;
+      kernelPatches = linux_6_5.kernelPatches;
+   };
 
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
@@ -386,6 +380,8 @@ in {
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
+
+    mstflint_access = callPackage ../os-specific/linux/mstflint_access { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
 

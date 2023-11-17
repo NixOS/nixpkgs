@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.5.1";
+  version = "4.6.0";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${version}";
-    hash = "sha256-qQEthy6YhNAQmdDMyoCIvK8f3Tx25MgqhJZW74CB93E=";
+    hash = "sha256-qCg5qjsPPynCHIg0JsPJldwVdcYkI68zYmyNAKUCoyw=";
   };
 
   patches = [

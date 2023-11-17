@@ -257,6 +257,7 @@ foreach my $path (glob "/sys/class/{block,mmc_host}/*") {
 
 # Add bcache module, if needed.
 my @bcacheDevices = glob("/dev/bcache*");
+@bcacheDevices = grep(!qr#dev/bcachefs.*#, @bcacheDevices);
 if (scalar @bcacheDevices > 0) {
     push @initrdAvailableKernelModules, "bcache";
 }
@@ -466,6 +467,19 @@ EOF
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
     # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
+
+    # This should work for single and multi-device systems.
+    # still needs subvolume support
+    if ($fsType eq "bcachefs") {
+        my ($status, @info) = runCommand("bcachefs fs usage $rootDir$mountPoint");
+        my $UUID = $info[0];
+
+        if ($status == 0 && $UUID =~ /^Filesystem:[ \t\n]*([0-9a-z-]+)/) {
+            $stableDevPath = "UUID=$1";
+        } else {
+            print STDERR "warning: can't find bcachefs mount UUID falling back to device-path";
+        }
+    }
 
     # Emit the filesystem.
     $fileSystems .= <<EOF;

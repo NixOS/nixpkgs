@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchNpmDeps, buildPackages, nodejs } @ topLevelArgs:
+{ lib
+, stdenv
+, fetchNpmDeps
+, buildPackages
+, nodejs
+, darwin
+} @ topLevelArgs:
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -35,16 +41,15 @@
   # Value for npm `--workspace` flag and directory in which the files to be installed are found.
 , npmWorkspace ? null
 , nodejs ? topLevelArgs.nodejs
+, npmDeps ?  fetchNpmDeps {
+  inherit forceGitDeps src srcs sourceRoot prePatch patches postPatch;
+  name = "${name}-npm-deps";
+  hash = npmDepsHash;
+}
 , ...
 } @ args:
 
 let
-  npmDeps = fetchNpmDeps {
-    inherit forceGitDeps src srcs sourceRoot prePatch patches postPatch;
-    name = "${name}-npm-deps";
-    hash = npmDepsHash;
-  };
-
   # .override {} negates splicing, so we need to use buildPackages explicitly
   npmHooks = buildPackages.npmHooks.override {
     inherit nodejs;
@@ -55,7 +60,9 @@ in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook ];
+  nativeBuildInputs = nativeBuildInputs
+    ++ [ nodejs npmConfigHook npmBuildHook npmInstallHook nodejs.python ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;

@@ -257,6 +257,21 @@ let
       '';
     };
 
+    exportarr-sonarr = {
+      nodeName = "exportarr_sonarr";
+      exporterConfig = {
+        enable = true;
+        url = "http://127.0.0.1:8989";
+        # testing for real data is tricky, because the api key can not be preconfigured
+        apiKeyFile = pkgs.writeText "dummy-api-key" "eccff6a992bc2e4b88e46d064b26bb4e";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-exportarr-sonarr-exporter.service")
+        wait_for_open_port(9707)
+        succeed("curl -sSf 'http://localhost:9707/metrics")
+      '';
+    };
+
     fastly = {
       exporterConfig = {
         enable = true;
@@ -1318,12 +1333,12 @@ let
         wait_for_open_port(9374)
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}' | grep -v ' 0$'".format(
-                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1"} '
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1",source=""} '
             )
         )
         wait_until_succeeds(
             "curl -sSf localhost:9374/metrics | grep '{}'".format(
-                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1"}'
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source=""}'
             )
         )
       '';

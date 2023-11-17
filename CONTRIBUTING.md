@@ -322,6 +322,8 @@ All the review template samples provided in this section are generic and meant a
 
 To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section][overview].
 
+If a pull request contains documentation changes that might require feedback from the documentation team, ping @NixOS/documentation-team on the pull request.
+
 If you consider having enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic. They will give you information about the reviewing process. The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests to see who reviewed or git-blaming the code to see who committed to that topic can give some hints.
 
 Container system, boot system and library changes are some examples of the pull requests fitting this category.
@@ -465,7 +467,7 @@ Is the change [acceptable for releases][release-acceptable] and do you wish to h
 - No: Use the `master` branch, do not backport the pull request.
 - Yes: Can the change be implemented the same way on the `master` and release branches?
   For example, a packages major version might differ between the `master` and release branches, such that separate security patches are required.
-  - Yes: Use the `master` branch and [backport the pull request](#backporting-changes).
+  - Yes: Use the `master` branch and [backport the pull request](#how-to-backport-pull-requests).
   - No: Create separate pull requests to the `master` and `release-XX.YY` branches.
 
 Furthermore, if the change causes a [mass rebuild][mass-rebuild], use the appropriate staging branch instead:
@@ -512,33 +514,18 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 
 - If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
 
-- Format the commit messages in the following way:
+- For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
 
-  ```
-  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
-
-  (Motivation for change. Link to release notes. Additional information.)
-  ```
-
-  For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
-
-  Examples:
-
-  * nginx: init at 2.0.1
-  * firefox: 54.0.1 -> 55.0
-
-    https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
-  * nixos/hydra: add bazBaz option
-
-    Dual baz behavior is needed to do foo.
-  * nixos/nginx: refactor config generation
-
-    The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
-
-  When adding yourself as maintainer, in the same pull request, make a separate
+- When adding yourself as maintainer in the same pull request, make a separate
   commit with the message `maintainers: add <handle>`.
   Add the commit before those making changes to the package or module.
   See [Nixpkgs Maintainers](./maintainers/README.md) for details.
+
+- Make sure you read about any commit conventions specific to the area you're touching. See:
+  - [Commit conventions](./pkgs/README.md#commit-conventions) for changes to `pkgs`.
+  - [Commit conventions](./lib/README.md#commit-conventions) for changes to `lib`.
+  - [Commit conventions](./nixos/README.md#commit-conventions) for changes to `nixos`.
+  - [Commit conventions](./doc/README.md#commit-conventions) for changes to `doc`, the Nixpkgs manual.
 
 ### Writing good commit messages
 

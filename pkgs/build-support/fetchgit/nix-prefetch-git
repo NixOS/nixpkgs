@@ -261,14 +261,14 @@ make_deterministic_repo(){
     # Remove files that contain timestamps or otherwise have non-deterministic
     # properties.
     if [ -f .git ]; then
-	local dotgit_content=$(<.git)
-	local dotgit_dir="${dotgit_content#gitdir: }"
+        local dotgit_content=$(<.git)
+        local dotgit_dir="${dotgit_content#gitdir: }"
     else
-	local dotgit_dir=".git"
+        local dotgit_dir=".git"
     fi
-    pushd "$dotgit_dir"
+    pushd "$dotgit_dir" >/dev/null
         rm -rf logs/ hooks/ index FETCH_HEAD ORIG_HEAD refs/remotes/origin/HEAD config
-    popd
+    popd >/dev/null
     # Remove all remote branches.
     git branch -r | while read -r branch; do
         clean_git branch -rD "$branch"

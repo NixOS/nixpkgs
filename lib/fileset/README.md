@@ -238,10 +238,22 @@ Arguments:
   And it would be unclear how the library should behave if the one file wouldn't be added to the store:
   `toSource { root = ./file.nix; fileset = <empty>; }` has no reasonable result because returing an empty store path wouldn't match the file type, and there's no way to have an empty file store path, whatever that would mean.
 
+### `fileFilter` takes a path
+
+The `fileFilter` function takes a path, and not a file set, as its second argument.
+
+- (-) Makes it harder to compose functions, since the file set type, the return value, can't be passed to the function itself like `fileFilter predicate fileset`
+  - (+) It's still possible to use `intersection` to filter on file sets: `intersection fileset (fileFilter predicate ./.)`
+    - (-) This does need an extra `./.` argument that's not obvious
+      - (+) This could always be `/.` or the project directory, `intersection` will make it lazy
+- (+) In the future this will allow `fileFilter` to support a predicate property like `subpath` and/or `components` in a reproducible way.
+  This wouldn't be possible if it took a file set, because file sets don't have a predictable absolute path.
+  - (-) What about the base path?
+    - (+) That can change depending on which files are included, so if it's used for `fileFilter`
+      it would change the `subpath`/`components` value depending on which files are included.
+- (+) If necessary, this restriction can be relaxed later, the opposite wouldn't be possible
+
 ## To update in the future
 
 Here's a list of places in the library that need to be updated in the future:
-- > The file set library is currently somewhat limited but is being expanded to include more functions over time.
-
-  in [the manual](../../doc/functions/fileset.section.md)
 - If/Once a function exists that can optionally include a path depending on whether it exists, the error message for the path not existing in `_coerce` should mention the new function

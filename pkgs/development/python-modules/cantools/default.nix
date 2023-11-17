@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
+, setuptools
 , argparse-addons
 , bitstruct
 , can
@@ -16,18 +16,18 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "38.0.2";
-  format = "setuptools";
+  version = "39.3.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k7/m9L1lLzaXY+qRYrAnpi9CSoQA8kI9QRN5GM5oxo4=";
+    hash = "sha256-LD0IGSJZG8FhHJ8f9S1sivHQMxT4xyTMEU2FbMVVzCg=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -50,8 +50,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    description = "Tools to work with CAN bus";
     homepage = "https://github.com/cantools/cantools";
-    description = "CAN bus tools.";
+    changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gray-heron ];
   };

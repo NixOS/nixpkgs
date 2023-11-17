@@ -10,11 +10,15 @@
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
+, pkgsHostTarget
 }:
 
 let
   pkgs = __splicedPackages;
-  qt5 = __splicedPackages.qt5;
+  # qt5 set should not be pre-spliced to prevent spliced packages being a part of an unspliced set
+  # 'pkgsCross.aarch64-multiplatform.pkgsBuildTarget.targetPackages.libsForQt5.qtbase' should not have a `__spliced` but if qt5 is pre-spliced then it will have one.
+  # pkgsHostTarget == pkgs
+  qt5 = pkgsHostTarget.qt5;
 in
 
 makeScopeWithSplicing' {
@@ -136,7 +140,9 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
+  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+  };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
@@ -186,7 +192,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
-  qca-qt5 = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca-qt5 {
+  qca-qt5 = callPackage ../development/libraries/qca-qt5 {
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (libsForQt5) qtbase;
   };
 
@@ -217,8 +224,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
-    inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   qtmpris = callPackage ../development/libraries/qtmpris { };

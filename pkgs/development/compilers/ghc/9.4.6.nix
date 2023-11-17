@@ -197,6 +197,7 @@ stdenv.mkDerivation (rec {
       extraPrefix = "libraries/Cabal/";
       sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
     })
+    ./docs-sphinx-7.patch
 
     # Work around a type not being defined when including Rts.h in bytestring's cbits
     # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.

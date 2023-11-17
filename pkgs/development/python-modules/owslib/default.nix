@@ -63,6 +63,8 @@ buildPythonPackage rec {
     "test_wmts_example_informatievlaanderen"
     "test_opensearch_creodias"
   ] ++ lib.optionals stdenv.isDarwin [
+    "test_ogcapi_processes_pygeoapi"
+    "test_ogcapi_records_pycsw"
     "test_ogcapi_records_pygeoapi"
     "test_wms_getfeatureinfo_130"
   ];

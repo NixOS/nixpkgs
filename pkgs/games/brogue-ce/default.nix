@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "A community-lead fork of the minimalist roguelike game Brogue";
     homepage = "https://github.com/tmewett/BrogueCE";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [ AndersonTorres fgaz ];
     platforms = platforms.all;
   };
 }

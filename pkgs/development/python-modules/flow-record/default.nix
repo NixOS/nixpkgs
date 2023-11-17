@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.12";
+  version = "3.13";
   format = "pyproject";
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
     rev = "refs/tags/${version}";
-    hash = "sha256-b9MCgs3Imo0DHtPyvQuRgYvsLWe8N2Y9TIWdU1E04L8=";
+    hash = "sha256-Yg42nA0dRjHormpmpbOuZYuvBpNz9XEpf84XI2iJpYY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

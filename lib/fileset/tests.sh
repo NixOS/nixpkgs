@@ -43,15 +43,29 @@ crudeUnquoteJSON() {
     cut -d \" -f2
 }
 
-prefixExpression='let
-  lib = import <nixpkgs/lib>;
-  internal = import <nixpkgs/lib/fileset/internal.nix> {
-    inherit lib;
-  };
-in
-with lib;
-with internal;
-with lib.fileset;'
+prefixExpression() {
+    echo 'let
+      lib =
+        (import <nixpkgs/lib>)
+    '
+    if [[ "${1:-}" == "--simulate-pure-eval" ]]; then
+        echo '
+        .extend (final: prev: {
+          trivial = prev.trivial // {
+            inPureEvalMode = true;
+          };
+        })'
+    fi
+    echo '
+      ;
+      internal = import <nixpkgs/lib/fileset/internal.nix> {
+        inherit lib;
+      };
+    in
+    with lib;
+    with internal;
+    with lib.fileset;'
+}
 
 # Check that two nix expression successfully evaluate to the same value.
 # The expressions have `lib.fileset` in scope.
@@ -60,7 +74,7 @@ expectEqual() {
     local actualExpr=$1
     local expectedExpr=$2
     if actualResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/actualStderr \
-        --expr "$prefixExpression ($actualExpr)"); then
+        --expr "$(prefixExpression) ($actualExpr)"); then
         actualExitCode=$?
     else
         actualExitCode=$?
@@ -68,7 +82,7 @@ expectEqual() {
     actualStderr=$(< "$tmp"/actualStderr)
 
     if expectedResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/expectedStderr \
-        --expr "$prefixExpression ($expectedExpr)"); then
+        --expr "$(prefixExpression) ($expectedExpr)"); then
         expectedExitCode=$?
     else
         expectedExitCode=$?
@@ -95,8 +109,9 @@ expectEqual() {
 # Usage: expectStorePath NIX
 expectStorePath() {
     local expr=$1
-    if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace \
-        --expr "$prefixExpression ($expr)"); then
+    if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp"/stderr \
+        --expr "$(prefixExpression) ($expr)"); then
+        cat "$tmp/stderr" >&2
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
     # This is safe because we assume to get back a store path in a string
@@ -108,10 +123,16 @@ expectStorePath() {
 # The expression has `lib.fileset` in scope.
 # Usage: expectFailure NIX REGEX
 expectFailure() {
+    if [[ "$1" == "--simulate-pure-eval" ]]; then
+        maybePure="--simulate-pure-eval"
+        shift
+    else
+        maybePure=""
+    fi
     local expr=$1
     local expectedErrorRegex=$2
     if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
-        --expr "$prefixExpression $expr"); then
+        --expr "$(prefixExpression $maybePure) $expr"); then
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
     stderr=$(<"$tmp/stderr")
@@ -128,12 +149,12 @@ expectTrace() {
     local expectedTrace=$2
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTrace \
-        --expr "$prefixExpression trace ($expr)" || true
+        --expr "$(prefixExpression) trace ($expr)" || true
 
     actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTraceVal \
-        --expr "$prefixExpression traceVal ($expr)" || true
+        --expr "$(prefixExpression) traceVal ($expr)" || true
 
     actualTraceVal=$(sed -n 's/^trace: //p' "$tmp/stderrTraceVal")
 
@@ -810,10 +831,18 @@ checkFileset 'difference ./. ./b'
 
 ## File filter
 
+# The first argument needs to be a function
+expectFailure 'fileFilter null (abort "this is not needed")' 'lib.fileset.fileFilter: First argument is of type null, but it should be a function instead.'
+
+# The second argument needs to be an existing path
+expectFailure 'fileFilter (file: abort "this is not needed") _emptyWithoutBase' 'lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
+\s*If you need to filter files in a file set, use `intersection fileset \(fileFilter pred \./\.\)` instead.'
+expectFailure 'fileFilter (file: abort "this is not needed") null' 'lib.fileset.fileFilter: Second argument is of type null, but it should be a path instead.'
+expectFailure 'fileFilter (file: abort "this is not needed") ./a' 'lib.fileset.fileFilter: Second argument \('"$work"'/a\) is a path that does not exist.'
+
 # The predicate is not called when there's no files
 tree=()
 checkFileset 'fileFilter (file: abort "this is not needed") ./.'
-checkFileset 'fileFilter (file: abort "this is not needed") _emptyWithoutBase'
 
 # The predicate must be able to handle extra attributes
 touch a
@@ -874,6 +903,18 @@ tree=(
 checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)'
 # but here we need to use ./c
 checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
+
+# Make sure single files are filtered correctly
+tree=(
+    [a]=1
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; true) ./a'
+tree=(
+    [a]=0
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; false) ./a'
 
 ## Tracing
 
@@ -1229,6 +1270,179 @@ expectEqual 'trace (intersection ./a (fromSource (lib.cleanSourceWith {
     else
       abort "filter should not be called on ${pathString}";
 }))) null' 'trace ./a/b null'
+rm -rf -- *
+
+## lib.fileset.gitTracked/gitTrackedWith
+
+# The first/second argument has to be a path
+expectFailure 'gitTracked null' 'lib.fileset.gitTracked: Expected the argument to be a path, but it'\''s a null instead.'
+expectFailure 'gitTrackedWith {} null' 'lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it'\''s a null instead.'
+
+# The path has to contain a .git directory
+expectFailure 'gitTracked ./.' 'lib.fileset.gitTracked: Expected the argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
+expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the second argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
+
+# recurseSubmodules has to be a boolean
+expectFailure 'gitTrackedWith { recurseSubmodules = null; } ./.' 'lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it'\''s a null instead.'
+
+# recurseSubmodules = true is not supported on all Nix versions
+if [[ "$(nix-instantiate --eval --expr "$(prefixExpression) (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
+    fetchGitSupportsSubmodules=1
+else
+    fetchGitSupportsSubmodules=
+    expectFailure 'gitTrackedWith { recurseSubmodules = true; } ./.' 'lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version 2.4 and after, but Nix version [0-9.]+ is used.'
+fi
+
+# Checks that `gitTrackedWith` contains the same files as `git ls-files`
+# for the current working directory.
+# If --recurse-submodules is passed, the flag is passed through to `git ls-files`
+# and as `recurseSubmodules` to `gitTrackedWith`
+checkGitTrackedWith() {
+    if [[ "${1:-}" == "--recurse-submodules" ]]; then
+        gitLsFlags="--recurse-submodules"
+        gitTrackedArg="{ recurseSubmodules = true; }"
+    else
+        gitLsFlags=""
+        gitTrackedArg="{ }"
+    fi
+
+    # All files listed by `git ls-files`
+    expectedFiles=()
+    while IFS= read -r -d $'\0' file; do
+        # If there are submodules but --recurse-submodules isn't passed,
+        # `git ls-files` lists them as empty directories,
+        # we need to filter that out since we only want to check/count files
+        if [[ -f "$file" ]]; then
+            expectedFiles+=("$file")
+        fi
+    done < <(git ls-files -z $gitLsFlags)
+
+    storePath=$(expectStorePath 'toSource { root = ./.; fileset = gitTrackedWith '"$gitTrackedArg"' ./.; }')
+
+    # Check that each expected file is also in the store path with the same content
+    for expectedFile in "${expectedFiles[@]}"; do
+        if [[ ! -e "$storePath"/"$expectedFile" ]]; then
+            die "Expected file $expectedFile to exist in $storePath, but it doesn't.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+        fi
+        if ! diff "$expectedFile" "$storePath"/"$expectedFile"; then
+            die "Expected file $expectedFile to have the same contents as in $storePath, but it doesn't.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+        fi
+    done
+
+    # This is a cheap way to verify the inverse: That all files in the store path are also expected
+    # We just count the number of files in both and verify they're the same
+    actualFileCount=$(find "$storePath" -type f -printf . | wc -c)
+    if [[ "${#expectedFiles[@]}" != "$actualFileCount" ]]; then
+        die "Expected ${#expectedFiles[@]} files in $storePath, but got $actualFileCount.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+    fi
+}
+
+
+# Runs checkGitTrackedWith with and without --recurse-submodules
+# Allows testing both variants together
+checkGitTracked() {
+    checkGitTrackedWith
+    if [[ -n "$fetchGitSupportsSubmodules" ]]; then
+        checkGitTrackedWith --recurse-submodules
+    fi
+}
+
+createGitRepo() {
+    git init -q "$1"
+    # Only repo-local config
+    git -C "$1" config user.name "Nixpkgs"
+    git -C "$1" config user.email "nixpkgs@nixos.org"
+    # Get at least a HEAD commit, needed for older Nix versions
+    git -C "$1" commit -q --allow-empty -m "Empty commit"
+}
+
+# Check the error message for pure eval mode
+createGitRepo .
+expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTracked ./.; }' 'lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
+expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTrackedWith {} ./.; }' 'lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
+rm -rf -- *
+
+# Go through all stages of Git files
+# See https://www.git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+
+# Empty repository
+createGitRepo .
+checkGitTracked
+
+# Untracked file
+echo a > a
+checkGitTracked
+
+# Staged file
+git add a
+checkGitTracked
+
+# Committed file
+git commit -q -m "Added a"
+checkGitTracked
+
+# Edited file
+echo b > a
+checkGitTracked
+
+# Removed file
+git rm -f -q a
+checkGitTracked
+
+rm -rf -- *
+
+# gitignored file
+createGitRepo .
+echo a > .gitignore
+touch a
+git add -A
+checkGitTracked
+
+# Add it regardless (needs -f)
+git add -f a
+checkGitTracked
+rm -rf -- *
+
+# Directory
+createGitRepo .
+mkdir -p d1/d2/d3
+touch d1/d2/d3/a
+git add d1
+checkGitTracked
+rm -rf -- *
+
+# Submodules
+createGitRepo .
+createGitRepo sub
+
+# Untracked submodule
+git -C sub commit -q --allow-empty -m "Empty commit"
+checkGitTracked
+
+# Tracked submodule
+git submodule add ./sub sub >/dev/null
+checkGitTracked
+
+# Untracked file
+echo a > sub/a
+checkGitTracked
+
+# Staged file
+git -C sub add a
+checkGitTracked
+
+# Committed file
+git -C sub commit -q -m "Add a"
+checkGitTracked
+
+# Changed file
+echo b > sub/b
+checkGitTracked
+
+# Removed file
+git -C sub rm -f -q a
+checkGitTracked
+
 rm -rf -- *
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets

@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = {
     description = "Sphinx API for Web Apps";
     homepage = "http://sphinx-doc.org/";

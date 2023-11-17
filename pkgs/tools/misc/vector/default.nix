@@ -27,14 +27,14 @@
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
-    ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+    ++ lib.optional stdenv.hostPlatform.isUnix "unix")
 , nixosTests
 , nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.34.0";
+  version = "0.34.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E9sbpVFDVKJKYqSiqXeC9AItset/bXvVA9mURazTn/I=";
+    hash = "sha256-vK+k+VbUVgJ8idlvuod5ExAkkeTYDk/135dyLRct0zs=";
   };
 
   cargoLock = {

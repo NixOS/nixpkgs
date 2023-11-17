@@ -107,7 +107,7 @@ in {
     makePythonHook {
       name = "python-catch-conflicts-hook";
       substitutions = {
-        inherit pythonInterpreter pythonSitePackages setuptools;
+        inherit pythonInterpreter pythonSitePackages;
         catchConflicts=../catch_conflicts/catch_conflicts.py;
       };
     } ./python-catch-conflicts-hook.sh) {};
@@ -183,16 +183,14 @@ in {
       };
     } ./setuptools-check-hook.sh) {};
 
-    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust }:
       makePythonHook {
         name = "setuptools-rust-setup-hook";
         propagatedBuildInputs = [ setuptools-rust ];
         substitutions = {
           pyLibDir = "${python}/lib/${python.libPrefix}";
-          cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
-          cargoLinkerVar = lib.toUpper (
-              builtins.replaceStrings ["-"] ["_"] (
-                rust.toRustTarget stdenv.hostPlatform));
+          cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
+          cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
           targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
         };
       } ./setuptools-rust-hook.sh) {};
@@ -228,5 +226,8 @@ in {
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
       propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ];
+      substitutions = {
+        sphinxBuild = "${pythonOnBuildForHost.pkgs.sphinx}/bin/sphinx-build";
+      };
     } ./sphinx-hook.sh) {};
 }

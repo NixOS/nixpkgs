@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchzip
 , autoconf, automake, autoreconfHook, clang, dos2unix, file, perl
 , pkg-config
-, alsa-lib, coreutils, freetype, glib, glibc, gnugrep, libpulseaudio, libtool
-, libuuid, openssl, pango, xorg
+, alsa-lib, coreutils, freetype, glib, glibc, gnugrep, libGL, libpulseaudio
+, libtool, libuuid, openssl, pango, xorg
 , squeakImageHash ? null, squeakSourcesHash ? null, squeakSourcesVersion ? null
 , squeakVersion ? null, squeakVmCommitHash ? null, squeakVmCommitHashHash ? null
 , squeakVmVersion ? null
@@ -88,6 +88,7 @@ in stdenv.mkDerivation {
     glib
     glibc
     gnugrep
+    libGL
     libpulseaudio
     libtool
     libuuid

@@ -12,14 +12,18 @@ let
     _printFileset
     _intersection
     _difference
+    _mirrorStorePath
+    _fetchGitSubmodulesMinver
     ;
 
   inherit (builtins)
+    isBool
     isList
     isPath
     pathExists
     seq
     typeOf
+    nixVersion
     ;
 
   inherit (lib.lists)
@@ -34,6 +38,7 @@ let
 
   inherit (lib.strings)
     isStringLike
+    versionOlder
     ;
 
   inherit (lib.filesystem)
@@ -47,6 +52,7 @@ let
   inherit (lib.trivial)
     isFunction
     pipe
+    inPureEvalMode
     ;
 
 in {
@@ -188,7 +194,7 @@ in {
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
             - Set `fileset` to a file set that cannot contain files outside the `root` (${toString root}). This could change the files included in the result.''
     else
-      builtins.seq sourceFilter
+      seq sourceFilter
       cleanSourceWith {
         name = "source";
         src = root;
@@ -366,7 +372,7 @@ in {
           type :: String,
           ...
         } -> Bool)
-        -> FileSet
+        -> Path
         -> FileSet
 
     Example:
@@ -380,7 +386,7 @@ in {
       fileFilter (file: hasPrefix "." file.name) ./.
 
       # Include all regular files (not symlinks or others) in the current directory
-      fileFilter (file: file.type == "regular")
+      fileFilter (file: file.type == "regular") ./.
   */
   fileFilter =
     /*
@@ -397,14 +403,24 @@ in {
       Other attributes may be added in the future.
     */
     predicate:
-    # The file set to filter based on the predicate function
-    fileset:
+    # The path whose files to filter
+    path:
     if ! isFunction predicate then
       throw ''
-        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function.''
+        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
+    else if ! isPath path then
+      if path._type or "" == "fileset" then
+        throw ''
+          lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
+              If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
+      else
+        throw ''
+          lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
     else
-      _fileFilter predicate
-        (_coerce "lib.fileset.fileFilter: Second argument" fileset);
+      _fileFilter predicate path;
 
   /*
     The file set containing all files that are in both of two given file sets.
@@ -586,4 +602,111 @@ in {
       # We could also return the original fileset argument here,
       # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
       actualFileset;
+
+  /*
+    Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
+
+    This function behaves like [`gitTrackedWith { }`](#function-library-lib.fileset.gitTrackedWith) - using the defaults.
+
+    Type:
+      gitTracked :: Path -> FileSet
+
+    Example:
+      # Include all files tracked by the Git repository in the current directory
+      gitTracked ./.
+
+      # Include only files tracked by the Git repository in the parent directory
+      # that are also in the current directory
+      intersection ./. (gitTracked ../.)
+  */
+  gitTracked =
+    /*
+      The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      This directory must contain a `.git` file or subdirectory.
+    */
+    path:
+    # See the gitTrackedWith implementation for more explanatory comments
+    let
+      fetchResult = builtins.fetchGit path;
+    in
+    if inPureEvalMode then
+      throw "lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
+    else if ! isPath path then
+      throw "lib.fileset.gitTracked: Expected the argument to be a path, but it's a ${typeOf path} instead."
+    else if ! pathExists (path + "/.git") then
+      throw "lib.fileset.gitTracked: Expected the argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
+    else
+      _mirrorStorePath path fetchResult.outPath;
+
+  /*
+    Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
+    The first argument allows configuration with an attribute set,
+    while the second argument is the path to the Git working tree.
+    If you don't need the configuration,
+    you can use [`gitTracked`](#function-library-lib.fileset.gitTracked) instead.
+
+    This is equivalent to the result of [`unions`](#function-library-lib.fileset.unions) on all files returned by [`git ls-files`](https://git-scm.com/docs/git-ls-files)
+    (which uses [`--cached`](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt--c) by default).
+
+    :::{.warning}
+    Currently this function is based on [`builtins.fetchGit`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchGit)
+    As such, this function causes all Git-tracked files to be unnecessarily added to the Nix store,
+    without being re-usable by [`toSource`](#function-library-lib.fileset.toSource).
+
+    This may change in the future.
+    :::
+
+    Type:
+      gitTrackedWith :: { recurseSubmodules :: Bool ? false } -> Path -> FileSet
+
+    Example:
+      # Include all files tracked by the Git repository in the current directory
+      # and any submodules under it
+      gitTracked { recurseSubmodules = true; } ./.
+  */
+  gitTrackedWith =
+    {
+      /*
+        (optional, default: `false`) Whether to recurse into [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to also include their tracked files.
+
+        If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
+      */
+      recurseSubmodules ? false,
+    }:
+    /*
+      The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      This directory must contain a `.git` file or subdirectory.
+    */
+    path:
+    let
+      # This imports the files unnecessarily, which currently can't be avoided
+      # because `builtins.fetchGit` is the only function exposing which files are tracked by Git.
+      # With the [lazy trees PR](https://github.com/NixOS/nix/pull/6530),
+      # the unnecessarily import could be avoided.
+      # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
+      fetchResult = builtins.fetchGit {
+        url = path;
+
+        # This is the only `fetchGit` parameter that makes sense in this context.
+        # We can't just pass `submodules = recurseSubmodules` here because
+        # this would fail for Nix versions that don't support `submodules`.
+        ${if recurseSubmodules then "submodules" else null} = true;
+      };
+    in
+    if inPureEvalMode then
+      throw "lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
+    else if ! isBool recurseSubmodules then
+      throw "lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it's a ${typeOf recurseSubmodules} instead."
+    else if recurseSubmodules && versionOlder nixVersion _fetchGitSubmodulesMinver then
+      throw "lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version ${_fetchGitSubmodulesMinver} and after, but Nix version ${nixVersion} is used."
+    else if ! isPath path then
+      throw "lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it's a ${typeOf path} instead."
+    # We can identify local working directories by checking for .git,
+    # see https://git-scm.com/docs/gitrepository-layout#_description.
+    # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
+    # even though `git ls-files` wouldn't return any files in that case.
+    else if ! pathExists (path + "/.git") then
+      throw "lib.fileset.gitTrackedWith: Expected the second argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
+    else
+      _mirrorStorePath path fetchResult.outPath;
 }

@@ -25,16 +25,16 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.43.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-5voAO3vHygSo7rl9ELdb9BwMNFVZdjEe7x8foyi+a6s=";
+    hash = "sha256-YIMtLQzxORWFWCgdnLUQLmmE79aw40LhcxqiHCWjgNk=";
   };
 
-  vendorHash = "sha256-cv8KUXPRXufvbaZlvf/DeFfQCzu7MAlikRVPHWlakx0=";
+  vendorHash = "sha256-EutNjyW5bvGvMZP9xBrcu91TOAbl9TDZe2+g0/qnuAQ=";
 
   CGO_ENABLED = 0;
 

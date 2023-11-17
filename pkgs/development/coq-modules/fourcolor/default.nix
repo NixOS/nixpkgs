@@ -16,7 +16,7 @@ mkCoqDerivation {
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
     { cases = [ (isGe "8.16") (isGe "2.0") ]; out = "1.3.1"; }
     { cases = [ (isGe "8.16") "2.0.0" ]; out = "1.3.0"; }
-    { cases = [ (isGe "8.11") (range "1.12" "1.17") ]; out = "1.2.5"; }
+    { cases = [ (isGe "8.11") (range "1.12" "1.18") ]; out = "1.2.5"; }
     { cases = [ (isGe "8.11") (range "1.11" "1.14") ]; out = "1.2.4"; }
     { cases = [ (isLe "8.13") (lib.pred.inter (isGe "1.11.0") (isLt "1.13")) ]; out = "1.2.3"; }
   ] null;

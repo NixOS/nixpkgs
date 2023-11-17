@@ -60,6 +60,9 @@ default-package-overrides:
   # hls-floskell-plugin 2.4 does not yet support floskell 0.11
   - floskell < 0.11
 
+  # Newer daemons requires GHC 9.6
+  - daemons == 0.3.0
+
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
@@ -411,6 +414,9 @@ package-maintainers:
     - ttn-client
     - update-nix-fetchgit
     - zre
+  srid:
+    - ema
+    - emanote
   sternenseemann:
     # also maintain upstream package
     - cabal2nix

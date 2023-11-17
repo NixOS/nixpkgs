@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     cp -r . "$out/lib/node_modules/@mermaid-js/mermaid-cli"
 
     makeWrapper "${nodejs}/bin/node" "$out/bin/mmdc" \
-  '' + lib.optionalString (lib.meta.availableOn stdenv.targetPlatform chromium) ''
+  '' + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform chromium) ''
       --set PUPPETEER_EXECUTABLE_PATH '${lib.getExe chromium}' \
   '' + ''
       --add-flags "$out/lib/node_modules/@mermaid-js/mermaid-cli/src/cli.js"
