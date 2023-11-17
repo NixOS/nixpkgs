@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flit-core
 , matplotlib
 , numpy
@@ -13,15 +13,17 @@
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.2.6";
+  version = "0.2.6-unstable-2023-08-20";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0CvMhCUc+i7dPiHH+IXdlj+OjFh/l1wvnU4dmxQrzFI=";
+  src = fetchFromGitHub {
+    owner = "python-acoustics";
+    repo  = "python-acoustics";
+    rev = "99d79206159b822ea2f4e9d27c8b2fbfeb704d38";
+    hash = "sha256-/4bVjlhj8ihpAFHEWPaZ/xBILi3rb8f0NmwAexJCg+o=";
   };
-  format = "pyproject";
 
   nativeBuildInputs = [ flit-core ];
 
@@ -45,11 +47,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-Wignore::DeprecationWarning"
-  ];
-
-  disabledTestPaths = [
-    # ValueError: Unknown window type: "hanning"
-    "tests/standards/test_iso_1996_2_2007.py"
   ];
 
   pythonImportsCheck = [ "acoustics" ];
