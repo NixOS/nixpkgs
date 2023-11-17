@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 
 , build
@@ -39,6 +40,13 @@ buildPythonPackage rec {
     "bork"
     "bork.api"
     "bork.cli"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+  pytestFlagsArray = [
+    "-m 'not network'"
   ];
 
   meta = with lib; {
