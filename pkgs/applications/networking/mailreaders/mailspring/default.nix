@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
     openssl
     (lib.getLib udev)
     libappindicator
+    libsecret
   ];
 
   unpackPhase = ''
