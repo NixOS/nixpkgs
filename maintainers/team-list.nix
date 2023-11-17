@@ -916,7 +916,6 @@ with lib.maintainers; {
 
   tts = {
     members = [
-      hexa
       mic92
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
