@@ -4,11 +4,13 @@
 , pythonOlder
 , pyquaternion
 , numpy
+, poetry-core
 }:
 
 buildPythonPackage rec {
   pname = "bbox";
   version = "0.9.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,6 +20,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pyquaternion numpy ];
+  buildInputs = [ poetry-core ];
+
+  # upstream has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "bbox" ];
 
