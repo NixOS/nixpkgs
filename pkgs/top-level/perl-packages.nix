@@ -4419,10 +4419,10 @@ with self; {
 
   ConfigTiny = buildPerlPackage {
     pname = "Config-Tiny";
-    version = "2.29";
+    version = "2.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Config-Tiny-2.29.tgz";
-      hash = "sha256-PeebDqA6jWqT6dkSj+hF+1ViIrFGmaT28NXKBXrjMzs=";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Config-Tiny-2.30.tgz";
+      hash = "sha256-svc0VhmzuOY23TnqAQcxydwr+48CK8vYauatF4ZuEQ0=";
     };
     buildInputs = [ TestPod ];
     meta = {
