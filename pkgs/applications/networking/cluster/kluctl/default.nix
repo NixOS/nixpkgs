@@ -33,6 +33,6 @@ buildGoModule rec {
     description = "The missing glue to put together large Kubernetes deployments";
     homepage = "https://kluctl.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; [ sikmir netthier ];
   };
 }

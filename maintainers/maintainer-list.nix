@@ -12758,6 +12758,12 @@
     githubId = 13920346;
     name = "Sébastien Iooss";
   };
+  netthier = {
+    email = "netthier@proton.me";
+    name = "nett_hier";
+    github = "netthier";
+    githubId = 66856670;
+  };
   networkexception = {
     name = "networkException";
     email = "nix@nwex.de";
