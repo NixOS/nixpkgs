@@ -10760,10 +10760,10 @@ with self; {
 
   GitAutofixup = buildPerlPackage rec {
     pname = "App-Git-Autofixup";
-    version = "0.004001";
+    version = "0.004005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004001.tar.gz";
-      hash = "sha256-WroBPI3hOZD1iRoOKjnJcHTQcnvjZTIMLGrxnTbF3aw=";
+      url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.004005.tar.gz";
+      hash = "sha256-mD0ImRmlbAJ7B5fJrO+zPUhVW7A+2W1G99G6odhQ1+o=";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
