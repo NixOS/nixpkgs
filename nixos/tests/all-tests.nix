@@ -607,6 +607,7 @@ in {
   openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
   opensearch = discoverTests (import ./opensearch.nix);
+  opensearch-dashboards = discoverTests (import ./opensearch-dashboards.nix);
   openresty-lua = handleTest ./openresty-lua.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   opensmtpd-rspamd = handleTest ./opensmtpd-rspamd.nix {};

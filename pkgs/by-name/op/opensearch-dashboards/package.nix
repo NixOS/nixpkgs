@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , makeWrapper
+, nixosTests
 , fetchurl
 , nodejs
 , coreutils
@@ -32,5 +33,8 @@ stdenv.mkDerivation rec {
     homepage = "https://opensearch.org/docs/latest/dashboards/index/";
     maintainers = with lib.maintainers; [ _0z13 ];
   };
+
+  passthru.tests = nixosTests.opensearch-dashboards;
+
 }
 
