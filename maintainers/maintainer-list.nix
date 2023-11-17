@@ -5948,6 +5948,12 @@
     githubId = 74379;
     name = "Florian Pester";
   };
+  fmhoeger = {
+    email = "fmhoeger@mirsem.org";
+    name = "fmhoeger";
+    github = "fmhoeger";
+    githubId = 59626853;
+  };
   fmoda3 = {
     email = "fmoda3@mac.com";
     github = "fmoda3";
