@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/xtensor-stack/xtensor/commit/77a650a8018e0be6fcc76bf66685ff352ae23ef1.patch";
       hash = "sha256-vOdUzzsSK+lYcA7fZXWOTVV202GZC0DhkMMjzggnmWE=";
     })
+    # A single test fails on Darwin, see:
+    # https://github.com/xtensor-stack/xtensor/issues/2718
+    ./remove-failing-test_xinfo.patch
   ];
 
   nativeBuildInputs = [
