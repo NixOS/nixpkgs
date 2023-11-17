@@ -277,4 +277,20 @@ in
       machine.wait_for_unit("multi-user.target")
     '';
   };
+
+  no-bootspec = makeTest
+    {
+      name = "systemd-boot-no-bootspec";
+      meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
+
+      nodes.machine = {
+        imports = [ common ];
+        boot.bootspec.enable = false;
+      };
+
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+      '';
+    };
 }

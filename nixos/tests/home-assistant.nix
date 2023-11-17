@@ -9,13 +9,11 @@ in {
   nodes.hass = { pkgs, ... }: {
     services.postgresql = {
       enable = true;
-
-      # FIXME: hack for https://github.com/NixOS/nixpkgs/issues/216989
-      # Should be replaced with ensureUsers again when a solution for that is found
-      initialScript = pkgs.writeText "hass-setup-db.sql" ''
-        CREATE ROLE hass WITH LOGIN;
-        CREATE DATABASE hass WITH OWNER hass;
-      '';
+      ensureDatabases = [ "hass" ];
+      ensureUsers = [{
+        name = "hass";
+        ensureDBOwnership = true;
+      }];
     };
 
     services.home-assistant = {
