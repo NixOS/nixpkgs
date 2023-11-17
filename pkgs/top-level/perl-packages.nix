@@ -7691,10 +7691,10 @@ with self; {
 
   DevelNYTProf = buildPerlPackage {
     pname = "Devel-NYTProf";
-    version = "6.12";
+    version = "6.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.12.tar.gz";
-      hash = "sha256-qDtZheTalr24X1McFqtvPUkHGnM80JSqMPqF+2pLAsQ=";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.14.tar.gz";
+      hash = "sha256-rCTdfaWyJHaWvs78FcqTVIQ2d0Oq1EyyyM+heimtjgM=";
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     buildInputs = [ CaptureTiny TestDifferences ];
