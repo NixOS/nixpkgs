@@ -15865,10 +15865,10 @@ with self; {
 
   Minion = buildPerlPackage {
     pname = "Minion";
-    version = "10.25";
+    version = "10.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.25.tar.gz";
-      hash = "sha256-C+CoN1N2iJ2gRgRpY4TAz5iyYh0mUNnrAwf25LlAra0=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.26.tar.gz";
+      hash = "sha256-AMV6OrkJ8p/IxXfrBbe87eKWHmcnJ1tirKt0lA0Mw6A=";
     };
     propagatedBuildInputs = [ Mojolicious YAMLLibYAML ];
     meta = {
