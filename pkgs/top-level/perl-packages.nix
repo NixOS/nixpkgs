@@ -21615,10 +21615,10 @@ with self; {
 
   PodMarkdown = buildPerlPackage {
     pname = "Pod-Markdown";
-    version = "3.300";
+    version = "3.400";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-3.300.tar.gz";
-      hash = "sha256-7HnpkIo2BXScT+tQVHY+toEt0ztUzoWlEzmqfPmZG3k=";
+      url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-3.400.tar.gz";
+      hash = "sha256-pibpm81OfSFOQ9RyKlTjqvrDcThi90ec+5Sg4oefhEI=";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ URI ];
