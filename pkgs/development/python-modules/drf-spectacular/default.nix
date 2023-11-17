@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , dj-rest-auth
 , django
 , django-allauth
@@ -36,6 +37,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-sK+upLh0mi8eHKh1Wt9FoLRjqlHitTSX0Zl54S4Ce6E=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/tfranzel/drf-spectacular/pull/1090
+      url = "https://github.com/tfranzel/drf-spectacular/commit/8db4c2458f8403c53db0db352dd94057d285814b.patch";
+      hash = "sha256-Ue5y7IB4ie+9CEineMBgMMCLGiF4zqmn60TJvKsV1h0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     django

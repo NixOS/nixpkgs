@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb-compat-0_1, libelf
 , libftdi1, readline
 # documentation building is broken on darwin
-, docSupport ? (!stdenv.isDarwin), texlive, texinfo, texi2html, unixtools }:
+, docSupport ? (!stdenv.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake bison flex ] ++ lib.optionals docSupport [
     unixtools.more
-    texlive.combined.scheme-medium
+    texliveMedium
     texinfo
     texi2html
   ];

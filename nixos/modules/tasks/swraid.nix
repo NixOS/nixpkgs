@@ -62,13 +62,13 @@ in {
         cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
       '';
 
-      extraUtilsCommands = ''
+      extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         # Add RAID mdadm tool.
         copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
         copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
       '';
 
-      extraUtilsCommandsTest = ''
+      extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         $out/bin/mdadm --version
       '';
 

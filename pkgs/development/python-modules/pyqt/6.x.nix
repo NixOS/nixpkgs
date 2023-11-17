@@ -132,6 +132,9 @@ buildPythonPackage rec {
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
 
+  # fix build with qt 6.6
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+
   meta = with lib; {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";

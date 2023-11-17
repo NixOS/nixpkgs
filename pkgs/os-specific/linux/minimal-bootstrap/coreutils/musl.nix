@@ -12,7 +12,7 @@
 , gzip
 }:
 let
-  pname = "coreutils";
+  pname = "bootstrap-coreutils-musl";
   version = "9.4";
 
   src = fetchurl {

@@ -35,13 +35,13 @@ rec {
     }:
     stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "23.8.1";
+      version = "23.11.1";
 
       src = fetchFromGitHub {
         owner = "notofonts";
         repo = "notofonts.github.io";
         rev = "noto-monthly-release-${version}";
-        hash = "sha256-TYCJzioZcNFV8N5wLr7Fo69g/p5GQF/tbGgYoLUV7Us=";
+        hash = "sha256-qBHLCOfVBOn9CV194S4cYw9nhHyAe2AUBJHQMvyEfW8=";
       };
 
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
@@ -160,8 +160,8 @@ rec {
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
-    version = "2.001";
-    sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
+    version = "2.002";
+    sha256 = "sha256-GLjpTAiHfygj1J4AdUVDJh8kykkFOglq+h4kyat5W9s=";
   };
 
   noto-fonts-color-emoji =
@@ -253,9 +253,11 @@ rec {
         metadata.files;
 
       installPhase = ''
+        runHook preInstall
         for src in $srcs; do
           install -D $src $out/share/fonts/noto/$(stripHash $src)
         done
+        runHook postInstall
       '';
 
       meta = with lib; {

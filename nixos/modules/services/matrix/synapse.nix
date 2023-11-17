@@ -60,7 +60,6 @@ let
     ++ lib.optional (cfg.settings ? oidc_providers) "oidc"
     ++ lib.optional (cfg.settings ? jwt_config) "jwt"
     ++ lib.optional (cfg.settings ? saml2_config) "saml2"
-    ++ lib.optional (cfg.settings ? opentracing) "opentracing"
     ++ lib.optional (cfg.settings ? redis) "redis"
     ++ lib.optional (cfg.settings ? sentry) "sentry"
     ++ lib.optional (cfg.settings ? user_directory) "user-search"
@@ -72,13 +71,12 @@ let
     inherit (cfg) plugins;
   };
 
-  logConfig = logName: {
+  defaultCommonLogConfig = {
     version = 1;
     formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
     handlers.journal = {
       class = "systemd.journal.JournalHandler";
       formatter = "journal_fmt";
-      SYSLOG_IDENTIFIER = logName;
     };
     root = {
       level = "INFO";
@@ -86,33 +84,27 @@ let
     };
     disable_existing_loggers = false;
   };
+
+  defaultCommonLogConfigText = generators.toPretty { } defaultCommonLogConfig;
+
   logConfigText = logName:
-    let
-      expr = ''
-        {
-          version = 1;
-          formatters.journal_fmt.format = "%(name)s: [%(request)s] %(message)s";
-          handlers.journal = {
-            class = "systemd.journal.JournalHandler";
-            formatter = "journal_fmt";
-            SYSLOG_IDENTIFIER = "${logName}";
-          };
-          root = {
-            level = "INFO";
-            handlers = [ "journal" ];
-          };
-          disable_existing_loggers = false;
-        };
-      '';
-    in
     lib.literalMD ''
       Path to a yaml file generated from this Nix expression:
 
       ```
-      ${expr}
+      ${generators.toPretty { } (
+        recursiveUpdate defaultCommonLogConfig { handlers.journal.SYSLOG_IDENTIFIER = logName; }
+      )}
       ```
     '';
-  genLogConfigFile = logName: format.generate "synapse-log-${logName}.yaml" (logConfig logName);
+
+  genLogConfigFile = logName: format.generate
+    "synapse-log-${logName}.yaml"
+    (cfg.log // optionalAttrs (cfg.log?handlers.journal) {
+      handlers.journal = cfg.log.handlers.journal // {
+        SYSLOG_IDENTIFIER = logName;
+      };
+    });
 in {
 
   imports = [
@@ -304,6 +296,18 @@ in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
 
+      serviceUnit = lib.mkOption {
+        type = lib.types.str;
+        readOnly = true;
+        description = lib.mdDoc ''
+          The systemd unit (a service or a target) for other services to depend on if they
+          need to be started after matrix-synapse.
+
+          This option is useful as the actual parent unit for all matrix-synapse processes
+          changes when configuring workers.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         readOnly = true;
@@ -341,7 +345,6 @@ in {
           [
             "cache-memory" # Provide statistics about caching memory consumption
             "jwt"          # JSON Web Token authentication
-            "opentracing"  # End-to-end tracing support using Jaeger
             "oidc"         # OpenID Connect authentication
             "postgres"     # PostgreSQL database backend
             "redis"        # Redis support for the replication stream between worker processes
@@ -393,6 +396,49 @@ in {
         description = lib.mdDoc ''
           The directory where matrix-synapse stores its stateful data such as
           certificates, media and uploads.
+        '';
+      };
+
+      log = mkOption {
+        type = types.attrsOf format.type;
+        defaultText = literalExpression defaultCommonLogConfigText;
+        description = mdDoc ''
+          Default configuration for the loggers used by `matrix-synapse` and its workers.
+          The defaults are added with the default priority which means that
+          these will be merged with additional declarations. These additional
+          declarations also take precedence over the defaults when declared
+          with at least normal priority. For instance
+          the log-level for synapse and its workers can be changed like this:
+
+          ```nix
+          { lib, ... }: {
+            services.matrix-synapse.log.root.level = "WARNING";
+          }
+          ```
+
+          And another field can be added like this:
+
+          ```nix
+          {
+            services.matrix-synapse.log = {
+              loggers."synapse.http.matrixfederationclient".level = "DEBUG";
+            };
+          }
+          ```
+
+          Additionally, the field `handlers.journal.SYSLOG_IDENTIFIER` will be added to
+          each log config, i.e.
+          * `synapse` for `matrix-synapse.service`
+          * `synapse-<worker name>` for `matrix-synapse-worker-<worker name>.service`
+
+          This is only done if this option has a `handlers.journal` field declared.
+
+          To discard all settings declared by this option for each worker and synapse,
+          `lib.mkForce` can be used.
+
+          To discard all settings declared by this option for a single worker or synapse only,
+          [](#opt-services.matrix-synapse.workers._name_.worker_log_config) or
+          [](#opt-services.matrix-synapse.settings.log_config) can be used.
         '';
       };
 
@@ -987,11 +1033,14 @@ in {
       port = 9093;
     });
 
+    services.matrix-synapse.serviceUnit = if hasWorkers then "matrix-synapse.target" else "matrix-synapse.service";
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
 
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
+
+    services.matrix-synapse.log = mapAttrsRecursive (const mkDefault) defaultCommonLogConfig;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";

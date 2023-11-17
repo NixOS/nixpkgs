@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnustep-make";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";
-    sha256 = "sha256-oLBmwRJXh5x8hTEd6mnGf23HQe8znbZRT4W2SZLEDSo=";
+    sha256 = "sha256-w9bnDPFWsn59HtJQHFffP5bidIjOLzUbk+R5xYwB6uc=";
   };
 
   configureFlags = [

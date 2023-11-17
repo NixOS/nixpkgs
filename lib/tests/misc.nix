@@ -20,6 +20,10 @@ let
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = { success = false; value = false; };
   };
+  testingEval = expr: {
+    expr = (builtins.tryEval expr).success;
+    expected = true;
+  };
   testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
@@ -38,6 +42,18 @@ let
 in
 
 runTests {
+
+# CUSTOMIZATION
+
+  testFunctionArgsMakeOverridable = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null}: {}));
+    expected = { a = false; b = false; c = true; };
+  };
+
+  testFunctionArgsMakeOverridableOverride = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
+    expected = { a = false; b = false; c = true; };
+  };
 
 # TRIVIAL
 
@@ -173,6 +189,11 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testReplicateString = {
+    expr = strings.replicate 5 "hello";
+    expected = "hellohellohellohellohello";
   };
 
   testSplitStringsSimple = {
@@ -705,6 +726,15 @@ runTests {
     expected = 7;
   };
 
+  testAllUnique_true = {
+    expr = allUnique [ 3 2 4 1 ];
+    expected = true;
+  };
+  testAllUnique_false = {
+    expr = allUnique [ 3 2 3 4 ];
+    expected = false;
+  };
+
 # ATTRSETS
 
   testConcatMapAttrs = {
@@ -815,6 +845,26 @@ runTests {
     expr = overrideExisting { a = 3; b = 2; } { a = 1; };
     expected = { a = 1; b = 2; };
   };
+
+  testListAttrsReverse = let
+    exampleAttrs = {foo=1; bar="asdf"; baz = [1 3 3 7]; fnord=null;};
+    exampleSingletonList = [{name="foo"; value=1;}];
+  in {
+    expr = {
+      isReverseToListToAttrs = builtins.listToAttrs (attrsToList exampleAttrs) == exampleAttrs;
+      isReverseToAttrsToList = attrsToList (builtins.listToAttrs exampleSingletonList) == exampleSingletonList;
+      testDuplicatePruningBehaviour = attrsToList (builtins.listToAttrs [{name="a"; value=2;} {name="a"; value=1;}]);
+    };
+    expected = {
+      isReverseToAttrsToList = true;
+      isReverseToListToAttrs = true;
+      testDuplicatePruningBehaviour = [{name="a"; value=2;}];
+    };
+  };
+
+  testAttrsToListsCanDealWithFunctions = testingEval (
+    attrsToList { someFunc= a: a + 1;}
+  );
 
 # GENERATORS
 # these tests assume attributes are converted to lists
@@ -1870,4 +1920,32 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+
+# Meta
+  testGetExe'Output = {
+    expr = getExe' {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+    } "executable";
+    expected = "somelonghash/bin/executable";
+  };
+
+  testGetExeOutput = {
+    expr = getExe {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainProgram = "mainProgram";
+    };
+    expected = "somelonghash/bin/mainProgram";
+  };
+
+  testGetExe'FailureFirstArg = testingThrow (
+    getExe' "not a derivation" "executable"
+  );
+
+  testGetExe'FailureSecondArg = testingThrow (
+    getExe' { type = "derivation"; } "dir/executable"
+  );
 }

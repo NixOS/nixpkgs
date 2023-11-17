@@ -121,7 +121,7 @@ in
       ensureDatabases = [ "odoo" ];
       ensureUsers = [{
         name = "odoo";
-        ensurePermissions = { "DATABASE odoo" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
     };
   });

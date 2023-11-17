@@ -1,14 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry-core
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.21.1";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
     owner = "python-validators";
     repo = "validators";
     rev = "refs/tags/${version}";
-    hash = "sha256-b5K1WP+cEAjPBXu9sAZQf1J5H7PLnn94400Zd/0Y9ew=";
+    hash = "sha256-Qu6Tu9uIluT1KBJYkFjDFt9AWN2Kez3uCYDQknXqYrU=";
   };
 
   nativeBuildInputs = [
-    poetry-core
+    setuptools
   ];
 
   nativeCheckInputs = [

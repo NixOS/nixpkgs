@@ -1,5 +1,6 @@
 { python3Packages
 , fetchFromGitHub
+, qtwayland
 , wrapQtAppsHook
 , lib
 }:
@@ -23,6 +24,10 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     python3Packages.pyqt5
     wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtwayland
   ];
 
   propagatedBuildInputs = with python3Packages; [

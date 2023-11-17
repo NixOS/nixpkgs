@@ -1,55 +1,32 @@
 { lib
-, fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # Upstream is pinning releases incl. dependencies of their dependencies
-      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.31.0";
-        src = fetchFromGitHub {
-          owner = "jstasiak";
-          repo = "python-zeroconf";
-          rev = version;
-          hash = "sha256-8pYbIkPsg16VelwqpYSzqfAJaCU37lun+XZ/crzCDZU=";
-        };
-      });
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "7.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
-        };
-        disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
-      });
-
-      pychromecast = super.pychromecast.overridePythonAttrs (oldAttrs: rec {
-        version = "9.2.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-bTRZNXXPd1Zd9Hr0x13UfGplgx7BiowQtTZ7LxwXLwo=";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "catt";
-  version = "0.12.7";
-  format = "setuptools";
+  version = "0.12.11";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q9ePWRLwuuTG+oPKFg7xn1gj4uAVlXUxegWdyH3Yd90=";
+    hash = "sha256-0bqYYfWwF7yYoAbjZPhi/f4CLcL89imWGYaMi5Bwhtc=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      # set explicit build-system
+      url = "https://github.com/skorokithakis/catt/commit/08e7870a239e85badd30982556adc2aa8a8e4fc1.patch";
+      hash = "sha256-QH5uN3zQNVPP6Th2LHdDBF53WxwMhoyhhQUAZOeHh4k=";
+    })
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     click
     ifaddr
     pychromecast

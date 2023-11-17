@@ -1,22 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , requests
 , future
 }:
 
 buildPythonPackage rec {
   pname = "pysignalclirestapi";
-  version = "0.3.18";
+  version = "0.3.21";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bbernhard";
     repo = "pysignalclirestapi";
     rev = version;
-    hash = "sha256-BF4BmnQVfrj7f0N+TN/d7GNuDTbDQfwsCkUn2pVmMWo=";
+    hash = "sha256-CAZ6UgGz7ZDXlQlngi+hEhczOphvAT/Yl9vLqnrS1Qc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests

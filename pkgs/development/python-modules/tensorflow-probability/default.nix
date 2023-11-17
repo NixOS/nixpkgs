@@ -27,17 +27,17 @@
 }:
 
 let
-  version = "0.19.0";
-  pname = "tensorflow_probability";
+  version = "0.21.0";
+  pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
-    name = "${pname}-${version}-py2.py3-none-any.whl";
+    name = "tensorflow_probability-${version}-py2.py3-none-any.whl";
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "probability";
-      rev = "v" + version;
-      hash = "sha256-ZkQ20Qt/RF/leVP6Kc38tGgPz+C6lEuHvoL+s97oksE=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-DsJd1E5n86xNS7Ci0DXxoUxQ9jH8OwTZq2UuLlQtMUU=";
     };
     nativeBuildInputs = [
       # needed to create the output wheel in installPhase
@@ -54,7 +54,7 @@ let
     LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-XChXujA2XpnkybrraN3FIJA/QkxLCfX97id2jMFzFJk=";
+      sha256 = "sha256-1iO/eXz1wvSIRTmGuGZDF9VeDVTiWYnjw0Cby4n/6HM=";
     };
 
     buildAttrs = {
@@ -116,6 +116,6 @@ in buildPythonPackage {
     description = "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
     license = licenses.asl20;
-    maintainers = with maintainers; [];  # This package is maintainerless.
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

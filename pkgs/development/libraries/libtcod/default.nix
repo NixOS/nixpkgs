@@ -29,6 +29,6 @@ stdenv.mkDerivation {
     homepage = "http://roguecentral.org/doryen/libtcod/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.skeidel ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

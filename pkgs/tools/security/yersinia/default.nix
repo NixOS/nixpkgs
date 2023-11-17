@@ -8,31 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "yersinia";
-  version = "0.8.2";
+  version = "unstable-2022-11-20";
 
   src = fetchFromGitHub {
     owner = "tomac";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "06yfpf9iyi525rly1ychsihzvw3sas8kp0nxxr99xkwiqp5dc78b";
+    rev = "867b309eced9e02b63412855440cd4f5f7727431";
+    sha256 = "sha256-VShg9Nzd8dzUNiqYnKcDzRgqjwar/8XRGEJCJL25aR0=";
   };
-
-  patches = [
-    # ncurses-6.3 support, included in next release
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/tomac/yersinia/commit/d91bbf6f475e7ea39f131b77ce91b2de9646d5ca.patch";
-      sha256 = "fl1pZKWA+nLtBm9+3FBFqaeuVZjszQCNkNl6Cf++BAI=";
-    })
-
-    # Pull upstream fix for -fno-common toolchain support:
-    #   https://github.com/tomac/yersinia/pull/66
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/tomac/yersinia/commit/36247225dc7a6f38c4ba70537e20351f04762749.patch";
-      sha256 = "KHaN8gfgNROEico27gWnYiP9ZVhpWz0KjFYy2t5tPBo=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libpcap libnet ncurses ]
@@ -58,7 +41,5 @@ stdenv.mkDerivation rec {
     # so not sure, but it could work on openbsd, illumos, and freebsd
     # if you have a machine to test with, feel free to add these
     platforms = with platforms; linux;
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

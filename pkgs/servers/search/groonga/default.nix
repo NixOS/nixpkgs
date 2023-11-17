@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
        optional zlibSupport "--with-zlib"
     ++ optional lz4Support  "--with-lz4";
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # Prevent warning about using a GNU extension from being promoted to an error.
+    NIX_CFLAGS_COMPILE = "-Wno-error=gnu-folding-constant";
+  };
+
   doInstallCheck    = true;
   installCheckPhase = "$out/bin/groonga --version";
 

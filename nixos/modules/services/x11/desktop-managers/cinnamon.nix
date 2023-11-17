@@ -221,7 +221,7 @@ in
 
       # Default Fonts
       fonts.packages = with pkgs; [
-        source-code-pro # Default monospace font in 3.32
+        dejavu_fonts # Default monospace font in LMDE 6+
         ubuntu_font_family # required for default theme
       ];
     })

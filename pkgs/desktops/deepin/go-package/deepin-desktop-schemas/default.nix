@@ -33,7 +33,7 @@ buildGoPackage rec {
   buildPhase = ''
     runHook preBuild
     addToSearchPath GOPATH "${go-lib}/share/gocode"
-    make ARCH=${stdenv.targetPlatform.linuxArch} -C go/src/${goPackagePath}
+    make ARCH=${stdenv.hostPlatform.linuxArch} -C go/src/${goPackagePath}
     runHook postBuild
   '';
 

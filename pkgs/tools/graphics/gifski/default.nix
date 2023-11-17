@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.12.2";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    hash = "sha256-KiedPhlPcFkTiZZfOBlTKqtzU2ND1HXdsfhq+F1MtdU=";
+    hash = "sha256-Ij+bgL935uLCZeh8GQnTFlPIuUloNCn8LUdvMd+6okM=";
   };
 
   cargoLock = {

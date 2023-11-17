@@ -1,23 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , click
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "click-aliases";
-  version = "1.0.1";
+  version = "1.0.3";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-aliases";
     rev = "v${version}";
-    hash = "sha256-vzWlCb4m9TdRaVz4DrlRRZ60+9gj60NoiALgvaIG0gA=";
+    hash = "sha256-HTjo6ID27W7D4MZjeAJMSy5yVd6oKg0Ed9/kDtQZ7Vw=";
   };
 
-  patches = [
-    ./0001-Fix-quotes-in-test.patch
+  nativeBuildInputs = [
+    poetry-core
   ];
 
   propagatedBuildInputs = [

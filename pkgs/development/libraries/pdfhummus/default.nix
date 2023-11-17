@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdfhummus";
-  version = "4.5.12";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "galkahana";
     repo = "PDF-Writer";
     rev = "v${version}";
-    hash = "sha256-n5mzzIDU7Lb2V9YImPvceCBUt9Q+ZeF45CHtW52cGpY=";
+    hash = "sha256-4QJxYxLELBDg5GZISdO2xKzJej8F21BY+GD+KkrGXws=";
   };
 
   nativeBuildInputs = [

@@ -209,5 +209,14 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ colamaroro ];
+    knownVulnerabilities = [
+      "CVE-2023-5217"
+      "CVE-2022-21718"
+      "CVE-2022-29247"
+      "CVE-2022-29257"
+      "CVE-2022-36077"
+      "CVE-2023-29198"
+      "CVE-2023-39956"
+    ];
   };
 }

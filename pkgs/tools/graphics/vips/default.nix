@@ -18,7 +18,6 @@
 , libexif
 , librsvg
 , poppler
-, libgsf
 , libtiff
 , fftw
 , lcms2
@@ -26,7 +25,6 @@
 , libimagequant
 , imagemagick
 , pango
-, orc
 , matio
 , cfitsio
 , libwebp
@@ -36,19 +34,23 @@
 , openslide
 , libheif
 , cgif
+, libarchive
+, libhwy
+, testers
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.14.5";
+  version = "8.15.0";
 
   outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
-    rev = "v${version}";
-    hash = "sha256-fG3DTP+3pO7sbqR/H9egJHU3cLKPU4Jad6qxcQ9evNw=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-WfKq+maLcAXyjk1sq66wSU92ALv4MfRDPKe4Mki0KRQ=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -76,7 +78,6 @@ stdenv.mkDerivation rec {
     libexif
     librsvg
     poppler
-    libgsf
     libtiff
     fftw
     lcms2
@@ -84,7 +85,6 @@ stdenv.mkDerivation rec {
     libimagequant
     imagemagick
     pango
-    orc
     matio
     cfitsio
     libwebp
@@ -94,6 +94,8 @@ stdenv.mkDerivation rec {
     openslide
     libheif
     cgif
+    libarchive
+    libhwy
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
@@ -109,12 +111,29 @@ stdenv.mkDerivation rec {
   ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
   ;
 
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "vips --version";
+      };
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v([0-9.]+)" ];
+    };
+  };
+
   meta = with lib; {
-    changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";
-    homepage = "https://libvips.github.io/libvips/";
+    changelog = "https://github.com/libvips/libvips/blob/${finalAttrs.src.rev}/ChangeLog";
+    homepage = "https://www.libvips.org/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ kovirobi ];
+    maintainers = with maintainers; [ kovirobi anthonyroussel ];
+    pkgConfigModules = [ "vips" "vips-cpp" ];
     platforms = platforms.unix;
+    mainProgram = "vips";
   };
-}
+})

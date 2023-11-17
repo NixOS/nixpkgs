@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/desktop-file-utils";
+    homepage = "https://www.freedesktop.org/wiki/Software/desktop-file-utils";
     description = "Command line utilities for working with .desktop files";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2Plus;

@@ -44,11 +44,11 @@ in
     hash = "sha256-LL9zWFC+76wH74nqKszPQf2ZDfXq8BiH6tuiK43wYHA=";
   };
   v5 = font-awesome {
-    version = "5.15.3";
-    hash = "sha256-CFXGsl70o/gXUCEKu8Wkv4EBRhrrcMIq8NpfWzcxEus=";
+    version = "5.15.4";
+    hash = "sha256-gd23ZplNY56sm1lfkU3kPXUOmNmY5SRnT0qlQZRNuBo=";
   };
   v6 = font-awesome {
-    version = "6.1.1";
-    hash = "sha256-rujqhKI33Pi2xugMKGoTJDkPkCDK407+Da6yNJP2yAc=";
+    version = "6.4.2";
+    hash = "sha256-/utIhn7CWxlWXshcCUj57WuObRmLTGhTfQo7L6FDHqA=";
   };
 }

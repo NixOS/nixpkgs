@@ -1,13 +1,15 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 
 # build-system
 , cython
+, meson-python
+, meson
 , oldest-supported-numpy
-, setuptools
+, pkg-config
 , versioneer
 , wheel
 
@@ -63,24 +65,37 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "2.0.3";
-  format = "pyproject";
+  version = "2.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wC83Kojg0X820wk6ZExzz8F4jodqfEvLQCCndRLiBDw=";
+  src = fetchFromGitHub {
+    owner = "pandas-dev";
+    repo = "pandas";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6SgW4BtO7EFnS8P8LL4AGk5EdPwOQ0+is0wXgqsm9w0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
+      --replace "meson==1.2.1" "meson>=1.2.1"
+  '';
+
   nativeBuildInputs = [
-    setuptools
     cython
+    meson-python
+    meson
     numpy
-    oldest-supported-numpy
+    pkg-config
     versioneer
     wheel
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml
+  ++ lib.optionals (pythonOlder "3.12") [
+    oldest-supported-numpy
+  ];
 
   enableParallelBuilding = true;
 
@@ -193,10 +208,9 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
-    "--skip-db"
-    "--skip-slow"
-    "--skip-network"
-    "-m" "'not single_cpu and not slow_arm'"
+    "-m" "'not single_cpu and not slow and not network and not db and not slow_arm'"
+    # https://github.com/pandas-dev/pandas/issues/54907
+    "--no-strict-data-files"
     "--numprocesses" "4"
   ];
 
@@ -208,6 +222,9 @@ buildPythonPackage rec {
     "test_binops"
     # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
     "test_rolling"
+  ] ++ lib.optional stdenv.is32bit [
+    # https://github.com/pandas-dev/pandas/issues/37398
+    "test_rolling_var_numerical_issues"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions
@@ -232,9 +249,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # https://github.com/pandas-dev/pandas/issues/14866
-    # pandas devs are no longer testing i686 so safer to assume it's broken
-    broken = stdenv.isi686;
+    # pandas devs no longer test i686, it's commonly broken
+    # broken = stdenv.isi686;
     changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Powerful data structures for data analysis, time series, and statistics";
     downloadPage = "https://github.com/pandas-dev/pandas";

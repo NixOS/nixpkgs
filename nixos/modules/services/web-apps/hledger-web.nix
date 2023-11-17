@@ -7,7 +7,7 @@ in {
 
     enable = mkEnableOption (lib.mdDoc "hledger-web service");
 
-    serveApi = mkEnableOption (lib.mdDoc "Serve only the JSON web API, without the web UI");
+    serveApi = mkEnableOption (lib.mdDoc "serving only the JSON web API, without the web UI");
 
     host = mkOption {
       type = types.str;

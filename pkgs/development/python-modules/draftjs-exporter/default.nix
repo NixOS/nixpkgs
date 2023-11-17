@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "draftjs-exporter";
-  version = "2.1.7";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     repo = "draftjs_exporter";
     owner = "springload";
-    rev = "v${version}";
-    sha256 = "sha256-tw0r9RnQdIwcY+pqnW8fcV0o2LzmxW0MZPn5drNgK80=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4MmCVRx350p6N9XqTZSo8ROI/OJ0s4aKSYH9+Oxgvf4=";
   };
 
   passthru.optional-dependencies = {

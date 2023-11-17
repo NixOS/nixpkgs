@@ -40,11 +40,15 @@ in
         port = 31637;
       };
 
+      # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
+      services.postgresql.package = pkgs.postgresql_14;
+
       services.mastodon = {
         enable = true;
         configureNginx = true;
         localDomain = "mastodon.local";
         enableUnixSocket = false;
+        streamingProcesses = 2;
         smtp = {
           createLocally = false;
           fromAddress = "mastodon@mastodon.local";

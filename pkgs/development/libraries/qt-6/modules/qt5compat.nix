@@ -8,6 +8,6 @@
 
 qtModule {
   pname = "qt5compat";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ libiconv icu openssl ];
 }

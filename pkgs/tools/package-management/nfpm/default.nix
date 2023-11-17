@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "nfpm";
-  version = "2.33.1";
+  version = "2.34.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5CNN0aKy9FnoqRwhbNVTUs04q+hkzoAWlDuDKMeT+1s=";
+    hash = "sha256-O7qxJ2TE62XDYljqvNsO3ssD/YhfOLfy9zF0W++T0Hw=";
   };
 
-  vendorHash = "sha256-P96qMc9KHDMreuPI3xY/yI/+8qp/znQM/O2B6t6iFug=";
+  vendorHash = "sha256-qihPtpygHoIfGf2wj+klDWwL4sTHqDxi1jxjv57vUx4=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

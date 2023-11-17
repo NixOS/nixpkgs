@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    hash = "sha256-DC4KPPaMuqML0HEhWJmWjyox4WEbExPDfNnpnWzoaHc=";
+    hash = "sha256-okNmobCVAC9y7tjZqFd0DBhOjs3WWRPK8jvK1j9G29k=";
   };
 
   outputs = [ "out" "dev" "bin" ];

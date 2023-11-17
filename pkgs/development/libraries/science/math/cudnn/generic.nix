@@ -153,8 +153,14 @@ in
       description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
       homepage = "https://developer.nvidia.com/cudnn";
       sourceProvenance = with sourceTypes; [binaryNativeCode];
-      # TODO: consider marking unfreRedistributable when not using runfile
-      license = licenses.unfree;
+      license = {
+        shortName = "cuDNN EULA";
+        fullName = "NVIDIA cuDNN Software License Agreement (EULA)";
+        url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
+        free = false;
+      } // lib.optionalAttrs (!useCudatoolkitRunfile) {
+        redistributable = true;
+      };
       platforms = ["x86_64-linux"];
       maintainers = with maintainers; [mdaiter samuela];
       # Force the use of the default, fat output by default (even though `dev` exists, which

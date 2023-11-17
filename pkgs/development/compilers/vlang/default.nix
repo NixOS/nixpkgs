@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
 let
-  version = "weekly.2023.19";
+  version = "weekly.2023.44";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -9,12 +9,12 @@ let
   # Required for bootstrap.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "unstable-2023-05-14";
+    version = "unstable-2023-10-30";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "f7c2b5f2a0738d0d236161c9de9f31dd0280ac86";
-      sha256 = "sha256-xU3TvyNgc0o4RCsHtoC6cZTNaue2yuAiolEOvP37TKA=";
+      rev = "66b89ab916c13c5781753797d1f4ff08e427bb6b";
+      hash = "sha256-5Y7/rlcoIHjbf79A1rqFysNFc5+p6CY09MRPQalo7Ak=";
     };
 
     # patch the ptrace reference for darwin
@@ -30,8 +30,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "6e970bd0a7459ad7798588f1ace4aa46c5e789a2";
-    hash = "sha256-hFf7c8ZNMU1j7fgmDakuO7tBVr12Wq0dgQddJnkMajE=";
+    rev = "61c47ea0a6c0c79e973a119dcbab3b8fdd0973ca";
+    hash = "sha256-XBD30Pc9CGXzU1Gy6U0pDpTozYVwfgAvZRjIsnXp8ZM=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "sha256-fHn1z2q3LmSycCOa1ii4DoHvbEW4uJt3Psq3/VuZNVQ=";
+    hash = "sha256-1yFuheSyKfvm4GqKIbXycdzKx3XcD9LSmmuKlcJmteg=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
@@ -97,6 +97,7 @@ stdenv.mkDerivation {
     $out/lib/v -v $out/lib/cmd/tools/vdoc
     $out/lib/v -v $out/lib/cmd/tools/vast
     $out/lib/v -v $out/lib/cmd/tools/vvet
+    $out/lib/v -v $out/lib/cmd/tools/vcreate
 
     runHook postInstall
   '';
@@ -110,7 +111,7 @@ stdenv.mkDerivation {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [ Madouura delta231 ];
     mainProgram = "v";
     platforms = platforms.all;
   };

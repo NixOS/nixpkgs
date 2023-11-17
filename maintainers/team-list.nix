@@ -324,12 +324,16 @@ with lib.maintainers; {
   geospatial = {
     members = [
       imincik
-      sikmir
       nh2
+      sikmir
       willcohen
+    ];
+    githubTeams = [
+      "geospatial"
     ];
     scope = "Maintain geospatial packages.";
     shortName = "Geospatial";
+    enableFeatureFreezePing = true;
   };
 
   gitlab = {
@@ -350,6 +354,7 @@ with lib.maintainers; {
       mic92
       zowoq
       qbit
+      mfrw
     ];
     githubTeams = [
       "golang"
@@ -393,6 +398,7 @@ with lib.maintainers; {
       cdepillabout
       expipiplus1
       maralorn
+      ncfavier
       sternenseemann
     ];
     githubTeams = [
@@ -406,7 +412,6 @@ with lib.maintainers; {
   home-assistant = {
     members = [
       fab
-      globin
       hexa
       mic92
     ];
@@ -430,6 +435,7 @@ with lib.maintainers; {
     members = [
       cleeyv
       ryantm
+      lassulus
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -439,6 +445,7 @@ with lib.maintainers; {
     members = [
       GaetanLepage
       natsukium
+      thomasjm
     ];
     scope = "Maintain Jupyter and related packages.";
     shortName = "Jupyter";
@@ -611,6 +618,7 @@ with lib.maintainers; {
 
   minimal-bootstrap = {
     members = [
+      alejandrosame
       artturin
       emilytrau
       ericson2314
@@ -682,6 +690,18 @@ with lib.maintainers; {
     shortName = "Numtide team";
   };
 
+  ocaml = {
+    members = [
+      alizter
+    ];
+    githubTeams = [
+      "ocaml"
+    ];
+    scope = "Maintain the OCaml compiler and package set.";
+    shortName = "OCaml";
+    enableFeatureFreezePing = true;
+  };
+
   openstack = {
     members = [
       SuperSandro2000
@@ -728,7 +748,6 @@ with lib.maintainers; {
       aanderse
       drupol
       etu
-      globin
       ma27
       talyz
     ];
@@ -898,7 +917,6 @@ with lib.maintainers; {
 
   tts = {
     members = [
-      hexa
       mic92
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
@@ -919,7 +937,6 @@ with lib.maintainers; {
   wdz = {
     members = [
       n0emis
-      netali
       vidister
       johannwagner
       yuka

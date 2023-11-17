@@ -12,22 +12,44 @@ let
     then cfgc.package
     else pkgs.buildPackages.openssh;
 
-  # reports boolean as yes / no
-  mkValueStringSshd = with lib; v:
-        if isInt           v then toString v
-        else if isString   v then v
-        else if true  ==   v then "yes"
-        else if false ==   v then "no"
-        else if isList     v then concatStringsSep "," v
-        else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
-
   # dont use the "=" operator
-  settingsFormat = (pkgs.formats.keyValue {
-      mkKeyValue = lib.generators.mkKeyValueDefault {
-      mkValueString = mkValueStringSshd;
-    } " ";});
+  settingsFormat =
+    let
+      # reports boolean as yes / no
+      mkValueString = with lib; v:
+            if isInt           v then toString v
+            else if isString   v then v
+            else if true  ==   v then "yes"
+            else if false ==   v then "no"
+            else throw "unsupported type ${builtins.typeOf v}: ${(lib.generators.toPretty {}) v}";
 
-  configFile = settingsFormat.generate "sshd.conf-settings" cfg.settings;
+      base = pkgs.formats.keyValue {
+        mkKeyValue = lib.generators.mkKeyValueDefault { inherit mkValueString; } " ";
+      };
+      # OpenSSH is very inconsistent with options that can take multiple values.
+      # For some of them, they can simply appear multiple times and are appended, for others the
+      # values must be separated by whitespace or even commas.
+      # Consult either sshd_config(5) or, as last resort, the OpehSSH source for parsing
+      # the options at servconf.c:process_server_config_line_depth() to determine the right "mode"
+      # for each. But fortunaly this fact is documented for most of them in the manpage.
+      commaSeparated = [ "Ciphers" "KexAlgorithms" "Macs" ];
+      spaceSeparated = [ "AuthorizedKeysFile" "AllowGroups" "AllowUsers" "DenyGroups" "DenyUsers" ];
+    in {
+      inherit (base) type;
+      generate = name: value:
+        let transformedValue = mapAttrs (key: val:
+          if isList val then
+            if elem key commaSeparated then concatStringsSep "," val
+            else if elem key spaceSeparated then concatStringsSep " " val
+            else throw "list value for unknown key ${key}: ${(lib.generators.toPretty {}) val}"
+          else
+            val
+          ) value;
+        in
+          base.generate name transformedValue;
+    };
+
+  configFile = settingsFormat.generate "sshd.conf-settings" (filterAttrs (n: v: v != null) cfg.settings);
   sshconf = pkgs.runCommand "sshd.conf-final" { } ''
     cat ${configFile} - >$out <<EOL
     ${cfg.extraConfig}
@@ -74,6 +96,19 @@ let
       };
     };
 
+    options.openssh.authorizedPrincipals = mkOption {
+      type = with types; listOf types.singleLineStr;
+      default = [];
+      description = mdDoc ''
+        A list of verbatim principal names that should be added to the user's
+        authorized principals.
+      '';
+      example = [
+        "example@host"
+        "foo@bar"
+      ];
+    };
+
   };
 
   authKeysFiles = let
@@ -88,6 +123,16 @@ let
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
+
+  authPrincipalsFiles = let
+    mkAuthPrincipalsFile = u: nameValuePair "ssh/authorized_principals.d/${u.name}" {
+      mode = "0444";
+      text = concatStringsSep "\n" u.openssh.authorizedPrincipals;
+    };
+    usersWithPrincipals = attrValues (flip filterAttrs config.users.users (n: u:
+      length u.openssh.authorizedPrincipals != 0
+    ));
+  in listToAttrs (map mkAuthPrincipalsFile usersWithPrincipals);
 
 in
 
@@ -285,6 +330,14 @@ in
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
+            AuthorizedPrincipalsFile = mkOption {
+              type = types.str;
+              default = "none"; # upstream default
+              description = lib.mdDoc ''
+                Specifies a file that lists principal names that are accepted for certificate authentication. The default
+                is `"none"`, i.e. not to use	a principals file.
+              '';
+            };
             LogLevel = mkOption {
               type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
               default = "INFO"; # upstream default
@@ -400,6 +453,42 @@ in
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
               '';
             };
+            AllowUsers = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is allowed only for the listed users.
+                See {manpage}`sshd_config(5)` for details.
+              '';
+            };
+            DenyUsers = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is denied for all listed users. Takes
+                precedence over [](#opt-services.openssh.settings.AllowUsers).
+                See {manpage}`sshd_config(5)` for details.
+              '';
+            };
+            AllowGroups = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is allowed only for users part of the
+                listed groups.
+                See {manpage}`sshd_config(5)` for details.
+              '';
+            };
+            DenyGroups = mkOption {
+              type = with types; nullOr (listOf str);
+              default = null;
+              description = lib.mdDoc ''
+                If specified, login is denied for all users part of the listed
+                groups. Takes precedence over
+                [](#opt-services.openssh.settings.AllowGroups). See
+                {manpage}`sshd_config(5)` for details.
+              '';
+            };
           };
         });
       };
@@ -444,7 +533,7 @@ in
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
-    environment.etc = authKeysFiles //
+    environment.etc = authKeysFiles // authPrincipalsFiles //
       { "ssh/moduli".source = cfg.moduliFile;
         "ssh/sshd_config".source = sshconf;
       };
@@ -540,6 +629,8 @@ in
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
       [ "%h/.ssh/authorized_keys" "/etc/ssh/authorized_keys.d/%u" ];
+
+    services.openssh.settings.AuthorizedPrincipalsFile = mkIf (authPrincipalsFiles != {}) "/etc/ssh/authorized_principals.d/%u";
 
     services.openssh.extraConfig = mkOrder 0
       ''

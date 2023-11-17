@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EHSFr05VXJuOjUnweEJngdnfSUZUF1HsO28ZBSLGlvE=";
+    hash = "sha256-YOsq3cB+Pn2eC1Dky3fobBRR7GMxcf/tvWr6i3Vq/BE=";
   };
 
   patches = [

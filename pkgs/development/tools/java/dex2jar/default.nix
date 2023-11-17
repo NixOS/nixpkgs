@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dex2jar";
-  version  = "2.1";
+  version  = "2.4";
 
   src = fetchurl {
-    url = "https://github.com/pxb1988/dex2jar/releases/download/v${finalAttrs.version}/dex2jar-${finalAttrs.version}.zip";
-    hash = "sha256-epvfhD1D3k0elOwue29VglAXsMSn7jn/gmYOJJOkbwg=";
+    url = "https://github.com/pxb1988/dex2jar/releases/download/v${finalAttrs.version}/dex-tools-v${finalAttrs.version}.zip";
+    hash = "sha256-7nxF6zwdJHSmFF2NRH5lGnNqItlmS209O+WlqBfdojo=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];

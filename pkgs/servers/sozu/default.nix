@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "0.15.5";
+  version = "0.15.15";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
     repo = pname;
     rev = version;
-    hash = "sha256-EKp+BR1x98BFDl4d6cCwBlldF6NT66SfrchNvyasI0s=";
+    hash = "sha256-zxGP2SWrq8beb+mJpgB39T7B1HpE76YP6se01vMewuw=";
   };
 
-  cargoHash = "sha256-8uiMQPXhZyk3YteTQfxzFIt9xlJzvogUy+WqsHBzmhk=";
+  cargoHash = "sha256-KqCDOWCMRYpBMsESTdhMEgTu6qAxcg4RHe252JBggqs=";
 
   nativeBuildInputs = [ protobuf ];
 

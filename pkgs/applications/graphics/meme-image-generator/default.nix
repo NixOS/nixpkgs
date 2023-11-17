@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/nomad-software/meme";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
+    mainProgram = "meme";
   };
 }

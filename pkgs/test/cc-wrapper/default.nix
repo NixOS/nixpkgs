@@ -9,7 +9,8 @@ let
   );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
   emulator = stdenv.hostPlatform.emulator buildPackages;
-  libcxxStdenvSuffix = lib.optionalString (stdenv.cc.libcxx != null) "-libcxx";
+  isCxx = stdenv.cc.libcxx != null;
+  libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
 in stdenv.mkDerivation {
   pname = "cc-wrapper-test-${stdenv.cc.cc.pname}${libcxxStdenvSuffix}";
   version = stdenv.cc.version;
@@ -29,6 +30,21 @@ in stdenv.mkDerivation {
     echo "checking whether compiler builds valid C++ binaries... " >&2
     $CXX -o cxx-check ${./cxx-main.cc}
     ${emulator} ./cxx-check
+
+    # test for https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1431745905
+    # .../include/cxxabi.h:20:10: fatal error: '__cxxabi_config.h' file not found
+    # in libcxxStdenv
+    echo "checking whether cxxabi.h can be included... " >&2
+    $CXX -o include-cxxabi ${./include-cxxabi.cc}
+    ${emulator} ./include-cxxabi
+
+    # cxx doesn't have libatomic.so
+    ${lib.optionalString (!isCxx) ''
+      # https://github.com/NixOS/nixpkgs/issues/91285
+      echo "checking whether libatomic.so can be linked... " >&2
+      $CXX -shared -o atomics.so ${./atomics.cc} -latomic ${lib.optionalString (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "6.0.0" ) "-std=c++17"}
+      $READELF -d ./atomics.so | grep libatomic.so && echo "ok" >&2 || echo "failed" >&2
+    ''}
 
     ${lib.optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
       echo "checking whether compiler can build with CoreFoundation.framework... " >&2

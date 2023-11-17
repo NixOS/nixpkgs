@@ -24,20 +24,20 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "5.0.2";
+  version = "5.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3r0h34el2zRF1l/94S7xTjBqJPWtSQFQvtVW8Mjq0rs=";
+    hash = "sha256-RfrHlOTCDH51sBgGnX+XYfJfqjYZ7zDfJAE8okq/mnQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8" \
-      --replace "Pillow>=4.0.0,<10.0.0" "Pillow>=9.1.0,<11.0.0"
+      --replace "draftjs_exporter>=2.1.5,<3.0" "draftjs_exporter>=2.1.5,<6.0"
   '';
 
   propagatedBuildInputs = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     requests
     telepath
     willow
-  ];
+  ] ++ willow.optional-dependencies.heif;
 
   # Tests are in separate derivation because they require a package that depends
   # on wagtail (wagtail-factories)

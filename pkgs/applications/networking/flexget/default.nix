@@ -8,6 +8,7 @@ let
   python = python3.override {
     # FlexGet doesn't support transmission-rpc>=5 yet
     # https://github.com/NixOS/nixpkgs/issues/258504
+    # https://github.com/Flexget/Flexget/issues/3847
     packageOverrides = self: super: {
       transmission-rpc = super.transmission-rpc.overridePythonAttrs (old: rec {
         version = "4.3.1";
@@ -23,7 +24,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.9.11";
+  version = "3.9.18";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -31,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0ONjRIMSfHKvaO05hhurfnS/waNNRZEVq7BodeV00kU=";
+    hash = "sha256-Wxi6+6c/PK990YCoFKBMxJbYgMkS9y46hNIlkVhjbA4=";
   };
 
   postPatch = ''

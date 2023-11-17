@@ -38,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.isLinux alsa-lib
   ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  preConfigure = ''
+  # touch ChangeLog to avoid below error on darwin:
+  # Makefile.am: error: required file './ChangeLog.md' not found
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    touch ChangeLog
+  '' + ''
     ./autogen.sh
   '';
 
@@ -48,6 +52,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
   };
 })

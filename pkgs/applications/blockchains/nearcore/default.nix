@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mic92 mikroskeem ];
+    maintainers = with maintainers; [ mikroskeem ];
     # only x86_64 is supported in nearcore because of sse4+ support, macOS might
     # be also possible
     platforms = [ "x86_64-linux" ];

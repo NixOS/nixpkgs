@@ -29,7 +29,7 @@ let
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (lib)
-    getBin optionalString literalExpression
+    getBin optionalAttrs optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
     mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
 
@@ -178,7 +178,7 @@ in
           capabilities = "cap_sys_nice+ep";
           source = "${getBin plasma5.kwin}/bin/kwin_wayland";
         };
-      } // mkIf (!cfg.runUsingSystemd) {
+      } // optionalAttrs (!cfg.runUsingSystemd) {
         start_kdeinit = {
           setuid = true;
           owner = "root";
@@ -309,7 +309,7 @@ in
         "/share"
       ];
 
-      environment.etc."X11/xkb".source = xcfg.xkbDir;
+      environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
       environment.sessionVariables = {
         PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
@@ -379,7 +379,7 @@ in
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
 
-      programs.firefox.wrapperConfig.enablePlasmaBrowserIntegration = true;
+      programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
     })
 
     (mkIf (cfg.kwinrc != {}) {

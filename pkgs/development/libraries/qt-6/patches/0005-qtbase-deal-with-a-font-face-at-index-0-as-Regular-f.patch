@@ -1,7 +1,7 @@
-From 4e8c14f1af9c332826e0454f4fd63e541edbaf5c Mon Sep 17 00:00:00 2001
+From 880fe5653a86d8091f3f577977f8af93552c48fd Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 21 Mar 2023 15:48:49 +0800
-Subject: [PATCH 5/6] qtbase: deal with a font face at index 0 as Regular for
+Subject: [PATCH 05/11] qtbase: deal with a font face at index 0 as Regular for
  Variable fonts
 
 Reference: https://bugreports.qt.io/browse/QTBUG-111994
@@ -22,5 +22,5 @@ index 474644b871f..c7a117fd134 100644
          FcObjectSetDestroy(os);
          FcPatternDestroy(pattern);
 -- 
-2.39.2
+2.42.0
 

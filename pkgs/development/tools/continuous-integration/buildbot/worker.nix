@@ -15,7 +15,7 @@
 # tests
 , parameterized
 , psutil
-, setuptoolsTrial
+, setuptools-trial
 
 # passthru
 , nixosTests
@@ -36,7 +36,7 @@ buildPythonPackage (rec {
   '';
 
   nativeBuildInputs = [
-    setuptoolsTrial
+    setuptools-trial
   ];
 
   propagatedBuildInputs = [

@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    hash = "sha256-aMQq44vflpsI66CyaXekMfYh/ssH7UkCX0zsO55st3Y=";
+    hash = "sha256-uKmiBNwuu3Eduf0v3p2VYYNf6mgxJTBUsYs+tKZQZys=";
   };
 
-  cargoHash = "sha256-1D87O4fje82Oxyj2Q9kAEey4uEzsNT7kTd8IbNT4WXE=";
+  cargoHash = "sha256-iBO99kpITVl7ySlXPkEg2YecS1lonVx9CbKt9WI180s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -64,6 +64,18 @@ rustPlatform.buildRustPackage rec {
     package = czkawka;
     command = "czkawka_cli --version";
   };
+
+  postInstall = ''
+    # Install Icons
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka.svg
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
+
+    # Install MetaInfo
+    install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
+
+    # Install Desktop Entry
+    install -Dm444 -t $out/share/applications data/com.github.qarmin.czkawka.desktop
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";

@@ -220,7 +220,7 @@ in
             "catch_workers_output" = true;
           };
           phpEnv = {
-            FRESHRSS_DATA_PATH = "${cfg.dataDir}";
+            DATA_PATH = "${cfg.dataDir}";
           };
         };
       };
@@ -267,7 +267,7 @@ in
             WorkingDirectory = cfg.package;
           };
           environment = {
-            FRESHRSS_DATA_PATH = cfg.dataDir;
+            DATA_PATH = cfg.dataDir;
           };
 
           script =
@@ -302,7 +302,7 @@ in
         wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
         environment = {
-          FRESHRSS_DATA_PATH = cfg.dataDir;
+          DATA_PATH = cfg.dataDir;
         };
         serviceConfig = defaultServiceConfig //{
           ExecStart = "${cfg.package}/app/actualize_script.php";

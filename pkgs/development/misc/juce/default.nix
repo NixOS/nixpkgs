@@ -53,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd # libGL.so
     webkitgtk # webkit2gtk-4.0
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    darwin.apple_sdk_11_0.frameworks.MetalKit
-    darwin.apple_sdk_11_0.frameworks.WebKit
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.MetalKit
+    darwin.apple_sdk.frameworks.WebKit
   ];
 
   meta = with lib; {

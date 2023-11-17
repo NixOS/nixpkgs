@@ -127,8 +127,8 @@ in
               ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
                 "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
               } \
-              -model '${xkbModel}' -layout '${layout}' \
-              -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
+              -model '${xkb.model}' -layout '${xkb.layout}' \
+              -option '${xkb.options}' -variant '${xkb.variant}' > "$out"
           '');
     }
 

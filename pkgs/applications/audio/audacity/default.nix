@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , makeWrapper
 , wrapGAppsHook
@@ -15,6 +14,8 @@
 , lv2
 , lilv
 , mpg123
+, opusfile
+, rapidjson
 , serd
 , sord
 , sqlite
@@ -61,13 +62,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.3.3";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "audacity";
+    repo = "audacity";
     rev = "Audacity-${version}";
-    hash = "sha256-m38Awdv2ew+MKqd68x/ZsRBwidM2KJ3BRykIKgnFSx4=";
+    hash = "sha256-g9VdwVRrZrIKd4VUU12C691aM2ilgTJdW5Ic7sokk4M=";
   };
 
   postPatch = ''
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11.0") ''
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
@@ -109,8 +110,10 @@ stdenv.mkDerivation rec {
     lilv
     lv2
     mpg123
+    opusfile
     pcre
     portmidi
+    rapidjson
     serd
     sord
     soundtouch

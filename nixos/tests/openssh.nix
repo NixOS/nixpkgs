@@ -22,7 +22,7 @@ in {
         ];
       };
 
-    server_lazy =
+    server-lazy =
       { ... }:
 
       {
@@ -34,7 +34,7 @@ in {
         ];
       };
 
-    server_localhost_only =
+    server-localhost-only =
       { ... }:
 
       {
@@ -43,7 +43,7 @@ in {
         };
       };
 
-    server_localhost_only_lazy =
+    server-localhost-only-lazy =
       { ... }:
 
       {
@@ -52,7 +52,7 @@ in {
         };
       };
 
-    server_match_rule =
+    server-match-rule =
       { ... }:
 
       {
@@ -82,6 +82,19 @@ in {
         };
       };
 
+    server_allowedusers =
+      { ... }:
+
+      {
+        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
+        users.groups = { alice = { }; bob = { }; carol = { }; };
+        users.users = {
+          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+        };
+      };
+
     client =
       { ... }: { };
 
@@ -90,7 +103,12 @@ in {
   testScript = ''
     start_all()
 
-    server.wait_for_unit("sshd")
+    server.wait_for_unit("sshd", timeout=30)
+    server_localhost_only.wait_for_unit("sshd", timeout=30)
+    server_match_rule.wait_for_unit("sshd", timeout=30)
+
+    server_lazy.wait_for_unit("sshd.socket", timeout=30)
+    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
 
     with subtest("manual-authkey"):
         client.succeed("mkdir -m 700 /root/.ssh")
@@ -119,11 +137,11 @@ in {
         )
 
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'echo hello world' >&2",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'echo hello world' >&2",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'ulimit -l' | grep 1024",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server-lazy 'ulimit -l' | grep 1024",
             timeout=30
         )
 
@@ -137,7 +155,7 @@ in {
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server_lazy true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
             timeout=30
         )
 
@@ -147,5 +165,23 @@ in {
 
     with subtest("match-rules"):
         server_match_rule.succeed("ss -nlt | grep '127.0.0.1:22'")
+
+    with subtest("allowed-users"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server_allowedusers true",
+            timeout=30
+        )
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server_allowedusers true",
+            timeout=30
+        )
+        client.fail(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server_allowedusers true",
+            timeout=30
+        )
   '';
 })

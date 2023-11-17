@@ -52,34 +52,37 @@ in
   config = mkMerge [
     (mkIf enableBtrfs {
       system.fsPackages = [ pkgs.btrfs-progs ];
+    })
 
-      boot.initrd.kernelModules = mkIf inInitrd [ "btrfs" ];
-      boot.initrd.availableKernelModules = mkIf inInitrd (
+    (mkIf inInitrd {
+      boot.initrd.kernelModules = [ "btrfs" ];
+      boot.initrd.availableKernelModules =
         [ "crc32c" ]
         ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
           # Needed for mounting filesystems with new checksums
           "xxhash_generic"
           "blake2b_generic"
           "sha256_generic" # Should be baked into our kernel, just to be sure
-        ]
-      );
+        ];
 
-      boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)
       ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)
       ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
+      boot.initrd.postDeviceCommands = mkIf (!config.boot.initrd.systemd.enable)
       ''
         btrfs device scan
       '';
+
+      boot.initrd.systemd.initrdBin = [ pkgs.btrfs-progs ];
     })
 
     (mkIf enableAutoScrub {

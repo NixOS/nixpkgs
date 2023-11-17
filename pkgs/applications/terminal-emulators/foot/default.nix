@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.15.3";
+  version = "1.16.2";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     rev = version;
-    hash = "sha256-jn/S0xjxZPnkGYpTRIpL3dKxGe7+Z+EmOGHiE0UkQqg=";
+    hash = "sha256-hT+btlfqfwGBDWTssYl8KN6SbR9/Y2ors4ipECliigM=";
   };
 
   separateDebugInfo = true;
@@ -206,7 +206,7 @@ stdenv.mkDerivation {
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
     description = "A fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ maintainers.sternenseemann maintainers.abbe ];
     platforms = platforms.linux;
     # From (presumably) ncurses version 6.3, it will ship a foot
     # terminfo file. This however won't include some non-standard

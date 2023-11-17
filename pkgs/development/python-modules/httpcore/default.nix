@@ -3,6 +3,8 @@
 , buildPythonPackage
 , certifi
 , fetchFromGitHub
+, hatchling
+, hatch-fancy-pypi-readme
 , h11
 , h2
 , pproxy
@@ -20,8 +22,8 @@
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.17.2";
-  format = "setuptools";
+  version = "0.18.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -29,8 +31,13 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qAoORhzBbjXxgtzTqbAxWBxrohzfwDWm5mxxrgeXt48=";
+    hash = "sha256-UEpERsB7jZlMqRtyHxLYBisfDbTGaAiTtsgU1WUpvtA=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
   propagatedBuildInputs = [
     anyio
@@ -57,18 +64,19 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.http2
     ++ passthru.optional-dependencies.socks;
 
-  pythonImportsCheck = [
-    "httpcore"
+  disabledTests = [
+    # https://github.com/encode/httpcore/discussions/813
+    "test_connection_pool_timeout_during_request"
+    "test_connection_pool_timeout_during_response"
+    "test_h11_timeout_during_request"
+    "test_h11_timeout_during_response"
+    "test_h2_timeout_during_handshake"
+    "test_h2_timeout_during_request"
+    "test_h2_timeout_during_response"
   ];
 
-  preCheck = ''
-    # remove upstreams pytest flags which cause:
-    # httpcore.ConnectError: TLS/SSL connection has been closed (EOF) (_ssl.c:997)
-    rm setup.cfg
-  '';
-
-  pytestFlagsArray = [
-    "--asyncio-mode=strict"
+  pythonImportsCheck = [
+    "httpcore"
   ];
 
   __darwinAllowLocalNetworking = true;

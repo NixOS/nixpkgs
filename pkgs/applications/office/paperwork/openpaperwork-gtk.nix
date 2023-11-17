@@ -9,6 +9,7 @@
 , pillow
 , pygobject3
 , distro
+, setuptools-scm
 
 , pkgs
 }:
@@ -16,6 +17,7 @@
 buildPythonPackage rec {
   pname = "openpaperwork-gtk";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
+  format = "pyproject";
 
   sourceRoot = "${src.name}/openpaperwork-gtk";
 
@@ -23,12 +25,18 @@ buildPythonPackage rec {
   disabled = !isPy3k && !isPyPy;
 
   patchPhase = ''
-    echo 'version = "${version}"' > src/openpaperwork_gtk/_version.py
     chmod a+w -R ..
     patchShebangs ../tools
   '';
 
-  nativeBuildInputs = [ pkgs.gettext pkgs.which ];
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    pkgs.gettext
+    pkgs.which
+    setuptools-scm
+  ];
+
   preBuild = ''
     make l10n_compile
   '';

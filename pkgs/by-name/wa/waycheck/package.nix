@@ -10,16 +10,16 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "waycheck";
-  version = "0.1.3";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "serebit";
     repo = "waycheck";
-    rev = "v${version}";
-    hash = "sha256-DbXc1Q/ZIqlIMocFld3fOmUp44rU3fEzazHKSDdqMNs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oGpiFwbPBQHF0wRHliltU8B+QmClcoFfbjpAYzOFPqs=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     description = "Simple GUI that displays the protocols implemented by a Wayland compositor";
     homepage = "https://gitlab.freedesktop.org/serebit/waycheck";
     license = licenses.asl20;
-    maintainers = with maintainers; [ julienmalka ];
+    maintainers = with maintainers; [ julienmalka federicoschonborn ];
     mainProgram = "waycheck";
     platforms = platforms.linux;
   };
-}
+})

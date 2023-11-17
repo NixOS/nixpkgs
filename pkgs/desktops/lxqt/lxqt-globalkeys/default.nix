@@ -15,23 +15,23 @@
 
 mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "lo5FG6+kQTm15MEh+CZO2DvywsLrmX4sKzs4Rka6GSo=";
+    hash = "sha256-2S61d7BSuDPU1dNXLENpmpt6BB+CAeCtBVQS+ZGxrtU=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtx11extras
     qtsvg
     kwindowsystem

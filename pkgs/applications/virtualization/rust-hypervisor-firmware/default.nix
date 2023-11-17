@@ -1,14 +1,13 @@
 { lib
 , fetchFromGitHub
 , hostPlatform
-, targetPlatform
 , cargo
 , rustc
 , lld
 }:
 
 let
-  arch = targetPlatform.qemuArch;
+  arch = hostPlatform.qemuArch;
 
   target = ./. + "/${arch}-unknown-none.json";
 

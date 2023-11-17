@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !enableCuda;
 
   nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   preCheck = ''

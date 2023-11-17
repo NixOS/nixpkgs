@@ -5,8 +5,8 @@ index 153815577..584b15273 100644
 @@ -1,7 +1,5 @@
 -prefix=@CMAKE_INSTALL_PREFIX@
 -exec_prefix=${prefix}
--libdir=${exec_prefix}/@CMAKE_INSTALL_REL_LIBDIR_PC@
--includedir=${prefix}/@CMAKE_INSTALL_REL_INCLUDEDIR_PC@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR_PC@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR_PC@
 +libdir=@CMAKE_INSTALL_LIBDIR@
 +includedir=@CMAKE_INSTALL_INCLUDEDIR@
 

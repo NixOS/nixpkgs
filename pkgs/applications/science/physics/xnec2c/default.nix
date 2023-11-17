@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
+, wrapGAppsHook
 , pkg-config
 , which
 , gtk3
@@ -20,7 +21,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-6Yrx6LkJjfnMA/kJUDWLhGzGopZeecARSrcR++UScsU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config which ];
+  nativeBuildInputs = [
+    autoreconfHook
+    wrapGAppsHook
+    pkg-config
+    which
+  ];
   buildInputs = [ gtk3 blas lapack ];
 
   meta = with lib; {

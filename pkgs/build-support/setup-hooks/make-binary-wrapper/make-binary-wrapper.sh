@@ -193,8 +193,23 @@ makeCWrapper() {
 
 addFlags() {
     local n flag before after var
+
+    # Disable file globbing, since bash will otherwise try to find
+    # filenames matching the the value to be prefixed/suffixed if
+    # it contains characters considered wildcards, such as `?` and
+    # `*`. We want the value as is, except we also want to split
+    # it on on the separator; hence we can't quote it.
+    local reenableGlob=0
+    if [[ ! -o noglob ]]; then
+        reenableGlob=1
+    fi
+    set -o noglob
     # shellcheck disable=SC2086
     before=($1) after=($2)
+    if (( reenableGlob )); then
+        set +o noglob
+    fi
+
     var="argv_tmp"
     printf '%s\n' "char **$var = calloc(${#before[@]} + argc + ${#after[@]} + 1, sizeof(*$var));"
     printf '%s\n' "assert($var != NULL);"

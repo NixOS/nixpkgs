@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, rpm, pkg-config
+, exiv2, libgsf, pkg-config
+, rpmSupport ? stdenv.isLinux, rpm
 , gstreamerSupport ? true, gst_all_1
 # ^ Needed e.g. for proper id3 and FLAC support.
 #   Set to `false` to decrease package closure size by about 87 MB (53%).
@@ -52,8 +53,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
-     libgsf rpm
-   ] ++ lib.optionals gstreamerSupport
+     libgsf
+   ] ++ lib.optionals rpmSupport [ rpm ]
+     ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ lib.optionals gtkSupport [ glib gtk3 ]
      ++ lib.optionals videoSupport [ ffmpeg_4 libmpeg2 ];
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.
   doCheck = false;
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = "make check";
 
   meta = with lib; {
@@ -98,6 +100,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     maintainers = [ maintainers.jorsn ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

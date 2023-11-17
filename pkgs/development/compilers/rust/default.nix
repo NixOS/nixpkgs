@@ -13,6 +13,7 @@
 }:
 { stdenv, lib
 , buildPackages
+, targetPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildBuild
@@ -21,7 +22,7 @@
 
 let
   # Use `import` to make sure no packages sneak in here.
-  lib' = import ../../../build-support/rust/lib { inherit lib; };
+  lib' = import ../../../build-support/rust/lib { inherit lib stdenv buildPackages targetPackages; };
   # Allow faster cross compiler generation by reusing Build artifacts
   fastCross = (stdenv.buildPlatform == stdenv.hostPlatform) && (stdenv.hostPlatform != stdenv.targetPlatform);
 in
@@ -29,7 +30,7 @@ in
   lib = lib';
 
   # Backwards compat before `lib` was factored out.
-  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget;
+  inherit (lib') toTargetArch toTargetOs toRustTarget toRustTargetSpec IsNoStdTarget toRustTargetForUseInEnvVars envVars;
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions to build
@@ -72,7 +73,7 @@ in
         patches = rustcPatches;
 
         # Use boot package set to break cycle
-        inherit (bootstrapRustPackages) cargo rustc;
+        inherit (bootstrapRustPackages) cargo rustc rustfmt;
       });
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;

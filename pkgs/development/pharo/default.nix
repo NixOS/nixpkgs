@@ -23,8 +23,8 @@ let
   pharo-sources = fetchurl {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
-    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-10.0.5-2757766-Linux-x86_64-c-src.zip";
-    hash = "sha256-i6WwhdVdyzmqGlx1Fn12mCq5+HnRORT65HEiJo0joCE=";
+    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-10.0.8-b323c5f-Linux-x86_64-c-src.zip";
+    hash = "sha256-5IHymk6yl3pMLG3FeM4nqos0yLYMa3B2+hYW08Yo1V0=";
   };
   library_path = makeLibraryPath [
     libgit2
@@ -35,7 +35,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "pharo";
-  version = "10.0.5";
+  version = "10.0.8";
   src = pharo-sources;
 
   buildInputs = [
@@ -64,6 +64,8 @@ stdenv.mkDerivation {
   cmakeFlags = [
     # Necessary to perform the bootstrapping without already having Pharo available.
     "-DGENERATED_SOURCE_DIR=."
+    "-DALWAYS_INTERACTIVE=ON"
+    "-DBUILD_IS_RELEASE=ON"
     "-DGENERATE_SOURCES=OFF"
     # Prevents CMake from trying to download stuff.
     "-DBUILD_BUNDLE=OFF"

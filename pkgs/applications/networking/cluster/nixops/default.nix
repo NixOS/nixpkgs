@@ -1,108 +1,56 @@
-{ nixosTests
-, pkgs
-, poetry2nix
-, lib
-, overrides ? (self: super: {})
-}:
+{ python3 }:
 
 let
+  python = python3.override {
+    packageOverrides = self: super: {
+      nixops = self.callPackage ./unwrapped.nix { };
+    } // (plugins self);
+  };
 
-  interpreter = (
-    poetry2nix.mkPoetryPackages {
-      projectDir = ./.;
-      python = pkgs.python310;
-      overrides = [
-        poetry2nix.defaultPoetryOverrides
-        (import ./poetry-git-overlay.nix { inherit pkgs; })
-        (
-          self: super: {
+  plugins = ps: with ps; rec {
+    nixops-aws = callPackage ./plugins/nixops-aws.nix { };
+    nixops-digitalocean = callPackage ./plugins/nixops-digitalocean.nix { };
+    nixops-encrypted-links = callPackage ./plugins/nixops-encrypted-links.nix { };
+    nixops-gce = callPackage ./plugins/nixops-gce.nix { };
+    nixops-hercules-ci = callPackage ./plugins/nixops-hercules-ci.nix { };
+    nixops-hetzner = callPackage ./plugins/nixops-hetzner.nix { };
+    nixops-hetznercloud = callPackage ./plugins/nixops-hetznercloud.nix { };
+    nixops-libvirtd = callPackage ./plugins/nixops-libvirtd.nix { };
+    nixops-vbox = callPackage ./plugins/nixops-vbox.nix { };
+    nixos-modules-contrib = callPackage ./plugins/nixos-modules-contrib.nix { };
 
-            nixops = super.nixops.overridePythonAttrs (
-              old: {
-                version = "${old.version}-pre-${lib.substring 0 7 super.nixops.src.rev or "dirty"}";
+    # aliases for backwards compatibility
+    nixops-gcp = nixops-gce;
+    nixops-virtd = nixops-libvirtd;
+    nixopsvbox = nixops-vbox;
+  };
 
-                postPatch = ''
-                  substituteInPlace nixops/args.py --subst-var version
-                '';
+  # selector is a function mapping pythonPackages to a list of plugins
+  # e.g. nixops_unstable.withPlugins (ps: with ps; [ nixops-aws ])
+  withPlugins = selector: let
+    selected = selector (plugins python.pkgs);
+  in python.pkgs.toPythonApplication (python.pkgs.nixops.overridePythonAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ selected;
 
-                meta = old.meta // {
-                  homepage = "https://github.com/NixOS/nixops";
-                  description = "NixOS cloud provisioning and deployment tool";
-                  maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
-                  platforms = lib.platforms.unix;
-                  license = lib.licenses.lgpl3;
-                  mainProgram = "nixops";
-                };
+    # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+    # when used in nix-shell.
+    postFixup = ''
+      rm $out/nix-support/propagated-build-inputs
+    '';
 
-              }
-            );
-          }
-        )
-
-        # User provided overrides
-        overrides
-
-        # Make nixops pluginable
-        (self: super: let
-          # Create a fake sphinx directory that doesn't pull the entire setup hook and incorrect python machinery
-          sphinx = pkgs.runCommand "sphinx" {} ''
-            mkdir -p $out/bin
-            for f in ${pkgs.python3.pkgs.sphinx}/bin/*; do
-              ln -s $f $out/bin/$(basename $f)
-            done
-          '';
-
-        in {
-          nixops = super.__toPluginAble {
-            drv = super.nixops;
-            finalDrv = self.nixops;
-
-            nativeBuildInputs = [ sphinx ];
-
-            postInstall = ''
-              doc_cache=$(mktemp -d)
-              sphinx-build -b man -d $doc_cache doc/ $out/share/man/man1
-
-              html=$(mktemp -d)
-              sphinx-build -b html -d $doc_cache doc/ $out/share/nixops/doc
-            '';
-
-          };
-        })
-
-        (self: super: {
-          cryptography = super.cryptography.overridePythonAttrs (old: {
-            meta = old.meta // {
-              knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
-                ++ lib.optionals (lib.versionOlder old.version "41.0.0") [
-                  "CVE-2023-2650"
-                  "CVE-2023-2975"
-                  "CVE-2023-3446"
-                  "CVE-2023-3817"
-                  "CVE-2023-38325"
-                ];
-            };
-          });
-        })
-
-      ];
-    }
-  ).python;
-
-  pkg = (interpreter.pkgs.nixops.withPlugins(ps: [
-    ps.nixops-aws
-    ps.nixops-digitalocean
-    ps.nixops-encrypted-links
-    ps.nixops-gcp
-    ps.nixops-hercules-ci
-    ps.nixops-hetzner
-    ps.nixopsvbox
-    ps.nixops-virtd
-    ps.nixops-hetznercloud
-  ])).overrideAttrs (finalAttrs: prevAttrs: {
-    passthru = prevAttrs.passthru or {} // {
-      tests = prevAttrs.passthru.tests or {} //
-        nixosTests.nixops.unstable.passthru.override { nixopsPkg = pkg; };
+    passthru = old.passthru // {
+      plugins = plugins python.pkgs;
+      inherit withPlugins python;
     };
-  });
-in pkg
+  }));
+in withPlugins (ps: [
+  ps.nixops-aws
+  ps.nixops-digitalocean
+  ps.nixops-encrypted-links
+  ps.nixops-gce
+  ps.nixops-hercules-ci
+  ps.nixops-hetzner
+  ps.nixops-hetznercloud
+  ps.nixops-libvirtd
+  ps.nixops-vbox
+])

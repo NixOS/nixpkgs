@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "k-diffusion";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "crowsonkb";
     repo = "k-diffusion";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jcIA0HfEnVHk9XDXPevGBw81GsXlm1Ztp8ceNirShEA=";
+    hash = "sha256-ef4NhViHQcV+4T+GXpg+Qev5IC0Cid+XWE3sFVx7w4w=";
   };
 
   propagatedBuildInputs = [

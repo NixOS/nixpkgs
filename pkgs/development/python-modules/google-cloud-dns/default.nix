@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
-  version = "0.34.1";
+  version = "0.34.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RPpi7pPFHGxXIWBY2S0qkRa3E6SocanRajqDuZ4wwfk=";
+    hash = "sha256-/GG9jPBw6Hqstidi6ypa8VUHBsmIgdeurrru0RKAr9M=";
   };
 
   propagatedBuildInputs = [

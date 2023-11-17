@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "2.0.2";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "hhatto";
     repo = "autopep8";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+EZgo7xtYKMgpcntU5FtPrfikDDpnvGHhorhtoqDsvE=";
+    hash = "sha256-TuaDnZqn9mRUsoDJkj9JK4ztvzl9JTwAk8nghIkZBvw=";
   };
 
   propagatedBuildInputs = [

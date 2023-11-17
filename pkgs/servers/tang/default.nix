@@ -13,6 +13,7 @@
 , testers
 , tang
 , gitUpdater
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -53,10 +54,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = tang;
-      command = "${tang}/libexec/tangd --version";
-      version = "tangd ${version}";
+    tests = {
+      inherit (nixosTests) tang;
+      version = testers.testVersion {
+        package = tang;
+        command = "${tang}/libexec/tangd --version";
+        version = "tangd ${version}";
+      };
     };
     updateScript = gitUpdater { };
   };
@@ -67,5 +71,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/latchset/tang/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.gpl3Plus;
+    mainProgram = "tangd";
   };
 }

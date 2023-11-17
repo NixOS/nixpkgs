@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "8.2.2";
+  version = "8.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q68DeCK9ACkCWHfzstl8xNe7DCmRAAo9WdcVF8XJaeA=";
+    hash = "sha256-U5jvDXjmP0AAfB+0wL/5bhkROU0vqNGU93YZwF/2zIo=";
   };
 
   nativeBuildInputs = [

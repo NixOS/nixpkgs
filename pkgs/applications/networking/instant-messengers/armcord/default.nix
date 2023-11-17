@@ -20,7 +20,6 @@
 , glib
 , gtk3
 , libappindicator-gtk3
-, libdbusmenu
 , libdrm
 , libnotify
 , libpulseaudio
@@ -39,7 +38,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.4-libwebp";
+  version = "3.2.5";
 
   src =
     let
@@ -47,12 +46,12 @@ stdenv.mkDerivation rec {
     in
       {
         x86_64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${builtins.head (lib.splitString "-" version)}_amd64.deb";
-          hash = "sha256-WeHgai9vTaN04zMdAXmhemKroKH+kwHuOr/E85mfurE=";
+          url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
+          hash = "sha256-6zlYm4xuYpG+Bgsq5S+B/Zt9TRB2GZnueKAg2ywYLE4=";
         };
         aarch64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${builtins.head (lib.splitString "-" version)}_arm64.deb";
-          hash = "sha256-4/vGdWXv8wrbF/EhMK6kJPjta0EOGH6C3kUyM0OTB8M=";
+          url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
+          hash = "sha256-HJu1lRa3zOTohsPMe23puHxg1VMWNR2aOjDQJqc4TqE=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

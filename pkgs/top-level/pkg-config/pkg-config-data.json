@@ -773,11 +773,6 @@
         "ruby_2_7"
       ]
     },
-    "ruby-3.0": {
-      "attrPath": [
-        "ruby_3_0"
-      ]
-    },
     "ruby-3.1": {
       "attrPath": [
         "ruby_3_1"

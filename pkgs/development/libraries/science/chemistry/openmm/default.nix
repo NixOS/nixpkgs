@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
       export OPENMM_LIB_PATH=$out/lib
       export OPENMM_INCLUDE_PATH=$out/include
       cd python
-      ${python3Packages.python.pythonForBuild.interpreter} setup.py build
-      ${python3Packages.python.pythonForBuild.interpreter} setup.py install --prefix=$out
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py build
+      ${python3Packages.python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out
     '';
 
   postFixup = ''

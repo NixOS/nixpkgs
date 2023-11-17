@@ -8,6 +8,7 @@
 , hamlib
 , hamlibSupport ? true
 , perl
+, portaudio
 , python3
 , espeak
 , udev
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "direwolf";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "wb2osz";
     repo = "direwolf";
     rev = version;
-    sha256 = "0xmz64m02knbrpasfij4rrq53ksxna5idxwgabcw4n2b1ig7pyx5";
+    hash = "sha256-Vbxc6a6CK+wrBfs15dtjfRa1LJDKKyHMrg8tqsF7EX4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = lib.optionals stdenv.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.isDarwin [ portaudio ]
     ++ lib.optionals gpsdSupport [ gpsd ]
     ++ lib.optionals hamlibSupport [ hamlib ]
     ++ lib.optionals extraScripts [ python3 perl espeak ];

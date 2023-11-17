@@ -11,9 +11,6 @@
 # This also holds true for GitHub teams. Since almost none of our teams have write
 # permissions, you need to list all members of the team with commit access individually.
 
-# This file
-/.github/CODEOWNERS @edolstra
-
 # GitHub actions
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/merge-staging @FRidh
@@ -22,12 +19,12 @@
 /.editorconfig @Mic92 @zowoq
 
 # Libraries
-/lib                        @edolstra @infinisil
+/lib                        @infinisil
 /lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
-/lib/generators.nix         @edolstra @Profpatsch
-/lib/cli.nix                @edolstra @Profpatsch
-/lib/debug.nix              @edolstra @Profpatsch
-/lib/asserts.nix            @edolstra @Profpatsch
+/lib/generators.nix         @infinisil @Profpatsch
+/lib/cli.nix                @infinisil @Profpatsch
+/lib/debug.nix              @infinisil @Profpatsch
+/lib/asserts.nix            @infinisil @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
 /lib/fileset                @infinisil
 /doc/functions/fileset.section.md @infinisil
@@ -48,18 +45,20 @@
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
 /pkgs/pkgs-lib                                   @infinisil
+## Format generators/serializers
+/pkgs/pkgs-lib/formats/libconfig                 @ckiee
 
 # pkgs/by-name
 /pkgs/test/nixpkgs-check-by-name @infinisil
 /pkgs/by-name/README.md @infinisil
 /pkgs/top-level/by-name-overlay.nix @infinisil
-/.github/workflows/check-by-name.nix @infinisil
+/.github/workflows/check-by-name.yml @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs make-disk-image
-/doc/builders/images/makediskimage.section.md  @raitobezarius
+/doc/build-helpers/images/makediskimage.section.md  @raitobezarius
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
@@ -116,17 +115,16 @@
 /maintainers/scripts/update-python-libraries	              @FRidh
 /pkgs/development/interpreters/python                       @FRidh
 /doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
-/pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @ncfavier
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @ncfavier
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @ncfavier
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
@@ -149,6 +147,8 @@
 # C compilers
 /pkgs/development/compilers/gcc @amjoseph-nixpkgs
 /pkgs/development/compilers/llvm @RaitoBezarius
+/pkgs/development/compilers/emscripten @raitobezarius
+/doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt
@@ -216,7 +216,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/knot.nix @mweinelt
 
 # Web servers
-/doc/builders/packages/nginx.section.md @raitobezarius
+/doc/packages/nginx.section.md @raitobezarius
 /pkgs/servers/http/nginx/ @raitobezarius
 /nixos/modules/services/web-servers/nginx/ @raitobezarius
 
@@ -269,7 +269,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # Docker tools
 /pkgs/build-support/docker                   @roberth
 /nixos/tests/docker-tools*                   @roberth
-/doc/builders/images/dockertools.section.md  @roberth
+/doc/build-helpers/images/dockertools.section.md  @roberth
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood

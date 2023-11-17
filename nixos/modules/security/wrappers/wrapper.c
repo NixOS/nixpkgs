@@ -26,8 +26,6 @@
 
 // aborts when false, printing the failed expression
 #define ASSERT(expr) ((expr) ? (void) 0 : assert_failure(#expr))
-// aborts when returns non-zero, printing the failed expression and errno
-#define MUSTSUCCEED(expr) ((expr) ? print_errno_and_die(#expr) : (void) 0)
 
 extern char **environ;
 
@@ -44,12 +42,6 @@ static char *wrapper_debug = "WRAPPER_DEBUG";
 
 static noreturn void assert_failure(const char *assertion) {
     fprintf(stderr, "Assertion `%s` in NixOS's wrapper.c failed.\n", assertion);
-    fflush(stderr);
-    abort();
-}
-
-static noreturn void print_errno_and_die(const char *assertion) {
-    fprintf(stderr, "Call `%s` in NixOS's wrapper.c failed: %s\n", assertion, strerror(errno));
     fflush(stderr);
     abort();
 }

@@ -103,7 +103,7 @@ in
       '';
     };
 
-    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "Flush the entire ruleset on each reload.");
+    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "flushing the entire ruleset on each reload");
 
     networking.nftables.extraDeletions = mkOption {
       type = types.lines;

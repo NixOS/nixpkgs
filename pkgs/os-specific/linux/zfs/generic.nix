@@ -76,22 +76,14 @@ stdenv'.mkDerivation {
     substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
     substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                   --replace "/etc/default"            "$out/etc/default"
-    # TODO: drop when upgrading to 2.2.0
-    ${if isUnstable then ''
-      substituteInPlace ./contrib/initramfs/Makefile.am \
-        --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
-      substituteInPlace ./udev/vdev_id \
-        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-         "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
-    '' else ''
-      substituteInPlace ./etc/zfs/Makefile.am --replace "\$(sysconfdir)/zfs" "$out/etc/zfs"
-
-      find ./contrib/initramfs -name Makefile.am -exec sed -i -e 's|/usr/share/initramfs-tools|'$out'/share/initramfs-tools|g' {} \;
-
-      substituteInPlace ./cmd/vdev_id/vdev_id \
-        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-        "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
-    ''}
+    substituteInPlace ./contrib/initramfs/Makefile.am \
+      --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
+    substituteInPlace ./udev/vdev_id \
+      --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+       "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+    substituteInPlace ./config/zfs-build.m4 \
+      --replace "bashcompletiondir=/etc/bash_completion.d" \
+        "bashcompletiondir=$out/share/bash-completion/completions"
   '';
 
   nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
@@ -137,6 +129,14 @@ stdenv'.mkDerivation {
     "DEFAULT_INITCONF_DIR=\${out}/default"
     "INSTALL_MOD_PATH=\${out}"
   ];
+
+  preConfigure = ''
+    # The kernel module builds some tests during the configurePhase, this envvar controls their parallelism
+    export TEST_JOBS=$NIX_BUILD_CORES
+    if [ -z "$enableParallelBuilding" ]; then
+      export TEST_JOBS=1
+    fi
+  '';
 
   # Enabling BTF causes zfs to be build with debug symbols.
   # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
@@ -202,15 +202,15 @@ stdenv'.mkDerivation {
     changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
     license = lib.licenses.cddl;
 
-    # The case-block for TARGET_CPU has branches for only five CPU families,
+    # The case-block for TARGET_CPU has branches for only some CPU families,
     # which prevents ZFS from building on any other platform.  Since the NixOS
     # `boot.zfs.enabled` property is `readOnly`, excluding platforms where ZFS
     # does not build is the only way to produce a NixOS installer on such
     # platforms.
-    # https://github.com/openzfs/zfs/blob/6a6bd493988c75331deab06e5352a9bed035a87d/config/always-arch.m4#L16
+    # https://github.com/openzfs/zfs/blob/6723d1110f6daf93be93db74d5ea9f6b64c9bce5/config/always-arch.m4#L12
     platforms =
       with lib.systems.inspect.patterns;
-      map (p: p // isLinux) [ isx86_32 isx86_64 isPower isAarch64 isSparc ];
+      map (p: p // isLinux) ([ isx86_32 isx86_64 isPower isAarch64 isSparc ] ++ isArmv7);
 
     maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
     mainProgram = "zfs";

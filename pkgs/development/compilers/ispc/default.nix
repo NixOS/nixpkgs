@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.21.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256:029rlkh7vh8hxg8ygpspxb9hvw5q97m460zbxwb7xnx1jnq8msh4";
+    sha256 = "sha256-QnGD27f1GWcuyFxFtzm1f7U/ng7VHZKSeSTcKINO/SA=";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];

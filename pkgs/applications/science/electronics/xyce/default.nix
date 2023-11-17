@@ -16,7 +16,7 @@
 , trilinos
 , withMPI ? false
   # for doc
-, texlive
+, texliveMedium
 , pandoc
 , enableDocs ? true
   # for tests
@@ -81,16 +81,14 @@ stdenv.mkDerivation rec {
     gfortran
     libtool_2
   ] ++ lib.optionals enableDocs [
-    (texlive.combine {
-      inherit (texlive)
-        scheme-medium
+    (texliveMedium.withPackages (ps: with ps; [
         koma-script
         optional
         framed
         enumitem
         multirow
-        preprint;
-    })
+        preprint
+      ]))
   ];
 
   buildInputs = [

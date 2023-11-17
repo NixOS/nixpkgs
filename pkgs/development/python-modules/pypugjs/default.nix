@@ -7,7 +7,7 @@
 , mako
 , nose
 , pyramid
-, pyramid_mako
+, pyramid-mako
 , pytestCheckHook
 , six
 , tornado
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     nose
     tornado
     pyramid
-    pyramid_mako
+    pyramid-mako
     pytestCheckHook
   ];
 

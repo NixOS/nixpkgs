@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "iozone";
-  version = "3.493";
+  version = "3.506";
 
   src = fetchurl {
-    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings ["."] ["_"] version}.tgz";
-    hash = "sha256-Y0wSNgC0u0LoJ0g/oVsq+uba2ikHt4SxTgFBWTPUMZg=";
+    url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings ["."] ["_"] version}.tar";
+    hash = "sha256-EUzlwHGHO5ose6bnPQXV735mVkOSrL/NwLMmHbEPy+c=";
   };
 
   license = fetchurl {

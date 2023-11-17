@@ -34,9 +34,6 @@ evalConfigArgs@
                  in lib.optional (e != "") (import e)
 }:
 
-let pkgs_ = pkgs;
-in
-
 let
   inherit (lib) optional;
 
@@ -58,8 +55,9 @@ let
         nixpkgs.system = lib.mkDefault system;
       })
       ++
-      (optional (pkgs_ != null) {
-        _module.args.pkgs = lib.mkForce pkgs_;
+      (optional (pkgs != null) {
+        # This should be default priority, so it conflicts with any user-defined pkgs.
+        nixpkgs.pkgs = pkgs;
       })
     );
   };
@@ -109,10 +107,10 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-  withExtraArgs = nixosSystem: nixosSystem // {
+  withExtraAttrs = configuration: configuration // {
     inherit extraArgs;
-    inherit (nixosSystem._module.args) pkgs;
-    extendModules = args: withExtraArgs (nixosSystem.extendModules args);
+    inherit (configuration._module.args) pkgs;
+    extendModules = args: withExtraAttrs (configuration.extendModules args);
   };
 in
-withWarnings (withExtraArgs nixosWithUserModules)
+withWarnings (withExtraAttrs nixosWithUserModules)

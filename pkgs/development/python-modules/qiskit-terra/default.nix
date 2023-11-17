@@ -58,15 +58,15 @@ in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.21.0";
+  version = "0.25.1";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "qiskit";
     repo = pname;
-    rev = version;
-    hash = "sha256-imktzBpgP+lq6FsVWIUK82+t76gKTgt53kPfKOnsseQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4/LVKDNxKsRztCtU/mMfKMVHHJqfadZXmxeOlnlz9Tc=";
   };
 
   nativeBuildInputs = [ setuptools-rust rustc cargo rustPlatform.cargoSetupHook ];

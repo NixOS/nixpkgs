@@ -65,6 +65,9 @@ in {
     '' + optionalString (def.vrfConfig != { }) ''
       [VRF]
       ${attrsToSection def.vrfConfig}
+    '' + optionalString (def.wlanConfig != { }) ''
+      [WLAN]
+      ${attrsToSection def.wlanConfig}
     '' + optionalString (def.batmanAdvancedConfig != { }) ''
       [BatmanAdvanced]
       ${attrsToSection def.batmanAdvancedConfig}

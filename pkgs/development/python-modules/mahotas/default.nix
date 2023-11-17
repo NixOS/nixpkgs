@@ -38,6 +38,11 @@ buildPythonPackage rec {
       --replace 'ctypes.CDLL(libname)' 'np.ctypeslib.load_library("libfreeimage", "${freeimage}/lib")'
   '';
 
+  # mahotas/_morph.cpp:864:10: error: no member named 'random_shuffle' in namespace 'std'
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-std=c++14";
+  };
+
   # tests must be run in the build directory
   preCheck = ''
     cd build/lib*

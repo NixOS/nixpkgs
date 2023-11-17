@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "globalping-cli";
-  version = "1.1.0";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UY+SAmkE8h/K92Em5iikcMiNixkqnDVkhlrKVq1ZkVM=";
+    hash = "sha256-k89tqQpGvX0WiYqEwPj+tDViUKDjLR5MrkA0CQI/A+o=";
   };
 
   vendorHash = "sha256-fUB7WIEAPBot8A2f7WQ5wUDtCrOydZd4nd4qDuy1vzg=";

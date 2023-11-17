@@ -8,7 +8,7 @@
 , blas-ilp64
 , hdf5-cpp
 , python3
-, texlive
+, texliveMinimal
 , armadillo
 , libxc
 , makeWrapper
@@ -43,14 +43,14 @@ let
 in
 stdenv.mkDerivation {
   pname = "openmolcas";
-  version = "23.06";
+  version = "23.10";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     # The tag keeps moving, fix a hash instead
-    rev = "1cda3772686cbf99a4af695929a12d563c795ca2"; # 2023-06-12
-    sha256 = "sha256-DLRQsRy2jt8V8q2sKmv2hLuKCuMihp/+zcMY/3sg1Fk=";
+    rev = "c74317e68572d1da82fdce4210b005c2c1b1de53"; # 2023-09-25
+    hash = "sha256-wBrASZ6YFsWsu/TreEZ6Q+VxNQwCwMpyPC8AOqmNxos=";
   };
 
   patches = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     perl
     gfortran
     cmake
-    texlive.combined.scheme-minimal
+    texliveMinimal
     makeWrapper
     autoPatchelfHook
   ];

@@ -24,13 +24,13 @@ assert builtins.all (x: builtins.elem x [ "node16" "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.309.0";
+  version = "2.311.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-P70kNcd5TjWsHj16y11SEYROGG+JUkpwE9eVpHzvTes=";
+    hash = "sha256-71SwPuX1XZygT/TdAHECudxFxsQuXrl/tcAYVAxfxfI=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -80,6 +80,14 @@ buildDotnetModule rec {
       name = "ln-fhs.patch";
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
+    })
+  ] ++ lib.optionals (nodeRuntimes == [ "node20" ]) [
+    # If the package is built without Node 16, make Node 20 the default internal version
+    # https://github.com/actions/runner/pull/2844
+    (fetchpatch {
+      name = "internal-node-20.patch";
+      url = "https://github.com/actions/runner/commit/acdc6ed.patch";
+      hash = "sha256-3/6yhhJPr9OMWBFc5/NU/DRtn76aTYvjsjQo2u9ZqnU=";
     })
   ];
 

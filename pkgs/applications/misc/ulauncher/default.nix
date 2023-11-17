@@ -21,15 +21,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.15.3";
+  version = "5.15.4";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-unAic6GTgvZFFJwPERh164vfDiFE0zLEUjgADR94w5w=";
+    sha256 = "sha256-5pEpYnJFHQKEfTve07ngFVDAOM9+kwrx6hc30gEwsko=";
   };
 
   nativeBuildInputs = with python3Packages; [
-    distutils_extra
+    distutils-extra
     gobject-introspection
     intltool
     wrapGAppsHook

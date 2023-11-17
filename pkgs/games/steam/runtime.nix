@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeShellScript "update.sh" ''
       version=$(${curl}/bin/curl https://repo.steampowered.com/steamrt-images-scout/snapshots/latest-steam-client-general-availability/VERSION.txt)
-      ${nix-update}/bin/nix-update --version "$version" steamPackages.steam-runtime
+      ${lib.getExe nix-update} --version "$version" steamPackages.steam-runtime
     '';
   };
 

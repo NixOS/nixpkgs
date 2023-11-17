@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, gitUpdater
 , testers
 , furnace
 , fetchFromGitHub
@@ -104,9 +103,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = furnace;
     };

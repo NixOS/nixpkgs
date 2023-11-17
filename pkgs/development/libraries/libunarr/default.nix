@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libunarr";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://github.com/selmf/unarr/releases/download/v${version}/unarr-${version}.tar.xz";
-    hash = "sha256-5wCnhjoj+GTmaeDTCrUnm1Wt9SsWAbQcPSYM//FNeOA=";
+    hash = "sha256-Mo76BOqZbdOJFrEkeozxdqwpuFyvkhdONNMZmN5BdNI=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''

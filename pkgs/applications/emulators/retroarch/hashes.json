@@ -59,12 +59,6 @@
         "rev": "cd395e9e3ee407608450ebc565e871b24e7ffed6",
         "hash": "sha256-EIZRv1EydfLWFoBb8TzvAY3kkL9Qr2OrwrljOnnM92A="
     },
-    "beetle-snes": {
-        "owner": "libretro",
-        "repo": "beetle-bsnes-libretro",
-        "rev": "d770563fc3c4bd9abb522952cefb4aa923ba0b91",
-        "hash": "sha256-zHPtfgp9hc8Q4gXJ5VgfJLWLeYjCsQhkfU1T5RM7AL0="
-    },
     "beetle-supafaust": {
         "owner": "libretro",
         "repo": "supafaust",

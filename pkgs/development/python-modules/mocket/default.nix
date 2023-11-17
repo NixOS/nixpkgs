@@ -1,36 +1,50 @@
 { lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, stdenv
+
+# build-system
+, hatchling
+
+# dependencies
+, decorator
+, httptools
+, python-magic
+, urllib3
+
+# optional-dependencies
+, xxhash
+, pook
+
+# tests
 , aiohttp
 , asgiref
-, buildPythonPackage
-, decorator
 , fastapi
-, fetchPypi
 , gevent
-, httptools
 , httpx
-, isPy3k
-, pook
-, pytest-mock
+, pytest-asyncio
 , pytestCheckHook
-, python-magic
-, pythonOlder
 , redis
+, redis-server
 , requests
 , sure
-, urllib3
+
 }:
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.11.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.12.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OIdLP3hHnPZ9MqrHt6G5t2SSO342+jTACgzxM6RjVYM=";
+    hash = "sha256-brvBWwTWT2F/usVBRr7wz9L0kct4X1Fddl4mu5LUENA=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     decorator
@@ -43,42 +57,48 @@ buildPythonPackage rec {
     pook = [
       pook
     ];
+    speedups = [
+      xxhash
+    ];
   };
 
   nativeCheckInputs = [
-    aiohttp
     asgiref
     fastapi
     gevent
     httpx
-    pytest-mock
+    pytest-asyncio
     pytestCheckHook
     redis
     requests
     sure
-  ] ++ passthru.optional-dependencies.pook;
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    aiohttp
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  # Skip http tests
-  SKIP_TRUE_HTTP = true;
+  preCheck = lib.optionalString stdenv.isLinux ''
+    ${redis-server}/bin/redis-server &
+    REDIS_PID=$!
+  '';
 
-  disabledTestPaths = [
-    # Requires a live Redis instance
-    "tests/main/test_redis.py"
-  ];
+  postCheck = lib.optionalString stdenv.isLinux ''
+    kill $REDIS_PID
+  '';
+
+  # Skip http tests, they require network access
+  env.SKIP_TRUE_HTTP = true;
+
+  _darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # tests that require network access (like DNS lookups)
-    "test_truesendall"
-    "test_truesendall_with_chunk_recording"
-    "test_truesendall_with_gzip_recording"
-    "test_truesendall_with_recording"
-    "test_wrongpath_truesendall"
     "test_truesendall_with_dump_from_recording"
-    "test_truesendall_with_recording_https"
-    "test_truesendall_after_mocket_session"
-    "test_real_request_session"
     "test_asyncio_record_replay"
     "test_gethostbyname"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "tests/main/test_redis.py"
   ];
 
   pythonImportsCheck = [
@@ -86,9 +106,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     description = "A socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
-    changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };

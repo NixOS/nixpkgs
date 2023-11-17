@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "fugashi";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "polm";
     repo = "fugashi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VDqRhJiNDbKFE284EAUS0d5T9cl8kgyHjh+r/HjjDY8=";
+    hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

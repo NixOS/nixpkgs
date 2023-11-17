@@ -19,15 +19,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
   };
 
-  patches = [ ./fix-libxcrypt-build.patch ]
-    ++ lib.optional stdenv.isFreeBSD ./include-static-dependencies.patch;
+  patches = [
+    ./fix-libxcrypt-build.patch
+    # Fix incorrect Berkeley DB detection with newer versions of clang due to implicit `int` on main errors.
+    ./clang-bdb.patch
+  ] ++ lib.optional stdenv.isFreeBSD ./include-static-dependencies.patch;
 
   NIX_CFLAGS_LINK = [ "-lcrypt" ];
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isFreeBSD autoreconfHook;
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
     ++ lib.optional (!stdenv.isCygwin) "--with-crypto"

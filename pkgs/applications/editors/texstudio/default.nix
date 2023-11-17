@@ -29,6 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv "$out/bin/texstudio.app" "$out/Applications"
+    rm -d "$out/bin"
+  '';
+
   meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
@@ -39,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://texstudio.org";
     changelog = "https://github.com/texstudio-org/texstudio/blob/${version}/utilities/manual/CHANGELOG.txt";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ajs124 cfouche ];
   };
 })

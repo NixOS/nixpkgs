@@ -44,8 +44,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             enable = true;
             initialScript = pkgs.writeText "init-postgres-with-password" ''
               CREATE USER kemal WITH PASSWORD 'correct horse battery staple';
-              CREATE DATABASE invidious;
-              GRANT ALL PRIVILEGES ON DATABASE invidious TO kemal;
+              CREATE DATABASE invidious OWNER kemal;
             '';
           };
       };

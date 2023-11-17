@@ -1,5 +1,6 @@
 { pname
 , version
+, packageVersion ? version
 , meta
 , updateScript ? null
 , binaryName ? "firefox"
@@ -206,7 +207,7 @@ in
 
 buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
-  inherit version;
+  version = packageVersion;
 
   inherit src unpackPhase meta;
 
@@ -502,6 +503,9 @@ buildStdenv.mkDerivation {
 
   preBuild = ''
     cd mozobj
+  '' + lib.optionalString (lib.versionAtLeast version "120") ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   postBuild = ''
@@ -557,7 +561,6 @@ buildStdenv.mkDerivation {
   passthru = {
     inherit application extraPatches;
     inherit updateScript;
-    inherit version;
     inherit alsaSupport;
     inherit binaryName;
     inherit jackSupport;
@@ -569,6 +572,7 @@ buildStdenv.mkDerivation {
     inherit tests;
     inherit gtk3;
     inherit wasiSysRoot;
+    version = packageVersion;
   } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security

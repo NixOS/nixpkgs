@@ -28,18 +28,20 @@ let
     # TODO: warn the user that any address configured on those interfaces will be useless
     ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches);
 
-  genericNetwork = override:
-    let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
-      ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
-        makeGateway = gateway: {
+  defaultGateways = mkMerge (forEach [ cfg.defaultGateway cfg.defaultGateway6 ] (gateway:
+    optionalAttrs (gateway != null && gateway.interface != null) {
+      networks."40-${gateway.interface}" = {
+        matchConfig.Name = gateway.interface;
+        routes = [{
           routeConfig = {
-            Gateway = gateway;
-            GatewayOnLink = false;
+            Gateway = gateway.address;
+          } // optionalAttrs (gateway.metric != null) {
+            Metric = gateway.metric;
           };
-        };
-    in optionalAttrs (gateway != [ ]) {
-      routes = override (map makeGateway gateway);
-    };
+        }];
+      };
+    }
+  ));
 
   genericDhcpNetworks = initrd: mkIf cfg.useDHCP {
     networks."99-ethernet-default-dhcp" = {
@@ -86,10 +88,10 @@ let
         };
       };
     });
-    networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
+    networks."40-${i.name}" = {
       name = mkDefault i.name;
       DHCP = mkForce (dhcpStr
-        (if i.useDHCP != null then i.useDHCP else false));
+        (if i.useDHCP != null then i.useDHCP else (config.networking.useDHCP && i.ipv4.addresses == [ ])));
       address = forEach (interfaceIps i)
         (ip: "${ip.address}/${toString ip.prefixLength}");
       routes = forEach (interfaceRoutes i)
@@ -158,7 +160,7 @@ let
       } // optionalAttrs (i.mtu != null) {
         MTUBytes = toString i.mtu;
       };
-    }];
+    };
   }));
 
   bridgeNetworks = mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
@@ -169,10 +171,10 @@ let
       };
     };
     networks = listToAttrs (forEach bridge.interfaces (bi:
-      nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
+      nameValuePair "40-${bi}" {
         DHCP = mkOverride 0 (dhcpStr false);
         networkConfig.Bridge = name;
-      } ])));
+      }));
   }));
 
   vlanNetworks = mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
@@ -183,9 +185,9 @@ let
       };
       vlanConfig.Id = vlan.id;
     };
-    networks."40-${vlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+    networks."40-${vlan.interface}" = {
       vlan = [ name ];
-    } ]);
+    };
   }));
 
 in
@@ -198,6 +200,7 @@ in
     # initrd.systemd.network.enable. By setting the latter and not the
     # former, the user retains full control over the configuration.
     boot.initrd.systemd.network = mkMerge [
+      defaultGateways
       (genericDhcpNetworks true)
       interfaceNetworks
       bridgeNetworks
@@ -214,11 +217,11 @@ in
       assertion = cfg.defaultGatewayWindowSize == null;
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
     } {
-      assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
-      message = "networking.defaultGateway.interface is not supported by networkd.";
+      assertion = cfg.defaultGateway != null -> cfg.defaultGateway.interface != null;
+      message = "networking.defaultGateway.interface is not optional when using networkd.";
     } {
-      assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
-      message = "networking.defaultGateway6.interface is not supported by networkd.";
+      assertion = cfg.defaultGateway6 != null -> cfg.defaultGateway6.interface != null;
+      message = "networking.defaultGateway6.interface is not optional when using networkd.";
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -233,6 +236,7 @@ in
       mkMerge [ {
         enable = true;
       }
+      defaultGateways
       (genericDhcpNetworks false)
       interfaceNetworks
       bridgeNetworks
@@ -302,10 +306,10 @@ in
         };
 
         networks = listToAttrs (forEach bond.interfaces (bi:
-          nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
+          nameValuePair "40-${bi}" {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bond = name;
-          } ])));
+          }));
       })))
       (mkMerge (flip mapAttrsToList cfg.macvlans (name: macvlan: {
         netdevs."40-${name}" = {
@@ -315,9 +319,9 @@ in
           };
           macvlanConfig = optionalAttrs (macvlan.mode != null) { Mode = macvlan.mode; };
         };
-        networks."40-${macvlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+        networks."40-${macvlan.interface}" = {
           macvlan = [ name ];
-        } ]);
+        };
       })))
       (mkMerge (flip mapAttrsToList cfg.fooOverUDP (name: fou: {
         netdevs."40-${name}" = {
@@ -362,9 +366,9 @@ in
               })));
         };
         networks = mkIf (sit.dev != null) {
-          "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+          "40-${sit.dev}" = {
             tunnel = [ name ];
-          } ]);
+          };
         };
       })))
       (mkMerge (flip mapAttrsToList cfg.greTunnels (name: gre: {
@@ -383,9 +387,9 @@ in
             });
         };
         networks = mkIf (gre.dev != null) {
-          "40-${gre.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+          "40-${gre.dev}" = {
             tunnel = [ name ];
-          } ]);
+          };
         };
       })))
       vlanNetworks
@@ -438,7 +442,7 @@ in
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
               echo "Shutting down internal ${n} interface"
-              ip link set ${n} down || true
+              ip link set dev ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
               echo "Deleting Open vSwitch ${n}"

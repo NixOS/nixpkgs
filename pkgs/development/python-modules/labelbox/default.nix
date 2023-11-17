@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.38.0";
+  version = "3.52.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-AyQPI19As49GML3kVXtHtRNOKthrpkQ7MCmww+F6owc=";
+    hash = "sha256-t0Q+6tnUPK2oqjdAwwYeSebgn2EQ1fBivw115L8ndOg=";
   };
 
   postPatch = ''

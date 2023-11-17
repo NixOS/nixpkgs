@@ -25,11 +25,13 @@ let
       ];
       nativeBuildInputs = [
         nix
+        pkgs.gitMinimal
       ] ++ lib.optional pkgs.stdenv.isLinux pkgs.inotify-tools;
       strictDeps = true;
     } ''
       datadir="${nix}/share"
       export TEST_ROOT=$(pwd)/test-tmp
+      export HOME=$(mktemp -d)
       export NIX_BUILD_HOOK=
       export NIX_CONF_DIR=$TEST_ROOT/etc
       export NIX_LOCALSTATE_DIR=$TEST_ROOT/var

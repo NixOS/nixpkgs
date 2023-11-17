@@ -1,0 +1,20 @@
+diff --git a/src/img2pdf.py b/src/img2pdf.py
+index 036232b..d2e7829 100755
+--- a/src/img2pdf.py
++++ b/src/img2pdf.py
+@@ -3815,14 +3815,7 @@ def gui():
+ 
+ 
+ def get_default_icc_profile():
+-    for profile in [
+-        "/usr/share/color/icc/sRGB.icc",
+-        "/usr/share/color/icc/OpenICC/sRGB.icc",
+-        "/usr/share/color/icc/colord/sRGB.icc",
+-    ]:
+-        if os.path.exists(profile):
+-            return profile
+-    return "/usr/share/color/icc/sRGB.icc"
++    return "@srgbProfile@"
+ 
+ 
+ def get_main_parser():

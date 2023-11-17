@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.3.2";
+  version = "4.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
+    hash = "sha256-5tQaNT6QVN9mxa9t6OvMux4ZGy4flUqszTAwet2QL0w=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
-    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 
@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     "todoman"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
@@ -90,9 +90,9 @@ python3.pkgs.buildPythonApplication rec {
       now.
       Unsupported fields may not be shown but are never deleted or altered.
     '';
-    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
-    license = licenses.isc;
-    maintainers = with maintainers; [ leenaars antonmosich ];
+    changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${builtins.replaceStrings ["."] ["-"] version}";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ leenaars antonmosich ];
     mainProgram = "todo";
   };
 }

@@ -60,6 +60,11 @@ buildPythonPackage rec {
     "benchmarks"
   ];
 
+  disabledTests = [
+    # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
+    "test_convert_field_datetime_default_locale"
+  ];
+
   meta = {
     changelog = "https://github.com/horazont/aioxmpp/blob/${src.rev}/docs/api/changelog.rst";
     description = "Pure-python XMPP library for asyncio";

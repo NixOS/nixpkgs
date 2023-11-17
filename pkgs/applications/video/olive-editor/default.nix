@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , which
 , frei0r
@@ -34,12 +35,19 @@ stdenv.mkDerivation {
     "-DBUILD_QT6=1"
   ];
 
+  patches = [
+    (fetchpatch {
+      # Taken from https://github.com/olive-editor/olive/pull/2294.
+      name = "olive-editor-openimageio-2.3-compat.patch";
+      url = "https://github.com/olive-editor/olive/commit/311eeb72944f93f873d1cd1784ee2bf423e1e7c2.patch";
+      hash = "sha256-lswWn4DbXGH1qPvPla0jSgUJQXuqU7LQGHIPoXAE8ag=";
+    })
+  ];
+
   # https://github.com/olive-editor/olive/issues/2200
-  patchPhase = ''
-    runHook prePatch
+  postPatch = ''
     substituteInPlace ./app/node/project/serializer/serializer230220.cpp \
       --replace 'QStringRef' 'QStringView'
-    runHook postPatch
   '';
 
   nativeBuildInputs = [

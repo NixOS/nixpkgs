@@ -37,16 +37,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.6.3";
+  version = "1.3.7.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-jpKPmUduH3IuUYzBAZJFl/w1FqjGC8sXSTnet8YEZ0I=";
+    hash = "sha256-f7i7gytk3cKeFQD0FR+nrUR2o0FWaJWKG7OpDz9u42E=";
   };
-
-  outputs = [ "out" "lib" ];
 
   prePatch = ''
     mkdir -p external/renderdoc/src
@@ -92,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mv $out $lib
+    # Check that nothing was installed so far
+    ! test -e $out
 
     mkdir -p $out/bin $out/archive-dir
     cp -a external/vulkancts/modules/vulkan/deqp-vk external/vulkancts/modules/vulkan/deqp-vksc $out/bin/

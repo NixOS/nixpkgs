@@ -80,7 +80,7 @@ in
     };
 
     boot.initrd.network.udhcpc.enable = mkOption {
-      default = config.networking.useDHCP;
+      default = config.networking.useDHCP && !config.boot.initrd.systemd.enable;
       defaultText = "networking.useDHCP";
       type = types.bool;
       description = lib.mdDoc ''
@@ -116,11 +116,11 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
-    boot.initrd.extraUtilsCommands = ''
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
     '';
 
-    boot.initrd.preLVMCommands = mkBefore (
+    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore (
       # Search for interface definitions in command line.
       ''
         ifaces=""
@@ -138,7 +138,7 @@ in
         # Bring up all interfaces.
         for iface in ${dhcpIfShellExpr}; do
           echo "bringing up network interface $iface..."
-          ip link set "$iface" up && ifaces="$ifaces $iface"
+          ip link set dev "$iface" up && ifaces="$ifaces $iface"
         done
 
         # Acquire DHCP leases.
@@ -148,12 +148,12 @@ in
         done
       ''
 
-      + cfg.postCommands);
+      + cfg.postCommands));
 
-    boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
+    boot.initrd.postMountCommands = mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable) ''
       for iface in $ifaces; do
-        ip address flush "$iface"
-        ip link set "$iface" down
+        ip address flush dev "$iface"
+        ip link set dev "$iface" down
       done
     '';
 

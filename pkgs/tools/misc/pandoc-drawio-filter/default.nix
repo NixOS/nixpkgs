@@ -5,7 +5,7 @@
 , pandoc
 , pandocfilters
 , runCommand
-, texlive
+, texliveTeTeX
 }:
 
 let
@@ -34,7 +34,7 @@ let
           nativeBuildInputs = [
             pandoc
             pandoc-drawio-filter
-            texlive.combined.scheme-tetex
+            texliveTeTeX
           ];
         };
       in

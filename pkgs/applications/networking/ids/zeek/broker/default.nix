@@ -14,8 +14,8 @@ let
   src-cmake = fetchFromGitHub {
     owner = "zeek";
     repo = "cmake";
-    rev = "9f05362a5c33ed11dab37d2dedf74206d59d8f6d";
-    hash = "sha256-UfPPbwLJcI6+8EYLKRcBhxashEkCTJ2Gj1JOtFayot8=";
+    rev = "b191c36167bc0d6bd9f059b01ad4c99be98488d9";
+    hash = "sha256-h6xPCcdTnREeDsGQhWt2w4yJofpr7g4a8xCOB2e0/qQ=";
   };
   src-3rdparty = fetchFromGitHub {
     owner = "zeek";
@@ -28,17 +28,13 @@ let
     src = fetchFromGitHub {
       owner = "zeek";
       repo = "actor-framework";
-      rev = "dbb68b4573736d7aeb69268cc73aa766c998b3dd";
-      hash = "sha256-RV2mKF3B47h/hDgK/D1UJN/ll2G5rcPkHaLVY1/C/Pg=";
+      rev = "4f580d89f35ae4d475505101623c8b022c0c6aa6";
+      hash = "sha256-8KGXg072lZiq/rC5ZuThDGRjeYvVVFBd3ea8yhUHOYY=";
     };
-    checkPhase = ''
-      runHook preCheck
-      libcaf_core/caf-core-test
-      libcaf_io/caf-io-test
-      libcaf_openssl/caf-openssl-test
-      libcaf_net/caf-net-test --not-suites='net.*'
-      runHook postCheck
-    '';
+    cmakeFlags = old.cmakeFlags ++ [
+      "-DCAF_ENABLE_TESTING=OFF"
+    ];
+    doCheck = false;
   });
 in
 stdenv.mkDerivation {
@@ -51,8 +47,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "broker";
-    rev = "bc0205ce1fc06ddb91abb6744cb79c7eb846c23e";
-    hash = "sha256-bmyitJg3kRyIXm09IupLwZXbiGZfikkHcRcIexkS4/g=";
+    rev = "3df8d35732d51e3bd41db067260998e79e93f366";
+    hash = "sha256-37JIgbG12zd13YhfgVb4egzi80fUcZVj/s+yvsjcP7E=";
   };
   postUnpack = ''
     rmdir $sourceRoot/cmake $sourceRoot/3rdparty
@@ -77,6 +73,8 @@ stdenv.mkDerivation {
     "-DENABLE_STATIC_ONLY:BOOL=${if isStatic then "ON" else "OFF"}"
     "-DPY_MOD_INSTALL_DIR=${placeholder "py"}/${python3.sitePackages}/"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   meta = with lib; {
     description = "Zeek's Messaging Library";

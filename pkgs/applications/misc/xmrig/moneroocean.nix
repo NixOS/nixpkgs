@@ -15,6 +15,7 @@ xmrig.overrideAttrs (oldAttrs: rec {
     description = "A fork of the XMRig CPU miner with support for algorithm switching";
     homepage = "https://github.com/MoneroOcean/xmrig";
     license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
     platforms = platforms.unix;
     maintainers = with maintainers; [ j0hax ];
   };

@@ -68,10 +68,22 @@ in
   scheme2c-compatibility = old:
     addToNativeBuildInputs (lib.optionals (stdenv.system == "x86_64-darwin") [ pkgs.memorymappingHook ])
       (addPkgConfig old);
-  sdl-base = addToBuildInputs pkgs.SDL;
-  sdl2 = addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2;
-  sdl2-image = addToBuildInputs pkgs.SDL2_image;
-  sdl2-ttf = addToBuildInputs pkgs.SDL2_ttf;
+  sdl-base = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL old) //
+      # needed for sdl-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL old));
+  sdl2 = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
+  sdl2-image = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_image old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
+  sdl2-ttf = old:
+    ((addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_ttf old) //
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old));
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   sqlite3 = addToBuildInputs pkgs.sqlite;
   stemmer = old:
@@ -80,7 +92,10 @@ in
   stfl = old:
     (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old)
     // (addToCscOptions "-L -lncurses" old);
-  taglib = addToBuildInputs [ pkgs.zlib pkgs.taglib ];
+  taglib = old:
+    (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old) // (
+      # needed for tablib-config to be in PATH
+      addToNativeBuildInputs pkgs.taglib old);
   uuid-lib = addToBuildInputs pkgs.libuuid;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;

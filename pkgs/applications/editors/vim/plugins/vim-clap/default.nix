@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.45";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-espFos1Mrxdq2p+qi0ooTWAV8EgV/lTx9KuP3GkMWos=";
+    hash = "sha256-CYv5AZsGvN2dtN7t58b50a8PH7804Lnm4d4wAX6Mm5Q=";
   };
 
   meta = with lib; {
@@ -47,8 +47,7 @@ let
       libgit2
       zlib
     ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.CoreServices
     ];
   };
 in

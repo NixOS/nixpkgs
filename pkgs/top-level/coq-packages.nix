@@ -70,6 +70,7 @@ let
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
+      iris-named-props = callPackage ../development/coq-modules/iris-named-props {};
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
@@ -120,11 +121,18 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       topology = callPackage ../development/coq-modules/topology {};
       trakt = callPackage ../development/coq-modules/trakt {};
+      vcfloat = callPackage ../development/coq-modules/vcfloat {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
       VST = callPackage ../development/coq-modules/VST ((lib.optionalAttrs
         (lib.versionAtLeast self.coq.version "8.14") {
-          compcert = self.compcert.override { version = "3.11"; };
+          compcert = self.compcert.override {
+            version = with lib.versions; lib.switch self.coq.version [
+              { case = isEq "8.17"; out = "3.13"; }
+              { case = range "8.15" "8.16"; out = "3.12"; }
+              { case = isEq "8.14"; out = "3.11"; }
+            ] null;
+          };
         }) // (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           ITree = self.ITree.override {
             version = "4.0.0";

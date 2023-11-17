@@ -17,25 +17,6 @@ let
           hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
         };
       });
-      # mautrix>=0.19.8,<0.20
-      mautrix = prev.mautrix.overridePythonAttrs (old: rec {
-        version = "0.19.16";
-        disabled = final.pythonOlder "3.8";
-        checkInputs = old.checkInputs ++ [ final.sqlalchemy ];
-        SQLALCHEMY_SILENCE_UBER_WARNING = true;
-        src = old.src.override {
-          rev = "refs/tags/v${version}";
-          hash = "sha256-aZlc4+J5Q+N9qEzGUMhsYguPdUy+E5I06wrjVyqvVDk=";
-        };
-      });
-      # mautrix has a runtime error with new ruamel-yaml since 0.17.22 changed the interface
-      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: rec {
-        version = "0.17.21";
-        src = prev.src.override {
-          version = version;
-          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-        };
-      });
       # SQLAlchemy>=1,<1.4
       # SQLAlchemy 2.0's derivation is very different, so don't override, just write it from scratch
       # (see https://github.com/NixOS/nixpkgs/blob/65dbed73949e4c0207e75dcc7271b29f9e457670/pkgs/development/python-modules/sqlalchemy/default.nix)
@@ -60,12 +41,12 @@ let
 
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
-    version = "0.4.1";
-    disabled = python.pythonOlder "3.8";
+    version = "0.4.2";
+    disabled = python.pythonOlder "3.9";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "sha256-Ro2PPgF8818F8JewPZ3AlbfWFNNHKTZkQq+1zpm3kk4=";
+      hash = "sha256-svdg7KpCy/+T9Hu+FbsgLNU8nVuIn0flPg7qyn7I+30=";
     };
 
     patches = [
@@ -107,10 +88,13 @@ let
       rm $out/example-config.yaml
     '';
 
-    passthru.tests = {
-      simple = runCommand "${pname}-tests" { } ''
-        ${maubot}/bin/mbc --help > $out
-      '';
+    passthru = {
+      inherit python;
+      tests = {
+        simple = runCommand "${pname}-tests" { } ''
+          ${maubot}/bin/mbc --help > $out
+        '';
+      };
     };
 
     # Setuptools is trying to do python -m maubot test

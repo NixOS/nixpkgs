@@ -24,13 +24,15 @@
 , moto
 , markdown
 , lz4
-, setuptoolsTrial
+, setuptools-trial
 , buildbot-worker
 , buildbot-plugins
 , buildbot-pkg
 , parameterized
 , git
 , openssh
+, setuptools
+, pythonRelaxDepsHook
 , glibcLocales
 , nixosTests
 , callPackage
@@ -66,7 +68,7 @@ let
   package = buildPythonApplication rec {
     pname = "buildbot";
     version = "3.9.2";
-    format = "setuptools";
+    format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
@@ -88,6 +90,7 @@ let
       autobahn
       pyjwt
       pyyaml
+      setuptools
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
@@ -100,7 +103,7 @@ let
       moto
       markdown
       lz4
-      setuptoolsTrial
+      setuptools-trial
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
@@ -108,7 +111,10 @@ let
       git
       openssh
       glibcLocales
+      pythonRelaxDepsHook
     ];
+
+    pythonRelaxDeps = [ "Twisted" ];
 
     patches = [
       # This patch disables the test that tries to read /etc/os-release which

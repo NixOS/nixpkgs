@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   format = "setuptools";
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "romis2012";

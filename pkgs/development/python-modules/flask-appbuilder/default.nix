@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.3.1";
+  version = "4.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-FP92HEGOsufHtaIySqDiScD3QUu3iQhWdtvkOecUvuI=";
+    hash = "sha256-jKlxD6fScEdH0ZXhG0h9RaVx9AVZ2DmdnV36QuofPHg=";
   };
 
   propagatedBuildInputs = [

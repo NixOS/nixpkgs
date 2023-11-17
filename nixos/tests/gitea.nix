@@ -26,7 +26,7 @@ let
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
   makeGiteaTest = type: nameValuePair type (makeTest {
     name = "${giteaPackage.pname}-${type}";
-    meta.maintainers = with maintainers; [ aanderse emilylange kolaente ma27 ];
+    meta.maintainers = with maintainers; [ aanderse kolaente ma27 ];
 
     nodes = {
       server = { config, pkgs, ... }: {

@@ -60,7 +60,6 @@
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
-, llvmPackages_14
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -93,7 +92,6 @@
 
 qtModule {
   pname = "qtwebengine";
-  qtInputs = [ qtdeclarative qtwebchannel qtwebsockets qtpositioning ];
   nativeBuildInputs = [
     bison
     coreutils
@@ -107,7 +105,6 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages_14.clang
     bootstrap_cmds
     cctools
     xcbuild
@@ -166,7 +163,7 @@ qtModule {
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
   + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.cmake \
+    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
@@ -201,6 +198,11 @@ qtModule {
   ];
 
   propagatedBuildInputs = [
+    qtdeclarative
+    qtwebchannel
+    qtwebsockets
+    qtpositioning
+
     # Image formats
     libjpeg
     libpng

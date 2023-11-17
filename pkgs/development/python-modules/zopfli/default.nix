@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "zopfli";
-  version = "0.2.2";
+  version = "0.2.3";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z1akqx3fjnwa75insch9p08hafikqdvqkj6mxv1k6fr81sxnj9d";
+    sha256 = "sha256-28mEG+3XNgQeteaYLNktqTvuFFdF9UIvN5X28ljNxu8=";
     extension = "zip";
   };
 

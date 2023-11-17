@@ -21,10 +21,16 @@
 , eigen
 , libvdwxc
 , llvmPackages
-, gpuBackend ? "none"
 , cudaPackages
-, hip
-, rocblas
+, rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -67,8 +73,10 @@ stdenv.mkDerivation rec {
     libvdwxc
   ]
   ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optionals (gpuBackend == "rocm") [ hip rocblas ]
-  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocblas
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
   propagatedBuildInputs = [ mpi ];
@@ -87,7 +95,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (gpuBackend == "rocm") [
     "-DUSE_ROCM=ON"
-    "-DHIP_ROOT_DIR=${hip}"
+    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
   ];
 
   doCheck = true;

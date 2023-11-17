@@ -6,11 +6,11 @@
 }:
 mkDerivation rec {
   pname = "kuserfeedback";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-dqrJIrFTJJsnRoCm9McsI47xTj3wS60Ay2QVixBj8mQ=";
+    hash = "sha256-JSMIuCLdRpDqhasWiMmw2lUSl4rGtDX3ell5/B0v/RM=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules qttools ];

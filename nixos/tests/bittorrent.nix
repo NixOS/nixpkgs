@@ -148,7 +148,7 @@ in
       )
 
       # Bring down the initial seeder.
-      # tracker.stop_job("transmission")
+      tracker.stop_job("transmission")
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.

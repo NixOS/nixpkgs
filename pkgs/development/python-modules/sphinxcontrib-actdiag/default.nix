@@ -29,6 +29,8 @@ buildPythonPackage rec {
     "sphinxcontrib.actdiag"
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx actdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-actdiag";

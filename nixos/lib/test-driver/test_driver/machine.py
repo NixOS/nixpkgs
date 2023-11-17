@@ -19,6 +19,8 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from test_driver.logger import rootlog
 
+from .qmp import QMPSession
+
 CHAR_TO_KEY = {
     "A": "shift-a",
     "N": "shift-n",
@@ -144,6 +146,7 @@ class StartCommand:
     def cmd(
         self,
         monitor_socket_path: Path,
+        qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool = False,
     ) -> str:
@@ -167,6 +170,7 @@ class StartCommand:
 
         return (
             f"{self._cmd}"
+            f" -qmp unix:{qmp_socket_path},server=on,wait=off"
             f" -monitor unix:{monitor_socket_path}"
             f" -chardev socket,id=shell,path={shell_socket_path}"
             f"{qemu_opts}"
@@ -194,11 +198,14 @@ class StartCommand:
         state_dir: Path,
         shared_dir: Path,
         monitor_socket_path: Path,
+        qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool,
     ) -> subprocess.Popen:
         return subprocess.Popen(
-            self.cmd(monitor_socket_path, shell_socket_path, allow_reboot),
+            self.cmd(
+                monitor_socket_path, qmp_socket_path, shell_socket_path, allow_reboot
+            ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -309,6 +316,7 @@ class Machine:
     shared_dir: Path
     state_dir: Path
     monitor_path: Path
+    qmp_path: Path
     shell_path: Path
 
     start_command: StartCommand
@@ -317,6 +325,7 @@ class Machine:
     process: Optional[subprocess.Popen]
     pid: Optional[int]
     monitor: Optional[socket.socket]
+    qmp_client: Optional[QMPSession]
     shell: Optional[socket.socket]
     serial_thread: Optional[threading.Thread]
 
@@ -352,6 +361,7 @@ class Machine:
 
         self.state_dir = self.tmp_dir / f"vm-state-{self.name}"
         self.monitor_path = self.state_dir / "monitor"
+        self.qmp_path = self.state_dir / "qmp"
         self.shell_path = self.state_dir / "shell"
         if (not self.keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
@@ -360,6 +370,7 @@ class Machine:
         self.process = None
         self.pid = None
         self.monitor = None
+        self.qmp_client = None
         self.shell = None
         self.serial_thread = None
 
@@ -791,6 +802,28 @@ class Machine:
         with self.nested(f"waiting for TCP port {port} on {addr}"):
             retry(port_is_open, timeout)
 
+    def wait_for_open_unix_socket(
+        self, addr: str, is_datagram: bool = False, timeout: int = 900
+    ) -> None:
+        """
+        Wait until a process is listening on the given UNIX-domain socket
+        (default to a UNIX-domain stream socket).
+        """
+
+        nc_flags = [
+            "-z",
+            "-uU" if is_datagram else "-U",
+        ]
+
+        def socket_is_open(_: Any) -> bool:
+            status, _ = self.execute(f"nc {' '.join(nc_flags)} {addr}")
+            return status == 0
+
+        with self.nested(
+            f"waiting for UNIX-domain {'datagram' if is_datagram else 'stream'} on '{addr}'"
+        ):
+            retry(socket_is_open, timeout)
+
     def wait_for_closed_port(
         self, port: int, addr: str = "localhost", timeout: int = 900
     ) -> None:
@@ -1090,11 +1123,13 @@ class Machine:
             self.state_dir,
             self.shared_dir,
             self.monitor_path,
+            self.qmp_path,
             self.shell_path,
             allow_reboot,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
+        self.qmp_client = QMPSession.from_path(self.qmp_path)
 
         # Store last serial console lines for use
         # of wait_for_console_text
@@ -1243,3 +1278,19 @@ class Machine:
     def run_callbacks(self) -> None:
         for callback in self.callbacks:
             callback()
+
+    def switch_root(self) -> None:
+        """
+        Transition from stage 1 to stage 2. This requires the
+        machine to be configured with `testing.initrdBackdoor = true`
+        and `boot.initrd.systemd.enable = true`.
+        """
+        self.wait_for_unit("initrd.target")
+        self.execute(
+            "systemctl isolate --no-block initrd-switch-root.target 2>/dev/null >/dev/null",
+            check_return=False,
+            check_output=False,
+        )
+        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
+        self.connected = False
+        self.connect()

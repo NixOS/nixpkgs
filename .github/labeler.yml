@@ -37,6 +37,11 @@
 "6.topic: fetch":
   - pkgs/build-support/fetch*/**/*
 
+"6.topic: flakes":
+  - '**/flake.nix'
+  - lib/systems/flake-systems.nix
+  - nixos/modules/config/nix-flakes.nix
+
 "6.topic: GNOME":
   - doc/languages-frameworks/gnome.section.md
   - nixos/modules/services/desktops/gnome/**/*

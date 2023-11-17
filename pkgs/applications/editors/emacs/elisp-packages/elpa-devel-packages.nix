@@ -65,7 +65,7 @@ self: let
       });
 
       xeft = super.xeft.overrideAttrs (old: let
-        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
       in {
         dontUnpack = false;
 

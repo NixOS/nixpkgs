@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchPypi
 , ipykernel
-, ipython_genutils
+, ipython-genutils
 , ipywidgets
 , matplotlib
 , numpy
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ipykernel
-    ipython_genutils
+    ipython-genutils
     ipywidgets
     matplotlib
     numpy

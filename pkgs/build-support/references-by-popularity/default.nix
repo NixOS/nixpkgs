@@ -6,11 +6,8 @@ path: runCommand "closure-paths"
   exportReferencesGraph.graph = path;
   __structuredAttrs = true;
   preferLocalBuild = true;
-  PATH = "${coreutils}/bin:${python3}/bin";
-  builder = builtins.toFile "builder"
-    ''
-      . .attrs.sh
-      python3 ${./closure-graph.py} .attrs.json graph > ''${outputs[out]}
-    '';
-  }
-  ""
+  nativeBuildInputs = [ coreutils python3 ];
+}
+''
+  python3 ${./closure-graph.py} "$NIX_ATTRS_JSON_FILE" graph > ''${outputs[out]}
+''

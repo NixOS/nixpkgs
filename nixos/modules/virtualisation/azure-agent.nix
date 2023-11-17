@@ -61,7 +61,7 @@ in
 
         # Which provisioning agent to use. Supported values are "auto" (default), "waagent",
         # "cloud-init", or "disabled".
-        Provisioning.Agent=disabled
+        Provisioning.Agent=auto
 
         # Password authentication for root account will be unavailable.
         Provisioning.DeleteRootPassword=n
@@ -241,7 +241,16 @@ in
       after = [ "network-online.target" "sshd.service" ];
       wants = [ "network-online.target" ];
 
-      path = [ pkgs.e2fsprogs pkgs.bash ];
+      path = [
+        pkgs.e2fsprogs
+        pkgs.bash
+
+        # waagent's Microsoft.OSTCExtensions.VMAccessForLinux needs Python 3
+        pkgs.python39
+
+        # waagent's Microsoft.CPlat.Core.RunCommandLinux needs lsof
+        pkgs.lsof
+      ];
       description = "Windows Azure Agent Service";
       unitConfig.ConditionPathExists = "/etc/waagent.conf";
       serviceConfig = {
@@ -249,6 +258,11 @@ in
         Type = "simple";
       };
     };
+
+    # waagent will generate files under /etc/sudoers.d during provisioning
+    security.sudo.extraConfig = ''
+      #includedir /etc/sudoers.d
+    '';
 
   };
 }

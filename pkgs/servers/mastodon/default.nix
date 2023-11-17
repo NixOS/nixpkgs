@@ -1,5 +1,5 @@
 { lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
+, yarn, callPackage, imagemagick, ffmpeg, file, ruby, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
 , brotli
 
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
-    inherit version gemset;
-    ruby = ruby_3_0;
+    inherit version gemset ruby;
     gemdir = src;
     # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
     # symlinks with directories, resolving this error when running rake:

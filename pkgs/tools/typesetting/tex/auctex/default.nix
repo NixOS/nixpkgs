@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, emacs, texlive, ghostscript }:
+{ lib, stdenv, fetchurl, emacs, texliveBasic, ghostscript }:
 
 let auctex = stdenv.mkDerivation ( rec {
   # Make this a valid tex(live-new) package;
@@ -17,7 +17,7 @@ let auctex = stdenv.mkDerivation ( rec {
   buildInputs = [
     emacs
     ghostscript
-    (texlive.combine { inherit (texlive) scheme-basic hypdoc;  })
+    (texliveBasic.withPackages (ps: [ ps.hypdoc ]))
   ];
 
   preConfigure = ''

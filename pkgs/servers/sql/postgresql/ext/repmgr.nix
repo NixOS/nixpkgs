@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib,share/postgresql/extension}
 
     cp repmgr{,d} $out/bin
-    cp *.so       $out/lib
+    cp *${postgresql.dlSuffix} $out/lib
     cp *.sql      $out/share/postgresql/extension
     cp *.control  $out/share/postgresql/extension
   '';

@@ -30,8 +30,9 @@ stdenv.mkDerivation {
   ];
 
   patches = [
+    # https://github.com/paulnasca/paulstretch_cpp/pull/12
     (fetchpatch {
-      url = "https://github.com/paulnasca/paulstretch_cpp/pull/12.patch";
+      url = "https://github.com/paulnasca/paulstretch_cpp/commit/d8671b36135fe66839b11eadcacb474cc8dae0d1.patch";
       sha256 = "0lx1rfrs53afkiz1drp456asqgj5yv6hx3lkc01165cv1jsbw6q4";
     })
   ];

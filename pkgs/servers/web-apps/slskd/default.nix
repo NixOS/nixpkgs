@@ -1,8 +1,6 @@
-{ lib, stdenv
+{ lib
 , buildNpmPackage
 , fetchFromGitHub
-, fetchurl
-, unzip
 , dotnetCorePackages
 , buildDotnetModule
 , mono
@@ -27,14 +25,13 @@ let
     platforms = platforms.linux;
   };
 
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-
-  wwwroot = buildNpmPackage' {
+  wwwroot = buildNpmPackage {
     inherit meta version;
 
     pname = "slskd-web";
     src = "${src}/src/web";
     npmFlags = [ "--legacy-peer-deps" ];
+    nodejs = nodejs_18;
     npmDepsHash = "sha256-+2g3pCaGFbzQjKwhjmD6viuzVE5pRg+qSOXMrCtLQkI=";
     installPhase = ''
       cp -r build $out

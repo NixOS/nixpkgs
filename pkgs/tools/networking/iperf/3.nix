@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iperf";
-  version = "3.14";
+  version = "3.15";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
-    hash = "sha256-cj/MQwoCe8aVJij6KjrHdYSh0L0ygnXlc/ybIGwVUAQ=";
+    hash = "sha256-vbd8EfcrzpAhSIMVlXf6JEEgE+YrIIPPX1Q5HXmx2P8=";
   };
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];

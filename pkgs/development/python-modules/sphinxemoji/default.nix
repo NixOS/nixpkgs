@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , sphinx
 , sphinxHook
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "sphinxemoji";
   version = "0.2.0";
+  format = "pyproject";
 
   outputs = [ "out" "doc" ];
 
@@ -18,13 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-TLhjpJpUIoDAe3RZ/7sjTgdW+5s7OpMEd1/w0NyCQ3A=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    sphinxHook
+  ];
+
   propagatedBuildInputs = [
     sphinx
    ];
-
-  nativeBuildInputs = [
-    sphinxHook
-  ];
 
   pythonImportsCheck = [
     "sphinxemoji"

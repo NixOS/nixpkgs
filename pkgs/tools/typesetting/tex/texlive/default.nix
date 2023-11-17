@@ -2,11 +2,11 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, runCommand, writeShellScript, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
-, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
+, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, html-tidy, ncurses, zip
 , libfaketime, asymptote, biber-ms, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
@@ -22,13 +22,6 @@ let
     tlpdb = overriddenTlpdb;
   };
 
-  # function for creating a working environment from a set of TL packages
-  combine = import ./combine.nix {
-    inherit bin buildEnv lib makeWrapper writeText runCommand
-      perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
-    ghostscript = ghostscript_headless;
-  };
-
   tlpdb = import ./tlpdb.nix;
 
   tlpdbVersion = tlpdb."00texlive.config";
@@ -40,7 +33,7 @@ let
         stdenv lib bin tlpdb tlpdbxz tl
         installShellFiles
         coreutils findutils gawk getopt ghostscript_headless gnugrep
-        gnumake gnupg gnused gzip ncurses perl python3 ruby zip;
+        gnumake gnupg gnused gzip html-tidy ncurses perl python3 ruby zip;
     };
   in overrides tlpdb;
 
@@ -101,12 +94,114 @@ let
       // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
   ) overriddenTlpdb;
 
+  # function for creating a working environment
+  buildTeXEnv = import ./build-tex-env.nix {
+    inherit bin tl;
+    ghostscript = ghostscript_headless;
+    inherit lib buildEnv libfaketime makeFontsConf makeWrapper runCommand
+      writeShellScript writeText toTLPkgSets bash perl coreutils gawk gnugrep gnused;
+  };
+
+  ### texlive.combine compatibility layer:
+  # convert TeX packages to { pkgs = [ ... ]; } lists
+  # respecting specified outputs
+  toTLPkgList = drv: if drv.outputSpecified or false
+    then let tlType = drv.tlType or tlOutToType.${drv.tlOutputName or drv.outputName} or null; in
+      lib.optional (tlType != null) (drv // { inherit tlType; })
+    else [ (drv.tex // { tlType = "run"; }) ] ++
+      lib.optional (drv ? texdoc) (drv.texdoc // { tlType = "doc"; } // lib.optionalAttrs (drv ? man) { hasManpages = true; }) ++
+      lib.optional (drv ? texsource) (drv.texsource // { tlType = "source"; }) ++
+      lib.optional (drv ? tlpkg) (drv.tlpkg // { tlType = "tlpkg"; }) ++
+      lib.optional (drv ? out) (drv.out // { tlType = "bin"; });
+  tlOutToType = { out = "bin"; tex = "run"; texsource = "source"; texdoc = "doc"; tlpkg = "tlpkg"; };
+
+  # convert { pkgs = [ ... ]; } lists to TeX packages
+  # possibly more than one, if pkgs is also used to specify dependencies
+  tlTypeToOut = { run = "tex"; doc = "texdoc"; source = "texsource"; bin = "out"; tlpkg = "tlpkg"; };
+  toSpecifiedNV = p: rec {
+    name = value.tlOutputName;
+    value = builtins.removeAttrs p [ "pkgs" ]
+      // { outputSpecified = true; tlOutputName = tlTypeToOut.${p.tlType}; };
+  };
+  toTLPkgSet = pname: drvs:
+    let set = lib.listToAttrs (builtins.map toSpecifiedNV drvs);
+        mainDrv = set.out or set.tex or set.tlpkg or set.texdoc or set.texsource; in
+    builtins.removeAttrs mainDrv [ "outputSpecified" ];
+  toTLPkgSets = { pkgs, ... }: lib.mapAttrsToList toTLPkgSet
+    (builtins.groupBy (p: p.pname) pkgs);
+
+  # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
+  allPkgLists = lib.mapAttrs (n: drv: { pkgs = toTLPkgList drv; }) tl;
+
+  # function for creating a working environment from a set of TL packages
+  # now a legacy wrapper around buildTeXEnv
+  combine = import ./combine-wrapper.nix { inherit buildTeXEnv lib toTLPkgList toTLPkgSets; };
+
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
     assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
+  # Pre-defined evironment packages for TeX Live schemes,
+  # to make nix-env usage more comfortable and build selected on Hydra.
+
+  # these license lists should be the sorted union of the licenses of the packages the schemes contain.
+  # The correctness of this collation is tested by tests.texlive.licenses
+  licenses = with lib.licenses; {
+    scheme-basic = [ free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-bookpub = [ artistic2 asl20 fdl13Only free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain ];
+    scheme-context = [ bsd2 bsd3 cc-by-sa-40 free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21
+      lppl1 lppl13c mit ofl publicDomain x11 ];
+    scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
+      cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth
+      lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2
+      gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-infraonly = [ gpl2 gpl2Plus lgpl21 ];
+    scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only
+      free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl
+      publicDomain x11 ];
+    scheme-minimal = [ free gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-small = [ asl20 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth
+      lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
+    scheme-tetex = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0
+      fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a
+      lppl13c mit ofl publicDomain x11];
+  };
+
+  meta = {
+    description = "TeX Live environment";
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers;  [ veprbl ];
+    license = licenses.scheme-infraonly;
+  };
+
+  combined = recurseIntoAttrs (
+    lib.genAttrs [ "scheme-basic" "scheme-bookpub" "scheme-context" "scheme-full" "scheme-gust" "scheme-infraonly"
+      "scheme-medium" "scheme-minimal" "scheme-small" "scheme-tetex" ]
+      (pname:
+        (buildTeXEnv {
+          __extraName = "combined" + lib.removePrefix "scheme" pname;
+          __extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
+          requiredTeXPackages = ps: [ ps.${pname} ];
+          # to maintain full backward compatibility, enable texlive.combine behavior
+          __combine = true;
+        }).overrideAttrs {
+          meta = meta // {
+            description = "TeX Live environment for ${pname}";
+            license = licenses.${pname};
+          };
+        }
+      )
+  );
+
+  schemes = lib.listToAttrs (map (s: {
+    name = "texlive" + s;
+    value = lib.addMetaAttrs { license = licenses.${"scheme-" + (lib.toLower s)}; } (buildTeXEnv { requiredTeXPackages = ps: [ ps.${"scheme-" + (lib.toLower s)} ]; });
+  }) [ "Basic" "BookPub" "ConTeXt" "Full" "GUST" "InfraOnly" "Medium" "Minimal" "Small" "TeTeX" ]);
+
 in
-  tl // {
+  allPkgLists // {
+    pkgs = tl;
 
     tlpdb = {
       # nested in an attribute set to prevent them from appearing in search
@@ -116,55 +211,15 @@ in
 
     bin = assert assertions; bin // {
       # for backward compatibility
-      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
+      latexindent = tl.latexindent;
     };
 
     combine = assert assertions; combine;
 
-    # Pre-defined combined packages for TeX Live schemes,
-    # to make nix-env usage more comfortable and build selected on Hydra.
-    combined = with lib;
-      let
-        # these license lists should be the sorted union of the licenses of the packages the schemes contain.
-        # The correctness of this collation is tested by tests.texlive.licenses
-        licenses = with lib.licenses; {
-          scheme-basic = [ free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
-          scheme-context = [ bsd2 bsd3 cc-by-sa-40 free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21
-            lppl1 lppl13c mit ofl publicDomain x11 ];
-          scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
-            cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth
-            lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-          scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2
-            gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-          scheme-infraonly = [ gpl2 gpl2Plus lgpl21 ];
-          scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only
-            free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl
-            publicDomain x11 ];
-          scheme-minimal = [ free gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
-          scheme-small = [ asl20 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth
-            lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-          scheme-tetex = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0
-            fdl13Only free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a
-            lppl13c mit ofl publicDomain x11];
-        };
-      in recurseIntoAttrs (
-      mapAttrs
-        (pname: attrs:
-          addMetaAttrs rec {
-            description = "TeX Live environment for ${pname}";
-            platforms = lib.platforms.all;
-            maintainers = with lib.maintainers;  [ veprbl ];
-            license = licenses.${pname};
-          }
-          (combine {
-            ${pname} = attrs;
-            extraName = "combined" + lib.removePrefix "scheme" pname;
-            extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
-          })
-        )
-        { inherit (tl)
-            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
-            scheme-medium scheme-minimal scheme-small scheme-tetex;
-        }
-    );
+    combined = assert assertions; combined;
+
+    inherit schemes;
+
+    # convenience alias
+    withPackages = (buildTeXEnv { }).withPackages;
   }

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace mpv.py \
       --replace "sofile = ctypes.util.find_library('mpv')" \
-                'sofile = "${mpv}/lib/libmpv${stdenv.targetPlatform.extensions.sharedLibrary}"'
+                'sofile = "${mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   # tests impure, will error if it can't load libmpv.so

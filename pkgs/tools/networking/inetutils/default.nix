@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ help2man perl /* for `whois' */ ];
   buildInputs = [ ncurses /* for `talk' */ libxcrypt ];
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # This is a temporary workaround for missing headers in the 10.12 SDK to avoid a mass rebuild.
+    # A commit to revert this change will be included in the fix PR targeting staging.
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   # Don't use help2man if cross-compiling
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
   # https://git.congatec.com/yocto/meta-openembedded/blob/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3/meta-networking/recipes-connectivity/inetutils/inetutils_1.9.1.bb#L44

@@ -5,6 +5,8 @@
 , callee
 , fetchFromGitHub
 , mock
+, poetry-core
+, poetry-dynamic-versioning
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -13,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.4.2";
-  format = "setuptools";
+  version = "4.6.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -22,8 +24,13 @@ buildPythonPackage rec {
     owner = "auth0";
     repo = "auth0-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-RBkAuZQx7mBxVCpo5PoBiEge8+yTmp0XpcnxCkOsM6U=";
+    hash = "sha256-KNhuonqFt+KrRYctQ426FcnzxISp5sBRs28hFL/Du0Q=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
   propagatedBuildInputs = [
     requests

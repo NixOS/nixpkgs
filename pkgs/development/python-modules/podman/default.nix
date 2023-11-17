@@ -72,5 +72,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "podman";
   };
 }

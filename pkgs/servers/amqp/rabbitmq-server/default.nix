@@ -38,12 +38,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-  version = "3.12.4";
+  version = "3.12.7";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-9D59IZl7zYJzkSYuFcA6IPttCI9SjacE/l04cUh3An8=";
+    hash = "sha256-EX7+f6R1dfU2hYt2ftEjpevmaUtAJ1wHcr+X30z5Bb8=";
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];

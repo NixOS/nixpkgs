@@ -1,5 +1,5 @@
 # similar to interpreters/python/default.nix
-{ stdenv, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
+{ stdenv, config, lib, callPackage, fetchFromGitHub, fetchurl, fetchpatch, makeBinaryWrapper }:
 
 
 let
@@ -39,7 +39,13 @@ let
             selfHostHost = luaOnHostForHost.pkgs;
             selfTargetTarget = luaOnTargetForTarget.pkgs or {};
           };
+
+          aliases = final: prev:
+            lib.optionalAttrs config.allowAliases
+              (import ../../lua-modules/aliases.nix lib final prev);
+
           extensions = lib.composeManyExtensions [
+            aliases
             generatedPackages
             overriddenPackages
             overrides

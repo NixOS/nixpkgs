@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "ufo2ft";
-  version = "2.30.0";
+  version = "2.33.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZpO55rNXkVbqMdGxsZn77gJnGBbM8c8GIAaQnTzVnf8=";
+    hash = "sha256-e6p/H1Vub0Ln0VhQvwsVLuD/p8uNG5oCPhfQPCTl1nY=";
   };
 
   nativeBuildInputs = [

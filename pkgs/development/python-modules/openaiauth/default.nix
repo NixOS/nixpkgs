@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "openaiauth";
-  version = "2.0.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "OpenAIAuth";
-    hash = "sha256-wmVR+cN/uJ75l62uzmHqpvEcnjzi6CU0kQ2e/5LxkBw=";
+    hash = "sha256-9SrptiheiM5s9YI6Ht68ahDGMFADWfBQgAWUBY3EEJ8=";
   };
 
   propagatedBuildInputs = [

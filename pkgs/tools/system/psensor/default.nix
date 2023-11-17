@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchurl, pkg-config, lm_sensors, libgtop, libatasmart, gtk3
-, libnotify, udisks2, libXNVCtrl, wrapGAppsHook
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, lm_sensors
+, libgtop
+, libatasmart
+, gtk3
+, libnotify
+, udisks2
+, libXNVCtrl
+, wrapGAppsHook
+, libappindicator
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +26,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   buildInputs = [
-    lm_sensors libgtop libatasmart gtk3 libnotify udisks2
+    lm_sensors
+    libgtop
+    libatasmart
+    gtk3
+    libnotify
+    udisks2
+    libappindicator
   ];
 
   preConfigure = ''

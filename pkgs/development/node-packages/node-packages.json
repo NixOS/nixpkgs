@@ -188,7 +188,6 @@
 , "peerflix"
 , "peerflix-server"
 , {"pgrok-build-deps": "../../tools/networking/pgrok/build-deps"}
-, "pkg"
 , "pm2"
 , "pnpm"
 , "poor-mans-t-sql-formatter-cli"
@@ -310,5 +309,4 @@
 , "@yaegassy/coc-nginx"
 , "yalc"
 , "yarn"
-, "@zwave-js/server"
 ]

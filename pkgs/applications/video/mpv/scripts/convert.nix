@@ -1,7 +1,7 @@
-{ stdenvNoCC, fetchgit, lib
+{ lib, fetchgit, buildLua
 , yad, mkvtoolnix-cli, libnotify }:
 
-stdenvNoCC.mkDerivation {
+buildLua {
   pname = "mpv-convert-script";
   version = "2016-03-18";
   src = fetchgit {
@@ -22,15 +22,9 @@ stdenvNoCC.mkDerivation {
                 'yad_exe = "${yad}/bin/yad"' \
       --replace 'notify_send_exe = "notify-send"' \
                 'notify_send_exe = "${libnotify}/bin/notify-send"' \
-
   '';
 
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/share/mpv/scripts
-    cp convert_script.lua $out/share/mpv/scripts
-  '';
-  passthru.scriptName = "convert_script.lua";
+  scriptPath = "convert_script.lua";
 
   meta = with lib; {
     description = "Convert parts of a video while you are watching it in mpv";

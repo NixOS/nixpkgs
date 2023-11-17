@@ -6,31 +6,38 @@
 , jinja2
 , ipython
 , jsonpickle
+, pytestCheckHook
 , numpy
 }:
 
 buildPythonPackage rec {
   pname = "pyvis";
-  version = "0.2.1";
+  version = "0.3.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "WestHealth";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cER5XYxnURzRLtrisWBu2kxtOiRqgaRTJYyaCMh2qqE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eo9Mk2c0hrBarCrzwmkXha3Qt4Bl1qR7Lhl9EkUx96E=";
   };
 
-  patches = [
-    # Fix test: https://github.com/WestHealth/pyvis/issues/138
-    (fetchpatch {
-      url = "https://github.com/WestHealth/pyvis/commit/eaa24b882401e2e74353efa78bf4e71a880cfc47.patch";
-      hash = "sha256-hyDypavoCM36SiuQda1U4FLUPdAjTIMtaeZ0KqfHKzI=";
-    })
+  propagatedBuildInputs = [
+    jinja2
+    networkx
+    ipython
+    jsonpickle
   ];
 
-  propagatedBuildInputs = [ networkx jinja2 ipython jsonpickle ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+  ];
 
-  nativeCheckInputs = [ numpy ];
+  disabledTestPaths = [
+    # jupyter integration test with selenium and webdriver_manager
+    "pyvis/tests/test_html.py"
+  ];
 
   pythonImportsCheck = [ "pyvis" ];
 
@@ -38,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WestHealth/pyvis";
     description = "Python package for creating and visualizing interactive network graphs";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pbsds ];
   };
 }

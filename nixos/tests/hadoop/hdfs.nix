@@ -50,8 +50,8 @@ import ../make-test-python.nix ({ package, lib, ... }:
     namenode.wait_for_unit("hdfs-namenode")
     namenode.wait_for_unit("network.target")
     namenode.wait_for_open_port(8020)
-    namenode.succeed("ss -tulpne | systemd-cat")
-    namenode.succeed("cat /etc/hadoop*/hdfs-site.xml | systemd-cat")
+    namenode.succeed("systemd-cat ss -tulpne")
+    namenode.succeed("systemd-cat cat /etc/hadoop*/hdfs-site.xml")
     namenode.wait_for_open_port(9870)
 
     datanode.wait_for_unit("hdfs-datanode")

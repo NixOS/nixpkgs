@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyjnius";
-  version = "1.5.0";
+  version = "1.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZjRuJk8eIghrh8XINonqvP7xRQrGR2/YVr6kmLLhNz4=";
+    hash = "sha256-0qfs5u15vx1/l6T21hMC2fHXZSGCo+TIpp267zE5bmA=";
   };
 
   nativeBuildInputs = [

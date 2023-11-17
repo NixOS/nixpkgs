@@ -9,7 +9,7 @@ preface.chapter.md
 using-nixpkgs.md
 lib.md
 stdenv.md
-builders.md
+build-helpers.md
 development.md
 contributing.md
 ```

@@ -1,15 +1,15 @@
 {
-  "packageVersion": "118.0.1-1",
+  "packageVersion": "119.0.1-1",
   "source": {
-    "rev": "118.0.1-1",
-    "sha256": "1wdqiif1la97w9b3xsz20xrcg2d1c0j13pdfcj7z23jz8846iqk4"
+    "rev": "119.0.1-1",
+    "sha256": "1ghxrylxrb5i37i4z2hrb8dn9lndhs75pjvhdafg079jmar5wfn7"
   },
   "settings": {
-    "rev": "9c862f06f970d69e00c1035e0d4774fb44fd84a6",
-    "sha256": "0ay58wrhfn0b56748phpn0ahz11ls9y8d2fd1z4zrj6dv398vlmb"
+    "rev": "095f50ed91aa7db2de9c67763cf46bae09146a58",
+    "sha256": "0nwrzcqxa72wcbxjbilxl340i69m5l0qr7gq2s6a76bbzxg502gi"
   },
   "firefox": {
-    "version": "118.0.1",
-    "sha512": "b1efa1afea70434dc2a18d335bb8b526883cde200f1503b8c5fd2e7db8285e6a999cfa3aac354ea1c15a91d13a46d68db37023235314240b59eb8f55e01554ad"
+    "version": "119.0.1",
+    "sha512": "4f3201aee10e7b831cc384b2c7430a24f4de81f703115a917f9eb7acecb2ae1725f11af56c41257a056bb9d7a4d749d590cc9baffcd6e13852be45aaecf8163a"
   }
 }

@@ -29,6 +29,7 @@ buildFHSEnv {
     perl
     psmisc
     python3
+    unzip
     which
     xorg.xrandr
     zstd
@@ -96,6 +97,7 @@ buildFHSEnv {
     libsoup
     libtheora
     libtiff
+    libunwind
     libusb1
     libv4l
     libva

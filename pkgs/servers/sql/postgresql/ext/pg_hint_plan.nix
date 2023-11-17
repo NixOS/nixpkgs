@@ -22,10 +22,6 @@ let
       version = "1.3.9";
       hash = "sha256-64/dlm6e4flCxMQ8efsxfKSlja+Tko0zsghTgLatN+Y=";
     };
-    "11" = {
-      version = "1.3.9";
-      hash = "sha256-8t/HhB/2Kjx4xMItmmKv3g9gba5VCBHdplYtYD/3UhA=";
-    };
   }.${lib.versions.major postgresql.version} or (throw "Source for pg_hint_plan is not available for ${postgresql.version}");
 in
 stdenv.mkDerivation {
@@ -47,7 +43,7 @@ stdenv.mkDerivation {
   buildInputs = [ postgresql ];
 
   installPhase = ''
-    install -D -t $out/lib pg_hint_plan.so
+    install -D -t $out/lib pg_hint_plan${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
   '';

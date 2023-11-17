@@ -7,6 +7,7 @@
 , darwin
 , nixosTests
 , rocksdb
+, rust-jemalloc-sys
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    sqlite
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

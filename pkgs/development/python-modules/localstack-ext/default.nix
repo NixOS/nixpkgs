@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "2.2.0";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BLK41TRaYNtpeeDeGZhlvnvkQwWo0uGB19g34waRqFk=";
+    hash = "sha256-Ex5ZPlteDaiyex90QumucVdTTbpp9uWiBrvw1kMr++8=";
   };
 
   postPatch = ''

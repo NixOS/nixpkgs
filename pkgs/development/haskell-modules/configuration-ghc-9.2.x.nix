@@ -71,10 +71,9 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
   };
 
-  fourmolu = self.fourmolu_0_10_1_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  };
+  stylish-haskell = doJailbreak super.stylish-haskell_0_14_4_0;
 
+  haskell-language-server = disableCabalFlag "fourmolu" (super.haskell-language-server.override { hls-fourmolu-plugin = null; });
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;

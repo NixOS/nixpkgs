@@ -70,8 +70,10 @@ let
     ghc928
     ghc945
     ghc946
+    ghc947
     ghc962
     ghc963
+    ghc981
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -482,33 +484,55 @@ let
       # and to confirm that critical packages for the
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
-      cabal-install = released;
-      Cabal_3_10_1_0 = released;
-      Cabal-syntax_3_10_1_0 = released;
-      cabal2nix = released;
-      cabal2nix-unstable = released;
+      cabal-install = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
+      Cabal_3_10_2_0 = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
+      Cabal-syntax_3_10_1_0 = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
+      cabal2nix = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
+      cabal2nix-unstable = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
       funcmp = released;
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 1.9.0.0
         compilerNames.ghc884
+        # Support ceased as of 2.3.0.0
+        compilerNames.ghc8107
+        # Not yet supported
+        compilerNames.ghc981
       ] released;
       hoogle = lib.subtractLists [
         compilerNames.ghc962
         compilerNames.ghc963
+        compilerNames.ghc981
       ] released;
       hlint = lib.subtractLists [
         compilerNames.ghc962
         compilerNames.ghc963
+        compilerNames.ghc981
       ] released;
-      hpack = released;
+      hpack = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
       hsdns = released;
       jailbreak-cabal = released;
-      language-nix = released;
+      language-nix = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
       large-hashable = [
         compilerNames.ghc928
       ];
       nix-paths = released;
-      titlecase = released;
+      titlecase = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
       ghc-api-compat = [
         compilerNames.ghc884
         compilerNames.ghc8107
@@ -518,9 +542,15 @@ let
         compilerNames.ghc884
         compilerNames.ghc8107
       ];
-      ghc-lib = released;
-      ghc-lib-parser = released;
-      ghc-lib-parser-ex = released;
+      ghc-lib = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
+      ghc-lib-parser = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
+      ghc-lib-parser-ex = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
       ghc-source-gen = [
         # Feel free to remove these as they break,
         # ghc-source-gen currently doesn't support GHC 9.4
@@ -529,20 +559,13 @@ let
         compilerNames.ghc902
         compilerNames.ghc928
       ];
-      ghc-tags = [
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
-        compilerNames.ghc928
-        compilerNames.ghc945
-        compilerNames.ghc946
-        compilerNames.ghc962
-        compilerNames.ghc963
-      ];
-      hashable = released;
+      ghc-tags = lib.subtractLists [
+        compilerNames.ghc884
+        compilerNames.ghc981
+      ] released;
+      hashable = lib.subtractLists [
+        compilerNames.ghc981
+      ] released;
       primitive = released;
       weeder = [
         compilerNames.ghc8107
@@ -554,6 +577,7 @@ let
         compilerNames.ghc928
         compilerNames.ghc945
         compilerNames.ghc946
+        compilerNames.ghc947
         compilerNames.ghc962
         compilerNames.ghc963
       ];

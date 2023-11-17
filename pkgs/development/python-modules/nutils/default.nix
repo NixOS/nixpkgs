@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "7.3";
+  version = "8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "evalf";
     repo = "nutils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3VtQFnR8vihxoIyRkbE1a1Rs8Np3/79PWNKReTBZDg8=";
+    hash = "sha256-6VvzUKKUB5SkmvC7PFPqGayc51t3PTMPwrxgZI5+jHA=";
   };
 
   nativeBuildInputs = [

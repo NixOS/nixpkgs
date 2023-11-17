@@ -21,6 +21,7 @@ in
                                            # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
+    mainProgram = "librewolf";
   };
   tests = [ nixosTests.librewolf ];
   updateScript = callPackage ./update.nix {

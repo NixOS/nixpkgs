@@ -59,14 +59,14 @@ in stdenv.mkDerivation rec {
 
   buildPhase = with python3.pkgs; ''
     runHook preBuild
-    ${python.pythonForBuild.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
+    ${python.pythonOnBuildForHost.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
     runHook postBuild
   '';
 
   installPhase = with python3.pkgs; ''
     runHook preInstall
 
-    ${python.pythonForBuild.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
+    ${python.pythonOnBuildForHost.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 

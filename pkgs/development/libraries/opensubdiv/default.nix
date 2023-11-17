@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
       "-DNO_OPENCL=1"
     ];
 
+  preBuild = let maxBuildCores = 16; in lib.optionalString cudaSupport ''
+    # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
+    NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
+  '';
+
   postInstall = "rm $out/lib/*.a";
 
   meta = {

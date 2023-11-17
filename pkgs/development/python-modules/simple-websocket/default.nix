@@ -24,9 +24,12 @@ buildPythonPackage rec {
     wheel
   ];
 
+  propagatedBuildInputs = [
+    wsproto
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
-    wsproto
   ];
 
   pythonImportsCheck = [

@@ -999,13 +999,20 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-HdewCCraJ2jj2KAVnjzND+4O52jqfABonFU6ybWWAWY=";
+        cargoHash = "sha256-ITrjY15Haz8hEztWym4q8YW2h0R8/kOYPaIYJu87sN4=";
 
         nativeBuildInputs = [ pkg-config ];
 
         buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
           darwin.apple_sdk.frameworks.Security
+          darwin.apple_sdk.frameworks.SystemConfiguration
         ];
+
+        prePatch = ''
+          rm .cargo/config.toml
+        '';
+
+        env.OPENSSL_NO_VENDOR = true;
 
         cargoBuildFlags = [ "--workspace" ];
 
@@ -1033,23 +1040,22 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.6";
+      version = "1.3.8";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
-        rev = "v${version}";
-        hash = "sha256-1xvB/YhpHlOhxbkIGlgQyTlO5ljWPHfOm+tuhKRTXAw=";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-xQb/VZOuwB1J4m6iOs1JMfH1f1rOzJzpvq3D4HHOHAI=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        # Cargo.lock is outdated
-        preBuild = ''
-          cargo update --offline
-        '';
+        buildInputs = lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
 
-        cargoHash = "sha256-pML4ZJYivC/tu/7yvbB/VHfXTT+UpLZuS1Y3iNXt2Ks=";
+        cargoHash = "sha256-6h0P0UVks6dQz2PZ1A/CLa1T8okD3CIUnfrH3vHe4L8=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -1245,6 +1251,10 @@ self: super: {
       '';
       meta.maintainers = with lib.maintainers; [enderger];
     };
+
+  typescript-tools-nvim = super.typescript-tools-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  };
 
   unicode-vim =
     let

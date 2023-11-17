@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ajrkkg5awmi8m4b3mha7h07ylg18k252qprvk1sgq0qbyd66zy7";
   };
 
+  postPatch = ''
+    substituteInPlace lib/socket.c \
+      --replace "void iscsi_decrement_iface_rr() {" "void iscsi_decrement_iface_rr(void) {"
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
 
   # This problem is gone on libiscsi master.

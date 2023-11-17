@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
       --replace "stripprog=" "stripprog=\$STRIP # "
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = {
     description = "Command-line editing library";
     homepage = "https://www.astro.caltech.edu/~mcs/tecla/";

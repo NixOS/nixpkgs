@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
+, acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, util-linux, json_c, nixosTests
 , ncurses }:
 
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-tKxjzJ69wr48QQEgYLp7G6aOqxs9CCUiTHV1kaRCiHM=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoreconfHook pkg-config
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-ext4"	# requires patched kernel & e2fsprogs
+    "DIFFBIN=${diffutils}/bin/diff"
+    "RMBIN=${coreutils}/bin/rm"
   ];
 
   enableParallelBuilding = true;

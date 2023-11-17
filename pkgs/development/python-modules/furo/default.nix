@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "2023.7.26";
   format = "wheel";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version format;

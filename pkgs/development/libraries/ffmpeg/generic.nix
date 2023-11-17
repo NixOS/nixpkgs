@@ -43,7 +43,7 @@
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps # frei0r video filtering
 , withFribidi ? withFullDeps # Needed for drawtext filter
-, withGlslang ? withFullDeps && !stdenv.isDarwin
+, withGlslang ? withFullDeps && !stdenv.isDarwin && lib.versionAtLeast version "5.0"
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
@@ -52,7 +52,7 @@
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withLzma ? withHeadlessDeps # xz-utils
-, withMfx ? withFullDeps && (with stdenv.targetPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
+, withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
@@ -386,8 +386,8 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withHardcodedTables "hardcoded-tables")
     (enableFeature withSafeBitstreamReader "safe-bitstream-reader")
 
-    (enableFeature (withMultithread && stdenv.targetPlatform.isUnix) "pthreads")
-    (enableFeature (withMultithread && stdenv.targetPlatform.isWindows) "w32threads")
+    (enableFeature (withMultithread && stdenv.hostPlatform.isUnix) "pthreads")
+    (enableFeature (withMultithread && stdenv.hostPlatform.isWindows) "w32threads")
     "--disable-os2threads" # We don't support OS/2
 
     (enableFeature withNetwork "network")

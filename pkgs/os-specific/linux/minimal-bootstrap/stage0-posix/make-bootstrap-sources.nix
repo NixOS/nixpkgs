@@ -12,12 +12,13 @@
 #
 
 { lib
+, hostPlatform
 , fetchFromGitHub
 , fetchpatch
 }:
 
 let
-  expected = import ./bootstrap-sources.nix { };
+  expected = import ./bootstrap-sources.nix { inherit hostPlatform; };
 in
 
 fetchFromGitHub {

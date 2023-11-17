@@ -25,7 +25,7 @@ let
   checkConfig = file:
     pkgs.runCommand "checked-blackbox-exporter.conf" {
       preferLocalBuild = true;
-      buildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
+      nativeBuildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
     } ''
       ln -s ${coerceConfigFile file} $out
       blackbox_exporter --config.check --config.file $out

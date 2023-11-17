@@ -4,7 +4,7 @@
 , pkg-config
 , gettext
 , gtk3
-, libindicator-gtk3
+, libayatana-indicator
 , mate
 , hicolor-icon-theme
 , wrapGAppsHook
@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "144fh9f3lag2cqnmb6zxlh8k83ya8kha6rmd7r8gg3z5w3nzpyz4";
   };
 
+  postPatch = ''
+    # Find installed Unity & Ayatana (new-style) indicators
+    substituteInPlace src/applet-main.c \
+      --replace '/usr/share' '/run/current-system/sw/share'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     gettext
@@ -28,10 +34,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libindicator-gtk3
+    libayatana-indicator
     mate.mate-panel
     hicolor-icon-theme
   ];
+
+  configureFlags = [ "--with-ayatana-indicators" ];
 
   enableParallelBuilding = true;
 

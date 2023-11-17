@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck-minimal }:
 
 let
   inherit (lib)
@@ -311,6 +311,8 @@ rec {
     Similar to writeShellScriptBin and writeScriptBin.
     Writes an executable Shell script to /nix/store/<store path>/bin/<name> and
     checks its syntax with shellcheck and the shell's -n option.
+    Individual checks can be foregone by putting them in the excludeShellChecks
+    list, e.g. [ "SC2016" ].
     Automatically includes sane set of shellopts (errexit, nounset, pipefail)
     and handles creation of PATH based on runtimeInputs
 
@@ -338,6 +340,7 @@ rec {
     , runtimeInputs ? [ ]
     , meta ? { }
     , checkPhase ? null
+    , excludeShellChecks ? [  ]
     }:
     writeTextFile {
       inherit name meta;
@@ -362,11 +365,12 @@ rec {
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
         let
-          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck.compiler;
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
+          excludeOption = lib.optionalString (excludeShellChecks != [  ]) "--exclude '${lib.concatStringsSep "," excludeShellChecks}'";
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
             # pandoc takes long to build and documentation isn't needed for just running the cli
-            ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+            ${lib.getExe shellcheck-minimal} ${excludeOption} "$target"
           '';
         in
         if checkPhase == null then ''

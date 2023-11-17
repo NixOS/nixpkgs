@@ -11,7 +11,7 @@ in
       udev rules for keyboards from ZSA like the ErgoDox EZ, Planck EZ and Moonlander Mark I.
       You need it when you want to flash a new configuration on the keyboard
       or use their live training in the browser.
-      You may want to install the wally-cli package.
+      You may want to install the wally-cli package
     '');
   };
 

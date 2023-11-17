@@ -255,14 +255,6 @@ in let
         [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
-
-          # Combat "__cxxabi_config.h not found". Maybe this could be fixed by
-          # copying these headers into libcxx? Note that building libcxx
-          # outside of monorepo isn't supported anymore, might be related to
-          # https://github.com/llvm/llvm-project/issues/55632
-          # ("16.0.3 libcxx, libcxxabi: circular build dependencies")
-          # Looks like the machinery changed in https://reviews.llvm.org/D120727.
-          "-I${lib.getDev targetLlvmLibraries.libcxx.cxxabi}/include/c++/v1"
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
@@ -279,11 +271,13 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-        "-nostdlib++"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+          "-nostdlib++"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -294,10 +288,12 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoCompilerRt = wrapCCWith rec {
@@ -306,17 +302,29 @@ in let
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-      nixSupport.cc-cflags = [ "-nostartfiles" ];
+      nixSupport.cc-cflags =
+        [
+          "-nostartfiles"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
-    clangNoCompilerRtWithLibc = wrapCCWith rec {
+    clangNoCompilerRtWithLibc = wrapCCWith (rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintools';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-    };
+    } // lib.optionalAttrs stdenv.targetPlatform.isWasm {
+      nixSupport.cc-cflags = [ "-fno-exceptions" ];
+    });
 
+    # Has to be in tools despite mostly being a library,
+    # because we use a native helper executable from a
+    # non-cross build in cross builds.
+    libclc = callPackage ./libclc {
+      inherit buildLlvmTools;
+    };
   });
 
   libraries = lib.makeExtensible (libraries: let

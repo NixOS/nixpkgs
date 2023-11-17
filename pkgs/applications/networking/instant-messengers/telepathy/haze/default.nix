@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pidgin, telepathy-glib, python3, glib, dbus-glib, pkg-config, libxslt }:
+{ lib, stdenv, fetchurl, pidgin, telepathy-glib, python3, glib, dbus-glib, pkg-config, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-haze";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Telepathy connection manager based on libpurple";
-    platforms = lib.platforms.gnu ++ lib.platforms.linux; # Random choice
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-haze/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

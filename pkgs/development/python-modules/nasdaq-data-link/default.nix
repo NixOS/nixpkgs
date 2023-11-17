@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , fetchFromGitHub
 , httpretty
 , inflection
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     httpretty
     jsondate
     mock

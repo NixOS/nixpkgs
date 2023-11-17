@@ -88,7 +88,7 @@ let
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
-  # http://docs.grafana.org/administration/provisioning/#datasources
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
@@ -140,7 +140,7 @@ let
     };
   };
 
-  # http://docs.grafana.org/administration/provisioning/#dashboards
+  # https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards
   grafanaTypes.dashboardConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
 
@@ -1841,6 +1841,7 @@ in
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
+        Restart = "on-failure";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening

@@ -16,19 +16,18 @@ let
     if enablePlayback then
       pythonPackages.pyqt5_with_qtmultimedia
     else
-      pythonPackages.pyqt5
-  ;
+      pythonPackages.pyqt5;
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.9.2";
+  version = "2.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-Sk4QlwJqqgCWAgguhIVscJfpf/5imoHYN9yVWv5qYG8=";
+    hash = "sha256-wgIJ813mOSpFzFJESDwNvRSZcX42MTtOyFgSeeRR28g=";
   };
 
   nativeBuildInputs = [

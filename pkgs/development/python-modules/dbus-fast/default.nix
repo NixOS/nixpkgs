@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.11.0";
+  version = "2.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8kK0T5b5hzT8CBYKvYOrc7bKEQxXDsTgjApmrILecek=";
+    hash = "sha256-IT18r7LKOVuiCuE/QzW6X/jkr5EK8sSR038i4LR1bcs=";
   };
 
   # The project can build both an optimized cython version and an unoptimized

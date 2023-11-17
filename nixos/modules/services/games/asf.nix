@@ -187,29 +187,41 @@ in
             Group = "asf";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
-            ExecStart = "${cfg.package}/bin/ArchiSteamFarm --path ${cfg.dataDir} --process-required --no-restart --service --no-config-migrate";
+            ExecStart = "${lib.getExe cfg.package} --no-restart --process-required --service --system-required --path ${cfg.dataDir}";
             Restart = "always";
 
-            # mostly copied from the default systemd service
-            PrivateTmp = true;
+            # copied from the default systemd service at
+            # https://github.com/JustArchiNET/ArchiSteamFarm/blob/main/ArchiSteamFarm/overlay/variant-base/linux/ArchiSteamFarm%40.service
+            CapabilityBoundingSet = "";
+            DevicePolicy = "closed";
             LockPersonality = true;
+            NoNewPrivileges = true;
             PrivateDevices = true;
             PrivateIPC = true;
             PrivateMounts = true;
+            PrivateTmp = true; # instead of rw /tmp
             PrivateUsers = true;
+            ProcSubset = "pid";
             ProtectClock = true;
             ProtectControlGroups = true;
+            ProtectHome = true;
             ProtectHostname = true;
             ProtectKernelLogs = true;
             ProtectKernelModules = true;
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
-            ProtectSystem = "full";
+            ProtectSystem = "strict";
             RemoveIPC = true;
-            RestrictAddressFamilies = "AF_INET AF_INET6";
+            RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            UMask = "0077";
+
+            # we luckily already have systemd v247+
+            SecureBits = "noroot-locked";
+            SystemCallFilter = [ "@system-service" "~@privileged" ];
           }
         ];
 

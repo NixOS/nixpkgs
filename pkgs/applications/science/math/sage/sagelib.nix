@@ -78,6 +78,7 @@
 , sphinx
 , sympy
 , typing-extensions
+, nbclassic
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -181,6 +182,8 @@ buildPythonPackage rec {
     sphinx
     sympy
     typing-extensions
+
+    nbclassic
   ];
 
   preBuild = ''

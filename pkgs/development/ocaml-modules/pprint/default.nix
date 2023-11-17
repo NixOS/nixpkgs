@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "pprint";
   version = "20230830";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
     owner = "fpottier";

@@ -162,5 +162,12 @@ rec {
        getExe' pkgs.imagemagick "convert"
        => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
   */
-  getExe' = x: y: "${lib.getBin x}/bin/${y}";
+  getExe' = x: y:
+    assert lib.assertMsg (lib.isDerivation x)
+      "lib.meta.getExe': The first argument is of type ${builtins.typeOf x}, but it should be a derivation instead.";
+    assert lib.assertMsg (lib.isString y)
+     "lib.meta.getExe': The second argument is of type ${builtins.typeOf y}, but it should be a string instead.";
+    assert lib.assertMsg (builtins.length (lib.splitString "/" y) == 1)
+     "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+    "${lib.getBin x}/bin/${y}";
 }

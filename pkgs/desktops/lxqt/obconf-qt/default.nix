@@ -15,25 +15,25 @@
 
 mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "zxwQfKowgpLjfxSV2t7Ly8o7DFqoIxi60zIVCcKDQWo=";
+    hash = "sha256-ExBcP+j1uf9Y8f6YfZsqyD6YTx1PriS3w8I6qdqQGeE=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     pcre
     qtbase
-    qttools
     qtx11extras
     xorg.libpthreadstubs
     xorg.libXdmcp

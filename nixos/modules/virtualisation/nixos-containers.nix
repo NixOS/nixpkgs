@@ -649,6 +649,15 @@ in
               '';
             };
 
+            restartIfChanged = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Whether the container should be restarted during a NixOS
+                configuration switch if its definition has changed.
+              '';
+            };
+
             timeoutStartSec = mkOption {
               type = types.str;
               default = "1min";
@@ -745,7 +754,7 @@ in
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql_14;
 
-                    system.stateVersion = "21.05";
+                    system.stateVersion = "${lib.trivial.release}";
                   };
               };
           }
@@ -826,7 +835,7 @@ in
                 containerConfig.path
                 config.environment.etc."${configurationDirectoryName}/${name}.conf".source
               ];
-              restartIfChanged = true;
+              restartIfChanged = containerConfig.restartIfChanged;
             }
           )
       )) config.containers)
@@ -897,4 +906,6 @@ in
       "tun"
     ];
   });
+
+  meta.buildDocsInSandbox = false;
 }

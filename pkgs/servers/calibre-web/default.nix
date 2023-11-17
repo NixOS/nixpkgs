@@ -25,13 +25,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.20";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-0lArY1aTpO4sgIVDSqClYMGlip92f9hE/L2UouTLK8Q=";
+    hash = "sha256-tRrOquetn3P2NmrXq7DQHRGP1sWnLR7bV2Lw0W/lUPQ=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
@@ -64,8 +64,6 @@ python.pkgs.buildPythonApplication rec {
     # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
     # are stored in the DB.
     ./db-migrations.patch
-    # environ in tornado.wsgi.WSGIContainer no longer a static method from 6.3 version
-    ./static_environ.patch
   ];
 
   # calibre-web doesn't follow setuptools directory structure. The following is taken from the script

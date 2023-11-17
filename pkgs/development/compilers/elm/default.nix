@@ -69,7 +69,7 @@ let
       attoparsec = self.attoparsec_0_13_2_5;
 
       # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
-      aeson = self.aeson_1_5_6_0;
+      aeson = doJailbreak self.aeson_1_5_6_0;
 
       # elm-instrument needs this
       indents = self.callPackage ./packages/indents.nix {};
@@ -197,6 +197,15 @@ in lib.makeScope pkgs.newScope (self: with self; {
       };
     };
 
+    elm-graphql =
+      nodePkgs."@dillonkearns/elm-graphql" // {
+        meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
+          description = " Autogenerate type-safe GraphQL queries in Elm.";
+          license = licenses.bsd3;
+          maintainers = [ maintainers.pedrohlc ];
+        };
+      };
+
     elm-review =
       nodePkgs.elm-review // {
         meta = with lib; nodePkgs.elm-review.meta // {
@@ -261,6 +270,17 @@ in lib.makeScope pkgs.newScope (self: with self; {
             homepage = "https://github.com/dillonkearns/elm-pages";
             license = licenses.bsd3;
             maintainers = [ maintainers.turbomack maintainers.jali-clarke ];
+          };
+        }
+      );
+
+      elm-land = nodePkgs."elm-land".overrideAttrs (
+        old: {
+          meta = with lib; nodePkgs."elm-land".meta // {
+            description = "A production-ready framework for building Elm applications.";
+            homepage = "https://elm.land/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.zupo ];
           };
         }
       );

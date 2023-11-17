@@ -1,12 +1,12 @@
-{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, buildPackages }:
+{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, gawk, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "parallel";
-  version = "20230822";
+  version = "20230922";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-S1lFmaPBE8KVLWsMG3zlRGAJjqIVrF9oUSAfme5r/F4=";
+    sha256 = "sha256-EUR0Ft1eXfZQE897RULhQJOKO/1fPzCVye2xaPy/4GM=";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils gawk ]}"
   '';
 
   doCheck = true;

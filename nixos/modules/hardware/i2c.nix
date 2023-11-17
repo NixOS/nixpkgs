@@ -11,7 +11,7 @@ in
     enable = mkEnableOption (lib.mdDoc ''
       i2c devices support. By default access is granted to users in the "i2c"
       group (will be created if non-existent) and any user with a seat, meaning
-      logged on the computer locally.
+      logged on the computer locally
     '');
 
     group = mkOption {

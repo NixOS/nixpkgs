@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.networking.networkmanager;
+  ini = pkgs.formats.ini { };
 
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
 
@@ -379,6 +380,74 @@ in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
         '';
       };
+      ensureProfiles = {
+        profiles = with lib.types; mkOption {
+          type = attrsOf (submodule {
+            freeformType = ini.type;
+
+            options = {
+              connection = {
+                id = lib.mkOption {
+                  type = str;
+                  description = "This is the name that will be displayed by NetworkManager and GUIs.";
+                };
+                type = lib.mkOption {
+                  type = str;
+                  description = "The connection type defines the connection kind, like vpn, wireguard, gsm, wifi and more.";
+                  example = "vpn";
+                };
+              };
+            };
+          });
+          apply = (lib.filterAttrsRecursive (n: v: v != { }));
+          default = { };
+          example = {
+            home-wifi = {
+              connection = {
+                id = "home-wifi";
+                type = "wifi";
+                permissions = "";
+              };
+              wifi = {
+                mac-address-blacklist = "";
+                mode = "infrastructure";
+                ssid = "Home Wi-Fi";
+              };
+              wifi-security = {
+                auth-alg = "open";
+                key-mgmt = "wpa-psk";
+                psk = "$HOME_WIFI_PASSWORD";
+              };
+              ipv4 = {
+                dns-search = "";
+                method = "auto";
+              };
+              ipv6 = {
+                addr-gen-mode = "stable-privacy";
+                dns-search = "";
+                method = "auto";
+              };
+            };
+          };
+          description = lib.mdDoc ''
+            Declaratively define NetworkManager profiles. You can find information about the generated file format [here](https://networkmanager.dev/docs/api/latest/nm-settings-keyfile.html) and [here](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/assembly_networkmanager-connection-profiles-in-keyfile-format_configuring-and-managing-networking).
+            You current profiles which are most likely stored in `/etc/NetworkManager/system-connections` and there is [a tool](https://github.com/janik-haag/nm2nix) to convert them to the needed nix code.
+            If you add a new ad-hoc connection via a GUI or nmtui or anything similar it should just work together with the declarative ones.
+            And if you edit a declarative profile NetworkManager will move it to the persistent storage and treat it like a ad-hoc one,
+            but there will be two profiles as soon as the systemd unit from this option runs again which can be confusing since NetworkManager tools will start displaying two profiles with the same name and probably a bit different settings depending on what you edited.
+            A profile won't be deleted even if it's removed from the config until the system reboots because that's when NetworkManager clears it's temp directory.
+          '';
+        };
+        environmentFiles = mkOption {
+          default = [];
+          type = types.listOf types.path;
+          example = [ "/run/secrets/network-manager.env" ];
+          description = lib.mdDoc ''
+            Files to load as environment file. Environment variables from this file
+            will be substituted into the static configuration file using [envsubst](https://github.com/a8m/envsubst).
+          '';
+        };
+      };
     };
   };
 
@@ -505,6 +574,30 @@ in
       # useful binaries for user-specified hooks
       path = [ pkgs.iproute2 pkgs.util-linux pkgs.coreutils ];
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
+    };
+
+    systemd.services.NetworkManager-ensure-profiles = mkIf (cfg.ensureProfiles.profiles != { }) {
+      description = "Ensure that NetworkManager declarative profiles are created";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "network-online.target" ];
+      script = let
+        path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
+      in ''
+        mkdir -p /run/NetworkManager/system-connections
+      '' + lib.concatMapStringsSep "\n"
+        (profile: ''
+          ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
+        '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
+      + ''
+        if systemctl is-active --quiet NetworkManager; then
+          ${pkgs.networkmanager}/bin/nmcli connection reload
+        fi
+      '';
+      serviceConfig = {
+        EnvironmentFile = cfg.ensureProfiles.environmentFiles;
+        UMask = "0177";
+        Type = "oneshot";
+      };
     };
 
     # Turn off NixOS' network management when networking is managed entirely by NetworkManager

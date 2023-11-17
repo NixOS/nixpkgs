@@ -42,6 +42,7 @@ let
     buildPhase = ''
       runHook preBuild
 
+      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"

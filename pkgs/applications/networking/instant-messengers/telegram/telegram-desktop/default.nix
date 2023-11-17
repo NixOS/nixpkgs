@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
+, fetchurl
 , fetchpatch
+, fetchpatch2
 , callPackage
 , pkg-config
 , cmake
@@ -26,6 +28,7 @@
 , libopus
 , alsa-lib
 , libpulseaudio
+, perlPackages
 , pipewire
 , range-v3
 , tl-expected
@@ -50,11 +53,11 @@
 , libthai
 , libdatrie
 , xdg-utils
-, xorg
 , libsysprof-capture
 , libpsl
 , brotli
 , microsoft-gsl
+, mm-common
 , rlottie
 , stdenv
 , nix-update-script
@@ -73,17 +76,41 @@ let
       cxxStandard = "20";
     };
   };
+  glibmm = glibmm_2_68.overrideAttrs (attrs: {
+    version = "2.78.0";
+    src = fetchurl {
+      url = "mirror://gnome/sources/glibmm/2.78/glibmm-2.78.0.tar.xz";
+      hash = "sha256-XS6HJWSZbwKgbYu6w2d+fDlK+LAN0VJq69R6+EKj71A=";
+    };
+    patches = [
+      # Revert "Glib, Gio: Add new API from glib 2.77.0"
+      (fetchpatch2 {
+        url = "https://github.com/GNOME/glibmm/commit/5b9032c0298cbb49c3ed90d5f71f2636751fa638.patch";
+        revert = true;
+        hash = "sha256-UzrzIOnXh9pxuTDQsp6mnunDNNtc86hE9tCe1NgKsyo=";
+      })
+    ];
+    mesonFlags = [
+      "-Dmaintainer-mode=true"
+      "-Dbuild-documentation=false"
+    ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      mm-common
+      perlPackages.perl
+      perlPackages.XMLParser
+    ];
+  });
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.4";
+  version = "4.11.8";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
+    hash = "sha256-VuMcqbGo1t1J7I8kXdqsw/01Mth9YKEbiy8aNtM3azw=";
   };
 
   patches = [
@@ -143,7 +170,7 @@ stdenv.mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm_2_68
+    glibmm
     webkitgtk_6_0
     jemalloc
     rnnoise
@@ -189,7 +216,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 

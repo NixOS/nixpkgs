@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.2";
+  version = "5.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C6IT9jCiyydycorvVqxog9w6LxNDXhAEj26X1IUG270=";
+    hash = "sha256-FJHfgmz8UXjIDz6J3W37po5ITvM024EHDrXLgJSzEWc=";
   };
 
   propagatedBuildInputs = [

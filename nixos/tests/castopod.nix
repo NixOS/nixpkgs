@@ -82,6 +82,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     castopod.succeed("curl -s http://localhost/cp-install | grep 'Create your Super Admin account' > /dev/null")
 
     with subtest("Create superadmin and log in"):
-        castopod.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
+        castopod.succeed("PYTHONUNBUFFERED=1 systemd-cat -t test-runner test-runner")
   '';
 })

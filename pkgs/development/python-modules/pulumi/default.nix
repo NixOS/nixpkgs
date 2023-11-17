@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
 , protobuf
 , dill
 , grpcio
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     cp ../../README.md .
     substituteInPlace setup.py \
       --replace "3.0.0" "${version}" \
-      --replace "grpcio==1.51.3" "grpcio" \
+      --replace "grpcio~=1.59" "grpcio" \
       --replace "semver~=2.13" "semver"
   '';
 

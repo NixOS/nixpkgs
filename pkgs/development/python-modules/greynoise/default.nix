@@ -22,7 +22,7 @@ buildPythonPackage rec {
   version = "2.0.1";
   format = "setuptools";
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";

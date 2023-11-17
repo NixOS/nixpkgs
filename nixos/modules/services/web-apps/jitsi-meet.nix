@@ -105,9 +105,9 @@ in
         type = bool;
         default = true;
         description = lib.mdDoc ''
-          Whether to enable Jitsi Videobridge instance and configure it to connect to Prosody.
+          Jitsi Videobridge instance and configure it to connect to Prosody.
 
-          Additional configuration is possible with {option}`services.jitsi-videobridge`.
+          Additional configuration is possible with {option}`services.jitsi-videobridge`
         '';
       };
 

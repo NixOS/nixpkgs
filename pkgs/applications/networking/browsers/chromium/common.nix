@@ -1,4 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
+, fetchzip, zstd
 , buildPackages
 , pkgsBuildBuild
 , pkgsBuildTarget
@@ -61,21 +62,21 @@
 buildFun:
 
 let
-  python3WithPackages = python3.pythonForBuild.withPackages(ps: with ps; [
+  python3WithPackages = python3.pythonOnBuildForHost.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
   clangFormatPython3 = fetchurl {
     url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
-    sha256 = "0ic3hn65dimgfhakli1cyf9j3cxcqsf1qib706ihfhmlzxf7256l";
+    hash = "sha256-1BRxXP+0QgejAWdFHJzGrLMhk/MsRDoVdK/GVoyFg0U=";
   };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
 
-  githubPatch = { commit, sha256, revert ? false }: fetchpatch {
+  githubPatch = { commit, hash, revert ? false }: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
-    inherit sha256 revert;
+    inherit hash revert;
   };
 
   mkGnFlags =
@@ -117,7 +118,7 @@ let
   libExecPath = "$out/libexec/${packageName}";
 
   ungoogler = ungoogled-chromium {
-    inherit (upstream-info.deps.ungoogled-patches) rev sha256;
+    inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
   # There currently isn't a (much) more concise way to get a stdenv
@@ -147,15 +148,39 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
+  recompressTarball = { version, hash ? "" }: fetchzip {
+    name = "chromium-${version}.tar.zstd";
+    url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
+    inherit hash;
+
+    nativeBuildInputs = [ zstd ];
+
+    postFetch = ''
+      echo removing unused code from tarball to stay under hydra limit
+      rm -r $out/third_party/{rust-src,llvm}
+
+      echo moving remains out of \$out
+      mv $out source
+
+      echo recompressing final contents into new tarball
+      # try to make a deterministic tarball
+      tar \
+        --use-compress-program "zstd -T$NIX_BUILD_CORES" \
+        --sort name \
+        --mtime 1970-01-01 \
+        --owner=root --group=root \
+        --numeric-owner --mode=go=rX,u+rw,a-s \
+        -cf $out source
+    '';
+  };
+
+
   base = rec {
     pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
-    src = fetchurl {
-      url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-      inherit (upstream-info) sha256;
-    };
+    src = recompressTarball { inherit version; inherit (upstream-info) hash; };
 
     nativeBuildInputs = [
       ninja pkg-config
@@ -225,7 +250,7 @@ let
       (githubPatch {
         # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
         commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
-        sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
+        hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
         revert = true;
       })
     ];
@@ -290,9 +315,6 @@ let
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
     '' + ''
-      sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-        gpu/config/gpu_info_collector_linux.cc
-
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
 
@@ -309,7 +331,7 @@ let
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
       ln -s "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
-      ln -s "${pkgsBuildHost.jre8_headless}/bin/java" third_party/jdk/current/bin/
+      ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
@@ -415,7 +437,7 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python3.pythonForBuild}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${python3.pythonOnBuildForHost}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
       ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
@@ -454,9 +476,10 @@ let
 
     postFixup = ''
       # Make sure that libGLESv2 and libvulkan are found by dlopen.
+      # libpci (from pciutils) is needed by dlopen in angle/src/gpu_info_util/SystemInfo_libpci.cpp
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader ]}:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {
@@ -464,6 +487,7 @@ let
       chromiumDeps = {
         gn = gnChromium;
       };
+      inherit recompressTarball;
     };
   }
   # overwrite `version` with the exact same `version` from the same source,

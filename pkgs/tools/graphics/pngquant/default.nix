@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = with licenses; [ gpl3Plus hpnd bsd2 ];
     mainProgram = "pngquant";
-    maintainers = [ maintainers.srapenne ];
+    maintainers = [ ];
   };
 }

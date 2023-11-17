@@ -1,27 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
-, starlette
-, pytestCheckHook
-, pytest-asyncio
-, aiosqlite
-, databases
-, flask
-, httpx
+, pythonOlder
+
+# build-system
 , hatchling
-, orjson
+
+# dependencies
+, starlette
+, pydantic
+, typing-extensions
+
+# tests
+, dirty-equals
+, flask
 , passlib
-, peewee
+, pytest-asyncio
+, pytestCheckHook
 , python-jose
 , sqlalchemy
 , trio
-, pythonOlder
+
+# optional-dependencies
+, httpx
+, jinja2
+, python-multipart
+, itsdangerous
+, pyyaml
+, ujson
+, orjson
+, email-validator
+, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.95.2";
+  version = "0.103.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,40 +44,44 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-wD39CqUZOgwpG/NEGz/pXgQsadzUoM/elxfEXthOlHo=";
+    hash = "sha256-2J8c3S4Ca+c5bI0tyjMJArJKux9qPmu+ohqve5PhSGI=";
   };
 
   nativeBuildInputs = [
     hatchling
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"databases[sqlite] >=0.3.2,<0.7.0",' "" \
-      --replace "starlette==" "starlette>="
-  '';
-
   propagatedBuildInputs = [
     starlette
     pydantic
+    typing-extensions
   ];
 
-  nativeCheckInputs = [
-    aiosqlite
-    # databases FIXME incompatible with SQLAlchemy 2.0
-    flask
+  passthru.optional-dependencies.all = [
     httpx
+    jinja2
+    python-multipart
+    itsdangerous
+    pyyaml
+    ujson
     orjson
+    email-validator
+    uvicorn
+    # pydantic-settings
+    # pydantic-extra-types
+  ] ++ uvicorn.optional-dependencies.standard;
+
+  nativeCheckInputs = [
+    dirty-equals
+    flask
     passlib
-    peewee
-    python-jose
     pytestCheckHook
     pytest-asyncio
-    sqlalchemy
+    python-jose
     trio
-  ]
-  ++ passlib.optional-dependencies.bcrypt
-  ++ pydantic.optional-dependencies.email;
+    sqlalchemy
+  ] ++ passthru.optional-dependencies.all
+  ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
@@ -92,6 +110,8 @@ buildPythonPackage rec {
     "test_trace"
     # Unexpected number of warnings caught
     "test_warn_duplicate_operation_id"
+    # assert state["except"] is True
+    "test_dependency_gets_exception"
   ];
 
   pythonImportsCheck = [

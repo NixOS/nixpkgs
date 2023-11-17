@@ -165,18 +165,6 @@ let
   # Watch out for python <> boost compatibility
   python = python310.override {
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs rec {
-        version = "1.4.46";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
-        };
-        disabledTestPaths = [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      };
     };
   };
 

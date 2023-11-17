@@ -11,17 +11,18 @@
 , uhdm
 , antlr4
 , capnproto
+, nlohmann_json
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.73";
+  version = "1.76";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-z47Eqs3fP53pbEb3s66CqMiO4UpEwox+fKakxtRBakQ=";
+    hash = "sha256-Vg9NZrgzFRVIsEbZQe8DItDhFOVG1XZoQWBrLzVNwLU=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     uhdm
     capnproto
     antlr4.runtime.cpp
+    nlohmann_json
   ];
 
   cmakeFlags = [
@@ -50,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSURELOG_USE_HOST_UHDM=On"
     "-DSURELOG_USE_HOST_GTEST=On"
     "-DSURELOG_USE_HOST_ANTLR=On"
+    "-DSURELOG_USE_HOST_JSON=On"
     "-DANTLR_JAR_LOCATION=${antlr4.jarLocation}"
   ];
 

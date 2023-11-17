@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl2;
     maintainers = with maintainers; [ ercao kashw2 ];
+    knownVulnerabilities = [ "CVE-2023-5217" ];
   };
 })

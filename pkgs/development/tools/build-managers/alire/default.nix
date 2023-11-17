@@ -46,5 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ atalii ];
     platforms = lib.platforms.unix;
+    mainProgram = "alr";
   };
 })

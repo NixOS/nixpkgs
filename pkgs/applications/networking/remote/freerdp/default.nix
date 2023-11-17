@@ -8,7 +8,7 @@
 , alsa-lib
 , faac
 , faad2
-, ffmpeg
+, ffmpeg_5 # Depends on deprecated libav features
 , glib
 , openh264
 , openssl
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     cairo
     cups
     faad2
-    ffmpeg
+    ffmpeg_5
     glib
     gst-plugins-base
     gst-plugins-good
@@ -190,6 +190,8 @@ stdenv.mkDerivation rec {
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=incompatible-function-pointer-types"
   ]);
 
   NIX_LDFLAGS = lib.optionals stdenv.isDarwin [

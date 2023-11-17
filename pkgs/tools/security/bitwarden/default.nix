@@ -1,10 +1,11 @@
 { lib
-, applyPatches
 , buildNpmPackage
 , cargo
+, copyDesktopItems
 , dbus
-, electron_24
+, electron_25
 , fetchFromGitHub
+, fetchpatch2
 , glib
 , gnome
 , gtk3
@@ -24,38 +25,38 @@
 let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
-
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-  electron = electron_24;
-
-  desktopItem = makeDesktopItem {
-    name = "bitwarden";
-    exec = "bitwarden %U";
-    inherit icon;
-    comment = description;
-    desktopName = "Bitwarden";
-    categories = [ "Utility" ];
-  };
-in buildNpmPackage' rec {
+  electron = electron_25;
+in buildNpmPackage rec {
   pname = "bitwarden";
-  version = "2023.9.0";
+  version = "2023.10.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-8rNJmDpKLzTre5c2wktle7tthp1owZK5WAQP80/2R0g=";
+    hash = "sha256-cwSIMN40d1ySUSxBl8jXLVndnJJvPnLiTxkYnA3Pqws=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/bitwarden/clients/issues/6812#issuecomment-1806830091
+      url = "https://github.com/solopasha/bitwarden_flatpak/raw/daec07b067b9cec5e260b44a53216fc65866ba1d/wayland-clipboard.patch";
+      hash = "sha256-hcaRa9Nl7MYaTNwmB5Qdm65Mtufv3z+IPwLDPiO3pcw=";
+    })
+  ];
+
+  nodejs = nodejs_18;
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-0q3XoC87kfC2PYMsNse4DV8M8OXjckiLTdN3LK06lZY=";
+  npmDepsHash = "sha256-KN8C9Y0tfhHVagk+CUMpI/bIRChhzxC9M27HkU4aTEc=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
-    inherit src;
+    inherit patches src;
+    patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-YF3UHQWCSuWAg2frE8bo1XrLn44P6+1A7YUh4RZxwo0=";
+    hash = "sha256-AmtdmOR3aZJTZiFbkwRXjeTOJdcN40bTmWx4Ss3JNJ8=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -63,6 +64,7 @@ in buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    copyDesktopItems
     jq
     makeWrapper
     moreutils
@@ -128,6 +130,8 @@ in buildNpmPackage' rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     pushd apps/desktop/dist/linux-unpacked
@@ -141,9 +145,6 @@ in buildNpmPackage' rec {
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-
     pushd apps/desktop/resources/icons
     for icon in *.png; do
       dir=$out/share/icons/hicolor/"''${icon%.png}"/apps
@@ -151,7 +152,20 @@ in buildNpmPackage' rec {
       cp "$icon" "$dir"/${icon}.png
     done
     popd
+
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "bitwarden";
+      exec = "bitwarden %U";
+      inherit icon;
+      comment = description;
+      desktopName = "Bitwarden";
+      categories = [ "Utility" ];
+    })
+  ];
 
   meta = {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
@@ -160,5 +174,6 @@ in buildNpmPackage' rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall kiwi ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "bitwarden";
   };
 }

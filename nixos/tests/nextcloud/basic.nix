@@ -37,8 +37,6 @@ in {
         "d /var/lib/nextcloud-data 0750 nextcloud nginx - -"
       ];
 
-      system.stateVersion = "22.11"; # stateVersion >=21.11 to make sure that we use OpenSSL3
-
       services.nextcloud = {
         enable = true;
         datadir = "/var/lib/nextcloud-data";

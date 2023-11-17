@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "chain-bench";
-  version = "0.1.7";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UWP/S15s9k92RhH6xr0V544BHF4n9g+inN6Sdpja6uM=";
+    sha256 = "sha256-eNCQbmqTnCBBwrppFL2yvmiwgj439sosYVkk2ryMa0I=";
   };
-  vendorHash = "sha256-R6V4dE2cNKcsBweSaUWjZHKnUQP/kADAbW2aTQc7TAg=";
+  vendorHash = "sha256-sAZIMJRx/E+l12Zyp/vKfuiaCMeaonRbEcsRIRXbXm8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

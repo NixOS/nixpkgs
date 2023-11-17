@@ -4,6 +4,7 @@
 , rustPlatform
 , pkg-config
 , openssl
+, CoreServices
 , Security
 }:
 
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
     Security
   ];
 

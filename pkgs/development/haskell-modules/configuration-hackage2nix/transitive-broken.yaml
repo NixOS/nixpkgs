@@ -22,7 +22,6 @@ dont-distribute-packages:
  - Advise-me
  - AlgoRhythm
  - AlignmentAlgorithms
- - Allure
  - AndroidViewHierarchyImporter
  - Annotations
  - ApplePush
@@ -33,6 +32,7 @@ dont-distribute-packages:
  - BPS
  - Barracuda
  - BerlekampAlgorithm
+ - BesselJ
  - BioHMM
  - Biobase
  - BiobaseBlast
@@ -113,6 +113,7 @@ dont-distribute-packages:
  - Fin
  - Finance-Treasury
  - FiniteCategories
+ - FiniteCategoriesGraphViz
  - FiniteMap
  - FirstOrderTheory
  - Flippi
@@ -250,8 +251,8 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
+ - LPFP
  - LPPaver
- - LambdaHack
  - LambdaINet
  - LambdaPrettyQuote
  - LambdaShell
@@ -403,6 +404,7 @@ dont-distribute-packages:
  - UTFTConverter
  - UrlDisp
  - ViennaRNA-extras
+ - Vis
  - WEditorBrick
  - WEditorHyphen
  - WL500gPControl
@@ -485,8 +487,6 @@ dont-distribute-packages:
  - amby
  - ampersand
  - amqp-streamly
- - amqp-utils_0_6_4_0
- - amqp_0_22_2
  - analyze-client
  - anatomy
  - animate-example
@@ -599,6 +599,7 @@ dont-distribute-packages:
  - babylon
  - backblaze-b2-hs
  - backdropper
+ - balkon
  - ballast
  - bamboo
  - bamboo-launcher
@@ -747,7 +748,6 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
- - calamity
  - calc
  - calculator
  - caldims
@@ -847,6 +847,8 @@ dont-distribute-packages:
  - clash-vhdl
  - clashilator
  - classify-frog
+ - classy-effects
+ - classy-effects-th
  - classy-miso
  - clckwrks
  - clckwrks-cli
@@ -986,6 +988,7 @@ dont-distribute-packages:
  - craftwerk-cairo
  - craftwerk-gtk
  - craze
+ - credentials-cli
  - crf-chain1
  - crf-chain1-constrained
  - crf-chain2-generic
@@ -1145,10 +1148,12 @@ dont-distribute-packages:
  - distributed-process-systest
  - distributed-process-task
  - distributed-process-tests
+ - distributed-process-zookeeper
  - distributed-static
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_1_0
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1479,9 +1484,11 @@ dont-distribute-packages:
  - ghc-dump-util
  - ghc-imported-from
  - ghc-instances
+ - ghc-lib_9_8_1_20231009
  - ghc-mod
  - ghc-plugs-out
  - ghc-session
+ - ghc_9_8_1
  - ghci-pretty
  - ghcide-bench
  - ghcjs-dom-hello
@@ -1491,7 +1498,6 @@ dont-distribute-packages:
  - ght
  - gi-cairo-again
  - gi-ges
- - gi-gsk
  - gi-gstpbutils
  - gi-gtk-declarative-app-simple
  - gi-gtk_4_0_8
@@ -1720,8 +1726,6 @@ dont-distribute-packages:
  - gogol-youtube-reporting
  - google-drive
  - google-mail-filters
- - google-maps-geocoding
- - google-static-maps
  - googleplus
  - gore-and-ash-actor
  - gore-and-ash-async
@@ -1887,7 +1891,6 @@ dont-distribute-packages:
  - haskell-pdf-presenter
  - haskell-platform-test
  - haskell-reflect
- - haskell-snake
  - haskell-src-exts-observe
  - haskell-token-utils
  - haskell-tools-ast
@@ -1933,7 +1936,6 @@ dont-distribute-packages:
  - haskoin-crypto
  - haskoin-protocol
  - haskoin-script
- - haskoin-store
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
@@ -2004,6 +2006,8 @@ dont-distribute-packages:
  - hedgehog-checkers-lens
  - hedgehog-gen-json
  - hedis-pile
+ - heftia
+ - heftia-effects
  - heist-aeson
  - heist-async
  - heist-extra
@@ -2027,6 +2031,7 @@ dont-distribute-packages:
  - hesql
  - heterolist
  - hetzner
+ - hetzner_0_5_0_0
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2183,9 +2188,7 @@ dont-distribute-packages:
  - htoml-parse
  - htsn-import
  - http-client-auth
- - http-client-restricted_0_1_0
  - http-client-rustls
- - http-client-tls_0_3_6_3
  - http-enumerator
  - http-exchange
  - http-exchange-instantiations
@@ -2488,6 +2491,7 @@ dont-distribute-packages:
  - ldapply
  - leaky
  - lean
+ - learn-physics_0_6_6
  - learning-hmm
  - legion
  - legion-discovery
@@ -2539,6 +2543,7 @@ dont-distribute-packages:
  - liquid-prelude
  - liquid-vector
  - liquidhaskell
+ - liquidhaskell-boot
  - liquidhaskell-cabal-demo
  - list-t-attoparsec
  - list-t-html-parser
@@ -2812,7 +2817,6 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
- - net-mqtt_0_8_6_0
  - net-spider
  - net-spider-cli
  - net-spider-pangraph
@@ -2826,7 +2830,6 @@ dont-distribute-packages:
  - nettle-openflow
  - network-anonymous-i2p
  - network-anonymous-tor
- - network-conduit-tls_1_4_0
  - network-connection
  - network-enumerator
  - network-hans
@@ -3017,6 +3020,7 @@ dont-distribute-packages:
  - phonetic-languages-simplified-common
  - phonetic-languages-simplified-examples-array
  - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-common
  - phonetic-languages-simplified-lists-examples
  - phonetic-languages-simplified-properties-lists
  - phonetic-languages-simplified-properties-lists-double
@@ -3109,6 +3113,7 @@ dont-distribute-packages:
  - potoki-conduit
  - potoki-hasql
  - potoki-zlib
+ - powerqueue-sqs
  - pqueue-mtl
  - practice-room
  - pred-set
@@ -3339,7 +3344,6 @@ dont-distribute-packages:
  - repo-based-blog
  - repr
  - representable-tries
- - req_3_13_1
  - reserve
  - resin
  - resource-simple
@@ -3562,7 +3566,6 @@ dont-distribute-packages:
  - shady-gen
  - shady-graphics
  - shake-bindist
- - shake-futhark
  - shake-minify-css
  - shakebook
  - shaker
@@ -3739,6 +3742,7 @@ dont-distribute-packages:
  - stackage-sandbox
  - stackage-setup
  - stackage-upload
+ - stackage2nix
  - stackctl
  - starrover2
  - stateful-mtl
@@ -3772,6 +3776,7 @@ dont-distribute-packages:
  - stripe-tests
  - strongswan-sql
  - structural-induction
+ - structured-haskell-mode
  - structured-mongoDB
  - stunts
  - stutter
@@ -3827,7 +3832,6 @@ dont-distribute-packages:
  - tagged-th
  - tagsoup-navigate
  - tagstew
- - tahoe-chk
  - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-ssk
@@ -4178,7 +4182,6 @@ dont-distribute-packages:
  - workflow-extra
  - workflow-pure
  - workflow-types
- - wraxml
  - wrecker
  - wrecker-ui
  - wright
@@ -4190,7 +4193,6 @@ dont-distribute-packages:
  - wumpus-drawing
  - wumpus-microprint
  - wumpus-tree
- - wuss_2_0_1_4
  - wx
  - wxAsteroids
  - wxFruit
@@ -4310,4 +4312,5 @@ dont-distribute-packages:
  - zoom-cache
  - zoom-cache-pcm
  - zoom-cache-sndfile
+ - zoovisitor
  - zuramaru

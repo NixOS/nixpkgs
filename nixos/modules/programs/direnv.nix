@@ -11,7 +11,7 @@ in {
     enable = lib.mkEnableOption (lib.mdDoc ''
       direnv integration. Takes care of both installation and
       setting up the sourcing of the shell. Additionally enables nix-direnv
-      integration. Note that you need to logout and login for this change to apply.
+      integration. Note that you need to logout and login for this change to apply
     '');
 
     package = lib.mkPackageOptionMD pkgs "direnv" {};
@@ -54,7 +54,7 @@ in {
   };
 
   imports = [
-    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is on longer necessary")
+    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is no longer necessary")
   ];
 
   config = lib.mkIf cfg.enable {

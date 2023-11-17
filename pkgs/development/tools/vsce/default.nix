@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "vsce";
-  version = "2.21.0";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${version}";
-    hash = "sha256-iBbKVfkmt8n06JJ8TSO8BDCeiird9gTkOQhlREtZ5Cw=";
+    hash = "sha256-cFqjoWQu/6cvbT1vxReERybuKpeL4LCVl5qhvSwr6fs=";
   };
 
   npmDepsHash = "sha256-Difk9a9TYmfwzP9SawEuaxm7iHVjdfO+FxFCE7aEMzM=";

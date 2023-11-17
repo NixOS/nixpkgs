@@ -1,6 +1,8 @@
 { stdenv
 , lib
+, bash
 , cmake
+, coreutils
 , cfitsio
 , libusb1
 , zlib
@@ -23,6 +25,10 @@
 , withFirmware ? false
 , firmware ? null
 }:
+
+let
+  libusb-with-fxload = libusb1.override { withExamples = true;};
+in
 
 stdenv.mkDerivation rec {
   pname = "indi-3rdparty";
@@ -67,6 +73,19 @@ stdenv.mkDerivation rec {
     "-DWITH_FISHCAMP=off"
     "-DWITH_SBIG=off"
   ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    for f in $out/lib/udev/rules.d/*.rules
+    do
+      substituteInPlace $f --replace "/sbin/fxload" "${libusb-with-fxload}/sbin/fxload" \
+                           --replace "/lib/firmware/" "$out/lib/firmware/" \
+                           --replace "/bin/sleep" "${coreutils}/bin/sleep" \
+                           --replace "/bin/cat" "${coreutils}/bin/cat" \
+                           --replace "/bin/echo" "${coreutils}/bin/echo" \
+                           --replace "/bin/sh" "${bash}/bin/sh"
+    done
+  '';
+
 
   meta = with lib; {
     homepage = "https://www.indilib.org/";

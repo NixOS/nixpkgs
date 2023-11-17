@@ -1,24 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "trinity";
-  version = "1.9";
+  version = "1.9-unstable-2023-07-10";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
-    rev = "v${version}";
-    sha256 = "0z1a7x727xacam74jccd223k303sllgwpq30lnq9b6xxy8b659bv";
+    rev = "e71872454d26baf37ae1d12e9b04a73d64179555";
+    hash = "sha256-Zy+4L1CuB2Ul5iF+AokDkAW1wheDzoCTNkvRZFGRNps=";
   };
-
-  patches = [
-    # Pull upstream fix for -fno-common toolchains
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/kernelslacker/trinity/commit/e53e25cc8dd5bdb5f7d9b4247de9e9921eec81d8.patch";
-      sha256 = "0dbhyc98x11cmac6rj692zymnfqfqcbawlrkg1lhgfagzjxxwshg";
-    })
-  ];
 
   postPatch = ''
     patchShebangs configure
@@ -27,12 +18,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
     description = "A Linux System call fuzz tester";
-    homepage = "https://codemonkey.org.uk/projects/trinity/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/kernelslacker/trinity";
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
   };

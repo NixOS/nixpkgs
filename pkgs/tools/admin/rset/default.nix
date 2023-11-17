@@ -44,5 +44,10 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];
+    # 2023-08-19, fails to compile with glibc-2.38 because of strlcpy.
+    # At the time of writing, this was 4 minors behind already and
+    # the `paths.patch` didn't apply anymore, so this is now considered
+    # broken until somebody cares enough to fix and upgrade this.
+    broken = true;
   };
 }

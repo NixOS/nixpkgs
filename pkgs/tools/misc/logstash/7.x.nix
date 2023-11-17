@@ -74,7 +74,7 @@ let
       ];
       license = if enableUnfree then licenses.elastic20 else licenses.asl20;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ wjlroe offline basvandijk ];
+      maintainers = with maintainers; [ offline basvandijk ];
     };
     passthru.tests =
       lib.optionalAttrs (config.allowUnfree && enableUnfree) (

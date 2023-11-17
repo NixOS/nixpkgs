@@ -177,13 +177,13 @@ in {
 
         backup = {
           enable = mkEnableOption (lib.mdDoc ''
-            Backup server role. When using OpenAFS built-in buserver, use in conjunction with the
+            the backup server role. When using OpenAFS built-in buserver, use in conjunction with the
             `database` role to maintain the Backup
             Database. Normally only used in conjunction with tape storage
             or IBM's Tivoli Storage Manager.
 
             For a modern backup server, enable this role and see
-            {option}`enableFabs`.
+            {option}`enableFabs`
           '');
 
           enableFabs = mkEnableOption (lib.mdDoc ''

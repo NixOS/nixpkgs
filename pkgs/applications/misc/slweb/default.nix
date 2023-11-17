@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slweb";
-  version = "0.6.11";
+  version = "0.9.0";
 
   src = fetchFromSourcehut {
     owner = "~strahinja";
     repo = "slweb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+bKapK/s1pmo1NRRslf7V4ogWTtchFNWpzi+S8YG6+4=";
+    hash = "sha256-QDHcp5pCmapgOlJpDDyyC12JOfh/biDyF6O+iKGbOGg=";
   };
 
   nativeBuildInputs = [ redo-apenwarr ];

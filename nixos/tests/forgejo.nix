@@ -37,7 +37,7 @@ let
           settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
           settings.actions.ENABLED = true;
         };
-        environment.systemPackages = [ config.services.forgejo.package pkgs.gnupg pkgs.jq ];
+        environment.systemPackages = [ config.services.forgejo.package pkgs.gnupg pkgs.jq pkgs.file ];
         services.openssh.enable = true;
 
         specialisation.runner = {
@@ -53,6 +53,14 @@ let
             tokenFile = "/var/lib/forgejo/runner_token";
           };
         };
+        specialisation.dump = {
+          inheritParentConfig = true;
+          configuration.services.forgejo.dump = {
+            enable = true;
+            type = "tar.zst";
+            file = "dump.tar.zst";
+          };
+        };
       };
       client1 = { config, pkgs, ... }: {
         environment.systemPackages = [ pkgs.git ];
@@ -66,8 +74,10 @@ let
       let
         inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
         serverSystem = nodes.server.system.build.toplevel;
+        dumpFile = with nodes.server.specialisation.dump.configuration.services.forgejo.dump; "${backupDir}/${file}";
       in
       ''
+        import json
         GIT_SSH_COMMAND = "ssh -i $HOME/.ssh/privk -o StrictHostKeyChecking=no"
         REPO = "forgejo@server:test/repo"
         PRIVK = "${snakeOilPrivateKey}"
@@ -137,6 +147,11 @@ let
         client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
         client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
 
+        with subtest("Testing git protocol version=2 over ssh"):
+            git_protocol = client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' GIT_TRACE2_EVENT=true git -C repo fetch |& grep negotiated-version")
+            version = json.loads(git_protocol).get("value")
+            assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
+
         server.wait_until_succeeds(
             'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
             + '-H "Accept: application/json" | jq length)" = "1"',
@@ -150,6 +165,12 @@ let
             server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
             server.wait_for_unit("gitea-runner-test.service")
             server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+
+        with subtest("Testing backup service"):
+            server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
+            server.systemctl("start forgejo-dump")
+            assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
+            server.copy_from_vm("${dumpFile}")
       '';
   });
 in

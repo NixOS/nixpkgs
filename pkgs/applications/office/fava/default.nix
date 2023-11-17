@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.26.1";
+  version = "1.26.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pj4kaQDXahjhN7bu7xxT/ZuoCfPdGyo898482S5gnlE=";
+    hash = "sha256-+rMuVfe6BDAcZgJkBb18YLFZirOBfad6WGbWtAT21uI=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
@@ -30,6 +30,11 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'setuptools_scm>=8.0' 'setuptools_scm'
+  '';
 
   preCheck = ''
     export HOME=$TEMPDIR

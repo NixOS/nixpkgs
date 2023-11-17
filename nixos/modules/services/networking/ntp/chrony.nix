@@ -9,6 +9,7 @@ let
   stateDir = cfg.directory;
   driftFile = "${stateDir}/chrony.drift";
   keyFile = "${stateDir}/chrony.keys";
+  rtcFile = "${stateDir}/chrony.rtc";
 
   configFile = pkgs.writeText "chrony.conf" ''
     ${concatMapStringsSep "\n" (server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts") cfg.servers}
@@ -20,8 +21,10 @@ let
 
     driftfile ${driftFile}
     keyfile ${keyFile}
+    ${optionalString (cfg.enableRTCTrimming) "rtcfile ${rtcFile}"}
     ${optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
 
+    ${optionalString (cfg.enableRTCTrimming) "rtcautotrim ${builtins.toString cfg.autotrimThreshold}"}
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
 
     ${cfg.extraConfig}
@@ -85,6 +88,33 @@ in
         '';
       };
 
+      enableRTCTrimming = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Enable tracking of the RTC offset to the system clock and automatic trimming.
+          See also [](#opt-services.chrony.autotrimThreshold)
+
+          ::: {.note}
+          This is not compatible with the `rtcsync` directive, which naively syncs the RTC time every 11 minutes.
+
+          Tracking the RTC drift will allow more precise timekeeping,
+          especially on intermittently running devices, where the RTC is very relevant.
+          :::
+        '';
+      };
+
+      autotrimThreshold = mkOption {
+        type = types.ints.positive;
+        default = 30;
+        example = 10;
+        description = ''
+          Maximum estimated error threshold for the `rtcautotrim` command.
+          When reached, the RTC will be trimmed.
+          Only used when [](#opt-services.chrony.enableRTCTrimming) is enabled.
+        '';
+      };
+
       enableNTS = mkOption {
         type = types.bool;
         default = false;
@@ -141,7 +171,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+    meta.maintainers = with lib.maintainers; [ thoughtpolice vifino ];
 
     environment.systemPackages = [ chronyPkg ];
 
@@ -156,12 +186,19 @@ in
 
     services.timesyncd.enable = mkForce false;
 
+    # If chrony controls and tracks the RTC, writing it externally causes clock error.
+    systemd.services.save-hwclock = lib.mkIf cfg.enableRTCTrimming {
+      enable = lib.mkForce false;
+    };
+
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
 
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 chrony chrony - -"
       "f ${driftFile} 0640 chrony chrony - -"
       "f ${keyFile} 0640 chrony chrony - -"
+    ] ++ lib.optionals cfg.enableRTCTrimming [
+      "f ${rtcFile} 0640 chrony chrony - -"
     ];
 
     systemd.services.chronyd =

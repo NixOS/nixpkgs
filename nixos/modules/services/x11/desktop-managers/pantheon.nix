@@ -201,7 +201,7 @@ in
         onboard
         orca # elementary/greeter#668
         sound-theme-freedesktop
-        xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
       ]) ++ (with pkgs.pantheon; [
         # Artwork
         elementary-gtk-theme

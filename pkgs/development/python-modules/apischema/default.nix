@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "apischema";
-  version = "0.18.0";
+  version = "0.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "wyfo";
     repo = "apischema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBFFCLi8cpASyGPNqZvYe3OTLSbNZ8QzaxjQkOiHxFc=";
+    hash = "sha256-omw6znk09r2SigPfaVrtA6dd8KeSfjaPgGfK12ty23g=";
   };
 
   passthru.optional-dependencies = {

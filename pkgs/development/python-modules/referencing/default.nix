@@ -15,7 +15,7 @@
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.30.0";
+    version = "0.30.2";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ let
       repo = "referencing";
       rev = "refs/tags/v${version}";
       fetchSubmodules = true;
-      hash = "sha256-nJSnZM3gg2+yfFAnOJzzXsmIEQdNf5ypt5R0O60NphA=";
+      hash = "sha256-C2gKjoaMcUWz/QOsqpv4TkozQyI+zEIQf3GMf5w40aw=";
     };
 
     SETUPTOOLS_SCM_PRETEND_VERSION = version;

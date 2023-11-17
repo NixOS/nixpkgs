@@ -95,6 +95,13 @@ stdenv.mkDerivation rec {
   else [ "-DHDF4_BUILD_FORTRAN=OFF" ]
   );
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
+
   doCheck = true;
 
   excludedTests = lib.optionals stdenv.isDarwin [

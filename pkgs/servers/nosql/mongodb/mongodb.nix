@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, sconsPackages
+, scons_3_1_2
 , boost
 , gperftools
 , pcre-cpp
@@ -31,7 +31,8 @@ with lib;
 
 let
   variants =
-    if versionAtLeast version "6.0" then rec {
+    if versionAtLeast version "6.0"
+    then rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
         cheetah3
@@ -41,12 +42,13 @@ let
         pymongo
       ]);
 
-      scons = sconsPackages.scons_3_1_2;
+      scons = scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
 
-    } else rec {
+    }
+    else rec {
       python = scons.python.withPackages (ps: with ps; [
         pyyaml
         cheetah3
@@ -54,7 +56,7 @@ let
         setuptools
       ]);
 
-      scons = sconsPackages.scons_3_1_2;
+      scons = scons_3_1_2;
 
       mozjsVersion = "60";
       mozjsReplace = "defined(HAVE___SINCOS)";
@@ -84,7 +86,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ variants.scons ]
-    ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+                      ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
 
   buildInputs = [
     boost
@@ -147,7 +149,7 @@ in stdenv.mkDerivation rec {
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
   ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
-    ++ map (lib: "--use-system-${lib}") system-libraries;
+  ++ map (lib: "--use-system-${lib}") system-libraries;
 
   # This seems to fix mongodb not able to find OpenSSL's crypto.h during build
   hardeningDisable = [ "fortify3" ];

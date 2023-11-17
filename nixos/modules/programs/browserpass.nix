@@ -27,6 +27,6 @@ with lib;
       "opt/brave/native-messaging-hosts/${appId}".source = source "hosts/chromium";
       "opt/brave/policies/managed/${appId}".source = source "policies/chromium";
     };
-    programs.firefox.wrapperConfig.enableBrowserpass = true;
+    programs.firefox.nativeMessagingHosts.packages = [ pkgs.browserpass ];
   };
 }

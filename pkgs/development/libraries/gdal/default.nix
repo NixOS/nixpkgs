@@ -76,13 +76,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/7Egbg4Cg5Gqsy+CEMVbs2NCWbdJteDNWelBsrQSUj4=";
+    hash = "sha256-+69mh1hKL1r7SNwDilaQz5UochMMWFG2lrBLYBF31JY=";
   };
 
   nativeBuildInputs = [
@@ -233,6 +233,9 @@ stdenv.mkDerivation (finalAttrs: {
     "test_sentinel2_zipped"
     # tries to call unwrapped executable
     "test_SetPROJAuxDbPaths"
+    # fixed and renamed in 3.8.0RC1
+    # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
+    "test_visoss_6"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"

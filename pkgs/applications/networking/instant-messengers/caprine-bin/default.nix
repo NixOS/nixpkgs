@@ -1,7 +1,7 @@
 { lib, callPackage, stdenvNoCC }:
 let
   pname = "caprine";
-  version = "2.58.3";
+  version = "2.59.1";
   metaCommon = with lib; {
     description = "An elegant Facebook Messenger desktop app";
     homepage = "https://sindresorhus.com/caprine";
@@ -10,11 +10,11 @@ let
   };
   x86_64-appimage = callPackage ./build-from-appimage.nix {
     inherit pname version metaCommon;
-    sha256 = "sha256-w0nBQhHYzFLsNu0MxWhoju6fh4JpAKC7MWWVxwDkRYk=";
+    sha256 = "sha256-stMv4KQoWPmK5jcfdhamC27Rb51zjbeEn40u6YUvXz4=";
   };
   x86_64-dmg = callPackage ./build-from-dmg.nix {
     inherit pname version metaCommon;
-    sha256 = "sha256-6Mx2ZkT2hdnaSVt2hKMMV9xc7rYPFFbxcj6vb84ojYU=";
+    sha256 = "sha256-WMT4yrLjDSMsI/lFbYODu3/0whcF+++4ShoChfMyLfQ=";
   };
 in
 (if stdenvNoCC.isDarwin then x86_64-dmg else x86_64-appimage).overrideAttrs (oldAttrs: {

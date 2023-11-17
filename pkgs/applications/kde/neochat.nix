@@ -24,7 +24,6 @@
 , qcoro
 , qqc2-desktop-style
 , qtgraphicaleffects
-, qtkeychain
 , qtlocation
 , qtmultimedia
 , qtquickcontrols2
@@ -59,7 +58,6 @@ mkDerivation {
     olm
     qcoro
     qtgraphicaleffects
-    qtkeychain
     qtlocation
     qtmultimedia
     qtquickcontrols2

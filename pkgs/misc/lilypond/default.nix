@@ -3,9 +3,7 @@
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , freefont_ttf, makeFontsConf
 , makeWrapper, t1utils, boehmgc, rsync
-, texlive, tex ? texlive.combine {
-    inherit (texlive) scheme-small lh metafont epsf fontinst;
-  }
+, texliveSmall, tex ? texliveSmall.withPackages (ps: with ps; [ lh metafont epsf fontinst ])
 }:
 
 stdenv.mkDerivation rec {

@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "plpgsql_check";
-  version = "2.5.1";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4J4uKcQ/jRKKgrpUUed9MXDmOJaYKYDzznt1DItr6T0=";
+    hash = "sha256-mC8cDLfTu/gpMjNfXGCAV8EhE+kMq2MofzibIWijX3w=";
   };
 
   buildInputs = [ postgresql ];
 
   installPhase = ''
-    install -D -t $out/lib *.so
+    install -D -t $out/lib *${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
   '';

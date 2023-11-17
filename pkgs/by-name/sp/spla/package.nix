@@ -6,10 +6,16 @@
 , blas
 , gfortran
 , llvmPackages
-, gpuBackend ? "none"
 , cudaPackages
-, hip
-, rocblas
+, rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -39,8 +45,10 @@ stdenv.mkDerivation rec {
     blas
   ]
   ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optionals (gpuBackend == "rocm") [ hip rocblas rocblas ]
-  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocblas
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
   propagatedBuildInputs = [ mpi ];

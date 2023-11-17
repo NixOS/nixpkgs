@@ -2,6 +2,11 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+
+# build-system
+, setuptools
+
+# dependencies
 , spake2
 , pynacl
 , six
@@ -9,12 +14,17 @@
 , twisted
 , autobahn
 , automat
-, hkdf
 , tqdm
 , click
 , humanize
 , txtorcon
+
+# optional-dependencies
+, noiseprotocol
+
+# tests
 , nettools
+, unixtools
 , mock
 , magic-wormhole-transit-relay
 , magic-wormhole-mailbox-server
@@ -23,12 +33,17 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.12.0";
+  version = "0.13.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q41j99718y7m95zg1vaybnsp31lp6lhyqkbv4yqz5ys6jixh3qv";
+    hash = "sha256-rDvWgoYnDn8UnAYUmo5Anl+jTX/rDoiESibSnu0tFRY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     spake2
@@ -38,25 +53,30 @@ buildPythonPackage rec {
     twisted
     autobahn
     automat
-    hkdf
     tqdm
     click
     humanize
     txtorcon
-  ] ++ autobahn.optional-dependencies.twisted
+  ]
+  ++ autobahn.optional-dependencies.twisted
   ++ twisted.optional-dependencies.tls;
+
+  passthru.optional-dependencies = {
+    dilation = [
+      noiseprotocol
+    ];
+  };
 
   nativeCheckInputs = [
     mock
     magic-wormhole-transit-relay
     magic-wormhole-mailbox-server
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.optional-dependencies.dilation
+  ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
 
-  disabledTests = [
-    # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
-    "test_welcome"
-  ] ++ lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.isDarwin [
     # These tests doesn't work within Darwin's sandbox
     "test_version"
     "test_text"
@@ -92,6 +112,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole";
     license = licenses.mit;

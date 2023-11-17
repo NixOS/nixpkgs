@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.64.0";
+  version = "1.64.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-miXYBKUTmsqAvVLmxcVCpjgEO3HeKQpUZKSvzaxhqdU=";
+    hash = "sha256-gOFOcqCgFAiTc6W3v8Z917hGCzxluswqnuOoUht73GA=";
   };
 
-  vendorHash = "sha256-rpF44yd8ElOkXTT1lSW0l3ZwTqeNdGS1OxrvNY8atzA=";
+  vendorHash = "sha256-eYIGVCTvUfGbsIMFthEfD0r6aeA7Ly9xJ8PJ6hR2SjA=";
 
   subPackages = [ "." ];
 
@@ -41,6 +41,10 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
+
+      # filesystem helpers
+      ln -s $out/bin/rclone $out/bin/rclonefs
+      ln -s $out/bin/rclone $out/bin/mount.rclone
     '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
       # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
       # as the setuid wrapper is required as non-root on NixOS.
@@ -59,6 +63,7 @@ buildGoModule rec {
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
+    mainProgram = "rclone";
     maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

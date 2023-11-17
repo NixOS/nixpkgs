@@ -10,9 +10,8 @@
 
   server.wait_for_unit("redis-mastodon.service")
   server.wait_for_unit("mastodon-sidekiq-all.service")
-  server.wait_for_unit("mastodon-streaming.service")
+  server.wait_for_unit("mastodon-streaming.target")
   server.wait_for_unit("mastodon-web.service")
-  server.wait_for_open_port(55000)
   server.wait_for_open_port(55001)
 
   # Check that mastodon-media-auto-remove is scheduled

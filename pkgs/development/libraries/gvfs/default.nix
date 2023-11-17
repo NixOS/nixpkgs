@@ -5,6 +5,7 @@
 , meson
 , ninja
 , pkg-config
+, substituteAll
 , gettext
 , dbus
 , glib
@@ -53,12 +54,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Hardcode the ssh path again.
-    # https://gitlab.gnome.org/GNOME/gvfs/-/issues/465
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/gvfs/-/commit/8327383e262e1e7f32750a8a2d3dd708195b0f53.patch";
-      hash = "sha256-ReD7qkezGeiJHyo9jTqEQNBjECqGhV9nSD+dYYGZWJ8=";
-      revert = true;
+    (substituteAll {
+      src = ./hardcode-ssh-path.patch;
+      ssh_program = "${lib.getBin openssh}/bin/ssh";
     })
   ];
 
@@ -76,7 +74,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     wrapGAppsHook
-    libxml2
     libxslt
     docbook_xsl
     docbook_xml_dtd_42
@@ -92,7 +89,7 @@ stdenv.mkDerivation rec {
     libimobiledevice
     libbluray
     libnfs
-    openssh
+    libxml2
     gsettings-desktop-schemas
     libsoup_3
   ] ++ lib.optionals udevSupport [

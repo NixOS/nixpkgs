@@ -62,6 +62,7 @@ buildGoPackage rec {
       src = ./0005-fix-custom-wallpapers-path.diff;
       inherit coreutils;
     })
+    ./0006-fix-build-with-ddcutil-2.patch
   ];
 
   postPatch = ''

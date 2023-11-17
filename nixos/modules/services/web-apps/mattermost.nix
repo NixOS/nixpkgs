@@ -287,9 +287,9 @@ in
 
       # The systemd service will fail to execute the preStart hook
       # if the WorkingDirectory does not exist
-      system.activationScripts.mattermost = ''
-        mkdir -p "${cfg.statePath}"
-      '';
+      systemd.tmpfiles.rules = [
+        ''d "${cfg.statePath}" -''
+      ];
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";

@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      name = "system-makedeps.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-makedeps.patch?h=llpp&id=0d2913056aaf3dbf7431e57b7b08b55568ba076c";
-      hash = "sha256-t9PLXsM8+exCeYqJBe0LSDK0D2rpktmozS8qNcEAcHo=";
+      name = "system-makedeps-and-ocaml5.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-makedeps-and-ocaml5.patch?h=llpp&id=32955e115f914bb96348d288f9af9c6e3e80a02b";
+      hash = "sha256-3rcPsR+M8Jx7M8GHUIsw0WNBvp6aE7BcPr4yk2vT9Ik=";
     })
   ];
 

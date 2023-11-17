@@ -56,6 +56,12 @@ buildPythonPackage rec {
     "pytest_examples"
   ];
 
+  disabledTests = [
+    # Test fails with latest ruff v0.1.2
+    # See https://github.com/pydantic/pytest-examples/issues/26
+    "test_ruff_error"
+  ];
+
   meta = with lib; {
     description = "Pytest plugin for testing examples in docstrings and markdown files";
     homepage = "https://github.com/pydantic/pytest-examples";

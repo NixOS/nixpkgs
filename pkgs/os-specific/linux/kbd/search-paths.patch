@@ -18,34 +18,30 @@ Without this patch, kbd will only look inside
  	DATADIR "/" KEYMAPDIR "/mac/include/",
 --- a/src/libkfont/context.c
 +++ b/src/libkfont/context.c
-@@ -13,6 +13,7 @@
+@@ -13,5 +13,6 @@
  /* search for the map file in these directories (with trailing /) */
  static const char *const mapdirpath[]  = {
- 	"",
 +	"/etc/kbd/" TRANSDIR "/",
  	DATADIR "/" TRANSDIR "/",
  	NULL
  };
-@@ -28,6 +29,7 @@ static const char *const mapsuffixes[] = {
+@@ -28,5 +29,6 @@ static const char *const mapsuffixes[] = {
  /* search for the font in these directories (with trailing /) */
  static const char *const fontdirpath[]  = {
- 	"",
 +	"/etc/kbd/" FONTDIR "/",
  	DATADIR "/" FONTDIR "/",
  	NULL
  };
-@@ -42,6 +44,7 @@ static char const *const fontsuffixes[] = {
+@@ -42,5 +44,6 @@ static char const *const fontsuffixes[] = {
  
  static const char *const unidirpath[]  = {
- 	"",
 +	"/etc/kbd/" UNIMAPDIR "/",
  	DATADIR "/" UNIMAPDIR "/",
  	NULL
  };
-@@ -55,6 +58,7 @@ static const char *const unisuffixes[] = {
+@@ -55,5 +58,6 @@ static const char *const unisuffixes[] = {
  /* hide partial fonts a bit - loading a single one is a bad idea */
  const char *const partfontdirpath[]  = {
- 	"",
 +	"/etc/kbd/" FONTDIR "/" PARTIALDIR "/",
  	DATADIR "/" FONTDIR "/" PARTIALDIR "/",
  	NULL

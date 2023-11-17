@@ -150,12 +150,15 @@
 
   # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
-, hadrian ? bootPkgs.callPackage ../../tools/haskell/hadrian {
+, hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
     ghcSrc = ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;
     # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
-    enableHyperlinkedSource = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+    enableHyperlinkedSource =
+      # TODO(@sternenseemann): Disabling currently doesn't work with GHC >= 9.8
+      lib.versionAtLeast version "9.8" ||
+      !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
   }
 
 , #  Whether to build sphinx documentation.
@@ -263,6 +266,11 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  patches = [
+    (if lib.versionAtLeast version "9.8"
+      then ./docs-sphinx-7-ghc98.patch
+      else ./docs-sphinx-7.patch )
+  ];
   postPatch = ''
     patchShebangs --build .
   '';

@@ -1,9 +1,16 @@
+# Gomplate 3.x does not build with go > 1.20.
+# Version 4 of gomplate (yet unreleased) should not have this issue.
+#
+# see https://github.com/hairyhenderson/gomplate/issues/1872
+
 { lib
-, buildGoModule
+#, buildGoModule
+, buildGo120Module
 , fetchFromGitHub
 }:
 
-buildGoModule rec {
+# buildGoModule rec {
+buildGo120Module rec {
   pname = "gomplate";
   version = "3.11.5";
 

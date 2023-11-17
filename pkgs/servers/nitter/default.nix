@@ -22,13 +22,13 @@
 
 buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2023-08-08";
+  version = "unstable-2023-10-31";
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "d7ca353a55ea3440a2ec1f09155951210a374cc7";
-    hash = "sha256-nlpUzbMkDzDk1n4X+9Wk7+qQk+KOfs5ID6euIfHBoa8=";
+    rev = "b62d73dbd373f08af07c7a79efcd790d3bc1a49c";
+    hash = "sha256-yCD7FbqWZMY0fyFf9Q3Ka06nw5Ha7jYLpmPONAhEVIM=";
   };
 
   patches = [

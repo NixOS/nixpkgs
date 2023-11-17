@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.10";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-GdgzHmzPCK3wq/8sCc1NaPEVwl4Q5OBZMp86RXkhE0M=";
+    hash = "sha256-2fd21aSCjwSwk8G0uS3cPGzLZfPVoJl2V5dG+akfCrE=";
   };
 
   patches = [
@@ -49,6 +49,14 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
+    })
+
+    # https://github.com/psycopg/psycopg/pull/669
+    # mark some tests as timing remove on next version update
+    (fetchpatch {
+      name = "mark_tests_as_timing.patch";
+      url = "https://github.com/psycopg/psycopg/commit/00a3c640dd836328ba15931b400b012171f648c2.patch";
+      hash = "sha256-DoVZv1yy9gHOKl0AdVLir+C+UztJZVjboLhS5af2944=";
     })
   ];
 

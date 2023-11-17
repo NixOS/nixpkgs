@@ -4,9 +4,9 @@
 buildDunePackage {
   pname = "hacl-star";
 
-  inherit (hacl-star-raw) version src meta doCheck minimalOCamlVersion;
+  inherit (hacl-star-raw) version src meta doCheck;
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     hacl-star-raw

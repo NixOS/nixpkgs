@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     guile
     pkg-config
-    scheme-bytestructures
   ];
   buildInputs = [ guile ];
   propagatedBuildInputs = [ xz ];
+  propagatedNativeBuildInputs = [ scheme-bytestructures ];
 
   doCheck = true;
 

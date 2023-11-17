@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda mic92 zowoq ];
+    mainProgram = "nix-update";
     platforms = platforms.all;
   };
 }

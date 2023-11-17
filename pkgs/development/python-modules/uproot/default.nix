@@ -1,11 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , awkward
 , hatchling
-, importlib-metadata
 , numpy
 , packaging
 , pytestCheckHook
@@ -18,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.0.12";
-  format = "pyproject";
+  version = "5.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5RJPRrnPRRj1KXeyCqrGwaurXPx0aT6gso1o7gQ1aNs=";
+    hash = "sha256-TMa+j2jdFagJJhlyCx4rNLaxQhrJyq1HdpnA40xiyME=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +36,6 @@ buildPythonPackage rec {
     awkward
     numpy
     packaging
-  ]  ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [
@@ -61,6 +57,7 @@ buildPythonPackage rec {
     "test_no_multipart"
     "test_fallback"
     "test_pickle_roundtrip_http"
+    "test_open_fsspec_local"
   ];
 
   disabledTestPaths = [

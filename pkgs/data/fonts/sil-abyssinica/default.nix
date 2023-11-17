@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sil-abyssinica";
-  version = "2.200";
+  version = "2.201";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL-${version}.zip";
-    hash = "sha256-IdWMZHm9VoLVDO0//ISujxlXUxe0O6+aEcdP63YRmPg=";
+    hash = "sha256-DJWp3T9uBLnztSq9r5YCSWaBjIK/0Aljg1IiU0FLrdE=";
   };
 
   installPhase = ''

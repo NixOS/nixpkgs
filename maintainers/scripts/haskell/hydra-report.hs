@@ -187,7 +187,7 @@ getBuildReports opt = runReq defaultHttpConfig do
 
 getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
 getEvalBuilds NoHydraSlownessWorkaround id =
-  hydraJSONQuery (responseTimeout 900000000) ["eval", showT id, "builds"]
+  hydraJSONQuery mempty ["eval", showT id, "builds"]
 getEvalBuilds HydraSlownessWorkaround id = do
   Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
   forM builds $ \buildId -> do
@@ -195,14 +195,15 @@ getEvalBuilds HydraSlownessWorkaround id = do
     hydraJSONQuery mempty [ "build", showT buildId ]
 
 hydraQuery :: HttpResponse a => Proxy a -> Option 'Https -> [Text] -> Req (HttpResponseBody a)
-hydraQuery responseType option query =
-   responseBody
-      <$> req
-         GET
-         (foldl' (/:) (https "hydra.nixos.org") query)
-         NoReqBody
-         responseType
-         (header "User-Agent" "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270" <> option)
+hydraQuery responseType option query = do
+  let customHeaderOpt =
+        header
+          "User-Agent"
+          "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270"
+      customTimeoutOpt = responseTimeout 900_000_000 -- 15 minutes
+      opts = customHeaderOpt <> customTimeoutOpt <> option
+      url = foldl' (/:) (https "hydra.nixos.org") query
+  responseBody <$> req GET url NoReqBody responseType opts
 
 hydraJSONQuery :: FromJSON a => Option 'Https -> [Text] -> Req a
 hydraJSONQuery = hydraQuery jsonResponse

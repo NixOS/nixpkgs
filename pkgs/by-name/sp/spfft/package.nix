@@ -6,11 +6,16 @@
 , mpi
 , gfortran
 , llvmPackages
-, gpuBackend ? "none"
 , cudaPackages
-, hip
-, rocfft
-, hipfft
+, rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -35,8 +40,11 @@ stdenv.mkDerivation rec {
     fftw
   ]
   ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optionals (gpuBackend == "rocm") [ hip rocfft hipfft ]
-  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocfft
+    rocmPackages.hipfft
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
   propagatedBuildInputs = [ mpi ];
@@ -53,7 +61,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (gpuBackend == "cuda") "-DSPFFT_GPU_BACKEND=CUDA"
   ++ lib.optionals (gpuBackend == "rocm") [
     "-DSPFFT_GPU_BACKEND=ROCM"
-    "-DHIP_ROOT_DIR=${hip}"
+    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
   ];
 
 

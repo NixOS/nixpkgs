@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     # fix with openssl 3.x
+    # https://github.com/OpenSC/pam_p11/pull/22
     (fetchpatch {
-      url = "https://github.com/OpenSC/pam_p11/pull/22.patch";
+      name = "OpenSC-pam_p11-pull-22.patch";
+      url = "https://github.com/OpenSC/pam_p11/compare/cd4eba2e921e1c2f93cde71922a76af99376246c...debd4f7acfaf998cfe4002e0be5c35ad9a9591b5.patch";
       excludes = [ ".github/build.sh" ];
       hash = "sha256-bm/agnBgvrr8L8yoGK4gzBqOGgsNWf9NIgcNJG7proE=";
     })

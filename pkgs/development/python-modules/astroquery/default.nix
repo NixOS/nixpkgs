@@ -53,6 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   # Tests must be run in the build directory. The tests create files
   # in $HOME/.astropy so we need to set HOME to $TMPDIR.
   preCheck = ''
@@ -66,8 +71,6 @@ buildPythonPackage rec {
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
     license = licenses.bsd3;
-    # Broken since a certain astropy update, due to API incompatibility
-    broken = true;
     maintainers = [ maintainers.smaret ];
   };
 }

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, ipython_genutils
+, ipython-genutils
 , jinja2
 , jupyter-client
 , jupyter-core
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argon2-cffi
     ipykernel
-    ipython_genutils
+    ipython-genutils
     jinja2
     jupyter-client
     jupyter-core

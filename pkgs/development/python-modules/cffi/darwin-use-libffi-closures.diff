@@ -1,7 +1,8 @@
-diff -r bac92fcfe4d7 c/_cffi_backend.c
---- a/c/_cffi_backend.c	Mon Jul 18 15:58:34 2022 +0200
-+++ b/c/_cffi_backend.c	Sat Aug 20 12:38:31 2022 -0700
-@@ -96,7 +96,7 @@
+diff --git a/src/c/_cffi_backend.c b/src/c/_cffi_backend.c
+index 537271f..9c3bf94 100644
+--- a/src/c/_cffi_backend.c
++++ b/src/c/_cffi_backend.c
+@@ -103,7 +103,7 @@
  # define CFFI_CHECK_FFI_PREP_CIF_VAR 0
  # define CFFI_CHECK_FFI_PREP_CIF_VAR_MAYBE 0
  
@@ -10,7 +11,7 @@ diff -r bac92fcfe4d7 c/_cffi_backend.c
  
  # define CFFI_CHECK_FFI_CLOSURE_ALLOC __builtin_available(macos 10.15, ios 13, watchos 6, tvos 13, *)
  # define CFFI_CHECK_FFI_CLOSURE_ALLOC_MAYBE 1
-@@ -6413,7 +6413,7 @@
+@@ -6422,7 +6422,7 @@ static PyObject *b_callback(PyObject *self, PyObject *args)
      else
  #endif
      {

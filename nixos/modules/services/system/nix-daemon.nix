@@ -249,11 +249,6 @@ in
 
     services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
 
-    system.activationScripts.nix = stringAfter [ "etc" "users" ]
-      ''
-        install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
-      '';
-
     # Legacy configuration conversion.
     nix.settings = mkMerge [
       (mkIf (isNixAtLeast "2.3pre") { sandbox-fallback = false; })

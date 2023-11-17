@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "dooit";
     rev = "v${version}";
-    hash = "sha256-iQAGD6zrBBd4fJONaB7to1OJpAJUO0zeA1xhVQZBkMc=";
+    hash = "sha256-ZCEBpaQHaFb09MUlN6acYB3LrfX456uRbhVh9YPz7NU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

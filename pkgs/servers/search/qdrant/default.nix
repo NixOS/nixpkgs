@@ -5,19 +5,20 @@
 , stdenv
 , pkg-config
 , openssl
+, rust-jemalloc-sys
 , nix-update-script
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-CWE3tCeLJjtuFcvnGLdODtx0mvVSl2ULIcxgf3X3SPU=";
+    sha256 = "sha256-G9nA0F3KKl6mLgcpuMW1uikOyBcBsJ1qd2IlMhW4vhg=";
   };
 
   cargoLock = {
@@ -32,7 +33,10 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    openssl
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
 
