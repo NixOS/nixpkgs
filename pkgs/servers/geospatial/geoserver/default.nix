@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xX1rAONMh5XSWGPXkVMemAvG34DDNmu2018HsTvY7G0=";
   };
 
+  patches = [
+    # set GEOSERVER_DATA_DIR to current working directory if not provided
+    ./data-dir.patch
+  ];
+
   sourceRoot = ".";
   nativeBuildInputs = [ unzip makeWrapper ];
 
