@@ -171,11 +171,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # Test fails
 
+  dontWrapGApps = true;
+
   # Replace audacity's wrapper, to:
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram "$out/bin/audacity" \
+      "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_6 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
