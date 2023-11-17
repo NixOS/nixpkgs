@@ -212,12 +212,6 @@ in
         assertion = cfg.nginx.enable -> (cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.ip == settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ]);
         message = "Setting the IP mobilizon listens on is only possible when the nginx config is not used, as it is hardcoded there.";
       }
-      {
-        assertion = isLocalPostgres -> repoSettings.database == repoSettings.username;
-        message = ''
-          When creating a database via NixOS, the db user and db name must be equal!
-        '';
-      }
     ];
 
     services.mobilizon.settings = {
@@ -353,12 +347,18 @@ in
 
       # Taken from here:
       # https://framagit.org/framasoft/mobilizon/-/blob/1.1.0/priv/templates/setup_db.eex
+      # TODO(to maintainers of mobilizon): the owner database alteration is necessary
+      # as PostgreSQL 15 changed their behaviors w.r.t. to privileges.
+      # See https://github.com/NixOS/nixpkgs/issues/216989 to get rid
+      # of that workaround.
       script =
         ''
           psql "${repoSettings.database}" -c "\
             CREATE EXTENSION IF NOT EXISTS postgis; \
             CREATE EXTENSION IF NOT EXISTS pg_trgm; \
             CREATE EXTENSION IF NOT EXISTS unaccent;"
+          psql -tAc 'ALTER DATABASE "${repoSettings.database}" OWNER TO "${dbUser}";'
+
         '';
 
       serviceConfig = {
@@ -378,7 +378,10 @@ in
       ensureUsers = [
         {
           name = dbUser;
-          ensureDBOwnership = true;
+          # Given that `dbUser` is potentially arbitrarily custom, we will perform
+          # manual fixups in mobilizon-postgres.
+          # TODO(to maintainers of mobilizon): Feel free to simplify your setup by using `ensureDBOwnership`.
+          ensureDBOwnership = false;
         }
       ];
       extraPlugins = with postgresql.pkgs; [ postgis ];
