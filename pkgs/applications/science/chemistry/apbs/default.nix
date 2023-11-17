@@ -33,6 +33,10 @@ let
       "-DBUILD_SUPERLU=OFF"
     ];
 
+    env = lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+    };
+
     buildInputs = [
       blas
       superlu
@@ -91,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_MODULE_PATH=${fetk}/share/fetk/cmake;"
     "-DENABLE_TESTS=1"
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   doCheck = true;
 

@@ -84,6 +84,10 @@ stdenv.mkDerivation {
     "--${if withX then "with" else "without"}-x"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     homepage = "http://www.afterstep.org/afterimage/";
     description = "A generic image manipulation library";

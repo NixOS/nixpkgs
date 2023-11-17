@@ -9,6 +9,7 @@
 , gst_all_1
 , libglvnd
 , darwin
+, overrideSDK
 , buildPackages
 , python3
 
@@ -141,13 +142,18 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind llvmPackages_14;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        qtModule = qtModule.override {
+          stdenv = if stdenv.isDarwin
+            then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+            else stdenv;
+        };
         xcbuild = buildPackages.xcbuild.override {
           productBuildVer = "20A2408";
         };

@@ -119,9 +119,9 @@ stdenv.mkDerivation {
   '';
 
   # Hack around weird upsream RPATH bug
-  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
-  '' + lib.optionalString (useLLVM) ''
+  '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:

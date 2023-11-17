@@ -119,7 +119,10 @@ in {
         hash = "sha256-eldLvCCALqdrUsp/rwcmf3IEXoYbGJFcUnKpjCer+IQ=";
       };
       patches = [
-         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+        ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+
+        # Fix regression turning `struct sockaddr_ll` flexible size.
+        ./revert-af_packet-flex.patch
       ];
     };
 }

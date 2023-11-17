@@ -1,6 +1,5 @@
 { lib, stdenv
 , mkRustcDepArgs, mkRustcFeatureArgs, needUnstableCLI
-, rust
 }:
 
 { crateName,
@@ -21,7 +20,7 @@
         (mkRustcDepArgs dependencies crateRenames)
         (mkRustcFeatureArgs crateFeatures)
       ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "--target" (rust.toRustTargetSpec stdenv.hostPlatform)
+        "--target" stdenv.hostPlatform.rust.rustcTargetSpec
       ] ++ lib.optionals (needUnstableCLI dependencies) [
         "-Z" "unstable-options"
       ] ++ extraRustcOpts

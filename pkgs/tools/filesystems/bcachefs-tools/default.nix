@@ -12,12 +12,10 @@
 , lz4
 , attr
 , udev
-, valgrind
 , nixosTests
 , fuse3
 , cargo
 , rustc
-, coreutils
 , rustPlatform
 , makeWrapper
 , fuseSupport ? false
@@ -29,15 +27,13 @@ stdenv.mkDerivation {
   pname = "bcachefs-tools";
   inherit version;
 
+
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${version}";
     hash = "sha256-4TmH6YOW6ktISVA6RLo7JRl8/SnRzGMrdbyCr+mDkqY=";
   };
-
-  # errors on fsck_err function. Maybe miss-detection?
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   nativeBuildInputs = [
     pkg-config
@@ -72,7 +68,6 @@ stdenv.mkDerivation {
 
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-  nativeCheckInputs = [ valgrind ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -80,7 +75,7 @@ stdenv.mkDerivation {
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
 
-  preCheck = lib.optionalString fuseSupport ''
+  preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
   '';
 
@@ -88,11 +83,6 @@ stdenv.mkDerivation {
     smoke-test = nixosTests.bcachefs;
     inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
   };
-
-  postFixup = ''
-    wrapProgram $out/bin/mount.bcachefs \
-      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
-  '';
 
   enableParallelBuilding = true;
 

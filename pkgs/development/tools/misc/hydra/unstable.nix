@@ -205,6 +205,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = [
+    ./crypt-passphrase-argon2-fix-output-len.patch
+  ];
+
   postPatch = ''
     # Change 5s timeout for init to 30s
     substituteInPlace t/lib/HydraTestContext.pm \

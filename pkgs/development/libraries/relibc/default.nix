@@ -64,7 +64,7 @@ redoxRustPlatform.buildRustPackage rec {
   '';
 
   # TODO: should be hostPlatform
-  TARGET = buildPackages.rust.toRustTargetSpec stdenvNoCC.targetPlatform;
+  TARGET = stdenvNoCC.targetPlatform.rust.rustcTargetSpec;
 
   cargoLock = {
     lockFile = ./Cargo.lock;

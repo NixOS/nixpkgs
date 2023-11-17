@@ -174,5 +174,6 @@ in buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall kiwi ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "bitwarden";
   };
 }

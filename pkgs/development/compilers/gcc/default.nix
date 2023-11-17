@@ -108,8 +108,8 @@ let inherit version;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
-    stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
-    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
+    stageNameAddon = optionalString withoutTargetLibc "-nolibc";
+    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}${stageNameAddon}-";
 
     javaAwtGtk = langJava && x11Support;
     xlibs = [

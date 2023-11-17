@@ -24,18 +24,20 @@
 , perlPackages
 , pkg-config
 , systemd
-, forceInstallAllHacks ? false
+, forceInstallAllHacks ? true
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xscreensaver";
-  version = "6.06";
+  version = "6.08";
 
   src = fetchurl {
     url = "https://www.jwz.org/xscreensaver/xscreensaver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-9TT6uFqDbeW4vo6R/CG4DKfWpO2ThuviB9S+ek50mac=";
+    hash = "sha256-XPUrpSXO7PlLLyvWNIXr3zGOEvzA8q2tfUwQbYVedqM=";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     intltool
@@ -65,7 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.MozillaCA
     perlPackages.perl
   ]
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optionals withSystemd [ systemd ];
+
+  postPatch = ''
+    pushd hacks
+    patchShebangs check-configs.pl munge-ad.pl xml2man.pl
+    popd
+  '';
 
   preConfigure = ''
     # Fix installation paths for GTK resources.

@@ -1046,6 +1046,8 @@ let
 
     merlin-lib = callPackage ../development/tools/ocaml/merlin/lib.nix { };
 
+    metadata = callPackage ../development/ocaml-modules/metadata { };
+
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
     metrics-influx = callPackage ../development/ocaml-modules/metrics/influx.nix { };

@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cargo, cmake, rust, rustc, rustfmt
+, darwin, cargo, cmake, rustc, rustfmt
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -53,7 +53,7 @@ in stdenv.mkDerivation (finalAttrs: {
   # but it does support checking these idiosyncratic PKG_CONFIG_${TRIPLE}
   # environment variables.
   # [1]: https://github.com/rust-lang/pkg-config-rs/issues/53
-  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] (rust.toRustTarget stdenv.buildPlatform)}" =
+  "PKG_CONFIG_${builtins.replaceStrings ["-"] ["_"] stdenv.buildPlatform.rust.rustcTarget}" =
     "${pkgsBuildHost.stdenv.cc.targetPrefix}pkg-config";
 
   NIX_LDFLAGS = toString (
@@ -68,15 +68,18 @@ in stdenv.mkDerivation (finalAttrs: {
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
-    setBuild  = "--set=target.${rust.toRustTarget stdenv.buildPlatform}";
-    setHost   = "--set=target.${rust.toRustTarget stdenv.hostPlatform}";
-    setTarget = "--set=target.${rust.toRustTarget stdenv.targetPlatform}";
-    ccForBuild  = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForBuild = "${pkgsBuildBuild.targetPackages.stdenv.cc}/bin/${pkgsBuildBuild.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForHost  = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForHost = "${pkgsBuildHost.targetPackages.stdenv.cc}/bin/${pkgsBuildHost.targetPackages.stdenv.cc.targetPrefix}c++";
-    ccForTarget  = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}cc";
-    cxxForTarget = "${pkgsBuildTarget.targetPackages.stdenv.cc}/bin/${pkgsBuildTarget.targetPackages.stdenv.cc.targetPrefix}c++";
+    prefixForStdenv = stdenv: "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}";
+    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
+    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
+    setBuild  = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
+    setHost   = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
+    setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
+    ccForBuild  = ccPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
+    cxxForBuild  = cxxPrefixForStdenv pkgsBuildBuild.targetPackages.stdenv;
+    ccForHost  = ccPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
+    cxxForHost  = cxxPrefixForStdenv pkgsBuildHost.targetPackages.stdenv;
+    ccForTarget  = ccPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
+    cxxForTarget  = cxxPrefixForStdenv pkgsBuildTarget.targetPackages.stdenv;
   in [
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
@@ -90,23 +93,23 @@ in stdenv.mkDerivation (finalAttrs: {
     "--tools=rustc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
-    "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
-    "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
+    "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
+    "--host=${stdenv.hostPlatform.rust.rustcTargetSpec}"
     # std is built for all platforms in --target.
     "--target=${concatStringsSep "," ([
-      (rust.toRustTargetSpec stdenv.targetPlatform)
+      stdenv.targetPlatform.rust.rustcTargetSpec
 
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
     # scripts.
     ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
-      (rust.toRustTargetSpec stdenv.buildPlatform)
+      stdenv.buildPlatform.rust.rustcTargetSpec
 
     # (host!=target): When building a cross-targeting compiler we
     # need to add the host platform as well so rustc can compile
     # build.rs scripts.
     ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
-      (rust.toRustTargetSpec stdenv.hostPlatform)
+      stdenv.hostPlatform.rust.rustcTargetSpec
     ])}"
 
     "${setBuild}.cc=${ccForBuild}"
@@ -137,7 +140,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
-  ] ++ optionals (rust.IsNoStdTarget stdenv.targetPlatform) [
+  ] ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
     "--disable-docs"
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
@@ -149,12 +152,12 @@ in stdenv.mkDerivation (finalAttrs: {
   buildPhase = if fastCross then "
     runHook preBuild
 
-    mkdir -p build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-{std,rustc}/${rust.toRustTargetSpec stdenv.hostPlatform}/release/
-    ln -s ${rustc}/lib/rustlib/${rust.toRustTargetSpec stdenv.hostPlatform}/libstd-*.so build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-std/${rust.toRustTargetSpec stdenv.hostPlatform}/release/libstd.so
-    ln -s ${rustc}/lib/rustlib/${rust.toRustTargetSpec stdenv.hostPlatform}/librustc_driver-*.so build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-rustc/${rust.toRustTargetSpec stdenv.hostPlatform}/release/librustc.so
-    ln -s ${rustc}/bin/rustc build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-rustc/${rust.toRustTargetSpec stdenv.hostPlatform}/release/rustc-main
-    touch build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-std/${rust.toRustTargetSpec stdenv.hostPlatform}/release/.libstd.stamp
-    touch build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-rustc/${rust.toRustTargetSpec stdenv.hostPlatform}/release/.librustc.stamp
+    mkdir -p build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-{std,rustc}/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/
+    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
+    ln -s ${rustc}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
+    ln -s ${rustc}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
+    touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
+    touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
     python ./x.py --keep-stage=0 --stage=1 build library/std
 
     runHook postBuild
@@ -167,8 +170,8 @@ in stdenv.mkDerivation (finalAttrs: {
     mkdir -v $out/bin $doc $man
     makeWrapper ${rustc}/bin/rustc $out/bin/rustc --add-flags "--sysroot $out"
     makeWrapper ${rustc}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
-    ln -s ${rustc}/lib/rustlib/{manifest-rust-std-,}${rust.toRustTargetSpec stdenv.hostPlatform} $out/lib/rustlib/
-    echo rust-std-${rust.toRustTargetSpec stdenv.hostPlatform} >> $out/lib/rustlib/components
+    ln -s ${rustc}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
+    echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
     lndir ${rustc.man} $man
 
@@ -288,9 +291,8 @@ in stdenv.mkDerivation (finalAttrs: {
       "i686-freebsd13" "x86_64-freebsd13"
       "x86_64-solaris"
       "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
-      "loongarch64-linux" "mipsel-linux" "mips64el-linux"
-      "powerpc64-linux" "powerpc64le-linux" "riscv64-linux"
-      "s390x-linux" "x86_64-linux"
+      "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
+      "riscv64-linux" "s390x-linux" "x86_64-linux"
       "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
       "x86_64-netbsd"
       "i686-openbsd" "x86_64-openbsd"

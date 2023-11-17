@@ -24,8 +24,13 @@ dotnetBuildHook() {
         dotnetBuildFlags+=("-p:UseAppHost=true")
     fi
 
+    local versionFlags=()
     if [ "${version-}" ]; then
-        local -r versionFlag="-p:Version=${version-}"
+        versionFlags+=("-p:InformationalVersion=${version-}")
+    fi
+
+    if [ "${versionForDotnet-}" ]; then
+        versionFlags+=("-p:Version=${versionForDotnet-}")
     fi
 
     dotnetBuild() {
@@ -43,7 +48,7 @@ dotnetBuildHook() {
             -p:Deterministic=true \
             --configuration "@buildType@" \
             --no-restore \
-            ${versionFlag-} \
+            ${versionFlags[@]} \
             ${runtimeIdFlags[@]} \
             ${dotnetBuildFlags[@]}  \
             ${dotnetFlags[@]}

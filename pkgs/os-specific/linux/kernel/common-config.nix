@@ -845,6 +845,8 @@ let
       CLEANCACHE = whenOlder "5.17" (option yes);
       CRASH_DUMP = option no;
 
+      FSCACHE_STATS = yes;
+
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 
       EFI_STUB            = yes; # EFI bootloader in the bzImage itself

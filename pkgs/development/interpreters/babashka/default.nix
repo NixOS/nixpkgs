@@ -33,9 +33,10 @@ let
     doInstallCheck = true;
 
     installCheckPhase = ''
-      $out/bin/bb --version | grep '${version}'
-      $out/bin/bb '(+ 1 2)' | grep '3'
-      $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | grep '[1 2]'
+      $out/bin/bb --version | fgrep '${version}'
+      $out/bin/bb '(+ 1 2)' | fgrep '3'
+      $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | fgrep '[1 2]'
+      $out/bin/bb '(prn "bépo àê")' | fgrep 'bépo àê'
     '';
 
     # As of v1.2.174, this will remove references to ${graalvmDrv}/conf/chronology,

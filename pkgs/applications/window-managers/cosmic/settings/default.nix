@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
     (placeholder "out")
     "--set"
     "bin-src"
-    "target/${rust.lib.toRustTargetSpecShort stdenv.hostPlatform}/release/cosmic-settings"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-settings"
   ];
 
   postInstall = ''

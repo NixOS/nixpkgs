@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1ish0dw0nf9gyghxsdhpy1jjiy5wp54c993swp85xp7m6vdx6l0y";
   };
 
+  patches = [
+    # Fix implicit declaration of `isatty`, which is an error with newer versions of clang.
+    ./fix-missing-header.patch
+  ];
+
   enableParallelBuilding = true;
 
   configurePhase = ''
