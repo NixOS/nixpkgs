@@ -136,7 +136,7 @@ let
         description = "An enhanced, drop-in replacement for MySQL";
         homepage    = "https://mariadb.org/";
         license     = licenses.gpl2;
-        maintainers = with maintainers; [ thoughtpolice ajs124 das_j ];
+        maintainers = with maintainers; [ thoughtpolice ] ++ teams.helsinki-systems.members;
         platforms   = platforms.all;
       };
     };

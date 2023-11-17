@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus bsd3 ];
     mainProgram = "exim";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tv ajs124 das_j ];
+    maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }
