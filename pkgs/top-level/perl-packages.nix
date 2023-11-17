@@ -4789,10 +4789,10 @@ with self; {
 
   CPANChanges = buildPerlPackage {
     pname = "CPAN-Changes";
-    version = "0.400002";
+    version = "0.500002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/CPAN-Changes-0.400002.tar.gz";
-      hash = "sha256-Ae7eqQ0HRoy1jkpQv6O7HU7tqQc1lq3REY/DWRU6vo0=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/CPAN-Changes-0.500002.tar.gz";
+      hash = "sha256-/CNyw3i52JANZBMae5wq407lHeAubnyiAMmyvjU3fk4=";
     };
     meta = {
       description = "Read and write Changes files";
