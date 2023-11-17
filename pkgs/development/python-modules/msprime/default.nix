@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , oldest-supported-numpy
 , setuptools-scm
 , wheel
@@ -25,6 +26,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-YAJa2f0w2CenKubnYLbP8HodDhabLB2hAkyw/CPkp6o=";
   };
+
+  patches = [
+    # upstream patch fixes 2 failing unittests. remove on update
+    (fetchpatch {
+      name = "python311.patch";
+      url = "https://github.com/tskit-dev/msprime/commit/639125ec942cb898cf4a80638f229e11ce393fbc.patch";
+      hash = "sha256-peli4tdu8Bv21xIa5H8SRdfjQnTMO72IPFqybmSBSO8=";
+      includes = [ "tests/test_ancestry.py" ];
+    })
+  ];
 
   nativeBuildInputs = [
     gsl
