@@ -7,6 +7,7 @@
 , desktopToDarwinBundle
 , buildPackages
 , pkg-config
+, fixDarwinDylibNames
 , freetype
 , harfbuzz
 , openjpeg
@@ -99,10 +100,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
     ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
-    ++ lib.optional stdenv.isDarwin xcbuild
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
     ++ lib.optionals enableCurl [ curl openssl ]
     ++ lib.optionals enableGL (

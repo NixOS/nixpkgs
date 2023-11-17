@@ -1029,7 +1029,6 @@ broken-packages:
   - cut-the-crap # failure in job https://hydra.nixos.org/build/233238478 at 2023-09-02
   - CV # failure in job https://hydra.nixos.org/build/233223571 at 2023-09-02
   - d3js # failure in job https://hydra.nixos.org/build/233251474 at 2023-09-02
-  - daemons # failure in job https://hydra.nixos.org/build/237233422 at 2023-10-21
   - dag # failure in job https://hydra.nixos.org/build/233220719 at 2023-09-02
   - DAG-Tournament # failure in job https://hydra.nixos.org/build/233218747 at 2023-09-02
   - dahdit # failure in job https://hydra.nixos.org/build/233245113 at 2023-09-02

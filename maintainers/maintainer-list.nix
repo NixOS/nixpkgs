@@ -2545,6 +2545,12 @@
     githubId = 4621;
     name = "Brad Ediger";
   };
+  brahyerr = {
+    name = "Bryant Pham";
+    email = "bp@1829847@gmail.com";
+    github = "brahyerr";
+    githubId = 120991075;
+  };
   brainrape = {
     email = "martonboros@gmail.com";
     github = "brainrake";
@@ -19584,6 +19590,12 @@
     email = "yanganto@gmail.com";
     github = "yanganto";
     githubId = 10803111;
+  };
+  yannip = {
+    email = "yPapandreou7@gmail.com";
+    github = "YanniPapandreou";
+    githubId = 15948162;
+    name = "Yanni Papandreou";
   };
   yarny = {
     github = "Yarny0";
