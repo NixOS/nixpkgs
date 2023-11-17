@@ -257,9 +257,7 @@ in {
       ensureUsers = [
         {
           name = "netbox";
-          ensurePermissions = {
-            "DATABASE netbox" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };

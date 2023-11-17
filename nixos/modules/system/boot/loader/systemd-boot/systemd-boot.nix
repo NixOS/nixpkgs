@@ -16,6 +16,8 @@ let
 
     systemd = config.systemd.package;
 
+    bootspecTools = pkgs.bootspec;
+
     nix = config.nix.package.out;
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;

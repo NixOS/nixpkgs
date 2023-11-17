@@ -109,15 +109,17 @@ let
     # Default to using the local database if we create it
     services.invidious.database.host = lib.mkDefault null;
 
+
+    # TODO(raitobezarius to maintainers of invidious): I strongly advise to clean up the kemal specific
+    # thing for 24.05 and use `ensureDBOwnership`.
+    # See https://github.com/NixOS/nixpkgs/issues/216989
+    systemd.services.postgresql.postStart = lib.mkAfter ''
+      $PSQL -tAc 'ALTER DATABASE "${cfg.settings.db.dbname}" OWNER TO "${cfg.settings.db.user}";'
+    '';
     services.postgresql = {
       enable = true;
+      ensureUsers = lib.singleton { name = cfg.settings.db.user; ensureDBOwnership = false; };
       ensureDatabases = lib.singleton cfg.settings.db.dbname;
-      ensureUsers = lib.singleton {
-        name = cfg.settings.db.user;
-        ensurePermissions = {
-          "DATABASE ${cfg.settings.db.dbname}" = "ALL PRIVILEGES";
-        };
-      };
       # This is only needed because the unix user invidious isn't the same as
       # the database user. This tells postgres to map one to the other.
       identMap = ''
@@ -136,6 +138,7 @@ let
       documentation = [ "https://docs.invidious.io/Database-Information-and-Maintenance.md" ];
       startAt = lib.mkDefault "weekly";
       path = [ config.services.postgresql.package ];
+      after = [ "postgresql.service" ];
       script = ''
         psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "DELETE FROM nonces * WHERE expire < current_timestamp"
         psql ${cfg.settings.db.dbname} ${cfg.settings.db.user} -c "TRUNCATE TABLE videos"

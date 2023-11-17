@@ -17,7 +17,7 @@ import ./make-test-python.nix ({ lib, ... }: {
         ensureDatabases = [ "paperless" ];
         ensureUsers = [
           { name = config.services.paperless.user;
-            ensurePermissions = { "DATABASE \"paperless\"" = "ALL PRIVILEGES"; };
+            ensureDBOwnership = true;
           }
         ];
       };

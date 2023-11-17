@@ -149,8 +149,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.username == name;
-        message = "services.coder.database.username must be set to ${user} if services.coder.database.createLocally is set true";
+      { assertion = cfg.database.createLocally -> cfg.database.username == name && cfg.database.database == cfg.database.username;
+        message = "services.coder.database.username must be set to ${name} if services.coder.database.createLocally is set true";
       }
     ];
 
@@ -193,10 +193,8 @@ in {
         cfg.database.database
       ];
       ensureUsers = [{
-        name = cfg.database.username;
-        ensurePermissions = {
-          "DATABASE \"${cfg.database.database}\"" = "ALL PRIVILEGES";
-        };
+        name = cfg.user;
+        ensureDBOwnership = true;
         }
       ];
     };
