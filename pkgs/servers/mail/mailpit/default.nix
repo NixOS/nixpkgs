@@ -34,6 +34,12 @@ let
       hash = "sha256-r4yv2qImIlNMPJagz5i1sxqBDnFAucc2kDUmjGktM6A=";
     };
 
+    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
+      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
+      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
+    };
+
     nativeBuildInputs = [ nodejs python3 libtool npmHooks.npmConfigHook ];
 
     buildPhase = ''
