@@ -119,12 +119,6 @@ in
     let
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
-
-      joinedPortals = pkgs.buildEnv {
-        name = "xdg-portals";
-        paths = packages;
-        pathsToLink = [ "/share/xdg-desktop-portal/portals" "/share/applications" ];
-      };
     in
     mkIf cfg.enable {
       warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
@@ -151,11 +145,9 @@ in
       systemd.packages = packages;
 
       environment = {
-        systemPackages = [
-          joinedPortals
-        ] ++ cfg.configPackages;
+        systemPackages = packages ++ cfg.configPackages;
         pathsToLink = [
-          # Upstream desktop environment portal configurations.
+          # Portal definitions and upstream desktop environment portal configurations.
           "/share/xdg-desktop-portal"
           # .desktop files to register fallback icon and app name.
           "/share/applications"
@@ -164,7 +156,7 @@ in
         sessionVariables = {
           GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
-          NIX_XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
+          NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
         etc = lib.concatMapAttrs
