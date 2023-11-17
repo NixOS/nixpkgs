@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/JoNil/elf2uf2-rs";
     license = with licenses; [ bsd0 ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ polygon fortuneteller2k ];
+    maintainers = with maintainers; [ polygon moni ];
   };
 }

@@ -30,5 +30,5 @@ in
       ++ optionals (activatedHosts == [ ]) [ "${pkgs.stevenblack-blocklist}/hosts" ];
   };
 
-  meta.maintainers = [ maintainers.fortuneteller2k maintainers.artturin ];
+  meta.maintainers = [ maintainers.moni maintainers.artturin ];
 }

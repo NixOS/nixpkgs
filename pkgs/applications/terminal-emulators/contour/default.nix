@@ -103,7 +103,7 @@ mkDerivation rec {
     homepage = "https://github.com/contour-terminal/contour";
     changelog = "https://github.com/contour-terminal/contour/raw/v${version}/Changelog.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     platforms = platforms.unix;
   };
 }

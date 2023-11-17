@@ -44,7 +44,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu shawn8901 zzzsy ];
+      maintainers = with lib.maintainers; [ moni lovesegfault atemu shawn8901 zzzsy ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };
