@@ -47,6 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/anhaidgroup/py_stringmatching";
     changelog = "https://github.com/anhaidgroup/py_stringmatching/blob/v${version}/CHANGES.txt";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ixxie ];
   };
 }
