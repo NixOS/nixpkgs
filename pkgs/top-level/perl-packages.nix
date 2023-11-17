@@ -1169,6 +1169,20 @@ with self; {
     };
   };
 
+  AsyncUtil = buildPerlPackage {
+    pname = "Async-Util";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WH/WHITNEY/Async-Util-0.01.tar.gz";
+      hash = "sha256-jzKxHKvFD2Xjh79W8mWBV6IsNah5Nmbhtfis/hMQkQY=";
+    };
+    buildInputs = [ AnyEvent ListMoreUtils ];
+    meta = {
+      description = "Utilities for doing common async operations";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ArchiveCpio = buildPerlPackage {
     pname = "Archive-Cpio";
     version = "0.10";
@@ -1250,6 +1264,18 @@ with self; {
       description = "Object-oriented interface to FITS HDUs";
       homepage = "https://github.com/timj/perl-Astro-FITS-Header";
       license = with lib.licenses; [ gpl3Plus ];
+    };
+  };
+
+  AudioCuefileParser = buildPerlPackage {
+    pname = "Audio-Cuefile-Parser";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTK/Audio-Cuefile-Parser-0.02.tar.gz";
+      hash = "sha256-ulbQcMhz2WxoatmoH99P6JuETkPrSd/gAL+c70PFtmk=";
+    };
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -3598,6 +3624,19 @@ with self; {
     '';
     meta = {
       description = "Generate common types of methods";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ClassMember = buildPerlPackage {
+    pname = "Class-Member";
+    version = "1.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OP/OPI/Class-Member-1.6.tar.gz";
+      hash = "sha256-p1KK8in6OhIF3NJakd59dKxvp9lSgbmTtV6Lb0+HuZE=";
+    };
+    meta = {
+      description = "A set of modules to make the module developement easier";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12712,6 +12751,19 @@ with self; {
     };
   };
 
+  IOInterface = buildPerlModule {
+    pname = "IO-Interface";
+    version = "1.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LD/LDS/IO-Interface-1.09.tar.gz";
+      hash = "sha256-5j6BxS6x4OYOwtmD9VUtJJPhFxeZJclnV/I8S9n6cTo=";
+    };
+    meta = {
+      description = "Access and modify network interface card configuration";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   IOInteractive = buildPerlPackage {
     pname = "IO-Interactive";
     version = "1.025";
@@ -17930,6 +17982,20 @@ with self; {
       description = "URI related types and coercions for Moose";
       homepage = "https://github.com/moose/MooseX-Types-URI";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MP3CutGapless = buildPerlPackage {
+    pname = "MP3-Cut-Gapless";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/MP3-Cut-Gapless-0.03.tar.gz";
+      hash = "sha256-PoS3OdHx4902FvhR3GV14WXTKEZ/AySGB5UOWVH+pPM=";
+    };
+    propagatedBuildInputs = [ AudioCuefileParser ];
+    meta = {
+      description = "Split an MP3 file without gaps (based on pcutmp3)";
+      license = with lib.licenses; [ artistic1 ];
     };
   };
 
