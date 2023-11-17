@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, Accelerate
 , blas
 , lapack
 , numpy
@@ -22,9 +23,18 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    lapack
+  env = lib.optionalAttrs (!stdenv.isDarwin) {
+    # provide lib locations in env vars as numpy distutils 1.26.1 and later
+    # does not
+    BLAS   = lib.getLib blas;
+    LAPACK = lib.getLib lapack;
+  };
+
+  buildInputs = if stdenv.isDarwin then [
+    Accelerate
+  ] else [
     blas
+    lapack
   ];
 
   propagatedBuildInputs = [
