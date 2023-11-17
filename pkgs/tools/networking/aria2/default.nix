@@ -15,15 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xbiNSg/Z+CA0x0DQfMNsWdA+TATyX6dCeW2Nf3L3Kfs=";
   };
 
-  patches = [
-    # Fixes build errors clang 16 because `std::unary_function` and `std::binary_function`
-    # were removed in C++17, which is the default with clang 16.
-    (fetchpatch {
-      url = "https://github.com/aria2/aria2/commit/8956c58d126a4e57e114f69ba6a5961724b7a817.patch";
-      hash = "sha256-bwcR0YHlkxUdz1AKHq1m2bYI9vDVMv4x3WPsR8QEHtk=";
-    })
-  ];
-
   strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
