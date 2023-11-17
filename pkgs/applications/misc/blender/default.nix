@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-5aUjwUCC2uk3BvsAKxbnMfKrSyAvXoIzfWInLKSIRWk=";
+    hash = "sha256-/jLU0noX5RxhQ+26G16nGFylm65Lzfm9s11oCWCC43Q=";
   };
 
   patches = [
