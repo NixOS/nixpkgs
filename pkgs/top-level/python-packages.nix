@@ -6354,6 +6354,8 @@ self: super: with self; {
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
+  linknlink = callPackage ../development/python-modules/linknlink { };
+
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode = callPackage ../development/python-modules/linode { };
