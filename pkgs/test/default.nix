@@ -67,7 +67,6 @@ with pkgs;
             # libcxx does not build for some reason on aarch64-linux
             (filterAttrs (n: _: n != "llvmPackages_7"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filterAttrs (n: _: n != "llvmPackages_5"))
             (filterAttrs (n: _: n != "llvmPackages_6"))
             (filterAttrs (n: _: n != "llvmPackages_7"))
             (filterAttrs (n: _: n != "llvmPackages_8"))
