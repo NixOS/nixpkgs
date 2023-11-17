@@ -14983,10 +14983,10 @@ with self; {
 
   MailMessage = buildPerlPackage {
     pname = "Mail-Message";
-    version = "3.013";
+    version = "3.015";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.013.tar.gz";
-      hash = "sha256-yK1YiNsBWkUOti7Cqj6mbcLdwRtwpdtsjKGn+fgg6B8=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.015.tar.gz";
+      hash = "sha256-soWNf4d9PtSJ+DQEpAqqld2W72HgDxQa7xSaMyOZslo=";
     };
     propagatedBuildInputs = [ IOStringy MIMETypes MailTools URI UserIdentity ];
     meta = {
