@@ -300,7 +300,16 @@ let
   passthru.updateScript = let
       filename = builtins.head (lib.splitString ":" self.meta.position);
     in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation
-  (disabled -> throw "${name} not supported for interpreter ${python.executable}")
-  passthru
-  self
+in lib.extendDerivation' {
+    condition = disabled -> throw "${name} not supported for interpreter ${python.executable}";
+    inherit passthru;
+    overriderNames = [
+      "override"
+      "overrideAttrs"
+      "overrideDerivation"
+      "overridePythonAttrs"
+    ];
+    # false if `overridePythonAttrs` is passed through `<pkg>.passthru`
+    # true otherwise
+    keepOverriders = !(attrs?passthru && attrs.passthru?overridePythonAttrs);
+  } self
