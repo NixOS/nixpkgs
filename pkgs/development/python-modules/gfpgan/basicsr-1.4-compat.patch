@@ -1,0 +1,14 @@
+diff --git a/tests/test_gfpgan_model.py b/tests/test_gfpgan_model.py
+index 1408ddd..0c43cab 100644
+--- a/tests/test_gfpgan_model.py
++++ b/tests/test_gfpgan_model.py
+@@ -3,7 +3,8 @@ import torch
+ import yaml
+ from basicsr.archs.stylegan2_arch import StyleGAN2Discriminator
+ from basicsr.data.paired_image_dataset import PairedImageDataset
+-from basicsr.losses.losses import GANLoss, L1Loss, PerceptualLoss
++from basicsr.losses.gan_loss import GANLoss
++from basicsr.losses.basic_loss import L1Loss, PerceptualLoss
+ 
+ from gfpgan.archs.arcface_arch import ResNetArcFace
+ from gfpgan.archs.gfpganv1_arch import FacialComponentDiscriminator, GFPGANv1
