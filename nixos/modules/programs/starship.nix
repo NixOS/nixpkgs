@@ -44,21 +44,27 @@ in
   config = mkIf cfg.enable {
     programs.bash.${initOption} = ''
       if [[ $TERM != "dumb" ]]; then
-        export STARSHIP_CONFIG=${settingsFile}
+        if [[ ! -f "$HOME/.config/starship.toml" ]]; then
+          export STARSHIP_CONFIG=${settingsFile}
+        fi
         eval "$(${pkgs.starship}/bin/starship init bash)"
       fi
     '';
 
     programs.fish.${initOption} = ''
       if test "$TERM" != "dumb"
-        set -x STARSHIP_CONFIG ${settingsFile}
+        if not test -f "$HOME/.config/starship.toml";
+          set -x STARSHIP_CONFIG ${settingsFile}
+        end
         eval (${pkgs.starship}/bin/starship init fish)
       end
     '';
 
     programs.zsh.${initOption} = ''
       if [[ $TERM != "dumb" ]]; then
-        export STARSHIP_CONFIG=${settingsFile}
+        if [[ ! -f "$HOME/.config/starship.toml" ]]; then
+          export STARSHIP_CONFIG=${settingsFile}
+        fi
         eval "$(${pkgs.starship}/bin/starship init zsh)"
       fi
     '';
