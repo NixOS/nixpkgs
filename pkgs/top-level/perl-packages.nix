@@ -20349,10 +20349,10 @@ with self; {
 
   PerlCritic = buildPerlModule {
     pname = "Perl-Critic";
-    version = "1.150";
+    version = "1.152";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.150.tar.gz";
-      hash = "sha256-5c2V3j5DvOcHdRdidLqkBfMm/IdA3wBUu4FpdcyNNJs=";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.152.tar.gz";
+      hash = "sha256-5b+vZ/YaKmoO00PwQDsZ9RW0iQ7tYnKrqrcHdJxeXh4=";
     };
     buildInputs = [ TestDeep ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
