@@ -15854,7 +15854,9 @@ with pkgs;
 
   default-gcc-version =
     if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-    else 12;
+    else if stdenv.buildPlatform.isDarwin  then 12  # unable to test
+    else if stdenv.buildPlatform.isAarch64 then 12  # unable to test
+    else 13;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
