@@ -1,5 +1,33 @@
-{lib, stdenv, fetchurl, fetchpatch, alsa-lib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, alsa-lib
+, alsa-plugins
+, gettext
+, makeWrapper
+, ncurses
+, libsamplerate
+, pciutils
+, which
+, fftw
+, pipewire
+, withPipewireLib ? true
+, symlinkJoin
+}:
 
+let
+  plugin-packages = [ alsa-plugins ] ++ lib.optional withPipewireLib pipewire;
+
+  # Create a directory containing symlinks of all ALSA plugins.
+  # This is necessary because ALSA_PLUGIN_DIR must reference only one directory.
+  plugin-dir = symlinkJoin {
+    name = "all-plugins";
+    paths = map
+      (path: "${path}/lib/alsa-lib")
+      plugin-packages;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
   version = "1.2.10";
@@ -30,6 +58,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mv $out/bin/alsa-info.sh $out/bin/alsa-info
     wrapProgram $out/bin/alsa-info --prefix PATH : "${lib.makeBinPath [ which pciutils ]}"
+    wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
   '';
 
   meta = with lib; {
