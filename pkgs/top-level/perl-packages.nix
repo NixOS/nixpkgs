@@ -4906,10 +4906,10 @@ with self; {
 
   CryptArgon2 = buildPerlModule {
     pname = "Crypt-Argon2";
-    version = "0.019";
+    version = "0.020";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.019.tar.gz";
-      hash = "sha256-+Fm+6NL2tAf11EZFwiOu4hL+AFkd/YLlBlrhvnio5Dg=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.020.tar.gz";
+      hash = "sha256-FiGMb8lqnj7hMi2d+H9jW1vhF7wTfvnObW01NARVSlo=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
