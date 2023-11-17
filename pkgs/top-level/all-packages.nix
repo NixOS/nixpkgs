@@ -15036,9 +15036,7 @@ with pkgs;
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
-  clipboard-jh = callPackage ../tools/misc/clipboard-jh {
-    stdenv = if stdenv.isDarwin then llvmPackages_16.stdenv else stdenv;
-  };
+  clipboard-jh = callPackage ../tools/misc/clipboard-jh { };
 
   clipbuzz = callPackage ../tools/misc/clipbuzz { };
 
