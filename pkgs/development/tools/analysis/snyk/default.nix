@@ -12,9 +12,6 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-j3lMQh8++pb/00d9H2v7QBkpxIJdsuRQoFkNiQbvnF4=";
-
-  nativeBuildInputs = [ nodePackages.node-gyp python3 ];
-
   npmBuildScript = "build:prod";
 
   meta = with lib; {

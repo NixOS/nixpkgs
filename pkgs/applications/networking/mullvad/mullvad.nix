@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   # talpid-core wants libwg.a in build/lib/{triple}
   preBuild = ''
-    dest=build/lib/${stdenv.targetPlatform.config}
+    dest=build/lib/${stdenv.hostPlatform.config}
     mkdir -p $dest
     ln -s ${libwg}/lib/libwg.a $dest
   '';

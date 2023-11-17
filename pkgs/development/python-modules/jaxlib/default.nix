@@ -136,8 +136,8 @@ let
 
   arch =
     # KeyError: ('Linux', 'arm64')
-    if stdenv.targetPlatform.isLinux && stdenv.targetPlatform.linuxArch == "arm64" then "aarch64"
-    else stdenv.targetPlatform.linuxArch;
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.linuxArch == "arm64" then "aarch64"
+    else stdenv.hostPlatform.linuxArch;
 
   bazel-build = buildBazelPackage rec {
     name = "bazel-build-${pname}-${version}";
@@ -219,7 +219,7 @@ let
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
       build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
-    '' + lib.optionalString (stdenv.targetPlatform.avxSupport && stdenv.targetPlatform.isUnix) ''
+    '' + lib.optionalString (stdenv.hostPlatform.avxSupport && stdenv.hostPlatform.isUnix) ''
       build --config=avx_posix
     '' + lib.optionalString mklSupport ''
       build --config=mkl_open_source_only
@@ -298,13 +298,13 @@ let
     inherit meta;
   };
   platformTag =
-    if stdenv.targetPlatform.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
       "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
-    else throw "Unsupported target platform: ${stdenv.targetPlatform}";
+    else throw "Unsupported target platform: ${stdenv.hostPlatform}";
 
 in
 buildPythonPackage {
