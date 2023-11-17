@@ -4063,6 +4063,8 @@ self: super: with self; {
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
+  flask-sock = callPackage ../development/python-modules/flask-sock { };
+
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
 
   flask-sockets = callPackage ../development/python-modules/flask-sockets { };
