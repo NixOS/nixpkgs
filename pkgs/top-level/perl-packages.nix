@@ -3164,10 +3164,10 @@ with self; {
 
   CGIFast = buildPerlPackage {
     pname = "CGI-Fast";
-    version = "2.16";
+    version = "2.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.16.tar.gz";
-      hash = "sha256-AiPX+RuAA3ud/183NgZAtx9dyNvZiaBZPV0i8/c8s9Q=";
+      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.17.tar.gz";
+      hash = "sha256-ivo6j/+OsbKdZG7RiKLMiJsZ1aD7OqXdrVCMywx5vfI=";
     };
     propagatedBuildInputs = [ CGI FCGI ];
     doCheck = false;
