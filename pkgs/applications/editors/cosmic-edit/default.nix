@@ -15,11 +15,6 @@
 , fontconfig
 , freetype
 , wayland
-, expat
-, udev
-, which
-, lld
-, util-linuxMinimal
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,8 +46,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ cmake just pkg-config which lld util-linuxMinimal makeWrapper ];
-  buildInputs = [ libxkbcommon libinput fontconfig freetype wayland expat udev glib gtk3 ];
+  nativeBuildInputs = [ cmake just pkg-config makeWrapper ];
+  buildInputs = [ libxkbcommon libinput fontconfig freetype wayland glib gtk3 ];
 
   dontUseJustBuild = true;
 
@@ -74,6 +69,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
+    mainProgram = "cosmic-edit";
     maintainers = with maintainers; [ ahoneybun ];
     platforms = platforms.linux;
   };

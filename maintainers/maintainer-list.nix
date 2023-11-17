@@ -371,6 +371,15 @@
     githubId = 124545;
     name = "Anthony Cowley";
   };
+  acuteenvy = {
+    matrix = "@acuteenvy:matrix.org";
+    github = "acuteenvy";
+    githubId = 126529524;
+    name = "Lena";
+    keys = [{
+      fingerprint = "CE85 54F7 B9BC AC0D D648  5661 AB5F C04C 3C94 443F";
+    }];
+  };
   adamcstephens = {
     email = "happy.plan4249@valkor.net";
     matrix = "@adam:valkor.net";
@@ -6103,6 +6112,10 @@
     github = "frogamic";
     githubId = 10263813;
     name = "Dominic Shelton";
+    matrix = "@frogamic:beeper.com";
+    keys = [{
+      fingerprint = "779A 7CA8 D51C C53A 9C51  43F7 AAE0 70F0 67EC 00A5";
+    }];
   };
   frontsideair = {
     email = "photonia@gmail.com";
@@ -12480,6 +12493,11 @@
     keys = [{
       fingerprint = "9E6A 25F2 C1F2 9D76 ED00  1932 1261 173A 01E1 0298";
     }];
+  };
+  nadir-ishiguro = {
+    github = "nadir-ishiguro";
+    githubId = 23151917;
+    name = "nadir-ishiguro";
   };
   nadrieril = {
     email = "nadrieril@gmail.com";
