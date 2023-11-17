@@ -18961,6 +18961,12 @@
     githubId = 3413119;
     name = "Vonfry";
   };
+  vonixxx = {
+    email = "vonixxx@tuta.io";
+    github = "vonixxx";
+    githubId = 144771550;
+    name = "Luca Uricariu";
+  };
   votava = {
     email = "votava@gmail.com";
     github = "janvotava";
