@@ -1,10 +1,14 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
-, pyquaternion
+, matplotlib
 , numpy
+, pendulum
+, pillow
 , poetry-core
+, pyquaternion
 }:
 
 buildPythonPackage rec {
@@ -14,16 +18,23 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-GGQhKkdwmrYPEhtldPY3WUInSniU/B40NZvt1gXEuzg=";
+  src = fetchFromGitHub {
+    owner = "varunagrawal";
+    repo = pname;
+    # matches 0.9.4 on PyPi + tests
+    rev = "d3f07ed0e38b6015cf4181e3b3edae6a263f8565";
+    hash = "sha256-FrJ8FhlqwmnEB/QvPlkDfqZncNGPhwY9aagM9yv1LGs=";
   };
 
   propagatedBuildInputs = [ pyquaternion numpy ];
   buildInputs = [ poetry-core ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    matplotlib
+    pendulum
+    pillow
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "bbox" ];
 
