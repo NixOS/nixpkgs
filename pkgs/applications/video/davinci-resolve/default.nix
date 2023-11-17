@@ -242,7 +242,7 @@ buildFHSEnv {
     ''
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
     export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${davinci}/libs
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${davinci}/libs
     ${davinci}/bin/resolve
     ''
   }";
