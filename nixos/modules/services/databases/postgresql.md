@@ -106,7 +106,7 @@ are already created.
 
 ```nix
     systemd.services."migrate-service1-db1" = {
-      type = "oneshot";
+      serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
       after = "postgresql.service";
@@ -143,7 +143,7 @@ are already created.
 
 ```nix
     systemd.services."migrate-service1-db1" = {
-      type = "oneshot";
+      serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
       after = "postgresql.service";
