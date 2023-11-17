@@ -18,6 +18,7 @@
 , rustc
 , rustPlatform
 , makeWrapper
+, writeScript
 , fuseSupport ? false
 }:
 
@@ -77,9 +78,24 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/test_fuse.py
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.bcachefs;
-    inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+  passthru = {
+    tests = {
+      smoke-test = nixosTests.bcachefs;
+      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+    };
+
+    updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+      res="$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
+        -sL "https://api.github.com/repos/${finalAttrs.src.owner}/${finalAttrs.src.repo}/tags?per_page=1")"
+
+      version="$(echo $res | jq '.[0].name | split("v") | .[1]' --raw-output)"
+      update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
+
+      curl "https://raw.githubusercontent.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/v$version/rust-src/Cargo.lock" > \
+        "$(git rev-parse --show-toplevel)/pkgs/tools/filesystems/bcachefs-tools/Cargo.lock"
+    '';
   };
 
   enableParallelBuilding = true;
