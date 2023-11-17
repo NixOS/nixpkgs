@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1s495qmakw2n50x11klf6wb2869b5v94wsihq4r19mqdbg1pxm1y";
   };
 
-  buildInputs = [ python39 flex bison ];
+  nativeBuildInputs = [ python39 flex bison ];
 
   installPhase = "mkdir -p $out/bin ; mv build/dice $out/bin";
 
   meta = with lib; {
     homepage = "https://www.ianhunter.ie/GNOLL";
-    description = "GNOLL is an efficient dice notation parser for multiple programming languages that supports a wide set of dice notation ";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ 0x4d6165 ];
+    description = "an efficient dice notation parser for multiple programming languages that supports a wide set of dice notation";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ _0x4d6165 ];
   };
 }
