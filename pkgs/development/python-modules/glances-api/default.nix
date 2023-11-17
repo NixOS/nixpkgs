@@ -12,9 +12,9 @@
 buildPythonPackage rec {
   pname = "glances-api";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
