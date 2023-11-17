@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "somajo";
   version = "2.3.1";
-  pyproject = true;
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
