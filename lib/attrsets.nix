@@ -7,7 +7,7 @@ let
   inherit (builtins) head length;
   inherit (lib.trivial) mergeAttrs warn;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl intersectLists;
 in
 
 rec {
@@ -574,6 +574,44 @@ rec {
   getAttrs =
     names:
     attrs: genAttrs names (name: attrs.${name});
+
+  /**
+    Given a list of possible attribute names, return the set of
+    attribuets whose name is in the list from the given set.
+
+    It works like `getAttrs` when the first attribute is a list,
+    but skip attributes not in the input set
+    instead of throwing the "attribute is missing" error.
+
+    # Inputs
+
+    `names`
+
+    : A list of possible attribute names to get out of `attrs`.
+
+    `attrs`
+
+    : The set to get the existing named attribute from.
+
+    # Type
+
+    ```
+    getOptionalAttrs :: [String] -> AttrSet -> AttrSet
+    ```
+
+    # Example
+    :::{.example}
+
+    ## `lib.attrsets.getOptionalAttrs` usage example
+    ```nix
+    getOptionalAttrs [ "a" "b" "d" ] { a = 1; b = 2; c = 3; }
+    => { a = 1; b = 2; }
+    ```
+    :::
+  */
+  getOptionalAttrs =
+    names:
+    attrs: getAttrs (intersectLists (attrNames attrs) names) attrs;
 
   /**
     Collect each attribute named `attr` from a list of attribute

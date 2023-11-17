@@ -53,6 +53,7 @@ let
     generators
     genList
     getAttrs
+    getOptionalAttrs
     getExe
     getExe'
     groupBy
@@ -1871,6 +1872,26 @@ runTests {
 
   testGetAttrsEmpty = {
     expr = getAttrs [ ] { };
+    expected = { };
+  };
+
+  testGetOptionalAttrsExample = {
+    expr = getOptionalAttrs [ "a" "b" "d" ] { a = 1; b = 2; c = 3; };
+    expected = { a = 1; b = 2; };
+  };
+
+  testGetOptionalAttrsEmptyNames = {
+    expr = getOptionalAttrs [ ] { a = 1; b = 2; c = 3; };
+    expected = { };
+  };
+
+  testGetOptionalAttrsEmptyValues = {
+    expr = getOptionalAttrs [ "a" "b" "d" ] { };
+    expected = { };
+  };
+
+  testGetOptionalAttrsEmpty = {
+    expr = getOptionalAttrs [ ] { };
     expected = { };
   };
 
