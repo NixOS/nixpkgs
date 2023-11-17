@@ -8470,10 +8470,7 @@ self: super: with self; {
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
-  openai-whisper = callPackage ../development/python-modules/openai-whisper {
-    inherit (pkgs.config) cudaSupport;
-    openai-triton = self.openai-triton-cuda;
-  };
+  openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openant = callPackage ../development/python-modules/openant { };
 
