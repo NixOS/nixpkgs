@@ -242,15 +242,6 @@ in
       } cfg.nginx.virtualHost ];
     };
 
-    assertions = [
-      {
-        assertion = srvCfg.user == srvCfg.postgresql.database;
-        message = ''
-          When creating a database via NixOS, the db user and db name must be equal!
-        '';
-      }
-    ];
-
     services.postgresql = mkIf cfg.postgresql.enable {
       authentication = ''
         local ${srvCfg.postgresql.database} ${srvCfg.user} trust
@@ -258,9 +249,12 @@ in
       ensureDatabases = [ srvCfg.postgresql.database ];
       ensureUsers = map (name: {
           inherit name;
-          ensureDBOwnership = true;
+          # We don't use it because we have a special default database name with dots.
+          # TODO(for maintainers of sourcehut): migrate away from custom preStart script.
+          ensureDBOwnership = false;
         }) [srvCfg.user];
     };
+
 
     services.sourcehut.settings = mkMerge [
       {
@@ -387,10 +381,11 @@ in
         extraService
       ])) extraServices)
 
-      # Work around 'pq: permission denied for schema public' with postgres v15, until a
-      # solution for `services.postgresql.ensureUsers` is found.
+      # Work around 'pq: permission denied for schema public' with postgres v15.
       # See https://github.com/NixOS/nixpkgs/issues/216989
       # Workaround taken from nixos/forgejo: https://github.com/NixOS/nixpkgs/pull/262741
+      # TODO(to maintainers of sourcehut): please migrate away from this workaround
+      # by migrating away from database name defaults with dots.
       (lib.mkIf (
           cfg.postgresql.enable
           && lib.strings.versionAtLeast config.services.postgresql.package.version "15.0"
