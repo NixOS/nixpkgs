@@ -398,6 +398,7 @@ with lib.maintainers; {
       cdepillabout
       expipiplus1
       maralorn
+      ncfavier
       sternenseemann
     ];
     githubTeams = [
