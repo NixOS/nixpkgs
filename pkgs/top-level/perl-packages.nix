@@ -24391,10 +24391,10 @@ with self; {
 
   TermTable = buildPerlPackage {
     pname = "Term-Table";
-    version = "0.017";
+    version = "0.018";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.017.tar.gz";
-      hash = "sha256-8R20JorYBE9uGhrJU0ygzTrXecQAb/83+uUA25j6yRo=";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.018.tar.gz";
+      hash = "sha256-kVm5Ex7ms/OVa3T0VCKYVVNXS6u/rrpgvlwXvBFKwBE=";
     };
     propagatedBuildInputs = [ Importer ];
     meta = {
