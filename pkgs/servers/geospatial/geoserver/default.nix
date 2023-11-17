@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, unzip, jre, makeWrapper }:
+{ lib
+, fetchurl
+, makeWrapper
+, nixosTests
+, stdenv
+
+, jre
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "geoserver";
@@ -31,6 +39,10 @@ stdenv.mkDerivation rec {
       --set GEOSERVER_HOME "$out/share/geoserver"
     runHook postInstall
   '';
+
+  passthru = {
+    tests.geoserver = nixosTests.geoserver;
+  };
 
   meta = with lib; {
     description = "Open source server for sharing geospatial data";
