@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "1827l5hxsvfnyc2m78rs95cnb2fwi14nl7ricpl25ndh1j0a7ccz",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.5.2/calendar-v4.5.2.tar.gz",
-    "version": "4.5.2",
+    "sha256": "1iq8np72pjw2bn4zmbp2rmrh12n4z62rwrz2bb94xjza1fws7b2v",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.5.3/calendar-v4.5.3.tar.gz",
+    "version": "4.5.3",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -29,6 +29,16 @@
       "agpl"
     ]
   },
+  "cookbook": {
+    "sha256": "18rzvdqd99nlkk3p0y9y8b17ihw5c4c9wsx8psq6xadspm97002y",
+    "url": "https://github.com/nextcloud/cookbook/releases/download/v0.10.2/Cookbook-0.10.2.tar.gz",
+    "version": "0.10.2",
+    "description": "A library for all your recipes. It uses JSON files following the schema.org recipe format. To add a recipe to the collection, you can paste in the URL of the recipe, and the provided web page will be parsed and downloaded to whichever folder you specify in the app settings.",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "cospend": {
     "sha256": "1rg9k33yapbl8chpxx3bjyzc9h4krjavksbxsvw14kpm01rss3j9",
     "url": "https://github.com/julien-nc/cospend-nc/releases/download/v1.5.10/cospend-1.5.10.tar.gz",
@@ -40,9 +50,9 @@
     ]
   },
   "deck": {
-    "sha256": "0j228lbf0zrm2sq45f9abgkln1qzgrkw8ac5r6fhyi0qfxcpmm0m",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.9.3/deck-v1.9.3.tar.gz",
-    "version": "1.9.3",
+    "sha256": "15hir3fssvzyysazbaad8qiz0bv00x73c2wfdj5aviz9h0gp4x4v",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.9.4/deck-v1.9.4.tar.gz",
+    "version": "1.9.4",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -93,7 +103,7 @@
     "sha256": "0imddmyg9s1v3d20spr26g7mbyz2mwl3v2l1a4nz5kaxl3a6fsr2",
     "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v1.13.1/impersonate-v1.13.1.tar.gz",
     "version": "1.13.1",
-    "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.",
+    "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
     "homepage": "https://github.com/nextcloud/impersonate",
     "licenses": [
       "agpl"
@@ -110,10 +120,10 @@
     ]
   },
   "mail": {
-    "sha256": "0mr3npd48j444lalkph1z8rsz5jllpgdrcqsjdrqgmf70y0g55mh",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.4.3/mail-v3.4.3.tar.gz",
-    "version": "3.4.3",
-    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
+    "sha256": "0ascail3vfkv3mm5s4s3ma74d6qxai76kdqxknmljnw56xb19qfv",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.4.4/mail-v3.4.4.tar.gz",
+    "version": "3.4.4",
+    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
       "agpl"
@@ -130,11 +140,21 @@
     ]
   },
   "memories": {
-    "sha256": "0i146mlg27phs407clclksn1wjkyl0c5fb2zw0npbx5dvqnpglcd",
-    "url": "https://github.com/pulsejet/memories/releases/download/v6.0.1/memories.tar.gz",
-    "version": "6.0.1",
+    "sha256": "1yn1wkv4jxpc8faf4rl46yfddyplnryrkws3jz0x1wcr9zlxdkng",
+    "url": "https://github.com/pulsejet/memories/releases/download/v6.1.0/memories.tar.gz",
+    "version": "6.1.0",
     "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "music": {
+    "sha256": "06w82v34csx4scl5n4k4fpdxiivrzjb3yvj3hh4bc15gdz68cis9",
+    "url": "https://github.com/owncloud/music/releases/download/v1.9.1/music_1.9.1_for_nextcloud.tar.gz",
+    "version": "1.9.1",
+    "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from m3u, m3u8, and pls files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Play internet radio and podcast channels\n- Setup Last.fm connection to see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on various external apps e.g. on Android or iPhone",
+    "homepage": "https://github.com/owncloud/music",
     "licenses": [
       "agpl"
     ]
@@ -160,9 +180,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "0hdxnkar2ibis5p0gp3yr1i6894la9wxq4pzrbqdrq2cgvsj6a18",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.3/notify_push-v0.6.3.tar.gz",
-    "version": "0.6.3",
+    "sha256": "0lwyy1pnyfw464vab1v5k8q0rgarrj5w12cf1nsywjaafb8y1ym0",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.5/notify_push-v0.6.5.tar.gz",
+    "version": "0.6.5",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -180,9 +200,9 @@
     ]
   },
   "polls": {
-    "sha256": "1v5zb164f60qskfiv02l9x2v0d4rayacg5qivd70dawmyqnz4vmd",
-    "url": "https://github.com/nextcloud/polls/releases/download/v5.3.2/polls.tar.gz",
-    "version": "5.3.2",
+    "sha256": "1dmws4ybv3pzxz5g9c7ghblx0nfal2ssmsg7hjcs1n4xcjc6585p",
+    "url": "https://github.com/nextcloud/polls/releases/download/v5.4.2/polls.tar.gz",
+    "version": "5.4.2",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -240,9 +260,9 @@
     ]
   },
   "twofactor_nextcloud_notification": {
-    "sha256": "03fp8wcwhyp8ivrcf20klgg17sxc9fia5sa44rbrv3cicmwmw50b",
-    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.7.0/twofactor_nextcloud_notification-v3.7.0.tar.gz",
-    "version": "3.7.0",
+    "sha256": "0gaqgzbryim580dxarak7p4g3wd8wp3w6lw9jhl84jh46wrsbrj8",
+    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.8.0/twofactor_nextcloud_notification-v3.8.0.tar.gz",
+    "version": "3.8.0",
     "description": "Allows using any of your logged in devices as second factor",
     "homepage": "https://github.com/nextcloud/twofactor_nextcloud_notification",
     "licenses": [
@@ -250,9 +270,9 @@
     ]
   },
   "twofactor_webauthn": {
-    "sha256": "1lqcw74rsnl8c4sirw9208ra3c8zl8zp93scs7y8fv2n4n60l465",
-    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v1.2.0/twofactor_webauthn-v1.2.0.tar.gz",
-    "version": "1.2.0",
+    "sha256": "0z6m2chq5kxc8f10g6n1lh51yi10svy2qp5gp0v8xs71apqcc2wx",
+    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v1.3.0/twofactor_webauthn-v1.3.0.tar.gz",
+    "version": "1.3.0",
     "description": "A two-factor provider for WebAuthn devices",
     "homepage": "https://github.com/nextcloud/twofactor_webauthn#readme",
     "licenses": [
@@ -270,9 +290,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "1gsq5mcn5nnxd56jlp4j2610gqq2gk3ma9yvhgy74wl0sqil98jd",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.2/user_saml-v5.2.2.tar.gz",
-    "version": "5.2.2",
+    "sha256": "04ivgqdls72p6x5yrh5p5ycbbfmxhzd0dqin1grblm6cbl7b4s2k",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.4/user_saml-v5.2.4.tar.gz",
+    "version": "5.2.4",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
