@@ -353,16 +353,50 @@ in
       inputsDefaultPath = lib.makeBinPath finalAttrs.defaultPathInputs;
       passthru = prevAttrs.passthru or { } // {
         inherit sourceFilesWithDefaultPaths;
-        tests = {
-          image-hello-cowsay = singularity-tools.buildImage {
-            name = "hello-cowsay";
-            contents = [
-              hello
-              cowsay
-            ];
-            singularity = finalAttrs.finalPackage;
+        tests =
+          {
+            image-hello-cowsay = singularity-tools.buildImage {
+              name = "hello-cowsay";
+              contents = [
+                hello
+                cowsay
+              ];
+              singularity = finalAttrs.finalPackage;
+            };
+          }
+          # Sylabs SingularityCE requires loop device to run images,
+          # which is not available in the Nix build sandbox.
+          // lib.optionalAttrs (projectName == "apptainer") {
+            exec-image-in-linux-vm = singularity-tools.runImageInLinuxVM { } (
+              runCommandLocal "test-exec-image-in-linux-vm"
+                {
+                  nativeBuildInputs = [ finalAttrs.finalPackage ];
+                  passthru = {
+                    singularity = finalAttrs.finalPackage;
+                  };
+                  inherit projectName;
+                  imageHelloCowsay = finalAttrs.passthru.tests.image-hello-cowsay;
+                  expected =
+                    runCommandLocal "expected-hello-cowsay"
+                      {
+                        nativeBuildInputs = [
+                          cowsay
+                          hello
+                        ];
+                      }
+                      ''
+                        hello | cowsay | tee "$out"
+                      '';
+                }
+                ''
+                  set -eu -o pipefail
+                  runHook preImageRun
+                  "$projectName" exec "$imageHelloCowsay" hello | "$projectName" exec "$imageHelloCowsay" cowsay | tee "$out"
+                  diff "$out" "$expected"
+                  runHook postImageRun
+                ''
+            );
           };
-        };
         gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
           # Should be in tests, but Ofborg would skip image-hello-cowsay because
           # saxpy is unfree.
