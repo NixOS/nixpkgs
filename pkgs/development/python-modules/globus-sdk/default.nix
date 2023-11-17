@@ -56,6 +56,5 @@ buildPythonPackage rec {
     homepage =  "https://github.com/globus/globus-sdk-python";
     changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "piper-phonemize";
-  version = "2023.11.6-1";
+  version = "2023.11.14-4";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper-phonemize";
     rev = "refs/tags/${version}";
-    hash = "sha256-IRvuA03Z6r8Re/ocq2G/r28uwI9RU3xmmNI7S2G40rc=";
+    hash = "sha256-pj1DZUhy3XWGn+wNtxKKDWET9gsfofEB0NZ+EEQz9q0=";
   };
 
   nativeBuildInputs = [

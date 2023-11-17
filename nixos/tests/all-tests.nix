@@ -124,6 +124,7 @@ in {
   apfs = runTest ./apfs.nix;
   appliance-repart-image = runTest ./appliance-repart-image.nix;
   apparmor = handleTest ./apparmor.nix {};
+  archi = handleTest ./archi.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   atuin = handleTest ./atuin.nix {};

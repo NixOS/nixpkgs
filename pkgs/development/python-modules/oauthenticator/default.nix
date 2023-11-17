@@ -67,6 +67,5 @@ buildPythonPackage rec {
     homepage =  "https://github.com/jupyterhub/oauthenticator";
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ixxie ];
   };
 }
