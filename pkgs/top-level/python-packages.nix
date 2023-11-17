@@ -8461,6 +8461,8 @@ self: super: with self; {
 
   opcua-widgets = callPackage ../development/python-modules/opcua-widgets { };
 
+  open-clip-torch = callPackage ../development/python-modules/open-clip-torch { };
+
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
