@@ -42004,7 +42004,7 @@ with pkgs;
   bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
-    wlroots = wlroots_0_15;
+    wlroots = wlroots_0_16;
   };
 
   psftools = callPackage ../os-specific/linux/psftools { };
