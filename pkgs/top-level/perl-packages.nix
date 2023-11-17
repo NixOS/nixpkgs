@@ -28978,10 +28978,10 @@ with self; {
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.20";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.20.tar.gz";
-      hash = "sha256-Wn0myqMroqQQUZwMJLHYCznvMgdRN224vbef2u/pms0=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.21.tar.gz";
+      hash = "sha256-DWazQrtVm2PLz+fCjV6EeN7VWXAQlwS7fJfPXptp7Yo=";
     };
     buildInputs = [ Test2Suite ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
