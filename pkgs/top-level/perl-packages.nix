@@ -19488,10 +19488,10 @@ with self; {
 
   ObjectPad = buildPerlModule {
     pname = "Object-Pad";
-    version = "0.804";
+    version = "0.806";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.804.tar.gz";
-      hash = "sha256-z4jSquGKKHHX1/MPi6bU7lv5U+IP3KileME8dB0W0a0=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.806.tar.gz";
+      hash = "sha256-XKQIVwjZlhtVafPUljBKwI5TAUGiwxK8ooGseJcgR7k=";
     };
     buildInputs = [ Test2Suite TestFatal TestRefcount ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
