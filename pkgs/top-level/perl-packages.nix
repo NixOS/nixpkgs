@@ -3089,10 +3089,10 @@ with self; {
 
   CGI = buildPerlPackage {
     pname = "CGI";
-    version = "4.59";
+    version = "4.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.59.tar.gz";
-      hash = "sha256-be5LibiLEOd8lvPAjRm1hq74M7F6Ql1hiq19KMJi+Rw=";
+      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.60.tar.gz";
+      hash = "sha256-wvYzC8x8rNoMkF9Xyg0x2hsZouTlur7eZIxJsTgD7hE=";
     };
     buildInputs = [ TestDeep TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ HTMLParser ];
