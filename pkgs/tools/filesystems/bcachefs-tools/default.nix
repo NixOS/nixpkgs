@@ -20,18 +20,16 @@
 , makeWrapper
 , fuseSupport ? false
 }:
-let
-  version = "1.3.3";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  inherit version;
+  version = "1.3.3";
 
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-73vgwgBqyRLQ/Tts7bl6DhZMOs8ndIOiCke5tN89Wps=";
   };
 
@@ -71,7 +69,7 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
 
@@ -93,4 +91,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ davidak Madouura ];
     platforms = platforms.linux;
   };
-}
+})
