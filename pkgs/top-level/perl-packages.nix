@@ -8670,10 +8670,10 @@ with self; {
 
   Encode = buildPerlPackage {
     pname = "Encode";
-    version = "3.19";
+    version = "3.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.19.tar.gz";
-      hash = "sha256-kWP4SO72nk1MyIODl/CGH9nqft4AERfb2WlPjZUFLvU=";
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.20.tar.gz";
+      hash = "sha256-ztj8BsVMBfInv9nbOMHtSKWilduJ9JfUKzNa+/H3NRc=";
     };
     meta = {
       description = "Character encodings in Perl";
