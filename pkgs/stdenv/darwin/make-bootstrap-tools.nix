@@ -1,5 +1,21 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath
 , localSystem ? { system = builtins.currentSystem; }
+# Specify the desired LLVM version in an overlay to avoid the use of
+# mismatching versions.
+#
+# The llvmPackages that we take things (clang, libc++ and such) from
+# is specified explicitly to be llvmPackages_11 to keep the
+# bootstrap-tools stable.  However, tools like otool,
+# install_name_tool and strip are taken straight from stdenv.cc,
+# which, after the bump, is a different LLVM version altogether.
+#
+# The original intent was that bootstrap-tools specified LLVM 11
+# exhaustively but it didn't. That should be rectified with this
+# PR. As to why stick with 11? That's just to keep the
+# bootstrap-tools unchanged.
+#
+# https://github.com/NixOS/nixpkgs/pull/267058/files#r1390889848
+, overlays ? [(self: super: { llvmPackages = super.llvmPackages_11; })]
 , crossSystem ? null
 , bootstrapFiles ? null
 }:
@@ -13,11 +29,9 @@ let cross = if crossSystem != null
               in (import "${pkgspath}/pkgs/stdenv/darwin" args');
            }
       else {};
-in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
+in with import pkgspath ({ inherit localSystem overlays; } // cross // custom-bootstrap);
 
-let
-  llvmPackages = llvmPackages_11;
-in rec {
+rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
