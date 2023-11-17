@@ -15524,10 +15524,10 @@ with self; {
 
   MathRound = buildPerlPackage {
     pname = "Math-Round";
-    version = "0.07";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GROMMEL/Math-Round-0.07.tar.gz";
-      hash = "sha256-c6cymoblSlwppEA4LlgDCVtY8zEp5hod8Ak7SCTekyc=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Math-Round-0.08.tar.gz";
+      hash = "sha256-e00nda07hZpf1h9/P8XPukKxoQ3whtLtFaCucSyP1AI=";
     };
     meta = {
       description = "Perl extension for rounding numbers";
