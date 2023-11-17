@@ -21181,7 +21181,6 @@ with pkgs;
   fancypp = callPackage ../development/libraries/fancypp { };
 
   far2l = callPackage ../applications/misc/far2l {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL System;
   };
 
