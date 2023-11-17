@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "chain-bench";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vQzxTOShxQGitZRCuR8izSxCkZdPWm2ohoXBOvAkwfw=";
+    sha256 = "sha256-eNCQbmqTnCBBwrppFL2yvmiwgj439sosYVkk2ryMa0I=";
   };
   vendorHash = "sha256-sAZIMJRx/E+l12Zyp/vKfuiaCMeaonRbEcsRIRXbXm8=";
 
