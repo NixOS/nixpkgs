@@ -304,12 +304,13 @@ in buildPythonPackage rec {
     "-Wno-pass-failed"
   ] ++ [
     "-Wno-unused-command-line-argument"
-    "-Wno-maybe-uninitialized"
     "-Wno-uninitialized"
     "-Wno-array-bounds"
-    "-Wno-stringop-overflow"
     "-Wno-free-nonheap-object"
     "-Wno-unused-result"
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    "-Wno-maybe-uninitialized"
+    "-Wno-stringop-overflow"
   ]));
 
   nativeBuildInputs = [
