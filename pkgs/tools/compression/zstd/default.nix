@@ -50,8 +50,6 @@ stdenv.mkDerivation rec {
       tests/playTests.sh
   '';
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
-
   cmakeFlags = lib.attrsets.mapAttrsToList
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;

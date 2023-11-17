@@ -151,6 +151,15 @@ in
 }.${majorVersion} or [])
 
 
+### RISC-V
+
+
+# https://gcc.gnu.org/git?p=gcc.git;a=commit;h=f797260adaf52bee0ec0e16190bbefbe1bfc3692
+# Fixes errors like:
+#     ld: [...]: undefined reference to `__atomic_exchange_1'
+++ optional (targetPlatform.isRiscV && is12) ./riscv-inline-subword-atomic-ops.patch
+
+
 ## Windows
 
 # Obtain latest patch with ../update-mcfgthread-patches.sh
