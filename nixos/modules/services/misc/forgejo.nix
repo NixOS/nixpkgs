@@ -677,5 +677,6 @@ in
     };
   };
 
+  meta.doc = ./forgejo.md;
   meta.maintainers = with lib.maintainers; [ bendlas emilylange ];
 }
