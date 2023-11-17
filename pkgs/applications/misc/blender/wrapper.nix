@@ -8,7 +8,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = blender.pname + "-wrapped";
   src = blender;
 
-  inherit (blender) version meta;
+  inherit (blender) version;
+  meta = blender.meta // { mainProgram = pname; };
 
   nativeBuildInputs = [ blender.pythonPackages.wrapPython makeWrapper ];
   installPhase = ''
