@@ -76,13 +76,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
-  version = "3.7.3";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+69mh1hKL1r7SNwDilaQz5UochMMWFG2lrBLYBF31JY=";
+    hash = "sha256-Yu4cXSWSdh9HH/a5LA90/K3RRH1oQA9QMMa8heGLcAw=";
   };
 
   nativeBuildInputs = [
@@ -221,6 +221,9 @@ stdenv.mkDerivation (finalAttrs: {
     "gcore/vsis3.py"
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
+
+    # disable benchmarks
+    "benchmark/*"
   ];
   disabledTests = [
     # tests that attempt to make network requests
