@@ -5328,6 +5328,8 @@ self: super: with self; {
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
+  imgcompare = callPackage ../development/python-modules/imgcompare { };
+
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
   imgsize = callPackage ../development/python-modules/imgsize { };
