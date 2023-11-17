@@ -3,6 +3,9 @@
 , fetchurl
 , pkg-config
 , iproute2
+, libcap_ng
+, libnl
+, lz4
 , lzo
 , openssl
 , pam
@@ -16,7 +19,7 @@
 let
   inherit (lib) versionOlder optional optionals optionalString;
 
-  generic = { version, sha256, extraBuildInputs ? [] }:
+  generic = { version, sha256, extraBuildInputs ? [ ] }:
     let
       withIpRoute = stdenv.isLinux && (versionOlder version "2.5.4");
     in
@@ -32,8 +35,8 @@ let
 
         nativeBuildInputs = [ pkg-config ];
 
-        buildInputs = [ lzo ]
-          ++ optional stdenv.isLinux pam
+        buildInputs = [ lz4 lzo ]
+          ++ optionals stdenv.isLinux [ libcap_ng libnl pam ]
           ++ optional withIpRoute iproute2
           ++ optional useSystemd systemd
           ++ optional pkcs11Support pkcs11helper
@@ -73,8 +76,8 @@ let
 in
 {
   openvpn = generic {
-    version = "2.5.8";
-    sha256 = "1cixqm4gn2d1v8qkbww75j30fzvxz13gc7whcmz54i0x4fvibwx6";
+    version = "2.6.8";
+    sha256 = "sha256-Xt4VZcim2IAQD38jUxen7p7qg9UFLbVUfxOp52r3gF0=";
     extraBuildInputs = [ openssl ];
   };
 }
