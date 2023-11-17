@@ -6,19 +6,13 @@
 
 mkYarnPackage rec {
   pname = "lxd-ui";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-DygWNktangFlAqinBm6wWsRLGmX6yjhmRJ2iU0yjcgk=";
-  };
-
-  packageJSON = ./package.json;
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-B1SVCViX1LEFoBLMdFk9qaoayku7Y+zU5c4JEJkLmwE=";
+    sha256 = "sha256-kbXJNT7mvEXfXQXKMWd0ZQBpXMhjvH3ae+c946SFWHk=";
   };
 
   buildPhase = ''
