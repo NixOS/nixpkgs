@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://geoserver.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     platforms = platforms.all;
   };
 }
