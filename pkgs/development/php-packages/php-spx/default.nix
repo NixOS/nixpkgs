@@ -4,7 +4,7 @@ let
   version = "0.4.14";
 in buildPecl {
   inherit version;
-  pname = "php-spx";
+  pname = "spx";
 
   src = fetchFromGitHub {
     owner = "NoiseByNorthwest";
