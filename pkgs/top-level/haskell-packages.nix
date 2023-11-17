@@ -1,38 +1,12 @@
 { buildPackages, pkgsBuildTarget, pkgs, newScope, stdenv }:
 
 let
-  # These are attributes in compiler and packages that don't support integer-simple.
-  integerSimpleExcludes = [
-    "ghc865Binary"
-    "ghc8102Binary"
-    "ghc8107Binary"
-    "ghc924Binary"
-    "ghcjs"
-    "ghcjs810"
-    "integer-simple"
-    "native-bignum"
-    "ghc902"
-    "ghc90"
-    "ghc924"
-    "ghc925"
-    "ghc926"
-    "ghc927"
-    "ghc928"
-    "ghc92"
-    "ghc942"
-    "ghc943"
-    "ghc944"
-    "ghc945"
-    "ghc946"
-    "ghc947"
-    "ghc948"
-    "ghc94"
-    "ghc96"
-    "ghc962"
-    "ghc963"
-    "ghc981"
-    "ghc98"
-    "ghcHEAD"
+  # These are attributes in compiler that support integer-simple.
+  integerSimpleIncludes = [
+    "ghc88"
+    "ghc884"
+    "ghc810"
+    "ghc8107"
   ];
 
   nativeBignumIncludes = [
@@ -463,7 +437,7 @@ in {
     # build with integer-simple instead of integer-gmp.
     integer-simple = let
       integerSimpleGhcNames = pkgs.lib.filter
-        (name: ! builtins.elem name integerSimpleExcludes)
+        (name: builtins.elem name integerSimpleIncludes)
         (pkgs.lib.attrNames compiler);
     in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
       integerSimpleGhcNames
@@ -626,7 +600,7 @@ in {
     integer-simple =
       let
         integerSimpleGhcNames = pkgs.lib.filter
-          (name: ! builtins.elem name integerSimpleExcludes)
+          (name: builtins.elem name integerSimpleIncludes)
           (pkgs.lib.attrNames packages);
       in
       pkgs.lib.genAttrs integerSimpleGhcNames
