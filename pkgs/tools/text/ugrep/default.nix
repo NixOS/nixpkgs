@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
     changelog = "https://github.com/Genivia/ugrep/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ numkem ];
+    maintainers = with maintainers; [ numkem mikaelfangel ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };
