@@ -1,31 +1,44 @@
 { lib
 , buildGoModule
-, fetchFromGitHub
 , cairo
+, fetchFromGitHub
 , gobject-introspection
-, gtk3
 , gtk-layer-shell
+, gtk3
 , pkg-config
 , wrapGAppsHook
-, xdg-utils }:
+, xdg-utils
+}:
 
-buildGoModule rec {
+let
   pname = "nwg-drawer";
-  version = "0.3.9";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
-    repo = pname;
+    repo = "nwg-drawer";
     rev = "v${version}";
-    sha256 = "sha256-RCryDei8Tw1f+7y8iIDC3mASv5nwq4qrWRc4CudS/Cg=";
+    hash = "sha256-2/YI91Rcm+N8tNoKBRIDAQ3T2M6T7+kWngbCzyaXOCc=";
   };
 
-  vendorHash = "sha256-YwXX3srQdCicJlstodqOsL+dwBNVyJx/SwC2dMOUBh4=";
+  vendorHash = "sha256-8s8+ukMQpciQmKt77fNE7r+3cm/UDxO8VtkrNYdKhM8=";
+in
+buildGoModule {
+  inherit pname version src vendorHash;
 
-  buildInputs = [ cairo gtk3 gtk-layer-shell ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [
+    gobject-introspection
+    pkg-config
+    wrapGAppsHook
+  ];
 
-  doCheck = false;
+  buildInputs = [
+    cairo
+    gtk-layer-shell
+    gtk3
+  ];
+
+  doCheck = false; # Too slow
 
   preInstall = ''
     mkdir -p $out/share/nwg-drawer
@@ -43,9 +56,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Application drawer for sway Wayland compositor";
     homepage = "https://github.com/nwg-piotr/nwg-drawer";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit ];
     mainProgram = "nwg-drawer";
-    maintainers = with maintainers; [ plabadens ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = with lib.platforms; linux;
   };
 }
