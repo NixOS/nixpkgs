@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KLZeFMDy0+y7+19VydzeXk+qgKwWo3qCOQmh/jy8swo=";
+    sha256 = "sha256-323pYBDinuIfY3oUfqvzDVCyXjhB3R1o+T7onOd+Nmw=";
   };
 
   propagatedBuildInputs = [ pbr python-mimeparse extras ];
