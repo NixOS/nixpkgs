@@ -29,8 +29,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python library for creating and simulating large-scale brain models";
-    homepage    = "https://nengo.ai/";
-    license     = licenses.unfreeRedistributable;
+    homepage = "https://nengo.ai/";
+    changelog = "https://github.com/nengo/nengo/blob/v${version}/CHANGES.rst";
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ arjix ];
   };
 }
