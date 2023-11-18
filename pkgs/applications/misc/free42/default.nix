@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.0.21";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zRO0buYfKtybUisWZJRkvLJVLJYZwLcDnT04rnQWy+s=";
+    hash = "sha256-v3nZMjV9KnoTefeu2jl3k1B7efnJnNVOAfDVLyce6QI=";
   };
 
   nativeBuildInputs = [
