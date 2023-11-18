@@ -20,6 +20,7 @@
 , millet
 , shfmt
 , typst-lsp
+, typst-preview
 , autoPatchelfHook
 , zlib
 , stdenv
@@ -2328,6 +2329,17 @@ let
         nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
         buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+
+        buildInputs = [
+          typst-preview
+        ];
+
+        nativeBuildInputs = [ jq moreutils ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."typst-preview.executable".default = "${lib.getExe typst-preview}"' package.json | sponge package.json
+        '';
 
         meta = {
           description = "Typst Preview is an extension for previewing your Typst files in vscode instantly";
