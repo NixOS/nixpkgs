@@ -24959,9 +24959,9 @@ with pkgs;
 
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
-  sdrpp = callPackage ../applications/radio/sdrpp {
+  sdrpp = pin-to-gcc12-if-gcc13 (callPackage ../applications/radio/sdrpp {
     inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
+  });
 
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 
