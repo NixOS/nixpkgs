@@ -1,15 +1,15 @@
-{
-  fetchFromSourcehut,
-  file,
-  installShellFiles,
-  less,
-  lib,
-  offpunk,
-  python3Packages,
-  testers,
-  timg,
-  xdg-utils,
-  xsel,
+{ fetchFromSourcehut
+, file
+, installShellFiles
+, less
+, lib
+, offpunk
+, python3Packages
+, testers
+, timg
+, xdg-utils
+, xsel
+,
 }:
 
 let
