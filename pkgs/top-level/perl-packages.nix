@@ -10549,7 +10549,7 @@ with self; {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-IO-0.15.tar.gz";
       hash = "sha256-Sk4clkrRw99gI3aHxRcKR5v+9bAweuAsY5EJb7Rp378=";
     };
-    buildInputs = [ TestFutureIOImpl ];
+    buildInputs = [ TestFutureIOImpl TestExpectAndCheck ];
     propagatedBuildInputs = [ Future StructDumb ];
     preCheck = "rm t/06connect.t"; # this test fails in sandbox
     meta = {
