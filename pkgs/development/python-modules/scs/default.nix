@@ -2,6 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, meson-python
+, Accelerate
 , blas
 , lapack
 , numpy
@@ -12,19 +14,31 @@
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.2.3";
+  version = "3.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
     rev = version;
-    hash = "sha256-/5yGvZy3luGQkbYcsb/6TZLYou91lpA3UKONviMVpuM=";
+    hash = "sha256-UmMbnj7QZSvHWSUk1Qa0VP4i3iDCYHxoa+qBmEdFjRs=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    lapack
+  nativeBuildInputs = [
+    meson-python
+  ];
+
+  env = lib.optionalAttrs (!stdenv.isDarwin) {
+    # needed for meson's cc.find_library
+    LIBRARY_PATH = lib.makeLibraryPath [ blas lapack ];
+  };
+
+  buildInputs = if stdenv.isDarwin then [
+    Accelerate
+  ] else [
     blas
+    lapack
   ];
 
   propagatedBuildInputs = [
