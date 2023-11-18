@@ -27408,6 +27408,8 @@ with self; {
       url = "mirror://cpan/authors/id/P/PA/PATL/Time-Out-0.11.tar.gz";
       hash = "sha256-k5baaY/UUtnOYNZCzaIQjxHyDtdsiWF3muEbiXroFdI=";
     };
+    buildInputs = [ ExtUtilsMakeMakerCPANfile TestFatal TestNeeds ];
+    propagatedBuildInputs = [ TryTiny ];
     meta = {
       description = "Easily timeout long running operations";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
