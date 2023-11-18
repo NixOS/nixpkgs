@@ -1,36 +1,57 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatch-vcs
+, hatchling
+, pythonOlder
 , pythonRelaxDepsHook
-, pbr
-, python-mimeparse
-, extras
-, traceback2
+, setuptools
 , testscenarios
+, traceback2
 }:
 
 buildPythonPackage rec {
   pname = "testtools";
   version = "2.7.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-323pYBDinuIfY3oUfqvzDVCyXjhB3R1o+T7onOd+Nmw=";
+    hash = "sha256-323pYBDinuIfY3oUfqvzDVCyXjhB3R1o+T7onOd+Nmw=";
   };
 
-  propagatedBuildInputs = [ pbr python-mimeparse extras ];
-  buildInputs = [ traceback2 ];
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRemoveDeps = [
+    "fixtures"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    hatchling
+    hatch-vcs
+  ];
+
+  propagatedBuildInputs = [
+    setuptools
+  ];
+
+  buildInputs = [
+    traceback2
+  ];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;
-  nativeCheckInputs = [ testscenarios ];
 
-  pythonRemoveDeps = [ "fixtures" ];
+  pythonImportsCheck = [
+    "testtools"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "A set of extensions to the Python standard library's unit testing framework";
-    homepage = "https://pypi.python.org/pypi/testtools";
-    license = lib.licenses.mit;
+    homepage = "https://github.com/testing-cabal/testtools";
+    changelog = "https://github.com/testing-cabal/testtools/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
