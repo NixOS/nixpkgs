@@ -16,9 +16,10 @@
   filelock,
   jinja2,
   networkx,
-  openai-triton,
   sympy,
   numpy, pyyaml, cffi, click, typing-extensions,
+  # ROCm build and `torch.compile` requires `openai-triton`
+  tritonSupport ? (!stdenv.isDarwin), openai-triton,
 
   # Unit tests
   hypothesis, psutil,
@@ -303,12 +304,13 @@ in buildPythonPackage rec {
     "-Wno-pass-failed"
   ] ++ [
     "-Wno-unused-command-line-argument"
-    "-Wno-maybe-uninitialized"
     "-Wno-uninitialized"
     "-Wno-array-bounds"
-    "-Wno-stringop-overflow"
     "-Wno-free-nonheap-object"
     "-Wno-unused-result"
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    "-Wno-maybe-uninitialized"
+    "-Wno-stringop-overflow"
   ]));
 
   nativeBuildInputs = [
@@ -377,12 +379,10 @@ in buildPythonPackage rec {
     # the following are required for tensorboard support
     pillow six future tensorboard protobuf
 
-    # ROCm build and `torch.compile` requires openai-triton
-    openai-triton
-
     # torch/csrc requires `pybind11` at runtime
     pybind11
   ]
+  ++ lib.optionals tritonSupport [ openai-triton ]
   ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 

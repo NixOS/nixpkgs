@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , testers
 , difftastic
+, stdenv
 }:
 
 let
@@ -30,6 +31,11 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "tree_magic_mini-3.0.2" = "sha256-iIX/DeDbquObDPOx/pctVFN4R8GSkD9bPNkNgOLdUJs=";
     };
+  };
+
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   postPatch = ''
