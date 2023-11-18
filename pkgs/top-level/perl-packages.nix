@@ -5619,10 +5619,14 @@ with self; {
       url = "mirror://cpan/authors/id/S/SP/SPROUT/CSS-DOM-0.17.tar.gz";
       hash = "sha256-Zbl46/PDmF5V7jK7baHp+upJSoXTAFxjuux+lphZ8CY=";
     };
+
+    patches = [
+      # Replace apostrophe as package separator
+      # https://rt.cpan.org/Public/Bug/Display.html?id=146661
+      ../development/perl-modules/CSSDOM-replace-apostrophe.patch
+    ];
+
     propagatedBuildInputs = [ Clone ];
-    preCheck = ''
-      rm t/css-dom.t # Remove test that fails due to deprecated package separator warning
-    '';
     meta = {
       description = "Document Object Model for Cascading Style Sheets";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
