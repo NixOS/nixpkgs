@@ -454,7 +454,7 @@ in
       { assertion = cfg.database.createLocally -> (cfg.database.type == "mysql" || cfg.database.type == "postgres");
         message = "services.mediawiki.createLocally is currently only supported for database type 'mysql' and 'postgres'";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.name == cfg.database.user;
         message = "services.mediawiki.database.user must be set to ${user} if services.mediawiki.database.createLocally is set true";
       }
       { assertion = cfg.database.createLocally -> cfg.database.socket != null;
@@ -486,7 +486,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [{
         name = cfg.database.user;
-        ensurePermissions = { "DATABASE \"${cfg.database.name}\"" = "ALL PRIVILEGES"; };
+        ensureDBOwnership = true;
       }];
     };
 

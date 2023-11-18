@@ -88,9 +88,20 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
 
 
 def get_bootspec(profile: str | None, generation: int) -> BootSpec:
-    boot_json_path = os.path.realpath("%s/%s" % (system_dir(profile, generation, None), "boot.json"))
-    boot_json_f = open(boot_json_path, 'r')
-    bootspec_json = json.load(boot_json_f)
+    system_directory = system_dir(profile, generation, None)
+    boot_json_path = os.path.realpath("%s/%s" % (system_directory, "boot.json"))
+    if os.path.isfile(boot_json_path):
+        boot_json_f = open(boot_json_path, 'r')
+        bootspec_json = json.load(boot_json_f)
+    else:
+        boot_json_str = subprocess.check_output([
+        "@bootspecTools@/bin/synthesize",
+        "--version",
+        "1",
+        system_directory,
+        "/dev/stdout"],
+        universal_newlines=True)
+        bootspec_json = json.loads(boot_json_str)
     return bootspec_from_json(bootspec_json)
 
 def bootspec_from_json(bootspec_json: Dict) -> BootSpec:

@@ -612,7 +612,7 @@ in {
   config = lib.mkIf cfg.enable (lib.mkMerge [{
     assertions = [
       {
-        assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.database.user);
+        assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.database.user && cfg.database.user == cfg.database.name);
         message = ''
           For local automatic database provisioning (services.mastodon.database.createLocally == true) with peer
             authentication (services.mastodon.database.host == "/run/postgresql") to work services.mastodon.user
@@ -845,8 +845,8 @@ in {
       enable = true;
       ensureUsers = [
         {
-          name = cfg.database.user;
-          ensurePermissions."DATABASE ${cfg.database.name}" = "ALL PRIVILEGES";
+          name = cfg.database.name;
+          ensureDBOwnership = true;
         }
       ];
       ensureDatabases = [ cfg.database.name ];

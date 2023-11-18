@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.19.1";
-  format = "pyproject";
+  version = "0.20.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GYVr/Wam1IGCSR2vHMAu5Fg/jRB333L6iNjltnRKh4E=";
+    hash = "sha256-1nlSf15IEX1qKfDtR6+jQqskjxIuzaIWatkj9Z1fh8Y=";
   };
 
   postPatch = let
@@ -57,7 +57,9 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     cython
+    numpy
     packaging
+    setuptools
   ];
 
   propagatedBuildInputs = with python.pkgs; [

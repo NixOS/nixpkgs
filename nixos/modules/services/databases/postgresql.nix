@@ -168,7 +168,12 @@ in
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
+              visible = false; # This option has been deprecated.
               description = lib.mdDoc ''
+                This option is DEPRECATED and should not be used in nixpkgs anymore,
+                use `ensureDBOwnership` instead. It can also break with newer
+                versions of PostgreSQL (≥ 15).
+
                 Permissions to ensure for the user, specified as an attribute set.
                 The attribute names specify the database and tables to grant the permissions for.
                 The attribute values specify the permissions to grant. You may specify one or
@@ -184,6 +189,16 @@ in
                   "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
                   "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
                 }
+              '';
+            };
+
+            ensureDBOwnership = mkOption {
+              type = types.bool;
+              default = false;
+              description = mdDoc ''
+                Grants the user ownership to a database with the same name.
+                This database must be defined manually in
+                [](#opt-services.postgresql.ensureDatabases).
               '';
             };
 
@@ -338,26 +353,21 @@ in
         });
         default = [];
         description = lib.mdDoc ''
-          Ensures that the specified users exist and have at least the ensured permissions.
+          Ensures that the specified users exist.
           The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
           same name only, and that without the need for a password.
-          This option will never delete existing users or remove permissions, especially not when the value of this
-          option is changed. This means that users created and permissions assigned once through this option or
-          otherwise have to be removed manually.
+          This option will never delete existing users or remove DB ownership of databases
+          once granted with `ensureDBOwnership = true;`. This means that this must be
+          cleaned up manually when changing after changing the config in here.
         '';
         example = literalExpression ''
           [
             {
               name = "nextcloud";
-              ensurePermissions = {
-                "DATABASE nextcloud" = "ALL PRIVILEGES";
-              };
             }
             {
               name = "superuser";
-              ensurePermissions = {
-                "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-              };
+              ensureDBOwnership = true;
             }
           ]
         '';
@@ -444,6 +454,27 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    assertions = map ({ name, ensureDBOwnership, ... }: {
+      assertion = ensureDBOwnership -> builtins.elem name cfg.ensureDatabases;
+      message = ''
+        For each database user defined with `services.postgresql.ensureUsers` and
+        `ensureDBOwnership = true;`, a database with the same name must be defined
+        in `services.postgresql.ensureDatabases`.
+
+        Offender: ${name} has not been found among databases.
+      '';
+    }) cfg.ensureUsers;
+    # `ensurePermissions` is now deprecated, let's avoid it.
+    warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
+      `services.postgresql.*.ensurePermissions` is used in your expressions,
+      this option is known to be broken with newer PostgreSQL versions,
+      consider migrating to `services.postgresql.*.ensureDBOwnership` or
+      consult the release notes or manual for more migration guidelines.
+
+      This option will be removed in NixOS 24.05 unless it sees significant
+      maintenance improvements.
+    ";
 
     services.postgresql.settings =
       {
@@ -556,12 +587,15 @@ in
             ${
               concatMapStrings
               (user:
-                let
+              let
                   userPermissions = concatStringsSep "\n"
                     (mapAttrsToList
                       (database: permission: ''$PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"' '')
                       user.ensurePermissions
                     );
+                  dbOwnershipStmt = optionalString
+                    user.ensureDBOwnership
+                    ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
 
                   filteredClauses = filterAttrs (name: value: value != null) user.ensureClauses;
 
@@ -572,6 +606,8 @@ in
                   $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
                   ${userPermissions}
                   ${userClauses}
+
+                  ${dbOwnershipStmt}
                 ''
               )
               cfg.ensureUsers

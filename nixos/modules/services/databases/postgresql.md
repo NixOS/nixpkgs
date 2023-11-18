@@ -39,6 +39,125 @@ By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlS
 services.postgresql.dataDir = "/data/postgresql";
 ```
 
+## Initializing {#module-services-postgres-initializing}
+
+As of NixOS 23.11,
+`services.postgresql.ensureUsers.*.ensurePermissions` has been
+deprecated, after a change to default permissions in PostgreSQL 15
+invalidated most of its previous use cases:
+
+- In psql < 15, `ALL PRIVILEGES` used to include `CREATE TABLE`, where
+  in psql >= 15 that would be a separate permission
+- psql >= 15 instead gives only the database owner create permissions
+- Even on psql < 15 (or databases migrated to >= 15), it is
+  recommended to manually assign permissions along these lines
+  - https://www.postgresql.org/docs/release/15.0/
+  - https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV
+
+### Assigning ownership {#module-services-postgres-initializing-ownership}
+
+Usually, the database owner should be a database user of the same
+name. This can be done with
+`services.postgresql.ensureUsers.*.ensureDBOwnership = true;`.
+
+If the database user name equals the connecting system user name,
+postgres by default will accept a passwordless connection via unix
+domain socket. This makes it possible to run many postgres-backed
+services without creating any database secrets at all
+
+### Assigning extra permissions {#module-services-postgres-initializing-extra-permissions}
+
+For many cases, it will be enough to have the database user be the
+owner. Until `services.postgresql.ensureUsers.*.ensurePermissions` has
+been re-thought, if more users need access to the database, please use
+one of the following approaches:
+
+**WARNING:** `services.postgresql.initialScript` is not recommended
+for `ensurePermissions` replacement, as that is *only run on first
+start of PostgreSQL*.
+
+**NOTE:** all of these methods may be obsoleted, when `ensure*` is
+reworked, but it is expected that they will stay viable for running
+database migrations.
+
+**NOTE:** please make sure that any added migrations are idempotent (re-runnable).
+
+#### as superuser {#module-services-postgres-initializing-extra-permissions-superuser}
+
+**Advantage:** compatible with postgres < 15, because it's run
+as the database superuser `postgres`.
+
+##### in database `postStart` {#module-services-postgres-initializing-extra-permissions-superuser-post-start}
+
+**Disadvantage:** need to take care of ordering yourself. In this
+example, `mkAfter` ensures that permissions are assigned after any
+databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
+are already created.
+
+```nix
+    systemd.services.postgresql.postStart = lib.mkAfter ''
+      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+```
+
+##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
+
+```nix
+    systemd.services."migrate-service1-db1" = {
+      serviceConfig.Type = "oneshot";
+      requiredBy = "service1.service";
+      before = "service1.service";
+      after = "postgresql.service";
+      serviceConfig.User = "postgres";
+      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      path = [ postgresql ];
+      script = ''
+        $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        # ....
+      '';
+    };
+```
+
+#### as service user {#module-services-postgres-initializing-extra-permissions-service-user}
+
+**Advantage:** re-uses systemd's dependency ordering;
+
+**Disadvantage:** relies on service user having grant permission. To be combined with `ensureDBOwnership`.
+
+##### in service `preStart` {#module-services-postgres-initializing-extra-permissions-service-user-pre-start}
+
+```nix
+    environment.PSQL = "psql --port=${toString services.postgresql.port}";
+    path = [ postgresql ];
+    systemd.services."service1".preStart = ''
+      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+```
+
+##### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-service-user-oneshot}
+
+```nix
+    systemd.services."migrate-service1-db1" = {
+      serviceConfig.Type = "oneshot";
+      requiredBy = "service1.service";
+      before = "service1.service";
+      after = "postgresql.service";
+      serviceConfig.User = "service1";
+      environment.PSQL = "psql --port=${toString services.postgresql.port}";
+      path = [ postgresql ];
+      script = ''
+        $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        # ....
+      '';
+    };
+```
+
 ## Upgrading {#module-services-postgres-upgrading}
 
 ::: {.note}
