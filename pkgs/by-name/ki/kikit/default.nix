@@ -15,14 +15,12 @@
 , wxPython_4_2
 , pcbnew-transition
 , pybars3
+, shapely
 , versioneer
 }:
 let
   solidpython = callPackage ./solidpython { };
 
-  # https://github.com/yaqwsx/KiKit/issues/574
-  # copy-pasted from nixpkgs#8d8e62e74f511160a599471549a98bc9e4f4818d
-  shapely = callPackage ./shapely { };
 in
 buildPythonApplication rec {
   pname = "kikit";
