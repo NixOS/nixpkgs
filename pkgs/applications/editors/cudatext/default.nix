@@ -47,11 +47,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-ke7i0eeZHEsVhtzaS0AeLQOrYE1F+ppCwjR2TWeJQPA=";
   };
 
+  patches = [ ./proc_globdata.patch ];
+
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
-      --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
-      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
+      --subst-var out \
+      --subst-var-by python3 ${python3}
   '';
 
   nativeBuildInputs = [ lazarus fpc ]
