@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "mopeka-iot-ble";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -23,6 +23,11 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-m27As3tB77JbgY0kDDJ6kmYFTv2O/Sh6y9tFiKDIjbI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -38,11 +43,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "mopeka_iot_ble"
