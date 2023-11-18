@@ -35373,7 +35373,9 @@ with pkgs;
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
-  spike = callPackage ../applications/virtualization/spike { };
+  spike = callPackage ../applications/virtualization/spike {
+    stdenv = gcc12Stdenv;
+  };
 
   tensorman = callPackage ../tools/misc/tensorman { };
 
