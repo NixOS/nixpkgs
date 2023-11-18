@@ -1,0 +1,8 @@
+--- a/dbus-python.pc.in
++++ b/dbus-python.pc.in
+@@ -9,4 +9,4 @@
+ Description: Python bindings for D-Bus
+ Requires: dbus-1 >= 1.0
+ Version: @VERSION@
+-Cflags: -I${includedir}
++Cflags: -I${includedir}/dbus-1.0

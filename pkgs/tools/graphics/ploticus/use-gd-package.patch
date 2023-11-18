@@ -1,0 +1,34 @@
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -91,10 +91,10 @@
+ 
+ 
+ ########### Option 1: use bundled GD16 (PNG only).  Requires libpng and zlib.
+-exetarget: plpng 
+-GD16LIBS = -lpng -lz
+-GD16H =  -I/usr/local/include
+-ZFLAG = -DWZ
++# exetarget: plpng 
++# GD16LIBS = -lpng -lz
++# GD16H =  -I/usr/local/include
++# ZFLAG = -DWZ
+ ### These should remain commented unless your libs are not in usual places, then alter to suit...
+ ### GD16LIBS = /home/scg/lib/libpng.a /home/scg/lib/libz.a
+ ### GD16H = -I/home/scg/lib
+@@ -111,11 +111,11 @@
+ 
+ ########### Option 4: use your own GD resource with FreeType2 (ttf) fonts enabled.  
+ ###########           Requires GD 1.84+, libpng, zlib, libjpeg and libfreetype
+-# exetarget: plgd18 
+-# GD18LIBS = -lgd -lpng -lz -ljpeg -lfreetype
+-# GD18H = 
+-# GDFREETYPE = -DGDFREETYPE
+-# ZFLAG = -DWZ
++exetarget: plgd18 
++GD18LIBS = -lgd -lpng -lz -ljpeg -lfreetype
++GD18H = 
++GDFREETYPE = -DGDFREETYPE
++ZFLAG = -DWZ
+ 
+ ########### Option 5: don't use GD at all.
+ # exetarget: plnogd 

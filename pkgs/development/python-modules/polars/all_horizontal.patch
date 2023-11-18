@@ -1,0 +1,13 @@
+diff --git a/crates/polars-lazy/src/frame/mod.rs b/crates/polars-lazy/src/frame/mod.rs
+index 2d2ede651..be24b8809 100644
+--- a/crates/polars-lazy/src/frame/mod.rs
++++ b/crates/polars-lazy/src/frame/mod.rs
+@@ -25,7 +25,7 @@ pub use parquet::*;
+ use polars_core::frame::explode::MeltArgs;
+ use polars_core::prelude::*;
+ use polars_io::RowCount;
+-use polars_plan::dsl::all_horizontal;
++use polars_plan::dsl::functions::all_horizontal;
+ pub use polars_plan::frame::{AllowedOptimizations, OptState};
+ use polars_plan::global::FETCH_ROWS;
+ #[cfg(any(feature = "ipc", feature = "parquet", feature = "csv"))]
