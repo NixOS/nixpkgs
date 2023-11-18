@@ -102,16 +102,16 @@
     "version": "2.06"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/4.35.1",
-    "rev": "2990976",
-    "sha256": "0pf7r8q939420bzwd0mlv5zbnlkg824hg40vf3w082ryclzyiap5",
-    "version": "4.35.1"
+    "path": "mailpoet/tags/4.36.0",
+    "rev": "2995974",
+    "sha256": "1782z2b1bwg7mx9qzvyzpiymmkqiafd5ymb31q11i7ks19gxlmbw",
+    "version": "4.36.0"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
-    "rev": "2980433",
-    "sha256": "0vx71g1dihlmxrrgmc8fa3glxxndgxcrysidbc23hz33xd18wcbh",
-    "version": "1.15.1"
+    "rev": "2997367",
+    "sha256": "158i9pqn4qqa5mzn57pg4m9gsln35c0gfb8v7sg1y02hp9876shg",
+    "version": "2.2"
   },
   "opengraph": {
     "path": "opengraph/tags/1.11.2",
@@ -130,6 +130,12 @@
     "rev": "2941521",
     "sha256": "1mrwgqp1ril54xqr8k2gwgjcsbf4xv3671v15xawapwz730h2c4r",
     "version": "0.10.0"
+  },
+  "tc-custom-javascript": {
+    "path": "tc-custom-javascript/tags/1.2.3",
+    "rev": "2870386",
+    "sha256": "0lcprrnf25p6a12mf5hkfnl6r470n35pgfdl9nizjh4q43qzdcam",
+    "version": "1.2.3"
   },
   "webp-converter-for-media": {
     "path": "webp-converter-for-media/tags/5.11.4",
