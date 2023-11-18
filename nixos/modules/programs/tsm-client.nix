@@ -2,22 +2,12 @@
 
 let
 
-  inherit (builtins) length map;
   inherit (lib.attrsets) attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
+  inherit (lib.lists) allUnique map;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatLines optionalString toLower;
   inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr path port str strMatching submodule;
-
-  # Checks if given list of strings contains unique
-  # elements when compared without considering case.
-  # Type: checkIUnique :: [string] -> bool
-  # Example: checkIUnique ["foo" "Foo"] => false
-  checkIUnique = lst:
-    let
-      lenUniq = l: length (lib.lists.unique l);
-    in
-      lenUniq lst == lenUniq (map toLower lst);
 
   # TSM rejects servername strings longer than 64 chars.
   servernameType = strMatching ".{1,64}";
@@ -110,7 +100,7 @@ let
       # differ only by upper and lower case.
       type = addCheck
         (attrsOf (nullOr str))
-        (attrs: checkIUnique (attrNames attrs));
+        (attrs: allUnique (map toLower (attrNames attrs)));
       default = {};
       example.compression = "yes";
       example.passwordaccess = null;
@@ -238,7 +228,7 @@ let
 
   assertions = [
     {
-      assertion = checkIUnique (mapAttrsToList (k: v: v.name) cfg.servers);
+      assertion = allUnique (mapAttrsToList (k: v: toLower v.name) cfg.servers);
       message = ''
         TSM servernames contain duplicate name
         (note that case doesn't matter!)
