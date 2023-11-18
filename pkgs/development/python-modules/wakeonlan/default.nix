@@ -9,8 +9,9 @@
 buildPythonPackage rec {
   pname = "wakeonlan";
   version = "3.1.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "remcohaszing";
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for wake on lan";
     homepage = "https://github.com/remcohaszing/pywakeonlan";
+    changelog = "https://github.com/remcohaszing/pywakeonlan/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
