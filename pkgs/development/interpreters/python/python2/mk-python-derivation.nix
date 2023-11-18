@@ -57,8 +57,7 @@
 # Raise an error if two packages are installed with the same name
 # TODO: For cross we probably need a different PYTHONPATH, or not
 # add the runtime deps until after buildPhase.
-# FIXME: disabled for Python 2 because broken
-, catchConflicts ? false
+, catchConflicts ? (python.stdenv.hostPlatform == python.stdenv.buildPlatform)
 
 # Additional arguments to pass to the makeWrapper function, which wraps
 # generated binaries.
