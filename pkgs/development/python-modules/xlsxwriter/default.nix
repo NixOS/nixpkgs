@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for creating Excel XLSX files";
     homepage = "https://xlsxwriter.readthedocs.io/";
+    changelog = "https://xlsxwriter.readthedocs.io/changes.html";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jluttine ];
   };
