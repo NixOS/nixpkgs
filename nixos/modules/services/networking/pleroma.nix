@@ -6,6 +6,12 @@ in {
     services.pleroma = with lib; {
       enable = mkEnableOption (lib.mdDoc "pleroma");
 
+      epmd = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the clustering daemon service. If unprotected, it can be a security issue.";
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.pleroma;
@@ -94,6 +100,8 @@ in {
 
       import_config "${cfg.secretConfigFile}"
     '';
+
+    services.epmd.enable = cfg.epmd;
 
     systemd.services.pleroma = {
       description = "Pleroma social network";
