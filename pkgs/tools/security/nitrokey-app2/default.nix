@@ -63,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    maintainers = with maintainers; [ _999eagle panicgh ];
     mainProgram = "nitrokeyapp";
   };
 }
