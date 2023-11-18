@@ -1,9 +1,10 @@
-{ fetchgit, fetchzip, lib }:
+{ lib, fetchgit, fetchzip }:
 
 lib.makeOverridable (
 # gitlab example
 { owner, repo, rev, protocol ? "https", domain ? "gitlab.com", name ? "source", group ? null
-, fetchSubmodules ? false, leaveDotGit ? false, deepClone ? false
+, fetchSubmodules ? false, leaveDotGit ? false
+, deepClone ? false
 , ... # For hash agility
 } @ args:
 
@@ -13,7 +14,7 @@ let
   escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
   passthruAttrs = removeAttrs args [ "protocol" "domain" "owner" "group" "repo" "rev" "fetchSubmodules" "leaveDotGit" "deepClone" ];
 
-  useFetchGit = deepClone || fetchSubmodules || leaveDotGit;
+  useFetchGit = fetchSubmodules || leaveDotGit || deepClone;
   fetcher = if useFetchGit then fetchgit else fetchzip;
 
   gitRepoUrl = "${protocol}://${domain}/${slug}.git";

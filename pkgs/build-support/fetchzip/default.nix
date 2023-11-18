@@ -24,7 +24,7 @@
 # the rest are given to fetchurl as is
 , ... } @ args:
 
-assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'." true;
+assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." true;
 
 let
   tmpFilename =
