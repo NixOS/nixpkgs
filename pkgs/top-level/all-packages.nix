@@ -24977,6 +24977,7 @@ with pkgs;
 
   sdrpp = callPackage ../applications/radio/sdrpp {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+    stdenv = gcc12Stdenv;
   };
 
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
