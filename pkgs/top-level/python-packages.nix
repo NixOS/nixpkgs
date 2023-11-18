@@ -3441,6 +3441,8 @@ self: super: with self; {
 
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
+  echo = callPackage ../development/python-modules/echo { };
+
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
   ecos = callPackage ../development/python-modules/ecos { };
@@ -3802,6 +3804,8 @@ self: super: with self; {
   fastapi = callPackage ../development/python-modules/fastapi { };
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
+
+  fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
 
@@ -4507,6 +4511,8 @@ self: super: with self; {
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   glom = callPackage ../development/python-modules/glom { };
+
+  glueviz = callPackage ../development/python-modules/glueviz { };
 
   glymur = callPackage ../development/python-modules/glymur { };
 
@@ -7073,6 +7079,8 @@ self: super: with self; {
   mplhep-data = callPackage ../development/python-modules/mplhep-data { };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
+
+  mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
@@ -9695,6 +9703,8 @@ self: super: with self; {
   pushbullet-py = callPackage ../development/python-modules/pushbullet-py { };
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
+
+  pvextractor = callPackage ../development/python-modules/pvextractor { };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 
