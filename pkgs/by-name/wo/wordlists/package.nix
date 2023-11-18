@@ -1,11 +1,8 @@
 { lib
-, callPackage
+, symlinkJoin
 , nmap
 , rockyou
-, runtimeShell
 , seclists
-, symlinkJoin
-, tree
 , wfuzz
 , lists ? [
     nmap
@@ -13,33 +10,39 @@
     seclists
     wfuzz
   ]
+, writeShellScriptBin
+, tree
 }:
+let
+  wordlistsCollection = symlinkJoin {
+    name = "wordlists-collection";
+    paths = lists;
 
-symlinkJoin rec {
-  pname = "wordlists";
-  version = "unstable-2023-10-10";
+    postBuild = ''
+      shopt -s extglob
+      rm -rf $out/!(share)
+      rm -rf $out/share/!(wordlists)
+      shopt -u extglob
+    '';
+  };
 
-  name = "${pname}-${version}";
-  paths = lists;
-
-  postBuild = ''
-    mkdir -p $out/bin
-
-    # Create a command to show the location of the links.
-    cat >> $out/bin/wordlists << __EOF__
-    #!${runtimeShell}
-    ${tree}/bin/tree ${placeholder "out"}/share/wordlists
-    __EOF__
-    chmod +x $out/bin/wordlists
-
-    # Create a handy command for easy access to the wordlists.
-    # e.g.: `cat "$(wordlists_path)/rockyou.txt"`, or `ls "$(wordlists_path)/dirbuster"`
-    cat >> $out/bin/wordlists_path << __EOF__
-    #!${runtimeShell}
-    printf "${placeholder "out"}/share/wordlists\n"
-    __EOF__
-    chmod +x $out/bin/wordlists_path
+  # A command to show the location of the links.
+  wordlistsBin = writeShellScriptBin "wordlists" ''
+    ${lib.getExe tree} ${wordlistsCollection}/share/wordlists
   '';
+  # A command for easy access to the wordlists.
+  wordlistsPathBin = writeShellScriptBin "wordlists_path" ''
+    printf "${wordlistsCollection}/share/wordlists\n"
+  '';
+
+in symlinkJoin {
+  name = "wordlists";
+
+  paths = [
+    wordlistsCollection
+    wordlistsBin
+    wordlistsPathBin
+  ];
 
   meta = with lib; {
     description = "A collection of wordlists useful for security testing";
@@ -65,6 +68,6 @@ symlinkJoin rec {
       If you want to add a new package that provides wordlist/s the convention
       is to copy it to {file}`$out/share/wordlists/myNewWordlist`.
     '';
-    maintainers = with maintainers; [ janik pamplemousse ];
+    maintainers = with maintainers; [ janik pamplemousse h7x4 ];
   };
 }
