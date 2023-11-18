@@ -4,7 +4,7 @@
 , cf-xarray
 , dask
 , deepdiff
-, fetchPypi
+, fetchFromGitHub
 , h5netcdf
 , h5py
 , hypothesis
@@ -49,14 +49,16 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.41.1";
-  format = "pyproject";
+  version = "0.42.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3Ncg51E4KYbvzlEyesVbTmzmz+UPfFkj3tudVbNYqHQ=";
+  src = fetchFromGitHub {
+    owner = "QCoDeS";
+    repo = "Qcodes";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+NtPE9mQKWftk3vR5WFZgM+7jl8HWr9MxVA+VpbuHvE=";
   };
 
   nativeBuildInputs = [
@@ -126,9 +128,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test depends on qcodes-loop, causing a cyclic dependency
-    "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
+    "tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
-    "qcodes/tests/dataset/test_dataset_basic.py"
+    "tests/dataset/test_dataset_basic.py"
   ];
 
   disabledTests = [
