@@ -1,32 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , cython
 , hypothesis
 , numpy
-, pytest
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.7.9";
-  format = "setuptools";
+  version = "0.7.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ke9MJQB3hakP/C8Ks9O9O3XNLXhWqaSCt9DayNURoJ0=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "cython-blis";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-p8pzGZc5OiiGTvXULDgzsBC3jIhovTKUq3RtPnQ/+to=";
   };
 
   postPatch = ''
     # See https://github.com/numpy/numpy/issues/21079
+    # has no functional difference as the name is only used in log output
     substituteInPlace blis/benchmark.py \
-      --replace "numpy.__config__.blas_ilp64_opt_info" "numpy.__config__.blas_opt_info"
+      --replace 'numpy.__config__.blas_ilp64_opt_info["libraries"]' '["dummy"]'
+  '';
+
+  preCheck = ''
+    # remove src module, so tests use the installed module instead
+    rm -rf ./blis
   '';
 
   nativeBuildInputs = [
+    setuptools
     cython
   ];
 
@@ -36,7 +46,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -53,6 +63,6 @@ buildPythonPackage rec {
     description = "BLAS-like linear algebra library";
     homepage = "https://github.com/explosion/cython-blis";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
