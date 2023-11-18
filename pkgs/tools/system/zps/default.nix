@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zps";
-  version = "1.2.8";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "zps";
     rev = version;
-    hash = "sha256-t0kVMrJn+eqUUD98pp3iIK28MoLwOplLk0sYgRJkO4c=";
+    hash = "sha256-+evCYiTiH8tRmhvsse+49WlKGRP5XQtep7wGoCySvJ4=";
   };
 
   nativeBuildInputs = [
