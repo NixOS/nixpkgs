@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Python CBOR (de)serializer with extensive tag support";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
-    maintainers = with maintainers; [ taneb ];
+    maintainers = with maintainers; [ ];
   };
 }
