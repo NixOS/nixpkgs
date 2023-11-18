@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "3.0.0";
+  version = "3.1.0";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "remcohaszing";
     repo = "pywakeonlan";
     rev = "refs/tags/${version}";
-    hash = "sha256-7BDE7TmTT8rSaG0rEn5QwH+izGWA2PeQzxpGiv7+3fo=";
+    hash = "sha256-VPdklyD3GVn0cex4I6zV61I0bUr4KQp8DdMKAM/r4io=";
   };
 
   nativeBuildInputs = [
