@@ -12,6 +12,8 @@ buildPythonPackage {
   disabled = isPy27;
   inherit (libndtypes) version src meta;
 
+  outputs = [ "out" "dev" ];
+
   propagatedBuildInputs = [ numpy ];
 
   postPatch = ''
