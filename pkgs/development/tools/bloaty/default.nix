@@ -1,14 +1,15 @@
 { lib, stdenv, cmake, zlib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "1.1";
   pname = "bloaty";
+  version = "1.1-unstable-2023-11-06";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bloaty";
-    rev = "v${version}";
-    sha256 = "1556gb8gb8jwf5mwxppcqz3mp269b5jhd51kj341iqkbn27zzngk";
+    # no version since 1.1 in 2020
+    rev = "16f9fe54d9cd0e9abe1d25fc1a9b44c214cfaa9f";
+    hash = "sha256-w855aSLzzvuUWjAU9zOKuZTNGLZiEKMJYjVGejH48xQ=";
     fetchSubmodules = true;
   };
 
