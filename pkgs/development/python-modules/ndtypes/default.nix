@@ -17,7 +17,7 @@ buildPythonPackage {
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'include_dirs = ["libndtypes"]' \
-                'include_dirs = ["${libndtypes}/include"]' \
+                'include_dirs = ["${libndtypes.dev}/include"]' \
       --replace 'library_dirs = ["libndtypes"]' \
                 'library_dirs = ["${libndtypes}/lib"]' \
       --replace 'runtime_library_dirs = ["$ORIGIN"]' \
