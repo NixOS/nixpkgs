@@ -26581,6 +26581,7 @@ with self; {
       hash = "sha256-em3iICQurst9ZJWIFD1P4VHzQ7VtPXPBkyn8csc34yE=";
     };
     buildInputs = [ IOString PDFAPI2 ];
+    propagatedBuildInputs = [ ObjectPad ];
     meta = {
       description = "Pango style markup formatting";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
