@@ -12,6 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8pbSl5eUsKa3JrgK/JLk0FnGXcJhKksJN3wWiDPYYvQ=";
   };
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   preConfigure = ''
     cd src
 
