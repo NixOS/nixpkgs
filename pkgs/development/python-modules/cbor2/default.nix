@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/agronholm/cbor2";
     changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ taneb ];
+    maintainers = with maintainers; [ ];
   };
 }
