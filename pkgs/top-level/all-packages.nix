@@ -4381,6 +4381,8 @@ with pkgs;
 
   buttercup-desktop = callPackage ../tools/security/buttercup-desktop { };
 
+  buuf-nestort-icon-theme = callPackage ../data/icons/buuf-nestort-icon-theme { };
+
   charles = charles4;
   inherit (callPackage ../applications/networking/charles {})
     charles3
