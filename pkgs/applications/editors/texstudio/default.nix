@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qt5compat, quazip
+, qtwayland
 , hunspell
 , wrapQtAppsHook, poppler, zlib, pkg-config }:
 
@@ -27,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     quazip
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
