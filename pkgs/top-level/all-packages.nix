@@ -8462,8 +8462,6 @@ with pkgs;
 
   fornalder = callPackage ../applications/version-management/fornalder { };
 
-  free42 = callPackage ../applications/misc/free42 { };
-
   galen = callPackage ../development/tools/galen { };
 
   gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
@@ -32526,8 +32524,6 @@ with pkgs;
   mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
 
   noson = libsForQt5.callPackage ../applications/audio/noson { };
-
-  offpunk = callPackage ../applications/networking/browsers/offpunk { };
 
   owl-compositor = callPackage ../applications/window-managers/owl { };
 
