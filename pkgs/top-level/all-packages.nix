@@ -14235,8 +14235,6 @@ with pkgs;
 
   typst-live = callPackage ../tools/typesetting/typst-live { };
 
-  typst-preview = callPackage ../tools/typesetting/typst-preview { };
-
   tz = callPackage ../tools/misc/tz { };
 
   u9fs = callPackage ../servers/u9fs { };
