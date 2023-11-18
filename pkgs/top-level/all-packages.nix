@@ -28141,10 +28141,6 @@ with pkgs;
   linuxPackages_testing = linuxKernel.packages.linux_testing;
   linux_testing = linuxKernel.kernels.linux_testing;
 
-  # FIXME: Remove and alias to `linux(Packages)_testing`` after 23.11 is released
-  linuxPackages_testing_bcachefs = linuxKernel.packages.linux_testing_bcachefs;
-  linux_testing_bcachefs = linuxKernel.kernels.linux_testing_bcachefs;
-
   # Realtime kernel
   linuxPackages-rt = linuxKernel.packageAliases.linux_rt_default;
   linuxPackages-rt_latest = linuxKernel.packageAliases.linux_rt_latest;
