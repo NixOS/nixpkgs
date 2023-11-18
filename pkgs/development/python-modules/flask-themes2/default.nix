@@ -13,6 +13,10 @@ buildPythonPackage rec {
     hash = "sha256-0U0cSdBddb9+IG3CU6zUPlxaJhQlxOV6OLgxnNDChy8=";
   };
 
+  patches = [
+    ./fix-flask-tests.patch # https://github.com/sysr-q/flask-themes2/pull/15
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
   propagatedBuildInputs = [ flask ];
 
