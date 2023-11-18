@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pygobject-stubs";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pygobject";
     repo = "pygobject-stubs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-A28vH5S5xxY7VIJORbgQ7jAi/wG4WiffNGryiumHWf0=";
+    hash = "sha256-fz+qzFWl9JJu9CEVkeiV6XUIPDvwWgrfhTo/nj1EH5c=";
   };
 
   nativeBuildInputs = [
