@@ -1,8 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
 
 buildGoModule rec {
   pname = "kubectl-klock";
   version = "0.5.0";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "applejag";
@@ -12,6 +14,10 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-AkYKKM4PR/msG44MwdSq6XAf6EvdtJHoXyw7Xj7MXso=";
+
+  postInstall = ''
+    makeWrapper $out/bin/kubectl-klock $out/bin/kubectl_complete-klock --add-flags __complete
+  '';
 
   meta = with lib; {
     description = "A kubectl plugin to render watch output in a more readable fashion";
