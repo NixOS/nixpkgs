@@ -7,7 +7,7 @@ let
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatLines optionalString toLower;
-  inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr package path port str strMatching submodule;
+  inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr path port str strMatching submodule;
 
   # Checks if given list of strings contains unique
   # elements when compared without considering case.
@@ -222,16 +222,16 @@ let
         to add paths to the client system-options file.
       '';
     };
-    wrappedPackage = mkOption {
-      type = package;
-      readOnly = true;
-      description = lib.mdDoc ''
-        The TSM client derivation, wrapped with the path
-        to the client system-options file "dsm.sys".
-        This option is to provide the effective derivation
+    wrappedPackage = mkPackageOption pkgs "tsm-client" {
+      default = null;
+      extraDescription = ''
+        This option is to provide the effective derivation,
+        wrapped with the path to the
+        client system-options file "dsm.sys".
+        It should not be changed, but exists
         for other modules that want to call TSM executables.
       '';
-    };
+    } // { readOnly = true; };
   };
 
   cfg = config.programs.tsmClient;
