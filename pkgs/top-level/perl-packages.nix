@@ -4794,6 +4794,7 @@ with self; {
       url = "mirror://cpan/authors/id/H/HA/HAARG/CPAN-Changes-0.500002.tar.gz";
       hash = "sha256-/CNyw3i52JANZBMae5wq407lHeAubnyiAMmyvjU3fk4=";
     };
+    propagatedBuildInputs = [ ModuleRuntime Moo SubQuote TypeTiny ];
     meta = {
       description = "Read and write Changes files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
