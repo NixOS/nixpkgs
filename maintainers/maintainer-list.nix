@@ -2851,6 +2851,13 @@
     githubId = 686190;
     name = "Carlos D'Agostino";
   };
+  carlossless = {
+    email = "contact@carlossless.io";
+    matrix = "@carlossless:matrix.org";
+    github = "carlossless";
+    githubId = 498906;
+    name = "Karolis Stasaitis";
+  };
   carlsverre = {
     email = "accounts@carlsverre.com";
     github = "carlsverre";
