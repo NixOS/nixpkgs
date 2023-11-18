@@ -3,10 +3,52 @@
   []{#sec-fileset}
 
   The [`lib.fileset`](#sec-functions-library-fileset) library allows you to work with _file sets_.
-  A file set is a mathematical set of local files that can be added to the Nix store for use in Nix derivations.
+  A file set is a (mathematical) set of local files that can be added to the Nix store for use in Nix derivations.
   File sets are easy and safe to use, providing obvious and composable semantics with good error messages to prevent mistakes.
 
-  See the [function reference](#sec-functions-library-fileset) for function-specific documentation.
+  ## Overview {#sec-fileset-overview}
+
+  Basics:
+  - [Implicit coercion from paths to file sets](#sec-fileset-path-coercion)
+
+  - [`lib.fileset.trace`](#function-library-lib.fileset.trace)/[`lib.fileset.traceVal`](#function-library-lib.fileset.trace):
+
+    Pretty-print file sets for debugging.
+
+  - [`lib.fileset.toSource`](#function-library-lib.fileset.toSource):
+
+    Add files in file sets to the store to use as derivation sources.
+
+  Combinators:
+  - [`lib.fileset.union`](#function-library-lib.fileset.union)/[`lib.fileset.unions`](#function-library-lib.fileset.unions):
+
+    Create a larger file set from all the files in multiple file sets.
+
+  - [`lib.fileset.intersection`](#function-library-lib.fileset.intersection):
+
+    Create a smaller file set from only the files in both file sets.
+
+  - [`lib.fileset.difference`](#function-library-lib.fileset.difference):
+
+    Create a smaller file set containing all files that are in one file set, but not another one.
+
+  Filtering:
+  - [`lib.fileset.fileFilter`](#function-library-lib.fileset.fileFilter):
+
+    Create a file set from all files that satisisfy a predicate in a directory.
+
+  Utilities:
+  - [`lib.fileset.fromSource`](#function-library-lib.fileset.fromSource):
+
+    Create a file set from a `lib.sources`-based value.
+
+  - [`lib.fileset.gitTracked`](#function-library-lib.fileset.gitTracked)/[`lib.fileset.gitTrackedWith`](#function-library-lib.fileset.gitTrackedWith):
+
+    Create a file set from all tracked files in a local Git repository.
+
+  If you need more file set functions,
+  see [this issue](https://github.com/NixOS/nixpkgs/issues/266356) to request it.
+
 
   ## Implicit coercion from paths to file sets {#sec-fileset-path-coercion}
 
