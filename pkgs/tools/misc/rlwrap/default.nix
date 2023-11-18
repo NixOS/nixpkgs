@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
+
   meta = with lib; {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
