@@ -44,6 +44,9 @@ rustPlatform.buildRustPackage rec {
     (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
   );
 
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
+
   buildAndTestSubdir = "cli";
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
