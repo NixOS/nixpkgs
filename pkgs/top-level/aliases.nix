@@ -828,6 +828,7 @@ mapAliases ({
   rtsp-simple-server = throw "rtsp-simple-server is rebranded as mediamtx, including default config path update"; # Added 2023-04-11
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
+  rustc-wasm32 = rustc; # Added 2023-12-01
   rxvt_unicode = rxvt-unicode-unwrapped; # Added 2020-02-02
   rxvt_unicode-with-plugins = rxvt-unicode; # Added 2020-02-02
 
