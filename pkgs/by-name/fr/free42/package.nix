@@ -1,22 +1,22 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, pkg-config
-, gtk3
 , alsa-lib
+, copyDesktopItems
+, gtk3
+, makeDesktopItem
+, pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.0.21";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-zRO0buYfKtybUisWZJRkvLJVLJYZwLcDnT04rnQWy+s=";
+    repo = "free42";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-v3nZMjV9KnoTefeu2jl3k1B7efnJnNVOAfDVLyce6QI=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,27 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.thomasokken.free42bin";
+      desktopName = "Free42Bin";
+      genericName = "Calculator";
+      exec = "free42bin";
+      type = "Application";
+      comment = finalAttrs.meta.description;
+      categories = [ "Utility" "Calculator" ];
+    })
+    (makeDesktopItem {
+      name = "com.thomasokken.free42dec";
+      desktopName = "Free42Dec";
+      genericName = "Calculator";
+      exec = "free42dec";
+      type = "Application";
+      comment = finalAttrs.meta.description;
+      categories = [ "Utility" "Calculator" ];
+    })
+  ];
+
   buildPhase = ''
     runHook preBuild
 
@@ -50,48 +71,28 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     install --directory $out/bin \
-                        $out/share/doc/${pname} \
-                        $out/share/${pname}/skins \
+                        $out/share/doc/free42 \
+                        $out/share/free42/skins \
                         $out/share/icons/hicolor/48x48/apps \
                         $out/share/icons/hicolor/128x128/apps
 
     install -m755 gtk/free42dec gtk/free42bin $out/bin
-    install -m644 gtk/README $out/share/doc/${pname}/README-GTK
-    install -m644 README $out/share/doc/${pname}/README
+    install -m644 gtk/README $out/share/doc/free42/README-GTK
+    install -m644 README $out/share/doc/free42/README
 
     install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps
     install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps
-    install -m644 skins/* $out/share/${pname}/skins
+    install -m644 skins/* $out/share/free42/skins
 
     runHook postInstall
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "com.thomasokken.free42bin";
-      desktopName = "Free42Bin";
-      genericName = "Calculator";
-      exec = "free42bin";
-      type = "Application";
-      comment = meta.description;
-      categories = [ "Utility" "Calculator" ];
-    })
-    (makeDesktopItem {
-      name = "com.thomasokken.free42dec";
-      desktopName = "Free42Dec";
-      genericName = "Calculator";
-      exec = "free42dec";
-      type = "Application";
-      comment = meta.description;
-      categories = [ "Utility" "Calculator" ];
-    })
-  ];
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thomasokken/free42";
     description = "A software clone of HP-42S Calculator";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ AndersonTorres plabadens ];
-    platforms = with platforms; unix;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "free42dec";
+    platforms = with lib.platforms; unix;
   };
-}
+})
