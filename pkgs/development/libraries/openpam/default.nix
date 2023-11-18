@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, lib }:
+{ lib, stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "openpam";
-  version = "20170430";
+  version = "20230627";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openpam/openpam/Resedacea/${pname}-${version}.tar.gz";
-    sha256 = "0pz8kf9mxj0k8yp8jgmhahddz58zv2b7gnyjwng75xgsx4i55xi2";
+    url = "mirror://sourceforge/openpam/openpam/Ximenia/openpam-${version}.tar.gz";
+    hash = "sha256-DZrI9bVaYkH1Bz8T7/HpVGFCLEWsGjBEXX4QaOkdtP0=";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     homepage = "https://www.openpam.org";
