@@ -10,6 +10,7 @@ let
     "--disable-intl"
     "--enable-threads=posix"
     "--with-glibc-version=${glibc.version}"
+    "--disable-plugin"
 
     # these are required in order to prevent inhibit_libc=true,
     # which will cripple libgcc's unwinder; see:
