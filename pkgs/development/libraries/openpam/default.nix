@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://www.openpam.org";
     description = "An open source PAM library that focuses on simplicity, correctness, and cleanliness";
