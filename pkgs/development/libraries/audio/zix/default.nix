@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     "-Ddocs=disabled"
   ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "A lightweight C99 portability and data structure library";
     homepage = "https://gitlab.com/drobilla/zix";
