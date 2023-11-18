@@ -24971,6 +24971,21 @@ with self; {
     };
   };
 
+  TestExpectAndCheck = buildPerlModule {
+    pname = "Test-ExpectAndCheck";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-ExpectAndCheck-0.06.tar.gz";
+      hash = "sha256-f/o1XpM8ZqxES7Fy2h0gaq2OmKUGnKMH+MsgFAgvVVY=";
+    };
+    buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ Future TestDeep ];
+    meta = {
+      description = "expect/check-style unit testing with object methods";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestFailWarnings = buildPerlPackage {
     pname = "Test-FailWarnings";
     version = "0.008";
