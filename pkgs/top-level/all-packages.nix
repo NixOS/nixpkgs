@@ -32527,8 +32527,6 @@ with pkgs;
 
   noson = libsForQt5.callPackage ../applications/audio/noson { };
 
-  offpunk = callPackage ../applications/networking/browsers/offpunk { };
-
   owl-compositor = callPackage ../applications/window-managers/owl { };
 
   p2pool = callPackage ../applications/misc/p2pool { };
