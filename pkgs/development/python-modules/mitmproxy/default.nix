@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, stdenv
   # Mitmproxy requirements
 , aioquic
 , asgiref
@@ -15,6 +16,7 @@
 , hyperframe
 , kaitaistruct
 , ldap3
+, mitmproxy-macos
 , mitmproxy-rs
 , msgpack
 , passlib
@@ -81,6 +83,8 @@ buildPythonPackage rec {
     urwid
     wsproto
     zstandard
+  ] ++ lib.optionals stdenv.isDarwin [
+    mitmproxy-macos
   ];
 
   nativeCheckInputs = [
