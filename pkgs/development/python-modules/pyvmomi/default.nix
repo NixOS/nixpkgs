@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, lxml
 , requests
 , six
+, pyopenssl
 , pythonOlder
 }:
 
@@ -24,6 +26,13 @@ buildPythonPackage rec {
     requests
     six
   ];
+
+  passthru.optional-dependencies = {
+    sso = [
+      lxml
+      pyopenssl
+    ];
+  };
 
   # Requires old version of vcrpy
   doCheck = false;
