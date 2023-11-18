@@ -114,7 +114,11 @@ let
       check_tables = true;
 
       db = {
-        user = lib.mkDefault "kemal";
+        user = lib.mkDefault (
+          if (lib.versionAtLeast config.system.stateVersion "24.05")
+          then "invidious"
+          else "kemal"
+        );
         dbname = lib.mkDefault "invidious";
         port = cfg.database.port;
         # Blank for unix sockets, see
@@ -143,31 +147,26 @@ let
 
   # Settings necessary for running with an automatically managed local database
   localDatabaseConfig = lib.mkIf cfg.database.createLocally {
+    assertions = [
+      {
+        assertion = cfg.settings.db.user == cfg.settings.db.dbname;
+        message = ''
+          For local automatic database provisioning (services.invidious.database.createLocally == true)
+          to  work, the username used to connect to PostgreSQL must match the database name, that is
+          services.invidious.database.user must match services.invidious.database.dbName.
+          This is the default since NixOS 24.05. For older systems, it is normally safe to manually set
+          services.invidious.database.user to "invidious" as the new user will be created with permissions
+          for the existing database.
+        '';
+      }
+    ];
     # Default to using the local database if we create it
     services.invidious.database.host = lib.mkDefault null;
 
-
-    # TODO(raitobezarius to maintainers of invidious): I strongly advise to clean up the kemal specific
-    # thing for 24.05 and use `ensureDBOwnership`.
-    # See https://github.com/NixOS/nixpkgs/issues/216989
-    systemd.services.postgresql.postStart = lib.mkAfter ''
-      $PSQL -tAc 'ALTER DATABASE "${cfg.settings.db.dbname}" OWNER TO "${cfg.settings.db.user}";'
-    '';
     services.postgresql = {
       enable = true;
-      ensureUsers = lib.singleton { name = cfg.settings.db.user; ensureDBOwnership = false; };
+      ensureUsers = lib.singleton { name = cfg.settings.db.user; ensureDBOwnership = true; };
       ensureDatabases = lib.singleton cfg.settings.db.dbname;
-      # This is only needed because the unix user invidious isn't the same as
-      # the database user. This tells postgres to map one to the other.
-      identMap = ''
-        invidious invidious ${cfg.settings.db.user}
-      '';
-      # And this specifically enables peer authentication for only this
-      # database, which allows passwordless authentication over the postgres
-      # unix socket for the user map given above.
-      authentication = ''
-        local ${cfg.settings.db.dbname} ${cfg.settings.db.user} peer map=invidious
-      '';
     };
   };
 

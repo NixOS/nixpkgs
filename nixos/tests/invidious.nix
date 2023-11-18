@@ -10,12 +10,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.postgresql = {
         enable = true;
         initialScript = pkgs.writeText "init-postgres-with-password" ''
-          CREATE USER kemal WITH PASSWORD 'correct horse battery staple';
-          CREATE DATABASE invidious WITH OWNER kemal;
+          CREATE USER invidious WITH PASSWORD 'correct horse battery staple';
+          CREATE DATABASE invidious WITH OWNER invidious;
         '';
         enableTCPIP = true;
         authentication = ''
-          host invidious kemal samenet scram-sha-256
+          host invidious invidious samenet scram-sha-256
         '';
       };
       networking.firewall.allowedTCPPorts = [ config.services.postgresql.port ];
@@ -24,10 +24,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.invidious = {
         enable = true;
       };
-      services.postgresql.initialScript = pkgs.writeText "init-postgres-with-password" ''
-        CREATE USER kemal;
-        CREATE DATABASE invidious WITH OWNER kemal;
-      '';
 
       specialisation = {
         nginx.configuration = {
