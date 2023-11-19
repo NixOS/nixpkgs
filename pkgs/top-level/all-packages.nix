@@ -33123,6 +33123,16 @@ with pkgs;
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
 
+  kotatogram-desktop-nightly = qt6.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/nightly {
+    stdenv = if stdenv.isDarwin
+      then overrideSDK stdenv "11.0"
+      else stdenv;
+  };
+
+  kotatogram-desktop-nightly-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/nightly/with-webkit.nix {
+    kotatogram-desktop = kotatogram-desktop-nightly;
+  };
+
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
   krabby = callPackage ../applications/misc/krabby { };
