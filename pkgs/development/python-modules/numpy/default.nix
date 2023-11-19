@@ -83,6 +83,10 @@ in buildPythonPackage rec {
     rm numpy/core/tests/test_cython.py
 
     patchShebangs numpy/_build_utils/*.py
+
+    # remove needless reference to full Python path stored in built wheel
+    substituteInPlace numpy/meson.build \
+      --replace 'py.full_path()' "'python'"
   '';
 
   nativeBuildInputs = [
