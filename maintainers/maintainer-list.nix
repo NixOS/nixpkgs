@@ -6941,6 +6941,12 @@
     githubId = 5317234;
     name = "Raphael Megzari";
   };
+  haras = {
+    email = "social@haras.anonaddy.me";
+    github = "haras-unicorn";
+    githubId= 53652902;
+    name = "Haras";
+  };
   hardselius = {
     email = "martin@hardselius.dev";
     github = "hardselius";
