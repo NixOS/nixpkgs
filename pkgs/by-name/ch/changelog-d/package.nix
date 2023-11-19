@@ -1,10 +1,8 @@
 {
-  cabal2nix,
   callPackage,
   lib,
   haskell,
   haskellPackages,
-  writeShellApplication,
 }:
 
 let
@@ -16,16 +14,7 @@ let
 
     version = oldAttrs.version + "-git-${lib.strings.substring 0 7 oldAttrs.src.rev}";
 
-    passthru.updateScript = lib.getExe (writeShellApplication {
-      name = "update-changelog-d";
-      runtimeInputs = [
-        cabal2nix
-      ];
-      text = ''
-        cd pkgs/development/misc/haskell/changelog-d
-        cabal2nix https://codeberg.org/fgaz/changelog-d >changelog-d.nix
-      '';
-    });
+    passthru.updateScript = lib.getExe (callPackage ./updateScript.nix { });
     passthru.tests = {
       basic = callPackage ./tests/basic.nix { changelog-d = finalAttrs.finalPackage; };
     };
