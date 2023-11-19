@@ -14,7 +14,10 @@ let
 
     version = oldAttrs.version + "-git-${lib.strings.substring 0 7 oldAttrs.src.rev}";
 
+    # nix-shell ./maintainers/scripts/update.nix --argstr package changelog-d
     passthru.updateScript = lib.getExe (callPackage ./updateScript.nix { });
+
+    # nix-build -A changelog-d.tests
     passthru.tests = {
       basic = callPackage ./tests/basic.nix { changelog-d = finalAttrs.finalPackage; };
     };
