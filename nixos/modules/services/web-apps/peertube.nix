@@ -100,19 +100,19 @@ in {
     listenHttp = lib.mkOption {
       type = lib.types.port;
       default = 9000;
-      description = lib.mdDoc "listen port for HTTP server.";
+      description = lib.mdDoc "The port that the local PeerTube web server will listen on.";
     };
 
     listenWeb = lib.mkOption {
       type = lib.types.port;
       default = 9000;
-      description = lib.mdDoc "listen port for WEB server.";
+      description = lib.mdDoc "The public-facing port that PeerTube will be accessible at (likely 80 or 443 if running behind a reverse proxy). Clients will try to access PeerTube at this port.";
     };
 
     enableWebHttps = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc "Enable or disable HTTPS protocol.";
+      description = lib.mdDoc "Whether clients will access your PeerTube instance with HTTPS. Does NOT configure the PeerTube webserver itself to listen for incoming HTTPS connections.";
     };
 
     dataDirs = lib.mkOption {
@@ -279,7 +279,7 @@ in {
       type = lib.types.package;
       default = pkgs.peertube;
       defaultText = lib.literalExpression "pkgs.peertube";
-      description = lib.mdDoc "Peertube package to use.";
+      description = lib.mdDoc "PeerTube package to use.";
     };
   };
 
