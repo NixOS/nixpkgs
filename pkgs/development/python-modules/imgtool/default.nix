@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "imgtool";
-  version = "1.10.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A7NOdZNKw9lufEK2vK8Rzq9PRT98bybBfXJr0YMQS0A=";
+    hash = "sha256-elQSVeae7B8Sqjjc4fHU/iDYISZ3xoqbbsY0ypGgZhI=";
   };
 
   nativeBuildInputs = [
