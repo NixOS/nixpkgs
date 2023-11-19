@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
       "https://github.com/hackerschoice/THC-Archive/raw/96eeadb00075097c68bc2c6d10b0a7fbd5be8fae/Tools/secure_delete-${version}.tar.gz";
     sha256 = "1mgqvmxwy36rxjzgd1m0k0qjc7xwjs2nwc5v7gqvvwg3vk8ldn59";
   };
-  
+
   patches = [
     (fetchurl {
       url =
