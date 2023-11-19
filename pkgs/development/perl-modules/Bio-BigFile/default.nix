@@ -25,7 +25,7 @@ buildPerlModule rec {
   # Only kent 335 works with Bio-BigFile, see
   # - official documentation: https://www.ensembl.org/info/docs/tools/vep/script/vep_download.html#bigfile
   # - one of the developer's answer: https://github.com/Ensembl/ensembl-vep/issues/1412
-  # KENT_SRC is needed for building BioBigfil
+  # BioBigfile needs the environment variable KENT_SRC to find kent
   KENT_SRC = kent.overrideAttrs (old: rec {
     pname = "kent";
     version = "335";
@@ -37,13 +37,12 @@ buildPerlModule rec {
       sha256 = "1455dwzpaq4hyhcqj3fpwgq5a39kp46qarfbr6ms6l2lz583r083";
     };
 
-    # The first patch is a custom fix  for linking error with zlib.
     patches = [
+      # Fix  for linking error with zlib. Adding zlib as a dependency is not enough
       ./kent-utils.patch
-      (fetchpatch {
-        url = "https://github.com/ucscGenomeBrowser/kent/commit/316e4fd40f53c96850128fd65097a42623d1e736.patch";
-        sha256 = "sha256-wr3NP5qoSonKz1TLKtQyrTPErCOk2gC1RimcX0tE7cM=";
-      })];
+      # Vendoring upstream patch (not merged in uscsGenomeBrowser/kent)
+      ./kent-316e4fd40f53c96850128fd65097a42623d1e736.patch
+    ];
   });
 
 
@@ -55,12 +54,13 @@ buildPerlModule rec {
     openssl
   ];
 
+  # Ensure compatibility with GCC-11 (compilation fails if -Wno-format-security)
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
     homepage = "https://metacpan.org/dist/Bio-BigFile";
     description = "Manipulate Jim Kent's BigWig and BigBed index files for genomic features";
-    license = licenses.unfree;
+    license = licenses.artistic2;
     maintainers = with maintainers; [ apraga ];
   };
 }
