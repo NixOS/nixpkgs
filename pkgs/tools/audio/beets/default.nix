@@ -46,6 +46,12 @@ lib.makeExtensible (self: {
       # Pillow 10 compatibility fix, a backport of
       # https://github.com/beetbox/beets/pull/4868, which doesn't apply now
       ./patches/fix-pillow10-compat.patch
+
+      # Sphinx 6 compatibility fix.
+      (fetchpatch {
+        url = "https://github.com/beetbox/beets/commit/2106f471affd1dab35b4b26187b9c74d034528c5.patch";
+        hash = "sha256-V/886dYJW/O55VqU8sd+x/URIFcKhP6j5sUhTGMoxL8=";
+      })
     ];
     disabledTests = [
       # This issue is present on this version alone, and can be removed on the
