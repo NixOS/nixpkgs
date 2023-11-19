@@ -11,9 +11,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-LNzsG6I4InygpfbzTikJ1gxTFkVrkDV1eS0CJwKT26A=";
   };
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
   propagatedBuildInputs = with python3Packages; [ git pyqt5 qtpy send2trash ];
-  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook ];
+  nativeBuildInputs = with python3Packages; [ setuptools-scm gettext qt5.wrapQtAppsHook ];
   nativeCheckInputs = with python3Packages; [ git pytestCheckHook ];
 
   disabledTestPaths = [
