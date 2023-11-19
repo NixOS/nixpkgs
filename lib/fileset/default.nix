@@ -149,6 +149,96 @@ let
 in {
 
   /*
+    Incrementally evaluate and trace a file set in a pretty way.
+    This function is only intended for debugging purposes.
+    The exact tracing format is unspecified and may change.
+
+    This function takes a final argument to return.
+    In comparison, [`traceVal`](#function-library-lib.fileset.traceVal) returns
+    the given file set argument.
+
+    This variant is useful for tracing file sets in the Nix repl.
+
+    Type:
+      trace :: FileSet -> Any -> Any
+
+    Example:
+      trace (unions [ ./Makefile ./src ./tests/run.sh ]) null
+      =>
+      trace: /home/user/src/myProject
+      trace: - Makefile (regular)
+      trace: - src (all files in directory)
+      trace: - tests
+      trace:   - run.sh (regular)
+      null
+  */
+  trace =
+    /*
+    The file set to trace.
+
+    This argument can also be a path,
+    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    */
+    fileset:
+    let
+      # "fileset" would be a better name, but that would clash with the argument name,
+      # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
+      actualFileset = _coerce "lib.fileset.trace: Argument" fileset;
+    in
+    seq
+      (_printFileset actualFileset)
+      (x: x);
+
+  /*
+    Incrementally evaluate and trace a file set in a pretty way.
+    This function is only intended for debugging purposes.
+    The exact tracing format is unspecified and may change.
+
+    This function returns the given file set.
+    In comparison, [`trace`](#function-library-lib.fileset.trace) takes another argument to return.
+
+    This variant is useful for tracing file sets passed as arguments to other functions.
+
+    Type:
+      traceVal :: FileSet -> FileSet
+
+    Example:
+      toSource {
+        root = ./.;
+        fileset = traceVal (unions [
+          ./Makefile
+          ./src
+          ./tests/run.sh
+        ]);
+      }
+      =>
+      trace: /home/user/src/myProject
+      trace: - Makefile (regular)
+      trace: - src (all files in directory)
+      trace: - tests
+      trace:   - run.sh (regular)
+      "/nix/store/...-source"
+  */
+  traceVal =
+    /*
+    The file set to trace and return.
+
+    This argument can also be a path,
+    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    */
+    fileset:
+    let
+      # "fileset" would be a better name, but that would clash with the argument name,
+      # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
+      actualFileset = _coerce "lib.fileset.traceVal: Argument" fileset;
+    in
+    seq
+      (_printFileset actualFileset)
+      # We could also return the original fileset argument here,
+      # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
+      actualFileset;
+
+  /*
     Add the local files contained in `fileset` to the store as a single [store path](https://nixos.org/manual/nix/stable/glossary#gloss-store-path) rooted at `root`.
 
     The result is the store path as a string-like value, making it usable e.g. as the `src` of a derivation, or in string interpolation:
@@ -293,75 +383,6 @@ in {
       };
 
   /*
-  Create a file set with the same files as a `lib.sources`-based value.
-  This does not import any of the files into the store.
-
-  This can be used to gradually migrate from `lib.sources`-based filtering to `lib.fileset`.
-
-  A file set can be turned back into a source using [`toSource`](#function-library-lib.fileset.toSource).
-
-  :::{.note}
-  File sets cannot represent empty directories.
-  Turning the result of this function back into a source using `toSource` will therefore not preserve empty directories.
-  :::
-
-  Type:
-    fromSource :: SourceLike -> FileSet
-
-  Example:
-    # There's no cleanSource-like function for file sets yet,
-    # but we can just convert cleanSource to a file set and use it that way
-    toSource {
-      root = ./.;
-      fileset = fromSource (lib.sources.cleanSource ./.);
-    }
-
-    # Keeping a previous sourceByRegex (which could be migrated to `lib.fileset.unions`),
-    # but removing a subdirectory using file set functions
-    difference
-      (fromSource (lib.sources.sourceByRegex ./. [
-        "^README\.md$"
-        # This regex includes everything in ./doc
-        "^doc(/.*)?$"
-      ])
-      ./doc/generated
-
-    # Use cleanSource, but limit it to only include ./Makefile and files under ./src
-    intersection
-      (fromSource (lib.sources.cleanSource ./.))
-      (unions [
-        ./Makefile
-        ./src
-      ]);
-  */
-  fromSource = source:
-    let
-      # This function uses `._isLibCleanSourceWith`, `.origSrc` and `.filter`,
-      # which are technically internal to lib.sources,
-      # but we'll allow this since both libraries are in the same code base
-      # and this function is a bridge between them.
-      isFiltered = source ? _isLibCleanSourceWith;
-      path = if isFiltered then source.origSrc else source;
-    in
-    # We can only support sources created from paths
-    if ! isPath path then
-      if isStringLike path then
-        throw ''
-          lib.fileset.fromSource: The source origin of the argument is a string-like value ("${toString path}"), but it should be a path instead.
-              Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.''
-      else
-        throw ''
-          lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead.''
-    else if ! pathExists path then
-      throw ''
-        lib.fileset.fromSource: The source origin (${toString path}) of the argument is a path that does not exist.''
-    else if isFiltered then
-      _fromSourceFilter path source.filter
-    else
-      # If there's no filter, no need to run the expensive conversion, all subpaths will be included
-      _singleton path;
-
-  /*
     The file set containing all files that are in either of two given file sets.
     This is the same as [`unions`](#function-library-lib.fileset.unions),
     but takes just two file sets instead of a list.
@@ -452,66 +473,6 @@ in {
         (_coerceMany "lib.fileset.unions")
         _unionMany
       ];
-
-  /*
-    Filter a file set to only contain files matching some predicate.
-
-    Type:
-      fileFilter ::
-        ({
-          name :: String,
-          type :: String,
-          ...
-        } -> Bool)
-        -> Path
-        -> FileSet
-
-    Example:
-      # Include all regular `default.nix` files in the current directory
-      fileFilter (file: file.name == "default.nix") ./.
-
-      # Include all non-Nix files from the current directory
-      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
-
-      # Include all files that start with a "." in the current directory
-      fileFilter (file: hasPrefix "." file.name) ./.
-
-      # Include all regular files (not symlinks or others) in the current directory
-      fileFilter (file: file.type == "regular") ./.
-  */
-  fileFilter =
-    /*
-      The predicate function to call on all files contained in given file set.
-      A file is included in the resulting file set if this function returns true for it.
-
-      This function is called with an attribute set containing these attributes:
-
-      - `name` (String): The name of the file
-
-      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
-        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
-
-      Other attributes may be added in the future.
-    */
-    predicate:
-    # The path whose files to filter
-    path:
-    if ! isFunction predicate then
-      throw ''
-        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
-    else if ! isPath path then
-      if path._type or "" == "fileset" then
-        throw ''
-          lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
-              If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
-      else
-        throw ''
-          lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
-    else if ! pathExists path then
-      throw ''
-        lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
-    else
-      _fileFilter predicate path;
 
   /*
     The file set containing all files that are in both of two given file sets.
@@ -605,94 +566,133 @@ in {
       (elemAt filesets 1);
 
   /*
-    Incrementally evaluate and trace a file set in a pretty way.
-    This function is only intended for debugging purposes.
-    The exact tracing format is unspecified and may change.
-
-    This function takes a final argument to return.
-    In comparison, [`traceVal`](#function-library-lib.fileset.traceVal) returns
-    the given file set argument.
-
-    This variant is useful for tracing file sets in the Nix repl.
+    Filter a file set to only contain files matching some predicate.
 
     Type:
-      trace :: FileSet -> Any -> Any
+      fileFilter ::
+        ({
+          name :: String,
+          type :: String,
+          ...
+        } -> Bool)
+        -> Path
+        -> FileSet
 
     Example:
-      trace (unions [ ./Makefile ./src ./tests/run.sh ]) null
-      =>
-      trace: /home/user/src/myProject
-      trace: - Makefile (regular)
-      trace: - src (all files in directory)
-      trace: - tests
-      trace:   - run.sh (regular)
-      null
-  */
-  trace =
-    /*
-    The file set to trace.
+      # Include all regular `default.nix` files in the current directory
+      fileFilter (file: file.name == "default.nix") ./.
 
-    This argument can also be a path,
-    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+      # Include all non-Nix files from the current directory
+      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
+
+      # Include all files that start with a "." in the current directory
+      fileFilter (file: hasPrefix "." file.name) ./.
+
+      # Include all regular files (not symlinks or others) in the current directory
+      fileFilter (file: file.type == "regular") ./.
+  */
+  fileFilter =
+    /*
+      The predicate function to call on all files contained in given file set.
+      A file is included in the resulting file set if this function returns true for it.
+
+      This function is called with an attribute set containing these attributes:
+
+      - `name` (String): The name of the file
+
+      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+      Other attributes may be added in the future.
     */
-    fileset:
-    let
-      # "fileset" would be a better name, but that would clash with the argument name,
-      # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.trace: Argument" fileset;
-    in
-    seq
-      (_printFileset actualFileset)
-      (x: x);
+    predicate:
+    # The path whose files to filter
+    path:
+    if ! isFunction predicate then
+      throw ''
+        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
+    else if ! isPath path then
+      if path._type or "" == "fileset" then
+        throw ''
+          lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
+              If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
+      else
+        throw ''
+          lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
+    else
+      _fileFilter predicate path;
 
   /*
-    Incrementally evaluate and trace a file set in a pretty way.
-    This function is only intended for debugging purposes.
-    The exact tracing format is unspecified and may change.
+  Create a file set with the same files as a `lib.sources`-based value.
+  This does not import any of the files into the store.
 
-    This function returns the given file set.
-    In comparison, [`trace`](#function-library-lib.fileset.trace) takes another argument to return.
+  This can be used to gradually migrate from `lib.sources`-based filtering to `lib.fileset`.
 
-    This variant is useful for tracing file sets passed as arguments to other functions.
+  A file set can be turned back into a source using [`toSource`](#function-library-lib.fileset.toSource).
 
-    Type:
-      traceVal :: FileSet -> FileSet
+  :::{.note}
+  File sets cannot represent empty directories.
+  Turning the result of this function back into a source using `toSource` will therefore not preserve empty directories.
+  :::
 
-    Example:
-      toSource {
-        root = ./.;
-        fileset = traceVal (unions [
-          ./Makefile
-          ./src
-          ./tests/run.sh
-        ]);
-      }
-      =>
-      trace: /home/user/src/myProject
-      trace: - Makefile (regular)
-      trace: - src (all files in directory)
-      trace: - tests
-      trace:   - run.sh (regular)
-      "/nix/store/...-source"
+  Type:
+    fromSource :: SourceLike -> FileSet
+
+  Example:
+    # There's no cleanSource-like function for file sets yet,
+    # but we can just convert cleanSource to a file set and use it that way
+    toSource {
+      root = ./.;
+      fileset = fromSource (lib.sources.cleanSource ./.);
+    }
+
+    # Keeping a previous sourceByRegex (which could be migrated to `lib.fileset.unions`),
+    # but removing a subdirectory using file set functions
+    difference
+      (fromSource (lib.sources.sourceByRegex ./. [
+        "^README\.md$"
+        # This regex includes everything in ./doc
+        "^doc(/.*)?$"
+      ])
+      ./doc/generated
+
+    # Use cleanSource, but limit it to only include ./Makefile and files under ./src
+    intersection
+      (fromSource (lib.sources.cleanSource ./.))
+      (unions [
+        ./Makefile
+        ./src
+      ]);
   */
-  traceVal =
-    /*
-    The file set to trace and return.
-
-    This argument can also be a path,
-    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
-    */
-    fileset:
+  fromSource = source:
     let
-      # "fileset" would be a better name, but that would clash with the argument name,
-      # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.traceVal: Argument" fileset;
+      # This function uses `._isLibCleanSourceWith`, `.origSrc` and `.filter`,
+      # which are technically internal to lib.sources,
+      # but we'll allow this since both libraries are in the same code base
+      # and this function is a bridge between them.
+      isFiltered = source ? _isLibCleanSourceWith;
+      path = if isFiltered then source.origSrc else source;
     in
-    seq
-      (_printFileset actualFileset)
-      # We could also return the original fileset argument here,
-      # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
-      actualFileset;
+    # We can only support sources created from paths
+    if ! isPath path then
+      if isStringLike path then
+        throw ''
+          lib.fileset.fromSource: The source origin of the argument is a string-like value ("${toString path}"), but it should be a path instead.
+              Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.''
+      else
+        throw ''
+          lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fromSource: The source origin (${toString path}) of the argument is a path that does not exist.''
+    else if isFiltered then
+      _fromSourceFilter path source.filter
+    else
+      # If there's no filter, no need to run the expensive conversion, all subpaths will be included
+      _singleton path;
 
   /*
     Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
