@@ -155,6 +155,7 @@ mapAliases ({
   codimd = hedgedoc; # Added 2020-11-29
   inherit (libsForQt5.mauiPackages) communicator; # added 2022-05-17
   compton = throw "'compton' has been renamed to/replaced by 'picom'"; # Converted to throw 2023-09-10
+  picom-allusive = throw "picom-allusive was renamed to compfy in November 2023";
   concurrencykit = libck; # Added 2021-03
   connmanPackages = throw "'connmanPackages' was removed and their subpackages/attributes were promoted to top level."; # Added 2023-10-08
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
