@@ -703,6 +703,7 @@ dont-distribute-packages:
  - borel
  - both
  - breakout
+ - brick_2_1_1
  - bricks
  - bricks-internal-test
  - bricks-parsec
@@ -1725,6 +1726,7 @@ dont-distribute-packages:
  - gogol-youtube-reporting
  - google-drive
  - google-mail-filters
+ - google-maps-geocoding
  - googleplus
  - gore-and-ash-actor
  - gore-and-ash-async
@@ -2172,6 +2174,9 @@ dont-distribute-packages:
  - hsql-odbc
  - hsql-postgresql
  - hsql-sqlite3
+ - hsqml-datamodel-vinyl
+ - hsqml-demo-morris
+ - hsqml-morris
  - hsreadability
  - hssqlppp-th
  - hstar
@@ -2253,7 +2258,15 @@ dont-distribute-packages:
  - idris
  - ige-mac-integration
  - igrf
+ - ihaskell-aeson
+ - ihaskell-basic
+ - ihaskell-blaze
+ - ihaskell-display
+ - ihaskell-hatex
+ - ihaskell-hvega
  - ihaskell-inline-r
+ - ihaskell-juicypixels
+ - ihaskell-magic
  - ihaskell-rlangqq
  - ihttp
  - imap
@@ -4110,6 +4123,7 @@ dont-distribute-packages:
  - voicebase
  - vorbiscomment
  - vpq
+ - vty-crossplatform
  - vty-ui-extras
  - waargonaut
  - wahsp
