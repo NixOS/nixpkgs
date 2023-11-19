@@ -65,7 +65,8 @@ in {
 
   compiler = {
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix {
-      llvmPackages = pkgs.llvmPackages_6;
+      # Should be llvmPackages_6 which has been removed from nixpkgs
+      llvmPackages = null;
     };
 
     ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
