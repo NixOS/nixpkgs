@@ -46,14 +46,10 @@ python3Packages.buildPythonApplication rec {
     pyqt6-sip
   ];
 
+
   postInstall = ''
     install -Dm555 share/applications/com.rtosta.zapzap.desktop -t $out/share/applications/
-    install -Dm555 share/icons/com.rtosta.zapzap.svg -t $out/share/icons/hicolor/scalable/apps/
-  '';
-
-  dontWrapQtApps = true;
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    install -Dm555 share/icons/com.rtosta.zapzap.svg -t $out/share/icons/hicolor/scalable/
   '';
 
   # has no tests
