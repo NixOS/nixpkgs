@@ -62,6 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = true; # https://github.com/DataDog/datadogpy/issues/800
     description = "The Datadog Python library";
     homepage = "https://github.com/DataDog/datadogpy";
     changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
