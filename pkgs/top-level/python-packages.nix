@@ -54,8 +54,6 @@ self: super: with self; {
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
 
-  adafruit-nrfutil = callPackage ../development/python-modules/adafruit-nrfutil { };
-
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
   adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
