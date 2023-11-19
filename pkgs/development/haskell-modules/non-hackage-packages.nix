@@ -7,7 +7,7 @@
 # files.
 self: super: {
 
-  changelog-d = self.callPackage ../misc/haskell/changelog-d/changelog-d.nix {};
+  changelog-d = self.callPackage ../misc/haskell/changelog-d {};
 
   dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 

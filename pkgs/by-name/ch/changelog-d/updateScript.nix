@@ -7,6 +7,6 @@ writeShellApplication {
   ];
   text = ''
     cd pkgs/development/misc/haskell/changelog-d
-    cabal2nix https://codeberg.org/fgaz/changelog-d >changelog-d.nix
+    cabal2nix https://codeberg.org/fgaz/changelog-d >default.nix
   '';
 }
