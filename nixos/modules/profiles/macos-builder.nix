@@ -112,6 +112,9 @@ in
     environment.extraSetup = ''
       rm --force $out/bin/{nix-instantiate,nix-build,nix-shell,nix-prefetch*,nix}
     '';
+    # Deployment is by image.
+    # TODO system.switch.enable = false;?
+    system.disableInstallerTools = true;
 
     nix.settings = {
       auto-optimise-store = true;
