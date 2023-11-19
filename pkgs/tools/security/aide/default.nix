@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://aide.github.io/";
     description = "A file and directory integrity checker";
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ happysalada ];
     platforms = platforms.linux;
   };
 }
