@@ -1,4 +1,4 @@
-{ config, lib, options, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   keysDirectory = "/var/keys";
@@ -14,7 +14,10 @@ in
 {
   imports = [
     ../virtualisation/qemu-vm.nix
-
+    # Setting NIX_PATH allows nix-shell and others to work by default
+    {
+      nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
+    }
     # Avoid a dependency on stateVersion
     {
       disabledModules = [
