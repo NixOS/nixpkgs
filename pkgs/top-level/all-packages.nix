@@ -7236,7 +7236,7 @@ with pkgs;
   compass = callPackage ../development/tools/compass { };
 
   cone = callPackage ../development/compilers/cone {
-    llvmPackages = llvmPackages_7;
+    llvmPackages = llvmPackages_13;
   };
 
   conda = callPackage ../tools/package-management/conda { };
@@ -15640,7 +15640,6 @@ with pkgs;
 
   clang = llvmPackages.clang;
   clang_6  = llvmPackages_6.clang;
-  clang_7  = llvmPackages_7.clang;
   clang_8  = llvmPackages_8.clang;
   clang_9  = llvmPackages_9.clang;
   clang_10 = llvmPackages_10.clang;
@@ -15657,10 +15656,6 @@ with pkgs;
 
   clang-tools_6 = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_6;
-  };
-
-  clang-tools_7 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_7;
   };
 
   clang-tools_8 = callPackage ../development/tools/clang-tools {
@@ -16592,7 +16587,6 @@ with pkgs;
 
   lld = llvmPackages.lld;
   lld_6 = llvmPackages_6.lld;
-  lld_7 = llvmPackages_7.lld;
   lld_8 = llvmPackages_8.lld;
   lld_9 = llvmPackages_9.lld;
   lld_10 = llvmPackages_10.lld;
@@ -16605,7 +16599,6 @@ with pkgs;
 
   lldb = lldb_14;
   lldb_6 = llvmPackages_6.lldb;
-  lldb_7 = llvmPackages_7.lldb;
   lldb_8 = llvmPackages_8.lldb;
   lldb_9 = llvmPackages_9.lldb;
   lldb_10 = llvmPackages_10.lldb;
@@ -16618,7 +16611,6 @@ with pkgs;
 
   llvm = llvmPackages.llvm;
   llvm_6  = llvmPackages_6.llvm;
-  llvm_7  = llvmPackages_7.llvm;
   llvm_8  = llvmPackages_8.llvm;
   llvm_9  = llvmPackages_9.llvm;
   llvm_10 = llvmPackages_10.llvm;
@@ -16654,13 +16646,6 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvm = targetPackages.llvmPackages_6.llvm or llvmPackages_6.llvm;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries or llvmPackages_6.libraries;
-  });
-
-  llvmPackages_7 = recurseIntoAttrs (callPackage ../development/compilers/llvm/7 {
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_7.tools;
-    targetLlvm = targetPackages.llvmPackages_7.llvm or llvmPackages_7.llvm;
-    targetLlvmLibraries = targetPackages.llvmPackages_7.libraries or llvmPackages_7.libraries;
   });
 
   llvmPackages_8 = recurseIntoAttrs (callPackage ../development/compilers/llvm/8 {
