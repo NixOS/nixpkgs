@@ -56,8 +56,6 @@ let
         url = "https://github.com/maubot/maubot/commit/283f0a3ed5dfae13062b6f0fd153fbdc477f4381.patch";
         sha256 = "0yn5357z346qzy5v5g124mgiah1xsi9yyfq42zg028c8paiw8s8x";
       })
-      # allow running "mbc build" in a nix derivation
-      ./allow-building-plugins-from-nix-store.patch
     ];
 
     propagatedBuildInputs = with python.pkgs; [

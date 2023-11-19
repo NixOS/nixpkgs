@@ -5,6 +5,7 @@
 , fetchFromGitea
 , stdenvNoCC
 , callPackage
+, ensureNewerSourcesForZipFilesHook
 , maubot
 , python3
 , poetry
@@ -18,7 +19,10 @@ let
   buildMaubotPlugin = attrs@{ version, pname, base_config ? null, ... }:
     stdenvNoCC.mkDerivation (builtins.removeAttrs attrs [ "base_config" ] // {
       pluginName = "${pname}-v${version}.mbp";
-      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ maubot ];
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+        ensureNewerSourcesForZipFilesHook
+        maubot
+      ];
       buildPhase = ''
         runHook preBuild
 
