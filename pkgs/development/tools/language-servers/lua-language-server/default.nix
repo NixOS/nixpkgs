@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
       -e '/cxx_/s,$cc,clang++,'
   '';
 
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   ninjaFlags = [
     "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja"
   ];
