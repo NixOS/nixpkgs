@@ -20345,6 +20345,8 @@ with pkgs;
 
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
+  zapzap = python3Packages.callPackage ../by-name/za/zapzap { };
+
   whatstyle = callPackage ../development/tools/misc/whatstyle {
     inherit (llvmPackages) clang-unwrapped;
   };
