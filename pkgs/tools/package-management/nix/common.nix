@@ -1,9 +1,11 @@
-{ lib, fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , version
 , suffix ? ""
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
 }:
 assert (hash == null) -> (src != null);
 let
@@ -243,7 +245,7 @@ self = stdenv.mkDerivation {
     '';
     homepage = "https://nixos.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ eelco lovesegfault artturin ];
+    inherit maintainers;
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";

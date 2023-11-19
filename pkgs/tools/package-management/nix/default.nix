@@ -151,6 +151,7 @@ in lib.makeExtensible (self: ({
     patches = [
       patch-monitorfdhup
     ];
+    maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; };
 
   nix_2_10 = common {
