@@ -7,6 +7,7 @@
 , nix-update-script
 
 , autoPatchelfHook
+, cmake
 , ncurses
 , pkg-config
 
@@ -48,19 +49,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.19";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-N7eHIyp2imkMUVwiOCameOROoaDJ7g+zNKdIB2aGZy0=";
+    hash = "sha256-q3Wq7jIYE4g1uPAlpzNWvwUvMy9eN6NQNmPNC4cFmYg=";
   };
 
-  cargoHash = "sha256-XD+/DaaJEJ9jHZITTUma/wfsbduPUTc/SralPOx46Yo=";
+  cargoHash = "sha256-SP85se+H4jL/cXyvfbFS2lxpNSjuptAIPs3/htcrMcw=";
 
   nativeBuildInputs = [
     ncurses
+    cmake
   ] ++ lib.optionals stdenv.isLinux [
     pkg-config
     autoPatchelfHook
@@ -84,8 +86,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 644 misc/rio.desktop -t $out/share/applications
-    install -D -m 644 rio/src/screen/window/resources/images/logo.png \
-                      $out/share/icons/hicolor/scalable/apps/rio.png
+    install -D -m 644 misc/logo.svg \
+                      $out/share/icons/hicolor/scalable/apps/rio.svg
 
     install -dm 755 "$terminfo/share/terminfo/r/"
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
