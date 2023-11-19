@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "11.0.3";
+  version = "12.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
-    repo = pname;
+    repo = "websockets";
     rev = "refs/tags/${version}";
-    hash = "sha256-RdkbIiZI/UYsWdnnl5gJPsnJ/6adfFtkiXC7MO/HwcI=";
+    hash = "sha256-sOL3VI9Ib/PncZs5KN4dAIHOrBc7LfXqT15LO4M6qKg=";
   };
 
   patchPhase = ''
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "WebSocket implementation in Python";
+    description = "WebSocket implementation";
     homepage = "https://websockets.readthedocs.io/";
     changelog = "https://github.com/aaugustin/websockets/blob/${version}/docs/project/changelog.rst";
     license = licenses.bsd3;
