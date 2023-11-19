@@ -603,6 +603,12 @@ in makeScopeWithSplicing' {
     version = "9.2";
     sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
 
+    # Make the build ignore linker warnings
+    prePatch = ''
+      substituteInPlace sys/conf/Makefile.kern.inc \
+        --replace "-Wa,--fatal-warnings" ""
+    '';
+
     patches = [
       # Fix this error when building bootia32.efi and bootx64.efi:
       # error: PHDR segment not covered by LOAD segment
@@ -634,7 +640,11 @@ in makeScopeWithSplicing' {
     makeFlags = defaultMakeFlags ++ [ "FIRMWAREDIR=$(out)/libdata/firmware" ];
     hardeningDisable = [ "pic" ];
     MKKMOD = "no";
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wa,--no-warn" ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=array-parameter"
+      "-Wno-error=array-bounds"
+      "-Wa,--no-warn"
+    ];
 
     postBuild = ''
       make -C arch/$MACHINE/compile/$CONFIG $makeFlags
