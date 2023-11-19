@@ -73,7 +73,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DCMAKE_C_COMPILER_WORKS=ON"
-    "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
     "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
