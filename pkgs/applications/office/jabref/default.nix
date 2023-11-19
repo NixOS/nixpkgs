@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
@@ -20,21 +21,18 @@ let
       snapshot = "2.2.1-SNAPSHOT";
       pin = "2.2.1-20230117.075740-16";
     };
-    afterburner = {
-      snapshot = "1.1.0-SNAPSHOT";
-      pin = "1.1.0-20221226.155809-7";
-    };
   };
 in
 stdenv.mkDerivation rec {
-  version = "5.10";
+  version = "5.11";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-Yj4mjXOZVM0dKcMfTjmnZs/kIs8AR0KJ9HKlyPM96j8=";
+    hash = "sha256-MTnM4QHTFXJt/T8SOWwHlZ1CuegSGjpT3qDaMRi5n18=";
+    fetchSubmodules = true;
   };
 
   desktopItems = [
@@ -51,46 +49,41 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  deps =
-    let
-      javafx-web = fetchurl {
-        url = "https://repo1.maven.org/maven2/org/openjfx/javafx-web/20/javafx-web-20.jar";
-        hash = "sha256-qRtVN34KURlVM5Ie/x25IfKsKsUcux7V2m3LML74G/s=";
-      };
-    in
-    stdenv.mkDerivation {
-      pname = "${pname}-deps";
-      inherit src version postPatch;
+  deps = stdenv.mkDerivation {
+    pname = "${pname}-deps";
+    inherit src version patches postPatch;
 
-      nativeBuildInputs = [ gradle perl ];
-      buildPhase = ''
-        export GRADLE_USER_HOME=$(mktemp -d)
-        gradle --no-daemon downloadDependencies -Dos.arch=amd64
-        gradle --no-daemon downloadDependencies -Dos.arch=aarch64
-      '';
-      # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-      installPhase = ''
-        find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-          | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
-          | sh
-        mv $out/org/jabref/afterburner.fx/${versionReplace.afterburner.pin} \
-          $out/org/jabref/afterburner.fx/${versionReplace.afterburner.snapshot}
-        mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
-          $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
-        # This jar is required but not used or cached for unknown reason.
-        cp ${javafx-web} $out/org/openjfx/javafx-web/20/javafx-web-20.jar
-      '';
-      # Don't move info to share/
-      forceShare = [ "dummy" ];
-      outputHashMode = "recursive";
-      outputHash = "sha256-XswHEKjzErL+znau/F6mTORVJlFSgVuT0svK29v5dEU=";
-    };
+    nativeBuildInputs = [ gradle perl ];
+    buildPhase = ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      gradle --no-daemon downloadDependencies -Dos.arch=amd64
+      gradle --no-daemon downloadDependencies -Dos.arch=aarch64
+    '';
+    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
+    installPhase = ''
+      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
+        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
+        | sh
+      mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
+        $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
+    '';
+    # Don't move info to share/
+    forceShare = [ "dummy" ];
+    outputHashMode = "recursive";
+    outputHash = "sha256-sMbAv122EcLPOqbEVKowfxp9B71iJaccLRlKS75b3Xc=";
+  };
+
+  patches = [
+    # Use JavaFX 21
+    (fetchpatch {
+      url = "https://github.com/JabRef/jabref/commit/2afd1f622a3ab85fc2cf5fa879c5a4d41c245eca.patch";
+      hash = "sha256-cs7TSSnEY4Yf5xrqMOpfIA4jVdzM3OQQV/anQxJyy64=";
+    })
+  ];
 
   postPatch = ''
     # Pin the version
     substituteInPlace build.gradle \
-      --replace 'org.jabref:afterburner.fx:${versionReplace.afterburner.snapshot}' \
-        'org.jabref:afterburner.fx:${versionReplace.afterburner.pin}' \
       --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
         'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
 
@@ -98,29 +91,31 @@ stdenv.mkDerivation rec {
     substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
       --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
         'VERSION_CHECK_ENABLED, Boolean.FALSE'
+
+    # Add back downloadDependencies task for deps download which is removed upstream in https://github.com/JabRef/jabref/pull/10326
+    cat <<EOF >> build.gradle
+    task downloadDependencies {
+      description "Pre-downloads *most* dependencies"
+      doLast {
+        configurations.getAsMap().each { name, config ->
+          println "Retrieving dependencies for $name"
+          try {
+            config.files
+          } catch (e) {
+            // some cannot be resolved, just log them
+            project.logger.info e.message
+          }
+        }
+      }
+    }
+    EOF
   '';
 
   preBuild = ''
-    # Include CSL styles and locales in our build
-    cp -r buildres/csl/* src/main/resources/
-
     # Use the local packages from -deps
     sed -i -e '/repositories {/a maven { url uri("${deps}") }' \
       build.gradle \
-      buildSrc/build.gradle \
       settings.gradle
-
-    # The `plugin {}` block can't resolve plugins from the deps repo
-    sed -e '/plugins {/,/^}/d' buildSrc/build.gradle > buildSrc/build.gradle.tmp
-    cat > buildSrc/build.gradle <<EOF
-    buildscript {
-      repositories { maven { url uri("${deps}") } }
-      dependencies { classpath 'org.openjfx:javafx-plugin:0.0.14' }
-    }
-    apply plugin: 'java'
-    apply plugin: 'org.openjfx.javafxplugin'
-    EOF
-    cat buildSrc/build.gradle.tmp >> buildSrc/build.gradle
   '';
 
   nativeBuildInputs = [
