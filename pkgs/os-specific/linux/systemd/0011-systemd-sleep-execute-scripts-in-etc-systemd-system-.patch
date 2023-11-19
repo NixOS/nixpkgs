@@ -9,10 +9,10 @@ This is needed for NixOS to use such scripts as systemd directory is immutable.
  1 file changed, 1 insertion(+)
 
 diff --git a/src/sleep/sleep.c b/src/sleep/sleep.c
-index de1f6c7ec1..d0cdebd80a 100644
+index 21af3e9e52..6d096e3c78 100644
 --- a/src/sleep/sleep.c
 +++ b/src/sleep/sleep.c
-@@ -224,6 +224,7 @@ static int execute(
+@@ -215,6 +215,7 @@ static int execute(
          };
          static const char* const dirs[] = {
                  SYSTEM_SLEEP_PATH,
