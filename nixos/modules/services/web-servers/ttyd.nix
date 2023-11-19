@@ -14,6 +14,7 @@ let
          ++ (concatLists (mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
          ++ [ "--terminal-type" cfg.terminalType ]
          ++ optionals cfg.checkOrigin [ "--check-origin" ]
+         ++ optionals cfg.writable [ "--writable" ]
          ++ [ "--max-clients" (toString cfg.maxClients) ]
          ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
          ++ optionals cfg.enableIPv6 [ "--ipv6" ]
@@ -73,6 +74,12 @@ in
         type = types.ints.u8;
         default = 1;
         description = lib.mdDoc "Signal to send to the command on session close.";
+      };
+
+      writable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Allow clients to write to the TTY.";
       };
 
       clientOptions = mkOption {
