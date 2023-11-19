@@ -76,6 +76,7 @@ let tests = {
 
       rio.pkg = p: p.rio;
       rio.cmd = "rio -e $command";
+      rio.pinkValue = "#FF1261";
 
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";

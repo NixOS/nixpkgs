@@ -1,20 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , clikit
 , poetry-core
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   version = "6.0.0";
   pname = "xdg";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "srstevenson";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-yVuruSKv99IZGNCpY9cKwAe6gJNAWjL+Lol2D1/0hiI=";
+  # the github source uses `xdg_base_dirs`, but pypi's sdist maintains `xdg` for compatibility.
+  # there are actually breaking changes in xdg_base_dirs,
+  # and libraries that want to support python 3.9 and below need to use xdg.
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-JCeAlPLUXoRtHrKKLruS17Z/wMq1JJ7jzojJX2SaHJI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -23,7 +26,12 @@ buildPythonPackage rec {
     clikit
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # sdist has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "xdg"
+  ];
 
   meta = with lib; {
     description = "XDG Base Directory Specification for Python";
