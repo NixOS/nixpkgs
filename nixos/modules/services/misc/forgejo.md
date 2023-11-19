@@ -68,7 +68,7 @@ services.forgejo = {
   database.user = "gitea";
 };
 
-users.users,gitea = {
+users.users.gitea = {
   home = "/var/lib/gitea";
   useDefaultShell = true;
   group = "gitea";

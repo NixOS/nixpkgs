@@ -106,9 +106,16 @@ in {
   pythonCatchConflictsHook = callPackage ({ makePythonHook, setuptools }:
     makePythonHook {
       name = "python-catch-conflicts-hook";
-      substitutions = {
+      substitutions = let
+        useLegacyHook = lib.versionOlder python.version "3.10";
+      in {
         inherit pythonInterpreter pythonSitePackages;
-        catchConflicts=../catch_conflicts/catch_conflicts.py;
+        catchConflicts = if useLegacyHook then
+          ../catch_conflicts/catch_conflicts_py2.py
+        else
+          ../catch_conflicts/catch_conflicts.py;
+      } // lib.optionalAttrs useLegacyHook {
+        inherit setuptools;
       };
     } ./python-catch-conflicts-hook.sh) {};
 
