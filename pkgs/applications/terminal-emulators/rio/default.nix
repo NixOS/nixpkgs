@@ -30,7 +30,7 @@
 let
   rlinkLibs = if stdenv.isDarwin then [
     darwin.libobjc
-    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ] else [
     (lib.getLib gcc-unwrapped)
     fontconfig
@@ -62,8 +62,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     ncurses
-    cmake
   ] ++ lib.optionals stdenv.isLinux [
+    cmake
     pkg-config
     autoPatchelfHook
   ];
