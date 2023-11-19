@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.0.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-IQBszOKou5Q1lgDy2LICHFmOKYJ3/djmuHGNalVHeBQ=";
+    hash = "sha256-u5380inzLmOT0v6emOtjU3pIEQqTmziAVz1R6QG77x0=";
   };
 
   outputs = [ "out" "doc" "man" ];
