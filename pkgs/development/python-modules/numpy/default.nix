@@ -11,6 +11,7 @@
 , cython_3
 , gfortran
 , meson-python
+, mesonEmulatorHook
 , pkg-config
 , xcbuild
 
@@ -96,6 +97,8 @@ in buildPythonPackage rec {
     pkg-config
   ] ++ lib.optionals (stdenv.isDarwin) [
     xcbuild.xcrun
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -112,6 +115,11 @@ in buildPythonPackage rec {
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
+  '';
+
+  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
+  postConfigure = ''
+    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
   '';
 
   preBuild = ''
