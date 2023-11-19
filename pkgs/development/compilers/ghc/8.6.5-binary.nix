@@ -10,7 +10,9 @@
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
-  useLLVM = !stdenv.targetPlatform.isx86;
+  useLLVM = !(stdenv.targetPlatform.isx86
+              || stdenv.targetPlatform.isPower
+              || stdenv.targetPlatform.isSparc);
 
   useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux"
                 || (with stdenv.hostPlatform; isPower64 && isLittleEndian);
