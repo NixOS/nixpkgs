@@ -4,7 +4,7 @@
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, libepoxy, libglvnd, unstableGitUpdater
+, mesa, libepoxy, libglvnd, unstableGitUpdater, darwin
 }:
 
 stdenv.mkDerivation {
@@ -24,12 +24,28 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
   buildInputs = [
-    libjpeg libopus ffmpeg alsa-lib libpulseaudio protobuf
-    openh264 usrsctp libevent libvpx
+    libjpeg libopus ffmpeg protobuf openh264 usrsctp libevent libvpx abseil-cpp
+  ] ++ lib.optionals stdenv.isLinux [
     libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
-    glib abseil-cpp pcre util-linuxMinimal libselinux libsepol pipewire
+    glib pcre util-linuxMinimal libselinux libsepol pipewire alsa-lib libpulseaudio
     mesa libepoxy libglvnd
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Cocoa
+    AppKit
+    IOKit
+    IOSurface
+    Foundation
+    AVFoundation
+    CoreMedia
+    VideoToolbox
+    CoreGraphics
+    CoreVideo
+    OpenGL
+    Metal
+    MetalKit
+    CoreFoundation
+    ApplicationServices
+  ]);
 
   patches = [
     # GCC 12 Fix
