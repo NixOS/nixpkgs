@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5 }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, git, qt5, gitUpdater }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
@@ -26,6 +26,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";
