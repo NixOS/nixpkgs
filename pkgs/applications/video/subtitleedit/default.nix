@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchzip {
     url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${lib.replaceStrings [ "." ] [ "" ] version}.zip";
-    hash = "sha256-Z7NVn4F19Hx55YWPNmbpWZ8yQulXd50bcy2A/8pCqJ4=";
+    hash = "sha256-kcs2h6HeWniJhGDNsy+EBauXbiDIlLCOJkVOCIzLBzM=";
     stripRoot = false;
   };
 
