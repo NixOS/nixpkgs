@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.4";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = version;
-    hash = "sha256-cvAq9b7xDowLIfIAzV+X08SUEL0QOisr/wBXMYeQ/8A=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-bXAQjq7xBYn34tIZF96Sr5jDUii3s4FGkNx65rGKXkY=";
   };
 
   propagatedBuildInputs = [
