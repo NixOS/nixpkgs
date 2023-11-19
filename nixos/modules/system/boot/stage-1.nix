@@ -435,7 +435,7 @@ let
          }
 
         # mindepth 1 so that we don't change the mode of /
-        (cd "$tmp" && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
