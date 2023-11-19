@@ -2,6 +2,7 @@
 , cmake
 , darwin
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , stdenv
 , symlinkJoin
@@ -45,6 +46,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/b${finalAttrs.version}";
     hash = "sha256-TYklPkqwXLt+80FSHBDA2r3xTXlmgqB7sOt2mNnVNso=";
   };
+
+  patches = [
+    # openblas > v0.3.21 64-bit pkg-config file is now named openblas64.pc
+    # can remove when patch is accepted upstream
+    # https://github.com/ggerganov/llama.cpp/pull/4134
+    (fetchpatch {
+      name = "openblas64-pkg-config.patch";
+      url = "https://github.com/ggerganov/llama.cpp/commit/c885cc9f76c00557601b877136191b0f7aadc320.patch";
+      hash = "sha256-GBTxCiNrCazYRvcHwbqVMAALuJ+Svzf5BE7+nkxw064=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace ./ggml-metal.m \
