@@ -136,6 +136,8 @@ let
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
     postBuild = ''
+      ln -fs $out/bin/ldconfig $out/sbin/ldconfig
+
       if [[ -d  $out/share/gsettings-schemas/ ]]; then
           # Recreate the standard schemas directory if its a symlink to make it writable
           if [[ -L $out/share/glib-2.0 ]]; then
