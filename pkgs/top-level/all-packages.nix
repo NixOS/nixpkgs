@@ -26912,7 +26912,6 @@ with pkgs;
   inherit (import ../servers/sql/mariadb pkgs)
     mariadb_105
     mariadb_106
-    mariadb_1010
     mariadb_1011
     mariadb_110
   ;
