@@ -6,8 +6,9 @@
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
 , version ? srcOverride.version
+, patches ? []
   # src is a package
-, srcOverride ? callPackage ./source.nix {}
+, srcOverride ? callPackage ./source.nix { inherit patches; }
 , gemset ? ./. + "/gemset.nix"
 , yarnHash ? srcOverride.yarnHash
 }:
