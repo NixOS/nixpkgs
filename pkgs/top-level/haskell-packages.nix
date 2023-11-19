@@ -80,20 +80,6 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
 
-    ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
-      bootPkgs =
-        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-        # 8.10.2 is needed as using 8.10.7 is broken due to RTS-incompatibilities
-        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMusl then
-          packages.ghc8102Binary
-        else
-          packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
-      llvmPackages = pkgs.llvmPackages_7;
-    };
-    ghc88 = compiler.ghc884;
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
       bootPkgs =
         # the oldest ghc with aarch64-darwin support is 8.10.5
@@ -484,12 +470,6 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc884 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc884;
-      ghc = bh.compiler.ghc884;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
-    };
-    ghc88 = packages.ghc884;
     ghc8107 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc8107;
       ghc = bh.compiler.ghc8107;
