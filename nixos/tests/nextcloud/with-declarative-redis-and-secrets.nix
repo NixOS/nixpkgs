@@ -41,13 +41,10 @@ in {
         };
         secretFile = "/etc/nextcloud-secrets.json";
 
-        extraOptions = {
-          allow_local_remote_servers = true;
-          redis = {
-            dbindex = 0;
-            timeout = 1.5;
-            # password handled via secretfile below
-          };
+        extraOptions.redis = {
+          dbindex = 0;
+          timeout = 1.5;
+          # password handled via secretfile below
         };
         configureRedis = true;
       };
@@ -65,7 +62,6 @@ in {
 
       services.postgresql = {
         enable = true;
-        package = pkgs.postgresql_14;
       };
       systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
         password=$(cat ${passFile})

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "pylsp-rope";
   version = "0.1.11";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

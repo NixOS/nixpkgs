@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "wand";
   version = "0.6.13";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Wand";

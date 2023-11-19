@@ -18,6 +18,5 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/itkach/xdxf2slob/";
     license = licenses.gpl3;
     platforms = platforms.all;
-    mainProgram = "xdxf2slob";
   };
 }

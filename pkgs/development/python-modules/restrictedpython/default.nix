@@ -5,25 +5,20 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "7.0";
-  pyproject = true;
+  version = "6.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    hash = "sha256-U3BK+7w1D9yPskVEE2e+Zxyfg4CGkgGy6EUudPzj2xQ=";
+    hash = "sha256-23Prfjs5ZQ8NIdEMyN2pwOKYbmIclLDF3jL7De46CK8=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook

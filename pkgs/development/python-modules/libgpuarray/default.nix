@@ -18,7 +18,6 @@
 buildPythonPackage rec {
   pname = "libgpuarray";
   version = "0.7.6";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Theano";

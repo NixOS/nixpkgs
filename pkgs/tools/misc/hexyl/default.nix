@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hexyl";
-  version = "0.14.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-di7SBuB4LsnqlP3BdMcsSLj4zpyKA/ninVpRyR9AJaI=";
+    hash = "sha256-+jmMy5Hi4EfMh/rBzBs5b+f48OZcR/Tw7IU1uTbwiCo=";
   };
 
-  cargoHash = "sha256-fXrdOiCmRgMPJxZIS/SkTkZZkag8ZUhNnMlU4k1m/+0=";
+  cargoHash = "sha256-TjJ0645TRlNzduQgxYLZWz+rLFfRv12GuwXBcmNr/h8=";
 
   meta = with lib; {
     description = "A command-line hex viewer";
@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/hexyl/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir figsoda SuperSandro2000 ];
-    mainProgram = "hexyl";
   };
 }

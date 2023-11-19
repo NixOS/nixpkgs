@@ -19,7 +19,6 @@ in
 buildPythonPackage rec {
   pname = "entrance";
   version = "1.1.20";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

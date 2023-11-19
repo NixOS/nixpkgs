@@ -11,15 +11,14 @@
 , pytestCheckHook
 , python
 , respx
-, setuptools
 , time-machine
 , tzdata
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.14.6";
-  pyproject = true;
+  version = "0.14.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -27,27 +26,21 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-/FL9czp5x/BcKSXXzT19kgGiPFd61BpU7HLtgyyHlIs=";
+    hash = "sha256-69H0hB+yVmyzJ5A2Cb7ZcaaoRzMt618U+TUHYQ03/cY=";
   };
 
   nativeBuildInputs = [
     pbr
-    setuptools
   ];
 
   PBR_VERSION = version;
 
   propagatedBuildInputs = [
     httpx
+    pillow
     pycryptodome
     pyjwt
   ];
-
-  passthru.optional-dependencies = {
-    china = [
-      pillow
-    ];
-  };
 
   postInstall = ''
     cp -R bimmer_connected/tests/responses $out/${python.sitePackages}/bimmer_connected/tests/
@@ -58,7 +51,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
     time-machine
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ];
 
   preCheck = ''
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo

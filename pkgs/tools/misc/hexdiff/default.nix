@@ -35,6 +35,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ rogarb ];
     platforms = lib.platforms.linux;
-    mainProgram = "hexdiff";
   };
 }

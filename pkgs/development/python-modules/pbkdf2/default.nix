@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pbkdf2";
   version = "1.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dtolnay/star-history";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "star-history";
   };
 }

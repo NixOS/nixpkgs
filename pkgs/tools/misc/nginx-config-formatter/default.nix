@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ Baughn ];
     license = licenses.asl20;
     homepage = "https://github.com/slomkowski/nginx-config-formatter";
-    mainProgram = "nginxfmt";
   };
 }

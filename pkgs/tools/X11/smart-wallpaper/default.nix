@@ -34,6 +34,5 @@ stdenvNoCC.mkDerivation {
     license = licenses.bsd2;
     maintainers = with maintainers; [ baitinq ];
     platforms = platforms.linux;
-    mainProgram = "smart-wallpaper";
   };
 }

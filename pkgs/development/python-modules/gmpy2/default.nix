@@ -10,7 +10,6 @@
 let
   pname = "gmpy2";
   version = "2.1.2";
-  format = "setuptools";
 in
 
 buildPythonPackage {

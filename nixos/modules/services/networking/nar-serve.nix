@@ -6,7 +6,7 @@ let
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary maintainers.zimbatm ];
+    maintainers = [ maintainers.rizary ];
   };
   options = {
     services.nar-serve = {

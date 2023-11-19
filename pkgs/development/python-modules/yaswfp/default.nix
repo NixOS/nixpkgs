@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "yaswfp";
   version = "unstable-20210331";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "facundobatista";

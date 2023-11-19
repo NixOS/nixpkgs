@@ -16,6 +16,5 @@ bundlerEnv {
       zachcoyle
       nicknovitski
     ];
-    mainProgram = "teamocil";
   };
 }

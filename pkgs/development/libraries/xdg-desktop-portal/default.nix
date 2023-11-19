@@ -1,12 +1,11 @@
 { lib
+, acl
+, autoreconfHook
+, dbus
 , fetchFromGitHub
 , flatpak
 , fuse3
 , bubblewrap
-, docbook_xml_dtd_412
-, docbook_xml_dtd_43
-, docbook_xsl
-, docutils
 , systemdMinimal
 , geoclue2
 , glib
@@ -14,8 +13,6 @@
 , json-glib
 , libportal
 , libxml2
-, meson
-, ninja
 , nixosTests
 , pipewire
 , gdk-pixbuf
@@ -25,13 +22,12 @@
 , stdenv
 , runCommand
 , wrapGAppsHook
-, xmlto
 , enableGeoLocation ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.2";
+  version = "1.16.0";
 
   outputs = [ "out" "installedTests" ];
 
@@ -39,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    hash = "sha256-Pd5IKrVp/OOE10Ozy4R3XbubVc6iz0znG+YB0Uu+68E=";
+    sha256 = "sha256-5VNauinTvZrSaQzyP/quL/3p2RPcTJUDLscEQMJpvYA=";
   };
 
   patches = [
@@ -50,31 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
       substitute "${flatpak.icon-validator-patch}" "$out" \
         --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
     '')
-
-    # Allow installing installed tests to a separate output.
-    ./installed-tests-path.patch
-
-    # `XDG_DESKTOP_PORTAL_DIR` originally was used for upstream tests. But we are making use
-    # of this in the NixOS module, this actually blocks any configs from being loaded since
-    # configs are not expected to be placed in a portal implementation or even under the
-    # `share/xdg-desktop-portal/portals/` path.
-    ./separate-env-for-portal-config.patch
   ];
 
   nativeBuildInputs = [
-    docbook_xml_dtd_412
-    docbook_xml_dtd_43
-    docbook_xsl
-    docutils # for rst2man
+    autoreconfHook
     libxml2
-    meson
-    ninja
     pkg-config
     wrapGAppsHook
-    xmlto
   ];
 
   buildInputs = [
+    acl
+    dbus
     flatpak
     fuse3
     bubblewrap
@@ -97,33 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     geoclue2
   ];
 
-  nativeCheckInputs = [
-    python3.pkgs.pytest
-    python3.pkgs.python-dbusmock
-    python3.pkgs.pygobject3
-    python3.pkgs.dbus-python
-  ];
-
-  mesonFlags = [
-    "--sysconfdir=/etc"
-    "-Dinstalled-tests=true"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  configureFlags = [
+    "--enable-installed-tests"
   ] ++ lib.optionals (!enableGeoLocation) [
-    "-Dgeoclue=disabled"
+    "--disable-geoclue"
   ];
 
-  doCheck = true;
-
-  preCheck = ''
-    # For test_trash_file
-    export HOME=$(mktemp -d)
-
-    # Upstream disables a few tests in CI upstream as they are known to
-    # be flaky. Let's disable those downstream as hydra exhibits similar
-    # flakes:
-    #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
-    export TEST_IN_CI=1
-  '';
+  makeFlags = [
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
+  ];
 
   passthru = {
     tests = {
@@ -138,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
-    homepage = "https://flatpak.github.io/xdg-desktop-portal/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

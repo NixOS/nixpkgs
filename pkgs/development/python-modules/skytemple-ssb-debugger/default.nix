@@ -1,53 +1,40 @@
-{ buildPythonPackage
-, explorerscript
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , gobject-introspection
 , gtk3
 , gtksourceview4
-, importlib-metadata
-, lib
-, ndspy
+, wrapGAppsHook
 , nest-asyncio
-, pmdsky-debug-py
 , pycairo
-, pygobject3
+, py-desmume
 , pygtkspellcheck
-, pythonOlder
-, range-typed-integers
+, setuptools
 , skytemple-files
 , skytemple-icons
-, skytemple-ssb-emulator
-, wrapGAppsHook
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.6.1";
-  pyproject = true;
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-Zqp/NSF3uoxktycg+Q3BLFUMzbHFKUkYCg+DvEcRydU=";
+    hash = "sha256-/LBz0PCQI3QOAmOZk6Jynqi/+NN0w8gbY/S3YckRZ68=";
   };
 
   buildInputs = [ gtk3 gtksourceview4 ];
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [
-    explorerscript
-    ndspy
     nest-asyncio
-    pmdsky-debug-py
     pycairo
-    pygobject3
+    py-desmume
     pygtkspellcheck
-    range-typed-integers
+    setuptools
     skytemple-files
     skytemple-icons
-    skytemple-ssb-emulator
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
   ];
 
   doCheck = false; # requires Pokémon Mystery Dungeon ROM
@@ -57,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-ssb-debugger";
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ xfix ];
   };
 }

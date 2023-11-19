@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "virtualenvwrapper";
   version = "4.8.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

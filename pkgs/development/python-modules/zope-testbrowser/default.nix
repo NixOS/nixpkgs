@@ -12,7 +12,7 @@
 , wsgiproxy2
 , six
 , mock
-, zope-testing
+, zope_testing
 , zope_testrunner
 , python
 }:
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    zope-testing
+    zope_testing
     zope_testrunner
   ];
 

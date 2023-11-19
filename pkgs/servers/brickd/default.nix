@@ -59,6 +59,5 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.qknight ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
-    mainProgram = "brickd";
   };
 }

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "snowballstemmer";
   version = "2.2.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

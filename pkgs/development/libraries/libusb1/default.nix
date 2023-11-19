@@ -33,9 +33,6 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = withStatic;
 
-  # libusb-1.0.rc:11: fatal error: opening dependency file .deps/libusb-1.0.Tpo: No such file or directory
-  dontAddDisableDepTrack = stdenv.hostPlatform.isWindows;
-
   configureFlags =
     lib.optional (!enableUdev) "--disable-udev"
     ++ lib.optional (withExamples) "--enable-examples-build";

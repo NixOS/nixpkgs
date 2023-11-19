@@ -50,7 +50,7 @@ in
       };
 
       defaultVoicePort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 9987;
         description = lib.mdDoc ''
           Default UDP port for clients to connect to virtual servers - used for first virtual server, subsequent ones will open on incrementing port numbers by default.
@@ -67,7 +67,7 @@ in
       };
 
       fileTransferPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 30033;
         description = lib.mdDoc ''
           TCP port opened for file transfers.
@@ -84,26 +84,10 @@ in
       };
 
       queryPort = mkOption {
-        type = types.port;
+        type = types.int;
         default = 10011;
         description = lib.mdDoc ''
-          TCP port opened for ServerQuery connections using the raw telnet protocol.
-        '';
-      };
-
-      querySshPort = mkOption {
-        type = types.port;
-        default = 10022;
-        description = lib.mdDoc ''
-          TCP port opened for ServerQuery connections using the SSH protocol.
-        '';
-      };
-
-      queryHttpPort = mkOption {
-        type = types.port;
-        default = 10080;
-        description = lib.mdDoc ''
-          TCP port opened for ServerQuery connections using the HTTP protocol.
+          TCP port opened for ServerQuery connections.
         '';
       };
 
@@ -144,9 +128,7 @@ in
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.fileTransferPort ] ++ (map (port:
-        mkIf cfg.openFirewallServerQuery port
-      ) [cfg.queryPort cfg.querySshPort cfg.queryHttpPort]);
+      allowedTCPPorts = [ cfg.fileTransferPort ] ++ optionals (cfg.openFirewallServerQuery) [ cfg.queryPort (cfg.queryPort + 11) ];
       # subsequent vServers will use the incremented voice port, let's just open the next 10
       allowedUDPPortRanges = [ { from = cfg.defaultVoicePort; to = cfg.defaultVoicePort + 10; } ];
     };
@@ -159,19 +141,13 @@ in
       serviceConfig = {
         ExecStart = ''
           ${ts3}/bin/ts3server \
-            dbsqlpath=${ts3}/lib/teamspeak/sql/ \
-            logpath=${cfg.logPath} \
-            license_accepted=1 \
-            default_voice_port=${toString cfg.defaultVoicePort} \
-            filetransfer_port=${toString cfg.fileTransferPort} \
-            query_port=${toString cfg.queryPort} \
-            query_ssh_port=${toString cfg.querySshPort} \
-            query_http_port=${toString cfg.queryHttpPort} \
+            dbsqlpath=${ts3}/lib/teamspeak/sql/ logpath=${cfg.logPath} \
             ${optionalString (cfg.voiceIP != null) "voice_ip=${cfg.voiceIP}"} \
+            default_voice_port=${toString cfg.defaultVoicePort} \
             ${optionalString (cfg.fileTransferIP != null) "filetransfer_ip=${cfg.fileTransferIP}"} \
+            filetransfer_port=${toString cfg.fileTransferPort} \
             ${optionalString (cfg.queryIP != null) "query_ip=${cfg.queryIP}"} \
-            ${optionalString (cfg.queryIP != null) "query_ssh_ip=${cfg.queryIP}"} \
-            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"} \
+            query_port=${toString cfg.queryPort} license_accepted=1
         '';
         WorkingDirectory = cfg.dataDir;
         User = user;

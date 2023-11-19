@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "robotsuite";
   version = "2.3.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

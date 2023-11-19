@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "python-ptrace";
   version = "0.9.8";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

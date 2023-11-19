@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-machinelearningcompute";
   version = "0.4.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,47 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{ buildPythonPackage, lib, fetchFromGitHub, pytest
+, typing ? null, funcsigs ? null, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gentools";
   version = "1.2.1";
-  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
+  # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
     owner = "ariebovenberg";
-    repo = "gentools";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RBUIji3FOIRjfp4t7zBAVSeiWaYufz4ID8nTWmhDkf8=";
+    sha256 = "sha256-RBUIji3FOIRjfp4t7zBAVSeiWaYufz4ID8nTWmhDkf8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  propagatedBuildInputs =
+    lib.optionals (pythonOlder "3.5") [ typing ] ++
+    lib.optionals (pythonOlder "3.4") [ funcsigs ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "gentools"
-  ];
+  nativeCheckInputs = [ pytest ];
+  checkPhase = "pytest";
 
   meta = with lib; {
     description = "Tools for generators, generator functions, and generator-based coroutines";
-    homepage = "https://gentools.readthedocs.io/";
-    changelog = "https://github.com/ariebovenberg/gentools/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
+    homepage = "https://gentools.readthedocs.io/";
     maintainers = with maintainers; [ mredaelli ];
   };
+
 }

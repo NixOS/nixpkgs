@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-qt-dbus-factory";
-  version = "6.0.0";
+  version = "5.5.22";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-9r5thJJjEZAuDT0N/m1gcr0Faa8WpZOtGKDYuZEvJis=";
+    sha256 = "sha256-jqk04S+i3py3rVJcHmkPKHsU+eNEN1yoUBBlfXBbcwM=";
   };
 
   nativeBuildInputs = [

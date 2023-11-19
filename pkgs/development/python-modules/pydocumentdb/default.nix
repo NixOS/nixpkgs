@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "2.3.5";
-  format = "setuptools";
   pname = "pydocumentdb";
 
   src = fetchPypi {

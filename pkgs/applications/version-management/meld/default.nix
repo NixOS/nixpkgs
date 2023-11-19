@@ -69,6 +69,5 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ jtojnar mimame ];
-    mainProgram = "meld";
   };
 }

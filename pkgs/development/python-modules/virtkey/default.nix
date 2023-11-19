@@ -6,7 +6,6 @@ let
 in buildPythonPackage rec {
   pname = "virtkey";
   version = "${majorVersion}.${minorVersion}";
-  format = "setuptools";
 
   src = fetchurl {
     url = "https://launchpad.net/virtkey/${majorVersion}/${version}/+download/virtkey-${version}.tar.gz";

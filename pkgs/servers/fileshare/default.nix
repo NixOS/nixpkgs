@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.esclear ];
     platforms = platforms.linux;
-    mainProgram = "fileshare";
   };
 }

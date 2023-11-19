@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ intervaltree ];
-  pythonImportsCheck = [ "ipymarkup" ];
+  pythonImportCheck = [ "ipymarkup" ];
 
   # Upstream has no tests:
   doCheck = false;

@@ -27,6 +27,5 @@ buildGoModule rec {
       information. It is used by the Datadog agent to provide detailed
       system metrics.
     '';
-    mainProgram = "gohai";
   };
 }

@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "openwebifpy";
   version = "3.2.7";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

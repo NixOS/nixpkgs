@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyprof2calltree";
   version = "1.4.5";
-  format = "setuptools";
 
   # Fetch from GitHub because the PyPi packaged version does not
   # include all test files.

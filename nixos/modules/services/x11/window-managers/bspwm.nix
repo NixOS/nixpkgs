@@ -11,8 +11,14 @@ in
     services.xserver.windowManager.bspwm = {
       enable = mkEnableOption (lib.mdDoc "bspwm");
 
-      package = mkPackageOption pkgs "bspwm" {
-        example = "bspwm-unstable";
+      package = mkOption {
+        type        = types.package;
+        default     = pkgs.bspwm;
+        defaultText = literalExpression "pkgs.bspwm";
+        example     = literalExpression "pkgs.bspwm-unstable";
+        description = lib.mdDoc ''
+          bspwm package to use.
+        '';
       };
       configFile = mkOption {
         type        = with types; nullOr path;
@@ -25,8 +31,14 @@ in
       };
 
       sxhkd = {
-        package = mkPackageOption pkgs "sxhkd" {
-          example = "sxhkd-unstable";
+        package = mkOption {
+          type        = types.package;
+          default     = pkgs.sxhkd;
+          defaultText = literalExpression "pkgs.sxhkd";
+          example     = literalExpression "pkgs.sxhkd-unstable";
+          description = lib.mdDoc ''
+            sxhkd package to use.
+          '';
         };
         configFile = mkOption {
           type        = with types; nullOr path;

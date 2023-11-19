@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "flatdict";
   version = "4.0.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gmr";

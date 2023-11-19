@@ -37,7 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ical2org-py/ical2org.py";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ StillerHarpo ];
-    mainProgram = "ical2orgpy";
   };
 
 }

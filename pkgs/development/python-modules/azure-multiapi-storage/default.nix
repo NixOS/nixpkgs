@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   version = "1.2.0";
-  format = "setuptools";
   pname = "azure-multiapi-storage";
   disabled = isPy27;
 

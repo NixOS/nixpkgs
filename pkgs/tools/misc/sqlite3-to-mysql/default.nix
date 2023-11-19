@@ -59,6 +59,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
-    mainProgram = "sqlite3mysql";
   };
 }

@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = "http://ptop.projects.postgresql.org/";
     platforms = platforms.linux;
     license = licenses.free; # see commands.c
-    mainProgram = "pg_top";
   };
 }

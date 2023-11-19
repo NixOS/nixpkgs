@@ -1512,6 +1512,7 @@
   ./tasks/network-interfaces.nix
   ./tasks/powertop.nix
   ./tasks/scsi-link-power-management.nix
+  ./tasks/snapraid.nix
   ./tasks/stratis.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
@@ -1557,6 +1558,9 @@
     documentation.nixos.extraModules = [
       ./virtualisation/qemu-vm.nix
       ./image/repart.nix
+  { documentation.nixos.extraModules = [
+    ./virtualisation/qemu-vm.nix
+    ./image/repart.nix
     ];
   }
 ]

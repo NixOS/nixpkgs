@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "routes";
   version = "2.5.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Routes";

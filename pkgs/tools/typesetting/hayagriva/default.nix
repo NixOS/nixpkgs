@@ -5,21 +5,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hayagriva";
-  version = "0.5.0";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-oUIMtyQoOqn3C8XOSLFHso76GOHB54ZoLBSDWaDcqdE=";
+    hash = "sha256-d4T+GF0bdMjpjwcN56yYpEw4aZCvJ19P1cbPuVhFR0A=";
   };
 
-  cargoHash = "sha256-l1iFF44qTaBu2QDxkTLZTo+R32OTu5za1qdXtq43IM8=";
+  cargoHash = "sha256-mRKvCnW4XVXYzOKQ5rASwiwpLdqpEgGlq8W4gB7hHco=";
 
   buildFeatures = [ "cli" ];
 
   checkFlags = [
     # requires internet access
     "--skip=try_archive"
-    "--skip=always_archive"
 
     # requires a separate large repository
     "--skip=csl::tests::test_csl"
@@ -31,6 +30,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/typst/hayagriva/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "hayagriva";
   };
 }

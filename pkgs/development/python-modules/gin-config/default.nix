@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "gin-config";
   version = "0.5.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

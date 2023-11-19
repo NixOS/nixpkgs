@@ -44,7 +44,14 @@ in {
     services.prometheus.alertmanager = {
       enable = mkEnableOption (lib.mdDoc "Prometheus Alertmanager");
 
-      package = mkPackageOption pkgs "prometheus-alertmanager" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus-alertmanager;
+        defaultText = literalExpression "pkgs.alertmanager";
+        description = lib.mdDoc ''
+          Package that should be used for alertmanager.
+        '';
+      };
 
       configuration = mkOption {
         type = types.nullOr types.attrs;

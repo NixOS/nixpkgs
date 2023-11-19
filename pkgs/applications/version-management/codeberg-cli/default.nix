@@ -38,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/RobWalt/codeberg-cli";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ robwalt ];
-    mainProgram = "berg";
   };
 }

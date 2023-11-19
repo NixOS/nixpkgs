@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "outcome";
   version = "1.2.0";
-  format = "setuptools";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {

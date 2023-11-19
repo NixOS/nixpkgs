@@ -2,7 +2,8 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchFromGitHub
+, fetchPypi
+, fetchpatch
 , isPyPy
 , substituteAll
 
@@ -31,19 +32,24 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.33.1";
+  version = "2.32.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "imageio";
-    repo = "imageio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1Q1KKQmla/iHb5KbJZZmkpBT2j9uIwy8YDAJ7qDDC4Q=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-5CWtNsYFMI2eptk+2nsJh5JgWbi4YiDhQqWZp5dRKN0=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = [
+    # pillow 10.1.0 compat
+    (fetchpatch {
+      name = "imageio-pillow-10.1.0-compat.patch";
+      url = "https://github.com/imageio/imageio/commit/f58379c1ae7fbd1da8689937b39e499e2d225740.patch";
+      hash = "sha256-jPSl/EUe69Dizkv8CqWpnm+TDPtF3VX2DkHOCEuYTLA=";
+    })
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -111,16 +117,6 @@ buildPythonPackage rec {
     "tests/test_pillow.py"
     "tests/test_spe.py"
     "tests/test_swf.py"
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Segmentation fault
-    "test_bayer_write"
-    # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation
-    "test_writer_file_properly_closed"
-    "test_writer_pixelformat_size_verbose"
-    "test_writer_ffmpeg_params"
-    "test_reverse_read"
   ];
 
   meta = with lib; {

@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "smart-meter-texas";
   version = "0.5.3";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

@@ -38,7 +38,6 @@
 buildPythonPackage rec {
   pname = "spsdk";
   version = "1.11.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";

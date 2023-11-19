@@ -10,24 +10,24 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "9.10.0";
+  version = "9.9.2";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-JVeJY0VUNyIeR/IQcfoLBN0I1WQNFy7PpCjzk5bPv/Q=";
+      sha256 = "sha256-UfzHkgqxEaSsoiDwFLsyIBW2min9AvSBrLPJ2MlKh3U=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-npc+dwHH0tlVKkAZxmGwpoiHXeDn0VHkivqbwoJsI7M=";
+      sha256 = "sha256-ble0n+giM8xmuSewBVdj+RuT2093rW0taNzsyQLO92I=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-fszsGdNKcVgKdv97gBBf+fSODzjKbOBB4MyCvWzm3CA=";
+      sha256 = "sha256-QYhYzjqbCO0/pRDK7c5jYifj+/UY7SLpRqQUQ3LBFkE=";
     };
   };
 
@@ -39,8 +39,7 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ xnwdd evanjs arkivm nicolas-goudry ];
-    mainProgram = "gitkraken";
+    maintainers = with maintainers; [ xnwdd evanjs arkivm ];
   };
 
   linux = stdenv.mkDerivation rec {

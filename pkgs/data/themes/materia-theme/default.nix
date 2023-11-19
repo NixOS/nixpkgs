@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
+  dontBuild = true;
+
   mesonFlags = [
     "-Dgnome_shell_version=${lib.versions.majorMinor gnome.gnome-shell.version}"
   ];

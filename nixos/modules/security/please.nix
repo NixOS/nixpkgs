@@ -13,7 +13,14 @@ in
       file as another user
     '');
 
-    package = mkPackageOption pkgs "please" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.please;
+      defaultText = literalExpression "pkgs.please";
+      description = mdDoc ''
+        Which package to use for {command}`please`.
+      '';
+    };
 
     wheelNeedsPassword = mkOption {
       type = types.bool;

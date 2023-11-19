@@ -57,6 +57,5 @@ buildGoModule rec {
       caarlos0
     ];
     license = licenses.mit;
-    mainProgram = "goreleaser";
   };
 }

@@ -57,6 +57,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ misuzu ];
     platforms = platforms.unix;
-    mainProgram = "alfis";
   };
 }

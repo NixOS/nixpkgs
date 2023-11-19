@@ -18,6 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/consbio/mbtileserver";
     changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
     license = licenses.isc;
-    maintainers = teams.geospatial.members;
+    maintainers = with maintainers; [ sikmir ];
   };
 }

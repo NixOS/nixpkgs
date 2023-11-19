@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/twogood/unshield";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "unshield";
   };
 }

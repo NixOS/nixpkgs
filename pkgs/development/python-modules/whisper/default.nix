@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "whisper";
   version = "1.1.10";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "graphite-project";

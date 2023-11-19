@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "py-ubjson";
   version = "0.16.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Iotic-Labs";

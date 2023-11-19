@@ -90,6 +90,8 @@ let
 
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
+  needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
+
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
@@ -428,7 +430,7 @@ in {
         "${cfg.package}/lib/systemd/systemd-fsck"
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
-        "${cfg.package}/lib/systemd/systemd-makefs"
+        (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
         "${cfg.package}/lib/systemd/systemd-modules-load"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
         "${cfg.package}/lib/systemd/systemd-shutdown"

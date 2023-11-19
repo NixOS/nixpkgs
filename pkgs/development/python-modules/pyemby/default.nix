@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyemby";
   version = "1.9";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mezz64";

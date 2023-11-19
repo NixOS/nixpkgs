@@ -20,6 +20,5 @@ stdenv.mkDerivation {
     homepage = "http://actinid.org/vix/";
     license = licenses.gpl3;
     maintainers = [ maintainers.ehmry ];
-    mainProgram = "vix";
   };
 }

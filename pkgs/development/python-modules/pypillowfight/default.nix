@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "pypillowfight";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

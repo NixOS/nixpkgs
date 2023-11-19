@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "skia-pathops";
   version = "0.8.0.post1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "skia-pathops";

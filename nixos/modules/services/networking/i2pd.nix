@@ -244,7 +244,14 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "i2pd" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.i2pd;
+        defaultText = literalExpression "pkgs.i2pd";
+        description = lib.mdDoc ''
+          i2pd package to use.
+        '';
+      };
 
       logLevel = mkOption {
         type = types.enum ["debug" "info" "warn" "error"];

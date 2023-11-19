@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pycsdr";
   version = "0.18.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";

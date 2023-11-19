@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "py-libzfs";
   version = "22.12.4.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "truenas";

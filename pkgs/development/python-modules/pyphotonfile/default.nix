@@ -6,7 +6,6 @@
 }:
 let
   version = "0.2.1";
-  format = "setuptools";
 in
 buildPythonPackage {
   pname = "pyphotonfile";

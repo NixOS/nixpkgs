@@ -64,6 +64,5 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
-    mainProgram = "screenkey";
   };
 }

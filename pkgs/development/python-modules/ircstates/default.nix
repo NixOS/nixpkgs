@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "ircstates";
   version = "0.12.1";
-  format = "setuptools";
   disabled = pythonOlder "3.6";  # f-strings
 
   src = fetchFromGitHub {

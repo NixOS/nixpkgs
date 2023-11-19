@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "1.2.0";
-  format = "setuptools";
   pname = "azure-mgmt-imagebuilder";
   disabled = isPy27;
 

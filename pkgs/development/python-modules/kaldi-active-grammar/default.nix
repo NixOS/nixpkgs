@@ -24,7 +24,6 @@ in
 buildPythonPackage rec {
   pname = "kaldi-active-grammar";
   version = "3.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "daanzu";

@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "stm32loader";
   version = "0.5.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

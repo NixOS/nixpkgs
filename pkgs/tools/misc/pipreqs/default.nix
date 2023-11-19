@@ -21,6 +21,5 @@ buildPythonApplication rec {
     homepage = "https://github.com/bndr/pipreqs";
     license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];
-    mainProgram = "pipreqs";
   };
 }

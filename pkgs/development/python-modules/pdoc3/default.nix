@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pdoc3";
   version = "0.10.0";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

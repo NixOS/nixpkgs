@@ -23,6 +23,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/bahamas10/hueadm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ infinisil ];
-    mainProgram = "hueadm";
   };
 }

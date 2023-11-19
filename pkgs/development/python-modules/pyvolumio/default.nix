@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyvolumio";
   version = "0.1.5";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

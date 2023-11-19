@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "python-dotenv";
   version = "1.0.0";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {

@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lukaspustina/mhost";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mgttlinger ];
-    mainProgram = "mhost";
   };
 }

@@ -1,38 +1,44 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, gitpython
 , click
 , ordered-set
 , pythonOlder
 , pillow
 , sortedcollections
-, setuptools_dso
 }:
 
 buildPythonPackage rec {
   pname = "tilequant";
-  version = "1.1.0";
-  pyproject = true;
+  version = "0.4.1.post0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uW1g3nlT6Y+1beifo/MOlGxsGL7on/jcAROxSddySHk=";
+  src = fetchFromGitHub {
+    owner = "SkyTemple";
+    repo = pname;
+    rev = version;
+    hash = "sha256-7vU/AYnX7deOH3PjrseRIj9BUJMWzDlwR3UcMpBRyfc=";
+    fetchSubmodules = true;
   };
+
+  buildInputs = [
+    gitpython
+  ];
 
   propagatedBuildInputs = [
     click
     ordered-set
     pillow
     sortedcollections
-    setuptools_dso
   ];
 
   doCheck = false; # there are no tests
 
   pythonImportsCheck = [
-    "tilequant"
+    "skytemple_tilequant"
   ];
 
   meta = with lib; {

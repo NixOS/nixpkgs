@@ -1,17 +1,16 @@
 { lib, stdenv, fetchFromGitHub, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
 , libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs, nixosTests
-, pcre2
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxterminal";
-  version = "0.4.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxterminal";
     rev = version;
-    sha256 = "sha256-bCF/V6yFe4vKqVMOtNlwYyw/ickj1LFuFn4IyypwIg0=";
+    sha256 = "sha256-5J21Xvx43Ie01IxB2usyixDl+WZEeFHn2HXZsRS5imo=";
   };
 
   configureFlags = [
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 
-  buildInputs = [ gtk3 vte pcre2 ];
+  buildInputs = [ gtk3 vte ];
 
   patches = [
     ./respect-xml-catalog-files-var.patch
@@ -47,8 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wiki.lxde.org/en/LXTerminal";
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.pbsds ];
+    maintainers = [ lib.maintainers.velovix ];
     platforms = lib.platforms.linux;
-    mainProgram = "lxterminal";
   };
 }

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
   version = "1.60.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

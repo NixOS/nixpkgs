@@ -2,24 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , azure-core
+, uamqp
 , pythonOlder
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
-  version = "5.11.5";
+  version = "5.11.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HDdOmQezNIPVCLTHst8p+crGM15dpaGNIYU0+UL01Uw=";
+    extension = "zip";
+    hash = "sha256-aLiaNRUEDxF2+bSWxMdtOBwQd3mu13V8u7mj2r4wqCM=";
   };
 
   propagatedBuildInputs = [
     azure-core
+    uamqp
     typing-extensions
   ];
 

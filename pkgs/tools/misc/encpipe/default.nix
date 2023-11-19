@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jedisct1/encpipe";
     license = licenses.isc;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "encpipe";
   };
 }

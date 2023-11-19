@@ -6,7 +6,7 @@ in
 {
   options.services.esdm = {
     enable = lib.mkEnableOption (lib.mdDoc "ESDM service configuration");
-    package = lib.mkPackageOption pkgs "esdm" { };
+    package = lib.mkPackageOptionMD pkgs "esdm" { };
     serverEnable = lib.mkOption {
       type = lib.types.bool;
       default = true;

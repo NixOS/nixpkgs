@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "hexdump";
   version = "3.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

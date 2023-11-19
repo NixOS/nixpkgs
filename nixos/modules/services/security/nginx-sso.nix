@@ -10,7 +10,14 @@ in {
   options.services.nginx.sso = {
     enable = mkEnableOption (lib.mdDoc "nginx-sso service");
 
-    package = mkPackageOption pkgs "nginx-sso" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.nginx-sso;
+      defaultText = literalExpression "pkgs.nginx-sso";
+      description = lib.mdDoc ''
+        The nginx-sso package that should be used.
+      '';
+    };
 
     configuration = mkOption {
       type = types.attrsOf types.unspecified;

@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir synthetica ];
     platforms = platforms.linux;
-    mainProgram = "mako";
   };
 }

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "async-generator";
   version = "1.10";
-  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

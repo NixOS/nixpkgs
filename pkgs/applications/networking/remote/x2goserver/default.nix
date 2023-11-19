@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     homepage = "http://x2go.org/";
     platforms = lib.platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ averelld ];
+    maintainers = with maintainers; [ averelld mkg20001 ];
   };
 }

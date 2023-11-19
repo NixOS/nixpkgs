@@ -31,6 +31,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ jpentland ];
     platforms = platforms.linux;
-    mainProgram = "lesbar";
   };
 })

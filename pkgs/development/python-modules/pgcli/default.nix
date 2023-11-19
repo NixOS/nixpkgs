@@ -23,7 +23,6 @@
 buildPythonPackage rec {
   pname = "pgcli";
   version = "4.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

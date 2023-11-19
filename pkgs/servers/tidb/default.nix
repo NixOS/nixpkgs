@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://pingcap.com";
     license = licenses.asl20;
     maintainers = [];
-    mainProgram = "tidb-server";
   };
 }

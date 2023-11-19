@@ -26,6 +26,5 @@ buildGoModule rec {
     description = "Garbage Youtube livestream downloader";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "ytarchive";
   };
 }

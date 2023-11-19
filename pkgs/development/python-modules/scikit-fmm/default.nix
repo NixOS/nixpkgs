@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "scikit-fmm";
   version = "2023.4.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

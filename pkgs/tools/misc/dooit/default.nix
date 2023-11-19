@@ -50,6 +50,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ khaneliman wesleyjrz ];
-    mainProgram = "dooit";
   };
 }

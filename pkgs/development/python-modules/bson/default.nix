@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "bson";
   version = "0.5.10";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

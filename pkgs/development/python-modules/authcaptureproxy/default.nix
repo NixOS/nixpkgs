@@ -1,33 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-
-# build-system
 , poetry-core
-
-# dependencies
 , aiohttp
 , beautifulsoup4
 , httpx
+, importlib-metadata
 , multidict
 , typer
 , yarl
-
-# tests
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.3.2";
-  pyproject = true;
+  version = "1.2.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gdu0Ror/epu6huTEpBrqHD62O9uaL6273pKnpqPKskc=";
+    hash = "sha256-OY6wT0xi7f6Bn8VOL9+6kyv5cENYbrGGTWWKc6o36cw=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +33,7 @@ buildPythonPackage rec {
     aiohttp
     beautifulsoup4
     httpx
+    importlib-metadata
     multidict
     typer
     yarl

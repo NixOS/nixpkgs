@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oksh";
-  version = "7.4";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-QkWUTqFoEA+XZv0EAHnDtkm9xI+NlQcNqicCvCtXJYc=";
+    sha256 = "sha256-uGiPbkIeKH9zu+xKJJLCYFnyejWLdq7bE59yub3f3KM=";
   };
 
   strictDeps = true;

@@ -2,16 +2,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "platformsh";
-  version = "4.11.4";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "platformsh";
     repo = "legacy-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4Fo4vmTEo0rSJNtoGz/mRv5dRCMq5vJmnwAxsvfs9qo=";
+    hash = "sha256-aEQxlotwMScEIfHrVDdXBgFxMqAIypkEl9TLi1Bvhnw=";
   };
 
-  vendorHash = "sha256-MuZKa4lKvfls85cYjOTHHd6lKVVS0QJD6Pdn7csSzUo=";
+  vendorHash = "sha256-e89xxgTI6FajDfj8xr8VYlbxJD6lUZWz5+2UFQTClsY=";
 
   prePatch = ''
     substituteInPlace config-defaults.yaml \

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "html2text";
   version = "2020.1.16";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

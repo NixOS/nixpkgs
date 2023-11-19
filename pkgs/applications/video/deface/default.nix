@@ -52,6 +52,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ORB-HD/deface";
     license = licenses.mit;
     maintainers = with maintainers; [ lurkki ];
-    mainProgram = "deface";
   };
 }

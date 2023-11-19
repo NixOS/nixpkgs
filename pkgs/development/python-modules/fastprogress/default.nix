@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "fastprogress";
   version = "1.0.3";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

@@ -22,7 +22,6 @@ buildPythonPackage {
 
   # protobuf 21 corresponds with its python library 4.21
   version = "4.${protobufVersionMajor}.${protobufVersionMinor}";
-  format = "setuptools";
 
   sourceRoot = "${protobuf.src.name}/python";
 

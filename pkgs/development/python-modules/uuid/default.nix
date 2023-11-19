@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "uuid";
   version = "1.30";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

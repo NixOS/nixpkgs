@@ -20,7 +20,14 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "trickster" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.trickster;
+        defaultText = literalExpression "pkgs.trickster";
+        description = lib.mdDoc ''
+          Package that should be used for trickster.
+        '';
+      };
 
       configFile = mkOption {
         type = types.nullOr types.path;

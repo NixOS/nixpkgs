@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.4.0";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     rev = "v${version}";
-    hash = "sha256-ufqTbY59AI1MrY/vrsDg5a4WEVz9IFTdgl1GHMw9HGc=";
+    hash = "sha256-YXFfjJp4dSxzEyAtrEi/ONQZKD7QAU/MZ62l4QCcbwE=";
   };
 
   nativeBuildInputs = [
@@ -114,6 +114,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "mold";
-    maintainers = with maintainers; [ azahi paveloom ];
+    maintainers = with maintainers; [ azahi nitsky paveloom ];
   };
 }

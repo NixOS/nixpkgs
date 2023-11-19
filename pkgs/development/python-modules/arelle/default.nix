@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
   version = "18.3";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vyp ];
     platforms = platforms.unix;
-    mainProgram = "setroot";
   };
 }

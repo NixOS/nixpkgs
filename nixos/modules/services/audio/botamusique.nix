@@ -14,7 +14,12 @@ in
   options.services.botamusique = {
     enable = mkEnableOption (lib.mdDoc "botamusique, a bot to play audio streams on mumble");
 
-    package = mkPackageOption pkgs "botamusique" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.botamusique;
+      defaultText = literalExpression "pkgs.botamusique";
+      description = lib.mdDoc "The botamusique package to use.";
+    };
 
     settings = mkOption {
       type = with types; submodule {

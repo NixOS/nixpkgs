@@ -46,11 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
-  postInstall = ''
-    install -Dm444 fluxboxlauncher.desktop -t $out/share/applications
-    install -Dm444 fluxboxlauncher.svg -t $out/share/icons/hicolor/scalable/apps
-  '';
-
   meta = with lib; {
     description = "A Gui editor (gtk) to configure applications launching on a fluxbox session";
     homepage = "https://github.com/mothsART/fluxboxlauncher";

@@ -27,7 +27,7 @@ let
         services.postgresql = {
           enable = true;
           package = postgresql-package;
-          extraPlugins = ps: with ps; [
+          extraPlugins = with postgresql-package.pkgs; [
             timescaledb
             promscale_extension
           ];

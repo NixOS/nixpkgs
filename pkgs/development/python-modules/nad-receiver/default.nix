@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "nad-receiver";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joopert";

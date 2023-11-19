@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/fishi0x01/vsh";
     license = licenses.mit;
     maintainers = with maintainers; [ fishi0x01 ];
-    mainProgram = "vsh";
   };
 }

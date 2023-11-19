@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "bpp-core";
@@ -9,13 +9,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0ma2cl677l7s0n5sffh66cy9lxp5wycm50f121g8rx85p95vkgwv";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/BioPP/bpp-core/commit/d450e8033b06e80dff9c2236fb7ce1f3ced5dcbb.patch";
-      hash = "sha256-9t68mrK7KNs5BxljKMaA+XskCcKDNv8DNCVUYunoNdw=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 

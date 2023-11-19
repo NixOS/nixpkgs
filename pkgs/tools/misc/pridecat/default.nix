@@ -19,6 +19,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/lunasorcery/pridecat";
     license = licenses.cc-by-nc-sa-40;
     maintainers = with maintainers; [ lunarequest ];
-    mainProgram = "pridecat";
   };
 }

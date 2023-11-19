@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/annaaurora/sanctity";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ annaaurora ];
-    mainProgram = "sanctity";
   };
 }

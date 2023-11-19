@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pyixapi";
   version = "0.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

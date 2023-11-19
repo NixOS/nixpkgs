@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "asyncserial";
   version = "unstable-2022-06-10";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";

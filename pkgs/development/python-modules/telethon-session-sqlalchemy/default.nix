@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "telethon-session-sqlalchemy";
   version = "0.2.16";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

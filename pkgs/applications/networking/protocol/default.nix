@@ -25,6 +25,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/luismartingarcia/protocol";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ teto ];
-    mainProgram = "protocol";
   };
 }

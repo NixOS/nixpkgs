@@ -158,10 +158,9 @@ in stdenv.mkDerivation {
 
     # Remove PATH restriction, root and avahi daemon checks, and hostname call
     sed -i '
-      s/^\s*PATH=/# &/
+      s/^PATH=/# &/
       s/isRoot="false"/# &/
-      s/^\s*checkAvahiDaemon$/:/
-      s/^\s*installBundledInstall$/:/
+      s/^checkAvahiDaemon$/# &/
       s/`hostname`/""/
     ' MathInstaller
 

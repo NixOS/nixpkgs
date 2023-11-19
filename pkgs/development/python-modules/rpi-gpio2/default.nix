@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "rpi-gpio2";
   version = "0.4.0";
-  format = "setuptools";
 
   # PyPi source does not work for some reason
   src = fetchFromGitHub {

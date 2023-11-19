@@ -1,8 +1,6 @@
 { lib
 , python3
 , fetchPypi
-, fetchFromGitHub
-, fetchpatch
 , git
 , postgresql
 , postgresqlTestHook
@@ -12,7 +10,6 @@
 let
   py = python3.override {
     packageOverrides = final: prev: {
-      # sqlalchemy 1.4.x or 2.x are not supported
       sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = fetchPypi {
@@ -22,10 +19,31 @@ let
         };
         doCheck = false;
       });
-      alembic = prev.alembic.overridePythonAttrs (lib.const {
+      starlette = prev.starlette.overridePythonAttrs (oldAttrs: rec {
+        version = "0.20.4";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-QvzzEi+Zj+/OPixa1+Xtvw8Cz2hdZGqDoI1ARyavUIQ=";
+        };
+        nativeBuildInputs = with final; [
+          setuptools
+        ];
         doCheck = false;
       });
-      factory-boy = prev.factory-boy.overridePythonAttrs (lib.const {
+      ariadne = prev.ariadne.overridePythonAttrs (oldAttrs: rec {
+        version = "0.17.1";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-B98wl/NkNOyq99AKsVQem9TZ0meOnvg7IdWIEAI2vy8=";
+        };
+        nativeBuildInputs = with final; [
+          setuptools
+        ];
+        doCheck = false;
+      });
+      alembic = prev.alembic.overridePythonAttrs (lib.const {
         doCheck = false;
       });
       beautifultable = prev.beautifultable.overridePythonAttrs (oldAttrs: rec {
@@ -43,27 +61,25 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
-  version = "4.4.2";
-  format = "pyproject";
+  version = "4.3.0.post1";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "irrdnet";
-    repo = "irrd";
-    rev = "v${version}";
-    hash = "sha256-vZSuBP44ZvN0mu2frcaQNZN/ilvKWIY9ETnrStzSnG0=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-hayfdcYAgIopfUiAR/AUWMuTzwpXvXuq6iPp9uhWN1M=";
   };
+
   patches = [
-    # replace poetry dependency with poetry-core
-    # https://github.com/irrdnet/irrd/pull/884
-    (fetchpatch {
-      url = "https://github.com/irrdnet/irrd/commit/4fb6e9b50d65729aff2d0a94c2e9b4e2daadea85.patch";
-      hash = "sha256-DcE6VZfJkbHnPiEdYDpXea7S/8P0SmdvvJ42hywnpf0=";
-    })
+    ./irrd-asgiref-3.8.0.diff
   ];
 
+  pythonRelaxDeps = true;
   nativeBuildInputs = with python3.pkgs; [
-    poetry-core
+    pythonRelaxDepsHook
   ];
+  postPatch = ''
+    substituteInPlace setup.py --replace psycopg2-binary psycopg2
+  '';
 
   nativeCheckInputs = [
     git
@@ -74,7 +90,6 @@ py.pkgs.buildPythonPackage rec {
     pytest-asyncio
     pytest-freezegun
     pytestCheckHook
-    smtpdfix
   ]);
 
   propagatedBuildInputs = with py.pkgs; [
@@ -108,17 +123,6 @@ py.pkgs.buildPythonPackage rec {
     ujson
     wheel
     websockets
-    limits
-    factory-boy
-    webauthn
-    wtforms
-    imia
-    starlette-wtf
-    zxcvbn
-    pyotp
-    asgi-logger
-    wtforms-bootstrap5
-    email-validator
   ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
   preCheck = ''
@@ -130,15 +134,8 @@ py.pkgs.buildPythonPackage rec {
       sleep 1
     done
 
-    export SMTPD_HOST=127.0.0.1
     export IRRD_DATABASE_URL="postgres:///$PGDATABASE"
     export IRRD_REDIS_URL="redis://localhost/1"
-  '';
-
-  # required for test_object_writing_and_status_checking
-  postgresqlTestSetupPost = ''
-    echo "track_commit_timestamp=on" >> $PGDATA/postgresql.conf
-    pg_ctl restart
   '';
 
   postCheck = ''

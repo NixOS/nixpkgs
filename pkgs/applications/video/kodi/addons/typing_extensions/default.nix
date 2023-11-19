@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "typing_extensions";
   namespace = "script.module.typing_extensions";
-  version = "4.7.1";
+  version = "3.7.4.3";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-bCGPl5fGVyptCenpNXP/Msi7hu+UdtZd2ms7MfzbsbM=";
+    sha256 = "sha256-GE9OfOIWtEKQcAmQZAK1uOFN4DQDiWU0YxUWICGDSFw=";
   };
 
   passthru = {

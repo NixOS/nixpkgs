@@ -18,7 +18,14 @@ in
 {
 
   options.programs.htop = {
-    package = mkPackageOption pkgs "htop" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.htop;
+      defaultText = lib.literalExpression "pkgs.htop";
+      description = lib.mdDoc ''
+        The htop package that should be used.
+      '';
+    };
 
     enable = mkEnableOption (lib.mdDoc "htop process monitor");
 

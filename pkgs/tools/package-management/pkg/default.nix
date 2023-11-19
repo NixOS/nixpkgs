@@ -32,6 +32,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ qyliss ];
     platforms = with platforms; darwin ++ freebsd ++ linux ++ netbsd ++ openbsd;
     license = licenses.bsd2;
-    mainProgram = "pkg";
   };
 })

@@ -16,9 +16,6 @@
 
 let
   perlPackages = perl538Packages;
-
-  binPath = lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio));
-  libPath = lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ];
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
@@ -121,9 +118,6 @@ perlPackages.buildPerlPackage rec {
     rm -r CPAN
     mv CPAN_used CPAN
 
-    # another set of vendored/modified modules exist in lib, more selectively cleaned for now
-    rm -rf lib/Audio
-
     ${lib.optionalString (!enableUnfreeFirmware) ''
       # remove unfree firmware
       rm -rf Firmware
@@ -136,8 +130,9 @@ perlPackages.buildPerlPackage rec {
 
   installPhase = ''
     cp -r . $out
-    wrapProgram $out/slimserver.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
-    wrapProgram $out/scanner.pl --prefix LD_LIBRARY_PATH : "${libPath}" --prefix PATH : "${binPath}"
+    wrapProgram $out/slimserver.pl \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib stdenv.cc.cc.lib ]}" \
+      --prefix PATH : "${lib.makeBinPath ([ lame flac faad2 sox wavpack ] ++ (lib.optional stdenv.isLinux monkeysAudio))}"
     mkdir $out/bin
     ln -s $out/slimserver.pl $out/bin/slimserver
   '';

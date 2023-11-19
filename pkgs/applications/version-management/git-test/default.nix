@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
-    mainProgram = "git-test";
   };
 }

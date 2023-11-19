@@ -34,6 +34,5 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ georgesalkhouri ];
-    mainProgram = "yai";
   };
 }

@@ -39,6 +39,7 @@
 , libwacom
 , libxml2
 , libxslt
+, magpie
 , meson
 , modemmanager
 , networkmanager
@@ -108,7 +109,6 @@ stdenv.mkDerivation rec {
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome.gnome-user-share
-    gnome.mutter
     gsettings-desktop-schemas
     gsound
     gtk3
@@ -126,6 +126,7 @@ stdenv.mkDerivation rec {
     libsecret
     libwacom
     libxml2
+    magpie
     modemmanager
     networkmanager
     polkit
@@ -158,7 +159,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
-      --prefix XDG_DATA_DIRS : "${gnome.mutter}/share"
+      --prefix XDG_DATA_DIRS : "${magpie}/share"
     )
   '';
 

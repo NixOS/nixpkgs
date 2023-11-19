@@ -39,6 +39,5 @@ mkDerivation rec {
     maintainers = with maintainers; [ sbruder ];
     license = licenses.gpl3Plus;
     platforms = with platforms; linux;
-    mainProgram = "antimicrox";
   };
 }

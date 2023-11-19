@@ -20,6 +20,5 @@ buildGoModule rec {
     license = licenses.cc0;
     platforms = platforms.linux;
     maintainers = with maintainers; [ crinklywrappr ];
-    mainProgram = "tdfgo";
   };
 }

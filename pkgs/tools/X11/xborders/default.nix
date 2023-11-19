@@ -53,6 +53,5 @@ python3Packages.buildPythonPackage rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ elnudev ];
     platforms = platforms.linux;
-    mainProgram = "xborders";
   };
 }

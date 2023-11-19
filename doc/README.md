@@ -1,17 +1,13 @@
-# Contributing to the Nixpkgs reference manual
+# Contributing to the Nixpkgs manual
 
-This directory houses the sources files for the Nixpkgs reference manual.
+This directory houses the sources files for the Nixpkgs manual.
 
-Going forward, it should only contain [reference](https://nix.dev/contributing/documentation/diataxis#reference) documentation.
-For tutorials, guides and explanations, contribute to <https://nix.dev/> instead.
-
-For documentation only relevant for contributors, use Markdown files and code comments in the source code.
-
-Rendered documentation:
-- [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
-- [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
-
+You can find the [rendered documentation for Nixpkgs `unstable` on nixos.org](https://nixos.org/manual/nixpkgs/unstable/).
 The rendering tool is [nixos-render-docs](../pkgs/tools/nix/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
+
+[Docs for Nixpkgs stable](https://nixos.org/manual/nixpkgs/stable/) are also available.
+
+If you're only getting started with Nix, go to [nixos.org/learn](https://nixos.org/learn).
 
 ## Contributing to this documentation
 
@@ -52,7 +48,7 @@ It uses the widely compatible [header attributes](https://github.com/jgm/commonm
 ## Syntax {#sec-contributing-markup}
 ```
 
-> [!Note]
+> **Note**
 > NixOS option documentation does not support headings in general.
 
 #### Inline Anchors

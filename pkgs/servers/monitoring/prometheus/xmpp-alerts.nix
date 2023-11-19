@@ -9,18 +9,27 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
-  version = "0.5.8";
-  format = "pyproject";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iwqcowwJktZQfdxykpsw/MweAPY0KF7ojVwvk1LP8a4=";
+    sha256 = "sha256-PwShGS1rbfZCK5OS6Cnn+mduOpWAD4fC69mcGB5GB1c=";
   };
 
+  patches = [
+    # Required until https://github.com/jelmer/prometheus-xmpp-alerts/pull/33 is merged
+    # and contained in a release
+    (fetchpatch {
+      name = "Fix-outdated-entrypoint-definiton.patch";
+      url = "https://github.com/jelmer/prometheus-xmpp-alerts/commit/c41dd41dbd3c781b874bcf0708f6976e6252b621.patch";
+      hash = "sha256-G7fRLSXbkI5EDgGf4n9xSVs54IPD0ev8rTEFffRvLY0=";
+    })
+  ];
+
   postPatch = ''
-    substituteInPlace pyproject.toml \
+    substituteInPlace setup.cfg \
       --replace "bs4" "beautifulsoup4"
   '';
 
@@ -37,7 +46,6 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   nativeCheckInputs = with python3Packages; [
-    setuptools
     unittestCheckHook
     pytz
   ];

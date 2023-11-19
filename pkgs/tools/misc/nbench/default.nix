@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     description = "A synthetic computing benchmark program";
     platforms = platforms.unix;
     maintainers = with lib.maintainers; [ bennofs ];
-    mainProgram = "nbench";
   };
 }

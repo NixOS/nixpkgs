@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pygments-markdown-lexer";
   version = "0.1.0.dev39";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

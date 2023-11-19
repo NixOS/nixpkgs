@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://golang.org/x/review/git-codereview";
     license = licenses.bsd3;
     maintainers = [ maintainers.edef ];
-    mainProgram = "git-codereview";
   };
 }

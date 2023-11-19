@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -16,21 +17,24 @@
 , poppler_utils
 , liberation_ttf
 , xcbuild
-, pango
-, pkg-config
 }:
 
 let
-  version = "2.1.2";
+  version = "1.17.4";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jD0dRgU/9gtNZUuTV+zkjqWb8gBnvD/AOTPucdaVKwE=";
+    hash = "sha256-Kl8AUfHfEiEy40qeDI8x2rxdXcj01mpitw7T/96ibQQ=";
   };
 
-  python = python3;
+  # Use specific package versions required by paperless-ngx
+  python = python3.override {
+    packageOverrides = self: super: {
+      django = super.django_4;
+    };
+  };
 
   path = lib.makeBinPath [
     ghostscript
@@ -48,22 +52,17 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    postPatch = ''
-      cd src-ui
-    '';
-
-    npmDepsHash = "sha256-K7wTYGGwEhPoXdRD+4swhSlMH0iem6YkF0tjnVHh7K8=";
+    npmDepsHash = "sha256-5Q9NtIO7k/6AiF9Er10HhmEBFyQOP9CiTkTZglUeChg=";
 
     nativeBuildInputs = [
-      pkg-config
       python3
     ] ++ lib.optionals stdenv.isDarwin [
       xcbuild
     ];
 
-    buildInputs = [
-      pango
-    ];
+    postPatch = ''
+      cd src-ui
+    '';
 
     CYPRESS_INSTALL_BINARY = "0";
     NG_CLI_ANALYTICS = "false";
@@ -92,6 +91,16 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   inherit version src;
+
+  patches = [
+    # https://github.com/paperless-ngx/paperless-ngx/pull/4146
+    (fetchpatch {
+      name = "fix-tests-for-python311.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/73f6c0a056e3859061339e295f57213fd4239b2d.patch";
+      hash = "sha256-sZcRug5T4cw5ppKpGYrrfz9RxtYxnkeNOlXcMgdWT0E=";
+    })
+  ];
+
 
   nativeBuildInputs = [
     gettext
@@ -122,24 +131,18 @@ python.pkgs.buildPythonApplication rec {
     constantly
     cryptography
     dateparser
-    django-auditlog
     django-celery-results
-    django-compression-middleware
     django-cors-headers
+    django-compression-middleware
     django-extensions
     django-filter
     django-guardian
-    django-multiselectfield
     django
     djangorestframework-guardian2
     djangorestframework
-    drf-writable-nested
     filelock
-    flower
-    gotenberg-client
     gunicorn
     h11
-    h2
     hiredis
     httptools
     httpx
@@ -175,8 +178,8 @@ python.pkgs.buildPythonApplication rec {
     python-dateutil
     python-dotenv
     python-ipware
-    python-magic
     python-gnupg
+    python-magic
     pytz
     pyyaml
     pyzbar
@@ -187,8 +190,8 @@ python.pkgs.buildPythonApplication rec {
     requests
     scikit-learn
     scipy
-    setproctitle
     service-identity
+    setproctitle
     sniffio
     sqlparse
     threadpoolctl
@@ -230,18 +233,16 @@ python.pkgs.buildPythonApplication rec {
     ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
-  installPhase = let
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
-  in ''
+  installPhase = ''
     mkdir -p $out/lib/paperless-ngx
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
     ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
-      --prefix PYTHONPATH : "${pythonPath}" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : "${path}"
     makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
-      --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
+      --prefix PYTHONPATH : "$PYTHONPATH:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
   '';
 
@@ -254,6 +255,7 @@ python.pkgs.buildPythonApplication rec {
     daphne
     factory-boy
     imagehash
+    pdfminer-six
     pytest-django
     pytest-env
     pytest-httpx
@@ -279,6 +281,10 @@ python.pkgs.buildPythonApplication rec {
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
       --replace "--cov --cov-report=html --cov-report=xml" ""
+    # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
+    # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
+    substituteInPlace src/paperless_tesseract/tests/test_parser.py \
+      --replace "this is awebp document" "this is a webp document"
   '';
 
   disabledTests = [

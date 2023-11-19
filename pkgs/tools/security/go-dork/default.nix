@@ -22,6 +22,5 @@ buildGoModule rec {
     changelog = "https://github.com/dwisiswant0/go-dork/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "go-dork";
   };
 }

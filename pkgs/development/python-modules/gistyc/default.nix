@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "gistyc";
   version = "1.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

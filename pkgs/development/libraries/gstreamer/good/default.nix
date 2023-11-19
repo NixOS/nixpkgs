@@ -43,7 +43,6 @@
 , libgudev
 , wavpack
 , glib
-, openssl
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
@@ -54,13 +53,13 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.7";
+  version = "1.22.6";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ttsOGOOYtSZlt83OMBw0qHUEg9X0+6we3p+AsDdDzRU=";
+    hash = "sha256-s7B/4/HOf+k6qb5yF4ZgRFSPNcSneSKA7sfhCKMvmBc=";
   };
 
   strictDeps = true;
@@ -110,7 +109,6 @@ stdenv.mkDerivation rec {
     libintl
     ncurses
     wavpack
-    openssl
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
   ] ++ lib.optionals enableX11 [

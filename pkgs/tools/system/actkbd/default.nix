@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/";
     platforms = platforms.linux;
-    mainProgram = "actkbd";
   };
 }

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "simplehound";
   version = "0.6";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

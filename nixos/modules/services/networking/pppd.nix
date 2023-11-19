@@ -14,7 +14,12 @@ in
     services.pppd = {
       enable = mkEnableOption (lib.mdDoc "pppd");
 
-      package = mkPackageOption pkgs "ppp" { };
+      package = mkOption {
+        default = pkgs.ppp;
+        defaultText = literalExpression "pkgs.ppp";
+        type = types.package;
+        description = lib.mdDoc "pppd package to use.";
+      };
 
       peers = mkOption {
         default = {};

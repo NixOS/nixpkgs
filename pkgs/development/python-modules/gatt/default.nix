@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "gatt";
   version = "0.2.6";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "getsenic";

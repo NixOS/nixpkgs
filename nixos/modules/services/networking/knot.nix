@@ -182,7 +182,14 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "knot-dns" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.knot-dns;
+        defaultText = literalExpression "pkgs.knot-dns";
+        description = lib.mdDoc ''
+          Which Knot DNS package to use
+        '';
+      };
     };
   };
   imports = [

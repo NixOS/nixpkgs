@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/yxdunc/lipl";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "lipl";
   };
 }

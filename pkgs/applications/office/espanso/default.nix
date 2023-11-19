@@ -1,5 +1,4 @@
 { lib
-, coreutils
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -107,9 +106,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace scripts/create_bundle.sh \
-      --replace target/mac/ $out/Applications/ \
-      --replace /bin/echo ${coreutils}/bin/echo
+    substituteInPlace scripts/create_bundle.sh --replace target/mac/ $out/Applications/
     patchShebangs scripts/create_bundle.sh
     substituteInPlace espanso/src/res/macos/Info.plist \
       --replace "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
@@ -119,11 +116,6 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
       --replace '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
   '';
-
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
 
   # Some tests require networking
   doCheck = false;

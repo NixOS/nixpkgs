@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "purl";
   version = "1.6";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "codeinthehole";

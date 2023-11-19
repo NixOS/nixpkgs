@@ -5,11 +5,11 @@
 , hatch-fancy-pypi-readme
 , hatch-vcs
 , hatchling
-, anyio
-, distro
+, attrs
+, cattrs
 , httpx
-, httpx-auth
 , openllm-core
+, orjson
 , soundfile
 , transformers
 }:
@@ -30,19 +30,16 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    anyio
-    distro
+    attrs
+    cattrs
     httpx
-    openllm-core
+    orjson
   ];
 
   passthru.optional-dependencies = {
     grpc = [
       bentoml
     ] ++ bentoml.optional-dependencies.grpc;
-    auth = [
-      httpx-auth
-    ];
     agents = [
       transformers
       # diffusers

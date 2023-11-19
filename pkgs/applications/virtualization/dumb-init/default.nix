@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.linux;
-    mainProgram = "dumb-init";
   };
 }

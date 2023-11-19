@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.1.0";
+  version = "6.29.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-cKUV+tBZ5ZdXkoLdJPdURKnWP5B5gzCUQQehVQIRgko=";
+    hash = "sha256-w9mvMKm76w5sDfW0OYxhZuhIOYKdUH3tpiGlpKNC2kM=";
   };
 
   patches = [
@@ -123,7 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
       zeroconf
       jeepney
       pycryptodome
-      xxhash
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [

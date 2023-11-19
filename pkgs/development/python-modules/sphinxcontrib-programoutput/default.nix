@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-programoutput";
   version = "0.17";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

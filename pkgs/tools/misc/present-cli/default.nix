@@ -28,6 +28,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/terror/present/";
     license = licenses.cc0;
     maintainers = with maintainers; [ cameronfyfe ];
-    mainProgram = "present";
   };
 }

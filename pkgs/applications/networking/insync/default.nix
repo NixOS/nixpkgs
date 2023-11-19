@@ -37,7 +37,6 @@ let
      1) Currently the system try icon does not render correctly.
      2) libqtvirtualkeyboardplugin does not have necessary Qt library shipped from vendor.
     '';
-    mainProgram = "insync";
   };
 
   insync-pkg = stdenvNoCC.mkDerivation {

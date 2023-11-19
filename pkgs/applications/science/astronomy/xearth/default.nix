@@ -17,18 +17,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "sets the X root window to an image of the Earth";
-    homepage = "https://xearth.org";
+    homepage = "http://xplanet.org";
     longDescription =
       '' Xearth  sets  the X root window to an image of the Earth, as seen from your favorite vantage point in space,
          correctly shaded for the current position of the Sun.
          By default, xearth updates the displayed image every  five  minutes.
       '';
     maintainers = [ maintainers.mafo ];
-    license  = {
-      fullName = "xearth license";
-      url = "https://xearth.org/copyright.html";
-      free = true;
-    };
+    license = "xearth";
     platforms=platforms.unix;
   };
 

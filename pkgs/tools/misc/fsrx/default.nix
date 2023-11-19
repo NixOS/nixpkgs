@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/thatvegandev/fsrx";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
-    mainProgram = "fsrx";
   };
 }

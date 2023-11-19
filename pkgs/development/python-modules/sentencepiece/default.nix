@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   pname = "sentencepiece";
-  format = "setuptools";
   inherit (sentencepiece) version src;
 
   nativeBuildInputs = [ pkg-config ];

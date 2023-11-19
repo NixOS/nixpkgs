@@ -23,6 +23,5 @@ buildGoModule {
     homepage = "https://github.com/muesli/asciicam";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "asciicam";
   };
 }

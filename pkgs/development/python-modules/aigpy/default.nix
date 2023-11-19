@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "aigpy";
   version = "2022.7.8.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

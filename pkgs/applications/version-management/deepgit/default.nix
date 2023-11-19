@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "deepgit";
-  version = "4.4";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/deepgit/deepgit-linux-${lib.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    hash = "sha256-ILqwXDyW7/hZzoSxxaxv4bF5xsB/JFaOBYAJFb7xmdk=";
+    hash = "sha256-Ovd9MjgpMJvNySW/FPXYVtpLoCSQP1W1nlcNkgI7sgA=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +82,5 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ urandom ];
     platforms = platforms.linux;
-    mainProgram = "deepgit";
   };
 }

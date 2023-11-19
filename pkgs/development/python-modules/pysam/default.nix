@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname   = "pysam";
   version = "0.21.0";
-  format = "setuptools";
 
   # Fetching from GitHub instead of PyPi cause the 0.13 src release on PyPi is
   # missing some files which cause test failures.

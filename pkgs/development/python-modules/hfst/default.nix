@@ -9,7 +9,6 @@
 
 buildPythonPackage rec {
   pname = "hfst";
-  format = "setuptools";
   inherit (pkgs.hfst) version src;
 
   sourceRoot = "${src.name}/python";

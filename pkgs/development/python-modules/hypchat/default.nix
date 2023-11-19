@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "hypchat";
   version = "0.21";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -23,6 +23,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ utdemir ];
     platforms = with platforms; unix;
     license = licenses.mit;
-    mainProgram = "kt";
   };
 }

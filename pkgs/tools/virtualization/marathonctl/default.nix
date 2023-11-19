@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "CLI tool for Marathon";
     license = licenses.mit;
     maintainers = with maintainers; [ manveru ];
-    mainProgram = "marathonctl";
   };
 }

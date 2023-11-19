@@ -57,6 +57,5 @@ mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "cool-retro-term";
   };
 }

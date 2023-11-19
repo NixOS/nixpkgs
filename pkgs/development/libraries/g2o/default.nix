@@ -1,26 +1,24 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, cmake, eigen, suitesparse, blas
-, lapack, libGLU, qtbase, libqglviewer, spdlog }:
+, lapack, libGLU, qtbase, libqglviewer, makeWrapper }:
 
 mkDerivation rec {
   pname = "g2o";
-  version = "20230806";
+  version = "20230223";
 
   src = fetchFromGitHub {
     owner = "RainerKuemmerle";
     repo = pname;
     rev = "${version}_git";
-    hash = "sha256-9u1FFRWe7qvDhzSKdGTduuGBXmmgzcSriGFb/oCJjNA=";
+    sha256 = "sha256-J2Z3oRkyiinIfywBQvnq1Q8Z5WuzQXOVTZTwN8oivf0=";
   };
 
   # Removes a reference to gcc that is only used in a debug message
   patches = [ ./remove-compiler-reference.patch ];
 
-  outputs = [ "out" "dev" ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ eigen suitesparse blas lapack libGLU qtbase libqglviewer ];
-  propagatedBuildInputs = [ spdlog ];
 
   dontWrapQtApps = true;
 

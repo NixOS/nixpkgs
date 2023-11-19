@@ -16,7 +16,6 @@
 , libxslt
 , mesa
 , ninja
-, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -30,18 +29,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8owyyzCrZVbWXcCR+RA+m0MOrdzW+efI+rIMWEVEZ1o=";
   };
 
-  strictDeps = true;
-
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ];
-
   buildInputs = [
     libGLU
     libGL
     libdrm
     libtsm
     libxkbcommon
+    libxslt
     pango
     pixman
     systemd
@@ -53,7 +47,6 @@ stdenv.mkDerivation rec {
     ninja
     docbook_xsl
     pkg-config
-    libxslt # xsltproc
   ];
 
   patches = [

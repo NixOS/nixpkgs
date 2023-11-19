@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.spease ];
     # 64-bit only
     platforms = platforms.aarch64 ++ platforms.x86_64;
-    mainProgram = "zfp";
   };
 }

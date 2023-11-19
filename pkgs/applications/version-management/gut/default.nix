@@ -29,6 +29,5 @@ buildGoModule rec {
     homepage = "https://gut-cli.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ paveloom ];
-    mainProgram = "gut";
   };
 }

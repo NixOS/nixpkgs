@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "plugnplay";
   version = "0.5.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

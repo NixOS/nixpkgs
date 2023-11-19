@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "commonmark";
   version = "0.9.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

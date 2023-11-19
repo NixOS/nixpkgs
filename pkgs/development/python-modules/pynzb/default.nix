@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pynzb";
   version = "0.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

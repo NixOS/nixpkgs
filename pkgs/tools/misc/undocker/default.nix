@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "A CLI tool to convert a Docker image to a flattened rootfs tarball";
     license = licenses.asl20;
     maintainers = with maintainers; [ jordanisaacs ];
-    mainProgram = "undocker";
   };
 }

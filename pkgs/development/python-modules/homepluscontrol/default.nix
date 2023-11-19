@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "homepluscontrol";
   version = "0.1";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

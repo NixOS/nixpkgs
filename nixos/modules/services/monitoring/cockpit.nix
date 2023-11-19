@@ -2,14 +2,14 @@
 
 let
   cfg = config.services.cockpit;
-  inherit (lib) types mkEnableOption mkOption mkIf mdDoc literalMD mkPackageOption;
+  inherit (lib) types mkEnableOption mkOption mkIf mdDoc literalMD mkPackageOptionMD;
   settingsFormat = pkgs.formats.ini {};
 in {
   options = {
     services.cockpit = {
       enable = mkEnableOption (mdDoc "Cockpit");
 
-      package = mkPackageOption pkgs "Cockpit" {
+      package = mkPackageOptionMD pkgs "Cockpit" {
         default = [ "cockpit" ];
       };
 

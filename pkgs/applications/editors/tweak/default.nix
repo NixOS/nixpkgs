@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.chiark.greenend.org.uk/~sgtatham/tweak";
     license = licenses.mit;
     platforms = platforms.unix;
-    mainProgram = "tweak";
   };
 }

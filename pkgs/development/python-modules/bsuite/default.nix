@@ -28,7 +28,6 @@
 let bsuite = buildPythonPackage rec {
   pname = "bsuite";
   version = "0.3.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

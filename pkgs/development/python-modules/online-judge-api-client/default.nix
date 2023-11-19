@@ -21,7 +21,6 @@ let
 in buildPythonPackage rec {
   pname = "online-judge-api-client";
   version = "10.10.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";

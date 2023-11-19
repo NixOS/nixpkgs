@@ -4,9 +4,16 @@ with lib;
 
 let
 
+  inherit (pkgs) sudo sudo-rs;
+
   cfg = config.security.sudo-rs;
 
-  inherit (config.security.pam) enableSSHAgentAuth;
+  enableSSHAgentAuth =
+    with config.security;
+    pam.enableSSHAgentAuth && pam.sudo.sshAgentAuth;
+
+  usingMillersSudo = cfg.package.pname == sudo.pname;
+  usingSudoRs = cfg.package.pname == sudo-rs.pname;
 
   toUserString = user: if (isInt user) then "#${toString user}" else "${user}";
   toGroupString = group: if (isInt group) then "%#${toString group}" else "%${group}";
@@ -34,19 +41,33 @@ in
 
     defaultOptions = mkOption {
       type = with types; listOf str;
-      default = [];
+      default = optional usingMillersSudo "SETENV";
+      defaultText = literalMD ''
+        `[ "SETENV" ]` if using the default `sudo` implementation
+      '';
       description = mdDoc ''
         Options used for the default rules, granting `root` and the
         `wheel` group permission to run any command as any user.
       '';
     };
 
-    enable = mkEnableOption (mdDoc ''
-      a memory-safe implementation of the {command}`sudo` command,
-      which allows non-root users to execute commands as root.
-    '');
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = mdDoc ''
+        Whether to enable the {command}`sudo` command, which
+        allows non-root users to execute commands as root.
+      '';
+    };
 
-    package = mkPackageOption pkgs "sudo-rs" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.sudo-rs;
+      defaultText = literalExpression "pkgs.sudo-rs";
+      description = mdDoc ''
+        Which package to use for `sudo`.
+      '';
+    };
 
     wheelNeedsPassword = mkOption {
       type = types.bool;
@@ -187,12 +208,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [ {
-      assertion = ! config.security.sudo.enable;
-      message = "`security.sudo` and `security.sudo-rs` cannot both be enabled";
-    }];
-    security.sudo.enable = mkDefault false;
-
     security.sudo-rs.extraRules =
       let
         defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
@@ -220,16 +235,20 @@ in
         # Don't edit this file. Set the NixOS options ‘security.sudo-rs.configFile’
         # or ‘security.sudo-rs.extraRules’ instead.
       ''
-      (pipe cfg.extraRules [
-        (filter (rule: length rule.commands != 0))
-        (map (rule: [
-          (map (user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.users)
-          (map (group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}") rule.groups)
-        ]))
-        flatten
-        (concatStringsSep "\n")
-      ])
-      "\n"
+      (optionalString enableSSHAgentAuth ''
+        # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
+        Defaults env_keep+=SSH_AUTH_SOCK
+      '')
+      (concatStringsSep "\n" (
+        lists.flatten (
+          map (
+            rule: optionals (length rule.commands != 0) [
+              (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
+              (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
+            ]
+          ) cfg.extraRules
+        )
+      ) + "\n")
       (optionalString (cfg.extraConfig != "") ''
         # extraConfig
         ${cfg.extraConfig}
@@ -246,12 +265,18 @@ in
         source = "${cfg.package.out}/bin/sudo";
         inherit owner group setuid permissions;
       };
+      # sudo-rs does not yet ship a sudoedit (as of v0.2.0)
+      sudoedit = mkIf usingMillersSudo {
+        source = "${cfg.package.out}/bin/sudoedit";
+        inherit owner group setuid permissions;
+      };
     };
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ sudo ];
 
     security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
-    security.pam.services.sudo-i = { sshAgentAuth = true; usshAuth = true; };
+    security.pam.services.sudo-i = mkIf usingSudoRs
+      { sshAgentAuth = true; usshAuth = true; };
 
     environment.etc.sudoers =
       { source =
@@ -260,7 +285,7 @@ in
             src = pkgs.writeText "sudoers-in" cfg.configFile;
             preferLocalBuild = true;
           }
-          "${pkgs.buildPackages.sudo-rs}/bin/visudo -f $src -c && cp $src $out";
+          "${pkgs.buildPackages."${cfg.package.pname}"}/bin/visudo -f $src -c && cp $src $out";
         mode = "0440";
       };
 

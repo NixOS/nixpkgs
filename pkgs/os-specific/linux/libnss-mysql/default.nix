@@ -1,11 +1,4 @@
-{ lib
-, nixosTests
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, which
-, libmysqlclient
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, libmysqlclient }:
 
 stdenv.mkDerivation rec {
   pname = "libnss-mysql";
@@ -26,10 +19,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -r $out/etc
   '';
-
-  passthru.tests = {
-    inherit (nixosTests) auth-mysql;
-  };
 
   meta = with lib; {
     description = "MySQL module for the Solaris Nameservice Switch (NSS)";

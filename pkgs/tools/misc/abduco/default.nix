@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     description = "Allows programs to be run independently from its controlling terminal";
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
-    mainProgram = "abduco";
   };
 }

@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "spinners";
   version = "0.0.24";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

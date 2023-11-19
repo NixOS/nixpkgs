@@ -27,6 +27,5 @@ buildPythonApplication rec {
     homepage = "https://github.com/astrofrog/psrecord";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ johnazoidberg ];
-    mainProgram = "psrecord";
   };
 }

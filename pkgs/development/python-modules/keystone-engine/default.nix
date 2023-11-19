@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "keystone-engine";
   version = "0.9.2";
-  format = "setuptools";
 
   src = fetchPypi {
    inherit pname version;

@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.artistic1;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.unix;
-    mainProgram = "wily";
   };
 }

@@ -8,24 +8,19 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.5.0";
-  pyproject = true;
+  version = "3.4.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dwO/R8iyEIYw0qJ15X9DJuPAceZmISrZorPVqAkMZ2c=";
+    hash = "sha256-DfgkGrJ3GZuRnKODen3oUFk2P+oOPWYAYIcL587/wEc=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -47,11 +42,6 @@ buildPythonPackage rec {
     "google.cloud.vision_v1p2beta1"
     "google.cloud.vision_v1p3beta1"
     "google.cloud.vision_v1p4beta1"
-  ];
-
-  disabledTests = [
-    # Tests require PROJECT_ID
-    "test_list_products"
   ];
 
   meta = with lib; {

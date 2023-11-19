@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "dj-rest-auth";
   version = "5.0.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iMerica";

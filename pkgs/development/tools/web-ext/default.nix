@@ -1,8 +1,6 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, runCommand
-, web-ext
 }:
 
 buildNpmPackage rec {
@@ -17,13 +15,6 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-KPBKUjCxva11w/E+Qhlx+1vikpCL7Hr9MiKenYHEVSU=";
-
-  npmBuildFlags = [ "--production" ];
-
-  passthru.tests.help = runCommand "${pname}-tests" { } ''
-    ${web-ext}/bin/web-ext --help
-    touch $out
-  '';
 
   meta = {
     description = "A command line tool to help build, run, and test web extensions";

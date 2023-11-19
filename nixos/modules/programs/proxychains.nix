@@ -51,8 +51,8 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "installing proxychains configuration");
 
-      package = mkPackageOption pkgs "proxychains" {
-        example = "proxychains-ng";
+      package = mkPackageOptionMD pkgs "proxychains" {
+        example = "pkgs.proxychains-ng";
       };
 
       chain = {

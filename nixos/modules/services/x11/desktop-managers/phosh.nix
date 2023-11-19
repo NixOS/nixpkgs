@@ -135,7 +135,15 @@ in
         description = lib.mdDoc "Enable the Phone Shell.";
       };
 
-      package = mkPackageOption pkgs "phosh" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.phosh;
+        defaultText = literalExpression "pkgs.phosh";
+        example = literalExpression "pkgs.phosh";
+        description = lib.mdDoc ''
+          Package that should be used for Phosh.
+        '';
+      };
 
       user = mkOption {
         description = lib.mdDoc "The user to run the Phosh service.";

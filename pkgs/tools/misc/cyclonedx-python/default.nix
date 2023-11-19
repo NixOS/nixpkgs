@@ -43,6 +43,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/CycloneDX/cyclonedx-python";
     license = licenses.asl20;
     maintainers = [ ];
-    mainProgram = "cyclonedx-py";
   };
 }

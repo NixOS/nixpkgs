@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "html5-parser";
-  version = "0.4.12";
+  version = "0.4.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "kovidgoyal";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-0Qn+To/d3+HMx+KhhgJBEHVYPOfIeBnngBraY7r4uSs=";
+    hash = "sha256-l7cCt+zX+qOujS6noc1/p7mELqrHae3eiKQNXBxLm7o=";
   };
 
   nativeBuildInputs = [

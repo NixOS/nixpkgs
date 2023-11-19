@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "pytomlpp";
   version = "1.0.13";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bobfang1992";

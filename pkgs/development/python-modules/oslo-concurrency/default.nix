@@ -19,7 +19,6 @@
 buildPythonPackage rec {
   pname = "oslo-concurrency";
   version = "5.2.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.concurrency";

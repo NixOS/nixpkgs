@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ilai-deutel/kibi";
     license = licenses.mit;
     maintainers = with maintainers; [ robertodr ];
-    mainProgram = "kibi";
   };
 }

@@ -25,6 +25,5 @@ buildGoModule rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
-    mainProgram = "go-audit";
   };
 }

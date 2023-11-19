@@ -118,7 +118,12 @@ in
       enable = mkEnableOption (lib.mdDoc "BIND domain name server");
 
 
-      package = mkPackageOption pkgs "bind" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.bind;
+        defaultText = literalExpression "pkgs.bind";
+        description = lib.mdDoc "The BIND package to use.";
+      };
 
       cacheNetworks = mkOption {
         default = [ "127.0.0.0/24" ];

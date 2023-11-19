@@ -12,7 +12,6 @@
 buildPythonPackage {
   pname = "prox-tv";
   version = "3.3.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "albarji";

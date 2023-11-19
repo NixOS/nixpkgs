@@ -5,9 +5,7 @@ let
   preseedFormat = pkgs.formats.yaml { };
 in
 {
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
+  meta.maintainers = [ lib.maintainers.adamcstephens ];
 
   options = {
     virtualisation.incus = {
@@ -19,9 +17,9 @@ in
         {command}`incus` command line tool, among others.
       '');
 
-      package = lib.mkPackageOption pkgs "incus" { };
+      package = lib.mkPackageOptionMD pkgs "incus" { };
 
-      lxcPackage = lib.mkPackageOption pkgs "lxc" { };
+      lxcPackage = lib.mkPackageOptionMD pkgs "lxc" { };
 
       preseed = lib.mkOption {
         type = lib.types.nullOr (

@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "komga";
-  version = "1.8.3";
+  version = "1.6.4";
 
   src = fetchurl {
-    url = "https://github.com/gotson/${pname}/releases/download/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-kZzyDzFDVrzjScpvCFw5xXk3uCYW01sP7y28YDADVHc=";
+    url = "https://github.com/gotson/${pname}/releases/download/v${version}/${pname}-${version}.jar";
+    sha256 = "sha256-tqrC3l2njYGRVIdvt86JVKTCVaAK7GPoYacx3hFRggg=";
   };
 
   nativeBuildInputs = [
@@ -27,13 +27,12 @@ stdenvNoCC.mkDerivation rec {
     komga = nixosTests.komga;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Free and open source comics/mangas server";
     homepage = "https://komga.org/";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     platforms = jdk17_headless.meta.platforms;
-    maintainers = with lib.maintainers; [ govanify ];
-    mainProgram = "komga";
+    maintainers = with maintainers; [ govanify ];
   };
 
 }

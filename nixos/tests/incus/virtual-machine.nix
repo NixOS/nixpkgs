@@ -19,9 +19,7 @@ in
 {
   name = "incus-virtual-machine";
 
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
+  meta.maintainers = with lib.maintainers; [ adamcstephens ];
 
   nodes.machine = {...}: {
     virtualisation = {

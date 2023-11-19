@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "1.4.0";
-  format = "setuptools";
   pname = "mockito";
 
   src = fetchPypi {

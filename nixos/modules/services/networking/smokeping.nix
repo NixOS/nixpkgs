@@ -165,7 +165,12 @@ in
         example = "no-reply@yourdomain.com";
         description = lib.mdDoc "Email contact for owner";
       };
-      package = mkPackageOption pkgs "smokeping" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.smokeping;
+        defaultText = literalExpression "pkgs.smokeping";
+        description = lib.mdDoc "Specify a custom smokeping package";
+      };
       host = mkOption {
         type = types.nullOr types.str;
         default = "localhost";

@@ -24,7 +24,12 @@ in
         description = lib.mdDoc "Enable the Lambdabot IRC bot";
       };
 
-      package = mkPackageOption pkgs "lambdabot" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.lambdabot;
+        defaultText = literalExpression "pkgs.lambdabot";
+        description = lib.mdDoc "Used lambdabot package";
+      };
 
       script = mkOption {
         type = types.str;

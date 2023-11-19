@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ ivar ];
     platforms = platforms.unix;
-    mainProgram = "hactool";
   };
 }

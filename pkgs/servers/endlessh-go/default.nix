@@ -27,6 +27,5 @@ buildGoModule rec {
     changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
-    mainProgram = "endlessh-go";
   };
 }

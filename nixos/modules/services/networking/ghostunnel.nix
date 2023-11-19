@@ -9,7 +9,6 @@ let
     mapAttrs'
     mkDefault
     mkEnableOption
-    mkPackageOption
     mkIf
     mkOption
     nameValuePair
@@ -216,7 +215,12 @@ in
   options = {
     services.ghostunnel.enable = mkEnableOption (lib.mdDoc "ghostunnel");
 
-    services.ghostunnel.package = mkPackageOption pkgs "ghostunnel" { };
+    services.ghostunnel.package = mkOption {
+      description = lib.mdDoc "The ghostunnel package to use.";
+      type = types.package;
+      default = pkgs.ghostunnel;
+      defaultText = literalExpression "pkgs.ghostunnel";
+    };
 
     services.ghostunnel.servers = mkOption {
       description = lib.mdDoc ''

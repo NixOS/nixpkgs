@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mgunyho/tere";
     license = licenses.eupl12;
     maintainers = with maintainers; [ ProducerMatt ];
-    mainProgram = "tere";
   };
 }

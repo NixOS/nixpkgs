@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/git-chglog/git-chglog";
     license = licenses.mit;
     maintainers = with maintainers; [ ldenefle ];
-    mainProgram = "git-chglog";
   };
 }

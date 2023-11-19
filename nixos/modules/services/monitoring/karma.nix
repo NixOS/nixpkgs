@@ -8,7 +8,14 @@ in
   options.services.karma = {
     enable = mkEnableOption (mdDoc "the Karma dashboard service");
 
-    package = mkPackageOption pkgs "karma" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.karma;
+      defaultText = literalExpression "pkgs.karma";
+      description = mdDoc ''
+        The Karma package that should be used.
+      '';
+    };
 
     configFile = mkOption {
       type = types.path;

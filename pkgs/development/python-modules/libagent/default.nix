@@ -23,7 +23,6 @@
 buildPythonPackage rec {
   pname = "libagent";
   version = "0.14.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "romanz";

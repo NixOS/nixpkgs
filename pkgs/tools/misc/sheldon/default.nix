@@ -62,6 +62,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ seqizz ];
     platforms = platforms.linux;
-    mainProgram = "sheldon";
   };
 }

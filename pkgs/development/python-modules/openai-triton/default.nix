@@ -2,11 +2,10 @@
 , config
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , addOpenGLRunpath
-, setuptools
 , pytestCheckHook
 , pythonRelaxDepsHook
+, pkgsTargetTarget
 , cmake
 , ninja
 , pybind11
@@ -24,32 +23,46 @@
 }:
 
 let
-  ptxas = "${cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+  # A time may come we'll want to be cross-friendly
+  #
+  # Short explanation: we need pkgsTargetTarget, because we use string
+  # interpolation instead of buildInputs.
+  #
+  # Long explanation: OpenAI/triton downloads and vendors a copy of NVidia's
+  # ptxas compiler. We're not running this ptxas on the build machine, but on
+  # the user's machine, i.e. our Target platform. The second "Target" in
+  # pkgsTargetTarget maybe doesn't matter, because ptxas compiles programs to
+  # be executed on the GPU.
+  # Cf. https://nixos.org/manual/nixpkgs/unstable/#sec-cross-infra
+  ptxas = "${pkgsTargetTarget.cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
 in
 buildPythonPackage rec {
   pname = "triton";
-  version = "2.1.0";
-  pyproject = true;
+  version = "2.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8UTUwLH+SriiJnpejdrzz9qIquP2zBp1/uwLdHmv0XQ=";
+    hash = "sha256-9GZzugab+Pdt74Dj6zjlEzjj4BcJ69rzMJmqcVMxsKU=";
   };
 
   patches = [
-    # fix overflow error
-    (fetchpatch {
-      url = "https://github.com/openai/triton/commit/52c146f66b79b6079bcd28c55312fc6ea1852519.patch";
-      hash = "sha256-098/TCQrzvrBAbQiaVGCMaF3o5Yc3yWDxzwSkzIuAtY=";
-    })
+    # TODO: there have been commits upstream aimed at removing the "torch"
+    # circular dependency, but the patches fail to apply on the release
+    # revision. Keeping the link for future reference
+    # Also cf. https://github.com/openai/triton/issues/1374
+
+    # (fetchpatch {
+    #   url = "https://github.com/openai/triton/commit/fc7c0b0e437a191e421faa61494b2ff4870850f1.patch";
+    #   hash = "sha256-f0shIqHJkVvuil2Yku7vuqWFn7VCRKFSFjYRlwx25ig=";
+    # })
   ] ++ lib.optionals (!cudaSupport) [
     ./0000-dont-download-ptxas.patch
   ];
 
   nativeBuildInputs = [
-    setuptools
     pythonRelaxDepsHook
     # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
@@ -98,7 +111,7 @@ buildPythonPackage rec {
       --replace "include(GoogleTest)" "find_package(GTest REQUIRED)"
   '' + lib.optionalString cudaSupport ''
     # Use our linker flags
-    substituteInPlace python/triton/common/build.py \
+    substituteInPlace python/triton/compiler.py \
       --replace '${oldStr}' '${newStr}'
   '';
 

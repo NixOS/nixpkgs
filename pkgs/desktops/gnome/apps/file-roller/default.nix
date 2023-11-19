@@ -23,13 +23,13 @@
 , nautilus
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "43.1";
+  version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/file-roller/${lib.versions.major finalAttrs.version}/file-roller-${finalAttrs.version}.tar.xz";
-    sha256 = "hJlAI5lyk76zRdl5Pbj18Lu0H6oVXG/7SDKPIDlXrQg=";
+    url = "mirror://gnome/sources/file-roller/${lib.versions.major version}/file-roller-${version}.tar.xz";
+    sha256 = "KYcp/b252oEywLvGCQdRfWVoWwVhiuBRZzNeZIT1c6E=";
   };
 
   nativeBuildInputs = [
@@ -75,4 +75,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members ++ teams.pantheon.members;
     mainProgram = "file-roller";
   };
-})
+}

@@ -7,12 +7,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pubs";
   version = "0.9.0";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
@@ -29,26 +28,22 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
-    argcomplete
-    beautifulsoup4
-    bibtexparser
-    configobj
-    feedparser
-    python-dateutil
     pyyaml
-    requests
+    bibtexparser
+    python-dateutil
     six
+    requests
+    configobj
+    beautifulsoup4
+    feedparser
+    argcomplete
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    ddt
-    mock
     pyfakefs
+    mock
+    ddt
     pytestCheckHook
   ];
 
@@ -62,18 +57,11 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # https://github.com/pubs/pubs/issues/276
     "test_readme"
-    # AssertionError: Lists differ: ['Ini[112 chars]d to...
-    "test_add_non_standard"
-  ];
-
-  pythonImportsCheck = [
-    "pubs"
   ];
 
   meta = with lib; {
     description = "Command-line bibliography manager";
     homepage = "https://github.com/pubs/pubs";
-    changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ gebner dotlambda ];
   };

@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
   version = "2.3.0";
-  format = "setuptools";
 
   disabled = isPy27;
 

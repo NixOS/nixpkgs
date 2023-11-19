@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyaml";
   version = "23.9.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

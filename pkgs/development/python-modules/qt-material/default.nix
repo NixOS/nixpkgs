@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "qt-material";
   version = "2.14";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

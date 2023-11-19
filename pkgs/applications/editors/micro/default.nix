@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "micro";
-  version = "2.0.13";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fe+7RkUwCveBk14bYzg5uLGOqTVVJsrqixBQhCS79hY=";
+    hash = "sha256-L8yJE3rjNcx+1gawQ8urZcFfoQdO20E67mJQjWaVwVo=";
   };
 
-  vendorHash = "sha256-ePhObvm3m/nT+7IyT0W6K+y+9UNkfd2kYjle2ffAd9Y=";
+  vendorHash = "sha256-h00s+xqepj+odKAgf54s35xMnnj3gtx5LWDOYFx5GY0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage assets/packaging/micro.1
-    install -Dm444 -t $out/share/applications assets/packaging/micro.desktop
+    install -Dt $out/share/applications assets/packaging/micro.desktop
     install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
   '';
 

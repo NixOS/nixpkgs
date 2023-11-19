@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   version = "0.10.0";
-  format = "setuptools";
   pname = "piep";
   disabled = isPy3k;
 

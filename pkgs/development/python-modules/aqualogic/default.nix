@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "aqualogic";
   version = "3.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "swilson";

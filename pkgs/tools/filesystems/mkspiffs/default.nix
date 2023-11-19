@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/igrr/mkspiffs";
     maintainers = with maintainers; [ haslersn ];
     platforms = platforms.linux;
-    mainProgram = "mkspiffs";
   };
 }

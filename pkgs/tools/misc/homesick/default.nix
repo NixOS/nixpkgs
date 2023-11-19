@@ -24,6 +24,5 @@ bundlerEnv {
     license = licenses.mit;
     maintainers = with maintainers; [ aaronschif nicknovitski ];
     platforms = platforms.unix;
-    mainProgram = "homesick";
   };
 }

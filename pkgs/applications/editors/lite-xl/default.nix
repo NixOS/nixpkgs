@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ sefidel ];
     platforms = platforms.unix;
-    mainProgram = "lite-xl";
   };
 }

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "helper";
   version = "2.5.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gmr";

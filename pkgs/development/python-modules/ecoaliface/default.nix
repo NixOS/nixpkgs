@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "ecoaliface";
   version = "0.5.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

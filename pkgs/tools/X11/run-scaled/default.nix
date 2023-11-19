@@ -26,6 +26,5 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.snaar ];
     license = licenses.bsd3;
     platforms = platforms.unix;
-    mainProgram = "run_scaled";
   };
 }

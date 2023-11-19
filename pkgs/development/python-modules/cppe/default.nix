@@ -33,8 +33,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  format = "setuptools";
-
   buildInputs = [ pybind11 ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 

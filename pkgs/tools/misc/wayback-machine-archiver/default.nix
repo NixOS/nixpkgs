@@ -27,6 +27,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/agude/wayback-machine-archiver";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion ];
-    mainProgram = "archiver";
   };
 }

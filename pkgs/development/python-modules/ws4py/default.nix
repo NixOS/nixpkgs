@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "ws4py";
   version = "0.5.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

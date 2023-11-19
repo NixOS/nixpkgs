@@ -1,13 +1,13 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , glib
 , gobject-introspection
 , intltool
 , shared-mime-info
 , gtk3
 , wrapGAppsHook
-, libarchive
 , libxml2
 , xapp
 , meson
@@ -27,14 +27,23 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "4.0.0";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TL8LlNQLGUevXlNcnS9HcdGh1TzC/0I/6reJpe6rahM=";
+    sha256 = "sha256-2zqlfoN4L+V237cQ3PVh49YaZfNKGiLqh2JIiGJE340=";
   };
+
+  patches = [
+    # Fix build with meson 1.2, can be dropped on next bump
+    # https://github.com/linuxmint/xreader/issues/612
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xreader/commit/06b18a884c8cf3257ea1f053a82784da078999ed.patch";
+      sha256 = "sha256-+LXEW3OkfhkIcbxtvfQYjdaC18O8imOx22t91ad/XZw=";
+    })
+  ];
 
   nativeBuildInputs = [
     shared-mime-info
@@ -55,7 +64,6 @@ stdenv.mkDerivation rec {
     gtk3
     xapp
     cairo
-    libarchive
     libxml2
     libsecret
     poppler

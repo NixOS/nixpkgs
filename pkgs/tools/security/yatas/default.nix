@@ -22,6 +22,5 @@ buildGoModule rec {
     changelog = "https://github.com/padok-team/YATAS/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "yatas";
   };
 }

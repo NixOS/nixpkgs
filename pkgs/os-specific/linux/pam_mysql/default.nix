@@ -1,15 +1,4 @@
-{ lib
-, nixosTests
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pam
-, pkg-config
-, libmysqlclient
-, mariadb
-, libxcrypt
-}:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pam, pkg-config, libmysqlclient, mariadb, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "pam_mysql";
@@ -24,10 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson pkg-config ninja ];
   buildInputs = [ pam libmysqlclient mariadb libxcrypt ];
-
-  passthru.tests = {
-    inherit (nixosTests) auth-mysql;
-  };
 
   meta = with lib; {
     description = "PAM authentication module against a MySQL database";

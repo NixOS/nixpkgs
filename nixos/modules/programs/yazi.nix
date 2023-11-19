@@ -11,7 +11,7 @@ in
   options.programs.yazi = {
     enable = lib.mkEnableOption (lib.mdDoc "yazi terminal file manager");
 
-    package = lib.mkPackageOption pkgs "yazi" { };
+    package = lib.mkPackageOptionMD pkgs "yazi" { };
 
     settings = lib.mkOption {
       type = with lib.types; submodule {

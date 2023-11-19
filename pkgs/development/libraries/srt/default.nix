@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, windows
+{ lib, stdenv, fetchFromGitHub, cmake, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -19,15 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.mingw_w64_pthreads
-  ];
-
-  patches = lib.optionals stdenv.hostPlatform.isMinGW [
-    ./no-msvc-compat-headers.patch
-  ];
+  buildInputs = [ openssl ];
 
   cmakeFlags = [
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
@@ -42,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Secure, Reliable, Transport";
-    homepage = "https://github.com/Haivision/srt";
-    license = licenses.mpl20;
+    homepage    = "https://github.com/Haivision/srt";
+    license     = licenses.mpl20;
     maintainers = with maintainers; [ nh2 ];
-    platforms = platforms.all;
+    platforms   = platforms.all;
   };
 }

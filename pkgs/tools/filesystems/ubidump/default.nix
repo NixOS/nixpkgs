@@ -36,7 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/nlitsme/ubidump";
     license = licenses.mit;
     maintainers = with maintainers; [ sgo ];
-    mainProgram = "ubidump";
   };
 }
 

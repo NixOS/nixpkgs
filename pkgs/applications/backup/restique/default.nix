@@ -39,6 +39,5 @@ mkDerivation rec {
     homepage = "https://git.srcbox.net/stefan/restique";
     license = with licenses; [ gpl3Plus cc-by-sa-40 cc0 ];
     maintainers = with maintainers; [ dotlambda ];
-    mainProgram = "restique";
   };
 }

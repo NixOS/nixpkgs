@@ -52,7 +52,12 @@ in {
     services.netdata = {
       enable = mkEnableOption (lib.mdDoc "netdata");
 
-      package = mkPackageOption pkgs "netdata" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.netdata;
+        defaultText = literalExpression "pkgs.netdata";
+        description = lib.mdDoc "Netdata package to use.";
+      };
 
       user = mkOption {
         type = types.str;
@@ -198,7 +203,6 @@ in {
         }
       ];
 
-    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 

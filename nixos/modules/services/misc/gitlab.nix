@@ -258,17 +258,41 @@ in {
         '';
       };
 
-      packages.gitlab = mkPackageOption pkgs "gitlab" {
-        example = "gitlab-ee";
+      packages.gitlab = mkOption {
+        type = types.package;
+        default = pkgs.gitlab;
+        defaultText = literalExpression "pkgs.gitlab";
+        description = lib.mdDoc "Reference to the gitlab package";
+        example = literalExpression "pkgs.gitlab-ee";
       };
 
-      packages.gitlab-shell = mkPackageOption pkgs "gitlab-shell" { };
+      packages.gitlab-shell = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-shell;
+        defaultText = literalExpression "pkgs.gitlab-shell";
+        description = lib.mdDoc "Reference to the gitlab-shell package";
+      };
 
-      packages.gitlab-workhorse = mkPackageOption pkgs "gitlab-workhorse" { };
+      packages.gitlab-workhorse = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-workhorse;
+        defaultText = literalExpression "pkgs.gitlab-workhorse";
+        description = lib.mdDoc "Reference to the gitlab-workhorse package";
+      };
 
-      packages.gitaly = mkPackageOption pkgs "gitaly" { };
+      packages.gitaly = mkOption {
+        type = types.package;
+        default = pkgs.gitaly;
+        defaultText = literalExpression "pkgs.gitaly";
+        description = lib.mdDoc "Reference to the gitaly package";
+      };
 
-      packages.pages = mkPackageOption pkgs "gitlab-pages" { };
+      packages.pages = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-pages;
+        defaultText = literalExpression "pkgs.gitlab-pages";
+        description = lib.mdDoc "Reference to the gitlab-pages package";
+      };
 
       statePath = mkOption {
         type = types.str;

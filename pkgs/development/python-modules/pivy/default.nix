@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pivy";
   version = "0.6.8";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coin3d";

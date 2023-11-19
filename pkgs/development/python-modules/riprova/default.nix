@@ -7,7 +7,6 @@
 buildPythonPackage rec{
   pname = "riprova";
   version = "0.3.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -3,7 +3,7 @@
 let
   inherit (geos) pname;
 in
-runCommand "${pname}-tests" { meta.timeout = 60; }
+runCommand "${geos}-tests" { meta.timeout = 60; }
   ''
     ${geos}/bin/geosop \
       --explode \

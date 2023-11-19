@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ muscaln ];
-    mainProgram = "vkmark";
   };
 }

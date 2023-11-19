@@ -34,6 +34,5 @@ rustPlatform.buildRustPackage {
     description = "A wrapper over the nix cli";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "nux";
   };
 }

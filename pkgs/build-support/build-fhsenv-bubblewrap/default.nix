@@ -16,7 +16,6 @@
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
-, extraPreBwrapCmds ? ""
 , extraBwrapArgs ? []
 , unshareUser ? false
 , unshareIpc ? false
@@ -24,7 +23,6 @@
 , unshareNet ? false
 , unshareUts ? false
 , unshareCgroup ? false
-, privateTmp ? false
 , dieWithParent ? true
 , ...
 } @ args:
@@ -40,8 +38,8 @@ let
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
   fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
-    "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
+    "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
+    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
     "pname" "version"
   ]);
 
@@ -118,8 +116,7 @@ let
 
   indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ${extraPreBwrapCmds}
-    ignored=(/nix /dev /proc /etc ${lib.optionalString privateTmp "/tmp"})
+    ignored=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
     etc_ignored=()
@@ -149,19 +146,14 @@ let
       done
     fi
 
-    # propagate /etc from the actual host if nested
-    if [[ -e /.host-etc ]]; then
-      ro_mounts+=(--ro-bind /.host-etc /.host-etc)
-    else
-      ro_mounts+=(--ro-bind /etc /.host-etc)
-    fi
-
     for i in ${lib.escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
-      if [[ -e $i ]]; then
-        symlinks+=(--symlink "/.host-etc/''${i#/etc/}" "$i")
+      if [[ -L $i ]]; then
+        symlinks+=(--symlink "$(${coreutils}/bin/readlink "$i")" "$i")
+      else
+        ro_mounts+=(--ro-bind-try "$i" "$i")
       fi
     done
 
@@ -200,7 +192,6 @@ let
       ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       ${lib.optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
-      ${lib.optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
@@ -209,7 +200,6 @@ let
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
       --tmpfs ${glibc}/etc \
-      --tmpfs /etc \
       --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \

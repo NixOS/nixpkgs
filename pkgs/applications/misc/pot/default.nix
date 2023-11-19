@@ -19,18 +19,17 @@
 , libsoup
 , openssl
 , xdotool
-, cacert
 }:
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "2.7.0";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-ODqMbyL6Zda/cY5Lgijaj9Pr5aozQDgzHlS89q4rA4w=";
+    hash = "sha256-ZpN+SgBq2vA2p4MjrT07j22VB67FdiXIIl9puGiGJA4=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
       jq
       moreutils
       nodePackages.pnpm
-      cacert
     ];
 
     installPhase = ''
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-xl1dSrJ7o0Xn4QB2tRBB6U8gUItltxTE+hyEJ1GIw1k=";
+    outputHash = "sha256-PqdwoGPsu1j4sDTvBAguDhB2v1yaNWybluLiN37SDa4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

@@ -22,6 +22,5 @@ stdenv.mkDerivation {
     license = licenses.free;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.unix;
-    mainProgram = "u9fs";
   };
 }

@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     downloadPage = "https://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     homepage = "https://sourceforge.net/projects/smbnetfs/";
-    mainProgram = "smbnetfs";
   };
 }

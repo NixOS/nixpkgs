@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "batinfo";
   version = "0.4.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

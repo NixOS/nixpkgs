@@ -57,6 +57,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru ];
     platforms = lib.platforms.unix;
-    mainProgram = "openethereum";
   };
 }

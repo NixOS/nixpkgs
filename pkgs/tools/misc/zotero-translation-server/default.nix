@@ -31,6 +31,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/zotero/translation-server";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "translation-server";
   };
 }

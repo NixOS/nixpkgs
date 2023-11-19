@@ -8,7 +8,12 @@ in
   options.services.fluidd = {
     enable = mkEnableOption (lib.mdDoc "Fluidd, a Klipper web interface for managing your 3d printer");
 
-    package = mkPackageOption pkgs "fluidd" { };
+    package = mkOption {
+      type = types.package;
+      description = lib.mdDoc "Fluidd package to be used in the module";
+      default = pkgs.fluidd;
+      defaultText = literalExpression "pkgs.fluidd";
+    };
 
     hostName = mkOption {
       type = types.str;

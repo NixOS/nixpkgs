@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;
-    mainProgram = "stressapptest";
   };
 }

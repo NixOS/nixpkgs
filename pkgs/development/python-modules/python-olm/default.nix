@@ -8,7 +8,6 @@
 
 buildPythonPackage {
   pname = "python-olm";
-  format = "setuptools";
   inherit (olm) src version;
 
   disabled = !isPy3k;

@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "pyjwkest";
   version = "1.4.2";
-  format = "setuptools";
 
   meta = {
     description = "Implementation of JWT, JWS, JWE and JWK";

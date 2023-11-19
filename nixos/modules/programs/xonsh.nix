@@ -24,8 +24,14 @@ in
         type = types.bool;
       };
 
-      package = mkPackageOption pkgs "xonsh" {
-        example = "xonsh.override { extraPackages = ps: [ ps.requests ]; }";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.xonsh;
+        defaultText = literalExpression "pkgs.xonsh";
+        example = literalExpression "pkgs.xonsh.override { extraPackages = ps: [ ps.requests ]; }";
+        description = lib.mdDoc ''
+          xonsh package to use.
+        '';
       };
 
       config = mkOption {

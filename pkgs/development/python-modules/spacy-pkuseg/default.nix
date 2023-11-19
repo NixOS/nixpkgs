@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
   version = "0.0.33";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -1,80 +1,59 @@
-{ lib
+{ lib, stdenv
+, autoPatchelfHook
 , buildFHSEnv
-, fetchFromGitHub
+, dpkg
+, fetchurl
+, gcc-unwrapped
 , ocl-icd
-, openssl
-, scons
-, stdenv
-, extraPkgs ? [ ]
+, zlib
+, extraPkgs ? []
 }:
 let
-  version = "8.1.18";
+  majMin = lib.versions.majorMinor version;
+  version = "7.6.21";
 
-  cbangSrc = fetchFromGitHub {
-    owner = "cauldrondevelopmentllc";
-    repo = "cbang";
-    rev = "bastet-v${version}";
-    hash = "sha256-G0rknVmZiyC4sRTOowFjf7EQ5peGf+HLPPcLWXXFlX4=";
-  };
-
-  fah-client = stdenv.mkDerivation {
-    pname = "fah-client";
+  fahclient = stdenv.mkDerivation rec {
     inherit version;
+    pname = "fahclient";
 
-    src = fetchFromGitHub {
-      owner = "FoldingAtHome";
-      repo = "fah-client-bastet";
-      rev = "v${version}";
-      hash = "sha256-IgT/5NqCwN8N8OObjtASuT4IRb2EN4bdixxUdjiyddI=";
+    src = fetchurl {
+      url = "https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${majMin}/fahclient_${version}_amd64.deb";
+      sha256 = "2827f05f1c311ee6c7eca294e4ffb856c81957e8f5bfc3113a0ed27bb463b094";
     };
 
-    nativeBuildInputs = [ scons ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+    ];
 
-    buildInputs = [ openssl ];
+    buildInputs = [
+      gcc-unwrapped.lib
+      zlib
+    ];
 
-    postUnpack = ''
-      export CBANG_HOME=$NIX_BUILD_TOP/cbang
-
-      cp -r --no-preserve=mode ${cbangSrc} $CBANG_HOME
-    '';
-
-    preBuild = ''
-      scons -C $CBANG_HOME
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/{bin,share/applications,share/feh-client}
-
-      cp fah-client $out/bin/fah-client
-
-      cp install/lin/fah-client.desktop $out/share/applications/
-      cp -r images $out/share/feh-client/
-
-      sed -e "s|Icon=.*|Icon=$out/share/feh-client/images/fahlogo.png|g" -i $out/share/applications/fah-client.desktop
-
-      runHook postInstall
-    '';
-
+    unpackPhase = "dpkg-deb -x ${src} ./";
+    installPhase = "cp -ar usr $out";
   };
 in
 buildFHSEnv {
-  name = fah-client.name;
+  name = fahclient.name;
 
-  targetPkgs = _: [ fah-client ocl-icd ] ++ extraPkgs;
+  targetPkgs = pkgs': [
+    fahclient
+    ocl-icd
+  ] ++ extraPkgs;
 
-  runScript = "/bin/fah-client";
+  runScript = "/bin/FAHClient";
 
   extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/fah-client
+    mv $out/bin/$name $out/bin/FAHClient
   '';
 
   meta = {
     description = "Folding@home client";
     homepage = "https://foldingathome.org/";
-    license = lib.licenses.gpl3;
-    mainProgram = "fah-client";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];
   };

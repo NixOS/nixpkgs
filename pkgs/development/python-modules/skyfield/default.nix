@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "skyfield";
   version = "1.45";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "skyfielders";

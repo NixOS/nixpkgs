@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "grequests";
   version = "0.7.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

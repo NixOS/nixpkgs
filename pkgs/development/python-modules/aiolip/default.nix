@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "aiolip";
   version = "1.1.6";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

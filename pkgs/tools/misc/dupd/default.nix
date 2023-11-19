@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.virkki.com/dupd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    mainProgram = "dupd";
   };
 }

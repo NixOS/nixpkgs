@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "ase";
   version = "3.22.1";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

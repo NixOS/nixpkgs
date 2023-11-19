@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ geri1701 ];
-    mainProgram = "ne";
   };
 }

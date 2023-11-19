@@ -31,6 +31,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/hurlenko/mloader";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ marsam ];
-    mainProgram = "mloader";
   };
 }

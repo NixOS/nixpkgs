@@ -30,6 +30,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Mange/tydra";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
-    mainProgram = "tydra";
   };
 }

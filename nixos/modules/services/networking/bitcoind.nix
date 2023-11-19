@@ -36,7 +36,12 @@ let
 
       enable = mkEnableOption (lib.mdDoc "Bitcoin daemon");
 
-      package = mkPackageOption pkgs "bitcoind" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.bitcoind;
+        defaultText = literalExpression "pkgs.bitcoind";
+        description = lib.mdDoc "The package providing bitcoin binaries.";
+      };
 
       configFile = mkOption {
         type = types.nullOr types.path;

@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.felipeqq2 ];
     license = licenses.wtfpl;
-    mainProgram = "clolcat";
   };
 }

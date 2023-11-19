@@ -62,6 +62,5 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ pennae ];
     platforms = lib.platforms.linux;
-    mainProgram = "syncserver";
   };
 }

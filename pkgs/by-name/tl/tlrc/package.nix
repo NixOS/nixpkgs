@@ -6,24 +6,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.8.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-wHAPlBNVhIytquEAUdrbxE4m0njVRPxxlYlwjqG9Zlw=";
+    hash = "sha256-Jdie9ESSbRV07SHjITfQPwDKTedHMbY01FdEMlNOr50=";
   };
 
-  cargoHash = "sha256-BymyjSVNwS3HPNnZcaAu1xUssV2iXmECtpKXPdZpM3g=";
+  cargoHash = "sha256-2OXyPtgdRGIIc7jIES9zhRpFiaodcEnaK88k+rUVSJo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage tldr.1
 
-    installShellCompletion --name tldr \
-      --bash $releaseDir/build/tlrc-*/out/tldr.bash \
+    installShellCompletion \
+      --name tldr --bash $releaseDir/build/tlrc-*/out/tldr.bash \
       --zsh $releaseDir/build/tlrc-*/out/_tldr \
       --fish $releaseDir/build/tlrc-*/out/tldr.fish
   '';

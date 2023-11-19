@@ -22,7 +22,6 @@
 buildPythonPackage rec {
   pname = "fs";
   version = "2.4.16";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

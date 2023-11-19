@@ -8,7 +8,6 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from markdown_it.token import Token
-from pathlib import Path
 from typing import Any, Generic, Optional
 from urllib.parse import quote
 
@@ -288,27 +287,18 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     _links_in_last_description: Optional[list[str]] = None
 
     def __init__(self, revision: str,
-                 header: list[str] | None,
-                 footer: list[str] | None,
                  *,
                  # only for parallel rendering
                  _options_by_id: Optional[dict[str, str]] = None):
         super().__init__(revision)
         self._options_by_id = _options_by_id or {}
         self._renderer = OptionsManpageRenderer({}, self._options_by_id)
-        self._header = header
-        self._footer = footer
 
     def _parallel_render_prepare(self) -> Any:
-        return (
-            self._revision,
-            self._header,
-            self._footer,
-            { '_options_by_id': self._options_by_id },
-        )
+        return (self._revision, { '_options_by_id': self._options_by_id })
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> ManpageConverter:
-        return cls(a[0], a[1], a[2], **a[3])
+        return cls(a[0], **a[1])
 
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
         links = self._renderer.link_footnotes = []
@@ -352,29 +342,26 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     def finalize(self) -> str:
         result = []
 
-        if self._header is not None:
-            result += self._header
-        else:
-            result += [
-                r'''.TH "CONFIGURATION\&.NIX" "5" "01/01/1980" "NixOS" "NixOS Reference Pages"''',
-                r'''.\" disable hyphenation''',
-                r'''.nh''',
-                r'''.\" disable justification (adjust text to left margin only)''',
-                r'''.ad l''',
-                r'''.\" enable line breaks after slashes''',
-                r'''.cflags 4 /''',
-                r'''.SH "NAME"''',
-                self._render('{file}`configuration.nix` - NixOS system configuration specification'),
-                r'''.SH "DESCRIPTION"''',
-                r'''.PP''',
-                self._render('The file {file}`/etc/nixos/configuration.nix` contains the '
-                            'declarative specification of your NixOS system configuration. '
-                            'The command {command}`nixos-rebuild` takes this file and '
-                            'realises the system configuration specified therein.'),
-                r'''.SH "OPTIONS"''',
-                r'''.PP''',
-                self._render('You can use the following options in {file}`configuration.nix`.'),
-            ]
+        result += [
+            r'''.TH "CONFIGURATION\&.NIX" "5" "01/01/1980" "NixOS" "NixOS Reference Pages"''',
+            r'''.\" disable hyphenation''',
+            r'''.nh''',
+            r'''.\" disable justification (adjust text to left margin only)''',
+            r'''.ad l''',
+            r'''.\" enable line breaks after slashes''',
+            r'''.cflags 4 /''',
+            r'''.SH "NAME"''',
+            self._render('{file}`configuration.nix` - NixOS system configuration specification'),
+            r'''.SH "DESCRIPTION"''',
+            r'''.PP''',
+            self._render('The file {file}`/etc/nixos/configuration.nix` contains the '
+                        'declarative specification of your NixOS system configuration. '
+                        'The command {command}`nixos-rebuild` takes this file and '
+                        'realises the system configuration specified therein.'),
+            r'''.SH "OPTIONS"''',
+            r'''.PP''',
+            self._render('You can use the following options in {file}`configuration.nix`.'),
+        ]
 
         for (name, opt) in self._sorted_options():
             result += [
@@ -396,14 +383,11 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
 
             result.append(".RE")
 
-        if self._footer is not None:
-            result += self._footer
-        else:
-            result += [
-                r'''.SH "AUTHORS"''',
-                r'''.PP''',
-                r'''Eelco Dolstra and the Nixpkgs/NixOS contributors''',
-            ]
+        result += [
+            r'''.SH "AUTHORS"''',
+            r'''.PP''',
+            r'''Eelco Dolstra and the Nixpkgs/NixOS contributors''',
+        ]
 
         return "\n".join(result)
 
@@ -496,8 +480,8 @@ class OptionsHTMLRenderer(OptionDocsRestrictions, HTMLRenderer):
         token.meta['compact'] = False
         return super().bullet_list_open(token, tokens, i)
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        info = f" {html.escape(token.info, True)}" if token.info != "" else ""
-        return f'<pre><code class="programlisting{info}">{html.escape(token.content)}</code></pre>'
+        # TODO use token.info. docbook doesn't so we can't yet.
+        return f'<pre class="programlisting">{html.escape(token.content)}</pre>'
 
 class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
     __option_block_separator__ = ""
@@ -589,8 +573,6 @@ def _build_cli_db(p: argparse.ArgumentParser) -> None:
 
 def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
     p.add_argument('--revision', required=True)
-    p.add_argument("--header", type=Path)
-    p.add_argument("--footer", type=Path)
     p.add_argument("infile")
     p.add_argument("outfile")
 
@@ -621,22 +603,7 @@ def _run_cli_db(args: argparse.Namespace) -> None:
             f.write(md.finalize())
 
 def _run_cli_manpage(args: argparse.Namespace) -> None:
-    header = None
-    footer = None
-
-    if args.header is not None:
-        with args.header.open() as f:
-            header = f.read().splitlines()
-
-    if args.footer is not None:
-        with args.footer.open() as f:
-            footer = f.read().splitlines()
-
-    md = ManpageConverter(
-        revision = args.revision,
-        header = header,
-        footer = footer,
-    )
+    md = ManpageConverter(revision = args.revision)
 
     with open(args.infile, 'r') as f:
         md.add_options(json.load(f))

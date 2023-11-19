@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ zimbatm ];
     platforms = platforms.linux;
-    mainProgram = "dispad";
   };
 }

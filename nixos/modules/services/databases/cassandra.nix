@@ -11,7 +11,6 @@ let
     recursiveUpdate
     mdDoc
     mkEnableOption
-    mkPackageOption
     mkIf
     mkOption
     types
@@ -156,8 +155,14 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "cassandra" {
-      example = "cassandra_3_11";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.cassandra;
+      defaultText = literalExpression "pkgs.cassandra";
+      example = literalExpression "pkgs.cassandra_3_11";
+      description = mdDoc ''
+        The Apache Cassandra package to use.
+      '';
     };
 
     jvmOpts = mkOption {

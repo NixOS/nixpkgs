@@ -43,6 +43,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ suominen ];
     platforms = platforms.unix;
-    mainProgram = "colorless";
   };
 }

@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/AleoHQ/wagyu";
     license = with licenses; [ mit asl20 ];
     maintainers = [ maintainers.offline ];
-    mainProgram = "wagyu";
   };
 }

@@ -11,12 +11,14 @@ let
   # options shown in settings.
   # We post-process the result to add support for YAML functions, like secrets or includes, see e.g.
   # https://www.home-assistant.io/docs/configuration/secrets/
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) (lib.recursiveUpdate customLovelaceModulesResources (cfg.config or {}));
+  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.config or {};
   configFile = pkgs.runCommandLocal "configuration.yaml" { } ''
     cp ${format.generate "configuration.yaml" filteredConfig} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';
-  lovelaceConfigFile = format.generate "ui-lovelace.yaml" cfg.lovelaceConfig;
+  lovelaceConfig = if (cfg.lovelaceConfig == null) then {}
+    else (lib.recursiveUpdate customLovelaceModulesResources cfg.lovelaceConfig);
+  lovelaceConfigFile = format.generate "ui-lovelace.yaml" lovelaceConfig;
 
   # Components advertised by the home-assistant package
   availableComponents = cfg.package.availableComponents;
@@ -75,7 +77,7 @@ let
   # Create parts of the lovelace config that reference lovelave modules as resources
   customLovelaceModulesResources = {
     lovelace.resources = map (card: {
-      url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
+      url = "/local/nixos-lovelace-modules/${card.entrypoint or card.pname}.js?${card.version}";
       type = "module";
     }) cfg.customLovelaceModules;
   };
@@ -157,7 +159,7 @@ in {
       default = [];
       example = literalExpression ''
         with pkgs.home-assistant-custom-components; [
-          prometheus_sensor
+          prometheus-sensor
         ];
       '';
       description = lib.mdDoc ''
@@ -453,10 +455,10 @@ in {
           ln -s /etc/home-assistant/configuration.yaml "${cfg.configDir}/configuration.yaml"
         '';
         copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
-          rm -f "${cfg.configDir}/ui-lovelace.yaml"
           cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
         '' else ''
-          ln -fs /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
+          rm -f "${cfg.configDir}/ui-lovelace.yaml"
+          ln -s /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
         copyCustomLovelaceModules = if cfg.customLovelaceModules != [] then ''
           mkdir -p "${cfg.configDir}/www"
@@ -468,8 +470,8 @@ in {
           mkdir -p "${cfg.configDir}/custom_components"
 
           # remove components symlinked in from below the /nix/store
-          readarray -d "" components < <(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l -print0)
-          for component in "''${components[@]}"; do
+          components="$(find "${cfg.configDir}/custom_components" -maxdepth 1 -type l)"
+          for component in "$components"; do
             if [[ "$(readlink "$component")" =~ ^${escapeShellArg builtins.storeDir} ]]; then
               rm "$component"
             fi
@@ -523,6 +525,7 @@ in {
           "bluetooth_tracker"
           "bthome"
           "default_config"
+          "eq3btsmart"
           "eufylife_ble"
           "esphome"
           "fjaraskupan"

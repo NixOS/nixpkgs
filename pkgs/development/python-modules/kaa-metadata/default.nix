@@ -10,7 +10,6 @@
 
 buildPythonPackage rec {
   version = "0.7.8dev-r4569-20111003";
-  format = "setuptools";
   pname = "kaa-metadata";
   disabled = isPyPy || isPy3k;
 

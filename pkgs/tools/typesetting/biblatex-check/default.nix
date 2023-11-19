@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Pezmc/BibLatex-Check";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
-    mainProgram = "biblatex-check";
   };
 }

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qmapshack";
-  version = "1.17.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = "qmapshack";
     rev = "V_${version}";
-    hash = "sha256-wqztKmaUxY3qd7IgPM7kV7x0BsrTMTX3DbcdM+lsarI=";
+    hash = "sha256-qG/fiR2J5wQZaR+xvBGjdp3L7viqki2ktkzBUf6fZi8=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

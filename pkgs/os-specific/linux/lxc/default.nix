@@ -6,6 +6,7 @@
 , libcap ? null, systemd ? null
 }:
 
+with lib;
 stdenv.mkDerivation rec {
   pname = "lxc";
   version = "4.0.12";
@@ -47,10 +48,10 @@ stdenv.mkDerivation rec {
     "--disable-api-docs"
     "--with-init-script=none"
     "--with-distro=nixos" # just to be sure it is "unknown"
-  ] ++ lib.optional (libapparmor != null) "--enable-apparmor"
-    ++ lib.optional (libselinux != null) "--enable-selinux"
-    ++ lib.optional (libseccomp != null) "--enable-seccomp"
-    ++ lib.optional (libcap != null) "--enable-capabilities"
+  ] ++ optional (libapparmor != null) "--enable-apparmor"
+    ++ optional (libselinux != null) "--enable-selinux"
+    ++ optional (libseccomp != null) "--enable-seccomp"
+    ++ optional (libcap != null) "--enable-capabilities"
     ++ [
     "--disable-examples"
     "--enable-python"
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://linuxcontainers.org/";
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
-    license = lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
 
     longDescription = ''
       LXC is the userspace control package for Linux Containers, a
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
       mechanisms to Linux’s existing process management infrastructure.
     '';
 
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

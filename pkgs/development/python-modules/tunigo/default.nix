@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "tunigo";
   version = "1.0.0";
-  format = "setuptools";
 
   propagatedBuildInputs = [ requests ];
 

@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tversteeg/emplace";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ Br1ght0ne ];
-    mainProgram = "emplace";
   };
 }

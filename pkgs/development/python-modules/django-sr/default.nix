@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "django-sr";
   version = "0.0.4";
-  format = "setuptools";
 
   meta = {
     description = "Django settings resolver";

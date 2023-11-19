@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "morphys";
   version = "1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mkalinski";

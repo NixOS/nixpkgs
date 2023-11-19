@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-applicationinsights";
   version = "4.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

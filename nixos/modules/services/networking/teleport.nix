@@ -11,8 +11,12 @@ in
     services.teleport = with lib.types; {
       enable = mkEnableOption (lib.mdDoc "the Teleport service");
 
-      package = mkPackageOption pkgs "teleport" {
-        example = "teleport_11";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.teleport;
+        defaultText = lib.literalMD "pkgs.teleport";
+        example = lib.literalMD "pkgs.teleport_11";
+        description = lib.mdDoc "The teleport package to use";
       };
 
       settings = mkOption {

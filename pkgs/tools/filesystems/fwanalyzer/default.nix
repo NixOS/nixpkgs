@@ -35,6 +35,5 @@ buildGoModule rec {
     homepage = "https://github.com/cruise-automation/fwanalyzer";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "fwanalyzer";
   };
 }

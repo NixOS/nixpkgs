@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.ncsa;
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.unix;
-    mainProgram = "nyancat";
   };
 }

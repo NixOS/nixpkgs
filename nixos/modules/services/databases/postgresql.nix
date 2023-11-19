@@ -18,7 +18,7 @@ let
     in
     if cfg.extraPlugins == []
       then base
-      else base.withPackages cfg.extraPlugins;
+      else base.withPackages (_: cfg.extraPlugins);
 
   toStr = value:
     if true == value then "yes"
@@ -53,8 +53,12 @@ in
 
       enableJIT = mkEnableOption (lib.mdDoc "JIT support");
 
-      package = mkPackageOption pkgs "postgresql" {
-        example = "postgresql_15";
+      package = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.postgresql_15";
+        description = lib.mdDoc ''
+          PostgreSQL package to use.
+        '';
       };
 
       port = mkOption {
@@ -391,11 +395,12 @@ in
       };
 
       extraPlugins = mkOption {
-        type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
-        default = _: [];
-        example = literalExpression "ps: with ps; [ postgis pg_repack ]";
+        type = types.listOf types.path;
+        default = [];
+        example = literalExpression "with pkgs.postgresql_15.pkgs; [ postgis pg_repack ]";
         description = lib.mdDoc ''
-          List of PostgreSQL plugins.
+          List of PostgreSQL plugins. PostgreSQL version for each plugin should
+          match version for `services.postgresql.package` value.
         '';
       };
 
@@ -404,7 +409,7 @@ in
         default = {};
         description = lib.mdDoc ''
           PostgreSQL configuration. Refer to
-          <https://www.postgresql.org/docs/current/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
+          <https://www.postgresql.org/docs/15/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
           for an overview of `postgresql.conf`.
 
           ::: {.note}
@@ -462,9 +467,9 @@ in
     }) cfg.ensureUsers;
     # `ensurePermissions` is now deprecated, let's avoid it.
     warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
-      `services.postgresql.ensureUsers.*.ensurePermissions` is used in your expressions,
+      `services.postgresql.*.ensurePermissions` is used in your expressions,
       this option is known to be broken with newer PostgreSQL versions,
-      consider migrating to `services.postgresql.ensureUsers.*.ensureDBOwnership` or
+      consider migrating to `services.postgresql.*.ensureDBOwnership` or
       consult the release notes or manual for more migration guidelines.
 
       This option will be removed in NixOS 24.05 unless it sees significant

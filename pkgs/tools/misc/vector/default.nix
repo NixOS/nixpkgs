@@ -13,7 +13,6 @@
 , libiconv
 , coreutils
 , CoreServices
-, SystemConfiguration
 , tzdata
 , cmake
 , perl
@@ -47,8 +46,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-vK+k+VbUVgJ8idlvuod5ExAkkeTYDk/135dyLRct0zs=";
   };
 
-  patches = [ ./vector-pr19075.patch ];
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -63,9 +60,8 @@ rustPlatform.buildRustPackage {
     };
   };
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
-  buildInputs =
-    [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices SystemConfiguration ];
+  buildInputs = [ oniguruma openssl protobuf rdkafka zstd rust-jemalloc-sys ]
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

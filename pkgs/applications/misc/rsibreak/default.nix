@@ -4,12 +4,15 @@
   knotifyconfig, kidletime, kwindowsystem, ktextwidgets, kcrash
 }:
 
-mkDerivation rec {
+let
   pname = "rsibreak";
-  version = "0.12.13";
+  version = "0.12";
+  revision = ".13";
+in mkDerivation rec {
+  name = "rsibreak-${version}${revision}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/rsibreak/${version}/rsibreak-${version}.tar.xz";
+    url = "https://download.kde.org/stable/${pname}/${version}/${name}.tar.xz";
     sha256 = "N0C+f788fq5yotSC54H2K4WDc6PnGi8Nh/vXL4v0fxo=";
   };
 

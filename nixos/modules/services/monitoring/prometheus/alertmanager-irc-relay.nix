@@ -12,7 +12,12 @@ in
   options.services.prometheus.alertmanagerIrcRelay = {
     enable = mkEnableOption (mdDoc "Alertmanager IRC Relay");
 
-    package = mkPackageOption pkgs "alertmanager-irc-relay" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.alertmanager-irc-relay;
+      defaultText = literalExpression "pkgs.alertmanager-irc-relay";
+      description = mdDoc "Alertmanager IRC Relay package to use.";
+    };
 
     extraFlags = mkOption {
       type = types.listOf types.str;

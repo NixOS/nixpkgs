@@ -59,6 +59,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/aquasecurity/kube-hunter";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "kube-hunter";
   };
 }

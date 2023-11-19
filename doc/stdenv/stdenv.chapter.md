@@ -119,18 +119,13 @@ phases="${prePhases[*]:-} unpackPhase patchPhase" genericBuild
 ```
 
 Then, run more phases up until the failure is reached.
-If the failure is in the build or check phase, the following phases would be required:
+For example, if the failure is in the build phase, the following phases would be required:
 
 ```bash
-phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase" genericBuild
+phases="${preConfigurePhases[*]:-} configurePhase ${preBuildPhases[*]:-} buildPhase" genericBuild
 ```
 
-Use this command to run all install phases:
-```bash
-phases="${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase" genericBuild
-```
-
-Single phase can be re-run as many times as necessary to examine the failure like so:
+Re-run a single phase as many times as necessary to examine the failure like so:
 
 ```bash
 phases="buildPhase" genericBuild
@@ -591,7 +586,7 @@ See also the section about [`passthru.tests`](#var-meta-tests).
 
 `stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
 
-This generic command either invokes a script at *buildCommandPath*, or a *buildCommand*, or a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
+This generic command invokes a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
 
 Each phase can be overridden in its entirety either by setting the environment variable `namePhase` to a string containing some shell commands to be executed, or by redefining the shell function `namePhase`. The former is convenient to override a phase from the derivation, while the latter is convenient from a build script. However, typically one only wants to *add* some commands to a phase, e.g. by defining `postInstall` or `preFixup`, as skipping some of the default actions may have unexpected consequences. The default script for each phase is defined in the file `pkgs/stdenv/generic/setup.sh`.
 
@@ -831,7 +826,7 @@ Note that shell arrays cannot be passed through environment variables, so you ca
 
 ##### `buildFlags` / `buildFlagsArray` {#var-stdenv-buildFlags}
 
-A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the build phase. Any build targets should be specified as part of the `buildFlags`.
+A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the build phase.
 
 ##### `preBuild` {#var-stdenv-preBuild}
 
@@ -872,7 +867,7 @@ If unset, use `check` if it exists, otherwise `test`; if neither is found, do no
 
 ##### `checkFlags` / `checkFlagsArray` {#var-stdenv-checkFlags}
 
-A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the check phase. Unlike with `buildFlags`, the `checkTarget` is automatically added to the `make` invocation in addition to any `checkFlags` specified.
+A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the check phase.
 
 ##### `checkInputs` {#var-stdenv-checkInputs}
 
@@ -914,7 +909,7 @@ installTargets = "install-bin install-doc";
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
 
-A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the install phase. Unlike with `buildFlags`, the `installTargets` are automatically added to the `make` invocation in addition to any `installFlags` specified.
+A list of strings passed as additional flags to `make`. Like `makeFlags` and `makeFlagsArray`, but only used by the install phase.
 
 ##### `preInstall` {#var-stdenv-preInstall}
 

@@ -15,6 +15,5 @@ bundlerApp {
     homepage = "https://serverspec.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ dylanmtaylor ];
-    mainProgram = "serverspec-init";
   };
 }

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "asgineer";
   version = "0.8.1";
-  format = "setuptools";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {

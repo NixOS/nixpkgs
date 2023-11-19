@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/liamg/dismember";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "dismember";
   };
 }

@@ -1,41 +1,33 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (lib) mkOption mkIf types;
   cfg = config.programs.screen;
 in
 
 {
+  ###### interface
+
   options = {
     programs.screen = {
-      enable = lib.mkEnableOption (lib.mdDoc "screen, a basic terminal multiplexer");
 
-      package = lib.mkPackageOptionMD pkgs "screen" { };
-
-      screenrc = lib.mkOption {
-        type = with lib.types; nullOr lines;
-        example = ''
-          defscrollback 10000
-          startup_message off
+      screenrc = mkOption {
+        default = "";
+        description = lib.mdDoc ''
+          The contents of /etc/screenrc file.
         '';
-        description = lib.mdDoc "The contents of {file}`/etc/screenrc` file";
+        type = types.lines;
       };
     };
   };
 
-  config = {
-    # TODO: Added in 24.05, remove before 24.11
-    assertions = [
-      {
-        assertion = cfg.screenrc != null -> cfg.enable;
-        message = "`programs.screen.screenrc` has been configured, but `programs.screen.enable` is not true";
-      }
-    ];
-  } // lib.mkIf cfg.enable {
-    environment.etc.screenrc = {
-      enable = cfg.screenrc != null;
-      text = cfg.screenrc;
-    };
-    environment.systemPackages = [ cfg.package ];
+  ###### implementation
+
+  config = mkIf (cfg.screenrc != "") {
+    environment.etc.screenrc.text = cfg.screenrc;
+
+    environment.systemPackages = [ pkgs.screen ];
     security.pam.services.screen = {};
   };
+
 }

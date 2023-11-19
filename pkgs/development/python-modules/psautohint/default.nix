@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "psautohint";
   version = "2.4.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

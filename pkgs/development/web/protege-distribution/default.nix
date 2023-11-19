@@ -1,30 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, jdk11
+{ lib, stdenv, fetchurl, unzip, jre8
 , copyDesktopItems
-, iconConvTools
 , makeDesktopItem
-, makeWrapper
+, iconConvTools
 }:
 
 stdenv.mkDerivation rec {
   pname = "protege-distribution";
-  version = "5.6.3";
+  version = "5.5.0";
 
   src = fetchurl {
-    url = "https://github.com/protegeproject/protege-distribution/releases/download/protege-${version}/Protege-${version}-platform-independent.zip";
-    sha256 = "08pr0rn76wcc9bczdf93nlshxbid4z4nyvmaz198hhlq96aqpc3i";
+    url = "https://github.com/protegeproject/protege-distribution/releases/download/v${version}/Protege-${version}-platform-independent.zip";
+    sha256 = "092x22wyisdnhccx817mqq15sxqdfc7iz4whr4mbvzrd9di6ipjq";
   };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    iconConvTools
-    jdk11
-    makeWrapper
-    unzip
-  ];
+  nativeBuildInputs = [ unzip copyDesktopItems iconConvTools ];
 
   patches = [
     # Replace logic for searching the install directory with a static cd into $out
@@ -34,8 +23,11 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Resolve @out@ (introduced by "static-path.patch") to $out
-    substituteInPlace run.sh --subst-var-by out $out
+    # Resolve @out@ (introduced by "static-path.patch") to $out, and set the
+    # correct Java executable (Protege is a JRE 8 application)
+    substituteInPlace run.sh \
+      --subst-var-by out $out \
+      --replace "java -X" "exec ${jre8.outPath}/bin/java -X"
   '';
 
   dontConfigure = true;
@@ -44,18 +36,20 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
+    mkdir $out
 
-    # Wrap launch script to set $JAVA_HOME correctly
-    mv run.sh $out/bin/run-protege
-    wrapProgram  $out/bin/run-protege --set JAVA_HOME ${jdk11.home}
+    # Delete non-Linux launch scripts
+    rm run.{bat,command}
+
+    # Move launch script into /bin, giving it a recognizable name
+    install -D run.sh $out/bin/run-protege
 
     # Generate and copy icons to where they can be found
     icoFileToHiColorTheme app/Protege.ico protege $out
 
     # Move everything else under protege/
     mkdir $out/protege
-    mv {bundles,conf,plugins} $out/protege
+    mv {bin,bundles,conf,plugins} $out/protege
 
     runHook postInstall
   '';

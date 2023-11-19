@@ -3,12 +3,12 @@
 , pkgs ? import ../.. { inherit system; }
 , package
 }:
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+import ./make-test-python.nix ({ pkgs, ... }: let
   testPath = pkgs.hello;
 in {
   name = "varnish";
-  meta = {
-    maintainers = lib.teams.helsinki-systems.members;
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ ajs124 ];
   };
 
   nodes = {

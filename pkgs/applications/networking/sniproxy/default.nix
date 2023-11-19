@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ womfoo raitobezarius ];
     platforms = platforms.linux;
-    mainProgram = "sniproxy";
   };
 
 }

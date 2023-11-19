@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "wadllib";
   version = "1.3.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

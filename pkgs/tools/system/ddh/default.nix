@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ h7x4 ];
     platforms = platforms.all;
-    mainProgram = "ddh";
   };
 }

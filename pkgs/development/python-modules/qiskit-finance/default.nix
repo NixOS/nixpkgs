@@ -23,7 +23,6 @@
 buildPythonPackage rec {
   pname = "qiskit-finance";
   version = "0.3.4";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

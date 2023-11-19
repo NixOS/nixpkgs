@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-commerce";
   version = "6.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

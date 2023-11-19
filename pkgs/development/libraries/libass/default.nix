@@ -4,7 +4,6 @@
 , rasterizerSupport ? false # Internal rasterizer
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
 , libiconv
-, darwin
 }:
 
 assert fontconfigSupport -> fontconfig != null;
@@ -30,12 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ freetype fribidi harfbuzz ]
     ++ lib.optional fontconfigSupport fontconfig
-    ++ lib.optional stdenv.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.ApplicationServices
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreText
-    ];
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Portable ASS/SSA subtitle renderer";

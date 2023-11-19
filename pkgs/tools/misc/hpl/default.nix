@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.markuskowa ];
-    mainProgram = "xhpl";
   };
 }

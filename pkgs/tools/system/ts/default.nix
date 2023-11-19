@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.all;
-    mainProgram = "ts";
   };
 }

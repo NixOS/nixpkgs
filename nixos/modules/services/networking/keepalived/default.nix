@@ -150,14 +150,6 @@ in
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to automatically allow VRRP and AH packets in the firewall.
-        '';
-      };
-
       enableScriptSecurity = mkOption {
         type = types.bool;
         default = false;
@@ -289,19 +281,6 @@ in
   config = mkIf cfg.enable {
 
     assertions = flatten (map vrrpInstanceAssertions vrrpInstances);
-
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      extraCommands = ''
-        # Allow VRRP and AH packets
-        ip46tables -A nixos-fw -p vrrp -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
-        ip46tables -A nixos-fw -p ah -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
-      '';
-
-      extraStopCommands = ''
-        ip46tables -D nixos-fw -p vrrp -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
-        ip46tables -D nixos-fw -p ah -m comment --comment "services.keepalived.openFirewall" -j ACCEPT
-      '';
-    };
 
     systemd.timers.keepalived-boot-delay = {
       description = "Keepalive Daemon delay to avoid instant transition to MASTER state";

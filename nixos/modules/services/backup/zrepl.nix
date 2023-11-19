@@ -13,7 +13,12 @@ in
     services.zrepl = {
       enable = mkEnableOption (lib.mdDoc "zrepl");
 
-      package = mkPackageOption pkgs "zrepl" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.zrepl;
+        defaultText = literalExpression "pkgs.zrepl";
+        description = lib.mdDoc "Which package to use for zrepl";
+      };
 
       settings = mkOption {
         default = { };

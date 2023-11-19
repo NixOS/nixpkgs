@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "python-nvd3";
   version = "0.15.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "areski";

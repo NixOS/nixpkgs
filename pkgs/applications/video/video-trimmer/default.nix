@@ -13,7 +13,7 @@
 , gtk4
 , libadwaita
 , gst_all_1
-, ffmpeg-headless
+, ffmpeg-full
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg-full ]}"
     )
   '';
 
@@ -73,6 +73,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    mainProgram = "video-trimmer";
   };
 })

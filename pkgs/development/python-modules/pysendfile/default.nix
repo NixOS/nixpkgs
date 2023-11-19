@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pysendfile";
   version = "2.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

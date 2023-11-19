@@ -44,7 +44,14 @@ in
 
       enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
 
-      package = mkPackageOption pkgs "xrdp" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.xrdp;
+        defaultText = literalExpression "pkgs.xrdp";
+        description = lib.mdDoc ''
+          The package to use for the xrdp daemon's binary.
+        '';
+      };
 
       port = mkOption {
         type = types.port;

@@ -17,6 +17,5 @@ buildGoModule rec {
     homepage = "https://github.com/rsc/tcat";
     maintainers = with maintainers; [ mmlb ];
     license = licenses.bsd3;
-    mainProgram = "tcat";
   };
 }

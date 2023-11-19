@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.5.1";
+  version = "2.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +32,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lfeoWTmK/VNm3uFLHmIPO4r9aZPK3NhgDwio5WN4jqU=";
+    hash = "sha256-D+bgKI6olK3smgnRdACvd0gYMWvS6ao6f7nQh3YExXw=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +57,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     fsspec
+    jax
+    jaxlib
     numba
     setuptools
     numexpr
@@ -65,10 +66,6 @@ buildPythonPackage rec {
     pyarrow
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    # no support for darwin
-    jax
-    jaxlib
   ];
 
   # The following tests have been disabled because they need to be run on a GPU platform.

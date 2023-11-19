@@ -71,6 +71,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = [ ];
     platforms = lib.platforms.linux;
-    mainProgram = "stellar-core";
   };
 })

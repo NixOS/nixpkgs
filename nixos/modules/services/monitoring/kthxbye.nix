@@ -9,7 +9,14 @@ in
   options.services.kthxbye = {
     enable = mkEnableOption (mdDoc "kthxbye alert acknowledgement management daemon");
 
-    package = mkPackageOption pkgs "kthxbye" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.kthxbye;
+      defaultText = literalExpression "pkgs.kthxbye";
+      description = mdDoc ''
+        The kthxbye package that should be used.
+      '';
+    };
 
     openFirewall = mkOption {
       type = types.bool;

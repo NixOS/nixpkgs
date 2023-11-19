@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pybullet";
   version = "3.2.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

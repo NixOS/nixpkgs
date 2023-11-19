@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
       license = licenses.gpl2;
       maintainers = with maintainers; [ wnklmnn ];
       platforms = platforms.all;
-      mainProgram = "jugglinglab";
   };
 }

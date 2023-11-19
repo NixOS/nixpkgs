@@ -30,7 +30,7 @@ in
 
     nativeBuildInputs = [ makeWrapper ];
 
-    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID IOSocketSSL ];
+    buildInputs = with perlPackages; [ perl MusicBrainz MusicBrainzDiscID ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 

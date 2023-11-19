@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "deluge-client";
   version = "1.9.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

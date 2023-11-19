@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools
 , aiohttp
 , xmltodict
 , python-socketio
@@ -11,27 +10,23 @@
 
 buildPythonPackage rec {
   pname = "pycontrol4";
-  version = "1.1.2";
+  version = "1.1.0";
 
   disabled = pythonOlder "3.6";
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lawtancool";
     repo = "pyControl4";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oKKc9s3/fO7cFMjOeKtpvEwmfglxI2lxlN3EIva7zR8=";
+    rev = "v${version}";
+    hash = "sha256-dMv2b6dbMauPvPf4LHKmLF4jnXYRYe6A+2lDtiZDUhY=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "python-socketio>=4,<5" "python-socketio>=4"
   '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     aiohttp

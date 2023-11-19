@@ -5,5 +5,4 @@
   handy_window = callPackage ./handy-window { };
   matrix = callPackage ./matrix { };
   olm = callPackage ./olm { };
-  system_tray = callPackage ./system-tray { };
 }

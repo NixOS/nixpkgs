@@ -9,7 +9,7 @@ in
   options.programs.cardboard = {
     enable = lib.mkEnableOption (lib.mdDoc "cardboard");
 
-    package = lib.mkPackageOption pkgs "cardboard" { };
+    package = lib.mkPackageOptionMD pkgs "cardboard" { };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [

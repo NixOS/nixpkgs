@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "certifi";
   version = "2023.07.22";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

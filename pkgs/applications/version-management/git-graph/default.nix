@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ cafkafk ];
-    mainProgram = "git-graph";
   };
 }

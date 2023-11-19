@@ -174,7 +174,14 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "neo4j" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.neo4j;
+      defaultText = literalExpression "pkgs.neo4j";
+      description = lib.mdDoc ''
+        Neo4j package to use.
+      '';
+    };
 
     readOnly = mkOption {
       type = types.bool;

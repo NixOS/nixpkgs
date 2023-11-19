@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.sfrijters ];
     platforms = lib.platforms.linux;
-    mainProgram = "obconf";
   };
 }

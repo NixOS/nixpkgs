@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "nixpkgs";
   version = "0.2.4";
-  format = "setuptools";
   disabled = ! pythonAtLeast "3.5";
 
   src = fetchPypi {

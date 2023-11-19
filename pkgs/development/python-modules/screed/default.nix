@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "screed";
   version = "1.1.2";
-  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {

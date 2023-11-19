@@ -64,6 +64,5 @@ stdenv.mkDerivation {
       maintainers.minion3665
     ];
     platforms = platforms.all;
-    mainProgram = "pridefetch";
   };
 }

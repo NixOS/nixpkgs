@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "snakebite";
   version = "2.11.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

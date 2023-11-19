@@ -18,6 +18,5 @@ stdenv.mkDerivation (finalAttr: {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hughobrien ];
     platforms = platforms.linux;
-    mainProgram = "iat";
   };
 })

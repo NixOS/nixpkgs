@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "zope-deferredimport";
   version = "5.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.deferredimport";

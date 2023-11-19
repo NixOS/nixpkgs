@@ -43,6 +43,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Soft/xcolor";
     maintainers = with lib.maintainers; [ moni ];
     license = licenses.mit;
-    mainProgram = "xcolor";
   };
 }

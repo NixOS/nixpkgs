@@ -27,21 +27,20 @@
 , tzlocal
 , uharfbuzz
 , wheel
-, xsdata
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.21.0";
-  pyproject = true;
+  version = "0.20.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+RlrXuKMY89mO4iuFw7RLQABy+wLrAeHlEvTDCpBSqU=";
+    hash = "sha256-mWhkTVhq3bDkOlhUZIBBqwXUuQCXcFHW1haGOGMywzg=";
   };
 
   postPatch = ''
@@ -86,9 +85,6 @@ buildPythonPackage rec {
     ];
     async-http = [
       aiohttp
-    ];
-    etsi = [
-      xsdata
     ];
   };
 

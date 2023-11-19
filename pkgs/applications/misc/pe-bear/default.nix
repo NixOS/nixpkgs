@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pe-bear";
-  version = "0.6.6";
+  version = "0.6.5.2";
 
   src = fetchFromGitHub {
     owner = "hasherezade";
     repo = "pe-bear";
     rev = "v${version}";
-    sha256 = "sha256-WuuhQxjmV/AlmM1z85paUbpIaBht4fgqY8yvtZ0hPKQ=";
+    sha256 = "sha256-00OebZZUUwQ1yruTKEUj+bNEKY/CuzdLEbejnnagPnY=";
     fetchSubmodules = true;
   };
 

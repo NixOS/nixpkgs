@@ -35,6 +35,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/fabaff/past-time/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "past-time";
   };
 }

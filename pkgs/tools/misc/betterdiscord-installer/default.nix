@@ -28,6 +28,5 @@ in appimageTools.wrapType2 {
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "betterdiscord-installer";
   };
 }

@@ -1,26 +1,13 @@
-{ lib
-, fetchurl
-, makeWrapper
-, nixosTests
-, stdenv
-
-, jre
-, unzip
-}:
+{ lib, stdenv, fetchurl, unzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "geoserver";
-  version = "2.24.1";
+  version = "2.24.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    sha256 = "sha256-3GdpM5BIH6+NME+/Zig0c7pYFWuWZywT6goD9JT6gZI=";
+    sha256 = "sha256-xX1rAONMh5XSWGPXkVMemAvG34DDNmu2018HsTvY7G0=";
   };
-
-  patches = [
-    # set GEOSERVER_DATA_DIR to current working directory if not provided
-    ./data-dir.patch
-  ];
 
   sourceRoot = ".";
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -40,16 +27,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.geoserver = nixosTests.geoserver;
-  };
-
   meta = with lib; {
     description = "Open source server for sharing geospatial data";
     homepage = "https://geoserver.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
-    maintainers = teams.geospatial.members;
+    maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;
   };
 }

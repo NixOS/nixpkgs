@@ -13,12 +13,16 @@ in {
   options = {
     programs.i3lock = {
       enable = mkEnableOption (mdDoc "i3lock");
-      package = mkPackageOption pkgs "i3lock" {
-        example = "i3lock-color";
-        extraDescription = ''
-          ::: {.note}
+      package = mkOption {
+        type        = types.package;
+        default     = pkgs.i3lock;
+        defaultText = literalExpression "pkgs.i3lock";
+        example     = literalExpression ''
+          pkgs.i3lock-color
+        '';
+        description = mdDoc ''
+          Specify which package to use for the i3lock program,
           The i3lock package must include a i3lock file or link in its out directory in order for the u2fSupport option to work correctly.
-          :::
         '';
       };
       u2fSupport = mkOption {

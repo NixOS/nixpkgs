@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "permissionedforms";
   version = "0.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "django-permissionedforms";

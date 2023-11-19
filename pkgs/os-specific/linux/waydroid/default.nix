@@ -78,11 +78,11 @@ python3Packages.buildPythonApplication rec {
       --replace '"sh"' '"${runtimeShell}"'
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu";
     homepage = "https://github.com/waydroid/waydroid";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mcaju ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mcaju ];
   };
 }

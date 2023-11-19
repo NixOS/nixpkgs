@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "nitransforms";
   version = "23.0.1";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

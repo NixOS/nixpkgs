@@ -10,14 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "dayon";
-  version = "13.0.0";
+  version = "12.0.1";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${version}";
-    hash = "sha256-2Fo+LQvsrDvqEudZxzQBtJHGxrRYUyNyhrPV1xS49pQ=";
+    hash = "sha256-SCInonMTvBXtiDxWlN8QWNS+8MFB52vloonqfLcAEis=";
   };
+
+  # https://github.com/RetGal/Dayon/pull/66
+  postPatch = ''
+    substituteInPlace resources/deb/dayon_assisted.desktop resources/deb/dayon_assistant.desktop \
+      --replace "Exec=/usr/bin/" "Exec="
+  '';
 
   nativeBuildInputs = [
     ant
@@ -41,15 +47,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -Dm644 build/dayon.jar $out/share/dayon/dayon.jar
     mkdir -p $out/bin
-    # jre is in PATH because dayon needs keytool to generate certificates
     makeWrapper ${jre}/bin/java $out/bin/dayon \
-      --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-jar $out/share/dayon/dayon.jar"
     makeWrapper ${jre}/bin/java $out/bin/dayon_assisted \
-      --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assisted.AssistedRunner"
     makeWrapper ${jre}/bin/java $out/bin/dayon_assistant \
-      --prefix PATH : "${lib.makeBinPath [ jre ]}" \
       --add-flags "-cp $out/share/dayon/dayon.jar mpo.dayon.assistant.AssistantRunner"
     install -Dm644 resources/dayon.png $out/share/icons/hicolor/128x128/apps/dayon.png
     runHook postInstall

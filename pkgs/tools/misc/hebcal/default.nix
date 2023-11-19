@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.hhm ];
     platforms = platforms.all;
-    mainProgram = "hebcal";
   };
 }

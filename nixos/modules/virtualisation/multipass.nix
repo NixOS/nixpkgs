@@ -22,7 +22,7 @@ in
         '';
       };
 
-      package = lib.mkPackageOption pkgs "multipass" { };
+      package = lib.mkPackageOptionMD pkgs "multipass" { };
     };
   };
 

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "flask-basicauth";
   version = "0.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jpvanhal";

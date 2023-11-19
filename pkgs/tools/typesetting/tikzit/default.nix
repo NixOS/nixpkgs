@@ -29,6 +29,5 @@ mkDerivation {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.iblech maintainers.mgttlinger ];
-    mainProgram = "tikzit";
   };
 }

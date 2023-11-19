@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "python3-eventlib";
   version = "0.3.0";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   version = "0.24.0";
-  format = "setuptools";
   pname = "pybtex";
 
   doCheck = false;

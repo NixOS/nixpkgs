@@ -3,7 +3,7 @@ let
   callPackage = newScope self;
 
   self = {
-    pkgs = self // { recurseForDerivations = false; };
+    pkgs = self;
 
     fetchegg = callPackage ./fetchegg { };
 

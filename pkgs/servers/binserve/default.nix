@@ -33,6 +33,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ snapdgn ];
     platforms = platforms.unix;
-    mainProgram = "binserve";
   };
 }

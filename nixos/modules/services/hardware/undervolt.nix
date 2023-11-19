@@ -47,7 +47,14 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "undervolt" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.undervolt;
+      defaultText = literalExpression "pkgs.undervolt";
+      description = lib.mdDoc ''
+        undervolt derivation to use.
+      '';
+    };
 
     coreOffset = mkOption {
       type = types.nullOr types.int;

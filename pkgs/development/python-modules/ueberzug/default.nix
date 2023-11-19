@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "ueberzug";
   version = "18.1.9";
-  format = "setuptools";
 
   disabled = isPy27;
 

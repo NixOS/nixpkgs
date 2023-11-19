@@ -31,6 +31,5 @@ buildGoModule rec {
     changelog = "https://github.com/actions/gh-actions-cache/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
-    mainProgram = "gh-actions-cache";
   };
 }

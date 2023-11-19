@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pytest-mpl";
   version = "0.16.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

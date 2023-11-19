@@ -21,7 +21,6 @@
 buildPythonPackage rec {
   pname = "cheroot";
   version = "10.0.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-runtimeconfig";
-  version = "0.33.3";
+  version = "0.33.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4sv5wua03gLd9YqwdD8P/VaKv4LcacB42fK5hUAt2vQ=";
+    hash = "sha256-MPmyvm2FSrUzb1y5i4xl5Cqea6sxixLoZ7V1hxNi7hw=";
   };
 
   propagatedBuildInputs = [

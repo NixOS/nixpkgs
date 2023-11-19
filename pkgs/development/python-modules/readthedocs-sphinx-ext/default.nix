@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "readthedocs-sphinx-ext";
   version = "2.2.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

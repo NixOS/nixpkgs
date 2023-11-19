@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "bz2file";
   version = "0.98";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

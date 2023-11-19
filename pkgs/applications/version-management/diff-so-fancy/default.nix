@@ -53,6 +53,5 @@ stdenv.mkDerivation rec {
       diff-highlight to upgrade your diffs' appearances.
     '';
     maintainers = with maintainers; [ fpletz ma27 ];
-    mainProgram = "diff-so-fancy";
   };
 }

@@ -40,6 +40,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/laurent22/massren";
     maintainers = with maintainers; [ andrew-d ];
-    mainProgram = "massren";
   };
 }

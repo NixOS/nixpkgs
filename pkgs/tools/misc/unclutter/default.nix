@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
     license = lib.licenses.publicDomain;
-    mainProgram = "unclutter";
   };
 }

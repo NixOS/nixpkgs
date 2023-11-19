@@ -84,7 +84,7 @@ in
           getpwuid = ''
             SELECT name, 'x', uid, gid, name, CONCAT('/home/', name), "/run/current-system/sw/bin/bash" \
             FROM users \
-            WHERE uid=%1$u \
+            WHERE id=%1$u \
             LIMIT 1
           '';
           getspnam = ''
@@ -140,7 +140,6 @@ in
 
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("mysql.service")
-    machine.wait_until_succeeds("cat /etc/security/pam_mysql.conf | grep users.db_passwd")
     machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
 
     with subtest("Local login"):

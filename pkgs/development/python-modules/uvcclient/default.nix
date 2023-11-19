@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "uvcclient";
   version = "0.11.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kk7ds";

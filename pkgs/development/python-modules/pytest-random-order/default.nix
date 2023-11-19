@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "1.1.0";
-  format = "setuptools";
   pname = "pytest-random-order";
 
   src = fetchPypi {

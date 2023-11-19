@@ -16,8 +16,6 @@ let
           sha256 = "sha256-ctdPPKPSD4weidyhyj7RCV89baIhmuxucF3/Ojx1Efo=";
         };
 
-        patches = [ ];
-
         disabledTestPaths = [ "tests/test_nearley/test_nearley.py" ];
       });
     };

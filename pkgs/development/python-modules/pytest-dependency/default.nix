@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pytest-dependency";
   version = "0.5.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

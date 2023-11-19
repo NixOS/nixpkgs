@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/danielpaulus/go-ios";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
-    mainProgram = "ios";
   };
 }

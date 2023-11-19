@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "avro-python3";
   version = "1.10.2";
-  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {

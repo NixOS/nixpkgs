@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "betamax-serializers";
   version = "0.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

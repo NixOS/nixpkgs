@@ -16,7 +16,12 @@ in
         description = lib.mdDoc "The directory where Lidarr stores its data files.";
       };
 
-      package = mkPackageOption pkgs "lidarr" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.lidarr;
+        defaultText = literalExpression "pkgs.lidarr";
+        description = lib.mdDoc "The Lidarr package to use";
+      };
 
       openFirewall = mkOption {
         type = types.bool;

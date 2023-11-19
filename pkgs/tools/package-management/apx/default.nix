@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-spxZgc1krs8AhOhAZmqGj/yiXzMUefcFFKg/xFpdWj8=";
+    hash = "sha256-3CelqEntpfld0n+Ewg7NCkowVjgCf5b6StfSkYbgV5k=";
   };
 
   vendorHash = null;
@@ -21,7 +21,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace config/apx.json \
-      --replace "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
+      --replace "/usr/share/apx/distrobox" "${distrobox}/bin/distrobox" \
       --replace "/usr/share/apx" "$out/bin/apx"
     substituteInPlace settings/config.go \
       --replace "/usr/share/apx/" "$out/share/apx/"
@@ -37,7 +37,6 @@ buildGoModule rec {
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya chewblacka ];
-    mainProgram = "apx";
+    maintainers = with maintainers; [ dit7ya jgarcia ];
   };
 }

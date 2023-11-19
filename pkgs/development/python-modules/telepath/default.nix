@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "telepath";
   version = "0.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = "telepath";

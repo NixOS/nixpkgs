@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
-    mainProgram = "guff";
   };
 }

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "salmon-mail";
   version = "3.2.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

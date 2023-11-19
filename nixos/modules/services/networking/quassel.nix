@@ -35,7 +35,14 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "quasselDaemon" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.quasselDaemon;
+        defaultText = literalExpression "pkgs.quasselDaemon";
+        description = lib.mdDoc ''
+          The package of the quassel daemon.
+        '';
+      };
 
       interfaces = mkOption {
         type = types.listOf types.str;

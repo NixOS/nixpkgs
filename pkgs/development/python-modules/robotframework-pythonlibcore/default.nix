@@ -2,37 +2,30 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools
 , pytest-mockito
 , pytestCheckHook
 , robotframework
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "robotframework-pythonlibcore";
-  version = "4.3.0";
+  version = "4.2.0";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "PythonLibCore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5ayOQyOhCg4nLpAyH/eQ6NYEApix0wsL2nhJzEXKJRo=";
+    hash = "sha256-RJTn1zSVJYgbh93Idr77uHl02u0wpj6p6llSJfQVTQk=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   nativeCheckInputs = [
     pytest-mockito
     pytestCheckHook
     robotframework
-    typing-extensions
   ];
 
   preCheck = ''

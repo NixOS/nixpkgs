@@ -10,7 +10,6 @@
 
 buildPythonPackage rec {
   version = "1.7.4";
-  format = "setuptools";
   pname = "vidstab";
 
   src = fetchPypi {

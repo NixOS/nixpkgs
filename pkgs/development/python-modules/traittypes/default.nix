@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "traittypes";
   version = "unstable-2019-06-23";
-  format = "setuptools";
 
   disabled = isPy27;
 

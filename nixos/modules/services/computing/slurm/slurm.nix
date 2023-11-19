@@ -131,10 +131,14 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "slurm" {
-        example = "slurm-full";
-      } // {
+      package = mkOption {
+        type = types.package;
         default = pkgs.slurm.override { enableX11 = ! cfg.enableSrunX11; };
+        defaultText = literalExpression "pkgs.slurm";
+        example = literalExpression "pkgs.slurm-full";
+        description = lib.mdDoc ''
+          The package to use for slurm binaries.
+        '';
       };
 
       controlMachine = mkOption {

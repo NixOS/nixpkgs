@@ -74,7 +74,6 @@ builder rec {
 
   patches = [
     ./eai_system.patch
-    ./guile-hurd-posix-spawn.patch
   ] ++ lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
   ++ lib.optional stdenv.isDarwin
     (fetchpatch {
@@ -164,7 +163,7 @@ builder rec {
       foreign function call interface, and powerful string processing.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ludo lovek323 vrthra ];
     platforms = platforms.all;
   };
 }

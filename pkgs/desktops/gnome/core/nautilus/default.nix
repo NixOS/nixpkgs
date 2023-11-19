@@ -36,15 +36,15 @@
 , gobject-introspection
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "45.2.1";
+  version = "44.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    sha256 = "ul1T3zmhVVYt+XHvXjHoJwdJBdDEjqseskIaEChLmQ0=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "2cYvAkcn96dvxqXaeIorAkffAaccKmARQ8YqrA/0Hkw=";
   };
 
   patches = [
@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "nautilus";
-      attrPath = "gnome.nautilus";
+      packageName = pname;
+      attrPath = "gnome.${pname}";
     };
   };
 
@@ -131,4 +131,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };
-})
+}

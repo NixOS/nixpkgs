@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "influxdb";
   version = "5.3.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

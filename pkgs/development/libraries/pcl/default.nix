@@ -18,8 +18,7 @@
 , Cocoa
 , AGL
 , OpenGL
-, config
-, withCuda ? config.cudaSupport, cudaPackages
+, withCuda ? false, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
@@ -39,13 +38,7 @@ stdenv.mkDerivation rec {
     sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    wrapQtAppsHook
-  ]
-  ++ lib.optionals withCuda [ cudaPackages.cuda_nvcc ];
-
+  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
   buildInputs = [
     eigen
     libusb1
@@ -53,7 +46,8 @@ stdenv.mkDerivation rec {
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
+  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
+  ++ lib.optionals withCuda [ cudatoolkit ];
 
   propagatedBuildInputs = [
     boost

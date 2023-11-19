@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pyramid-chameleon";
   version = "0.3";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "pyramid_chameleon";

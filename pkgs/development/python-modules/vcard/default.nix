@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "vcard";
   version = "0.15.4";
-  format = "setuptools";
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 

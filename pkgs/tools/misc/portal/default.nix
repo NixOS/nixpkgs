@@ -22,6 +22,5 @@ buildGoModule rec {
     changelog = "https://github.com/SpatiumPortae/portal/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ tennox ];
-    mainProgram = "portal";
   };
 }

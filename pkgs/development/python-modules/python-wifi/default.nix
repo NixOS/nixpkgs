@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "python-wifi";
   version = "0.6.1";
-  format = "setuptools";
   disabled = !isPy27;
 
   src = fetchPypi {

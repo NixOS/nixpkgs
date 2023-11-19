@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "Interactive command line client for testing websocket servers";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    mainProgram = "claws";
   };
 }

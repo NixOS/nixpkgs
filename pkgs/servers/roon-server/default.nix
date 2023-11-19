@@ -95,6 +95,5 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "RoonServer";
   };
 }

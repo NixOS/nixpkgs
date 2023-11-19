@@ -19,9 +19,10 @@ COMPILERS="mescc gcc"
 
 
 format() {
-  echo "["
-  echo $* | xargs printf '      "%s"\n'
-  echo "    ]"
+  echo -n "[ "
+  # Terrible hack to convert a newline-delimited string to space-delimited
+  echo $* | xargs printf '"%s" '
+  echo -n "]"
 }
 
 gen_sources() {
@@ -37,12 +38,12 @@ gen_sources() {
   cat <<EOF
   $mes_cpu.$mes_kernel.$compiler = {
     libc_mini_SOURCES = $(format $libc_mini_SOURCES);
-    libmescc_SOURCES = $(format $libmescc_SOURCES);
-    libtcc1_SOURCES = $(format $libtcc1_SOURCES);
-    libc_SOURCES = $(format $libc_SOURCES);
-    libc_tcc_SOURCES = $(format $libc_tcc_SOURCES);
-    libc_gnu_SOURCES = $(format $libc_gnu_SOURCES);
-    mes_SOURCES = $(format $mes_SOURCES);
+    libmescc_SOURCES  = $(format $libmescc_SOURCES);
+    libtcc1_SOURCES   = $(format $libtcc1_SOURCES);
+    libc_SOURCES      = $(format $libc_SOURCES);
+    libc_tcc_SOURCES  = $(format $libc_tcc_SOURCES);
+    libc_gnu_SOURCES  = $(format $libc_gnu_SOURCES);
+    mes_SOURCES       = $(format $mes_SOURCES);
   };
 EOF
 }

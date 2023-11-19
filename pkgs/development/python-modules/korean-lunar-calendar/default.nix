@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "korean-lunar-calendar";
   version = "0.3.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

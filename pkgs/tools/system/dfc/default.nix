@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [qknight];
     platforms = lib.platforms.all;
-    mainProgram = "dfc";
   };
 }

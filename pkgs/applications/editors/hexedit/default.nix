@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];
-    mainProgram = "hexedit";
   };
 }

@@ -5,7 +5,6 @@
 
 buildPythonPackage rec {
   version = "0.3";
-  format = "setuptools";
   pname = "httpauth";
 
   src = fetchPypi {

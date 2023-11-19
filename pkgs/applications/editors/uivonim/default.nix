@@ -39,6 +39,5 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.agpl3Only;
-    mainProgram = "uivonim";
   };
 }

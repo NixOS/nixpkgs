@@ -33,6 +33,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ leona erictapen ];
     platforms = platforms.linux;
-    mainProgram = "vouch-proxy";
   };
 }

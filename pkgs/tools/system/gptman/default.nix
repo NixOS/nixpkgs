@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-disk-partition-management/gptman";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ akshgpt7 ];
-    mainProgram = "gptman";
   };
 }

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "ufonormalizer";
   version = "0.6.1";
-  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

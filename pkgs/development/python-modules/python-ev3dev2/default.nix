@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "python-ev3dev2";
   version = "2.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ev3dev";

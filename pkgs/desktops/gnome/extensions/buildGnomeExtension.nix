@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchzip, nixosTests }:
+{ pkgs, lib, stdenv, fetchzip }:
 
 let
 
@@ -61,10 +61,6 @@ let
       extensionPortalSlug = pname;
       # Store the extension's UUID, because we might need it at some places
       extensionUuid = uuid;
-
-      tests = {
-        gnome-extensions = nixosTests.gnome-extensions;
-      };
     };
   };
 in

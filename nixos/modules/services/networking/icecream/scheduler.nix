@@ -54,7 +54,12 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "icecream" { };
+      package = mkOption {
+        default = pkgs.icecream;
+        defaultText = literalExpression "pkgs.icecream";
+        type = types.package;
+        description = lib.mdDoc "Icecream package to use.";
+      };
 
       extraArgs = mkOption {
         type = types.listOf types.str;

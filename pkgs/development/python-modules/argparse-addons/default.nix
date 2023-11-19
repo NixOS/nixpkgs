@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "argparse-addons";
   version = "0.12.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "argparse_addons";

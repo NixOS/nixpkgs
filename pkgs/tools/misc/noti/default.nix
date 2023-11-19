@@ -48,6 +48,5 @@ buildGoModule rec {
     homepage = "https://github.com/variadico/noti";
     license = licenses.mit;
     maintainers = with maintainers; [ stites marsam ];
-    mainProgram = "noti";
   };
 }

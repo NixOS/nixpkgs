@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ freebsd;
     license = licenses.gpl2;
     maintainers = [maintainers.rycee];
-    mainProgram = "cpulimit";
   };
 }

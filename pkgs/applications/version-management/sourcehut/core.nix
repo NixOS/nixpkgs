@@ -21,17 +21,12 @@
 , importlib-metadata
 , tinycss2
 , sassc
-, pythonOlder
 , minify
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "srht";
   version = "0.69.15";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -44,10 +39,6 @@ buildPythonPackage rec {
   patches = [
     # Fix Unix socket support in RedisQueueCollector
     patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
-  ];
-
-  nativeBuildInputs = [
-    setuptools
   ];
 
   propagatedNativeBuildInputs = [

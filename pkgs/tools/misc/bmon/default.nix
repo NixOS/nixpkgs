@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor pSub ];
-    mainProgram = "bmon";
   };
 }

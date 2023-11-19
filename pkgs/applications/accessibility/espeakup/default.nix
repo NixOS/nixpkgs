@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethindp ];
     platforms = with platforms; linux;
-    mainProgram = "espeakup";
   };
 }

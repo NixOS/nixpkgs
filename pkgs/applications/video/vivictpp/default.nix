@@ -7,7 +7,7 @@
 , cacert }:
 
 let
-  version = "1.0.0";
+  version = "0.3.1";
   withSubprojects = stdenv.mkDerivation {
     name = "sources-with-subprojects";
 
@@ -15,7 +15,7 @@ let
       owner = "vivictorg";
       repo = "vivictpp";
       rev = "v${version}";
-      hash = "sha256-dCtMjemEjXe63ELAfQhzJl3GecqWLcjL2y5Htn6hYgU=";
+      hash = "sha256-6YfYeUrM7cq8hnOPMq0Uq/HToFBDri0N/r0SU0LeT/Y=";
     };
 
     nativeBuildInputs = [
@@ -33,7 +33,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-a7NBQJt5T+KwP8Djc8TQiVLNZF8UcXlXrv2G/dZ54aM=";
+    outputHash = "sha256-lIm2Bwy61St9d1e6QSm5ZpSIDR9ucaQKBPHATTDEgW4=";
   };
 in stdenv.mkDerivation rec {
   pname = "vivictpp";
@@ -69,6 +69,5 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ tilpner ];
-    mainProgram = "vivictpp";
   };
 }

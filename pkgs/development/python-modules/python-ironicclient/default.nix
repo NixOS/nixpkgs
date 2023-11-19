@@ -21,7 +21,6 @@
 buildPythonPackage rec {
   pname = "python-ironicclient";
   version = "5.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

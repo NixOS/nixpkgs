@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "treq";
   version = "22.2.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -11,7 +11,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.4.0";
+  version = "2.3.1";
   format = "other";
 
   sourceRoot = "source/source";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-BIaBysqkNfRk7N4dzyjnN+ha2WkppkwFDSj4AAcp9UI=";
+    hash = "sha256-dpRTHsujaIwzgr+qY5LC9xtXz40g3akdpEiHuxiilZM=";
   };
 
   pythonPath = with python3Packages; [
@@ -34,16 +34,18 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    libadwaita
-    # needed for gstreamer https
-    libsoup_3
-    glib-networking
-  ] ++ (with gst_all_1; [
-    gst-plugins-base
-    gst-plugins-good
-    gstreamer
-  ]);
+  buildInputs =
+    [
+      libadwaita
+      # needed for gstreamer https
+      libsoup_3
+      glib-networking
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-base
+      gst-plugins-good
+      gstreamer
+    ]);
 
   installFlags = [ "prefix=$(out)" ];
 
@@ -53,7 +55,7 @@ python3Packages.buildPythonApplication rec {
       --prefix PYTHONPATH : "$program_PYTHONPATH"
       --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
       # needed for gstreamer https
-      --prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib"
+      --prefix LD_LIBRARY_PATH : "${libsoup_3.out}/lib"
     )
   '';
 

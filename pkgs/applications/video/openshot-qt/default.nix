@@ -2,6 +2,7 @@
 , stdenv
 , mkDerivationWith
 , fetchFromGitHub
+, fetchpatch
 , doxygen
 , gtk3
 , libopenshot
@@ -11,20 +12,16 @@
 , wrapGAppsHook
 }:
 
-let
+mkDerivationWith python3.pkgs.buildPythonApplication rec {
   pname = "openshot-qt";
-  version = "3.1.1";
+  version = "3.0.0";
+
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    hash = "sha256-kEz1APBitWLlnIbyloYMsqNrwC9RqU04kyyWzm5klYc=";
+    hash = "sha256-h4R2txi038m6tzdKYiXIB8CiqWt2MFFRNerp1CFP5as=";
   };
-in
-mkDerivationWith python3.pkgs.buildPythonApplication {
-  inherit pname version src;
-
-  outputs = [ "out" ]; # "lib" can't be split
 
   nativeBuildInputs = [
     doxygen
@@ -44,10 +41,8 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     sip_4
   ];
 
-  strictDeps = true;
-
   preConfigure = ''
-    # the builder tries to create caching directories during install
+    # tries to create caching directories during install
     export HOME=$(mktemp -d)
   '';
 
@@ -72,19 +67,18 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     inherit (libopenshot) libopenshot-audio;
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor";
     longDescription = ''
       OpenShot Video Editor is a free, open-source video editor for Linux.
-      OpenShot can take your videos, photos, and music files and help you create
-      the film you have always dreamed of. Easily add sub-titles, transitions,
-      and effects, and then export your film to DVD, YouTube, Vimeo, Xbox 360,
-      and many other common formats.
+      OpenShot can take your videos, photos, and music files and help you
+      create the film you have always dreamed of. Easily add sub-titles,
+      transitions, and effects, and then export your film to DVD, YouTube,
+      Vimeo, Xbox 360, and many other common formats.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
-    mainProgram = "openshot-qt";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix;
+    license = with licenses; gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }

@@ -63,6 +63,5 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://awstats.org";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    mainProgram = "awstats";
   };
 }

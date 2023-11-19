@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pycountry";
   version = "22.3.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

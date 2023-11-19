@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/maruel/panicparse";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
-    mainProgram = "panicparse";
   };
 }

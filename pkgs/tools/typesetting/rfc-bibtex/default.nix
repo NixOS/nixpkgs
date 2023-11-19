@@ -29,6 +29,5 @@ with python3.pkgs; buildPythonApplication rec {
     description = "Generate Bibtex entries for IETF RFCs and Internet-Drafts";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];
-    mainProgram = "rfcbibtex";
   };
 }

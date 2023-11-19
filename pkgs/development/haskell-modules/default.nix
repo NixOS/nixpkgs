@@ -18,8 +18,7 @@ let
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
-    inherit stdenv haskellLib ghc extensible-self all-cabal-hashes;
-    buildHaskellPackages = buildHaskellPackages // { __attrsFailEvaluation = true; };
+    inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
   };
 
   platformConfigurations = lib.optionals stdenv.hostPlatform.isAarch [

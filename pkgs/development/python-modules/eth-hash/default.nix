@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "eth-hash";
   version = "0.5.2";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

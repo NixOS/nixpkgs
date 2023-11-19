@@ -25,7 +25,14 @@ in
   options.services.heisenbridge = {
     enable = mkEnableOption (lib.mdDoc "the Matrix to IRC bridge");
 
-    package = mkPackageOption pkgs "heisenbridge" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.heisenbridge;
+      defaultText = lib.literalExpression "pkgs.heisenbridge";
+      description = lib.mdDoc ''
+        Package of the application to run, exposed for overriding purposes.
+      '';
+    };
 
     homeserver = mkOption {
       type = types.str;

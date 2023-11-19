@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , opencv
@@ -35,19 +34,6 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/${version}";
     hash = "sha256-1xb8O3VrErldid2OgAUMG28mSUO7QBUsPuSz8p03tSI";
   };
-
-  patches = [
-    # Fix build with g2o 20230806
-    (fetchpatch {
-      url = "https://github.com/introlab/rtabmap/commit/85cc6fe3c742855ad16c8442895e12dbb10b6e8b.patch";
-      hash = "sha256-P6GkYKCNwe9dgZdgF/oEhgjA3bJnwXFWJCPoyIknQCo=";
-    })
-    # Fix typo in previous patch
-    (fetchpatch {
-      url = "https://github.com/introlab/rtabmap/commit/c4e94bcdc31b859c1049724dbb7671e4597d86de.patch";
-      hash = "sha256-1btkV4/y+bnF3xEVqlUy/9F6BoANeTOEJjZLmRzG3iA=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook ];
   buildInputs = [

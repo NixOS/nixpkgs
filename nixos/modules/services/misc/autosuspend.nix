@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 let
   inherit (lib) mapAttrs' nameValuePair filterAttrs types mkEnableOption
-    mdDoc mkPackageOption mkOption literalExpression mkIf flatten
+    mdDoc mkPackageOptionMD mkOption literalExpression mkIf flatten
     maintainers attrValues;
 
   cfg = config.services.autosuspend;
@@ -96,7 +96,7 @@ in
     services.autosuspend = {
       enable = mkEnableOption (mdDoc "the autosuspend daemon");
 
-      package = mkPackageOption pkgs "autosuspend" { };
+      package = mkPackageOptionMD pkgs "autosuspend" { };
 
       settings = mkOption {
         type = types.submodule {

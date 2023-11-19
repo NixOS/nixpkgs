@@ -32,6 +32,5 @@ python3Packages.buildPythonPackage rec {
     maintainers = with maintainers; [ globin willibutz ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    mainProgram = "opsdroid";
   };
 }

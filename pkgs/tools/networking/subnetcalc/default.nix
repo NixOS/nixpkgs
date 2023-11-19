@@ -1,30 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-}:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "subnetcalc";
-  version = "2.4.23";
+  version = "2.4.22";
 
   src = fetchFromGitHub {
     owner = "dreibh";
-    repo = "subnetcalc";
-    rev = "subnetcalc-${finalAttrs.version}";
-    hash = "sha256-uX/roOWjeuuuEFpBbF+hEPDOo0RTR79WpyNvr9U7wR4=";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-5sDEMS4RgHdGQZAT2MVF/Ls0KXwdKzX+05uQpHhCZn8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
-  meta = {
+  meta = with lib; {
     description = "SubNetCalc is an IPv4/IPv6 subnet address calculator";
-    homepage = "https://www.uni-due.de/~be0001/subnetcalc/";
-    license = lib.licenses.gpl3Plus;
     longDescription = ''
       SubNetCalc is an IPv4/IPv6 subnet address calculator. For given IPv4 or
       IPv6 address and netmask or prefix length, it calculates network address,
@@ -33,8 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
       Furthermore, it prints useful information on specific address types (e.g.
       type, scope, interface ID, etc.).
     '';
-    mainProgram = "subnetcalc";
-    maintainers = with lib.maintainers; [ atila ];
-    platforms = lib.platforms.unix;
+    homepage = "https://www.uni-due.de/~be0001/subnetcalc/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ atila ];
+    platforms = platforms.unix;
   };
-})
+}

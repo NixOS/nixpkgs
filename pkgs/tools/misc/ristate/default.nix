@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/snakedye/ristate";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];
-    mainProgram = "ristate";
   };
 }

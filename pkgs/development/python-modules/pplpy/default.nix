@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "pplpy";
   version = "0.8.9";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
-    mainProgram = "font-config-info";
   };
 }

@@ -6,20 +6,20 @@
 , pkg-config
 , wrapQtAppsHook
 , dtkwidget
-, qtbase
 , qtsvg
 , xorg
+, qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-picker";
-  version = "6.0.0";
+  version = "5.0.28";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-DkSgeMALhwGeU5sDHuerpPpiN3/3m19jmwtwOjZvOVo=";
+    sha256 = "sha256-b463PqrCpt/DQqint5Xb0cRT66iHNPavj0lsTMv801k=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase
     dtkwidget
     qtsvg
     xorg.libXtst

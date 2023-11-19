@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "webdavclient3";
   version = "3.14.6";
-  format = "setuptools";
 
   disabled = isPy27;
 

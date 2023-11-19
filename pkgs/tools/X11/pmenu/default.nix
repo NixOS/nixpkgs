@@ -56,6 +56,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = [ lib.maintainers.azahi ];
     platforms = lib.platforms.unix;
-    mainProgram = "pmenu";
   };
 })

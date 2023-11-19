@@ -13,14 +13,14 @@
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "0.95.0";
+  version = "0.93.1";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-NKlSTpC06FKc1eyz/QaoavPFxn8tq6UXtlUjqtC4S6w=";
+    hash = "sha256-eiqwcSDwxkuYEsseHdjBE3KFnTnD/7BMyz/DNVAKUIA=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

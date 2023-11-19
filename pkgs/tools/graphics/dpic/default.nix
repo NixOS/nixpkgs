@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ aespinosa ];
     platforms = platforms.all;
-    mainProgram = "dpic";
   };
 }
 

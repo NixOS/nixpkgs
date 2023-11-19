@@ -50,16 +50,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.11.1"; # always change at once with ./minimal.nix
+  version = "8.10"; # always change at once with ./minimal.nix
 
-  src = (lib.makeOverridable ({ name, hash }:
+  src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
       url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-      inherit hash;
+      inherit sha256;
     }
   )) {
     name = "${pname}-${version}";
-    hash = "sha256-5ZqwMLkqeONYnsQFxdJfpRdojCCZAjO9aMs0Vo1lTAU=";
+    sha256 = "sha256-Dklj2iwX5/bVdCi9odz2Ttp0N+Lya7bMSLR/QXo9k6M=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -98,10 +98,6 @@ stdenv.mkDerivation rec {
         --replace /bin/true ${coreutils}/bin/true
     done
 
-    # Remove QuickScript register.rkt because it breaks on sandbox
-    # https://github.com/Metaxal/quickscript/issues/73
-    rm -f share/pkgs/quickscript/register.rkt
-
     # The configure script forces using `libtool -o` as AR on Darwin. But, the
     # `-o` option is only available from Apple libtool. GNU ar works here.
     substituteInPlace src/ChezScheme/zlib/configure \
@@ -135,13 +131,11 @@ stdenv.mkDerivation rec {
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
                    ++ lib.optionals disableDocs [ "--disable-docs" ]
-                   ++ lib.optionals stdenv.isDarwin [ "--disable-strip" "--enable-xonx" ];
+                   ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
   enableParallelBuilding = false;
-
-  dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
     description = "A programmable programming language";
@@ -157,7 +151,7 @@ stdenv.mkDerivation rec {
     homepage = "https://racket-lang.org/";
     changelog = "https://github.com/racket/racket/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = with maintainers; [ henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }

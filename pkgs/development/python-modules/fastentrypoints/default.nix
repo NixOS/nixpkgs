@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "fastentrypoints";
   version = "0.12";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

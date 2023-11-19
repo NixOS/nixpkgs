@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];
-    mainProgram = "envchain";
   };
 }

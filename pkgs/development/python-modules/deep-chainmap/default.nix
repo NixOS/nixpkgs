@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "deep-chainmap";
   version = "0.1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "deep_chainmap";

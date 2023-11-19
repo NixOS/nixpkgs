@@ -23,6 +23,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ethancedwards8 ];
-    mainProgram = "hash-identifier";
   };
 }

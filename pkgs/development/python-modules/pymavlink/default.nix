@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pymavlink";
   version = "2.4.40";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -3,7 +3,6 @@
 , glibcLocales
   # The GraalVM derivation to use
 , graalvmDrv
-, removeReferencesTo
 , executable ? args.pname
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
@@ -12,7 +11,6 @@
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
-    (lib.optionalString (stdenv.isLinux && stdenv.isAarch64) "-H:PageSize=64K")
     "-H:Name=${executable}"
     "-march=compatibility"
     "--verbose"
@@ -39,22 +37,14 @@ let
     "buildPhase"
     "nativeBuildInputs"
     "installPhase"
-    "postInstall"
   ];
 in
 stdenv.mkDerivation ({
   inherit dontUnpack jar;
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales removeReferencesTo ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
 
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
-
-  # Workaround GraalVM issue where the builder does not have access to the
-  # environment variables since 21.0.0
-  # https://github.com/oracle/graal/pull/6095
-  # https://github.com/oracle/graal/pull/6095
-  # https://github.com/oracle/graal/issues/7502
-  env.NATIVE_IMAGE_DEPRECATED_BUILDER_SANITATION = "true";
 
   buildPhase = args.buildPhase or ''
     runHook preBuild
@@ -70,11 +60,6 @@ stdenv.mkDerivation ({
     install -Dm755 ${executable} -t $out/bin
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    remove-references-to -t ${graalvmDrv} $out/bin/${executable}
-    ${args.postInstall or ""}
   '';
 
   disallowedReferences = [ graalvmDrv ];

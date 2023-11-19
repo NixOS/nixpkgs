@@ -46,7 +46,14 @@ in {
   options.services.pgmanage = {
     enable = mkEnableOption (lib.mdDoc "PostgreSQL Administration for the web");
 
-    package = mkPackageOption pkgs "pgmanage" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.pgmanage;
+      defaultText = literalExpression "pkgs.pgmanage";
+      description = lib.mdDoc ''
+        The pgmanage package to use.
+      '';
+    };
 
     connections = mkOption {
       type = types.attrsOf types.str;

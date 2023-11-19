@@ -20,6 +20,5 @@ buildPythonApplication rec {
     homepage    = "https://mzucker.github.io/2016/09/20/noteshrink.html";
     license     = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj ];
-    mainProgram = "noteshrink";
   };
 }

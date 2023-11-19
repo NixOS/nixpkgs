@@ -19,6 +19,5 @@ bundlerApp {
     license     = licenses.asl20;
     maintainers = with maintainers; [ zimbatm manveru nicknovitski ];
     platforms = platforms.unix;
-    mainProgram = "r10k";
   };
 }

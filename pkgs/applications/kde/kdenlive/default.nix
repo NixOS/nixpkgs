@@ -36,11 +36,6 @@
 , wrapGAppsHook
 }:
 
-let
-  mlt-full = mlt.override {
-    ffmpeg = ffmpeg-full;
-  };
-in
 mkDerivation {
   pname = "kdenlive";
   nativeBuildInputs = [
@@ -65,7 +60,7 @@ mkDerivation {
     kplotting
     ktextwidgets
     mediainfo
-    mlt-full
+    mlt
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
@@ -86,9 +81,8 @@ mkDerivation {
   # https://github.com/NixOS/nixpkgs/issues/83885
   patches = [ ./dependency-paths.patch ];
 
-  inherit mediainfo;
+  inherit mlt mediainfo;
   ffmpeg = ffmpeg-full;
-  mlt = mlt-full;
 
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.

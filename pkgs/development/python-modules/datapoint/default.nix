@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "datapoint";
   version = "0.9.8";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ejep";

@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ckauhaus ];
     platforms = platforms.unix;
-    mainProgram = "symlinks";
   };
 }

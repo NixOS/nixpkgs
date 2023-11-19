@@ -11,7 +11,12 @@ in {
   options = {
     services.unit = {
       enable = mkEnableOption (lib.mdDoc "Unit App Server");
-      package = mkPackageOption pkgs "unit" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.unit;
+        defaultText = literalExpression "pkgs.unit";
+        description = lib.mdDoc "Unit package to use.";
+      };
       user = mkOption {
         type = types.str;
         default = "unit";

@@ -22,7 +22,7 @@ in {
       '';
     };
 
-    package = lib.mkPackageOption pkgs "grafana-loki" { };
+    package = lib.mkPackageOptionMD pkgs "grafana-loki" { };
 
     group = mkOption {
       type = types.str;

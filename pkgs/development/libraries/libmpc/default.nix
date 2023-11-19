@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
          built upon and follows the same principles as GNU MPFR.
       '';
 
-    homepage = "https://www.multiprecision.org/mpc/";
+    homepage = "http://mpc.multiprecision.org/";
     license = lib.licenses.lgpl2Plus;
 
     platforms = lib.platforms.all;

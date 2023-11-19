@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/INFURA/versus";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
-    mainProgram = "versus";
   };
 }

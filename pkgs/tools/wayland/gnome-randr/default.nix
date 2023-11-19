@@ -30,6 +30,5 @@ rustPlatform.buildRustPackage {
     license = licenses.mit;
     maintainers = [ maintainers.roberth ];
     platforms = platforms.linux;
-    mainProgram = "gnome-randr";
   };
 }

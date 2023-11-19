@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "6.0.0";
-  format = "setuptools";
   pname = "azure-mgmt-managedservices";
   disabled = isPy27;
 

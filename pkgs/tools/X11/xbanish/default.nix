@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [lib.maintainers.choochootrain];
     platforms = lib.platforms.linux;
-    mainProgram = "xbanish";
   };
 }

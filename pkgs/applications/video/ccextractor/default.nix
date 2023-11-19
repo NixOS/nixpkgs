@@ -66,6 +66,5 @@ stdenv.mkDerivation rec {
     broken = stdenv.isAarch64;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ titanous ];
-    mainProgram = "ccextractor";
   };
 }

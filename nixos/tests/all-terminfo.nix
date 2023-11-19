@@ -10,11 +10,7 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
         let
           o = builtins.tryEval drv;
         in
-        o.success &&
-        lib.isDerivation o.value &&
-        o.value ? outputs &&
-        builtins.elem "terminfo" o.value.outputs &&
-        !o.value.meta.broken;
+        o.success && lib.isDerivation o.value && o.value ? outputs && builtins.elem "terminfo" o.value.outputs;
       terminfos = lib.filterAttrs infoFilter pkgs;
       excludedTerminfos = lib.filterAttrs (_: drv: !(builtins.elem drv.terminfo config.environment.systemPackages)) terminfos;
       includedOuts = lib.filterAttrs (_: drv: builtins.elem drv.out config.environment.systemPackages) terminfos;

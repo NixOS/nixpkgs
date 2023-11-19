@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "show-in-file-manager";
   version = "1.1.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

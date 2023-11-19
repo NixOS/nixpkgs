@@ -69,9 +69,7 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-  noExtraAttrs = set:
-    lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ]
-    // { __attrsFailEvaluation = true; };
+  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ];
 
 in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
@@ -81,8 +79,6 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   kdeApplications = kdeGear;
 
   ### LIBRARIES
-
-  accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
 
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -144,13 +140,13 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../development/libraries/libopenshot {
+  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-  libopenshot-audio = callPackage ../development/libraries/libopenshot-audio {
+  libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
@@ -250,8 +246,6 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
-  qzxing = callPackage ../development/libraries/qzxing { };
-
   soqt = callPackage ../development/libraries/soqt { };
 
   telepathy = callPackage ../development/libraries/telepathy/qt { };
@@ -272,9 +266,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {
-  # Convert to a throw on 01-01-2023.
-  # Warnings show up in various cli tool outputs, throws do not.
-  # Remove completely before 24.05
+  # remove after 23.11 branch-off and backport removal to 23.11
+  # 23.11 will have a warning for this in `makeScope` itself
   overrideScope' = lib.warn "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
 }));
 }

@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.matthew-levan ];
     license = licenses.mit;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "urbit";
   };
 }

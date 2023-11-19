@@ -103,6 +103,5 @@ in mkYarnPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pacien ];
     platforms = lib.platforms.linux;
-    mainProgram = "matrix-appservice-discord";
   };
 }

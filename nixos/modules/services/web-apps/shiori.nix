@@ -8,7 +8,12 @@ in {
     services.shiori = {
       enable = mkEnableOption (lib.mdDoc "Shiori simple bookmarks manager");
 
-      package = mkPackageOption pkgs "shiori" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.shiori;
+        defaultText = literalExpression "pkgs.shiori";
+        description = lib.mdDoc "The Shiori package to use.";
+      };
 
       address = mkOption {
         type = types.str;

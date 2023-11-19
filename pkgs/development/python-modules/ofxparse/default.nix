@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "ofxparse";
   version = "0.21";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

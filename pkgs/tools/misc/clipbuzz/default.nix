@@ -27,6 +27,5 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://trong.loang.net/~cnx/clipbuzz";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.McSinyx ];
-    mainProgram = "clipbuzz";
   };
 })

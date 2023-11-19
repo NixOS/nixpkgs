@@ -130,6 +130,5 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     maintainers = with maintainers; [ nrdxp pedrohlc Scrumplex zhaofengli ];
     platforms = platforms.linux;
-    mainProgram = "gamescope";
   };
 }

@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit; # expat version
     platforms = platforms.unix;
     maintainers = with maintainers; [ vcunat ];
-    mainProgram = "vdpauinfo";
   };
 }

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "basiciw";
   version = "0.2.2";
-  format = "setuptools";
 
   disabled = isPy27 || isPyPy;
 

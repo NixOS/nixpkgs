@@ -41,7 +41,7 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "gmediarender" {
+    package = mkPackageOptionMD pkgs "gmediarender" {
       default = "gmrender-resurrect";
     };
 

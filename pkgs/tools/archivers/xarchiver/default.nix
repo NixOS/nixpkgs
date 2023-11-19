@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.domenkozar ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
-    mainProgram = "xarchiver";
   };
 }

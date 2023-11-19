@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lpan/viw";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ AndersonTorres ];
-    mainProgram = "viw";
   };
 }

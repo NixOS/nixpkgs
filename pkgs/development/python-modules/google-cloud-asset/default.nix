@@ -1,37 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, grpc-google-iam-v1
 , google-api-core
 , google-cloud-access-context-manager
 , google-cloud-org-policy
 , google-cloud-os-config
 , google-cloud-testutils
-, grpc-google-iam-v1
 , libcst
-, mock
-, proto-plus
 , protobuf
+, proto-plus
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, setuptools
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.22.0";
-  pyproject = true;
+  version = "3.20.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S+rJ80pkphkPlNFUn8e0bxpnkBILRS9Uvoa0vlfrK8M=";
+    hash = "sha256-lJLC1igiY0OYLu3eyuOvJ2KmFr9n4su8T7LPgWlUtCk=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     grpc-google-iam-v1
@@ -68,8 +63,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Client for Google Cloud Asset API";
-    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-v${version}/packages/google-cloud-asset/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/python-asset";
+    changelog = "https://github.com/googleapis/python-asset/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

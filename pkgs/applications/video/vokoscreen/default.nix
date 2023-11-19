@@ -53,6 +53,5 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.league ];
     platforms = platforms.linux;
-    mainProgram = "vokoscreen";
   };
 }

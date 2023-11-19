@@ -357,13 +357,18 @@ self: super: builtins.intersectAttrs super {
 
   # Doesn't declare boost dependency
   nix-serve-ng = overrideSrc {
-    version = "1.0.0-unstable-2023-12-18";
-    src = pkgs.fetchFromGitHub {
-      repo = "nix-serve-ng";
-      owner = "aristanetworks";
-      rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
-      hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
-    };
+    src = assert super.nix-serve-ng.version == "1.0.0";
+      # Workaround missing files in sdist
+      # https://github.com/aristanetworks/nix-serve-ng/issues/10
+      #
+      # Workaround for libstore incompatibility with Nix 2.13
+      # https://github.com/aristanetworks/nix-serve-ng/issues/22
+      pkgs.fetchFromGitHub {
+        repo = "nix-serve-ng";
+        owner = "aristanetworks";
+        rev = "dabf46d65d8e3be80fa2eacd229eb3e621add4bd";
+        hash = "sha256-SoJJ3rMtDMfUzBSzuGMY538HDIj/s8bPf8CjIkpqY2w=";
+      };
   } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
   # These packages try to access the network.
@@ -619,6 +624,8 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
   fsnotify = dontCheck super.fsnotify;
+
+  hidapi = addExtraLibrary pkgs.udev super.hidapi;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
@@ -1090,7 +1097,7 @@ self: super: builtins.intersectAttrs super {
     '';
   }) (lib.pipe
         (super.cachix.override {
-          hnix-store-core = self.hnix-store-core_0_7_0_0;
+          hnix-store-core = self.hnix-store-core_0_6_1_0;
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
         [

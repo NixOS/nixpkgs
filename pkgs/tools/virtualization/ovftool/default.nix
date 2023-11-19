@@ -145,6 +145,5 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ numinit wolfangaukang ];
     platforms = builtins.attrNames ovftoolSystems;
-    mainProgram = "ovftool";
   };
 }

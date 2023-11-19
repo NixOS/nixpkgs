@@ -40,8 +40,6 @@ let
   version = "146";
   buildVersion = makeBuildVersion version;
 
-  gradleWithJdk = gradle.override { java = jdk; };
-
   selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
@@ -116,7 +114,7 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradleWithJdk perl ];
+    nativeBuildInputs = [ gradle perl ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -151,7 +149,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     pkg-config
-    gradleWithJdk
+    gradle
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [

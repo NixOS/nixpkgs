@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ meisternu ];
     license = "Custom";
     platforms = platforms.linux;
-    mainProgram = "xtitle";
   };
 }

@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/voc/srtrelay";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
-    mainProgram = "srtrelay";
   };
 }

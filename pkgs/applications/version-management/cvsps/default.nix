@@ -57,6 +57,5 @@ stdenv.mkDerivation rec {
     homepage = "http://www.cobite.com/cvsps/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    mainProgram = "cvsps";
   };
 }

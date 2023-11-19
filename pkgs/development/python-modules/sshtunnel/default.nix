@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   version = "0.4.0";
-  format = "setuptools";
   pname = "sshtunnel";
 
   src = fetchPypi {

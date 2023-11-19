@@ -68,6 +68,5 @@ stdenv.mkDerivation {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ ];
-    mainProgram = "yabar";
   };
 }

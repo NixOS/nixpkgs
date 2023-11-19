@@ -31,6 +31,5 @@ buildGoModule rec {
     homepage = "https://github.com/ethereum-optimism/optimism";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
-    mainProgram = "cmd";
   };
 }

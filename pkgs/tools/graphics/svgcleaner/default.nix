@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/RazrFalcon/svgcleaner/releases";
     license = licenses.gpl2;
     maintainers = with maintainers; [ yuu ];
-    mainProgram = "svgcleaner";
   };
 }

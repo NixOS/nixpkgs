@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "queuelib";
   version = "1.6.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

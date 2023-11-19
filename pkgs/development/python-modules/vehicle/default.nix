@@ -3,19 +3,17 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, mashumaro
-, orjson
 , poetry-core
+, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, syrupy
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "2.2.1";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -24,15 +22,8 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-vehicle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mu30v4iZoOYfQZc1P45UZaor6hf+i+gOvGcVGcQYzTo=";
+    hash = "sha256-EbjrAfbqVY336RHBWq81KM+oHixen+38aUTnWZQ+nCs=";
   };
-
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -40,8 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    mashumaro
-    orjson
+    pydantic
     yarl
   ];
 
@@ -49,8 +39,14 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
-    syrupy
   ];
+
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}" \
+      --replace "--cov" ""
+  '';
 
   pythonImportsCheck = [
     "vehicle"

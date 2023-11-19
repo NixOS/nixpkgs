@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "python3-application";
   version = "3.0.6";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

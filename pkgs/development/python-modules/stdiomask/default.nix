@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "stdiomask";
   version = "0.0.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

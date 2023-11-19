@@ -16,7 +16,6 @@
 , libgee
 , libical
 , libportal-gtk4
-, libsoup_3
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -24,13 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.3.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    rev = version;
-    hash = "sha256-YF4un5j7zv0ishcgt00XDGy0AhR/bo6HJj04t0qfxwU=";
+    # The commit is named as "Release 4.1.1", published to Flathub, but not tags
+    # https://github.com/flathub/io.github.alainm23.planify/commit/2a353ccfcf3379add6778d569f49da37f40accfa
+    # https://github.com/alainm23/planify/issues/1002
+    rev = "adf3629bcacfc9978f6dde5b87eff0278533ab3e";
+    hash = "sha256-xqklvSYmqBQ+IQ3lRjMbV4W4vD/rLCln7rBVCbYiBGo=";
   };
 
   nativeBuildInputs = [
@@ -52,14 +54,9 @@ stdenv.mkDerivation rec {
     libgee
     libical
     libportal-gtk4
-    libsoup_3
     pantheon.granite7
     sqlite
     webkitgtk_6_0
-  ];
-
-  mesonFlags = [
-    "-Dprofile=default"
   ];
 
   meta = with lib; {

@@ -12,7 +12,12 @@ in
   options.services.ntfy-sh = {
     enable = mkEnableOption (mdDoc "[ntfy-sh](https://ntfy.sh), a push notification service");
 
-    package = mkPackageOption pkgs "ntfy-sh" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.ntfy-sh;
+      defaultText = literalExpression "pkgs.ntfy-sh";
+      description = mdDoc "The ntfy.sh package to use.";
+    };
 
     user = mkOption {
       default = "ntfy-sh";

@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     description = "A multithreaded lossless PNG compression optimizer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dywedir ];
-    mainProgram = "oxipng";
   };
 }

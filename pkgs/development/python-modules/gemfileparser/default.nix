@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "gemfileparser";
   version = "0.8.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

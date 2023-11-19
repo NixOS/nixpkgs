@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.cjmweb.net/vbindiff/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    mainProgram = "vbindiff";
   };
 }

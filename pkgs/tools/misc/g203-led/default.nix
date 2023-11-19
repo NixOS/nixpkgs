@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ r-burns ];
     homepage = "https://github.com/smasty/g203-led";
     platforms = platforms.linux;
-    mainProgram = "g203-led";
   };
 }

@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ pjjw ];
     platforms = platforms.all;
-    mainProgram = "srisum";
   };
 }

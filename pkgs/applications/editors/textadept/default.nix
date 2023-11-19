@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon arcuru ];
     platforms = platforms.linux;
-    mainProgram = "textadept";
   };
 }

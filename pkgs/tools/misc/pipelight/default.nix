@@ -63,6 +63,5 @@ in stdenv.mkDerivation rec {
     description = "A wrapper for using Windows plugins in Linux browsers";
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
-    mainProgram = "pipelight-plugin";
   };
 }

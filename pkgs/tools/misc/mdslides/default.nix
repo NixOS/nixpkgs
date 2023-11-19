@@ -18,6 +18,5 @@ python3Packages.buildPythonApplication rec {
     homepage    = "https://github.com/dadoomer/markdown-slides";
     license     = licenses.mit;
     maintainers = [ maintainers.qjoly ];
-    mainProgram = "mdslides";
   };
 }

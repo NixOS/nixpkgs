@@ -38,6 +38,5 @@ buildGoModule rec {
     homepage = "https://github.com/projectdiscovery/notify";
     license = licenses.mit;
     maintainers = with maintainers; [ hanemile ];
-    mainProgram = "notify";
   };
 }

@@ -18,7 +18,6 @@
 buildPythonPackage rec {
   pname = "cliff";
   version = "4.3.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

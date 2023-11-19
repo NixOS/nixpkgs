@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pyudev";
   version = "0.24.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

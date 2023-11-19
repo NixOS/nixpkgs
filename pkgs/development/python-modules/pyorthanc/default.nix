@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyorthanc";
-  version = "1.15.0";
+  version = "1.13.1";
   disabled = pythonOlder "3.8";
 
   format = "pyproject";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "gacou54";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2F5yXWqOwQM1i0AgCCr1j98jpZLA2D919Iex9WjKLuw=";
+    hash = "sha256-LahLR+LbppcPKs0gPT2lEP48XG6pbGMvCBW/EwAIFDQ=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook poetry-core ];

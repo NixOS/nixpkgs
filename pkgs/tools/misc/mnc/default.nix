@@ -22,6 +22,5 @@ buildGoModule rec {
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wentam ];
-    mainProgram = "mnc";
   };
 }

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "manhole";
   version = "1.8.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

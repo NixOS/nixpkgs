@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-frontdoor";
   version = "1.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

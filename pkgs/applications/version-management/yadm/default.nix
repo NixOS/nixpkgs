@@ -135,6 +135,5 @@ resholve.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ abathur ];
     platforms = lib.platforms.unix;
-    mainProgram = "yadm";
   };
 }

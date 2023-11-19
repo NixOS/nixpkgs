@@ -17,7 +17,6 @@
 , gamemode
 , flite
 , mesa-demos
-, pciutils
 , udev
 , libusb1
 
@@ -81,7 +80,6 @@ symlinkJoin {
       runtimePrograms = [
         xorg.xrandr
         mesa-demos # need glxinfo
-        pciutils # need lspci
       ]
       ++ additionalPrograms;
 

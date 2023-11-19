@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "unify";
   version = "0.5";
-  format = "setuptools";
 
   # PyPi release is missing tests (see https://github.com/myint/unify/pull/18)
   src = fetchFromGitHub {

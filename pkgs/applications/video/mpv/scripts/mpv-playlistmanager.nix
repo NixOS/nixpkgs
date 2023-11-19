@@ -17,6 +17,8 @@ buildLua rec {
       'youtube_dl_executable = "${lib.getBin yt-dlp}/bin/yt-dlp"',
   '';
 
+  scriptPath = "playlistmanager.lua";
+
   meta = with lib; {
     description = "Mpv lua script to create and manage playlists";
     homepage = "https://github.com/jonniek/mpv-playlistmanager";

@@ -6,8 +6,6 @@
 , qttools
 , wrapQtAppsHook
 , dtkwidget
-, wayland
-, dwayland
 , qt5integration
 , qt5platform-plugins
 , image-editor
@@ -16,7 +14,6 @@
 , ffmpeg
 , ffmpegthumbnailer
 , libusb1
-, libpciaccess
 , portaudio
 , libv4l
 , gst_all_1
@@ -25,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-camera";
-  version = "unstable-2023-09-26";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = "8ad3b6ad2a4f5f0b22a216496a0187a69a1e1bcc";
-    hash = "sha256-/8ddplHJzeu7lrRzN66KhJGkFou4FcXc+BzYFK5YVeE=";
+    rev = version;
+    hash = "sha256-GQQFwlJNfdsi0GvDRMIorUnlbXrgbYl9H9aBedOm+ZQ=";
   };
 
   # QLibrary and dlopen work with LD_LIBRARY_PATH
@@ -55,8 +52,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
-    wayland
-    dwayland
     qt5integration
     qt5platform-plugins
     image-editor
@@ -65,7 +60,6 @@ stdenv.mkDerivation rec {
     ffmpeg
     ffmpegthumbnailer
     libusb1
-    libpciaccess
     portaudio
     libv4l
   ] ++ (with gst_all_1 ; [

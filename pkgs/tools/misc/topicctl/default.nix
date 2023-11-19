@@ -27,6 +27,5 @@ buildGoModule rec {
     inherit (src.meta) homepage;
     license = licenses.mit;
     maintainers = with maintainers; [ eskytthe srhb ];
-    mainProgram = "topicctl";
   };
 }

@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "jupyter-sphinx";
   version = "0.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

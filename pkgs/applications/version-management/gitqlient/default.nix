@@ -82,6 +82,5 @@ mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
-    mainProgram = "gitqlient";
   };
 }

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "image-go-nord";
   version = "0.1.7";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

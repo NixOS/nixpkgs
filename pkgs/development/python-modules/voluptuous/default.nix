@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "voluptuous";
   version = "0.13.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alecthomas";

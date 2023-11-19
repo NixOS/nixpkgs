@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
-    mainProgram = "woeusb";
   };
 }

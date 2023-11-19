@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "msal-extensions";
   version = "1.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

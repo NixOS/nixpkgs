@@ -14,5 +14,4 @@ in
     reconstructLock = true;
     passthru.tests.test = callPackage ./test.nix { };
     meta.maintainers = with lib.maintainers; [ roberth ];
-    meta.mainProgram = "netlify";
   }

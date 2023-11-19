@@ -36,6 +36,5 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
-    mainProgram = "esshader";
   };
 }

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyjet";
   version = "1.9.0";
-  format = "setuptools";
 
   # tests not included in pypi tarball
   src = fetchFromGitHub {

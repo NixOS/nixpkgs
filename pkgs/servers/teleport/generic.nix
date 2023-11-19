@@ -14,7 +14,7 @@
 , stdenv
 , xdg-utils
 , yarn
-, prefetch-yarn-deps
+, yarn2nix-moretea
 , nixosTests
 
 , withRdpClient ? true
@@ -72,7 +72,7 @@ let
     nativeBuildInputs = [
       nodejs
       yarn
-      prefetch-yarn-deps
+      yarn2nix-moretea.fixup_yarn_lock
     ];
 
     configurePhase = ''
@@ -81,7 +81,7 @@ let
 
     buildPhase = ''
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-      fixup-yarn-lock yarn.lock
+      fixup_yarn_lock yarn.lock
 
       yarn install --offline \
         --frozen-lockfile \

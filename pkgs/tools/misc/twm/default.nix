@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ vinnymeller ];
-    mainProgram = "twm";
   };
 }

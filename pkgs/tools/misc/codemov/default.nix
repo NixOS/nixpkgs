@@ -44,6 +44,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/sloganking/codemov";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "codemov";
   };
 }

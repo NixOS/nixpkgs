@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchPypi, pkgs, testers, afew }:
+{ lib, python3Packages, fetchPypi, pkgs }:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";
@@ -25,7 +25,6 @@ python3Packages.buildPythonApplication rec {
     chardet
     dkimpy
     notmuch
-    setuptools
   ];
 
   nativeCheckInputs = [
@@ -44,12 +43,6 @@ python3Packages.buildPythonApplication rec {
     "doc"
     "man"
   ];
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = afew;
-    };
-  };
 
   meta = with lib; {
     homepage = "https://github.com/afewmail/afew";

@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 jk ];
     platforms = platforms.linux;
-    mainProgram = "afetch";
   };
 }

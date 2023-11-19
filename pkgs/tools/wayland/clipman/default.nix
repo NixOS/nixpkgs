@@ -37,6 +37,5 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
-    mainProgram = "clipman";
   };
 }

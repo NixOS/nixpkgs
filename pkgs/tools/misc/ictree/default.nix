@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NikitaIvanovV/ictree";
     platforms = platforms.unix;
     maintainers = with maintainers; [ foo-dogsquared ];
-    mainProgram = "ictree";
   };
 }

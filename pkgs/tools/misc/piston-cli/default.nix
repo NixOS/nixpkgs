@@ -33,6 +33,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Shivansh-007/piston-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ ethancedwards8 ];
-    mainProgram = "piston";
   };
 }

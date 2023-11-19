@@ -21,6 +21,5 @@ mkDerivation rec {
     description = "Graphical front-end to Git";
     maintainers = with maintainers; [ peterhoeg markuskowa ];
     inherit (qtbase.meta) platforms;
-    mainProgram = "qgit";
   };
 }

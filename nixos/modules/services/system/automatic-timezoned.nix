@@ -18,7 +18,14 @@ in
           the timezone.
         '';
       };
-      package = mkPackageOption pkgs "automatic-timezoned" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.automatic-timezoned;
+        defaultText = literalExpression "pkgs.automatic-timezoned";
+        description = mdDoc ''
+          Which `automatic-timezoned` package to use.
+        '';
+      };
     };
   };
 

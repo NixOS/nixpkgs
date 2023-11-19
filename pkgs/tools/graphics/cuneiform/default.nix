@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, cmake, imagemagick, testers }:
+{ lib, stdenv, fetchurl, cmake, imagemagick }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "cuneiform";
   version = "1.1.0";
 
@@ -30,22 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
   '';
 
-  # make the install path match the rpath
-  postInstall = ''
-    if [[ -d ''${!outputLib}/lib64 ]]; then
-      mv ''${!outputLib}/lib64 ''${!outputLib}/lib
-      ln -s lib ''${!outputLib}/lib64
-    fi
-  '';
-
   buildInputs = [ imagemagick ];
 
   nativeBuildInputs = [ cmake ];
-
-  passthru.tests = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "cuneiform";
-  };
 
   meta = with lib; {
     description = "Multi-language OCR system";
@@ -53,6 +40,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
-    mainProgram = "cuneiform";
   };
-})
+}

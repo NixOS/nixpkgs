@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) escapeShellArgs mkEnableOption mkPackageOption mkIf mkOption types;
+  inherit (lib) escapeShellArgs mkEnableOption mkIf mkOption types;
 
   cfg = config.services.mimir;
 
@@ -26,7 +26,12 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "mimir" { };
+    package = mkOption {
+      default = pkgs.mimir;
+      defaultText = lib.literalExpression "pkgs.mimir";
+      type = types.package;
+      description = lib.mdDoc ''Mimir package to use.'';
+    };
 
     extraFlags = mkOption {
       type = types.listOf types.str;

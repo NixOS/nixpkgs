@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
-    mainProgram = "progress";
   };
 }

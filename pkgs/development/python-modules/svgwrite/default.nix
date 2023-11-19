@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "svgwrite";
   version = "1.4.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mozman";

@@ -19,6 +19,5 @@ crystal.buildCrystalPackage rec {
     homepage = "https://blahaj.queer.software";
     license = licenses.bsd2;
     maintainers = with maintainers; [ aleksana cafkafk ];
-    mainProgram = "blahaj";
   };
 }

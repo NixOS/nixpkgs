@@ -134,6 +134,5 @@ in stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.sspl;
     platforms = [ "x86_64-linux" ];
-    mainProgram = "mongodb-compass";
   };
 }

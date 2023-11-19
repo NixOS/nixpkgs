@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "mariadb";
   version = "1.1.4";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.cygwin;
     maintainers = [ ];
     license = licenses.gpl2Plus;
-    mainProgram = "convmv";
   };
 }

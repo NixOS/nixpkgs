@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption mdDoc types literalExpression;
+  inherit (lib) mkEnableOption mkIf mkOption mdDoc types literalExpression;
 
   cfg = config.services.meme-bingo-web;
 in {
@@ -13,7 +13,12 @@ in {
         Note: The application's author suppose to run meme-bingo-web behind a reverse proxy for SSL and HTTP/3
       '');
 
-      package = mkPackageOption pkgs "meme-bingo-web" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.meme-bingo-web;
+        defaultText = literalExpression "pkgs.meme-bingo-web";
+        description = mdDoc "meme-bingo-web package to use.";
+      };
 
       baseUrl = mkOption {
         description = mdDoc ''

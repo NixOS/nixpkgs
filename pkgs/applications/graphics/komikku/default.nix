@@ -1,10 +1,10 @@
 { lib
 , fetchFromGitLab
+, fetchpatch
 , desktop-file-utils
 , gettext
 , glib
 , gobject-introspection
-, blueprint-compiler
 , gtk4
 , libadwaita
 , libnotify
@@ -19,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.31.0";
+  version = "1.24.2";
 
   format = "other";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-7u7F2Z1fYr3S1Sx9FAVmimQbT0o6tb96jXG0o9+4/rc=";
+    hash = "sha256-c00JRy1K/jYoQYNAMSm6lQkuGQXZv/2liV1F4jpg+C4=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     glib # for glib-compile-resources
     desktop-file-utils
     gobject-introspection
-    blueprint-compiler
   ];
 
   buildInputs = [
@@ -51,21 +50,20 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    pygobject3
     beautifulsoup4
     brotli
-    colorthief
+    cloudscraper
     dateparser
     emoji
     keyring
     lxml
+    python-magic
     natsort
     piexif
     pillow
     pure-protobuf
-    pygobject3
-    python-magic
     rarfile
-    requests
     unidecode
   ];
 

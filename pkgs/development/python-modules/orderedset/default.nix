@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "orderedset";
   version = "2.0.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

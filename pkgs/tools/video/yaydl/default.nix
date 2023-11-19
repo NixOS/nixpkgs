@@ -40,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     description = "Yet another youtube down loader";
     license = licenses.cddl;
     maintainers = with maintainers; [];
-    mainProgram = "yaydl";
   };
 }

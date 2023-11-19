@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "1.0.0";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    hash = "sha256-NHrpJC6cF/YAcyqZ4bRQdSdjDNhkEV7U2P/S4LSADao=";
+    hash = "sha256-pYPUYy/ODzg9HN0/PTGZkV1NFBPmluhEwoJjYuZ6DTg=";
   };
 
-  cargoHash = "sha256-HT084XewXwZByL5KZhyymqU7sy99SAjYIWysm3qGvWU=";
+  cargoHash = "sha256-FdXk6SzW0f3jkTfxMd8TMzfJGTRaZjG4qp56yHqDAuw=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional withClipboard python3;

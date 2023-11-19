@@ -2,25 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "libspectre";
-  version = "0.2.12";
+  version = "0.2.7";
 
   src = fetchurl {
     url = "https://libspectre.freedesktop.org/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-VadRfNNXK9JWXfDPRQlEoE1Sc7J567NpqJU5GVfw+WA=";
+    sha256 = "1v63lqc6bhhxwkpa43qmz8phqs8ci4dhzizyy16d3vkb20m846z8";
   };
+
+  patches = [ ./libspectre-0.2.7-gs918.patch ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     # Need `libgs.so'.
-    ghostscript
+    ghostscript cairo /*for tests*/
   ];
 
   doCheck = true;
-
-  checkInputs = [
-    cairo
-  ];
 
   meta = {
     homepage = "http://libspectre.freedesktop.org/";

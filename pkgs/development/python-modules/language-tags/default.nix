@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "language-tags";
   version = "1.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "OnroerendErfgoed";

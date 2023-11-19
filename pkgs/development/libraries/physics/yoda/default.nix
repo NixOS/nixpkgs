@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , python
 , root
 , makeWrapper
@@ -10,12 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.9";
+  version = "1.9.8";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-68rVU2mhztzuOi3gWUB8hRZSukRJURP1wJ2MLlf1Fqo=";
+    hash = "sha256-e8MGJGirulCv8+y4sizmdxlgNgCYkGiO9FM6qn+S5uQ=";
   };
+
+  patches = [
+    # A bugfix https://gitlab.com/hepcedar/yoda/-/merge_requests/116
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/yoda/-/commit/ba1275033522c66bc473dfeffae1a7971e985611.diff";
+      hash = "sha256-/8UJuypiQzywarE+o3BEMtqM+f+YzkHylugi+xTJf+w=";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   nativeBuildInputs = with python.pkgs; [
     cython

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "yapsy";
   version = "1.12.2";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Yapsy";

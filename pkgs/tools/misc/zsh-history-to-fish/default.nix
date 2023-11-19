@@ -29,6 +29,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/rsalmei/zsh-history-to-fish";
     license = licenses.mit;
     maintainers = with maintainers; [ alanpearce ];
-    mainProgram = "zsh-history-to-fish";
   };
 }

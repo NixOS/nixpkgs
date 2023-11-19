@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "irpf";
-  version = "2023-1.5";
+  version = "2023-1.3";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
@@ -19,13 +19,13 @@ stdenvNoCC.mkDerivation rec {
     year = lib.head (lib.splitVersion version);
   in fetchzip {
     url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    hash = "sha256-L1X+xysQSJ43TO8NSdO+T4aalampd4REL+5Uv33kYUI=";
+    sha256 = "sha256-W9n9YlOg9BYsESuU5NOn+Ff+I+7vlBpFuKzHsGVJwAA=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
 
   desktopItems = [
-    (makeDesktopItem {
+    (makeDesktopItem rec {
       name = pname;
       exec = pname;
       icon = "rfb64";
@@ -41,9 +41,10 @@ stdenvNoCC.mkDerivation rec {
     BASEDIR="$out/share/${pname}"
     mkdir -p "$BASEDIR"
 
-    cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
+    cp -r help lib lib-modulos "$BASEDIR"
 
-    install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
+    install -Dm755 irpf.jar "$BASEDIR/${pname}.jar"
+    install -Dm644 Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
     makeWrapper ${jdk11}/bin/java $out/bin/${pname} \

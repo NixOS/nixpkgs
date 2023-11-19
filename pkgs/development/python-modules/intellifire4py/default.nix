@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "3.6.1";
+  version = "3.1.30";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jeeftor";
-    repo = "intellifire4py";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ovJUL8Z98F6gyKG04CoOiQE5dJbp9yTVHcTgniJBvOw=";
+    hash = "sha256-CIcudKyRPVJX6QvWk6dBbYnO5EULREDhaflJTAfJEvc=";
   };
 
   nativeBuildInputs = [
@@ -37,20 +37,19 @@ buildPythonPackage rec {
     rich
   ];
 
+  pythonImportsCheck = [
+    "intellifire4py"
+  ];
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "intellifire4py"
-  ];
-
   meta = with lib; {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
-    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${version}";
+    changelog = "https://github.com/jeeftor/intellifire4py/blob/${version}/CHANGELOG";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

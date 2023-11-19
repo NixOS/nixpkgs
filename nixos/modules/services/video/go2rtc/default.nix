@@ -11,7 +11,7 @@ let
     mdDoc
     mkEnableOption
     mkOption
-    mkPackageOption
+    mkPackageOptionMD
     types
     ;
 
@@ -28,7 +28,7 @@ in
   options.services.go2rtc = with types; {
     enable = mkEnableOption (mdDoc "go2rtc streaming server");
 
-    package = mkPackageOption pkgs "go2rtc" { };
+    package = mkPackageOptionMD pkgs "go2rtc" { };
 
     settings = mkOption {
       default = {};

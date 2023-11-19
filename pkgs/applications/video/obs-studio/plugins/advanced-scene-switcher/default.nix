@@ -1,53 +1,41 @@
-{ lib
-, fetchFromGitHub
-
-, cmake
-, ninja
-
-, alsa-lib
+{ alsa-lib
 , asio
+, cmake
 , curl
-, nlohmann_json
+, fetchFromGitHub
+, lib
+, libremidi
 , obs-studio
 , opencv
 , procps
 , qtbase
 , stdenv
-, tesseract
 , websocketpp
 , xorg
-
-, httplib
-, libremidi
 }:
 
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.24.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-Xnf8Vz6I5EfiiVoG0JRd0f0IJHw1IVkTLL4Th/hWYrc=";
+    hash = "sha256-rpZ/vR9QbWgr8n6LDv6iTRsKXSIDGy0IpPu1Uatb0zw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     alsa-lib
     asio
     curl
     libremidi
-    nlohmann_json
     obs-studio
     opencv
     procps
     qtbase
-    tesseract
     websocketpp
     xorg.libXScrnSaver
   ];
@@ -55,9 +43,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   postUnpack = ''
-    cp -r ${httplib.src}/* $sourceRoot/deps/cpp-httplib
     cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
-    chmod -R +w $sourceRoot/deps/cpp-httplib
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
@@ -67,11 +53,11 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An automated scene switcher for OBS Studio";
     homepage = "https://github.com/WarmUpTill/SceneSwitcher";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ paveloom ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

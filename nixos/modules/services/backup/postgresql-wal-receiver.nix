@@ -5,8 +5,12 @@ with lib;
 let
   receiverSubmodule = {
     options = {
-      postgresqlPackage = mkPackageOption pkgs "postgresql" {
-        example = "postgresql_15";
+      postgresqlPackage = mkOption {
+        type = types.package;
+        example = literalExpression "pkgs.postgresql_15";
+        description = lib.mdDoc ''
+          PostgreSQL package to use.
+        '';
       };
 
       directory = mkOption {

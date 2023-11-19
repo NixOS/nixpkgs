@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "termstyle";
   version = "0.1.11";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

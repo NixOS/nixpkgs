@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , pkg-config
@@ -14,11 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwaylandvideobridge";
-  version = "0.3.0";
+  version = "0.2";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/xwaylandvideobridge/xwaylandvideobridge-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Npuj+DsO9XqeXr4qtj+Haqzb8PHfi02u3RDgyzfz/o=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "system";
+    repo = "xwaylandvideobridge";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-79Z4BH7C85ZF+1Zivs3bTey7IdUnaDKhvZxzL6sDqUs=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Utility to allow streaming Wayland windows to X applications";
     homepage = "https://invent.kde.org/system/xwaylandvideobridge";
-    license = with lib.licenses; [ bsd3 cc0 gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = lib.platforms.linux;
     mainProgram = "xwaylandvideobridge";

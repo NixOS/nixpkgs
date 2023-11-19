@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/wsdjeg/mdctags.rs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pacien ];
-    mainProgram = "mdctags";
   };
 }

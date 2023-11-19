@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.garrison ];
     platforms = lib.platforms.all;
-    mainProgram = "vmtouch";
   };
 }

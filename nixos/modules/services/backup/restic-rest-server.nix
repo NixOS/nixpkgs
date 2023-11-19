@@ -57,7 +57,12 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "restic-rest-server" { };
+    package = mkOption {
+      default = pkgs.restic-rest-server;
+      defaultText = literalExpression "pkgs.restic-rest-server";
+      type = types.package;
+      description = lib.mdDoc "Restic REST server package to use.";
+    };
   };
 
   config = mkIf cfg.enable {

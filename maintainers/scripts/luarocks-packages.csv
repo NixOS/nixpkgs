@@ -17,7 +17,6 @@ dkjson,,,,,,
 fennel,,,,,,misterio77
 fifo,,,,,,
 fluent,,,,,,alerque
-fzy,,,,,,mrcjkb
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat
@@ -74,7 +73,6 @@ luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luasec,,,,,,flosse
-luasnip,,,,,,
 luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
@@ -95,8 +93,8 @@ mediator_lua,,,,,,
 middleclass,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
-nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
+nvim-client,https://github.com/neovim/lua-client.git,,,,,
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,

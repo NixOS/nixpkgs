@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "python-oauth2";
   version = "1.1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

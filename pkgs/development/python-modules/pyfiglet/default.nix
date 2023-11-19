@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "1.0.2";
-  format = "setuptools";
   pname = "pyfiglet";
 
   src = fetchPypi {

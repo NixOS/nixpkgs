@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ lib.maintainers.expipiplus1 ];
-    mainProgram = "OpenCorsairLink.elf";
   };
 }

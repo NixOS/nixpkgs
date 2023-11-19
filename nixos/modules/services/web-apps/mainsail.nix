@@ -8,7 +8,12 @@ in
   options.services.mainsail = {
     enable = mkEnableOption (lib.mdDoc "a modern and responsive user interface for Klipper");
 
-    package = mkPackageOption pkgs "mainsail" { };
+    package = mkOption {
+      type = types.package;
+      description = lib.mdDoc "Mainsail package to be used in the module";
+      default = pkgs.mainsail;
+      defaultText = literalExpression "pkgs.mainsail";
+    };
 
     hostName = mkOption {
       type = types.str;

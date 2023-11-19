@@ -35,6 +35,5 @@ buildGoModule rec {
     homepage = "https://umo.ci";
     license = licenses.asl20;
     maintainers = with maintainers; [ zokrezyl ];
-    mainProgram = "umoci";
   };
 }

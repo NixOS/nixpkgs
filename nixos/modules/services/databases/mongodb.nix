@@ -31,7 +31,14 @@ in
 
       enable = mkEnableOption (lib.mdDoc "the MongoDB server");
 
-      package = mkPackageOption pkgs "mongodb" { };
+      package = mkOption {
+        default = pkgs.mongodb;
+        defaultText = literalExpression "pkgs.mongodb";
+        type = types.package;
+        description = lib.mdDoc ''
+          Which MongoDB derivation to use.
+        '';
+      };
 
       user = mkOption {
         type = types.str;

@@ -18,7 +18,6 @@
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
   version = "0.13.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

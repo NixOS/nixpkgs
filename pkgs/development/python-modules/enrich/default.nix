@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "enrich";
   version = "1.2.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

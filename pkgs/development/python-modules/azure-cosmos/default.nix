@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "4.5.1";
-  format = "setuptools";
   pname = "azure-cosmos";
 
   src = fetchPypi {

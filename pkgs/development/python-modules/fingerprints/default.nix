@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "fingerprints";
   version = "1.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alephdata";

@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     description = "Simple ad-hoc server with SPA support";
     maintainers = with maintainers; [ flosse ];
     license = licenses.mit;
-    mainProgram = "microserver";
   };
 }

@@ -6,7 +6,6 @@
 , isodate
 , pythonOlder
 , typing-extensions
-, msrest
 }:
 
 buildPythonPackage rec {
@@ -25,7 +24,6 @@ buildPythonPackage rec {
     isodate
     azure-common
     azure-mgmt-core
-    msrest
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];

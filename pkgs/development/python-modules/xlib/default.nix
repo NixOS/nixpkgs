@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "xlib";
   version = "0.33";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-xlib";

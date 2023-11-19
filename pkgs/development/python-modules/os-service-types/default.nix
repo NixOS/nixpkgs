@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "os-service-types";
   version = "1.7.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "pyxnat";
   version = "1.6";
-  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   # PyPI dist missing test configuration files:

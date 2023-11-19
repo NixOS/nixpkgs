@@ -20,12 +20,9 @@ stdenv.mkDerivation rec {
       file from a PFA or PFB font.
     '';
     homepage = "https://www.lcdf.org/type/";
-    license = {
-      shortName = "Click"; # README.md says BSD-like, see LICENSE
-      url = "https://github.com/kohler/t1utils/blob/master/LICENSE";
-      free = true;
-      redistributable = true;
-    };
+    # README from tarball says "BSD-like" and points to non-existing LICENSE
+    # file...
+    license = "Click"; # MIT with extra clause, https://github.com/kohler/t1utils/blob/master/LICENSE
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };

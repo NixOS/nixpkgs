@@ -37,6 +37,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.taneb ];
     platforms = platforms.all;
-    mainProgram = "q";
   };
 }

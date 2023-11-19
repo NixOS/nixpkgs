@@ -3,7 +3,6 @@
 let
   pname = "gmpy";
   version = "1.17";
-  format = "setuptools";
 in
 
 buildPythonPackage {

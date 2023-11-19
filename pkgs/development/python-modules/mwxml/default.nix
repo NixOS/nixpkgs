@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "mwxml";
   version = "0.3.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

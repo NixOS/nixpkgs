@@ -7,7 +7,7 @@ let
     mkEnableOption
     mkIf
     mkOption
-    mkPackageOption
+    mkPackageOptionMD
     mkRemovedOptionModule
     types
     ;
@@ -25,12 +25,12 @@ in
     services.plantuml-server = {
       enable = mkEnableOption (mdDoc "PlantUML server");
 
-      package = mkPackageOption pkgs "plantuml-server" { };
+      package = mkPackageOptionMD pkgs "plantuml-server" { };
 
       packages = {
-        jdk = mkPackageOption pkgs "jdk" { };
-        jetty = mkPackageOption pkgs "jetty" {
-          default = [ "jetty_11" ];
+        jdk = mkPackageOptionMD pkgs "jdk" { };
+        jetty = mkPackageOptionMD pkgs "jetty" {
+          default = "jetty_11";
           extraDescription = ''
             At the time of writing (v1.2023.12), PlantUML Server does not support
             Jetty versions higher than 12.x.
@@ -78,7 +78,7 @@ in
         description = mdDoc "Limits image width and height.";
       };
 
-      graphvizPackage = mkPackageOption pkgs "graphviz" { };
+      graphvizPackage = mkPackageOptionMD pkgs "graphviz" { };
 
       plantumlStats = mkOption {
         type = types.bool;

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "percol";
   version = "unstable-2019-07-24";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mooz";

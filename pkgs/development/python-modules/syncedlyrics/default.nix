@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "syncedlyrics";
-  version = "0.7.0";
-  pyproject = true;
+  version = "0.6.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rtcq";
-    repo = "syncedlyrics";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qZVUptmLouFFBCWiRviYFO0sQKlyz65GjWMg/b1idXY=";
+    hash = "sha256-oMG3TqCJfEyfF5zK8hNhyhQ1z7G+S+De8hI1GLCfctM=";
   };
 
   nativeBuildInputs = [

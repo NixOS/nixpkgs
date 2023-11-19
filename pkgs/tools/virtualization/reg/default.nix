@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/genuinetools/reg";
     license = licenses.mit;
     maintainers = with maintainers; [ ereslibre ];
-    mainProgram = "reg";
   };
 }

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "colorspacious";
   version = "1.1.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

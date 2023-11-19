@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "serpent";
   version = "1.41";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

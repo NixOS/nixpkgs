@@ -30,6 +30,5 @@ buildGoModule rec {
     homepage = "https://github.com/jesseduffield/lazydocker";
     license = licenses.mit;
     maintainers = with maintainers; [ das-g Br1ght0ne ];
-    mainProgram = "lazydocker";
   };
 }

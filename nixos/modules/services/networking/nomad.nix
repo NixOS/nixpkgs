@@ -10,7 +10,14 @@ in
     services.nomad = {
       enable = mkEnableOption (lib.mdDoc "Nomad, a distributed, highly available, datacenter-aware scheduler");
 
-      package = mkPackageOption pkgs "nomad" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.nomad;
+        defaultText = literalExpression "pkgs.nomad";
+        description = lib.mdDoc ''
+          The package used for the Nomad agent and CLI.
+        '';
+      };
 
       extraPackages = mkOption {
         type = types.listOf types.package;

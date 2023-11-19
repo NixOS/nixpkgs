@@ -31,6 +31,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];
     platforms = with platforms; linux;
-    mainProgram = "gitbatch";
   };
 }

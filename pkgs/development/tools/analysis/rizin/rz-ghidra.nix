@@ -10,7 +10,6 @@
 # optional buildInputs
 , enableCutterPlugin ? true
 , cutter
-, qt5compat
 , qtbase
 , qtsvg
 }:
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     rizin
   ] ++ lib.optionals enableCutterPlugin [
     cutter
-    qt5compat
     qtbase
     qtsvg
   ];
@@ -56,12 +54,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    # errors out with undefined symbols from Cutter
-    broken = enableCutterPlugin && stdenv.isDarwin;
     description = "Deep ghidra decompiler and sleigh disassembler integration for rizin";
     homepage = src.meta.homepage;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ chayleaf ];
-    inherit (rizin.meta) platforms;
   };
 }

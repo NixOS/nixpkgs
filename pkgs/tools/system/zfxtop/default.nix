@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/ssleert/zfxtop";
     license = licenses.bsd2;
     maintainers = with maintainers; [ wozeparrot ];
-    mainProgram = "zfxtop";
   };
 }

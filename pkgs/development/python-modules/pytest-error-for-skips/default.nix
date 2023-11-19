@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pytest-error-for-skips";
   version = "2.0.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jankatins";

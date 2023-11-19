@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.bradediger ];
     platforms = lib.platforms.linux;
-    mainProgram = "dvdbackup";
   };
 }

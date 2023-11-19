@@ -12,11 +12,11 @@
 let inherit (lib) optional; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.11";
+  version = "1.10.9";
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Cvx32lxGIXcJR1u++8qRwMtvHqYozNjDYZbPbFpN4wQ=";
+    sha256 = "sha256-AMS+cJbzb9yvpPl04SbGwUEkKOOOvHsYHZB0WeeB8ZE=";
   };
 
   outputs = [ "out" "dev" ];
@@ -51,5 +51,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2020-10809"
+      "CVE-2020-10810"
+      "CVE-2020-10811"
+      "CVE-2020-10812"
+    ];
   };
 }

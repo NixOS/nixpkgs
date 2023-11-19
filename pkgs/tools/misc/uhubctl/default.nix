@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ prusnak ];
     platforms = with platforms; linux ++ darwin;
-    mainProgram = "uhubctl";
   };
 }

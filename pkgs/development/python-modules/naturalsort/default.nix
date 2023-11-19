@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "naturalsort";
   version = "1.5.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";

@@ -2,6 +2,7 @@
 , extra-cmake-modules
 , wrapGAppsHook
 , glib
+, gtk2
 , gtk3
 , karchive
 , kcmutils
@@ -24,6 +25,7 @@ mkDerivation {
     ki18n
     kio
     glib
+    gtk2
     gtk3
     karchive
     kcmutils
@@ -37,6 +39,7 @@ mkDerivation {
   ];
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGLIB_SCHEMAS_DIR=${gsettings-desktop-schemas.out}/"
   ];
   # The gtkconfig KDED module will crash the daemon if the GSettings schemas

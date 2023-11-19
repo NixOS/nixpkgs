@@ -28,6 +28,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ takagiy ];
-    mainProgram = "wmderlandc";
   };
 })

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.6.6";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9wVH+msUh0t0PKz+5044PhT9lGsbfp4u44gX0O70Pbo=";
+    hash = "sha256-5Vd8fD0nB2POtxDFNVtkJfVEe+O8tjnwlwYosDJjIDA=";
   };
 
-  cargoHash = "sha256-Q4KA+mc48OfmxYY7vDJ2ZU/Wd+101kbimwAw6ag3d+w=";
+  cargoHash = "sha256-TF4rL7KXsbfYiEOfkKRyr3PCvyocq6tg90OZURZh8f8=";
 
   passthru = rec {
     test_client = rustPlatform.buildRustPackage {
@@ -24,13 +24,10 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-XiaeCVgVjre7NmH/B+dNw0u2HV0vJwlgDjhLXXgJS+Y=";
+      cargoHash = "sha256-ES0LBKirOUqXOtA9O2KouA+NWisIMoe8XhmnTC8w1cg=";
     };
     tests = {
-      inherit (nixosTests.nextcloud)
-        with-postgresql-and-redis26
-        with-postgresql-and-redis27
-        with-postgresql-and-redis28;
+      inherit (nixosTests.nextcloud) with-postgresql-and-redis26;
       inherit test_client;
     };
   };
@@ -39,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     description = "Update notifications for nextcloud clients";
     homepage = "https://github.com/nextcloud/notify_push";
     license = licenses.agpl3Plus;
-    maintainers = teams.helsinki-systems.members;
+    maintainers = with maintainers; [ ajs124 ];
   };
 }

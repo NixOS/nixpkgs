@@ -32,9 +32,8 @@ in stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postInstall = ''
-    mkdir -p $out/share/{dirb,wordlists}
+    mkdir -p $out/share/dirb/
     cp -r wordlists/ $out/share/dirb/
-    ln -s $out/share/dirb/wordlists/ $out/share/wordlists/dirb
   '';
 
   meta = {

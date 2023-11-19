@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "0.2.4";
-  format = "setuptools";
   pname = "python-lzf";
 
   src = fetchPypi {

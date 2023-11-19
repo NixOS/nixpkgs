@@ -1,22 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, flex
-, pcsclite
-, pkg-config
-, libusb1
-, perl
-, zlib
-, gitUpdater
-}:
+{ lib, stdenv, fetchurl, pcsclite, pkg-config, libusb1, perl }:
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.5.4";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-boMq3Bcuzc/e4rVvMxRGhIgsvpctr/GTjnqcc6ZPiL8=";
+    sha256 = "sha256-E5NEh+b4tI9pmhbTZ8x6GvejyodN5yGsbpYzvrhuchk=";
   };
 
   postPatch = ''
@@ -24,50 +14,21 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.in --replace /bin/echo echo
   '';
 
-  configureFlags = [
-    "--enable-twinserial"
-    "--enable-serialconfdir=${placeholder "out"}/etc/reader.conf.d"
-    "--enable-ccidtwindir=${placeholder "out"}/pcsc/drivers/serial"
-    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
-  ];
-
-  # error: call to undeclared function 'InterruptRead';
-  # ISO C99 and later do not support implicit function declarations
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
-
-  nativeBuildInputs = [
-    flex
-    pkg-config
-    perl
-  ];
-
-  buildInputs = [
-    pcsclite
-    libusb1
-    zlib
-  ];
-
-  postInstall = ''
-    install -Dm 0444 -t $out/lib/udev/rules.d src/92_pcscd_ccid.rules
-    substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
-      --replace "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
+  preConfigure = ''
+    configureFlagsArray+=("--enable-usbdropdir=$out/pcsc/drivers")
   '';
+
+  nativeBuildInputs = [ pkg-config perl ];
+  buildInputs = [ pcsclite libusb1 ];
 
   # The resulting shared object ends up outside of the default paths which are
   # usually getting stripped.
   stripDebugList = ["pcsc"];
 
-  passthru.updateScript = gitUpdater {
-    url = "https://salsa.debian.org/rousseau/CCID.git";
-  };
-
   meta = with lib; {
-    description = "PC/SC driver for USB CCID smart card readers";
+    description = "ccid drivers for pcsclite";
     homepage = "https://ccid.apdu.fr/";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.anthonyroussel ];
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

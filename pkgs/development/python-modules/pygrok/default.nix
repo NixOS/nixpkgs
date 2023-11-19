@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pygrok";
   version = "1.0.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "garyelephant";

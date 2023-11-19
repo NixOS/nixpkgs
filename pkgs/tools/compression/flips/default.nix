@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.xfix ];
     platforms = platforms.linux;
-    mainProgram = "flips";
   };
 }

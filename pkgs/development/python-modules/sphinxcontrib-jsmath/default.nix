@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-jsmath";
   version = "1.0.1";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

@@ -28,7 +28,7 @@ in
   options = {
     services.tinyproxy = {
       enable = mkEnableOption (lib.mdDoc "Tinyproxy daemon");
-      package = mkPackageOption pkgs "tinyproxy" {};
+      package = mkPackageOptionMD pkgs "tinyproxy" {};
       settings = mkOption {
         description = lib.mdDoc "Configuration for [tinyproxy](https://tinyproxy.github.io/).";
         default = { };
@@ -85,7 +85,7 @@ in
         User = "tinyproxy";
         Group = "tinyproxy";
         Type = "simple";
-        ExecStart = "${getExe cfg.package} -d -c ${configFile}";
+        ExecStart = "${getExe pkgs.tinyproxy} -d -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";

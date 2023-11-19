@@ -7,7 +7,6 @@ runCommandCC "xkbvalidate" {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.aszlig ];
-    mainProgram = "xkbvalidate";
   };
 } ''
   mkdir -p "$out/bin"

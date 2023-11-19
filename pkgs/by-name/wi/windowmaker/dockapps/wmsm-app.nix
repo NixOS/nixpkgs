@@ -12,7 +12,7 @@ stdenv.mkDerivation  (finalAttrs: {
 
   inherit (dockapps-sources) version src;
 
-  sourceRoot = "${finalAttrs.src.name}/wmsm.app/wmsm";
+  sourceRoot = "${src.name}/wmsm.app/wmsm";
 
   buildInputs = [
     libX11

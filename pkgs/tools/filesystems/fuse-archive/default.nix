@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/google/fuse-archive/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ icyrockcom ];
-    mainProgram = "fuse-archive";
   };
 
   inherit (fuse.meta) platforms;

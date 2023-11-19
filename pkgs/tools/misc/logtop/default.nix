@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/JulienPalard/logtop";
     platforms = platforms.unix;
     maintainers = [ maintainers.starcraft66 ];
-    mainProgram = "logtop";
   };
 }

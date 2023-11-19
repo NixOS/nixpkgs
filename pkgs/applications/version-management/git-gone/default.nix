@@ -33,6 +33,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "git-gone";
   };
 }

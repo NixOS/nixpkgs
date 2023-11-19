@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "odp-amsterdam";
-  version = "6.0.0";
-  pyproject = true;
+  version = "5.3.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dAyKypc8bMWkXhYa7BlGGAGqPaPJHFHwXd/UK80BGoE=";
+    hash = "sha256-HesAg6hJ8Al/ZZRBTXZM0EVv1kjYmmA66W+crwtWhf4=";
   };
 
   postPatch = ''

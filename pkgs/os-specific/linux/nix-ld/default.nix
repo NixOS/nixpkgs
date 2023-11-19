@@ -5,16 +5,20 @@
 , ninja
 , nixosTests
 }:
-
+let
+  libDir = if builtins.elem stdenv.system [ "x86_64-linux" "mips64-linux" "powerpc64le-linux" ]
+           then "/lib64"
+           else "/lib";
+in
 stdenv.mkDerivation rec {
   pname = "nix-ld";
-  version = "1.2.3";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-h+odOVyiGmEERMECoFOj5P7FPiMR8IPRzroFA4sKivg=";
+    hash = "sha256-+z9t7BLugZO1WhyYEq6FI38TMh2EwfgfAv3RDFSjwtc=";
   };
 
   doCheck = true;
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/nix-support
 
-    ldpath=/${stdenv.hostPlatform.libDir}/$(basename $(< ${stdenv.cc}/nix-support/dynamic-linker))
+    ldpath=${libDir}/$(basename $(< ${stdenv.cc}/nix-support/dynamic-linker))
     echo "$ldpath" > $out/nix-support/ldpath
     mkdir -p $out/lib/tmpfiles.d/
     cat > $out/lib/tmpfiles.d/nix-ld.conf <<EOF

@@ -32,6 +32,5 @@ python3Packages.buildPythonPackage rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ infinisil ];
     broken = stdenv.isDarwin; # https://github.com/amanusk/s-tui/issues/49
-    mainProgram = "s-tui";
   };
 }

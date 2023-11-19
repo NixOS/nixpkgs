@@ -38,8 +38,7 @@ buildGoModule rec {
     description = "WireGuard automation from homelab to enterprise";
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
-    license = licenses.asl20;
+    license = licenses.sspl;
     maintainers = with maintainers; [ urandom qjoly ];
-    mainProgram = "netmaker";
   };
 }

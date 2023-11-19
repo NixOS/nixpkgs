@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "testrepository";
   version = "0.0.20";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

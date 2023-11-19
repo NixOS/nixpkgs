@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "django-polymorphic";
   version = "3.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "django-polymorphic";

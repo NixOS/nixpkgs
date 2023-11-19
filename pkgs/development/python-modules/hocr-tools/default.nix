@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "hocr-tools";
   version = "1.3.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tmbdev";

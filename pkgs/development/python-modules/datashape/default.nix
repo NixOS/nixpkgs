@@ -22,7 +22,6 @@ let
 in buildPythonPackage rec {
   pname = "datashape";
   version = "0.5.4";
-  format = "setuptools";
 
   src = fetcher {
     inherit pname version;

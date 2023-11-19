@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pykmtronic";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

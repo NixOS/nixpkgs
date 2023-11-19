@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pure-python-adb";
   version = "0.3.0.dev0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

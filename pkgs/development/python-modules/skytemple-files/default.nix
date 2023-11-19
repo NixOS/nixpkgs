@@ -12,8 +12,6 @@
 , tilequant
 , pyyaml
 , pmdsky-debug-py
-, range-typed-integers
-, importlib-resources
 , typing-extensions
 , pythonOlder
 , # optional dependancies for SpriteCollab
@@ -30,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.6.1";
-  pyproject = true;
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-P0VME1keazqcyb0JuQ4iXPyJH7/gTmYE7uASpjvhqUo=";
+    hash = "sha256-PVHI3SuXXH+XpSaBhtSUT5I6wYK3WmwW67nJmPLKdg4=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
@@ -58,9 +56,7 @@ buildPythonPackage rec {
     tilequant
     pyyaml
     pmdsky-debug-py
-    range-typed-integers
   ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
     typing-extensions
   ];
 

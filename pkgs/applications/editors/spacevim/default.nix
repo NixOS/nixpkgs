@@ -73,6 +73,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.fzakaria ];
     platforms = platforms.all;
-    mainProgram = "spacevim";
   };
 }

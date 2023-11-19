@@ -16,6 +16,5 @@ stdenv.mkDerivation rec {
     description = "A standalone X11 program to create chained key bindings";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    mainProgram = "xchainkeys";
   };
 }

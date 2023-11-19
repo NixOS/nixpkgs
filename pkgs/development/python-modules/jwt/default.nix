@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "jwt";
   version = "1.3.1";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

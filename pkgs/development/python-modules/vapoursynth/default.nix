@@ -2,7 +2,6 @@
 
 buildPythonPackage {
   pname = "vapoursynth";
-  format = "setuptools";
 
   inherit (vapoursynth) version src;
 

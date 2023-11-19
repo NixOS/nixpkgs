@@ -45,6 +45,5 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    mainProgram = "brasero";
   };
 }

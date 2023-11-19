@@ -12,7 +12,6 @@
 
 buildPythonPackage rec {
   pname = "cirq";
-  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   propagatedBuildInputs = [

@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.linux;
-    mainProgram = "convimg";
   };
 }

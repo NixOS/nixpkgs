@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "future-fstrings";
   version = "1.2.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

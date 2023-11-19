@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "changelogger";
-  version = "0.6.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "MarkusFreitag";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XDiO8r1HpdsfBKzFLnsWdxte2EqL1blPH21137fNm5M=";
+    sha256 = "sha256-g3d4BEVMQGBEKx+YVPjPrypWQNtEun/pSRgAsJY/RT4=";
   };
 
   vendorHash = "sha256-E6J+0tZriskBnXdhQOQA240c3z+laXM5honoREjHPfM=";
@@ -39,6 +39,5 @@ buildGoModule rec {
     changelog = "https://github.com/MarkusFreitag/changelogger/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ tomsiewert ];
-    mainProgram = "changelogger";
   };
 }

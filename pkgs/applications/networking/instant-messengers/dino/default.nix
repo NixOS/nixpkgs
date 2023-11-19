@@ -1,5 +1,4 @@
 { lib, stdenv, fetchFromGitHub
-, buildPackages
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
 , gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
 , libadwaita
@@ -87,10 +86,6 @@ stdenv.mkDerivation rec {
     "-DVERSION_FOUND=true"
     "-DVERSION_IS_RELEASE=true"
     "-DVERSION_FULL=${version}"
-    "-DXGETTEXT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/xgettext"
-    "-DMSGFMT_EXECUTABLE=${lib.getBin buildPackages.gettext}/bin/msgfmt"
-    "-DGLIB_COMPILE_RESOURCES_EXECUTABLE=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-    "-DSOUP_VERSION=${lib.versions.major libsoup.version}"
   ];
 
   # Undefined symbols for architecture arm64: "_gpg_strerror"

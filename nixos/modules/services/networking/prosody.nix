@@ -496,8 +496,12 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "prosody" {
-        example = ''
+      package = mkOption {
+        type = types.package;
+        description = lib.mdDoc "Prosody package to use";
+        default = pkgs.prosody;
+        defaultText = literalExpression "pkgs.prosody";
+        example = literalExpression ''
           pkgs.prosody.override {
             withExtraLibs = [ pkgs.luaPackages.lpty ];
             withCommunityModules = [ "auth_external" ];

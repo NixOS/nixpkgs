@@ -1,27 +1,17 @@
-{ lib, buildNpmPackage, fetchFromGitHub, testers, typescript }:
+{ lib, buildNpmPackage, fetchFromGitHub }:
 
 buildNpmPackage rec {
   pname = "typescript";
-  version = "5.3.3";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
     rev = "v${version}";
-    hash = "sha256-gZdS4TGbafaOdNc1ZB24uAjMu9g0hef6mEsOr/dPqvY=";
+    hash = "sha256-wjoqDmCudN5+9C3GrP1viiXBvsWgU0UIYWaFeK/TJEY=";
   };
 
-  patches = [
-    ./disable-dprint-dstBundler.patch
-  ];
-
-  npmDepsHash = "sha256-gj59jjko13UBPqqy/3z1KgVMFUQPUAIg47UTTaseF+w=";
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = typescript;
-    };
-  };
+  npmDepsHash = "sha256-7Wm6nlpqZRNqBU0mYFZRVWQkO4uqvrKrp2h2aEmZtow=";
 
   meta = with lib; {
     description = "A superset of JavaScript that compiles to clean JavaScript output";

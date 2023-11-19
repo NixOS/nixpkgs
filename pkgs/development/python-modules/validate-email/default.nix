@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "validate-email";
   version = "1.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

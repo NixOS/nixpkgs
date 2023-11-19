@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "twitch-python";
   version = "0.0.20";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

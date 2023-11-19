@@ -17,16 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pvextractor";
-  version = "0.4";
-  format = "setuptools";
+  version = "0.3";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-TjwoTtoGWU6C6HdFuS+gJj69PUnfchPHs7UjFqwftVQ=";
+    rev = "v${version}";
+    sha256 = "sha256-HYus2Gk3hzKq+3lJLOJQ+EE6LeO+DrvqLK3NpqrUYeI=";
   };
 
   buildInputs = [ pyqt-builder ];

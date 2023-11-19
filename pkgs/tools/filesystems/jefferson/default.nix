@@ -37,6 +37,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/onekey-sec/jefferson";
     license = licenses.mit;
     maintainers = with maintainers; [ tnias vlaci ];
-    mainProgram = "jefferson";
   };
 }

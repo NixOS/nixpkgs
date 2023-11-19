@@ -9,7 +9,7 @@ in {
   options.services.plausible = {
     enable = mkEnableOption (lib.mdDoc "plausible");
 
-    package = mkPackageOption pkgs "plausible" { };
+    package = mkPackageOptionMD pkgs "plausible" { };
 
     adminUser = {
       name = mkOption {

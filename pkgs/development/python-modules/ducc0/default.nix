@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "ducc0";
   version = "0.32.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

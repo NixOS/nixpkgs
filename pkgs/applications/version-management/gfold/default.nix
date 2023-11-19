@@ -41,6 +41,5 @@ rustPlatform.buildRustPackage {
     license = licenses.asl20;
     maintainers = [ maintainers.shanesveller ];
     platforms = platforms.unix;
-    mainProgram = "gfold";
   };
 }

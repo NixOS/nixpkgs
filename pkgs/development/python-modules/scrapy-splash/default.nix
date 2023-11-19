@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "scrapy-splash";
   version = "0.9.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

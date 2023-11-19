@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dead10ck/urlencode";
     license = licenses.mit;
     maintainers = with maintainers; [ l0b0 ];
-    mainProgram = "urlencode";
   };
 }

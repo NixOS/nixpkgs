@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "munch";
   version = "4.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

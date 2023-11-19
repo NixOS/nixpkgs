@@ -11,6 +11,7 @@
 , dbus
 , cryptsetup
 , util-linux
+, udev
 , lvm2
 , systemd
 , xfsprogs
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.6.3";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "refs/tags/stratisd-v${version}";
-    hash = "sha256-Wu3SkuHyMCBape+pMymQntXRtdMIlF5wz75kKxaZlms=";
+    hash = "sha256-R6Bb6ep5T8ePmxwDTxQyeXcSpp2S1C2zqwxmX2Wt1L8=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
       --replace stratis-min           "$out/bin/stratis-min" \
       --replace systemd-ask-password  "${systemd}/bin/systemd-ask-password" \
       --replace sleep                 "${coreutils}/bin/sleep" \
-      --replace udevadm               "${systemd}/bin/udevadm"
+      --replace udevadm               "${udev}/bin/udevadm"
   '';
 
   nativeBuildInputs = [
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     dbus
     cryptsetup
     util-linux
-    systemd
+    udev
     lvm2
   ];
 

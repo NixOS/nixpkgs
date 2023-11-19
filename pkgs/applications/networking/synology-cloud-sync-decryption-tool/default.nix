@@ -39,6 +39,5 @@ qt5.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ kalbasit ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "SynologyCloudSyncDecryptionTool";
   };
 }

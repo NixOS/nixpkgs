@@ -121,17 +121,13 @@ rec {
   cli = stdenv.mkDerivation {
     name = "resholve-test";
     src = rSrc;
-
-    dontBuild = true;
-
     installPhase = ''
       mkdir $out
       cp *.ansi $out/
     '';
-
     doCheck = true;
     buildInputs = [ resholve ];
-    nativeCheckInputs = [ coreutils bats ];
+    nativeCheckInputs = [ coreutils bats python27 ];
     # LOGLEVEL="DEBUG";
 
     # default path

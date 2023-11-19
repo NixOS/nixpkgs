@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/LyonSyonII/hunt";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "hunt";
   };
 }

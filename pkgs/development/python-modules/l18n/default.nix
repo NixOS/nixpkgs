@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "l18n";
   version = "2021.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

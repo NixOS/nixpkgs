@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "quamash";
   version = "0.6.1";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

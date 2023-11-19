@@ -43,6 +43,5 @@ buildGoModule rec {
     homepage = "https://gitlab.com/gitlab-org/cli";
     changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${version}";
     maintainers = with maintainers; [ freezeboy ];
-    mainProgram = "glab";
   };
 }

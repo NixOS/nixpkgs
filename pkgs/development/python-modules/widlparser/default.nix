@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "widlparser";
   version = "1.0.12";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

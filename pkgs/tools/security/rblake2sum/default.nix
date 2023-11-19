@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/crev-dev/rblake2sum";
     license = [ licenses.mit ];
     maintainers = with maintainers; [ dpc ];
-    mainProgram = "rblake2sum";
   };
 }

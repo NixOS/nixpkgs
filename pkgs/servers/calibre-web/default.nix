@@ -103,6 +103,5 @@ python.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pborzenkov ];
     platforms = platforms.all;
-    mainProgram = "calibre-web";
   };
 }

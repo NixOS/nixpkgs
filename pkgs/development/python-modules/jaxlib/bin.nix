@@ -29,13 +29,17 @@
 , stdenv
   # Options:
 , cudaSupport ? config.cudaSupport
-, cudaPackagesGoogle
+, cudaPackages ? {}
 }:
 
 let
-  inherit (cudaPackagesGoogle) cudatoolkit cudnn;
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
-  version = "0.4.23";
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
+
+let
+  version = "0.4.20";
 
   inherit (python) pythonVersion;
 
@@ -56,65 +60,65 @@ let
       "3.9-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp39";
-        hash = "sha256-maN9RzK6/hYIuPRd8n8n5qa/HyPgAf6UD+mlqzZ1/Xc=";
+        hash = "sha256-eIE+rz5x5BEkO85zncIWE8p/wDPxV8bnVJdHiknS998=";
       };
       "3.9-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp39";
-        hash = "sha256-gdb07c12HCfK5VXT2C+9lYKSiIpPgD8sNmd4eG2M6M4=";
+        hash = "sha256-dxInv8/aQiHsN7DpScuZao2ZyHDjF0AaTqUDA0qqg/M=";
       };
       "3.9-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp39";
-        hash = "sha256-TdU4wEoqEhsDq18MuLEpmKqpU51+xUYp/reZqEDJK1U=";
+        hash = "sha256-wva6LkSokEHN+WQLCancVC7YBIxfImPsQpB1LzFcyqM=";
       };
 
       "3.10-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp310";
-        hash = "sha256-cnX75aSJxoPFUCYD1V5QgyPNovS9lSGqg4PGdPsKsvM=";
+        hash = "sha256-Yo2TYnkIelyy4vb5+nC/yY8SjV34i/jJvCe/VRQppmo=";
       };
       "3.10-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp310";
-        hash = "sha256-H9sbeR4+4XytREYLP0LJphqGkQqHcinTC9NlT0Rj1aA=";
+        hash = "sha256-ufA/ACE4s4R/Fiq5SN7T44SVEN1Z5OfkJ/98lKxRFmo=";
       };
       "3.10-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp310";
-        hash = "sha256-43VuBgGvdjauWPQtJK9w5GBI/++JvV4FwwO4maIXfDY=";
+        hash = "sha256-hBSrYQyOGMn0BexRWQKYnJdEYYlzHUWuWGHmjVT10TE=";
       };
 
       "3.11-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp311";
-        hash = "sha256-mEdm0wmyHKg4RlA7q9/e1OOu+BfGcPKBCSvLwXfFhJI=";
+        hash = "sha256-5N0nghTBrsa7d8kt8hZC2ghqlxCNC7U8ApD0PG7DHn8=";
       };
       "3.11-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp311";
-        hash = "sha256-1kb/m8DODrtXO2drIfpttCLC72oNVszADbSDspllQVs=";
+        hash = "sha256-j13Br64cKe0hFh/cMBbOMuTXqauAvSKE+KzEmN7U6RA=";
       };
       "3.11-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp311";
-        hash = "sha256-jhLX4ps+EtU1sku722v51mz2SSamo4/dkdRWX3zFcRE=";
+        hash = "sha256-nTnyawU4Ngq9VTE6oDuEfR6iJPRy+E/VLt98cU6eW4M=";
       };
 
       "3.12-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp312";
-        hash = "sha256-oimiuQopgN1oKhbDc7SsRJPnA6JiEI9UieikWR2qpVk=";
+        hash = "sha256-qPMoa7cso7DRBWuCJQoiOEzLPL3m76MPZZMYmZUj400=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-J4zaKcx0c0Bgk7w/n6klqDlgY9IqTNINfg6g033LUDk=";
+        hash = "sha256-VqTC5egDHaDIvwVa3sAc9Sdtd0CwEFcXjDU/i54h844=";
       };
       "3.12-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp312";
-        hash = "sha256-UFEE/mBitEOVUoijhUfphyy24QfWPZ+FQPsQ0cjY79A=";
+        hash = "sha256-1F98Je2rMJJKrksI/EVAsX9n+dOpmDehUeAaMq/BY7o=";
       };
     };
 
@@ -124,19 +128,19 @@ let
   gpuSrcs = {
     "3.9" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp39-cp39-manylinux2014_x86_64.whl";
-      hash = "sha256-our2mSwHPdjVoDAZP+9aNUkJ+vxv1Tq7G5UqA9HvhNI=";
+      hash = "sha256-VM2HuyMnG+hzrsTQEB5KJpqpBXyyp+eV1LVxmY1ZCGU=";
     };
     "3.10" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-jkIABnJZnn7A6n9VGs/MldzdDiKwWh0fEvl7Vqn85Kg=";
+      hash = "sha256-TLq3z3T2fjTcO3ESahboKG33mrOpjtj9C92f4d4nJKo=";
     };
     "3.11" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl";
-      hash = "sha256-dMUcRnHjl8NyUeO3P1x7CNgF0iAHFKIzUtHh+/CNkow=";
+      hash = "sha256-CUXwyJq0HOo2j3Sw+NguBCnFkDuJpc3wfZUc90yyhOY=";
     };
     "3.12" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp312-cp312-manylinux2014_x86_64.whl";
-      hash = "sha256-kXJ6bUwX+QybqYPV9Kpwv+lhdoGEFRr4+1T0vfXoWRo=";
+      hash = "sha256-bAR8FLtiqufU+rL2a1q9c61CjH1eXxGTNGnDUkHlDBA=";
     };
   };
 
@@ -209,9 +213,5 @@ buildPythonPackage {
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
-    broken =
-      !(cudaSupport -> (cudaPackagesGoogle ? cudatoolkit) && lib.versionAtLeast cudatoolkit.version "11.1")
-      || !(cudaSupport -> (cudaPackagesGoogle ? cudnn) && lib.versionAtLeast cudnn.version "8.2")
-      || !(cudaSupport -> stdenv.isLinux);
   };
 }

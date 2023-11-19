@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pyflick";
   version = "0.0.2";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

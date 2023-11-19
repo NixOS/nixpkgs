@@ -3,14 +3,12 @@
 let
   librewolf-src = callPackage ./librewolf.nix { };
 in
-(buildMozillaMach rec {
+((buildMozillaMach rec {
   pname = "librewolf";
   applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;
-  requireSigning = false;
-  allowAddonSideload = true;
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
@@ -32,4 +30,6 @@ in
 }).override {
   crashreporterSupport = false;
   enableOfficialBranding = false;
-}
+}).overrideAttrs (prev: {
+  MOZ_REQUIRE_SIGNING = "";
+})

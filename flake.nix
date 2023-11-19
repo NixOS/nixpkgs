@@ -9,8 +9,7 @@
         nixpkgs = self;
       };
 
-      libVersionInfoOverlay = import ./lib/flake-version-info.nix self;
-      lib = (import ./lib).extend libVersionInfoOverlay;
+      lib = import ./lib;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
@@ -21,7 +20,13 @@
 
         nixosSystem = args:
           import ./nixos/lib/eval-config.nix (
-            args // { inherit (self) lib; } // lib.optionalAttrs (! args?system) {
+            args // {
+              modules = args.modules ++ [{
+                system.nixos.versionSuffix =
+                  ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
+                system.nixos.revision = final.mkIf (self ? rev) self.rev;
+              }];
+            } // lib.optionalAttrs (! args?system) {
               # Allow system to be set modularly in nixpkgs.system.
               # We set it to null, to remove the "legacy" entrypoint's
               # non-hermetic default.
@@ -48,11 +53,7 @@
       # attribute it displays `omitted` instead of evaluating all packages,
       # which keeps `nix flake show` on Nixpkgs reasonably fast, though less
       # information rich.
-      legacyPackages = forAllSystems (system:
-        (import ./. { inherit system; }).extend (final: prev: {
-          lib = prev.lib.extend libVersionInfoOverlay;
-        })
-      );
+      legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;

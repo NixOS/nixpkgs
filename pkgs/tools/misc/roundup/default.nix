@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.all;
-    mainProgram = "roundup";
   };
 }

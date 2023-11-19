@@ -1,6 +1,5 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "tomcat";
-  meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
   nodes.machine = { pkgs, ... }: {
     services.tomcat = {

@@ -41,6 +41,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/pacstall/pacup/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zahrun ];
-    mainProgram = "pacup";
   };
 }

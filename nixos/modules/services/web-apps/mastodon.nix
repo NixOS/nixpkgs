@@ -136,7 +136,7 @@ let
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      path = with pkgs; [ ffmpeg-headless file imagemagick ];
+      path = with pkgs; [ file imagemagick ffmpeg ];
     })
   ) cfg.sidekiqProcesses;
 
@@ -229,7 +229,7 @@ in {
       streamingProcesses = lib.mkOption {
         description = lib.mdDoc ''
           Number of processes used by the mastodon-streaming service.
-          Please define this explicitly, recommended is the amount of your CPU cores minus one.
+          Recommended is the amount of your CPU cores minus one.
         '';
         type = lib.types.ints.positive;
         example = 3;
@@ -711,28 +711,31 @@ in {
     systemd.services.mastodon-init-db = lib.mkIf cfg.automaticMigrations {
       script = lib.optionalString (!databaseActuallyCreateLocally) ''
         umask 077
-        export PGPASSWORD="$(cat '${cfg.database.passwordFile}')"
+
+        export PGPASSFILE
+        PGPASSFILE=$(mktemp)
+        cat > $PGPASSFILE <<EOF
+        ${cfg.database.host}:${toString cfg.database.port}:${cfg.database.name}:${cfg.database.user}:$(cat ${cfg.database.passwordFile})
+        EOF
+
       '' + ''
-        if [ `psql -c \
+        if [ `psql ${cfg.database.name} -c \
                 "select count(*) from pg_class c \
                 join pg_namespace s on s.oid = c.relnamespace \
                 where s.nspname not in ('pg_catalog', 'pg_toast', 'information_schema') \
                 and s.nspname not like 'pg_temp%';" | sed -n 3p` -eq 0 ]; then
-          echo "Seeding database"
           SAFETY_ASSURED=1 rails db:schema:load
           rails db:seed
         else
-          echo "Migrating database (this might be a noop)"
           rails db:migrate
         fi
       '' +  lib.optionalString (!databaseActuallyCreateLocally) ''
-        unset PGPASSWORD
+        rm $PGPASSFILE
+        unset PGPASSFILE
       '';
       path = [ cfg.package pkgs.postgresql ];
       environment = env // lib.optionalAttrs (!databaseActuallyCreateLocally) {
         PGHOST = cfg.database.host;
-        PGPORT = toString cfg.database.port;
-        PGDATABASE = cfg.database.name;
         PGUSER = cfg.database.user;
       };
       serviceConfig = {
@@ -773,7 +776,7 @@ in {
         # System Call Filtering
         SystemCallFilter = [ ("~" + lib.concatStringsSep " " systemCallsList) "@chown" "pipe" "pipe2" ];
       } // cfgService;
-      path = with pkgs; [ ffmpeg-headless file imagemagick ];
+      path = with pkgs; [ file imagemagick ffmpeg ];
     };
 
     systemd.services.mastodon-media-auto-remove = lib.mkIf cfg.mediaAutoRemove.enable {

@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/blacksphere/blackmagic";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pjones emily sorki ];
-    platforms = platforms.unix;
+    # fails on darwin with
+    # arm-none-eabi-gcc: error: unrecognized command line option '-iframework'
+    platforms = platforms.linux;
   };
 }

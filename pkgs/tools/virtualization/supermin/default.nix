@@ -26,6 +26,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    mainProgram = "supermin";
   };
 })

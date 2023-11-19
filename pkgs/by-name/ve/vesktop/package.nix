@@ -12,21 +12,19 @@
 , pipewire
 , libpulseaudio
 , libicns
-, libnotify
 , jq
 , moreutils
-, cacert
 , nodePackages
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "0.4.4";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ot2O5J1wUZAWgdpJNaEUSwtbcNqDdGhzuCtx8Qg+4gg=";
+    hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
   };
 
   # NOTE: This requires pnpm 8.10.0 or newer
@@ -41,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
         jq
         moreutils
         nodePackages.pnpm
-        cacert
       ];
 
       pnpmPatch = builtins.toJSON {
@@ -73,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-v6ibAcfYgr1VjGK7NUF4DKd5da03mZndPUAnSl++RqE=";
+      outputHash = "sha256-nNXe0vSQiQTkiRqgScKlpkpG/BJc2eIY2ueAd9sk36c=";
     };
 
   nativeBuildInputs = [
@@ -117,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
       # this is mainly required for venmic
       libPath = lib.makeLibraryPath [
         libpulseaudio
-        libnotify
         pipewire
         gcc13Stdenv.cc.cc.lib
       ];
@@ -152,7 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "VencordDesktop";
       genericName = "Internet Messenger";
       keywords = [ "discord" "vencord" "electron" "chat" ];
-      categories = [ "Network" "InstantMessaging" "Chat" ];
     })
   ];
 

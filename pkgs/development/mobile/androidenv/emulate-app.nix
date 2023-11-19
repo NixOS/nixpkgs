@@ -1,26 +1,16 @@
 { composeAndroidPackages, stdenv, lib, runtimeShell }:
-{ name
-, app ? null
+{ name, app ? null
 , platformVersion ? "33"
 , abiVersion ? "armeabi-v7a"
 , systemImageType ? "default"
-, enableGPU ? false # Enable GPU acceleration. It's deprecated, instead use `configOptions` below.
-, configOptions ? (
-    # List of options to add in config.ini
-    lib.optionalAttrs enableGPU
-      (lib.warn
-        "enableGPU argument is deprecated and will be removed; use configOptions instead"
-        { "hw.gpu.enabled" = "yes"; }
-      )
-  )
-, extraAVDFiles ? [ ]
+, enableGPU ? false
+, extraAVDFiles ? []
 , package ? null
 , activity ? null
 , androidUserHome ? null
 , avdHomeDir ? null # Support old variable with non-standard naming!
 , androidAvdHome ? avdHomeDir
-, deviceName ? "device"
-, sdkExtraArgs ? { }
+, sdkExtraArgs ? {}
 , androidAvdFlags ? null
 , androidEmulatorFlags ? null
 }:
@@ -109,28 +99,27 @@ stdenv.mkDerivation {
     export ANDROID_SERIAL="emulator-$port"
 
     # Create a virtual android device for testing if it does not exist
-    if [ "$(${sdk}/bin/avdmanager list avd | grep 'Name: ${deviceName}')" = "" ]
+    if [ "$(${sdk}/bin/avdmanager list avd | grep 'Name: device')" = "" ]
     then
         # Create a virtual android device
-        yes "" | ${sdk}/bin/avdmanager create avd --force -n ${deviceName} -k "system-images;android-${platformVersion};${systemImageType};${abiVersion}" -p $ANDROID_AVD_HOME/${deviceName}.avd $NIX_ANDROID_AVD_FLAGS
+        yes "" | ${sdk}/bin/avdmanager create avd --force -n device -k "system-images;android-${platformVersion};${systemImageType};${abiVersion}" -p $ANDROID_AVD_HOME $NIX_ANDROID_AVD_FLAGS
 
-        ${builtins.concatStringsSep "\n" (
-          lib.mapAttrsToList (configKey: configValue: ''
-            echo "${configKey} = ${configValue}" >> $ANDROID_AVD_HOME/${deviceName}.avd/config.ini
-          '') configOptions
-        )}
+        ${lib.optionalString enableGPU ''
+          # Enable GPU acceleration
+          echo "hw.gpu.enabled=yes" >> $ANDROID_AVD_HOME/device.avd/config.ini
+        ''}
 
         ${lib.concatMapStrings (extraAVDFile: ''
-          ln -sf ${extraAVDFile} $ANDROID_AVD_HOME/${deviceName}.avd
+          ln -sf ${extraAVDFile} $ANDROID_AVD_HOME/device.avd
         '') extraAVDFiles}
     fi
 
     # Launch the emulator
     echo "\nLaunch the emulator"
-    $ANDROID_SDK_ROOT/emulator/emulator -avd ${deviceName} -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
+    $ANDROID_SDK_ROOT/emulator/emulator -avd device -no-boot-anim -port $port $NIX_ANDROID_EMULATOR_FLAGS &
 
     # Wait until the device has completely booted
-    echo "Waiting until the emulator has booted the ${deviceName} and the package manager is ready..." >&2
+    echo "Waiting until the emulator has booted the device and the package manager is ready..." >&2
 
     ${sdk}/libexec/android-sdk/platform-tools/adb -s emulator-$port wait-for-device
 

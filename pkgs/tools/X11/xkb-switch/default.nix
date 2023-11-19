@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];
     platforms = platforms.linux;
-    mainProgram = "xkb-switch";
   };
 }

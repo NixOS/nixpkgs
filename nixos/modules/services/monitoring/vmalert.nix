@@ -22,7 +22,14 @@ in
   options.services.vmalert = {
     enable = mkEnableOption (mdDoc "vmalert");
 
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.victoriametrics;
+      defaultText = "pkgs.victoriametrics";
+      description = mdDoc ''
+        The VictoriaMetrics derivation to use.
+      '';
+    };
 
     settings = mkOption {
       type = types.submodule {

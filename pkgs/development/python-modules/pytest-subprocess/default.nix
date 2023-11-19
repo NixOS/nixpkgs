@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "pytest-subprocess";
   version = "1.5.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

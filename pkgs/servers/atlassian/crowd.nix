@@ -1,7 +1,13 @@
 { lib, stdenv, fetchurl, home ? "/var/lib/crowd"
 , port ? 8092, proxyUrl ? null, openidPassword ? "WILL_NEVER_BE_SET" }:
 
-lib.warnIf (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is deprecated!"
+let
+  optionalWarning = cond: msg:
+    if cond then lib.warn msg
+    else lib.id;
+in
+
+optionalWarning (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is deprecated!"
 (stdenv.mkDerivation rec {
   pname = "atlassian-crowd";
   version = "5.0.1";

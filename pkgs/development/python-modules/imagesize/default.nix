@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "imagesize";
   version = "1.4.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

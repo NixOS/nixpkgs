@@ -559,15 +559,6 @@ in {
         '';
       };
 
-      databaseDir = mkOption {
-        type = types.path;
-        description = lib.mdDoc ''
-          The directory containing the database and logs.
-        '';
-        default = cfg.configDir;
-        defaultText = literalExpression "config.${opt.configDir}";
-      };
-
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -592,7 +583,14 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "syncthing" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.syncthing;
+        defaultText = literalExpression "pkgs.syncthing";
+        description = lib.mdDoc ''
+          The Syncthing package to use.
+        '';
+      };
     };
   };
 
@@ -669,7 +667,7 @@ in {
               -no-browser \
               -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
               -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
+              -data=${cfg.dataDir} \
               ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;

@@ -32,6 +32,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/WeblateOrg/wlc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ paperdigits ];
-    mainProgram = "wlc";
   };
 }

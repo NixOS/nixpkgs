@@ -61,9 +61,19 @@ in
     services.gerrit = {
       enable = mkEnableOption (lib.mdDoc "Gerrit service");
 
-      package = mkPackageOption pkgs "gerrit" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.gerrit;
+        defaultText = literalExpression "pkgs.gerrit";
+        description = lib.mdDoc "Gerrit package to use";
+      };
 
-      jvmPackage = mkPackageOption pkgs "jre_headless" { };
+      jvmPackage = mkOption {
+        type = types.package;
+        default = pkgs.jre_headless;
+        defaultText = literalExpression "pkgs.jre_headless";
+        description = lib.mdDoc "Java Runtime Environment package to use";
+      };
 
       jvmOpts = mkOption {
         type = types.listOf types.str;

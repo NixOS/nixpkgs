@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "enamlx";
   version = "0.6.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";

@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "mox3";
   version = "1.1.0";
-  format = "setuptools";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {

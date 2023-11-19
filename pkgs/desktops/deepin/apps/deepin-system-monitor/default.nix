@@ -21,19 +21,17 @@
 , util-linux
 , systemd
 , polkit
-, wayland
-, dwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-system-monitor";
-  version = "6.0.9";
+  version = "5.9.33";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ompsCTPmmF7S0UHNNU0YDQiTdvcFglpEoS4o+XMZ7jg=";
+    sha256 = "sha256-X7/YwnJyA/HOLsOGARjsHWgL2qxW1eU1TvoWulvz0j4=";
   };
 
   postPatch = ''
@@ -41,8 +39,8 @@ stdenv.mkDerivation rec {
       deepin-system-monitor-main/process/priority_controller.cpp \
       deepin-system-monitor-main/service/service_manager.cpp \
       deepin-system-monitor-main/translations/policy/com.deepin.pkexec.deepin-system-monitor.policy \
-        --replace "/usr/bin/kill" "${lib.getBin util-linux}/bin/kill" \
-        --replace "/usr/bin/renice" "${lib.getBin util-linux}/bin/renice" \
+        --replace "/usr/bin/kill" "${util-linux}/bin/kill" \
+        --replace "/usr/bin/renice" "${util-linux}/bin/renice" \
         --replace '/usr/bin/systemctl' '${lib.getBin systemd}/systemctl'
 
     substituteInPlace deepin-system-monitor-main/{service/service_manager.cpp,process/{priority_controller.cpp,process_controller.cpp}} \
@@ -76,12 +74,11 @@ stdenv.mkDerivation rec {
     procps
     libpcap
     libnl
-    wayland
-    dwayland
   ];
 
   cmakeFlags = [
     "-DVERSION=${version}"
+    "-DUSE_DEEPIN_WAYLAND=OFF"
   ];
 
   strictDeps = true;

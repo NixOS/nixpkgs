@@ -4,7 +4,7 @@
 , cf-xarray
 , dask
 , deepdiff
-, fetchFromGitHub
+, fetchPypi
 , h5netcdf
 , h5py
 , hypothesis
@@ -31,6 +31,7 @@
 , pythonOlder
 , pyvisa
 , pyvisa-sim
+, qcodes-loop
 , rsa
 , ruamel-yaml
 , setuptools
@@ -48,16 +49,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.42.0";
-  pyproject = true;
+  version = "0.41.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "QCoDeS";
-    repo = "Qcodes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+NtPE9mQKWftk3vR5WFZgM+7jl8HWr9MxVA+VpbuHvE=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-3Ncg51E4KYbvzlEyesVbTmzmz+UPfFkj3tudVbNYqHQ=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +97,12 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  passthru.optional-dependencies = {
+    loop = [
+      qcodes-loop
+    ];
+  };
+
   nativeCheckInputs = [
     deepdiff
     hypothesis
@@ -115,26 +120,21 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
-    "-v"
-    "-n"
-    "$NIX_BUILD_CORES"
     # Follow upstream with settings
     "--durations=20"
   ];
 
   disabledTestPaths = [
     # Test depends on qcodes-loop, causing a cyclic dependency
-    "tests/dataset/measurement/test_load_legacy_data.py"
+    "qcodes/tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
-    "tests/dataset/test_dataset_basic.py"
+    "qcodes/tests/dataset/test_dataset_basic.py"
   ];
 
   disabledTests = [
     # Tests are time-sensitive and power-consuming
-    # Those tests fails repeatably and are flaky
+    # Those tests fails repeatably
     "test_access_channels_by_slice"
-    "test_aggregator"
-    "test_datasaver"
     "test_do1d_additional_setpoints_shape"
     "test_dond_1d_additional_setpoints_shape"
     "test_field_limits"

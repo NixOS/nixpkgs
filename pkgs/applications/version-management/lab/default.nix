@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
     maintainers = with maintainers; [ marsam dtzWill ];
-    mainProgram = "lab";
   };
 }

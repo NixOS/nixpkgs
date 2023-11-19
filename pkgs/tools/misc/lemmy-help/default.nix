@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/numToStr/lemmy-help/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "lemmy-help";
   };
 }

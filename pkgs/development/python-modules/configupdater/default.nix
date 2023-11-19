@@ -7,13 +7,12 @@
 
 buildPythonPackage rec {
   pname = "configupdater";
-  version = "3.2";
-  format = "setuptools";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit version;
     pname = "ConfigUpdater";
-    hash = "sha256-n9rFODHBsGKSm/OYtkm4fKMOfxpzXz+/SCBygEEGMGs=";
+    hash = "sha256-RvDHTXPvpyN3Z2S0PJc59oBSSV3T1zQxnB0OtYUR8Vs=";
   };
 
   postPatch = ''

@@ -92,7 +92,12 @@ in
       description = lib.mdDoc "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
-    package = mkPackageOption pkgs "jirafeau" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.jirafeau;
+      defaultText = literalExpression "pkgs.jirafeau";
+      description = lib.mdDoc "Jirafeau package to use";
+    };
 
     poolConfig = mkOption {
       type = with types; attrsOf (oneOf [ str int bool ]);

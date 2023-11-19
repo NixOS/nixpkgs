@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "http://www.update.uu.se/~zrajm/programs/";
     downloadPage = "http://www.update.uu.se/~zrajm/programs/ratmen/";
-    mainProgram = "ratmen";
   };
 }

@@ -2,18 +2,18 @@
 
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
   cfg = config.virtualisation.lxc.lxcfs;
 in {
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
+  meta.maintainers = [ maintainers.mic92 ];
 
   ###### interface
   options.virtualisation.lxc.lxcfs = {
     enable =
-      lib.mkOption {
-        type = lib.types.bool;
+      mkOption {
+        type = types.bool;
         default = false;
         description = lib.mdDoc ''
           This enables LXCFS, a FUSE filesystem for LXC.
@@ -27,7 +27,7 @@ in {
   };
 
   ###### implementation
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     systemd.services.lxcfs = {
       description = "FUSE filesystem for LXC";
       wantedBy = [ "multi-user.target" ];

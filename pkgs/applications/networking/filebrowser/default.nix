@@ -56,6 +56,5 @@ buildGoModule rec {
     homepage = "https://filebrowser.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ nielsegberts ];
-    mainProgram = "filebrowser";
   };
 }

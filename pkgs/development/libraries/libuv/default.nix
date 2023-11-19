@@ -1,10 +1,13 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoconf
 , automake
 , libtool
 , pkg-config
+, ApplicationServices
+, CoreServices
 , pkgsStatic
 
 # for passthru.tests
@@ -18,19 +21,27 @@
 , nodejs
 , ocamlPackages
 , python3
-, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.47.0";
+  version = "1.46.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J6qvq///A/tr+/vNRVCwCc80/VHKWQTYF6Mt1I+dBCU=";
+    sha256 = "sha256-Lrsyh4qd3OkTw1cSPfahzfSGNt6+pRN1X21iiv1SsFo=";
   };
+
+  patches = [
+    # Disable io_uring close on selected kernels. Remove on next release
+    # https://github.com/libuv/libuv/pull/4141
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/c811169f91b2101f7302e96de3d2dc366ade3a25.patch";
+      hash = "sha256-7vk6XGXwJcwYUQPqIJ3JPd/fPIGrjE5WRDSJCMQfKeU=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -39,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
       "tcp_connect_timeout" # tries to reach out to 8.8.8.8
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
-      "getaddrinfo_fail" "getaddrinfo_fail_sync" "tcp_connect6_link_local"
+      "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
       "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
@@ -75,11 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
-    in lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+    in lib.optionalString (finalAttrs.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
+  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh
@@ -107,14 +119,12 @@ stdenv.mkDerivation (finalAttrs: {
     python-pyuv = python3.pkgs.pyuv;
     python-uvloop = python3.pkgs.uvloop;
     static = pkgsStatic.libuv;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
-    pkgConfigModules = [ "libuv" ];
     maintainers = with maintainers; [ marsam ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];

@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "rtmidi-python";
   version = "0.2.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

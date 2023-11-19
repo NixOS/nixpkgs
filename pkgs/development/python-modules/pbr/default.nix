@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pbr";
   version = "5.11.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;
-    mainProgram = "wlr-randr";
   };
 }

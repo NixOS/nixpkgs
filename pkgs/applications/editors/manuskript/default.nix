@@ -58,6 +58,5 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.unix;
-    mainProgram = "manuskript";
   };
 }

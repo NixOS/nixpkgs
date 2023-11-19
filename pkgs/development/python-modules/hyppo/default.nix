@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "hyppo";
   version = "0.4.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

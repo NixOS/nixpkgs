@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "django-nose";
   version = "1.4.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

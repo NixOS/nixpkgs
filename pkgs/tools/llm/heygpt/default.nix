@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     description = "A simple command-line interface for ChatGPT API.";
     homepage = "https://github.com/fuyufjh/heygpt";
     license = licenses.mit;
-    mainProgram = "heygpt";
+    mainProgram = pname;
     maintainers = with maintainers; [aldoborrero];
   };
 }

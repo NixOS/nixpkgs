@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.dtzWill ];
     platforms = platforms.unix;
-    mainProgram = "vivid";
   };
 }

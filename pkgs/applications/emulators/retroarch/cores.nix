@@ -390,8 +390,7 @@ in
     preBuild = "cd svn-current/trunk";
     meta = {
       description = "Port of Final Burn Alpha ~2012 to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -401,8 +400,7 @@ in
     preBuild = "cd src/burner/libretro";
     meta = {
       description = "Port of FBNeo to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -432,8 +430,7 @@ in
     makefile = "Makefile";
     meta = {
       description = "FMSX libretro port";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -466,8 +463,7 @@ in
     core = "genesis-plus-gx";
     meta = {
       description = "Enhanced Genesis Plus libretro port";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -528,8 +524,7 @@ in
     makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
     meta = {
       description = "Port of MAME ~2000 to libretro, compatible with MAME 0.37b5 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "MAME";
     };
   };
 
@@ -538,8 +533,7 @@ in
     makefile = "Makefile";
     meta = {
       description = "Port of MAME ~2003 to libretro, compatible with MAME 0.78 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "MAME";
     };
   };
 
@@ -548,8 +542,7 @@ in
     makefile = "Makefile";
     meta = {
       description = "Port of MAME ~2003+ to libretro, compatible with MAME 0.78 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "MAME";
     };
   };
 
@@ -559,8 +552,7 @@ in
     makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
     meta = {
       description = "Port of MAME ~2010 to libretro, compatible with MAME 0.139 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "MAME";
     };
   };
 
@@ -574,8 +566,7 @@ in
     enableParallelBuilding = false;
     meta = {
       description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "MAME";
     };
   };
 
@@ -717,8 +708,7 @@ in
     makeFlags = [ "CC_PREFIX=${stdenv.cc.targetPrefix}" ];
     meta = {
       description = "Opera is a port of 4DO/libfreedo to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -792,8 +782,7 @@ in
     dontConfigure = true;
     meta = {
       description = "Fast MegaDrive/MegaCD/32X emulator";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "MAME";
     };
   };
 
@@ -912,8 +901,7 @@ in
     preBuild = "cd libretro";
     meta = {
       description = "Port of SNES9x git to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -922,8 +910,7 @@ in
     makefile = "Makefile";
     meta = {
       description = "Optimized port/rewrite of SNES9x 1.39 to Libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -932,8 +919,7 @@ in
     makefile = "Makefile";
     meta = {
       description = "Optimized port/rewrite of SNES9x 1.43 to Libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -944,8 +930,7 @@ in
     makeFlags = [ "USE_BLARGG_APU=1" ];
     meta = {
       description = "Optimized port/rewrite of SNES9x 1.43 to Libretro, with Blargg's APU";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 
@@ -953,8 +938,7 @@ in
     core = "snes9x2010";
     meta = {
       description = "Optimized port/rewrite of SNES9x 1.52+ to Libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
+      license = "Non-commercial";
     };
   };
 

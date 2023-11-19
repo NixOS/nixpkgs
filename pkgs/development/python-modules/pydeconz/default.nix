@@ -1,44 +1,32 @@
 { lib
 , aiohttp
 , aioresponses
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , orjson
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
-, setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pydeconz";
-  version = "114";
-  pyproject = true;
+  version = "113";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "deconz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XN6di3pxB7lhZ5TQnyHr7nKA0STBi0CVzGnhvRDsbFY=";
+    hash = "sha256-Vf3nYUopaGY5JK//rqqsz47VRHwql1cQcslYbkH3owQ=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=pydeconz --cov-report term-missing" "" \
-      --replace "setuptools==" "setuptools>=" \
-      --replace "wheel==" "wheel>="
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
     orjson
   ];
 

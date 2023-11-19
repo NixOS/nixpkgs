@@ -62,6 +62,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/karpierz/libpcap/";
     license = licenses.bsd3;
-    maintainers = teams.ororatech.members;
+    maintainers = [ teams.ororatech ];
   };
 }

@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     description = "Serial port configuration utility";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
-    mainProgram = "setserial";
   };
 }

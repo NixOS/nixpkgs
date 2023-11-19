@@ -40,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mayeranalytics/coinlive";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "coinlive";
   };
 }

@@ -30,6 +30,5 @@ buildGoModule rec {
     changelog = "https://github.com/hahwul/gitls/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "gitls";
   };
 }

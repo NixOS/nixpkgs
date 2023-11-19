@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "aiohttp-cors";
   version = "0.7.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

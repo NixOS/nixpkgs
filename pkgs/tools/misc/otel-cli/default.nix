@@ -28,6 +28,5 @@ buildGoModule rec {
     changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with lib.maintainers; [ emattiza urandom ];
-    mainProgram = "otel-cli";
   };
 }

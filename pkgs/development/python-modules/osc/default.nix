@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "osc";
   version = "1.3.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";

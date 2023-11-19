@@ -37,7 +37,12 @@ in
   options.services.certmgr = {
     enable = mkEnableOption (lib.mdDoc "certmgr");
 
-    package = mkPackageOption pkgs "certmgr" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.certmgr;
+      defaultText = literalExpression "pkgs.certmgr";
+      description = lib.mdDoc "Which certmgr package to use in the service.";
+    };
 
     defaultRemote = mkOption {
       type = types.str;

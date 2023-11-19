@@ -38,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ xlambein ];
     platforms = platforms.linux;
-    mainProgram = "wlr-which-key";
   };
 }

@@ -5,14 +5,13 @@
 , fetchFromGitHub
 , prompt-toolkit
 , pycryptodome
-, pydantic
 , pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pykoplenti";
-  version = "1.2.2";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "stegm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2sGkHCIGo1lzLurvQBmq+16sodAaK8v+mAbIH/Gd3+E=";
+    hash = "sha256-XBOKf3i8xywU/1Kzl+VI1Qnkp9ohpSuDX3AnotD32oo=";
   };
 
   nativeBuildInputs = [
@@ -36,16 +35,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    click
+    prompt-toolkit
     pycryptodome
-    pydantic
   ];
-
-  passthru.optional-dependencies = {
-    CLI = [
-      click
-      prompt-toolkit
-    ];
-  };
 
   # Project has no tests
   doCheck = false;

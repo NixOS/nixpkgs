@@ -71,6 +71,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.pamplemousse ];
     platforms = platforms.linux;
-    mainProgram = "sasquatch";
   };
 }

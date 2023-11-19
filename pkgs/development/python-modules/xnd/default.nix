@@ -11,7 +11,6 @@
 
 buildPythonPackage {
   pname = "xnd";
-  format = "setuptools";
   disabled = isPy27;
   inherit (libxnd) version src meta;
 

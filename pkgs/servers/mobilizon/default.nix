@@ -18,6 +18,10 @@ in
 mixRelease rec {
   inherit (common) pname version src;
 
+  # See https://github.com/whitfin/cachex/issues/205
+  # This circumvents a startup error for now
+  stripDebug = false;
+
   nativeBuildInputs = [ git cmake ];
 
   mixNixDeps = import ./mix.nix {
@@ -31,15 +35,15 @@ mixRelease rec {
         fast_html = prev.fast_html.override {
           nativeBuildInputs = [ cmake ];
         };
-        ex_cldr = prev.ex_cldr.overrideAttrs (old: {
+        ex_cldr = prev.ex_cldr.overrideAttrs (old: rec {
+          version = "2.37.2";
           # We have to use the GitHub sources, as it otherwise tries to download
           # the locales at build time.
           src = fetchFromGitHub {
             owner = "elixir-cldr";
             repo = "cldr";
-            rev = "v${old.version}";
-            sha256 = assert old.version == "2.37.5";
-              "sha256-T5Qvuo+xPwpgBsqHNZYnTCA4loToeBn1LKTMsDcCdYs=";
+            rev = "v${version}";
+            sha256 = "sha256-dDOQzLIi3zjb9xPyR7Baul96i9Mb3CFHUA+AWSexrk4=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
@@ -51,7 +55,7 @@ mixRelease rec {
         });
 
         # The remainder are Git dependencies (and their deps) that are not supported by mix2nix currently.
-        web_push_encryption = buildMix rec {
+        web_push_encryption = buildMix {
           name = "web_push_encryption";
           version = "0.3.1";
           src = fetchFromGitHub {
@@ -73,36 +77,40 @@ mixRelease rec {
           };
           beamDeps = with final; [ mix_test_watch ex_doc timex ];
         };
-        rajska = buildMix rec {
-          name = "rajska";
-          version = "1.3.3";
-          src = fetchFromGitHub {
-            owner = "tcitworld";
-            repo = name;
-            rev = "0c036448e261e8be6a512581c592fadf48982d84";
-            sha256 = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
-          };
-          beamDeps = with final; [ ex_doc credo absinthe excoveralls hammer mock ];
-        };
         exkismet = buildMix rec {
           name = "exkismet";
-          version = "0.0.3";
+          version = "0.0.1";
           src = fetchFromGitHub {
             owner = "tcitworld";
             repo = name;
             rev = "8b5485fde00fafbde20f315bec387a77f7358334";
             sha256 = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
           };
-          beamDeps = with final; [ httpoison ex_doc credo doctor dialyxir ];
+          beamDeps = with final; [ httpoison ];
+        };
+        rajska = buildMix rec {
+          name = "rajska";
+          version = "0.0.1";
+          src = fetchFromGitHub {
+            owner = "tcitworld";
+            repo = name;
+            rev = "0c036448e261e8be6a512581c592fadf48982d84";
+            sha256 = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
+          };
+          beamDeps = with final; [ httpoison absinthe ];
         };
 
       });
   };
 
+  preConfigure = ''
+    export LANG=C.UTF-8 # fix elixir locale warning
+  '';
+
   # Install the compiled js part
   preBuild =
     ''
-      cp -a "${mobilizon-frontend}/static" ./priv
+      cp -a "${mobilizon-frontend}/libexec/mobilizon/deps/priv/static" ./priv
       chmod 770 -R ./priv
     '';
 
@@ -115,7 +123,9 @@ mixRelease rec {
     updateScript = writeShellScriptBin "update.sh" ''
       set -eou pipefail
 
-      ${mix2nix}/bin/mix2nix '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
+      SRC=$(nix path-info .#mobilizon.src)
+      ${mix2nix}/bin/mix2nix $SRC/mix.lock > pkgs/servers/mobilizon/mix.nix
+      cat $SRC/js/package.json > pkgs/servers/mobilizon/package.json
     '';
     elixirPackage = beamPackages.elixir;
   };

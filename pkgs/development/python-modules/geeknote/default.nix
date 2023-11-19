@@ -12,7 +12,6 @@
 
 buildPythonPackage {
   version = "2015-05-11";
-  format = "setuptools";
   pname = "geeknote";
   disabled = ! isPy27;
 

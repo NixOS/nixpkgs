@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to help you backup your git repositories from services like GitHub";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "git-backup";
   };
 }

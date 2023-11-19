@@ -525,8 +525,6 @@ ${expr "" v}
           "(${v.expr})"
         else if v == { } then
           "{}"
-        else if libAttr.isDerivation v then
-          ''"${toString v}"''
         else
           "{${introSpace}${concatItems (
             lib.attrsets.mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v

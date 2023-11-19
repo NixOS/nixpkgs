@@ -67,6 +67,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ astro ];
     platforms = [ "x86_64-none" ];
-    mainProgram = "hypervisor-fw";
   };
 }

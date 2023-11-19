@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "paramz";
   version = "0.9.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -17,9 +17,7 @@
 , libxdg_basedir
 , wxGTK
 # GStreamer
-, glib-networking
 , gst_all_1
-, libsoup_3
 # User-agent info
 , lsb-release
 # rt2rtng
@@ -60,8 +58,6 @@ stdenv.mkDerivation rec {
     libxdg_basedir
     lsb-release
     wxGTK
-    # for https gstreamer / libsoup
-    glib-networking
   ] ++ gstInputs
     ++ pythonInputs;
 
@@ -93,8 +89,6 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
-    # for GStreamer
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib")
   '';
 
   meta = with lib; {

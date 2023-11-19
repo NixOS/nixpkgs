@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "osmpythontools";
   version = "0.3.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";

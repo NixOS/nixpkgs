@@ -28,7 +28,14 @@ in {
         type = types.lines;
       };
 
-      package = mkPackageOption pkgs "ngircd" { };
+      package = mkOption {
+        description = lib.mdDoc "The ngircd package.";
+
+        type = types.package;
+
+        default = pkgs.ngircd;
+        defaultText = literalExpression "pkgs.ngircd";
+      };
     };
   };
 

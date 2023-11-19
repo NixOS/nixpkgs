@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, geos_3_11
+, geos
 , pytestCheckHook
 , cython
 , numpy
@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pygeos";
   version = "0.14";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    geos_3_11 # for geos-config
+    geos # for geos-config
     cython
   ];
 
@@ -48,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pygeos/pygeos";
     changelog = "https://github.com/pygeos/pygeos/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    maintainers = with maintainers; [ nialov ];
   };
 }

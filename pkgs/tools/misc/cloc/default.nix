@@ -56,6 +56,5 @@ in stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ rycee ];
-    mainProgram = "cloc";
   };
 }

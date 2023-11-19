@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.bsd3;
     maintainers = [ maintainers.markuskowa ];
-    mainProgram = "xhpcg";
   };
 }
 

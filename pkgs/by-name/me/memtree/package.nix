@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication {
   pname = "memtree";
-  version = "unstable-2023-11-22";
+  version = "unstable-2023-11-04";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbraud";
     repo = "memtree";
-    rev = "edc09d91dcd72f175d6adc1d08b261dd95cc4fbf";
-    hash = "sha256-YLZm0wjkjaTw/lHY5k4cqPXCgINe+49SGPLZq+eRdI4=";
+    rev = "093caeef26ee944b5bf4408710f63494e442b5ff";
+    hash = "sha256-j4LqWy7DxeV7pjwnCfpkHwug4p48kux6BM6oDJmvuUo=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -26,11 +26,16 @@ python3Packages.buildPythonApplication {
 
   nativeCheckInputs = with python3Packages; [
     hypothesis
-    pytestCheckHook
+    pytest
   ];
 
-  pytestFlagsArray = [ "-v" ];
-  pythonImportsCheck = [ "memtree" ];
+  checkPhase = ''
+    runHook preCheck
+    python -m pytest -v
+    runHook postCheck
+  '';
+
+  pythonImportChecks = [ "memtree" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
@@ -40,7 +45,6 @@ python3Packages.buildPythonApplication {
     description = "Render cgroups tree annotated by memory usage";
     homepage = "https://github.com/nbraud/memtree";
     maintainers = with maintainers; [ nicoo ];
-    mainProgram = "memtree";
     platforms = platforms.linux;
   };
 }

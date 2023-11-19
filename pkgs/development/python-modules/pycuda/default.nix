@@ -25,7 +25,6 @@ in
 buildPythonPackage rec {
   pname = "pycuda";
   version = "2023.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,7 @@
 { kernelPackages ? null }:
-import ../make-test-python.nix ({ pkgs, lib, ... }: {
+import ../make-test-python.nix ({ pkgs, ... }: {
   name = "lvm2-vdo";
-  meta.maintainers = lib.teams.helsinki-systems.members;
+  meta.maintainers = with pkgs.lib.maintainers; [ ajs124 ];
 
   nodes.machine = { pkgs, lib, ... }: {
     # Minimum required size for VDO volume: 5063921664 bytes

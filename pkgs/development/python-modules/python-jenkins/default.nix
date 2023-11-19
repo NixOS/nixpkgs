@@ -19,7 +19,6 @@
 buildPythonPackage rec {
   pname = "python-jenkins";
   version = "1.8.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

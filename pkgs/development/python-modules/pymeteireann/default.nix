@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "pymeteireann";
   version = "2021.8.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "DylanGore";

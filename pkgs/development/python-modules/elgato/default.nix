@@ -3,9 +3,8 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, mashumaro
-, orjson
 , poetry-core
+, pydantic
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "elgato";
-  version = "5.1.1";
+  version = "5.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-elgato";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g0po3BtY2uiOmuyWVA+o08c3I86SE4zmvo1ps8HpNNw=";
+    hash = "sha256-TI5wu2FYVUMvgDkbktcwPLnTSD8XUSy8qwOCdrsiopk=";
   };
 
   postPatch = ''
@@ -39,8 +38,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    mashumaro
-    orjson
+    pydantic
     yarl
   ];
 

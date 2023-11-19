@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/milaq/XMousePasteBlock";
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.petercommand ];
-    mainProgram = "xmousepasteblock";
   };
 }

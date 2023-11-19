@@ -514,39 +514,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-fzy = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder }:
-buildLuarocksPackage {
-  pname = "fzy";
-  version = "1.0-1";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/fzy-1.0-1.rockspec";
-    sha256 = "1v050lm3rn1k5wwi2nimlbp1b7j6b8vkwvhc1npyqzj8jv7w9w9n";
-  }).outPath;
-  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-  "url": "https://github.com/swarn/fzy-lua",
-  "rev": "2d018a56e3a240bca4b3142a723b2f56392f3e4a",
-  "date": "2023-01-29T07:05:02-06:00",
-  "path": "/nix/store/nz19glmy52jbz46wl7xf0jd8m441klf0-fzy-lua",
-  "sha256": "0xknm5513a6nlariwxgqndf3wj8xals26swjsv06hx133ihna01x",
-  "hash": "sha256-PQBlYRwjdGjA1pJrIzRVHUk+XLP4dR6zotaoEUqpdnY=",
-  "fetchLFS": false,
-  "fetchSubmodules": true,
-  "deepClone": false,
-  "leaveDotGit": false
-}
- '') ["date" "path" "sha256"]) ;
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "https://github.com/swarn/fzy-lua";
-    description = "A fuzzy string-matching algorithm";
-    maintainers = with lib.maintainers; [ mrcjkb ];
-    license.fullName = "MIT";
-  };
-}) {};
-
 gitsigns-nvim = callPackage({ buildLuarocksPackage, fetchgit, lua }:
 buildLuarocksPackage {
   pname = "gitsigns.nvim";
@@ -2216,29 +2183,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-luasnip = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, jsregexp, lua, luaOlder }:
-buildLuarocksPackage {
-  pname = "luasnip";
-  version = "2.1.1-1";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luasnip-2.1.1-1.rockspec";
-    sha256 = "1jrdai8qsanr6x2vqp70hipsxrxh0abvwr2xwh9p4wr29k4wyycb";
-  }).outPath;
-  src = fetchzip {
-    url    = "https://github.com/L3MON4D3/LuaSnip/archive/v2.1.1.zip";
-    sha256 = "0mbpwf3sxfrmrza13d9w0hlcmzlrj551g332syp1qhs94abfnnrd";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ jsregexp lua ];
-
-  meta = {
-    homepage = "https://github.com/L3MON4D3/LuaSnip";
-    description = "Snippet Engine for Neovim written in Lua.";
-    license.fullName = "Apache-2.0";
-  };
-}) {};
-
 luasocket = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "luasocket";
@@ -2724,29 +2668,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-nlua = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder }:
-buildLuarocksPackage {
-  pname = "nlua";
-  version = "0.1.0-1";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/nlua-0.1.0-1.rockspec";
-    sha256 = "14ynhy85m2prawym1ap1kplkbicafbczpggzgdnji00frwqa1zvv";
-  }).outPath;
-  src = fetchzip {
-    url    = "https://github.com/mfussenegger/nlua/archive/v0.1.0.zip";
-    sha256 = "1x3pbv5ngbk0sjgwfpjsv3x49wzq4x29d9rm0hgyyb2g2mwag3jc";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "https://github.com/mfussenegger/nlua";
-    description = "Neovim as Lua interpreter";
-    license.fullName = "GPL-3.0";
-  };
-}) {};
-
 nui-nvim = callPackage({ buildLuarocksPackage, fetchgit, fetchurl }:
 buildLuarocksPackage {
   pname = "nui.nvim";
@@ -2775,6 +2696,26 @@ buildLuarocksPackage {
     description = "UI Component Library for Neovim.";
     maintainers = with lib.maintainers; [ mrcjkb ];
     license.fullName = "MIT";
+  };
+}) {};
+
+nvim-client = callPackage({ buildLuarocksPackage, coxpcall, fetchurl, lua, luaOlder, luv, mpack }:
+buildLuarocksPackage {
+  pname = "nvim-client";
+  version = "0.2.4-1";
+
+  src = fetchurl {
+    url    = "https://github.com/neovim/lua-client/archive/0.2.4-1.tar.gz";
+    sha256 = "0sk1lmj0r7pyj9k3p6n0wqjbd95br44ansz0ck3amp6ql8f9kprf";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ coxpcall lua luv mpack ];
+
+  meta = {
+    homepage = "https://github.com/neovim/lua-client";
+    description = "Lua client to Nvim";
+    license.fullName = "Apache";
   };
 }) {};
 

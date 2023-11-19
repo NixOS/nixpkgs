@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ makefu ];
-    mainProgram = "u3-tool";
   };
 }

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "python-mpv-jsonipc";
   version = "1.2.0";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

@@ -20,7 +20,6 @@
 buildPythonPackage rec {
   pname = "mako";
   version = "1.2.4";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

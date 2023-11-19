@@ -52,6 +52,5 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
-    mainProgram = "git-up";
   };
 }

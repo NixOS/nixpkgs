@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "python-pkcs11";
   version = "0.7.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "danni";

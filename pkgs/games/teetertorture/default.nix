@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     description = "Simple shooting game with your cannon is sitting atop a teeter totter";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    mainProgram = "teetertorture";
   };
 }

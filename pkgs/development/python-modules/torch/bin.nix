@@ -9,6 +9,7 @@
 , future
 , numpy
 , autoPatchelfHook
+, patchelf
 , pyyaml
 , requests
 , setuptools
@@ -24,7 +25,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.1.2";
+  version = "2.0.1";
 in buildPythonPackage {
   inherit version;
 

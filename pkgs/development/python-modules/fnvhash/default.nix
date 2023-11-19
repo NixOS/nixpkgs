@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "fnvhash";
   version = "0.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "znerol";

@@ -114,7 +114,7 @@ in
   options.services.sanoid = {
     enable = mkEnableOption (lib.mdDoc "Sanoid ZFS snapshotting service");
 
-    package = lib.mkPackageOption pkgs "sanoid" {};
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
 
     interval = mkOption {
       type = types.str;

@@ -32,7 +32,7 @@ in
   options.services.gotosocial = {
     enable = lib.mkEnableOption (lib.mdDoc "ActivityPub social network server");
 
-    package = lib.mkPackageOption pkgs "gotosocial" { };
+    package = lib.mkPackageOptionMD pkgs "gotosocial" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;

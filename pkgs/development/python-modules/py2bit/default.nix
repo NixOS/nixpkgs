@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "py2bit";
   version = "0.3.0";
-  format = "setuptools";
 
   checkInput = [ pytest ];
 

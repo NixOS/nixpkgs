@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "socketio-client";
   version = "0.7.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "invisibleroads";

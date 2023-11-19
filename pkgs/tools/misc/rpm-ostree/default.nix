@@ -120,6 +120,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
-    mainProgram = "rpm-ostree";
   };
 }

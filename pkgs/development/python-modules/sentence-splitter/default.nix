@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "sentence-splitter";
   version = "1.4";
-  format = "setuptools";
 
   disabled = pythonOlder "3.5";
 

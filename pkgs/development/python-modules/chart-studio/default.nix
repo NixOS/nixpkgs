@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "chart-studio";
   version = "5.17.0";
-  format = "setuptools";
 
   # chart-studio was split from plotly
   src = fetchFromGitHub {

@@ -19,7 +19,7 @@ let
     mapAttrs'
     mkEnableOption
     mkOption
-    mkPackageOption
+    mkPackageOptionMD
     mkIf
     nameValuePair
     types
@@ -56,7 +56,7 @@ in
   ];
 
   options.services.gitea-actions-runner = with types; {
-    package = mkPackageOption pkgs "gitea-actions-runner" { };
+    package = mkPackageOptionMD pkgs "gitea-actions-runner" { };
 
     instances = mkOption {
       default = {};

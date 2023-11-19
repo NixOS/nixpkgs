@@ -15,6 +15,5 @@ bundlerApp {
     homepage = "https://inspec.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dylanmtaylor ];
-    mainProgram = "inspec";
   };
 }

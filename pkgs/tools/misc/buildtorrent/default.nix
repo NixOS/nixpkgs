@@ -14,6 +14,5 @@ stdenv.mkDerivation rec {
     homepage = "https://mathr.co.uk/blog/torrent.html";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    mainProgram = "buildtorrent";
   };
 }

@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-Denable_tests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
+    "-Denable_tests=${lib.boolToString finalAttrs.doCheck}"
   ];
 
   dontWrapQtApps = true;

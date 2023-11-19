@@ -88,6 +88,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyball equirosa marsam ];
     platforms = platforms.unix;
-    mainProgram = "ffsend";
   };
 }

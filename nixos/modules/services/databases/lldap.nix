@@ -8,7 +8,7 @@ in
   options.services.lldap = with lib; {
     enable = mkEnableOption (mdDoc "lldap");
 
-    package = mkPackageOption pkgs "lldap" { };
+    package = mkPackageOptionMD pkgs "lldap" { };
 
     environment = mkOption {
       type = with types; attrsOf str;

@@ -54,6 +54,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = with platforms; linux ++ freebsd;
     maintainers = with maintainers; [ numinit ];
-    mainProgram = "ioztat";
   };
 }

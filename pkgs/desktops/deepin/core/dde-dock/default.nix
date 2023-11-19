@@ -1,50 +1,49 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchFromGitHub
+, dtkwidget
+, dde-qt-dbus-factory
+, qt5integration
+, qt5platform-plugins
+, dde-control-center
+, deepin-desktop-schemas
 , cmake
-, extra-cmake-modules
 , qttools
+, qtx11extras
 , pkg-config
 , wrapQtAppsHook
 , wrapGAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dwayland
-, qtx11extras
 , gsettings-qt
 , libdbusmenu
 , xorg
+, gtest
+, qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-dock";
-  version = "6.0.22";
+  version = "5.5.81";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-fhc2faiPH35ZKw6SCoGTz+6mgxabNpCFQeY2p68Ba5w=";
+    sha256 = "sha256-x8U5QPfIykaQLjwbErZiYbZC+JyPQQ+jd6MBjDQyUjs=";
   };
 
   postPatch = ''
-    substituteInPlace plugins/pluginmanager/pluginmanager.cpp frame/controller/quicksettingcontroller.cpp  \
-      --replace "/usr/lib/dde-dock" "/run/current-system/sw/lib/dde-dock"
+    substituteInPlace plugins/tray/system-trays/systemtrayscontroller.cpp frame/controller/dockpluginscontroller.cpp \
+      --replace "/usr/lib/dde-dock/plugins" "/run/current-system/sw/lib/dde-dock/plugins"
 
-    substituteInPlace configs/com.deepin.dde.dock.json frame/util/common.h \
-    --replace "/usr" "/run/current-system/sw"
+    substituteInPlace plugins/show-desktop/showdesktopplugin.cpp frame/window/components/desktop_widget.cpp \
+      --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
 
-    for file in $(grep -rl "/usr/lib/deepin-daemon"); do
-      substituteInPlace $file --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
-    done
-   '';
+    substituteInPlace plugins/{dcc-dock-plugin/settings_module.cpp,tray/system-trays/systemtrayscontroller.cpp} \
+      --replace "/usr" "$out"
+    '';
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     qttools
     pkg-config
     wrapQtAppsHook
@@ -53,17 +52,18 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    qtbase
     dtkwidget
     qt5platform-plugins
-    dwayland
+    dde-qt-dbus-factory
+    dde-control-center
+    deepin-desktop-schemas
     qtx11extras
     gsettings-qt
     libdbusmenu
     xorg.libXcursor
     xorg.libXtst
     xorg.libXdmcp
-    xorg.libXres
+    gtest
   ];
 
   outputs = [ "out" "dev" ];

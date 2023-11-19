@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = [ maintainers.jflanglois ];
     platforms = platforms.linux;
-    mainProgram = "hitch";
   };
 }

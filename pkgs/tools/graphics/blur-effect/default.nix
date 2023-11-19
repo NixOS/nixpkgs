@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # packages 'libdrm' and 'gbm' not found
     maintainers = with maintainers; [ romildo ];
-    mainProgram = "blur_image";
   };
 }

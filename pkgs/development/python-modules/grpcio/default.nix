@@ -1,7 +1,5 @@
-{ lib
-, stdenv
+{ lib, stdenv
 , buildPythonPackage
-, fetchPypi
 , grpc
 , six
 , protobuf
@@ -16,14 +14,9 @@
 }:
 
 buildPythonPackage rec {
+  inherit (grpc) src version;
   pname = "grpcio";
   format = "setuptools";
-  version = "1.59.3";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eAD5lWinSgbr3M1BndG25jm0d9yvbad+pwL4+xTOX4A=";
-  };
 
   outputs = [ "out" "dev" ];
 

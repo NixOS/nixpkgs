@@ -5,11 +5,11 @@
 # iptables to nftables requires a full reboot, which is a bit hard inside NixOS
 # tests.
 
-import ../make-test-python.nix ({ pkgs, lib, ...} : {
+import ../make-test-python.nix ({ pkgs, ...} : {
   name = "lxd-nftables";
 
-  meta = {
-    maintainers = lib.teams.lxc.members;
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ patryk27 ];
   };
 
   nodes.machine = { lib, ... }: {

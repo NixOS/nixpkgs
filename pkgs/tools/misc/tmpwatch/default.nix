@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ vlstill ];
     platforms = platforms.unix;
-    mainProgram = "tmpwatch";
   };
 }

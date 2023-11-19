@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "ttach";
   version = "0.0.3";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

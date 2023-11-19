@@ -5,7 +5,6 @@
 , ninja
 , pkg-config
 , libhandy
-, libsecret
 , modemmanager
 , gtk3
 , gom
@@ -64,7 +63,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     modemmanager
     libhandy
-    libsecret
     evolution-data-server
     folks
     gom
@@ -112,6 +110,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
     platforms = platforms.linux;
-    mainProgram = "gnome-calls";
   };
 }

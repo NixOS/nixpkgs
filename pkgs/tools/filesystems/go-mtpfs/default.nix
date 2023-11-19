@@ -30,6 +30,5 @@ buildGoModule rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     broken = stdenv.isDarwin;
-    mainProgram = "go-mtpfs";
   };
 }

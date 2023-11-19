@@ -45,7 +45,12 @@ in
     services.vault = {
       enable = mkEnableOption (lib.mdDoc "Vault daemon");
 
-      package = mkPackageOption pkgs "vault" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vault;
+        defaultText = literalExpression "pkgs.vault";
+        description = lib.mdDoc "This option specifies the vault package to use.";
+      };
 
       dev = mkOption {
         type = types.bool;

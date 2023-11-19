@@ -75,7 +75,6 @@ let
 in buildPythonPackage rec {
   pname = "gpaw";
   version = "23.9.1";
-  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "gpaw";

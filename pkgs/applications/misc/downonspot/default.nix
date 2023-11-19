@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "downonspot";
-  version = "unstable-2023-11-26";
+  version = "unstable-2021-10-13";
 
   src = fetchFromGitHub {
     owner = "oSumAtrIX";
     repo = "DownOnSpot";
-    rev = "406fbf137306208bcb9835ad3aa92b0edbc01805";
-    hash = "sha256-gY5pDZ5EwKhBmV8VyuKW/19BgfPSIZSp9rEI/GuonYQ=";
+    rev = "9d78ea2acad4dfe653a895a1547ad0abe7c5b47a";
+    sha256 = "03g99yx9sldcg3i6hvpdxyk70f09f8kfj3kh283vl09b1a2c477w";
   };
 
-  # Use official public librespot version
-  cargoPatches = [ ./Cargo.lock.patch ];
+  cargoSha256 = "0k200p6wgwb60ax1r8mjn3aq08zxpkqbfqpi3b25zi3xf83my44d";
 
-  cargoHash = "sha256-CG9QY9Nfy/dxzvSPG2NB2/6yjTvdoDI76PRSaM138Wk=";
+  # fixes: error: the option `Z` is only accepted on the nightly compiler
+  RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
     pkg-config

@@ -30,7 +30,6 @@
 buildPythonPackage rec {
   pname = "drf-spectacular";
   version = "0.26.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tfranzel";

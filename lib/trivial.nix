@@ -1,18 +1,6 @@
 { lib }:
 
-let
-  inherit (lib.trivial)
-    isFunction
-    isInt
-    functionArgs
-    pathExists
-    release
-    setFunctionArgs
-    toBaseDigits
-    version
-    versionSuffix
-    warn;
-in {
+rec {
 
   ## Simple (higher order) functions
 
@@ -70,7 +58,9 @@ in {
      of the next function, and the last function returns the
      final value.
   */
-  pipe = builtins.foldl' (x: f: f x);
+  pipe = val: functions:
+    let reverseApply = x: f: f x;
+    in builtins.foldl' reverseApply val functions;
 
   # note please don’t add a function like `compose = flip pipe`.
   # This would confuse users, because the order of the functions
@@ -205,7 +195,7 @@ in {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Uakari";
+  codeName = "Tapir";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -449,7 +439,7 @@ in {
   */
   functionArgs = f:
     if f ? __functor
-    then f.__functionArgs or (functionArgs (f.__functor f))
+    then f.__functionArgs or (lib.functionArgs (f.__functor f))
     else builtins.functionArgs f;
 
   /* Check whether something is a function or something
@@ -520,20 +510,22 @@ in {
 
      toHexString 250 => "FA"
   */
-  toHexString = let
-    hexDigits = {
-      "10" = "A";
-      "11" = "B";
-      "12" = "C";
-      "13" = "D";
-      "14" = "E";
-      "15" = "F";
-    };
-    toHexDigit = d:
-      if d < 10
-      then toString d
-      else hexDigits.${toString d};
-  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+  toHexString = i:
+    let
+      toHexDigit = d:
+        if d < 10
+        then toString d
+        else
+          {
+            "10" = "A";
+            "11" = "B";
+            "12" = "C";
+            "13" = "D";
+            "14" = "E";
+            "15" = "F";
+          }.${toString d};
+    in
+      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:

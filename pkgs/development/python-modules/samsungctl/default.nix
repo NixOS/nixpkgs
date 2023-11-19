@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "samsungctl";
   version = "0.7.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

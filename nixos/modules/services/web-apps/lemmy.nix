@@ -17,11 +17,11 @@ in
     enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
     server = {
-      package = mkPackageOption pkgs "lemmy-server" {};
+      package = mkPackageOptionMD pkgs "lemmy-server" {};
     };
 
     ui = {
-      package = mkPackageOption pkgs "lemmy-ui" {};
+      package = mkPackageOptionMD pkgs "lemmy-ui" {};
 
       port = mkOption {
         type = types.port;

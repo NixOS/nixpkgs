@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "isoweek";
   version = "1.3.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

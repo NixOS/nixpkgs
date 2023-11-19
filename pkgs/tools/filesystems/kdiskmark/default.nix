@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.symphorien ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    mainProgram = "kdiskmark";
   };
 }
 

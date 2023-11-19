@@ -58,6 +58,5 @@ mkDerivation rec {
       kiwi
     ];
     platforms = platforms.linux;
-    mainProgram = "mlvapp";
   };
 }

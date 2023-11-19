@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "gbinder-python";
   version = "1.1.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "erfanoabdi";
@@ -34,11 +33,11 @@ buildPythonPackage rec {
 
   setupPyGlobalFlags = [ "--cython" ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for libgbinder";
     homepage = "https://github.com/erfanoabdi/gbinder-python";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mcaju ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ mcaju ];
+    platforms = platforms.linux;
   };
 }

@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/zee-editor/zee";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner ];
-    mainProgram = "zee";
   };
 }

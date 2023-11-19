@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    mainProgram = "linssid";
   };
 }

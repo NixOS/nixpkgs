@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "argocd-vault-plugin";
-  version = "1.17.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "argoproj-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YH7yNRaKdYzasaxYSManuiImyxglmIwgLvDKjUg3MR8=";
+    hash = "sha256-7bUpshg+OqlS5wvFkZkovQVaLglvSpp7FsVA9qNOk1U=";
   };
 
-  vendorHash = "sha256-0PrGrcS8Gx0cVImGrlmXlycFgWCTLjg2ISi0OhYoPpw=";
+  vendorHash = "sha256-r9Pcm95gU0QTiREdiQiyJMOKZb5Lt2bIJywLerzgbdg=";
 
   # integration tests require filesystem and network access for credentials
   doCheck = false;

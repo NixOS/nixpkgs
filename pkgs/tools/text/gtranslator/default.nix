@@ -6,27 +6,28 @@
 , pkg-config
 , itstool
 , gettext
-, wrapGAppsHook4
+, python3
+, wrapGAppsHook
 , libxml2
-, libadwaita
 , libgda6
+, libhandy
 , libsoup_3
-, libspelling
 , json-glib
+, gspell
 , glib
-, gtk4
-, gtksourceview5
+, gtk3
+, gtksourceview4
 , gnome
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "45.3";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "MBAgTfXHpa4Cf1owsVRNaXfUF/Dku53il/CtGoAzGHM=";
+    sha256 = "Kme8v+ZDBhsGltiaEIR9UL81kF/zNhuYcTV9PjQi8Ts=";
   };
 
   nativeBuildInputs = [
@@ -35,22 +36,28 @@ stdenv.mkDerivation rec {
     pkg-config
     itstool
     gettext
-    wrapGAppsHook4
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
     libxml2
     glib
-    gtk4
-    gtksourceview5
-    libadwaita
+    gtk3
+    gtksourceview4
     libgda6
+    libhandy
     libsoup_3
-    libspelling
     json-glib
     gettext
+    gspell
     gsettings-desktop-schemas
   ];
+
+  postPatch = ''
+    chmod +x build-aux/meson/meson_post_install.py
+    patchShebangs build-aux/meson/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

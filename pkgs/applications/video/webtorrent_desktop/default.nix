@@ -57,7 +57,6 @@ buildNpmPackage {
     homepage = "https://webtorrent.io/desktop";
     license = licenses.mit;
     maintainers = [ maintainers.bendlas ];
-    mainProgram = "WebTorrent";
   };
 
 }

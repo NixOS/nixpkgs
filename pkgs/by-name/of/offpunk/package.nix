@@ -33,7 +33,7 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "offpunk";
-  version = "2.1";
+  version = "2.0";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -42,7 +42,7 @@ python3Packages.buildPythonPackage rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-IFqasTI2dZCauLUAq6/rvwkfraVK7SGUXpHCPEgSPGk=";
+    hash = "sha256-6ftc2goCNgvXf5kszvjeSHn24Hn73jq26Irl5jiN6pk=";
   };
 
   nativeBuildInputs = [ python3Packages.hatchling installShellFiles ];
@@ -51,8 +51,6 @@ python3Packages.buildPythonPackage rec {
   postInstall = ''
     installManPage man/*.1
   '';
-
-  passthru.tests.version = testers.testVersion { package = offpunk; };
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";

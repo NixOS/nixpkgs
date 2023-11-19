@@ -39,6 +39,5 @@ buildGoModule {
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
     license = licenses.gpl3;
-    mainProgram = "localtimed";
   };
 }

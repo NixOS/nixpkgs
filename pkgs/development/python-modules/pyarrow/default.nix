@@ -27,7 +27,6 @@ in
 
 buildPythonPackage rec {
   pname = "pyarrow";
-  format = "setuptools";
   inherit (arrow-cpp) version src;
 
   disabled = pythonOlder "3.7";

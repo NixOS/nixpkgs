@@ -31,7 +31,6 @@
 , libepoxy
 , libva
 , libvdpau
-, libglvnd
 , numactl
 , amf-headers
 , intel-media-sdk
@@ -132,7 +131,6 @@ stdenv.mkDerivation rec {
     mesa
     xorg.libXrandr
     libxcb
-    libglvnd
   ];
 
   cmakeFlags = [

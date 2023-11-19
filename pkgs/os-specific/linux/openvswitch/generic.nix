@@ -1,6 +1,5 @@
 { version
 , hash
-, updateScriptArgs ? ""
 }:
 
 { lib
@@ -21,7 +20,6 @@
 , sphinxHook
 , util-linux
 , which
-, writeScript
 }:
 
 let
@@ -106,10 +104,6 @@ in stdenv.mkDerivation rec {
     pyparsing
     pytest
   ]);
-
-  passthru.updateScript = writeScript "ovs-update.nu" ''
-    ${./update.nu} ${updateScriptArgs}
-  '';
 
   meta = with lib; {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";

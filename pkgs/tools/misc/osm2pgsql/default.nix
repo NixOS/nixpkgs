@@ -7,6 +7,7 @@
 , bzip2
 , zlib
 , boost
+, cimg
 , postgresql
 , python3
 , withLuaJIT ? false
@@ -14,7 +15,6 @@
 , luajit
 , libosmium
 , nlohmann_json
-, opencv
 , potrace
 , protozero
 , testers
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.10.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-IFAQ7iA37QXnWOSxUjh9EW7ss85k0h948JGuuUcpr5w=";
+    hash = "sha256-RzJpaOEpgKm2IN6CK2Z67CUG0WU2ELvCpGhdQehjGKU=";
   };
 
   postPatch = ''
@@ -41,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     bzip2
+    cimg
     expat
     fmt
     libosmium
     nlohmann_json
-    opencv
     postgresql
     potrace
     proj

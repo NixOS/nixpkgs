@@ -13,6 +13,7 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , zlib
 , openssl

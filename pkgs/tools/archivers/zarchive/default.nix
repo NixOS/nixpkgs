@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Exzap/ZArchive";
     license = licenses.mit0;
     maintainers = with maintainers; [ zhaofengli ];
-    mainProgram = "zarchive";
   };
 }

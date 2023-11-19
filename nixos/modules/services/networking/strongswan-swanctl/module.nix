@@ -10,7 +10,14 @@ in  {
   options.services.strongswan-swanctl = {
     enable = mkEnableOption (lib.mdDoc "strongswan-swanctl service");
 
-    package = mkPackageOption pkgs "strongswan" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.strongswan;
+      defaultText = literalExpression "pkgs.strongswan";
+      description = lib.mdDoc ''
+        The strongswan derivation to use.
+      '';
+    };
 
     strongswan.extraConfig = mkOption {
       type = types.str;

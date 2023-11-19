@@ -1,6 +1,6 @@
 { lib, rustPlatform, fetchFromGitHub, pkg-config, udev }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "framework-tool";
 
   # Latest stable version 0.1.0 has an ssh:// git URL in Cargo.lock,
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/FrameworkComputer/framework-system";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ nickcao leona kloenk ];
+    maintainers = with maintainers; [ nickcao ];
     mainProgram = "framework_tool";
   };
 }

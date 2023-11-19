@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "utils";
   version = "1.0.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "haaksmash";

@@ -40,6 +40,5 @@ stdenv.mkDerivation {
       description = "A tool from Rockchip to communicate with Rockusb devices (pine64 fork)";
       license = lib.licenses.gpl2;
       maintainers = [ maintainers.adisbladis ];
-      mainProgram = "rkdeveloptool";
     };
 }

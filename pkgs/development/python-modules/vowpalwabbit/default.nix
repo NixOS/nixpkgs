@@ -19,7 +19,6 @@
 buildPythonPackage rec {
   pname = "vowpalwabbit";
   version = "9.9.0";
-  format = "setuptools";
 
   src = fetchPypi{
     inherit pname version;

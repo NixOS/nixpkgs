@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/brycx/checkpwn/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "checkpwn";
   };
 }

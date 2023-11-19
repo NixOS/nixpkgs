@@ -12,7 +12,12 @@ in
   options.services.freshrss = {
     enable = mkEnableOption (mdDoc "FreshRSS feed reader");
 
-    package = mkPackageOption pkgs "freshrss" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.freshrss;
+      defaultText = lib.literalExpression "pkgs.freshrss";
+      description = mdDoc "Which FreshRSS package to use.";
+    };
 
     defaultUser = mkOption {
       type = types.str;

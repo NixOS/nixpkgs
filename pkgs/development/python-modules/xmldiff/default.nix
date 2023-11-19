@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "xmldiff";
   version = "2.6.3";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

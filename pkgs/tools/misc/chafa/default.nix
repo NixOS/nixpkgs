@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.mog ];
-    mainProgram = "chafa";
   };
 }

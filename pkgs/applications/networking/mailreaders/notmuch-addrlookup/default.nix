@@ -25,6 +25,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ mog ];
     platforms = platforms.unix;
     license = licenses.mit;
-    mainProgram = "notmuch-addrlookup";
   };
 }

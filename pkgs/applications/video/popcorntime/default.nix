@@ -89,6 +89,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3;
     maintainers = with maintainers; [ onny ];
-    mainProgram = "popcorntime";
   };
 }

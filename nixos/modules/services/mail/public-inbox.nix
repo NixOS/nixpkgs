@@ -144,7 +144,12 @@ in
 {
   options.services.public-inbox = {
     enable = mkEnableOption (lib.mdDoc "the public-inbox mail archiver");
-    package = mkPackageOption pkgs "public-inbox" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.public-inbox;
+      defaultText = literalExpression "pkgs.public-inbox";
+      description = lib.mdDoc "public-inbox package to use.";
+    };
     path = mkOption {
       type = with types; listOf package;
       default = [];

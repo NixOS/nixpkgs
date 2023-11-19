@@ -26,6 +26,5 @@ buildGoModule rec {
     changelog = "https://github.com/orhun/pkgtop/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "pkgtop";
   };
 }

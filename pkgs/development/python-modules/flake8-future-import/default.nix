@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "flake8-future-import";
   version = "0.4.7";
-  format = "setuptools";
 
   # PyPI tarball doesn't include the test suite
   src = fetchFromGitHub {

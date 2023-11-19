@@ -7,7 +7,14 @@ in {
   options.services.opentracker = {
     enable = mkEnableOption (lib.mdDoc "opentracker");
 
-    package = mkPackageOption pkgs "opentracker" { };
+    package = mkOption {
+      type = types.package;
+      description = lib.mdDoc ''
+        opentracker package to use
+      '';
+      default = pkgs.opentracker;
+      defaultText = literalExpression "pkgs.opentracker";
+    };
 
     extraOptions = mkOption {
       type = types.separatedString " ";

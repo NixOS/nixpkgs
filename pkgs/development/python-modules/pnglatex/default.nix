@@ -4,7 +4,6 @@ buildPythonPackage rec {
 
   pname = "pnglatex";
   version = "1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

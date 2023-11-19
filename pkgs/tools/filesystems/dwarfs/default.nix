@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dwarfs";
-  version = "0.7.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-lFJW9rmUhiHyu+unGuONcgbsJg9h9MSvNyECmarRF/M=";
+    hash = "sha256-DcPRrATI2cpLZWAL+sSCoXvJ1R0O3yHqhlJW1aEpDpA=";
   };
 
   patches = [

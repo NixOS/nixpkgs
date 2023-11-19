@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-fGOo9FgVMI6ayyB3EMN6RGThwWciShcBZzWTZWtOt8E=";
   };
 
-  # remove addops as they add test directory and coverage parameters to pytest
+  # disable test coverage
   postPatch = ''
-    substituteInPlace setup.cfg --replace 'addopts =' 'no-opts ='
+    sed -i "/--cov/d" setup.cfg
   '';
 
   propagatedBuildInputs = [

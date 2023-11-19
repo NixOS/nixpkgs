@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "iowait";
   version = "0.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

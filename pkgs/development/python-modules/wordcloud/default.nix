@@ -24,11 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-Tcle9otT1eBN/RzajwKZDUq8xX0Lhi2t74OvhUrvHZE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov --cov-report xml --tb=short" ""
-  '';
-
   nativeBuildInputs = [
     cython
   ];
@@ -44,6 +39,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-report xml --tb=short" ""
+  '';
+
   preCheck = ''
     cd test
   '';
@@ -55,15 +55,11 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't tests CLI
     "test_cli_as_executable"
-    # OSError: invalid ppem value
-    "test_recolor_too_small"
-    "test_coloring_black_works"
   ];
 
   meta = with lib; {
     description = "Word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";
-    changelog = "https://github.com/amueller/word_cloud/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];
   };

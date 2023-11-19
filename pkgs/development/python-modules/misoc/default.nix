@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "misoc";
   version = "unstable-2022-10-08";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";

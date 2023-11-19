@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "stups-zign";
   version = "1.2";
-  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

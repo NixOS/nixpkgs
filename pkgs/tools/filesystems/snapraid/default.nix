@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
-    mainProgram = "snapraid";
   };
 }

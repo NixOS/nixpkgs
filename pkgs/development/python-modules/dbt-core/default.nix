@@ -7,7 +7,6 @@
 , click
 , colorama
 , dbt-extractor
-, dbt-semantic-interfaces
 , hologram
 , idna
 , isodate
@@ -61,7 +60,6 @@ buildPythonPackage rec {
     click
     colorama
     dbt-extractor
-    dbt-semantic-interfaces
     hologram
     idna
     isodate

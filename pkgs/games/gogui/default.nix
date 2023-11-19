@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "1.5.4a";
+  version = "1.5.3";
 in stdenv.mkDerivation {
   pname = "gogui";
   inherit version;
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     owner = "Remi-Coulom";
     repo = "gogui";
     rev = "v${version}";
-    hash = "sha256-UFhOk2mAnTtxfwEOHquN64YDCRq7nNUqZAPQf77MEEw=";
+    hash = "sha256-GezFhNYB542JnAIUeUVa188+SR5mCedwj0hZN8L83UQ=";
   };
 
   nativeBuildInputs = [

@@ -40,6 +40,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/alecthomas/ondir/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.michaelCTS ];
-    mainProgram = "ondir";
   };
 }

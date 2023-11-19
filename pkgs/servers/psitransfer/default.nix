@@ -45,6 +45,5 @@ in buildNpmPackage {
     description = "Simple open source self-hosted file sharing solution";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ hyshka ];
-    mainProgram = "psitransfer";
   };
 }

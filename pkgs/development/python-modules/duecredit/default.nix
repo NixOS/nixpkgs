@@ -7,22 +7,23 @@
 , vcrpy
 , citeproc-py
 , requests
+, six
 }:
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.9.3";
+  version = "0.9.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+DeOqQ0R+XUlkuSHySFj2oDZqf85mT64PAi/LtTso3I=";
+    hash = "sha256-Dg/Yfp5GzmyUMI6feAwgP+g22JYoQE+L9a+Wp0V77Rw=";
   };
 
   nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [ citeproc-py requests ];
+  propagatedBuildInputs = [ citeproc-py requests six ];
 
   nativeCheckInputs = [ pytestCheckHook vcrpy ];
   disabledTests = [ "test_import_doi" ];  # tries to access network

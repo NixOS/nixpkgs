@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "pytest-click";
   version = "1.1.0";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

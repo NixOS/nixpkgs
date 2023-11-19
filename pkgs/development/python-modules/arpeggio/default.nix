@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "arpeggio";
   version = "2.0.2";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Arpeggio";

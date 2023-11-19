@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "nose-pattern-exclude";
   version = "0.1.3";
-  format = "setuptools";
 
   propagatedBuildInputs = [ nose ];
 

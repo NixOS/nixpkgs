@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-mommy";
-  version = "0.3.1";
+  version = "0.2.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-2WR6xUYL/bLgZlI4ADbPAtdLq0y4MoVP8Loxdu/58Wc=";
+    sha256 = "sha256-/f6jHXwUJqAlqmVvvxfB4tvKkYwCmqI8GgPBHf5Qg1E=";
   };
 
-  cargoHash = "sha256-iQt6eTCcpzhFnrDkUmT4x7JX+Z7fWdW5ovbB/9Ui7Sw=";
+  cargoSha256 = "sha256-hj6oRuTlCxGq5SosVBkVwrG0Sgv5iDz5naCXPueYFqM=";
 
   meta = with lib; {
     description = "Cargo wrapper that encourages you after running commands";

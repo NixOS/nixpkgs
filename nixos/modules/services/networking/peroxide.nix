@@ -11,7 +11,7 @@ in
   options.services.peroxide = {
     enable = mkEnableOption (lib.mdDoc "peroxide");
 
-    package = mkPackageOption pkgs "peroxide" {
+    package = mkPackageOptionMD pkgs "peroxide" {
       default = [ "peroxide" ];
     };
 

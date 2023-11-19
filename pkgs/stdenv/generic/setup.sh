@@ -1260,10 +1260,6 @@ configurePhase() {
                 prependToVar configureFlags --disable-static
             fi
         fi
-
-        if [ -z "${dontPatchShebangsInConfigure:-}" ]; then
-            patchShebangs --build "$configureScript"
-        fi
     fi
 
     if [ -n "$configureScript" ]; then
@@ -1499,7 +1495,17 @@ distPhase() {
 
 showPhaseHeader() {
     local phase="$1"
-    echo "Running phase: $phase"
+    case "$phase" in
+        unpackPhase) echo "unpacking sources";;
+        patchPhase) echo "patching sources";;
+        configurePhase) echo "configuring";;
+        buildPhase) echo "building";;
+        checkPhase) echo "running tests";;
+        installPhase) echo "installing";;
+        fixupPhase) echo "post-installation fixup";;
+        installCheckPhase) echo "running install tests";;
+        *) echo "$phase";;
+    esac
 }
 
 

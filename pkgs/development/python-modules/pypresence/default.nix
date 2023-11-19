@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pypresence";
   version = "4.3.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

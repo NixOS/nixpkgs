@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/major/MySQLTuner-perl";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg shamilton ];
-    mainProgram = "mysqltuner";
   };
 }

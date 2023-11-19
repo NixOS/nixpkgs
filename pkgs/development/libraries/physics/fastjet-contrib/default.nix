@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     for f in Makefile.in */Makefile; do
       substituteInPlace "$f" --replace "CXX=g++" ""
     done
-    patchShebangs ./utils/check.sh ./utils/install-sh
+    patchShebangs ./configure ./utils/check.sh ./utils/install-sh
   '';
 
   # Written in shell manually, does not support autoconf-style

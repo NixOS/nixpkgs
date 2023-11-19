@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "smhi-pkg";
   version = "1.0.16";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joysoftware";

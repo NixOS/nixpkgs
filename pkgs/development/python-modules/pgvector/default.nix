@@ -13,12 +13,11 @@
 , pytestCheckHook
 , pythonOlder
 , sqlalchemy
-, sqlmodel
 }:
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.4";
+  version = "0.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XKoaEwLW59pV4Dwis7p2L65XoO2zUEa1kXxz6Lgs2d8=";
+    hash = "sha256-KQROG0cHvKmdWssr7Git3JH0YguRPno/ZzYiQL7VhwU=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     sqlalchemy
-    sqlmodel
   ];
 
   env = {

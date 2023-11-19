@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://github.com/chriswalz/bit";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "bit";
   };
 }

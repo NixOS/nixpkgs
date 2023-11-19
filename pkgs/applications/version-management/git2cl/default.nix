@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/git2cl";
     description = "Convert git logs to GNU style ChangeLog files";
     platforms = lib.platforms.unix;
-    mainProgram = "git2cl";
   };
 }

@@ -34,6 +34,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/nickstenning/honcho";
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
-    mainProgram = "honcho";
   };
 }

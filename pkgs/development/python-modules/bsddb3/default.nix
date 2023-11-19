@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "bsddb3";
   version = "6.2.9";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

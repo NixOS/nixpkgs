@@ -15,3 +15,12 @@ index 0242e0b75af3..d732011306f7 100644
          for i, ln in enumerate(commands):
              match = re.match(kPdbgRegex, ln)
              if match:
+@@ -1363,7 +1369,7 @@ def applySubstitutions(script, substitutions, conditions={},
+         return processed
+ 
+     process = processLine if recursion_limit is None else processLineToFixedPoint
+-    
++
+     return [unescapePercents(process(ln)) for ln in script]
+ 
+ 

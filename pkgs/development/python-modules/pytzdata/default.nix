@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pytzdata";
   version = "2020.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

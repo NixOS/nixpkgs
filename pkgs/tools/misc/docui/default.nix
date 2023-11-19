@@ -19,6 +19,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aethelz ];
     broken = stdenv.isDarwin;
-    mainProgram = "docui";
   };
 }

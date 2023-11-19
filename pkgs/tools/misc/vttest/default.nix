@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "https://invisible-island.net/vttest/";
     license = licenses.mit;
     platforms = platforms.all;
-    mainProgram = "vttest";
   };
 }
 

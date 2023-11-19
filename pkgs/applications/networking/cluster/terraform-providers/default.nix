@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , fetchFromGitLab
 , callPackage
@@ -86,6 +87,7 @@ let
       heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
+      tailscale = automated-providers.tailscale.override { mkProviderGoModule = buildGo121Module; };
     };
 
   # Put all the providers we not longer support in this list.
@@ -96,6 +98,7 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       fly = archived "fly" "2023/10";
+      ksyun = removed "ksyun" "2023/04";
     };
 
   # excluding aliases, used by terraform-full

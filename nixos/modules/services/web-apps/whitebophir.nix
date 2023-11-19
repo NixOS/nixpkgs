@@ -9,7 +9,12 @@ in {
     services.whitebophir = {
       enable = mkEnableOption (lib.mdDoc "whitebophir, an online collaborative whiteboard server (persistent state will be maintained under {file}`/var/lib/whitebophir`)");
 
-      package = mkPackageOption pkgs "whitebophir" { };
+      package = mkOption {
+        default = pkgs.whitebophir;
+        defaultText = literalExpression "pkgs.whitebophir";
+        type = types.package;
+        description = lib.mdDoc "Whitebophir package to use.";
+      };
 
       listenAddress = mkOption {
         type = types.str;

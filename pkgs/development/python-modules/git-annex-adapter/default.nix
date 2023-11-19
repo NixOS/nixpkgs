@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "git-annex-adapter";
   version = "0.2.2";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

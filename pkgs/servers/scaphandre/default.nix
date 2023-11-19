@@ -66,6 +66,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ gaelreyrol ];
-    mainProgram = "scaphandre";
   };
 }

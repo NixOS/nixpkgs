@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "getkey";
   version = "0.6.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

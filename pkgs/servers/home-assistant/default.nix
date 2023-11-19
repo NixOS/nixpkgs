@@ -30,26 +30,24 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
-        version = "19.2.1";
+      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.4";
         src = fetchFromGitHub {
-          owner = "esphome";
-          repo = "aioesphomeapi";
+          owner = "CorantGmbH";
+          repo = "aioairq";
           rev = "refs/tags/v${version}";
-          hash = "sha256-WSWGO0kI1m6oaImUYZ6m5WKJ+xPs/rtn5wVq1bDr+bE=";
+          hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
         };
       });
 
       # https://github.com/home-assistant/core/pull/101913
       aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
-        version = "3.9.1";
+        version = "3.8.5";
         src = fetchPypi {
           inherit (old) pname;
           inherit version;
-          hash = "sha256-j8Sah6wmnUUp2kWHHi/7aHTod3nD0OLM2BPAiZIhI50=";
+          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
         };
-        patches = [];
-        doCheck = false;
       });
 
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
@@ -59,15 +57,6 @@ let
           repo = "aiowatttime";
           rev = "refs/tags/${version}";
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
-        };
-      });
-
-      aioresponses = super.aioresponses.overridePythonAttrs (oldAttrs: rec {
-        pname = "aioresponses";
-        version = "0.7.6";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
         };
       });
 
@@ -116,10 +105,10 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
         };
-        nativeBuildInputs = with self; [
+        nativeBuildInputs = with super; [
           setuptools
         ];
-        propagatedBuildInputs = with self; [
+        propagatedBuildInputs = with super; [
           aenum
           aiohttp
           pydantic
@@ -146,6 +135,11 @@ let
         };
       });
 
+      # moto tests are a nuissance
+      moto = super.moto.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
@@ -157,11 +151,11 @@ let
           hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
         };
 
-        nativeBuildInputs = with self; [
+        nativeBuildInputs = with super; [
           setuptools
         ];
 
-        propagatedBuildInputs = with self; [
+        propagatedBuildInputs = with super; [
           requests
         ];
 
@@ -186,6 +180,15 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
+        };
+      });
+
+      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
         };
       });
 
@@ -321,7 +324,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.12.3";
+  hassVersion = "2023.11.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -334,50 +337,29 @@ in python.pkgs.buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  # Primary source is the git, which has the tests and allows bisecting the core
-  src = fetchFromGitHub {
+  # Primary source is the pypi sdist, because it contains translations
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-cnneRq0hIyvgKo0du/52ze0IVs8TgTPNQM3T1kyy03s=";
+  };
+
+  # Secondary source is git for tests
+  gitSrc = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-pTDYiy9Ux7Rgsf9rXXF3GbaiJkTX5FA/7K2hJtiNOkQ=";
-  };
-
-  # Secondary source is pypi sdist for translations
-  sdist = fetchPypi {
-    inherit pname version;
-    hash = "sha256-cvsYkuQG4i3GG8VGJ+HGSjdvpSBLzh0BFYQQpoVq4FY=";
+    hash = "sha256-OljfYmlXSJVoWWsd4jcSF4nI/FXHqRA8e4LN5AaPVv8=";
   };
 
   nativeBuildInputs = with python.pkgs; [
-    pythonRelaxDepsHook
     setuptools
     wheel
   ];
 
-  pythonRelaxDeps = [
-    "aiohttp"
-    "attrs"
-    "awesomeversion"
-    "bcrypt"
-    "ciso8601"
-    "cryptography"
-    "home-assistant-bluetooth"
-    "httpx"
-    "ifaddr"
-    "orjson"
-    "pip"
-    "PyJWT"
-    "pyOpenSSL"
-    "PyYAML"
-    "requests"
-    "typing-extensions"
-    "voluptuous-serialize"
-    "yarl"
-  ];
-
-  # extract translations from pypi sdist
+  # copy tests early, so patches apply as they would to the git repo
   prePatch = ''
-    tar --extract --gzip --file $sdist --strip-components 1 --wildcards "**/translations"
+    cp --no-preserve=mode --recursive ${gitSrc}/tests ./
+    chmod u+x tests/auth/providers/test_command_line_cmd.sh
   '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -392,7 +374,33 @@ in python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  postPatch = ''
+  postPatch = let
+    relaxedConstraints = [
+      "aiohttp"
+      "attrs"
+      "awesomeversion"
+      "bcrypt"
+      "ciso8601"
+      "cryptography"
+      "home-assistant-bluetooth"
+      "httpx"
+      "ifaddr"
+      "orjson"
+      "pip"
+      "PyJWT"
+      "pyOpenSSL"
+      "PyYAML"
+      "requests"
+      "typing-extensions"
+      "voluptuous-serialize"
+      "yarl"
+    ];
+  in ''
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's/${package}[<>=]+.*/${package}",/g' \''
+      ) relaxedConstraints)}
+      pyproject.toml
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
@@ -428,9 +436,6 @@ in python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
-    # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
-    pyotp
-    pyqrcode
     # Implicit dependency via homeassistant/requirements.py
     setuptools
   ];
@@ -455,14 +460,19 @@ in python.pkgs.buildPythonApplication rec {
     pytestCheckHook
     requests-mock
     respx
+    stdlib-list
     syrupy
     tomli
+    # required through tests/auth/mfa_modules/test_otp.py
+    pyotp
     # Sneakily imported in tests/conftest.py
     paho-mqtt
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
     "hue"
+    # for tests/test_config.py::test_merge_id_schema
+    "qwikswitch"
   ];
 
   pytestFlagsArray = [
@@ -475,10 +485,14 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_translation.py::test_caching"
+    # AssertionError: assert None == RegistryEntry
+    "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
     # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
-    # SystemError: PyThreadState_SetAsyncExc failed
-    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # tests are located in tests/
     "tests"
   ];
@@ -528,6 +542,5 @@ in python.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
     platforms = platforms.linux;
-    mainProgram = "hass";
   };
 }

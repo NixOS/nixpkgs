@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "android-backup";
   version = "0.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bluec0re";

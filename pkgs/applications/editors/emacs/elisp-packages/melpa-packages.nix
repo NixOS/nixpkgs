@@ -281,20 +281,6 @@ let
           packageRequires = [ self.haskell-mode ];
         });
 
-        hotfuzz = super.hotfuzz.overrideAttrs (old: {
-          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
-
-          dontUseCmakeBuildDir = true;
-
-          preBuild = ''
-            make -j$NIX_BUILD_CORES
-          '';
-
-          postInstall = (old.postInstall or "") + "\n" + ''
-            install source/hotfuzz-module.so $out/share/emacs/site-lisp/elpa/hotfuzz-*
-          '';
-        });
-
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
           env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
@@ -476,13 +462,6 @@ let
         orgit-forge = buildWithGit super.orgit-forge;
 
         ox-rss = buildWithGit super.ox-rss;
-
-        python-isort = super.python-isort.overrideAttrs (attrs: {
-          postPatch = attrs.postPatch or "" + ''
-            substituteInPlace python-isort.el \
-              --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
-          '';
-        });
 
         # upstream issue: missing file header
         mhc = super.mhc.override {
@@ -735,5 +714,4 @@ let
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
-(generateMelpa { })
-// { __attrsFailEvaluation = true; }
+generateMelpa { }

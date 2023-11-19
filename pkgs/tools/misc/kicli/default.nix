@@ -24,6 +24,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ poelzi ];
     platforms = platforms.all;
-    mainProgram = "kicli";
   };
 }

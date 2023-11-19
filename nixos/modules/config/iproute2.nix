@@ -18,9 +18,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.etc."iproute2/rt_tables.d/nixos.conf" = {
+    environment.etc."iproute2/rt_tables" = {
       mode = "0644";
-      text = cfg.rttablesExtraConfig;
+      text = (fileContents "${pkgs.iproute2}/lib/iproute2/rt_tables")
+        + (optionalString (cfg.rttablesExtraConfig != "") "\n\n${cfg.rttablesExtraConfig}");
     };
   };
 }

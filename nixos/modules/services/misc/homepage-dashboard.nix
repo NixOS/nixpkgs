@@ -12,7 +12,7 @@ in
     services.homepage-dashboard = {
       enable = lib.mkEnableOption (lib.mdDoc "Homepage Dashboard");
 
-      package = lib.mkPackageOption pkgs "homepage-dashboard" { };
+      package = lib.mkPackageOptionMD pkgs "homepage-dashboard" { };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;

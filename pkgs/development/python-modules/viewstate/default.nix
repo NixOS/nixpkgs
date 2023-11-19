@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "viewstate";
   version = "0.4.3";
-  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

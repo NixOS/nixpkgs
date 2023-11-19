@@ -1,99 +1,64 @@
 { lib
-, attrs
 , buildPythonPackage
-, click
 , fetchFromGitHub
-, future
-, importlib-metadata
-, ldfparser
-, lxml
-, openpyxl
-, pytestCheckHook
 , pythonOlder
-, pyyaml
-, six
-, xlrd
+, attrs
+, bitstruct
+, click
+, future
+, pathlib2
+, typing ? null
+, lxml
 , xlwt
+, xlrd
+, xlsxwriter
+, pyyaml
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "canmatrix";
-  version = "1.0";
-  format = "setuptools";
+  version = "0.9.5";
 
-  disabled = pythonOlder "3.7";
-
+  # uses fetchFromGitHub as PyPi release misses test/ dir
   src = fetchFromGitHub {
     owner = "ebroecker";
-    repo = "canmatrix";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UUJnLVt+uOj8Eav162btprkUeTemItGrSnBBB9UhJJI=";
+    repo = pname;
+    rev = version;
+    sha256 = "0x8x8kbg4gyzi0ia9657xygp0mqfii76b67fsx76d31bqsdvlda5";
   };
+
+  propagatedBuildInputs = [
+    # required
+    attrs
+    bitstruct
+    click
+    future
+    pathlib2
+    # optional
+    lxml
+    xlwt
+    xlrd
+    xlsxwriter
+    pyyaml
+  ] ++ lib.optional (pythonOlder "3.5") typing;
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version = versioneer.get_version()" 'version = "${version}"'
+      --replace "version = versioneer.get_version()" "version = \"${version}\""
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    click
-    future
-    six
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
-
-  passthru.optional-dependencies = {
-    arxml = [
-      lxml
-    ];
-    fibex = [
-      lxml
-    ];
-    kcd = [
-      lxml
-    ];
-    ldf = [
-      ldfparser
-    ];
-    odx = [
-      lxml
-    ];
-    xls = [
-      xlrd
-      xlwt
-    ];
-    xlsx = [
-      openpyxl
-    ];
-    yaml = [
-      pyyaml
-    ];
-  };
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    # long_envvar_name_imports requires stable key value pair ordering
-    "-s src/canmatrix"
-  ];
-
-  disabledTests = [
-    "long_envvar_name_imports"
-  ];
-
-  pythonImportsCheck = [
-    "canmatrix"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  # long_envvar_name_imports requires stable key value pair ordering
+  pytestFlagsArray = [ "-s src/canmatrix" ];
+  disabledTests = [ "long_envvar_name_imports" ];
+  pythonImportsCheck = [ "canmatrix" ];
 
   meta = with lib; {
-    description = "Support and convert several CAN (Controller Area Network) database formats";
     homepage = "https://github.com/ebroecker/canmatrix";
-    changelog = "https://github.com/ebroecker/canmatrix/releases/tag/${version}";
+    description = "Support and convert several CAN (Controller Area Network) database formats .arxml .dbc .dbf .kcd .sym fibex xls(x)";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sorki ];
   };
 }
+

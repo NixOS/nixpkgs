@@ -14,8 +14,12 @@ in {
     services.vdr = {
       enable = mkEnableOption (lib.mdDoc "VDR. Please put config into ${libDir}");
 
-      package = mkPackageOption pkgs "vdr" {
-        example = "wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vdr;
+        defaultText = literalExpression "pkgs.vdr";
+        example = literalExpression "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
+        description = lib.mdDoc "Package to use.";
       };
 
       videoDir = mkOption {

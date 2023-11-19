@@ -1,4 +1,5 @@
 { lib
+, backoff
 , buildPythonPackage
 , fetchFromGitHub
 , geojson
@@ -6,17 +7,21 @@
 , imagesize
 , nbconvert
 , nbformat
+, ndjson
 , numpy
-, opencv4
+, opencv
+  # , opencv-python
 , packaging
 , pillow
 , pydantic
+  # , pygeotile
 , pyproj
+, pytest-cases
 , pytestCheckHook
-, python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
+, rasterio
 , requests
-, setuptools
 , shapely
 , tqdm
 , typeguard
@@ -25,8 +30,8 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.58.1";
-  pyproject = true;
+  version = "3.52.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -34,7 +39,7 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-H6fn+TpfYbu/warhr9XcQjfxSThIjBp9XwelA5ZvTBE=";
+    hash = "sha256-t0Q+6tnUPK2oqjdAwwYeSebgn2EQ1fBivw115L8ndOg=";
   };
 
   postPatch = ''
@@ -43,13 +48,18 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "backoff"
   ];
 
   propagatedBuildInputs = [
+    backoff
     google-api-core
+    ndjson
     pydantic
-    python-dateutil
     requests
     tqdm
   ];
@@ -60,7 +70,7 @@ buildPythonPackage rec {
       geojson
       numpy
       pillow
-      opencv4
+      # opencv-python
       typeguard
       imagesize
       pyproj
@@ -73,20 +83,20 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     nbconvert
     nbformat
+    pytest-cases
     pytestCheckHook
   ] ++ passthru.optional-dependencies.data;
-
-  # disable pytest_plugins which requires `pygeotile`
-  preCheck = ''
-    substituteInPlace tests/conftest.py \
-      --replace "pytest_plugins" "_pytest_plugins"
-  '';
 
   disabledTestPaths = [
     # Requires network access
     "tests/integration"
     # Missing requirements
     "tests/data"
+  ];
+
+  pytestFlagsArray = [
+    # see tox.ini
+    "-k 'not notebooks'"
   ];
 
   pythonImportsCheck = [

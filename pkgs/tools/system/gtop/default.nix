@@ -23,6 +23,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/aksakalli/gtop";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tfc ];
-    mainProgram = "gtop";
   };
 }

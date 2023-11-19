@@ -24,7 +24,7 @@ buildPythonPackage rec {
     # Tries to download model binary artifacts:
     "tests/test_api.py"
   ];
-  pythonImportsCheck = [ "slovnet" ];
+  pythonImportCheck = [ "slovnet" ];
 
   meta = with lib; {
     description = "Deep-learning based NLP modeling for Russian language";

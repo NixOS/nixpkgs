@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "servefile";
   version = "0.5.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sebageek";

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "ambiclimate";
   version = "0.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Ambiclimate";

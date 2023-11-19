@@ -20,7 +20,14 @@ in
   options.services.zigbee2mqtt = {
     enable = mkEnableOption (lib.mdDoc "zigbee2mqtt service");
 
-    package = mkPackageOption pkgs "zigbee2mqtt" { };
+    package = mkOption {
+      description = lib.mdDoc "Zigbee2mqtt package to use";
+      default = pkgs.zigbee2mqtt;
+      defaultText = literalExpression ''
+        pkgs.zigbee2mqtt
+      '';
+      type = types.package;
+    };
 
     dataDir = mkOption {
       description = lib.mdDoc "Zigbee2mqtt data directory";

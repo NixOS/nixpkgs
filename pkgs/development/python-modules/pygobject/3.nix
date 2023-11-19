@@ -10,24 +10,24 @@
 , ncurses
 , meson
 , ninja
-, pythonOlder
+, isPy3k
 , gnome
 , python
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.46.0";
+  version = "3.44.1";
 
   outputs = [ "out" "dev" ];
 
-  disabled = pythonOlder "3.8";
+  disabled = !isPy3k;
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QmAIstrVSMmvHHsDtZ3wRA/eXDPzj7VAaxA6Q9ZTyvw=";
+    sha256 = "PGgF0TIb6QzDLmSCFaViQw4NPW7c2o9MXnqdr/ytVxA=";
   };
 
   depsBuildBuild = [

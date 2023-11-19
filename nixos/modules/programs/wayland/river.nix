@@ -10,9 +10,12 @@ in {
   options.programs.river = {
     enable = mkEnableOption (lib.mdDoc "river, a dynamic tiling Wayland compositor");
 
-    package = mkPackageOption pkgs "river" {
-      nullable = true;
-      extraDescription = ''
+    package = mkOption {
+      type = with types; nullOr package;
+      default = pkgs.river;
+      defaultText = literalExpression "pkgs.river";
+      description = lib.mdDoc ''
+        River package to use.
         Set to `null` to not add any River package to your path.
         This should be done if you want to use the Home Manager River module to install River.
       '';
@@ -48,9 +51,6 @@ in {
 
         # To make a river session available if a display manager like SDDM is enabled:
         services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
-
-        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-        xdg.portal.config.river.default = mkDefault [ "wlr" "gtk" ];
       }
       (import ./wayland-session.nix { inherit lib pkgs; })
     ]);

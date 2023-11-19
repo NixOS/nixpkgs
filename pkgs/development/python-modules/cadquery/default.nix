@@ -25,7 +25,6 @@ let
   pythonocc-core-cadquery = toPythonModule (stdenv.mkDerivation {
     pname = "pythonocc-core-cadquery";
     version = "0.18.2";
-    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "CadQuery";

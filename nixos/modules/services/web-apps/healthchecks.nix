@@ -33,7 +33,12 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "healthchecks" { };
+    package = mkOption {
+      default = pkgs.healthchecks;
+      defaultText = literalExpression "pkgs.healthchecks";
+      type = types.package;
+      description = lib.mdDoc "healthchecks package to use.";
+    };
 
     user = mkOption {
       default = defaultUser;

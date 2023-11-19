@@ -4,7 +4,7 @@
 , fparser
 , tinyxml
 , hdf5
-, cgal
+, cgal_5
 , vtk
 , boost
 , gmp
@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "csxcad";
-  version = "0.6.3";
+  version = "unstable-2022-05-18";
 
   src = fetchFromGitHub {
     owner = "thliebig";
     repo = "CSXCAD";
-    rev = "v${version}";
-    sha256 = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
+    rev = "cd9decb4d9cebe3c8bf115e2c0ee73f730f22da1";
+    sha256 = "1604amhvp7dm8ych7gwzxwawqvb9hpjglk5ffd4qm0y3k6r89arn";
   };
 
   patches = [./searchPath.patch ];
 
   buildInputs = [
-    cgal
+    cgal_5
     boost
     gmp
     mpfr

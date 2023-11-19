@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiolyric";
-  version = "1.1.1";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
+    hash = "sha256-LDLpNuwkoPacI/a2NSlqUABRgwy+jAjGwOxmShLskso=";
   };
 
   propagatedBuildInputs = [

@@ -128,7 +128,13 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "buildbot-worker" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.buildbot-worker;
+        defaultText = literalExpression "pkgs.python3Packages.buildbot-worker";
+        description = lib.mdDoc "Package to use for buildbot worker.";
+        example = literalExpression "pkgs.python2Packages.buildbot-worker";
+      };
 
       packages = mkOption {
         default = with pkgs; [ git ];

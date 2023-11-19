@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "easyprocess";
   version = "1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "EasyProcess";

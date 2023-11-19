@@ -1,28 +1,31 @@
 { lib
-, azure-common
-, azure-mgmt-core
 , buildPythonPackage
 , fetchPypi
-, isodate
-, pythonOlder
+, msrest
+, msrestazure
+, azure-common
+, azure-mgmt-core
+, azure-mgmt-nspkg
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "7.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "7.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-78/m9/Ug7Qq8/oZRfhyM8CpxL3N6PbDbfLRsbWR5ge0=";
+    extension = "zip";
+    hash = "sha256-WxbN5+MNwgRmuRH/vEmlcljH7ylYRyxNz2Ev8aAS8Vw=";
   };
 
   propagatedBuildInputs = [
+    msrest
+    msrestazure
     azure-common
     azure-mgmt-core
-    isodate
+  ] ++ lib.optionals (!isPy3k) [
+    azure-mgmt-nspkg
   ];
 
   # has no tests
@@ -31,7 +34,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This is the Microsoft Azure Web Apps Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-web_${version}/sdk/appservice/azure-mgmt-web/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

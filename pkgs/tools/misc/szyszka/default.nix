@@ -43,6 +43,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/qarmin/szyszka";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];
-    mainProgram = "szyszka";
   };
 }

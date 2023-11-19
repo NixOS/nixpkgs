@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "aiorwlock";
   version = "1.3.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

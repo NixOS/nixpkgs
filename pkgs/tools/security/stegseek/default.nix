@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/RickdeJager/stegseek";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "stegseek";
   };
 }

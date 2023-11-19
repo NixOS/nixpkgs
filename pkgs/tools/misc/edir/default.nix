@@ -24,6 +24,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ guyonvarch ];
     platforms = platforms.all;
-    mainProgram = "edir";
   };
 }

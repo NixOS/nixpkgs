@@ -13,6 +13,5 @@ perlPackages.buildPerlPackage {
     license = licenses.gpl1Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.jensbin ];
-    mainProgram = "graph-easy";
   };
 }

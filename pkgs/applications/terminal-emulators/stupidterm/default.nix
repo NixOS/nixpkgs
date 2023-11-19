@@ -34,6 +34,5 @@ stdenv.mkDerivation {
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.etu ];
     platforms = platforms.linux;
-    mainProgram = "stupidterm";
   };
 }

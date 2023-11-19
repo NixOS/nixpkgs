@@ -15,7 +15,6 @@
 , libgtop
 , libxml2
 , libnotify
-, mate-desktop
 , mate-panel
 , polkit
 , upower
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
     libnotify
     libwnck
     libxml2
-    mate-desktop # for org.mate.lockdown
     mate-panel
     polkit
     upower

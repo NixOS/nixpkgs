@@ -44,6 +44,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
-    mainProgram = "pijul";
   };
 }

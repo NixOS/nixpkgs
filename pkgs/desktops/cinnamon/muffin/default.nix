@@ -6,7 +6,6 @@
 , cinnamon-desktop
 , dbus
 , desktop-file-utils
-, egl-wayland
 , glib
 , gnome
 , gobject-introspection
@@ -20,7 +19,6 @@
 , libinput
 , libstartup_notification
 , libwacom
-, libxcvt
 , libXdamage
 , libxkbcommon
 , libXtst
@@ -31,16 +29,13 @@
 , pkg-config
 , python3
 , udev
-, wayland
-, wayland-protocols
 , wrapGAppsHook
 , xorgserver
-, xwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "6.0.0";
+  version = "5.8.1";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -48,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-17B2C3SW9smTgLBBGJc9LwFpXoP9WidZEGgI2hbJTH8=";
+    hash = "sha256-9YE+pHXJb21CcAflL9swNyhQY3ZCkLlZbnmUwTNdyfA=";
   };
 
   patches = [
@@ -74,7 +69,6 @@ stdenv.mkDerivation rec {
     cairo
     cinnamon-desktop
     dbus
-    egl-wayland
     glib
     gtk3
     libcanberra
@@ -84,14 +78,10 @@ stdenv.mkDerivation rec {
     libinput
     libstartup_notification
     libwacom
-    libxcvt
     libXdamage
     libxkbcommon
     pipewire
     udev
-    wayland
-    wayland-protocols
-    xwayland
   ];
 
   propagatedBuildInputs = [
@@ -99,13 +89,6 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
-  ];
-
-  mesonFlags = [
-    # Based on Mint's debian/rules.
-    "-Degl_device=true"
-    "-Dwayland_eglstream=true"
-    "-Dxwayland_path=${lib.getExe xwayland}"
   ];
 
   postPatch = ''

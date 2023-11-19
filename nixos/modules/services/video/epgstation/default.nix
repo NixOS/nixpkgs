@@ -80,11 +80,11 @@ in
   options.services.epgstation = {
     enable = lib.mkEnableOption (lib.mdDoc description);
 
-    package = lib.mkPackageOption pkgs "epgstation" { };
+    package = lib.mkPackageOptionMD pkgs "epgstation" { };
 
-    ffmpeg = lib.mkPackageOption pkgs "ffmpeg" {
-      default = "ffmpeg-headless";
-      example = "ffmpeg-full";
+    ffmpeg = lib.mkPackageOptionMD pkgs "ffmpeg" {
+      default = [ "ffmpeg-headless" ];
+      example = "pkgs.ffmpeg-full";
     };
 
     usePreconfiguredStreaming = lib.mkOption {

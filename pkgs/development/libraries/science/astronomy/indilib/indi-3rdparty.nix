@@ -20,8 +20,6 @@
 , gpsd
 , ffmpeg
 , limesuite
-, pkg-config
-, zeromq
 , version
 , src
 , withFirmware ? false
@@ -37,12 +35,12 @@ stdenv.mkDerivation rec {
 
   inherit version src;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
     libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
-    limesuite zeromq
+    limesuite
   ] ++ lib.optionals withFirmware [
     firmware
   ];

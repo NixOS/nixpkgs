@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "osc-lib";
   version = "2.8.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openstack";

@@ -1,13 +1,13 @@
 { lib, fetchPypi, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev75";
+  version = "0.5.0b3.dev72";
   pname = "pyload-ng";
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1lPIKkZESonDaVCnac0iUu/gCqXVDBhNZrk5S0eC6F0=";
+    hash = "sha256-pcbJc23Fylh/JoWRmbZmC8xUzUqh2ej6gT+B2w8DHFQ=";
   };
 
   postPatch = ''

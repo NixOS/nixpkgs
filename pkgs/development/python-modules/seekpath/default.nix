@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "seekpath";
   version = "2.0.1";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

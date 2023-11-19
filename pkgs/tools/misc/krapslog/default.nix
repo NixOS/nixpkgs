@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/acj/krapslog-rs";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ yanganto ];
-    mainProgram = "krapslog";
   };
 }

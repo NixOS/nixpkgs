@@ -1,17 +1,5 @@
 { lib }:
 
-let
-  inherit (builtins)
-    intersectAttrs;
-  inherit (lib)
-    functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs
-    optionalAttrs attrNames filter elemAt concatStringsSep sortOn take length
-    filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
-    mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
-    ;
-  inherit (lib.strings) levenshtein levenshteinAtMost;
-
-in
 rec {
 
 
@@ -55,15 +43,15 @@ rec {
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in flip (extendDerivation (seq drv.drvPath true)) newDrv (
+    in lib.flip (extendDerivation (builtins.seq drv.drvPath true)) newDrv (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
       //
       (drv.passthru or {})
       //
-      optionalAttrs (drv ? __spliced) {
-        __spliced = {} // (mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      lib.optionalAttrs (drv ? __spliced) {
+        __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
       });
 
 
@@ -91,30 +79,30 @@ rec {
   makeOverridable = f:
     let
       # Creates a functor with the same arguments as f
-      mirrorArgs = mirrorFunctionArgs f;
+      mirrorArgs = lib.mirrorFunctionArgs f;
     in
     mirrorArgs (origArgs:
     let
       result = f origArgs;
 
       # Changes the original arguments with (potentially a function that returns) a set of new attributes
-      overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
+      overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
       # Re-call the function but with different arguments
       overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
       # Change the result of the function call by applying g to it
       overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
     in
-      if isAttrs result then
+      if builtins.isAttrs result then
         result // {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
             overrideResult (x: x.overrideAttrs fdrv);
         }
-      else if isFunction result then
+      else if lib.isFunction result then
         # Transform the result into a functor while propagating its arguments
-        setFunctionArgs result (functionArgs result) // {
+        lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
       else result);
@@ -152,39 +140,39 @@ rec {
   */
   callPackageWith = autoArgs: fn: args:
     let
-      f = if isFunction fn then fn else import fn;
-      fargs = functionArgs f;
+      f = if lib.isFunction fn then fn else import fn;
+      fargs = lib.functionArgs f;
 
       # All arguments that will be passed to the function
       # This includes automatic ones and ones passed explicitly
-      allArgs = intersectAttrs fargs autoArgs // args;
+      allArgs = builtins.intersectAttrs fargs autoArgs // args;
 
       # a list of argument names that the function requires, but
       # wouldn't be passed to it
-      missingArgs =
+      missingArgs = lib.attrNames
         # Filter out arguments that have a default value
-        (filterAttrs (name: value: ! value)
+        (lib.filterAttrs (name: value: ! value)
         # Filter out arguments that would be passed
-        (removeAttrs fargs (attrNames allArgs)));
+        (removeAttrs fargs (lib.attrNames allArgs)));
 
       # Get a list of suggested argument names for a given missing one
-      getSuggestions = arg: pipe (autoArgs // args) [
-        attrNames
+      getSuggestions = arg: lib.pipe (autoArgs // args) [
+        lib.attrNames
         # Only use ones that are at most 2 edits away. While mork would work,
         # levenshteinAtMost is only fast for 2 or less.
-        (filter (levenshteinAtMost 2 arg))
+        (lib.filter (lib.strings.levenshteinAtMost 2 arg))
         # Put strings with shorter distance first
-        (sortOn (levenshtein arg))
+        (lib.sort (x: y: lib.strings.levenshtein x arg < lib.strings.levenshtein y arg))
         # Only take the first couple results
-        (take 3)
+        (lib.take 3)
         # Quote all entries
         (map (x: "\"" + x + "\""))
       ];
 
       prettySuggestions = suggestions:
         if suggestions == [] then ""
-        else if length suggestions == 1 then ", did you mean ${elemAt suggestions 0}?"
-        else ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
+        else if lib.length suggestions == 1 then ", did you mean ${lib.elemAt suggestions 0}?"
+        else ", did you mean ${lib.concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
 
       errorForArg = arg:
         let
@@ -192,18 +180,16 @@ rec {
           # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
           # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
           loc' = if loc != null then loc.file + ":" + toString loc.line
-            else if ! isFunction fn then
-              toString fn + optionalString (pathIsDirectory fn) "/default.nix"
+            else if ! lib.isFunction fn then
+              toString fn + lib.optionalString (lib.sources.pathIsDirectory fn) "/default.nix"
             else "<unknown location>";
         in "Function called without required argument \"${arg}\" at "
         + "${loc'}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
-      error = errorForArg (head (attrNames missingArgs));
+      error = errorForArg (lib.head missingArgs);
 
-    in if missingArgs == {}
-       then makeOverridable f allArgs
-       else throw "lib.customisation.callPackageWith: ${error}";
+    in if missingArgs == [] then makeOverridable f allArgs else abort error;
 
 
   /* Like callPackage, but for a function that returns an attribute
@@ -215,17 +201,17 @@ rec {
   */
   callPackagesWith = autoArgs: fn: args:
     let
-      f = if isFunction fn then fn else import fn;
-      auto = intersectAttrs (functionArgs f) autoArgs;
+      f = if lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
       mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
     in
-      if isDerivation pkgs then throw
+      if lib.isDerivation pkgs then throw
         ("function `callPackages` was called on a *single* derivation "
           + ''"${pkgs.name or "<unknown-name>"}";''
           + " did you mean to use `callPackage` instead?")
-      else mapAttrs mkAttrOverridable pkgs;
+      else lib.mapAttrs mkAttrOverridable pkgs;
 
 
   /* Add attributes to each output of a derivation without changing
@@ -238,7 +224,7 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs = drv // (listToAttrs outputsList) //
+      commonAttrs = drv // (builtins.listToAttrs outputsList) //
         ({ all = map (x: x.value) outputsList; }) // passthru;
 
       outputToAttrListElement = outputName:
@@ -252,7 +238,7 @@ rec {
             # TODO: give the derivation control over the outputs.
             #       `overrideAttrs` may not be the only attribute that needs
             #       updating when switching outputs.
-            optionalAttrs (passthru?overrideAttrs) {
+            lib.optionalAttrs (passthru?overrideAttrs) {
               # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
               overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
             };
@@ -278,11 +264,11 @@ rec {
 
       commonAttrs =
         { inherit (drv) name system meta; inherit outputs; }
-        // optionalAttrs (drv._hydraAggregate or false) {
+        // lib.optionalAttrs (drv._hydraAggregate or false) {
           _hydraAggregate = true;
-          constituents = map hydraJob (flatten drv.constituents);
+          constituents = map hydraJob (lib.flatten drv.constituents);
         }
-        // (listToAttrs outputsList);
+        // (lib.listToAttrs outputsList);
 
       makeOutput = outputName:
         let output = drv.${outputName}; in
@@ -297,9 +283,9 @@ rec {
 
       outputsList = map makeOutput outputs;
 
-      drv' = (head outputsList).value;
+      drv' = (lib.head outputsList).value;
     in if drv == null then null else
-      deepSeq drv' drv';
+      lib.deepSeq drv' drv';
 
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage` will be evaluated with the same
@@ -318,11 +304,11 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          overrideScope = g: makeScope newScope (extends g f);
+          overrideScope = g: makeScope newScope (lib.fixedPoints.extends g f);
           # Remove after 24.11 is released.
-          overrideScope' = g: warnIf (isInOldestRelease 2311)
+          overrideScope' = g: lib.warnIf (lib.isInOldestRelease 2311)
             "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
-            (makeScope newScope (extends g f));
+            (makeScope newScope (lib.fixedPoints.extends g f));
           packages = f;
         };
     in self;
@@ -398,7 +384,7 @@ rec {
         overrideScope = g: (makeScopeWithSplicing'
           { inherit splicePackages newScope; }
           { inherit otherSplices keep extra;
-            f = extends g f;
+            f = lib.fixedPoints.extends g f;
           });
         packages = f;
       };

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pandoc-attributes";
   version = "0.1.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.linux;
-    mainProgram = "stacer";
   };
 }

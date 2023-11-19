@@ -1,7 +1,6 @@
 { lib
 , fetchzip
 , libXxf86vm
-, libGL
 , makeWrapper
 , openal
 , openjdk
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
-  buildInputs = [ xorg.libXxf86vm openal libGL ];
+  buildInputs = [ xorg.libXxf86vm openal ];
 
   dontBuild = true;
 

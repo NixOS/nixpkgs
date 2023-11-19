@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "dash-table";
   version = "5.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "dash_table";

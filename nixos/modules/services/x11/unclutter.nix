@@ -13,7 +13,12 @@ in {
       default = false;
     };
 
-    package = mkPackageOption pkgs "unclutter" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.unclutter;
+      defaultText = literalExpression "pkgs.unclutter";
+      description = lib.mdDoc "unclutter derivation to use.";
+    };
 
     keystroke = mkOption {
       description = lib.mdDoc "Wait for a keystroke before hiding the cursor";

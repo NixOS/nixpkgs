@@ -32,7 +32,6 @@
 buildPythonPackage rec {
   pname = "androguard";
   version = "3.4.0a1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;

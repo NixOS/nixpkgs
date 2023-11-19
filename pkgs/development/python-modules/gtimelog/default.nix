@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "gtimelog";
   version = "unstable-2020-05-16";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

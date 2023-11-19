@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/whyrusleeping/gx";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
-    mainProgram = "gx";
   };
 }

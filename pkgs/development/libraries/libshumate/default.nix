@@ -12,14 +12,13 @@
 , sqlite
 , libsoup_3
 , gtk4
-, libsysprof-capture
 , xvfb-run
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.1.2";
+  version = "1.0.5";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "g/82LQNwM/dwQ/zKDhAGtZE7JEtQ0jFWcylcP1azvSY=";
+    sha256 = "mHfhCKzLfP1BkqM+FiLUlo/I0TCe3G8C0lmO6007pMY=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
     sqlite
     libsoup_3
     gtk4
-    libsysprof-capture
   ];
 
   nativeCheckInputs = [

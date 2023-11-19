@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.9";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    hash = "sha256-9lMgRdph7rKtwgqavEFmtLLUGrLByltQDNYWuxuS57E=";
+    hash = "sha256-dbPz1BnKY4jR/S7A7afh+Q8yS5lszwWR9IpdLijczBM=";
   };
 
   latex = texliveBasic.withPackages (ps: with ps; [

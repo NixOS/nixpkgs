@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "nidaqmx";
   version = src.rev;
-  format = "setuptools";
 
   # 3.10 is not supported, upstream inactive
   disabled = pythonAtLeast "3.10";

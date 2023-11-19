@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ivar ashley ];
     platforms = platforms.linux;
-    mainProgram = "yafetch";
   };
 }

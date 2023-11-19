@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.bsd3;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
-    mainProgram = "stricat";
   };
 }

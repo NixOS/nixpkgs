@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "eth-account";
   version = "0.9.0";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

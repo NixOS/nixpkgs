@@ -18,6 +18,5 @@ buildGoModule rec {
     description = "Convert ELF/DWARF symbol and type information into vol3's intermediate JSON";
     license = licenses.vol-sl;
     maintainers = with maintainers; [ arkivm ];
-    mainProgram = "dwarf2json";
   };
 }

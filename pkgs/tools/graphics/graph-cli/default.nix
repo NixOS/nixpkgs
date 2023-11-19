@@ -28,6 +28,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/mcastorina/graph-cli/";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ leungbk ];
-    mainProgram = "graph";
   };
 }

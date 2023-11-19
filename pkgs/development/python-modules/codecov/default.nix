@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "codecov";
   version = "2.1.13";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "codecov";

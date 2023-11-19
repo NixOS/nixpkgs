@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ sebtm ];
     platforms = platforms.linux;
-    mainProgram = "tp-auto-kbbl";
   };
 }

@@ -110,7 +110,14 @@ in
         description = lib.mdDoc "Web server directory.";
       };
 
-      package = mkPackageOption pkgs "galene" { };
+      package = mkOption {
+        default = pkgs.galene;
+        defaultText = literalExpression "pkgs.galene";
+        type = types.package;
+        description = lib.mdDoc ''
+          Package for running Galene.
+        '';
+      };
     };
   };
 

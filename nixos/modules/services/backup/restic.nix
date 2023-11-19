@@ -245,7 +245,14 @@ in
           '';
         };
 
-        package = mkPackageOption pkgs "restic" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.restic;
+          defaultText = literalExpression "pkgs.restic";
+          description = lib.mdDoc ''
+            Restic package to use.
+          '';
+        };
 
         createWrapper = lib.mkOption {
           type = lib.types.bool;
@@ -384,11 +391,10 @@ in
       ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
       # set same environment variables as the systemd service
       ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-        (lib.filterAttrs (n: v: v != null && n != "PATH"))
+        (lib.filterAttrs (_: v: v != null))
         (lib.mapAttrsToList (n: v: "${n}=${v}"))
         (lib.concatStringsSep "\n")
       ]}
-      PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
       exec ${resticCmd} $@
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);

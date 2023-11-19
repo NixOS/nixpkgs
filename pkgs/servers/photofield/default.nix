@@ -5,19 +5,17 @@
 , makeWrapper
 , exiftool
 , ffmpeg
-, testers
-, photofield
 }:
 
 let
   pname = "photofield-ui";
-  version = "0.13.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "SmilyOrg";
     repo = "photofield";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6pJvOn3sN6zfjt2dVZ/xH6pSXM0WgbG7au9tSVUGYys=";
+    rev = "v${version}";
+    hash = "sha256-AqOhagqH0wRKjwcRHFVw0izC0DBv9uY3B5MMDBJoFVE=";
   };
 
   webui = buildNpmPackage {
@@ -26,7 +24,7 @@ let
 
     sourceRoot = "${src.name}/ui";
 
-    npmDepsHash = "sha256-trKcNuhRdiabFKMafOLtPg8x1bQHLOif6Hm4k5bTAYc=";
+    npmDepsHash = "sha256-YVyaZsFh5bolDzMd5rXWrbbXQZBeEIV6Fh/kwN+rvPk=";
 
     installPhase = ''
       mkdir -p $out/share
@@ -39,7 +37,7 @@ buildGoModule rec {
   pname = "photofield";
   inherit version src;
 
-  vendorHash = "sha256-4JFP3vs/Z8iSKgcwfxpdnQpO9kTF68XQArFHYP8IoDQ=";
+  vendorHash = "sha256-0rrBHkKZfStwzIv5Us/8Db6z3ZSqassCMWQMpScZq7Y=";
 
   preBuild = ''
     cp -r ${webui}/share/photofield-ui ui/dist
@@ -52,7 +50,7 @@ buildGoModule rec {
     "-X main.builtBy=Nix"
   ];
 
-  tags = [ "embedui" ];
+  tags = [ "embedstatic" ];
 
   doCheck = false; # tries to modify filesytem
 
@@ -63,16 +61,10 @@ buildGoModule rec {
       --prefix PATH : "${lib.makeBinPath [exiftool ffmpeg]}"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = photofield;
-    command = "photofield -version";
-  };
-
   meta = with lib; {
     description = "Experimental fast photo viewer";
     homepage = "https://github.com/SmilyOrg/photofield";
     license = licenses.mit;
-    mainProgram = "photofield";
     maintainers = with maintainers; [ dit7ya ];
   };
 }

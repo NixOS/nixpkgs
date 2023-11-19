@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   version = "3.1.0";
-  format = "setuptools";
   pname = "intervaltree";
 
   src = fetchPypi {

@@ -28,6 +28,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/josegonzalez/python-github-backup/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
-    mainProgram = "github-backup";
   };
 }

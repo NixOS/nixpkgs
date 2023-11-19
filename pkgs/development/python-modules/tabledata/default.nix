@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "tabledata";
   version = "1.3.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thombashi";

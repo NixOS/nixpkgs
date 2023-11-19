@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     };
     maintainers = with maintainers; [ eyjhb ];
     platforms = platforms.unix;
-    mainProgram = "sl";
   };
 }

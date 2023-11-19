@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";
-  version = "1.5.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
     rev = version;
-    sha256 = "sha256-BYMdGNDl8HUin1Hu4Fqgx305a/tTt1fztqlT2vDeTh8=";
+    sha256 = "sha256-lZLjTmSKxGJhUMELcIPjycpuRR3m9oz/Vh1/FEUzMOQ=";
   };
 
   buildInputs = [ ncurses ];
@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tenox7/ttyplot";
     license = licenses.unlicense;
     maintainers = with maintainers; [ lassulus ];
-    mainProgram = "ttyplot";
   };
 }

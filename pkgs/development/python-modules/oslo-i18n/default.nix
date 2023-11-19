@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "oslo-i18n";
   version = "6.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.i18n";

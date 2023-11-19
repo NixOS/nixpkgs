@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "pylutron";
   version = "0.2.10";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

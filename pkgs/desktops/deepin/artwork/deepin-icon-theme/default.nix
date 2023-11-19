@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-icon-theme";
-  version = "2023.11.28";
+  version = "2023.04.03";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-kCWJAmJa0VmhnuegE+acj82Ojl4Z5D8g7/q2PzppJwg=";
+    hash = "sha256-YRmpJr3tvBxomgb7yJPTqE3u4tXQKE5HHOP0CpjbQEg=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  preFixup = ''
+  postFixup = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done

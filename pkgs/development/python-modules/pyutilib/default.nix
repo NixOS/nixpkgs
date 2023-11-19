@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyutilib";
   version = "6.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyUtilib";

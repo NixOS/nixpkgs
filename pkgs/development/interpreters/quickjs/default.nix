@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quickjs";
-  version = "2021-12-09";
+  version = "2021-03-27";
 
   src = fetchFromGitHub {
     owner = "bellard";
     repo = pname;
-    rev = "daa35bc1e5d43192098af9b51caeb4f18f73f9f9";
-    hash = "sha256-BhAsa8tumCQ4jK/TbRbptj2iOIUFFjU1MQYdIrDMpko=";
+    rev = "b5e62895c619d4ffc75c9d822c8d85f1ece77e5b";
+    hash = "sha256-VMaxVVQuJ3DAwYrC14uJqlRBg0//ugYvtyhOXsTUbCA=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''

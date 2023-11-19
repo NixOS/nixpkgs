@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pylzma";
   version = "0.5.0";
-  format = "setuptools";
 
   # This vendors an old LZMA SDK
   # After some discussion, it seemed most reasonable to keep it that way

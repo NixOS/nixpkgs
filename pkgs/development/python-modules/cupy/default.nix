@@ -11,37 +11,13 @@
 , cudaPackages
 , addOpenGLRunpath
 , pythonOlder
-, symlinkJoin
 }:
 
 let
-  inherit (cudaPackages) cudnn cutensor nccl;
-  cudatoolkit-joined = symlinkJoin {
-    name = "cudatoolkit-joined-${cudaPackages.cudaVersion}";
-    paths = with cudaPackages; [
-      cuda_cccl # <nv/target>
-      cuda_cccl.dev
-      cuda_cudart
-      cuda_nvcc.dev # <crt/host_defines.h>
-      cuda_nvprof
-      cuda_nvrtc
-      cuda_nvtx
-      cuda_profiler_api
-      libcublas
-      libcufft
-      libcurand
-      libcusolver
-      libcusparse
-
-      # Missing:
-      # cusparselt
-    ];
-  };
-in
-buildPythonPackage rec {
+  inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
+in buildPythonPackage rec {
   pname = "cupy";
   version = "12.2.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -56,32 +32,27 @@ buildPythonPackage rec {
   # very short builds and a few extremely long ones, so setting both ends up
   # working nicely in practice.
   preConfigure = ''
+    export CUDA_PATH=${cudatoolkit}
     export CUPY_NUM_BUILD_JOBS="$NIX_BUILD_CORES"
     export CUPY_NUM_NVCC_THREADS="$NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
-    setuptools
-    wheel
     addOpenGLRunpath
     cython
-    cudaPackages.cuda_nvcc
   ];
 
-  buildInputs = [
-    cudatoolkit-joined
+  LDFLAGS = "-L${cudatoolkit}/lib/stubs";
+
+  propagatedBuildInputs = [
+    cudatoolkit
     cudnn
     cutensor
     nccl
-  ];
-
-  NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
-  CUDA_PATH = "${cudatoolkit-joined}";
-  LDFLAGS = "-L${cudaPackages.cuda_cudart}/lib/stubs";
-
-  propagatedBuildInputs = [
     fastrlock
     numpy
+    setuptools
+    wheel
   ];
 
   nativeCheckInputs = [

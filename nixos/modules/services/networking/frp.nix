@@ -14,7 +14,7 @@ in
     services.frp = {
       enable = mkEnableOption (mdDoc "frp");
 
-      package = mkPackageOption pkgs "frp" { };
+      package = mkPackageOptionMD pkgs "frp" { };
 
       role = mkOption {
         type = types.enum [ "server" "client" ];

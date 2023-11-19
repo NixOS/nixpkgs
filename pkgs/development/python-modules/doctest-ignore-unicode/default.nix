@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "doctest-ignore-unicode";
   version = "0.1.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

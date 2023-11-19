@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "junitparser";
   version = "2.8.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "weiwei";

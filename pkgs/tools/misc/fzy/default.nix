@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
-    mainProgram = "fzy";
   };
 }

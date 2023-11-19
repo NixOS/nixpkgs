@@ -38,6 +38,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mlvzk ];
-    mainProgram = "discocss";
   };
 }

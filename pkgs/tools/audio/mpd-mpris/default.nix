@@ -39,6 +39,5 @@ buildGoModule rec {
     homepage = "https://github.com/natsukagami/mpd-mpris";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
-    mainProgram = "mpd-mpris";
   };
 }

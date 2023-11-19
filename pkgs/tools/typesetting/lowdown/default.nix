@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "1.1.0";
+  version = "1.0.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    hash = "sha512-EpAWTz7Zy+2qqJGgzLrt0tK7WEZ+hHbdyqzAmMiaqc6uNXscR88git6/UbTjvB9Yanvetvw9huSuyhcORCEIug==";
+    hash = "sha512-tahhm2QsaC9xP6V9qWEf6HkXiyWjRo3pzEKi9tyBLvonQKUMgV+pmWkvtubUUnxYVrhTm0Xsne1lemKj9ecfWQ==";
   };
 
   nativeBuildInputs = [ which dieHook ]
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      soVersion = "1";
+      soVersion = "3";
     in
 
     # Check that soVersion is up to date even if we are not on darwin

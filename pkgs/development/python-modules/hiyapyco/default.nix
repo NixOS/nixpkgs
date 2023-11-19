@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "hiyapyco";
   version = "0.5.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zerwes";

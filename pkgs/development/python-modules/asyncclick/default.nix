@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "asyncclick";
   version = "8.1.3.2";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

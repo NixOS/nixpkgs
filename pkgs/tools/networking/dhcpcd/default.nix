@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
   '';
 
+  preConfigure = "patchShebangs ./configure";
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"

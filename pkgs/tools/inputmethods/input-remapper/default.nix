@@ -33,21 +33,21 @@
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-(buildPythonApplication rec {
+(buildPythonApplication {
   pname = "input-remapper";
-  version = "2.0.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
+    rev = "e31a1b2bc5d23fe13130afcc242063196335399f";
     owner = "sezanzeb";
     repo = "input-remapper";
-    rev = version;
-    hash = "sha256-rwlVGF/cWSv6Bsvhrs6nMDQ8avYT80aasrhWyQv55/A=";
+    hash = "sha256-KPQLgXSonuOgphagYN2JN+CMIpmjTIPUTCqOPDk0UYU=";
   };
 
   postPatch = ''
     # fix FHS paths
     substituteInPlace inputremapper/configs/data.py \
-      --replace "/usr/share"  "$out/usr/share"
+      --replace "/usr/share/input-remapper"  "$out/usr/share/input-remapper"
   '' + lib.optionalString withDebugLogLevel ''
     # if debugging
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"

@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "ircrobots";
   version = "0.6.6";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

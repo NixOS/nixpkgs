@@ -62,6 +62,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    mainProgram = "swaglyrics";
   };
 }

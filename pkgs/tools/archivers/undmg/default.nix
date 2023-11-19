@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ matthewbauer lnl7 ];
-    mainProgram = "undmg";
   };
 }

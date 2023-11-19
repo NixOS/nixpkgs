@@ -49,7 +49,6 @@
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
   version = "4.9.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tensorflow";

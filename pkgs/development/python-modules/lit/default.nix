@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "lit";
   version = "17.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

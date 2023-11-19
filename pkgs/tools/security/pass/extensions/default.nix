@@ -12,5 +12,4 @@ with pkgs;
   pass-tomb = callPackage ./tomb.nix {};
   pass-update = callPackage ./update.nix {};
   pass-genphrase = callPackage ./genphrase.nix {};
-  pass-file = callPackage ./file.nix {};
 }

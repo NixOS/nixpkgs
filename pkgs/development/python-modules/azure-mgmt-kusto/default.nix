@@ -1,42 +1,36 @@
-{ lib
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , azure-common
 , azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
+, msrest
+, msrestazure
 }:
 
 buildPythonPackage rec {
+  version = "3.2.0";
   pname = "azure-mgmt-kusto";
-  version = "3.3.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PmGGtyVrYFCMnpiCq9x9uwoMboDO1ePlGAJzrMTj3ps=";
+    hash = "sha256-zgkFMrufHoX3gq9QXo8SlJYZOfV5GlY3pVQXmIWyx7c=";
+    extension = "zip";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    isodate
+    msrest
+    msrestazure
   ];
 
   # no tests included
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.common"
-    "azure.mgmt.kusto"
-  ];
+  pythonImportsCheck = [ "azure.common" "azure.mgmt.kusto" ];
 
   meta = with lib; {
     description = "Microsoft Azure Kusto Management Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-kusto_${version}/sdk/kusto/azure-mgmt-kusto/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

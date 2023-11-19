@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "imantics";
   version = "0.1.12";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jsbroks";

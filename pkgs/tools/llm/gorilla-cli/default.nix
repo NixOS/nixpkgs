@@ -34,6 +34,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/gorilla-llm/gorilla-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
-    mainProgram = "gorilla";
   };
 }

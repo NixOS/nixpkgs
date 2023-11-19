@@ -1,28 +1,26 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, nix-update-script
 , testers
 , symfony-cli
 }:
 
 buildGoModule rec {
   pname = "symfony-cli";
-  version = "5.7.6";
-  vendorHash = "sha256-GuLcevYEM+neWAJoNBZrAVzVxdaLFFi9nubXGzp4EXw=";
+  version = "5.7.3";
+  vendorHash = "sha256-xC5EHP4Zb9lgvbxVkoVBxdQ4+f34zqRf4XapntZMTTc=";
 
   src = fetchFromGitHub {
     owner = "symfony-cli";
     repo = "symfony-cli";
     rev = "v${version}";
-    hash = "sha256-HMyq4raB6pPtx4DEJlcSM2+jlw7KWJW72RRVdG2wvn0=";
+    hash = "sha256-mxyGdyR1yZY+YOyf9ngk6P2oBmUL+IbwLWaCvZziSIM=";
   };
 
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
-    "-X main.channel=stable"
   ];
 
   postInstall = ''
@@ -32,13 +30,10 @@ buildGoModule rec {
   # Tests requires network access
   doCheck = false;
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      inherit version;
-      package = symfony-cli;
-      command = "symfony version --no-ansi";
-    };
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = symfony-cli;
+    command = "symfony version --no-ansi";
   };
 
   meta = {

@@ -73,6 +73,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk raitobezarius dit7ya ];
-    mainProgram = "authelia";
   };
 }

@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-rdbms";
   version = "10.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

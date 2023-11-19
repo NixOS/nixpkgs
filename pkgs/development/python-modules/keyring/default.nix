@@ -3,9 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, installShellFiles
 , setuptools-scm
-, shtab
 , importlib-metadata
 , dbus-python
 , jaraco-classes
@@ -16,19 +14,17 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "24.3.0";
-  pyproject = true;
+  version = "24.2.0";
+  format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5zDs/9MJZYoI7oJTWjtexLTIZpqb4R77ZiSdjgrrmiU=";
+    hash = "sha256-ygdGoZ7EISGfTXE/hI+il6ZhqKjBUEhn5Vv7XgkJFQk=";
   };
 
   nativeBuildInputs = [
-    installShellFiles
     setuptools-scm
-    shtab
   ];
 
   propagatedBuildInputs = [
@@ -39,12 +35,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.12") [
     importlib-metadata
   ];
-
-  postInstall = ''
-    installShellCompletion --cmd keyring \
-      --bash <($out/bin/keyring --print-completion bash) \
-      --zsh <($out/bin/keyring --print-completion zsh)
-  '';
 
   pythonImportsCheck = [
     "keyring"
@@ -66,7 +56,6 @@ buildPythonPackage rec {
     homepage    = "https://github.com/jaraco/keyring";
     changelog   = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
     license     = licenses.mit;
-    mainProgram = "keyring";
     maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;
   };

@@ -136,6 +136,5 @@ stdenv.mkDerivation rec {
     platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);
     license = with licenses; [ lgpl21 bsdOriginal ];
     maintainers = with maintainers; [ rehno-lindeque  ];
-    mainProgram = "hw-probe";
   };
 }

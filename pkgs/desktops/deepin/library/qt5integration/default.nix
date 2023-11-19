@@ -2,11 +2,13 @@
 , lib
 , fetchFromGitHub
 , dtkwidget
-, cmake
-, pkg-config
+, qmake
 , qtbase
 , qtsvg
+, pkg-config
+, wrapQtAppsHook
 , qtx11extras
+, qt5platform-plugins
 , lxqt
 , mtdev
 , xorg
@@ -15,36 +17,37 @@
 
 stdenv.mkDerivation rec {
   pname = "qt5integration";
-  version = "5.6.17";
+  version = "5.6.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-8ag/cFkjp5u/0/71xKR6z6dXp2NGRIYNNbzzEmgsDmc=";
+    sha256 = "sha256-7b18ydyy/TIEGDkFAoium1LSx3Qs4I4pYpMfehOBZbY=";
   };
 
   nativeBuildInputs = [
-    cmake
+    qmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
-    qtbase
-    qtsvg
     qtx11extras
+    qt5platform-plugins
     mtdev
     lxqt.libqtxdg
     xorg.xcbutilrenderutil
     gtest
   ];
 
-  cmakeFlags = [
-    "-DPLUGIN_INSTALL_BASE_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-  ];
-
-  dontWrapQtApps = true;
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/${qtbase.qtPluginPrefix}
+    cp -r bin/plugins/* $out/${qtbase.qtPluginPrefix}/
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Qt platform theme integration plugins for DDE";

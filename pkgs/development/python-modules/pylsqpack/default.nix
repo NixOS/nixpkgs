@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pylsqpack";
   version = "0.3.17";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -33,7 +33,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs "pufferpanel" { };
+    package = lib.mkPackageOptionMD pkgs "pufferpanel" { };
 
     extraGroups = lib.mkOption {
       type = lib.types.listOf lib.types.str;

@@ -63,8 +63,12 @@ with pkgs;
 
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
+          ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+            # libcxx does not build for some reason on aarch64-linux
+            (filterAttrs (n: _: n != "llvmPackages_7"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             (filterAttrs (n: _: n != "llvmPackages_6"))
+            (filterAttrs (n: _: n != "llvmPackages_7"))
             (filterAttrs (n: _: n != "llvmPackages_8"))
             (filterAttrs (n: _: n != "llvmPackages_9"))
             (filterAttrs (n: _: n != "llvmPackages_10"))
@@ -113,19 +117,17 @@ with pkgs;
 
   install-shell-files = callPackage ./install-shell-files {};
 
-  checkpoint-build = callPackage ./checkpointBuild {};
-
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
-  cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
+  cross = callPackage ./cross {};
 
   php = recurseIntoAttrs (callPackages ./php {});
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // { __recurseIntoDerivationForReleaseJobs = true; };
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };

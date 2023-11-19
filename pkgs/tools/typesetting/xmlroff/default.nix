@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     homepage = "http://xmlroff.org/";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    mainProgram = "xmlroff";
   };
 }

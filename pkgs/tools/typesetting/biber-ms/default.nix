@@ -50,6 +50,5 @@ perlPackages.buildPerlModule {
     license = biberSource.meta.license;
     platforms = platforms.unix;
     maintainers = [ maintainers.xworld21 ];
-    mainProgram = "biber-ms";
   };
 }

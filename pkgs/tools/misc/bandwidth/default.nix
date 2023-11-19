@@ -53,6 +53,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.x86 ++ platforms.arm ++ platforms.aarch64;
     maintainers = with maintainers; [ r-burns ];
-    mainProgram = "bandwidth";
   };
 }

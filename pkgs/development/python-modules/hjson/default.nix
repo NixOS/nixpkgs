@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "hjson";
   version = "3.0.2";
-  format = "setuptools";
 
   # N.B. pypi src tarball does not have tests
   src = fetchFromGitHub {

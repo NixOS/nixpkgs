@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.linux;
-    mainProgram = "zps";
   };
 }

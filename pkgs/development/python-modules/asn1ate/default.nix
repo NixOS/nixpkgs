@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "asn1ate";
-  format = "setuptools";
   version= "0.6";
 
   src = fetchFromGitHub {

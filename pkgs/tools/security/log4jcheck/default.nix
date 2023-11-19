@@ -30,6 +30,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/NorthwaveSecurity/log4jcheck";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "log4jcheck";
   };
 }

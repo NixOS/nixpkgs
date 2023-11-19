@@ -22,6 +22,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/git-big-picture/git-big-picture";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.nthorne ];
-    mainProgram = "git-big-picture";
   };
 }

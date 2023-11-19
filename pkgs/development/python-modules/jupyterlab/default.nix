@@ -15,18 +15,19 @@
 , jinja2
 , tomli
 , pythonOlder
+, jupyter-packaging
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.0.9";
-  pyproject = true;
+  version = "4.0.6";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nrraQdUmUfYjwMnwad24oh1oSOTIh9jl3cBhMWbtXAs=";
+    hash = "sha256-bEOuWmof0v36/LNFQASVi95tp2Mxq7RM/8b55Daxm6E=";
   };
 
   nativeBuildInputs = [

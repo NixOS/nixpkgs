@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pycomposefile";
   version = "0.0.30";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

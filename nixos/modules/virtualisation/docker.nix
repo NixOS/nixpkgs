@@ -150,7 +150,14 @@ in
       };
     };
 
-    package = mkPackageOption pkgs "docker" { };
+    package = mkOption {
+      default = pkgs.docker;
+      defaultText = literalExpression "pkgs.docker";
+      type = types.package;
+      description = lib.mdDoc ''
+        Docker package to be used in the module.
+      '';
+    };
 
     extraPackages = mkOption {
       type = types.listOf types.package;

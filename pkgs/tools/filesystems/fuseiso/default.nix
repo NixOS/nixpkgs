@@ -51,6 +51,5 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/fuseiso";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    mainProgram = "fuseiso";
   };
 }

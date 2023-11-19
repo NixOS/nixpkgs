@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , aiocoap
-, aiohappyeyeballs
 , async-interrupt
 , bleak
 , bleak-retry-connector
@@ -20,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.1.0";
-  pyproject = true;
+  version = "3.0.9";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
-    repo = "aiohomekit";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yaPliPKa/mS9amUkEx/iM398HGoiKrR6miCtK7fThNw=";
+    hash = "sha256-YaLSpWSaiEP7X+IujrQgXgWl3aPc1WDMq2yaMUTu328=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiocoap
-    aiohappyeyeballs
     async-interrupt
     bleak
     bleak-retry-connector
@@ -60,17 +58,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/test_ip_pairing.py"
-  ];
-
-  disabledTests = [
-    # AttributeError: 'MockedAsyncServiceInfo' object has no attribute '_set_properties'
-    "test_discover_find_one_unpaired"
-    "test_find_device_id_case_lower"
-    "test_find_device_id_case_upper"
-    "test_discover_missing_csharp"
-    "test_discover_csharp_case"
-    "test_discover_device_id_case_lower"
-    "test_discover_device_id_case_upper"
   ];
 
   pythonImportsCheck = [

@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "mixins";
   version = "0.1.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

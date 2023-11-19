@@ -2,24 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mailchecker";
-  version = "6.0.1";
-  pyproject = true;
+  version = "5.0.9";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PXo6dfiAqC1WD/z5NBI6UZVUl/cwlvoqKDyfZI4fn2s=";
+    hash = "sha256-iwg5B9pC2qRI2T6xnwyXjd4uhWVhel52Jxs1pfcoXM0=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   # Module has no tests
   doCheck = false;

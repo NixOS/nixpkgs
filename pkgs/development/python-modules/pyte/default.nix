@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.8.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "selectel";

@@ -13,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "aiowaqi";
-  version = "3.0.1";
-  pyproject = true;
+  version = "3.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.11";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-waqi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+4l820FGQI66GGr+KGEeDmPUFwRrMNvYFJuSouesakY=";
+    hash = "sha256-FHpZVY7TFjk+2YNBejEwSdYWK41V9bti1JxpWivemw4=";
   };
 
   postPatch = ''
@@ -48,15 +48,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "aiowaqi"
-  ];
-
-  disabledTests = [
-    # Upstream mocking fails
-    "test_search"
-  ];
-
-  pytestFlagsArray = [
-    "--snapshot-update"
   ];
 
   meta = with lib; {

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "tracing";
   version = "0.8";
-  format = "setuptools";
 
   src = fetchurl {
     url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";

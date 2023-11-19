@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "sphinx-issues";
   version = "3.0.1";
-  format = "setuptools";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {

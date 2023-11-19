@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/slok/grafterm";
     license = licenses.asl20;
     maintainers = with maintainers; [ arikgrahl ];
-    mainProgram = "grafterm";
   };
 }

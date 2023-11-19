@@ -22,7 +22,14 @@ in
 
       enable = mkEnableOption (lib.mdDoc "the Miredo IPv6 tunneling service");
 
-      package = mkPackageOption pkgs "miredo" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.miredo;
+        defaultText = literalExpression "pkgs.miredo";
+        description = lib.mdDoc ''
+          The package to use for the miredo daemon's binary.
+        '';
+      };
 
       serverAddress = mkOption {
         default = "teredo.remlab.net";

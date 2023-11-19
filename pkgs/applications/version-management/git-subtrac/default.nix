@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/apenwarr/git-subtrac";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "git-subtrac";
   };
 }

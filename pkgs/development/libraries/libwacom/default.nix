@@ -41,10 +41,7 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform
-            && lib.meta.availableOn stdenv.hostPlatform valgrind
-            && !stdenv.hostPlatform.isPower  # one test times out
-  ;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform valgrind;
 
   mesonFlags = [
     "-Dtests=${if doCheck then "enabled" else "disabled"}"

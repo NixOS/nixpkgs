@@ -64,6 +64,5 @@ mkDerivation rec {
     homepage = "https://www.kde.org/applications/office/kile/";
     maintainers = with lib.maintainers; [ fridh ];
     license = lib.licenses.gpl2Plus;
-    mainProgram = "kile";
   };
 }

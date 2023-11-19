@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "pygraphviz";
   version = "1.11";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

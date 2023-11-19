@@ -33,7 +33,12 @@ in
 
       enable = mkEnableOption (lib.mdDoc "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin");
 
-      package = mkPackageOption pkgs "cgminer" { };
+      package = mkOption {
+        default = pkgs.cgminer;
+        defaultText = literalExpression "pkgs.cgminer";
+        description = lib.mdDoc "Which cgminer derivation to use.";
+        type = types.package;
+      };
 
       user = mkOption {
         type = types.str;

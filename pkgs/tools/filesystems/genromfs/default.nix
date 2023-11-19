@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
-    mainProgram = "genromfs";
   };
 }

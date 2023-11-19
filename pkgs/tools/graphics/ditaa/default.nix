@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
-    mainProgram = "ditaa";
   };
 }

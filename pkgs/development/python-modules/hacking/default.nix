@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "hacking";
   version = "6.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

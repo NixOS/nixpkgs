@@ -12,7 +12,7 @@ let
     DEBUG_TOOLBAR = "0";
     MEDIA_ROOT = "/var/lib/tandoor-recipes";
   } // optionalAttrs (config.time.timeZone != null) {
-    TZ = config.time.timeZone;
+    TIMEZONE = config.time.timeZone;
   } // (
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
@@ -71,7 +71,12 @@ in
       };
     };
 
-    package = mkPackageOption pkgs "tandoor-recipes" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.tandoor-recipes;
+      defaultText = literalExpression "pkgs.tandoor-recipes";
+      description = lib.mdDoc "The Tandoor Recipes package to use.";
+    };
   };
 
   config = mkIf cfg.enable {

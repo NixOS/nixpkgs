@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "showit";
   version = "1.1.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "freeman-lab";

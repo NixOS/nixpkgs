@@ -70,6 +70,5 @@ buildPythonApplication rec {
     changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
-    mainProgram = "parquet-tools";
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, substituteAll
 }:
 
 buildGoModule rec {
@@ -14,14 +13,6 @@ buildGoModule rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-cewQ03dK/k3mXevE09M01Yox/3ZWP6IrG0H4QsZMzy8=";
   };
-
-  patches = [
-    # patch in version information
-    (substituteAll {
-      src = ./version.patch;
-      inherit version;
-    })
-  ];
 
   vendorHash = "sha256-r9XshbgVA5rppJF46SFYPad344ZHMLWTHTnL6vbIFH8=";
 

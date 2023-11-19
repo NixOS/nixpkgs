@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pgsanity";
   version = "0.2.9";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

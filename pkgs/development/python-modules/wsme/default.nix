@@ -23,7 +23,6 @@
 buildPythonPackage rec {
   pname = "wsme";
   version = "0.11.0";
-  format = "setuptools";
 
   disabled = pythonAtLeast "3.9";
 

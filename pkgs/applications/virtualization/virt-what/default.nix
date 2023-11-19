@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    mainProgram = "virt-what";
   };
 }

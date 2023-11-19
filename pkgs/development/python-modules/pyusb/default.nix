@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyusb";
   version = "1.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

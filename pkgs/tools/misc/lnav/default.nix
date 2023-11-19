@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
-    mainProgram = "lnav";
   };
 
 }

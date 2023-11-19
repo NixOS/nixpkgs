@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "google-crc32c";
   version = "1.5.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "googleapis";

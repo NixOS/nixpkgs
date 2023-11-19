@@ -67,6 +67,5 @@ stdenv.mkDerivation rec {
        * faster syncing with Disk's server;
        * no need to be constantly connected to work with files.
     '';
-    mainProgram = "yandex-disk";
   };
 }

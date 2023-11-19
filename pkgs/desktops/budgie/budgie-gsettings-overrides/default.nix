@@ -4,7 +4,7 @@
 , budgie-desktop-view
 , glib
 , gsettings-desktop-schemas
-, gnome
+, magpie
 , mate
 , nixos-artwork
 , nixos-background-light ? nixos-artwork.wallpapers.nineish
@@ -63,7 +63,7 @@ let
       budgie-desktop
       budgie-desktop-view
       gsettings-desktop-schemas
-      gnome.mutter
+      magpie
   ] ++ extraGSettingsOverridePackages;
 
 in

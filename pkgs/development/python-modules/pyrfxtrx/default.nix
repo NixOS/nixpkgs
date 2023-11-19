@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyrfxtrx";
   version = "0.30.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";

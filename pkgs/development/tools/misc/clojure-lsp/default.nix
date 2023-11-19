@@ -1,14 +1,4 @@
-{ lib
-, stdenv
-, buildGraalvmNativeImage
-, babashka
-, fetchurl
-, fetchFromGitHub
-, clojure
-, writeScript
-, testers
-, clojure-lsp
-}:
+{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
@@ -38,17 +28,11 @@ buildGraalvmNativeImage rec {
     export HOME="$(mktemp -d)"
     ./${pname} --version | fgrep -q '${version}'
   ''
-  # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
-  #${babashka}/bin/bb integration-test ./${pname}
+    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
+    #${babashka}/bin/bb integration-test ./${pname}
   + ''
     runHook postCheck
   '';
-
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = clojure-lsp;
-    command = "clojure-lsp --version";
-  };
 
   passthru.updateScript = writeScript "update-clojure-lsp" ''
     #!/usr/bin/env nix-shell

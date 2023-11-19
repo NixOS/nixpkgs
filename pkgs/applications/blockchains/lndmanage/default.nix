@@ -40,6 +40,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/bitromortac/lndmanage";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata ];
-    mainProgram = "lndmanage";
   };
 }

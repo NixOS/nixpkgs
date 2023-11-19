@@ -18,12 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
-  version = "2.1.8";
+  version = "2.1.7";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "sha256-r/LF9mYwKPwkIidMAb4k4B6Q2UYjW0TucKI5LJ2gjl0=";
+    sha256 = "sha256-XMb4+YPH1xgbiRC4vmooxALmjX2QURLWOGOwepdWI7o=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -32,7 +32,14 @@ in
                 If specified, the port should be included.
               '';
             };
-            package = mkPackageOption pkgs "tahoelafs" { };
+            package = mkOption {
+              default = pkgs.tahoelafs;
+              defaultText = literalExpression "pkgs.tahoelafs";
+              type = types.package;
+              description = lib.mdDoc ''
+                The package to use for the Tahoe LAFS daemon.
+              '';
+            };
           };
         });
         description = lib.mdDoc ''
@@ -169,7 +176,14 @@ in
                 URL of the accounts server.
               '';
             };
-            package = mkPackageOption pkgs "tahoelafs" { };
+            package = mkOption {
+              default = pkgs.tahoelafs;
+              defaultText = literalExpression "pkgs.tahoelafs";
+              type = types.package;
+              description = lib.mdDoc ''
+                The package to use for the Tahoe LAFS daemon.
+              '';
+            };
           };
         });
         description = lib.mdDoc ''

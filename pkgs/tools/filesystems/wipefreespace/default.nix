@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ catap ];
-    mainProgram = "wipefreespace";
   };
 }

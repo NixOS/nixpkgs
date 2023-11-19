@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = [ maintainers.nyanloutre ];
     platforms = platforms.linux;
-    mainProgram = "jftui";
   };
 }

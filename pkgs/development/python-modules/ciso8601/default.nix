@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "ciso8601";
-  version = "2.3.1";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "closeio";
     repo = "ciso8601";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KkMa1Rr3Z+5VnZfj25LDYpTfRyKqWA9u0vq6dZpwEy0=";
+    hash = "sha256-qTpt91Wf3L6Jl7FU8sn9PvGMRd/cjhQ1mQvUaQeLFQU=";
   };
 
   nativeBuildInputs = [

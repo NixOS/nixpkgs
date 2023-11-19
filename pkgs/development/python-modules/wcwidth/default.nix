@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "wcwidth";
   version = "0.2.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

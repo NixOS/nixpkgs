@@ -7,15 +7,23 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      validators = super.validators.overridePythonAttrs (_: rec {
-        version = "0.20.0";
+      django = super.django_4;
+
+      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
+        version = "1.14.0";
+        format = "setuptools";
+
         src = fetchFromGitHub {
-          owner = "python-validators";
-          repo = "validators";
-          rev = version;
-          hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
+          owner = "django-crispy-forms";
+          repo = "django-crispy-forms";
+          rev = "refs/tags/${version}";
+          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
         };
-        propagatedBuildInputs = [ super.decorator super.six ];
+      });
+
+      # Tests are incompatible with Django 4
+      django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
+        doCheck = false;
       });
     };
   };
@@ -36,8 +44,8 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     ./media-root.patch
     # https://github.com/TandoorRecipes/recipes/pull/2706
     (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/702c1d67d3b2d13cf471bf9daa1d2ef0f1837dec.patch";
-      hash = "sha256-6vmtYs6b0d38Ojxxc2I7oxqpkIlyRVlhzURBOTO2VlQ=";
+      url = "https://github.com/TandoorRecipes/recipes/commit/8f66f5c3ca61751a80cc133ff4c59019d6fca406.patch";
+      hash = "sha256-oF5YlPg1LEdLvKpxiSqjTmYPbrGquPlRIz6A05031gs=";
     })
   ];
 
@@ -55,7 +63,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-cleanup
     django-cors-headers
     django-crispy-forms
-    django-crispy-bootstrap4
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
@@ -136,11 +143,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     pytestCheckHook
     pytest-django
     pytest-factoryboy
-  ];
-
-  # flaky
-  disabledTests = [
-    "test_search_count"
   ];
 
   passthru = {

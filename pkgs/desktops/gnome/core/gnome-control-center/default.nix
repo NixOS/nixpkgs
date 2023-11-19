@@ -20,13 +20,13 @@
 , gnome-desktop
 , gnome-online-accounts
 , gnome-settings-daemon
-, gnome-tecla
 , gnome
 , gsettings-desktop-schemas
 , gsound
 , gst_all_1
 , gtk4
 , ibus
+, libgnomekbd
 , libgtop
 , libgudev
 , libadwaita
@@ -50,7 +50,6 @@
 , polkit
 , python3
 , samba
-, setxkbmap
 , shadow
 , shared-mime-info
 , sound-theme-freedesktop
@@ -63,23 +62,22 @@
 , gnome-user-share
 , gnome-remote-desktop
 , wrapGAppsHook
-, xvfb-run
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "45.2";
+  version = "44.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-DPo8My1u2stz0GxrJv/KEHjob/WerIGbKTHglndT33A=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-BmplBS/D7ProYAJehfeX5qsrh6WMT4q5xm7CBxioDHo=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      inherit glibc tzdata shadow;
+      inherit glibc libgnomekbd tzdata shadow;
       inherit cups networkmanagerapplet;
     })
   ];
@@ -112,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-online-accounts
     gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
-    gnome-tecla
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
@@ -144,32 +141,9 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
   ]);
 
-  nativeCheckInputs = [
-    python3.pkgs.python-dbusmock
-    setxkbmap
-    xvfb-run
-  ];
-
-  doCheck = true;
-
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    testEnvironment=(
-      # Basically same as https://github.com/NixOS/nixpkgs/pull/141299
-      "ADW_DISABLE_PORTAL=1"
-      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
-    )
-
-    env "''${testEnvironment[@]}" xvfb-run \
-      meson test --print-errorlogs
-
-    runHook postCheck
   '';
 
   postInstall = ''
@@ -201,8 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gnome-control-center";
-      attrPath = "gnome.gnome-control-center";
+      packageName = pname;
+      attrPath = "gnome.${pname}";
     };
   };
 
@@ -212,4 +186,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-})
+}

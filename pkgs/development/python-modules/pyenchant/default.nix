@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyenchant";
   version = "3.2.2";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

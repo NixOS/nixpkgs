@@ -46,7 +46,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: rec {
   pname = "isabelle";
-  version = "2023";
+  version = "2022";
 
   dirname = "Isabelle${version}";
 
@@ -56,18 +56,18 @@ in stdenv.mkDerivation (finalAttrs: rec {
       fetchurl
         {
           url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-          sha256 = "sha256-0VSW2SrHNI3/k4cCCZ724ruXaq7W1NCPsLrXFZ9l1/Q=";
+          sha256 = "0b84rx9b7b5y8m1sg7xdp17j6yngd2dkx6v5bkd8h7ly102lai18";
         }
     else if stdenv.hostPlatform.isx86
     then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-        sha256 = "sha256-Go4ZCsDz5gJ7uWG5VLrNJOddMPX18G99FAadpX53Rqg=";
+        sha256 = "1ih4gykkp1an43qdgc5xzyvf30fhs0dah3y0a5ksbmvmjsfnxyp7";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux_arm.tar.gz";
-        hash = "sha256-Tzxxs0gKw6vymbaXIzH8tK5VgUrpOIp9vcWQ/zxnRCc=";
+        hash = "sha256-qI/BR/KZwLjnkO5q/yYeW4lN4xyUe78VOM2INC/Z/io=";
       };
 
   nativeBuildInputs = [ java ];
@@ -134,7 +134,8 @@ in stdenv.mkDerivation (finalAttrs: rec {
 
     substituteInPlace src/Tools/Setup/src/Environment.java \
       --replace 'cmd.add("/usr/bin/env");' "" \
-      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");" \
+      --replace 'private static read_file(path: Path): String =' 'private static String read_file(Path path) throws IOException'
 
     substituteInPlace src/Pure/General/sha1.ML \
       --replace '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'

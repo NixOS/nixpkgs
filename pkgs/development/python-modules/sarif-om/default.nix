@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "sarif-om";
   version = "1.0.4";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "sarif_om";

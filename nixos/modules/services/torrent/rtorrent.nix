@@ -53,7 +53,14 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "rtorrent" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.rtorrent;
+      defaultText = literalExpression "pkgs.rtorrent";
+      description = lib.mdDoc ''
+        The rtorrent package to use.
+      '';
+    };
 
     port = mkOption {
       type = types.port;

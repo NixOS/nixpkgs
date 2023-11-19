@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

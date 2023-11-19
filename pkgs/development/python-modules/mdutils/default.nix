@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "mdutils";
   version = "1.6.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "didix21";

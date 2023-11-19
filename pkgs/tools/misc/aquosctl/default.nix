@@ -29,7 +29,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.linux;
-    mainProgram = "aquosctl";
   };
 }
 

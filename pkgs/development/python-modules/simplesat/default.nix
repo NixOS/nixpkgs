@@ -9,7 +9,6 @@
 
 let
   version = "0.8.2";
-  format = "setuptools";
 
   versionFile = writeText "simplesat_ver" ''
     version = '${version}'

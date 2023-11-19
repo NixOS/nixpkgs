@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "asterisk-mbox";
   version = "0.5.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "asterisk_mbox";

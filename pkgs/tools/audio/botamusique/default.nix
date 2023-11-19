@@ -152,6 +152,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ infinisil ];
-    mainProgram = "botamusique";
   };
 }

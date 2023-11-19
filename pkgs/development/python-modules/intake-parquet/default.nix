@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "intake-parquet";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "intake";

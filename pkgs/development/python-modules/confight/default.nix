@@ -6,12 +6,11 @@
 
 buildPythonPackage rec {
   pname = "confight";
-  version = "2.0";
-  format = "setuptools";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iodoexnh9tG4dgkjDXCUzWRFDhRlJ3HRgaNhxG2lwPY=";
+    hash = "sha256-fJr7f9Y/zEpCedWYd04AMuhkOFqZLJOw4sDiz8SDQ/Y=";
   };
 
   propagatedBuildInputs = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "javacc";
-  version = "7.0.13";
+  version = "7.0.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-nDJvKIbJc23Tvfn7Zqvt5tDDffNf4KQ0juGQQCZ+i1c=";
+    sha256 = "sha256-tDtstF3ivKjG01vOZ8Ga1zTjIZFSTWt5QPY1VQvyFMU=";
   };
 
   nativeBuildInputs = [ ant jdk makeWrapper ];

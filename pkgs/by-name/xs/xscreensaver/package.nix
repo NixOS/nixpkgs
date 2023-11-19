@@ -26,9 +26,6 @@
 , systemd
 , forceInstallAllHacks ? true
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, nixosTests
-, substituteAll
-, wrapperPrefix ? "/run/wrappers/bin"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,13 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  patches = [
-    (substituteAll {
-      src = ./xscreensaver-wrapper-prefix.patch;
-      inherit wrapperPrefix;
-    })
-  ];
-
   preConfigure = ''
     # Fix installation paths for GTK resources.
     sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
@@ -114,10 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1 | xargs make -j$NIX_BUILD_CORES -C hacks/glx
     cp -f $(find hacks -type f -perm -111 "!" -name "*.*" ) "$out/libexec/xscreensaver"
   '';
-
-  passthru.tests = {
-    xscreensaver = nixosTests.xscreensaver;
-  };
 
   meta = {
     homepage = "https://www.jwz.org/xscreensaver/";

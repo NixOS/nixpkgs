@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyevmasm";
   version = "0.2.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "crytic";

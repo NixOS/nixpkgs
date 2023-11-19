@@ -29,6 +29,5 @@ buildGoModule rec {
     homepage = "https://github.com/icyphox/legit";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ratsclub ];
-    mainProgram = "legit";
   };
 }

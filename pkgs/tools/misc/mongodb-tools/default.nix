@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mongo-tools";
-  version = "100.9.3";
+  version = "100.9.1";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
     rev = version;
-    sha256 = "sha256-l3A7ykkQCkT34EdgpcSJpFsZq1gE9GII9gzaXJaUwEk=";
+    sha256 = "sha256-c+pzpDUDx6xqpELLM32z0T5mGlF0qk6wqyS1OU9NkRs=";
   };
 
   vendorHash = null;

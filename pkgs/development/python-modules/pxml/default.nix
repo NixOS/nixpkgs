@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pxml";
   version = "0.2.13";
-  format = "setuptools";
   disabled = pythonAtLeast "3.8";
 
   src = fetchPypi {

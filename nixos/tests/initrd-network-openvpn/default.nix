@@ -59,19 +59,18 @@ import ../make-test-python.nix ({ lib, ...}:
 
             # This command does not fork to keep the VM in the state where
             # only the initramfs is loaded
-            preLVMCommands = lib.mkIf (!systemdStage1)
-              ''
-                /bin/nc -p 1234 -lke /bin/echo TESTVALUE
-              '';
+            preLVMCommands =
+            ''
+              /bin/nc -p 1234 -lke /bin/echo TESTVALUE
+            '';
 
             network = {
               enable = true;
 
               # Work around udhcpc only getting a lease on eth0
-              postCommands = lib.mkIf (!systemdStage1)
-                ''
-                  /bin/ip addr add 192.168.1.2/24 dev eth1
-                '';
+              postCommands = ''
+                /bin/ip addr add 192.168.1.2/24 dev eth1
+              '';
 
               # Example configuration for OpenVPN
               # This is the main reason for this test

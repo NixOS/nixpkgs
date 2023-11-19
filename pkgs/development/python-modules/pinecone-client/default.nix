@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "pinecone-client";
   version = "2.2.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

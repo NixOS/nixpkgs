@@ -20,7 +20,14 @@ in
 
       enable = mkEnableOption (lib.mdDoc "pgpkeyserver-lite on a nginx vHost proxying to a gpg keyserver");
 
-      package = mkPackageOption pkgs "pgpkeyserver-lite" { };
+      package = mkOption {
+        default = pkgs.pgpkeyserver-lite;
+        defaultText = literalExpression "pkgs.pgpkeyserver-lite";
+        type = types.package;
+        description = lib.mdDoc ''
+          Which webgui derivation to use.
+        '';
+      };
 
       hostname = mkOption {
         type = types.str;

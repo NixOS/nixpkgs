@@ -8,7 +8,14 @@ in
   options.programs.noisetorch = {
     enable = mkEnableOption (lib.mdDoc "noisetorch + setcap wrapper");
 
-    package = mkPackageOption pkgs "noisetorch" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.noisetorch;
+      defaultText = literalExpression "pkgs.noisetorch";
+      description = lib.mdDoc ''
+        The noisetorch package to use.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {

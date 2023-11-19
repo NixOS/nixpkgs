@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pycoin";
   version = "0.92.20230326";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

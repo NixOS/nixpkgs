@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "python-prctl";
   version = "1.8.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

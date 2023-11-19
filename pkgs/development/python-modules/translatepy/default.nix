@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "translatepy";
   version = "2.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Animenosekai";

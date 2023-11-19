@@ -30,6 +30,5 @@ rustPlatform.buildRustPackage rec {
     description = "Github user information on terminal";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];
-    mainProgram = "octofetch";
   };
 }

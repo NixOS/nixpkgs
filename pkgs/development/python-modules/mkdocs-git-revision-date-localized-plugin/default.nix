@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.2.2";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6qLVmmJzMTrvuoeSVUjWqmI6f5MbAFWAj36v2l3ZeD8=";
+    hash = "sha256-UIbW64ac9kXptJjn86V6vPArnICANiT3QGi5JH45KLY=";
   };
 
   propagatedBuildInputs = [

@@ -16,7 +16,6 @@
 , pyarrow
 , pymysql
 , pyodbc
-, pyparsing
 , pytestCheckHook
 , pythonOlder
 , redshift-connector
@@ -25,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.4.2";
+  version = "3.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +33,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-fvqtSDd5lResArquOdhcLYqpDo5yFWaknQlq3pODbX8=";
+    hash = "sha256-RjZWK7XfyRYu7vNaxPd0/F5nBN/JH01ZwZXloMS0g68=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +57,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     moto
-    pyparsing
     pytestCheckHook
   ];
 

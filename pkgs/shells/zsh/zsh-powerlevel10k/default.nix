@@ -1,16 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, gitstatus
-, bash
-}:
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs, bash }:
 
 
 let
   # match gitstatus version with given `gitstatus_version`:
   # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
-  gitstatus' = gitstatus.overrideAttrs (oldAtttrs: rec {
+  gitstatus = pkgs.gitstatus.overrideAttrs (oldAtttrs: rec {
     version = "1.5.4";
 
     src = fetchFromGitHub {
@@ -38,7 +32,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./gitstatusd.patch;
-      gitstatusdPath = "${gitstatus'}/bin/gitstatusd";
+      gitstatusdPath = "${gitstatus}/bin/gitstatusd";
     })
   ];
 

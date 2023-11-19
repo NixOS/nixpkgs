@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.infinisil ];
     platforms = platforms.unix;
-    mainProgram = "blockhash";
   };
 }

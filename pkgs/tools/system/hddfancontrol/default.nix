@@ -30,6 +30,5 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/desbma/hddfancontrol";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ benley ];
-    mainProgram = "hddfancontrol";
   };
 }

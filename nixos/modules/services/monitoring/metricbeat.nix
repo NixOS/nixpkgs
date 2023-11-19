@@ -5,7 +5,6 @@ let
     attrValues
     literalExpression
     mkEnableOption
-    mkPackageOption
     mkIf
     mkOption
     types
@@ -22,8 +21,14 @@ in
 
       enable = mkEnableOption (lib.mdDoc "metricbeat");
 
-      package = mkPackageOption pkgs "metricbeat" {
-        example = "metricbeat7";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.metricbeat;
+        defaultText = literalExpression "pkgs.metricbeat";
+        example = literalExpression "pkgs.metricbeat7";
+        description = lib.mdDoc ''
+          The metricbeat package to use
+        '';
       };
 
       modules = mkOption {

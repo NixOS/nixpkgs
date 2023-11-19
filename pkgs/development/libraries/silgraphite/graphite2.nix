@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
     #   https://github.com/silnrsi/graphite/pull/74
     substituteInPlace tests/CMakeLists.txt \
       --replace 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
-
-    # support cross-compilation by using target readelf binary:
-    substituteInPlace Graphite.cmake \
-      --replace 'readelf' "${stdenv.cc.targetPrefix}readelf"
   '';
 
   cmakeFlags = lib.optionals static [

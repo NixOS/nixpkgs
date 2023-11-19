@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "monai";
   version = "1.3.0";
-  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {

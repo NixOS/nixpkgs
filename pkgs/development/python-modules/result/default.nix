@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "result";
   version = "0.7.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rustedpy";

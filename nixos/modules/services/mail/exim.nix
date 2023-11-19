@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) literalExpression mkIf mkOption singleton types mkPackageOption;
+  inherit (lib) literalExpression mkIf mkOption singleton types;
   inherit (pkgs) coreutils;
   cfg = config.services.exim;
 in
@@ -57,8 +57,12 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "exim" {
-        extraDescription = ''
+      package = mkOption {
+        type = types.package;
+        default = pkgs.exim;
+        defaultText = literalExpression "pkgs.exim";
+        description = lib.mdDoc ''
+          The Exim derivation to use.
           This can be used to enable features such as LDAP or PAM support.
         '';
       };

@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "libusbsio";
-  format = "setuptools";
   inherit (libusbsio) version;
 
   src = "${libusbsio.src}/python";

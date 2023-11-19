@@ -2,13 +2,13 @@
 , lib
 , fetchFromGitHub
 , dtkwidget
+, qt5integration
+, qt5platform-plugins
+, dde-qt-dbus-factory
 , gio-qt
 , cmake
-, extra-cmake-modules
 , qttools
-, wayland
 , kwayland
-, dwayland
 , pkg-config
 , wrapQtAppsHook
 , glibmm
@@ -17,18 +17,32 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-clipboard";
-  version = "6.0.7";
+  version = "5.4.25";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-6CbCor0vgVMsMt8KY2uWrNqOsBEIaz7s2nViiHz+m1g=";
+    sha256 = "sha256-oFATOBXf4NvGxjVMlfxwfQkBffeKut8ao+X6T9twb/I=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "/etc/xdg" "$out/etc/xdg" \
+      --replace "/lib/systemd/user" "$out/lib/systemd/user" \
+      --replace "/usr/share" "$out/share"
+
+    substituteInPlace misc/com.deepin.dde.Clipboard.service \
+      --replace "/usr/bin/qdbus" "${lib.getBin qttools}/bin/qdbus"
+
+    substituteInPlace misc/{dde-clipboard.desktop,dde-clipboard-daemon.service,com.deepin.dde.Clipboard.service} \
+      --replace "/usr" "$out"
+
+    patchShebangs translate_generation.sh generate_gtest_report.sh
+  '';
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     pkg-config
     qttools
     wrapQtAppsHook
@@ -36,16 +50,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
+    qt5platform-plugins
+    dde-qt-dbus-factory
     gio-qt
-    wayland
     kwayland
-    dwayland
     glibmm
     gtest
   ];
 
   cmakeFlags = [
-    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
+    "-DUSE_DEEPIN_WAYLAND=OFF"
   ];
 
   meta = with lib; {

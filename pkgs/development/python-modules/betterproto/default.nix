@@ -9,7 +9,6 @@
 , jinja2
 , isort
 , python
-, pydantic
 , pytestCheckHook
 , pytest-asyncio
 , pytest-mock
@@ -19,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "betterproto";
-  version = "2.0.0b6";
+  version = "2.0.0b5";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
-    rev = "v.${version}";
-    hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
+    rev = "v${version}";
+    hash = "sha256-XyXdpo3Yo4aO1favMWC7i9utz4fNDbKbsnYXJW0b7Gc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -46,7 +45,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "betterproto" ];
 
   nativeCheckInputs = [
-    pydantic
     pytestCheckHook
     pytest-asyncio
     pytest-mock
@@ -58,7 +56,6 @@ buildPythonPackage rec {
   # the protoc-gen-python_betterproto script from the package to be on PATH.
   preCheck = ''
     export PATH=$PATH:$out/bin
-    patchShebangs src/betterproto/plugin/main.py
     ${python.interpreter} -m tests.generate
   '';
 

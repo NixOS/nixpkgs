@@ -9,7 +9,6 @@
 
 buildPythonPackage rec {
   pname = "cirq-google";
-  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";

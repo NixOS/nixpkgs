@@ -14,7 +14,6 @@
 let
   pname = "grpclib";
   version = "0.4.4";
-  format = "setuptools";
 in
 buildPythonPackage {
   inherit pname version;

@@ -230,7 +230,12 @@ in
 
       openFirewall = mkEnableOption (lib.mdDoc "opening of the relay port(s) in the firewall");
 
-      package = mkPackageOption pkgs "tor" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.tor;
+        defaultText = literalExpression "pkgs.tor";
+        description = lib.mdDoc "Tor package to use.";
+      };
 
       enableGeoIP = mkEnableOption (lib.mdDoc ''use of GeoIP databases.
         Disabling this will disable by-country statistics for bridges and relays

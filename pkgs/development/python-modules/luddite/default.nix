@@ -1,32 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, packaging
+, setuptools
 , pytestCheckHook
+, pytest-socket
 , pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "luddite";
-  version = "1.0.3";
-  format = "setuptools";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "jumptrading";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JXIM7/5LO95oabM16GwAt3v3a8uldGpGXDWmVic8Ins=";
+    sha256 = "8/7uwO5HLhyXYt+T6VUO/O7TN9+FfRlT8y0r5+CJ/l4=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" "" \
-      --replace "--disable-socket" ""
+      --replace "--cov=luddite --cov-report=html --cov-report=term --no-cov-on-fail" ""
   '';
 
-  propagatedBuildInputs = [ packaging ];
+  propagatedBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
+  nativeCheckInputs = [ pytestCheckHook pytest-socket pytest-mock ];
   pythonImportsCheck = [ "luddite" ];
 
   meta = with lib; {

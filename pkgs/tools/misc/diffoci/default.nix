@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "diffoci";
-  version = "0.1.4";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "diffoci";
     rev = "v${version}";
-    hash = "sha256-BTggky5behIxbVxyDZ09uobw0FBopboE9uUBEVgCgR4=";
+    hash = "sha256-Rrwwo1OCE2gn6MGt5XVddb8bJtoN7iAtxzr2MxyHcwk=";
   };
 
-  vendorHash = "sha256-4C35LBxSm6EkcOznQY1hT2vX9bwFfps/q76VqqPKBfI=";
+  vendorHash = "sha256-18rsa91PiqZv70EK3K6K1l6N2mIpoVpkX29amKCo5cg=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/reproducible-containers/diffoci/";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
-    mainProgram = "diffoci";
   };
 }

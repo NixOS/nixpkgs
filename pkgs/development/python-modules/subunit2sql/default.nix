@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "subunit2sql";
   version = "1.10.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

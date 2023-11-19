@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyeclib";
   version = "unstable-2022-03-11";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openstack";

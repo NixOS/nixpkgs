@@ -137,6 +137,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
-    mainProgram = "sile";
   };
 })

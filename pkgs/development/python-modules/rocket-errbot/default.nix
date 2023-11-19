@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "rocket-errbot";
   version = "1.2.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

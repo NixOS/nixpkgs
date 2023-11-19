@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "pyscreenshot";
   version = "3.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

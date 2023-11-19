@@ -17,7 +17,15 @@ in
         Erlang computations.
       '';
     };
-    package = mkPackageOption pkgs "erlang" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.erlang;
+      defaultText = literalExpression "pkgs.erlang";
+      description = lib.mdDoc ''
+        The Erlang package to use to get epmd binary. That way you can re-use
+        an Erlang runtime that is already installed for other purposes.
+      '';
+    };
     listenStream = mkOption
       {
         type = types.str;

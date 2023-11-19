@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "klaus";
   version = "2.0.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jonashaag";

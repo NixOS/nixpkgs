@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "mwtypes";
   version = "0.3.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -26,6 +26,5 @@ buildGoModule rec {
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda penguwin ];
-    mainProgram = "duf";
   };
 }

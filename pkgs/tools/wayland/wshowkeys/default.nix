@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     # TODO: gpl3Only or gpl3Plus (ask upstream)?
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos berbiche ];
-    mainProgram = "wshowkeys";
   };
 }

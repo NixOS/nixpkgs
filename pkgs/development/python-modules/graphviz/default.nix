@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "graphviz";
   version = "0.20.1";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

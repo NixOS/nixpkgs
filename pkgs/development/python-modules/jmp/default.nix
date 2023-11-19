@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "jmp";
   version = "0.0.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";

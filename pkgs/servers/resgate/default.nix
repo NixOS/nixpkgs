@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://resgate.io";
     license = licenses.mit;
     maintainers = with maintainers; [ farcaller ];
-    mainProgram = "resgate";
   };
 }

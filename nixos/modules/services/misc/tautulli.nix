@@ -50,7 +50,14 @@ in
         description = lib.mdDoc "Group under which Tautulli runs.";
       };
 
-      package = mkPackageOption pkgs "tautulli" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.tautulli;
+        defaultText = literalExpression "pkgs.tautulli";
+        description = lib.mdDoc ''
+          The Tautulli package to use.
+        '';
+      };
     };
   };
 

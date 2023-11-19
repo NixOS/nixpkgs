@@ -29,10 +29,6 @@ stdenv.mkDerivation rec {
     "--with-gnu-filesystem-hierarchy"
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
-
   postFixup = ''
     for f in $out/${guile.siteDir}/ncurses/**.scm; do \
       substituteInPlace $f \

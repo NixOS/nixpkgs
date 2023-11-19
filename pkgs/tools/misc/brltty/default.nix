@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow, util-linux
+, tcl, acl, kmod, coreutils, shadow, util-linux, udev
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
@@ -90,6 +90,6 @@ stdenv.mkDerivation rec {
      )
      substituteInPlace $out/libexec/brltty/systemd-wrapper \
        --replace 'logger' "${util-linux}/bin/logger" \
-       --replace 'udevadm' "${systemd}/bin/udevadm"
+       --replace 'udevadm' "${udev}/bin/udevadm"
   '';
 }

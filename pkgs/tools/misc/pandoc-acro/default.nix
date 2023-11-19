@@ -59,6 +59,5 @@ buildPythonApplication {
     description = "Pandoc filter which manages acronyms in Pandoc flavored Markdown sources";
     license = licenses.bsd2;
     maintainers = with maintainers; [ tfc ];
-    mainProgram = "pandoc-acro";
   };
 }

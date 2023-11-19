@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "sphinx-argparse";
   version = "0.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "sphinx_argparse";

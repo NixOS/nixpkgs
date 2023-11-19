@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.louisdk1 ];
-    mainProgram = "hdhomerun_config_gui";
   };
 }

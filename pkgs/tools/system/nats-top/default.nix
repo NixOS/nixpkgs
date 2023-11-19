@@ -37,6 +37,5 @@ buildGoModule rec {
     changelog = "https://github.com/nats-io/nats-top/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "nats-top";
   };
 }

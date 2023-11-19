@@ -19,7 +19,12 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "slimserver" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.slimserver;
+        defaultText = literalExpression "pkgs.slimserver";
+        description = lib.mdDoc "Slimserver package to use.";
+      };
 
       dataDir = mkOption {
         type = types.path;

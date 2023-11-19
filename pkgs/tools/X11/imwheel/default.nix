@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jhillyerd ];
     platforms = platforms.linux;
     license = licenses.gpl2;
-    mainProgram = "imwheel";
   };
 }

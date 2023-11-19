@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, prefetch-yarn-deps
+, fixup_yarn_lock
 , nodejs
 , makeWrapper
 , copyDesktopItems
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup_yarn_lock
     nodejs
     makeWrapper
     copyDesktopItems
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
+    fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
@@ -116,6 +116,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     maintainers = with maintainers; [ panda2134 ];
     inherit (electron.meta) platforms;
-    mainProgram = "podman-desktop";
   };
 })

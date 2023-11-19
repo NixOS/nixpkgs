@@ -35,6 +35,7 @@
   # Runtime dependencies:
 , double-conversion
 , giflib
+, grpc
 , libjpeg_turbo
 , python
 , snappy
@@ -43,17 +44,17 @@
 , config
   # CUDA flags:
 , cudaSupport ? config.cudaSupport
-, cudaPackagesGoogle
+, cudaPackages ? {}
 
   # MKL:
 , mklSupport ? true
 }:
 
 let
-  inherit (cudaPackagesGoogle) backendStdenv cudatoolkit cudaFlags cudnn nccl;
+  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.4.23";
+  version = "0.4.20";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -97,8 +98,7 @@ let
     # Not packaged in nixpkgs
     # "com_github_googleapis_googleapis"
     # "com_github_googlecloudplatform_google_cloud_cpp"
-    # Issue with transitive dependencies after https://github.com/grpc/grpc/commit/f1d14f7f0b661bd200b7f269ef55dec870e7c108
-    # "com_github_grpc_grpc"
+    "com_github_grpc_grpc"
     # ERROR: /build/output/external/bazel_tools/tools/proto/BUILD:25:6: no such target '@com_google_protobuf//:cc_toolchain':
     # target 'cc_toolchain' not declared in package '' defined by /build/output/external/com_google_protobuf/BUILD.bazel
     # "com_google_protobuf"
@@ -150,7 +150,7 @@ let
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
+      hash = "sha256-WLYXUtchOaA6SGnKuVhN9CmV06xMCLQTEuEtL13ttZU=";
     };
 
     nativeBuildInputs = [
@@ -169,6 +169,7 @@ let
       curl
       double-conversion
       giflib
+      grpc
       jsoncpp
       libjpeg_turbo
       numpy
@@ -262,10 +263,10 @@ let
       ];
 
       sha256 = (if cudaSupport then {
-        x86_64-linux = "sha256-q2wRaoCGnISEdtF6jDMk9Wccy/wTmLusVBI7dDATwi4=";
+        x86_64-linux = "sha256-QczClHxHElLZCqIZlHc3z3DXJ7rZQJaMs2XIb+lxarI=";
       } else {
-        x86_64-linux = "sha256-0cDJ27HCi3J5xeT6TkTtfUzF/yESBYmEVG1r14kPdRs=";
-        aarch64-linux = "sha256-WbaN8VYjeW0mDthmtoSTttqd4K/Z8dP5+VkTo10pLtU=";
+        x86_64-linux = "sha256-mqiJe4u0NYh1PKCbQfbo0U2e9/kYiBqj98d+BPHFSxQ=";
+        aarch64-linux = "sha256-EuLqamVBJ+qoVMCFIYUT846AghltZolfLGdtO9UeXSM=";
       }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
@@ -335,6 +336,7 @@ buildPythonPackage {
     double-conversion
     flatbuffers
     giflib
+    grpc
     jsoncpp
     libjpeg_turbo
     ml-dtypes

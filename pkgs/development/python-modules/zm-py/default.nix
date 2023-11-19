@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "zm-py";
   version = "0.5.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

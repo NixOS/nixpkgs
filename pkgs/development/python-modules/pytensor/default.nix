@@ -18,13 +18,15 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, tensorflow-probability
+# Tensorflow is currently (2023/10/04) broken.
+# Thus, we don't provide this optional test dependency.
+# , tensorflow-probability
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.18.4";
+  version = "2.17.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-j7SNXFiQUofP5NtggSOwLxXkg267yneqoWH2uoDZogs=";
+    hash = "sha256-FufPCFzSjG8BrHes7t3XsdovX9gqUBG0gMDGKvkRkSA=";
   };
 
   postPatch = ''
@@ -64,7 +66,9 @@ buildPythonPackage rec {
     numba-scipy
     pytest-mock
     pytestCheckHook
-    tensorflow-probability
+    # Tensorflow is currently (2023/10/04) broken.
+    # Thus, we don't provide this optional test dependency.
+    # tensorflow-probability
   ];
 
   preBuild = ''
@@ -82,6 +86,8 @@ buildPythonPackage rec {
     "test_logsumexp_benchmark"
     "test_scan_multiple_output"
     "test_vector_taps_benchmark"
+    # Temporarily disabled because of broken tensorflow-probability
+    "test_tfp_ops"
   ];
 
   disabledTestPaths = [

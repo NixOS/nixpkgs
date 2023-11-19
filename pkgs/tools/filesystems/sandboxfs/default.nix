@@ -30,6 +30,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bazelbuild/sandboxfs";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ jeremyschlatter ];
-    mainProgram = "sandboxfs";
   };
 }

@@ -98,7 +98,7 @@ self: let
         '';
 
         postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh "$out"
+          ./install.sh --prefix=$out
         '';
 
         meta = old.meta // {
@@ -181,4 +181,4 @@ self: let
 
   in elpaPackages // { inherit elpaBuild; });
 
-in (generateElpa { }) // { __attrsFailEvaluation = true; }
+in generateElpa { }

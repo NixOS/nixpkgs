@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "py-multiaddr";
   version = "0.0.9";
-  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {

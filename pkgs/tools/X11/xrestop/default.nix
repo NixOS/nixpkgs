@@ -18,6 +18,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
-    mainProgram = "xrestop";
   };
 }

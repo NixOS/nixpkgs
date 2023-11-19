@@ -11,11 +11,14 @@ in {
     services.rmfakecloud = {
       enable = mkEnableOption (lib.mdDoc "rmfakecloud remarkable self-hosted cloud");
 
-      package = mkPackageOption pkgs "rmfakecloud" {
-        extraDescription = ''
-          ::: {.note}
+      package = mkOption {
+        type = types.package;
+        default = pkgs.rmfakecloud;
+        defaultText = literalExpression "pkgs.rmfakecloud";
+        description = lib.mdDoc ''
+          rmfakecloud package to use.
+
           The default does not include the web user interface.
-          :::
         '';
       };
 

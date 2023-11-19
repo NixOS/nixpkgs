@@ -6,7 +6,7 @@
 , protobuf
 , rustPlatform
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup_yarn_lock
 , stdenv
 , yarn
 , nodejs
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
     };
 
-    nativeBuildInputs = [ yarn nodejs prefetch-yarn-deps ];
+    nativeBuildInputs = [ yarn nodejs ];
 
     outputs = [ "out" "dist" ];
 
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       yarn config --offline set yarn-offline-mirror ${yarnDeps}
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock yarn.lock
+      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 

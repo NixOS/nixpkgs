@@ -8,8 +8,12 @@ in {
   options.services.xserver.desktopManager.retroarch = {
     enable = mkEnableOption (lib.mdDoc "RetroArch");
 
-    package = mkPackageOption pkgs "retroarch" {
-      example = "retroarch-full";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.retroarch;
+      defaultText = literalExpression "pkgs.retroarch";
+      example = literalExpression "pkgs.retroarch-full";
+      description = lib.mdDoc "RetroArch package to use.";
     };
 
     extraArgs = mkOption {

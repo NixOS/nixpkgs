@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "etesync";
   version = "0.12.1";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

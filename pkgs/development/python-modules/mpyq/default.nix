@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "mpyq";
   version = "0.2.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

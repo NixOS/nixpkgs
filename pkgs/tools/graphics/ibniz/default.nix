@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];
-    mainProgram = "ibniz";
   };
 }

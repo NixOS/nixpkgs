@@ -22,6 +22,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/Rich-Harris/degit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kidonng ];
-    mainProgram = "degit";
   };
 }

@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://github.com/cube2222/octosql";
     license = licenses.mpl20;
     maintainers = with maintainers; [ arikgrahl ];
-    mainProgram = "octosql";
   };
 }

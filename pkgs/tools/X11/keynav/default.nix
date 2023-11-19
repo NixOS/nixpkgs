@@ -58,6 +58,5 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
-    mainProgram = "keynav";
   };
 }

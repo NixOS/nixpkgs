@@ -24,6 +24,5 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nrhtr ];
     platforms = lib.platforms.unix;
-    mainProgram = "sloth";
   };
 }

@@ -28,6 +28,7 @@
 , gobject-introspection
 , yelp-tools
 , gspell
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gnome-desktop
 , dbus
@@ -42,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "45.0";
+  version = "44.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0YZH1Cdcvd8NMoF7HQTjBzQqhb6RTsTa0tgIKq+KpKg=";
+    sha256 = "O4uhWBpHpun1f2tqoI8PtnVJxgEhqiTjEUDpOUe4NiI=";
   };
 
   depsBuildBuild = [
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    adwaita-icon-theme
     atk
     dbus # only needed to find the service directory
     djvulibre
@@ -140,7 +142,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    mainProgram = "evince";
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

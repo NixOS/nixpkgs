@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     description = "A tool to extract data from a 3ds rom";
     platforms = platforms.linux;
     maintainers = [ maintainers.marius851000 ];
-    mainProgram = "ctrtool";
   };
 
 }

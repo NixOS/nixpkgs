@@ -45,6 +45,5 @@ buildGoModule rec {
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cole-h danderson mdlayher ];
-    mainProgram = "zrepl";
   };
 }

@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ kaction ];
     license = licenses.cc0;
     platforms = platforms.unix;
-    mainProgram = "snooze";
   };
 }

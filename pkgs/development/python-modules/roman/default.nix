@@ -5,7 +5,6 @@
 
 buildPythonPackage rec {
   version = "2.0.0";
-  format = "setuptools";
   pname = "roman";
 
   src = fetchPypi {

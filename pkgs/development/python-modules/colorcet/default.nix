@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "colorcet";
   version = "3.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

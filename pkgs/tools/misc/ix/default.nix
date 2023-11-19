@@ -32,6 +32,5 @@ resholve.mkDerivation {
     description = "Command line pastebin";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
-    mainProgram = "ix";
   };
 }

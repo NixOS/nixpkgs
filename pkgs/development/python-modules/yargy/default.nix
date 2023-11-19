@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pymorphy2 ];
-  pythonImportsCheck = [ "yargy" ];
+  pythonImportCheck = [ "yargy" ];
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
 

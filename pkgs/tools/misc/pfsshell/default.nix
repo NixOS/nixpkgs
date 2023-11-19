@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
       afl20    # APA, PFS, and iomanX libraries which are compiled together with this package
     ];
     maintainers = with maintainers; [ makefu ];
-    mainProgram = "pfsshell";
   };
 }

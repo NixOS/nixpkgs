@@ -36,6 +36,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://blog.thms.uk/fedifetcher";
     license = licenses.mit;
     maintainers = with maintainers; [ delroth ];
-    mainProgram = "fedifetcher";
   };
 }

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "social-auth-core";
-  version = "4.5.0";
+  version = "4.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "python-social-auth";
     repo = "social-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-5WEXXLl0IUPMbji8bWjTbAjY8VSLOTQvrfSCE9+ui5Y=";
+    hash = "sha256-o/qx3bwaj2fiNKM3fafFxOW27JrJ9jG4M4uSnnJDpes=";
   };
 
   propagatedBuildInputs = [
@@ -75,7 +75,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
-    changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ n0emis ];
   };

@@ -10,8 +10,6 @@ buildPythonPackage {
 
   sourceRoot = notmuch.pythonSourceRoot;
 
-  format = "setuptools";
-
   buildInputs = [ python notmuch ];
 
   postPatch = ''

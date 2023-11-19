@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "genpy";
   version = "2022.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

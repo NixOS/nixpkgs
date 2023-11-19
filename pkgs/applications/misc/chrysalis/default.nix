@@ -35,15 +35,15 @@ in appimageTools.wrapType2 rec {
         $out/share/applications/Chrysalis.desktop \
         --replace 'Exec=Chrysalis' 'Exec=${pname}'
 
-    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
+    cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
   meta = with lib; {
     description = "A graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ aw ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "chrysalis";
+    mainProgram = pname;
   };
 }

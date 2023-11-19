@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "xbox-webapi";
   version = "2.0.11";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

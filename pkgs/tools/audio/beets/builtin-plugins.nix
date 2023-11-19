@@ -17,32 +17,20 @@
   };
   acousticbrainz.propagatedBuildInputs = [ python3Packages.requests ];
   albumtypes = { };
-  aura = {
-    propagatedBuildInputs = with python3Packages; [ flask pillow ];
-    testPaths = [ ];
-  };
-  badfiles = {
-    testPaths = [ ];
-    wrapperBins = [ mp3val flac ];
-  };
+  aura.propagatedBuildInputs = with python3Packages; [ flask pillow ];
+  badfiles.wrapperBins = [ mp3val flac ];
   bareasc = { };
   beatport.propagatedBuildInputs = [ python3Packages.requests-oauthlib ];
-  bench.testPaths = [ ];
-  bpd.testPaths = [ ];
-  bpm.testPaths = [ ];
-  bpsync.testPaths = [ ];
+  bench = { };
+  bpd = { };
+  bpm = { };
+  bpsync = { };
   bucket = { };
-  chroma = {
-    propagatedBuildInputs = [ python3Packages.pyacoustid ];
-    testPaths = [ ];
-  };
+  chroma.propagatedBuildInputs = [ python3Packages.pyacoustid ];
   convert.wrapperBins = [ ffmpeg ];
-  deezer = {
-    propagatedBuildInputs = [ python3Packages.requests ];
-    testPaths = [ ];
-  };
+  deezer.propagatedBuildInputs = [ python3Packages.requests ];
   discogs.propagatedBuildInputs = with python3Packages; [ discogs-client requests ];
-  duplicates.testPaths = [ ];
+  duplicates = { };
   edit = { };
   embedart = {
     propagatedBuildInputs = with python3Packages; [ pillow ];
@@ -55,44 +43,32 @@
     wrapperBins = [ imagemagick ];
   };
   filefilter = { };
-  fish.testPaths = [ ];
-  freedesktop.testPaths = [ ];
-  fromfilename.testPaths = [ ];
+  fish = { };
+  freedesktop = { };
+  fromfilename = { };
   ftintitle = { };
-  fuzzy.testPaths = [ ];
-  gmusic.testPaths = [ ];
+  fuzzy = { };
+  gmusic = { };
   hook = { };
   ihate = { };
   importadded = { };
   importfeeds = { };
   info = { };
-  inline.testPaths = [ ];
+  inline = { };
   ipfs = { };
   keyfinder.wrapperBins = [ keyfinder-cli ];
-  kodiupdate = {
-    propagatedBuildInputs = [ python3Packages.requests ];
-    testPaths = [ ];
-  };
+  kodiupdate.propagatedBuildInputs = [ python3Packages.requests ];
   lastgenre.propagatedBuildInputs = [ python3Packages.pylast ];
-  lastimport = {
-    propagatedBuildInputs = [ python3Packages.pylast ];
-    testPaths = [ ];
-  };
-  loadext = {
-    propagatedBuildInputs = [ python3Packages.requests ];
-    testPaths = [ ];
-  };
+  lastimport.propagatedBuildInputs = [ python3Packages.pylast ];
+  loadext.propagatedBuildInputs = [ python3Packages.requests ];
   lyrics.propagatedBuildInputs = [ python3Packages.beautifulsoup4 ];
-  mbcollection.testPaths = [ ];
+  mbcollection = { };
   mbsubmit = { };
   mbsync = { };
   metasync = { };
-  missing.testPaths = [ ];
+  missing = { };
   mpdstats.propagatedBuildInputs = [ python3Packages.mpd2 ];
-  mpdupdate = {
-    propagatedBuildInputs = [ python3Packages.mpd2 ];
-    testPaths = [ ];
-  };
+  mpdupdate.propagatedBuildInputs = [ python3Packages.mpd2 ];
   parentwork = { };
   permissions = { };
   play = { };
@@ -100,18 +76,12 @@
   plexupdate = { };
   random = { };
   replaygain.wrapperBins = [ aacgain ffmpeg mp3gain ];
-  rewrite.testPaths= [ ];
-  scrub.testPaths = [ ];
+  rewrite = { };
+  scrub = { };
   smartplaylist = { };
-  sonosupdate = {
-    propagatedBuildInputs = [ python3Packages.soco ];
-    testPaths = [ ];
-  };
+  sonosupdate.propagatedBuildInputs = [ python3Packages.soco ];
   spotify = { };
-  subsonicplaylist = {
-    propagatedBuildInputs = [ python3Packages.requests ];
-    testPaths = [ ];
-  };
+  subsonicplaylist.propagatedBuildInputs = [ python3Packages.requests ];
   subsonicupdate.propagatedBuildInputs = [ python3Packages.requests ];
   the = { };
   thumbnails = {
@@ -119,7 +89,7 @@
     wrapperBins = [ imagemagick ];
   };
   types.testPaths = [ "test/test_types_plugin.py" ];
-  unimported.testPaths = [ ];
+  unimported = { };
   web.propagatedBuildInputs = [ python3Packages.flask ];
   zero = { };
 }

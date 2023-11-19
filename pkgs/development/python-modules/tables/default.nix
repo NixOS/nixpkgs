@@ -22,7 +22,6 @@
 buildPythonPackage rec {
   pname = "tables";
   version = "3.8.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 

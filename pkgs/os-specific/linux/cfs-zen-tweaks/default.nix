@@ -8,22 +8,22 @@
 
 stdenv.mkDerivation rec {
   pname = "cfs-zen-tweaks";
-  version = "1.3.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "igo95862";
     repo = "cfs-zen-tweaks";
     rev = version;
-    hash = "sha256-E3sNWWXm0NEqLCzFccd/nfYby+/b/MVjIHeGlDxV1W4=";
+    sha256 = "HRR2tdjNmWyrpbcMlihSdb/7g/tHma3YyXogQpRCVyo=";
   };
 
   preConfigure = ''
-    substituteInPlace set-cfs-zen-tweaks.sh \
+    substituteInPlace set-cfs-zen-tweaks.bash \
       --replace '$(gawk' '$(${gawk}/bin/gawk'
   '';
 
   preFixup = ''
-    chmod +x $out/lib/cfs-zen-tweaks/set-cfs-zen-tweaks.sh
+    chmod +x $out/lib/cfs-zen-tweaks/set-cfs-zen-tweaks.bash
   '';
 
   nativeBuildInputs = [ cmake ];

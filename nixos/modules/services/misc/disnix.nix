@@ -27,7 +27,12 @@ in
 
       useWebServiceInterface = mkEnableOption (lib.mdDoc "the DisnixWebService interface running on Apache Tomcat");
 
-      package = mkPackageOption pkgs "disnix" {};
+      package = mkOption {
+        type = types.path;
+        description = lib.mdDoc "The Disnix package";
+        default = pkgs.disnix;
+        defaultText = literalExpression "pkgs.disnix";
+      };
 
       enableProfilePath = mkEnableOption (lib.mdDoc "exposing the Disnix profiles in the system's PATH");
 

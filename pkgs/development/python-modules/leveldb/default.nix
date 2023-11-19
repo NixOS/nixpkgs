@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "leveldb";
   version = "0.201";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

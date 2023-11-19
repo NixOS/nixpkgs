@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "grip";
   version = "4.6.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joeyespo";

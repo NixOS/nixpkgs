@@ -209,7 +209,12 @@ in
     services.rippled = {
       enable = mkEnableOption (lib.mdDoc "rippled");
 
-      package = mkPackageOption pkgs "rippled" { };
+      package = mkOption {
+        description = lib.mdDoc "Which rippled package to use.";
+        type = types.package;
+        default = pkgs.rippled;
+        defaultText = literalExpression "pkgs.rippled";
+      };
 
       ports = mkOption {
         description = lib.mdDoc "Ports exposed by rippled";

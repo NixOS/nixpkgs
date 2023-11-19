@@ -68,6 +68,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ andsild ];
     platforms = platforms.unix;
-    mainProgram = "st";
   };
 })

@@ -352,7 +352,12 @@ in {
     services.akkoma = {
       enable = mkEnableOption (mdDoc "Akkoma");
 
-      package = mkPackageOption pkgs "akkoma" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.akkoma;
+        defaultText = literalExpression "pkgs.akkoma";
+        description = mdDoc "Akkoma package to use.";
+      };
 
       user = mkOption {
         type = types.nonEmptyStr;

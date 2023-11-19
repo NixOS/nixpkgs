@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "scikit-learn-extra";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";

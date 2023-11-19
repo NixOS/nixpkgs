@@ -21,6 +21,5 @@ buildGoModule rec {
     homepage = "https://github.com/hahwul/jwt-hack";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "jwt-hack";
   };
 }

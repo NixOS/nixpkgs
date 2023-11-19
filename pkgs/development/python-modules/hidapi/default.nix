@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "hidapi";
   version = "0.14.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

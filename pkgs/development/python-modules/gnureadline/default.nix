@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "8.1.2";
-  format = "setuptools";
   pname = "gnureadline";
   disabled = isPyPy;
 

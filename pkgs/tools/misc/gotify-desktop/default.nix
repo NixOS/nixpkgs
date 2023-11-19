@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bryanasdev000 genofire ];
     broken = stdenv.isDarwin;
-    mainProgram = "gotify-desktop";
   };
 }

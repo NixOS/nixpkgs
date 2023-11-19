@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "pygame_sdl2";
   version = "2.1.0";
-  format = "setuptools";
   renpy_version = renpy.base_version;
   name = "${pname}-${version}-${renpy_version}";
 

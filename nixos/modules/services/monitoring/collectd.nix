@@ -41,7 +41,14 @@ in {
       type = types.bool;
     };
 
-    package = mkPackageOption pkgs "collectd" { };
+    package = mkOption {
+      default = pkgs.collectd;
+      defaultText = literalExpression "pkgs.collectd";
+      description = lib.mdDoc ''
+        Which collectd package to use.
+      '';
+      type = types.package;
+    };
 
     buildMinimalPackage = mkOption {
       default = false;

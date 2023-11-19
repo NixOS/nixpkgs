@@ -9,7 +9,6 @@
 buildPythonPackage {
   pname = "typesentry";
   version = "0.2.7";
-  format = "setuptools";
 
   # Only wheel distribution is available on PyPi.
   src = fetchFromGitHub {

@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "wsnsimpy";
   version = "0.2.5";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

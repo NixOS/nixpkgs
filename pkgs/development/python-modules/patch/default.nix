@@ -5,7 +5,6 @@
 
 buildPythonPackage rec {
   version = "1.16";
-  format = "setuptools";
   pname = "patch";
 
   src = fetchzip {

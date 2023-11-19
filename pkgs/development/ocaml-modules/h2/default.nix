@@ -30,6 +30,9 @@ buildDunePackage rec {
     src
     ;
 
+  duneVersion = "3";
+  minimalOCamlVersion = "4.06";
+
   propagatedBuildInputs = [
     angstrom
     faraday
@@ -39,7 +42,8 @@ buildDunePackage rec {
     httpaf
   ];
 
-  doCheck = true;
+  # Tests fail with ≤ 4.07
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   preCheck = ''
     ln -s "${http2-frame-test-case}" lib_test/http2-frame-test-case
   '';

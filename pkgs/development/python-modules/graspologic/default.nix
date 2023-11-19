@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "graspologic";
   version = "3.2.0";
-  format = "setuptools";
 
   disabled = isPy27;
 

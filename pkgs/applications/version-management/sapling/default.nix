@@ -13,7 +13,7 @@
 , fetchYarnDeps
 , yarn
 , nodejs
-, prefetch-yarn-deps
+, fixup_yarn_lock
 , glibcLocales
 , libiconv
 , Cocoa
@@ -66,7 +66,7 @@ let
     inherit version;
 
     nativeBuildInputs = [
-      prefetch-yarn-deps
+      fixup_yarn_lock
       nodejs
       yarn
     ];
@@ -75,7 +75,7 @@ let
       runHook preBuild
 
       export HOME=$(mktemp -d)
-      fixup-yarn-lock yarn.lock
+      fixup_yarn_lock yarn.lock
       yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
       yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
       patchShebangs node_modules

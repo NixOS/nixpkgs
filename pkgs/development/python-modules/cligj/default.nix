@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "cligj";
   version = "0.7.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mapbox";

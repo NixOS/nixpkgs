@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "qdldl";
   version = "0.1.7.post0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

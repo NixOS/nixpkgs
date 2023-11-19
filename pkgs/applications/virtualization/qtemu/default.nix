@@ -41,6 +41,5 @@ mkDerivation rec {
     license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ romildo ];
-    mainProgram = "qtemu";
   };
 }

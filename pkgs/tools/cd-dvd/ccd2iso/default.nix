@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
-    mainProgram = "ccd2iso";
   };
 }

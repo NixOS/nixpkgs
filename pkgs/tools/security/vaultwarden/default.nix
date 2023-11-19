@@ -9,16 +9,21 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.30.1";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    hash = "sha256-9JCrEe0tla4v207XPgprLqP3g0BslpX8f7xa9aUhQcg=";
+    hash = "sha256-mBKedJvb67FR4e8ZzdL8umg9XTgch1OWhbR1k46Lkn4=";
   };
 
-  cargoHash = "sha256-4KyBMOdTAHe5uD6X69gMd0aqIo4w2Rqrlg+25yY2B6o=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rocket-0.5.0-rc.3" = "sha256-E71cktkHCbmQyjkjWWJ20KfCm3B/h3jQ2TMluYhvCQw=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
@@ -39,6 +44,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dani-garcia/vaultwarden";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ msteen ivan ];
-    mainProgram = "vaultwarden";
   };
 }

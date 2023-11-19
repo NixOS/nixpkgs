@@ -9,7 +9,6 @@
 buildPythonPackage {
   pname = "gyp";
   version = "unstable-2022-04-01";
-  format = "setuptools";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/external/gyp";

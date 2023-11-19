@@ -121,6 +121,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ardumont ];
     platforms = platforms.linux;
-    mainProgram = "gerbera";
   };
 }

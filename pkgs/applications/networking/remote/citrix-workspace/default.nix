@@ -5,6 +5,7 @@
 
 let
   inherit (callPackage ./sources.nix { }) supportedVersions unsupportedVersions;
+  mkCitrix = callPackage ./generic.nix { };
 
   toAttrName = x: "citrix_workspace_${builtins.replaceStrings [ "." ] [ "_" ] x}";
 

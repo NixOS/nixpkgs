@@ -18,7 +18,6 @@
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildBuild
 , makeRustPlatform
-, wrapRustcWith
 }:
 
 let
@@ -62,10 +61,10 @@ in
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
     in {
       # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = (selectRustPackage buildPackages).packages.stable // { __attrsFailEvaluation = true; };
+      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
-      rustc-unwrapped = self.callPackage ./rustc.nix ({
+      rustc = self.callPackage ./rustc.nix ({
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
@@ -76,10 +75,6 @@ in
         # Use boot package set to break cycle
         inherit (bootstrapRustPackages) cargo rustc rustfmt;
       });
-      rustc = wrapRustcWith {
-        inherit (self) rustc-unwrapped;
-        sysroot = if fastCross then self.rustc-unwrapped else null;
-      };
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;
         inherit (self.buildRustPackages) rustc;

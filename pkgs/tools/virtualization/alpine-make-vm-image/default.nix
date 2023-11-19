@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.unix;
-    mainProgram = "alpine-make-vm-image";
   };
 }

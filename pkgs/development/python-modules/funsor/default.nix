@@ -22,7 +22,6 @@
 buildPythonPackage rec {
   pname = "funsor";
   version = "0.4.6";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

@@ -34,6 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cgsecurity.org/wiki/CmosPwd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ t4ccer ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.x86_64;
   };
 })

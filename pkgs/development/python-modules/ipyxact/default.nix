@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "ipyxact";
   version = "0.3.2";
-  format = "setuptools";
 
   propagatedBuildInputs = [ pyyaml ];
   checkInputs = [ six lxml ];

@@ -3,7 +3,6 @@
 buildPythonPackage {
   pname = "pygreat";
   version = "2019.5.1.dev0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";

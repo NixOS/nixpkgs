@@ -12,7 +12,14 @@ in {
 
         Your user needs to be in the `feedbackd` group to trigger effects
       '');
-      package = mkPackageOption pkgs "feedbackd" { };
+      package = mkOption {
+        description = lib.mdDoc ''
+          Which feedbackd package to use.
+        '';
+        type = types.package;
+        default = pkgs.feedbackd;
+        defaultText = literalExpression "pkgs.feedbackd";
+      };
     };
   };
   config = mkIf cfg.enable {

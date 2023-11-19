@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small utility to create JSON objects";
     homepage = "https://github.com/jpmens/jo";
-    mainProgram = "jo";
     license = licenses.gpl2Plus;
     maintainers = [maintainers.markus1189];
     platforms = platforms.all;

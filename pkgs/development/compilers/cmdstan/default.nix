@@ -1,13 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, stanc
-, buildPackages
-, runtimeShell
-, runCommandCC
-, cmdstan
-}:
+{ lib, stdenv, fetchFromGitHub, stanc, python3, buildPackages, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
@@ -21,43 +12,39 @@ stdenv.mkDerivation rec {
     hash = "sha256-c+L/6PjW7YgmXHuKhKjiRofBRAhKYCzFCZ6BOX5AmC4=";
   };
 
+  nativeBuildInputs = [ stanc ];
+
+  buildFlags = [ "build" ];
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  nativeCheckInputs = [ python3 ];
+
+  CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_BOOST_LGAMMA";
+
   postPatch = ''
     substituteInPlace stan/lib/stan_math/make/libraries \
       --replace "/usr/bin/env bash" "bash"
+    patchShebangs .
+  '' + lib.optionalString stdenv.isAarch64 ''
+    sed -z -i "s/TEST(CommandStansummary, check_console_output).*TEST(CommandStansummary, check_csv_output)/TEST(CommandStansummary, check_csv_output)/" \
+      src/test/interface/stansummary_test.cpp
   '';
 
-  nativeBuildInputs = [
-    python3
-    stanc
-  ];
-
   preConfigure = ''
-    patchShebangs test-all.sh runCmdStanTests.py stan/
-  ''
-  # Fix inclusion of hardcoded paths in PCH files, by building in the store.
-  + ''
-    mkdir -p $out/opt
-    cp -R . $out/opt/cmdstan
-    cd $out/opt/cmdstan
     mkdir -p bin
     ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
   '';
 
-  makeFlags = [
-    "build"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "arch=${stdenv.hostPlatform.darwinArch}"
-  ];
+  makeFlags = lib.optional stdenv.isDarwin "arch=${stdenv.hostPlatform.darwinArch}";
 
-  # Disable inclusion of timestamps in PCH files when using Clang.
-  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Xclang -fno-pch-timestamp";
-
-  enableParallelBuilding = true;
+  checkPhase = ''
+    ./runCmdStanTests.py -j$NIX_BUILD_CORES src/test/interface
+  '';
 
   installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
+    mkdir -p $out/opt $out/bin
+    cp -r . $out/opt/cmdstan
     ln -s $out/opt/cmdstan/bin/stanc $out/bin/stanc
     ln -s $out/opt/cmdstan/bin/stansummary $out/bin/stansummary
     cat > $out/bin/stan <<EOF
@@ -65,19 +52,10 @@ stdenv.mkDerivation rec {
     make -C $out/opt/cmdstan "\$(realpath "\$1")"
     EOF
     chmod a+x $out/bin/stan
-
-    runHook postInstall
   '';
 
-  passthru.tests = {
-    test = runCommandCC "cmdstan-test" { } ''
-      cp -R ${cmdstan}/opt/cmdstan cmdstan
-      chmod -R +w cmdstan
-      cd cmdstan
-      ./runCmdStanTests.py -j$NIX_BUILD_CORES src/test/interface
-      touch $out
-    '';
-  };
+  # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
+  preFixup = "rm -rf stan";
 
   meta = with lib; {
     description = "Command-line interface to Stan";

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "online-judge-tools";
   version = "11.5.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";

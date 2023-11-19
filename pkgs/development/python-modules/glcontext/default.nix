@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "glcontext";
   version = "2.5.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "moderngl";

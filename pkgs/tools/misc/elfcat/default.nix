@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ruslashev/elfcat";
     license = licenses.zlib;
     maintainers = with maintainers; [ moni ];
-    mainProgram = "elfcat";
   };
 }

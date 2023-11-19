@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://gitlab.scd31.com/stephen/dotacat";
     license = licenses.mit;
     maintainers = with maintainers; [ traxys ];
-    mainProgram = "dotacat";
   };
 }

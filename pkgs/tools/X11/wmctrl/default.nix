@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = with lib.platforms; all;
     maintainers = [ lib.maintainers.Anton-Latukha ];
-    mainProgram = "wmctrl";
   };
 
 }

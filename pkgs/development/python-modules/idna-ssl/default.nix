@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "idna-ssl";
   version = "1.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "setuptools-scm-git-archive";
   version = "1.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

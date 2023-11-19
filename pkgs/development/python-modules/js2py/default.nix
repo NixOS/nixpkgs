@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "js2py";
   version = "0.74";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Js2Py";

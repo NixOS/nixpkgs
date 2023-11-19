@@ -21,6 +21,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/pastpages/savepagenow";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    mainProgram = "savepagenow";
   };
 }

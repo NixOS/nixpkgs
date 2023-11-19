@@ -42,6 +42,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://lieer.gaute.vetsj.com/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli ];
-    mainProgram = "gmi";
   };
 }

@@ -19,6 +19,5 @@ buildGoModule rec {
     changelog = "https://github.com/tenox7/stc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.ivankovnatsky ];
-    mainProgram = "stc";
   };
 }

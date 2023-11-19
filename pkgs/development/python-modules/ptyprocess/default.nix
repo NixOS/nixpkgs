@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "ptyprocess";
   version = "0.7.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

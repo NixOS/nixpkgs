@@ -30,6 +30,5 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ felipeqq2 ];
-    mainProgram = "unflac";
   };
 }

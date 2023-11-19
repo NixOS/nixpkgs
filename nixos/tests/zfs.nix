@@ -13,7 +13,6 @@ let
                       else pkgs.linuxPackages
     , enableUnstable ? false
     , enableSystemdStage1 ? false
-    , zfsPackage ? if enableUnstable then pkgs.zfs else pkgs.zfsUnstable
     , extraTest ? ""
     }:
     makeTest {
@@ -22,7 +21,7 @@ let
         maintainers = [ adisbladis elvishjerricco ];
       };
 
-      nodes.machine = { config, pkgs, lib, ... }:
+      nodes.machine = { pkgs, lib, ... }:
         let
           usersharePath = "/var/lib/samba/usershares";
         in {
@@ -36,8 +35,8 @@ let
         boot.loader.efi.canTouchEfiVariables = true;
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
-        boot.zfs.package = zfsPackage;
         boot.supportedFilesystems = [ "zfs" ];
+        boot.zfs.enableUnstable = enableUnstable;
         boot.initrd.systemd.enable = enableSystemdStage1;
 
         environment.systemPackages = [ pkgs.parted ];
@@ -193,11 +192,6 @@ let
 
 
 in {
-
-  # maintainer: @raitobezarius
-  series_2_1 = makeZfsTest "2.1-series" {
-    zfsPackage = pkgs.zfs_2_1;
-  };
 
   stable = makeZfsTest "stable" { };
 

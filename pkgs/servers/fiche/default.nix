@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.pinpox ];
     platforms = platforms.all;
-    mainProgram = "fiche";
   };
 }

@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   pname = "urwidtrees";
-  format = "setuptools";
   version  = "1.0.3";
 
   src = fetchFromGitHub {

@@ -30,6 +30,5 @@ buildGoModule rec {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ chekoopa ];
     platforms = platforms.linux;
-    mainProgram = "mycorrhiza";
   };
 }

@@ -3,7 +3,14 @@ let cfg = config.services.victoriametrics; in
 {
   options.services.victoriametrics = with lib; {
     enable = mkEnableOption (lib.mdDoc "victoriametrics");
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.victoriametrics;
+      defaultText = literalExpression "pkgs.victoriametrics";
+      description = lib.mdDoc ''
+        The VictoriaMetrics distribution to use.
+      '';
+    };
     listenAddress = mkOption {
       default = ":8428";
       type = types.str;

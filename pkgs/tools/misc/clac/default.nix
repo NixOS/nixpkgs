@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
-    mainProgram = "clac";
   };
 }

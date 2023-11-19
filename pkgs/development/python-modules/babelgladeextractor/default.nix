@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "babelgladeextractor";
   version = "0.7.0";
-  format = "setuptools";
   disabled = (!isPy3k); # uses python3 specific file io in setup.py
 
   src = fetchPypi {

@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    mainProgram = "p910nd";
   };
 }

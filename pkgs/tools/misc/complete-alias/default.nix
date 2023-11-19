@@ -39,6 +39,5 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/cykerway/complete-alias";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ tuxinaut ];
-    mainProgram = "complete_alias";
   };
 }

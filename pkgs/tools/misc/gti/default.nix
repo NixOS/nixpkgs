@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gti";
-  version = "1.9.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "rwos";
     repo = "gti";
     rev = "v${version}";
-    sha256 = "sha256-DUDCFcaB38Xkp3lLfEhjGC0j430dphXFBVhGzm7/Bp0=";
+    sha256 = "sha256-x6ncvnZPPrVcQYwtwkSenW+ri0L6FpuDa7U7uYUqiyk=";
   };
 
   postPatch = ''
@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     description = "Humorous typo-based git runner; drives a car over the terminal";
     maintainers = with maintainers; [ fadenb ];
     platforms = platforms.unix;
-    mainProgram = "gti";
   };
 }

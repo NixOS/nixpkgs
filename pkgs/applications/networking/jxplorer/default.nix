@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.caossl;
     maintainers = with maintainers; [ benwbooth ];
     platforms   = platforms.linux;
-    mainProgram = "jxplorer";
   };
 }

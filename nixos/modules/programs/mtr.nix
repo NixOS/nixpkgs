@@ -17,7 +17,14 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "mtr" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.mtr;
+        defaultText = literalExpression "pkgs.mtr";
+        description = lib.mdDoc ''
+          The package to use.
+        '';
+      };
     };
   };
 

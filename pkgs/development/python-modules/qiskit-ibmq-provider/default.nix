@@ -41,7 +41,6 @@ in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
   version = "0.20.2";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

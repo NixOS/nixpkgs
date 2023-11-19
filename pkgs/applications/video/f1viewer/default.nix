@@ -19,6 +19,5 @@ buildGoModule rec {
     homepage = "https://github.com/SoMuchForSubtlety/f1viewer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ michzappa ];
-    mainProgram = "f1viewer";
   };
 }

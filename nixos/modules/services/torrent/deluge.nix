@@ -147,7 +147,13 @@ in {
           '';
         };
 
-        package = mkPackageOption pkgs "deluge-2_x" { };
+        package = mkOption {
+          type = types.package;
+          example = literalExpression "pkgs.deluge-2_x";
+          description = lib.mdDoc ''
+            Deluge package to use.
+          '';
+        };
       };
 
       deluge.web = {

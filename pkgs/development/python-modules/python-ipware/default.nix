@@ -3,12 +3,11 @@
 , fetchFromGitHub
 , pythonOlder
 , unittestCheckHook
-, setuptools
 }:
 buildPythonPackage rec {
   pname = "python-ipware";
-  version = "2.0.0";
-  pyproject = true;
+  version = "0.9.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -16,17 +15,12 @@ buildPythonPackage rec {
     owner = "un33k";
     repo = "python-ipware";
     rev = "v${version}";
-    hash = "sha256-j43uAcb1dyKe/SHQLLR+QJS6hKGB5qxjb9NiJaUPj8Y=";
+    hash = "sha256-RK624ktIzoLBD/2mB65zcYZ+o8axDE16bJpB6TwG4h4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   pythonImportsCheck = [
-    "python_ipware"
+    "ipware"
   ];
-
   nativeCheckInputs = [
     unittestCheckHook
   ];

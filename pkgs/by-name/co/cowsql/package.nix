@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Embeddable, replicated and fault tolerant SQL engine";
     homepage = "https://github.com/cowsql/cowsql";
     license = licenses.lgpl3Only;
-    maintainers = teams.lxc.members;
+    maintainers = with maintainers; [ adamcstephens ];
     platforms = platforms.unix;
   };
 })

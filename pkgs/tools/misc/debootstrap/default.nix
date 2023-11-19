@@ -97,6 +97,5 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ marcweber ];
     platforms = platforms.linux;
-    mainProgram = "debootstrap";
   };
 }

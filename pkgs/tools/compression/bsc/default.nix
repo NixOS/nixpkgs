@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     # Later commits changed the licence to Apache2 (no release yet, though)
     license = with licenses; [ lgpl3Plus ];
     platforms = platforms.unix;
-    mainProgram = "bsc";
   };
 }

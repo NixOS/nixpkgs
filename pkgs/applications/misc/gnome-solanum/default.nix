@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , rustPlatform
 , cargo
 , desktop-file-utils
@@ -21,20 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "solanum";
-  version = "5.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Solanum";
     rev = version;
-    hash = "sha256-Xf/b/9o6zHF1hjHSyAXb90ySoBj+DMMe31e6RfF8C4Y=";
+    hash = "sha256-ohUwxwhPxZlKoP5Nq/daD9z5Nj37C7MnFzyvQKp7R8E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-POvKpwzi+bkEkfSDhi/vjs/ey+A2vNN5ta4Q7Ma/RBQ=";
+    hash = "sha256-eDwMBxMmj246tplZfREJkViCDbKmuWSUZyM+tChNQDA=";
   };
 
   postPatch = ''
@@ -71,6 +72,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ linsui ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    mainProgram = "solanum";
   };
 }

@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vuimuich ];
     platforms = lib.platforms.linux;
-    mainProgram = "citron";
   };
 }

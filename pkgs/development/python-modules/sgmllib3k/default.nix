@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
 , pytestCheckHook
 , pythonAtLeast
@@ -13,9 +13,11 @@ buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eGj7HIv6dkwaxWPTzzacOB0TJdNhJJM6cm8p/NqoEuk=";
+  src = fetchFromGitHub {
+    owner = "hsoft";
+    repo = "sgmllib";
+    rev = "799964676f35349ca2dd04503e34c2b3ad522c0d";
+    sha256 = "0bzf6pv85dzfxfysm6zbj8m40hp0xzr9h8qlk4hp3nmy88rznqvr";
   };
 
   nativeCheckInputs = [
@@ -25,8 +27,6 @@ buildPythonPackage rec {
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
     "test_declaration_junk_chars"
   ];
-
-  doCheck = false;
 
   pythonImportsCheck = [
     "sgmllib"

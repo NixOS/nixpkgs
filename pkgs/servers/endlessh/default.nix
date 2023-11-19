@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ azahi marsam ];
     platforms = platforms.unix;
-    mainProgram = "endlessh";
   };
 }

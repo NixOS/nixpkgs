@@ -5,63 +5,43 @@
 , edid-decode
 , hexdump
 , zsh
+, modelines ? [ ] # Modeline "1280x800"   83.50  1280 1352 1480 1680  800 803 809 831 -hsync +vsync
+, clean ? false # should it skip all, but explicitly listed modelines?
 }:
 
 # Usage:
-#   hardware.firmware = [(edid-generator.overrideAttrs {
+#   (edid-generator.override {
 #     clean = true;
-#     modelines = ''
-#       Modeline "PG278Q_60"      241.50   2560 2608 2640 2720   1440 1443 1448 1481   -hsync +vsync
-#       Modeline "PG278Q_120"     497.75   2560 2608 2640 2720   1440 1443 1448 1525   +hsync -vsync
-#       Modeline "U2711_60"       241.50   2560 2600 2632 2720   1440 1443 1448 1481   -hsync +vsync
-#     '';
-#   })];
+#     modelines = [
+#       ''Modeline "PG278Q_2560x1440"       241.50   2560 2608 2640 2720   1440 1443 1448 1481   -hsync +vsync''
+#       ''Modeline "PG278Q_2560x1440@120"   497.75   2560 2608 2640 2720   1440 1443 1448 1525   +hsync -vsync''
+#       ''Modeline "U2711_2560x1440"        241.50   2560 2600 2632 2720   1440 1443 1448 1481   -hsync +vsync''
+#     ];
+#   })
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "edid-generator";
-  version = "master-2023-11-20";
-
-  # so `hardware.firmware` doesn't compress it
-  compressFirmware = false;
+  version = "unstable-2018-03-15";
 
   src = fetchFromGitHub {
     owner = "akatrevorjay";
     repo = "edid-generator";
-    rev = "476a016d8b488df749bf6d6efbf7b9fbfb2e3cb8";
-    sha256 = "sha256-UGxze273VB5cQDWrv9X/Lam6WbOu9U3bro8GcVbEvws=";
+    rev = "31a6f80784d289d2faa8c4ca4788409c83b3ea14";
+    sha256 = "0j6wqzx5frca8b5i6812vvr5iwk7440fka70bmqn00k0vfhsc2x3";
   };
 
   nativeBuildInputs = [ dos2unix edid-decode hexdump zsh ];
 
   postPatch = ''
     patchShebangs modeline2edid
+    # allows makefile to discover prefixes and suffixes in addition to just `[0-9]*x[0-9]*.S`
+    awk -i inplace '/^SOURCES\t/ { print "SOURCES\t:= $(wildcard *[0-9]*x[0-9]**.S)"; next; }; { print; }' Makefile
   '';
-
-  passAsFile = [ "modelines" ];
-  clean = false;
-  modelines = "";
 
   configurePhase = ''
-    test "$clean" != 1 || rm *x*.S
-    ./modeline2edid - <"$modelinesPath"
-
-    for file in *.S ; do
-      echo "--- generated file: $file"
-      cat "$file"
-    done
-    make clean
-  '';
-
-  buildPhase = ''
-    make all
-  '';
-
-  doCheck = true;
-  checkPhase = ''
-    for file in *.bin ; do
-      echo "validating $file"
-      edid-decode <"$file"
-    done
+    test '${toString clean}' != 1 || rm *x*.S
+    ${lib.concatMapStringsSep "\n" (m: "./modeline2edid - <<<'${m}'") modelines}
+    make clean all
   '';
 
   installPhase = ''
@@ -71,7 +51,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Hackerswork to generate an EDID blob from given Xorg Modelines";
     homepage = "https://github.com/akatrevorjay/edid-generator";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli nazarewk ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin

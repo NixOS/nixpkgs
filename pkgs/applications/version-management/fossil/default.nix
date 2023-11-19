@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fossil";
-  version = "2.23";
+  version = "2.22";
 
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dfgI6BNRAYqXFnRtnvGh/huxkEcz6LQYZDiB04GYhZM=";
+    hash = "sha256-gdgj/29dF1s4TfqE7roNBS2nOjfNZs1yt4bnFnEhDWs=";
   };
 
   # required for build time tool `./tools/translate.c`
@@ -66,6 +66,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ maggesi viric ];
     platforms = platforms.all;
-    mainProgram = "fossil";
   };
 })

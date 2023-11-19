@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.17.0";
+  version = "0.16.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DYLDQ9QwdK/a8eY0bFX31UNgxm8FUOaeNAnisFcyFNI=";
+    hash = "sha256-bXbexHd/SJjfAAREhQ8V4PekI9mle3GcUPjMn0zDAyw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

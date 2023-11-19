@@ -1,50 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rakudo
-, makeBinaryWrapper
-}:
+{ lib, stdenv, fetchFromGitHub, rakudo, makeWrapper }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "zef";
-  version = "0.21.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "ugexe";
     repo = "zef";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ji+KTxAOPZhuGryK0+svsVkU+HC1egKZWOboSBUON+s=";
+    rev = "v${version}";
+    sha256 = "sha256-QVUnn9G28epoUEcK8mwm8S2wDQ/tv5B3Zds7bTUFwlw=";
   };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
-
-  buildInputs = [
-    rakudo
-  ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ rakudo ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p "$out"
     # TODO: Find better solution. zef stores cache stuff in $HOME with the
     # default config.
     env HOME=$TMPDIR ${rakudo}/bin/raku -I. ./bin/zef --/depends --/test-depends --/build-depends --install-to=$out install .
-
-    runHook postInstall
   '';
 
   postFixup =''
     wrapProgram $out/bin/zef --prefix RAKUDOLIB , "inst#$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Raku / Perl6 Module Management";
     homepage    = "https://github.com/ugexe/zef";
-    license     = lib.licenses.artistic2;
-    mainProgram = "zef";
-    maintainers = with lib.maintainers; [ sgo ];
-    platforms   = lib.platforms.unix;
+    license     = licenses.artistic2;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ sgo ];
   };
-})
+}

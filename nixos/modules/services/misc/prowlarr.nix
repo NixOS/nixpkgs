@@ -11,7 +11,7 @@ in
     services.prowlarr = {
       enable = mkEnableOption (lib.mdDoc "Prowlarr");
 
-      package = mkPackageOption pkgs "prowlarr" { };
+      package = mkPackageOptionMD pkgs "prowlarr" { };
 
       openFirewall = mkOption {
         type = types.bool;

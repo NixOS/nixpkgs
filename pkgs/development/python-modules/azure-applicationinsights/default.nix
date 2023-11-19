@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "azure-applicationinsights";
   version = "0.1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiowithings";
-  version = "2.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-withings";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wVLoM1Lq1fchyjOOmn+6wVzEAra8x2uK6qaiocVqzmw=";
+    hash = "sha256-6yfhAMQIwhjKXlnN58bL9It8q6CXH9RxKBkB8BfSY1o=";
   };
 
   postPatch = ''

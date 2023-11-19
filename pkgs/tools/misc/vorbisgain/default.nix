@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
-    mainProgram = "vorbisgain";
   };
 }

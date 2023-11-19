@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "facedancer";
   version = "2019.3.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

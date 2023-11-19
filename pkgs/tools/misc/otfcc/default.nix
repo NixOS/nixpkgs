@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/caryll/otfcc";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ jfrankenau ttuegel ];
   };
 
 }

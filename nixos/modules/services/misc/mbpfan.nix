@@ -11,7 +11,12 @@ in {
   options.services.mbpfan = {
     enable = mkEnableOption (lib.mdDoc "mbpfan, fan controller daemon for Apple Macs and MacBooks");
 
-    package = mkPackageOption pkgs "mbpfan" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.mbpfan;
+      defaultText = literalExpression "pkgs.mbpfan";
+      description = lib.mdDoc "The package used for the mbpfan daemon.";
+    };
 
     verbose = mkOption {
       type = types.bool;

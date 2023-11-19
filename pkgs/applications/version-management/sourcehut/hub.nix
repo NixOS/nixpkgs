@@ -4,19 +4,13 @@
 , buildPythonPackage
 , python
 , srht
-, setuptools
-, pip
 , pyyaml
-, pythonOlder
 , unzip
 }:
 
 buildPythonPackage rec {
   pname = "hubsrht";
   version = "0.17.2";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -36,11 +30,6 @@ buildPythonPackage rec {
     vendorHash = "sha256-K5EmZ4U+xItTR85+SCwhwg5KUGLkKHo9Nr2pkvmJpfo=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
-  nativeBuildInputs = [
-    pip
-    setuptools
-  ];
-
   propagatedBuildInputs = [
     srht
     pyyaml
@@ -55,13 +44,7 @@ buildPythonPackage rec {
     ln -s ${hubsrht-api}/bin/api $out/bin/hubsrht-api
   '';
 
-
-  # Module has no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "hubsrht"
-  ];
+  pythonImportsCheck = [ "hubsrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hub.sr.ht";

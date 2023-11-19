@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "parso";
   version = "0.8.3";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

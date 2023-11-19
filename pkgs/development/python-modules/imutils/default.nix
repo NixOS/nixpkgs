@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   version = "0.5.4";
-  format = "setuptools";
   pname = "imutils";
 
   src = fetchPypi {

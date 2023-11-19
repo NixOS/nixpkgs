@@ -39,6 +39,5 @@ buildPythonApplication rec {
     homepage = "https://pypi.org/project/git-annex-remote-googledrive/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ gravndal ];
-    mainProgram = "git-annex-remote-googledrive";
   };
 }

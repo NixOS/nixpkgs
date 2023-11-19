@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.1";
+  version = "1.8";
   pname = "goaccess";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GTW7ECSHjFBw8O2NewvMgC+3aheusupDlSBTxZriHHc=";
+    sha256 = "sha256-nZqjC6PEpD/md+mWRhuro2hAxVAGiUhETfZMVHlfP5o=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ederoyd46 ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "goaccess";
   };
 }

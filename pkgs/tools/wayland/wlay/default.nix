@@ -53,6 +53,5 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
-    mainProgram = "wlay";
   };
 }

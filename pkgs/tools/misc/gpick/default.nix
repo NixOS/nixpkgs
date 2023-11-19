@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.vanilla ];
     platforms = platforms.linux;
-    mainProgram = "gpick";
   };
 }

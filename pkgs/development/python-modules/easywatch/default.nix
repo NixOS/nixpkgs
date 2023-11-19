@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "easywatch";
   version = "0.0.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

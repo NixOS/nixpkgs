@@ -301,6 +301,12 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" relro bindnow"
     ''
 
+    + optionalString (libc != null && targetPlatform.isAvr) ''
+      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
+        echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+      done
+    ''
+
     + optionalString stdenv.targetPlatform.isDarwin ''
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
@@ -316,10 +322,10 @@ stdenv.mkDerivation {
     ''
 
     ###
-    ### Remove certain timestamps from final binaries
+    ### Remove LC_UUID
     ###
     + optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
-      echo "export ZERO_AR_DATE=1" >> $out/nix-support/setup-hook
+      echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
 
     + ''

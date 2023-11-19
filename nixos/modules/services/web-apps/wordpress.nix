@@ -34,7 +34,7 @@ let
       # copy additional plugin(s), theme(s) and language(s)
       ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
       ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
-      ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
+      ${concatMapStringsSep "\n" (language: "cp -r ${language}/* $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
@@ -104,7 +104,12 @@ let
   siteOpts = { lib, name, config, ... }:
     {
       options = {
-        package = mkPackageOption pkgs "wordpress" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.wordpress;
+          defaultText = literalExpression "pkgs.wordpress";
+          description = lib.mdDoc "Which WordPress package to use.";
+        };
 
         uploadsDir = mkOption {
           type = types.path;

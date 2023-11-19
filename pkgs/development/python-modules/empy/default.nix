@@ -2,11 +2,10 @@
 
 buildPythonPackage rec {
   pname = "empy";
-  version = "4.0";
-  format = "setuptools";
+  version = "3.3.4";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JNmmKyN+G1+c7Lqw6Ta/9zVAJS0R6sb95/62OxSHuOM=";
+    sha256 = "c6xJeFtgFHnfTqGKfHm8EwSop8NMArlHLPEgauiPAbM=";
   };
   pythonImportsCheck = [ "em" ];
   meta = with lib; {

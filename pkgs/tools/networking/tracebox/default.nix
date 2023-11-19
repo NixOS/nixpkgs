@@ -37,11 +37,8 @@ stdenv.mkDerivation rec {
     "--with-libpcap=yes"
   ];
 
-  env = {
-    CXXFLAGS = "-std=c++14";
-    LUA_LIB = "-llua";
-    PCAPLIB = "-lpcap";
-  };
+  PCAPLIB="-lpcap";
+  LUA_LIB="-llua";
 
   enableParallelBuilding = true;
 

@@ -18,7 +18,14 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "freefall" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.freefall;
+      defaultText = literalExpression "pkgs.freefall";
+      description = lib.mdDoc ''
+        freefall derivation to use.
+      '';
+    };
 
     devices = mkOption {
       type = types.listOf types.str;

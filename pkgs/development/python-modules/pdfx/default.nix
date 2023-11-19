@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pdfx";
   version = "1.4.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "metachris";

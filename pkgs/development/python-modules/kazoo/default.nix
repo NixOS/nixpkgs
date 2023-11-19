@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "kazoo";
   version = "2.9.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

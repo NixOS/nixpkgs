@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
-    mainProgram = "autorevision";
   };
 }

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pq";
   version = "1.9.1";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

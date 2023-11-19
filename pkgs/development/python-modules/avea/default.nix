@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "avea";
   version = "1.5.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "k0rventen";

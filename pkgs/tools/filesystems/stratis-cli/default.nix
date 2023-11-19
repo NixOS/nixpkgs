@@ -44,6 +44,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://stratis-storage.github.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
-    mainProgram = "stratis";
   };
 }

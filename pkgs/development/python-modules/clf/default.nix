@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "clf";
   version = "0.5.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

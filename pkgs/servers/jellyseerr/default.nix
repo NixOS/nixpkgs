@@ -85,6 +85,5 @@ mkYarnPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ camillemndn ];
     platforms = platforms.linux;
-    mainProgram = "jellyseerr";
   };
 }

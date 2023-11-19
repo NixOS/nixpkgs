@@ -55,6 +55,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vmatare/thinkfan";
     maintainers = with lib.maintainers; [ domenkozar rnhmjoj ];
     platforms = lib.platforms.linux;
-    mainProgram = "thinkfan";
   };
 }

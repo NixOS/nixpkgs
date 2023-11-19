@@ -156,7 +156,12 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "vaultwarden" { };
+    package = mkOption {
+      type = package;
+      default = pkgs.vaultwarden;
+      defaultText = literalExpression "pkgs.vaultwarden";
+      description = lib.mdDoc "Vaultwarden package to use.";
+    };
 
     webVaultPackage = mkOption {
       type = package;

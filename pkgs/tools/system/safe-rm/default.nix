@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    mainProgram = "safe-rm";
   };
 }

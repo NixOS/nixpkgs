@@ -47,6 +47,5 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ devusb ];
     license = licenses.mit;
     platforms = platforms.linux;
-    mainProgram = "plex-mpv-shim";
   };
 }

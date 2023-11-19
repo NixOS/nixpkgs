@@ -20,6 +20,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.canndrew ];
     platforms = lib.platforms.linux;
-    mainProgram = "pico2wave";
   };
 })

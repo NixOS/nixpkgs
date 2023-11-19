@@ -19,9 +19,8 @@
 , libadwaita
 , libdex
 , libpanel
-, libpeas2
+, libpeas
 , libportal-gtk4
-, libsysprof-capture
 , libxml2
 , meson
 , ninja
@@ -42,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "45.0";
+  version = "44.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JC2gJZMpPUVuokEIpFk0cwoeMW2NxbGNnfDoZNt7pZY=";
+    sha256 = "z6aJx40/AiMcp0cVV99MZIKASio08nHDXRqWLX8XKbA=";
   };
 
   patches = [
@@ -83,7 +82,7 @@ stdenv.mkDerivation rec {
     editorconfig-core-c
     flatpak
     libgit2-glib
-    libpeas2
+    libpeas
     libportal-gtk4
     vte-gtk4
     enchant
@@ -95,12 +94,12 @@ stdenv.mkDerivation rec {
     libadwaita
     libdex
     libpanel
-    libsysprof-capture
     libxml2
     ostree
     d-spy
     pcre2
     python3
+    sysprof
     template-glib
     vala
     webkitgtk_6_0
@@ -143,8 +142,6 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
-      # For sysprof-agent
-      --prefix PATH : "${sysprof}/bin"
     )
 
     # Ensure that all plugins get their interpreter paths fixed up.
@@ -178,6 +175,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
-    mainProgram = "gnome-builder";
   };
 }

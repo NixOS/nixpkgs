@@ -16,6 +16,5 @@ python310Packages.buildPythonPackage rec {
     description = "Converts pixel art to SVG - pixel by pixel";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ annaaurora ];
-    mainProgram = "pixel2svg.py";
   };
 }

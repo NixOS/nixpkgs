@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "compiledb";
   version = "0.10.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nickdiego";

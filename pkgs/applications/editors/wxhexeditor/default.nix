@@ -76,6 +76,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ wegank ];
-    mainProgram = "wxHexEditor";
   };
 }

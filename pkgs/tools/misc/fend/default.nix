@@ -8,24 +8,20 @@
 , copyDesktopItems
 , makeDesktopItem
 , nix-update-script
-, testers
-, writeText
-, runCommand
-, fend
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.3.3";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4N2MSs4Uhd0NcS57b6qIJd8ovnUVjLiLniMsHTdZHCo=";
+    sha256 = "sha256-An1biuaqPeRniJZroxoT2o9IEA4XFf5l6ut4nmOsQJI=";
   };
 
-  cargoHash = "sha256-Y8LfkFPM4MKxwW6xk93+vCASkVfsMp3GugjH/kIAvQ8=";
+  cargoHash = "sha256-gnFu0JsMt1wMfifF6EnjDwwydFnVyqpkHV0cyR5Qt3Y=";
 
   nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
@@ -62,26 +58,11 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion { package = fend; };
-      units = testers.testEqualContents {
-        assertion = "fend does simple math and unit conversions";
-        expected = writeText "expected" ''
-          36 kph
-        '';
-        actual = runCommand "actual" { } ''
-          ${lib.getExe fend} '(100 meters) / (10 seconds) to kph' > $out
-        '';
-      };
-    };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
-    changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";

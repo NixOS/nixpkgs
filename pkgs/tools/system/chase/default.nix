@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.polyrod ];
     platforms = platforms.all;
-    mainProgram = "chase";
   };
 }

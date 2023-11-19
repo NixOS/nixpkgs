@@ -8,7 +8,6 @@
 
 buildPythonPackage rec {
   pname = "certbot-dns-ovh";
-  format = "setuptools";
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";

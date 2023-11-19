@@ -69,7 +69,7 @@ buildPythonPackage rec {
       Python 2.5) ctypes library, and is provided under an extremely
       liberal BSD-style Open-Source license.
     '';
-    license = licenses.bsd3;
+    license = "BSD-style";
     platforms = platforms.mesaPlatforms;
   };
 

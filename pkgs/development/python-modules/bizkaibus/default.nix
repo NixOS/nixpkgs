@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "bizkaibus";
   version = "0.1.4";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

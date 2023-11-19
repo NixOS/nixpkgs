@@ -6,7 +6,6 @@
 , pkg-config
 , meson
 , ninja
-, blueprint-compiler
 , glib
 , gtk4
 , libadwaita
@@ -18,26 +17,25 @@
 
 stdenv.mkDerivation rec {
   pname = "eyedropper";
-  version = "1.0.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PStQC9n+DTTOiNO9fHUjIkwgvKeA2alVbtX5qfqhTYo=";
+    hash = "sha256-ZlqRTTSQHmsOhQNg8W2hKL2/zCOu2ECEUrTQ507WN90=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-WRjoyIoVvOYcw2i/cMycE67iziZ8dvQrZ3EfE2v2jkQ=";
+    hash = "sha256-/CIheSIFrymYcCip3NmozAS8ojPnF0qO+oXI15zttkE=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    blueprint-compiler
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils

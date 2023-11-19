@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "waqiasync";
   version = "1.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

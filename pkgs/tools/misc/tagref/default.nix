@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.yusdacra ];
     platforms = platforms.unix;
-    mainProgram = "tagref";
   };
 }

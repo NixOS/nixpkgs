@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "minikanren";
   version = "1.0.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";

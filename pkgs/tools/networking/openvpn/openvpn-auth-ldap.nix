@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
     sha256 = "1j30sygj8nm8wjqxzpb7pfzr3dxqxggswzxd7z5yk7y04c0yp1hb";
   };
 
-  patches = [
-    ./auth-ldap-fix-conftest.patch
-  ];
-
   nativeBuildInputs = [
     autoreconfHook
     gnustep.base

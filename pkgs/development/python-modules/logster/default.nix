@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "logster";
   version = "1.0.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "etsy";

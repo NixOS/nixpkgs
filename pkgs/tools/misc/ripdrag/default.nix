@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nik012003/ripdrag/releases/tag/${src.rev}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "ripdrag";
   };
 }

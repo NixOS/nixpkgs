@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "ptest";
   version =  "1.7.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KarlGong";

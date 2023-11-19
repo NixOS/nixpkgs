@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "python-codon-tables";
   version = "0.1.12";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "python_codon_tables";

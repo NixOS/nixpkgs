@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Neofetch but for ip addresses";
-    homepage = "https://github.com/trakBan/ipfetch";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ annaaurora ];

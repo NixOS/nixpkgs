@@ -10,7 +10,6 @@
 , python3
 , lib
 , stdenv
-, systemd
 , xkeyboard_config
 , xorg
 , wrapGAppsHook
@@ -19,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "6.0.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-Ay9JyPBsE345dBwQHChkaGuoXiB2nPyvCNhWWphL8kY=";
+    hash = "sha256-rYTWtdYfMow3cIPhJdcmhyaIIU7fgVecWigbsCW0Piw=";
   };
 
   outputs = [ "out" "dev" ];
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdk-pixbuf
-    systemd
     xkeyboard_config
     xorg.libxkbfile
     xorg.libXext

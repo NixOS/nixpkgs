@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "sphinx-better-theme";
   version = "0.1.5";
-  format = "setuptools";
   outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {

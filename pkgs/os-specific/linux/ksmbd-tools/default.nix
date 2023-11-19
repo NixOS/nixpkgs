@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ksmbd-tools";
-  version = "3.5.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1Htky39oggDqPYSbF4it2UMIxuoLp0aK+IjGojPgaiU=";
+    sha256 = "sha256-8mjfKCazigHnuN7Egf11ZuD+nQx7ZTesn0a4LsVvV/M=";
   };
 
   buildInputs = [ glib libnl ] ++ lib.optional withKerberos libkrb5;

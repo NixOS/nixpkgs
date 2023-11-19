@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pysimplesoap
+, pytestCheckHook
+, pytest-xdist
 , pythonOlder
 , setuptools
 }:

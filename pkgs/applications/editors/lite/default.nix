@@ -55,6 +55,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
     platforms = platforms.unix;
-    mainProgram = "lite";
   };
 }

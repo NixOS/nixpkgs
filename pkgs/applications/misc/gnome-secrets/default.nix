@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , meson
 , ninja
 , pkg-config
@@ -12,12 +12,11 @@
 , gobject-introspection
 , desktop-file-utils
 , appstream-glib
-, libadwaita
-}:
+, libadwaita }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "8.0";
+  version = "7.2";
   format = "other";
 
   src = fetchFromGitLab {
@@ -25,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    hash = "sha256-SEPQjl6hd8IBs0c0LBEYaqn2n8CGQmYSEMJp5yoL/PA=";
+    hash = "sha256-CE0iuXYHBhu07mjfXCnAPZQUD1Wy95L+tvBT+uepbrk=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +67,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mvnetbiz ];
-    mainProgram = "secrets";
   };
 }

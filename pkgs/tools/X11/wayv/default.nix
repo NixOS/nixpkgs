@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;
     homepage = "https://github.com/mikemb/wayV";
-    mainProgram = "wayv";
   };
 }

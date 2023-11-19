@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
-    mainProgram = "pazi";
   };
 }

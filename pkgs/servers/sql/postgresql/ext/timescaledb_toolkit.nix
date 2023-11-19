@@ -1,47 +1,27 @@
 { lib
 , fetchFromGitHub
-, buildPgrxExtension
+, buildPgxExtension
 , postgresql
 , nixosTests
-, cargo-pgrx
-, fetchCrate
+, cargo-pgx_0_7_1
 , nix-update-script
 , stdenv
 }:
 
-let
-  cargo-pgrx_0_10_2 = cargo-pgrx.overrideAttrs (old: rec {
-    name = "cargo-pgrx-${version}";
-    version = "0.10.2";
-
-    src = fetchCrate {
-      pname = "cargo-pgrx";
-      inherit version;
-      hash = "sha256-FqjfbJmSy5UCpPPPk4bkEyvQCnaH9zYtkI7txgIn+ls=";
-    };
-
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      outputHash = "sha256-XyI3RaPI3Edm/tCP2xoZemib2d2n2cAhobgk9Oafg6s=";
-    });
-  });
-
-in
-
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
+(buildPgxExtension.override {cargo-pgx = cargo-pgx_0_7_1;})rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
-  version = "1.18.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb-toolkit";
     rev = version;
-    hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
+    sha256 = "sha256-aivGURTsm0dGaFq75qR3wIkXwsbvBiDEg+qLMcqKMj8=";
   };
 
-  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
+  cargoSha256 = "sha256-AO5nSgQYvTmohXbzjWvDylnBgS2WpKP6wFOnkUx7ksI=";
   buildAndTestSubdir = "extension";
 
   passthru = {

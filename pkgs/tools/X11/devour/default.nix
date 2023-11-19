@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ mazurel ];
     platforms = platforms.unix;
-    mainProgram = "devour";
   };
 }

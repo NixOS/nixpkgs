@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.mic92 ];
-    mainProgram = "cntr";
   };
 }

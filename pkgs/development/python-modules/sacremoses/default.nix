@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "sacremoses";
   version = "0.0.35";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alvations";

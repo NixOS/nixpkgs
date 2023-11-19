@@ -66,7 +66,14 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "distcc" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.distcc;
+        defaultText = literalExpression "pkgs.distcc";
+        description = lib.mdDoc ''
+          The distcc package to use.
+        '';
+      };
 
       port = mkOption {
         type = types.port;

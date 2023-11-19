@@ -1,5 +1,4 @@
-{ lib, stdenv, llvm_meta, version, src
-, cmake, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
+{ lib, stdenv, llvm_meta, version, src, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -21,9 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
-  buildInputs =
-    lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"

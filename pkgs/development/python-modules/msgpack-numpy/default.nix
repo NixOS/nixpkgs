@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "msgpack-numpy";
   version = "0.4.8";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

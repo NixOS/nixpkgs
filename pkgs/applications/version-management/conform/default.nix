@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/siderolabs/conform";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jmgilman jk ];
-    mainProgram = "conform";
   };
 }

@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.zimbatm ];
     platforms = platforms.all;
-    mainProgram = "beanstalkd";
   };
 }

@@ -90,7 +90,6 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [ ktor arkivm ];
     platforms = builtins.attrNames srcs;
-    mainProgram = "bcompare";
   };
 in
 if stdenv.isDarwin

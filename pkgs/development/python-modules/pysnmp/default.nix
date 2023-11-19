@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pysnmp";
   version = "4.4.12";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/mroth/scmpuff";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
-    mainProgram = "scmpuff";
   };
 }

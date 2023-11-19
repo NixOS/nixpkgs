@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
-  version = "0.6.1";
+  version = "0.6.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "rembo10";
     repo = "headphones";
     rev = "v${version}";
-    sha256 = "1pj6xrcc6g336lb2knlc9l3qxgj3jaaymnbd7bmfjahgq5cp4d4v";
+    sha256 = "0wx0kj9brcd4i9fdc4hmp39cgr27qybya6bp108cfgfv9x7150iw";
   };
 
   dontBuild = true;
@@ -35,6 +35,5 @@ python3.pkgs.buildPythonApplication rec {
     license     = licenses.gpl3Plus;
     homepage    = "https://github.com/rembo10/headphones";
     maintainers = with lib.maintainers; [ rembo10 ];
-    mainProgram = "headphones";
   };
 }

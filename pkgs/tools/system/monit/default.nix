@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3;
     maintainers = with lib.maintainers; [ raskin wmertens ryantm ];
     platforms = with lib; platforms.linux ++ platforms.darwin;
-    mainProgram = "monit";
   };
 }

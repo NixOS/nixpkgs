@@ -12,7 +12,7 @@ let
     mkOption
     mdDoc
     mkEnableOption
-    mkPackageOption
+    mkPackageOptionMD
     types
     ;
 
@@ -26,7 +26,7 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.wyoming.piper = with types; {
-    package = mkPackageOption pkgs "wyoming-piper" { };
+    package = mkPackageOptionMD pkgs "wyoming-piper" { };
 
     servers = mkOption {
       default = {};
@@ -38,7 +38,7 @@ in
           options = {
             enable = mkEnableOption (mdDoc "Wyoming Piper server");
 
-            piper = mkPackageOption pkgs "piper-tts" { };
+            piper = mkPackageOptionMD pkgs "piper-tts" { };
 
             voice = mkOption {
               type = str;
@@ -116,7 +116,6 @@ in
   in mkIf (cfg.servers != {}) {
     systemd.services = mapAttrs' (server: options:
       nameValuePair "wyoming-piper-${server}" {
-        inherit (options) enable;
         description = "Wyoming Piper server instance ${server}";
         after = [
           "network-online.target"

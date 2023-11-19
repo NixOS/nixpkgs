@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pyvizio";
   version = "0.1.61";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "monkeyhex";
   version = "1.7.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

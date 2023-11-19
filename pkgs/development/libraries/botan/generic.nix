@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
 # Passed by version specific builders
-, baseVersion, revision, hash
+, baseVersion, revision, sha256
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , extraPatches ? [ ]
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
        "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.${sourceExtension}"
        "http://botan.randombit.net/releases/Botan-${version}.${sourceExtension}"
     ];
-    inherit hash;
+    inherit sha256;
   };
   patches = extraPatches;
   inherit postPatch;

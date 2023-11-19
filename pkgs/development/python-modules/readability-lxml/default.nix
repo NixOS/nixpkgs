@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "readability-lxml";
   version = "0.8.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "buriy";

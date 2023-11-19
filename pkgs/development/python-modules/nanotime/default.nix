@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "nanotime";
   version = "0.5.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

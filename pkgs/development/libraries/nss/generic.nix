@@ -1,7 +1,7 @@
 { version, hash }:
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , nspr
 , perl
 , zlib
@@ -26,10 +26,8 @@ stdenv.mkDerivation rec {
   pname = "nss";
   inherit version;
 
-  src = fetchFromGitHub {
-    owner = "nss-dev";
-    repo = "nss";
-    rev = "NSS_${lib.replaceStrings ["."] ["_"] version}_RTM";
+  src = fetchurl {
+    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
     inherit hash;
   };
 
@@ -52,20 +50,24 @@ stdenv.mkDerivation rec {
     ./remove-c25519-support.patch
   ];
 
-  postPatch = ''
-    patchShebangs .
+  patchFlags = [ "-p0" ];
 
-    for f in coreconf/config.gypi build.sh; do
+  postPatch = ''
+    patchShebangs nss
+
+    for f in nss/coreconf/config.gypi nss/build.sh; do
       substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
     done
 
-    substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+    substituteInPlace nss/coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-    substituteInPlace coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+    substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
   '';
 
   outputs = [ "out" "dev" "tools" ];
+
+  preConfigure = "cd nss";
 
   buildPhase =
     let

@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "i3ipc";
   version = "2.2.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner  = "acrisci";

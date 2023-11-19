@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "pyls-isort";
   version = "0.2.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";

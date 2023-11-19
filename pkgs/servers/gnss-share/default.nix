@@ -22,6 +22,5 @@ buildGoModule rec {
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ balsoft ];
-    mainProgram = "gnss-share";
   };
 }

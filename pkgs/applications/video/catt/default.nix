@@ -46,6 +46,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/skorokithakis/catt";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
-    mainProgram = "catt";
   };
 }

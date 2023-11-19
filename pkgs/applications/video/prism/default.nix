@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/muesli/prism";
     license = licenses.mit;
     maintainers = with maintainers; [ paperdigits ];
-    mainProgram = "prism";
   };
 }

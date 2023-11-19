@@ -9,7 +9,6 @@
 buildPythonPackage {
   pname = "tess";
   version = "unstable-2019-05-07";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wackywendell";

@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ moaxcp ];
-    mainProgram = "ttygif";
   };
 }

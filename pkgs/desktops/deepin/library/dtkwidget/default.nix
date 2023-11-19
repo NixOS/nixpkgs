@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , qttools
@@ -20,19 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dtkwidget";
-  version = "5.6.17";
+  version = "5.6.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-oFmM0e7ht3lCL50pwS/v/BLFmT2jymQaUZ4SmLdxvMo=";
+    sha256 = "sha256-PhVK/lUFrDW1bn9lUhLuKWLAVj7E7+/YC5USShrg3ds=";
   };
-
-  patches = [
-    ./fix-pkgconfig-path.patch
-    ./fix-pri-path.patch
-  ];
 
   postPatch = ''
     substituteInPlace src/widgets/dapplication.cpp \
@@ -62,11 +56,12 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ dtkgui ];
 
   cmakeFlags = [
-    "-DDTK_VERSION=${version}"
+    "-DDVERSION=${version}"
     "-DBUILD_DOCS=ON"
-    "-DMKSPECS_INSTALL_DIR=${placeholder "dev"}/mkspecs/modules"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "doc"}/${qtbase.qtDocPrefix}"
-    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "dev"}/libexec"
+    "-DQCH_INSTALL_DESTINATION=${qtbase.qtDocPrefix}"
+    "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
   preConfigure = ''
@@ -74,8 +69,6 @@ stdenv.mkDerivation rec {
     # A workaround is to set QT_PLUGIN_PATH explicitly
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
-
-  outputs = [ "out" "dev" "doc" ];
 
   meta = with lib; {
     description = "Deepin graphical user interface library";

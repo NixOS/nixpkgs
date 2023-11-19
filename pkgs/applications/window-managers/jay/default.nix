@@ -39,6 +39,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "jay";
   };
 }

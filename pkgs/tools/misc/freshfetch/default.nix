@@ -43,6 +43,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/k4rakara/freshfetch";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "freshfetch";
   };
 }

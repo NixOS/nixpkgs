@@ -4,16 +4,11 @@
 , srht
 , pyyaml
 , buildsrht
-, pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "scmsrht";
   version = "0.22.23";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -21,10 +16,6 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-058dOEYJDY3jtxH1VkV1CFq5CZTkauSnTWg57DCnNtw=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     srht
@@ -37,7 +28,6 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
-
   pythonImportsCheck = [ "scmsrht" ];
 
   meta = with lib; {

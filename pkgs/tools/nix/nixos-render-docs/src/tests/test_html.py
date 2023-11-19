@@ -204,10 +204,8 @@ def test_full() -> None:
           <div class="blockquote">
            <blockquote class="blockquote">
             <p>with <span class="emphasis"><em>nesting</em></span></p>
-            <pre>
-             <code class="programlisting">
-              nested code block↵
-             </code>
+            <pre class="programlisting">↵
+             nested code block↵
             </pre>
            </blockquote>
           </div>
@@ -215,10 +213,8 @@ def test_full() -> None:
            <ul class="itemizedlist compact" style="list-style-type: disc;">
             <li class="listitem"><p>and lists</p></li>
             <li class="listitem">
-             <pre>
-              <code class="programlisting">
-               containing code↵
-              </code>
+             <pre class="programlisting">↵
+              containing code↵
              </pre>
             </li>
            </ul>
@@ -244,15 +240,11 @@ def test_full() -> None:
              </p>
             </blockquote>
            </div>
-           <pre>
-            <code class="programlisting">
-             code block↵
-            </code>
+           <pre class="programlisting">↵
+            code block↵
            </pre>
-           <pre>
-            <code class="programlisting">
-             fenced block↵
-            </code>
+           <pre class="programlisting">↵
+            fenced block↵
            </pre>
            <p>text</p>
           </dd>

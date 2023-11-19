@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
   version = "2.6.1";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

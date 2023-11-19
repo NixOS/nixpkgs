@@ -3,9 +3,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
 {
   name = "incus-preseed";
 
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
+  meta.maintainers = with lib.maintainers; [ adamcstephens ];
 
   nodes.machine = { lib, ... }: {
     virtualisation = {

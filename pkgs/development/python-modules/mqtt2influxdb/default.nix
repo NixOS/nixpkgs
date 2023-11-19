@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "mqtt2influxdb";
   version = "1.5.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";

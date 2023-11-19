@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -49,7 +49,7 @@ with lib;
         };
 
       script = ''
-        ${config.systemd.package}/bin/udevadm settle
+        ${pkgs.udev}/bin/udevadm settle
         echo -n 1 >/proc/sys/kernel/modules_disabled
       '';
     };

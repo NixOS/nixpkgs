@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pycflow2dot";
   version = "0.2.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

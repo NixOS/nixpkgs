@@ -5,6 +5,7 @@
 , meson
 , ninja
 , pkg-config
+, vala
 , wrapGAppsHook4
 , evolution-data-server-gtk4
 , glib
@@ -13,7 +14,7 @@
 , gst_all_1
 , json-glib
 , libadwaita
-, libpeas2
+, libpeas
 , libportal-gtk4
 , pulseaudio
 , sqlite
@@ -21,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-11-11";
+  version = "unstable-2023-08-26";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "51bca834b1c52a1cc49b79fe79d45dfcd9113c02";
+    rev = "89d1e5a0312a0371bfcd9a95486805917c3729c0";
     fetchSubmodules = true;
-    hash = "sha256-jmhio/vS+w37IW81XgV4xfb/6ralMgAlwi3zigr4t20=";
+    hash = "sha256-28l+SkjVQkOA/5f5nT5BbqIV2BrMLmSK/YtDGYl1xjQ=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    vala
     wrapGAppsHook4
   ];
 
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     json-glib
     libadwaita
-    libpeas2
+    libpeas
     libportal-gtk4
     pulseaudio
     sqlite
@@ -56,8 +58,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dplugin_bluez=true"
-    # FIXME: libpeas2 (and libpeas) not compiled with -Dvapi=true
-    "-Dvapi=false"
   ];
 
   meta = with lib; {

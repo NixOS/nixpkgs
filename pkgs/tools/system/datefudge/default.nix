@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];
-    mainProgram = "datefudge";
   };
 }

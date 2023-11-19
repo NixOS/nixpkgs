@@ -13,7 +13,7 @@ in {
   options = {
     programs.qdmr = {
       enable = lib.mkEnableOption (lib.mdDoc "QDMR - a GUI application and command line tool for programming DMR radios");
-      package = lib.mkPackageOption pkgs "qdmr" { };
+      package = lib.mkPackageOptionMD pkgs "qdmr" { };
     };
   };
 

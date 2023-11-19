@@ -2,14 +2,13 @@
 
 buildPythonPackage rec {
   pname = "skytemple-eventserver";
-  version = "1.6.0";
-  format = "setuptools";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-PWLGPORNprTfG+jgXI1sxyVkRTwSEib4SZhPdOBchwE=";
+    sha256 = "1xcf7ljvi5ixhwx9rkg3hnwcyv4wsgd2yb6is11jffbrdp00j2bq";
   };
 
   doCheck = false; # there are no tests
@@ -19,6 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-eventserver";
     description = "Websocket server that emits SkyTemple UI events";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ xfix ];
   };
 }

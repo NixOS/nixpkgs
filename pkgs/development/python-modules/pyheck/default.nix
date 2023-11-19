@@ -2,13 +2,11 @@
 , buildPythonPackage
 , cargo
 , fetchFromGitHub
-, libiconv
 , poetry-core
 , pytestCheckHook
 , pythonOlder
 , rustc
 , rustPlatform
-, stdenv
 }:
 
 buildPythonPackage rec {
@@ -40,8 +38,6 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     pytestCheckHook

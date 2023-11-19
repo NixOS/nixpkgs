@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "pproxy";
   version = "2.3.7";
-  format = "setuptools";
 
   disabled = isPy27;
 

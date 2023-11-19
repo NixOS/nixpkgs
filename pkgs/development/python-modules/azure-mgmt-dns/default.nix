@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
   version = "8.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

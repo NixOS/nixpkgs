@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
-    mainProgram = "pstoedit";
   };
 }

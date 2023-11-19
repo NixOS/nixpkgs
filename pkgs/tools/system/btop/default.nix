@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rmcgibbo ];
-    mainProgram = "btop";
   };
 }

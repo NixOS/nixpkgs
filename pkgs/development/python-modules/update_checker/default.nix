@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "update_checker";
   version = "0.18.0";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

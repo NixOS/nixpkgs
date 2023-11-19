@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "plyer";
   version = "2.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kivy";

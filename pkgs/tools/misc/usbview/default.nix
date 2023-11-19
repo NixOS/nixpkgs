@@ -3,25 +3,23 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, imagemagick
 , gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "usbview";
-  version = "3.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "gregkh";
     repo = "usbview";
     rev = "v${version}";
-    hash = "sha256-h+sB83BYsrB2VxwtatPWNiM0WdTCMY289nh+/0o8GOw=";
+    sha256 = "1cw5jjpidjn34rxdjslpdlj99k4dqaq1kz6mplv5hgjdddijvn5p";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    imagemagick
   ];
 
   buildInputs = [
@@ -32,8 +30,7 @@ stdenv.mkDerivation rec {
     description = "USB viewer for Linux";
     license = licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
-    maintainers = with maintainers; [ shamilton h7x4 ];
+    maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
-    mainProgram = "usbview";
   };
 }

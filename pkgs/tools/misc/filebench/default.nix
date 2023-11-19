@@ -17,6 +17,5 @@ stdenv.mkDerivation rec {
     license = licenses.cddl;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
-    mainProgram = "filebench";
   };
 }

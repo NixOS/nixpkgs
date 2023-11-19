@@ -85,6 +85,5 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.all;
-    mainProgram = "arc_unpacker";
   };
 }

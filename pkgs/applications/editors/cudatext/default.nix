@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.202.1";
+  version = "1.201.0.2";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
+    hash = "sha256-ke7i0eeZHEsVhtzaS0AeLQOrYE1F+ppCwjR2TWeJQPA=";
   };
 
   patches = [ ./proc_globdata.patch ];
@@ -118,6 +118,5 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
-    mainProgram = "cudatext";
   };
 }

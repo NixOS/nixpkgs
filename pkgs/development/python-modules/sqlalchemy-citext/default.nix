@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";
   version = "1.8.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "markdown-macros";
   version = "0.1.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

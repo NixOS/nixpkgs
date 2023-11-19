@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    # fix build with gcc 11+
-    "-DCMAKE_CXX_STANDARD=14"
   ];
 
   meta = with lib; {

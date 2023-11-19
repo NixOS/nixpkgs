@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pytest-django";
   version = "4.5.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

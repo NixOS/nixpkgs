@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "bkcharts";
   version = "0.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;

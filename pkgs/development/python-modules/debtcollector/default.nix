@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "debtcollector";
   version = "2.5.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

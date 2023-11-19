@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "types-futures";
   version = "3.3.8";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

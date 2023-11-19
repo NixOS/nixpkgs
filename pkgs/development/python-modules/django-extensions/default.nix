@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "django-extensions";
   version = "3.2.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

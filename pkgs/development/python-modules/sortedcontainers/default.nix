@@ -8,7 +8,6 @@ let
   sortedcontainers = buildPythonPackage rec {
     pname = "sortedcontainers";
     version = "2.4.0";
-    format = "setuptools";
 
     src = fetchFromGitHub {
       owner = "grantjenks";

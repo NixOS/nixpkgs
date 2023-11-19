@@ -2,13 +2,12 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "exrex";
   version = "0.11.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
@@ -24,12 +23,6 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "version=about['__version__']," "version='${version}',"
   '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  dontWrapPythonPrograms = true;
 
   # Projec thas no released tests
   doCheck = false;

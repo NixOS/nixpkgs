@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    mainProgram = "zaz";
   };
 }
 

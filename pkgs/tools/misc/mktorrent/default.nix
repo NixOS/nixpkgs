@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch winter ];
     platforms = platforms.all;
-    mainProgram = "mktorrent";
   };
 }

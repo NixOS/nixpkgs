@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "9.0.0";
-  format = "setuptools";
   pname = "azure-mgmt-hdinsight";
   disabled = isPy27;
 

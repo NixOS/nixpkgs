@@ -54,6 +54,5 @@ python3Packages.buildPythonApplication rec {
     description = "YouTube Music Downloader";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
-    mainProgram = "ytmdl";
   };
 }

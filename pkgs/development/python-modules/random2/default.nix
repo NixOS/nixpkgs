@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "random2";
   version = "1.0.1";
-  format = "setuptools";
   doCheck = !isPyPy;
 
   src = fetchPypi {

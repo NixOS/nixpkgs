@@ -22,6 +22,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.puffnfresh ];
     platforms = lib.platforms.linux;
-    mainProgram = "leela";
   };
 }

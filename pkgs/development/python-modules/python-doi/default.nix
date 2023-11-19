@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "python-doi";
   version = "0.1.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "papis";

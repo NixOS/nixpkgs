@@ -23,7 +23,14 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "vmagent" { };
+    package = mkOption {
+      default = pkgs.vmagent;
+      defaultText = lib.literalMD "pkgs.vmagent";
+      type = types.package;
+      description = lib.mdDoc ''
+        vmagent package to use.
+      '';
+    };
 
     dataDir = mkOption {
       type = types.str;

@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    mainProgram = "moe";
   };
 })
 # TODO: a configurable, global moerc file

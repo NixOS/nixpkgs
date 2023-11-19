@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lunush/rates";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "rates";
   };
 }

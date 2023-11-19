@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pkginfo2";
   version = "30.0.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   version = "2.0.1";
-  format = "setuptools";
   pname = "path-and-address";
 
   src = fetchFromGitHub {

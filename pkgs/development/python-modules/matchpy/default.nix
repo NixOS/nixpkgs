@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "matchpy";
   version = "0.5.5"; # Don't upgrade to 4.3.1, this tag is very old
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

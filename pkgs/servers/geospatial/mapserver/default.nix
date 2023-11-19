@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
     license = licenses.mit;
-    maintainers = teams.geospatial.members;
+    maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
 }

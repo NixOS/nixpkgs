@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "extruct";
   version = "0.13.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "scrapinghub";

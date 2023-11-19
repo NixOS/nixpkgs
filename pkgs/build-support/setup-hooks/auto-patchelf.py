@@ -336,12 +336,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--extra-args",
-        # Undocumented Python argparse feature: consume all remaining arguments
-        # as values for this one. This means this argument should always be passed
-        # last.
-        nargs="...",
+        nargs="*",
         type=str,
-        help="Extra arguments to pass to patchelf. This argument should always come last."
+        help="Extra arguments to pass to patchelf"
     )
 
     print("automatically fixing dependencies for ELF files")

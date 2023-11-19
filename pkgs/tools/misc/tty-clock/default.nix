@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "Digital clock in ncurses";
     platforms = platforms.all;
     maintainers = [ maintainers.koral ];
-    mainProgram = "tty-clock";
   };
 }

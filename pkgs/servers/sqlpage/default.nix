@@ -95,6 +95,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/lovasoa/SQLpage/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
-    mainProgram = "sqlpage";
   };
 }

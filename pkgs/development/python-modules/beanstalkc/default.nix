@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "beanstalkc";
   version = "0.5.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bosondata";

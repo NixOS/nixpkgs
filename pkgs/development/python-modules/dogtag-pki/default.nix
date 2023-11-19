@@ -4,7 +4,6 @@ python-ldap, requests, six }:
 buildPythonPackage rec {
   pname = "dogtag-pki";
   version = "11.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "fluent-logger";
   version = "0.10.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

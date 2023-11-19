@@ -32,6 +32,5 @@ stdenv.mkDerivation {
       Since the secret is read from a file, it won't be leaked through
       '/proc/<pid>/cmdline', unlike when 'sed' or 'replace' is used.
     '';
-    mainProgram = "replace-secret";
   };
 }

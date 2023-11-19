@@ -13,10 +13,15 @@
 let
   pname = "maptool";
   version = "1.13.2";
-  repoBase = "https://github.com/RPTools/maptool";
+  repoBase = "https://github.com/RPTools/${pname}";
   src = fetchurl {
-    url = "${repoBase}/releases/download/${version}/maptool-${version}-x86_64.pkg.tar.zst";
-    hash = "sha256-Ntmro+t4qpP5BXW20t97ki0wt2NKaK5yQarsxDEKbb0=";
+    url = "${repoBase}/releases/download/${version}/MapTool-${version}.jar";
+    hash = "sha256-14ULI1OAk0V4DqiL5IF7DK6pw0NRfmU+omrFP72PblA=";
+  };
+
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/RPTools/${pname}/${version}/package/linux/MapTool.png";
+    hash = "sha256-xkVYjMprTanHu8r4b9PHORI8E1aJp+9KDSP5mqCE8ew=";
   };
 
   meta = with lib; {
@@ -28,12 +33,9 @@ let
     ];
     license = licenses.agpl3;
     maintainers = with maintainers; [ rhendric ];
-    platforms = [ "x86_64-linux" ];
   };
 
   javafxModules = [ "base" "controls" "media" "swing" "web" "fxml" "graphics" ];
-
-  appClasspath = "share/${pname}";
 
   classpath =
     lib.concatMap (mod: [
@@ -41,7 +43,7 @@ let
       "${openjfx}/modules/javafx.${mod}"
       "${openjfx}/modules_libs/javafx.${mod}"
     ]) javafxModules ++
-    [ "$out/${appClasspath}/*" ];
+    [ src ];
 
   jvmArgs = [
     "-cp" (lib.concatStringsSep ":" classpath)
@@ -74,7 +76,6 @@ stdenvNoCC.mkDerivation {
   inherit pname version src meta;
 
   dontUnpack = true;
-  dontConfigure = true;
   dontBuild = true;
   dontWrapGApps = true;
 
@@ -98,20 +99,15 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    dest=$out/${appClasspath}
-    install -dm755 "$dest"
-    bsdtar -xf "$src" -C "$dest" --strip-components 4 opt/maptool/lib/app/{'*.jar',readme}
-
-    dest=$out/share/icons/hicolor/256x256/apps
-    install -dm755 "$dest"
-    bsdtar -xOf "$src" opt/maptool/lib/MapTool.png > "$dest"/${rdnsName}.png
-
-    dest=$out/bin
-    install -dm755 "$dest"
-    makeWrapper ${jre}/bin/java "$dest"/${binName} \
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/${binName} \
       "''${gappsWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ ffmpeg ]} \
-      --add-flags "${lib.concatStringsSep " " jvmArgs} net.rptools.maptool.client.LaunchInstructions"
+      --add-flags '${lib.concatStringsSep " " jvmArgs} net.rptools.maptool.client.LaunchInstructions'
+
+    dest=$out/share/icons/hicolor/256x256/apps
+    mkdir -p "$dest"
+    ln -s ${icon} "$dest/${rdnsName}.png"
 
     runHook postInstall
   '';

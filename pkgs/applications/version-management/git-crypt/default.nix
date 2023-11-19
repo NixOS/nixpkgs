@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
-    mainProgram = "git-crypt";
   };
 
 }

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "aioharmony";
   version = "0.2.10";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

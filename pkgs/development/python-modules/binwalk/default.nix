@@ -23,7 +23,6 @@
 buildPythonPackage rec {
   pname = "binwalk${lib.optionalString visualizationSupport "-full"}";
   version = "2.3.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ReFirmLabs";

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.6.5";
+  version = "0.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gJzrr3+/FsQN/HHDERxf/NECArwOaTqFwmI/Q2Z9HTM=";
+    hash = "sha256-7wfvsravSkAGkTtuPE01wPW7wEHKVWT8kYQn93Q2B4M=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

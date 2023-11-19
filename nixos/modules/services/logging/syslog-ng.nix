@@ -40,7 +40,14 @@ in {
           Whether to enable the syslog-ng daemon.
         '';
       };
-      package = mkPackageOption pkgs "syslogng" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.syslogng;
+        defaultText = literalExpression "pkgs.syslogng";
+        description = lib.mdDoc ''
+          The package providing syslog-ng binaries.
+        '';
+      };
       extraModulePaths = mkOption {
         type = types.listOf types.str;
         default = [];

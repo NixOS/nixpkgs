@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "libevdev";
   version = "0.11";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

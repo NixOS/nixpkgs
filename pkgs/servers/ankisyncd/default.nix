@@ -48,6 +48,5 @@ in rustPlatform.buildRustPackage {
     homepage = "https://github.com/ankicommunity/anki-sync-server-rs";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ martinetd ];
-    mainProgram = "ankisyncd";
   };
 }

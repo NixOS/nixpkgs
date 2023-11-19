@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "python-efl";
   version = "1.26.1";
-  format = "setuptools";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";

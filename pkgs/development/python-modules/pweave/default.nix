@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "pweave";
   version = "0.30.3";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Pweave";

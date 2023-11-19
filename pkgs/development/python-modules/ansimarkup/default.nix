@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "ansimarkup";
   version = "1.5.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gvalkov";

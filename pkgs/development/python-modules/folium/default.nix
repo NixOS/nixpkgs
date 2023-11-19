@@ -12,16 +12,14 @@
 , pythonOlder
 , requests
 , selenium
-, setuptools
 , setuptools-scm
-, wheel
 , xyzservices
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.15.1";
-  pyproject = true;
+  version = "0.15.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -29,15 +27,13 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CHPHxp8xEZhEEMLvhs/xAiOr2Hw6B+5svFNY+QvQa+U=";
+    hash = "sha256-xaz9oelkyS8lWECCmKs8P3mHB3Usv0KMUoh/K7rBnAs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptools
     setuptools-scm
-    wheel
   ];
 
   propagatedBuildInputs = [
@@ -45,7 +41,6 @@ buildPythonPackage rec {
     jinja2
     numpy
     requests
-    xyzservices
   ];
 
   nativeCheckInputs = [
@@ -55,6 +50,7 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
     selenium
+    xyzservices
   ];
 
   disabledTests = [

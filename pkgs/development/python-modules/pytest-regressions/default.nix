@@ -36,27 +36,23 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    numpy
+    pandas
+    pillow
     pytest-datadir
     pyyaml
   ];
 
 
   nativeCheckInputs = [
-    matplotlib
-    pandas
     pytestCheckHook
+    matplotlib
   ];
 
   pythonImportsCheck = [
     "pytest_regressions"
     "pytest_regressions.plugin"
   ];
-
-  passthru.optional-dependencies = {
-    dataframe = [ pandas numpy ];
-    image = [ numpy pillow ];
-    num = [ numpy pandas ];
-  };
 
   meta = with lib; {
     description = "Pytest fixtures to write regression tests";

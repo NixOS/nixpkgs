@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyqldb";
   version = "3.2.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "awslabs";

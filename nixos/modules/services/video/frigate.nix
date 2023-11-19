@@ -10,7 +10,6 @@ let
     mkDefault
     mdDoc
     mkEnableOption
-    mkPackageOption
     mkIf
     mkOption
     types;
@@ -63,7 +62,13 @@ in
   options.services.frigate = with types; {
     enable = mkEnableOption (mdDoc "Frigate NVR");
 
-    package = mkPackageOption pkgs "frigate" { };
+    package = mkOption {
+      type = package;
+      default = pkgs.frigate;
+      description = mdDoc ''
+        The frigate package to use.
+      '';
+    };
 
     hostname = mkOption {
       type = str;

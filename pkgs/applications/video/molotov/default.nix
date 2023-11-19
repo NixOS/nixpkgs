@@ -26,6 +26,5 @@ appimageTools.wrapType2 {
     license = with licenses; [ unfree ];
     maintainers = with maintainers; [ apeyroux freezeboy ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "molotov";
   };
 }

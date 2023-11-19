@@ -27,6 +27,5 @@ buildGoModule rec {
     changelog = "https://github.com/hueristiq/xcrawl3r/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "xcrawl3r";
   };
 }

@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = lib.platforms.x86; # uses SSE instructions
     maintainers = with maintainers; [ siraben ];
-    mainProgram = "uwuify";
   };
 }

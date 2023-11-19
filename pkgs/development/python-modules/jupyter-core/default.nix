@@ -5,22 +5,21 @@
 , hatchling
 , platformdirs
 , traitlets
-, pip
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-core";
-  version = "5.5.0";
+  version = "5.3.1";
   disabled = pythonOlder "3.7";
 
-  pyproject = true;
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GufCQUkR4283xMsyrbv5tDfJ8SeL35WBW5Aw2z6Ardc=";
+    hash = "sha256-kQ7oNEC5L19PTPaX6C2bP5FYuzlsFsS0TABsw6VvoL8=";
   };
 
   patches = [
@@ -37,18 +36,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pip
     pytestCheckHook
   ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
-
-  pytestFlagsArray = [
-    # suppress pytest.PytestUnraisableExceptionWarning: Exception ignored in: <socket.socket fd=-1, family=AddressFamily.AF_UNIX, type=SocketKind.SOCK_STREAM, proto=0>
-    "-W ignore::pytest.PytestUnraisableExceptionWarning"
-  ];
 
   disabledTests = [
     # creates a temporary script, which isn't aware of PYTHONPATH
@@ -64,8 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
-    changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
+    maintainers = with maintainers; [ fridh ];
   };
 }

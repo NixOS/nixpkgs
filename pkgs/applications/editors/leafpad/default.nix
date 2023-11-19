@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.flosse ];
     license = licenses.gpl3;
-    mainProgram = "leafpad";
   };
 }

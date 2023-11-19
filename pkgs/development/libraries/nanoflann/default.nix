@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.3";
+  version = "1.5.0";
   pname = "nanoflann";
 
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cTi3Q+SUSNQkSgi2K7nPqfqEQFMkbchbn2+pE2ol9xQ=";
+    hash = "sha256-vPLL6l4sFRi7nvIfdMbBn/gvQ1+1lQHlZbR/2ok0Iw8=";
   };
 
   nativeBuildInputs = [ cmake ];

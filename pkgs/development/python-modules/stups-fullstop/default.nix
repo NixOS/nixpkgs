@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "stups-fullstop";
   version = "1.1.31";
-  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

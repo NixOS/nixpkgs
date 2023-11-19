@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "sshfs";
   version = "2023.10.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fsspec";

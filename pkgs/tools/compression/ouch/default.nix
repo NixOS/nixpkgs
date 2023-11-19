@@ -7,21 +7,20 @@
 , xz
 , zlib
 , zstd
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.5.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
     rev = version;
-    hash = "sha256-WO1fetu39fcLGcrbzFh+toHpnyxWuDVHtmjuH203hzQ=";
+    hash = "sha256-XJOv7JFUJulEkGCMLxGi9nldHaPM/CUzyENIC2TdtoE=";
   };
 
-  cargoHash = "sha256-OdAu7fStTJCF1JGJG9TRE1Qosy6yjKsWq01MYpbXZcg=";
+  cargoHash = "sha256-TfAAU46rH6Jq0MuLRjbaVMRjzoSLYNAWBnUcT8DyIVg=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -29,19 +28,12 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "zstd/pkg-config" ];
 
-  preCheck = ''
-    substituteInPlace tests/ui.rs \
-      --replace 'format!(r"/private{path}")' 'path.to_string()'
-  '';
-
   postInstall = ''
     installManPage artifacts/*.1
     installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch
   '';
 
-  env = { OUCH_ARTIFACTS_FOLDER = "artifacts"; } //
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    lib.optionalAttrs stdenv.cc.isClang { NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}"; };
+  env.OUCH_ARTIFACTS_FOLDER = "artifacts";
 
   meta = with lib; {
     description = "A command-line utility for easily compressing and decompressing files and directories";
@@ -49,6 +41,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda psibi ];
-    mainProgram = "ouch";
   };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eos-installer";
-  version = "5.1.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "endlessm";
     repo = "eos-installer";
     rev = "Release_${version}";
-    sha256 = "BqvZglzFJabGXkI8hnLiw1r+CvM7kSKQPj8IKYBB6S4=";
+    sha256 = "utTTux8o8TN51bvnGldrtMEatiLA1AiHf/9XJZ7k7KM=";
     fetchSubmodules = true;
   };
 

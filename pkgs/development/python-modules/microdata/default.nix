@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "microdata";
   version = "0.8.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "edsu";

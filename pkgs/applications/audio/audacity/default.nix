@@ -30,7 +30,7 @@
 , libid3tag
 , libopus
 , libuuid
-, ffmpeg_6
+, ffmpeg_4
 , soundtouch
 , pcre
 , portaudio # given up fighting their portaudio.patch?
@@ -62,13 +62,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.4.2";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${version}";
-    hash = "sha256-YlRWCu6kQYdzast7Mf29p4FvpXJHQLG7vqqo/5SNQCQ=";
+    hash = "sha256-g9VdwVRrZrIKd4VUU12C691aM2ilgTJdW5Ic7sokk4M=";
   };
 
   postPatch = ''
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    ffmpeg_6
+    ffmpeg_4
     file
     flac
     gtk3
@@ -171,15 +171,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # Test fails
 
-  dontWrapGApps = true;
-
   # Replace audacity's wrapper, to:
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     wrapProgram "$out/bin/audacity" \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_6 ]} \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
   '' + lib.optionalString stdenv.isDarwin ''

@@ -62,6 +62,5 @@ stdenv.mkDerivation rec {
     homepage = "https://jwilk.net/software/pdf2djvu";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
-    mainProgram = "pdf2djvu";
   };
 }

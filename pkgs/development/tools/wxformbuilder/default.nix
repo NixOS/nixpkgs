@@ -11,27 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wxformbuilder";
-  version = "4.0.0";
+  version = "unstable-2023-04-21";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
-    rev = "v${finalAttrs.version}";
+    rev = "f026a8e1a7f68e794638f637e53845f8f04869ef";
     fetchSubmodules = true;
-    leaveDotGit = true;
-    postFetch = ''
-      substituteInPlace $out/.git-properties \
-        --replace "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
-        --replace "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
-      rm -rf $out/.git
-    '';
-    hash = "sha256-Lqta+u9WVwUREsR7aH+2DJn0oM5QwlwRSBImuwNkmS4=";
+    hash = "sha256-48J8osSBb5x9b8MYWZ5QGF6rWgwtcJ0PLLAYViDr50M=";
   };
 
   postPatch = ''
-    substituteInPlace third_party/tinyxml2/cmake/tinyxml2.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace .git-properties \
+      --replace "\$Format:%h\$" "${builtins.substring 0 7 finalAttrs.src.rev}" \
+      --replace "\$Format:%(describe)\$" "${builtins.substring 0 7 finalAttrs.src.rev}"
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 

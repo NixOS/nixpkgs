@@ -19,7 +19,7 @@ with lib;
 
       enable = mkEnableOption (lib.mdDoc "HAProxy, the reliable, high performance TCP/HTTP load balancer.");
 
-      package = mkPackageOption pkgs "haproxy" { };
+      package = mkPackageOptionMD pkgs "haproxy" { };
 
       user = mkOption {
         type = types.str;

@@ -30,6 +30,5 @@ buildPythonApplication {
     homepage = "https://github.com/13rac1/scfbuild";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
-    mainProgram = "scfbuild";
   };
 }

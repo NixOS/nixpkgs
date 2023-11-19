@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, boost, gmp, mpfr }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
-  version = "4.14.3";
+  version = "4.14.2";
   pname = "cgal";
 
-  src = fetchurl {
-    url = "https://github.com/CGAL/cgal/releases/download/releases%2FCGAL-${version}/CGAL-${version}.tar.xz";
-    hash = "sha256-W6/nq+hDW+yhehCCBi02M2jsHj8NZYG7DaiwEPs4n+Q=";
+  src = fetchFromGitHub {
+    owner = "CGAL";
+    repo = "releases";
+    rev = "CGAL-${version}";
+    sha256 = "1p1xyws2s9h2c8hlkz1af4ix48qma160av24by6lcm8al1g44pca";
   };
 
   patches = [

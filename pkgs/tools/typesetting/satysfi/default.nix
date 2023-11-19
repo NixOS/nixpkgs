@@ -80,6 +80,5 @@ in
       license = licenses.lgpl3Only;
       maintainers = [ maintainers.mt-caret maintainers.marsam ];
       platforms = platforms.all;
-      mainProgram = "satysfi";
     };
   }

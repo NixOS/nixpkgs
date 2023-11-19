@@ -5,10 +5,8 @@
   rustfmt,
   clippy,
   mkShell,
-  makeWrapper,
 }:
 let
-  runtimeExprPath = ./src/eval.nix;
   package =
     rustPlatform.buildRustPackage {
       name = "nixpkgs-check-by-name";
@@ -18,9 +16,7 @@ let
         nix
         rustfmt
         clippy
-        makeWrapper
       ];
-      env.NIX_CHECK_BY_NAME_EXPR_PATH = "${runtimeExprPath}";
       # Needed to make Nix evaluation work inside the nix build
       preCheck = ''
         export TEST_ROOT=$(pwd)/test-tmp
@@ -38,12 +34,7 @@ let
         cargo fmt --check
         cargo clippy -- -D warnings
       '';
-      postInstall = ''
-        wrapProgram $out/bin/nixpkgs-check-by-name \
-          --set NIX_CHECK_BY_NAME_EXPR_PATH "$NIX_CHECK_BY_NAME_EXPR_PATH"
-      '';
       passthru.shell = mkShell {
-        env.NIX_CHECK_BY_NAME_EXPR_PATH = toString runtimeExprPath;
         inputsFrom = [ package ];
       };
     };

@@ -6,16 +6,9 @@
 , openai
 , python-dotenv
 , tiktoken
-, tokenizers
-, click
-, jinja2
-, certifi
-, appdirs
-, aiohttp
-, httpx
 }:
 let
-  version = "1.15.0";
+  version = "0.11.1";
 in
 buildPythonPackage rec {
   pname = "litellm";
@@ -26,7 +19,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-s3Ue/N04YZHEfEnVxPHupRSVDHxWjVse8FDlRF5yKCk=";
+    hash = "sha256-5Zk1lc7G0dU/AoLE5V+p30wE/gRfYRPsVS3sNgwWzCU=";
   };
 
   postPatch = ''
@@ -38,16 +31,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    importlib-metadata
     openai
     python-dotenv
     tiktoken
-    importlib-metadata
-    tokenizers
-    click
-    jinja2
-    certifi
-    appdirs
-    aiohttp
   ];
 
   # the import check phase fails trying to do a network request to openai

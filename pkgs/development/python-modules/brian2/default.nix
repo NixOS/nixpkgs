@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "brian2";
   version = "2.5.4";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "Brian2";

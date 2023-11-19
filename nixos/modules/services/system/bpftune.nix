@@ -11,7 +11,7 @@ in
     services.bpftune = {
       enable = lib.mkEnableOption (lib.mdDoc "bpftune BPF driven auto-tuning");
 
-      package = lib.mkPackageOption pkgs "bpftune" { };
+      package = lib.mkPackageOptionMD pkgs "bpftune" { };
     };
   };
 

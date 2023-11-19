@@ -5,7 +5,6 @@
 , buildGoModule
 , makeWrapper
 , nodePackages
-, cacert
 , esbuild
 , jq
 , moreutils
@@ -70,7 +69,6 @@ in
         jq
         moreutils
         nodePackages.pnpm
-        cacert
       ];
 
       installPhase = ''

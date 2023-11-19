@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    mainProgram = "innoextract";
   };
 }

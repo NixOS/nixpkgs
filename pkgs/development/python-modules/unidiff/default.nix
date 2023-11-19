@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "unidiff";
   version = "0.7.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

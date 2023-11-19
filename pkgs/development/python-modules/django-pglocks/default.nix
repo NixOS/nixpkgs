@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "django-pglocks";
   version = "1.0.4";
-  format = "setuptools";
 
   meta = {
     description = "PostgreSQL locking context managers and functions for Django.";

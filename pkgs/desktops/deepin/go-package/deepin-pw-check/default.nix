@@ -1,8 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
-, buildGoModule
+, buildGoPackage
 , pkg-config
 , deepin-gettext-tools
+, go-dbus-factory
+, go-gir-generator
+, go-lib
 , gtk3
 , glib
 , libxcrypt
@@ -12,18 +16,20 @@
 , linux-pam
 }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "deepin-pw-check";
-  version = "6.0.2";
+  version = "5.1.18";
+
+  goPackagePath = "github.com/linuxdeepin/deepin-pw-check";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-kBrkcB0IWGUV4ZrkFzwdPglRgDcnVvYDFhTXS20pKOk=";
+    sha256 = "sha256-v1Z4ArkrejjOCO1vD+BhfEl9pTfuvKgLM6Ont0IUCQk=";
   };
 
-  vendorHash = "sha256-L0vUEkUN70Hrx5roIvTfaZBHbbq7mf3WpQJeFAMU5HY=";
+  goDeps = ./deps.nix;
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +38,9 @@ buildGoModule rec {
   ];
 
   buildInputs = [
+    go-dbus-factory
+    go-gir-generator
+    go-lib
     glib
     libxcrypt
     gtk3
@@ -42,19 +51,24 @@ buildGoModule rec {
 
   postPatch = ''
     sed -i 's|iniparser/||' */*.c
-    substituteInPlace misc/{pkgconfig/libdeepin_pw_check.pc,system-services/org.deepin.dde.PasswdConf1.service} \
+    substituteInPlace misc/pkgconfig/libdeepin_pw_check.pc \
       --replace "/usr" "$out"
+    substituteInPlace misc/system-services/com.deepin.daemon.PasswdConf.service \
+      --replace "/usr/lib/deepin-pw-check/deepin-pw-check" "$out/lib/deepin-pw-check/deepin-pw-check"
   '';
 
   buildPhase = ''
     runHook preBuild
-    make
+    addToSearchPath GOPATH "${go-dbus-factory}/share/gocode"
+    addToSearchPath GOPATH "${go-gir-generator}/share/gocode"
+    addToSearchPath GOPATH "${go-lib}/share/gocode"
+    make -C go/src/${goPackagePath}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    make install PREFIX="$out" PKG_FILE_DIR=$out/lib/pkgconfig PAM_MODULE_DIR=$out/etc/pam.d
+    make install PREFIX="$out" PKG_FILE_DIR=$out/lib/pkg-config PAM_MODULE_DIR=$out/etc/pam.d -C go/src/${goPackagePath}
     # https://github.com/linuxdeepin/deepin-pw-check/blob/d5597482678a489077a506a87f06d2b6c4e7e4ed/debian/rules#L21
     ln -s $out/lib/libdeepin_pw_check.so $out/lib/libdeepin_pw_check.so.1
     runHook postInstall

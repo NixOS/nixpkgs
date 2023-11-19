@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = [ maintainers.carlosdagos ];
-    mainProgram = "tinyproxy";
   };
 }

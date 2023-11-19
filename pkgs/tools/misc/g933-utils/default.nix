@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
     platforms = platforms.linux;
-    mainProgram = "g933-utils";
   };
 }

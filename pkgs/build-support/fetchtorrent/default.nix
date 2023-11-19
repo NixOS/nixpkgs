@@ -14,7 +14,6 @@ in
 , recursiveHash ? true
 , postFetch ? ""
 , postUnpack ? ""
-, meta ? {}
 }:
 let
   afterSuccess = writeShellScript "fetch-bittorrent-done.sh" ''
@@ -31,7 +30,6 @@ let
   jsonConfig = (formats.json {}).generate "jsonConfig" config;
 in
 runCommand name {
-  inherit meta;
   nativeBuildInputs = [ cacert ] ++ (if (backend == "transmission" ) then [ transmission_noSystemd ] else if (backend == "rqbit") then [ rqbit ] else throw "rqbit or transmission are the only available backends for fetchtorrent");
   outputHashAlgo = if hash != "" then null else "sha256";
   outputHash = hash;

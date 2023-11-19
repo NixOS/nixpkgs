@@ -94,11 +94,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
       system = linuxSystem;
       modules = [
         "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
-        { virtualisation = {
-            host.pkgs = pkgs;
-            darwin-builder.workingDirectory = "/var/lib/darwin-builder";
-          };
-        };
+        { virtualisation.host.pkgs = pkgs; }
       ];
     };
   in {

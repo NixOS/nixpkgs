@@ -29,6 +29,5 @@ gccStdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mkg20001 ];
     platforms = platforms.unix;
-    mainProgram = "mslink";
   };
 }

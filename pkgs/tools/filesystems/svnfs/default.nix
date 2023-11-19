@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.unix;
-    mainProgram = "svnfs";
   };
 }

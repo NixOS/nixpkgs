@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "theano-pymc";
   version = "1.1.2";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

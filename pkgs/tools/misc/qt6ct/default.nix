@@ -38,6 +38,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ Flakebi Scrumplex ];
-    mainProgram = "qt6ct";
   };
 })

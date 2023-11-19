@@ -8,7 +8,6 @@
 
 buildPythonPackage {
   pname = "notmuch2";
-  format = "setuptools";
   inherit (notmuch) version src;
 
   sourceRoot = "notmuch-${notmuch.version}/bindings/python-cffi";

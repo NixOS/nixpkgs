@@ -6,25 +6,17 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
-  # ####### GNOME 45 #######
+
+  # ####### GNOME 44 #######
 
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
-  "PersianCalendar@oxygenws.com" = "persian-calendar";
-  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
-
-  "batime@martin.zurowietz.de" = "battery-time";
-  "batterytime@typeof.pw" = "battery-time-2";
-
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
-
-  # ####### GNOME 44 #######
-
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
+
+  "PersianCalendar@oxygenws.com" = "persian-calendar";
+  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
 
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
@@ -34,6 +26,13 @@
 
   "panel-date-format@keiii.github.com" = "panel-date-format";
   "panel-date-format@atareao.es" = "panel-date-format-2";
+
+  "batime@martin.zurowietz.de" = "battery-time";
+  "batterytime@typeof.pw" = "battery-time-2";
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
 
   # ####### GNOME 43 #######
 
@@ -46,9 +45,6 @@
 
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
-
-  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
-  "FuzzyClock@johngoetz" = "fuzzy-clock";
 
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
@@ -79,6 +75,9 @@
   "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
   "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
 
+  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
+  "FuzzyClock@johngoetz" = "fuzzy-clock";
+
   # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
   # there seem to be upstream plans, so this should be checked periodically:
   # https://github.com/Deminder/ShutdownTimer https://github.com/neumann-d/ShutdownTimer/pull/46
@@ -88,6 +87,7 @@
 
   # ####### GNOME 40 #######
 
+  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
@@ -108,6 +108,9 @@
   # Forks of each other, azan@faissal.bensefia.id is more recent
   "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
   "azan@hatem.masmoudi.org" = null;
+
+  # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
+  "flypie@schneegans.github.com" = null;
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

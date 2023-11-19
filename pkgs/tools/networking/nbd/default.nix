@@ -1,15 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, glib
-, which
-, bison
-, nixosTests
-, libnl
-, linuxHeaders
-, gnutls
-}:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
@@ -20,23 +9,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-9cj9D8tXsckmWU0OV/NWQy7ghni+8dQNCI8IMPDL3Qo=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    which
-    bison
-  ];
+  buildInputs = [ glib gnutls ]
+    ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
 
-  buildInputs = [
-    glib
-    gnutls
-  ] ++ lib.optionals stdenv.isLinux [
-    libnl
-    linuxHeaders
-  ];
+  nativeBuildInputs = [ pkg-config which bison ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-  ];
+  postInstall = ''
+    mkdir -p "$out/share/doc/nbd-${version}"
+    cp README.md "$out/share/doc/nbd-${version}/"
+  '';
 
   doCheck = !stdenv.isDarwin;
 
@@ -49,6 +30,5 @@ stdenv.mkDerivation rec {
     description = "Map arbitrary files as block devices over the network";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

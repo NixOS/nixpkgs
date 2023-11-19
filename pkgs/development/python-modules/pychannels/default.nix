@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pychannels";
   version = "1.2.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fancybits";

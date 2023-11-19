@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://asouldocs.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ ivar anthonyroussel ];
-    mainProgram = "asouldocs";
   };
 }

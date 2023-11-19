@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/alexbers/mtprotoproxy";
     platforms   = python.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
-    mainProgram = "mtprotoproxy";
   };
 }

@@ -23,6 +23,5 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
-    mainProgram = "dbus-map";
   };
 }

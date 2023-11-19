@@ -36,6 +36,5 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ cransom ];
     platforms = platforms.all;
-    mainProgram = "gl";
   };
 }

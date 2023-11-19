@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.unix;
-    mainProgram = "snore";
   };
 }

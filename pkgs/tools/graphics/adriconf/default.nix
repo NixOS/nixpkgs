@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ muscaln ];
     platforms = platforms.linux;
-    mainProgram = "adriconf";
   };
 }

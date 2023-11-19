@@ -27,6 +27,5 @@ buildPythonApplication rec {
     homepage = "https://github.com/earwig/git-repo-updater";
     license = licenses.mit;
     maintainers = with maintainers; [bdesham ];
-    mainProgram = "gitup";
   };
 }

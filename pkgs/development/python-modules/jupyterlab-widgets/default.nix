@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
   version = "3.0.9";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "jupyterlab_widgets";

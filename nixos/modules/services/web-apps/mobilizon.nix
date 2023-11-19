@@ -71,7 +71,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "mobilizon" { };
+      package = mkPackageOptionMD pkgs "mobilizon" { };
 
       settings = mkOption {
         type =
@@ -384,7 +384,7 @@ in
           ensureDBOwnership = false;
         }
       ];
-      extraPlugins = ps: with ps; [ postgis ];
+      extraPlugins = with postgresql.pkgs; [ postgis ];
     };
 
     # Nginx config taken from support/nginx/mobilizon-release.conf

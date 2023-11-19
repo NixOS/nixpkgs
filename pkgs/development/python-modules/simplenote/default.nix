@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "simplenote";
   version = "2.1.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "simplenote-vim";

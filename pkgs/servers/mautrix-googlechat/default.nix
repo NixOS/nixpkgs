@@ -68,6 +68,5 @@
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arcnmx ];
-    mainProgram = "mautrix-googlechat";
   };
 }

@@ -40,6 +40,5 @@ buildGoModule rec {
     '';
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "confluencepot";
   };
 }

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "torchgpipe";
   version = "0.0.7";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

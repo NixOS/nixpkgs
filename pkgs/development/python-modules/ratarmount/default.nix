@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "ratarmount";
   version = "0.14.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

@@ -16,7 +16,14 @@ with lib;
         '';
       };
 
-      package = mkPackageOption pkgs "xray" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.xray;
+        defaultText = literalExpression "pkgs.xray";
+        description = lib.mdDoc ''
+          Which xray package to use.
+        '';
+      };
 
       settingsFile = mkOption {
         type = types.nullOr types.path;

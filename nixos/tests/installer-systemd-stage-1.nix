@@ -32,10 +32,6 @@
     stratisRoot
     swraid
     zfsroot
-    clevisLuks
-    clevisLuksFallback
-    clevisZfs
-    clevisZfsFallback
     ;
 
 }

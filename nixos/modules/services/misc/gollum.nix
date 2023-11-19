@@ -83,7 +83,14 @@ in
       description = lib.mdDoc "Specifies the path of the repository directory. If it does not exist, Gollum will create it on startup.";
     };
 
-    package = mkPackageOption pkgs "gollum" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.gollum;
+      defaultText = literalExpression "pkgs.gollum";
+      description = lib.mdDoc ''
+        The package used in the service
+      '';
+    };
 
     user = mkOption {
       type = types.str;

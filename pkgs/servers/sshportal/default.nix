@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://manfred.life/sshportal";
     license = licenses.asl20;
     maintainers = with maintainers; [ zaninime ];
-    mainProgram = "sshportal";
   };
 }

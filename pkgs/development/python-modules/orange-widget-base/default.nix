@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "orange-widget-base";
   version = "4.22.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

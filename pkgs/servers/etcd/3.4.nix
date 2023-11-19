@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "etcd";
-  version = "3.4.28";
+  version = "3.4.27";
+
+  vendorHash = "sha256-duqOIMIXAuJjvKDM15mDdi+LZUZm0uK0MjTv2Dsl3FA=";
+
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    hash = "sha256-M0iD05Wk3pC56kGKeIb0bfMUpy9idMKin0+DYhBo/cw=";
+    sha256 = "sha256-iw9rWfloK1h0M0O10AqCFKETSN6Adn71ujn4twVgsnk=";
   };
-
-  vendorHash = "sha256-DbDIz/cbXqYHaGqNqP+wYpuiaFiZYElRXmQwBXnCbMk=";
 
   buildPhase = ''
     patchShebangs .
     ./build
     ./functional/build
   '';
-
-  doCheck = false;
 
   installPhase = ''
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin

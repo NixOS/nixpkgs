@@ -53,6 +53,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;
-    mainProgram = "ganesha.nfsd";
   };
 }

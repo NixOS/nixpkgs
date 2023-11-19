@@ -35,6 +35,5 @@ python3.pkgs.buildPythonPackage rec {
     description = "A cli tool to browse and watch movies";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ baitinq ];
-    mainProgram = "mov-cli";
   };
 }

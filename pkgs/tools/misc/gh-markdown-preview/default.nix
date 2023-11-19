@@ -37,6 +37,5 @@ buildGoModule rec {
     changelog = "https://github.com/yusukebe/gh-markdown-preview/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
-    mainProgram = "gh-markdown-preview";
   };
 }

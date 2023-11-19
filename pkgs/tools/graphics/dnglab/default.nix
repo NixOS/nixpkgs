@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dnglab/dnglab";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "dnglab";
   };
 }

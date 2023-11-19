@@ -40,7 +40,14 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "virtualbox" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.virtualbox;
+      defaultText = literalExpression "pkgs.virtualbox";
+      description = lib.mdDoc ''
+        Which VirtualBox package to use.
+      '';
+    };
 
     addNetworkInterface = mkOption {
       type = types.bool;

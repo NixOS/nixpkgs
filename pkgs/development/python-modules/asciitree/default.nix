@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "asciitree";
   version = "0.3.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mbr";

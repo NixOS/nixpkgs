@@ -26,12 +26,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace '$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-  '';
-
   meta = with lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";

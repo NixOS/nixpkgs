@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "btrfs";
   version = "13";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -22,7 +22,6 @@
 buildPythonPackage rec {
   pname = "qiskit-machine-learning";
   version = "0.6.1";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

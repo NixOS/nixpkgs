@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "3.10.7";
-  format = "setuptools";
   pname = "thespian";
 
   src = fetchPypi {

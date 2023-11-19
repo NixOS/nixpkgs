@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "dissononce";
   version = "0.34.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tgalal";

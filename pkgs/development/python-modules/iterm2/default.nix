@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "iterm2";
   version = "2.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

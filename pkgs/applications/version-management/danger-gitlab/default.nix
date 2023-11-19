@@ -10,6 +10,5 @@ bundlerApp {
     homepage = "https://github.com/danger/danger-gitlab-gem";
     license = licenses.mit;
     maintainers = teams.serokell.members;
-    mainProgram = "danger";
   };
 }

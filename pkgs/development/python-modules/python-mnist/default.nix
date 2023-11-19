@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "python-mnist";
   version = "0.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

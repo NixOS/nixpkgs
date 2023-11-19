@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "django-colorful";
   version = "1.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

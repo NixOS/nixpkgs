@@ -85,7 +85,12 @@ in
       description = lib.mdDoc "Enable or disable access to web UI.";
     };
 
-    package = mkPackageOption pkgs "minio" { };
+    package = mkOption {
+      default = pkgs.minio;
+      defaultText = literalExpression "pkgs.minio";
+      type = types.package;
+      description = lib.mdDoc "Minio package to use.";
+    };
   };
 
   config = mkIf cfg.enable {

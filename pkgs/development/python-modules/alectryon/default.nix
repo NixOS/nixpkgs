@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "alectryon";
   version = "1.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

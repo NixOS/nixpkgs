@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;
-    mainProgram = "crex";
   };
 }

@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "cufflinks";
   version = "0.17.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

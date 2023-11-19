@@ -14,7 +14,12 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "the MonetDB database server");
 
-      package = mkPackageOption pkgs "monetdb" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.monetdb;
+        defaultText = literalExpression "pkgs.monetdb";
+        description = lib.mdDoc "MonetDB package to use.";
+      };
 
       user = mkOption {
         type = types.str;

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.23.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Lm0UWx4f57lo6rnolQp3x03tLYBsPgMx50RP3sKufek=";
+    sha256 = "sha256-dO1vIzjsBrrMQ0H3Yv4X5rYPlCrWSlPbFmyooaODPeo=";
   };
 
-  cargoHash = "sha256-kkmELD9886/NRuYfAT9OTRa9CUNazdG4E9/D3djgk5E=";
+  cargoHash = "sha256-6bLY9m6g7hSlYI3KrLS3fN4ATRkkbtq3Wf5xqS1G30s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://watchexec.github.io/";
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    mainProgram = "watchexec";
   };
 }

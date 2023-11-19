@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/est31/cargo-udeps";
     license = licenses.mit;
     maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
-    mainProgram = "cargo-udeps";
   };
 }

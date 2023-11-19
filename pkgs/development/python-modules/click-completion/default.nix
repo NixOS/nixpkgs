@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "click-completion";
   version = "0.5.2";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

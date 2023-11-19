@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "sparklines";
   version = "0.4.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deeplook";

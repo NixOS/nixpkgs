@@ -83,6 +83,5 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.linux;
-    mainProgram = "tilix";
   };
 }

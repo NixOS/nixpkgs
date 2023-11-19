@@ -8,16 +8,39 @@
 , pillow
 , pytest
 , scipy
+, symlinkJoin
 , torch
 , which
 }:
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv;
+  inherit (cudaPackages) backendStdenv cudaVersion;
+
+  # NOTE: torchvision doesn't use cudnn; torch does!
+  #   For this reason it is not included.
+  cuda-common-redist = with cudaPackages; [
+    cuda_cccl # <thrust/*>
+    libcublas # cublas_v2.h
+    libcusolver # cusolverDn.h
+    libcusparse # cusparse.h
+  ];
+
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_cudart # cuda_runtime.h
+      cuda_nvcc
+    ] ++ cuda-common-redist;
+  };
+
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaVersion}";
+    paths = cuda-common-redist;
+  };
 
   pname = "torchvision";
-  version = "0.16.2";
+  version = "0.15.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,18 +49,12 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fSFoMZbF0bYqonvgoNAE8ZzwCsjhCdVo2BJ0pOC2zd0=";
+    hash = "sha256-KNbOgd6PCINZqZ24c/Ev+ODux3ik5iUlzem9uUfQArM=";
   };
 
-  nativeBuildInputs = [
-    libpng
-    ninja
-    which
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs = [ libpng ninja which ] ++ lib.optionals cudaSupport [ cuda-native-redist ];
 
-  buildInputs = [ libjpeg_turbo libpng torch.cxxdev ];
+  buildInputs = [ libjpeg_turbo libpng ] ++ lib.optionals cudaSupport [ cuda-redist ];
 
   propagatedBuildInputs = [ numpy pillow torch scipy ];
 

@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kornelski/dupe-krill";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ urbas ];
-    mainProgram = "dupe-krill";
   };
 }

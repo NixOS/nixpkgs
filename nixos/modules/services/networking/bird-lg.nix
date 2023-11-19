@@ -51,7 +51,12 @@ in
 {
   options = {
     services.bird-lg = {
-      package = mkPackageOption pkgs "bird-lg" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.bird-lg;
+        defaultText = literalExpression "pkgs.bird-lg";
+        description = lib.mdDoc "The Bird Looking Glass package to use.";
+      };
 
       user = mkOption {
         type = types.str;

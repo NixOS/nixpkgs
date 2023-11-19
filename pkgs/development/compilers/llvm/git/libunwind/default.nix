@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     chmod -R u+w .
   '';
 
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
+
   postPatch = ''
     cd ../runtimes
   '';

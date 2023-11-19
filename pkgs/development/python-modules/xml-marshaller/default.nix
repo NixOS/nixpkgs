@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "xml-marshaller";
   version = "1.0.2";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "xml_marshaller";

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.9.5";
+  version = "0.9.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-M/VOt0p7io0K+VHrAmBJQ71VigH0Ll1D5it6+/o/3jg=";
+    hash = "sha256-d8EMmA499Zxyagkqx0JCKMZPwSH4LvBya+raD3v3iZU=";
   };
 
   nativeBuildInputs = [

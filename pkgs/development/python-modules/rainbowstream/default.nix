@@ -19,7 +19,6 @@
 buildPythonPackage rec {
   pname = "rainbowstream";
   version = "1.5.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "orakaro";

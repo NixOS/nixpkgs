@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, mkDerivation
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
@@ -21,12 +21,11 @@
 , sphinx
 , sqlite
 , xdg-utils
-, wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.11.0";
+  version = "3.10.1";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    hash = "sha256-rqSnCIsXQDf3cNQn4ofjGQkCgwYGyDau/WWUPHziNp4=";
+    sha256 = "sha256-PtWg9IMwZU0HG2pVHdRKgPQH8i2e72Fbs+q5wCwBsfo=";
   };
 
   patches = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     librsvg
     sphinx
-    wrapQtAppsHook
   ];
 
   buildInputs = [

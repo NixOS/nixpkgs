@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/curlpipe/ox/releases/tag/${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];
-    mainProgram = "ox";
   };
 }

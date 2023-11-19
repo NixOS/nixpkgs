@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "mail-parser";
   version = "3.15.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SpamScope";

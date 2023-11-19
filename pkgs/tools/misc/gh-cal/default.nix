@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mrshmllow/gh-cal";
     license = licenses.mit;
     maintainers = with maintainers; [ loicreynier ];
-    mainProgram = "gh-cal";
   };
 }

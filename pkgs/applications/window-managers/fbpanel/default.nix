@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.mit;
-    mainProgram = "fbpanel";
   };
 
   passthru = {

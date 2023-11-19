@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.vrthra ];
     license = [ lib.licenses.mit ];
     platforms = lib.platforms.unix;
-    mainProgram = "pxattr";
   };
 }

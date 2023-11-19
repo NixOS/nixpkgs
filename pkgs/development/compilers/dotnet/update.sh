@@ -255,7 +255,8 @@ sdk_packages () {
       "Microsoft.NETCore.App.Crossgen2.osx-arm64"
     )
 
-    # These packages were removed on .NET 8
+    # These packages are currently broken on .NET 8
+    # When .NET 8 officialy launches, these should be checked and added back if fixed
     if version_older "$version" "8"; then
         pkgs+=( \
             "Microsoft.NETCore.App.Host.win-arm" \

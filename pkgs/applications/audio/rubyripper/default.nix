@@ -24,10 +24,6 @@ stdenv.mkDerivation rec {
     ruby
   ];
 
-  postInstall = ''
-    cp -r share $out/
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/rrip_cli \
       --prefix PATH : ${lib.makeBinPath [ cddiscid cdparanoia ruby ]}

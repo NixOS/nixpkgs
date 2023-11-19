@@ -51,6 +51,5 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
-    mainProgram = "gonic";
   };
 }

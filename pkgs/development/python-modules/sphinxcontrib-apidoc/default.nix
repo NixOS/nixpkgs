@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
   version = "0.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

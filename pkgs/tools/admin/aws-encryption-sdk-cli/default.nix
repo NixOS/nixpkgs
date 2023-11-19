@@ -1,29 +1,12 @@
 { lib
-, python3
+, python3Packages
 , fetchPypi
 , nix-update-script
 , testers
 , aws-encryption-sdk-cli
 }:
 
-let
-  localPython = python3.override {
-    self = localPython;
-    packageOverrides = final: prev: {
-      urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
-        pyproject = true;
-        version = "1.26.18";
-        nativeBuildInputs = with final; [ setuptools ];
-        src = prev.src.override {
-          inherit version;
-          hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
-        };
-      });
-    };
-  };
-in
-
-localPython.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "aws-encryption-sdk-cli";
   version = "4.1.0";
 
@@ -32,16 +15,15 @@ localPython.pkgs.buildPythonApplication rec {
     hash = "sha256-OCbt0OkDVfpzUIogbsKzaPAle2L6l6N3cmZoS2hEaSM=";
   };
 
-  propagatedBuildInputs = with localPython.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     attrs
     aws-encryption-sdk
     base64io
-    urllib3
   ];
 
   doCheck = true;
 
-  nativeCheckInputs = with localPython.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytest-mock
     pytestCheckHook

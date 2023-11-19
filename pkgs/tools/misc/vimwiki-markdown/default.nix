@@ -24,6 +24,5 @@ buildPythonApplication rec {
     homepage = "https://github.com/WnP/vimwiki_markdown";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
-    mainProgram = "vimwiki_markdown";
   };
 }

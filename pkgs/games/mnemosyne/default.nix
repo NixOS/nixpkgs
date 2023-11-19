@@ -7,11 +7,11 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "mnemosyne";
-  version = "2.10.1";
+  version = "2.7.2";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
-    sha256 = "sha256-zI79iuRXb5S0Y87KfdG+HKc0XVNQOAcBR7Zt/OdaBP4=";
+    sha256 = "09yp9zc00xrc9dmjbsscnkb3hsv3yj46sxikc0r6s9cbghn3nypy";
   };
 
   nativeBuildInputs = with python.pkgs; [ pyqtwebengine.wrapQtAppsHook ];
@@ -25,9 +25,8 @@ python.pkgs.buildPythonApplication rec {
     gtts
     matplotlib
     pyopengl
-    pyqt6
-    pyqt6-webengine
-    argon2-cffi
+    pyqt5
+    pyqtwebengine
     webob
   ];
 

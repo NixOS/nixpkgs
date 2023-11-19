@@ -4,7 +4,6 @@
 
 buildPythonPackage rec {
   version = "2.0.3";
-  format = "setuptools";
   pname = "ofxclient";
 
   src = fetchPypi {

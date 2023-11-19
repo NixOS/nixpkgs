@@ -19,7 +19,10 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   nodes.machine =
     { pkgs, ... }: {
-      virtualisation.writableStore = true;
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
+      virtualisation = {
+        writableStore = true;
+      };
 
       containers.webserver4 = webserverFor "10.231.136.1" "10.231.136.2";
       containers.webserver6 = webserverFor "fc00::2" "fc00::1";

@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ShayBox/Lighthouse";
     license = licenses.mit;
     maintainers = with maintainers; [ expipiplus1 bddvlpr ];
-    mainProgram = "lighthouse";
   };
 }

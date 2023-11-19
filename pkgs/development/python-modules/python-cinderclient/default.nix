@@ -18,7 +18,6 @@
 buildPythonPackage rec {
   pname = "python-cinderclient";
   version = "9.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

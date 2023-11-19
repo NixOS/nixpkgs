@@ -36,6 +36,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ msfjarvis ];
-    mainProgram = "git-quickfix";
   };
 }

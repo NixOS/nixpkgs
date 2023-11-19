@@ -20,7 +20,6 @@ let
         printf "waiting for device to appear $path"
         for try in $(seq 10); do
           if [ -e $path ]; then
-              target=$(readlink -f $path)
               success=true
               break
           else
@@ -57,15 +56,7 @@ let
   # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
   firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
-  openCommand = name: fs: if config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices) then ''
-    if clevis decrypt < /etc/clevis/${firstDevice fs}.jwe | bcachefs unlock ${firstDevice fs}
-    then
-      printf "unlocked ${name} using clevis\n"
-    else
-      printf "falling back to interactive unlocking...\n"
-      tryUnlock ${name} ${firstDevice fs}
-    fi
-  '' else ''
+  openCommand = name: fs: ''
     tryUnlock ${name} ${firstDevice fs}
   '';
 
@@ -106,7 +97,7 @@ let
           lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
             lib.kernel.module
             lib.kernel.yes
-            (lib.kernel.option lib.kernel.yes)
+            lib.kernel.option.yes
           ]
         )
       );

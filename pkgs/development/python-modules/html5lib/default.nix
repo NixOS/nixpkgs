@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "html5lib";
   version = "1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

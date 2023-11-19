@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
@@ -66,7 +66,12 @@ in
   options.services.moodle = {
     enable = mkEnableOption (lib.mdDoc "Moodle web application");
 
-    package = mkPackageOption pkgs "moodle" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.moodle;
+      defaultText = literalExpression "pkgs.moodle";
+      description = lib.mdDoc "The Moodle package to use.";
+    };
 
     initialPassword = mkOption {
       type = types.str;

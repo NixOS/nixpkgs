@@ -20,6 +20,5 @@ python3.pkgs.buildPythonPackage rec {
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
-    mainProgram = "me_cleaner.py";
   };
 }

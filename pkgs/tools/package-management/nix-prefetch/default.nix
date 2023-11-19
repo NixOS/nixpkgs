@@ -76,6 +76,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ msteen ];
     homepage = "https://github.com/msteen/nix-prefetch";
     platforms = platforms.all;
-    mainProgram = "nix-prefetch";
   };
 }

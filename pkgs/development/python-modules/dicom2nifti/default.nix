@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "dicom2nifti";
   version = "2.4.8";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   # no tests in PyPI dist

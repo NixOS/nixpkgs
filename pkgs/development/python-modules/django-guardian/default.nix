@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "django-guardian";
   version = "2.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

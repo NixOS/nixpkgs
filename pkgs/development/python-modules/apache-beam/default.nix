@@ -49,7 +49,6 @@
 buildPythonPackage rec {
   pname = "apache-beam";
   version = "2.50.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "apache";

@@ -39,6 +39,5 @@ buildGoModule rec {
     description = "A command-line tool for generating and managing Architecture Decision Records";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
-    mainProgram = "adrgen";
   };
 }

@@ -11,7 +11,6 @@
 , dmidecode
 , bashInteractive
 , nix-update-script
-, nixosTests
 , testers
 , amazon-ssm-agent
 , overrideEtc ? true
@@ -148,14 +147,11 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) amazon-ssm-agent;
-      version = testers.testVersion {
-        package = amazon-ssm-agent;
-        command = "amazon-ssm-agent --version";
-      };
-    };
     updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = amazon-ssm-agent;
+      command = "amazon-ssm-agent --version";
+    };
   };
 
   __darwinAllowLocalNetworking = true;

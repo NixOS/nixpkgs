@@ -44,12 +44,10 @@ stdenv.mkDerivation rec {
       more common packet sniffing tools, such as tcpdump and snoop.
     '';
     homepage = "https://github.com/jpr5/ngrep/";
-    license = {
-      shortName = "ngrep";  # BSD-style, see README.md and LICENSE
-      url = "https://github.com/jpr5/ngrep/blob/master/LICENSE";
-      free = true;
-      redistributable = true;
-    };
+    # <ngrep>/doc/README.txt says that ngrep itself is licensed under a
+    # 'BSD-like' license but that the 'regex' library (in the ngrep tarball) is
+    # GPLv2.
+    license = "ngrep";  # Some custom BSD-style, see LICENSE.txt
     platforms = with platforms; linux ++ darwin;
     maintainers = [ maintainers.bjornfor ];
   };

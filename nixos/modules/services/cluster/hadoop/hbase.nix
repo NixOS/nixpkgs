@@ -134,7 +134,12 @@ in
 
     hbase = {
 
-      package = mkPackageOption pkgs "hbase" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.hbase;
+        defaultText = literalExpression "pkgs.hbase";
+        description = mdDoc "HBase package";
+      };
 
       rootdir = mkOption {
         description = mdDoc ''

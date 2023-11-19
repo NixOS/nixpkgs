@@ -11,8 +11,6 @@ let
   data = lib.importJSON ./pin.json;
 in
 mkYarnPackage rec {
-  inherit nodejs;
-
   pname = "matrix-appservice-slack";
   version = data.version;
 

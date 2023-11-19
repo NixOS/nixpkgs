@@ -26,6 +26,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh artturin ];
     platforms = platforms.linux;
-    mainProgram = "wlrctl";
   };
 }

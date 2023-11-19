@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "asciimatics";
   version = "1.15.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

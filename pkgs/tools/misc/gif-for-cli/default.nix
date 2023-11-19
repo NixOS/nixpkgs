@@ -51,6 +51,5 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/google/gif-for-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
-    mainProgram = "gif-for-cli";
   };
 }

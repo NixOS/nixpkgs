@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyssim";
   version = "0.6";
-  format = "setuptools";
 
   propagatedBuildInputs = [ numpy scipy pillow ];
 

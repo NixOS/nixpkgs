@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "jupyter-c-kernel";
   version = "1.2.2";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "jupyter_c_kernel";

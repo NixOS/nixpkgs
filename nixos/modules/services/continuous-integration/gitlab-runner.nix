@@ -195,8 +195,12 @@ in {
         Time to wait until a graceful shutdown is turned into a forceful one.
       '';
     };
-    package = mkPackageOption pkgs "gitlab-runner" {
-      example = "gitlab-runner_1_11";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.gitlab-runner;
+      defaultText = literalExpression "pkgs.gitlab-runner";
+      example = literalExpression "pkgs.gitlab-runner_1_11";
+      description = lib.mdDoc "Gitlab Runner package to use.";
     };
     extraPackages = mkOption {
       type = types.listOf types.package;

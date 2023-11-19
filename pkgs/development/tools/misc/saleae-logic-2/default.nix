@@ -1,10 +1,10 @@
 { lib, fetchurl, makeDesktopItem, appimageTools }:
 let
   name = "saleae-logic-2";
-  version = "2.4.13";
+  version = "2.4.12";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-0GIZQKQDY3arDUlxjQKWOHDB3j76xVwkx5H+8q+d0Rc=";
+    hash = "sha256-QqGtozLZtrS5UgnLmsKWxqbcTykLhlossVxuN4WNYzo=";
   };
   desktopItem = makeDesktopItem {
     inherit name;

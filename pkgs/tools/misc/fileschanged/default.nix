@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.linux;
-    mainProgram = "fileschanged";
   };
 }

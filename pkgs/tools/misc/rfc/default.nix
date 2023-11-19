@@ -44,6 +44,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.all;
-    mainProgram = "rfc";
   };
 }

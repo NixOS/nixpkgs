@@ -9,6 +9,7 @@ set -u
 out=${out:-/tmp}
 
 ################################################################################
+export CFLAGS=$NIX_CFLAGS_COMPILE
 export MAKEFLAGS="\
   ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}"
 

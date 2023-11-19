@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://github.com/aptible/supercronic";
     license = licenses.mit;
     maintainers = with maintainers; [ nasageek ];
-    mainProgram = "supercronic";
   };
 }

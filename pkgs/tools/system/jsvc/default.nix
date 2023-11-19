@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rsynnest ];
     license     = lib.licenses.asl20;
     platforms = with lib.platforms; unix;
-    mainProgram = "jsvc";
   };
 }

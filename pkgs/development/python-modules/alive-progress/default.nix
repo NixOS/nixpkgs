@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "alive-progress";
   version = "3.1.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rsalmei";

@@ -6,15 +6,11 @@
 , fetchpatch
 , cmake
 , fetchFromGitHub
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   version = "0.7.2";
-  format = "setuptools";
   pname = "dynd";
-
-  disabled = pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "libdynd";

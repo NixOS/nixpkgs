@@ -51,6 +51,5 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jpas ];
-    mainProgram = "wdomirror";
   };
 }

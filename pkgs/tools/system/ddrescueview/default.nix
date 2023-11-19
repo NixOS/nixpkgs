@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];
-    mainProgram = "ddrescueview";
   };
 }

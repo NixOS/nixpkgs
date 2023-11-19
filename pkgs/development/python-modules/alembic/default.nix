@@ -47,6 +47,5 @@ buildPythonPackage rec {
     description = "A database migration tool for SQLAlchemy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    mainProgram = "alembic";
   };
 }

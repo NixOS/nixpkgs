@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "spacy-alignments";
   version = "0.9.0";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

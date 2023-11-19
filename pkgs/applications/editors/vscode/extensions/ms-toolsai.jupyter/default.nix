@@ -28,9 +28,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     EOF
     }
     jq "$(print_jq_query)" ./package.json | sponge ./package.json
-    # Add a link from temp to /tmp so that the extension gets a writable
-    # directory to write to.
-    ln -s /tmp temp
   '';
 
   meta = {

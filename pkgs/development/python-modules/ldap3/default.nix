@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "ldap3";
   version = "2.9.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

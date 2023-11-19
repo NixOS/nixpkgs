@@ -47,6 +47,5 @@ with python3Packages; buildPythonApplication {
     platforms = platforms.linux;
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.gpl3;
-    mainProgram = "escrotum";
   };
 }

@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ imalison ];
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;
-    mainProgram = "rofi-systemd";
   };
 }

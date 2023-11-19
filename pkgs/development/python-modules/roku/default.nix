@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   version = "4.1";
-  format = "setuptools";
   pname = "roku";
   disabled = isPy27;
 

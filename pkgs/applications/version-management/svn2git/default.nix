@@ -34,6 +34,5 @@ stdenv.mkDerivation rec {
     description = "Tool for importing Subversion repositories into git";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    mainProgram = "svn2git";
   };
 }

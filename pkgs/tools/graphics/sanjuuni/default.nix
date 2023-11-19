@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.tomodachi94 ];
     license = licenses.gpl2Plus;
     broken = stdenv.isDarwin;
-    mainProgram = "sanjuuni";
   };
 }

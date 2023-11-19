@@ -29,6 +29,5 @@ in stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.theuni ];
-    mainProgram = "zerofree";
   };
 }

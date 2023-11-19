@@ -8,24 +8,21 @@
 , python
 , qtawesome
 , requests
-, setuptools
 , typing-extensions
 }:
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.10.7";
-  pyproject = true;
+  version = "1.10.3";
 
   src = fetchFromGitHub {
-    owner = "RareDevs";
+    owner = "Dummerle";
     repo = "Rare";
     rev = "refs/tags/${version}";
-    hash = "sha256-rV6B9tCdwWK9yvEtVyLnv4Lo1WP5xW0f4JcsNZ7iBGI=";
+    hash = "sha256-7KER9gCpqjEKikQTVHsvwX6efCb9L0ut6OBjjLBW2tI=";
   };
 
   nativeBuildInputs = [
-    setuptools
     qt5.wrapQtAppsHook
   ];
 
@@ -36,6 +33,11 @@ buildPythonApplication rec {
     qtawesome
     requests
     typing-extensions
+  ];
+
+  patches = [
+    # Not able to run pythonRelaxDepsHook because of https://github.com/NixOS/nixpkgs/issues/198342
+    ./legendary-gl-version.patch
   ];
 
   dontWrapQtApps = true;
@@ -54,10 +56,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "GUI for Legendary, an Epic Games Launcher open source alternative";
-    homepage = "https://github.com/RareDevs/Rare";
+    homepage = "https://github.com/Dummerle/Rare";
     maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    mainProgram = "rare";
   };
 }

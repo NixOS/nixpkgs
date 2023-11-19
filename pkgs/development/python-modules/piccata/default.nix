@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "piccata";
   version = "2.0.2";
-  format = "setuptools";
 
   disabled = isPy27;
 

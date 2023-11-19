@@ -26,17 +26,24 @@ let
   # The default for cudatoolkit 10.1 is CUDNN 8.0.5, the last version to support CUDA 10.1.
   # However, this caffe does not build with CUDNN 8.x, so we use CUDNN 7.6.5 instead.
   # Earlier versions of cudatoolkit use pre-8.x CUDNN, so we use the default.
-  hasCudnn =
-    if lib.versionOlder cudatoolkit.version "10.1"
-    then cudaPackages ? cudnn
-    else cudaPackages ? cudnn_7_6;
+  cudnn = if lib.versionOlder cudatoolkit.version "10.1"
+    then cudaPackages.cudnn
+    else cudaPackages.cudnn_7_6;
+in
 
+assert leveldbSupport -> (leveldb != null && snappy != null);
+assert cudnnSupport -> cudaSupport;
+assert ncclSupport -> cudaSupport;
+assert pythonSupport -> (python != null && numpy != null);
+
+let
   toggle = bool: if bool then "ON" else "OFF";
 
   test_model_weights = fetchurl {
     url = "http://dl.caffe.berkeleyvision.org/bvlc_reference_caffenet.caffemodel";
     sha256 = "472d4a06035497b180636d8a82667129960371375bd10fcb6df5c6c7631f25e0";
   };
+
 in
 
 stdenv.mkDerivation rec {
@@ -67,8 +74,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv4 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
-                ++ lib.optional (lib.versionOlder cudatoolkit.version "10.1" && hasCudnn) cudaPackages.cudnn
-                ++ lib.optional (lib.versionAtLeast cudatoolkit.version "10.1" && hasCudnn) cudaPackages.cudnn_7_6
+                ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
                 ++ lib.optional ncclSupport nccl
                 ++ lib.optionals leveldbSupport [ leveldb snappy ]
@@ -148,14 +154,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://caffe.berkeleyvision.org/";
     maintainers = with maintainers; [ ];
-    broken =
-      (pythonSupport && (python.isPy310))
-      || cudaSupport
-      || !(leveldbSupport -> (leveldb != null && snappy != null))
-      || !(cudnnSupport -> (hasCudnn && cudaSupport))
-      || !(ncclSupport -> cudaSupport)
-      || !(pythonSupport -> (python != null && numpy != null))
-    ;
+    broken = (pythonSupport && (python.isPy310)) || cudaSupport;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

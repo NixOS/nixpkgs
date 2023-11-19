@@ -8,7 +8,6 @@
 let pyjsparser = buildPythonPackage rec {
   pname = "pyjsparser";
   version = "2.7.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "PiotrDabkowski";

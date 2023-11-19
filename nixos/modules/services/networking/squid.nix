@@ -111,7 +111,12 @@ in
         description = lib.mdDoc "Whether to run squid web proxy.";
       };
 
-      package = mkPackageOption pkgs "squid" { };
+      package = mkOption {
+        default = pkgs.squid;
+        defaultText = literalExpression "pkgs.squid";
+        type = types.package;
+        description = lib.mdDoc "Squid package to use.";
+      };
 
       proxyAddress = mkOption {
         type = types.nullOr types.str;
@@ -171,7 +176,7 @@ in
       serviceConfig = {
         PIDFile="/run/squid.pid";
         ExecStart  = "${cfg.package}/bin/squid --foreground -YCs -f ${squidConfig}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecReload="kill -HUP $MAINPID";
         KillMode="mixed";
         NotifyAccess="all";
       };

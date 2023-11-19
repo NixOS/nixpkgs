@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.linux;
-    mainProgram = "makebootfat";
   };
 }

@@ -56,6 +56,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ] ++ teams.podman.members;
     platforms = platforms.linux;
-    mainProgram = "runc";
   };
 }

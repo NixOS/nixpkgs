@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "wifi";
   version = "0.3.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rockymeza";

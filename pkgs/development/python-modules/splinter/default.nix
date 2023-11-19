@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
-, setuptools
 , urllib3
 , selenium
 , cssselect
@@ -15,22 +14,18 @@
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.20.1";
+  version = "0.19.0";
 
   disabled = isPy27;
 
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
     rev = "refs/tags/${version}";
-    hash = "sha256-6oHcHIkqOr0aFNfCNjZpm4zIYuz2ov9drfCxSdjAg7o=";
+    hash = "sha256-K10zrQOM/khVcf+OT4s5UCY8zE2+nWtaAkRLy9/feU0=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     urllib3

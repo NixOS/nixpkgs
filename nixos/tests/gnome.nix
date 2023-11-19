@@ -40,25 +40,25 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
   testScript = { nodes, ... }: let
     # Keep line widths somewhat manageable
-    user = nodes.machine.users.users.alice;
+    user = nodes.machine.config.users.users.alice;
     uid = toString user.uid;
     bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
-    # Run a command in the appropriate user environment
-    run = command: "su - ${user.name} -c '${bus} ${command}'";
+    gdbus = "${bus} gdbus";
+    su = command: "su - ${user.name} -c '${command}'";
 
     # Call javascript in gnome shell, returns a tuple (success, output), where
     # `success` is true if the dbus call was successful and output is what the
     # javascript evaluates to.
-    eval = command: run "gdbus call --session -d org.gnome.Shell -o /org/gnome/Shell -m org.gnome.Shell.Eval ${command}";
+    eval = "call --session -d org.gnome.Shell -o /org/gnome/Shell -m org.gnome.Shell.Eval";
 
     # False when startup is done
-    startingUp = eval "Main.layoutManager._startingUp";
+    startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
 
     # Start Console
-    launchConsole = run "gapplication launch org.gnome.Console";
+    launchConsole = su "${bus} gapplication launch org.gnome.Console";
 
     # Hopefully Console's wm class
-    wmClass = eval "global.display.focus_window.wm_class";
+    wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
       with subtest("Login to GNOME with GDM"):
           # wait for gdm to start

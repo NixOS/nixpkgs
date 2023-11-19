@@ -11,7 +11,7 @@ in
     services.mediamtx = {
       enable = lib.mkEnableOption (lib.mdDoc "MediaMTX");
 
-      package = lib.mkPackageOption pkgs "mediamtx" { };
+      package = lib.mkPackageOptionMD pkgs "mediamtx" { };
 
       settings = lib.mkOption {
         description = lib.mdDoc ''

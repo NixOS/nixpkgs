@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "ijson";
   version = "3.2.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ICRAR/ijson";
     changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ rvl ];
   };
 }

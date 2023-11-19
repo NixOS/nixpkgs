@@ -10,7 +10,14 @@ in {
     services.surrealdb = {
       enable = mkEnableOption (lib.mdDoc "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web");
 
-      package = mkPackageOption pkgs "surrealdb" { };
+      package = mkOption {
+        default = pkgs.surrealdb;
+        defaultText = literalExpression "pkgs.surrealdb";
+        type = types.package;
+        description = lib.mdDoc ''
+          Which surrealdb derivation to use.
+        '';
+      };
 
       dbPath = mkOption {
         type = types.str;

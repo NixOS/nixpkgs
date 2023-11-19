@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pytest-openfiles";
   version = "0.5.0";
-  format = "setuptools";
   disabled = isPy27; # abandoned
 
   src = fetchPypi {

@@ -1,9 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, meson
-, ninja
+, autoreconfHook
 , pkg-config
+, libxml2
 , xdg-desktop-portal
 , gtk3
 , gnome
@@ -14,45 +14,51 @@
 , buildPortalsInGnome ? true
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.15.1";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = "xdg-desktop-portal-gtk";
-    rev = finalAttrs.version;
-    sha256 = "sha256-uXVjKsqoIjqJilJq8ERRzEqGKbkzc+Zl6y+37CAcYro=";
+    repo = pname;
+    rev = version;
+    sha256 = "8eyWeoiJ3b/GlqGVfmkf2/uS7FnOpRNgbfxwWjclw8w=";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
+    autoreconfHook
+    libxml2
     pkg-config
     wrapGAppsHook
+    xdg-desktop-portal
   ];
 
   buildInputs = [
     glib
-    gtk3
-    xdg-desktop-portal
-  ] ++ lib.optionals buildPortalsInGnome [
     gsettings-desktop-schemas # settings exposed by settings portal
+    gtk3
     gnome-desktop
-    gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
+    gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s)
   ];
 
-  mesonFlags = lib.optionals (!buildPortalsInGnome) [
-    "-Dwallpaper=disabled"
-    "-Dsettings=disabled"
-    "-Dappchooser=disabled"
-    "-Dlockdown=disabled"
+  configureFlags = if buildPortalsInGnome then [
+    "--enable-wallpaper"
+    "--enable-screenshot"
+    "--enable-screencast"
+    "--enable-background"
+    "--enable-settings"
+    "--enable-appchooser"
+  ] else [
+    # These are now enabled by default, even though we do not need them for GNOME.
+    # https://github.com/flatpak/xdg-desktop-portal-gtk/issues/355
+    "--disable-settings"
+    "--disable-appchooser"
   ];
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    license = licenses.lgpl2Plus;
   };
-})
+}

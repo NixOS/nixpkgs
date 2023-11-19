@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "mtm";
   };
 }

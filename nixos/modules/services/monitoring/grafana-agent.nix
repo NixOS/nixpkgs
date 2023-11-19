@@ -13,7 +13,7 @@ in
   options.services.grafana-agent = {
     enable = mkEnableOption (lib.mdDoc "grafana-agent");
 
-    package = mkPackageOption pkgs "grafana-agent" { };
+    package = mkPackageOptionMD pkgs "grafana-agent" { };
 
     credentials = mkOption {
       description = lib.mdDoc ''

@@ -42,7 +42,12 @@ in
         description = lib.mdDoc "Request timeout in seconds.";
       };
 
-      package = mkPackageOption pkgs "morty" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.morty;
+        defaultText = literalExpression "pkgs.morty";
+        description = lib.mdDoc "morty package to use.";
+      };
 
       port = mkOption {
         type = types.port;

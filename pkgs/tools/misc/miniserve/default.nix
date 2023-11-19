@@ -56,6 +56,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "miniserve";
   };
 }

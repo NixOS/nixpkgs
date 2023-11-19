@@ -12,7 +12,6 @@ let
     homepage = "https://mifi.no/losslesscut/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ShamrockLee ];
-    mainProgram = "losslesscut";
   };
   x86_64-appimage = callPackage ./build-from-appimage.nix {
     inherit pname version metaCommon;

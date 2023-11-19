@@ -10,6 +10,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      { assertion = false;
+        message = "The oddjob service was found to be broken without NixOS test or maintainer. Please take ownership of this service.";
+      }
+    ];
     systemd.packages = [ cfg.package ];
 
     systemd.services.oddjobd = {
@@ -25,6 +30,4 @@ in
       };
     };
   };
-
-  meta.maintainers = with lib.maintainers; [ SohamG ];
 }

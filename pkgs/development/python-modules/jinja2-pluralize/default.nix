@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "jinja2-pluralize";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "jinja2_pluralize";

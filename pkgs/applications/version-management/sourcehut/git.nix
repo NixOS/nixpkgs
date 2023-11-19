@@ -7,10 +7,7 @@
 , scmsrht
 , pygit2
 , minio
-, pythonOlder
 , unzip
-, pip
-, setuptools
 }:
 let
   version = "0.84.2";
@@ -81,19 +78,11 @@ in
 buildPythonPackage rec {
   inherit src version;
   pname = "gitsrht";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
   '';
-
-  nativeBuildInputs = [
-    pip
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     srht

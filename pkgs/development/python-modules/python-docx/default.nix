@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "python-docx";
   version = "0.8.11";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

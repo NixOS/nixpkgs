@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
   version = "0.4.16";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

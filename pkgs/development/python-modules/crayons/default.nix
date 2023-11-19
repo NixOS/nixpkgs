@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "crayons";
   version = "0.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

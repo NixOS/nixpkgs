@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "dbus-signature-pyparsing";
   version = "0.4.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";

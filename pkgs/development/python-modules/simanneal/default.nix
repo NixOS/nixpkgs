@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "simanneal";
   version = "0.5.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "perrygeo";

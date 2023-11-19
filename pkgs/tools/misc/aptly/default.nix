@@ -38,6 +38,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ montag451 ] ++ teams.bitnomial.members;
     changelog =
       "https://github.com/aptly-dev/aptly/releases/tag/v${version}";
-    mainProgram = "aptly";
   };
 }

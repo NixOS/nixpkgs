@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "glob2";
   version = "0.7";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

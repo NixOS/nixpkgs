@@ -31,6 +31,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/hifi/heisenbridge";
     license = licenses.mit;
     maintainers = [ maintainers.sumnerevans ];
-    mainProgram = "heisenbridge";
   };
 }

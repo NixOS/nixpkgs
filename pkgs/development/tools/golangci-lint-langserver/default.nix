@@ -22,7 +22,6 @@ buildGoModule rec {
     description = "Language server for golangci-lint";
     homepage = "https://github.com/nametake/golangci-lint-langserver";
     license = licenses.mit;
-    maintainers = with maintainers; [ kirillrdy ];
-    mainProgram = "golangci-lint-langserver";
+    maintainers = with maintainers; [ ];
   };
 }

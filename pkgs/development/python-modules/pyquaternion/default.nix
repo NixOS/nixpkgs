@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyquaternion";
   version = "0.9.9";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

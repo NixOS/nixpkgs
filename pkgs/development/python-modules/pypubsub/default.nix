@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pypubsub";
   version = "4.0.3";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

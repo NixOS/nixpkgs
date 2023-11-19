@@ -79,6 +79,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
-    mainProgram = "jwm";
   };
 }

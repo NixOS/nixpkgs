@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "expects";
   version = "0.9.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jaimegildesagredo";

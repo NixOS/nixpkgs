@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pyparted";
   version = "3.13.0";
-  format = "setuptools";
   disabled = isPyPy;
 
   src = fetchFromGitHub {

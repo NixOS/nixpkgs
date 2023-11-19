@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "rnc2rng";
   version = "2.6.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

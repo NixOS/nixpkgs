@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , future
@@ -12,6 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, stdenv
 , typing-extensions
 , wrapt
 , uptime
@@ -19,8 +19,8 @@
 
 buildPythonPackage rec {
   pname = "can";
-  version = "4.3.1";
-  pyproject = true;
+  version = "4.2.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t2zt54nPOYcEE0RPb4fbW7sN4HzFXlDIHvHudstBwrM=";
+    hash = "sha256-MyVGjAy13Ne0PkVufB0JDNEZHhVBzeUYWWlH72ib/pI=";
   };
 
   postPatch = ''
@@ -36,13 +36,10 @@ buildPythonPackage rec {
       --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
   propagatedBuildInputs = [
     msgpack
     packaging
+    setuptools
     typing-extensions
     wrapt
   ];

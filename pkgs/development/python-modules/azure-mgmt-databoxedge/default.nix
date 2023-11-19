@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "azure-mgmt-databoxedge";
   version = "1.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

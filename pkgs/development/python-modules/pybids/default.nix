@@ -19,7 +19,6 @@
 
 buildPythonPackage rec {
   version = "0.16.3";
-  format = "setuptools";
   pname = "pybids";
 
   src = fetchPypi {

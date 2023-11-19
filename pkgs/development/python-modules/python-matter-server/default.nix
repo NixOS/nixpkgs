@@ -5,11 +5,11 @@
 
 # build
 , setuptools
+, wheel
 
 # propagates
 , aiohttp
 , aiorun
-, async-timeout
 , coloredlogs
 , dacite
 , orjson
@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.0.3";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -37,22 +37,17 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-bR6AVoy9f02RKZ57dnHTDAv5LTCcd/qBbzMDRKsGbfM=";
+    hash = "sha256-zCw5sj+UgY0egjXGzcbOb7VATeLY80+8Mv9owmdA+f0=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
-  '';
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
     aiohttp
     aiorun
-    async-timeout
     coloredlogs
     dacite
     orjson

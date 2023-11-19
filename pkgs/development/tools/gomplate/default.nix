@@ -12,16 +12,16 @@
 # buildGoModule rec {
 buildGo120Module rec {
   pname = "gomplate";
-  version = "3.11.6";
+  version = "3.11.5";
 
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IXNI+VkmW7k+Hkx2gv8OCpfAe4qJ3sH9KT/mO8y3JcU=";
+    hash = "sha256-cBSOfjU7A6B7+5zQLGtGLx9kORsjH/IzGgkjwjjTcYY=";
   };
 
-  vendorHash = "sha256-DAtgebWwGBYioKTvW2qtzy+GPxYE2SuXIYpex6M85Vc=";
+  vendorHash = "sha256-thsa15CDD7+gCSPSU4xDbovETREeuL4gV6TjdcImj9w=";
 
   postPatch = ''
     # some tests require network access

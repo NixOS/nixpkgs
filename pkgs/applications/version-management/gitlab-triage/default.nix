@@ -12,6 +12,5 @@ bundlerApp {
     homepage = "https://gitlab.com/gitlab-org/gitlab-triage";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    mainProgram = "gitlab-triage";
   };
 }

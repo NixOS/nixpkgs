@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "itemdb";
   version = "1.1.2";
-  format = "setuptools";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {

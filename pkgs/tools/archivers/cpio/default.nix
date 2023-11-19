@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"
-    mainProgram = "cpio";
   };
 }

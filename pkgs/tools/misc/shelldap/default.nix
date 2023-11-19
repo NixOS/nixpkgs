@@ -48,6 +48,5 @@ perlPackages.buildPerlPackage rec {
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ clerie tobiasBora ];
     platforms = platforms.unix;
-    mainProgram = "shelldap";
   };
 }

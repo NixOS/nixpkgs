@@ -29,6 +29,5 @@ buildGoModule rec {
     description = "A command line utility for interacting with Google Drive";
     license = licenses.mit;
     maintainers = [ maintainers.rzetterberg ];
-    mainProgram = "gdrive";
   };
 }

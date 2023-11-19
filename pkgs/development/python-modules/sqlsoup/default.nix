@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "sqlsoup";
   version = "0.9.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

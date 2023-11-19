@@ -58,7 +58,14 @@ in {
           Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
-      package = mkPackageOption pkgs "freeswitch" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.freeswitch;
+        defaultText = literalExpression "pkgs.freeswitch";
+        description = lib.mdDoc ''
+          FreeSWITCH package.
+        '';
+      };
     };
   };
   config = mkIf cfg.enable {

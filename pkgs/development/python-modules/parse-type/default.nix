@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "parse-type";
   version = "0.6.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jenisys";

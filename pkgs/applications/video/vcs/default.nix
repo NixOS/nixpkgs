@@ -38,6 +38,5 @@ stdenv.mkDerivation {
     license = licenses.cc-by-nc-sa-30;
     maintainers = with maintainers; [ elitak ];
     platforms = with platforms; unix;
-    mainProgram = "vcs";
   };
 }

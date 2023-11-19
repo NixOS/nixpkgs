@@ -6,7 +6,12 @@ in {
     services.pleroma = with lib; {
       enable = mkEnableOption (lib.mdDoc "pleroma");
 
-      package = mkPackageOption pkgs "pleroma" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.pleroma;
+        defaultText = literalExpression "pkgs.pleroma";
+        description = lib.mdDoc "Pleroma package to use.";
+      };
 
       user = mkOption {
         type = types.str;

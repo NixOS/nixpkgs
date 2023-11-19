@@ -29,6 +29,5 @@ buildGoModule rec {
     description = "Smug - tmux session manager";
     license = licenses.mit;
     maintainers = with maintainers; [ juboba ];
-    mainProgram = "smug";
   };
 }

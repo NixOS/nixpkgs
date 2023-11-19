@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  configureFlags = [
-    "--unbundled"
+  cmakeFlags = [
+    "-DPOCO_UNBUNDLED=ON"
   ];
 
   postFixup = ''

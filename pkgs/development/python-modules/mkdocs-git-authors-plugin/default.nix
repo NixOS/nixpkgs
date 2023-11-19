@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "mkdocs-git-authors-plugin";
   version = "0.7.2";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

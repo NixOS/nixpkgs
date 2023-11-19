@@ -121,7 +121,12 @@ in {
       '';
     };
 
-    seafilePackage = mkPackageOption pkgs "seafile-server" { };
+    seafilePackage = mkOption {
+      type = types.package;
+      description = lib.mdDoc "Which package to use for the seafile server.";
+      default = pkgs.seafile-server;
+      defaultText = literalExpression "pkgs.seafile-server";
+    };
 
     seahubExtraConf = mkOption {
       default = "";

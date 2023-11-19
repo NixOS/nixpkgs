@@ -8,28 +8,26 @@
 , awesomeversion
 , backoff
 , cachetools
-, mashumaro
-, orjson
 , pycountry
+, pydantic
 , yarl
-, aresponses
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "radios";
-  version = "0.3.0";
-  pyproject = true;
+  version = "0.1.1";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
 
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
     rev = "v${version}";
-    hash = "sha256-bzo+SA8kqc2GcxSV0TiIJyPVG+JshdsMoXSUhZYSphU=";
+    hash = "sha256-NCBch9MCWVD6ez0sIUph8rwOOzEMZtwC4atXJe53xZM=";
   };
 
   postPatch = ''
@@ -48,21 +46,17 @@ buildPythonPackage rec {
     awesomeversion
     backoff
     cachetools
-    mashumaro
-    orjson
     pycountry
+    pydantic
     yarl
   ];
 
   nativeCheckInputs = [
-    aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "radios" ];
-
-  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Asynchronous Python client for the Radio Browser API";

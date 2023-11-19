@@ -45,9 +45,7 @@ let
     chown -R root:root "$PREFIX"
   '';
 in {
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
+  meta.maintainers = with lib.maintainers; [ adamcstephens ];
 
   options = {
     virtualisation.lxd.agent.enable = lib.mkEnableOption (lib.mdDoc "Enable LXD agent");
@@ -63,7 +61,6 @@ in {
       preStart = preStartScript;
 
       # avoid killing nixos-rebuild switch when executed through lxc exec
-      restartIfChanged = false;
       stopIfChanged = false;
 
       unitConfig = {

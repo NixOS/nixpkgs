@@ -55,6 +55,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
-    mainProgram = "alarm-clock-applet";
   };
 }

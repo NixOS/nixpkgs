@@ -3,8 +3,7 @@
 , enableQT             ? false # deprecated name
 , enableQt             ? enableQT
 , enableXM             ? false
-, mesa
-, enableOpenGLX11      ? !mesa.meta.broken
+, enableOpenGLX11      ? true
 , enablePython         ? false
 , enableRaytracerX11   ? false
 
@@ -48,19 +47,13 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.2.0";
+  version = "11.0.4";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-Rq1/qzxctL0L3XfdbT4igxhIGSNby8AbLRF9gbNVlqY=";
+    hash = "sha256-4wofoo0vLPd8/9CFY8EonpL8R9mcg5Wa9H/ve9UDSyc=";
   };
-
-  # Fix broken paths in a .pc
-  postPatch = ''
-    substituteInPlace source/externals/ptl/cmake/Modules/PTLPackageConfigHelpers.cmake \
-      --replace '${"$"}{prefix}/${"$"}{PTL_INSTALL_' '${"$"}{PTL_INSTALL_'
-  '';
 
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
@@ -76,7 +69,7 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_EXPAT=ON"
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-  ] ++ lib.optionals (enableOpenGLX11 && stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
     "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
@@ -95,13 +88,11 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true; # no binaries
 
-  buildInputs =
-    lib.optionals enableOpenGLX11 [ libGLU libXext libXmu ]
+  buildInputs = [ libGLU libXext libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 
-  propagatedBuildInputs = [ clhep expat xercesc zlib ]
-    ++ lib.optionals enableOpenGLX11 [ libGL ]
+  propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQt [ qtbase ];
 

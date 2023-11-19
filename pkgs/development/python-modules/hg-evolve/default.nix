@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "hg-evolve";
   version = "11.1.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

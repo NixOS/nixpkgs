@@ -56,6 +56,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/lncapital/torq";
     maintainers = with maintainers; [ mmilata prusnak ];
-    mainProgram = "torq";
   };
 }

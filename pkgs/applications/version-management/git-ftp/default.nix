@@ -95,6 +95,5 @@ resholve.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ tweber ];
     platforms = platforms.unix;
-    mainProgram = "git-ftp";
   };
 }

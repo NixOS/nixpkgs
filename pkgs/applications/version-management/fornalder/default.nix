@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hpjansson/fornalder";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ astro figsoda ];
-    mainProgram = "fornalder";
   };
 }

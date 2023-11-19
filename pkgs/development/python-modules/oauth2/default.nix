@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "oauth2";
   version = "1.9.0.post1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

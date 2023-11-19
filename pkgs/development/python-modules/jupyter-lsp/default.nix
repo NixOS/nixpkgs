@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "jupyter-lsp";
   version = "2.2.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

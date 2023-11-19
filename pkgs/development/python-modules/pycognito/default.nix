@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "pycognito";
   version = "2023.5.0";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

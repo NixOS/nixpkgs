@@ -1,17 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, nixosTests }:
 
-buildGoModule rec {
+let
   pname = "miniflux";
-  version = "2.0.51";
+  version = "2.0.50";
+
+in buildGo121Module {
+  inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "miniflux";
+    owner = pname;
     repo = "v2";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gffiZOsHUYTDEjIdKUPyKbsdRKX890aG6GY72LYESkA=";
+    rev = version;
+    sha256 = "sha256-+oNF/Zwc1Z/cu3SQC/ZTekAW5Qef9RKrdszunLomGII=";
   };
 
-  vendorHash = "sha256-yO4sNOkEDnM9eETE68C++dPnAfcoSMXznf5Nq4/iQmA=";
+  vendorHash = "sha256-jLyjQ+w/QS9uA0pGWF2X6dEfOifcI2gC2sgi1STEzpU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,7 +35,6 @@ buildGoModule rec {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs benpye emilylange ];
-    mainProgram = "miniflux";
+    maintainers = with maintainers; [ rvolosatovs benpye ];
   };
 }

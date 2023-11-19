@@ -15,7 +15,14 @@ in
 
       enableConfigCheck = mkEnableOption (lib.mdDoc "checking the config during build time") // { default = true; };
 
-      package = mkPackageOption pkgs "varnish" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.varnish;
+        defaultText = literalExpression "pkgs.varnish";
+        description = lib.mdDoc ''
+          The package to use
+        '';
+      };
 
       http_address = mkOption {
         type = types.str;

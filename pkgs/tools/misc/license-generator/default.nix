@@ -16,6 +16,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/azu/license-generator";
     license = licenses.mit;
     maintainers = with maintainers; [ loicreynier ];
-    mainProgram = "license-generator";
   };
 }

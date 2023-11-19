@@ -23,6 +23,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://infertux.com/labs/zeyple/";
     maintainers = with maintainers; [ ettom ];
     license = licenses.agpl3Plus;
-    mainProgram = "zeyple";
   };
 }

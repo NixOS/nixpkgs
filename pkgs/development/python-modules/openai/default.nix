@@ -1,32 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, hatchling
-# propagated
-, httpx
-, pydantic
-, typing-extensions
-, anyio
-, distro
-, sniffio
-, tqdm
-# optional
+, aiohttp
+, matplotlib
 , numpy
+, openpyxl
 , pandas
 , pandas-stubs
-# tests
-, pytestCheckHook
+, plotly
 , pytest-asyncio
 , pytest-mock
-, respx
-, dirty-equals
+, pytestCheckHook
+, pythonOlder
+, requests
+, scikit-learn
+, tenacity
+, tqdm
+, typing-extensions
+, wandb
+, withOptionalDependencies ? false
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.5.0";
-  pyproject = true;
+  version = "0.28.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7.1";
 
@@ -34,30 +32,35 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KLXDzXpT9F/JqA8Jeo8AF/eTD3hHXQQcTrblQJ4BHug=";
+    hash = "sha256-liJyeGxnYIC/jUQKdeATHpVJb/12KGbeM94Y2YQphfY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
   propagatedBuildInputs = [
-    httpx
-    pydantic
-    anyio
-    distro
-    sniffio
+    aiohttp
+    requests
     tqdm
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
-  ];
+  ] ++ lib.optionals withOptionalDependencies (builtins.attrValues {
+    inherit (passthru.optional-dependencies) embeddings wandb;
+  });
 
   passthru.optional-dependencies = {
     datalib = [
       numpy
+      openpyxl
       pandas
       pandas-stubs
     ];
+    embeddings = [
+      matplotlib
+      plotly
+      scikit-learn
+      tenacity
+    ] ++ passthru.optional-dependencies.datalib;
+    wandb = [
+      wandb
+    ] ++ passthru.optional-dependencies.datalib;
   };
 
   pythonImportsCheck = [
@@ -68,16 +71,21 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
-    respx
-    dirty-equals
+  ];
+
+  pytestFlagsArray = [
+    "openai/tests"
   ];
 
   OPENAI_API_KEY = "sk-foo";
 
   disabledTestPaths = [
-    # makes network requests
-    "tests/test_client.py"
-    "tests/api_resources"
+    # Requires a real API key
+    "openai/tests/test_endpoints.py"
+    "openai/tests/asyncio/test_endpoints.py"
+    # openai: command not found
+    "openai/tests/test_file_cli.py"
+    "openai/tests/test_long_examples_validator.py"
   ];
 
   meta = with lib; {

@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "conda";
   version = "4.3.16";
-  format = "setuptools";
 
   # this is a very outdated version of conda that isn't compatible with python 3.10+
   disabled = pythonAtLeast "3.10";

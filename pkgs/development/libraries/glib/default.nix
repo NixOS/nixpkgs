@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , gettext
 , meson
 , ninja
@@ -23,12 +24,17 @@
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
+# TODO:
+# * Make it build without python
+#     Problem: an example (test?) program needs it.
+#     Possible solution: disable compilation of this example somehow
+#     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
+#       $out/bin/gtester-report' to postInstall if this is solved
 /*
-  * TODO:
   * Use --enable-installed-tests for GNOME-related packages,
       and use them as a separately installed tests run by Hydra
       (they should test an already installed package)
-      https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
+      https://wiki.gnome.org/GnomeGoals/InstalledTests
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
@@ -50,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.78.1";
+  version = "2.76.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "kVvD0PhQfWUOrTgy4vj7Zw/OWarE13VKfatvHm/teLI=";
+    sha256 = "WloZHJaDbhZqd3H36myisAacYDx9o8uhzTjRaUo5Xdo=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -224,7 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
+  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"

@@ -1,59 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gfortran
-, lhapdf
-, python3
-, swig
-, zlib
-}:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gfortran, lhapdf, python3, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "apfel";
-  version = "3.1.1";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
     rev = version;
-    hash = "sha256-0Ix7KwEZUG/NmGJ380DVJbUA0PcoEJDlcGSc09l5Tbc=";
+    sha256 = "sha256-fRdJ+C92tEC75iUwP9Tmm/EswrlA52eUo5fBjfieH9o=";
   };
 
-  patches = [
-    # https://github.com/scarrazza/apfel/pull/54
-    ./cmake.patch
-  ];
+  # needed for aarch64-darwin
+  nativeBuildInputs = [ autoreconfHook ];
 
-  nativeBuildInputs = [
-    cmake
-    swig
-  ];
-  buildInputs = [
-    gfortran
-    lhapdf
-    python3
-    zlib
-  ];
+  buildInputs = [ gfortran lhapdf python3 zlib ];
 
-  cmakeFlags = [
-    "-DAPFEL_DOWNLOAD_PDFS=OFF"
-    "-DAPFEL_Python_SITEARCH=autoprefix"
-  ];
-
-  doCheck = true;
-  nativeCheckInputs = [
-    lhapdf.pdf_sets.NNPDF23_nlo_as_0118
-    lhapdf.pdf_sets.NNPDF31_nnlo_as_0118
-  ];
-
-  env.NIX_CFLAGS_COMPILE = "-DAPFEL_VERSION=${version}";
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "A PDF Evolution Library";
-    homepage = "https://apfel.mi.infn.it/";
-    license = licenses.gpl3Plus;
+    license     = licenses.gpl3Plus;
+    homepage    = "https://apfel.mi.infn.it/";
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
   };
 }

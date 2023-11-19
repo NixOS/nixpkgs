@@ -5,39 +5,29 @@
 
 buildGoModule rec {
   pname = "mmctl";
-  version = "9.2.2";
+  version = "7.10.5";
 
   src = fetchFromGitHub {
     owner = "mattermost";
-    repo = "mattermost";
+    repo = "mmctl";
     rev = "v${version}";
-    hash = "sha256-53L2F20vaLLxtQS3DP/u0ZxLtnXHmjfcOMbXd4i+A6Y=";
-  } + "/server";
+    sha256 = "sha256-FQdxFvYJ+YrOc1p3/Ju3ZOGFH32WeZjHXtsIYG+O0U0=";
+  };
 
-  vendorHash = "sha256-v8aKZyb4emrwuIgSBDgla5wzwyt6PVGakbXjB9JVaCk=";
+  vendorHash = null;
 
-  patches = [ ./0001-module-replace-public.patch ];
-
-  subPackages = [ "cmd/mmctl" ];
-
-  checkPhase = "go test -tags unit -timeout 30m ./cmd/mmctl/...";
+  checkPhase = "make test";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
+    "-X github.com/mattermost/mmctl/v6/commands.Version=${version}"
   ];
 
   meta = with lib; {
     description = "A remote CLI tool for Mattermost";
     homepage = "https://github.com/mattermost/mmctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ppom mgdelacroix ];
-    mainProgram = "mmctl";
+    maintainers = with maintainers; [ ppom ];
   };
 }

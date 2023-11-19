@@ -6,23 +6,23 @@
 , pipewire
 , libpulseaudio
 , xdg-utils
-, electron_28
+, electron_27
 , makeDesktopItem
 , nix-update-script
 }:
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.6.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
-    hash = "sha256-d/+ATnDh+c3Jr3VY+KrMxTuNtB9o14wn2Z5KXtk1B2c=";
+    hash = "sha256-isrExJeONhIxJUXOsMMq8l9xF9amInBGnb5D+DKuzHw=";
   };
 
-  npmDepsHash = "sha256-XfACVvK7nOrgduGO71pCEAXtYPqjXA9/1y+w4hahdi0=";
+  npmDepsHash = "sha256-RTYPxS6uLLCIu4JfQqMQP8y8+S5uwe3KXWNlbe7/A7Q=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -59,7 +59,7 @@ buildNpmPackage rec {
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
     # Add xdg-utils to path via suffix, per PR #181171
-    makeWrapper '${lib.getExe electron_28}' $out/bin/webcord \
+    makeWrapper '${lib.getExe electron_27}' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${binPath}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

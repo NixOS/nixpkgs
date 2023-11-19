@@ -47,7 +47,13 @@ in
       default = false;
     };
 
-    package = mkPackageOption pkgs "cachix" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.cachix;
+      defaultText = literalExpression "pkgs.cachix";
+      description = lib.mdDoc "Cachix Client package to use.";
+    };
+
   };
 
   config = mkIf cfg.enable {

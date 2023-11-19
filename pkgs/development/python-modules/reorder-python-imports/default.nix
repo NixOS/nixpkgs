@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "reorder-python-imports";
   version = "3.12.0";
-  format = "setuptools";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {

@@ -24,6 +24,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Hurricane996/Hackertyper";
     license = licenses.gpl3;
     maintainers = [ maintainers.marius851000 ];
-    mainProgram = "hackertyper";
   };
 }

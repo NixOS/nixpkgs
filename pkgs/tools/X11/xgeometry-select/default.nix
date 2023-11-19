@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     homepage    = "https://bbs.archlinux.org/viewtopic.php?pid=660837";
     maintainers = with maintainers; [ obadz ];
     platforms   = platforms.linux;
-    mainProgram = "xgeometry-select";
   };
 }

@@ -1,57 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pexpect
+{ lib, fetchFromGitHub
+, buildPythonPackage, isPy27
 , pillow
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
-, pyvirtualdisplay
-, setuptools
 , twisted
+, pexpect
+, nose
+, ptyprocess
 }:
 
 buildPythonPackage rec {
   pname = "vncdo";
   version = "1.1.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "vncdotool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m8msWa8uUuDEjEUlXHCgYi0HFPKXLVXpXLyuQ3quNbA=";
+    sha256 = "sha256-m8msWa8uUuDEjEUlXHCgYi0HFPKXLVXpXLyuQ3quNbA=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     pillow
-    pycryptodomex
     twisted
-  ];
-
-  nativeCheckInputs = [
     pexpect
-    pytestCheckHook
-    pyvirtualdisplay
+    nose
+    ptyprocess
   ];
 
-  pythonImportsCheck = [
-    "vncdotool"
-  ];
+  doCheck = !isPy27;
 
   meta = with lib; {
-    description = "A command line VNC client and Python library";
     homepage = "https://github.com/sibson/vncdotool";
-    changelog = "https://github.com/sibson/vncdotool/releases/tag/v${version}";
+    description = "A command line VNC client and python library";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];
-    mainProgram = "vncdo";
+    mainProgram = pname;
     platforms = with platforms; linux ++ darwin;
   };
 }

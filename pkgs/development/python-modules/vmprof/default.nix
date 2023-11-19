@@ -12,7 +12,6 @@
 
 buildPythonPackage rec {
   version = "0.4.15";
-  format = "setuptools";
   pname = "vmprof";
 
   src = fetchPypi {

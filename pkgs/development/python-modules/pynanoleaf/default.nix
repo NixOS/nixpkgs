@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pynanoleaf";
   version = "0.1.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

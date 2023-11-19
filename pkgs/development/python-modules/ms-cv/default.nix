@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "ms-cv";
   version = "0.1.1";
-  format = "setuptools";
 
   disabled = isPy27;
 

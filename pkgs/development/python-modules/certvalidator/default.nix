@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "certvalidator";
   version = "0.11.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wbond";

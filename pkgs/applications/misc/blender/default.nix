@@ -38,11 +38,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "4.0.2";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-qqDnKdp1kc+/RXcq92NFl32qp7EaCvNdmPkxPiRgd6M=";
+    hash = "sha256-/jLU0noX5RxhQ+26G16nGFylm65Lzfm9s11oCWCC43Q=";
   };
 
   patches = [
@@ -52,10 +52,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs =
     [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
     ]
-    ++ lib.optionals cudaSupport [
-      addOpenGLRunpath
-      cudaPackages.cuda_nvcc
-    ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
     ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
@@ -90,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional spaceNavSupport libspnav;
   pythonPath = with python310Packages; [ numpy requests zstandard ];

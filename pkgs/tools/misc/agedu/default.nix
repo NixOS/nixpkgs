@@ -37,6 +37,5 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ symphorien ];
     platforms = platforms.unix;
-    mainProgram = "agedu";
   };
 }

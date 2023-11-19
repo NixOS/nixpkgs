@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.jedsoft.org/most/index.html";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    mainProgram = "most";
   };
 }

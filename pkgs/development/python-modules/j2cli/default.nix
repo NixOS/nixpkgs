@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "j2cli";
   version = "0.3.10";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

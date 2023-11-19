@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.publicDomain;
-    mainProgram = "clipnotify";
   };
 }

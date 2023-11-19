@@ -37,6 +37,5 @@ in pythonPackages.buildPythonApplication rec {
     homepage = "https://github.com/cpbotha/nvpy";
     platforms = platforms.linux;
     license = licenses.bsd3;
-    mainProgram = "nvpy";
   };
 }

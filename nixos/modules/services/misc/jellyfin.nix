@@ -16,7 +16,14 @@ in
         description = lib.mdDoc "User account under which Jellyfin runs.";
       };
 
-      package = mkPackageOption pkgs "jellyfin" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.jellyfin;
+        defaultText = literalExpression "pkgs.jellyfin";
+        description = lib.mdDoc ''
+          Jellyfin package to use.
+        '';
+      };
 
       group = mkOption {
         type = types.str;

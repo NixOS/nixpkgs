@@ -30,6 +30,5 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/FRidh/niff";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.fridh ];
-    mainProgram = "niff";
   };
 }

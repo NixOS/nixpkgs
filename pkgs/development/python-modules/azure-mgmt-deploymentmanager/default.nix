@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "1.0.0";
-  format = "setuptools";
   pname = "azure-mgmt-deploymentmanager";
   disabled = isPy27;
 

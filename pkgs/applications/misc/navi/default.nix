@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.23.0";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
     rev = "v${version}";
-    sha256 = "sha256-pqBTrHBvsuosyQqCnSiI3+pOe2J6XeIQ8dai+kTVFjc=";
+    sha256 = "sha256-dlK7R9T1AezNr3+5Or8XYAMRlnnXejIs9jXAjwTuvd8=";
   };
 
-  cargoHash = "sha256-dx13p+kEyqhyaF8ejJLWsgW3IpEvS9nlIHhjxOpp4d8=";
+  cargoHash = "sha256-nastb6dsBGM8zIQ/WCfQy3Y50kH3J1dM/vnkOe/q95A=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/denisidoro/navi";
     license = licenses.asl20;
     platforms = platforms.unix;
-    mainProgram = "navi";
     maintainers = with maintainers; [ cust0dian ];
   };
 }

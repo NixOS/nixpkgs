@@ -9,7 +9,12 @@ in {
   options.services.clipcat= {
     enable = mkEnableOption (lib.mdDoc "Clipcat clipboard daemon");
 
-    package = mkPackageOption pkgs "clipcat" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.clipcat;
+      defaultText = literalExpression "pkgs.clipcat";
+      description = lib.mdDoc "clipcat derivation to use.";
+    };
   };
 
   config = mkIf cfg.enable {

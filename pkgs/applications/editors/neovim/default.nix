@@ -43,6 +43,7 @@ let
     luabitop
     mpack
   ] ++ lib.optionals doCheck [
+    nvim-client
     luv
     coxpcall
     busted

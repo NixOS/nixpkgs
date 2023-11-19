@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "rmsd";
   version = "1.5.1";
-  format = "setuptools";
 
   propagatedBuildInputs = [ scipy ];
 

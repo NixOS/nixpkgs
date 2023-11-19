@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   outputDevdoc = "out";
 
   preConfigure = "
+    patchShebangs ./configure
     patchShebangs ./do_install
   ";
 

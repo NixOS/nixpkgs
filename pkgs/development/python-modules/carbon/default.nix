@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "carbon";
   version = "1.1.10";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,6 @@
 python.pkgs.buildPythonPackage rec {
   pname = "memory-profiler";
   version = "0.61.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "memory_profiler";

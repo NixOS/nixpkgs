@@ -38,6 +38,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pohmelie/patray";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
-    mainProgram = "patray";
   };
 }

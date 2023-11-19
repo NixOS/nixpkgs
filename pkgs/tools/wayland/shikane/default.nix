@@ -41,6 +41,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ michaelpachec0 natsukium ];
     platforms = platforms.linux;
-    mainProgram = "shikane";
   };
 }

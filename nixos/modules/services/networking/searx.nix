@@ -143,7 +143,12 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "searxng" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.searxng;
+        defaultText = literalExpression "pkgs.searxng";
+        description = lib.mdDoc "searx package to use.";
+      };
 
       runInUwsgi = mkOption {
         type = types.bool;

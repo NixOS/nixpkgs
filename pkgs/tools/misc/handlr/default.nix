@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chmln/handlr";
     license = licenses.mit;
     maintainers = with maintainers; [ mredaelli artturin ];
-    mainProgram = "handlr";
   };
 }

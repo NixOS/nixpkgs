@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     description = "User-space filesystem that allows to mount a webdav share";
     platforms = platforms.unix;
-    mainProgram = "wdfs";
   };
 }

@@ -4,14 +4,13 @@
 
 buildPythonPackage rec {
   pname = "i-pi";
-  version = "2.6.1";
-  format = "setuptools";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "i-pi";
     repo = "i-pi";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-c1bs8ZI/dfDwKx5Df8ndtsDxESQrdbMkvrjfI6b9JTg=";
+    rev = "v${version}";
+    sha256 = "0d0ag57aa0fsqjwya27fyj8alimjvlxzgh6hxjqy1k4ap9h3n1cy";
   };
 
   nativeBuildInputs = [

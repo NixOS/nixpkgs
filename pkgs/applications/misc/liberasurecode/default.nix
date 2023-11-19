@@ -23,19 +23,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace doc/doxygen.cfg.in \
       --replace "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
-
-    substituteInPlace Makefile.am src/Makefile.am \
-      --replace "-Werror" ""
   '';
 
   nativeBuildInputs = [ autoreconfHook doxygen installShellFiles ];
 
   buildInputs = [ zlib ];
 
-  configureFlags = [
-    "--disable-werror"
-    "--enable-doxygen"
-  ];
+  configureFlags = [ "--enable-doxygen" ];
 
   postInstall = ''
     # remove useless man pages about directories

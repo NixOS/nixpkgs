@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "asitop";
-  version = "0.0.24";
+  version = "0.0.23";
   format = "setuptools";
 
   disabled = python3.pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xfe1kwRXKpSPcc+UuHrcYThpqKh6kzWVsbPia/QsPjc=";
+    hash = "sha256-BNncgQRNAd6Pgur5D1xVQi3LSsijSAYIYvhsuiVyi9Q=";
   };
 
   # has no tests

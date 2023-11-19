@@ -39,6 +39,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
     inherit (postgresql.meta) platforms;
-    mainProgram = "psql2csv";
   };
 }

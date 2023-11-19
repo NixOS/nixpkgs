@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "itsdangerous";
   version = "2.1.2";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

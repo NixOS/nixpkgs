@@ -3,7 +3,6 @@
 , runCommand
 , inkcut
 , callPackage
-, texlive
 }:
 
 {
@@ -44,8 +43,4 @@
     mkdir -p $out/share/inkscape/extensions
     cp ${inkcut}/share/inkscape/extensions/* $out/share/inkscape/extensions
   '');
-  textext = callPackage ./extensions/textext {
-    pdflatex = texlive.combined.scheme-basic;
-    lualatex = texlive.combined.scheme-basic;
-  };
 }

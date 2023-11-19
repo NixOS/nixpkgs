@@ -19,6 +19,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;
-    mainProgram = "pcp";
   };
 }

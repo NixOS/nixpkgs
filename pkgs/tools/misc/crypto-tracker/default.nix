@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/Nox04/crypto-tracker";
     license = licenses.mit;
     maintainers = with maintainers; [ tiredofit ];
-    mainProgram = "crypto-tracker";
   };
 }

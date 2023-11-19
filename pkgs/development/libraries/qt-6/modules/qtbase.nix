@@ -11,9 +11,11 @@
 , lndir
 , perl
 , pkg-config
+, python3
 , which
 , cmake
 , ninja
+, ccache
 , xmlstarlet
 , libproxy
 , xorg
@@ -234,12 +236,10 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_cxx17_filesystem=OFF"
   ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
+  NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
     "-framework GSS"
   ]);
-
-  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
 

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "md2gemini";
   version = "1.9.1";
-  format = "setuptools";
 
   propagatedBuildInputs = [ mistune cjkwrap wcwidth ];
   nativeCheckInputs = [ pytestCheckHook ];

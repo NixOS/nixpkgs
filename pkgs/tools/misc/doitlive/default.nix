@@ -19,6 +19,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pypi.python.org/pypi/doitlive";
     license = licenses.mit;
     maintainers = with maintainers; [ mbode ];
-    mainProgram = "doitlive";
   };
 }

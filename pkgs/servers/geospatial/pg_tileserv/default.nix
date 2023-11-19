@@ -31,6 +31,6 @@ buildGoModule rec {
     description = "A very thin PostGIS-only tile server in Go";
     homepage = "https://github.com/CrunchyData/pg_tileserv";
     license = licenses.asl20;
-    maintainers = teams.geospatial.members;
+    maintainers = with maintainers; [ sikmir ];
   };
 }

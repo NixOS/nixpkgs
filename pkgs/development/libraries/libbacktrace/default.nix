@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     (lib.enableFeature enableShared "shared")
   ];
 
-  doCheck = stdenv.isLinux && !stdenv.hostPlatform.isMusl;
+  doCheck = stdenv.isLinux;
 
   passthru = {
     updateScript = unstableGitUpdater { };

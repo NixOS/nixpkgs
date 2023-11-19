@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "django-simple-captcha";
   version = "0.5.20";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

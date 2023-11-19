@@ -182,7 +182,12 @@ let
       options = {
         enable = mkEnableOption (lib.mdDoc "DokuWiki web application");
 
-        package = mkPackageOption pkgs "dokuwiki" { };
+        package = mkOption {
+          type = types.package;
+          default = pkgs.dokuwiki;
+          defaultText = literalExpression "pkgs.dokuwiki";
+          description = lib.mdDoc "Which DokuWiki package to use.";
+        };
 
         stateDir = mkOption {
           type = types.path;
@@ -330,9 +335,14 @@ let
           '';
         };
 
-        phpPackage = mkPackageOption pkgs "php" {
-          default = "php81";
-          example = "php82";
+        phpPackage = mkOption {
+          type = types.package;
+          relatedPackages = [ "php81" "php82" ];
+          default = pkgs.php81;
+          defaultText = "pkgs.php81";
+          description = lib.mdDoc ''
+            PHP package to use for this dokuwiki site.
+          '';
         };
 
         phpOptions = mkOption {

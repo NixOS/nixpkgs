@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/mothsart/pouf/releases/tag/${version}";
     maintainers = with maintainers; [ mothsart ];
     license = with licenses; [ mit ];
-    mainProgram = "pouf";
   };
 }

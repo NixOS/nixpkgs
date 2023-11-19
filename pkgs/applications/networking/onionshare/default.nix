@@ -58,7 +58,6 @@ let
 
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lourkeur ];
-    mainProgram = "onionshare-cli";
   };
 
   # TODO: package meek https://support.torproject.org/glossary/meek/

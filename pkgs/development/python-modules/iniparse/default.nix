@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "iniparse";
   version = "0.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

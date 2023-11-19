@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://github.com/nalbury/promql-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ arikgrahl ];
-    mainProgram = "promql";
   };
 }

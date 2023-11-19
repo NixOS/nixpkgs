@@ -24,7 +24,12 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "ethercalc" { };
+      package = mkOption {
+        default = pkgs.ethercalc;
+        defaultText = literalExpression "pkgs.ethercalc";
+        type = types.package;
+        description = lib.mdDoc "Ethercalc package to use.";
+      };
 
       host = mkOption {
         type = types.str;

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "audiotools";
   version = "3.1.1";
-  format = "setuptools";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AudioToolbox

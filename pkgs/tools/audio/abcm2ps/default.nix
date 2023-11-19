@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     description = "A command line program which converts ABC to music sheet in PostScript or SVG format";
     platforms = platforms.unix;
     maintainers = [ maintainers.dotlambda ];
-    mainProgram = "abcm2ps";
   };
 }

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "xpybutil";
   version = "0.0.6";
-  format = "setuptools";
 
   # Pypi only offers a wheel
   src = fetchFromGitHub {

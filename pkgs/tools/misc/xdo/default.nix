@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
      maintainers = with maintainers; [ meisternu ];
      license = licenses.bsd2;
      platforms = platforms.linux;
-     mainProgram = "xdo";
    };
 }

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "colorlog";
   version = "6.7.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

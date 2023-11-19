@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
   version = "0.17.0";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

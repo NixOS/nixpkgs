@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/katmagic/Shallot";
     platforms = lib.platforms.linux;
-    mainProgram = "shallot";
   };
 }

@@ -152,7 +152,12 @@ in
       description = lib.mdDoc "Group under which cloudflared runs.";
     };
 
-    package = mkPackageOption pkgs "cloudflared" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.cloudflared;
+      defaultText = "pkgs.cloudflared";
+      description = lib.mdDoc "The package to use for Cloudflared.";
+    };
 
     tunnels = mkOption {
       description = lib.mdDoc ''

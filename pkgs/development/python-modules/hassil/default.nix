@@ -4,8 +4,8 @@
 , pythonOlder
 
 # propagates
+, importlib-resources
 , pyyaml
-, unicode-rbnf
 
 # tests
 , pytestCheckHook
@@ -13,22 +13,21 @@
 
 let
   pname = "hassil";
-  version = "1.5.1";
+  version = "1.2.5";
 in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GLvDT8BUBvEzgiqKaXokF912g3fOH+KsXnmeOXIwe9U=";
+    hash = "sha256-udOkZILoba2+eR8oSFThsB846COaIXawwRYhn261mCA=";
   };
 
   propagatedBuildInputs = [
     pyyaml
-    unicode-rbnf
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   nativeCheckInputs = [
@@ -36,7 +35,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    changelog  = "https://github.com/home-assistant/hassil/blob/v${version}/CHANGELOG.md";
+    changelog  = "https://github.com/home-assistant/hassil/releases/tag/v${version}";
     description = "Intent parsing for Home Assistant";
     homepage = "https://github.com/home-assistant/hassil";
     license = licenses.asl20;

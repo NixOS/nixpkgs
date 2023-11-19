@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/xteve-project/xTeVe";
     license = licenses.mit;
     maintainers = with maintainers; [ nrhelmi ];
-    mainProgram = "xteve";
   };
 }

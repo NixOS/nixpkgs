@@ -6,7 +6,13 @@
 
 assert withMysql -> (mysql_jdbc != null);
 
-lib.warnIf (crowdProperties != null) "Using `crowdProperties` is deprecated!"
+let
+  optionalWarning = cond: msg:
+    if cond then lib.warn msg
+    else lib.id;
+in
+
+optionalWarning (crowdProperties != null) "Using `crowdProperties` is deprecated!"
 (stdenvNoCC.mkDerivation rec {
   pname = "atlassian-confluence";
   version = "7.19.14";

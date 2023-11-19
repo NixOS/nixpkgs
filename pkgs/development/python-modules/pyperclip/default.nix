@@ -7,7 +7,6 @@
 
 buildPythonPackage rec {
   version = "1.8.2";
-  format = "setuptools";
   pname = "pyperclip";
 
   src = fetchPypi {

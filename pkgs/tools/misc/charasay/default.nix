@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/latipun7/charasay";
     license = licenses.mit;
     maintainers = with maintainers; [ hmajid2301 ];
-    mainProgram = "chara";
   };
 }

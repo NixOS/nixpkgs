@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-scarlett-gui";
-  version = "0.3.3";
+  version = "unstable-2022-08-11";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-lIwDNyzuvolDhTVCslCtUfbsC/TxKtxQF97h0zYxp9k=";
+    rev = "65c0f6aa432501355803a823be1d3f8aafe907a8";
+    sha256 = "sha256-wzBOPTs8PTHzu5RpKwKhx552E7QnDx2Zn4OFaes8Q2I=";
   };
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];

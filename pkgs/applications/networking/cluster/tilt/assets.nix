@@ -2,7 +2,7 @@
 , stdenvNoCC
 , version, src
 , fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
+, fixup_yarn_lock, yarn, nodejs
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
 
   inherit src version;
 
-  nativeBuildInputs = [ prefetch-yarn-deps yarn nodejs ];
+  nativeBuildInputs = [ fixup_yarn_lock yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/web/yarn.lock";
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
     cd web
-    fixup-yarn-lock yarn.lock
+    fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-engines
     patchShebangs node_modules
     export PATH=$PWD/node_modules/.bin:$PATH

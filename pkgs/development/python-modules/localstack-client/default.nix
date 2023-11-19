@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "localstack-client";
   version = "1.39";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "localstack";

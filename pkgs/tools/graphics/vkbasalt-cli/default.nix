@@ -27,6 +27,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/TheEvilSkeleton/vkbasalt-cli";
     license = with licenses; [ lgpl3Only gpl3Only ];
     maintainers = with maintainers; [ martfont ];
-    mainProgram = "vkbasalt";
   };
 }

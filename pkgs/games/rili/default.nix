@@ -37,6 +37,5 @@ to win.
     '';
     maintainers = with lib.maintainers; [ jcumming ];
     platforms = with lib.platforms; linux;
-    mainProgram = "Ri_li";
   };
 }

@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.auntie ];
-    mainProgram = "nitrogen";
   };
 }

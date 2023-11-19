@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/akavel/up";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.asl20;
-    mainProgram = "up";
   };
 }

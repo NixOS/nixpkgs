@@ -39,6 +39,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.lom ];
     platforms = platforms.linux;
-    mainProgram = "giph";
   };
 }

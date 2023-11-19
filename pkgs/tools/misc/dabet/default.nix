@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://codeberg.org/annaaurora/dabet";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ annaaurora ];
-    mainProgram = "dabet";
   };
 }
 

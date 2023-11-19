@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "pexif";
   version = "0.15";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

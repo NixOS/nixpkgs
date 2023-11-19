@@ -37,6 +37,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/jeffhacks/smbscan";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "smbscan";
   };
 }

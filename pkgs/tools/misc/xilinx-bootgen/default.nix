@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.flokli ];
-    mainProgram = "bootgen";
   };
 }

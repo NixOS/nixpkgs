@@ -86,7 +86,12 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "neovim-unwrapped" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.neovim-unwrapped;
+      defaultText = literalExpression "pkgs.neovim-unwrapped";
+      description = lib.mdDoc "The package to use for the neovim binary.";
+    };
 
     finalPackage = mkOption {
       type = types.package;

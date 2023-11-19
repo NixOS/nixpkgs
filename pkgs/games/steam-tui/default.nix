@@ -41,6 +41,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ lom ];
     # steam only supports that platform
     platforms = [ "x86_64-linux" ];
-    mainProgram = "steam-tui";
   };
 }

@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   version = "1.25";
-  format = "setuptools";
   pname = "numericalunits";
 
   src = fetchPypi {

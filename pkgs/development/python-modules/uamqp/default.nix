@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "uamqp";
   version = "1.6.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Azure";

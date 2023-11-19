@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
-    mainProgram = "fs_mark";
   };
 }

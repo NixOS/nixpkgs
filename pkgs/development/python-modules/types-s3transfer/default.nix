@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "types-s3transfer";
-  version = "0.8.2";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_s3transfer";
     inherit version;
-    hash = "sha256-LkF1b8+Ud1qZSa+oVkiaxFcDCGCbBJPfvXtNMz60I+Y=";
+    hash = "sha256-rKDySG0KOlA3zVuPPiCkUiopV5qN0YMoH/CqHE4siqc=";
   };
 
   nativeBuildInputs = [

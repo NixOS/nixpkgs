@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "python-etcd";
   version = "0.4.5";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

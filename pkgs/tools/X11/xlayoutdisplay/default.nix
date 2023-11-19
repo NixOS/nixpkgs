@@ -1,22 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorg, boost, gtest }:
+{ lib, stdenv, fetchFromGitHub, xorg, boost, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "xlayoutdisplay";
-  version = "1.5.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-A37jFhVTW/3QNEf776Oi3ViRK+ebOPRTsEQqdmNhA7E=";
+    sha256 = "sha256-8K9SoZToJTk/sL4PC4Fcsu9XzGLYfNIZlbIyxc9jf84=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
   buildInputs = with xorg; [ libX11 libXrandr libXcursor boost ];
   nativeCheckInputs = [ gtest ];
 
   doCheck = true;
   checkTarget = "gtest";
+
+  # Fixup reference to hardcoded boost path, dynamically link as seems fine and we don't have static for this
+  postPatch = ''
+    substituteInPlace config.mk --replace '/usr/lib/libboost_program_options.a' '-lboost_program_options'
+  '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
   enableParallelBuilding = true;
@@ -27,6 +31,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
     platforms = platforms.linux;
-    mainProgram = "xlayoutdisplay";
   };
 }

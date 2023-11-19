@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "speedtest-cli";
   version = "2.1.3";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

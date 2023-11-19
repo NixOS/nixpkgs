@@ -13,7 +13,7 @@
 }:
 let
   pname = "polars";
-  version = "0.20.0";
+  version = "0.19.12";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
@@ -28,11 +28,16 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  pyproject = true;
-
-  disabled = pythonOlder "3.8";
-
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
   src = rootSource;
+
+  patches = [
+    # workaround for apparent rustc bug
+    # remove when we're at Rust 1.73
+    # https://github.com/pola-rs/polars/issues/12050
+    ./all_horizontal.patch
+  ];
 
   # Cargo.lock file is sometimes behind actual release which throws an error,
   # thus the `sed` command
@@ -48,15 +53,12 @@ buildPythonPackage {
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
     };
   };
-
   cargoRoot = "py-polars";
 
   # Revisit this whenever package or Rust is upgraded
   RUSTC_BOOTSTRAP = 1;
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   dontUseCmakeConfigure = true;
 
@@ -76,6 +78,7 @@ buildPythonPackage {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  pythonImportsCheck = [ "polars" ];
   # nativeCheckInputs = [
   #   pytestCheckHook
   #   fixtures
@@ -86,14 +89,9 @@ buildPythonPackage {
   #   pydot
   # ];
 
-  pythonImportsCheck = [
-    "polars"
-  ];
-
   meta = with lib; {
-    description = "Fast multi-threaded DataFrame library";
+    description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
     homepage = "https://github.com/pola-rs/polars";
-    changelog = "https://github.com/pola-rs/polars/releases/tag/py-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
   };

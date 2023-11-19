@@ -33,7 +33,7 @@ in
   ];
 
   options.services.hedgedoc = {
-    package = lib.mkPackageOption pkgs "hedgedoc" { };
+    package = lib.mkPackageOptionMD pkgs "hedgedoc" { };
     enable = lib.mkEnableOption (mdDoc "the HedgeDoc Markdown Editor");
 
     settings = mkOption {

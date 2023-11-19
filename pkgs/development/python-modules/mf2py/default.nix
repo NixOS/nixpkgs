@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "mf2py";
   version = "1.1.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "microformats";

@@ -41,6 +41,5 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = [ maintainers.jiegec ];
     platforms = platforms.linux ++ platforms.darwin;
-    mainProgram = "foremost";
   };
 }

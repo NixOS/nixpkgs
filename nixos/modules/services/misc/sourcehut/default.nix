@@ -1,15 +1,6 @@
 { config, pkgs, lib, ... }:
-
+with lib;
 let
-  inherit (builtins) head tail;
-  inherit (lib) generators maintainers types;
-  inherit (lib.attrsets) attrValues filterAttrs mapAttrs mapAttrsToList recursiveUpdate;
-  inherit (lib.lists) flatten optional optionals;
-  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
-  inherit (lib.strings) concatMapStringsSep concatStringsSep optionalString versionOlder;
-  inherit (lib.trivial) mapNullable;
-  inherit (lib.modules) mkBefore mkDefault mkForce mkIf mkMerge
-    mkRemovedOptionModule mkRenamedOptionModule;
   inherit (config.services) nginx postfix postgresql redis;
   inherit (config.users) users groups;
   cfg = config.services.sourcehut;
@@ -680,8 +671,14 @@ in
     };
 
     git = {
-      package = mkPackageOption pkgs "git" {
-        example = "gitFull";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.git;
+        defaultText = literalExpression "pkgs.git";
+        example = literalExpression "pkgs.gitFull";
+        description = lib.mdDoc ''
+          Git package for git.sr.ht. This can help silence collisions.
+        '';
       };
       fcgiwrap.preforkProcess = mkOption {
         description = lib.mdDoc "Number of fcgiwrap processes to prefork.";
@@ -691,7 +688,14 @@ in
     };
 
     hg = {
-      package = mkPackageOption pkgs "mercurial" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.mercurial;
+        defaultText = literalExpression "pkgs.mercurial";
+        description = lib.mdDoc ''
+          Mercurial package for hg.sr.ht. This can help silence collisions.
+        '';
+      };
       cloneBundles = mkOption {
         type = types.bool;
         default = false;
@@ -1312,11 +1316,6 @@ in
     (import ./service.nix "paste" {
       inherit configIniOfService;
       port = 5011;
-      extraServices.pastesrht-api = {
-        serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "5s";
-        serviceConfig.ExecStart = "${pkgs.sourcehut.pastesrht}/bin/pastesrht-api -b ${cfg.listenAddress}:${toString (cfg.paste.port + 100)}";
-      };
     })
 
     (import ./service.nix "todo" {
@@ -1370,5 +1369,5 @@ in
   ];
 
   meta.doc = ./default.md;
-  meta.maintainers = with maintainers; [ tomberek nessdoor ];
+  meta.maintainers = with maintainers; [ tomberek ];
 }

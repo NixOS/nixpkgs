@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "ed25519-blake2b";
   version = "1.4";
-  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 

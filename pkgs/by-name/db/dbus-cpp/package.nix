@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     # pkg-config output patching hook expects prefix variable here
     substituteInPlace data/dbus-cpp.pc.in \
       --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
 

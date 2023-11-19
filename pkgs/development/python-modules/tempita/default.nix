@@ -2,7 +2,6 @@
 
 buildPythonPackage {
   version = "0.5.3-2016-09-28";
-  format = "setuptools";
   pname = "tempita";
 
   src = fetchFromGitHub {

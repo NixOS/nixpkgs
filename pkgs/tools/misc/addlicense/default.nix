@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/google/addlicense";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    mainProgram = "addlicense";
   };
 }

@@ -15,6 +15,5 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/pstray/rename";
     maintainers = with maintainers; [ mkg cyplo ];
     license = with licenses; [ gpl1Plus ];
-    mainProgram = "rename";
   };
 }

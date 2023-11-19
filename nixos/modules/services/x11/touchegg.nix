@@ -13,7 +13,12 @@ in {
   options.services.touchegg = {
     enable = mkEnableOption (lib.mdDoc "touchegg, a multi-touch gesture recognizer");
 
-    package = mkPackageOption pkgs "touchegg" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.touchegg;
+      defaultText = literalExpression "pkgs.touchegg";
+      description = lib.mdDoc "touchegg derivation to use.";
+    };
   };
 
   ###### implementation

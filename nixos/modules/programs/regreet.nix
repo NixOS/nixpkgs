@@ -24,7 +24,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
+    package = lib.mkPackageOptionMD pkgs [ "greetd" "regreet" ] { };
 
     settings = lib.mkOption {
       type = lib.types.either lib.types.path settingsFormat.type;

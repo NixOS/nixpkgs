@@ -63,6 +63,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux;
     license = licenses.bsd3;
-    mainProgram = "NifSkope";
   };
 }

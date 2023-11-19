@@ -12,7 +12,7 @@ let
     mdDoc
     mkEnableOption
     mkOption
-    mkPackageOption
+    mkPackageOptionMD
     types
     ;
   domain = "acme-dns.example.com";
@@ -21,7 +21,7 @@ in
   options.services.acme-dns = {
     enable = mkEnableOption (mdDoc "acme-dns");
 
-    package = mkPackageOption pkgs "acme-dns" { };
+    package = mkPackageOptionMD pkgs "acme-dns" { };
 
     settings = mkOption {
       description = mdDoc ''

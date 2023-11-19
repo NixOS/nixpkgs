@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "noiseprotocol";
   version = "0.3.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "plizonczyk";

@@ -22,8 +22,7 @@
 
 let
   pname = "HybridReverb2";
-  version = "2.1.2-unstable-2021-12-19";
-  rev = "2fc44c419f90133b3fcde71820212b5f281a0ad2";
+  version = "2.1.2";
   owner = "jpcima";
   DBversion = "1.0.0";
 in
@@ -41,8 +40,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = pname;
-    rev = rev;
-    hash = "sha256-+uwTKHQ3nIWKbBCPtf/axvyW6MU0gemVtd2ZqqiT/w0=";
+    rev = "v${version}";
+    sha256 = "16r20plz1w068bgbkrydv01a991ygjybdya3ah7bhp3m5xafjwqb";
     fetchSubmodules = true;
   };
 
@@ -69,8 +68,6 @@ stdenv.mkDerivation rec {
     "-DHybridReverb2_AdvancedJackStandalone=ON"
     "-DHybridReverb2_UseLocalDatabase=ON"
   ];
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/${pname}/

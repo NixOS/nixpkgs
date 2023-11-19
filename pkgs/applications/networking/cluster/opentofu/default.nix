@@ -14,17 +14,16 @@
 let
   package =  buildGoModule rec {
     pname = "opentofu";
-    version = "1.6.0-rc1";
+    version = "1.6.0-alpha5";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       rev = "v${version}";
-      hash = "sha256-3aNK0i0LrFmDT6JEvlYggIPC+DsilUtkrcp8E0w8FO8=";
+      hash = "sha256-nkDDq9/ruiSvACw997DgnswwTVzCaZ5K9oT2bKrBYWA=";
     };
-
-    vendorHash = "sha256-kSm5RZqQRgbmPaKt5IWmuMhHwAu+oJKTX1q1lbE7hWk=";
-    ldflags = [ "-s" "-w" "-X" "github.com/opentofu/opentofu/version.dev=no" ];
+    vendorHash = "sha256-mUakrS3d4UXA5XKyuiIUbGsCAiUMwVbYr8UWOyAtA8Y=";
+    ldflags = [ "-s" "-w" ];
 
     postConfigure = ''
       # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
@@ -36,7 +35,7 @@ let
     patches = [ ./provider-path-0_15.patch ];
 
     passthru = {
-      inherit full plugins withPlugins;
+      inherit plugins withPlugins;
       tests = { inherit opentofu_plugins_test; };
     };
 
@@ -59,14 +58,10 @@ let
       license = licenses.mpl20;
       maintainers = with maintainers; [
         gmemstr
-        nickcao
-        zowoq
       ];
       mainProgram = "tofu";
     };
   };
-
-  full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
   opentofu_plugins_test = let
     mainTf = writeText "main.tf" ''
@@ -111,6 +106,7 @@ let
       passthru = {
         withPlugins = newplugins:
           withPlugins (x: newplugins x ++ actualPlugins);
+        full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
         # Expose wrappers around the override* functions of the terraform
         # derivation.

@@ -31,7 +31,12 @@ in {
         description = lib.mdDoc "Whether to enable the OpenSMTPD server.";
       };
 
-      package = mkPackageOption pkgs "opensmtpd" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.opensmtpd;
+        defaultText = literalExpression "pkgs.opensmtpd";
+        description = lib.mdDoc "The OpenSMTPD package to use.";
+      };
 
       setSendmail = mkOption {
         type = types.bool;

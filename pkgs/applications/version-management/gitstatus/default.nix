@@ -87,6 +87,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
     platforms = platforms.all;
-    mainProgram = "gitstatusd";
   };
 }

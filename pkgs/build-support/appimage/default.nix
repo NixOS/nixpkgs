@@ -173,7 +173,6 @@ rec {
       libpulseaudio
       libsamplerate
       libmikmod
-      libthai
       libtheora
       libtiff
       pixman

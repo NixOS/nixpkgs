@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/npat-efault/picocom/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    mainProgram = "picocom";
   };
 }

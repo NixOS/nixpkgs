@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "xdot";
   version = "1.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jrfonseca";

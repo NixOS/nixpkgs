@@ -3,12 +3,12 @@
 , pythonOlder
 , fetchFromGitHub
 
-, setuptools
 , nodejs
 , yarn
-, prefetch-yarn-deps
+, fixup_yarn_lock
 , fetchYarnDeps
 
+, setuptools
 , flask
 , werkzeug
 , plotly
@@ -37,27 +37,26 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.14.2";
-  pyproject = true;
+  version = "2.14.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plotly";
-    repo = "dash";
-    rev = "v${version}";
-    hash = "sha256-EFEsFgd3VbzlIUiz1fBIsKHywgWrL74taDFx0yIM/Ks=";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vQOfX9RCIbr5lfUyT2knwrO374/vm7jH+/1+BeqmRjI=";
   };
 
   nativeBuildInputs = [
-    setuptools
     nodejs
     yarn
-    prefetch-yarn-deps
+    fixup_yarn_lock
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
+  yarnDeps = fetchYarnDeps {
+    yarnLock = src + "/@plotly/dash-jupyterlab/yarn.lock";
     hash = "sha256-mkiyrA0jGiP0zbabSjgHFLEUX3f+LZdJ8eARI5QA8CU=";
   };
 
@@ -66,12 +65,12 @@ buildPythonPackage rec {
 
     export HOME=$(mktemp -d)
 
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup-yarn-lock yarn.lock
+    yarn config --offline set yarn-offline-mirror ${yarnDeps}
+    fixup_yarn_lock yarn.lock
 
     substituteInPlace package.json --replace jlpm yarn
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
-    patchShebangs node_modules
+    patchShebangs .
 
     # Generates the jupyterlab extension files
     yarn run build:pack
@@ -80,6 +79,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    setuptools # for importing pkg_resources
     flask
     werkzeug
     plotly
@@ -125,9 +125,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dash" ];
 
   meta = {
-    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
+    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ antoinerg tomasajt ];
   };

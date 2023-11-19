@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "zipfile2";
   version = "0.0.12";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cournape";

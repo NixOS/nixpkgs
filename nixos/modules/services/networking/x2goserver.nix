@@ -160,8 +160,5 @@ in {
     security.sudo.extraConfig = ''
       Defaults  env_keep+=QT_GRAPHICSSYSTEM
     '';
-    security.sudo-rs.extraConfig = ''
-      Defaults  env_keep+=QT_GRAPHICSSYSTEM
-    '';
   };
 }

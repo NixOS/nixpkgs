@@ -963,7 +963,7 @@ repository:
      lib.updateManyAttrsByPath [{
        path = [ "packages" "stable" ];
        update = old: old.overrideScope(final: prev: {
-         rustc-unwrapped = prev.rustc-unwrapped.overrideAttrs (_: {
+         rustc = prev.rustc.overrideAttrs (_: {
            src = lib.cleanSource /git/scratch/rust;
            # do *not* put passthru.isReleaseTarball=true here
          });
@@ -1003,3 +1003,4 @@ nix-build $NIXPKGS -A package-broken-by-rust-changes
 The `git submodule update --init` and `cargo vendor` commands above
 require network access, so they can't be performed from within the
 `rustc` derivation, unfortunately.
+

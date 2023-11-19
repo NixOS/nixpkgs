@@ -15,7 +15,15 @@ in
 {
   port = 9221;
   extraOpts = {
-    package = mkPackageOption pkgs "prometheus-pve-exporter" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.prometheus-pve-exporter;
+      defaultText = literalExpression "pkgs.prometheus-pve-exporter";
+      example = literalExpression "pkgs.prometheus-pve-exporter";
+      description = lib.mdDoc ''
+        The package to use for prometheus-pve-exporter
+      '';
+    };
 
     environmentFile = mkOption {
       type = with types; nullOr path;

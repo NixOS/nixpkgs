@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "credstash";
   version = "1.17.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -81,6 +81,5 @@ mkDerivation rec {
     maintainers = [ maintainers.leenaars ];
     broken = stdenv.isAarch64;
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
-    mainProgram = "qstopmotion";
   };
 }

@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "pyroma";
   version = "3.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "regebro";

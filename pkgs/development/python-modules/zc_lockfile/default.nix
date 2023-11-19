@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , mock
-, zope-testing
+, zope_testing
 , lib
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ mock ];
-  propagatedBuildInputs = [ zope-testing ];
+  propagatedBuildInputs = [ zope_testing ];
 
   meta = with lib; {
     description = "Inter-process locks";

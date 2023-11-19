@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ j0hax ];
     platforms = platforms.unix;
-    mainProgram = "scrub";
   };
 }

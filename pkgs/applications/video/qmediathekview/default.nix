@@ -38,6 +38,5 @@ mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];
     broken = stdenv.isAarch64;
-    mainProgram = "QMediathekView";
   };
 }

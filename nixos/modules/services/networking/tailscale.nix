@@ -29,7 +29,7 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
-    package = lib.mkPackageOption pkgs "tailscale" {};
+    package = lib.mkPackageOptionMD pkgs "tailscale" {};
 
     openFirewall = mkOption {
       default = false;

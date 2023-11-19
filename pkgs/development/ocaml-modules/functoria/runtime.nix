@@ -1,21 +1,14 @@
-{ lib, buildDunePackage, fetchurl, cmdliner }:
+{ lib, buildDunePackage, functoria, cmdliner, fmt }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "functoria-runtime";
-  version = "4.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/mirage/mirage/releases/download/v${version}/mirage-${version}.tbz";
-    hash = "sha256-FKCdzrRJVpUrCWqrTiE8l00ZKJOYsvI9mNzJ0ZxDBwg=";
-  };
+  inherit (functoria) version src;
 
-  minimalOCamlVersion = "4.08";
-
-  propagatedBuildInputs = [ cmdliner ];
+  propagatedBuildInputs = [ cmdliner fmt ];
 
   meta = with lib; {
-    homepage    = "https://github.com/mirage/functoria";
-    license     = licenses.isc;
+    inherit (functoria.meta) homepage license;
     description = "Runtime support library for functoria-generated code";
     maintainers = [ maintainers.sternenseemann ];
   };

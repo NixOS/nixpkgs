@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
     export DOTNET_NOLOGO=1 # Disables the welcome message
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1 # Skip integrity check on first run, which fails due to read-only directory
   '';
 
   passthru = {
@@ -148,10 +147,9 @@ stdenv.mkDerivation (finalAttrs: rec {
         nativeBuildInputs = [ finalAttrs.finalPackage ];
       } ''
         HOME=$(pwd)/fake-home
-        dotnet new console --no-restore
-        dotnet restore --source "$(mktemp -d)"
-        dotnet build --no-restore
-        output="$(dotnet run --no-build)"
+        dotnet new console
+        dotnet build
+        output="$(dotnet run)"
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';

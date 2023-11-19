@@ -75,6 +75,5 @@ in {
     version = "3.12.3";
     sha256 = "13zk82ny1w5zd9qcs9qkq0kdb22ni5byzajyshpxdfm4zv6p32ss";
     jdk = jdk8.jre;
-    mainProgram = "charles";
   });
 }

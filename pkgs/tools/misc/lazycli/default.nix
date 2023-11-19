@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jesseduffield/lazycli";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "lazycli";
   };
 }

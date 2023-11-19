@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ tomberek ];
     platforms = with lib.platforms; all;
-    mainProgram = "rig";
   };
 }

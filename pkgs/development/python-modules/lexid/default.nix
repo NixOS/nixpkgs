@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "lexid";
   version = "2021.1006";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
   src = fetchPypi {
     inherit pname version;

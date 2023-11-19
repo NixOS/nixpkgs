@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "crabz";
   };
 }

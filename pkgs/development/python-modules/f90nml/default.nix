@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "f90nml";
   version = "1.4.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "marshallward";

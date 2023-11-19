@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "httpserver";
   version = "1.1.0";
-  format = "setuptools";
 
   buildInputs = [ docopt ];
 

@@ -25,7 +25,7 @@ in
   options.services.opensearch = {
     enable = mkEnableOption (lib.mdDoc "OpenSearch");
 
-    package = lib.mkPackageOption pkgs "OpenSearch" {
+    package = lib.mkPackageOptionMD pkgs "OpenSearch" {
       default = [ "opensearch" ];
     };
 
@@ -200,7 +200,7 @@ in
               # Install plugins
 
               # remove plugins directory if it is empty.
-              if [[ -d ${cfg.dataDir}/plugins && -z "$(ls -A ${cfg.dataDir}/plugins)" ]]; then
+              if [ -z "$(ls -A ${cfg.dataDir}/plugins)" ]; then
                 rm -r "${cfg.dataDir}/plugins"
               fi
 

@@ -26,6 +26,5 @@ buildGoModule rec {
     description = "Automatically configure monitors/outputs for Xorg via RANDR";
     license = with licenses; [ bsd2 ];
     platforms   = platforms.linux;
-    mainProgram = "grobi";
   };
 }

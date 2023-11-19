@@ -8,7 +8,6 @@
 let incremental = buildPythonPackage rec {
   pname = "incremental";
   version = "22.10.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

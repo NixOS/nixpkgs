@@ -67,6 +67,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];
     platforms = platforms.all;
-    mainProgram = "wtwitch";
   };
 }

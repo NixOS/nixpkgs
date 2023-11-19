@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types getExe;
+  inherit (lib) mkEnableOption mkIf mkOption types getExe;
 
   cfg = config.services.opentelemetry-collector;
   opentelemetry-collector = cfg.package;
@@ -11,7 +11,12 @@ in {
   options.services.opentelemetry-collector = {
     enable = mkEnableOption (lib.mdDoc "Opentelemetry Collector");
 
-    package = mkPackageOption pkgs "opentelemetry-collector" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.opentelemetry-collector;
+      defaultText = lib.literalExpression "pkgs.opentelemetry-collector";
+      description = lib.mdDoc "The opentelemetry-collector package to use.";
+    };
 
     settings = mkOption {
       type = settingsFormat.type;

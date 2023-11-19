@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.mynacol ];
     platforms = platforms.all;
-    mainProgram = "leanify";
   };
 }

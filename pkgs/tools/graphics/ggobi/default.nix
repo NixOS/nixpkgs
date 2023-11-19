@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = licenses.cpl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.michelk ];
-    mainProgram = "ggobi";
   };
 }

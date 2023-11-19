@@ -56,6 +56,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ otavio ];
     platforms = platforms.linux;
-    mainProgram = "agent";
   };
 }

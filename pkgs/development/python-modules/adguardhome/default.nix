@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "adguardhome";
-  version = "0.6.3";
+  version = "0.6.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-V8SsWsGYmUhR9/yV6BZBK1UjYGHlDrXrF8nt0eZbTnI=";
+    hash = "sha256-hCiyylnc1WsKz8zQxJhXe4v+SJxKFkwzpmPYnltnc8g=";
   };
 
   postPatch = ''

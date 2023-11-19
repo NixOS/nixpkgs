@@ -115,14 +115,18 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "atlassian-crowd" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-crowd;
+        defaultText = literalExpression "pkgs.atlassian-crowd";
+        description = lib.mdDoc "Atlassian Crowd package to use.";
+      };
 
-      jrePackage = mkPackageOption pkgs "oraclejre8" {
-        extraDescription = ''
-        ::: {.note }
-        Atlassian only supports the Oracle JRE (JRASERVER-46152).
-        :::
-        '';
+      jrePackage = mkOption {
+        type = types.package;
+        default = pkgs.oraclejre8;
+        defaultText = literalExpression "pkgs.oraclejre8";
+        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };

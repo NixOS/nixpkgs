@@ -33,6 +33,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/digitalsleuth/time_decode/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "time-decode";
   };
 }

@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "cytoolz";
   version = "0.12.2";
-  format = "setuptools";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
@@ -33,10 +32,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";
     description = "Cython implementation of Toolz: High performance functional utilities";
-    license = licenses.bsd3;
+    license = "licenses.bsd3";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

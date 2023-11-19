@@ -50,6 +50,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pbsds ];
-    mainProgram = "rmate";
   };
 }

@@ -19,7 +19,7 @@ let
     mkIf
     mkMerge
     mkOption
-    mkPackageOption
+    mkPackageOptionMD
     optional
     optionalAttrs
     optionalString
@@ -682,7 +682,7 @@ in {
 
   options.services.thanos = {
 
-    package = mkPackageOption pkgs "thanos" {};
+    package = mkPackageOptionMD pkgs "thanos" {};
 
     sidecar = paramsToOptions params.sidecar // {
       enable = mkEnableOption

@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , fetchurl
-, runCommand
 , cmake
 , ffmpeg_4
 , libdrm
@@ -13,7 +12,6 @@
 , libXdmcp
 , libxcb
 , makeWrapper
-, mesa
 , ninja
 , pkg-config
 , python3
@@ -39,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.7.2";
+  version = "1.3.7.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-TnHFCEGKgn1U00aUDMX7UEWSeTjzysmX7rOQCZTL8FU=";
+    hash = "sha256-f7i7gytk3cKeFQD0FR+nrUR2o0FWaJWKG7OpDz9u42E=";
   };
 
   prePatch = ''
@@ -106,12 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
-  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-    # Expand the wildcard to pick the existing architecture
-    export VK_ICD_FILENAMES=$(echo ${mesa.drivers}/share/vulkan/icd.d/lvp_icd.*.json)
-    deqp-vk -n dEQP-VK.api.smoke.triangle
-    touch $out
-  '';
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";

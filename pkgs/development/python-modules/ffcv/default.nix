@@ -14,7 +14,6 @@
 buildPythonPackage rec {
   pname = "ffcv";
   version = "1.0.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "libffcv";

@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "1.0.4";
-  format = "setuptools";
   pname = "python-editor";
 
   src = fetchPypi {

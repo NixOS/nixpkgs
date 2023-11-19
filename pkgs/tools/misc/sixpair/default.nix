@@ -35,6 +35,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.tomsmeets ];
     platforms = lib.platforms.linux;
-    mainProgram = "sixpair";
   };
 }

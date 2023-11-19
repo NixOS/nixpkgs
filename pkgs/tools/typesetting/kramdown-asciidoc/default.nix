@@ -30,7 +30,6 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ ];
       platforms = platforms.unix;
-      mainProgram = "kramdoc";
     };
   };
 in

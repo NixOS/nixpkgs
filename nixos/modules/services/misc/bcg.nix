@@ -26,7 +26,12 @@ in
   options = {
     services.bcg = {
       enable = mkEnableOption (mdDoc "BigClown gateway");
-      package = mkPackageOption pkgs [ "python3Packages" "bcg" ] { };
+      package = mkOption {
+        default = pkgs.python3Packages.bcg;
+        defaultText = literalExpression "pkgs.python3Packages.bcg";
+        description = mdDoc "Which bcg derivation to use.";
+        type = types.package;
+      };
       environmentFiles = mkOption {
         type = types.listOf types.path;
         default = [];

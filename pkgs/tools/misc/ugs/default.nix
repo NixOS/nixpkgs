@@ -48,6 +48,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     platforms = platforms.all;
-    mainProgram = "ugs";
   };
 }

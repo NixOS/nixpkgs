@@ -11,7 +11,7 @@ let
 in {
   options.services.stalwart-mail = {
     enable = mkEnableOption (mdDoc "the Stalwart all-in-one email server");
-    package = mkPackageOption pkgs "stalwart-mail" { };
+    package = mkPackageOptionMD pkgs "stalwart-mail" { };
 
     settings = mkOption {
       inherit (configFormat) type;

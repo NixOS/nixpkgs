@@ -1,27 +1,28 @@
 { lib
-, aiohttp
-, aresponses
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , poetry-core
+, aiohttp
+, yarl
+, aresponses
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
-, yarl
 }:
 
 buildPythonPackage rec {
   pname = "gridnet";
-  version = "5.0.0";
-  pyproject = true;
+  version = "4.3.0";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.9";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-gridnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7tLT5sRoUjWs1DOIuUEbnJJkg9LHZqrN/eu+Mjx5Yd4=";
+    hash = "sha256-8R8vPVL1Iq0NneN8G2bjUOrEq96LW9Zk5RcWG/LSJTY=";
   };
 
   postPatch = ''
@@ -45,14 +46,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "gridnet"
-  ];
+  pythonImportsCheck = [ "gridnet" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for NET2GRID devices";
     homepage = "https://github.com/klaasnicolaas/python-gridnet";
-    changelog = "https://github.com/klaasnicolaas/python-gridnet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

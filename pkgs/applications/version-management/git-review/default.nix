@@ -48,6 +48,5 @@ buildPythonApplication rec {
     homepage = "https://opendev.org/opendev/git-review";
     license = licenses.asl20;
     maintainers = with maintainers; [ kira-bruneau ];
-    mainProgram = "git-review";
   };
 }

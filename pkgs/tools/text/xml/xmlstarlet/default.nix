@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, libxml2
-, libxslt
-}:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   pname = "xmlstarlet";
@@ -16,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt ];
 
   patches = [
@@ -24,16 +17,18 @@ stdenv.mkDerivation rec {
     ./fix-incompatible-function-pointer.patch
   ];
 
-  preConfigure = ''
-    export LIBXSLT_PREFIX=${libxslt.dev}
-    export LIBXML_PREFIX=${libxml2.dev}
-    export LIBXSLT_LIBS=$($PKG_CONFIG --libs libxslt libexslt)
-    export LIBXML_LIBS=$($PKG_CONFIG --libs libxml-2.0)
-  '';
+  preConfigure =
+    ''
+      export LIBXSLT_PREFIX=${libxslt.dev}
+      export LIBXML_PREFIX=${libxml2.dev}
+      export LIBXSLT_LIBS=$(pkg-config --libs libxslt libexslt)
+      export LIBXML_LIBS=$(pkg-config --libs libxml-2.0)
+    '';
 
-  postInstall = ''
-    ln -s xml $out/bin/xmlstarlet
-  '';
+  postInstall =
+    ''
+      ln -s xml $out/bin/xmlstarlet
+    '';
 
   meta = {
     description = "A command line tool for manipulating and querying XML data";

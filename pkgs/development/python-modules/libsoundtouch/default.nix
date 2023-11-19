@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname   = "libsoundtouch";
   version = "0.8.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "CharlesBlonde";

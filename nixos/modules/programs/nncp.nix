@@ -23,7 +23,12 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "nncp" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.nncp;
+      defaultText = literalExpression "pkgs.nncp";
+      description = lib.mdDoc "The NNCP package to use system-wide.";
+    };
 
     secrets = mkOption {
       type = with types; listOf str;

@@ -36,6 +36,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Neo23x0/log4shell-detector";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "log4shell-detector";
   };
 }

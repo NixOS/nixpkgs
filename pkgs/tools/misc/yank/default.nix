@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.dochang ];
     platforms = platforms.unix;
-    mainProgram = "yank";
   };
 
 }

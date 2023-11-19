@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "txrequests";
   version = "0.9.6";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

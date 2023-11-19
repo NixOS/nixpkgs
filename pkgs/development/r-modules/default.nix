@@ -444,7 +444,6 @@ let
     units = [ pkgs.udunits ];
     V8 = [ pkgs.v8 ];
     XBRL = with pkgs; [ zlib libxml2.dev ];
-    XLConnect = [ pkgs.jdk ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
     XML = with pkgs; [ libtool libxml2.dev xmlsec libxslt ];
     affyPLM = [ pkgs.zlib.dev ];
@@ -490,7 +489,6 @@ let
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
     RcppCWB = [ pkgs.pkg-config ];
-    redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
@@ -620,7 +618,6 @@ let
     scModels = [ pkgs.mpfr.dev ];
     multibridge = [ pkgs.mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
-    redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
@@ -1384,13 +1381,6 @@ let
     httpuv = old.httpuv.overrideAttrs (_: {
       preConfigure = ''
         patchShebangs configure
-      '';
-    });
-
-    tesseract = old.tesseract.overrideAttrs (_: {
-      preConfigure = ''
-        substituteInPlace configure \
-          --replace 'PKG_CONFIG_NAME="tesseract"' 'PKG_CONFIG_NAME="tesseract lept"'
       '';
     });
 

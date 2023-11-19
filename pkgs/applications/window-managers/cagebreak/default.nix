@@ -87,7 +87,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
     changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
-    mainProgram = "cagebreak";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;

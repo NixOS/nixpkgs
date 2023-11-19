@@ -25,6 +25,5 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
-    mainProgram = "extundelete";
   };
 }

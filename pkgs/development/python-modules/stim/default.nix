@@ -1,32 +1,33 @@
 { lib
+, pkgs
 , buildPythonPackage
-, cirq-core
+, pythonOlder
+, pytestCheckHook
+, pytest-xdist
 , fetchFromGitHub
+, numpy
+, pybind11
+, cirq-core
 , matplotlib
 , networkx
-, numpy
-, pandas
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
 , scipy
 , setuptools
 , wheel
+, pandas
 }:
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.12.1";
-  pyproject = true;
+  version = "1.9.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vDpW8cn1JPARDIXpLyK9uenhHmva0FwnWIDV7dSHbIY=";
+    hash = "sha256-zXWdJjFkf74FCWxyVMF8dx0P8GmUkuHFxUo5wYNU2o0=";
   };
 
   postPatch = ''
@@ -46,31 +47,34 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+
     cirq-core
     matplotlib
     networkx
-    pandas
-    pytest-xdist
-    pytestCheckHook
     scipy
+    pandas
   ];
 
-  pythonImportsCheck = [
-    "stim"
-  ];
+  meta = {
+    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits.";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ chrispattison ];
+    homepage = "https://github.com/quantumlib/stim";
+  };
+
+  pythonImportsCheck = [ "stim" ];
 
   enableParallelBuilding = true;
 
   disabledTestPaths = [
-    # Don't test sample
-    "glue/sample/"
+    # No pymatching
+    "glue/sample/src/sinter/main_test.py"
+    "glue/sample/src/sinter/decoding_test.py"
+    "glue/sample/src/sinter/predict_test.py"
+    "glue/sample/src/sinter/collection_test.py"
+    "glue/sample/src/sinter/collection_work_manager.py"
+    "glue/sample/src/sinter/worker_test.py"
   ];
-
-  meta = with lib; {
-    description = "A tool for high performance simulation and analysis of quantum stabilizer circuits, especially quantum error correction (QEC) circuits";
-    homepage = "https://github.com/quantumlib/stim";
-    changelog = "https://github.com/quantumlib/Stim/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chrispattison ];
-  };
 }

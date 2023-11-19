@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
-    patchShebangs *.sh
+    patchShebangs ./configure *.sh
   '';
 
   configureFlags = [

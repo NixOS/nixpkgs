@@ -20,6 +20,5 @@ buildPythonApplication rec {
     description = "A small utility for changing settings in configuration textfiles";
     changelog = "https://github.com/xyproto/setconf/releases/tag/${version}";
     maintainers = [ lib.maintainers.AndersonTorres ];
-    mainProgram = "setconf";
   };
 }

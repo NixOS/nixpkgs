@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jensbin ];
     license = licenses.gpl3;
     platforms = platforms.linux;
-    mainProgram = "ldmtool";
   };
 }

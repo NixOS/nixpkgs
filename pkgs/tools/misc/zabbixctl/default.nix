@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/kovetskiy/zabbixctl";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
-    mainProgram = "zabbixctl";
   };
 }

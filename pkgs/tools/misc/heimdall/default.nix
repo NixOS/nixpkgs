@@ -50,6 +50,5 @@ mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    mainProgram = "heimdall";
   };
 }

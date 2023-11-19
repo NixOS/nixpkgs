@@ -1,26 +1,25 @@
 { lib
-, attrs
 , buildPythonPackage
-, deprecated
 , fetchFromGitHub
+, setuptools
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, setuptools
+, six
 }:
 
 buildPythonPackage rec {
   pname = "headerparser";
-  version = "0.5.1";
-  pyproject = true;
+  version = "0.4.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jwodder";
-    repo = "headerparser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CWXha7BYVO5JFuhWP8OZ95fhUsZ3Jo0cgPAM+O5bfec=";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-KJJt85iC/4oBoIelB2zUJVyHSppFem/22v6F30P5nYM=";
   };
 
   nativeBuildInputs = [
@@ -28,14 +27,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
-    deprecated
+    six
   ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--cov=headerparser" "" \
+      --replace "--no-cov-on-fail" "" \
+      --replace "--flakes" ""
+  '';
 
   pythonImportsCheck = [
     "headerparser"
@@ -44,7 +49,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";
     homepage = "https://github.com/jwodder/headerparser";
-    changelog = "https://github.com/wheelodex/headerparser/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ayazhafiz ];
   };

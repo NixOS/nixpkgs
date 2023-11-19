@@ -52,6 +52,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/threat9/routersploit";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "rsf";
   };
 }

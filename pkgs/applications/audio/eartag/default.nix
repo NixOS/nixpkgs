@@ -10,7 +10,6 @@
 , glib
 , gobject-introspection
 , desktop-file-utils
-, appstream
 , appstream-glib
 , gtk4
 , librsvg
@@ -19,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.5.1";
+  version = "0.4.3";
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-tHBEz4sZsWOxDkdUd/3zMta8vOhuzv4G01dtjKBX/D0=";
+    hash = "sha256-0nkaKLkUnJiNTs7/qe+c4Lkst/ItHD1RKAERCo2O2ms=";
   };
 
   postPatch = ''
@@ -42,7 +41,6 @@ python3Packages.buildPythonApplication rec {
     ninja
     glib
     desktop-file-utils
-    appstream
     appstream-glib
     pkg-config
     gettext

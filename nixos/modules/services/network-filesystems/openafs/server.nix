@@ -5,7 +5,7 @@ with import ./lib.nix { inherit config lib pkgs; };
 
 let
   inherit (lib) concatStringsSep literalExpression mkIf mkOption mkEnableOption
-  mkPackageOption optionalString types;
+  optionalString types;
 
   bosConfig = pkgs.writeText "BosConfig" (''
     restrictmode 1
@@ -101,7 +101,12 @@ in {
         description = lib.mdDoc "Definition of all cell-local database server machines.";
       };
 
-      package = mkPackageOption pkgs "openafs" { };
+      package = mkOption {
+        default = pkgs.openafs;
+        defaultText = literalExpression "pkgs.openafs";
+        type = types.package;
+        description = lib.mdDoc "OpenAFS package for the server binaries";
+      };
 
       roles = {
         fileserver = {

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pyspf";
   version = "2.0.14";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sdgathman";

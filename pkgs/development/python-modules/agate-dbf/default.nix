@@ -3,7 +3,6 @@
 buildPythonPackage rec {
     pname = "agate-dbf";
     version = "0.2.2";
-    format = "setuptools";
 
     propagatedBuildInputs = [ agate dbf dbfread ];
 

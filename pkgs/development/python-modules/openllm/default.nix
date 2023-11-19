@@ -9,18 +9,20 @@
 , accelerate
 , bentoml
 , bitsandbytes
-, build
 , click
-, ctranslate2
 , datasets
 , docker
 , einops
+, fairscale
+, flax
 , ghapi
-, huggingface-hub
 , hypothesis
 , ipython
+, jax
+, jaxlib
 , jupyter
 , jupytext
+, keras
 , nbformat
 , notebook
 , openai
@@ -32,12 +34,14 @@
 , pytest-randomly
 , pytest-rerunfailures
 , pytest-xdist
+, ray
 , safetensors
 , scipy
 , sentencepiece
 , soundfile
 , syrupy
 , tabulate
+, tensorflow
 , tiktoken
 , transformers
 , openai-triton
@@ -69,16 +73,12 @@ buildPythonPackage rec {
     accelerate
     bentoml
     bitsandbytes
-    build
     click
-    einops
     ghapi
     openllm-client
     openllm-core
     optimum
     safetensors
-    scipy
-    sentencepiece
     tabulate
     transformers
   ] ++ bentoml.optional-dependencies.io
@@ -92,43 +92,62 @@ buildPythonPackage rec {
       soundfile
       transformers
     ] ++ transformers.optional-dependencies.agents;
-    awq = [
-      # autoawq
-    ];
     baichuan = [
       # cpm-kernels
+      sentencepiece
     ];
     chatglm = [
       # cpm-kernels
-    ];
-    ctranslate = [
-      ctranslate2
+      sentencepiece
     ];
     falcon = [
+      einops
       xformers
     ];
     fine-tune = [
+      accelerate
+      bitsandbytes
       datasets
-      huggingface-hub
       peft
       # trl
+    ];
+    flan-t5 = [
+      flax
+      jax
+      jaxlib
+      keras
+      tensorflow
     ];
     ggml = [
       # ctransformers
     ];
     gptq = [
       # auto-gptq
+      optimum
     ]; # ++ autogptq.optional-dependencies.triton;
     grpc = [
-      bentoml
-    ] ++ bentoml.optional-dependencies.grpc;
+      openllm-client
+    ] ++ openllm-client.optional-dependencies.grpc;
+    llama = [
+      fairscale
+      sentencepiece
+      scipy
+    ];
     mpt = [
+      einops
       openai-triton
     ];
     openai = [
       openai
       tiktoken
-    ] ++ openai.optional-dependencies.datalib;
+    ] ++ openai.optional-dependencies.embeddings;
+    opt = [
+      flax
+      jax
+      jaxlib
+      keras
+      tensorflow
+    ];
     playground = [
       ipython
       jupyter
@@ -140,10 +159,11 @@ buildPythonPackage rec {
       bitsandbytes
     ];
     vllm = [
+      ray
       # vllm
     ];
     full = with passthru.optional-dependencies; (
-      agents ++ awq ++ baichuan ++ chatglm ++ ctranslate ++ falcon ++ fine-tune ++ ggml ++ gptq ++ mpt ++ openai ++ playground ++ starcoder ++ vllm
+      agents ++ baichuan ++ chatglm ++ falcon ++ fine-tune ++ flan-t5 ++ ggml ++ gptq ++ llama ++ mpt ++ openai ++ opt ++ playground ++ starcoder ++ vllm
     );
     all = passthru.optional-dependencies.full;
   };
@@ -167,15 +187,12 @@ buildPythonPackage rec {
     export CI=1
   '';
 
-  disabledTestPaths = [
-    # require network access
-    "tests/models"
-  ];
-
   disabledTests = [
-    # incompatible with recent TypedDict
-    # https://github.com/bentoml/OpenLLM/blob/f3fd32d596253ae34c68e2e9655f19f40e05f666/openllm-python/tests/configuration_test.py#L18-L21
-    "test_missing_default"
+    # these tests access to huggingface.co
+    "test_opt_125m"
+    "test_opt_125m"
+    "test_flan_t5"
+    "test_flan_t5"
   ];
 
   pythonImportsCheck = [ "openllm" ];

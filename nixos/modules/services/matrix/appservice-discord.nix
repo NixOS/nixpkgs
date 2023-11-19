@@ -15,7 +15,14 @@ in {
     services.matrix-appservice-discord = {
       enable = mkEnableOption (lib.mdDoc "a bridge between Matrix and Discord");
 
-      package = mkPackageOption pkgs "matrix-appservice-discord" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.matrix-appservice-discord;
+        defaultText = literalExpression "pkgs.matrix-appservice-discord";
+        description = lib.mdDoc ''
+          Which package of matrix-appservice-discord to use.
+        '';
+      };
 
       settings = mkOption rec {
         # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented

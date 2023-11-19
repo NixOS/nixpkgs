@@ -19,6 +19,5 @@ buildGoModule rec {
     homepage = "https://github.com/climech/grit";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
-    mainProgram = "grit";
   };
 }

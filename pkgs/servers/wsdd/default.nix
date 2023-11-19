@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ izorkin ];
     license = licenses.mit;
     platforms = platforms.all;
-    mainProgram = "wsdd";
   };
 }

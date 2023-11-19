@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Luflosi ];
-    mainProgram = "mp3fs";
   };
 }

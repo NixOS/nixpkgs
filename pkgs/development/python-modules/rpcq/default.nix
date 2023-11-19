@@ -9,31 +9,21 @@
 , pythonOlder
 , pyzmq
 , ruamel-yaml
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "rpcq";
   version = "3.10.0";
-  pyproject = true;
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rigetti";
-    repo = "rpcq";
+    repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-J7jtGXJIF3jp0a0IQZmSR4TWf9D02Luau+Bupmi/d68=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "msgpack>=0.6,<1.0" "msgpack"
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     msgpack
@@ -48,10 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # Don't run tests that spin-up a zmq server
-    "rpcq/test/test_base.py"
-    "rpcq/test/test_spec.py"
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "msgpack>=0.6,<1.0" "msgpack"
+  '';
+
+  disabledTests = [
+    # Test doesn't work properly on Hydra
+    "test_client_backlog"
   ];
 
   pythonImportsCheck = [

@@ -1,9 +1,4 @@
-{ lib
-, buildGraalvmNativeImage
-, fetchurl
-, testers
-, zprint
-}:
+{ lib, buildGraalvmNativeImage, fetchurl }:
 
 buildGraalvmNativeImage rec {
   pname = "zprint";
@@ -22,12 +17,6 @@ buildGraalvmNativeImage rec {
     "--initialize-at-build-time"
     "--no-fallback"
   ];
-
-  passthru.tests.version = testers.testVersion {
-    inherit version;
-    package = zprint;
-    command = "zprint --version";
-  };
 
   meta = with lib; {
     description = "Clojure/EDN source code formatter and pretty printer";

@@ -34,6 +34,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres xzfc ];
     platforms = platforms.linux;
-    mainProgram = "xpointerbarrier";
   };
 })

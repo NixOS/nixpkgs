@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "tilestache";
   version = "1.51.14";
-  format = "setuptools";
   disabled = !isPy27;
 
   src = fetchPypi {

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "jieba";
   version = "0.42.1";
-  format = "setuptools";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {

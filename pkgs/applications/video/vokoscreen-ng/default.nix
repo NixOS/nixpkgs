@@ -69,6 +69,5 @@ mkDerivation rec {
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
-    mainProgram = "vokoscreenNG";
   };
 }

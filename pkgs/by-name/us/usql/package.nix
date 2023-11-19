@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildGoModule
 , unixODBC
@@ -11,18 +10,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.17.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-AcxtIdPflMT2SGM2dgbbiFx5S+NlM7neMuXrIhysFPo=";
+    hash = "sha256-XfzCJOr0lOkimUKbOW0+qFNQMmYc0DBgi+0ItmEOjwE=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-UsYEhqsQUhRROe9HX4WIyi0OeMLHE87JOfp6vwbVMMo=";
+  vendorHash = "sha256-sijt6YOp1pFNhaxLIOLH90Z5ODVbWFj/mp8Csx8n+ac=";
   proxyVendor = true;
 
   # Exclude broken genji, hive & impala drivers (bad group)
@@ -49,11 +48,6 @@ buildGoModule rec {
     "sqlite_vtable"
     "no_adodb"
   ];
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
 
   ldflags = [
     "-s"

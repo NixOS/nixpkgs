@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ thall snicket2100 ];
-      mainProgram = "ums";
   };
 }

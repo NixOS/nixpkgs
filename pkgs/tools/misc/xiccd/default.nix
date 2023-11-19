@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    mainProgram = "xiccd";
   };
 }

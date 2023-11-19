@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "1.10.6";
-  format = "setuptools";
   pname = "docker-py";
 
   src = fetchPypi {

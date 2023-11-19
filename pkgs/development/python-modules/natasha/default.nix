@@ -5,7 +5,7 @@
 , razdel
 , navec
 , slovnet
-, yargy
+, yagry
 , ipymarkup
 , pytestCheckHook
 }:
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-Rgguazgq06a8B9jeRnfHD5VTR+Xrd+8OCsQUfaGLEq0=";
   };
 
-  propagatedBuildInputs = [ pymorphy2 navec razdel slovnet yargy ipymarkup ];
+  propagatedBuildInputs = [ pymorphy2 navec razdel slovnet yagry ipymarkup ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/" ];
-  pythonImportsCheck = [ "natasha" ];
+  pythonImportCheck = [ "natasha" ];
 
   meta = with lib; {
     description = "NLP framework for Russian language";

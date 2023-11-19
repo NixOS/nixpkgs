@@ -28,7 +28,6 @@ let
   phpPackage = cfg.phpPackage.buildEnv {
     extensions = { enabled, all }:
       (with all; enabled
-        ++ [ bz2 intl sodium ] # recommended
         ++ optional cfg.enableImagemagick imagick
         # Optionally enabled depending on caching settings
         ++ optional cfg.caching.apcu apcu
@@ -62,9 +61,7 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
   # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2"
-    || (versionOlder cfg.package.version "27.0.0"
-      && versionAtLeast cfg.package.version "26.0.8");
+  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2";
 
 in {
 
@@ -128,7 +125,12 @@ in {
       '';
       example = literalExpression ''
         {
-          inherit (pkgs.nextcloud25Packages.apps) mail calendar contact;
+          maps = pkgs.fetchNextcloudApp {
+            name = "maps";
+            sha256 = "007y80idqg6b6zk6kjxg4vgw0z8fsxs9lajnv49vv1zjy6jx2i1i";
+            url = "https://github.com/nextcloud/maps/releases/download/v0.1.9/maps-0.1.9.tar.gz";
+            version = "0.1.9";
+          };
           phonetrack = pkgs.fetchNextcloudApp {
             name = "phonetrack";
             sha256 = "0qf366vbahyl27p9mshfma1as4nvql6w75zy2zk5xwwbp343vsbc";
@@ -191,10 +193,15 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" ];
+      relatedPackages = [ "nextcloud26" "nextcloud27" ];
     };
-    phpPackage = mkPackageOption pkgs "php" {
-      example = "php82";
+    phpPackage = mkOption {
+      type = types.package;
+      relatedPackages = [ "php81" "php82" ];
+      defaultText = "pkgs.php";
+      description = lib.mdDoc ''
+        PHP package to use for Nextcloud.
+      '';
     };
 
     maxUploadSize = mkOption {
@@ -241,7 +248,7 @@ in {
     };
 
     phpOptions = mkOption {
-      type = with types; attrsOf (oneOf [ str int ]);
+      type = types.attrsOf types.str;
       defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
       description = lib.mdDoc ''
         Options for PHP's php.ini file for nextcloud.
@@ -680,7 +687,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 28;
+        latest = 27;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -701,8 +708,7 @@ in {
         '')
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
-        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"));
+        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -712,13 +718,15 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
+          else if versionOlder stateVersion "22.11" then nextcloud24
           else if versionOlder stateVersion "23.05" then nextcloud25
           else if versionOlder stateVersion "23.11" then nextcloud26
-          else if versionOlder stateVersion "24.05" then nextcloud27
-          else nextcloud28
+          else nextcloud27
         );
 
-      services.nextcloud.phpPackage = pkgs.php82;
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "26" then pkgs.php81
+        else pkgs.php82;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
@@ -1131,13 +1139,10 @@ in {
               fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
-          "~ \\.(?:css|js|mjs|svg|gif|png|jpg|jpeg|ico|wasm|tflite|map|html|ttf|bcmap|mp4|webm|ogg|flac)$".extraConfig = ''
+          "~ \\.(?:css|js|mjs|svg|gif|png|jpg|jpeg|ico|wasm|tflite|map|html|ttf|bcmap|mp4|webm)$".extraConfig = ''
             try_files $uri /index.php$request_uri;
             expires 6M;
             access_log off;
-            location ~ \.mjs$ {
-              default_type text/javascript;
-            }
             location ~ \.wasm$ {
               default_type application/wasm;
             }

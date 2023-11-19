@@ -18,7 +18,6 @@
 buildPythonPackage rec {
   pname = "accupy";
   version = "0.3.6";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

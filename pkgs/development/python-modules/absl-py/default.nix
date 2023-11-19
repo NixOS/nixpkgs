@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "absl-py";
   version = "1.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

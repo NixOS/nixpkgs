@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "versiontag";
   version = "1.2.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thelabnyc";

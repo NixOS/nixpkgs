@@ -1,54 +1,36 @@
-{ stdenv
-, lib
-, fetchhg
-, cmake
-, pkg-config
-, makeWrapper
-, callPackage
-, soundfont-fluid
-, SDL_compat
-, libGL
-, glew
-, bzip2
-, zlib
-, libjpeg
-, fluidsynth
-, fmodex
-, openssl
-, gtk2
-, python3
-, game-music-emu
+{ stdenv, lib, fetchhg, cmake, pkg-config, makeWrapper, callPackage
+, soundfont-fluid, SDL, libGL, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3, game-music-emu
 , serverOnly ? false
 }:
 
 let
   suffix = lib.optionalString serverOnly "-server";
-  fmod = fmodex; # fmodex is on nixpkgs now
+  fmod = callPackage ./fmod.nix { };
   sqlite = callPackage ./sqlite.nix { };
   clientLibPath = lib.makeLibraryPath [ fluidsynth ];
 
-in
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "zandronum${suffix}";
-  version = "3.1.0";
+  version = "3.0.1";
 
   src = fetchhg {
-    # expired ssl certificate
-    url = "http://hg.osdn.net/view/zandronum/zandronum-stable";
-    rev = "4178904d7698";
-    hash = "sha256-5t36CoRPPjDKQE0DVSv2Qqpqko6JAXBI53tuAYiylHQ=";
+    url = "https://hg.osdn.net/view/zandronum/zandronum-stable";
+    rev = "ZA_${version}";
+    sha256 = "16v5b6wfrmabs3ky6isbfhlrqdjrr1pvfxlxwk0im02kcpxxw9qw";
   };
 
   # zandronum tries to download sqlite now when running cmake, don't let it
+
   # it also needs the current mercurial revision info embedded in gitinfo.h
   # otherwise, the client will fail to connect to servers because the
   # protocol version doesn't match.
-  patches = [ ./zan_configure_impurity.patch ./dont_update_gitinfo.patch ./add_gitinfo.patch ];
+
+  patches = [ ./zan_configure_impurity.patch ./add_gitinfo.patch ./dont_update_gitinfo.patch ];
 
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
-  buildInputs = [ openssl bzip2 zlib SDL_compat libjpeg sqlite game-music-emu ]
-    ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
+  buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite game-music-emu ]
+             ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper python3 ];
 
@@ -71,7 +53,6 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # Won't work well without C or en_US. Setting LANG might not be enough if the user is making use of LC_* so wrap with LC_ALL instead
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/lib/zandronum
@@ -80,8 +61,6 @@ stdenv.mkDerivation rec {
        ${lib.optionalString (!serverOnly) "liboutput_sdl.so"} \
        $out/lib/zandronum
     makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}
-    wrapProgram $out/bin/zandronum${suffix} \
-      --set LC_ALL="C"
   '';
 
   postFixup = lib.optionalString (!serverOnly) ''
@@ -97,7 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://zandronum.com/";
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     maintainers = with maintainers; [ lassulus MP2E ];
-    license = licenses.sleepycat;
+    license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
   };
 }

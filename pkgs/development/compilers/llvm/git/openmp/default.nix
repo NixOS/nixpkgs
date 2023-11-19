@@ -11,7 +11,6 @@
 , clang-unwrapped
 , perl
 , pkg-config
-, xcbuild
 , version
 }:
 
@@ -39,8 +38,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
   ];
-
-  nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin xcbuild.xcrun;
 
   # Unsup:Pass:XFail:Fail
   # 26:267:16:8

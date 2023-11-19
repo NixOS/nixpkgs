@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.swflint ];
-    mainProgram = "x11idle";
   };
 }

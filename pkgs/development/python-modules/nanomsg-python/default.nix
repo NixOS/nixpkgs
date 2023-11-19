@@ -3,7 +3,6 @@
 buildPythonPackage {
   pname = "nanomsg-python";
   version = "1.0.20190114";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tonysimpson";

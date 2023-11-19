@@ -33,6 +33,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ davidak ];
     license = licenses.gpl3;
     platforms = with platforms; unix;
-    mainProgram = "phoronix-test-suite";
   };
 }

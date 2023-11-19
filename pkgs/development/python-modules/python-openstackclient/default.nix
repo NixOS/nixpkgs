@@ -17,7 +17,6 @@
 buildPythonPackage rec {
   pname = "python-openstackclient";
   version = "6.3.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

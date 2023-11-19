@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "pyfireservicerota";
   version = "0.0.43";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,21 +4,29 @@
 , fetchFromGitHub
 , setuptools
 , wheel
+, black
 , cloudpathlib
 , confection
+, isort
+, mypy
 , packaging
+, pre-commit
 , pydantic
+, pytest
 , requests
+, ruff
 , smart-open
 , srsly
 , typer
+, types-requests
+, types-setuptools
 , wasabi
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "weasel";
-  version = "0.3.4";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +35,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "weasel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
+    hash = "sha256-I8Omrez1wfAbCmr9hivqKN2fNgnFQRGm8OP7lb7YClk=";
   };
 
   nativeBuildInputs = [
@@ -36,14 +44,22 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    black
     cloudpathlib
     confection
+    isort
+    mypy
     packaging
+    pre-commit
     pydantic
+    pytest
     requests
+    ruff
     smart-open
     srsly
     typer
+    types-requests
+    types-setuptools
     wasabi
   ];
 

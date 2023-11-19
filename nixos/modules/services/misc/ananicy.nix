@@ -15,13 +15,21 @@ in
     services.ananicy = {
       enable = mkEnableOption (lib.mdDoc "Ananicy, an auto nice daemon");
 
-      package = mkPackageOption pkgs "ananicy" {
-        example = "ananicy-cpp";
+      package = mkOption {
+        type = types.package;
+        default = pkgs.ananicy;
+        defaultText = literalExpression "pkgs.ananicy";
+        example = literalExpression "pkgs.ananicy-cpp";
+        description = lib.mdDoc ''
+          Which ananicy package to use.
+        '';
       };
 
-      rulesProvider = mkPackageOption pkgs "ananicy" {
-        example = "ananicy-cpp";
-      } // {
+      rulesProvider = mkOption {
+        type = types.package;
+        default = pkgs.ananicy;
+        defaultText = literalExpression "pkgs.ananicy";
+        example = literalExpression "pkgs.ananicy-cpp";
         description = lib.mdDoc ''
           Which package to copy default rules,types,cgroups from.
         '';

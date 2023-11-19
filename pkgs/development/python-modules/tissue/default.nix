@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "tissue";
   version = "0.9.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

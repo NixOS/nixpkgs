@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , runtimeShell
 , dtkwidget
 , qt5integration
@@ -39,18 +38,17 @@
 , pcre
 , udisks2
 , libisoburn
-, gsettings-qt
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
-  version = "6.0.31";
+  version = "6.0.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-mc2HcoLrwMXKU8w34KUEh62ZfEIfbJLVzz4JGnUE5EM=";
+    hash = "sha256-H+pCWZ1jj5p3gOKXYyLxSmjCMv5/BPIz5A25JGGzrR8=";
   };
 
   nativeBuildInputs = [
@@ -61,16 +59,6 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
   dontWrapGApps = true;
-
-  patches = [
-    ./use_v23_dbus_interface.diff
-
-    (fetchpatch {
-      name = "use-pkgconfig-to-check-mount.patch";
-      url = "https://github.com/linuxdeepin/dde-file-manager/commit/b6c210057d991591df45b80607a614e7a57a9dc0.patch";
-      hash = "sha256-k0ZYlOVN3hHs1qvvRaJ3i6okOhDE+DoUKGs9AhSFBGU=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -127,11 +115,11 @@ stdenv.mkDerivation rec {
     pcre
     udisks2
     libisoburn
-    gsettings-qt
   ];
 
   cmakeFlags = [
     "-DVERSION=${version}"
+    "-DDEEPIN_OS_VERSION=20"
   ];
 
   enableParallelBuilding = true;

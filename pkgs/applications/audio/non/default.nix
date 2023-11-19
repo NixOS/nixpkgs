@@ -17,8 +17,6 @@ stdenv.mkDerivation {
                   ladspaH liblo libsigcxx lrdf
   ];
 
-  env.CXXFLAGS = "-std=c++14";
-
   meta = {
     description = "Lightweight and lightning fast modular Digital Audio Workstation";
     homepage = "http://non.tuxfamily.org";

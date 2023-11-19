@@ -36,6 +36,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "codevis";
   };
 }

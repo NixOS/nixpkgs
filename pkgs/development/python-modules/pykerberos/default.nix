@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pykerberos";
   version = "1.2.4";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

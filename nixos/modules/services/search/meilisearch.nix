@@ -16,10 +16,11 @@ in
   options.services.meilisearch = {
     enable = mkEnableOption (lib.mdDoc "MeiliSearch - a RESTful search API");
 
-    package = mkPackageOption pkgs "meilisearch" {
-      extraDescription = ''
-        Use this if you require specific features to be enabled. The default package has no features.
-      '';
+    package = mkOption {
+      description = lib.mdDoc "The package to use for meilisearch. Use this if you require specific features to be enabled. The default package has no features.";
+      default = pkgs.meilisearch;
+      defaultText = lib.literalExpression "pkgs.meilisearch";
+      type = types.package;
     };
 
     listenAddress = mkOption {

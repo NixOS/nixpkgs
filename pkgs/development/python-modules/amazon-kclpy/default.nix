@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "amazon-kclpy";
   version = "2.1.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "awslabs";

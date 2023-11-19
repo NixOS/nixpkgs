@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "python-opensky";
-  version = "1.0.0";
-  pyproject = true;
+  version = "0.2.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-opensky";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ia6/Lr/uNuF1u0s4g0tpYaW+hKeLbUKxYC/O+ZBqiXI=";
+    hash = "sha256-xNXFvCUZ/x5ox3KxmG3eA73wpX4fwhvAVmlfcKiT1V8=";
   };
 
   postPatch = ''

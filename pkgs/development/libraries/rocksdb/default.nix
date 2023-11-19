@@ -16,14 +16,14 @@
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "rocksdb";
   version = "8.3.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
+    repo = pname;
+    rev = "v${version}";
     hash = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
   };
 
@@ -48,10 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=unused-private-field"
     "-faligned-allocation"
-  ] ++ lib.optionals (lib.versionOlder finalAttrs.version "8") [
-    "-Wno-error=unused-but-set-variable"
-  ] ++ lib.optionals (lib.versionOlder finalAttrs.version "7") [
-    "-Wno-error=deprecated-copy"
   ]);
 
   cmakeFlags = [
@@ -81,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $tools/bin
     cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
   '' + lib.optionalString stdenv.isDarwin ''
-    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
+    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major version}.dylib" $out/lib/librocksdb.dylib {}
   '' + lib.optionalString (stdenv.isLinux && enableShared) ''
     ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
   '';
@@ -97,9 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
-    changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
+    changelog = "https://github.com/facebook/rocksdb/raw/v${version}/HISTORY.md";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ adev magenbluten ];
   };
-})
+}

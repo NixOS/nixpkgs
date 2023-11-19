@@ -36,6 +36,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/JakeStanger/mpd-discord-rpc/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];
-    mainProgram = "mpd-discord-rpc";
   };
 }

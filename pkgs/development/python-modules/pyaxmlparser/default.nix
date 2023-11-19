@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "0.3.27";
-  format = "setuptools";
   pname = "pyaxmlparser";
 
   src = fetchFromGitHub {

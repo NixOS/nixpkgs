@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/loony-bean/textplots-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "textplots";
   };
 }

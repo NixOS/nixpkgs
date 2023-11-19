@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
   version = "5.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

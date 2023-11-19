@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/krrishnarraj/clpeak/";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ];
-    mainProgram = "clpeak";
   };
 }

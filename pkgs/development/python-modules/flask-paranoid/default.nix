@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "flask-paranoid";
   version = "0.3.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";

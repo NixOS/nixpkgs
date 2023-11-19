@@ -28,6 +28,5 @@ python3Packages.buildPythonApplication rec {
     description = "Git for Humans, Inspired by GitHub for Mac";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ryneeverett ];
-    mainProgram = "legit";
   };
 }

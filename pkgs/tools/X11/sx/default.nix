@@ -35,6 +35,5 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ figsoda thiagokokada ];
-    mainProgram = "sx";
   };
 }

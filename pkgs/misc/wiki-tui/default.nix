@@ -38,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ lom builditluc matthiasbeyer ];
-    mainProgram = "wiki-tui";
   };
 }

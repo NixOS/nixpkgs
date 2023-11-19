@@ -72,6 +72,5 @@ mkYarnPackage rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
-    mainProgram = "mjolnir";
   };
 }

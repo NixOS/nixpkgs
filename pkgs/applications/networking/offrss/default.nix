@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ viric ];
     platforms = lib.platforms.linux;
-    mainProgram = "offrss";
   };
 }

@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "meteofrance-api";
-  version = "1.3.0";
-  pyproject = true;
+  version = "1.2.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
-    repo = "meteofrance-api";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uSrVK6LwCDyvsjzGl4xQd8585Hl6sp2Ua9ly0wqnC1Y=";
+    hash = "sha256-W26R+L2ZJpycEQ9KwkHqVARKsd/5YkJCxMeciKnKAX8=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +48,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_currentphenomenons"
-    "test_dictionary"
     "test_forecast"
-    "test_full_with_coastal_bulletin"
+    "test_full_with_coastal_bulletint"
     "test_fulls"
     "test_no_rain_expected"
     "test_picture_of_the_day"

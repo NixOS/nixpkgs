@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "ush";
   version = "3.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tarruda";

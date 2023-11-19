@@ -46,11 +46,6 @@ python310Packages.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
-  postInstall = ''
-    install -Dm444 nwg-displays.svg -t $out/share/icons/hicolor/scalable/apps
-    install -Dm444 nwg-displays.desktop -t $out/share/applications
-  '';
-
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}");
   '';

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "cinemagoer";
   version = "2023.5.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

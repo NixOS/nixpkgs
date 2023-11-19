@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "vilfo-api-client";
   version = "0.4.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ManneW";

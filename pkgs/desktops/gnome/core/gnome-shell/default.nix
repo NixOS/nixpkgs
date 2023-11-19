@@ -28,7 +28,7 @@
 , libpulseaudio
 , libical
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
 , libxslt
 , gcr_4
 , accountsservice
@@ -37,6 +37,7 @@
 , upower
 , ibus
 , libnma-gtk4
+, libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
 , gnome-keyring
@@ -56,7 +57,6 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
-, gnome-tecla
 , asciidoc
 , bash-completion
 , mesa
@@ -65,24 +65,24 @@
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "45.2";
+  version = "44.5";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    sha256 = "igz7+HKxp2JpbIbhPe/p82dekteVFOup0AC1thHCaiM=";
+    url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "wWr84Dgd1ZNCfXCER6nR+sdInrApRe+zfpBMp0qSSjU=";
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
+      gkbd_keyboard_display = "${lib.getBin libgnomekbd}/bin/gkbd-keyboard-display";
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
       unzip = "${lib.getBin unzip}/bin/unzip";
     })
 
@@ -95,8 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix greeter logo being too big.
     # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
-    # Reverts https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/1101
-    ./greeter-logo-size.patch
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
+      revert = true;
+      sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
+    })
 
     # Work around failing fingerprint auth
     (fetchpatch {
@@ -114,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_45
     gtk-doc
     perl
-    wrapGAppsHook4
+    wrapGAppsHook
     sassc
     desktop-file-utils
     libxslt.bin
@@ -184,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
-    rm data/theme/gnome-shell-{light,dark}.css
+    rm data/theme/gnome-shell.css
   '';
 
   postInstall = ''
@@ -231,4 +234,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
   };
 
-})
+}

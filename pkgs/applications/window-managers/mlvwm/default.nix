@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.linux;
     maintainers = [ maintainers.j0hax ];
-    mainProgram = "mlvwm";
   };
 }

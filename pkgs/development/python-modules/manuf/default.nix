@@ -29,8 +29,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    ${lib.getExe wireshark-cli} -G manuf > manuf/manuf
-    cat ${wireshark-cli}/share/wireshark/wka >> manuf/manuf
+    cat ${wireshark-cli}/share/wireshark/{manuf,wka} > manuf/manuf
   '';
 
   nativeCheckInputs = [

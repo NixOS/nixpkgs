@@ -3,10 +3,8 @@
 , fetchFromGitHub
 , nix-update-script
 
-, cmake
-, wrapQtAppsHook
-
 , cairo
+, cmake
 , ffmpeg
 , freetype
 , ghostscript
@@ -15,19 +13,20 @@
 , libtiff
 , qhull
 , qtbase
+, wrapQtAppsHook
 , xorg
 , zeromq
 }:
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.72.11";
+  version = "0.72.10";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-HspDRqO/JKpPeHOfctYAOwwR3y1u+GW3v0OnN7OfLT4=";
+    hash = "sha256-ZFaun8PBtPTmhZ0+OHzUu27NvcJGxsImh+c7ZvCTNa0=";
   };
 
   patches = [
@@ -61,11 +60,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "GR framework is a graphics library for visualisation applications";
     homepage = "https://gr-framework.org";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ paveloom ];
+    maintainers = [ lib.maintainers.paveloom ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

@@ -24,7 +24,12 @@ in {
 
     enable = mkEnableOption (lib.mdDoc "the device mapper multipath (DM-MP) daemon");
 
-    package = mkPackageOption pkgs "multipath-tools" { };
+    package = mkOption {
+      type = package;
+      description = lib.mdDoc "multipath-tools package to use";
+      default = pkgs.multipath-tools;
+      defaultText = lib.literalExpression "pkgs.multipath-tools";
+    };
 
     devices = mkOption {
       default = [ ];

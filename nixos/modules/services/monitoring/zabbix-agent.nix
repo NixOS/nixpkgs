@@ -3,7 +3,7 @@
 let
   cfg = config.services.zabbixAgent;
 
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkIf mkMerge mkOption;
+  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
   inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
   inherit (lib.generators) toKeyValue;
 
@@ -31,7 +31,12 @@ in
     services.zabbixAgent = {
       enable = mkEnableOption (lib.mdDoc "the Zabbix Agent");
 
-      package = mkPackageOption pkgs [ "zabbix" "agent" ] { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.zabbix.agent;
+        defaultText = literalExpression "pkgs.zabbix.agent";
+        description = lib.mdDoc "The Zabbix package to use.";
+      };
 
       extraPackages = mkOption {
         type = types.listOf types.package;

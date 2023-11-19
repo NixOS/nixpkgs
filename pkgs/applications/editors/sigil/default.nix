@@ -41,6 +41,5 @@ mkDerivation rec {
     license = licenses.gpl3;
     # currently unmaintained
     platforms = platforms.linux;
-    mainProgram = "sigil";
   };
 }

@@ -35,7 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     sip_4 (pyqt5.override { withWebSockets = true; })
     truststore
-    qt5.qtwayland
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];

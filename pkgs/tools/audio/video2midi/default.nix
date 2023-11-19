@@ -31,6 +31,5 @@ in pythonPackages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     maintainers = [ ];
     platforms = platforms.linux;
-    mainProgram = "v2m.py";
   };
 }

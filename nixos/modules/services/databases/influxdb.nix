@@ -116,7 +116,12 @@ in
         type = types.bool;
       };
 
-      package = mkPackageOption pkgs "influxdb" { };
+      package = mkOption {
+        default = pkgs.influxdb;
+        defaultText = literalExpression "pkgs.influxdb";
+        description = lib.mdDoc "Which influxdb derivation to use";
+        type = types.package;
+      };
 
       user = mkOption {
         default = "influxdb";

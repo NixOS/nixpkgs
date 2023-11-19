@@ -6,7 +6,6 @@
 
 buildPythonPackage rec {
   pname = "cirq-aqt";
-  format = "setuptools";
   inherit (cirq-core) version src meta;
 
   sourceRoot = "${src.name}/${pname}";

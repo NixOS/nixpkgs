@@ -4,7 +4,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
   name = "lxd-preseed";
 
   meta = {
-    maintainers = lib.teams.lxc.members;
+    maintainers = with lib.maintainers; [ adamcstephens ];
   };
 
   nodes.machine = { lib, ... }: {

@@ -9,6 +9,7 @@
 , gcr_4
 , libadwaita
 , meson
+, mutter
 , ninja
 , pango
 , pkg-config
@@ -18,14 +19,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "45";
+  version = "44.1";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-MpoeLXGdLfas/E3x5ojJW5Dd3H8XZORtFaBHgRGJXxg=";
+    sha256 = "sha256-c/q8VTzFOz8nzidPB3qnYw9+AkdKfTdUD4AcxyHKrqo=";
   };
 
   patches = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     gtk4
     gcr_4
     libadwaita
+    mutter
     pango
   ];
 

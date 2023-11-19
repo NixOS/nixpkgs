@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
-  version = "1.5.8";
+  version = "1.5.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_rtmidi";
     inherit version;
-    hash = "sha256-f5reaLBorgkADstWKulSHaOiNDYa1USeg/xzRUTQBPo=";
+    hash = "sha256-3vsaSyrob/OYwjLFPu2lVOJKSfZ96ELnnOuos8p3N00=";
   };
 
   nativeBuildInputs = [

@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ dezgeg ];
     platforms = platforms.unix;
-    mainProgram = "ckbcomp";
   };
 }

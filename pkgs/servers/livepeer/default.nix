@@ -28,6 +28,5 @@ buildGoModule rec {
     homepage = "https://livepeer.org";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];
-    mainProgram = "livepeer";
   };
 }

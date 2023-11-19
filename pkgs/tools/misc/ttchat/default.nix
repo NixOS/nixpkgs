@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/atye/ttchat";
     license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
-    mainProgram = "ttchat";
   };
 }

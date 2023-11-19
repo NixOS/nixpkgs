@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "betamax-matchers";
   version = "0.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

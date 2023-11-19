@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "telegram";
   version = "0.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

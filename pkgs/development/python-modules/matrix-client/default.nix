@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "matrix-client";
   version = "0.4.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "matrix_client";

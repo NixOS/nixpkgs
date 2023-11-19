@@ -21,6 +21,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/google/zx";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hlolli ];
-    mainProgram = "zx";
   };
 }

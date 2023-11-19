@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "timecop";
   version = "0.5.0dev";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

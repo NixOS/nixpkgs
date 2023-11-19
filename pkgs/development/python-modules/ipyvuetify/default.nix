@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "ipyvuetify";
   version = "1.8.10";
-  format = "setuptools";
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {

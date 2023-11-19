@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "aiocron";
   version = "1.8";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

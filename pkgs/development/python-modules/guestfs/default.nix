@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "guestfs";
   version = "1.40.1";
-  format = "setuptools";
 
   src = fetchurl {
     url = "http://download.libguestfs.org/python/guestfs-${version}.tar.gz";

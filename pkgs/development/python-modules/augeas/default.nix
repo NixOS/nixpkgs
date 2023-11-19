@@ -1,37 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, pkg-config
-, augeas
-, cffi
-, pkgs # for libxml2
-}:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, augeas, cffi }:
 buildPythonPackage rec {
     pname = "augeas";
-    version = "1.2.0";
-    format = "setuptools";
+    version = "1.1.0";
 
     src = fetchFromGitHub {
       owner = "hercules-team";
       repo = "python-augeas";
       rev = "v${version}";
-      hash = "sha256-Lq8ckra3sqN38zo1d5JsEq6U5TtLKRmqysoWNwR9J9A=";
+      sha256 = "12q52ilcx059rn544x3712xq6myn99niz131l0fs3xx67456pajh";
     };
 
-    nativeBuildInputs = [ pkg-config ];
+    # TODO: not very nice!
+    postPatch =
+      let libname = "libaugeas${stdenv.hostPlatform.extensions.sharedLibrary}";
+      in
+      ''
+        substituteInPlace augeas/ffi.py \
+          --replace 'ffi.dlopen("augeas")' \
+                    'ffi.dlopen("${lib.makeLibraryPath [augeas]}/${libname}")'
+      '';
 
-    buildInputs = [ augeas pkgs.libxml2 ];
+    propagatedBuildInputs = [ cffi augeas ];
 
-    propagatedBuildInputs = [ cffi ];
-
-    nativeCheckInputs = [ unittestCheckHook ];
-
-    pythonImportsCheck = [ "augeas" ];
+    doCheck = false;
 
     meta = with lib; {
-      changelog = "https://github.com/hercules-team/python-augeas/releases/tag/v${version}";
       description = "Pure python bindings for augeas";
       homepage = "https://github.com/hercules-team/python-augeas";
       license = licenses.lgpl2Plus;

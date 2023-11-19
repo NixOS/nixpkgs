@@ -24,7 +24,6 @@
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , enableJackrack ? stdenv.isLinux
-, glib
 , ladspa-sdk
 , ladspaPlugins
 , enablePython ? false
@@ -41,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.22.0";
+  version = "7.20.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    hash = "sha256-vJKpeEdQIWBQRRdDui5ibSZtD8qUlDZBD+UQE+0cQqk=";
+    hash = "sha256-5yELGA3U/YkINEtRyr/tb3HjWMQjqKIWjUbH7ZFMgLU=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +83,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ] ++ lib.optionals enableJackrack [
-    glib
     ladspa-sdk
     ladspaPlugins
   ] ++ lib.optionals enableQt [

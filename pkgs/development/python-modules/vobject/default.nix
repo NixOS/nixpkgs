@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "0.9.6.1";
-  format = "setuptools";
   pname = "vobject";
 
   src = fetchPypi {

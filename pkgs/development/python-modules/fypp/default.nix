@@ -3,7 +3,6 @@
 buildPythonApplication rec {
   pname = "fypp";
   version = "3.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aradi";

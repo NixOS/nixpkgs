@@ -19,7 +19,6 @@
 
 buildPythonPackage rec {
   version = "2.0.10";
-  format = "setuptools";
   pname = "pyglet";
   disabled = pythonOlder "3.6";
 

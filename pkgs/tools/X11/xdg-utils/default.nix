@@ -69,8 +69,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/bin/xdg-open \
       --replace "/usr/bin/printf" "${coreutils}/bin/printf" \
-      --replace "gdbus" "${glib}/bin/gdbus" \
-      --replace "mimeopen" "${perlPackages.FileMimeInfo}/bin/mimeopen"
+      --replace "gdbus" "${glib}/bin/gdbus"
 
     substituteInPlace $out/bin/xdg-mime \
       --replace "/usr/bin/file" "${file}/bin/file"
@@ -85,7 +84,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2 else licenses.mit;
+    license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };

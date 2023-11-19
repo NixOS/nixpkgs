@@ -13,8 +13,12 @@ in
     programs.npm = {
       enable = mkEnableOption (lib.mdDoc "{command}`npm` global config");
 
-      package = mkPackageOption pkgs [ "nodePackages" "npm" ] {
-        example = "nodePackages_13_x.npm";
+      package = mkOption {
+        type = types.package;
+        description = lib.mdDoc "The npm package version / flavor to use";
+        default = pkgs.nodePackages.npm;
+        defaultText = literalExpression "pkgs.nodePackages.npm";
+        example = literalExpression "pkgs.nodePackages_13_x.npm";
       };
 
       npmrc = mkOption {

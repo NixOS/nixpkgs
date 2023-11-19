@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "py-air-control";
   version = "2.1.0";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {

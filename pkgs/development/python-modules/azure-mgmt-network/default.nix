@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "25.2.0";
+  version = "25.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EUxCktIjsdHiR7Qa9luNWjeTVn5q2/ojB3IFUiP0GCo=";
+    hash = "sha256-+Tn3W/E54D0sRXpPB6XrrbWv/dcKpUvpoK9EuOUhMvw=";
   };
 
   propagatedBuildInputs = [

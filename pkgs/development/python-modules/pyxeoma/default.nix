@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "pyxeoma";
   version = "1.4.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "pathlib2";
   version = "2.3.7.post1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

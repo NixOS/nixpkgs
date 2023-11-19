@@ -16,6 +16,10 @@ appimageTools.wrapType2 rec {
     mv $out/bin/{${name},${pname}}
   '';
 
+  extraPkgs = pkgs: with pkgs; [
+    libthai
+  ];
+
   meta = with lib; {
     description = "A VR coworking platform";
     homepage = "https://immersed.com";

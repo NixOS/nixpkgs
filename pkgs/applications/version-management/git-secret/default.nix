@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lo1tuma ];
     platforms = lib.platforms.all;
-    mainProgram = "git-secret";
   };
 }

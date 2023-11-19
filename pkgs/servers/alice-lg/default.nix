@@ -5,9 +5,8 @@
 , stdenv
 , yarn
 , nodejs
-, nixosTests
 , git
-, prefetch-yarn-deps
+, fixup_yarn_lock
 }:
 
 buildGoModule rec {
@@ -33,7 +32,7 @@ buildGoModule rec {
       hash = "sha256-NeK9IM8E2IH09SVH9lMlV3taCmqwlroo4xzmv4Q01jI=";
     };
 
-    nativeBuildInputs = [ nodejs yarn git prefetch-yarn-deps ];
+    nativeBuildInputs = [ nodejs yarn git ];
     configurePhase = ''
       runHook preConfigure
 
@@ -44,7 +43,7 @@ buildGoModule rec {
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock yarn.lock
+      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
@@ -75,14 +74,11 @@ buildGoModule rec {
   subPackages = [ "cmd/alice-lg" ];
   doCheck = false;
 
-  passthru.tests = nixosTests.alice-lg;
-
   meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";
     description = "A looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ janik ];
-    mainProgram = "alice-lg";
   };
 }

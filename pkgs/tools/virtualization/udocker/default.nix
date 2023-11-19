@@ -53,7 +53,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;
-    mainProgram = "udocker";
   };
 
 }

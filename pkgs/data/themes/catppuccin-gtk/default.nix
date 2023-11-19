@@ -7,7 +7,6 @@
 , gtk-engine-murrine
 , python3
 , sassc
-, nix-update-script
 , accents ? [ "blue" ]
 , size ? "standard"
 , tweaks ? [ ]
@@ -29,13 +28,13 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.7.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-V3JasiHaATbVDQJeJPeFq5sjbkQnSMbDRWsaRzGccXU=";
+    hash = "sha256-J1iLN2FF3Ml/3zmntXYlfkv6dZcwl62A9X4ruAH1ll4=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -74,8 +73,6 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Soothing pastel theme for GTK";

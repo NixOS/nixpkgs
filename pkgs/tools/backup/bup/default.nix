@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
 
   postInstall = ''
     wrapProgram $out/bin/bup \

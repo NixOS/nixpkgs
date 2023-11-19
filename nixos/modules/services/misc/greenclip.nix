@@ -9,7 +9,12 @@ in {
   options.services.greenclip = {
     enable = mkEnableOption (lib.mdDoc "Greenclip daemon");
 
-    package = mkPackageOption pkgs [ "haskellPackages" "greenclip" ] { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.haskellPackages.greenclip;
+      defaultText = literalExpression "pkgs.haskellPackages.greenclip";
+      description = lib.mdDoc "greenclip derivation to use.";
+    };
   };
 
   config = mkIf cfg.enable {

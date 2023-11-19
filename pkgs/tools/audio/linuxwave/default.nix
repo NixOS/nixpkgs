@@ -33,6 +33,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
     inherit (zig_0_10.meta) platforms;
-    mainProgram = "linuxwave";
   };
 })

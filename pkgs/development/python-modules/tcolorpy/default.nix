@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "tcolorpy";
   version = "0.1.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thombashi";

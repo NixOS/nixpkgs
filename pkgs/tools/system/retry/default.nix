@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ gfrascadorio ];
     platforms = platforms.all;
-    mainProgram = "retry";
   };
 }
 

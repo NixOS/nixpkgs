@@ -7,7 +7,7 @@ trivialBuild {
   inherit (llvmPackages.llvm) src version;
 
   postUnpack = ''
-    sourceRoot="$sourceRoot/llvm/utils/emacs"
+    sourceRoot="$sourceRoot/utils/emacs"
   '';
 
   meta = {

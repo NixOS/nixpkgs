@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib
+{ lib, stdenv, makeWrapper, bash, curl, darwin, zlib
 , autoPatchelfHook, gcc
 , version
 , src
@@ -19,7 +19,7 @@ let
 in
 
 rec {
-  rustc-unwrapped = stdenv.mkDerivation {
+  rustc = stdenv.mkDerivation {
     pname = "rustc-${versionType}";
 
     inherit version;
@@ -60,8 +60,6 @@ rec {
 
     setupHooks = ./setup-hook.sh;
   };
-
-  rustc = wrapRustc rustc-unwrapped;
 
   cargo = stdenv.mkDerivation {
     pname = "cargo-${versionType}";

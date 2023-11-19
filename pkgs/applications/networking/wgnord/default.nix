@@ -61,6 +61,5 @@ resholve.mkDerivation rec {
     changelog = "https://github.com/phirecc/wgnord/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ urandom ];
     license = licenses.mit;
-    mainProgram = "wgnord";
   };
 }

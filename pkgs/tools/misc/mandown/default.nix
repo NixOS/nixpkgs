@@ -16,6 +16,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/kornelski/mandown";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ ];
-    mainProgram = "mandown";
   };
 }

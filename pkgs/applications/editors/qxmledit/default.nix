@@ -38,6 +38,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     platforms = platforms.unix;
     changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
-    mainProgram = "qxmledit";
   };
 }

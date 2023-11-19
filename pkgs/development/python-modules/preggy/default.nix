@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "preggy";
   version = "1.4.4";
-  format = "setuptools";
 
   propagatedBuildInputs = [ six unidecode ];
   nativeCheckInputs = [ nose yanc ];

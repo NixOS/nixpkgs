@@ -317,7 +317,7 @@ in {
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
-            ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
+            ${pkgs.python3Packages.gunicorn}/bin/gunicorn netbox.wsgi \
               --bind ${cfg.listenAddress}:${toString cfg.port} \
               --pythonpath ${pkg}/opt/netbox/netbox
           '';

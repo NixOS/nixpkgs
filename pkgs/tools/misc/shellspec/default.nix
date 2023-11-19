@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
     platforms = platforms.unix;
-    mainProgram = "shellspec";
   };
 }

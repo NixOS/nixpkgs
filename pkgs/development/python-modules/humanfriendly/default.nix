@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "humanfriendly";
   version = "10.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

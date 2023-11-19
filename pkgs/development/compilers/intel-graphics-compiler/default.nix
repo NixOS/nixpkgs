@@ -30,16 +30,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "1.0.15136.4";
+  version = "1.0.14828.8";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-graphics-compiler";
     rev = "igc-${version}";
-    hash = "sha256-Qh3FNck1z+rr7eSqxVnNs7YKvgXpKGY5dd3yx1Ft9Mg=";
+    hash = "sha256-BGmZVBEw7XlgbQcWgRK+qbJS9U4Sm9G8g9m0GRUhmCI=";
   };
 
-  nativeBuildInputs = [ bison cmake flex (python3.withPackages (ps : with ps; [ mako ])) ];
+  nativeBuildInputs = [ bison cmake flex python3 ];
 
   buildInputs = [ lld llvm spirv-headers spirv-llvm-translator' spirv-tools ];
 

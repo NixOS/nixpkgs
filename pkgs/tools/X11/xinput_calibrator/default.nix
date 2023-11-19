@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.flosse ];
     platforms = lib.platforms.linux;
-    mainProgram = "xinput_calibrator";
   };
 }

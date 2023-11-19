@@ -63,6 +63,5 @@ buildDotnetModule rec {
       .NET can find `/usr/bin/codesign` to sign the compiled binary.
       This problem is common to all .NET packages on MacOS with Nix.
     '';
-    mainProgram = "git-credential-manager";
   };
 }

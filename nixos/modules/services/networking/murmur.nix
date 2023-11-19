@@ -119,7 +119,12 @@ in
         description = lib.mdDoc "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = mkPackageOption pkgs "murmur" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.murmur;
+        defaultText = literalExpression "pkgs.murmur";
+        description = lib.mdDoc "Overridable attribute of the murmur package to use.";
+      };
 
       password = mkOption {
         type = types.str;

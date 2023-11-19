@@ -1,18 +1,13 @@
 { callPackage, fetchurl, lib, stdenv
-, ocamlPackages, coqPackages, rubber, hevea, emacs
-, version ? "1.7.0"
-}:
+, ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation rec {
   pname = "why3";
-  inherit version;
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
-    hash = {
-      "1.7.0" = "sha256-rygrjzuJVukOvpuXTG/yeoEP98ZFkLQHObgc3My1PVY=";
-      "1.6.0" = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
-    }."${version}";
+    hash = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
   };
 
   strictDeps = true;

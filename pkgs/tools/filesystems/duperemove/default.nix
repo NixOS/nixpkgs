@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , libgcrypt
 , pkg-config
 , glib
@@ -13,14 +14,23 @@
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
-  version = "0.14.1";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "markfasheh";
     repo = "duperemove";
     rev = "v${version}";
-    hash = "sha256-iMv80UKktYOhNfVA3mW6kKv8TwLZaP6MQt24t3Rchk4=";
+    hash = "sha256-D3+p8XgokKIHEwZnvOkn7cionVH1gsypcURF+PBpugY=";
   };
+
+  patches = [
+    # Use variable instead of hardcoding pkg-config
+    # https://github.com/markfasheh/duperemove/pull/315
+    (fetchpatch2 {
+      url = "https://github.com/markfasheh/duperemove/commit/0e1c62d79a9a79d7bb3e80f1bd528dbf7cb75e22.patch";
+      hash = "sha256-YMMu6LCkBlipEJALukQMwIMcjQEAG5pjGEGeTW9OEJk=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace util.c --replace \
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgcrypt glib linuxHeaders sqlite util-linux ];
+  buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

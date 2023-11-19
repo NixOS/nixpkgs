@@ -16,7 +16,6 @@
 buildPythonPackage rec {
   pname = "jupyter-nbextensions-configurator";
   version = "0.6.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jupyter-contrib";

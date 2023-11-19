@@ -1,13 +1,13 @@
-{ jdk11, jdk17, jdk21 }:
+{ jdk8, jdk11, jdk17 }:
 
 rec {
   gen =
 
-    { version, nativeVersion, hash,
+    { version, nativeVersion, sha256,
 
       # The default JDK/JRE that will be used for derived Gradle packages.
       # A current LTS version of a JDK is a good choice.
-      defaultJava,
+      defaultJava ? jdk8,
 
       # The platforms supported by this Gradle package.
       # Gradle Native-Platform ships some binaries that
@@ -41,7 +41,7 @@ rec {
       inherit version;
 
       src = fetchurl {
-        inherit hash;
+        inherit sha256;
         url =
           "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
       };
@@ -128,23 +128,23 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.5";
+    version = "8.4";
     nativeVersion = "0.22-milestone-25";
-    hash = "sha256-nZJnhwZqCBc56CAIWDOLSmnoN8OoIaM6yp2wndSkECY=";
-    defaultJava = jdk21;
+    sha256 = "1bkjxw7i0lm17pdyyvka4xpl6z0cdj0izagphync6839i2pg66iy";
+    defaultJava = jdk17;
   };
 
   gradle_7 = gen {
     version = "7.6.3";
     nativeVersion = "0.22-milestone-25";
-    hash = "sha256-dAwuRy7kMmwzv3WlyfXNHmns8/m1gPbiNshtHz2Yz6w=";
+    sha256 = "1b6gk0yiyvf86vigd05mz7ryqs8yrpswk9bmpwrnqcp45r3jw33l";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
     version = "6.9.4";
     nativeVersion = "0.22-milestone-20";
-    hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
+    sha256 = "16iqh4bn7ndch51h2lgkdqyyhnd91fdfjx55fa3z3scdacl0491y";
     defaultJava = jdk11;
   };
 }

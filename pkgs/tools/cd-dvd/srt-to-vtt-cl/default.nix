@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ericdallo ];
     homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
     platforms = platforms.unix;
-    mainProgram = "srt-vtt";
   };
 }

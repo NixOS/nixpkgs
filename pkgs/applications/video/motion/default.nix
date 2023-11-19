@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin && stdenv.isAarch64;
-    mainProgram = "motion";
   };
 }

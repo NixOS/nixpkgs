@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "z3c-checkversions";
   version = "2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

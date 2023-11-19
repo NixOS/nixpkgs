@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "marshmallow-enum";
   version = "1.5.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "justanr";

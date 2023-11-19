@@ -58,6 +58,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
-    mainProgram = "kazam";
   };
 }

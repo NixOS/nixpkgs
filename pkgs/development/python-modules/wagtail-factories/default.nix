@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "wagtail-factories";
   version = "4.1.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     repo = pname;

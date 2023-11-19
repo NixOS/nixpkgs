@@ -39,6 +39,5 @@ buildGoModule {
     homepage = "https://github.com/diamondburned/catnip-gtk4";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "catnip-gtk4";
   };
 }

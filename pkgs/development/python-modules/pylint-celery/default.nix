@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "pylint-celery";
   version = "0.3";
-  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

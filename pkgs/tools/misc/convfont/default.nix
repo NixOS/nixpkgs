@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.wtfpl;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
-    mainProgram = "convfont";
   };
 }

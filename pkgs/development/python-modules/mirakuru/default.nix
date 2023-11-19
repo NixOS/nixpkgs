@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mirakuru";
-  version = "2.5.2";
+  version = "2.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I1TKP0ESuBMTcReZf0tryjvGpSpwzofwmOiQqhyr6Zg=";
+    hash = "sha256-jBsSvIy2FaAYlDZLjJXl9hyCiK+nk/cM5j128f24dRc=";
   };
 
   nativeBuildInputs = [ setuptools ];

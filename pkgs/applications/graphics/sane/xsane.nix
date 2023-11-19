@@ -11,7 +11,6 @@
 , gimpSupport ? false
 , gimp
 , nix-update-script
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +24,6 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-oOg94nUsT9LLKnHocY0S5g02Y9a1UazzZAjpEI/s+yM=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/xsane/raw/rawhide/f/xsane-0.998-libpng.patch";
-      hash = "sha256-0z292+Waa2g0PCQpUebdWprl9VDyBOY0XgqMJaIcRb8=";
-    })
-  ];
 
   preConfigure = ''
     sed -e '/SANE_CAP_ALWAYS_SETTABLE/d' -i src/xsane-back-gtk.c

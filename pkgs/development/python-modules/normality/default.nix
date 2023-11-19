@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "normality";
   version = "2.2.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pudo";

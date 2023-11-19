@@ -6,21 +6,18 @@
 , portmidi
 , python-rtmidi
 , pytestCheckHook
-, pythonOlder
 , setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "mido";
-  version = "1.3.2";
-  pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  version = "1.3.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ouootu1zD3N9WxLaNXjevp3FAFj6Nw/pzt7ZGJtnw0g=";
+    sha256 = "sha256-hCguOs40vKP5hCINstvLmCRc/q+4VCYMAuAAdQ3Khqo=";
   };
 
   patches = [
@@ -50,7 +47,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
-    changelog = "https://github.com/mido/mido/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

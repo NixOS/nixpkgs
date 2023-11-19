@@ -13,7 +13,14 @@ with lib;
 
       enable = mkEnableOption (lib.mdDoc "ClickHouse database server");
 
-      package = mkPackageOption pkgs "clickhouse" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.clickhouse;
+        defaultText = lib.literalExpression "pkgs.clickhouse";
+        description = lib.mdDoc ''
+          ClickHouse package to use.
+        '';
+      };
 
     };
 

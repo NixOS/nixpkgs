@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Gerschtli/dwm-status/blob/master/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
-    mainProgram = "dwm-status";
+    mainProgram = pname;
     platforms = platforms.linux;
   };
 }

@@ -44,6 +44,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ qyliss ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    mainProgram = "apk";
   };
 }

@@ -71,8 +71,6 @@ buildFHSEnv rec {
       "bin/hotl"  # hda/otl manipulation tool
       "bin/hython"  # hython
       "bin/hkey"  # license administration
-      "bin/husk"  # hydra rendereing tool
-      "bin/mantra"  # mantra renderer
       "houdini/sbin/sesinetd"
     ];
   in ''
@@ -82,7 +80,7 @@ buildFHSEnv rec {
       mkdir -p $out/$(dirname $executable)
 
       echo "#!${stdenv.shell}" >> $out/$executable
-      echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
+      echo "$WRAPPER ${unwrapped}/$executable \$@" >> $out/$executable
     done
 
     cd $out
@@ -95,6 +93,6 @@ buildFHSEnv rec {
   ];
 
   runScript = writeScript "${name}-wrapper" ''
-    exec "$@"
+    exec $@
   '';
 }

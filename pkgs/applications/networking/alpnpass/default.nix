@@ -30,6 +30,5 @@ buildGoModule rec {
     homepage = "https://github.com/VerSprite/alpnpass";
     license = licenses.unlicense;
     maintainers = [ maintainers.raboof ];
-    mainProgram = "alpnpass";
   };
 }

@@ -25,6 +25,5 @@ in stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ lw ];
-    mainProgram = "imgur-screenshot";
   };
 }

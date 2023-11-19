@@ -31,6 +31,5 @@ buildGoModule rec {
     changelog = "https://github.com/0xERR0R/blocky/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [ ratsclub ];
-    mainProgram = "blocky";
   };
 }

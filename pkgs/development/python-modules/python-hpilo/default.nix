@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "python-hpilo";
   version = "4.4.3";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "seveas";

@@ -1,36 +1,30 @@
 { lib
 , aiohttp
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
-, poetry-core
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pycfdns";
-  version = "3.0.0";
-  pyproject = true;
-
-  disabled = pythonOlder "3.11";
+  version = "2.0.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bLzDakxKq8fcjEKSxc6D5VN9gfAu1M3/zaAU2UYnwSs=";
+    hash = "sha256-f6kxYX/dg16OWYpw29dH4Z26ncLZCYyHKGc4fzoCld0=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version="0",' 'version="${version}",'
+    substituteInPlace setup.py \
+      --replace 'version="master",' 'version="${version}",'
   '';
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
   ];
 
   # Project has no tests

@@ -1,8 +1,8 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, stdenv
   # Mitmproxy requirements
 , aioquic
 , asgiref
@@ -44,19 +44,19 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.1.6";
-  pyproject = true;
-
+  version = "10.1.1";
   disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-W+gxK5bNCit1jK9ojwE/HVjUz6OJcNw6Ac1lN5FxGgw=";
+    hash = "sha256-/ouMj7UVowvzwjOuusgVfXjvjNPKpuJUuoJf6Sl9P44=";
   };
 
   propagatedBuildInputs = [
+    setuptools
     aioquic
     asgiref
     blinker
@@ -73,12 +73,11 @@ buildPythonPackage rec {
     msgpack
     passlib
     protobuf
-    publicsuffix2
     pyopenssl
+    publicsuffix2
     pyparsing
     pyperclip
     ruamel-yaml
-    setuptools
     sortedcontainers
     tornado
     urwid
@@ -114,12 +113,10 @@ buildPythonPackage rec {
     "test_flowview"
     # ValueError: Exceeds the limit (4300) for integer string conversion
     "test_roundtrip_big_integer"
+
     "test_wireguard"
     "test_commands_exist"
     "test_statusbar"
-    # AssertionError: Playbook mismatch!
-    "test_untrusted_cert"
-    "test_mitmproxy_ca_is_untrusted"
   ];
 
   disabledTestPaths = [
@@ -134,7 +131,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };

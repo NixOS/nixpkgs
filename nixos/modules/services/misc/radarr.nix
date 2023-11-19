@@ -11,7 +11,13 @@ in
     services.radarr = {
       enable = mkEnableOption (lib.mdDoc "Radarr");
 
-      package = mkPackageOption pkgs "radarr" { };
+      package = mkOption {
+        description = lib.mdDoc "Radarr package to use";
+        default = pkgs.radarr;
+        defaultText = literalExpression "pkgs.radarr";
+        example = literalExpression "pkgs.radarr";
+        type = types.package;
+      };
 
       dataDir = mkOption {
         type = types.str;

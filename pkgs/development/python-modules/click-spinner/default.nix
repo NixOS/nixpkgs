@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "click-spinner";
   version = "0.1.10";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

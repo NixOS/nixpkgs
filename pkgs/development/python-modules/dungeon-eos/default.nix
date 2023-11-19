@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "dungeon-eos";
   version = "0.0.5";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

@@ -42,6 +42,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
-    mainProgram = "cicero";
   };
 }

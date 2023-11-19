@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname   = "prodict";
   version = "0.8.6";
-  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

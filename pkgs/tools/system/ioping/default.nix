@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
     homepage = "https://github.com/koct9i/ioping";
-    mainProgram = "ioping";
   };
 }

@@ -28,10 +28,6 @@
 , bzip2
 , libgcrypt
 , sqlite
-
-, stateDir ? "/var"
-, storeDir ? "/gnu/store"
-, confDir ? "/etc"
 }:
 
 stdenv.mkDerivation rec {
@@ -104,9 +100,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-store-dir=${storeDir}"
-    "--localstatedir=${stateDir}"
-    "--sysconfdir=${confDir}"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
     "--with-bash-completion-dir=$(out)/etc/bash_completion.d"
   ];
 
@@ -137,7 +132,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.gnu.org/software/guix";
     license = licenses.gpl3Plus;
     mainProgram = "guix";
-    maintainers = with maintainers; [ cafkafk foo-dogsquared ];
+    maintainers = with maintainers; [ cafkafk ];
     platforms = platforms.linux;
   };
 }

@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ Tungsten842 ];
     platforms = platforms.linux;
-    mainProgram = "evhz";
   };
 }

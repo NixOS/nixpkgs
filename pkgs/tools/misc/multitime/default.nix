@@ -35,6 +35,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     homepage = "https://tratt.net/laurie/src/multitime/";
     platforms = lib.platforms.unix;
-    mainProgram = "multitime";
   };
 }

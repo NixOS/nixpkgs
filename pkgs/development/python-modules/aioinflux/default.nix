@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "aioinflux";
   version = "0.9.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

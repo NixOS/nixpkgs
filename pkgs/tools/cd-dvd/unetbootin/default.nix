@@ -80,6 +80,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry ];
     platforms = platforms.linux;
-    mainProgram = "unetbootin";
   };
 }

@@ -14,7 +14,13 @@ in
   options.services.pict-rs = {
     enable = lib.mkEnableOption (lib.mdDoc "pict-rs server");
 
-    package = lib.mkPackageOption pkgs "pict-rs" { };
+    package = mkOption {
+      type = types.package;
+      example = lib.literalExpression "pkgs.pict-rs";
+      description = lib.mdDoc ''
+        pict-rs package to use.
+      '';
+    };
 
     dataDir = mkOption {
       type = types.path;

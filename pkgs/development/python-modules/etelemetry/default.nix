@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   version = "0.2.1";
-  format = "setuptools";
   pname = "etelemetry";
   disabled = isPy27;
 

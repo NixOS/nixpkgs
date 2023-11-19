@@ -3,7 +3,6 @@
 buildPythonPackage {
   pname = "simple-websocket-server";
   version = "20180414";
-  format = "setuptools";
   src = fetchFromGitHub {
     owner = "dpallot";
     repo = "simple-websocket-server";

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-pdfium";
-  version = "1.0.2";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ymJSTAccwRumXrh4VjwarKYgaqadMBrtXM1rjWNfe8o=";
+    sha256 = "sha256-gUIQ+fZ7VaYaIj1hbzER10ceoJZbvhJlnDTFIShMrKw=";
   };
 
   nativeBuildInputs = [

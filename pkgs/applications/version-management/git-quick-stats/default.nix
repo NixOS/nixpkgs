@@ -47,6 +47,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.kmein ];
     license = licenses.mit;
-    mainProgram = "git-quick-stats";
   };
 }

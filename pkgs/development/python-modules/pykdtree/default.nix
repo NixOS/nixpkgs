@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pykdtree";
   version = "1.3.7.post0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

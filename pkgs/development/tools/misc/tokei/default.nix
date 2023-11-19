@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security, zlib }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv Security
   ];
-
-  checkInputs = lib.optionals stdenv.isDarwin [ zlib ];
 
   # enable all output formats
   buildFeatures = [ "all" ];

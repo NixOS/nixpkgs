@@ -13,6 +13,5 @@ bundlerApp {
     license     = "MIT";
     maintainers = with maintainers; [ brecht ];
     platforms   = platforms.unix;
-    mainProgram = "twurl";
   };
 }

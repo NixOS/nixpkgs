@@ -7,24 +7,19 @@
 , ifaddr
 , inquirerpy
 , bitstring
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx";
-  version = "1.0.0";
-  pyproject = true;
+  version = "0.9.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2lWC2eTYh/YX0Pn3W11uVqqT2ycsa993siiDR2BV4qU=";
+    hash = "sha256-oK8Ih62EFwu3X5PNVFLH+Uce6ZBs7IMXet5/DHxfd5M=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   propagatedBuildInputs = [
     async-timeout

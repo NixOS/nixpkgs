@@ -6,7 +6,6 @@
 buildPythonPackage rec {
   pname = "wget";
   version = "3.2";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "makefun";
   version = "1.15.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

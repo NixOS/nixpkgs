@@ -33,6 +33,5 @@ buildNpmPackage rec {
     homepage = "https://github.com/chfritz/lineselect";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "lineselect";
   };
 }

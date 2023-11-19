@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "cocotb";
   version = "1.8.1";
-  format = "setuptools";
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {

@@ -26,6 +26,5 @@ buildGoModule rec {
     homepage = "https://github.com/github/git-sizer";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
-    mainProgram = "git-sizer";
   };
 }

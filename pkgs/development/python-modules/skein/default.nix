@@ -15,7 +15,6 @@
 buildPythonPackage rec {
   pname = "skein";
   version = "0.8.2";
-  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-nXTqsJNX/LwAglPcPZkmdYPfF+vDLN+nNdZaDFTrHzE=";

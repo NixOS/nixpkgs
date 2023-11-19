@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "xlrd";
   version = "2.0.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

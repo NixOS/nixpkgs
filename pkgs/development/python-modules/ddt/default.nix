@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "ddt";
   version = "1.6.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

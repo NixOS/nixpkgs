@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://github.com/dlvhdr/gh-dash";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ amesgen ];
-    mainProgram = "gh-dash";
   };
 }

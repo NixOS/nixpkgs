@@ -24,6 +24,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ qyliss ] ++ wlroots.meta.maintainers;
     license = licenses.cc0;
     inherit (wlroots.meta) platforms;
-    mainProgram = "tinywl";
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib, stdenv
+, fetchpatch
 , substituteAll
 , fetchurl
 , meson
@@ -34,22 +34,26 @@
 , wrapGAppsHook
 , python3
 , tzdata
+, nss
 , gcr_4
 , gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "45.0";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "u03EaVDiqQ848jIlhIhW0qextxjInQKFzhl7cBa7Hcg=";
+    sha256 = "EmU7ctgfFRMApH1wCslBCsG8zjjoPxvdGc3tKTKUOYk=";
   };
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
-    ./add-gnome-session-ctl-option.patch
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/commit/aae1e774dd9de22fe3520cf9eb2bfbf7216f5eb0.patch";
+      sha256 = "O4m0rOW8Zrgu3Q0p0OA8b951VC0FjYbOUk9MLzB9icI=";
+    })
 
     (substituteAll {
       src = ./fix-paths.patch;
@@ -85,6 +89,7 @@ stdenv.mkDerivation rec {
     upower
     colord
     libgweather
+    nss
     polkit
     geocode-glib_2
     geoclue2

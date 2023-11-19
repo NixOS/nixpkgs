@@ -76,6 +76,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    mainProgram = "gnome-network-displays";
   };
 })

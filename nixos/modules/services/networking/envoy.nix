@@ -17,7 +17,7 @@ in
   options.services.envoy = {
     enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
 
-    package = mkPackageOption pkgs "envoy" { };
+    package = mkPackageOptionMD pkgs "envoy" { };
 
     requireValidConfig = mkOption {
       type = types.bool;

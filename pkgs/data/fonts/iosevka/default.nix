@@ -136,6 +136,7 @@ buildNpmPackage rec {
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [
+      jfrankenau
       ttuegel
       babariviere
       rileyinman

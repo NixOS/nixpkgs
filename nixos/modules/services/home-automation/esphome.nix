@@ -26,7 +26,12 @@ in
   options.services.esphome = {
     enable = mkEnableOption (mdDoc "esphome");
 
-    package = lib.mkPackageOption pkgs "esphome" { };
+    package = mkOption {
+      type = types.package;
+      default = pkgs.esphome;
+      defaultText = literalExpression "pkgs.esphome";
+      description = mdDoc "The package to use for the esphome command.";
+    };
 
     enableUnixSocket = mkOption {
       type = types.bool;
@@ -102,10 +107,10 @@ in
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
-        ProtectHostname = false; # breaks bwrap
-        ProtectKernelLogs = false; # breaks bwrap
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
         ProtectKernelModules = true;
-        ProtectKernelTunables = false; # breaks bwrap
+        ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";

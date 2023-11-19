@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     maintainers = with maintainers; [ swistak35 nicknovitski ];
     platforms   = platforms.unix;
-    mainProgram = "pws";
   };
 }

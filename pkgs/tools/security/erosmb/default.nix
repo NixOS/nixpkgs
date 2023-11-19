@@ -44,6 +44,5 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/viktor02/EroSmb/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "erosmb";
   };
 }

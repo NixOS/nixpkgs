@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ sweber ];
     platforms = platforms.unix;
-    mainProgram = "pkgdiff";
   };
 }

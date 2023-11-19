@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ das_j ];
-    mainProgram = "sieve-connect";
   };
 }

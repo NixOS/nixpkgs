@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyspinel";
   version = "unstable-2021-08-19";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

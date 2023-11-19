@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pyexcel-io";
   version = "0.6.6";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

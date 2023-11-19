@@ -97,7 +97,12 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "hydra_unstable" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.hydra_unstable;
+        defaultText = literalExpression "pkgs.hydra_unstable";
+        description = lib.mdDoc "The Hydra package.";
+      };
 
       hydraURL = mkOption {
         type = types.str;

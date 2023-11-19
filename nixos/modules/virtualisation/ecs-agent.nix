@@ -8,7 +8,12 @@ in {
   options.services.ecs-agent = {
     enable = mkEnableOption (lib.mdDoc "Amazon ECS agent");
 
-    package = mkPackageOption pkgs "ecs-agent" { };
+    package = mkOption {
+      type = types.path;
+      description = lib.mdDoc "The ECS agent package to use";
+      default = pkgs.ecs-agent;
+      defaultText = literalExpression "pkgs.ecs-agent";
+    };
 
     extra-environment = mkOption {
       type = types.attrsOf types.str;

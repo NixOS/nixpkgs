@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "pytest-vcr";
   version = "1.0.2";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ktosiek";

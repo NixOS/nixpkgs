@@ -24,7 +24,6 @@
 buildPythonPackage rec {
   pname = "oslo-utils";
   version = "6.2.1";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.utils";

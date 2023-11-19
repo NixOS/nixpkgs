@@ -28,7 +28,6 @@ let
     sexplib0
     parsexp
     base
-    unionFind
     yojson
     zarith
   ];
@@ -37,12 +36,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "28.0";
-  slang   = "Nickel";
+  version = "27.1";
+  slang   = "Cobalt";
 
   src = fetchurl {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-KWEogjMOy27d0LTKOvwEkrcND+szeaG46JMZTG4XOYM=";
+    hash = "sha256-WxNXShaliXHCeQm+6Urn83sX2JeFK0DHaKPU4uCeOdI=";
   };
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
     lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
     ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
     gdk-pixbuf
-    unionFind
   ];
 
   buildPhase = ''

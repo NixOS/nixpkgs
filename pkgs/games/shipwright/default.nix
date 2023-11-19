@@ -95,13 +95,13 @@ assert (lib.assertMsg (oot.enable || ootMq.enable) "At least one of 'oot.enable'
 
 stdenv.mkDerivation rec {
   pname = "shipwright";
-  version = "7.1.1";
+  version = "7.0.2";
 
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     rev = version;
-    hash = "sha256-zgxJj65wKsQWvVxeCspyHG9YqoYqZxd6GrYptOA8Byk=";
+    hash = "sha256-2VCcczGWSvp6hk8FTA1/T1E1KkrrvWyOdkEw8eiYYnY=";
     fetchSubmodules = true;
   };
 
@@ -135,6 +135,12 @@ stdenv.mkDerivation rec {
     SDL2_net
     libpulseaudio
     libpng
+  ];
+
+  patches = [
+    # These patches make soh look inside the nix store for data files (the controller database and the OTRs)
+    ./lus-install-paths.patch
+    ./soh-misc-otr-patches.patch
   ];
 
   cmakeFlags = [

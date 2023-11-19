@@ -55,6 +55,5 @@ mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.rszibele ];
-    mainProgram = "notepadqq";
   };
 }

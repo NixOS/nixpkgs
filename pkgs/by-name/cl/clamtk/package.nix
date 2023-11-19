@@ -1,7 +1,7 @@
 { lib
 , perlPackages
 , fetchFromGitHub
-, wrapGAppsHook
+, makeWrapper
 , gobject-introspection
 , perl
 , clamav
@@ -9,16 +9,16 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "clamtk";
-  version = "6.17";
+  version = "6.16";
 
   src = fetchFromGitHub {
     owner = "dave-theunsub";
     repo = "clamtk";
     rev = "v${version}";
-    hash = "sha256-2tWVfRijf78OiKBpLUrZWFberIL8mjqtxvW/IjPn1IE=";
+    hash = "sha256-o6OaXOXLykTUuF/taKnEhZRV04/3nlU5aNY05ANr1Ko=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ makeWrapper gobject-introspection ];
   buildInputs = [ perl clamav ];
   propagatedBuildInputs = with perlPackages; [ Glib LWP LWPProtocolHttps TextCSV JSON LocaleGettext Gtk3 ];
 
@@ -51,15 +51,9 @@ perlPackages.buildPerlPackage rec {
     install -D images/* -t $out/share/pixmaps
     install -D clamtk.1.gz -t $out/share/man/man1
     install -D -m755 clamtk -t $out/bin
+    wrapProgram $out/bin/clamtk --prefix PERL5LIB : $PERL5LIB --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
 
     runHook postInstall
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PERL5LIB : $PERL5LIB
-      --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
-    )
   '';
 
   meta = with lib; {
@@ -69,7 +63,7 @@ perlPackages.buildPerlPackage rec {
     license = licenses.gpl1Plus;
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ chewblacka ShamrockLee ];
+    maintainers = with maintainers; [ jgarcia ];
   };
 
 }

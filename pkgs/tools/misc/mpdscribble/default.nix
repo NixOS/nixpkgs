@@ -46,6 +46,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.sohalt ];
     platforms = platforms.unix;
-    mainProgram = "mpdscribble";
   };
 }

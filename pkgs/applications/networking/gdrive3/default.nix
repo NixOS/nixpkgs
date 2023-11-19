@@ -33,6 +33,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/glotlabs/gdrive/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "gdrive";
   };
 }

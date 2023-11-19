@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "keyutils";
   version = "0.6";
-  format = "setuptools";
 
   # github version comes bundled with tests
   src = fetchFromGitHub {

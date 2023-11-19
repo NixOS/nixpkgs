@@ -63,6 +63,5 @@ rustPlatform.buildRustPackage {
 
     license = licenses.mit;
     maintainers = with maintainers; [ edef vmandela ];
-    mainProgram = "git-series";
   };
 }

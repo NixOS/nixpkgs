@@ -29,7 +29,7 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs "exportarr" { };
+    package = lib.mkPackageOptionMD pkgs "exportarr" { };
 
     environment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;

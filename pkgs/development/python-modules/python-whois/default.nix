@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "python-whois";
   version = "0.8.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -36,6 +36,5 @@ rustPlatform.buildRustPackage rec {
     description = "reversible directory-local environment variable manipulations";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
-    mainProgram = "shadowenv";
   };
 }

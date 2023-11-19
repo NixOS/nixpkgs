@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ mmahut ];
-    mainProgram = "tessera";
   };
 }

@@ -25,7 +25,6 @@
 buildPythonPackage rec {
   pname = "swift";
   version = "2.32.0";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -20,7 +20,6 @@
 buildPythonPackage rec {
   pname = "experiment-utilities";
   version = "0.3.6";
-  format = "setuptools";
 
   src = fetchFromGitLab {
     owner = "creinke";

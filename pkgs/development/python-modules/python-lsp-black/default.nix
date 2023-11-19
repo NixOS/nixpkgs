@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "python-lsp-black";
   version = "1.3.0";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

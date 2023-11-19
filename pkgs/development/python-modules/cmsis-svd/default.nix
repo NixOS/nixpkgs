@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "cmsis-svd";
   version = "0.4";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "posborne";

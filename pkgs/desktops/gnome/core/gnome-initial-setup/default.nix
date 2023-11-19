@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , substituteAll
-, dconf
 , gettext
 , meson
 , ninja
@@ -33,29 +32,27 @@
 , libadwaita
 , libnma-gtk4
 , tzdata
-, gnome-tecla
+, libgnomekbd
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "45.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sa/nZHmPiUi+25XHqzG9eFKaxctIHEH3p3d/Jk3lS9g=";
+    sha256 = "WTz8bcj4KphnG5TANbl9vojvVucIeAsq0dIyTk0Eu/8=";
   };
 
   patches = [
     (substituteAll {
       src = ./0001-fix-paths.patch;
-      inherit tzdata;
-      tecla = gnome-tecla;
+      inherit tzdata libgnomekbd;
     })
   ];
 
   nativeBuildInputs = [
-    dconf
     gettext
     meson
     ninja

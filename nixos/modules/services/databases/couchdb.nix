@@ -36,7 +36,14 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "CouchDB Server");
 
-      package = mkPackageOption pkgs "couchdb3" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.couchdb3;
+        defaultText = literalExpression "pkgs.couchdb3";
+        description = lib.mdDoc ''
+          CouchDB package to use.
+        '';
+      };
 
       adminUser = mkOption {
         type = types.str;

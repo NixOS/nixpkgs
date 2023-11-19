@@ -45,6 +45,7 @@ stdenv.mkDerivation {
     pkg-config
     wrapQtAppsHook
     xdg-utils
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     cmake
   ];
 
@@ -62,18 +63,7 @@ stdenv.mkDerivation {
     qtmacextras
   ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
-    (lib.cmakeFeature "TEXMACS_GUI" "Qt")
-    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "./TeXmacs.app/Contents/Resources")
-  ];
-
   env.NIX_LDFLAGS = "-lz";
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/{Applications,bin}
-    mv TeXmacs.app $out/Applications/
-    makeWrapper $out/Applications/TeXmacs.app/Contents/MacOS/TeXmacs $out/bin/texmacs
-  '';
 
   qtWrapperArgs = [
     "--suffix" "PATH" ":" (lib.makeBinPath [
@@ -87,7 +77,7 @@ stdenv.mkDerivation {
     ])
   ];
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = ''
     wrapQtApp $out/bin/texmacs
   '';
 

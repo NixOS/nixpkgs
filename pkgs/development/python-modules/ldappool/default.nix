@@ -13,7 +13,6 @@
 buildPythonPackage rec {
   pname = "ldappool";
   version = "3.0.0";
-  format = "setuptools";
 
   src = fetchPypi {
     pname = "ldappool";

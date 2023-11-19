@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "pyliblo";
   version = "0.10.0";
-  format = "setuptools";
   disabled = isPyPy;
 
   src = fetchurl {

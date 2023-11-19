@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -18,16 +17,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-nMm3Mdqc4ncCae8SoyGxZYURzmXLNcp1GjsSExfB6x4=";
   };
 
-  patches = [
-    # clang-16 support on Darwin:
-    #   https://gitlab.com/drobilla/zix/-/issues/3
-    (fetchpatch {
-      name = "darwin-sync.patch";
-      url = "https://gitlab.com/drobilla/zix/-/commit/a6f804073de1f1e626464a9dd0a169fd3f69fdff.patch";
-      hash = "sha256-ZkDPjtUzIyqnYarQR+7aCj7S/gSngbd6d75aRT+h7Ww=";
-    })
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
@@ -39,7 +28,12 @@ stdenv.mkDerivation rec {
     "-Ddocs=disabled"
   ];
 
-  doCheck = true;
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Do not fail the build on clang-16/darwin.
+    # TODO: drop the workaround when upstream fixes it in:
+    #   https://gitlab.com/drobilla/zix/-/issues/3
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
 
   meta = with lib; {
     description = "A lightweight C99 portability and data structure library";

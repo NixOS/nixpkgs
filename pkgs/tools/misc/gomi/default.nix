@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/b4b4r07/gomi";
     license = licenses.mit;
     maintainers = with maintainers; [ ozkutuk ];
-    mainProgram = "gomi";
   };
 }

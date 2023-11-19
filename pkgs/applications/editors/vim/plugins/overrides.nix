@@ -590,10 +590,6 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
-  harpoon2 = super.harpoon2.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
-  };
-
   hex-nvim = super.hex-nvim.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
@@ -851,7 +847,7 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neotest = super.neotest.overrideAttrs {
+  neotest = super.neorg.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
 
@@ -918,10 +914,6 @@ self: super: {
 
   octo-nvim = super.octo-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
-  };
-
-  ollama-nvim = super.ollama-nvim.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
   };
 
   onehalf = super.onehalf.overrideAttrs {
@@ -1011,7 +1003,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-U+EGS0GMWzE2yFyMH04gXpR9lR7HRMgWBecqICfTUbE=";
+        cargoHash = "sha256-ITrjY15Haz8hEztWym4q8YW2h0R8/kOYPaIYJu87sN4=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1052,12 +1044,12 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.9";
+      version = "1.3.8";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-g2zPGAJIjMDWn8FCsuRPZyYHDk+ZHCd04lGlYHvb4OI=";
+        hash = "sha256-xQb/VZOuwB1J4m6iOs1JMfH1f1rOzJzpvq3D4HHOHAI=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1067,7 +1059,7 @@ self: super: {
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-h/NhDFp+Yiyx37Tlfu0W9rMnd+ZmQp5gt+qhY3PB7DE=";
+        cargoHash = "sha256-6h0P0UVks6dQz2PZ1A/CLa1T8okD3CIUnfrH3vHe4L8=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -1115,10 +1107,6 @@ self: super: {
 
   ssr = super.ssr-nvim.overrideAttrs {
     dependencies = with self; [ nvim-treesitter ];
-  };
-
-  startup-nvim = super.startup-nvim.overrideAttrs {
-    dependencies = with super; [ plenary-nvim ];
   };
 
   statix = buildVimPlugin rec {
@@ -1647,10 +1635,6 @@ self: super: {
 
   vim-zettel = super.vim-zettel.overrideAttrs {
     dependencies = with self; [ vimwiki fzf-vim ];
-  };
-
-  wtf-nvim = super.wtf-nvim.overrideAttrs {
-    dependencies = with self; [ nui-nvim ];
   };
 
   YankRing-vim = super.YankRing-vim.overrideAttrs {

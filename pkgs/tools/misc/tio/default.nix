@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
-    mainProgram = "tio";
   };
 }

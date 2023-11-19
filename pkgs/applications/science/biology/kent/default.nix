@@ -24,12 +24,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
 
-  postPatch = ''
+  patchPhase = ''
+    runHook prePatch
+
     substituteInPlace ./src/checkUmask.sh \
       --replace "/bin/bash" "${bash}/bin/bash"
 
     substituteInPlace ./src/hg/sqlEnvTest.sh \
       --replace "which mysql_config" "${which}/bin/which ${libmysqlclient}/bin/mysql_config"
+
+    runHook postPatch
   '';
 
   buildPhase = ''

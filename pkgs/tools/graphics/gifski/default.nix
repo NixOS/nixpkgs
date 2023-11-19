@@ -7,14 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.13.1";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
-    # rev = version;
-    rev = "1.31.1"; # upstream tagged incorrectly
-    hash = "sha256-JzQReCX1AfFhbVbSPOIAKAVvNoddrWFHaJ1AxlsIPA0=";
+    rev = version;
+    hash = "sha256-Ij+bgL935uLCZeh8GQnTFlPIuUloNCn8LUdvMd+6okM=";
   };
 
   cargoLock = {
@@ -44,11 +43,6 @@ rustPlatform.buildRustPackage rec {
   # outline a solution.
   #
   checkType = "debug";
-
-  # Cargo.lock is outdated
-  postPatch = ''
-    cargo metadata --offline
-  '';
 
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";

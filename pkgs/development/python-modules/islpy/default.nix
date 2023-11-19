@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "islpy";
   version = "2023.1.2";
-  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

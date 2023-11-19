@@ -7,7 +7,6 @@
 buildPythonPackage {
   pname = "dopy";
   version = "2016-01-04";
-  format = "setuptools";
 
   src = pkgs.fetchFromGitHub {
     owner = "Wiredcraft";

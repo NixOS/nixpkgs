@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "pydigiham";
   version = "0.6.0";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";

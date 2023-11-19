@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "colorthief";
   version = "0.2.1";
-  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fengsp";

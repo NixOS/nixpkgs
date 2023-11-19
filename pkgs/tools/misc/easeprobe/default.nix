@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/megaease/easeprobe";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "easeprobe";
   };
 }

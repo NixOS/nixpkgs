@@ -30,6 +30,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ drets ];
     platforms = platforms.linux;
     license = licenses.bsd3;
-    mainProgram = "xkbset";
   };
 }

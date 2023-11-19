@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "allure-behave";
   version = "2.13.2";
-  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 

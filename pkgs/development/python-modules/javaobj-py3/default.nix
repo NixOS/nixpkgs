@@ -8,7 +8,6 @@
 buildPythonPackage rec {
   pname = "javaobj-py3";
   version = "0.4.3";
-  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {

@@ -57,6 +57,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Thann/play-with-mpv";
     license = licenses.mit;
     maintainers = with maintainers; [ dawidsowa ];
-    mainProgram = "play-with-mpv";
   };
 }

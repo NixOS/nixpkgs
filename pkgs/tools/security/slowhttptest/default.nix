@@ -22,6 +22,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shekyan/slowhttptest";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
-    mainProgram = "slowhttptest";
   };
 }

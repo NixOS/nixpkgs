@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.linux;
-    mainProgram = "zoom";
   };
 }

@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = mlton.meta.platforms;
     maintainers = with maintainers; [ athas ];
-    mainProgram = "smlpkg";
   };
 }

@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     description = "Swatch Internet Time implemented as a C program";
     platforms = platforms.all;
     maintainers = [ maintainers.j0hax ];
-    mainProgram = "beats";
   };
 }

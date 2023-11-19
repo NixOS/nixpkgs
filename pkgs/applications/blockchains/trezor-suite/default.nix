@@ -59,6 +59,5 @@ appimageTools.wrapType2 rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
-    mainProgram = "trezor-suite";
   };
 }

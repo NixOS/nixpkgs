@@ -36,6 +36,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    mainProgram = "git-open";
   };
 }

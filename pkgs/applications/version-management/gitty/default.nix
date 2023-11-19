@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "Contextual information about your git projects, right on the command-line";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
-    mainProgram = "gitty";
   };
 }

@@ -73,6 +73,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ x3ro ];
     platforms = platforms.linux;
-    mainProgram = "ksnip";
   };
 }

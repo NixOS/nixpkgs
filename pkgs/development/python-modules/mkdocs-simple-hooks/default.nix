@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "mkdocs-simple-hooks";
   version = "0.1.5";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

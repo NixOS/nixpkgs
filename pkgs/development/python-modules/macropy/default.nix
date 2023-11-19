@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   # https://github.com/lihaoyi/macropy/issues/94
   version = "1.1.0b2";
-  format = "setuptools";
   pname = "macropy";
   disabled = isPy27;
 

@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "mkdocs-drawio-exporter";
   version = "0.8.0";
-  format = "setuptools";
 
   disabled = !isPy3k;
 

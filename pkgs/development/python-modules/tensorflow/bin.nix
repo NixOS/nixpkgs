@@ -22,7 +22,7 @@
 , tensorboard
 , config
 , cudaSupport ? config.cudaSupport
-, cudaPackagesGoogle
+, cudaPackages ? {}
 , zlib
 , python
 , keras-applications
@@ -43,7 +43,7 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
-  inherit (cudaPackagesGoogle) cudatoolkit cudnn;
+  inherit (cudaPackages) cudatoolkit cudnn;
 in buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
@@ -146,10 +146,8 @@ in buildPythonPackage {
       rrPathArr=(
         "$out/${python.sitePackages}/tensorflow/"
         "$out/${python.sitePackages}/tensorflow/core/kernels"
-        "$out/${python.sitePackages}/tensorflow/compiler/mlir/stablehlo/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
-        "$out/${python.sitePackages}/tensorflow/include/external/ml_dtypes/"
         "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
         "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
@@ -200,7 +198,7 @@ in buildPythonPackage {
   ];
 
   passthru = {
-    cudaPackages = cudaPackagesGoogle;
+    inherit cudaPackages;
   };
 
   meta = with lib; {

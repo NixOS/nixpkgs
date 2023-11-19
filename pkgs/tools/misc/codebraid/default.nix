@@ -37,6 +37,5 @@ python3Packages.buildPythonApplication rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];
-    mainProgram = "codebraid";
   };
 }

@@ -10,7 +10,6 @@
 buildPythonPackage rec {
   pname = "plotly";
   version = "5.16.1";
-  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
