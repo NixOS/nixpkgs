@@ -5,7 +5,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "mfgtool-imgtool";
+  pname = "mcuboot-imgtool";
   version = "2.0.0";
   pyproject = true;
 
