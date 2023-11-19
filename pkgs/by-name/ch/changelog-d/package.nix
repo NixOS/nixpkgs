@@ -10,7 +10,7 @@
 let
   hsPkg = haskellPackages.changelog-d;
 
-  haskellModifications = x: x;
+  haskellModifications = haskell.lib.justStaticExecutables;
 
   mkDerivationOverrides = finalAttrs: oldAttrs: {
 
