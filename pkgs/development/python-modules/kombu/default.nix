@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.3";
+  version = "5.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FJHfgmz8UXjIDz6J3W37po5ITvM024EHDrXLgJSzEWc=";
+    hash = "sha256-C7LieGRNEd6mJywXl0o9u5aIqUnzu2CutbeRMpxE+tw=";
   };
 
   propagatedBuildInputs = [
@@ -104,7 +104,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Messaging library for Python";
     homepage = "https://github.com/celery/kombu";
-    changelog = "https://github.com/celery/kombu/releases/tag/v${version}";
+    changelog = "https://github.com/celery/kombu/blob/v${version}/Changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
