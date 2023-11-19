@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/uowuo/abaddon";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ genericnerdyusername ];
-    platforms = lib.intersectLists lib.platforms.x86_64 lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
