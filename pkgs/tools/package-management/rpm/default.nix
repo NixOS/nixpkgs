@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
                 ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+                ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+                  python.pkgs.pythonImportsCheckHook
+                ]
                 ++ lib.optional stdenv.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
@@ -40,13 +43,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
+    # https://pagure.io/rpmdevtools/issue/108
+    substituteInPlace build/parsePreamble.c --replace '0, LEN_AND_STR("buildarch")},' '1, LEN_AND_STR("buildarch")},'
   '';
 
   preFixup = ''
     # Don't keep a reference to RPM headers or manpages
     for f in $out/lib/rpm/platform/*/macros; do
-      substituteInPlace $f --replace "$dev" "/rpm-dev-path-was-here"
-      substituteInPlace $f --replace "$man" "/rpm-man-path-was-here"
+      substituteInPlace "$f" \
+        --replace "$dev" "/rpm-dev-path-was-here" \
+        --replace "$man" "/rpm-man-path-was-here"
     done
 
     # Avoid macros like '%__ld' pointing to absolute paths
@@ -55,9 +61,7 @@ stdenv.mkDerivation rec {
     done
 
     # Avoid helper scripts pointing to absolute paths
-    for tool in find-provides find-requires; do
-      sed -i $out/lib/rpm/$tool -e "s#/usr/lib/rpm/#$out/lib/rpm/#"
-    done
+    substituteInPlace "$out/lib/rpm/"{find-provides,find-requires,check-rpaths-worker,check-rpaths} --replace '/usr/lib/rpm' "$out/lib/rpm"
 
     # symlinks produced by build are incorrect
     ln -sf $out/bin/{rpm,rpmquery}
@@ -65,6 +69,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  pythonImportsCheck = [
+    "rpm"
+  ];
 
   meta = with lib; {
     homepage = "https://www.rpm.org/";

@@ -9827,6 +9827,8 @@ self: super: with self; {
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
+  pybeam = callPackage ../development/python-modules/pybeam { };
+
   pybids = callPackage ../development/python-modules/pybids { };
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
@@ -12464,6 +12466,8 @@ self: super: with self; {
   rpmfile = callPackage ../development/python-modules/rpmfile { };
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff { };
+
+  rpmlint = callPackage ../tools/package-management/rpm/lint.nix { };
 
   rpy2 = callPackage ../development/python-modules/rpy2 { };
 
