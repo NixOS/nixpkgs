@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Secure file deletion utilities";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ dettlaff ];
   };
 }
