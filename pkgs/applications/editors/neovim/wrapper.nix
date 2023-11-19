@@ -14,7 +14,9 @@ neovim-unwrapped:
 
 let
   wrapper = {
-      extraName ? ""
+    # NVIM_APPNAME. If set, an alias is created.
+      appName ? null
+    , extraName ? if appName == null then "" else appName
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
     # a limited RC script used only to generate the manifest for remote plugins
@@ -66,6 +68,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
+      ++ lib.optionals (appName != null) [ "--set" "NVIM_APPNAME" appName ]
       ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ++ commonWrapperArgs
       ;
@@ -109,6 +112,9 @@ let
       ''
       + lib.optionalString finalAttrs.viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
+      ''
+      + lib.optionalString (appName != null) ''
+        ln -s $out/bin/nvim $out/bin/${appName}
       ''
       + lib.optionalString (manifestRc != null) (let
         manifestWrapperArgs =
