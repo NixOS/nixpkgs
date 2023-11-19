@@ -9304,7 +9304,10 @@ with pkgs;
     stdenv = gcc8Stdenv;
   };
 
-  hylafaxplus = callPackage ../servers/hylafaxplus { };
+  hylafaxplus = callPackage ../servers/hylafaxplus {
+    # libtiff >= 4.6 dropped many executables needed by hylafaxplus
+    libtiff = libtiff_4_5;
+  };
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
@@ -17273,7 +17276,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation Security;
   };
 
-  squeak = callPackage ../development/compilers/squeak { };
+  squeak = callPackage ../development/compilers/squeak {
+    stdenv = clangStdenv;
+  };
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
     drivers = [ jtds_jdbc mssql_jdbc mysql_jdbc postgresql_jdbc ];
@@ -23501,6 +23506,7 @@ with pkgs;
   libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
 
   libtiff = callPackage ../development/libraries/libtiff { };
+  libtiff_4_5 = callPackage ../development/libraries/libtiff/4.5.nix { };
 
   libtiger = callPackage ../development/libraries/libtiger { };
 
@@ -26910,7 +26916,6 @@ with pkgs;
   inherit (import ../servers/sql/mariadb pkgs)
     mariadb_105
     mariadb_106
-    mariadb_1010
     mariadb_1011
     mariadb_110
   ;
@@ -34091,9 +34096,9 @@ with pkgs;
   okteto = callPackage ../development/tools/okteto { };
 
   onlyoffice-bin_7_2 = callPackage ../applications/office/onlyoffice-bin/7_2.nix { };
-  onlyoffice-bin_7_4 = callPackage ../applications/office/onlyoffice-bin/7_4.nix { };
+  onlyoffice-bin_7_5 = callPackage ../applications/office/onlyoffice-bin/7_5.nix { };
   onlyoffice-bin = onlyoffice-bin_7_2;
-  onlyoffice-bin_latest = onlyoffice-bin_7_4;
+  onlyoffice-bin_latest = onlyoffice-bin_7_5;
 
   onmetal-image = callPackage ../tools/virtualization/onmetal-image { };
 

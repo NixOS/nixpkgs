@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cython
 , gfortran
 , git
@@ -23,6 +24,17 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-XV3s+y3JdMr1770S91ek6Y7MqvTg7/2cphLQldUPe5s=";
   };
+
+  patches = [
+    # check for openblas64 pkg-config
+    # remove when patch merged upstream
+    # https://github.com/has2k1/scikit-misc/pull/29
+    (fetchpatch {
+      name = "openblas64-pkg-config.patch";
+      url = "https://github.com/has2k1/scikit-misc/commit/6a140de18e5e1276c7aa08bf0a047b1023aa9ae4.patch";
+      hash = "sha256-HzKiRISOvoDIUIcgiYVvxhx9klwyfAh/1DDKq7inl+A=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .

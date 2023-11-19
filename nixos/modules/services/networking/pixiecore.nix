@@ -16,7 +16,7 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Open ports (67, 69 UDP and 4011, 'port', 'statusPort' TCP) in the firewall for Pixiecore.
+          Open ports (67, 69, 4011 UDP and 'port', 'statusPort' TCP) in the firewall for Pixiecore.
         '';
       };
 
@@ -103,8 +103,8 @@ in
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 4011 cfg.port cfg.statusPort ];
-      allowedUDPPorts = [ 67 69 ];
+      allowedTCPPorts = [ cfg.port cfg.statusPort ];
+      allowedUDPPorts = [ 67 69 4011 ];
     };
 
     systemd.services.pixiecore = {
