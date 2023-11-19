@@ -1,21 +1,9 @@
 { lib
-, buildPythonPackage
+, python3Packages
 , fetchFromGitHub
-
-# build-system
-, setuptools
-
-# dependencies
-, pyserial
-, click
-, ecdsa
-
-# tests
-, behave
-, nose
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "adafruit-nrfutil";
   version = "0.5.3.post17";
   pyproject = true;
@@ -27,17 +15,17 @@ buildPythonPackage rec {
     hash = "sha256-mHHKOQE9AGBX8RAyaPOy+JS3fTs98+AFdq9qsVy7go4=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     click
     ecdsa
     pyserial
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     behave
     nose
   ];
