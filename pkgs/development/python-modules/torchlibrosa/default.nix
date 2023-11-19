@@ -4,6 +4,7 @@
 , fetchPypi
 , librosa
 , numpy
+, resampy
 , torch
 }:
 
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     librosa
     numpy
+    resampy
     torch
   ];
 
