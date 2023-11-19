@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.2.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VAn4zXypOugPIVyXQ/8Yt0rCDM7hVdIY+jpmoTHqssU=";
+    rev = "v${version}";
+    hash = "sha256-LNzsG6I4InygpfbzTikJ1gxTFkVrkDV1eS0CJwKT26A=";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ qt5.qtwayland ];
