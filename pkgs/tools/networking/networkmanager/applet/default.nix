@@ -18,7 +18,7 @@
 , gobject-introspection
 , python3
 , gtk3
-, libappindicator-gtk3
+, libayatana-appindicator
 , glib
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     jansson
     glib
     glib-networking
-    libappindicator-gtk3
+    libayatana-appindicator
     gnome.adwaita-icon-theme
   ];
 
