@@ -4,8 +4,10 @@
 , autoreconfHook
 , pkg-config
 , libmysqlclient
+, postgresql
 , libaio
 , luajit
+, postgresqlSupport ? true
 # For testing:
 , testers
 , sysbench
@@ -16,7 +18,10 @@ stdenv.mkDerivation rec {
   version = "1.0.20";
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libmysqlclient luajit ] ++ lib.optionals stdenv.isLinux [ libaio ];
+  buildInputs = [ libmysqlclient luajit ]
+                ++ lib.optionals stdenv.isLinux [ libaio ]
+                ++ lib.optionals postgresqlSupport [ postgresql ]
+                ;
 
   src = fetchFromGitHub {
     owner = "akopytov";
@@ -31,7 +36,8 @@ stdenv.mkDerivation rec {
     # The bundled version does not build on aarch64-darwin:
     # https://github.com/akopytov/sysbench/issues/416
     "--with-system-luajit"
-  ];
+  ]
+  ++ lib.optionals postgresqlSupport [ "--with-pgsql" ];
 
   passthru.tests = {
     versionTest = testers.testVersion {
