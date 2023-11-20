@@ -46,6 +46,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-vK+k+VbUVgJ8idlvuod5ExAkkeTYDk/135dyLRct0zs=";
   };
 
+  patches = [ ./vector-pr19075.patch ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
