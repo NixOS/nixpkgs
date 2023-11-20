@@ -28,6 +28,8 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
+  abjad = callPackage ../development/python-modules/abjad { };
+
   about-time = callPackage ../development/python-modules/about-time { };
 
   absl-py = callPackage ../development/python-modules/absl-py { };
@@ -15344,6 +15346,8 @@ self: super: with self; {
   uptime-kuma-api = callPackage ../development/python-modules/uptime-kuma-api { };
 
   uptime-kuma-monitor = callPackage ../development/python-modules/uptime-kuma-monitor { };
+
+  uqbar = callPackage ../development/python-modules/uqbar { };
 
   uranium = callPackage ../development/python-modules/uranium { };
 
