@@ -19512,6 +19512,15 @@
     githubId = 3992240;
     name = "Elijah Rum";
   };
+  x0ba = {
+    email = "dax@omg.lol";
+    github = "x0ba";
+    githubId = 64868985;
+    name = "Daniel Xu";
+    keys = [{
+      fingerprint = "B978 CBD2 4E24 51D9 CA8A  E423 F7AC C9D3 E3B6 C2E3";
+    }];
+  };
   x3ro = {
     name = "^x3ro";
     email = "nix@x3ro.dev";
