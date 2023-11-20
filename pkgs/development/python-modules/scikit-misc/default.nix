@@ -7,10 +7,12 @@
 , git
 , meson-python
 , pkg-config
+, blas
+, lapack
 , numpy
-, openblas
 , setuptools
 , wheel
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -25,22 +27,17 @@ buildPythonPackage rec {
     hash = "sha256-XV3s+y3JdMr1770S91ek6Y7MqvTg7/2cphLQldUPe5s=";
   };
 
-  patches = [
-    # check for openblas64 pkg-config
-    # remove when patch merged upstream
-    # https://github.com/has2k1/scikit-misc/pull/29
-    (fetchpatch {
-      name = "openblas64-pkg-config.patch";
-      url = "https://github.com/has2k1/scikit-misc/commit/6a140de18e5e1276c7aa08bf0a047b1023aa9ae4.patch";
-      hash = "sha256-HzKiRISOvoDIUIcgiYVvxhx9klwyfAh/1DDKq7inl+A=";
-    })
-  ];
-
   postPatch = ''
     patchShebangs .
 
+    # unbound numpy and disable coverage testing in pytest
     substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>='
+      --replace 'numpy==' 'numpy>=' \
+      --replace 'addopts = "' '#addopts = "'
+
+    # provide a version to use when git fails to get the tag
+    [[ -f skmisc/_version.py ]] || \
+      echo '__version__ = "${version}"' > skmisc/_version.py
   '';
 
   nativeBuildInputs = [
@@ -54,9 +51,31 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     numpy
-    openblas
+  ];
+
+  buildInputs = [
+    blas
+    lapack
+  ];
+
+  mesonFlags = [
+    "-Dblas=${blas.pname}"
+    "-Dlapack=${lapack.pname}"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # can not run tests from source directory
+  preCheck = ''
+    cd "$(mktemp -d)"
+  '';
+
+  pytestFlagsArray = [
+    "--pyargs skmisc"
   ];
 
   pythonImportsCheck = [
