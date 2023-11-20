@@ -57,9 +57,10 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     blinker
-    certifi
     cachecontrol
+    certifi
     findpython
+    first
     installer
     packaging
     platformdirs
