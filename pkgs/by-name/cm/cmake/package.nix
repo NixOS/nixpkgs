@@ -138,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-D_FILE_OFFSET_BITS=64"
     "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
   ]
+  # Workaround missing atomic ops with gcc <13
+  ++ lib.optional stdenv.hostPlatform.isRiscV "LDFLAGS=-latomic"
   ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
