@@ -1,0 +1,18 @@
+{
+  "boringssl": {
+    "rev": "251b5169fd44345f455438312ec4e18ae07fd58c",
+    "sha256": "sha256-EU6T9yQCdOLx98Io8o01rEsgxDFF/Xoy42LgPopD2/A="
+  },
+  "invidious": {
+    "rev": "c5b87e3b5e5cc7f7f5c8baa7732bd6d81d8f910a",
+    "sha256": "sha256-aYxVgktwUBVfvUxgQUDUmDAKp1sr0+ZJcyGqcmBB4e0=",
+    "version": "unstable-2023-11-08"
+  },
+  "lsquic": {
+    "sha256": "sha256-hG8cUvhbCNeMOsKkaJlgGpzUrIx47E/WhmPIdI5F3qM=",
+    "version": "2.18.1"
+  },
+  "videojs": {
+    "sha256": "0zj8fgxdg6jsllaxn795xipa6yxh4yf08hb8x0idyg74q37gfh4c"
+  }
+}

@@ -1,0 +1,22 @@
+commit a5d3497577c78b03c05c69d17df972fa9fb54f53
+Author: Linus Heckemann <git@sphalerite.org>
+Date:   Fri Jan 5 23:57:09 2018 +0100
+
+    Add -Wno-narrowing to GWEN's CMakeLists
+    
+    This avoids the compilation issue that occurs on aarch64 with gcc6.
+    (nixpkgs-specific patch)
+
+diff --git a/examples/ThirdPartyLibs/Gwen/CMakeLists.txt b/examples/ThirdPartyLibs/Gwen/CMakeLists.txt
+index 82fa0ffba..26c4bbd37 100644
+--- a/examples/ThirdPartyLibs/Gwen/CMakeLists.txt
++++ b/examples/ThirdPartyLibs/Gwen/CMakeLists.txt
+@@ -15,7 +15,7 @@ IF(NOT WIN32 AND NOT APPLE)
+         ADD_DEFINITIONS("-DDYNAMIC_LOAD_X11_FUNCTIONS=1")
+ ENDIF()
+ 
+-ADD_DEFINITIONS( -DGLEW_STATIC -DGWEN_COMPILE_STATIC -D_HAS_EXCEPTIONS=0 -D_STATIC_CPPLIB )
++ADD_DEFINITIONS( -DGLEW_STATIC -DGWEN_COMPILE_STATIC -D_HAS_EXCEPTIONS=0 -D_STATIC_CPPLIB -Wno-narrowing )
+ 
+ FILE(GLOB gwen_SRCS "*.cpp" "Controls/*.cpp" "Controls/Dialog/*.cpp" "Controls/Dialogs/*.cpp" "Controls/Layout/*.cpp" "Controls/Property/*.cpp" "Input/*.cpp" "Platforms/*.cpp" "Renderers/*.cpp" "Skins/*.cpp")
+ FILE(GLOB gwen_HDRS "*.h" "Controls/*.h" "Controls/Dialog/*.h" "Controls/Dialogs/*.h" "Controls/Layout/*.h" "Controls/Property/*.h" "Input/*.h" "Platforms/*.h" "Renderers/*.h" "Skins/*.h")

@@ -1,0 +1,13 @@
+diff --git a/src/modules/locale/Config.cpp b/src/modules/locale/Config.cpp
+index 2357019a7..75b547430 100644
+--- a/src/modules/locale/Config.cpp
++++ b/src/modules/locale/Config.cpp
+@@ -48,7 +48,7 @@ loadLocales( const QString& localeGenPath )
+     // supported locales. We first try that one, and if it doesn't exist, we fall back
+     // to parsing the lines from locale.gen
+     localeGenLines.clear();
+-    QFile supported( "/usr/share/i18n/SUPPORTED" );
++    QFile supported( "/run/current-system/sw/share/i18n/SUPPORTED" );
+     QByteArray ba;
+ 
+     if ( supported.exists() && supported.open( QIODevice::ReadOnly | QIODevice::Text ) )

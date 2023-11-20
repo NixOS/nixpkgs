@@ -1,0 +1,23 @@
+diff -ru ec2-ami-tools-1.4.0.5-orig/lib/ec2/amitools/bundle.rb ec2-ami-tools-1.4.0.5/lib/ec2/amitools/bundle.rb
+--- ec2-ami-tools-1.4.0.5-orig/lib/ec2/amitools/bundle.rb	2011-12-06 14:57:28.000000000 +0100
++++ ec2-ami-tools-1.4.0.5/lib/ec2/amitools/bundle.rb	2012-02-25 21:24:57.682427268 +0100
+@@ -80,7 +80,7 @@
+       # piped via several processes. The tee is used to allow a
+       # digest of the file to be calculated without having to re-read
+       # it from disk.
+-      tar = EC2::Platform::Current::Tar::Command.new.create.dereference.sparse
++      tar = EC2::Platform::Current::Tar::Command.new.create.dereference.sparse.writable
+       tar.owner(0).group(0)
+       tar.add(File::basename( image_file ), File::dirname( image_file ))
+       openssl = EC2::Platform::Current::Constants::Utility::OPENSSL
+diff -ru ec2-ami-tools-1.4.0.5-orig/lib/ec2/platform/linux/tar.rb ec2-ami-tools-1.4.0.5/lib/ec2/platform/linux/tar.rb
+--- ec2-ami-tools-1.4.0.5-orig/lib/ec2/platform/linux/tar.rb	2011-12-06 14:57:28.000000000 +0100
++++ ec2-ami-tools-1.4.0.5/lib/ec2/platform/linux/tar.rb	2012-02-25 21:23:36.342716403 +0100
+@@ -31,6 +31,7 @@
+           def update;         @options << '-u';          self; end
+           def sparse;         @options << '-S';          self; end
+           def dereference;    @options << '-h';          self; end
++          def writable;       @options << '--mode=0755'; self; end
+           
+           def archive(filename)
+             filename = '-' if filename.nil? 
