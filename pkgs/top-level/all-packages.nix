@@ -2974,8 +2974,6 @@ with pkgs;
 
   mucommander = callPackage ../applications/file-managers/mucommander { };
 
-  nimmm = callPackage ../applications/file-managers/nimmm { };
-
   nnn = callPackage ../applications/file-managers/nnn { };
 
   noice = callPackage ../applications/file-managers/noice { };
