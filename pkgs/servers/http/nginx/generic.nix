@@ -68,6 +68,7 @@ stdenv.mkDerivation {
     ++ mapModules "inputs";
 
   configureFlags = [
+    "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
     "--with-http_realip_module"
@@ -184,7 +185,7 @@ stdenv.mkDerivation {
 
   postInstall =
     let
-      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/bin/nginx\n") modules;
     in noSourceRefs + postInstall;
 
   passthru = {
