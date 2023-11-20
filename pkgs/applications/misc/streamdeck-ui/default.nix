@@ -1,12 +1,14 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, substituteAll
 , copyDesktopItems
 , writeText
 , makeDesktopItem
 , wrapGAppsHook
 , xvfb-run
 , qt6
+, fontconfig
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,6 +25,12 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # nixpkgs has a newer pillow version
     ./update-pillow.patch
+
+    # fix path to fc-list
+    (substituteAll {
+      src = ./fix-fc-list.patch;
+      fclist = "${fontconfig}/bin/fc-list";
+    })
   ];
 
   desktopItems = let
