@@ -35705,7 +35705,11 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop { };
+  telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
+    stdenv = if stdenv.isDarwin
+      then overrideSDK stdenv "11.0"
+      else stdenv;
+  };
 
   telegram-bot-api = callPackage ../servers/telegram-bot-api { };
 
