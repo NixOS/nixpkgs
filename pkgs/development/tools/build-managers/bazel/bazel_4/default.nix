@@ -204,6 +204,8 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    ./upb-clang16.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
@@ -399,6 +401,8 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+      # for CLang 16 compatibility in third_party/{zlib}, external/{upb} dependencies
+      export NIX_CFLAGS_COMPILE+=" -Wno-implicit-function-declaration -Wno-gnu-offsetof-extensions"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
