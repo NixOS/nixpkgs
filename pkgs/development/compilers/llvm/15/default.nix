@@ -54,24 +54,10 @@ in
 let
   monorepoSrc' = monorepoSrc;
 in let
-  monorepoSrc = if monorepoSrc' != null then
-    monorepoSrc'
-  else let
-    sha256 = releaseInfo.original.sha256;
-    rev = if gitRelease != null then
-      gitRelease.rev
-    else
-      "llvmorg-${releaseInfo.version}";
-  in fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    inherit rev sha256;
-  };
-
   # Import releaseInfo separately to avoid infinite recursion
   inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
   inherit (releaseInfo) release_version version;
-  inherit (import ../common/common-let.nix { inherit lib release_version gitRelease officialRelease; }) llvm_meta;
+  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
