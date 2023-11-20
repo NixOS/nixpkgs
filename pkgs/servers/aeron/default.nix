@@ -8,7 +8,7 @@
 
 let
   pname = "aeron";
-  version = "1.40.0";
+  version = "1.42.1";
   groupId = "io.aeron";
 
   aeronAll_1_40_0 = fetchMavenArtifact {
@@ -60,12 +60,60 @@ let
     hash = "sha512-vyAq4mfLDDyaVk7wcIpPvPcxSt92Ek8mxfuuZwaX+0Wu9oJCpwbnjvS9+bvzcE4qSGxzY6eJIIX6nMdw0LkACg==";
   };
 
-  aeronAll = aeronAll_1_40_0;
-  aeronArchive = aeronArchive_1_40_0;
-  aeronClient = aeronClient_1_40_0;
-  aeronCluster = aeronCluster_1_40_0;
-  aeronDriver= aeronDriver_1_40_0;
-  aeronSamples = aeronSamples_1_40_0;
+  aeronAll_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    artifactId = "aeron-all";
+    inherit version;
+    hash = "sha512-pjX+JopK6onDwElMIroj+ZXrKwdPj5H2uPg08XgNlrK1rAkHo9MUT8weBGbuFVFDLeqOZrHj0bt1wJ9XgYY5aA==";
+  };
+
+  aeronAgent_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-agent";
+    hash = "sha512-3XZ6XvPwlNdiMe4p4MuDNTWntGokFPnetN7AUMlhXzIgeXBExXvn+BdxI2crfq/xgVGrF/hjHD2shwu2NBa0Tg==";
+  };
+
+  aeronArchive_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-archive";
+    hash = "sha512-1DmeI9flgfzanbP4jSNUSAQAv2SGBvnlb3G4LbO1m+BN/gPn/nahvVHzotvGJjJA5b65DE1Sc5tqPnItRTK0zQ==";
+  };
+
+  aeronClient_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-client";
+    hash = "sha512-td2k2WNpaD3+2PNvlCCJ8cZRr615sFjngiQDKzuY2e9/de1OUwvER3zzVAFOonEIV+s5EhwVeQvWq3Wj5Uhadg==";
+  };
+
+  aeronCluster_1_42_1 =fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-cluster";
+    hash = "sha512-RiqGeY3pRqN6wWpeJqbeB1SCxrZWnQghrJlCGhew2M/GZAaWHkhhJs5haJqRvR5oOAbaI4RfIWvi5U7TiUo88g==";
+  };
+
+  aeronDriver_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-driver";
+    hash = "sha512-fKEN5oQCxD1h3qPODKkqFwYbKW6L03RFHNylpsYaNlztNODlCJd0CS5dBR6K8rbOdb2dVIXK/dW/IPBvOi5q/g==";
+  };
+  aeronSamples_1_42_1 = fetchMavenArtifact {
+    inherit groupId;
+    version = "1.42.1";
+    artifactId = "aeron-samples";
+    hash = "sha512-4JnHn22vJf2lmOg6ev5PD+/YiaL3KgfuyWAK92djX3KBVXO7ERMY2kH79dveVCJG1rbekvE1j1pnjaAIxwJcqg==";
+  };
+
+  aeronAll = aeronAll_1_42_1;
+  aeronArchive = aeronArchive_1_42_1;
+  aeronClient = aeronClient_1_42_1;
+  aeronCluster = aeronCluster_1_42_1;
+  aeronDriver= aeronDriver_1_42_1;
+  aeronSamples = aeronSamples_1_42_1;
 
 in stdenv.mkDerivation {
 
@@ -115,6 +163,7 @@ in stdenv.mkDerivation {
     wrap "${pname}-archiving-media-driver" io.aeron.archive.ArchivingMediaDriver
     wrap "${pname}-archive-tool" io.aeron.archive.ArchiveTool
     wrap "${pname}-logging-agent" io.aeron.agent.DynamicLoggingAgent
+    wrap "${pname}-clustered-media-driver" io.aeron.cluster.ClusteredMediaDriver
     wrap "${pname}-cluster-tool" io.aeron.cluster.ClusterTool
   '';
 
@@ -126,6 +175,10 @@ in stdenv.mkDerivation {
     description = "Low-latency messaging library";
     homepage = "https://aeron.io/";
     license = licenses.asl20;
+    mainProgram = "${pname}-media-driver";
     maintainers = [ maintainers.vaci ];
+    sourceProvenance = [
+      sourceTypes.binaryBytecode
+    ];
   };
 }
