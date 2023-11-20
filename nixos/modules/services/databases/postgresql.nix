@@ -467,9 +467,9 @@ in
     }) cfg.ensureUsers;
     # `ensurePermissions` is now deprecated, let's avoid it.
     warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
-      `services.postgresql.*.ensurePermissions` is used in your expressions,
+      `services.postgresql.ensureUsers.*.ensurePermissions` is used in your expressions,
       this option is known to be broken with newer PostgreSQL versions,
-      consider migrating to `services.postgresql.*.ensureDBOwnership` or
+      consider migrating to `services.postgresql.ensureUsers.*.ensureDBOwnership` or
       consult the release notes or manual for more migration guidelines.
 
       This option will be removed in NixOS 24.05 unless it sees significant
