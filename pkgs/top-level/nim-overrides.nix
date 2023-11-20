@@ -5,6 +5,7 @@
 , libsass
 , openssl
 , pkg-config
+, raylib
 , SDL2
 , tkrzw
 , xorg
@@ -29,6 +30,11 @@
     { nativeBuildInputs ? [ ], buildInputs ? [ ], ... }: {
       nativeBuildInputs = nativeBuildInputs ++ [ pkg-config ];
       buildInputs = buildInputs ++ [ getdns ];
+    };
+
+  nimraylib_now = lockAttrs: finalAttrs:
+    { buildInputs ? [ ], ... }: {
+      buildInputs = buildInputs ++ [ raylib ];
     };
 
   sass = lockAttrs: finalAttrs:

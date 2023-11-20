@@ -1,22 +1,19 @@
-{ lib, nimPackages, fetchFromGitea, raylib }:
+{ lib, buildNimPackage, fetchFromGitea, raylib }:
 
-nimPackages.buildNimPackage rec {
+buildNimPackage (finalAttrs: {
   pname = "snekim";
   version = "1.2.0";
-
-  nimBinOnly = true;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "snekim";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
   };
 
   strictDeps = true;
-
-  buildInputs = [ nimPackages.nimraylib-now raylib ];
+  lockFile = ./lock.json;
 
   nimFlags = [ "-d:nimraylib_now_shared" ];
 
@@ -25,10 +22,10 @@ nimPackages.buildNimPackage rec {
     install -D icons/hicolor/48x48/snekim.svg -t $out/share/icons/hicolor/48x48/apps
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/annaaurora/snekim";
     description = "A simple implementation of the classic snake game";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.annaaurora ];
   };
-}
+})

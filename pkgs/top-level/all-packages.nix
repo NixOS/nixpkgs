@@ -2814,8 +2814,6 @@ with pkgs;
 
   simplenes = callPackage ../applications/emulators/simplenes { };
 
-  snekim = callPackage ../games/snekim { };
-
   snes9x = callPackage ../applications/emulators/snes9x { };
 
   snes9x-gtk = callPackage ../applications/emulators/snes9x {
