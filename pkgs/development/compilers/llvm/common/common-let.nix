@@ -1,4 +1,8 @@
-{ lib, release_version }:
+{ lib
+, release_version ? null
+, gitRelease ? null
+, officialRelease ? null
+}:
 
 {
   llvm_meta = {
@@ -17,5 +21,20 @@
       lib.optionals (lib.versionAtLeast release_version "7") lib.platforms.riscv ++
       lib.optionals (lib.versionAtLeast release_version "14") lib.platforms.m68k;
   };
+
+  releaseInfo =
+    if gitRelease != null then rec {
+      original = gitRelease;
+      release_version = original.version;
+      version = gitRelease.rev-version;
+    } else rec {
+      original = officialRelease;
+      release_version = original.version;
+      version =
+        if original ? candidate then
+          "${release_version}-${original.candidate}"
+        else
+          release_version;
+    };
 
 }
