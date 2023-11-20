@@ -106,6 +106,7 @@ extra-packages:
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
   - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
   - ghc-lib-parser-ex == 9.6.*          # 2023-10-24: preserve for GHC 9.6
+  - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
