@@ -141,7 +141,7 @@ let
     '';
   };
 
-  # Sript-based interpreters in shebangs aren't guaranteed to work,
+  # Script-based interpreters in shebangs aren't guaranteed to work,
   # especially on MacOS. So let's produce a binary
   bashWithDefaultShellUtils = stdenv.mkDerivation {
     name = "bash";
