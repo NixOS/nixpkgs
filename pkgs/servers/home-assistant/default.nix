@@ -460,7 +460,6 @@ in python.pkgs.buildPythonApplication rec {
     pytestCheckHook
     requests-mock
     respx
-    stdlib-list
     syrupy
     tomli
     # required through tests/auth/mfa_modules/test_otp.py
