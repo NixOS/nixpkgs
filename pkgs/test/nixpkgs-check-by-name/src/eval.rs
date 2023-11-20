@@ -58,7 +58,8 @@ pub fn check_values(
         attrs_file_path.display()
     ))?;
 
-    let expr_path = std::env::var("NIX_CHECK_BY_NAME_EXPR_PATH")?;
+    let expr_path = std::env::var("NIX_CHECK_BY_NAME_EXPR_PATH")
+        .context("Could not get environment variable NIX_CHECK_BY_NAME_EXPR_PATH")?;
     // With restrict-eval, only paths in NIX_PATH can be accessed, so we explicitly specify the
     // ones needed needed
     let mut command = process::Command::new("nix-instantiate");
