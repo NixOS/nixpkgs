@@ -107,14 +107,11 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
-      preStart = ''
-        mkdir -m 0755 -p ${runDir}
-        chown ${clamavUser}:${clamavGroup} ${runDir}
-      '';
-
       serviceConfig = {
         ExecStart = "${pkg}/bin/clamd";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        StateDirectory = "clamav";
+        RuntimeDirectory = "clamav";
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
@@ -134,15 +131,13 @@ in
       description = "ClamAV virus database updater (freshclam)";
       restartTriggers = [ freshclamConfigFile ];
       after = [ "network-online.target" ];
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}
-        chown ${clamavUser}:${clamavGroup} ${stateDir}
-      '';
 
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkg}/bin/freshclam";
         SuccessExitStatus = "1"; # if databases are up to date
+        StateDirectory = "clamav";
+        RuntimeDirectory = "clamav";
         PrivateTmp = "yes";
         PrivateDevices = "yes";
       };
