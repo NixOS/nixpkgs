@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , installShellFiles
 , pytestCheckHook
 , pythonAtLeast
@@ -18,6 +19,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-zEgC3tTQ6kwDovHPHRTvYndWVF79DpnAX454VDZiedE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-non-deterministic-test.patch";
+      url = "https://github.com/redacted/XKCD-password-generator/commit/72d174a82822af1934c94de1b66fd956230142f5.patch";
+      hash = "sha256-GES40GHM0+Zx8bRceCy9/fOHJVlWZ7TCLfzhZczjfTE=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
