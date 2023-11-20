@@ -26,6 +26,7 @@
 , libdrm
 , makeWrapper
 , mesa
+, noto-fonts-cjk-sans
 , nspr
 , nss
 , pulseaudio
@@ -54,18 +55,6 @@ let
   # TODO: Find out which of these fonts we'd be allowed to distribute along
   #       with this package, or how to make this easier for users otherwise.
 
-  # Not using the `noto-fonts-cjk` package from nixpkgs, because it was
-  # reported that its `.ttc` file is not picked up by OnlyOffice, see:
-  # https://github.com/NixOS/nixpkgs/pull/116343#discussion_r593979816
-  noto-fonts-cjk = fetchurl {
-    url =
-      let
-        version = "v20201206-cjk";
-      in
-      "https://github.com/googlefonts/noto-cjk/raw/${version}/NotoSansCJKsc-Regular.otf";
-    sha256 = "sha256-aJXSVNJ+p6wMAislXUn4JQilLhimNSedbc9nAuPVxo4=";
-  };
-
   runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
@@ -76,11 +65,11 @@ let
 
   derivation = stdenv.mkDerivation rec {
     pname = "onlyoffice-desktopeditors";
-    version = "7.4.1";
+    version = "7.5.1";
     minor = null;
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-      sha256 = "sha256-vaBF3GJyLBldWdEruOeVpRvwGNwaRl7IKPguDLRoe8M=";
+      sha256 = "sha256-Hf5CNbUUMuHZHDY3fgD4qpF4UASevscK8DTZlauyHhY=";
     };
 
     nativeBuildInputs = [
@@ -134,10 +123,6 @@ let
       dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
     '';
 
-    preConfigure = ''
-      cp --no-preserve=mode,ownership ${noto-fonts-cjk} opt/onlyoffice/desktopeditors/fonts/
-    '';
-
     installPhase = ''
       runHook preInstall
 
@@ -179,12 +164,14 @@ in
 
 # In order to download plugins, OnlyOffice uses /usr/bin/curl so we have to wrap it.
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
+# Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
   name = derivation.name;
 
   targetPkgs = pkgs': [
     curl
     derivation
+    noto-fonts-cjk-sans
   ];
 
   runScript = "/bin/onlyoffice-desktopeditors";

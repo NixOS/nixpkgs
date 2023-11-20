@@ -9,21 +9,26 @@
 , pytest-error-for-skips
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
+    repo = "nettigo-air-monitor";
     rev = "refs/tags/${version}";
     hash = "sha256-24O9Yl0+boxDtyPW4tBTsk2iDGGXf8ofkDHu8B+GxhE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
