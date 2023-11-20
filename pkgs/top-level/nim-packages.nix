@@ -1,11 +1,13 @@
-{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub }:
+{ lib, pkgs, stdenv, newScope, nim, buildNimPackage }:
 
 lib.makeScope newScope (self:
   let callPackage = self.callPackage;
   in {
     inherit nim;
-    buildNimPackage =
-      callPackage ../development/nim-packages/build-nim-package { };
+    buildNimPackage = buildNimPackage.override {
+      defaultNimVersion =
+        if lib.versionAtLeast nim.version "2.0.0" then 2 else 1;
+    };
 
     asciigraph = callPackage ../development/nim-packages/asciigraph { };
 

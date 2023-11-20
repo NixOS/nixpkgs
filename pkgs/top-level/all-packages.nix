@@ -16810,6 +16810,7 @@ with pkgs;
   nim = nim1;
   nimPackages = recurseIntoAttrs nim1.pkgs;
   nim2Packages = recurseIntoAttrs nim2.pkgs;
+  buildNimPackage = callPackage ../development/compilers/nim/build-nim-package.nix { };
 
   nrpl = callPackage ../development/tools/nrpl { };
 
