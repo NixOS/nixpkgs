@@ -2,7 +2,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "8.1.0";
+  version = "8.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-PxyXlmEZ9cqZgDWcdeNznEC4F1J4NFMiwy0D7g+YZUs=";
+    hash = "sha256-d09h09V6TrATwSzFHQEMEIc5D0KnwoiyI8c3k17sXoY=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pathspec
     plumbum
     pydantic
+    pydantic-core
     pygments
     pyyaml
     pyyaml-include
