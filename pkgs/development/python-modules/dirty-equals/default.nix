@@ -12,7 +12,7 @@
 let
   dirty-equals = buildPythonPackage rec {
     pname = "dirty-equals";
-    version = "0.7.0";
+    version = "0.7.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ let
       owner = "samuelcolvin";
       repo = pname;
       rev = "refs/tags/v${version}";
-      hash = "sha256-ShbkPGj1whOQ11bFLUSTfvVEVlvc3JUzRDICbBohgMM=";
+      hash = "sha256-SDTwtaH10ghESrI3gQEW6y/jMDR4+4JRQmvFgIxDQUc=";
     };
 
     nativeBuildInputs = [
