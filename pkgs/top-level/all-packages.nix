@@ -28005,12 +28005,12 @@ with pkgs;
 
   ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {};
 
-  ipu6ep-camera-bin = callPackage ../os-specific/linux/firmware/ipu6-camera-bins {
+  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
     ipuVersion = "ipu6ep";
   };
 
-  ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
-    ipu6-camera-bin = ipu6ep-camera-bin;
+  ipu6epmtl-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
+    ipuVersion = "ipu6epmtl";
   };
 
   ivsc-firmware = callPackage ../os-specific/linux/firmware/ivsc-firmware { };
