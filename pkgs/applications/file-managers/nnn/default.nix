@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/jarun/nnn/blob/v${version}/CHANGELOG";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne ];
     mainProgram = "nnn";
   };
 })
