@@ -1,14 +1,11 @@
-{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub, buildPackages }:
+{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub }:
 
 lib.makeScope newScope (self:
   let callPackage = self.callPackage;
   in {
     inherit nim;
-    nim_builder = callPackage ../development/nim-packages/nim_builder { };
     buildNimPackage =
-      callPackage ../development/nim-packages/build-nim-package {
-        inherit (buildPackages.buildPackages.nimPackages) nim_builder;
-      };
+      callPackage ../development/nim-packages/build-nim-package { };
 
     asciigraph = callPackage ../development/nim-packages/asciigraph { };
 
