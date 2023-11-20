@@ -393,9 +393,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies =
-          optionals (conf.port != 0) ["AF_INET" "AF_INET6"] ++
-          optional (conf.unixSocket != null) "AF_UNIX";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
