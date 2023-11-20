@@ -1,0 +1,26 @@
+diff --git a/llama_cpp/llama_cpp.py b/llama_cpp/llama_cpp.py
+index a4d2100..8209415 100644
+--- a/llama_cpp/llama_cpp.py
++++ b/llama_cpp/llama_cpp.py
+@@ -62,6 +62,8 @@ def _load_shared_library(lib_base_name: str):
+             os.add_dll_directory(os.path.join(os.environ["CUDA_PATH"], "lib"))
+         cdll_args["winmode"] = ctypes.RTLD_GLOBAL
+ 
++    _lib_paths = [pathlib.Path("@llamaCppSharedLibrary@")]
++
+     # Try to load the shared library, handling potential errors
+     for _lib_path in _lib_paths:
+         if _lib_path.exists():
+diff --git a/tests/test_llama.py b/tests/test_llama.py
+index 23c7e86..691a8ea 100644
+--- a/tests/test_llama.py
++++ b/tests/test_llama.py
+@@ -4,7 +4,7 @@ import pytest
+ 
+ import llama_cpp
+ 
+-MODEL = "./vendor/llama.cpp/models/ggml-vocab-llama.gguf"
++MODEL = "@llamaCppModels@/ggml-vocab-llama.gguf"
+ 
+ 
+ def test_llama_cpp_tokenization():
