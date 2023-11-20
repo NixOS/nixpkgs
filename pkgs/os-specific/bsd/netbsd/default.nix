@@ -618,8 +618,13 @@ in makeScopeWithSplicing' {
       ./sys-headers-incsdir.patch
     ];
 
-    # multiple header dirs, see above
-    inherit (self.include) postPatch;
+    postPatch =
+      ''
+        substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
+          --replace "-nocombreloc" "-z nocombreloc"
+      '' +
+      # multiple header dirs, see above
+      self.include.postPatch;
 
     CONFIG = "GENERIC";
 
