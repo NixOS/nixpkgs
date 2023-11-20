@@ -1,0 +1,85 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 546fdbc6..c7feb979 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -78,60 +78,6 @@ ExternalProject_Get_Property(GTest SOURCE_DIR BINARY_DIR)
+ set(GTEST_INCLUDE_DIRS "${SOURCE_DIR}/googletest/include")
+ set(GTEST_LIBRARIES "${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}")
+ 
+-ExternalProject_Add(esplugin
+-    PREFIX "external"
+-    URL "https://github.com/Ortham/esplugin/archive/4.1.0.tar.gz"
+-    URL_HASH "SHA256=c0958051f99b1a3a1ea2db1d68f2521567563238b9d624dde1c5c075baddfa41"
+-    CONFIGURE_COMMAND ""
+-    BUILD_IN_SOURCE 1
+-    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
+-        cbindgen ffi/ -o ffi/include/esplugin.hpp
+-    INSTALL_COMMAND "")
+-ExternalProject_Get_Property(esplugin SOURCE_DIR)
+-set(ESPLUGIN_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
+-set(ESPLUGIN_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}esplugin_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+-    set(ESPLUGIN_LIBRARIES ${ESPLUGIN_LIBRARIES} userenv ntdll)
+-else()
+-    set(ESPLUGIN_LIBRARIES ${ESPLUGIN_LIBRARIES} dl)
+-endif()
+-
+-ExternalProject_Add(libloadorder
+-    PREFIX "external"
+-    URL "https://github.com/Ortham/libloadorder/archive/15.0.1.tar.gz"
+-    URL_HASH "SHA256=ffa359b71f1716566236609a8ee970542185fa5b990b7fb6c8800408b9f1b020"
+-    CONFIGURE_COMMAND ""
+-    BUILD_IN_SOURCE 1
+-    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
+-        cbindgen ffi/ -l c++ -o ffi/include/libloadorder.hpp
+-    INSTALL_COMMAND "")
+-ExternalProject_Get_Property(libloadorder SOURCE_DIR)
+-set(LIBLOADORDER_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
+-set(LIBLOADORDER_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loadorder_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+-    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} userenv)
+-else()
+-    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} dl)
+-endif()
+-
+-ExternalProject_Add(loot-condition-interpreter
+-    PREFIX "external"
+-    URL "https://github.com/loot/loot-condition-interpreter/archive/3.1.0.tar.gz"
+-    URL_HASH "SHA256=a2dcadff0e6f9fd4fdc12785d296bf5ee24cc556f4b20a357233e2a2e79d025c"
+-    CONFIGURE_COMMAND ""
+-    BUILD_IN_SOURCE 1
+-    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
+-        cbindgen ffi/ -o ffi/include/loot_condition_interpreter.h
+-    INSTALL_COMMAND "")
+-ExternalProject_Get_Property(loot-condition-interpreter SOURCE_DIR)
+-set(LCI_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
+-set(LCI_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loot_condition_interpreter_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+-    set(LCI_LIBRARIES ${LCI_LIBRARIES} userenv)
+-else()
+-    set(LCI_LIBRARIES ${LCI_LIBRARIES} dl)
+-endif()
+-
+ ExternalProject_Add(testing-plugins
+     PREFIX "external"
+     URL "https://github.com/Ortham/testing-plugins/archive/1.5.0.tar.gz"
+@@ -361,9 +307,6 @@ set(LIBLOOT_INTERFACE_TESTS_ALL_SOURCES
+ # Build tests.
+ add_executable(libloot_internals_tests ${LIBLOOT_INTERNALS_TESTS_ALL_SOURCES})
+ add_dependencies(libloot_internals_tests
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter
+     spdlog
+     yaml-cpp
+     GTest
+@@ -378,9 +321,6 @@ target_link_libraries(libloot_internals_tests PRIVATE
+ # Build API.
+ add_library(loot ${LIBLOOT_ALL_SOURCES})
+ add_dependencies(loot
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter
+     spdlog
+     yaml-cpp)
+ target_link_libraries(loot PRIVATE
