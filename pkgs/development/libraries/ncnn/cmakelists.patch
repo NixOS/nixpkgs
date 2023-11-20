@@ -2,15 +2,15 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index c453d23e..66b4aa24 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -478,6 +478,8 @@ if(NCNN_VULKAN)
- 
-             find_package(Threads)
- 
-+            include("${GLSLANG_TARGET_DIR}/SPIRV-Tools/SPIRV-ToolsTarget.cmake")
-+            include("${GLSLANG_TARGET_DIR}/SPIRV-Tools-opt/SPIRV-Tools-optTargets.cmake")
-             include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")
-             include("${GLSLANG_TARGET_DIR}/OGLCompilerTargets.cmake")
-             if(EXISTS "${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
+@@ -560,6 +560,8 @@ if(NCNN_VULKAN)
+                 message(WARNING "GLSLANG_TARGET_DIR must be defined! NCNN_SYSTEM_GLSLANG will be turned off.")
+                 set(NCNN_SYSTEM_GLSLANG OFF)
+             else()
++                include("${GLSLANG_TARGET_DIR}/SPIRV-Tools/SPIRV-ToolsTarget.cmake")
++                include("${GLSLANG_TARGET_DIR}/SPIRV-Tools-opt/SPIRV-Tools-optTargets.cmake")
+                 include("${GLSLANG_TARGET_DIR}/OSDependentTargets.cmake")
+                 include("${GLSLANG_TARGET_DIR}/OGLCompilerTargets.cmake")
+                 if(EXISTS "${GLSLANG_TARGET_DIR}/HLSLTargets.cmake")
 diff --git a/src/ncnn.pc.in b/src/ncnn.pc.in
 index b580fcee..be2becd0 100644
 --- a/src/ncnn.pc.in
