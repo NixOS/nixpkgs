@@ -2634,6 +2634,8 @@ self: super: with self; {
 
   dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
 
+  dbt-semantic-interfaces = callPackage ../development/python-modules/dbt-semantic-interfaces { };
+
   dbt-snowflake = callPackage ../development/python-modules/dbt-snowflake { };
 
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
