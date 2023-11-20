@@ -2696,4 +2696,21 @@ self: super: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.git];
   }) super.kmonad;
 
+  # Both of these need specific versions of ghc-lib-parser, the minor releases
+  # seem to be tied.
+  ghc-syntax-highlighter_0_0_10_0 = super.ghc-syntax-highlighter_0_0_10_0.overrideScope(self: super: {
+    ghc-lib-parser = self.ghc-lib-parser_9_6_3_20231014;
+  });
+  ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
+    ghc-lib-parser = self.ghc-lib-parser_9_8_1_20231009;
+  });
+
+  # Needs a matching version of ipython-kernel and a
+  # ghc-syntax-highlighter compatible with a newer ghc-lib-parser it
+  # transitively pulls in
+  ihaskell = super.ihaskell.overrideScope (self: super: {
+    ipython-kernel = self.ipython-kernel_0_11_0_0;
+    ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
