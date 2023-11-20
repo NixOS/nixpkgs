@@ -1,10 +1,8 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
-
 let
 
-  bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
+  bootFs = lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
   commonFunctions = ''
     prompt() {
@@ -56,7 +54,7 @@ let
   # remove this adaptation when bcachefs implements mounting by filesystem uuid
   # also, implement automatic waiting for the constituent devices when that happens
   # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
-  firstDevice = fs: head (splitString ":" fs.device);
+  firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
   openCommand = name: fs: ''
     tryUnlock ${name} ${firstDevice fs}
@@ -90,22 +88,45 @@ let
     };
   };
 
+  assertions = [
+    {
+      assertion = let
+        kernel = config.boot.kernelPackages.kernel;
+      in (
+        kernel.kernelAtLeast "6.7" || (
+          lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
+            lib.kernel.module
+            lib.kernel.yes
+            lib.kernel.option.yes
+          ]
+        )
+      );
+
+      message = "Linux 6.7-rc1 at minimum or a custom linux kernel with bcachefs support is required";
+    }
+  ];
 in
 
 {
-  config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
+  config = lib.mkIf (lib.elem "bcachefs" config.boot.supportedFilesystems) (lib.mkMerge [
     {
+      inherit assertions;
       # needed for systemd-remount-fs
       system.fsPackages = [ pkgs.bcachefs-tools ];
 
-      # use kernel package with bcachefs support until it's in mainline
-      # TODO replace with requireKernelConfig
-      boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
+      # FIXME: Replace this with `linuxPackages_testing` after NixOS 23.11 is released
+      # FIXME: Replace this with `linuxPackages_latest` when 6.7 is released, remove this line when the LTS version is at least 6.7
+      boot.kernelPackages = lib.mkDefault (
+        # FIXME: Remove warning after NixOS 23.11 is released
+        lib.warn "Please upgrade to Linux 6.7-rc1 or later: 'linuxPackages_testing_bcachefs' is deprecated. Use 'boot.kernelPackages = pkgs.linuxPackages_testing;' to silence this warning"
+        pkgs.linuxPackages_testing_bcachefs
+      );
 
       systemd.services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
     }
 
-    (mkIf ((elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+    (lib.mkIf ((lib.elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+      inherit assertions;
       # chacha20 and poly1305 are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "sha256" "chacha20" "poly1305" ];
       boot.initrd.systemd.extraBin = {
@@ -121,7 +142,7 @@ in
         $out/bin/bcachefs version
       '';
 
-      boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + concatStrings (mapAttrsToList openCommand bootFs));
+      boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs));
 
       boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
     })

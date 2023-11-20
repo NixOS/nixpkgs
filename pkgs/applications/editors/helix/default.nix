@@ -12,6 +12,17 @@ rustPlatform.buildRustPackage rec {
     stripRoot = false;
   };
 
+  patches = [
+    # Fixes implicit int error in rescript grammar when building with clang 16.
+    # https://github.com/nkrkv/tree-sitter-rescript/pull/227.
+    (fetchpatch {
+      url = "https://github.com/nkrkv/tree-sitter-rescript/commit/ea93cbf7d9c52f925ed296b4714737e8088f3a19.patch";
+      hash = "sha256-gpGPiy+yEs+dMJEnE5O3WC7iSB/6PLJYBYRcdTx//+o=";
+      extraPrefix = "runtime/grammars/sources/rescript/";
+      stripLen = 1;
+    })
+  ];
+
   cargoHash = "sha256-B8RO6BADDbPchowSfNVgviGvVgH23iF42DdhEBKBQzs=";
 
   nativeBuildInputs = [ git installShellFiles makeWrapper ];

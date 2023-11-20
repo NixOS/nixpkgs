@@ -3,7 +3,7 @@
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
-, zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
+, zlib, zstd, fftw, fftwFloat, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , hipSupport ? false, rocmPackages # comes with a significantly larger closure size
@@ -30,15 +30,19 @@ let
     url = "https://developer.download.nvidia.com/redist/optix/v7.3/OptiX-7.3.0-Include.zip";
     sha256 = "0max1j4822mchj0xpz9lqzh91zkmvsn4py0r174cvqfz8z8ykjk8";
   };
+  libdecor' = libdecor.overrideAttrs (old: {
+    # Blender uses private APIs, need to patch to expose them
+    patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
+  });
 
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "3.6.5";
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-QAHA/pn22HLsfH6VX4Sp7r25raFxAPS1Gergjez38kM=";
+    hash = "sha256-/jLU0noX5RxhQ+26G16nGFylm65Lzfm9s11oCWCC43Q=";
   };
 
   patches = [
@@ -53,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
-      opencolorio openexr openimageio openjpeg python zlib zstd fftw jemalloc
+      opencolorio openexr openimageio openjpeg python zlib zstd fftw fftwFloat jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
@@ -65,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       openpgl
     ]
     ++ lib.optionals waylandSupport [
-      wayland wayland-protocols libffi libdecor libxkbcommon dbus
+      wayland wayland-protocols libffi libdecor' libxkbcommon dbus
     ]
     ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise

@@ -7,6 +7,8 @@
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
 , branding ? null
+, requireSigning ? true
+, allowAddonSideload ? false
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -367,6 +369,8 @@ buildStdenv.mkDerivation {
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString (!requireSigning) ''
+    export MOZ_REQUIRE_SIGNING=
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
@@ -408,6 +412,7 @@ buildStdenv.mkDerivation {
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
+  ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ [
     (enableFeature alsaSupport "alsa")
     (enableFeature crashreporterSupport "crashreporter")

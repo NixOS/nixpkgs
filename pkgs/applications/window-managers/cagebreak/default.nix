@@ -6,6 +6,7 @@
 , libevdev
 , libinput
 , libxkbcommon
+, xcbutilwm
 , makeWrapper
 , mesa
 , meson
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.9.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-pU1QHYOqnkb3L4iSKbZY9Vo60Z6EaX9mp2Nw48NSPic=";
+    hash = "sha256-cJEJ8V9lDbNb07eY3nWmNcT7ULGlcmOeyb9UDOLGWfI=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     libevdev
     libinput
     libxkbcommon
+    xcbutilwm
     mesa # for libEGL headers
     pango
     pixman
@@ -69,6 +71,8 @@ stdenv.mkDerivation rec {
 
     # Patch cagebreak to read its default configuration from $out/share/cagebreak
     sed -i "s|/etc/xdg/cagebreak|$out/share/cagebreak|" meson.build cagebreak.c
+    substituteInPlace meson.build \
+      --replace "/usr/share/licenses" "$out/share/licenses"
   '';
 
   postFixup = lib.optionalString withXwayland ''

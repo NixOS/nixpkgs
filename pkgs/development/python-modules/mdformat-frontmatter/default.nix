@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "mdformat-frontmatter";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.0.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "butler54";
-    repo = pname;
+    repo = "mdformat-frontmatter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PhT5whtvvcYSs5gHQEsIvV1evhx7jR+3DWFMHrF0uMw=";
+    hash = "sha256-2heQw8LL/ILY36oItBeQq33qjVBGT51qGG4CcCEDutA=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "mdformat plugin to ensure frontmatter is respected";
     homepage = "https://github.com/butler54/mdformat-frontmatter";
+    changelog = "https://github.com/butler54/mdformat-frontmatter/blob/v{version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero polarmutex ];
   };

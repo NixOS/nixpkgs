@@ -10,11 +10,11 @@
 with lib;
 stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
-  version = "0.10.0";
+  version = "0.11.2";
 
   src = fetchurl {
     url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
-    sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
+    hash = "sha256-T5SFcdz5yrInE6+ydJqtstEYF0MvHquRZ7nvlCOVNzE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
@@ -69,11 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "unofficial Electron-based Figma desktop app for Linux";
+    description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ercao kashw2 ];
-    knownVulnerabilities = [ "CVE-2023-5217" ];
+    mainProgram = "figma-linux";
   };
 })

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
-, leptonica, libpng, libtiff, icu, pango, opencl-headers, fetchpatch
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers, fetchpatch
 , Accelerate, CoreGraphics, CoreVideo
 }:
 
@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    autoconf-archive
   ];
 
   buildInputs = [
+    curl
     leptonica
+    libarchive
     libpng
     libtiff
     icu

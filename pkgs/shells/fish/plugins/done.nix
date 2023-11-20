@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "done";
-  version = "1.17.1";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "franciscolourenco";
     repo = "done";
     rev = version;
-    hash = "sha256-aYKTkx5v7tB6k/UBcS0NOgA6SiRrjzn1lUTH/Xp5DFM=";
+    hash = "sha256-BGHfwKoMfOZUsa05kEt8W2luc1aC3Su/OyaGmcb4UiI=";
   };
 
   checkPlugins = [ fishtape ];
@@ -16,10 +16,10 @@ buildFishPlugin rec {
     fishtape test/done.fish
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Automatically receive notifications when long processes finish";
     homepage = "https://github.com/franciscolourenco/done";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malo ];
+    license = licenses.mit;
+    maintainers = [ maintainers.malo ];
   };
 }

@@ -666,7 +666,9 @@ in {
             ${cfg.package}/bin/syncthing \
               -no-browser \
               -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -home=${cfg.configDir} ${escapeShellArgs cfg.extraFlags}
+              -config=${cfg.configDir} \
+              -data=${cfg.dataDir} \
+              ${escapeShellArgs cfg.extraFlags}
           '';
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;

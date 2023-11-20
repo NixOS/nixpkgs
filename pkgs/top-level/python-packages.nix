@@ -28,6 +28,8 @@ self: super: with self; {
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
+  abjad = callPackage ../development/python-modules/abjad { };
+
   about-time = callPackage ../development/python-modules/about-time { };
 
   absl-py = callPackage ../development/python-modules/absl-py { };
@@ -53,8 +55,6 @@ self: super: with self; {
   acunetix = callPackage ../development/python-modules/acunetix { };
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
-
-  adafruit-nrfutil = callPackage ../development/python-modules/adafruit-nrfutil { };
 
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
@@ -633,6 +633,8 @@ self: super: with self; {
   apptools = callPackage ../development/python-modules/apptools { };
 
   appthreat-vulnerability-db = callPackage ../development/python-modules/appthreat-vulnerability-db { };
+
+  apricot-select = callPackage ../development/python-modules/apricot-select { };
 
   aprslib = callPackage ../development/python-modules/aprslib { };
 
@@ -3441,6 +3443,8 @@ self: super: with self; {
 
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
+  echo = callPackage ../development/python-modules/echo { };
+
   ecoaliface = callPackage ../development/python-modules/ecoaliface { };
 
   ecos = callPackage ../development/python-modules/ecos { };
@@ -3802,6 +3806,8 @@ self: super: with self; {
   fastapi = callPackage ../development/python-modules/fastapi { };
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
+
+  fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
 
@@ -4507,6 +4513,8 @@ self: super: with self; {
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   glom = callPackage ../development/python-modules/glom { };
+
+  glueviz = callPackage ../development/python-modules/glueviz { };
 
   glymur = callPackage ../development/python-modules/glymur { };
 
@@ -5323,6 +5331,8 @@ self: super: with self; {
   imgdiff = callPackage ../development/python-modules/imgdiff { };
 
   imgsize = callPackage ../development/python-modules/imgsize { };
+
+  imgtool = callPackage ../development/python-modules/imgtool { };
 
   iminuit = callPackage ../development/python-modules/iminuit { };
 
@@ -6354,6 +6364,8 @@ self: super: with self; {
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
+  linknlink = callPackage ../development/python-modules/linknlink { };
+
   linode-api = callPackage ../development/python-modules/linode-api { };
 
   linode = callPackage ../development/python-modules/linode { };
@@ -6885,6 +6897,8 @@ self: super: with self; {
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
+  mitmproxy-macos = callPackage ../development/python-modules/mitmproxy-macos { };
+
   mitmproxy-rs = callPackage ../development/python-modules/mitmproxy-rs { };
 
   mitmproxy-wireguard = callPackage ../development/python-modules/mitmproxy-wireguard { };
@@ -7069,6 +7083,8 @@ self: super: with self; {
   mplhep-data = callPackage ../development/python-modules/mplhep-data { };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
+
+  mpl-scatter-density = callPackage ../development/python-modules/mpl-scatter-density { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
@@ -8456,10 +8472,7 @@ self: super: with self; {
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
-  openai-whisper = callPackage ../development/python-modules/openai-whisper {
-    inherit (pkgs.config) cudaSupport;
-    openai-triton = self.openai-triton-cuda;
-  };
+  openai-whisper = callPackage ../development/python-modules/openai-whisper { };
 
   openant = callPackage ../development/python-modules/openant { };
 
@@ -9691,6 +9704,8 @@ self: super: with self; {
   pushbullet-py = callPackage ../development/python-modules/pushbullet-py { };
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
+
+  pvextractor = callPackage ../development/python-modules/pvextractor { };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 
@@ -11436,7 +11451,7 @@ self: super: with self; {
 
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
-  python_fedora = callPackage ../development/python-modules/python_fedora { };
+  python-fedora = callPackage ../development/python-modules/python-fedora { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
@@ -12670,7 +12685,9 @@ self: super: with self; {
 
   scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
-  scs = callPackage ../development/python-modules/scs { };
+  scs = callPackage ../development/python-modules/scs {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate;
+  };
 
   sdds = callPackage ../development/python-modules/sdds { };
 
@@ -15329,6 +15346,8 @@ self: super: with self; {
   uptime-kuma-api = callPackage ../development/python-modules/uptime-kuma-api { };
 
   uptime-kuma-monitor = callPackage ../development/python-modules/uptime-kuma-monitor { };
+
+  uqbar = callPackage ../development/python-modules/uqbar { };
 
   uranium = callPackage ../development/python-modules/uranium { };
 

@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
     rev = "v${version}";
-    hash = "sha256-l0D7uVoYTwiVI+b8yYpsJk/eAG5XYidR9CaQ595aTjw=";
+    hash = "sha256-TfFdHKXbbi0yqvyQjZArY9GbkwjUq1Z00UuNAldyDuc=";
   };
 
   sourceRoot = "${src.name}/cmd/ctl";
 
-  vendorHash = "sha256-3Ws2ObyBVYog7oVqHeEgIeWeRQpV1Z+Clilp8wI/PUA=";
+  vendorHash = "sha256-63XxGvVsIRDpQ0ri6VkjciyD+k7eEMBcg0w8NU8ypYs=";
 
   ldflags = [
     "-s"

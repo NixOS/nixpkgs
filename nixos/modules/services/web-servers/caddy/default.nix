@@ -376,7 +376,9 @@ in
         ReadWriteDirectories = cfg.dataDir;
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
         LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
-        Restart = "on-abnormal";
+        Restart = "on-failure";
+        RestartPreventExitStatus = 1;
+        RestartSecs = "5s";
 
         # TODO: attempt to upstream these options
         NoNewPrivileges = true;

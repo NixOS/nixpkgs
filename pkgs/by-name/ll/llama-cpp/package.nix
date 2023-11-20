@@ -2,6 +2,7 @@
 , cmake
 , darwin
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , stdenv
 , symlinkJoin
@@ -37,14 +38,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "1483";
+  version = "1538";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-TYklPkqwXLt+80FSHBDA2r3xTXlmgqB7sOt2mNnVNso=";
+    hash = "sha256-3JPGKJbO7Z3Jxz9KNSLYBAM7zQ+RJwBqsfRtpK6JS48=";
   };
+
+  patches = [
+    # openblas > v0.3.21 64-bit pkg-config file is now named openblas64.pc
+    # can remove when patch is accepted upstream
+    # https://github.com/ggerganov/llama.cpp/pull/4134
+    (fetchpatch {
+      name = "openblas64-pkg-config.patch";
+      url = "https://github.com/ggerganov/llama.cpp/commit/c885cc9f76c00557601b877136191b0f7aadc320.patch";
+      hash = "sha256-GBTxCiNrCazYRvcHwbqVMAALuJ+Svzf5BE7+nkxw064=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace ./ggml-metal.m \

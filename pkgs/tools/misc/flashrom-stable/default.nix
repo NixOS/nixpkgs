@@ -2,7 +2,7 @@
 , installShellFiles
 , lib
 , libftdi1
-, libgpiod
+, libgpiod_1
 , libjaylink
 , libusb1
 , pciutils
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libjaylink
     libusb1
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    libgpiod
+    libgpiod_1
     pciutils
   ];
 

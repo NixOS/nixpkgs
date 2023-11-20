@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.38.0";
+  version = "1.38.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-x01KggCu/sJnVvfJW/NZ+ARcl2Nl9LKn9dPBVmZcLi4=";
+    hash = "sha256-DLVeI1pnHpUya8muVUP6VNXiLmlaedOOPPef3tHNOng=";
   };
 
-  cargoHash = "sha256-PEKdQoAYhPpeHfv2pKGTsNaA1EANpf/GJw/3s+6TCoA=";
+  cargoHash = "sha256-qTvPpUBinPm3eQ5PLcqdCcZEG5Q6kGyt35mL914K9jk=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage rec {
     [ libiconv darwin.libobjc ] ++
     (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
   );
+
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
 
   buildAndTestSubdir = "cli";
 

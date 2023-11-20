@@ -33,19 +33,22 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # See https://github.com/aws/amazon-ssm-agent/blob/mainline/packaging/linux/amazon-ssm-agent.service
     systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
-      after    = [ "network.target" ];
+      after    = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ fake-lsb-release pkgs.coreutils ];
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/amazon-ssm-agent";
         KillMode = "process";
         # We want this restating pretty frequently. It could be our only means
         # of accessing the instance.
         Restart = "always";
-        RestartSec = "1min";
+        RestartPreventExitStatus = 194;
+        RestartSec = "90";
       };
     };
 
@@ -70,7 +73,7 @@ in {
       group = "ssm-user";
     };
 
-    environment.etc."amazon/ssm/seelog.xml".source = "${cfg.package}/seelog.xml.template";
+    environment.etc."amazon/ssm/seelog.xml".source = "${cfg.package}/etc/amazon/ssm/seelog.xml.template";
 
     environment.etc."amazon/ssm/amazon-ssm-agent.json".source =  "${cfg.package}/etc/amazon/ssm/amazon-ssm-agent.json.template";
 

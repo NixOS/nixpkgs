@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   # logic was not fixed.  So we must disable it.
   ''
     substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
+    substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
   '';
 
 

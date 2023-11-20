@@ -1,5 +1,4 @@
-# General list operations.
-
+/* General list operations. */
 { lib }:
 let
   inherit (lib.strings) toInt;

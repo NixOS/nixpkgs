@@ -1,4 +1,4 @@
-# Functions for copying sources to the Nix store.
+/* Functions for copying sources to the Nix store. */
 { lib }:
 
 # Tested in lib/tests/sources.sh

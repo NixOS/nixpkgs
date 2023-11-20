@@ -1,5 +1,7 @@
-# Functions for querying information about the filesystem
-# without copying any files to the Nix store.
+/*
+  Functions for querying information about the filesystem
+  without copying any files to the Nix store.
+*/
 { lib }:
 
 # Tested in lib/tests/filesystem.sh

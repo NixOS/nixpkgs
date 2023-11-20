@@ -15,6 +15,7 @@
 , at-spi2-atk
 , cairo
 , pango
+, pipewire
 , gdk-pixbuf
 , glib
 , freetype
@@ -150,7 +151,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
       # Currently crashes see https://github.com/NixOS/nixpkgs/issues/222043
       #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}

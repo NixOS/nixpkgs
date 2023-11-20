@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic-rs";
-  version = "0.5.4";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LAOU2cnKb+TEWNiXJkpgqNxuU16g/Kc3swGIUc8t9x0=";
+    hash = "sha256-rpIEgQYwfManfgTrhCt6/Q4VBY2yyn4edC6/mz5D7nM=";
   };
 
-  cargoHash = "sha256-OTIdl2x5m90rEwNBu3LL3rFQ0FVS3GDYU7gf8P7CTaQ=";
+  cargoHash = "sha256-q+K887jPB9i9iXpFYXjn3zppAPWNlTc2AG7ivOr77J4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";
-    changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/changelog/${version}.txt";
+    changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/CHANGELOG.md";
     description = "fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
