@@ -219,7 +219,6 @@ with lib.maintainers; {
       cole-h
       grahamc
       hoverbear
-      lheckemann
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
