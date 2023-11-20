@@ -9885,6 +9885,8 @@ with pkgs;
     buildGoModule = buildGo120Module;
   };
 
+  kubedock = callPackage ../development/tools/kubedock { };
+
   kubepug = callPackage ../development/tools/kubepug { };
 
   kubeshark = callPackage ../applications/networking/cluster/kubeshark { };
