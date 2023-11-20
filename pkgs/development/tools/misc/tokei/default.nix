@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libz, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-U7Bode8qwDsNf4FVppfEHA9uiOFz74CtKgXG6xyYlT8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [libz] ++ lib.optionals stdenv.isDarwin [
     libiconv Security
   ];
 
