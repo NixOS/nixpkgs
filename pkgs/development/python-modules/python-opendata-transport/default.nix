@@ -3,13 +3,14 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "python-opendata-transport";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-2lEKPu5vjyqNUqz1NGmZ5b6YP3oWnCgoubDdiQCbdps=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
