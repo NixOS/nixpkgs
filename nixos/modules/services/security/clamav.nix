@@ -110,6 +110,8 @@ in
       serviceConfig = {
         ExecStart = "${pkg}/bin/clamd";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        User = clamavUser;
+        Group = clamavGroup;
         StateDirectory = "clamav";
         RuntimeDirectory = "clamav";
         PrivateTmp = "yes";
@@ -138,6 +140,8 @@ in
         SuccessExitStatus = "1"; # if databases are up to date
         StateDirectory = "clamav";
         RuntimeDirectory = "clamav";
+        User = clamavUser;
+        Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
       };
