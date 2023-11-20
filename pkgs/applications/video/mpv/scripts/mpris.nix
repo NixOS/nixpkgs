@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hoyon/mpv-mpris";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
     changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }

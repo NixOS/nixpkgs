@@ -8355,12 +8355,6 @@
       fingerprint = "F1F1 3395 8E8E 9CC4 D9FC  9647 1931 9CD8 416A 642B";
     }];
   };
-  jfrankenau = {
-    email = "johannes@frankenau.net";
-    github = "jfrankenau";
-    githubId = 2736480;
-    name = "Johannes Frankenau";
-  };
   jfroche = {
     name = "Jean-François Roche";
     email = "jfroche@pyxel.be";
