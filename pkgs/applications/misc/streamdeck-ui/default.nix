@@ -11,13 +11,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
     rev = "v${version}";
-    sha256 = "sha256-AIE9j022L4WSlHBAu3TT5uE4Ilgk/jYSmU03K8Hs8xY=";
+    sha256 = "sha256-az00iCLWMLd9YsdSZoVDB6UQIHVEln+gkf84hmUlqFY=";
   };
 
   patches = [
@@ -78,6 +78,7 @@ python3Packages.buildPythonApplication rec {
     setuptools
     filetype
     cairosvg
+    importlib-metadata
     pillow
     pynput
     pyside6
@@ -90,9 +91,12 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     xvfb-run
     python3Packages.pytest
+    python3Packages.pytest-mock
+    python3Packages.pytest-qt
   ];
 
   checkPhase = ''
+    export HOME=$(pwd)
     xvfb-run pytest tests
   '';
 
