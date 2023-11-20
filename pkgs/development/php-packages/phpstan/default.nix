@@ -12,6 +12,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   vendorHash = "sha256-hjCfrmpn2rYgApenZkHX8fXqPXukh7BVKENkvwIk8Dk=";
+  composerStrictValidation = false;
 
   meta = {
     changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";
