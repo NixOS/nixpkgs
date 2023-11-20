@@ -54,19 +54,6 @@ in
 let
   monorepoSrc' = monorepoSrc;
 in let
-  releaseInfo = if gitRelease != null then rec {
-    original = gitRelease;
-    release_version = original.version;
-    version = gitRelease.rev-version;
-  } else rec {
-    original = officialRelease;
-    release_version = original.version;
-    version = if original ? candidate then
-      "${release_version}-${original.candidate}"
-    else
-      release_version;
-  };
-
   monorepoSrc = if monorepoSrc' != null then
     monorepoSrc'
   else let
@@ -81,9 +68,10 @@ in let
     inherit rev sha256;
   };
 
+  # Import releaseInfo separately to avoid infinite recursion
+  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
   inherit (releaseInfo) release_version version;
-
-  inherit (import ../common/common-let.nix { inherit lib release_version; }) llvm_meta;
+  inherit (import ../common/common-let.nix { inherit lib release_version gitRelease officialRelease; }) llvm_meta;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
