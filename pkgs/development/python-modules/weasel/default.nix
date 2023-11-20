@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "weasel";
-  version = "0.3.3";
+  version = "0.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "weasel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I8Omrez1wfAbCmr9hivqKN2fNgnFQRGm8OP7lb7YClk=";
+    hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
   };
 
   nativeBuildInputs = [

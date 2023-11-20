@@ -20,6 +20,7 @@
 , millet
 , shfmt
 , typst-lsp
+, typst-preview
 , autoPatchelfHook
 , zlib
 , stdenv
@@ -2297,37 +2298,26 @@ let
         };
       };
 
+      # Keep pkgs/tools/typesetting/typst-preview/default.nix in sync with this
+      # extension
       mgt19937.typst-preview = buildVscodeMarketplaceExtension {
-        mktplcRef =
-        let
-          sources = {
-            "x86_64-linux" = {
-              arch = "linux-x64";
-              sha256 = "sha256-O8sFv23tlhJS6N8LRKkHcTJTupZejCLDRdVVCdDlWbA=";
-            };
-            "x86_64-darwin" = {
-              arch = "darwin-x64";
-              sha256 = "1npzjch67agswh3nm14dbbsx777daq2rdw1yny10jf3858z2qynr";
-            };
-            "aarch64-linux" = {
-              arch = "linux-arm64";
-              sha256 = "1vv1jfgnyjbmshh4w6rf496d9dpdsk3f0049ii4d9vi23igk4xpk";
-            };
-            "aarch64-darwin" = {
-              arch = "darwin-arm64";
-              sha256 = "0dfchzqm61kddq20zvp1pcpk1625b9wgj32ymc08piq06pbadk29";
-            };
-          };
-        in
-        {
+        mktplcRef = {
           name = "typst-preview";
           publisher = "mgt19937";
-          version = "0.6.1";
-        } // sources.${stdenv.system};
+          version = "0.9.1";
+          sha256 = "sha256-GHD/i+QOnItGEYG0bl/pVl+a4Dvn7SHhICJ14VfqMjE=";
+        };
 
-        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+        buildInputs = [
+          typst-preview
+        ];
 
-        buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+        nativeBuildInputs = [ jq moreutils ];
+
+        postInstall = ''
+          cd "$out/$installPrefix"
+          jq '.contributes.configuration.properties."typst-preview.executable".default = "${lib.getExe typst-preview}"' package.json | sponge package.json
+        '';
 
         meta = {
           description = "Typst Preview is an extension for previewing your Typst files in vscode instantly";
@@ -2745,7 +2735,6 @@ let
         };
       };
 
-
       nvarner.typst-lsp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-lsp";
@@ -2758,9 +2747,13 @@ let
 
         nativeBuildInputs = [ jq moreutils ];
 
+        buildInputs = [
+          typst-lsp
+        ];
+
         postInstall = ''
           cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."typst-lsp.serverPath".default = "${typst-lsp}/bin/typst-lsp"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."typst-lsp.serverPath".default = "${lib.getExe typst-lsp}"' package.json | sponge package.json
         '';
 
         meta = {

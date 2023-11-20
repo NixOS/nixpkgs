@@ -12496,6 +12496,8 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
+  qlog = qt6Packages.callPackage ../applications/radio/qlog { };
+
   qnial = callPackage ../development/interpreters/qnial { };
 
   quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
@@ -14237,8 +14239,6 @@ with pkgs;
   typstfmt = callPackage ../tools/typesetting/typstfmt { };
 
   typst-live = callPackage ../tools/typesetting/typst-live { };
-
-  typst-preview = callPackage ../tools/typesetting/typst-preview { };
 
   tz = callPackage ../tools/misc/tz { };
 

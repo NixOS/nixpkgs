@@ -1064,12 +1064,17 @@ rm -rf -- *
 ## lib.fileset.fromSource
 
 # Check error messages
-expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
 
+# String-like values are not supported
 expectFailure 'fromSource (lib.cleanSource "")' 'lib.fileset.fromSource: The source origin of the argument is a string-like value \(""\), but it should be a path instead.
 \s*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
 
+# Wrong type
+expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
 expectFailure 'fromSource (lib.cleanSource null)' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+# fromSource on non-existent paths gives an error
+expectFailure 'fromSource ./a' 'lib.fileset.fromSource: The source origin \('"$work"'/a\) of the argument is a path that does not exist.'
 
 # fromSource on a path works and is the same as coercing that path
 mkdir a
