@@ -2800,6 +2800,7 @@ broken-packages:
   - ihaskell-charts # failure in job https://hydra.nixos.org/build/233193328 at 2023-09-02
   - ihaskell-gnuplot # failure in job https://hydra.nixos.org/build/233223675 at 2023-09-02
   - ihaskell-graphviz # failure in job https://hydra.nixos.org/build/233200671 at 2023-09-02
+  - ihaskell-hvega # failure in job https://hydra.nixos.org/build/241514418 at 2023-11-20
   - ihaskell-parsec # failure in job https://hydra.nixos.org/build/233244271 at 2023-09-02
   - ihaskell-plot # failure in job https://hydra.nixos.org/build/233255936 at 2023-09-02
   - ihp-hsx # failure in job https://hydra.nixos.org/build/233211401 at 2023-09-02
