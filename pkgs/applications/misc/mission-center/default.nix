@@ -104,6 +104,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace src/main.rs \
+      --replace "libGL.so.1" "${libGL}/lib/libGL.so.1"
+
     SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
     SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
 
