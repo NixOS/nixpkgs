@@ -15,16 +15,14 @@
 
 resholve.mkDerivation rec {
   pname = "pdf2odt";
-  version = "20170207";
+  version = "unstable-2022-08-27";
 
   src = fetchFromGitHub {
-    owner  = "gutschke";
-    repo   = "pdf2odt";
-    rev    = "4533bd14306c30c085001db59dbb8114ea09c360";
-    sha256 = "14f9r5f0g6jzanl54jv86ls0frvspka1p9c8dy3fnriqpm584j0r";
+    owner = "gutschke";
+    repo = "pdf2odt";
+    rev = "a05fbdebcc39277d905d1ae66f585a19f467b406";
+    hash = "sha256-995iF5Z1V4QEXeXUB8irG451TXpQBHZThJcEfHwfRtE=";
   };
-
-  patches = [ ./use_mktemp.patch ];
 
   installPhase = ''
     install -Dm0755 pdf2odt           -t $out/bin
@@ -32,6 +30,7 @@ resholve.mkDerivation rec {
 
     ln -rs $out/bin/pdf2odt $out/bin/pdf2ods
   '';
+
   solutions = {
     default = {
       scripts = [ "bin/pdf2odt" ];
@@ -52,9 +51,9 @@ resholve.mkDerivation rec {
 
   meta = with lib; {
     description = "PDF to ODT format converter";
-    homepage    = "https://github.com/gutschke/pdf2odt";
-    license     = licenses.mit;
-    platforms   = platforms.all;
+    homepage = "https://github.com/gutschke/pdf2odt";
+    license = licenses.mit;
+    platforms = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }
