@@ -4384,6 +4384,13 @@
     github = "Detegr";
     githubId = 724433;
   };
+  dettlaff = {
+    name = "dettlaff";
+    email = "dettlaff@riseup.net";
+    matrix = "@dettlaff:inex.rocks";
+    github = "xdettlaff";
+    githubId = 113319266;
+  };
   Dettorer = {
     name = "Paul Hervot";
     email = "paul.hervot@dettorer.net";
