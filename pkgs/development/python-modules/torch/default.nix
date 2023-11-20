@@ -1,5 +1,12 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
-  config, cudaSupport ? config.cudaSupport, cudaPackages, magma,
+  config, cudaSupport ? config.cudaSupport, cudaPackages,
+  effectiveMagma ?
+  if cudaSupport then magma-cuda-static
+  else if rocmSupport then magma-hip
+  else magma,
+  magma,
+  magma-hip,
+  magma-cuda-static,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
@@ -115,7 +122,7 @@ let
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
     "Unsupported CUDA version" = cudaSupport && !(builtins.elem cudaPackages.cudaMajorVersion [ "11" "12" ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
-    "Magma cudaPackages does not match cudaPackages" = cudaSupport && (magma.cudaPackages != cudaPackages);
+    "Magma cudaPackages does not match cudaPackages" = cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
   };
 in buildPythonPackage rec {
   pname = "torch";
@@ -359,7 +366,7 @@ in buildPythonPackage rec {
       cuda_profiler_api.dev # <cuda_profiler_api.h>
     ])
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
+    ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
     ++ lib.optionals stdenv.isDarwin [ Accelerate CoreServices libobjc ];
 
