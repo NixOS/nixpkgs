@@ -25,6 +25,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , fixPatch ? p: p
 , postPatch ? ""
 , preConfigure ? ""
+, preInstall ? ""
 , postInstall ? ""
 , meta ? null
 , nginx-doc ? outer.nginx-doc
@@ -179,7 +180,7 @@ stdenv.mkDerivation {
     if [[ -e man/nginx.8 ]]; then
       installManPage man/nginx.8
     fi
-  '';
+  '' + preInstall;
 
   disallowedReferences = map (m: m.src) modules;
 
