@@ -1,4 +1,4 @@
-# Nixpkgs/NixOS option handling.
+/* Nixpkgs/NixOS option handling. */
 { lib }:
 
 let
