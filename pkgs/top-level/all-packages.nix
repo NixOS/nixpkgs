@@ -336,6 +336,8 @@ with pkgs;
 
   bada-bib = callPackage ../applications/science/misc/bada-bib { };
 
+  badlion-client = callPackage ../games/badlion-client {};
+
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
