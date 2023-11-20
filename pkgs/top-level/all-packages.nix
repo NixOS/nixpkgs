@@ -42109,4 +42109,5 @@ with pkgs;
   code-maat = callPackage ../development/tools/code-maat {};
 
   mdhtml = callPackage ../tools/text/mdhtml { };
+  gnoll = callPackage ../games/gnoll {};
 }
