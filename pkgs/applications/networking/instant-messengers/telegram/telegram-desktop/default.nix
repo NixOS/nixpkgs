@@ -1,8 +1,6 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
-, fetchpatch2
 , callPackage
 , pkg-config
 , cmake
@@ -28,7 +26,6 @@
 , libopus
 , alsa-lib
 , libpulseaudio
-, perlPackages
 , pipewire
 , range-v3
 , tl-expected
@@ -57,7 +54,6 @@
 , libpsl
 , brotli
 , microsoft-gsl
-, mm-common
 , rlottie
 , stdenv
 , darwin
@@ -80,30 +76,6 @@ let
       cxxStandard = "20";
     };
   };
-  glibmm = glibmm_2_68.overrideAttrs (attrs: {
-    version = "2.78.0";
-    src = fetchurl {
-      url = "mirror://gnome/sources/glibmm/2.78/glibmm-2.78.0.tar.xz";
-      hash = "sha256-XS6HJWSZbwKgbYu6w2d+fDlK+LAN0VJq69R6+EKj71A=";
-    };
-    patches = [
-      # Revert "Glib, Gio: Add new API from glib 2.77.0"
-      (fetchpatch2 {
-        url = "https://github.com/GNOME/glibmm/commit/5b9032c0298cbb49c3ed90d5f71f2636751fa638.patch";
-        revert = true;
-        hash = "sha256-UzrzIOnXh9pxuTDQsp6mnunDNNtc86hE9tCe1NgKsyo=";
-      })
-    ];
-    mesonFlags = [
-      "-Dmaintainer-mode=true"
-      "-Dbuild-documentation=false"
-    ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      mm-common
-      perlPackages.perl
-      perlPackages.XMLParser
-    ];
-  });
   mainProgram = if stdenv.isLinux then "telegram-desktop" else "Telegram";
 in
 stdenv.mkDerivation rec {
@@ -185,7 +157,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     pipewire
     hunspell
-    glibmm
+    glibmm_2_68
     webkitgtk_6_0
     jemalloc
     # Transitive dependencies:
