@@ -8983,6 +8983,8 @@ self: super: with self; {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  plugp100 = callPackage ../development/python-modules/plugp100 { };
+
   pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
