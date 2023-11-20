@@ -1,5 +1,6 @@
 { addOpenGLRunpath
 , cmake
+, allowedPatternsPath ? (formats.json { }).generate "patterns.json" allowedPatterns
 , allowedPatterns ? rec {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
@@ -25,10 +26,6 @@
 
 
 let
-  confPath = (formats.json { }).generate "config.py" {
-    inherit allowedPatterns;
-    nixExe = lib.getExe nix;
-  };
   attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
   pname = attrs.project.name;
   inherit (attrs.project) version;
@@ -47,7 +44,9 @@ python3Packages.buildPythonApplication
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/${pname} --add-flags "--config ${confPath}"
+    wrapProgram $out/bin/${pname} \
+      --add-flags "--patterns ${allowedPatternsPath}" \
+      --add-flags "--nix-exe ${lib.getExe nix}"
   '';
 
   passthru = {

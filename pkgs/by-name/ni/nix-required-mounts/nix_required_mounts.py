@@ -26,15 +26,14 @@ class Pattern(TypedDict):
     unsafeFollowSymlinks: bool
 
 
-class HookConfig(TypedDict):
-    nixExe: str
-    allowedPatterns: Dict[str, Pattern]
+AllowedPatterns: TypeAlias = Dict[str, Pattern]
 
 
 parser = ArgumentParser("pre-build-hook")
 parser.add_argument("derivation_path")
 parser.add_argument("sandbox_path", nargs="?")
-parser.add_argument("--config", type=Path)
+parser.add_argument("--patterns", type=Path, required=True)
+parser.add_argument("--nix-exe", type=Path, required=True)
 parser.add_argument(
     "--issue-command",
     choices=("always", "conditional", "never"),
@@ -72,8 +71,8 @@ def entrypoint():
     args = parser.parse_args()
     drv_path = args.derivation_path
 
-    with open(args.config, "r") as f:
-        config = json.load(f)
+    with open(args.patterns, "r") as f:
+        allowed_patterns = json.load(f)
 
     if not Path(drv_path).exists():
         print(
@@ -85,7 +84,7 @@ def entrypoint():
 
     proc = subprocess.run(
         [
-            config["nixExe"],
+            args.nix_exe,
             "show-derivation",
             drv_path,
         ],
@@ -108,7 +107,6 @@ def entrypoint():
         return
     [canon_drv_path] = parsed_drv.keys()
 
-    allowed_patterns = config["allowedPatterns"]
     known_features = set(
         chain.from_iterable(
             pattern["onFeatures"] for pattern in allowed_patterns.values()
