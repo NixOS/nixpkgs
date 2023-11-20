@@ -140,17 +140,18 @@ rec {
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
-    }:
+    , ...
+    }@args:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
-      { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
+      ({ inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
         meta = lib.optionalAttrs (executable && matches != null) {
           mainProgram = lib.head matches;
         } // meta;
-      }
+      } // removeAttrs args [ "destination" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
