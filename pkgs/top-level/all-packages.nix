@@ -16799,8 +16799,6 @@ with pkgs;
   buildNimPackage = callPackage ../development/compilers/nim/build-nim-package.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
 
-  nimlsp = callPackage ../development/tools/misc/nimlsp { };
-
   neko = callPackage ../development/compilers/neko { };
 
   nextpnr = callPackage ../development/compilers/nextpnr { };
