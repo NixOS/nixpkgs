@@ -5,6 +5,7 @@
 , fetchurl
 , writeScript
 , installShellFiles
+, stdenv
 }:
 
 let
@@ -28,6 +29,8 @@ let
       "--no-fallback"
       "--native-image-info"
       "--enable-preview"
+    ] ++ lib.optionals stdenv.isAarch64 [
+      "-H:PageSize=64K"
     ];
 
     doInstallCheck = true;
