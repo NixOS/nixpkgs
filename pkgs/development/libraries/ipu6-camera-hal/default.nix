@@ -11,17 +11,29 @@
 , ipu6-camera-bin
 , libtool
 , gst_all_1
-}:
 
+# Pick one of
+# - ipu6 (Tiger Lake)
+# - ipu6ep (Alder Lake)
+# - ipu6epmtl (Meteor Lake)
+, ipuVersion ? "ipu6"
+}:
+let
+  ipuTarget = {
+    "ipu6" = "ipu_tgl";
+    "ipu6ep" = "ipu_adl";
+    "ipu6epmtl" = "ipu_mtl";
+  }.${ipuVersion};
+in
 stdenv.mkDerivation {
-  pname = "${ipu6-camera-bin.ipuVersion}-camera-hal";
-  version = "unstable-2023-02-08";
+  pname = "${ipuVersion}-camera-hal";
+  version = "unstable-2023-09-25";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "884b81aae0ea19a974eb8ccdaeef93038136bdd4";
-    hash = "sha256-AePL7IqoOhlxhfPRLpCman5DNh3wYS4MUcLgmgBUcCM=";
+    rev = "9fa05a90886d399ad3dda4c2ddc990642b3d20c9";
+    hash = "sha256-yS1D7o6dsQ4FQkjfwcisOxcP7Majb+4uQ/iW5anMb5c=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +41,10 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
+  PKG_CONFIG_PATH = "${lib.getDev ipu6-camera-bin}/lib/${ipuTarget}/pkgconfig";
+
   cmakeFlags = [
-    "-DIPU_VER=${ipu6-camera-bin.ipuVersion}"
+    "-DIPU_VER=${ipuVersion}"
     # missing libiacss
     "-DUSE_PG_LITE_PIPE=ON"
     # missing libipu4
@@ -39,8 +53,6 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error"
-    "-I${lib.getDev ipu6-camera-bin}/include/ia_imaging"
-    "-I${lib.getDev ipu6-camera-bin}/include/ia_camera"
   ];
 
   enableParallelBuilding = true;
@@ -64,7 +76,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit (ipu6-camera-bin) ipuVersion;
+    inherit ipuVersion;
   };
 
   meta = with lib; {
