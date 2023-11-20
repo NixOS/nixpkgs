@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "stdlib-list";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "stdlib_list";
     inherit version;
-    hash = "sha256-mOtmE1l2yWtO4/TA7wVS67Wpl3zjAoQz23n0c4sCryY=";
+    hash = "sha256-ZRnFDWRVE+0odle/6FbVJ/J3MxVAaR3er3eyVFmWShQ=";
   };
 
   nativeBuildInputs = [
