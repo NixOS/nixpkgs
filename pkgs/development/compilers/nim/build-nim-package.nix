@@ -1,4 +1,4 @@
-{ lib, stdenv, nim, nim_builder }:
+{ lib, stdenv, nim1, nim2, nim_builder, defaultNimVersion ? 2 }:
 pkgArgs:
 
 let
@@ -27,13 +27,19 @@ let
       nim_builder --phase:install
       runHook postInstall
     '';
-    meta = { inherit (nim.meta) maintainers platforms; };
+    meta = { inherit (nim2.meta) maintainers platforms; };
   };
 
-  inputsOverride =
-    { depsBuildBuild ? [ ], nativeBuildInputs ? [ ], ... }: {
+  inputsOverride = { depsBuildBuild ? [ ], nativeBuildInputs ? [ ]
+    , requiredNimVersion ? defaultNimVersion, ... }:
+    (if requiredNimVersion == 1 then {
+      nativeBuildInputs = [ nim1 ] ++ nativeBuildInputs;
+    } else if requiredNimVersion == 2 then {
+      nativeBuildInputs = [ nim2 ] ++ nativeBuildInputs;
+    } else
+      throw "requiredNimVersion ${toString requiredNimVersion} is not valid")
+    // {
       depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
-      nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
     };
 
   composition = finalAttrs:
