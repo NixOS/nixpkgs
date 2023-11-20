@@ -5100,6 +5100,8 @@ self: super: with self; {
 
   hstspreload = callPackage ../development/python-modules/hstspreload { };
 
+  html2image = callPackage ../development/python-modules/html2image { };
+
   html2text = callPackage ../development/python-modules/html2text { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
