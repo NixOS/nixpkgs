@@ -14125,10 +14125,6 @@ self: super: with self; {
   toposort = callPackage ../development/python-modules/toposort { };
 
   torch = callPackage ../development/python-modules/torch {
-    magma =
-      if pkgs.config.cudaSupport
-      then pkgs.magma-cuda-static
-      else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
   };
@@ -14138,7 +14134,6 @@ self: super: with self; {
   };
 
   torchWithCuda = self.torch.override {
-    magma = pkgs.magma-cuda-static;
     openai-triton = self.openai-triton-cuda;
     cudaSupport = true;
     rocmSupport = false;
@@ -14149,7 +14144,6 @@ self: super: with self; {
   };
 
   torchWithRocm = self.torch.override {
-    magma = pkgs.magma-hip;
     openai-triton = self.openai-triton-no-cuda;
     rocmSupport = true;
     cudaSupport = false;
