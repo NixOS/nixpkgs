@@ -385,6 +385,10 @@ let
       orga = "eonpatapon";
       repo = "tree-sitter-cue";
     };
+    "tree-sitter-uiua" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-uiua";
+    };
     "tree-sitter-wing" = {
       orga = "winglang";
       repo = "wing";
