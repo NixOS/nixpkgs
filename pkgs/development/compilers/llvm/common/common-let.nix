@@ -1,10 +1,12 @@
 { lib
+, fetchFromGitHub ? null
 , release_version ? null
 , gitRelease ? null
 , officialRelease ? null
+, monorepoSrc' ? null
 }:
 
-{
+rec {
   llvm_meta = {
     license = lib.licenses.ncsa;
     maintainers = lib.teams.llvm.members;
@@ -36,5 +38,23 @@
         else
           release_version;
     };
+
+  monorepoSrc =
+    if monorepoSrc' != null then
+      monorepoSrc'
+    else
+      let
+        sha256 = releaseInfo.original.sha256;
+        rev =
+          if gitRelease != null then
+            gitRelease.rev
+          else
+            "llvmorg-${releaseInfo.version}";
+      in
+      fetchFromGitHub {
+        owner = "llvm";
+        repo = "llvm-project";
+        inherit rev sha256;
+      };
 
 }
