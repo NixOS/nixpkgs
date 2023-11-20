@@ -9940,6 +9940,15 @@
     githubId = 1621930;
     name = "Kamil Chmielewski";
   };
+  kamillaova = {
+    name = "Kamilla Ova";
+    email = "me@kamillaova.dev";
+    github = "Kamillaova";
+    githubId = 54859825;
+    keys = [{
+      fingerprint = "B2D0 AA53 8DBE 60B0 0811  3FC0 2D52 5F67 791E 5834";
+    }];
+  };
   kampfschlaefer = {
     email = "arnold@arnoldarts.de";
     github = "kampfschlaefer";
