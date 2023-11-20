@@ -95,6 +95,8 @@ in
           lib.mdDoc ''
             This option determines which Docker storage driver to use. By default
             it let's docker automatically choose preferred storage driver.
+            Warning: Changing this setting will cause any existing containers and
+            images to become inaccessible.
           '';
       };
 
