@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-frontmatter";
-  version = "2.0.1";
+  version = "2.0.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "butler54";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-PhT5whtvvcYSs5gHQEsIvV1evhx7jR+3DWFMHrF0uMw=";
+    hash = "sha256-2heQw8LL/ILY36oItBeQq33qjVBGT51qGG4CcCEDutA=";
   };
 
   nativeBuildInputs = [
