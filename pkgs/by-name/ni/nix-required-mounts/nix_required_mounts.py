@@ -67,6 +67,30 @@ def get_strings(drv_env: dict, name: str) -> List[str]:
         return drv_env.get(name, "").split()
 
 
+def validate_mounts(pattern: Pattern) -> List[Tuple[PathString, PathString, bool]]:
+    roots = []
+    for mount in pattern["paths"]:
+        if isinstance(mount, PathString):
+            matches = glob.glob(mount)
+            assert matches, f"Specified host paths do not exist: {mount}"
+
+            roots.extend((m, m, pattern["unsafeFollowSymlinks"]) for m in matches)
+        else:
+            assert isinstance(mount, dict) and "host" in mount, mount
+            assert Path(
+                mount["host"]
+            ).exists(), f"Specified host paths do not exist: {mount['host']}"
+            roots.append(
+                (
+                    mount["guest"],
+                    mount["host"],
+                    pattern["unsafeFollowSymlinks"],
+                )
+            )
+
+    return roots
+
+
 def entrypoint():
     args = parser.parse_args()
     drv_path = args.derivation_path
@@ -118,23 +142,15 @@ def entrypoint():
     required_features = get_strings(drv_env, "requiredSystemFeatures")
     required_features = list(filter(known_features.__contains__, required_features))
 
-    patterns: List[Tuple[PathString | Mount, bool]] = list(
-        (path, pattern["unsafeFollowSymlinks"])
+    patterns: List[Pattern] = list(
+        pattern
         for pattern in allowed_patterns.values()
         for path in pattern["paths"]
         if any(feature in required_features for feature in pattern["onFeatures"])
     )  # noqa: E501
 
     queue: Deque[Tuple[PathString, PathString, bool]] = deque(
-        (
-            mnt
-            for (pattern, follow_symlinks) in patterns
-            for mnt in (
-                ((path, path, follow_symlinks) for path in glob.glob(pattern))
-                if isinstance(pattern, PathString)
-                else [(pattern["guest"], pattern["host"], follow_symlinks)]
-            )
-        )
+        (mnt for pattern in patterns for mnt in validate_mounts(pattern))
     )
 
     unique_mounts: Set[Tuple[PathString, PathString]] = set()
