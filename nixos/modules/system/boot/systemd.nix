@@ -179,12 +179,7 @@ in
 
   options.systemd = {
 
-    package = mkOption {
-      default = pkgs.systemd;
-      defaultText = literalExpression "pkgs.systemd";
-      type = types.package;
-      description = lib.mdDoc "The systemd package.";
-    };
+    package = mkPackageOption pkgs "systemd" {};
 
     units = mkOption {
       description = "Definition of systemd units.";
