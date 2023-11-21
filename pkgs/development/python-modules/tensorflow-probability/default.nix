@@ -9,6 +9,7 @@
 , setuptools
 , wheel
 , absl-py
+, pythonOlder
 , tensorflow
 , six
 , numpy
@@ -27,7 +28,7 @@
 }:
 
 let
-  version = "0.21.0";
+  version = "0.23.0";
   pname = "tensorflow-probability";
 
   # first build all binaries and generate setup.py using bazel
@@ -37,7 +38,7 @@ let
       owner = "tensorflow";
       repo = "probability";
       rev = "refs/tags/v${version}";
-      hash = "sha256-DsJd1E5n86xNS7Ci0DXxoUxQ9jH8OwTZq2UuLlQtMUU=";
+      hash = "sha256-cZTlWfg3pIFnJz5xrQhcS1uvRMfIOOxcUxN747txd28=";
     };
     nativeBuildInputs = [
       # needed to create the output wheel in installPhase
@@ -78,6 +79,7 @@ let
 in buildPythonPackage {
   inherit version pname;
   format = "wheel";
+  disabled = pythonOlder "3.9";
 
   src = bazel-wheel;
 
