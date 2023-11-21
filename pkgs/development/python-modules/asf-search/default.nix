@@ -1,18 +1,19 @@
 { lib
 , buildPythonPackage
+, dateparser
+, defusedxml
 , fetchFromGitHub
-, pythonOlder
-, requests
-, shapely
-, python-dateutil
-, pytz
 , importlib-metadata
 , numpy
-, dateparser
-, remotezip
 , pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, remotezip
+, requests
 , requests-mock
-, defusedxml
+, shapely
+, tenacity
 }:
 
 buildPythonPackage rec {
@@ -30,23 +31,21 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests
-    shapely
-    python-dateutil
-    pytz
+    dateparser
     importlib-metadata
     numpy
-    dateparser
+    python-dateutil
+    pytz
     remotezip
+    requests
+    shapely
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    requests-mock
     defusedxml
+    pytestCheckHook
+    requests-mock
+    tenacity
   ];
 
   pythonImportsCheck = [
