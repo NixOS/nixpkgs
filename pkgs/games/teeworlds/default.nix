@@ -3,6 +3,7 @@
 , nixosTests
 , Carbon
 , Cocoa
+, buildClient ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -38,21 +39,30 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (buildClient && stdenv.isLinux) [
     icoutils
   ];
 
   buildInputs = [
-    python3 libGLU SDL2 lua5_3 zlib freetype wavpack
+    python3 lua5_3 zlib
+  ] ++ lib.optionals buildClient ([
+    libGLU
+    SDL2
+    freetype
+    wavpack
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     libX11
   ] ++ lib.optionals stdenv.isDarwin [
     Carbon
     Cocoa
+  ]);
+
+  cmakeFlags = [
+    "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString buildClient (lib.optionalString stdenv.isLinux ''
     # Convert and install desktop icon
     mkdir -p $out/share/pixmaps
     icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
@@ -68,7 +78,7 @@ stdenv.mkDerivation rec {
     cp '../other/bundle/client/PkgInfo' "$out/Applications/teeworlds.app/Contents/"
     ln -s "$out/bin/teeworlds" "$out/Applications/teeworlds.app/Contents/MacOS/"
     ln -s "$out/share/teeworlds/data" "$out/Applications/teeworlds.app/Contents/Resources/data"
-  '';
+  '');
 
   passthru.tests.teeworlds = nixosTests.teeworlds;
 

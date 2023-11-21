@@ -60,6 +60,7 @@ let
     homepage = "https://localsend.org/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
+    mainProgram = "localsend";
     maintainers = with maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;
   };

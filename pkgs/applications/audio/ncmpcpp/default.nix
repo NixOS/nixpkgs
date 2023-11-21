@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://rybczak.net/ncmpcpp/";
     changelog   = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jfrankenau koral lovek323 ];
+    maintainers = with maintainers; [ koral lovek323 ];
     platforms   = platforms.all;
     mainProgram = "ncmpcpp";
   };

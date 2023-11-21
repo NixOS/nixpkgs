@@ -1,9 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , python3
 }:
-
 stdenv.mkDerivation rec {
   version = "1.5";
   pname = "pastebinit";
@@ -21,11 +21,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Required to allow pastebinit 1.5 to run on Python 3.8
-    (fetchpatch {
-      name = "use-distro-module.patch";
-      url = "https://bazaar.launchpad.net/~arnouten/pastebinit/python38/diff/264?context=3";
-      sha256 = "1gp5inp4xald65xbb7fc5aqq5s2fhw464niwjjja9anqyp3zhawj";
-    })
+    ./use-distro-module.patch
+    # Required to remove the deprecation warning of FancyURLopener
+    ./use-urllib-request.patch
     # Required because pastebin.com now redirects http requests to https
     (fetchpatch {
       name = "pastebin-com-https.patch";
@@ -47,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "A software that lets you send anything you want directly to a pastebin from the command line";
     maintainers = with maintainers; [ raboof ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ lib.platforms.darwin;
   };
 }
