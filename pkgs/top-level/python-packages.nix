@@ -5160,6 +5160,8 @@ self: super: with self; {
 
   httpx = callPackage ../development/python-modules/httpx { };
 
+  httpx-auth = callPackage ../development/python-modules/httpx-auth { };
+
   httpx-ntlm = callPackage ../development/python-modules/httpx-ntlm { };
 
   httpx-socks = callPackage ../development/python-modules/httpx-socks { };
