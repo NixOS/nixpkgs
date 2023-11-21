@@ -74,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     "LDFLAGS=-lXi"
   ];
 
+  # error: call to undeclared function 'xnee_check_key';
+  # ISO C99 and later do not support implicit function declarations
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   # XXX: Actually tests require an X server.
   doCheck = true;
 

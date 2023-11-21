@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "0.5.0";
+  version = "1.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UFmchPFAO5azvLKgbKLbPooGhQ4SZHzrCe6jBo0X3bw=";
+    hash = "sha256-EsZYEc4Hf99PoP5X9LEgcGftI7597P4l1LTepTabGqU=";
   };
 
   postPatch = ''
