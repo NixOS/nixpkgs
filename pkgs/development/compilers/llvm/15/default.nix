@@ -1,5 +1,5 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, stdenvNoCC, cmake, ninja
-, gccForLibs, preLibcCrossHeaders
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+, preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross

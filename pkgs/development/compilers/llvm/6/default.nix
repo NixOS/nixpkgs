@@ -1,5 +1,4 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -8,7 +7,6 @@
 let
   release_version = "6.0.1";
   version = release_version; # differentiating these is important for rc's
-  targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
     url = "https://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
