@@ -10,19 +10,30 @@
 , libmusicbrainz5
 , curl
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyanrip";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "cyanreg";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-gH/rWTRYX10Q2Y9oSaMu0bOy3SMbcSNmH3dkXHFAw90";
+    repo = "cyanrip";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sWgHf8S4GZDAIvMUf5KvGy2y0JcUbRS53IjArdgokqc=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ ffmpeg-headless libcdio libcdio-paranoia libmusicbrainz5 curl ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    ffmpeg-headless
+    libcdio
+    libcdio-paranoia
+    libmusicbrainz5
+    curl
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/cyanreg/cyanrip";
@@ -31,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.zane ];
   };
-}
+})
