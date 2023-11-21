@@ -2229,7 +2229,9 @@ with pkgs;
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
-  gex = callPackage ../applications/version-management/gex { };
+  gex = callPackage ../applications/version-management/gex {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gfold = callPackage ../applications/version-management/gfold {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -6872,7 +6874,7 @@ with pkgs;
 
   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
 
-  circus = with python3Packages; toPythonApplication circus;
+  circus = with python310Packages; toPythonApplication circus;
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
@@ -10171,6 +10173,10 @@ with pkgs;
   };
 
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-footnote = callPackage ../tools/text/mdbook-footnote {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -25674,8 +25680,6 @@ with pkgs;
   xlslib = callPackage ../development/libraries/xlslib { };
 
   xsimd = callPackage ../development/libraries/xsimd { };
-
-  xsimd10 = callPackage ../development/libraries/xsimd/10.nix { };
 
   xtensor = callPackage ../development/libraries/xtensor { };
 
