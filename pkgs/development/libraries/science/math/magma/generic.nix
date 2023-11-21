@@ -23,7 +23,7 @@
   # At least one back-end has to be enabled,
   # and we can't default to CUDA since it's unfree
 , rocmSupport ? !cudaSupport
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 , stdenv
 , symlinkJoin
 }:
