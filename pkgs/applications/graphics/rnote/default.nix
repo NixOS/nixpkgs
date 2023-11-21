@@ -26,20 +26,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-cIy2+Q6HSLwbT0XXDK88Z0mdu46vWSZNTVl8MphXhw0=";
+    hash = "sha256-LLJurn5KJBlTtFrQXcc7HZqtIATOLgiwJqUsZe4cRIo=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "ink-stroke-modeler-rs-0.1.0" = "sha256-WfZwezohm8+ZXiKZlssTX+b/Izk1M4jFwxQejeTfc6M=";
-      "librsvg-2.57.0-beta.2" = "sha256-8k5KWhm9PIpdmf2DByTyrqX5mGAa+a7ZDGmVO2ERhTU=";
       "piet-0.6.2" = "sha256-WrQok0T7uVQEp8SvNWlgqwQHfS7q0510bnP1ecr+s1Q=";
     };
   };
@@ -81,7 +80,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    dos2unix build-aux/*.py # FIXME remove once updated to 0.9.0
     chmod +x build-aux/*.py
     patchShebangs build-aux
   '';
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda yrd ];
+    maintainers = with maintainers; [ dotlambda gepbird yrd ];
     platforms = platforms.unix;
   };
 }
