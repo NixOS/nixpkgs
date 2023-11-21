@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
           "${sys}/${pname}-${sys}-${fmver}-archive.tar.xz";
     inherit sha256;
   };
-  phases = [ "unpackPhase" "installPhase" ];
 
   installPhase = ''
     find .
