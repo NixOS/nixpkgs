@@ -182,7 +182,7 @@ in
     package = mkPackageOption pkgs "systemd" {};
 
     units = mkOption {
-      description = "Definition of systemd units.";
+      description = "Definition of systemd units; see {manpage}`systemd.unit(5)`.";
       default = {};
       type = systemdUtils.types.units;
     };
@@ -197,38 +197,38 @@ in
     targets = mkOption {
       default = {};
       type = systemdUtils.types.targets;
-      description = "Definition of systemd target units.";
+      description = "Definition of systemd target units; see {manpage}`systemd.target(5)`";
     };
 
     services = mkOption {
       default = {};
       type = systemdUtils.types.services;
-      description = "Definition of systemd service units.";
+      description = "Definition of systemd service units; see {manpage}`systemd.service(5)`.";
     };
 
     sockets = mkOption {
       default = {};
       type = systemdUtils.types.sockets;
-      description = "Definition of systemd socket units.";
+      description = "Definition of systemd socket units; see {manpage}`systemd.socket(5)`.";
     };
 
     timers = mkOption {
       default = {};
       type = systemdUtils.types.timers;
-      description = "Definition of systemd timer units.";
+      description = "Definition of systemd timer units; see {manpage}`systemd.timer(5)`.";
     };
 
     paths = mkOption {
       default = {};
       type = systemdUtils.types.paths;
-      description = "Definition of systemd path units.";
+      description = "Definition of systemd path units; see {manpage}`systemd.path(5)`.";
     };
 
     mounts = mkOption {
       default = [];
       type = systemdUtils.types.mounts;
       description = ''
-        Definition of systemd mount units.
+        Definition of systemd mount units; see {manpage}`systemd.mount(5)`.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
       '';
@@ -238,16 +238,17 @@ in
       default = [];
       type = systemdUtils.types.automounts;
       description = ''
-        Definition of systemd automount units.
-        This is a list instead of an attrSet, because systemd mandates the names to be derived from
-        the 'where' attribute.
+        Definition of systemd automount units; see {manpage}`systemd.automount(5)`.
+
+        This is a list instead of an attrSet, because systemd mandates
+        the names to be derived from the `where` attribute.
       '';
     };
 
     slices = mkOption {
       default = {};
       type = systemdUtils.types.slices;
-      description = "Definition of slice configurations.";
+      description = "Definition of slice configurations; see {manpage}`systemd.slice(5)`.";
     };
 
     generators = mkOption {
@@ -255,7 +256,8 @@ in
       default = {};
       example = { systemd-gpt-auto-generator = "/dev/null"; };
       description = ''
-        Definition of systemd generators.
+        Definition of systemd generators; see {manpage}`systemd.generator(5)`.
+
         For each `NAME = VALUE` pair of the attrSet, a link is generated from
         `/etc/systemd/system-generators/NAME` to `VALUE`.
       '';
@@ -274,7 +276,9 @@ in
     defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
-      description = "Default unit started when the system boots.";
+      description = ''
+        Default unit started when the system boots; see {manpage}`systemd.special(7)`.
+      '';
     };
 
     ctrlAltDelUnit = mkOption {
@@ -282,7 +286,8 @@ in
       type = types.str;
       example = "poweroff.target";
       description = ''
-        Target that should be started when Ctrl-Alt-Delete is pressed.
+        Target that should be started when Ctrl-Alt-Delete is pressed;
+        see {manpage}`systemd.special(7)`.
       '';
     };
 
@@ -309,7 +314,7 @@ in
       default = true;
       type = types.bool;
       description = ''
-        Whether to enable cgroup accounting.
+        Whether to enable cgroup accounting; see {manpage}`cgroups(7)`.
       '';
     };
 
@@ -317,7 +322,7 @@ in
       default = true;
       type = types.bool;
       description = ''
-        Whether to enable the unified cgroup hierarchy (cgroupsv2).
+        Whether to enable the unified cgroup hierarchy (cgroupsv2); see {manpage}`cgroups(7)`.
       '';
     };
 
@@ -326,7 +331,7 @@ in
       type = types.lines;
       example = "DefaultLimitCORE=infinity";
       description = ''
-        Extra config options for systemd. See systemd-system.conf(5) man page
+        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -337,7 +342,7 @@ in
       example = "HibernateDelaySec=1h";
       description = ''
         Extra config options for systemd sleep state logic.
-        See sleep.conf.d(5) man page for available options.
+        See {manpage}`sleep.conf.d(5)` man page for available options.
       '';
     };
 
@@ -379,8 +384,10 @@ in
       example = "30s";
       description = ''
         The amount of time which can elapse before a watchdog hardware device
-        will automatically reboot the system. Valid time units include "ms",
-        "s", "min", "h", "d", and "w".
+        will automatically reboot the system.
+
+        Valid time units include "ms", "s", "min", "h", "d", and "w";
+        see {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -391,9 +398,11 @@ in
       description = ''
         The amount of time which can elapse after a reboot has been triggered
         before a watchdog hardware device will automatically reboot the system.
-        Valid time units include "ms", "s", "min", "h", "d", and "w". If left
-        `null`, systemd will use its default of `10min`; see also {command}`man
-        5 systemd-system.conf`.
+        If left `null`, systemd will use its default of 10 minutes;
+        see {manpage}`systemd-system.conf(5)`.
+
+        Valid time units include "ms", "s", "min", "h", "d", and "w";
+        see also {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -404,8 +413,11 @@ in
       description = ''
         The amount of time which can elapse when kexec is being executed before
         a watchdog hardware device will automatically reboot the system. This
-        option should only be enabled if reloadTime is also enabled. Valid
-        time units include "ms", "s", "min", "h", "d", and "w".
+        option should only be enabled if `reloadTime` is also enabled;
+        see {manpage}`kexec(8)`.
+
+        Valid time units include "ms", "s", "min", "h", "d", and "w";
+        see also {manpage}`systemd.time(7)`.
       '';
     };
   };
