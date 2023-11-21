@@ -40,7 +40,9 @@ let
     , packpathDirs
     , ...
   }:
+  assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
+  stdenv.mkDerivation (finalAttrs:
   let
 
     rcContent = ''
@@ -51,7 +53,7 @@ let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-    commonWrapperArgs =
+    generatedWrapperArgs =
       # vim accepts a limited number of commands so we join them all
           [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
@@ -76,15 +78,12 @@ let
     finalMakeWrapperArgs =
       [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
-      ++ commonWrapperArgs
+      ++ lib.optionals finalAttrs.wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
+      ++ finalAttrs.generatedWrapperArgs
       ;
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
-  in
-  assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
-
-  stdenv.mkDerivation (finalAttrs: {
+  in {
       name = "neovim-${lib.getVersion neovim-unwrapped}${extraName}";
 
       __structuredAttrs = true;
@@ -93,9 +92,8 @@ let
       inherit wrapRc providerLuaRc packpathDirs;
       inherit python3Env rubyEnv;
       withRuby = rubyEnv != null;
-      inherit wrapperArgs;
+      inherit wrapperArgs generatedWrapperArgs;
       luaRcContent = rcContent;
-
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
       postBuild = lib.optionalString stdenv.isLinux ''
@@ -123,7 +121,7 @@ let
       ''
       + lib.optionalString (manifestRc != null) (let
         manifestWrapperArgs =
-          [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ] ++ commonWrapperArgs;
+          [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ] ++ finalAttrs.generatedWrapperArgs;
       in ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim
