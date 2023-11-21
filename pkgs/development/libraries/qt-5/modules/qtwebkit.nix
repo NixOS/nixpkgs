@@ -3,16 +3,16 @@
 , fontconfig, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison, flex, gdb, gperf, perl, pkg-config, python38, ruby
-, ICU, OpenGL, hyphen
+, ICU, OpenGL, hyphen, woff2, dwz
 }:
 
 qtModule {
   pname = "qtwebkit";
   propagatedBuildInputs = [ qtbase qtdeclarative qtlocation qtsensors qtwebchannel ]
     ++ lib.optional stdenv.isDarwin qtmultimedia;
-  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base hyphen ]
+  buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base hyphen woff2 ]
     ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ];
-  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python38 ruby cmake ];
+  nativeBuildInputs = [ bison flex gdb gperf perl pkg-config python38 ruby cmake dwz ];
 
   cmakeFlags = [ "-DPORT=Qt" ]
     ++ lib.optionals stdenv.isDarwin [
