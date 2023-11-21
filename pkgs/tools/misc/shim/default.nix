@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, lib, elfutils, vendorCertFile ? null
+, overrideSecurityPolicy ? false
 , defaultLoader ? null }:
 
 let
@@ -24,11 +25,20 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ elfutils ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${toString elfutils.dev}/include" ];
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-I${toString elfutils.dev}/include"
+    ]
+  # Somehow the define doesn't end up in DEFINES for the scope of lib/,
+  # so security_policy.c gets built without it, and that means it
+  # compiles to nothing, so linking fails. Couldn't be bothered to
+  # debug the makefiles just now, so here's a hack.
+    ++ lib.optional overrideSecurityPolicy "-DOVERRIDE_SECURITY_POLICY"
+  );
 
   makeFlags =
     lib.optional (vendorCertFile != null) "VENDOR_CERT_FILE=${vendorCertFile}"
     ++ lib.optional (defaultLoader != null) "DEFAULT_LOADER=${defaultLoader}"
+    ++ lib.optional overrideSecurityPolicy "OVERRIDE_SECURITY_POLICY=1"
     ++ [ target ];
 
   installPhase = ''
