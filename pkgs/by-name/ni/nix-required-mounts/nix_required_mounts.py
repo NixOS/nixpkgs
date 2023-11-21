@@ -8,8 +8,8 @@ from argparse import ArgumentParser
 from collections import deque
 from itertools import chain
 from pathlib import Path
-from sys import stderr
 from typing import Deque, Dict, List, Set, Tuple, TypeAlias, TypedDict
+import logging
 
 Glob: TypeAlias = str
 PathString: TypeAlias = str
@@ -46,6 +46,7 @@ parser.add_argument(
     default="conditional",
     help="Whether to print the final empty line",
 )
+parser.add_argument("-v", "--verbose", action="count", default=0)
 
 
 def symlink_parents(p: Path) -> List[Path]:
@@ -93,17 +94,22 @@ def validate_mounts(pattern: Pattern) -> List[Tuple[PathString, PathString, bool
 
 def entrypoint():
     args = parser.parse_args()
+
+    VERBOSITY_LEVELS = [logging.ERROR, logging.INFO, logging.DEBUG]
+
+    level_index = min(args.verbose, len(VERBOSITY_LEVELS) - 1)
+    logging.basicConfig(level=VERBOSITY_LEVELS[level_index])
+
     drv_path = args.derivation_path
 
     with open(args.patterns, "r") as f:
         allowed_patterns = json.load(f)
 
     if not Path(drv_path).exists():
-        print(
-            f"[E] {drv_path} doesn't exist."
+        logging.error(
+            f"{drv_path} doesn't exist."
             " Cf. https://github.com/NixOS/nix/issues/9272"
             " Exiting the hook",
-            file=stderr,
         )
 
     proc = subprocess.run(
@@ -117,17 +123,13 @@ def entrypoint():
     try:
         parsed_drv = json.loads(proc.stdout)
     except json.JSONDecodeError:
-        print(
-            "[E] Couldn't parse the output of"
+        logging.error(
+            "Couldn't parse the output of"
             "`nix show-derivation`"
             f". Expected JSON, observed: {proc.stdout}",
-            file=stderr,
         )
-        print(
-            textwrap.indent(proc.stdout.decode("utf8"), prefix=" " * 4),
-            file=stderr,
-        )
-        print("[I] Exiting the nix-required-binds hook", file=stderr)
+        logging.error(textwrap.indent(proc.stdout.decode("utf8"), prefix=" " * 4))
+        logging.info("Exiting the nix-required-binds hook")
         return
     [canon_drv_path] = parsed_drv.keys()
 
