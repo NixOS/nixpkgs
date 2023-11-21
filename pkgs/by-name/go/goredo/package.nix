@@ -9,11 +9,11 @@
 
 buildGoModule rec {
   pname = "goredo";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "http://www.goredo.cypherpunks.ru/download/${pname}-${version}.tar.zst";
-    hash = "sha256-i43ivJ2DOSebh7qRpYWTfTyQo/PFtzSXJciYbOy8e4s=";
+    hash = "sha256-oUC/N6NLEVBrFC3tSEsWEXUBl5oyZNmqRTFWFbgL+zg=";
   };
 
   patches = [ ./fix-tests.diff ];
