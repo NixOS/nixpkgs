@@ -22,7 +22,7 @@ buildGoModule rec {
     homepage = "https://esbuild.github.io";
     changelog = "https://github.com/evanw/esbuild/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucus16 marsam undefined-moe ];
+    maintainers = with maintainers; [ lucus16 marsam undefined-moe ivan ];
     mainProgram = "esbuild";
   };
 }
