@@ -40,3 +40,10 @@ Thanks a lot if you do!
 List of open PRs: https://github.com/NixOS/nixpkgs/pulls
 Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
 -->
+
+### Priorities
+
+Add a :+1: [reaction] to [pull requests you find important].
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+[pull requests you find important]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+sort%3Areactions-%2B1-desc
