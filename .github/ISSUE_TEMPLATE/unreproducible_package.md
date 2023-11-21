@@ -85,3 +85,10 @@ nix log $(nix path-info --derivation nixpkgs#<package>)
 
 (please share the relevant fragment of the diffoscope output here, and any
 additional analysis you may have done)
+
+### Priorities
+
+Add a :+1: [reaction] to [issues you find important].
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
+[issues you find important]: https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc
