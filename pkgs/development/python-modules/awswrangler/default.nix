@@ -16,6 +16,7 @@
 , pyarrow
 , pymysql
 , pyodbc
+, pyparsing
 , pytestCheckHook
 , pythonOlder
 , redshift-connector
@@ -57,6 +58,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     moto
+    pyparsing
     pytestCheckHook
   ];
 
