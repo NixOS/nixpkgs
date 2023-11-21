@@ -2,14 +2,11 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 # build_requires
 , setuptools
-, wheel
 # install_requires
 , attrs
-, charset-normalizer
 , multidict
 , async-timeout
 , yarl
@@ -17,38 +14,27 @@
 , aiosignal
 , aiodns
 , brotli
-, faust-cchardet
-, typing-extensions
 # tests_require
-, async-generator
-, freezegun
 , gunicorn
 , pytest-mock
 , pytestCheckHook
+, python-on-whales
 , re-assert
+, time-machine
 , trustme
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.6";
-  format = "pyproject";
+  version = "3.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sM8qRQG/+TMKilJItM6VGFHkFb3M6dwVjnbP1V4VCFw=";
+    hash = "sha256-CfIyktKRNQJeGej/Twpo3weP5O4BO8oBBbLoA5id6S0=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/aio-libs/aiohttp/pull/7260
-      # Merged upstream, should be dropped once updated to 3.9.0
-      url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
-      hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
@@ -56,31 +42,27 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
     attrs
-    charset-normalizer
     multidict
     async-timeout
     yarl
-    typing-extensions
     frozenlist
     aiosignal
     aiodns
     brotli
-    faust-cchardet
   ];
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
-    async-generator
-    freezegun
     gunicorn
     pytest-mock
     pytestCheckHook
+    python-on-whales
     re-assert
+    time-machine
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
     # Optional test dependency. Depends indirectly on pyopenssl, which is
     # broken on aarch64-darwin.
@@ -100,6 +82,8 @@ buildPythonPackage rec {
     "test_static_file_if_none_match"
     "test_static_file_if_match"
     "test_static_file_if_modified_since_past_date"
+    # don't run benchmarks
+    "test_import_time"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -108,15 +92,14 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    "test_proxy_functional.py" # FIXME package proxy.py
+    "tests/test_proxy_functional.py" # FIXME package proxy.py
   ];
 
   __darwinAllowLocalNetworking = true;
 
   # aiohttp in current folder shadows installed version
-  # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
-    cd tests
+    rm -r aiohttp
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
