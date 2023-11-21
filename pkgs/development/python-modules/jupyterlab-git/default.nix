@@ -1,34 +1,41 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , git
 , jupyter-server
-, jupyter-packaging
+, hatch-jupyter-builder
+, hatch-nodejs-version
+, hatchling
 , jupyterlab
 , nbdime
 , nbformat
 , pexpect
 , pytest-asyncio
+, pytest-jupyter
 , pytest-tornasync
 , pytestCheckHook
 , pythonOlder
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.42.0";
+  version = "0.50.0rc0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    hash = "sha256-GFnox6KnwKWFqsUWY0QYzMShXlH9KFSY3rRJA4RAiCk=";
+    hash = "sha256-euo8j7jt6oUJfZMF3VnbuM4uhibv+eijiXPO4UwZCiU=";
   };
 
   nativeBuildInputs = [
-    jupyter-packaging
+    hatch-jupyter-builder
+    hatch-nodejs-version
+    hatchling
+    jupyterlab
   ];
 
   propagatedBuildInputs = [
@@ -37,17 +44,20 @@ buildPythonPackage rec {
     git
     nbformat
     pexpect
+    traitlets
   ];
 
   nativeCheckInputs = [
     jupyterlab
     pytest-asyncio
+    pytest-jupyter
     pytest-tornasync
     pytestCheckHook
   ];
 
-  # All Tests on darwin fail or are skipped due to sandbox
-  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   disabledTestPaths = [
     "jupyterlab_git/tests/test_handlers.py"
@@ -66,6 +76,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "jupyterlab_git"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Jupyter lab extension for version control with Git";
