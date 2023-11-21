@@ -47,6 +47,7 @@ let
         ${optionalString (config.secureboot.privateKeyFile != null) "--key ${config.secureboot.privateKeyFile}"} \
         ${file}
     '';
+    # TODO: validate that the signed thing is the same as the original
     verifyDrv = pkgs.runCommand "${name}-signed-verified" {
       nativeBuildInputs = [ pkgs.buildPackages.sbsigntool ];
       passthru.unsigned = file;
