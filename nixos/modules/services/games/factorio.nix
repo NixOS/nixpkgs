@@ -124,6 +124,13 @@ in
           startup.
 
           This option should be used for credentials.
+
+          For example a settings file could contain:
+          ```json
+          {
+            "game-password": "hunter1"
+          }
+          ```
         '';
       };
       stateDirName = mkOption {
@@ -198,7 +205,7 @@ in
         description = lib.mdDoc ''
           Your factorio.com login credentials. Required for games with visibility public.
 
-          This option is unsecure. Use extraSettingsFile instead.
+          This option is insecure. Use extraSettingsFile instead.
         '';
       };
       package = mkOption {
@@ -216,7 +223,7 @@ in
         description = lib.mdDoc ''
           Your factorio.com login credentials. Required for games with visibility public.
 
-          This option is unsecure. Use extraSettingsFile instead.
+          This option is insecure. Use extraSettingsFile instead.
         '';
       };
       token = mkOption {
@@ -232,7 +239,7 @@ in
         description = lib.mdDoc ''
           Game password.
 
-          This option is unsecure. Use extraSettingsFile instead.
+          This option is insecure. Use extraSettingsFile instead.
         '';
       };
       requireUserVerification = mkOption {
