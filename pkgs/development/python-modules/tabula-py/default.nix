@@ -15,13 +15,13 @@
 buildPythonPackage rec {
   pname = "tabula-py";
   version = "2.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "chezou";
-    repo = pname;
+    repo = "tabula-py";
     rev = "refs/tags/v${version}";
     hash = "sha256-MGv2n8DoSjumD3lRcqwI0sEsaEDgs1n+st8DwZuZauo=";
   };
