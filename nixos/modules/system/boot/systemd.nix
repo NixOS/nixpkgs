@@ -229,8 +229,9 @@ in
       type = systemdUtils.types.mounts;
       description = ''
         Definition of systemd mount units; see {manpage}`systemd.mount(5)`.
-        This is a list instead of an attrSet, because systemd mandates the names to be derived from
-        the 'where' attribute.
+
+        This is a list instead of an attrSet, because systemd mandates
+        the names to be derived from the `where` attribute.
       '';
     };
 
@@ -374,7 +375,7 @@ in
       example = "/dev/watchdog";
       description = ''
         The path to a hardware watchdog device which will be managed by systemd.
-        If not specified, systemd will default to /dev/watchdog.
+        If not specified, systemd will default to `/dev/watchdog`.
       '';
     };
 
@@ -411,7 +412,7 @@ in
       default = null;
       example = "10m";
       description = ''
-        The amount of time which can elapse when kexec is being executed before
+        The amount of time which can elapse when `kexec` is being executed before
         a watchdog hardware device will automatically reboot the system. This
         option should only be enabled if `reloadTime` is also enabled;
         see {manpage}`kexec(8)`.
