@@ -1,0 +1,26 @@
+diff --git a/libshiboken/CMakeLists.txt b/libshiboken/CMakeLists.txt
+index 2e558a39d..30e2aeff6 100644
+--- a/libshiboken/CMakeLists.txt
++++ b/libshiboken/CMakeLists.txt
+@@ -41,7 +41,7 @@ endif()
+ add_custom_command(
+     OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/embed/signature_bootstrap_inc.h"
+     OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/embed/signature_inc.h"
+-    COMMAND ${host_python_path} -E
++    COMMAND ${host_python_path}
+             "${CMAKE_CURRENT_SOURCE_DIR}/embed/embedding_generator.py"
+             --cmake-dir "${CMAKE_CURRENT_BINARY_DIR}/embed"
+             --use-pyc ${use_pyc_in_embedding}
+diff --git a/libshiboken/embed/embedding_generator.py b/libshiboken/embed/embedding_generator.py
+index a058fd372..6f503512d 100644
+--- a/libshiboken/embed/embedding_generator.py
++++ b/libshiboken/embed/embedding_generator.py
+@@ -42,7 +42,7 @@ from build_scripts import utils
+ 
+ 
+ def runpy(cmd, **kw):
+-    subprocess.call([sys.executable, '-E'] + cmd.split(), **kw)
++    subprocess.call([sys.executable] + cmd.split(), **kw)
+ 
+ 
+ def create_zipfile(use_pyc, quiet):
