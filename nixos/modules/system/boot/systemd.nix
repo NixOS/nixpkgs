@@ -493,32 +493,32 @@ in
       "systemd/system.conf".text = ''
         [Manager]
         ManagerEnvironment=${lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment)}
-        ${optionalString config.systemd.enableCgroupAccounting ''
+        ${optionalString cfg.enableCgroupAccounting ''
           DefaultCPUAccounting=yes
           DefaultIOAccounting=yes
           DefaultBlockIOAccounting=yes
           DefaultIPAccounting=yes
         ''}
         DefaultLimitCORE=infinity
-        ${optionalString (config.systemd.watchdog.device != null) ''
-          WatchdogDevice=${config.systemd.watchdog.device}
+        ${optionalString (cfg.watchdog.device != null) ''
+          WatchdogDevice=${cfg.watchdog.device}
         ''}
-        ${optionalString (config.systemd.watchdog.runtimeTime != null) ''
-          RuntimeWatchdogSec=${config.systemd.watchdog.runtimeTime}
+        ${optionalString (cfg.watchdog.runtimeTime != null) ''
+          RuntimeWatchdogSec=${cfg.watchdog.runtimeTime}
         ''}
-        ${optionalString (config.systemd.watchdog.rebootTime != null) ''
-          RebootWatchdogSec=${config.systemd.watchdog.rebootTime}
+        ${optionalString (cfg.watchdog.rebootTime != null) ''
+          RebootWatchdogSec=${cfg.watchdog.rebootTime}
         ''}
-        ${optionalString (config.systemd.watchdog.kexecTime != null) ''
-          KExecWatchdogSec=${config.systemd.watchdog.kexecTime}
+        ${optionalString (cfg.watchdog.kexecTime != null) ''
+          KExecWatchdogSec=${cfg.watchdog.kexecTime}
         ''}
 
-        ${config.systemd.extraConfig}
+        ${cfg.extraConfig}
       '';
 
       "systemd/sleep.conf".text = ''
         [Sleep]
-        ${config.systemd.sleep.extraConfig}
+        ${cfg.sleep.extraConfig}
       '';
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
