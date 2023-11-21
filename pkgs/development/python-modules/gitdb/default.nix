@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "gitdb";
-  version = "4.0.10";
+  version = "4.0.11";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-brmQtp304VutiZ6oaNxGVyw/dTOXNWY7gd55sG8X65o=";
+    hash = "sha256-v1QhEmE21tCvVbwefBrxw5ejT1t71553bNPol4XCsEs=";
   };
 
   propagatedBuildInputs = [ smmap ];
