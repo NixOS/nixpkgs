@@ -1,5 +1,6 @@
 use anyhow::{anyhow, bail, Context};
 use lock::UrlOrString;
+use log::{debug, info};
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
@@ -19,6 +20,8 @@ pub fn lockfile(
     force_git_deps: bool,
     force_empty_cache: bool,
 ) -> anyhow::Result<Vec<Package>> {
+    debug!("parsing lockfile with contents:\n{content}");
+
     let mut packages = lock::packages(content)
         .context("failed to extract packages from lockfile")?
         .into_par_iter()
@@ -45,6 +48,8 @@ pub fn lockfile(
         };
 
         let path = dir.path().join("package");
+
+        info!("recursively parsing lockfile for {} at {path:?}", pkg.name);
 
         let lockfile_contents = fs::read_to_string(path.join("package-lock.json"));
 
