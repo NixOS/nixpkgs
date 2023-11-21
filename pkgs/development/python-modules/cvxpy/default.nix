@@ -31,6 +31,7 @@ buildPythonPackage rec {
   # we need to patch out numpy version caps from upstream
   postPatch = ''
     sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+    # add a comment to trigger rebuilds. do not commit to master.
   '';
 
   nativeBuildInputs = [
