@@ -3,7 +3,9 @@
 let
   cfg = config.programs.nix-required-mounts;
   package = pkgs.nix-required-mounts;
-  overridenPackage = package.override { inherit (cfg) allowedPatterns; };
+  overridenPackage = package.override {
+    inherit (cfg) allowedPatterns;
+  };
 
   Mount = with lib;
     types.submodule {
@@ -37,7 +39,6 @@ let
     });
 
   driverPaths = [
-    # symlinks in /run/opengl-driver/lib:
     pkgs.addOpenGLRunpath.driverLink
 
     # mesa:
