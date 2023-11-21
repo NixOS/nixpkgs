@@ -11348,6 +11348,9 @@ with self; {
     buildInputs = [ BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
     propagatedBuildInputs = [ ClassLoad DBDSQLite DataDump DirSelf FileCountLines GetoptLongDescriptive IOInteractive IPCSystemSimple ListMoreUtils Moose MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk namespaceclean ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    patches = [
+      ../development/perl-modules/Hailo-fix-test-gld.patch
+    ];
     postPatch = ''
       patchShebangs bin
     '';
