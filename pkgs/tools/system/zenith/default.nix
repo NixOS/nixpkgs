@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
       + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

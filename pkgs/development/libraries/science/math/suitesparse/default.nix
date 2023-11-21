@@ -60,6 +60,12 @@ stdenv.mkDerivation rec {
   ]
   ;
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
+    # update the install names of the output dylibs.
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
+
   buildFlags = [
     # Build individual shared libraries, not demos
     "library"

@@ -15,13 +15,6 @@ let
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
 
-  openssl3Gem = fetchFromGitHub {
-    owner = "ruby";
-    repo = "openssl";
-    rev = "v3.0.2";
-    hash = "sha256-KhuKRP1JkMJv7CagGRQ0KKGOd5Oh0FP0fbj0VZ4utGo=";
-  };
-
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
@@ -156,12 +149,6 @@ let
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           cp -r ${rubygems}/test/rubygems $sourceRoot/test
-        '' + opString (ver.majMin == "3.0" && opensslSupport) ''
-          # Replace the Gem by a OpenSSL3-compatible one.
-          echo "Hotpatching the OpenSSL gem with a 3.x series for OpenSSL 3 support..."
-          cp -vr ${openssl3Gem}/ext/openssl $sourceRoot/ext/
-          cp -vr ${openssl3Gem}/lib/ $sourceRoot/ext/openssl/
-          cp -vr ${openssl3Gem}/{History.md,openssl.gemspec} $sourceRoot/ext/openssl/
         '';
 
         postPatch = ''
@@ -334,11 +321,6 @@ in {
     sha256 = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
   };
 
-  ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "6" "";
-    sha256 = "sha256-bmy9SQAw15EMD/IO3vq0KU380QRvD49H94tZeYesaD4=";
-  };
-
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "4" "";
     sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
@@ -351,8 +333,8 @@ in {
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "0" "preview2";
-    sha256 = "sha256-MM6LD+EbN7WsCI9aV2V0S5NerEW7ianjgXMVMxRPWZE=";
+    version = rubyVersion "3" "3" "0" "preview3";
+    sha256 = "sha256-CWkUG+kuZ+DtuEqPs1SsyY8BvXjmAqI6DxNgRcgvSAk=";
     cargoSha256 = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 

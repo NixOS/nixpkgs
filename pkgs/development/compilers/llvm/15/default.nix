@@ -266,11 +266,13 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-        "-nostdlib++"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+          "-nostdlib++"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -281,10 +283,12 @@ in let
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
-      nixSupport.cc-cflags = [
-        "-rtlib=compiler-rt"
-        "-B${targetLlvmLibraries.compiler-rt}/lib"
-      ];
+      nixSupport.cc-cflags =
+        [
+          "-rtlib=compiler-rt"
+          "-B${targetLlvmLibraries.compiler-rt}/lib"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
     clangNoCompilerRt = wrapCCWith rec {
@@ -293,16 +297,22 @@ in let
       bintools = bintoolsNoLibc';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-      nixSupport.cc-cflags = [ "-nostartfiles" ];
+      nixSupport.cc-cflags =
+        [
+          "-nostartfiles"
+        ]
+        ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
 
-    clangNoCompilerRtWithLibc = wrapCCWith rec {
+    clangNoCompilerRtWithLibc = wrapCCWith (rec {
       cc = tools.clang-unwrapped;
       libcxx = null;
       bintools = bintools';
       extraPackages = [ ];
       extraBuildCommands = mkExtraBuildCommands0 cc;
-    };
+    } // lib.optionalAttrs stdenv.targetPlatform.isWasm {
+      nixSupport.cc-cflags = [ "-fno-exceptions" ];
+    });
 
   });
 

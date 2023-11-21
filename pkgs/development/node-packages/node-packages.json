@@ -166,7 +166,6 @@
 , "markdown-link-check"
 , "mastodon-bot"
 , "mathjax"
-, "mathjax-node-cli"
 , "meat"
 , "mocha"
 , "multi-file-swagger"
@@ -310,5 +309,4 @@
 , "@yaegassy/coc-nginx"
 , "yalc"
 , "yarn"
-, "@zwave-js/server"
 ]

@@ -26,26 +26,6 @@ let
   mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
 
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
-
-  cmakeCommonFlags = [
-    "-Wno-dev"
-    (mkFlag custatsSupport "DETAILED_CU_STATS")
-    (mkFlag debugSupport "CHECKED_BUILD")
-    (mkFlag ppaSupport "ENABLE_PPA")
-    (mkFlag vtuneSupport "ENABLE_VTUNE")
-    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-    # Potentially riscv cross could be fixed by providing the correct CMAKE_SYSTEM_PROCESSOR flag
-  ] ++ lib.optional (isCross && stdenv.hostPlatform.isRiscV) "-DENABLE_ASSEMBLY=OFF";
-
-  cmakeStaticLibFlags = [
-    "-DHIGH_BIT_DEPTH=ON"
-    "-DENABLE_CLI=OFF"
-    "-DENABLE_SHARED=OFF"
-    "-DEXPORT_C_API=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isPower [
-    "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
-  ];
-
 in
 
 stdenv.mkDerivation rec {
@@ -96,31 +76,53 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake nasm ] ++ lib.optionals (numaSupport) [ numactl ];
 
+  cmakeFlags = [
+    "-Wno-dev"
+    (mkFlag custatsSupport "DETAILED_CU_STATS")
+    (mkFlag debugSupport "CHECKED_BUILD")
+    (mkFlag ppaSupport "ENABLE_PPA")
+    (mkFlag vtuneSupport "ENABLE_VTUNE")
+    (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+  ];
+
+  cmakeStaticLibFlags = [
+    "-DHIGH_BIT_DEPTH=ON"
+    "-DENABLE_CLI=OFF"
+    "-DENABLE_SHARED=OFF"
+    "-DEXPORT_C_API=OFF"
+  ] ++ lib.optionals stdenv.hostPlatform.isPower [
+    "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
+  ];
+
+  preConfigure = lib.optionalString multibitdepthSupport ''
+    cmake -B build-10bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags
+    cmake -B build-12bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags -DMAIN12=ON
+    cmakeFlagsArray+=(
+      -DEXTRA_LIB="x265-10.a;x265-12.a"
+      -DEXTRA_LINK_FLAGS=-L.
+      -DLINKED_10BIT=ON
+      -DLINKED_12BIT=ON
+    )
+  '' + ''
+    cmakeFlagsArray+=(
+      -DGIT_ARCHETYPE=1 # https://bugs.gentoo.org/814116
+      ${mkFlag (!stdenv.hostPlatform.isStatic) "ENABLE_SHARED"}
+      -DHIGH_BIT_DEPTH=OFF
+      -DENABLE_HDR10_PLUS=ON
+      ${mkFlag (isCross && stdenv.hostPlatform.isAarch) "CROSS_COMPILE_ARM"}
+      ${mkFlag cliSupport "ENABLE_CLI"}
+      ${mkFlag unittestsSupport "ENABLE_TESTS"}
+    )
+  '';
+
   # Builds 10bits and 12bits static libs on the side if multi bit-depth is wanted
   # (we are in x265_<version>/source/build)
-  preBuild = lib.optionalString (multibitdepthSupport) ''
-    cmake -S ../ -B ../build-10bits ${toString cmakeCommonFlags} ${toString cmakeStaticLibFlags}
+  preBuild = lib.optionalString multibitdepthSupport ''
     make -C ../build-10bits -j $NIX_BUILD_CORES
-    cmake -S ../ -B ../build-12bits ${toString cmakeCommonFlags} ${toString cmakeStaticLibFlags} -DMAIN12=ON
     make -C ../build-12bits -j $NIX_BUILD_CORES
     ln -s ../build-10bits/libx265.a ./libx265-10.a
     ln -s ../build-12bits/libx265.a ./libx265-12.a
   '';
-
-  cmakeFlags = cmakeCommonFlags ++ [
-    "-DGIT_ARCHETYPE=1" # https://bugs.gentoo.org/814116
-    "-DENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-    "-DHIGH_BIT_DEPTH=OFF"
-    "-DENABLE_HDR10_PLUS=ON"
-    (mkFlag (isCross && stdenv.hostPlatform.isAarch) "CROSS_COMPILE_ARM")
-    (mkFlag cliSupport "ENABLE_CLI")
-    (mkFlag unittestsSupport "ENABLE_TESTS")
-  ] ++ lib.optionals (multibitdepthSupport) [
-    "-DEXTRA_LIB=x265-10.a;x265-12.a"
-    "-DEXTRA_LINK_FLAGS=-L."
-    "-DLINKED_10BIT=ON"
-    "-DLINKED_12BIT=ON"
-  ];
 
   doCheck = unittestsSupport;
   checkPhase = ''

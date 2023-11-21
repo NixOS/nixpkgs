@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postBuild = lib.optionalString (pythonSupport) ''
       cd python
-      ${python.pythonForBuild.interpreter} setup.py install --prefix=../pythonlib
+      ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
       cd -
   '';
 

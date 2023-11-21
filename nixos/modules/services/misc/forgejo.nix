@@ -357,6 +357,14 @@ in
         assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.forgejo.database.user must match services.forgejo.user if the database is to be automatically provisioned";
       }
+      { assertion = cfg.database.createDatabase && usePostgresql -> cfg.database.user == cfg.database.name;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.forgejo.createDatabase` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.forgejo.settings = {
@@ -423,21 +431,10 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
-
-    # Work around 'pq: permission denied for schema public' with postgres v15, until a
-    # solution for `services.postgresql.ensureUsers` is found.
-    # See https://github.com/NixOS/nixpkgs/issues/216989
-    systemd.services.postgresql.postStart = lib.mkIf (
-      usePostgresql
-      && cfg.database.createDatabase
-      && lib.strings.versionAtLeast config.services.postgresql.package.version "15.0"
-    ) (lib.mkAfter ''
-      $PSQL -tAc 'ALTER DATABASE "${cfg.database.name}" OWNER TO "${cfg.database.user}";'
-    '');
 
     services.mysql = optionalAttrs (useMysql && cfg.database.createDatabase) {
       enable = mkDefault true;
@@ -677,5 +674,6 @@ in
     };
   };
 
+  meta.doc = ./forgejo.md;
   meta.maintainers = with lib.maintainers; [ bendlas emilylange ];
 }

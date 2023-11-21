@@ -358,6 +358,7 @@ in {
       [ "preDeviceCommands" ]
       [ "preLVMCommands" ]
       [ "postDeviceCommands" ]
+      [ "postResumeCommands" ]
       [ "postMountCommands" ]
       [ "extraUdevRulesCommands" ]
       [ "extraUtilsCommands" ]
@@ -369,7 +370,7 @@ in {
 
     boot.initrd.availableKernelModules = [
       # systemd needs this for some features
-      "autofs4"
+      "autofs"
       # systemd-cryptenroll
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
     ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";

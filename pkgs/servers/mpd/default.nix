@@ -148,7 +148,7 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
+      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \
           --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume

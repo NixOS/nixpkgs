@@ -2,7 +2,7 @@
   guile_1_8, xmodmap, which, freetype,
   libjpeg,
   sqlite,
-  tex ? null,
+  texliveSmall ? null,
   aspell ? null,
   git ? null,
   python3 ? null,
@@ -23,7 +23,8 @@ let
   pname = "texmacs";
   version = "2.1.2";
   common = callPackage ./common.nix {
-    inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
+    inherit extraFonts chineseFonts japaneseFonts koreanFonts;
+    tex = texliveSmall;
   };
 in
 stdenv.mkDerivation {
@@ -70,7 +71,7 @@ stdenv.mkDerivation {
       which
       ghostscriptX
       aspell
-      tex
+      texliveSmall
       git
       python3
     ])

@@ -4,10 +4,10 @@
 mkPulumiPackage rec {
   owner = "pulumi";
   repo = "pulumi-azure-native";
-  version = "2.11.0";
+  version = "2.13.0";
   rev = "v${version}";
-  hash = "sha256-qz/dCQR4BV+noJj7WPGuzDNMaR7I/D01F7FfvxU8z28=";
-  vendorHash = "sha256-SICms1JJk8Q10XWC69bw/RXsIPL43l1s+Aqy+cLOwRI=";
+  hash = "sha256-YyJxACeXyY7hZkTbLXT/ASNWa1uv9h3cvPoItR183fU=";
+  vendorHash = "sha256-20wHbNE/fenxP9wgTSzAnx6b1UYlw4i1fi6SesTs0sc=";
   cmdGen = "pulumi-gen-azure-native";
   cmdRes = "pulumi-resource-azure-native";
   extraLdflags = [

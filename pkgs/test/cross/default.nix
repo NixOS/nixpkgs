@@ -152,6 +152,13 @@ let
     # lots of interesting corner cases.  Only expected to work for
     # x86_64-linux buildPlatform.
     pkgs.pkgsMusl.pkgsCross.gnu64.hello
+
+    # Two web browsers -- exercises almost the entire packageset
+    pkgs.pkgsCross.aarch64-multiplatform.qt5.qutebrowser
+    pkgs.pkgsCross.aarch64-multiplatform.firefox
+
+    # Uses pkgsCross.riscv64-embedded; see https://github.com/NixOS/nixpkgs/issues/267859
+    pkgs.spike
   ];
 
 in {

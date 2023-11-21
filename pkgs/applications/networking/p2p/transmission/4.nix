@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       include <local/bin.transmission-daemon>
     }
     EOF
+    install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
   '';
 
   passthru.tests = {

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zigtools/zls/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/zigtools/zls";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda fortuneteller2k ];
+    maintainers = with lib.maintainers; [ figsoda moni ];
     platforms = lib.platforms.unix;
   };
 })

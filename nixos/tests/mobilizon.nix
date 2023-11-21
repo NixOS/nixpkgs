@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ lib, ... }:
     meta.maintainers = with lib.maintainers; [ minijackson erictapen ];
 
     nodes.server =
-      { ... }:
+      { pkgs, ... }:
       {
         services.mobilizon = {
           enable = true;
@@ -24,6 +24,8 @@ import ./make-test-python.nix ({ lib, ... }:
             };
           };
         };
+
+        services.postgresql.package = pkgs.postgresql_14;
 
         security.pki.certificateFiles = [ certs.ca.cert ];
 

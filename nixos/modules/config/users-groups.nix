@@ -153,7 +153,7 @@ let
           {file}`pam_mount.conf.xml`.
           Useful attributes might include `path`,
           `options`, `fstype`, and `server`.
-          See <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>
+          See <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>
           for more information.
         '';
       };

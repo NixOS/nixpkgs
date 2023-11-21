@@ -11,7 +11,7 @@
 , hdf5
 , boost
 , gflags
-, protobuf3_21
+, protobuf_21
 , config
 , ocl-icd
 , buildPackages
@@ -37,12 +37,11 @@
 , blas
 , enableContrib ? true
 
-, enableCuda ? config.cudaSupport && stdenv.hostPlatform.isx86_64
+, enableCuda ? config.cudaSupport
 , enableCublas ? enableCuda
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
 , enableCufft ? enableCuda
 , cudaPackages ? {}
-, symlinkJoin
 , nvidia-optical-flow-sdk
 
 , enableLto ? true
@@ -83,10 +82,15 @@
 , Accelerate
 , bzip2
 , callPackage
-}:
+}@inputs:
 
 let
   version = "4.7.0";
+
+  # It's necessary to consistently use backendStdenv when building with CUDA
+  # support, otherwise we get libstdc++ errors downstream
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
 
   src = fetchFromGitHub {
     owner = "opencv";
@@ -121,11 +125,11 @@ let
       sha256 = "1msbkc3zixx61rcg6a04i1bcfhw1phgsrh93glq1n80hgsk3nbjq";
     } + "/ippicv";
     files = let name = platform: "ippicv_2019_${platform}_general_20180723.tgz"; in
-      if stdenv.hostPlatform.system == "x86_64-linux" then
+      if effectiveStdenv.hostPlatform.system == "x86_64-linux" then
         { ${name "lnx_intel64"} = "c0bd78adb4156bbf552c1dfe90599607"; }
-      else if stdenv.hostPlatform.system == "i686-linux" then
+      else if effectiveStdenv.hostPlatform.system == "i686-linux" then
         { ${name "lnx_ia32"} = "4f38432c30bfd6423164b7a24bbc98a0"; }
-      else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
         { ${name "mac_intel64"} = "fe6b2bb75ae0e3f19ad3ae1a31dfa4a2"; }
       else
         throw "ICV is not available for this platform (or not yet supported by this package)";
@@ -232,35 +236,12 @@ let
   #https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) backendStdenv cudaFlags cudaVersion;
+  inherit (cudaPackages) cudaFlags cudaVersion;
   inherit (cudaFlags) cudaCapabilities;
 
-  cuda-common-redist = with cudaPackages; [
-    cuda_cccl # <thrust/*>
-    libnpp # npp.h
-  ] ++ lib.optionals enableCublas [
-    libcublas # cublas_v2.h
-  ] ++ lib.optionals enableCudnn [
-    cudnn # cudnn.h
-  ] ++ lib.optionals enableCufft [
-    libcufft # cufft.h
-  ];
-
-  cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaVersion}";
-    paths = with cudaPackages; [
-      cuda_cudart # cuda_runtime.h
-      cuda_nvcc
-    ] ++ cuda-common-redist;
-   };
-
-  cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
-    paths = cuda-common-redist;
-   };
 in
 
-stdenv.mkDerivation {
+effectiveStdenv.mkDerivation {
   pname = "opencv";
   inherit version src;
 
@@ -317,9 +298,9 @@ stdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
-  buildInputs = [ zlib pcre boost gflags protobuf3_21 ]
+  buildInputs = [ zlib pcre boost gflags protobuf_21 ]
     ++ lib.optional enablePython pythonPackages.python
-    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) hdf5
+    ++ lib.optional (effectiveStdenv.buildPlatform == effectiveStdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
     ++ lib.optional enableVtk vtk
@@ -330,7 +311,7 @@ stdenv.mkDerivation {
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableJPEG2000 openjpeg
     ++ lib.optional enableFfmpeg ffmpeg
-    ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
+    ++ lib.optionals (enableFfmpeg && effectiveStdenv.isDarwin)
       [ VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
     ++ lib.optional enableOvis ogre
@@ -343,11 +324,21 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals effectiveStdenv.isDarwin [
       bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
     ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
-    ++ lib.optionals enableCuda [ cuda-redist ];
+    ++ lib.optionals enableCuda  (with cudaPackages; [
+      cuda_cudart
+      cuda_cccl # <thrust/*>
+      libnpp # npp.h
+    ] ++ lib.optionals enableCublas [
+      libcublas # cublas_v2.h
+    ] ++ lib.optionals enableCudnn [
+      cudnn # cudnn.h
+    ] ++ lib.optionals enableCufft [
+      libcufft # cufft.h
+  ]);
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
     ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
@@ -357,7 +348,9 @@ stdenv.mkDerivation {
     pythonPackages.pip
     pythonPackages.wheel
     pythonPackages.setuptools
-  ] ++ lib.optionals enableCuda [ cuda-native-redist ];
+  ] ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -369,7 +362,7 @@ stdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf3_21}"
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf_21}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=${printEnabled runAccuracyTests}"
@@ -400,17 +393,14 @@ stdenv.mkDerivation {
     (opencvFlag "ENABLE_LTO" enableLto)
     (opencvFlag "ENABLE_THIN_LTO" (
       enableLto && (
-        # Only clang supports thin LTO, so we must either be using clang through the stdenv,
-        stdenv.cc.isClang ||
-          # or through the backend stdenv.
-          (enableCuda && backendStdenv.cc.isClang)
+        # Only clang supports thin LTO, so we must either be using clang through the effectiveStdenv,
+        effectiveStdenv.cc.isClang ||
+          # or through the backend effectiveStdenv.
+          (enableCuda && effectiveStdenv.cc.isClang)
       )
     ))
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    # We need to set the C and C++ host compilers for CUDA to the same compiler.
-    "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
-    "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
 
     # OpenCV respects at least three variables:
@@ -421,7 +411,7 @@ stdenv.mkDerivation {
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
 
     "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals effectiveStdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
 
@@ -435,7 +425,7 @@ stdenv.mkDerivation {
     "-DBUILD_JPEG=OFF"
     "-DBUILD_PNG=OFF"
     "-DBUILD_WEBP=OFF"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!effectiveStdenv.isDarwin) [
     "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
@@ -489,14 +479,17 @@ stdenv.mkDerivation {
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }
-    // lib.optionalAttrs (!stdenv.isDarwin) { inherit qimgv; }
+    // lib.optionalAttrs (!effectiveStdenv.isDarwin) { inherit qimgv; }
     // lib.optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-    // lib.optionalAttrs (stdenv.buildPlatform != "x86_64-darwin") {
+    // lib.optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
       opencv4-tests = callPackage ./tests.nix {
         inherit enableGStreamer enableGtk2 enableGtk3 runAccuracyTests runPerformanceTests testDataSrc;
         inherit opencv4;
-        };
       };
+    }
+    // lib.optionalAttrs (enableCuda) {
+      no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
+    };
   } // lib.optionalAttrs enablePython { pythonPath = [ ]; };
 
   meta = with lib; {

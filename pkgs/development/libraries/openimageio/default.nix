@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
   };
 
+  # Workaround broken zlib version detecion in CMake < 3.37.
+  postPatch = ''
+    substituteInPlace ./src/cmake/Config.cmake.in \
+      --replace " @ZLIB_VERSION@" ""
+  '';
+
   outputs = [ "bin" "out" "dev" "doc" ];
 
   nativeBuildInputs = [

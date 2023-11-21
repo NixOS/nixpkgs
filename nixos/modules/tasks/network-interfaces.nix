@@ -498,7 +498,7 @@ in
         option will result in an evaluation error if the hostname is empty or
         no domain is specified.
 
-        Modules that accept a mere `networing.hostName` but prefer a fully qualified
+        Modules that accept a mere `networking.hostName` but prefer a fully qualified
         domain name may use `networking.fqdnOrHostName` instead.
       '';
     };

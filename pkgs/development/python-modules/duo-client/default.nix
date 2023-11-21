@@ -3,7 +3,8 @@
 , fetchFromGitHub
 , freezegun
 , mock
-, nose2
+, pytestCheckHook
+, pythonOlder
 , pytz
 , setuptools
 , six
@@ -12,6 +13,9 @@
 buildPythonPackage rec {
   pname = "duo-client";
   version = "5.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "duosecurity";
@@ -26,20 +30,29 @@ buildPythonPackage rec {
       --replace "flake8" ""
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = [
     six
   ];
 
   nativeCheckInputs = [
     freezegun
     mock
-    nose2
+    pytestCheckHook
     pytz
   ];
 
   pythonImportsCheck = [
     "duo_client"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_server_hostname"
+    "test_server_hostname_with_port"
   ];
 
   meta = with lib; {

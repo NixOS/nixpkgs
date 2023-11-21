@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , libgit2_1_6
+, rust-jemalloc-sys
 , zlib
 , stdenv
 , darwin
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libgit2_1_6
+    rust-jemalloc-sys
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

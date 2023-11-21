@@ -23,6 +23,7 @@
 , gnome
 , gsettings-desktop-schemas
 , gsound
+, gst_all_1
 , gtk4
 , ibus
 , libgnomekbd
@@ -134,7 +135,11 @@ stdenv.mkDerivation rec {
     tracker-miners # for search locations dialog
     udisks2
     upower
-  ];
+  ] ++ (with gst_all_1; [
+    # For animations in Mouse panel.
+    gst-plugins-base
+    gst-plugins-good
+  ]);
 
   preConfigure = ''
     # For ITS rules

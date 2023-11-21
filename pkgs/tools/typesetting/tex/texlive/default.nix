@@ -6,7 +6,7 @@
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
-, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
+, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, html-tidy, ncurses, zip
 , libfaketime, asymptote, biber-ms, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
@@ -33,7 +33,7 @@ let
         stdenv lib bin tlpdb tlpdbxz tl
         installShellFiles
         coreutils findutils gawk getopt ghostscript_headless gnugrep
-        gnumake gnupg gnused gzip ncurses perl python3 ruby zip;
+        gnumake gnupg gnused gzip html-tidy ncurses perl python3 ruby zip;
     };
   in overrides tlpdb;
 
@@ -148,6 +148,7 @@ let
   # The correctness of this collation is tested by tests.texlive.licenses
   licenses = with lib.licenses; {
     scheme-basic = [ free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-bookpub = [ artistic2 asl20 fdl13Only free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain ];
     scheme-context = [ bsd2 bsd3 cc-by-sa-40 free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21
       lppl1 lppl13c mit ofl publicDomain x11 ];
     scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
@@ -175,7 +176,7 @@ let
   };
 
   combined = recurseIntoAttrs (
-    lib.genAttrs [ "scheme-basic" "scheme-context" "scheme-full" "scheme-gust" "scheme-infraonly"
+    lib.genAttrs [ "scheme-basic" "scheme-bookpub" "scheme-context" "scheme-full" "scheme-gust" "scheme-infraonly"
       "scheme-medium" "scheme-minimal" "scheme-small" "scheme-tetex" ]
       (pname:
         (buildTeXEnv {
@@ -192,6 +193,11 @@ let
         }
       )
   );
+
+  schemes = lib.listToAttrs (map (s: {
+    name = "texlive" + s;
+    value = lib.addMetaAttrs { license = licenses.${"scheme-" + (lib.toLower s)}; } (buildTeXEnv { requiredTeXPackages = ps: [ ps.${"scheme-" + (lib.toLower s)} ]; });
+  }) [ "Basic" "BookPub" "ConTeXt" "Full" "GUST" "InfraOnly" "Medium" "Minimal" "Small" "TeTeX" ]);
 
 in
   allPkgLists // {
@@ -211,6 +217,8 @@ in
     combine = assert assertions; combine;
 
     combined = assert assertions; combined;
+
+    inherit schemes;
 
     # convenience alias
     withPackages = (buildTeXEnv { }).withPackages;

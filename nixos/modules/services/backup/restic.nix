@@ -133,13 +133,15 @@ in
         };
 
         timerConfig = mkOption {
-          type = types.attrsOf unitOption;
+          type = types.nullOr (types.attrsOf unitOption);
           default = {
             OnCalendar = "daily";
             Persistent = true;
           };
           description = lib.mdDoc ''
-            When to run the backup. See {manpage}`systemd.timer(5)` for details.
+            When to run the backup. See {manpage}`systemd.timer(5)` for
+            details. If null no timer is created and the backup will only
+            run when explicitly started.
           '';
           example = {
             OnCalendar = "00:05";
@@ -345,7 +347,7 @@ in
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };
-          } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null || backup.backupPrepareCommand != null) {
+          } // optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
             preStart = ''
               ${optionalString (backup.backupPrepareCommand != null) ''
                 ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
@@ -360,12 +362,12 @@ in
                 ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
               ''}
             '';
-          } // optionalAttrs (backup.dynamicFilesFrom != null || backup.backupCleanupCommand != null) {
+          } // optionalAttrs (doBackup || backup.backupCleanupCommand != null) {
             postStop = ''
               ${optionalString (backup.backupCleanupCommand != null) ''
                 ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
               ''}
-              ${optionalString (backup.dynamicFilesFrom != null) ''
+              ${optionalString doBackup ''
                 rm ${filesFromTmpFile}
               ''}
             '';
@@ -378,7 +380,7 @@ in
           wantedBy = [ "timers.target" ];
           timerConfig = backup.timerConfig;
         })
-        config.services.restic.backups;
+        (filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (name: backup: let

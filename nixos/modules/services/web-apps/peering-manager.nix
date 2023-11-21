@@ -186,9 +186,7 @@ in {
       ensureUsers = [
         {
           name = "peering-manager";
-          ensurePermissions = {
-            "DATABASE \"peering-manager\"" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };

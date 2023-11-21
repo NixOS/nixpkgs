@@ -23,6 +23,7 @@
 , glib
 , graphene
 , gtk4
+, libGL
 , libadwaita
 , libdrm
 , mesa
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
     glib
     graphene
     gtk4
+    libGL
     libadwaita
     libdrm
     mesa

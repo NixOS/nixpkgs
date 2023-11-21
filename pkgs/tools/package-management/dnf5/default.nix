@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.6";
+  version = "5.1.7";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-yIv29mwCBk2H1HjJr2IYm/1eZU379jTNEuTuaoIu4TA=";
+    hash = "sha256-SXgl4YFWl1A3N2/IkDftvBl6Rwhnymxe8AqqaekGHTc=";
   };
 
   nativeBuildInputs = [ cmake createrepo_c gettext help2man pkg-config ];
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rpm-software-management/dnf5";
     changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ malt3 ];
+    maintainers = with lib.maintainers; [ malt3 katexochen ];
     mainProgram = "dnf5";
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -17,7 +17,9 @@
 , pyusb
 , pyyaml
 , requests
+, setuptools
 , setuptools-scm
+, wheel
 , xmodem
 }:
 
@@ -32,13 +34,13 @@ buildPythonPackage rec {
     sha256 = "sha256-yhlBqqCLOt6liw4iv8itG6E4QfIa7cW76QJqefUM5dw=";
   };
 
-  patches = [
-    # Pyserial within Nixpkgs already includes the necessary fix, remove the
-    # pyserial version check from labgrid.
-    ./0001-serialdriver-remove-pyserial-version-check.patch
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  pyproject = true;
 
   propagatedBuildInputs = [
     ansicolors

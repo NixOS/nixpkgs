@@ -26,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.22.0";
+  version = "1.23.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    hash = "sha256-lVHjcIGtO96BAYoNJPJFw/ggaZBUlZj7Mal6aDgKe3E=";
+    hash = "sha256-BD4u/hi0rSK5bUNN3nY/vtMs+NbCINxp3w0P+53Gb8Y=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     pkg-config
     texinfo
   ] ++ lib.optionals pythonSupport [
-    python3.pythonForBuild
+    python3.pythonOnBuildForHost
     ncurses
     swig2
     which

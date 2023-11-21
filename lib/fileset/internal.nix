@@ -7,7 +7,6 @@ let
     isString
     pathExists
     readDir
-    seq
     split
     trace
     typeOf
@@ -17,7 +16,6 @@ let
     attrNames
     attrValues
     mapAttrs
-    setAttrByPath
     zipAttrsWith
     ;
 
@@ -28,7 +26,6 @@ let
   inherit (lib.lists)
     all
     commonPrefix
-    drop
     elemAt
     filter
     findFirst
@@ -170,7 +167,12 @@ rec {
       else
         value
     else if ! isPath value then
-      if isStringLike value then
+      if value ? _isLibCleanSourceWith then
+        throw ''
+          ${context} is a `lib.sources`-based value, but it should be a file set or a path instead.
+              To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+              Note that this only works for sources created from paths.''
+      else if isStringLike value then
         throw ''
           ${context} ("${toString value}") is a string-like value, but it should be a file set or a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
@@ -179,7 +181,7 @@ rec {
           ${context} is of type ${typeOf value}, but it should be a file set or a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} (${toString value}) does not exist.''
+        ${context} (${toString value}) is a path that does not exist.''
     else
       _singleton value;
 
@@ -208,9 +210,9 @@ rec {
     if firstWithBase != null && differentIndex != null then
       throw ''
         ${functionContext}: Filesystem roots are not the same:
-            ${(head list).context}: root "${toString firstBaseRoot}"
-            ${(elemAt list differentIndex).context}: root "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
-            Different roots are not supported.''
+            ${(head list).context}: Filesystem root is "${toString firstBaseRoot}"
+            ${(elemAt list differentIndex).context}: Filesystem root is "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
+            Different filesystem roots are not supported.''
     else
       filesets;
 
@@ -473,6 +475,59 @@ rec {
     else
       nonEmpty;
 
+  # Turn a builtins.filterSource-based source filter on a root path into a file set
+  # containing only files included by the filter.
+  # The filter is lazily called as necessary to determine whether paths are included
+  # Type: Path -> (String -> String -> Bool) -> fileset
+  _fromSourceFilter = root: sourceFilter:
+    let
+      # During the recursion we need to track both:
+      # - The path value such that we can safely call `readDir` on it
+      # - The path string value such that we can correctly call the `filter` with it
+      #
+      # While we could just recurse with the path value,
+      # this would then require converting it to a path string for every path,
+      # which is a fairly expensive operation
+
+      # Create a file set from a directory entry
+      fromDirEntry = path: pathString: type:
+        # The filter needs to run on the path as a string
+        if ! sourceFilter pathString type then
+          null
+        else if type == "directory" then
+          fromDir path pathString
+        else
+          type;
+
+      # Create a file set from a directory
+      fromDir = path: pathString:
+        mapAttrs
+          # This looks a bit funny, but we need both the path-based and the path string-based values
+          (name: fromDirEntry (path + "/${name}") (pathString + "/${name}"))
+          # We need to readDir on the path value, because reading on a path string
+          # would be unspecified if there are multiple filesystem roots
+          (readDir path);
+
+      rootPathType = pathType root;
+
+      # We need to convert the path to a string to imitate what builtins.path calls the filter function with.
+      # We don't want to rely on `toString` for this though because it's not very well defined, see ../path/README.md
+      # So instead we use `lib.path.splitRoot` to safely deconstruct the path into its filesystem root and subpath
+      # We don't need the filesystem root though, builtins.path doesn't expose that in any way to the filter.
+      # So we only need the components, which we then turn into a string as one would expect.
+      rootString = "/" + concatStringsSep "/" (components (splitRoot root).subpath);
+    in
+    if rootPathType == "directory" then
+      # We imitate builtins.path not calling the filter on the root path
+      _create root (fromDir root rootString)
+    else
+      # Direct files are always included by builtins.path without calling the filter
+      # But we need to lift up the base path to its parent to satisfy the base path invariant
+      _create (dirOf root)
+        {
+          ${baseNameOf root} = rootPathType;
+        };
+
   # Transforms the filesetTree of a file set to a shorter base path, e.g.
   # _shortenTreeBase [ "foo" ] (_create /foo/bar null)
   # => { bar = null; }
@@ -731,29 +786,66 @@ rec {
         _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)
       ) (_directoryEntries path lhs);
 
-  _fileFilter = predicate: fileset:
+  # Filters all files in a path based on a predicate
+  # Type: ({ name, type, ... } -> Bool) -> Path -> FileSet
+  _fileFilter = predicate: root:
     let
-      recurse = path: tree:
-        mapAttrs (name: subtree:
-          if isAttrs subtree || subtree == "directory" then
-            recurse (path + "/${name}") subtree
-          else if
-            predicate {
-              inherit name;
-              type = subtree;
-              # To ensure forwards compatibility with more arguments being added in the future,
-              # adding an attribute which can't be deconstructed :)
-              "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
-            }
-          then
-            subtree
+      # Check the predicate for a single file
+      # Type: String -> String -> filesetTree
+      fromFile = name: type:
+        if
+          predicate {
+            inherit name type;
+            # To ensure forwards compatibility with more arguments being added in the future,
+            # adding an attribute which can't be deconstructed :)
+            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
+          }
+        then
+          type
+        else
+          null;
+
+      # Check the predicate for all files in a directory
+      # Type: Path -> filesetTree
+      fromDir = path:
+        mapAttrs (name: type:
+          if type == "directory" then
+            fromDir (path + "/${name}")
           else
-            null
-        ) (_directoryEntries path tree);
+            fromFile name type
+        ) (readDir path);
+
+      rootType = pathType root;
     in
-    if fileset._internalIsEmptyWithoutBase then
-      _emptyWithoutBase
+    if rootType == "directory" then
+      _create root (fromDir root)
     else
-      _create fileset._internalBase
-        (recurse fileset._internalBase fileset._internalTree);
+      # Single files are turned into a directory containing that file or nothing.
+      _create (dirOf root) {
+        ${baseNameOf root} =
+          fromFile (baseNameOf root) rootType;
+      };
+
+  # Support for `builtins.fetchGit` with `submodules = true` was introduced in 2.4
+  # https://github.com/NixOS/nix/commit/55cefd41d63368d4286568e2956afd535cb44018
+  _fetchGitSubmodulesMinver = "2.4";
+
+  # Mirrors the contents of a Nix store path relative to a local path as a file set.
+  # Some notes:
+  # - The store path is read at evaluation time.
+  # - The store path must not include files that don't exist in the respective local path.
+  #
+  # Type: Path -> String -> FileSet
+  _mirrorStorePath = localPath: storePath:
+    let
+      recurse = focusedStorePath:
+        mapAttrs (name: type:
+          if type == "directory" then
+            recurse (focusedStorePath + "/${name}")
+          else
+            type
+        ) (builtins.readDir focusedStorePath);
+    in
+    _create localPath
+      (recurse storePath);
 }

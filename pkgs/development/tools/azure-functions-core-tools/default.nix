@@ -27,7 +27,7 @@
     };
   };
 
-  platformInfo = builtins.getAttr stdenv.targetPlatform.system platforms;
+  platformInfo = builtins.getAttr stdenv.hostPlatform.system platforms;
 in
   stdenv.mkDerivation rec {
     pname = "azure-functions-core-tools";

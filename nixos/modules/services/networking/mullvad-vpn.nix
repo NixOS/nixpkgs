@@ -65,7 +65,9 @@ with lib;
         pkgs.iproute2
         # Needed for ping
         "/run/wrappers"
-      ];
+        # See https://github.com/NixOS/nixpkgs/issues/262681
+      ] ++ (lib.optional config.networking.resolvconf.enable
+        config.networking.resolvconf.package);
       startLimitBurst = 5;
       startLimitIntervalSec = 20;
       serviceConfig = {

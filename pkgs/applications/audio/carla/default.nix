@@ -61,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
         filename="$(basename -- "$file")"
         substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
     done
+  '' + lib.optionalString withGtk2 ''
+    # Will try to dlopen() libgtk-x11-2.0 at runtime when using the bridge.
+    substituteInPlace source/bridges-ui/Makefile \
+        --replace '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
   '';
 
   dontWrapQtApps = true;

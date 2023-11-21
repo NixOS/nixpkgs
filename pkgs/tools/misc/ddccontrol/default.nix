@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , intltool
 , libxml2
@@ -32,6 +33,14 @@ stdenv.mkDerivation rec {
     pciutils
     gtk2
     ddccontrol-db
+  ];
+
+  patches = [
+    # Upstream commit, fixed the version number in v1.0.0
+    (fetchpatch {
+      url = "https://github.com/ddccontrol/ddccontrol/commit/fc8c5b5d0f2b64b08b95f4a7d8f47f2fd8ceec34.patch";
+      hash = "sha256-SB1BaolTNCUYgj38nMg1uLUqOHvnwCr8T3cnfu/7rjI=";
+    })
   ];
 
   configureFlags = [

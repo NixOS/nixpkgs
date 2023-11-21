@@ -10,11 +10,13 @@
 , qtwebengine
 , enableWideVine ? false
 , widevine-cdm
-, enableVulkan ? stdenv.isLinux
+# can cause issues on some graphics chips
+, enableVulkan ? false
 , vulkan-loader
 }:
 
 let
+  isQt6 = lib.versions.major qtbase.version == "6";
   pdfjs = let
     version = "3.9.179";
   in
@@ -50,10 +52,11 @@ python3.pkgs.buildPythonApplication {
   ];
 
   propagatedBuildInputs = with python3.pkgs; ([
-    pyyaml pyqt6-webengine jinja2 pygments
+    pyyaml (if isQt6 then pyqt6-webengine else pyqtwebengine) jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    readability-lxml pykeepass stem
+    readability-lxml pykeepass
+    stem
     pynacl
     # extensive ad blocking
     adblock
@@ -80,7 +83,7 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     make -f misc/Makefile \
-      PYTHON=${python3}/bin/python3 \
+      PYTHON=${python3.pythonOnBuildForHost.interpreter} \
       PREFIX=. \
       DESTDIR="$out" \
       DATAROOTDIR=/share \
@@ -119,8 +122,10 @@ python3.pkgs.buildPythonApplication {
 
   meta = with lib; {
     homepage    = "https://github.com/qutebrowser/qutebrowser";
+    changelog   = "https://github.com/qutebrowser/qutebrowser/blob/v${version}/doc/changelog.asciidoc";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
+    mainProgram = "qutebrowser";
     platforms   = if enableWideVine then [ "x86_64-linux" ] else qtwebengine.meta.platforms;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda nrdxp ];
   };

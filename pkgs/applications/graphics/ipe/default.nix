@@ -13,7 +13,7 @@
 , libspiro
 , lua5
 , qtbase
-, texlive
+, texliveSmall
 , wrapQtAppsHook
 , zlib
 , withTeXLive ? true
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     qtbase
     zlib
   ] ++ (lib.optionals withTeXLive [
-    texlive
+    texliveSmall
   ]);
 
   makeFlags = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
   ];
 
-  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+  qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
 
   enableParallelBuilding = true;
 

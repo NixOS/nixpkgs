@@ -70,7 +70,9 @@ stdenv.mkDerivation rec {
     qtwayland
   ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = ''
+    export SOURCE_DATE_EPOCH=$(date -d 20${lib.versions.major version}0101 +%s)
+  '' + lib.optionalString stdenv.isDarwin ''
     export LC_ALL=en_US.UTF-8
   '';
 

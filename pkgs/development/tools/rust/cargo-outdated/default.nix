@@ -6,6 +6,7 @@
 , stdenv
 , curl
 , CoreFoundation
+, CoreServices
 , Security
 , SystemConfiguration
 }:
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     curl
     CoreFoundation
+    CoreServices
     Security
     SystemConfiguration
   ];

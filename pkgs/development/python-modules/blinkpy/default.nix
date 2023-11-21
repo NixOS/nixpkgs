@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.22.2";
+  version = "0.22.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T6ryiWVpraaXzwHYBXjuIO8PUqUcQBcLi1+O+iNBaoc=";
+    hash = "sha256-J9eBZv/uizkZz53IX1ZfF7IeMOnBonyMD2c5DphW8BQ=";
   };
 
   postPatch = ''

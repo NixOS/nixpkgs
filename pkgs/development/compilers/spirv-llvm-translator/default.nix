@@ -55,10 +55,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config cmake spirv-tools ]
+  nativeBuildInputs = [ pkg-config cmake ]
     ++ (if isROCm then [ llvm ] else [ llvm.dev ]);
 
-  buildInputs = [ spirv-headers ]
+  buildInputs = [ spirv-headers spirv-tools ]
     ++ lib.optionals (!isROCm) [ llvm ];
 
   nativeCheckInputs = [ lit ];

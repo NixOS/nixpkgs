@@ -2,7 +2,6 @@
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , jsonschema
 , parameterized
 , pydantic
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.74.0";
+  version = "1.78.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,15 +25,8 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uOfBR0bvLVyBcfSAkSqOx4KjmSYbfktpJlxKjipfj50=";
+    hash = "sha256-hSXJBEntj3k3Kml+Yuvn19X7YXL+Y1hXBkb8iZ7DxR4=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/aws/serverless-application-model/commit/e41b0f02204635a655100b68dd38220af32a2728.patch";
-      hash = "sha256-V6KXdXQUr9fvLzxI6sUMrSRnGX5SrAaDygcaQ87FaQ8=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
@@ -87,7 +79,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
-    homepage = "https://github.com/awslabs/serverless-application-model";
+    homepage = "https://github.com/aws/serverless-application-model";
     changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

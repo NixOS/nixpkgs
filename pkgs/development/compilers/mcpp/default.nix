@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash= "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
   };
 
+  patches = [
+    ./readlink.patch
+  ];
+
   configureFlags = [ "--enable-mcpplib" ];
 
   meta = with lib; {

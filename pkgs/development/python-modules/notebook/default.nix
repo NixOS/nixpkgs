@@ -7,7 +7,7 @@
 , hatchling
 , jupyter-server
 , jupyterlab
-, jupyterlab_server
+, jupyterlab-server
 , notebook-shim
 , tornado
 , pytest-jupyter
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jupyter-server
     jupyterlab
-    jupyterlab_server
+    jupyterlab-server
     notebook-shim
     tornado
   ];

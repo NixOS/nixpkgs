@@ -832,7 +832,7 @@ let
       };
 
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
-    })).overrideScope' liftJaneStreet;
+    })).overrideScope liftJaneStreet;
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
       self = self.janeStreet_0_9_0;
@@ -1045,6 +1045,8 @@ let
     merlin-extend = callPackage ../development/ocaml-modules/merlin-extend { };
 
     merlin-lib = callPackage ../development/tools/ocaml/merlin/lib.nix { };
+
+    metadata = callPackage ../development/ocaml-modules/metadata { };
 
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
@@ -1295,8 +1297,6 @@ let
     ocamlnet = callPackage ../development/ocaml-modules/ocamlnet { };
 
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
-
-    ocamlsdl = callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
@@ -1605,6 +1605,8 @@ let
     rfc7748 = callPackage ../development/ocaml-modules/rfc7748 { };
 
     ringo = callPackage ../development/ocaml-modules/ringo { };
+
+    riot = callPackage ../development/ocaml-modules/riot { };
 
     rock = callPackage ../development/ocaml-modules/rock { };
 
@@ -1967,7 +1969,7 @@ in let inherit (pkgs) callPackage; in rec
   # *and* non-JS OCaml libraries can pull in the same version of JS transitive
   # dependencies. Remove this once ligo and stanc can be compiled against
   # janestreet 0.16 libraries.
-  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope' (self: super: super // super.janeStreet_0_15);
+  ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope (self: super: super // super.janeStreet_0_15);
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

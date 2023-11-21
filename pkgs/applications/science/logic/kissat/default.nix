@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ shnarazk ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = "http://fmv.jku.at/kissat";
+    homepage = "https://fmv.jku.at/kissat";
   };
 }

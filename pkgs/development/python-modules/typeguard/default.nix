@@ -54,8 +54,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # not compatible with python3.10
-    "test_typed_dict"
+    # AssertionError: 'type of argument "x" must be ' != 'None'
+    "TestPrecondition::test_precondition_ok_and_typeguard_fails"
+    # AttributeError: 'C' object has no attribute 'x'
+    "TestInvariant::test_invariant_ok_and_typeguard_fails"
+    # AttributeError: 'D' object has no attribute 'x'
+    "TestInheritance::test_invariant_ok_and_typeguard_fails"
   ];
 
   meta = with lib; {

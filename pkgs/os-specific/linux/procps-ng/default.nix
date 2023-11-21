@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RRiz56r9NOwH0AY9JQ/UdJmbILIAIYw65W9dIRPxQbQ=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    ./v3-CVE-2023-4016.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # NOTE: Starting from 4.x we will not need a patch anymore, but need to add
     # "--disable-w" to configureFlags instead to prevent the utmp errors
     (fetchpatch {

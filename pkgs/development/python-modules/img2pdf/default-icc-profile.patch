@@ -14,7 +14,7 @@ index 036232b..d2e7829 100755
 -        if os.path.exists(profile):
 -            return profile
 -    return "/usr/share/color/icc/sRGB.icc"
-+    return "@colord@/share/color/icc/colord/sRGB.icc"
++    return "@srgbProfile@"
  
  
  def get_main_parser():

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "evohome-async";
-  version = "0.4.3";
+  version = "0.4.9";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "zxdavb";
     repo = "evohome-async";
     rev = "refs/tags/${version}";
-    hash = "sha256-GDrDOwB/cgry3eRNx8IMiBoLu5xLTnG5ByuuwnWA7DY=";
+    hash = "sha256-4AhxvUkLiej7OSj9Y19tJnVCzNlC5PF6KB5zTHN8gLA=";
   };
 
   nativeBuildInputs = [

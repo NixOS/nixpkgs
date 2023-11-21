@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.24.5";
+  version = "0.24.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-+ngEh5pidwJJfir66kCj2xy90qOroORBd4LdJMqJm7M=";
+    hash = "sha256-ify+ipUjhk1UFt4aYHEWQLa8KXInnSrfRu0ndsLZ/3w=";
   };
 
   postPatch = ''

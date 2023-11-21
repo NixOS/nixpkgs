@@ -12,13 +12,13 @@ let
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";
-  version = "dev-2023-08";
+  version = "dev-2023-11";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     rev = version;
-    hash = "sha256-pmgrauhB5/JWBkwrAm7tCml9IYQhXyGXsNVDKTntA0M=";
+    hash = "sha256-5plcr+j9aFSaLfLQXbG4WD1GH6rE7D3uhlUbPaDEYf8=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     description = "A fast, concise, readable, pragmatic and open sourced programming language";
     homepage = "https://odin-lang.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ luc65r astavie ];
+    maintainers = with maintainers; [ luc65r astavie znaniye ];
     platforms = platforms.x86_64 ++ [ "aarch64-darwin" ];
   };
 }

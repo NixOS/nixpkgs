@@ -88,9 +88,9 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "ASCIIDOC=${buildPackages.asciidoc}/bin/asciidoc"
     "XMLTO=${buildPackages.xmlto}/bin/xmlto"
-  ] ++ (lib.optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
-    "ARCH=${linuxArchMapping."${stdenv.targetPlatform.linuxArch}"}"
-    "CROSS_COMPILE=${stdenv.targetPlatform.config}-"
+  ] ++ (lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ARCH=${linuxArchMapping."${stdenv.hostPlatform.linuxArch}"}"
+    "CROSS_COMPILE=${stdenv.hostPlatform.config}-"
   ]);
 
   outputs = [ "out" "dev" "man" ];

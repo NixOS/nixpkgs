@@ -21,6 +21,8 @@ const fixupYarnLock = async (lockContents, verbose) => {
 
 			if (verbose) console.log(`Rewriting URL ${url} for dependency ${dep}`)
 			pkg.resolved = urlToName(url)
+			if (hash)
+				pkg.resolved += `#${hash}`
 
 			return [dep, pkg]
 		})

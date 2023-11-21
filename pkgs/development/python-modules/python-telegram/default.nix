@@ -1,11 +1,12 @@
 { lib
 , stdenv
-, fetchpatch
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , setuptools
 , tdlib
+, telegram-text
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -13,30 +14,33 @@ buildPythonPackage rec {
   version = "0.18.0";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UbJW/op01qe/HchfJUlBPBY9/W8NbZkEmFM8gZ5+EmI=";
+  src = fetchFromGitHub {
+    owner = "alexander-akhmetov";
+    repo = "python-telegram";
+    rev = version;
+    hash = "sha256-2Q0nUZ2TMVWznd05+fqYojkRn4xfFZJrlqb1PMuBsAY=";
   };
-
-  patches = [
-    # Search for the system library first, and fallback to the embedded one if the system was not found
-    (fetchpatch {
-      url = "https://github.com/alexander-akhmetov/python-telegram/commit/b0af0985910ebb8940cff1b92961387aad683287.patch";
-      hash = "sha256-ZqsntaiC2y9l034gXDMeD2BLO/RcsbBII8FomZ65/24=";
-    })
-  ];
 
   postPatch = ''
     # Remove bundled libtdjson
     rm -fr telegram/lib
 
     substituteInPlace telegram/tdjson.py \
-      --replace "ctypes.util.find_library(\"libtdjson\")" \
+      --replace "ctypes.util.find_library(\"tdjson\")" \
                 "\"${tdlib}/lib/libtdjson${stdenv.hostPlatform.extensions.sharedLibrary}\""
   '';
 
   propagatedBuildInputs = [
     setuptools
+    telegram-text
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "TestGetTdjsonTdlibPath"
   ];
 
   pythonImportsCheck = [

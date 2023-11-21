@@ -6,8 +6,8 @@ let
   };
   variants = if stdenv.isLinux then
     {
-      version = "5.0.21";
-      sha256 = "sha256-knAqb6bT1KpO1Gi4sKhG22OtCPhOR3NMmhRjUgseUPM=";
+      version = "5.0.22";
+      sha256 = "sha256-NIsx6nwXGsuk+ff+LOCwOMpT/HAaNn89t4jtJvKprIA=";
       patches = [ ./fix-build-with-boost-1.79-5_0-linux.patch ];
     }
   else lib.optionalAttrs stdenv.isDarwin

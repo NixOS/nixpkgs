@@ -6,9 +6,16 @@
 , mpi
 , gfortran
 , llvmPackages
-, gpuBackend ? "none"
 , cudaPackages
 , rocmPackages
+, config
+, gpuBackend ? (
+  if config.cudaSupport
+  then "cuda"
+  else if config.rocmSupport
+  then "rocm"
+  else "none"
+)
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , python3
 , openssl
+, libiconv
 , cargo
 , rustPlatform
 , rustc
@@ -57,6 +58,8 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

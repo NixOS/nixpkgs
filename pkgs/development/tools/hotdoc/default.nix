@@ -22,7 +22,7 @@
 , setuptools
 , toposort
 , wheezy-template
-, libclang
+, llvmPackages
 , gst_all_1
 }:
 
@@ -100,9 +100,9 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace hotdoc/extensions/c/c_extension.py \
       --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${libclang.lib}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${libclang.lib}/lib"'
+      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${llvmPackages.libclang.version}"' \
+      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${llvmPackages.libclang.lib}"' \
+      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${llvmPackages.libclang.lib}/lib"'
   '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark

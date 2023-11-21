@@ -9,23 +9,22 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "1.2.0";
+  version = "1.3.0";
+
+  disabled = pythonOlder "3.8";
+
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pluggy";
     rev = "refs/tags/${version}";
-    hash = "sha256-SzJu7ITdmUgusn8sz6fRBpxTMQncWIViP5NCAj4q4GM=";
+    hash = "sha256-jLasnqmATIOoheGu90Wo1+iTCwslYzNOKckqHIZDJec=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
 
   # To prevent infinite recursion with pytest
   doCheck = false;

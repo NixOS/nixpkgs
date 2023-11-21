@@ -5,6 +5,8 @@
 , buildPythonPackage
 , dill
 , fetchFromGitHub
+, flask
+, flask-cors
 , moto
 , pytest-asyncio
 , pytestCheckHook
@@ -41,6 +43,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dill
+    flask
+    flask-cors
     moto
     pytest-asyncio
     pytestCheckHook

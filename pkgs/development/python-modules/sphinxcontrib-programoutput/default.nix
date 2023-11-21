@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinxcontrib.programoutput" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx extension to include program output";
     homepage = "https://github.com/NextThought/sphinxcontrib-programoutput";

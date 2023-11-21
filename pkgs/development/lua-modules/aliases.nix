@@ -39,5 +39,6 @@ let
 in
 
 mapAliases {
-  "lpty" = throw "lpy was removed because broken and unmaintained "; # added 2023-10-14
+  lpty = throw "lpy was removed because broken and unmaintained "; # added 2023-10-14
+  cyrussasl = throw "cyrussasl was removed because broken and unmaintained "; # added 2023-10-18
 }

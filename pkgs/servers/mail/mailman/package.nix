@@ -29,7 +29,7 @@ buildPythonPackage rec {
     flufl_i18n
     flufl_lock
     gunicorn
-    lazr_config
+    lazr-config
     passlib
     requests
     sqlalchemy

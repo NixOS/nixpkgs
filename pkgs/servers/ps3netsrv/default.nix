@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, mbedtls, meson, ninja, fetchFromGitHub }:
+{ lib, stdenv, fetchzip, mbedtls, meson, ninja }:
 let
   webManModVersion = "1.47.42";
 in
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     ninja
     mbedtls
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Doff64_t=off_t";
 
   postInstall = ''
     install -Dm644 ../LICENSE.TXT $out/usr/share/licenses/${pname}/LICENSE.TXT

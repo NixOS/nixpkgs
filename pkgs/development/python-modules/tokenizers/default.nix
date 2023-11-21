@@ -60,7 +60,7 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.14.0";
+  version = "0.14.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zCpKNMzIdQ0lLWdn4cENtBEMTA7+fg+N6wQGvio9llE=";
+    hash = "sha256-cq7dQLttNkV5UUhXujxKKMuzhD7hz+zTTKxUKlvz1s0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

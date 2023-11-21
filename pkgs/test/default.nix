@@ -39,41 +39,42 @@ with pkgs;
       name = "cc-wrapper-supported";
       builtGCC =
         let
-          names = lib.pipe (attrNames gccTests) ([
-            (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.cc))
+          inherit (lib) filterAttrs;
+          sets = lib.pipe gccTests ([
+            (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
-            (filter (n: n != "gcc49Stdenv"))
-            (filter (n: n != "gccMultiStdenv"))
+            (filterAttrs (n: _: n != "gcc49Stdenv"))
+            (filterAttrs (n: _: n != "gccMultiStdenv"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             # fails with things like
             # ld: warning: ld: warning: object file (trunctfsf2_s.o) was built for newer macOS version (11.0) than being linked (10.5)
             # ld: warning: ld: warning: could not create compact unwind for ___fixunstfdi: register 20 saved somewhere other than in frame
-            (filter (n: n != "gcc11Stdenv"))
+            (filterAttrs (n: _: n != "gcc11Stdenv"))
           ]);
         in
-        toJSON (lib.genAttrs names (name: { name = pkgs.${name};  }));
+        toJSON sets;
 
       builtLLVM =
         let
-          names = lib.pipe (attrNames llvmTests) ([
-            (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.stdenv.cc))
-            (filter (n: lib.meta.availableOn stdenv.hostPlatform pkgs.${n}.libcxxStdenv.cc))
+          inherit (lib) filterAttrs;
+          sets = lib.pipe llvmTests ([
+            (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.clang.stdenv.cc))
+            (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.libcxx.stdenv.cc))
 
             # libcxxStdenv broken
             # fix in https://github.com/NixOS/nixpkgs/pull/216273
           ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
             # libcxx does not build for some reason on aarch64-linux
-            (filter (n: n != "llvmPackages_7"))
+            (filterAttrs (n: _: n != "llvmPackages_7"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-            (filter (n: n != "llvmPackages_5"))
-            (filter (n: n != "llvmPackages_6"))
-            (filter (n: n != "llvmPackages_7"))
-            (filter (n: n != "llvmPackages_8"))
-            (filter (n: n != "llvmPackages_9"))
-            (filter (n: n != "llvmPackages_10"))
+            (filterAttrs (n: _: n != "llvmPackages_6"))
+            (filterAttrs (n: _: n != "llvmPackages_7"))
+            (filterAttrs (n: _: n != "llvmPackages_8"))
+            (filterAttrs (n: _: n != "llvmPackages_9"))
+            (filterAttrs (n: _: n != "llvmPackages_10"))
           ]);
         in
-        toJSON (lib.genAttrs names (name: { stdenv = pkgs.${name}.stdenv; libcxx = pkgs.${name}.libcxxStdenv;  }));
+        toJSON sets;
         buildCommand = ''
           touch $out
         '';

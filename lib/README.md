@@ -74,3 +74,23 @@ path/tests/prop.sh
 # Run the lib.fileset tests
 fileset/tests.sh
 ```
+
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- Format the commit messages in the following way:
+
+  ```
+  lib.(section): (init | add additional argument | refactor | etc)
+
+  (Motivation for change. Additional information.)
+  ```
+
+  Examples:
+
+  * lib.getExe': check arguments
+  * lib.fileset: Add an additional argument in the design docs
+
+    Closes #264537
+

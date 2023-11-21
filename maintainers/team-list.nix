@@ -323,12 +323,16 @@ with lib.maintainers; {
   geospatial = {
     members = [
       imincik
-      sikmir
       nh2
+      sikmir
       willcohen
+    ];
+    githubTeams = [
+      "geospatial"
     ];
     scope = "Maintain geospatial packages.";
     shortName = "Geospatial";
+    enableFeatureFreezePing = true;
   };
 
   gitlab = {
@@ -393,6 +397,7 @@ with lib.maintainers; {
       cdepillabout
       expipiplus1
       maralorn
+      ncfavier
       sternenseemann
     ];
     githubTeams = [
@@ -911,7 +916,6 @@ with lib.maintainers; {
 
   tts = {
     members = [
-      hexa
       mic92
     ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";

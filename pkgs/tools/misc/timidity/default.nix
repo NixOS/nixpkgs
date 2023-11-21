@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/timidity/;
     cp ${./timidity.cfg} $out/share/timidity/timidity.cfg
+    substituteAllInPlace $out/share/timidity/timidity.cfg
     tar --strip-components=1 -xf $instruments -C $out/share/timidity/
   '';
   # This fixup step is unnecessary and fails on Darwin

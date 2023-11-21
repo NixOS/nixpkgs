@@ -1,6 +1,6 @@
-{ lib, stdenvNoCC, fetchFromGitHub, yt-dlp }:
+{ lib, buildLua, fetchFromGitHub, yt-dlp }:
 
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "mpv-playlistmanager";
   version = "unstable-2023-08-09";
 
@@ -17,21 +17,12 @@ stdenvNoCC.mkDerivation rec {
       'youtube_dl_executable = "${lib.getBin yt-dlp}/bin/yt-dlp"',
   '';
 
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-    install -D -t $out/share/mpv/scripts playlistmanager.lua
-    runHook postInstall
-  '';
-
-  passthru.scriptName = "playlistmanager.lua";
+  scriptPath = "playlistmanager.lua";
 
   meta = with lib; {
     description = "Mpv lua script to create and manage playlists";
     homepage = "https://github.com/jonniek/mpv-playlistmanager";
     license = licenses.unlicense;
-    platforms = platforms.all;
     maintainers = with maintainers; [ lunik1 ];
   };
 }

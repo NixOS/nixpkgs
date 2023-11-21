@@ -6,18 +6,21 @@
 , grpcio
 , protobuf
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pygnmi";
-  version = "0.8.12";
+  version = "0.8.13";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "akarneliuk";
     repo = "pygnmi";
-    rev = "v${version}";
-    sha256 = "sha256-5dAjN/HDFKQmJIjhergBjSmHQKhBxqy/Jneh1pLCHrw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-NkByimHk1DoBjMMD7ywplo38VxBpp1pnClYUzhtKwY4=";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +38,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pygnmi" ];
+  pythonImportsCheck = [
+    "pygnmi"
+  ];
 
   meta = with lib; {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
     homepage = "https://github.com/akarneliuk/pygnmi";
+    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

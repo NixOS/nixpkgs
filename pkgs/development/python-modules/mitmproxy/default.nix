@@ -2,7 +2,9 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, stdenv
   # Mitmproxy requirements
+, aioquic
 , asgiref
 , blinker
 , brotli
@@ -14,7 +16,8 @@
 , hyperframe
 , kaitaistruct
 , ldap3
-, mitmproxy-wireguard
+, mitmproxy-macos
+, mitmproxy-rs
 , msgpack
 , passlib
 , protobuf
@@ -41,19 +44,20 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "9.0.1";
+  version = "10.1.1";
   disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CINKvRnBspciS+wefJB8gzBE13L8CjbYCkmLmTTeYlA=";
+    hash = "sha256-/ouMj7UVowvzwjOuusgVfXjvjNPKpuJUuoJf6Sl9P44=";
   };
 
   propagatedBuildInputs = [
     setuptools
-    # setup.py
+    aioquic
     asgiref
     blinker
     brotli
@@ -65,7 +69,7 @@ buildPythonPackage rec {
     hyperframe
     kaitaistruct
     ldap3
-    mitmproxy-wireguard
+    mitmproxy-rs
     msgpack
     passlib
     protobuf
@@ -79,6 +83,8 @@ buildPythonPackage rec {
     urwid
     wsproto
     zstandard
+  ] ++ lib.optionals stdenv.isDarwin [
+    mitmproxy-macos
   ];
 
   nativeCheckInputs = [
@@ -90,11 +96,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ];
-
-  postPatch = ''
-    # remove dependency constraints
-    sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?\( \?, \?!=\([0-9]\.\?\)\+\)\?//' -i setup.py
-  '';
 
   __darwinAllowLocalNetworking = true;
 

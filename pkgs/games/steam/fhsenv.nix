@@ -81,7 +81,7 @@ in buildFHSEnv rec {
     xorg.libXfixes
     libGL
     libva
-    pipewire.lib
+    pipewire
 
     # steamwebhelper
     harfbuzz
@@ -169,6 +169,7 @@ in buildFHSEnv rec {
     libcaca
     libcanberra
     libgcrypt
+    libunwind
     libvpx
     librsvg
     xorg.libXft
@@ -314,6 +315,7 @@ in buildFHSEnv rec {
 
     meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
+      mainProgram = "steam-run";
       name = "steam-run";
     };
   };

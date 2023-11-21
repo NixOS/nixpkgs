@@ -53,8 +53,9 @@ fi
 
 if [[ -z "$REVISION" ]]; then
     REVISION="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/$OWNER/$REPO/releases" | jq -r  'map(select(.prerelease == false)) | .[0].tag_name')"
-    VERSION="$(echo "$REVISION" | cut -c2-)"
 fi
+
+VERSION="$(echo "$REVISION" | cut -c2-)"
 
 rm -f gemset.nix source.nix
 cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
@@ -85,15 +86,17 @@ cat > source.nix << EOF
 let
   version = "$VERSION";
 in
-applyPatches {
+(
+  applyPatches {
+    src = fetchFromGitHub {
+      owner = "$OWNER";
+      repo = "$REPO";
+      rev = "v\${version}";
+      hash = "$HASH";
+    };
+    patches = [$PATCHES];
+  }) // {
   inherit version;
-  src = fetchFromGitHub {
-    owner = "$OWNER";
-    repo = "$REPO";
-    rev = "v\${version}";
-    hash = "$HASH";
-  };
-  patches = [$PATCHES];
   yarnHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 }
 EOF

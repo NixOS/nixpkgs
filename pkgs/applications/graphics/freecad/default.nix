@@ -9,6 +9,7 @@
 , boost
 , coin3d
 , eigen
+, freecad  # for passthru.tests
 , gfortran
 , gts
 , hdf5
@@ -35,6 +36,7 @@
 , qtwebengine
 , qtx11extras
 , qtxmlpatterns
+, runCommand  # for passthru.tests
 , scipy
 , shiboken2
 , soqt
@@ -49,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-rwt81Z+Bp8uZlR4iuGQEDKBu/Dr9Rqg7d9SsCdofTUU=";
+    hash = "sha256-OX4s9rbGsAhH7tLJkUJYyq2A2vCdkq/73iqYo9adogs=";
   };
 
   nativeBuildInputs = [
@@ -146,6 +148,21 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/FreeCAD $out/bin/freecad
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
+
+  passthru.tests = {
+    # Check that things such as argument parsing still work correctly with
+    # the above PYTHONPATH patch. Previously the patch used above changed
+    # the `PyConfig_InitIsolatedConfig` to `PyConfig_InitPythonConfig`,
+    # which caused the built-in interpreter to attempt (and fail) to doubly
+    # parse argv. This should catch if that ever regresses and also ensures
+    # that PYTHONPATH is still respected enough for the FreeCAD console to
+    # successfully run and check that it was included in `sys.path`.
+    python-path = runCommand "freecad-test-console" {
+      nativeBuildInputs = [ freecad ];
+    } ''
+      HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
+    '';
+  };
 
   meta = {
     homepage = "https://www.freecad.org";

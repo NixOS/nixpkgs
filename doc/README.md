@@ -114,3 +114,24 @@ pear
 watermelon
 :   green fruit with red flesh
 ```
+
+## Commit conventions
+
+- Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
+
+- If creating a commit purely for documentation changes, format the commit message in the following way:
+
+  ```
+  doc: (documentation summary)
+
+  (Motivation for change, relevant links, additional information.)
+  ```
+
+  Examples:
+
+  * doc: update the kernel config documentation to use `nix-shell`
+  * doc: add information about `nix-update-script`
+
+    Closes #216321.
+
+- If the commit contains more than just documentation changes, follow the commit message format relevant for the rest of the changes.

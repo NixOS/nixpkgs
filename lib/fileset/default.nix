@@ -3,21 +3,27 @@ let
 
   inherit (import ./internal.nix { inherit lib; })
     _coerce
+    _singleton
     _coerceMany
     _toSourceFilter
+    _fromSourceFilter
     _unionMany
     _fileFilter
     _printFileset
     _intersection
     _difference
+    _mirrorStorePath
+    _fetchGitSubmodulesMinver
     ;
 
   inherit (builtins)
+    isBool
     isList
     isPath
     pathExists
     seq
     typeOf
+    nixVersion
     ;
 
   inherit (lib.lists)
@@ -32,6 +38,7 @@ let
 
   inherit (lib.strings)
     isStringLike
+    versionOlder
     ;
 
   inherit (lib.filesystem)
@@ -45,6 +52,7 @@ let
   inherit (lib.trivial)
     isFunction
     pipe
+    inPureEvalMode
     ;
 
 in {
@@ -122,11 +130,10 @@ in {
       Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
       `root` has to be a directory.
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
-:::{.note}
-Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
-The only way to change which files get added to the store is by changing the `fileset` attribute.
-:::
+      :::{.note}
+      Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
+      The only way to change which files get added to the store is by changing the `fileset` attribute.
+      :::
     */
     root,
     /*
@@ -135,10 +142,9 @@ The only way to change which files get added to the store is by changing the `fi
       This argument can also be a path,
       which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
 
-<!-- Ignore the indentation here, this is a nixdoc rendering bug that needs to be fixed: https://github.com/nix-community/nixdoc/issues/75 -->
-:::{.note}
-If a directory does not recursively contain any file, it is omitted from the store path contents.
-:::
+      :::{.note}
+      If a directory does not recursively contain any file, it is omitted from the store path contents.
+      :::
 
     */
     fileset,
@@ -154,9 +160,14 @@ If a directory does not recursively contain any file, it is omitted from the sto
       sourceFilter = _toSourceFilter fileset;
     in
     if ! isPath root then
-      if isStringLike root then
+      if root ? _isLibCleanSourceWith then
         throw ''
-          lib.fileset.toSource: `root` ("${toString root}") is a string-like value, but it should be a path instead.
+          lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
+              To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+              Note that this only works for sources created from paths.''
+      else if isStringLike root then
+        throw ''
+          lib.fileset.toSource: `root` (${toString root}) is a string-like value, but it should be a path instead.
               Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
         throw ''
@@ -165,13 +176,13 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # See also ../path/README.md
     else if ! fileset._internalIsEmptyWithoutBase && rootFilesystemRoot != filesetFilesystemRoot then
       throw ''
-        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` ("${toString root}"):
-            `root`: root "${toString rootFilesystemRoot}"
-            `fileset`: root "${toString filesetFilesystemRoot}"
-            Different roots are not supported.''
+        lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` (${toString root}):
+            `root`: Filesystem root is "${toString rootFilesystemRoot}"
+            `fileset`: Filesystem root is "${toString filesetFilesystemRoot}"
+            Different filesystem roots are not supported.''
     else if ! pathExists root then
       throw ''
-        lib.fileset.toSource: `root` (${toString root}) does not exist.''
+        lib.fileset.toSource: `root` (${toString root}) is a path that does not exist.''
     else if pathType root != "directory" then
       throw ''
         lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
@@ -183,12 +194,81 @@ If a directory does not recursively contain any file, it is omitted from the sto
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
             - Set `fileset` to a file set that cannot contain files outside the `root` (${toString root}). This could change the files included in the result.''
     else
-      builtins.seq sourceFilter
+      seq sourceFilter
       cleanSourceWith {
         name = "source";
         src = root;
         filter = sourceFilter;
       };
+
+  /*
+  Create a file set with the same files as a `lib.sources`-based value.
+  This does not import any of the files into the store.
+
+  This can be used to gradually migrate from `lib.sources`-based filtering to `lib.fileset`.
+
+  A file set can be turned back into a source using [`toSource`](#function-library-lib.fileset.toSource).
+
+  :::{.note}
+  File sets cannot represent empty directories.
+  Turning the result of this function back into a source using `toSource` will therefore not preserve empty directories.
+  :::
+
+  Type:
+    fromSource :: SourceLike -> FileSet
+
+  Example:
+    # There's no cleanSource-like function for file sets yet,
+    # but we can just convert cleanSource to a file set and use it that way
+    toSource {
+      root = ./.;
+      fileset = fromSource (lib.sources.cleanSource ./.);
+    }
+
+    # Keeping a previous sourceByRegex (which could be migrated to `lib.fileset.unions`),
+    # but removing a subdirectory using file set functions
+    difference
+      (fromSource (lib.sources.sourceByRegex ./. [
+        "^README\.md$"
+        # This regex includes everything in ./doc
+        "^doc(/.*)?$"
+      ])
+      ./doc/generated
+
+    # Use cleanSource, but limit it to only include ./Makefile and files under ./src
+    intersection
+      (fromSource (lib.sources.cleanSource ./.))
+      (unions [
+        ./Makefile
+        ./src
+      ]);
+  */
+  fromSource = source:
+    let
+      # This function uses `._isLibCleanSourceWith`, `.origSrc` and `.filter`,
+      # which are technically internal to lib.sources,
+      # but we'll allow this since both libraries are in the same code base
+      # and this function is a bridge between them.
+      isFiltered = source ? _isLibCleanSourceWith;
+      path = if isFiltered then source.origSrc else source;
+    in
+    # We can only support sources created from paths
+    if ! isPath path then
+      if isStringLike path then
+        throw ''
+          lib.fileset.fromSource: The source origin of the argument is a string-like value ("${toString path}"), but it should be a path instead.
+              Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.''
+      else
+        throw ''
+          lib.fileset.fromSource: The source origin of the argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fromSource: The source origin (${toString path}) of the argument does not exist.''
+    else if isFiltered then
+      _fromSourceFilter path source.filter
+    else
+      # If there's no filter, no need to run the expensive conversion, all subpaths will be included
+      _singleton path;
 
   /*
     The file set containing all files that are in either of two given file sets.
@@ -223,11 +303,11 @@ If a directory does not recursively contain any file, it is omitted from the sto
     _unionMany
       (_coerceMany "lib.fileset.union" [
         {
-          context = "first argument";
+          context = "First argument";
           value = fileset1;
         }
         {
-          context = "second argument";
+          context = "Second argument";
           value = fileset2;
         }
       ]);
@@ -269,12 +349,13 @@ If a directory does not recursively contain any file, it is omitted from the sto
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
     if ! isList filesets then
-      throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf filesets}."
+      throw ''
+        lib.fileset.unions: Argument is of type ${typeOf filesets}, but it should be a list instead.''
     else
       pipe filesets [
         # Annotate the elements with context, used by _coerceMany for better errors
         (imap0 (i: el: {
-          context = "element ${toString i}";
+          context = "Element ${toString i}";
           value = el;
         }))
         (_coerceMany "lib.fileset.unions")
@@ -291,7 +372,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
           type :: String,
           ...
         } -> Bool)
-        -> FileSet
+        -> Path
         -> FileSet
 
     Example:
@@ -305,7 +386,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
       fileFilter (file: hasPrefix "." file.name) ./.
 
       # Include all regular files (not symlinks or others) in the current directory
-      fileFilter (file: file.type == "regular")
+      fileFilter (file: file.type == "regular") ./.
   */
   fileFilter =
     /*
@@ -322,13 +403,24 @@ If a directory does not recursively contain any file, it is omitted from the sto
       Other attributes may be added in the future.
     */
     predicate:
-    # The file set to filter based on the predicate function
-    fileset:
+    # The path whose files to filter
+    path:
     if ! isFunction predicate then
-      throw "lib.fileset.fileFilter: Expected the first argument to be a function, but it's a ${typeOf predicate} instead."
+      throw ''
+        lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
+    else if ! isPath path then
+      if path._type or "" == "fileset" then
+        throw ''
+          lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
+              If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
+      else
+        throw ''
+          lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
+    else if ! pathExists path then
+      throw ''
+        lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
     else
-      _fileFilter predicate
-        (_coerce "lib.fileset.fileFilter: second argument" fileset);
+      _fileFilter predicate path;
 
   /*
     The file set containing all files that are in both of two given file sets.
@@ -356,11 +448,11 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       filesets = _coerceMany "lib.fileset.intersection" [
         {
-          context = "first argument";
+          context = "First argument";
           value = fileset1;
         }
         {
-          context = "second argument";
+          context = "Second argument";
           value = fileset2;
         }
       ];
@@ -408,11 +500,11 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       filesets = _coerceMany "lib.fileset.difference" [
         {
-          context = "first argument (positive set)";
+          context = "First argument (positive set)";
           value = positive;
         }
         {
-          context = "second argument (negative set)";
+          context = "Second argument (negative set)";
           value = negative;
         }
       ];
@@ -456,7 +548,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       # "fileset" would be a better name, but that would clash with the argument name,
       # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.trace: argument" fileset;
+      actualFileset = _coerce "lib.fileset.trace: Argument" fileset;
     in
     seq
       (_printFileset actualFileset)
@@ -503,11 +595,118 @@ If a directory does not recursively contain any file, it is omitted from the sto
     let
       # "fileset" would be a better name, but that would clash with the argument name,
       # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
-      actualFileset = _coerce "lib.fileset.traceVal: argument" fileset;
+      actualFileset = _coerce "lib.fileset.traceVal: Argument" fileset;
     in
     seq
       (_printFileset actualFileset)
       # We could also return the original fileset argument here,
       # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
       actualFileset;
+
+  /*
+    Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
+
+    This function behaves like [`gitTrackedWith { }`](#function-library-lib.fileset.gitTrackedWith) - using the defaults.
+
+    Type:
+      gitTracked :: Path -> FileSet
+
+    Example:
+      # Include all files tracked by the Git repository in the current directory
+      gitTracked ./.
+
+      # Include only files tracked by the Git repository in the parent directory
+      # that are also in the current directory
+      intersection ./. (gitTracked ../.)
+  */
+  gitTracked =
+    /*
+      The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      This directory must contain a `.git` file or subdirectory.
+    */
+    path:
+    # See the gitTrackedWith implementation for more explanatory comments
+    let
+      fetchResult = builtins.fetchGit path;
+    in
+    if inPureEvalMode then
+      throw "lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
+    else if ! isPath path then
+      throw "lib.fileset.gitTracked: Expected the argument to be a path, but it's a ${typeOf path} instead."
+    else if ! pathExists (path + "/.git") then
+      throw "lib.fileset.gitTracked: Expected the argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
+    else
+      _mirrorStorePath path fetchResult.outPath;
+
+  /*
+    Create a file set containing all [Git-tracked files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository) in a repository.
+    The first argument allows configuration with an attribute set,
+    while the second argument is the path to the Git working tree.
+    If you don't need the configuration,
+    you can use [`gitTracked`](#function-library-lib.fileset.gitTracked) instead.
+
+    This is equivalent to the result of [`unions`](#function-library-lib.fileset.unions) on all files returned by [`git ls-files`](https://git-scm.com/docs/git-ls-files)
+    (which uses [`--cached`](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt--c) by default).
+
+    :::{.warning}
+    Currently this function is based on [`builtins.fetchGit`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-fetchGit)
+    As such, this function causes all Git-tracked files to be unnecessarily added to the Nix store,
+    without being re-usable by [`toSource`](#function-library-lib.fileset.toSource).
+
+    This may change in the future.
+    :::
+
+    Type:
+      gitTrackedWith :: { recurseSubmodules :: Bool ? false } -> Path -> FileSet
+
+    Example:
+      # Include all files tracked by the Git repository in the current directory
+      # and any submodules under it
+      gitTracked { recurseSubmodules = true; } ./.
+  */
+  gitTrackedWith =
+    {
+      /*
+        (optional, default: `false`) Whether to recurse into [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to also include their tracked files.
+
+        If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
+      */
+      recurseSubmodules ? false,
+    }:
+    /*
+      The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+      This directory must contain a `.git` file or subdirectory.
+    */
+    path:
+    let
+      # This imports the files unnecessarily, which currently can't be avoided
+      # because `builtins.fetchGit` is the only function exposing which files are tracked by Git.
+      # With the [lazy trees PR](https://github.com/NixOS/nix/pull/6530),
+      # the unnecessarily import could be avoided.
+      # However a simpler alternative still would be [a builtins.gitLsFiles](https://github.com/NixOS/nix/issues/2944).
+      fetchResult = builtins.fetchGit {
+        url = path;
+
+        # This is the only `fetchGit` parameter that makes sense in this context.
+        # We can't just pass `submodules = recurseSubmodules` here because
+        # this would fail for Nix versions that don't support `submodules`.
+        ${if recurseSubmodules then "submodules" else null} = true;
+      };
+    in
+    if inPureEvalMode then
+      throw "lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292."
+    else if ! isBool recurseSubmodules then
+      throw "lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it's a ${typeOf recurseSubmodules} instead."
+    else if recurseSubmodules && versionOlder nixVersion _fetchGitSubmodulesMinver then
+      throw "lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version ${_fetchGitSubmodulesMinver} and after, but Nix version ${nixVersion} is used."
+    else if ! isPath path then
+      throw "lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it's a ${typeOf path} instead."
+    # We can identify local working directories by checking for .git,
+    # see https://git-scm.com/docs/gitrepository-layout#_description.
+    # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
+    # even though `git ls-files` wouldn't return any files in that case.
+    else if ! pathExists (path + "/.git") then
+      throw "lib.fileset.gitTrackedWith: Expected the second argument (${toString path}) to point to a local working tree of a Git repository, but it's not."
+    else
+      _mirrorStorePath path fetchResult.outPath;
 }

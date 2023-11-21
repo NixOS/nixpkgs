@@ -40,9 +40,10 @@ lib.fix (self: {
 let
   ### texlive.combine backward compatibility
   # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
-  ensurePkgSets = ps: if ! __fromCombineWrapper && builtins.any (p: p ? pkgs && builtins.all (p: p ? tlType) p.pkgs) ps
-    then let oldStyle = builtins.partition (p: p ? pkgs && builtins.all (p: p ? tlType) p.pkgs) ps;
-      in oldStyle.wrong ++ lib.concatMap toTLPkgSets oldStyle.right
+  isOldPkgList = p: ! p.outputSpecified or false && p ? pkgs && builtins.all (p: p ? tlType) p.pkgs;
+  ensurePkgSets = ps: if ! __fromCombineWrapper && builtins.any isOldPkgList ps
+    then let oldPkgLists = builtins.partition isOldPkgList ps;
+      in oldPkgLists.wrong ++ lib.concatMap toTLPkgSets oldPkgLists.right
     else ps;
 
   pkgList = rec {
@@ -69,7 +70,7 @@ let
 
     # group the specified outputs
     specified = builtins.partition (p: p.outputSpecified or false) all;
-    specifiedOutputs = builtins.groupBy (p: p.tlOutputName or p.outputName) specified.right;
+    specifiedOutputs = lib.groupBy (p: p.tlOutputName or p.outputName) specified.right;
     otherOutputNames = builtins.catAttrs "key" (builtins.genericClosure {
       startSet = map (key: { inherit key; }) (lib.concatLists (builtins.catAttrs "outputs" specified.wrong));
       operator = _: [ ];

@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     dbus
     gobject-introspection
     umockdev
-    (python3.pythonForBuild.withPackages
+    (python3.pythonOnBuildForHost.withPackages
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];
 

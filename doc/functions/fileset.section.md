@@ -6,10 +6,7 @@ The [`lib.fileset`](#sec-functions-library-fileset) library allows you to work w
 A file set is a mathematical set of local files that can be added to the Nix store for use in Nix derivations.
 File sets are easy and safe to use, providing obvious and composable semantics with good error messages to prevent mistakes.
 
-These sections apply to the entire library.
 See the [function reference](#sec-functions-library-fileset) for function-specific documentation.
-
-The file set library is currently somewhat limited but is being expanded to include more functions over time.
 
 ## Implicit coercion from paths to file sets {#sec-fileset-path-coercion}
 

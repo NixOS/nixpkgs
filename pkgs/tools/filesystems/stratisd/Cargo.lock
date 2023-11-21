@@ -1269,7 +1269,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "stratisd"
-version = "3.6.1"
+version = "3.6.2"
 dependencies = [
  "assert_cmd",
  "assert_matches",

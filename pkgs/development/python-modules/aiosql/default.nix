@@ -1,17 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry-core
+, pg8000
+, pytest-asyncio
 , pytestCheckHook
-, sphinxHook
+, pythonOlder
+, setuptools
+, setuptools-scm
 , sphinx-rtd-theme
+, sphinxHook
 }:
 
 buildPythonPackage rec {
   pname = "aiosql";
   version = "9.0";
-  outputs = [ "out" "doc" ];
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+  outputs = [
+    "doc"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "nackjicholson";
@@ -23,17 +33,25 @@ buildPythonPackage rec {
   sphinxRoot = "docs/source";
 
   nativeBuildInputs = [
-    pytestCheckHook
-    sphinxHook
-    poetry-core
+    setuptools
+    setuptools-scm
     sphinx-rtd-theme
+    sphinxHook
   ];
 
-  pythonImportsCheck = [ "aiosql" ];
+  propagatedBuildInputs = [
+    pg8000
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Simple SQL in Python";
     homepage = "https://nackjicholson.github.io/aiosql/";
+    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${version}";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ kaction ];
   };

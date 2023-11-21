@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, pkg-config, texinfo
 , cairo, gd, libcerf, pango, readline, zlib
-, withTeXLive ? false, texlive
+, withTeXLive ? false, texliveSmall
 , withLua ? false, lua
 , withCaca ? false, libcaca
 , libX11 ? null
@@ -32,7 +32,7 @@ in
 
   buildInputs =
     [ cairo gd libcerf pango readline zlib ]
-    ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
+    ++ lib.optional withTeXLive texliveSmall
     ++ lib.optional withLua lua
     ++ lib.optional withCaca libcaca
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]

@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonAtLeast
 , pythonOlder
 , pytestCheckHook
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.23.0";
+  version = "0.24.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -26,8 +27,17 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pFkEgE1NGLPBW1CeGU0RJr+1Nj/y58ZcljyOnJuR47A=";
+    hash = "sha256-DKyFb+4DUMhVUwr+sgF2IaJS9pEj2o2shGYwExfffWg=";
   };
+
+  patches = [
+    # https://github.com/huggingface/accelerate/pull/2121
+    (fetchpatch {
+      name = "fix-import-error-without-torch_distributed.patch";
+      url = "https://github.com/huggingface/accelerate/commit/42048092eabd67a407ea513a62f2acde97079fbc.patch";
+      hash = "sha256-9lvnU6z5ZEFc5RVw2bP0cGVyrwAp/pxX4ZgnmCN7qH8=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 

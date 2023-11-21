@@ -279,7 +279,7 @@ in
       default = true;
       type = types.bool;
       description = lib.mdDoc ''
-        Whether to assign [predictable names to network interfaces](http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames).
+        Whether to assign [predictable names to network interfaces](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/).
         If enabled, interfaces
         are assigned names that contain topology information
         (e.g. `wlp3s0`) and thus should be stable

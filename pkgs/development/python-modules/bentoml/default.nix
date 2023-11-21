@@ -29,7 +29,7 @@
 , pip-tools
 , prometheus-client
 , psutil
-, pynvml
+, nvidia-ml-py
 , python-dateutil
 , python-json-logger
 , python-multipart
@@ -69,7 +69,7 @@
 }:
 
 let
-  version = "1.1.7";
+  version = "1.1.9";
   aws = [ fs-s3fs ];
   grpc = [
     grpcio
@@ -105,7 +105,7 @@ buildPythonPackage {
     owner = "bentoml";
     repo = "BentoML";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xuUfdVa0d4TzJqPBNJvUikIPsjSgn+VdhdZidHMnAxA=";
+    hash = "sha256-+5enRlk05IGdsNY6KIzYgh7vGRua0duI57o/AIevcdM=";
   };
 
   # https://github.com/bentoml/BentoML/pull/4227 should fix this test
@@ -150,7 +150,7 @@ buildPythonPackage {
     pip-tools
     prometheus-client
     psutil
-    pynvml
+    nvidia-ml-py
     python-dateutil
     python-json-logger
     python-multipart

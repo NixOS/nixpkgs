@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+    ./bcachefs-patch-set.patch
   ];
 
   # We separate some of the utilities into their own outputs. This

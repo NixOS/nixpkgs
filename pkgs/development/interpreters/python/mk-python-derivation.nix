@@ -102,13 +102,14 @@
 
 , disabledTestPaths ? []
 
+# Allow passing in a custom stdenv to buildPython*
+, stdenv ? python.stdenv
+
 , ... } @ attrs:
 
 assert (pyproject != null) -> (format == null);
 
 let
-  inherit (python) stdenv;
-
   format' =
     if pyproject != null then
       if pyproject then
@@ -194,7 +195,7 @@ let
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
-    "disabledTestPaths" "outputs"
+    "disabledTestPaths" "outputs" "stdenv"
   ]) // {
 
     name = namePrefix + name_;
@@ -223,7 +224,7 @@ let
     ] ++ lib.optionals (format' == "pyproject") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
-          inherit (python.pythonForBuild.pkgs.bootstrap) build;
+          inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
           wheel = null;
         }
       else
@@ -235,7 +236,7 @@ let
     ] ++ lib.optionals (format' != "other") [(
       if isBootstrapInstallPackage then
         pypaInstallHook.override {
-          inherit (python.pythonForBuild.pkgs.bootstrap) installer;
+          inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
         }
       else
         pypaInstallHook
@@ -279,7 +280,7 @@ let
     '' + attrs.postFixup or "";
 
     # Python packages built through cross-compilation are always for the host platform.
-    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];
+    disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonOnBuildForHost ];
 
     outputs = outputs ++ lib.optional withDistOutput "dist";
 

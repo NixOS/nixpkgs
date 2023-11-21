@@ -36,10 +36,9 @@ builder rec {
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  depsBuildBuild = if stdenv.buildPlatform.isDarwin
-    then [ buildPackages.darwin.apple_sdk_11_0.stdenv.cc ]
-    else [ buildPackages.stdenv.cc ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     pkgsBuildBuild.guile_3_0;
   nativeBuildInputs = [
     makeWrapper
@@ -128,6 +127,9 @@ builder rec {
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
   doInstallCheck = doCheck;
+
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
 
   setupHook = ./setup-hook-3.0.sh;
 

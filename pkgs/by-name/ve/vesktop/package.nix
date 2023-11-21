@@ -16,48 +16,62 @@
 , moreutils
 , nodePackages
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
   version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wGOyDGY0FpAVS5+MTiKrOpDyd13ng0RLGAENW5tXuR4=";
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    pname = "${pname}-pnpm-deps";
-    inherit src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+  # NOTE: This requires pnpm 8.10.0 or newer
+  # https://github.com/pnpm/pnpm/pull/7214
+  pnpmDeps =
+    assert lib.versionAtLeast nodePackages.pnpm.version "8.10.0";
+    stdenvNoCC.mkDerivation {
+      pname = "${finalAttrs.pname}-pnpm-deps";
+      inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
 
-    nativeBuildInputs = [
-      jq
-      moreutils
-      nodePackages.pnpm
-    ];
+      nativeBuildInputs = [
+        jq
+        moreutils
+        nodePackages.pnpm
+      ];
 
-    # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-    installPhase = ''
-      export HOME=$(mktemp -d)
+      pnpmPatch = builtins.toJSON {
+        pnpm.supportedArchitectures = {
+          os = [ "linux" ];
+          cpu = [ "x64" "arm64" ];
+        };
+      };
 
-      pnpm config set store-dir $out
-      pnpm install --frozen-lockfile --ignore-script
+      postPatch = ''
+        mv package.json package.json.orig
+        jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
+      '';
 
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
+      # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
+      installPhase = ''
+        export HOME=$(mktemp -d)
 
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = {
-      "aarch64-linux" = "sha256-OcAQbUi+wpBAumncYxP3qtTzjyxiHL69kbQefwaeBfg=";
-      "x86_64-linux" = "sha256-R5/2MSH/jXHrj2x1Ap2OoOFLBLQp3Sq91o01uW8hWOw=";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  };
+        pnpm config set store-dir $out
+        pnpm install --frozen-lockfile --ignore-script
+
+        rm -rf $out/v3/tmp
+        for f in $(find $out -name "*.json"); do
+          sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
+          jq --sort-keys . $f | sponge $f
+        done
+      '';
+
+      dontBuild = true;
+      dontFixup = true;
+      outputHashMode = "recursive";
+      outputHash = "sha256-nNXe0vSQiQTkiRqgScKlpkpG/BJc2eIY2ueAd9sk36c=";
+    };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -76,7 +90,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
 
-    cp -r ${pnpm-deps}/* "$STORE_PATH"
+    cp -Tr "$pnpmDeps" "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
@@ -137,6 +151,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+  };
+
   meta = with lib; {
     description = "An alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
@@ -145,4 +163,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vencorddesktop";
   };
-}
+})

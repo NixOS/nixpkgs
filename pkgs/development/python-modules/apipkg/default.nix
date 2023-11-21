@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "apipkg";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gf84SzfuKLGYfI88IzPRJCqMZWwowUR10FgIbwXjwuY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ANLD7fUMKN3RmAVjVkcpwUH6U9ASalXdwKtPpoC8Urs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

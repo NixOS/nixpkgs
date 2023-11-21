@@ -6,7 +6,7 @@
 , dotnetCorePackages ? pkgs.dotnetCorePackages
 , openssl ? pkgs.openssl
 , zlib ? pkgs.zlib
-, targetPlatform ? pkgs.targetPlatform
+, hostPlatform ? stdenv.hostPlatform
 }:
 
 buildDotnetModule rec {
@@ -30,7 +30,7 @@ buildDotnetModule rec {
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
     substituteInPlace pocket_updater.csproj \
-      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid targetPlatform.system}"
+      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid hostPlatform.system}"
   '';
 
   projectFile = "pocket_updater.csproj";

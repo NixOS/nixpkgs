@@ -6,7 +6,7 @@
 , scdoc
 }:
 let
-  version = "0.7.0";
+  version = "0.7.1";
 in
 rustPlatform.buildRustPackage {
   pname = "aba";
@@ -16,27 +16,35 @@ rustPlatform.buildRustPackage {
     owner = "~onemoresuza";
     repo = "aba";
     rev = version;
-    hash = "sha256-YPE5HYa90BcNy5jdYbzkT81KavJcbSeGrsWRILnIiEE=";
+    hash = "sha256-Sz9I1Dw7wmoUPpTBNfbYbehfNO8FK6r/ubofx+FGb04=";
     domain = "sr.ht";
   };
 
-  cargoSha256 = "sha256-wzI+UMcVeFQNFlWDkyxk8tjpU7beNRKoPYbid8b15/Q=";
+  cargoSha256 = "sha256-Ihoh+yp12qN74JHvJbEDoYz+eoMwPOQar+yBEy+bqb0=";
 
   nativeBuildInputs = [
     just
     scdoc
   ];
 
+  postPatch = ''
+    # Suppress messages of command not found. jq is not needed for the build, but just calls it anyway.
+    sed -i '/[[:space:]]*|[[:space:]]*jq -r/s/jq -r .*/: \\/' ./justfile
+    # Let only nix strip the binary by disabling cargo's `strip = true`, like buildRustPackage does.
+    sed -i '/strip[[:space:]]*=[[:space:]]*true/s/true/false/' ./Cargo.toml
+  '';
+
+  preBuild = ''
+    justFlagsArray+=(
+      PREFIX=${builtins.placeholder "out"}
+      MANIFEST_OPTS="--frozen --locked --profile=release"
+      INSTALL_OPTS=--no-track
+    )
+  '';
+
   # There are no tests
   doCheck = false;
-
-  dontUseJustBuild = true;
   dontUseJustCheck = true;
-  dontUseJustInstall = true;
-
-  postInstall = ''
-    just --set PREFIX $out install-doc
-  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -47,7 +55,6 @@ rustPlatform.buildRustPackage {
     downloadPage = "https://git.sr.ht/~onemoresuza/aba/refs/${version}";
     maintainers = with lib.maintainers; [ onemoresuza ];
     license = lib.licenses.isc;
-    platforms = lib.platforms.unix;
     mainProgram = "aba";
   };
 }

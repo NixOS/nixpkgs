@@ -24,7 +24,7 @@
 , moto
 , markdown
 , lz4
-, setuptoolsTrial
+, setuptools-trial
 , buildbot-worker
 , buildbot-plugins
 , buildbot-pkg
@@ -103,7 +103,7 @@ let
       moto
       markdown
       lz4
-      setuptoolsTrial
+      setuptools-trial
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www

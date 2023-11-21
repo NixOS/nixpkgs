@@ -12,7 +12,7 @@
 let
 
   inherit (python3Packages)
-    python pytest nose cryptography pyyaml requests mock requests-mock
+    python pytest nose3 cryptography pyyaml requests mock requests-mock
     python-dateutil setuptools;
 
   version = "4.28.1";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   pythonPaths = [ cryptography pyyaml requests ];
   buildInputs = [ python perl python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip makeWrapper ];
-  nativeCheckInputs = [ nose pytest mock requests-mock ];
+  nativeCheckInputs = [ nose3 pytest mock requests-mock ];
 
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \

@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "mystmd";
-  version = "1.1.23";
+  version = "1.1.27";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mystmd";
     rev = "mystmd@${version}";
-    hash = "sha256-+zgAm3v7XcNhhVOFueRqJijteQqMCZmE33hDyR4d5bA=";
+    hash = "sha256-aMoL125DjXM/HL+ebCkjywwEv1VTKPmF2CV/TJd1LMU=";
   };
 
-  npmDepsHash = "sha256-8brgDSV0BBggYUnizV+24RQMXxPd6HUBDYrw9fJtL+M=";
+  npmDepsHash = "sha256-i1tbHCI/z/kiGIROlVMvnt7x4f8D7pzTk1BcSPFDwFw=";
 
   dontNpmInstall = true;
 

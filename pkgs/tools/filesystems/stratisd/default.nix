@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "refs/tags/stratisd-v${version}";
-    hash = "sha256-qpuJzsN6AXqvKtKBDZZEmviWBpPR0qNuq+3tIHGSWLs=";
+    hash = "sha256-R6Bb6ep5T8ePmxwDTxQyeXcSpp2S1C2zqwxmX2Wt1L8=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

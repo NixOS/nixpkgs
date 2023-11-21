@@ -46,6 +46,7 @@ buildPythonPackage rec {
     description = "Settings management using pydantic";
     homepage = "https://github.com/pydantic/pydantic-settings";
     license = licenses.mit;
+    broken = lib.versionOlder pydantic.version "2.0.0";
     maintainers = with maintainers; [ ];
   };
 }

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.13.0rc0";
+  version = "0.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mwaskom";
     repo = "seaborn";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bNuTDXUjdOwqJN1U20eaeSa4/Q3Fe2XMqulqVmDLFEU=";
+    hash = "sha256-RbtBNKTjUHdCFe1V7IvACgbSNIPhVFMYmtE34GKVIzs=";
   };
 
   nativeBuildInputs = [

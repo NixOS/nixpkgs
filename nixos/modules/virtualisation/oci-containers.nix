@@ -214,6 +214,13 @@ let
           '';
         };
 
+        hostname = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = lib.mdDoc "The hostname of the container.";
+          example = "hello-world";
+        };
+
         extraOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -245,11 +252,10 @@ let
       text = ''
         ${cfg.backend} rm -f ${name} || true
         ${optionalString (isValidLogin container.login) ''
-          cat ${container.login.passwordFile} | \
           ${cfg.backend} login \
           ${container.login.registry} \
           --username ${container.login.username} \
-          --password-stdin
+          --password-stdin < ${container.login.passwordFile}
         ''}
         ${optionalString (container.imageFile != null) ''
           ${cfg.backend} load -i ${container.imageFile}
@@ -280,6 +286,8 @@ let
       "--log-driver=${container.log-driver}"
     ] ++ optional (container.entrypoint != null)
       "--entrypoint=${escapeShellArg container.entrypoint}"
+      ++ optional (container.hostname != null)
+      "--hostname=${escapeShellArg container.hostname}"
       ++ lib.optionals (cfg.backend == "podman") [
         "--cidfile=/run/podman-${escapedName}.ctr-id"
         "--cgroups=no-conmon"

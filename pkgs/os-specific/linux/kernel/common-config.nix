@@ -562,6 +562,13 @@ let
       KEYS_REQUEST_CACHE               = whenAtLeast "5.3" yes;
       # randomized slab caches
       RANDOM_KMALLOC_CACHES            = whenAtLeast "6.6" yes;
+
+      # NIST SP800-90A DRBG modes - enabled by most distributions
+      #   and required by some out-of-tree modules (ShuffleCake)
+      #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
+      CRYPTO_DRBG_HASH                 = yes;
+      CRYPTO_DRBG_CTR                  = yes;
+
     } // optionalAttrs stdenv.hostPlatform.isx86_64 {
       # Enable Intel SGX
       X86_SGX     = whenAtLeast "5.11" yes;
@@ -715,7 +722,6 @@ let
       ZSWAP          = option yes;
       ZPOOL          = yes;
       ZBUD           = option yes;
-      ZSMALLOC       = module;
     };
 
     brcmfmac = {
@@ -838,6 +844,8 @@ let
       # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
       CLEANCACHE = whenOlder "5.17" (option yes);
       CRASH_DUMP = option no;
+
+      FSCACHE_STATS = yes;
 
       DVB_DYNAMIC_MINORS = option yes; # we use udev
 

@@ -36,6 +36,11 @@ buildPythonPackage {
 
   format = "setuptools";
 
+  patches = [
+    # backport of https://github.com/pydicom/pydicom/commit/2513a20cc41743a42bdb86f4cbb4873899b7823c
+    ./pillow-10.1.0-compat.patch
+  ];
+
   propagatedBuildInputs = [
     numpy
     pillow

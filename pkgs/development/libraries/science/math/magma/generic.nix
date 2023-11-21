@@ -24,7 +24,8 @@
 , libpthreadstubs
 , magmaRelease
 , ninja
-, rocmSupport ? false
+, config
+, rocmSupport ? config.rocmSupport
 , static ? false
 , stdenv
 , symlinkJoin

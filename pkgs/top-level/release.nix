@@ -143,10 +143,12 @@ let
 
               jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_5.clang.x86_64-linux
-              jobs.tests.cc-wrapper.llvmPackages_5.libcxx.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages_6.clang.x86_64-linux
               jobs.tests.cc-wrapper.llvmPackages_6.libcxx.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.libcxx.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.clang.x86_64-linux
+              jobs.tests.cc-wrapper.llvmPackages_7.libcxx.x86_64-linux
               jobs.tests.cc-multilib-gcc.x86_64-linux
               jobs.tests.cc-multilib-clang.x86_64-linux
               jobs.tests.stdenv-inputs.x86_64-linux
@@ -243,6 +245,18 @@ let
     (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
+      # Build selected packages (HLS) for multiple Haskell compilers to rebuild
+      # the cache after a staging merge
+      haskell.packages = lib.genAttrs [
+        # TODO: share this list between release.nix and release-haskell.nix
+        "ghc90"
+        "ghc92"
+        "ghc94"
+        "ghc96"
+      ] (compilerName: {
+        inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+          haskell-language-server;
+      });
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 

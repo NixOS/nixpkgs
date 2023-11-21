@@ -5,7 +5,7 @@
 , withCryptography ? true, cryptography
 , withVoipSupport ? true, sox
 , withPlottingSupport ? true, matplotlib
-, withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
+, withGraphicsSupport ? false, pyx, texliveBasic, graphviz, imagemagick
 , withManufDb ? false, wireshark
 , libpcap
 # 2D/3D graphics and graphs TODO: VPython
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     ++ lib.optional withCryptography cryptography
     ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-basic graphviz imagemagick ];
+    ++ lib.optionals withGraphicsSupport [ pyx texliveBasic graphviz imagemagick ];
 
   # Running the tests seems too complicated:
   doCheck = false;

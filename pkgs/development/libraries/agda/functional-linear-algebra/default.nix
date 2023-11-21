@@ -26,5 +26,6 @@ mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ryanorendorff ];
+    broken = true;
   };
 }

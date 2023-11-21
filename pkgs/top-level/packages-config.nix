@@ -20,7 +20,6 @@
       quicklispPackagesSBCL
       rPackages
       roundcubePlugins
-      sconsPackages
       sourceHanPackages
       steamPackages
       ut2004Packages

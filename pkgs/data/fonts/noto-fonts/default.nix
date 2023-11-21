@@ -160,8 +160,8 @@ rec {
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
-    version = "2.001";
-    sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
+    version = "2.002";
+    sha256 = "sha256-GLjpTAiHfygj1J4AdUVDJh8kykkFOglq+h4kyat5W9s=";
   };
 
   noto-fonts-color-emoji =

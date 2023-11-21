@@ -14,10 +14,10 @@
 }:
 gsmakeDerivation rec {
   pname = "gnustep-base";
-  version = "1.28.0";
+  version = "1.29.0";
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/${pname}-${version}.tar.gz";
-    sha256 = "05vjz19v1w7yb7hm8qrc41bqh6xd8in7sgg2p0h1vldyyaa5sh90";
+    hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
   outputs = [ "out" "dev" "lib" ];
   nativeBuildInputs = [ pkg-config ];

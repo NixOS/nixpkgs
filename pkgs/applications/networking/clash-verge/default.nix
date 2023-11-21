@@ -4,7 +4,6 @@
 , dpkg
 , wrapGAppsHook
 , autoPatchelfHook
-, clash
 , clash-meta
 , openssl
 , webkitgtk
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ln -s ${lib.getExe clash} $out/bin/clash
     ln -s ${lib.getExe clash-meta} $out/bin/clash-meta
   '';
 

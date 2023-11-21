@@ -1,4 +1,4 @@
-{ lib, stdenv, rust, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
+{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
 {
   build
 , buildDependencies
@@ -124,8 +124,8 @@ in ''
   export CARGO_PKG_AUTHORS="${authors}"
   export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
-  export CARGO_CFG_TARGET_ARCH=${rust.toTargetArch stdenv.hostPlatform}
-  export CARGO_CFG_TARGET_OS=${rust.toTargetOs stdenv.hostPlatform}
+  export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.rust.platform.arch}
+  export CARGO_CFG_TARGET_OS=${stdenv.hostPlatform.rust.platform.os}
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
   export CARGO_CFG_TARGET_ENV="gnu"
@@ -136,8 +136,8 @@ in ''
   export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${rust.toRustTargetSpec stdenv.hostPlatform}"
-  export HOST="${rust.toRustTargetSpec stdenv.buildPlatform}"
+  export TARGET="${stdenv.hostPlatform.rust.rustcTargetSpec}"
+  export HOST="${stdenv.buildPlatform.rust.rustcTargetSpec}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}

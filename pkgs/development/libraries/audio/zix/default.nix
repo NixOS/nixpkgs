@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
     "-Ddocs=disabled"
   ];
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Do not fail the build on clang-16/darwin.
+    # TODO: drop the workaround when upstream fixes it in:
+    #   https://gitlab.com/drobilla/zix/-/issues/3
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     description = "A lightweight C99 portability and data structure library";
     homepage = "https://gitlab.com/drobilla/zix";

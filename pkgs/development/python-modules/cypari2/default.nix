@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pari
-    python.pythonForBuild.pkgs.pip
+    python.pythonOnBuildForHost.pkgs.pip
   ];
 
   buildInputs = [

@@ -6,6 +6,7 @@
 , cargo
 , cmake
 , desktop-file-utils
+, dos2unix
 , glib
 , gstreamer
 , gtk4
@@ -25,21 +26,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.7.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-QcgmL6lLi/3QXnlcEsVyTqNUfjSm+R+nhRzRvw8M9Qc=";
+    hash = "sha256-cIy2+Q6HSLwbT0XXDK88Z0mdu46vWSZNTVl8MphXhw0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-1abfrPehOGc/ye/iFIwYPd6HJX6P8OP2vGBSJfeo+c8=";
-      "librsvg-2.56.2" = "sha256-uCHKDC4nc7J0k9qsmzF6etkWOoNq51Dddd9uQw5DOT0=";
-      "piet-0.6.2" = "sha256-If0qiZkgXeLvsrECItV9/HmhTk1H52xmVO7cUsD9dcU=";
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-WfZwezohm8+ZXiKZlssTX+b/Izk1M4jFwxQejeTfc6M=";
+      "librsvg-2.57.0-beta.2" = "sha256-8k5KWhm9PIpdmf2DByTyrqX5mGAa+a7ZDGmVO2ERhTU=";
+      "piet-0.6.2" = "sha256-WrQok0T7uVQEp8SvNWlgqwQHfS7q0510bnP1ecr+s1Q=";
     };
   };
 
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     appstream-glib # For appstream-util
     cmake
     desktop-file-utils # For update-desktop-database
+    dos2unix
     meson
     ninja
     pkg-config
@@ -79,10 +81,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    pushd build-aux
-    chmod +x cargo_build.py meson_post_install.py
-    patchShebangs cargo_build.py meson_post_install.py
-    popd
+    dos2unix build-aux/*.py # FIXME remove once updated to 0.9.0
+    chmod +x build-aux/*.py
+    patchShebangs build-aux
   '';
 
   meta = with lib; {

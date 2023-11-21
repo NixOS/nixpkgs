@@ -144,6 +144,20 @@ rec {
   */
   concatLines = concatMapStrings (s: s + "\n");
 
+  /*
+    Replicate a string n times,
+    and concatenate the parts into a new string.
+
+    Type: replicate :: int -> string -> string
+
+    Example:
+      replicate 3 "v"
+      => "vvv"
+      replicate 5 "hello"
+      => "hellohellohellohellohello"
+  */
+  replicate = n: s: concatStrings (lib.lists.replicate n s);
+
   /* Construct a Unix-style, colon-separated search path consisting of
      the given `subDir` appended to each of the given paths.
 

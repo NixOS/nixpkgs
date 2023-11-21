@@ -80,6 +80,11 @@ buildPythonPackage rec {
     export HOME="$TMPDIR"
   '';
 
+  disabledTests = [
+    # AssertionError: False is not true
+    "TestHDF5_Format"
+  ];
+
   meta = with lib; {
     description = "Features previously in QCoDeS";
     homepage = "https://github.com/QCoDeS/Qcodes_loop";

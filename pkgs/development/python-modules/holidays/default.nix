@@ -1,20 +1,27 @@
 { lib
 , buildPythonPackage
-, convertdate
 , fetchFromGitHub
-, hijri-converter
-, importlib-metadata
-, korean-lunar-calendar
-, polib
-, pytestCheckHook
-, python-dateutil
 , pythonOlder
+
+# build-system
 , setuptools
+
+# l10n
+, polib
+, lingua
+, chameleon
+
+# dependencies
+, python-dateutil
+
+# tests
+, importlib-metadata
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.35";
+  version = "0.36";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,19 +30,33 @@ buildPythonPackage rec {
     owner = "dr-prodigy";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FrAqVLyEtjhpiu1XdFY5yOstKKjXhRTv9PeaFlJaf8k=";
+    hash = "sha256-pYlirojeHi10kUcjcvpfBYpIzbYmIlFgOLfy7WRhACU=";
   };
 
   nativeBuildInputs = [
     setuptools
+
+    # l10n
+    lingua
+    chameleon
+    polib
   ];
 
+  postPatch = ''
+    patchShebangs scripts/l10n/*.py
+  '';
+
+  preBuild = ''
+    # make l10n
+    ./scripts/l10n/generate_po_files.py
+    ./scripts/l10n/generate_mo_files.py
+  '';
+
   propagatedBuildInputs = [
-    convertdate
     python-dateutil
-    hijri-converter
-    korean-lunar-calendar
   ];
+
+  doCheck = false;
 
   nativeCheckInputs = [
     importlib-metadata

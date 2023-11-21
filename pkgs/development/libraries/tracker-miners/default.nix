@@ -11,6 +11,7 @@
 , gexiv2
 , tracker
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , vala
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_45
     gettext
+    glib
     itstool
     libxslt
     meson
@@ -75,6 +77,8 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsNoGuiHook
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   # TODO: add libenca, libosinfo
@@ -83,7 +87,6 @@ stdenv.mkDerivation rec {
     dbus
     exempi
     giflib
-    glib
     gexiv2
     totem-pl-parser
     tracker

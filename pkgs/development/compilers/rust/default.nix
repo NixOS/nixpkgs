@@ -73,7 +73,7 @@ in
         patches = rustcPatches;
 
         # Use boot package set to break cycle
-        inherit (bootstrapRustPackages) cargo rustc;
+        inherit (bootstrapRustPackages) cargo rustc rustfmt;
       });
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;

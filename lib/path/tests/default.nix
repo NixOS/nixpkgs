@@ -6,16 +6,19 @@
     overlays = [];
     inherit system;
   },
+  nixVersions ? import ../../tests/nix-for-tests.nix { inherit pkgs; },
   libpath ? ../..,
   # Random seed
   seed ? null,
 }:
+
 pkgs.runCommand "lib-path-tests" {
-  nativeBuildInputs = with pkgs; [
-    nix
+  nativeBuildInputs = [
+    nixVersions.stable
+  ] ++ (with pkgs; [
     jq
     bc
-  ];
+  ]);
 } ''
   # Needed to make Nix evaluation work
   export TEST_ROOT=$(pwd)/test-tmp

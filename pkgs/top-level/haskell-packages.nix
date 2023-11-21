@@ -415,22 +415,15 @@ in {
     };
     ghc98 = compiler.ghc981;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs =
-        # For GHC 9.2 no armv7l bindists are available.
-        if stdenv.hostPlatform.isAarch32 then
-          packages.ghc924
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc924
-        else
-          packages.ghc924Binary;
+      bootPkgs = packages.ghc963;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-      # 2023-01-15: Support range >= 10 && < 15
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_14;
-      llvmPackages = pkgs.llvmPackages_14;
+      # 2023-01-15: Support range >= 11 && < 16
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
+      llvmPackages = pkgs.llvmPackages_15;
     };
 
     ghcjs = compiler.ghcjs810;
@@ -586,7 +579,7 @@ in {
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.10.x.nix { };
     };
 
     ghcjs = packages.ghcjs810;

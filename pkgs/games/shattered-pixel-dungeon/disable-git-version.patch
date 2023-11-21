@@ -21,7 +21,7 @@ diff --git a/build.gradle b/build.gradle
          appName = 'Summoning Pixel Dungeon'
          appPackageName = 'com.trashboxbobylev.summoningpixeldungeon'
  
-         appVersionCode = 430
+         appVersionCode = 432
 -        appVersionName = '@version@-' + details.gitHash.substring(0, 7)
 +        appVersionName = '@version@'
  

@@ -1,5 +1,6 @@
 { lib
 , azure-identity
+, azure-monitor-ingestion
 , boto3
 , buildPythonPackage
 , dateparser
@@ -38,14 +39,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.6.1";
+  version = "8.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lnIhXkBodvLWVeqiwFcnU4M53zwWDmtFz+9TThQY63I=";
+    hash = "sha256-ibxSp1M85WngQKdjlRC4JvLxn0rEn9oVkid/V4iD6zY=";
   };
 
   postPatch = ''
@@ -59,6 +60,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     azure-identity
+    azure-monitor-ingestion
     boto3
     dateparser
     dnspython
@@ -98,6 +100,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
+    mainProgram = "parsedmarc";
     maintainers = with maintainers; [ talyz ];
     license = licenses.asl20;
   };

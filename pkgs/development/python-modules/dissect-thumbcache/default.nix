@@ -12,9 +12,9 @@
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
   version = "1.6";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";

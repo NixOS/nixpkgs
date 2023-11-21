@@ -239,7 +239,7 @@ in
       enable = mkEnableOption (lib.mdDoc "I2Pd daemon") // {
         description = lib.mdDoc ''
           Enables I2Pd as a running service upon activation.
-          Please read http://i2pd.readthedocs.io/en/latest/ for further
+          Please read <https://i2pd.readthedocs.io/en/latest/> for further
           configuration help.
         '';
       };

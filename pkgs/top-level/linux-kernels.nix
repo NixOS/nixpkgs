@@ -201,17 +201,12 @@ in {
        then latest
        else testing;
 
+    # FIXME: Remove after 23.11 is released
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = callPackage ../os-specific/linux/kernel/mainline.nix {
-        branch = "6.4";
-      };
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.dell_xps_regression
-      ];
-    };
+      kernel = linux_6_5;
+      kernelPatches = linux_6_5.kernelPatches;
+   };
 
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
@@ -386,6 +381,8 @@ in {
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
+
+    mstflint_access = callPackage ../os-specific/linux/mstflint_access { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta { };
 
@@ -565,6 +562,8 @@ in {
 
     hid-ite8291r3 = callPackage ../os-specific/linux/hid-ite8291r3 { };
 
+    hid-tmff2 = callPackage ../os-specific/linux/hid-tmff2 { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
@@ -614,6 +613,7 @@ in {
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
+    # FIXME: Remove after 23.11 is released
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);

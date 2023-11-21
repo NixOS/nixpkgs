@@ -11,13 +11,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
-  version = "3.33";
+  version = "3.34";
 
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
     rev = "v${version}";
-    hash = "sha256-cX+ydMvpQNFfQICRVKyhnB5gZkVnOMLPbGgdFymzmeA=";
+    hash = "sha256-KuDNngHOoeEHJExEHoLdNO95ZUvLx8TWiAOTmRKHtmQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -33,10 +33,9 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/man/man1
-    cp get_iplayer $out/bin
+    install -D get_iplayer -t $out/bin
     wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg ]} --prefix PERL5LIB : $PERL5LIB
-    cp get_iplayer.1 $out/share/man/man1
+    install -D get_iplayer.1 -t $out/share/man/man1
 
     runHook postInstall
   '';

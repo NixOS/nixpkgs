@@ -207,7 +207,10 @@ checkout_ref(){
 
 # Update submodules
 init_submodules(){
-    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1}
+    # shallow with leaveDotGit will change hashes
+    [[ -z "$deepClone" ]] && [[ -z "$leaveDotGit" ]] && \
+    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress --depth 1 || \
+    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1} --progress
 }
 
 clone(){
@@ -258,14 +261,14 @@ make_deterministic_repo(){
     # Remove files that contain timestamps or otherwise have non-deterministic
     # properties.
     if [ -f .git ]; then
-	local dotgit_content=$(<.git)
-	local dotgit_dir="${dotgit_content#gitdir: }"
+        local dotgit_content=$(<.git)
+        local dotgit_dir="${dotgit_content#gitdir: }"
     else
-	local dotgit_dir=".git"
+        local dotgit_dir=".git"
     fi
-    pushd "$dotgit_dir"
+    pushd "$dotgit_dir" >/dev/null
         rm -rf logs/ hooks/ index FETCH_HEAD ORIG_HEAD refs/remotes/origin/HEAD config
-    popd
+    popd >/dev/null
     # Remove all remote branches.
     git branch -r | while read -r branch; do
         clean_git branch -rD "$branch"
@@ -422,8 +425,8 @@ fi
 
 tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
 exit_handlers+=(remove_tmpHomePath)
+ln -s "${NETRC:-$HOME/.netrc}" "$tmpHomePath/.netrc"
 HOME="$tmpHomePath"
-ln -s "$NIX_BUILD_TOP/.netrc" "$HOME/"
 unset XDG_CONFIG_HOME
 export GIT_CONFIG_NOSYSTEM=1
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ttyplot";
-  version = "1.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = "ttyplot";
     rev = version;
-    sha256 = "sha256-COnqzWqah1J/q64XrOBhMOsrafAs/BptqNvrjHJ9edQ=";
+    sha256 = "sha256-lZLjTmSKxGJhUMELcIPjycpuRR3m9oz/Vh1/FEUzMOQ=";
   };
 
   buildInputs = [ ncurses ];

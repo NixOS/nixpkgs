@@ -1,7 +1,7 @@
 { stdenv, lib, tlpdb, bin, tlpdbxz, tl
 , installShellFiles
 , coreutils, findutils, gawk, getopt, ghostscript_headless, gnugrep
-, gnumake, gnupg, gnused, gzip, ncurses, perl, python3, ruby, zip
+, gnumake, gnupg, gnused, gzip, html-tidy, ncurses, perl, python3, ruby, zip
 }:
 
 oldTlpdb:
@@ -88,6 +88,7 @@ in lib.recursiveUpdate orig rec {
   pkfix-helper.extraBuildInputs = [ ghostscript_headless ];
   ps2eps.extraBuildInputs = [ ghostscript_headless ];
   pst2pdf.extraBuildInputs = [ ghostscript_headless ];
+  tex4ebook.extraBuildInputs = [ html-tidy ];
   tex4ht.extraBuildInputs = [ ruby ];
   texlive-scripts.extraBuildInputs = [ gnused ];
   texlive-scripts-extra.extraBuildInputs = [ coreutils findutils ghostscript_headless gnused ];
@@ -239,6 +240,10 @@ in lib.recursiveUpdate orig rec {
 
   pst2pdf.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath pst2pdf.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/pst2pdf
+  '';
+
+  tex4ebook.postFixup = ''
+    sed -i '2ios.setenv("PATH","${lib.makeBinPath tex4ebook.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/tex4ebook
   '';
 
   tex4ht.postFixup = ''

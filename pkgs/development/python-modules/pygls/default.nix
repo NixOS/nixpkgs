@@ -3,16 +3,16 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, poetry-core
 , lsprotocol
 , typeguard
-, poetry-core
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "openlawlibrary";
     repo = "pygls";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FOuBS/UJpkYbuIu193vkSpN/77gf+UWiS5f/t8BpAk4=";
+    hash = "sha256-OfLlYTgVCg+oiYww0RjRTjiBwTZBSNqJRryo8gZEmk4=";
   };
 
   nativeBuildInputs = [
@@ -49,9 +49,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
-    changelog = "https://github.com/openlawlibrary/pygls/blob/${src.rev}/CHANGELOG.md";
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ kira-bruneau ];
   };

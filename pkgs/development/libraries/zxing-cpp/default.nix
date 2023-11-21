@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (python3.pkgs) zxing_cpp;
+      inherit (python3.pkgs) zxing-cpp;
     };
     updateScript = gitUpdater {
       rev-prefix = "v";

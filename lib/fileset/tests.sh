@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2016
+# shellcheck disable=SC2317
+# shellcheck disable=SC2192
 
 # Tests lib.fileset
 # Run:
@@ -41,15 +43,29 @@ crudeUnquoteJSON() {
     cut -d \" -f2
 }
 
-prefixExpression='let
-  lib = import <nixpkgs/lib>;
-  internal = import <nixpkgs/lib/fileset/internal.nix> {
-    inherit lib;
-  };
-in
-with lib;
-with internal;
-with lib.fileset;'
+prefixExpression() {
+    echo 'let
+      lib =
+        (import <nixpkgs/lib>)
+    '
+    if [[ "${1:-}" == "--simulate-pure-eval" ]]; then
+        echo '
+        .extend (final: prev: {
+          trivial = prev.trivial // {
+            inPureEvalMode = true;
+          };
+        })'
+    fi
+    echo '
+      ;
+      internal = import <nixpkgs/lib/fileset/internal.nix> {
+        inherit lib;
+      };
+    in
+    with lib;
+    with internal;
+    with lib.fileset;'
+}
 
 # Check that two nix expression successfully evaluate to the same value.
 # The expressions have `lib.fileset` in scope.
@@ -58,7 +74,7 @@ expectEqual() {
     local actualExpr=$1
     local expectedExpr=$2
     if actualResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/actualStderr \
-        --expr "$prefixExpression ($actualExpr)"); then
+        --expr "$(prefixExpression) ($actualExpr)"); then
         actualExitCode=$?
     else
         actualExitCode=$?
@@ -66,7 +82,7 @@ expectEqual() {
     actualStderr=$(< "$tmp"/actualStderr)
 
     if expectedResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/expectedStderr \
-        --expr "$prefixExpression ($expectedExpr)"); then
+        --expr "$(prefixExpression) ($expectedExpr)"); then
         expectedExitCode=$?
     else
         expectedExitCode=$?
@@ -93,8 +109,9 @@ expectEqual() {
 # Usage: expectStorePath NIX
 expectStorePath() {
     local expr=$1
-    if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace \
-        --expr "$prefixExpression ($expr)"); then
+    if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp"/stderr \
+        --expr "$(prefixExpression) ($expr)"); then
+        cat "$tmp/stderr" >&2
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
     # This is safe because we assume to get back a store path in a string
@@ -106,10 +123,16 @@ expectStorePath() {
 # The expression has `lib.fileset` in scope.
 # Usage: expectFailure NIX REGEX
 expectFailure() {
+    if [[ "$1" == "--simulate-pure-eval" ]]; then
+        maybePure="--simulate-pure-eval"
+        shift
+    else
+        maybePure=""
+    fi
     local expr=$1
     local expectedErrorRegex=$2
     if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
-        --expr "$prefixExpression $expr"); then
+        --expr "$(prefixExpression $maybePure) $expr"); then
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
     stderr=$(<"$tmp/stderr")
@@ -126,12 +149,12 @@ expectTrace() {
     local expectedTrace=$2
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTrace \
-        --expr "$prefixExpression trace ($expr)" || true
+        --expr "$(prefixExpression) trace ($expr)" || true
 
     actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
 
     nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTraceVal \
-        --expr "$prefixExpression traceVal ($expr)" || true
+        --expr "$(prefixExpression) traceVal ($expr)" || true
 
     actualTraceVal=$(sed -n 's/^trace: //p' "$tmp/stderrTraceVal")
 
@@ -224,23 +247,17 @@ withFileMonitor() {
     fi
 }
 
-# Check whether a file set includes/excludes declared paths as expected, usage:
+
+# Create the tree structure declared in the tree variable, usage:
 #
 # tree=(
-#   [a/b] =1  # Declare that file       a/b should exist and expect it to be included in the store path
-#   [c/a] =   # Declare that file       c/a should exist and expect it to be excluded in the store path
-#   [c/d/]=   # Declare that directory c/d/ should exist and expect it to be excluded in the store path
+#   [a/b] =   # Declare that file       a/b should exist
+#   [c/a] =   # Declare that file       c/a should exist
+#   [c/d/]=   # Declare that directory c/d/ should exist
 # )
-# checkFileset './a' # Pass the fileset as the argument
+# createTree
 declare -A tree
-checkFileset() {
-    # New subshell so that we can have a separate trap handler, see `trap` below
-    local fileset=$1
-
-    # Process the tree into separate arrays for included paths, excluded paths and excluded files.
-    local -a included=()
-    local -a excluded=()
-    local -a excludedFiles=()
+createTree() {
     # Track which paths need to be created
     local -a dirsToCreate=()
     local -a filesToCreate=()
@@ -248,24 +265,9 @@ checkFileset() {
         # If keys end with a `/` we treat them as directories, otherwise files
         if [[ "$p" =~ /$ ]]; then
             dirsToCreate+=("$p")
-            isFile=
         else
             filesToCreate+=("$p")
-            isFile=1
         fi
-        case "${tree[$p]}" in
-            1)
-                included+=("$p")
-                ;;
-            0)
-                excluded+=("$p")
-                if [[ -n "$isFile" ]]; then
-                    excludedFiles+=("$p")
-                fi
-                ;;
-            *)
-                die "Unsupported tree value: ${tree[$p]}"
-        esac
     done
 
     # Create all the necessary paths.
@@ -280,6 +282,43 @@ checkFileset() {
         mkdir -p "${parentsToCreate[@]}"
         touch "${filesToCreate[@]}"
     fi
+}
+
+# Check whether a file set includes/excludes declared paths as expected, usage:
+#
+# tree=(
+#   [a/b] =1  # Declare that file       a/b should exist and expect it to be included in the store path
+#   [c/a] =   # Declare that file       c/a should exist and expect it to be excluded in the store path
+#   [c/d/]=   # Declare that directory c/d/ should exist and expect it to be excluded in the store path
+# )
+# checkFileset './a' # Pass the fileset as the argument
+checkFileset() {
+    # New subshell so that we can have a separate trap handler, see `trap` below
+    local fileset=$1
+
+    # Create the tree
+    createTree
+
+    # Process the tree into separate arrays for included paths, excluded paths and excluded files.
+    local -a included=()
+    local -a excluded=()
+    local -a excludedFiles=()
+    for p in "${!tree[@]}"; do
+        case "${tree[$p]}" in
+            1)
+                included+=("$p")
+                ;;
+            0)
+                excluded+=("$p")
+                # If keys end with a `/` we treat them as directories, otherwise files
+                if [[ ! "$p" =~ /$ ]]; then
+                    excludedFiles+=("$p")
+                fi
+                ;;
+            *)
+                die "Unsupported tree value: ${tree[$p]}"
+        esac
+    done
 
     expression="toSource { root = ./.; fileset = $fileset; }"
 
@@ -318,8 +357,12 @@ checkFileset() {
 #### Error messages #####
 
 # Absolute paths in strings cannot be passed as `root`
-expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \("/nix/store/foobar"\) is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \(/nix/store/foobar\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+
+expectFailure 'toSource { root = cleanSourceWith { src = ./.; }; fileset = ./.; }' 'lib.fileset.toSource: `root` is a `lib.sources`-based value, but it should be a path instead.
+\s*To use a `lib.sources`-based value, convert it to a file set using `lib.fileset.fromSource` and pass it as `fileset`.
+\s*Note that this only works for sources created from paths.'
 
 # Only paths are accepted as `root`
 expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `root` is of type int, but it should be a path instead.'
@@ -328,14 +371,14 @@ expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `r
 mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./foo/mock-root; fileset = ./bar/mock-root; }
-' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \("'"$work"'/foo/mock-root"\):
-\s*`root`: root "'"$work"'/foo/mock-root"
-\s*`fileset`: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \('"$work"'/foo/mock-root\):
+\s*`root`: Filesystem root is "'"$work"'/foo/mock-root"
+\s*`fileset`: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # `root` needs to exist
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a path that does not exist.'
 
 # `root` needs to be a file
 touch a
@@ -365,9 +408,12 @@ rm -rf -- *
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
 expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a file set or a path instead.
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
+expectFailure 'toSource { root = ./.; fileset = cleanSourceWith { src = ./.; }; }' 'lib.fileset.toSource: `fileset` is a `lib.sources`-based value, but it should be a file set or a path instead.
+\s*To convert a `lib.sources`-based value to a file set you can use `lib.fileset.fromSource`.
+\s*Note that this only works for sources created from paths.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
@@ -490,26 +536,26 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = union ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.union: Filesystem roots are not the same:
-\s*first argument: root "'"$work"'/foo/mock-root"
-\s*second argument: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
 ' 'lib.fileset.unions: Filesystem roots are not the same:
-\s*element 0: root "'"$work"'/foo/mock-root"
-\s*element 1: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*Element 0: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Element 1: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument \('"$work"'/b\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: Second argument \('"$work"'/b\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: Element 0 \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: Element 1 \('"$work"'/b\) is a path that does not exist.'
 
 # unions needs a list
-expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
+expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Argument is of type null, but it should be a list instead.'
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files
 tree=()
@@ -603,14 +649,14 @@ mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./.; fileset = intersection ./foo/mock-root ./bar/mock-root; }
 ' 'lib.fileset.intersection: Filesystem roots are not the same:
-\s*first argument: root "'"$work"'/foo/mock-root"
-\s*second argument: root "'"$work"'/bar/mock-root"
-\s*Different roots are not supported.'
+\s*First argument: Filesystem root is "'"$work"'/foo/mock-root"
+\s*Second argument: Filesystem root is "'"$work"'/bar/mock-root"
+\s*Different filesystem roots are not supported.'
 rm -rf -- *
 
 # Coercion errors show the correct context
-expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: first argument \('"$work"'/a\) does not exist.'
-expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: second argument \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: First argument \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: Second argument \('"$work"'/b\) is a path that does not exist.'
 
 # The tree of later arguments should not be evaluated if a former argument already excludes all files
 tree=(
@@ -785,10 +831,18 @@ checkFileset 'difference ./. ./b'
 
 ## File filter
 
+# The first argument needs to be a function
+expectFailure 'fileFilter null (abort "this is not needed")' 'lib.fileset.fileFilter: First argument is of type null, but it should be a function instead.'
+
+# The second argument needs to be an existing path
+expectFailure 'fileFilter (file: abort "this is not needed") _emptyWithoutBase' 'lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
+\s*If you need to filter files in a file set, use `intersection fileset \(fileFilter pred \./\.\)` instead.'
+expectFailure 'fileFilter (file: abort "this is not needed") null' 'lib.fileset.fileFilter: Second argument is of type null, but it should be a path instead.'
+expectFailure 'fileFilter (file: abort "this is not needed") ./a' 'lib.fileset.fileFilter: Second argument \('"$work"'/a\) is a path that does not exist.'
+
 # The predicate is not called when there's no files
 tree=()
 checkFileset 'fileFilter (file: abort "this is not needed") ./.'
-checkFileset 'fileFilter (file: abort "this is not needed") _emptyWithoutBase'
 
 # The predicate must be able to handle extra attributes
 touch a
@@ -849,6 +903,18 @@ tree=(
 checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)'
 # but here we need to use ./c
 checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
+
+# Make sure single files are filtered correctly
+tree=(
+    [a]=1
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; true) ./a'
+tree=(
+    [a]=0
+    [b]=0
+)
+checkFileset 'fileFilter (file: assert file.name == "a"; false) ./a'
 
 ## Tracing
 
@@ -993,6 +1059,390 @@ expectedTrace=$work$'\n'$(printf -- '- %s (regular)\n' "${filesToCreate[@]}")
 # We need an excluded file so it doesn't print as `(all files in directory)`
 touch 0 "${filesToCreate[@]}"
 expectTrace 'unions (mapAttrsToList (n: _: ./. + "/${n}") (removeAttrs (builtins.readDir ./.) [ "0" ]))' "$expectedTrace"
+rm -rf -- *
+
+## lib.fileset.fromSource
+
+# Check error messages
+expectFailure 'fromSource null' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+expectFailure 'fromSource (lib.cleanSource "")' 'lib.fileset.fromSource: The source origin of the argument is a string-like value \(""\), but it should be a path instead.
+\s*Sources created from paths in strings cannot be turned into file sets, use `lib.sources` or derivations instead.'
+
+expectFailure 'fromSource (lib.cleanSource null)' 'lib.fileset.fromSource: The source origin of the argument is of type null, but it should be a path instead.'
+
+# fromSource on a path works and is the same as coercing that path
+mkdir a
+touch a/b c
+expectEqual 'trace (fromSource ./.) null' 'trace ./. null'
+rm -rf -- *
+
+# Check that converting to a file set doesn't read the included files
+mkdir a
+touch a/b
+run() {
+    expectEqual "trace (fromSource (lib.cleanSourceWith { src = ./a; })) null" "builtins.trace \"$work/a (all files in directory)\" null"
+    rm a/b
+}
+withFileMonitor run a/b
+rm -rf -- *
+
+# Check that converting to a file set doesn't read entries for directories that are filtered out
+mkdir -p a/b
+touch a/b/c
+run() {
+    expectEqual "trace (fromSource (lib.cleanSourceWith {
+      src = ./a;
+      filter = pathString: type: false;
+    })) null" "builtins.trace \"(empty)\" null"
+    rm a/b/c
+    rmdir a/b
+}
+withFileMonitor run a/b
+rm -rf -- *
+
+# The filter is not needed on empty directories
+expectEqual 'trace (fromSource (lib.cleanSourceWith {
+  src = ./.;
+  filter = abort "filter should not be needed";
+})) null' 'trace _emptyWithoutBase null'
+
+# Single files also work
+touch a b
+expectEqual 'trace (fromSource (cleanSourceWith { src = ./a; })) null' 'trace ./a null'
+rm -rf -- *
+
+# For a tree assigning each subpath true/false,
+# check whether a source filter with those results includes the same files
+# as a file set created using fromSource. Usage:
+#
+# tree=(
+#   [a]=1  # ./a is a file and the filter should return true for it
+#   [b/]=0 # ./b is a directory and the filter should return false for it
+# )
+# checkSource
+checkSource() {
+    createTree
+
+    # Serialise the tree as JSON (there's only minimal savings with jq,
+    # and we don't need to handle escapes)
+    {
+        echo "{"
+        first=1
+        for p in "${!tree[@]}"; do
+            if [[ -z "$first" ]]; then
+                echo ","
+            else
+                first=
+            fi
+            echo "\"$p\":"
+            case "${tree[$p]}" in
+                1)
+                    echo "true"
+                    ;;
+                0)
+                    echo "false"
+                    ;;
+                *)
+                    die "Unsupported tree value: ${tree[$p]}"
+            esac
+        done
+        echo "}"
+    } > "$tmp/tree.json"
+
+    # An expression to create a source value with a filter matching the tree
+    sourceExpr='
+      let
+        tree = importJSON '"$tmp"'/tree.json;
+      in
+      cleanSourceWith {
+        src = ./.;
+        filter =
+          pathString: type:
+          let
+            stripped = removePrefix (toString ./. + "/") pathString;
+            key = stripped + optionalString (type == "directory") "/";
+          in
+          tree.${key} or
+            (throw "tree key ${key} missing");
+      }
+    '
+
+    filesetExpr='
+      toSource {
+        root = ./.;
+        fileset = fromSource ('"$sourceExpr"');
+      }
+    '
+
+    # Turn both into store paths
+    sourceStorePath=$(expectStorePath "$sourceExpr")
+    filesetStorePath=$(expectStorePath "$filesetExpr")
+
+    # Loop through each path in the tree
+    while IFS= read -r -d $'\0' subpath; do
+        if [[ ! -e "$sourceStorePath"/"$subpath" ]]; then
+            # If it's not in the source store path, it's also not in the file set store path
+            if [[ -e "$filesetStorePath"/"$subpath" ]]; then
+                die "The store path $sourceStorePath created by $expr doesn't contain $subpath, but the corresponding store path $filesetStorePath created via fromSource does contain $subpath"
+            fi
+        elif [[ -z "$(find "$sourceStorePath"/"$subpath" -type f)" ]]; then
+            # If it's an empty directory in the source store path, it shouldn't be in the file set store path
+            if [[ -e "$filesetStorePath"/"$subpath" ]]; then
+                die "The store path $sourceStorePath created by $expr contains the path $subpath without any files, but the corresponding store path $filesetStorePath created via fromSource didn't omit it"
+            fi
+        else
+            # If it's non-empty directory or a file, it should be in the file set store path
+            if [[ ! -e "$filesetStorePath"/"$subpath" ]]; then
+                die "The store path $sourceStorePath created by $expr contains the non-empty path $subpath, but the corresponding store path $filesetStorePath created via fromSource doesn't include it"
+            fi
+        fi
+    done < <(find . -mindepth 1 -print0)
+
+    rm -rf -- *
+}
+
+# Check whether the filter is evaluated correctly
+tree=(
+    [a]=
+    [b/]=
+    [b/c]=
+    [b/d]=
+    [e/]=
+    [e/e/]=
+)
+# We fill out the above tree values with all possible combinations of 0 and 1
+# Then check whether a filter based on those return values gets turned into the corresponding file set
+for i in $(seq 0 $((2 ** ${#tree[@]} - 1 ))); do
+    for p in "${!tree[@]}"; do
+        tree[$p]=$(( i % 2 ))
+        (( i /= 2 )) || true
+    done
+    checkSource
+done
+
+# The filter is called with the same arguments in the same order
+mkdir a e
+touch a/b a/c d e
+expectEqual '
+  trace (fromSource (cleanSourceWith {
+    src = ./.;
+    filter = pathString: type: builtins.trace "${pathString} ${toString type}" true;
+  })) null
+' '
+  builtins.seq (cleanSourceWith {
+    src = ./.;
+    filter = pathString: type: builtins.trace "${pathString} ${toString type}" true;
+  }).outPath
+  builtins.trace "'"$work"' (all files in directory)"
+  null
+'
+rm -rf -- *
+
+# Test that if a directory is not included, the filter isn't called on its contents
+mkdir a b
+touch a/c b/d
+expectEqual 'trace (fromSource (cleanSourceWith {
+  src = ./.;
+  filter = pathString: type:
+    if pathString == toString ./a then
+      false
+    else if pathString == toString ./b then
+      true
+    else if pathString == toString ./b/d then
+      true
+    else
+      abort "This filter should not be called with path ${pathString}";
+})) null' 'trace (_create ./. { b = "directory"; }) null'
+rm -rf -- *
+
+# The filter is called lazily:
+# If a later say intersection removes a part of the tree, the filter won't run on it
+mkdir a d
+touch a/{b,c} d/e
+expectEqual 'trace (intersection ./a (fromSource (lib.cleanSourceWith {
+  src = ./.;
+  filter = pathString: type:
+    if pathString == toString ./a || pathString == toString ./a/b then
+      true
+    else if pathString == toString ./a/c then
+      false
+    else
+      abort "filter should not be called on ${pathString}";
+}))) null' 'trace ./a/b null'
+rm -rf -- *
+
+## lib.fileset.gitTracked/gitTrackedWith
+
+# The first/second argument has to be a path
+expectFailure 'gitTracked null' 'lib.fileset.gitTracked: Expected the argument to be a path, but it'\''s a null instead.'
+expectFailure 'gitTrackedWith {} null' 'lib.fileset.gitTrackedWith: Expected the second argument to be a path, but it'\''s a null instead.'
+
+# The path has to contain a .git directory
+expectFailure 'gitTracked ./.' 'lib.fileset.gitTracked: Expected the argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
+expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the second argument \('"$work"'\) to point to a local working tree of a Git repository, but it'\''s not.'
+
+# recurseSubmodules has to be a boolean
+expectFailure 'gitTrackedWith { recurseSubmodules = null; } ./.' 'lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it'\''s a null instead.'
+
+# recurseSubmodules = true is not supported on all Nix versions
+if [[ "$(nix-instantiate --eval --expr "$(prefixExpression) (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
+    fetchGitSupportsSubmodules=1
+else
+    fetchGitSupportsSubmodules=
+    expectFailure 'gitTrackedWith { recurseSubmodules = true; } ./.' 'lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version 2.4 and after, but Nix version [0-9.]+ is used.'
+fi
+
+# Checks that `gitTrackedWith` contains the same files as `git ls-files`
+# for the current working directory.
+# If --recurse-submodules is passed, the flag is passed through to `git ls-files`
+# and as `recurseSubmodules` to `gitTrackedWith`
+checkGitTrackedWith() {
+    if [[ "${1:-}" == "--recurse-submodules" ]]; then
+        gitLsFlags="--recurse-submodules"
+        gitTrackedArg="{ recurseSubmodules = true; }"
+    else
+        gitLsFlags=""
+        gitTrackedArg="{ }"
+    fi
+
+    # All files listed by `git ls-files`
+    expectedFiles=()
+    while IFS= read -r -d $'\0' file; do
+        # If there are submodules but --recurse-submodules isn't passed,
+        # `git ls-files` lists them as empty directories,
+        # we need to filter that out since we only want to check/count files
+        if [[ -f "$file" ]]; then
+            expectedFiles+=("$file")
+        fi
+    done < <(git ls-files -z $gitLsFlags)
+
+    storePath=$(expectStorePath 'toSource { root = ./.; fileset = gitTrackedWith '"$gitTrackedArg"' ./.; }')
+
+    # Check that each expected file is also in the store path with the same content
+    for expectedFile in "${expectedFiles[@]}"; do
+        if [[ ! -e "$storePath"/"$expectedFile" ]]; then
+            die "Expected file $expectedFile to exist in $storePath, but it doesn't.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+        fi
+        if ! diff "$expectedFile" "$storePath"/"$expectedFile"; then
+            die "Expected file $expectedFile to have the same contents as in $storePath, but it doesn't.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+        fi
+    done
+
+    # This is a cheap way to verify the inverse: That all files in the store path are also expected
+    # We just count the number of files in both and verify they're the same
+    actualFileCount=$(find "$storePath" -type f -printf . | wc -c)
+    if [[ "${#expectedFiles[@]}" != "$actualFileCount" ]]; then
+        die "Expected ${#expectedFiles[@]} files in $storePath, but got $actualFileCount.\nGit status:\n$(git status)\nStore path contents:\n$(find "$storePath")"
+    fi
+}
+
+
+# Runs checkGitTrackedWith with and without --recurse-submodules
+# Allows testing both variants together
+checkGitTracked() {
+    checkGitTrackedWith
+    if [[ -n "$fetchGitSupportsSubmodules" ]]; then
+        checkGitTrackedWith --recurse-submodules
+    fi
+}
+
+createGitRepo() {
+    git init -q "$1"
+    # Only repo-local config
+    git -C "$1" config user.name "Nixpkgs"
+    git -C "$1" config user.email "nixpkgs@nixos.org"
+    # Get at least a HEAD commit, needed for older Nix versions
+    git -C "$1" commit -q --allow-empty -m "Empty commit"
+}
+
+# Check the error message for pure eval mode
+createGitRepo .
+expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTracked ./.; }' 'lib.fileset.gitTracked: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
+expectFailure --simulate-pure-eval 'toSource { root = ./.; fileset = gitTrackedWith {} ./.; }' 'lib.fileset.gitTrackedWith: This function is currently not supported in pure evaluation mode, since it currently relies on `builtins.fetchGit`. See https://github.com/NixOS/nix/issues/9292.'
+rm -rf -- *
+
+# Go through all stages of Git files
+# See https://www.git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+
+# Empty repository
+createGitRepo .
+checkGitTracked
+
+# Untracked file
+echo a > a
+checkGitTracked
+
+# Staged file
+git add a
+checkGitTracked
+
+# Committed file
+git commit -q -m "Added a"
+checkGitTracked
+
+# Edited file
+echo b > a
+checkGitTracked
+
+# Removed file
+git rm -f -q a
+checkGitTracked
+
+rm -rf -- *
+
+# gitignored file
+createGitRepo .
+echo a > .gitignore
+touch a
+git add -A
+checkGitTracked
+
+# Add it regardless (needs -f)
+git add -f a
+checkGitTracked
+rm -rf -- *
+
+# Directory
+createGitRepo .
+mkdir -p d1/d2/d3
+touch d1/d2/d3/a
+git add d1
+checkGitTracked
+rm -rf -- *
+
+# Submodules
+createGitRepo .
+createGitRepo sub
+
+# Untracked submodule
+git -C sub commit -q --allow-empty -m "Empty commit"
+checkGitTracked
+
+# Tracked submodule
+git submodule add ./sub sub >/dev/null
+checkGitTracked
+
+# Untracked file
+echo a > sub/a
+checkGitTracked
+
+# Staged file
+git -C sub add a
+checkGitTracked
+
+# Committed file
+git -C sub commit -q -m "Add a"
+checkGitTracked
+
+# Changed file
+echo b > sub/b
+checkGitTracked
+
+# Removed file
+git -C sub rm -f -q a
+checkGitTracked
+
 rm -rf -- *
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets

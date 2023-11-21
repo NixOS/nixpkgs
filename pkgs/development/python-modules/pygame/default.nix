@@ -57,8 +57,12 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    ${python.pythonForBuild.interpreter} buildconfig/config.py
+    ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   checkPhase = ''
     runHook preCheck

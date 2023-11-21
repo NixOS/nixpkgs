@@ -2,13 +2,13 @@
 
 buildNpmPackage rec {
   pname = "quicktype";
-  version = "23.0.75"; # version from https://npm.im/quicktype
+  version = "23.0.78"; # version from https://npm.im/quicktype
 
   src = fetchFromGitHub {
     owner = "quicktype";
     repo = "quicktype";
-    rev = "9b570a73a896306778940c793c0037a38815304a"; # version not tagged
-    hash = "sha256-boCBgIoM2GECipZTJlp9IaeXT24aR8tawS1X8CFDDqw=";
+    rev = "317deefa6a0c8ba0201b9b2b50d00c7e93c41d78"; # version not tagged
+    hash = "sha256-KkyxS3mxOmUA8ZpB0tqdpdafvP429R5Y39C3CszTiZk=";
   };
 
   postPatch = ''

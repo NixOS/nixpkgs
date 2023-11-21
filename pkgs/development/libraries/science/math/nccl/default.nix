@@ -1,6 +1,7 @@
 { lib
 , backendStdenv
 , fetchFromGitHub
+, python3
 , which
 , autoAddOpenGLRunpathHook
 , cuda_cccl
@@ -17,13 +18,13 @@ let
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
-  version = "2.18.5-1";
+  version = "2.19.3-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vp2WitKateEt1AzSeeEvY/wM4NnUmV7XgL/gfPRUObY=";
+    hash = "sha256-59FlOKM5EB5Vkm4dZBRCkn+IgIcdQehE+FyZAdTCT/A=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,6 +33,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     which
     autoAddOpenGLRunpathHook
     cuda_nvcc
+    python3
   ];
 
   buildInputs = [
@@ -46,7 +48,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    patchShebangs src/collectives/device/gen_rules.sh
+    patchShebangs ./src/device/generate.py
     makeFlagsArray+=(
       "NVCC_GENCODE=${gencode}"
     )
@@ -77,7 +79,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mdaiter orivej ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ mdaiter orivej ] ++ teams.cuda.members;
   };
 })

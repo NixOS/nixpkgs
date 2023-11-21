@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchgit
 , SDL2
 , cmake
 , espeak
@@ -21,18 +20,16 @@
 , libXfixes
 , libdrm
 , libffi
+, libjpeg
 , libusb1
 , libuvc
 , libvlc
 , libvncserver
 , libxcb
 , libxkbcommon
-, lua5_1
-, luajit
 , makeWrapper
 , mesa
 , mupdf
-, ninja
 , openal
 , openjpeg
 , pcre2
@@ -121,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXfixes
     libdrm
     libffi
+    libjpeg
     libusb1
     libuvc
     libvlc
@@ -128,9 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libxkbcommon
     mesa
-    mupdf.dev
+    mupdf
     openal
-    openjpeg.dev
+    openjpeg
     pcre2
     sqlite
     tesseract

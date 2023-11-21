@@ -212,7 +212,7 @@ rec {
 
   # having no RC generated should autodisable init.vim wrapping
   nvim_autowrap = runTest nvim_via_override ''
-      ! grep "-u" ${nvimShouldntWrap}/bin/nvim
+      ! grep ${nvimShouldntWrap}/bin/nvim
   '';
 
 

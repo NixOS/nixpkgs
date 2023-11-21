@@ -42,6 +42,10 @@ rec {
       hash = "sha256-H3GKN0Pq1VFD5+SWxm8CXUVO7zAyj/ngKVmDaG/aRT4=";
       fetchSubmodules = true;
     };
+    patches = [
+      # Fixes several incompatible function pointer conversions, which are errors in clang 16.
+      ./0014-clang_incompatible_function_pointer_conversions.patch
+    ];
     # just for submodule IIRC
     nativeBuildInputs = [ git ];
   };
