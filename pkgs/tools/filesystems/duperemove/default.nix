@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=v${version}"
+    "CFLAGS=-Wno-error=format-security"
   ];
 
   passthru.tests.version = testers.testVersion {
