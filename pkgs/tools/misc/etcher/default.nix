@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , bash
-, util-linux
 , autoPatchelfHook
 , dpkg
 , makeWrapper
@@ -12,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.18.12";
+  version = "1.18.13";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
-    hash = "sha256-Ucs187xTpbRJ7P32hCl8cHPxO3HCs44ZneAas043FXk=";
+    hash = "sha256-1lfm8RdmDJixx4i0ru8Isd9sHrpU6t6lZFKP9tPN5ig=";
   };
 
   # sudo-prompt has hardcoded binary paths on Linux and we patch them here
@@ -24,8 +23,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace opt/balenaEtcher/resources/app/generated/gui.js \
       --replace '/usr/bin/pkexec' '/usr/bin/pkexec", "/run/wrappers/bin/pkexec' \
-      --replace '/bin/bash' '${bash}/bin/bash' \
-      --replace '"lsblk"' '"${util-linux}/bin/lsblk"'
+      --replace '/bin/bash' '${bash}/bin/bash'
   '';
 
   nativeBuildInputs = [
