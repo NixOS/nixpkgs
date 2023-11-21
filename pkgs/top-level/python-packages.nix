@@ -12691,9 +12691,7 @@ self: super: with self; {
 
   scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
-  scs = callPackage ../development/python-modules/scs {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate;
-  };
+  scs = callPackage ../development/python-modules/scs { };
 
   sdds = callPackage ../development/python-modules/sdds { };
 
