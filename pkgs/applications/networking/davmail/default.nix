@@ -14,20 +14,17 @@
 }:
 
 let
-  rev = 3423;
+  rev = 3464;
   jre' = if preferZulu then zulu else jre;
   gtk' = if preferGtk3 then gtk3 else gtk2;
-
-  inherit (lib) makeLibraryPath versions;
-
 in
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    sha256 = "sha256-/JsJFtGalNuOz21eeCPR/LvLueMtQAR7VSKN8SpnPvA=";
+    sha256 = "sha256-FatB0t/BhZRMofYE0KD5LDYGjDQ8hriIszKJP8qNvhw=";
   };
 
   postPatch = ''
