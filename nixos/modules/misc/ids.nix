@@ -288,7 +288,7 @@ in
       telegraf = 256;
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs  = 261;
       # stanchion = 262; # unused, removed 2020-10-14
@@ -599,7 +599,7 @@ in
       #telegraf = 256; # unused
       gitlab-runner = 257;
       postgrey = 258;
-      hound = 259;
+      # hound = 259; # unused, removed 2023-11-21
       leaps = 260;
       ipfs = 261;
       # stanchion = 262; # unused, removed 2020-10-14
