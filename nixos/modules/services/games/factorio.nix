@@ -38,7 +38,7 @@ let
     non_blocking_saving = cfg.nonBlockingSaving;
   } // cfg.extraSettings;
   serverSettingsString = builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings);
-  serverSettingsFile = pkgs.writeText "server-settings.json";
+  serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
   serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
@@ -269,15 +269,15 @@ in
       after         = [ "network.target" ];
 
       preStart =
-        toString [
+        (toString [
           "test -e ${stateDir}/saves/${cfg.saveName}.zip"
           "||"
           "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--create=${mkSavePath cfg.saveName}"
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-        ]
-        + (optionalString hasExtraSettings ("\necho ${lib.strings.escapeShellArgs serverSettingsString}"
+        ])
+        + (optionalString (cfg.extraSettingsFile != null) ("\necho ${lib.strings.escapeShellArg serverSettingsString}"
           + " \"$(cat ${cfg.extraSettingsFile})\" | ${lib.getExe pkgs.jq} -s add"
           + " > ${stateDir}/server-settings.json"));
 
@@ -294,7 +294,7 @@ in
           "--bind=${cfg.bind}"
           (optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
           "--server-settings=${
-            if hasExtraSettings
+            if (cfg.extraSettingsFile != null)
             then "${stateDir}/server-settings.json"
             else serverSettingsFile
           }"
