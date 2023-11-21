@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, meson, gettext, glib, gjs, ninja, python3, gtk3
-, webkitgtk, gsettings-desktop-schemas, wrapGAppsHook, desktop-file-utils
+, webkitgtk_4_1, gsettings-desktop-schemas, wrapGAppsHook, desktop-file-utils
 , gobject-introspection, glib-networking }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/main.js \
+      --replace "'WebKit2': '4.0'" "'WebKit2': '4.1'"
   '';
 
   postFixup = ''
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     glib-networking
     gjs
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     desktop-file-utils
     gsettings-desktop-schemas
   ];

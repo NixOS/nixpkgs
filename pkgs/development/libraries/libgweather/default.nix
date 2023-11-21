@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.2.0";
+  version = "4.4.0";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "r4qBLaDYl2oADh1iVywlYIaoFzI/vzWwZtv92NLKYgM=";
+    sha256 = "Nm6Gb/KnCLiUz+qUdbjo/1TLPitHfqcqit4Nq+5fSKQ=";
   };
 
   patches = [

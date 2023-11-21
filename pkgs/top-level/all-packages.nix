@@ -13412,6 +13412,8 @@ with pkgs;
 
   sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
 
+  snapshot = callPackage ../applications/graphics/snapshot { };
+
   solvespace = callPackage ../applications/graphics/solvespace { };
 
   sonarr = callPackage ../servers/sonarr { };
@@ -19257,6 +19259,8 @@ with pkgs;
 
   gnome-firmware = callPackage ../applications/misc/gnome-firmware { };
 
+  gnome-tecla = callPackage ../applications/misc/gnome-tecla { };
+
   gnome-usage = callPackage ../applications/misc/gnome-usage { };
 
   gnome-inform7 = callPackage ../applications/editors/gnome-inform7 { };
@@ -23365,6 +23369,7 @@ with pkgs;
   libpcap = callPackage ../development/libraries/libpcap { };
 
   libpeas = callPackage ../development/libraries/libpeas { };
+  libpeas2 = callPackage ../development/libraries/libpeas/2.x.nix { };
 
   libpg_query = callPackage ../development/libraries/libpg_query { };
 
@@ -38712,6 +38717,7 @@ with pkgs;
     gnome42Extensions
     gnome43Extensions
     gnome44Extensions
+    gnome45Extensions
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };

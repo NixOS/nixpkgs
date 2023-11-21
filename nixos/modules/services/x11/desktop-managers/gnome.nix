@@ -19,7 +19,7 @@ let
 
   defaultFavoriteAppsOverride = ''
     [org.gnome.shell]
-    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+    favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Nautilus.desktop' ]
   '';
 
   nixos-background-light = pkgs.nixos-artwork.wallpapers.simple-blue;
@@ -353,6 +353,7 @@ in
           buildPortalsInGnome = false;
         })
       ];
+      xdg.portal.configPackages = mkDefault [ pkgs.gnome.gnome-session ];
 
       networking.networkmanager.enable = mkDefault true;
 
@@ -462,15 +463,13 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages =
         with pkgs.gnome;
         utils.removePackagesByName
           ([
             baobab
-            cheese
-            eog
             epiphany
             pkgs.gnome-text-editor
             gnome-calculator
@@ -483,12 +482,13 @@ in
             gnome-logs
             gnome-maps
             gnome-music
-            pkgs.gnome-photos
             gnome-system-monitor
             gnome-weather
+            pkgs.loupe
             nautilus
             pkgs.gnome-connections
             simple-scan
+            pkgs.snapshot
             totem
             yelp
           ] ++ lib.optionals config.services.flatpak.enable [

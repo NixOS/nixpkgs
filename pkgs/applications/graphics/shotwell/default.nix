@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.32.2";
+  version = "0.32.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-pd5T6HMhbfj1mWyWgnvtlj1sY1TgReF5bf0ybGGIwmM=";
+    sha256 = "sha256-4AD+5bPzYseRFPDs/44is0yaKGW1nkGi2j5NxdLKLDw=";
   };
 
   nativeBuildInputs = [
