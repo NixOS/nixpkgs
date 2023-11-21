@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.20.2";
+  version = "0.20.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tree_sitter";
     inherit version;
-    hash = "sha256-CmwGq6pV3hdCQaR2tTYXO7ooJB0uqF0ZjTOqi/AJ8Cg=";
+    hash = "sha256-atsSPi8+VjmbvyNZkkYzyILMQO6DRIhSALygki9xO+U=";
   };
 
   nativeBuildInputs = [
