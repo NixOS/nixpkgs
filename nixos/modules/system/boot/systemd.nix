@@ -413,6 +413,16 @@ in
         time units include "ms", "s", "min", "h", "d", and "w".
       '';
     };
+
+    systemd.machineId = mkOption {
+      # A regexp matching (exactly) UUIDv4s, represented in hexadecimal without dashes.
+      type = with types; nullOr
+        (strMatching "[[:xdigit:]]{12}4[[:xdigit:]]{3}[89ab][[:xdigit:]]{15}");
+      description = ''
+        Persistent {manpage}`machine-id(5)` for systemd,
+        as a hex-encoded UUIDv4 without dashes.
+      '';
+    };
   };
 
 
@@ -629,7 +639,10 @@ in
     # https://github.com/systemd/systemd/pull/12226
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
 
-    boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
+    boot.kernelParams = lib.foldr (a: b: a ++ b) [] [
+      (optional (cfg.machineId != null) "systemd.machine_id=${cfg.machineId}")
+      (optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0")
+    ];
 
     # Avoid potentially degraded system state due to
     # "Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)."
