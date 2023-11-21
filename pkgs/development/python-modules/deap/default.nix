@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "A novel evolutionary computation framework for rapid prototyping and testing of ideas";
     homepage = "https://github.com/DEAP/deap";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [ getpsyched psyanticy ];
   };
 }
