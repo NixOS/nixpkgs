@@ -181,9 +181,8 @@ in {
 
 } // (let
   wrapNim = { nim', patches }:
-    let
-      targetPlatformConfig = stdenv.targetPlatform.config;
-      self = stdenv.mkDerivation (finalAttrs: {
+    let targetPlatformConfig = stdenv.targetPlatform.config;
+    in stdenv.mkDerivation (finalAttrs: {
         name = "${targetPlatformConfig}-nim-wrapper-${nim'.version}";
         inherit (nim') version;
         preferLocalBuild = true;
@@ -307,9 +306,6 @@ in {
           platforms = with lib.platforms; unix ++ genode;
         };
       });
-    in self // {
-      pkgs = callPackage ../../../top-level/nim-packages.nix { nim = self; };
-    };
 in {
 
   nim2 = wrapNim {
