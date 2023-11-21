@@ -65,6 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/a8324d670b813a48ac7d48aa0bc013773047a01d.patch";
       hash = "sha256-W6q3LuQqWmUVSBzORcJsTPoLfbWwytABMDR6JITHrDI=";
     })
+
+    # Fix Qt 5.15.11 compatibility
+    # Remove when version > 1.3.5011
+    (fetchpatch {
+      name = "0004-lomiri-ui-toolkit-Fix-compilation-with-Qt-5.15.11.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/4f999077dc6bc5591bdfede64fd21cb3acdcaac1.patch";
+      hash = "sha256-5VCQFOykxgspNBxH94XYuBpdHsH9a3+8FwV6xQE55Xc=";
+    })
   ];
 
   postPatch = ''
@@ -186,8 +194,11 @@ stdenv.mkDerivation (finalAttrs: {
       "recreateview"
       "subtheming"
       "swipearea"
+
+      # Intended scaling value gets overridden since Qt 5.15.11
+      "dpr1"
     ]}; do
-      sed -i -e "/$badUnitTest/d" tests/unit/unit.pro
+      sed -i -e "/$badUnitTest/d" tests/unit/unit.pro tests/unit/units/units.pro
     done
 
     # These tests don't fail explicitly, but issue warnings that the test suite doesn't expect, which it turns into errors
