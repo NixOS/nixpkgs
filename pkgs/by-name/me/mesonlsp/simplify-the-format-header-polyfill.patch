@@ -1,0 +1,47 @@
+From ae3fb8943dd5b2d282a2c6d4525a8ce0dd0244e8 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Tue, 25 Jun 2024 23:03:50 +0300
+Subject: [PATCH] Simplify the `<format>` header polyfill.
+
+---
+ src/polyfill/polyfill.hpp | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/src/polyfill/polyfill.hpp b/src/polyfill/polyfill.hpp
+index 5c5ba39a..b5d145ed 100644
+--- a/src/polyfill/polyfill.hpp
++++ b/src/polyfill/polyfill.hpp
+@@ -1,9 +1,6 @@
+ #pragma once
+
+ #if defined(__APPLE__)
+-#if __has_include(<format>) and !defined(__x86_64__)
+-#include <format>
+-#else
+ #include <chrono>
+ #include <fmt/core.h>
+
+@@ -23,10 +20,8 @@ struct fmt::formatter<std::chrono::time_point<Clock, Duration>> {
+     return fmt::format_to(ctx.out(), "{}", tp.time_since_epoch().count());
+   }
+ };
+-#endif
+-#else
++#elif defined(_WIN32)
+ #include <format>
+-#ifdef _WIN32
+ template <> struct std::formatter<wchar_t *> {
+   constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
+
+@@ -35,6 +30,6 @@ template <> struct std::formatter<wchar_t *> {
+     return std::format_to(ctx.out(), L"{}", str);
+   }
+ };
+-
+-#endif
++#else
++#include <format>
+ #endif
+--
+2.45.1
+
