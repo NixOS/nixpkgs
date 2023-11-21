@@ -3,6 +3,7 @@
   cmake,
   cudaPackages,
   lib,
+  saxpy,
 }:
 let
   inherit (cudaPackages)
@@ -57,6 +58,16 @@ backendStdenv.mkDerivation {
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
   ];
+
+  passthru.tests.withCuda = saxpy.overrideAttrs (
+    _: {
+      requiredSystemFeatures = ["cuda"];
+      doInstallCheck = true;
+      postInstallCheck = ''
+        $out/bin/saxpy
+      '';
+    }
+  );
 
   meta = rec {
     description = "Simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
