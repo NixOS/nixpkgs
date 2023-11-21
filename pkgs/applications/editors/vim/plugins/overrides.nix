@@ -847,7 +847,7 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neotest = super.neorg.overrideAttrs {
+  neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
 
