@@ -3,9 +3,6 @@
 let
   cfg = config.programs.nix-required-mounts;
   package = pkgs.nix-required-mounts;
-  overridenPackage = package.override {
-    inherit (cfg) allowedPatterns;
-  };
 
   Mount = with lib;
     types.submodule {
@@ -86,9 +83,26 @@ in
         example.require-ipfs.paths = [ "/ipfs" ];
         example.require-ipfs.onFeatures = [ "ifps" ];
       };
+    extraWrapperArgs = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      description =
+        lib.mdDoc
+          "List of extra arguments (such as `--add-flags -v`) to pass to the hook's wrapper";
+    };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = package.override {
+        inherit (cfg)
+          allowedPatterns
+          extraWrapperArgs;
+      };
+      description = lib.mdDoc "The final package with the final config applied";
+      internal = true;
+    };
   };
   config = lib.mkIf cfg.enable (lib.mkMerge [
-    { nix.settings.pre-build-hook = lib.getExe overridenPackage; }
+    { nix.settings.pre-build-hook = lib.getExe cfg.package; }
     (lib.mkIf cfg.presets.nvidia-gpu.enable {
       nix.settings.system-features = cfg.allowedPatterns.nvidia-gpu.onFeatures;
       programs.nix-required-mounts.allowedPatterns = {

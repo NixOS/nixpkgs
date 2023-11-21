@@ -16,12 +16,13 @@
   }
 , buildPackages
 , callPackage
+, extraWrapperArgs ? [ ]
 , formats
 , lib
+, makeWrapper
 , nix
 , nixosTests
 , python3Packages
-, makeWrapper
 , runCommand
 }:
 
@@ -47,7 +48,8 @@ python3Packages.buildPythonApplication
   postFixup = ''
     wrapProgram $out/bin/${pname} \
       --add-flags "--patterns ${allowedPatternsPath}" \
-      --add-flags "--nix-exe ${lib.getExe nix}"
+      --add-flags "--nix-exe ${lib.getExe nix}" \
+      ${builtins.concatStringsSep " " extraWrapperArgs}
   '';
 
   passthru = {
