@@ -98,24 +98,30 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
 
 ## Custom packages {#sec-language-texlive-custom-packages}
 
-You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its output and provide the appropriate `tlType` attribute (one of `"run"`, `"bin"`, `"doc"`, `"source"`). Dependencies on other TeX packages can be listed in the attribute `tlDeps`.
+You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its `"tex"` output, according to the [TeX Directory Structure](https://tug.ctan.org/tds/tds.html). Dependencies on other TeX packages can be listed in the attribute `tlDeps`.
 
-Such derivation must then be listed in the attribute `pkgs` of an attribute set passed to `texlive.combine`, for instance by passing `extraPkgs = { pkgs = [ custom_package ]; };`. Within Nixpkgs, `pkgs` should be part of the derivation itself, allowing users to call `texlive.combine { inherit (texlive) scheme-small; inherit some_tex_package; }`.
+The functions `texlive.combine` and `texlive.withPackages` recognise the following outputs:
 
-Here is a (very verbose) example where the attribute `pkgs` is attached to the derivation itself, which requires creating a fixed point. See also the packages `auctex`, `eukleides`, `mftrace` for more examples.
+- `"out"`: contents are linked in the TeX Live environment, and binaries in the `$out/bin` folder are wrapped;
+- `"tex"`: linked in `$TEXMFDIST`; files should follow the TDS (for instance `$tex/tex/latex/foiltex/foiltex.cls`);
+- `"texdoc"`, `"texsource"`: ignored by default, treated as `"tex"`;
+- `"tlpkg"`: linked in `$TEXMFROOT/tlpkg`;
+- `"man"`, `"info"`, ...: the other outputs are combined into separate outputs.
+
+When using `pkgFilter`, `texlive.combine` will assign `tlType` respectively `"bin"`, `"run"`, `"doc"`, `"source"`, `"tlpkg"` to the above outputs.
+
+Here is a (very verbose) example. See also the packages `auctex`, `eukleides`, `mftrace` for more examples.
 
 ```nix
 with import <nixpkgs> {};
 
 let
-  foiltex = stdenvNoCC.mkDerivation (finalAttrs: {
+  foiltex = stdenvNoCC.mkDerivation {
     pname = "latex-foiltex";
     version = "2.1.4b";
-    passthru = {
-      pkgs = [ finalAttrs.finalPackage ];
-      tlDeps = with texlive; [ latex ];
-      tlType = "run";
-    };
+
+    outputs = [ "tex" "texdoc" ];
+    passthru.tlDeps = with texlive; [ latex ];
 
     srcs = [
       (fetchurl {
@@ -138,7 +144,13 @@ let
       runHook postUnpack
     '';
 
-    nativeBuildInputs = [ texlive.combined.scheme-small ];
+    nativeBuildInputs = [
+      (texliveSmall.withPackages (ps: with ps; [ cm-super hypdoc latexmk ]))
+      # multiple-outputs.sh fails if $out is not defined
+      (writeShellScript "force-tex-output.sh" ''
+        out="''${tex-}"
+      '')
+    ];
 
     dontConfigure = true;
 
@@ -148,15 +160,23 @@ let
       # Generate the style files
       latex foiltex.ins
 
+      # Generate the documentation
+      export HOME=.
+      latexmk -pdf foiltex.dtx
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
 
-      path="$out/tex/latex/foiltex"
+      path="$tex/tex/latex/foiltex"
       mkdir -p "$path"
-      cp *.{cls,def,clo} "$path/"
+      cp *.{cls,def,clo,sty} "$path/"
+
+      path="$texdoc/doc/tex/latex/foiltex"
+      mkdir -p "$path"
+      cp *.pdf "$path/"
 
       runHook postInstall
     '';
@@ -167,12 +187,9 @@ let
       maintainers = with maintainers; [ veprbl ];
       platforms = platforms.all;
     };
-  });
-
-  latex_with_foiltex = texlive.combine {
-    inherit (texlive) scheme-small;
-    inherit foiltex;
   };
+
+  latex_with_foiltex = texliveSmall.withPackages (_: [ foiltex ]);
 in
   runCommand "test.pdf" {
     nativeBuildInputs = [ latex_with_foiltex ];

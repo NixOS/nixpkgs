@@ -677,18 +677,6 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
-  numtide = {
-    members = [
-      mic92
-      flokli
-      jfroche
-      tazjin
-      zimbatm
-    ];
-    scope = "Group registration for Numtide team members who collectively maintain packages.";
-    shortName = "Numtide team";
-  };
-
   ocaml = {
     members = [
       alizter
