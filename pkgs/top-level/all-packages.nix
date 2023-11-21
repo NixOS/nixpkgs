@@ -38562,9 +38562,7 @@ with pkgs;
 
   vms-empire = callPackage ../games/vms-empire { };
 
-  voxelands = callPackage ../games/voxelands {
-    libpng = libpng12;
-  };
+  voxelands = callPackage ../games/voxelands { };
 
   vvvvvv = callPackage ../games/vvvvvv {
     inherit (darwin.apple_sdk.frameworks) Foundation IOKit;
