@@ -1,4 +1,5 @@
 { config
+, pkgs
 , lib
 , stdenv
 , fetchFromGitHub
@@ -46,6 +47,7 @@
 , nlohmann_json
 , websocketpp
 , asio
+, libdatachannel
 , decklinkSupport ? false
 , blackmagic-desktop-video
 }:
@@ -56,13 +58,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "obs-studio";
-  version = "29.1.3";
+  version = "30.0.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "sha256-D0DPueMtopwz5rLgM8QcPT7DgTKcJKQHnst69EY9V6Q=";
+    sha256 = "sha256-ce2qYtR+L8afT5qSoItltEbLtuPZQtWyS6PiN+UwATc=";
     fetchSubmodules = true;
   };
 
@@ -80,7 +82,6 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ]
   ++ optional scriptingSupport swig4;
-
   buildInputs = [
     curl
     fdk_aac
@@ -108,6 +109,9 @@ stdenv.mkDerivation rec {
     nlohmann_json
     websocketpp
     asio
+    libdatachannel
+    (pkgs.callPackage ./qrcodegencpp.nix {})
+    (pkgs.callPackage ./onevpl.nix {})
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -146,7 +150,7 @@ stdenv.mkDerivation rec {
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail
-    rm $out/lib/obs-plugins/libcef.so
+    rm $out/lib/obs-plugins/libcef.so 
 
     qtWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
@@ -159,7 +163,7 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/lib/obs-plugins/*.so
 
     # Link libcef again after patchelfing other libs
-    ln -s ${libcef}/lib/libcef.so $out/lib/obs-plugins/libcef.so
+    ln -s ${libcef}/lib/* $out/lib/obs-plugins/
   '';
 
   meta = with lib; {
