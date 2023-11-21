@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "minidump";
-  version = "0.0.21";
+  version = "0.0.22";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g9YSr7bFdyfr84rKQztVD4P5+MfDtlYq0quXBx/YXzo=";
+    hash = "sha256-PPvvvHz3WA67Vn2P7MIY+ChkjXrCOuTgj0KXr4B2mZ0=";
   };
 
   # Upstream doesn't have tests
