@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-d7h9OJ39HVQNCHNr13M1ybDFoU3Xnd1PEczGLHZU/lU=";
   };
 
+  patches = [
+    # See https://github.com/linuxmint/cinnamon-screensaver/issues/446#issuecomment-1819580053
+    ./fix-broken-theming-with-pygobject-3-46.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook
