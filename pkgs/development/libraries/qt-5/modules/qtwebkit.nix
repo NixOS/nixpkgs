@@ -27,6 +27,8 @@
   python3,
   ruby,
   hyphen,
+  woff2,
+  dwz,
 }:
 
 qtModule {
@@ -49,6 +51,7 @@ qtModule {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     hyphen
+    woff2
   ];
   nativeBuildInputs = [
     bison
@@ -60,6 +63,7 @@ qtModule {
     python3
     ruby
     cmake
+    dwz
   ];
 
   cmakeFlags = [
