@@ -38,8 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  doCheck = false;
-
   meta = with lib; {
     changelog = "https://github.com/pbs/pycaption/blob/${version}/docs/changelog.rst";
     description = "Closed caption converter";
