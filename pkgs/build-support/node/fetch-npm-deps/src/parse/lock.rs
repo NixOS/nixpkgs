@@ -182,6 +182,7 @@ impl fmt::Display for Hash {
     }
 }
 
+#[allow(clippy::incorrect_partial_ord_impl_on_ord_type)]
 impl PartialOrd for Hash {
     fn partial_cmp(&self, other: &Hash) -> Option<Ordering> {
         let lhs = self.0.split_once('-')?.0;
