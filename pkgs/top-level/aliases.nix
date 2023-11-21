@@ -976,7 +976,6 @@ mapAliases ({
   ''; # Add 2023-07-29
   wcm = throw "'wcm' has been renamed to/replaced by 'wayfirePlugins.wcm'"; # Add 2023-07-29
   webkitgtk_5_0 = throw "'webkitgtk_5_0' has been superseded by 'webkitgtk_6_0'"; # Added 2023-02-25
-  wio = throw "wio has been removed from nixpkgs, it was unmaintained and required wlroots_0_14 at the time of removal"; # Added 2023-04-28
   wineWayland = wine-wayland;
   win-qemu = throw "'win-qemu' has been replaced by 'virtio-win'"; # Added 2023-08-16
   win-virtio = virtio-win; # Added 2023-10-17
