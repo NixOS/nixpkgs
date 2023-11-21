@@ -6,7 +6,6 @@
 , fetchPypi
 , pkg-config
 , dbus
-, lndir
 , dbus-python
 , sip
 , pyqt5_sip
@@ -20,8 +19,6 @@
 , withLocation ? false
 , withSerialPort ? false
 , withTools ? false
-, pkgsBuildTarget
-, buildPackages
 , dbusSupport ? !stdenv.isDarwin
 }:
 
@@ -115,40 +112,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     libsForQt5.qmake
-  ] ++ [
     setuptools
-    lndir
     sip
-  ] ++ (with pkgsBuildTarget.targetPackages.libsForQt5; [
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    qmake
-  ] ++ [
-    qtbase
-    qtsvg
-    qtdeclarative
-    qtwebchannel
-  ]
-    ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation
-    ++ lib.optional withSerialPort qtserialport
-    ++ lib.optional withTools qttools
-  );
+  ];
 
   buildInputs = with libsForQt5; [
     dbus
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     qtbase
-  ] ++ [
     qtsvg
     qtdeclarative
     pyqt-builder
   ]
     ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
