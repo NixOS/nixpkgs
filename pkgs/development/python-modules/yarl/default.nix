@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
-, pythonAtLeast
 , pythonOlder
+, cython_3
+, expandvars
+, setuptools
 , idna
 , multidict
 , typing-extensions
@@ -12,28 +13,26 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.9.2";
+  version = "1.9.3";
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BKudS59YfAbYAcKr/pMXt3zfmWxlqQ1ehOzEUBCCNXE=";
+    hash = "sha256-ShSQe1l+xVdA9j5S1/7g6e4J1bnVek85mnQjJo5Fe1c=";
   };
-
-  patches = [
-    # https://github.com/aio-libs/yarl/issues/876
-    (fetchpatch {
-      url = "https://github.com/aio-libs/yarl/commit/0a94c6e4948e00fff072c0cf367afbf4ac36f906.patch";
-      hash = "sha256-bqT46OLZLkBef8FQ1L95ITD70mC3+WIkr3+h2ekKrvE=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg
   '';
+
+  nativeBuildInputs = [
+    cython_3
+    expandvars
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     idna
