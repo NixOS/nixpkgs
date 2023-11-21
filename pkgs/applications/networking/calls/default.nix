@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , libhandy
+, libsecret
 , modemmanager
 , gtk3
 , gom
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     modemmanager
     libhandy
+    libsecret
     evolution-data-server
     folks
     gom

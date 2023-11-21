@@ -64,6 +64,7 @@ in
     xdg.portal = {
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
+      configPackages = mkDefault [ cfg.finalPackage ];
     };
   };
 
