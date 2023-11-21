@@ -8,6 +8,8 @@
 , gtk3
 , jre
 , libXtst
+, coreutils
+, gnugrep
 , zulu
 , preferGtk3 ? true
 , preferZulu ? true
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
-      --prefix PATH : ${jre'}/bin \
+      --prefix PATH : ${lib.makeBinPath [ jre' coreutils gnugrep ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk' libXtst ]}
 
     runHook postInstall
