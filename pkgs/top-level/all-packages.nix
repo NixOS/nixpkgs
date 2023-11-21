@@ -19293,8 +19293,6 @@ with pkgs;
 
   gopatch = callPackage ../development/tools/misc/gopatch { };
 
-  goredo = callPackage ../development/tools/build-managers/goredo { };
-
   gotify-server = callPackage ../servers/gotify { };
 
   gotty = callPackage ../servers/gotty { };
