@@ -24454,6 +24454,8 @@ with pkgs;
 
   osmid = callPackage ../applications/audio/osmid { };
 
+  overwitch = callPackage ../applications/audio/overwitch { withGui = false; };
+
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
 
