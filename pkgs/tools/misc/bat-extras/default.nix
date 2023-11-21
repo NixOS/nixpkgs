@@ -94,7 +94,7 @@ let
     name: # the name of the script
     dependencies: # the tools we need to prefix onto PATH
     stdenv.mkDerivation {
-      pname = "${core.pname}-${name}";
+      pname = name;
       inherit (core) version;
 
       src = core;
