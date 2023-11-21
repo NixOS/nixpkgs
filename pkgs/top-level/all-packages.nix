@@ -37729,9 +37729,7 @@ with pkgs;
 
   endless-sky = callPackage ../games/endless-sky { };
 
-  extremetuxracer = callPackage ../games/extremetuxracer {
-    libpng = libpng12;
-  };
+  extremetuxracer = callPackage ../games/extremetuxracer { };
 
   exult = callPackage ../games/exult { };
 
