@@ -11,7 +11,6 @@
 , dbus
 , cryptsetup
 , util-linux
-, udev
 , lvm2
 , systemd
 , xfsprogs
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace stratis-min           "$out/bin/stratis-min" \
       --replace systemd-ask-password  "${systemd}/bin/systemd-ask-password" \
       --replace sleep                 "${coreutils}/bin/sleep" \
-      --replace udevadm               "${udev}/bin/udevadm"
+      --replace udevadm               "${systemd}/bin/udevadm"
   '';
 
   nativeBuildInputs = [
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
     dbus
     cryptsetup
     util-linux
-    udev
+    systemd
     lvm2
   ];
 
