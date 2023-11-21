@@ -90,7 +90,6 @@ let
         , nativeBuildInputs ? [ ]
         , nimFlags ? [ ]
         , requiredNimVersion ? defaultNimVersion
-        , nimCopySources ? (lockAttrs == {}) # TODO: remove when nimPackages is gone
         , ...
         }:
         (if requiredNimVersion == 1 then {
@@ -103,7 +102,6 @@ let
           throw
             "requiredNimVersion ${toString requiredNimVersion} is not valid") // {
           nimFlags = lockFileNimFlags ++ nimFlags;
-          inherit nimCopySources;
         };
 
       attrs = postLock // finalOverride postLock;
