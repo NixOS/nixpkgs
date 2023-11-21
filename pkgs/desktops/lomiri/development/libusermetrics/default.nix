@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -39,22 +40,31 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  postPatch = ''
-    substituteInPlace data/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+  patches = [
+    # Only require libqtdbustest when building tests
+    # Remove when version > 1.3.1
+    (fetchpatch {
+      name = "0001-libusermetrics-Only-require-libqtdbustest-when-building-tests.patch";
+      url = "https://gitlab.com/ubports/development/core/libusermetrics/-/commit/45931f2bac3de24857a296edd6530c2f3c0adeac.patch";
+      hash = "sha256-dRsN7nEq3P9gc6TzmPEkugZ2ZgKdXb6a2hE5QUiCWZI=";
+    })
 
+    # Use GNUInstallDirs variables for more install destinations
+    # Remove when version > 1.3.1
+    (fetchpatch {
+      name = "0002-libusermetrics-Use-GNUInstallDirs-variables-for-more-install-destinations.patch";
+      url = "https://gitlab.com/ubports/development/core/libusermetrics/-/commit/d44bc8d715fcf9bccbe92cae1b54f32220623b88.patch";
+      hash = "sha256-PiJBbRbv/yEUlPhL9mBlu+qvSNjlVPXPqpn18I+Suuc=";
+    })
+  ];
+
+  postPatch = ''
     # Tries to query QMake for QT_INSTALL_QML variable, would return broken paths into /build/qtbase-<commit> even if qmake was available
     substituteInPlace src/modules/UserMetrics/CMakeLists.txt \
       --replace "\''${QT_IMPORTS_DIR}/UserMetrics" '${placeholder "out"}/${qtbase.qtQmlPrefix}/UserMetrics'
 
-    substituteInPlace src/libusermetricsinput/CMakeLists.txt \
-      --replace 'RUNTIME DESTINATION bin' 'RUNTIME DESTINATION ''${CMAKE_INSTALL_BINDIR}'
-
     substituteInPlace doc/CMakeLists.txt \
       --replace "\''${CMAKE_INSTALL_DATAROOTDIR}/doc/libusermetrics-doc" "\''${CMAKE_INSTALL_DOCDIR}"
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    # Only needed by tests
-    sed -i -e '/QTDBUSTEST/d' CMakeLists.txt
   '';
 
   strictDeps = true;
