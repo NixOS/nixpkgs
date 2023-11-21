@@ -70,6 +70,14 @@ in stdenv.mkDerivation rec {
     cargoCheckHook
   ];
 
+  # Sometimes -fmacro-prefix-map= can redirect __FILE__ to non-existent
+  # paths. This breaks packages like `python3.pkgs.deltachat`. We embed
+  # absolute path to headers by expanding `__FILE__`.
+  postInstall = ''
+    substituteInPlace $out/include/deltachat.h \
+      --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
+  '';
+
   passthru = {
     inherit cargoLock;
     tests = {

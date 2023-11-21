@@ -58,7 +58,7 @@ let
         keySet = p: {
           key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
           inherit p;
-          tlDeps = p.tlDeps or (p.requiredTeXPackages or (_: [ ]) [ ]);
+          tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
         };
       in
       # texlive.combine: the wrapper already resolves all dependencies
