@@ -3846,6 +3846,8 @@ with pkgs;
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
+  gb-studio = callPackage ../development/tools/gb-studio { };
+
   gem = callPackage ../applications/audio/pd-plugins/gem { };
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
