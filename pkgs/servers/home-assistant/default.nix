@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, fetchpatch
 , fetchPypi
 , python311
 , substituteAll
@@ -43,11 +44,37 @@ let
       # https://github.com/home-assistant/core/pull/101913
       aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
         version = "3.8.5";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+        src = fetchFromGitHub {
+          owner = "aio-libs";
+          repo = "aiohttp";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-rsI26JtlGFjSc2jZqfUiIwtT8AwSd+5tICK+VTxuSGg=";
         };
+        patches = old.patches ++ [
+          (fetchpatch {
+            # https://github.com/aio-libs/aiohttp/pull/7260
+            # Merged upstream, should be dropped once updated to 3.9.0
+            url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
+            hash = "sha256-ZzhlE50bmA+e2XX2RH1FuWQHZIAa6Dk/hZjxPoX5t4g=";
+          })
+        ];
+        propagatedBuildInputs = old.propagatedBuildInputs ++ (with self; [
+          charset-normalizer
+          faust-cchardet
+        ]);
+        nativeCheckInputs = old.nativeCheckInputs ++ (with self; [
+          freezegun
+          pytest-rerunfailures
+        ]);
+        pytestFlagsArray = [
+          "--reruns" "3"
+        ];
+        disabledTests = [
+          "test_request_te_chunked_with_content_length"
+          "test_url_parse_non_strict_mode"
+          "test_parse_uri_utf8"
+          "test_client_session_timeout_zero"
+        ];
       });
 
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
