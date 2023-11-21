@@ -94,30 +94,37 @@ in
 
         host = mkOption {
           type = types.str;
-          default = "127.0.0.1";
+          defaultText = literalExpression ''
+            lib.mkIf config.services.gitea.database.createDatabase "127.0.0.1"
+          '';
           description = "Database host address.";
         };
 
         port = mkOption {
           type = types.port;
-          default = if usePostgresql then pg.settings.port else 3306;
           defaultText = literalExpression ''
-            if config.${opt.database.type} != "postgresql"
-            then 3306
-            else 5432
+            lib.mkIf config.services.gitea.database.createDatabase (
+              if config.${opt.database.type} != "postgresql"
+              then 3306
+              else 5432
+            )
           '';
           description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
-          default = "gitea";
+          defaultText = literalExpression ''
+            lib.mkIf config.services.gitea.database.createDatabase "gitea"
+          '';
           description = "Database name.";
         };
 
         user = mkOption {
           type = types.str;
-          default = "gitea";
+          defaultText = literalExpression ''
+            lib.mkIf config.services.gitea.database.createDatabase "gitea"
+          '';
           description = "Database user.";
         };
 
@@ -143,23 +150,29 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
-          defaultText = literalExpression "null";
+          default = null;
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
         path = mkOption {
           type = types.str;
-          default = "${cfg.stateDir}/data/gitea.db";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
+          defaultText = literalExpression ''
+            lib.mkIf config.services.gitea.database.createDatabase (
+              "''${config.${opt.stateDir}}/data/gitea.db"
+            )
+          '';
           description = "Path to the sqlite3 database file.";
         };
 
         createDatabase = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether to create a local database automatically.";
+          description = ''
+            Whether to create a local database automatically.
+            If set `false`, then the other database settings required by the
+            configured database type *must* be specified explicitly.
+          '';
         };
       };
 
@@ -400,9 +413,27 @@ in
         message = ''
           When creating a database via NixOS, the db user and db name must be equal!
           If you already have an existing DB+user and this assertion is new, you can safely set
-          `services.gitea.createDatabase` to `false` because removal of `ensureUsers`
+          `services.gitea.database.createDatabase` to `false` because removal of `ensureUsers`
           and `ensureDatabases` doesn't have any effect.
         '';
+      }
+    ];
+
+    services.gitea.database = lib.mkMerge [
+      (lib.mkIf cfg.database.createDatabase {
+        host = lib.mkDefault "127.0.0.1";
+        port = lib.mkDefault (if usePostgresql then pg.settings.port else 3306);
+        name = lib.mkDefault "gitea";
+        user = lib.mkDefault "gitea";
+        socket = lib.mkDefault (if usePostgresql then "/run/postgresql" else if useMysql then "/run/mysqld/mysqld.sock" else null);
+        path = lib.mkDefault "${cfg.stateDir}/data/gitea.db";
+      })
+      {
+        # Create database passwordFile when password is configured.
+        passwordFile = toString (pkgs.writeTextFile {
+          name = "gitea-database-password";
+          text = cfg.database.password;
+        });
       }
     ];
 
@@ -687,13 +718,6 @@ in
         Please use services.forgejo instead.
         See https://nixos.org/manual/nixos/unstable/#module-forgejo for migration instructions.
       '';
-
-    # Create database passwordFile default when password is configured.
-    services.gitea.database.passwordFile =
-      mkDefault (toString (pkgs.writeTextFile {
-        name = "gitea-database-password";
-        text = cfg.database.password;
-      }));
 
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
