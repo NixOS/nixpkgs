@@ -2,7 +2,7 @@
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
+  imagemagick, libtiff_4_5, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
   # test dependencies
   xvfb-run, liberation_ttf, file, tesseract }:
 
@@ -71,7 +71,7 @@ perlPackages.buildPerlPackage rec {
     wrapProgram "$out/bin/gscan2pdf" \
       --prefix PATH : "${sane-backends}/bin" \
       --prefix PATH : "${imagemagick}/bin" \
-      --prefix PATH : "${libtiff}/bin" \
+      --prefix PATH : "${libtiff_4_5}/bin" \
       --prefix PATH : "${djvulibre}/bin" \
       --prefix PATH : "${poppler_utils}/bin" \
       --prefix PATH : "${ghostscript}/bin" \
@@ -87,7 +87,10 @@ perlPackages.buildPerlPackage rec {
 
   nativeCheckInputs = [
     imagemagick
-    libtiff
+    # Needs older libtiff version, because it stopped packageing tools like
+    # tiff2pdf and others in version 4.6. These tools are necessary for gscan2pdf.
+    # See commit f57a4b0ac1b954eec0c8def2a99e2a464ac6ff7a for in-depth explanation.
+    libtiff_4_5
     djvulibre
     poppler_utils
     ghostscript
