@@ -9319,6 +9319,8 @@ self: super: with self; {
 
   pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
 
+  pyformlang = callPackage ../development/python-modules/pyformlang { };
+
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
