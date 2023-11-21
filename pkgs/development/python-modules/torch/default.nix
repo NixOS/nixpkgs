@@ -118,7 +118,7 @@ let
   };
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
-    "CUDA and ROCm are not mutually exclusive" = cudaSupport && rocmSupport;
+    "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
     "Unsupported CUDA version" = cudaSupport && !(builtins.elem cudaPackages.cudaMajorVersion [ "11" "12" ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
