@@ -254,7 +254,8 @@ buildStdenv.mkDerivation {
   ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
+  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
+  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
   ++ extraPatches;
 
   postPatch = ''
