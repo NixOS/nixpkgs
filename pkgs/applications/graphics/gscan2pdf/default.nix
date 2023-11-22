@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook,
+{ lib, fetchurl, perlPackages, wrapGAppsHook, fetchpatch,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -16,6 +16,15 @@ perlPackages.buildPerlPackage rec {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
     hash = "sha256-NGz6DUa7TdChpgwmD9pcGdvYr3R+Ft3jPPSJpybCW4Q=";
   };
+
+  patches = [
+    # fixes warnings during tests. See https://sourceforge.net/p/gscan2pdf/bugs/421
+    (fetchpatch {
+      name = "0001-Remove-given-and-when-keywords-and-operator.patch";
+      url = "https://sourceforge.net/p/gscan2pdf/bugs/_discuss/thread/602a7cedfd/1ea4/attachment/0001-Remove-given-and-when-keywords-and-operator.patch";
+      hash = "sha256-JtrHUkfEKnDhWfEVdIdYVlr5b/xChTzsrrPmruLaJ5M=";
+    })
+  ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
