@@ -7,7 +7,7 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
 , libpulseaudio
 , pipewire
@@ -33,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SxUdTzk8WngkKwT05U8HJsK8+8ezcJWdiT/ettxpeEE=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 
