@@ -32,13 +32,6 @@ buildPythonPackage {
   disabled = pythonOlder "3.6";
   src = rootSource;
 
-  patches = [
-    # workaround for apparent rustc bug
-    # remove when we're at Rust 1.73
-    # https://github.com/pola-rs/polars/issues/12050
-    ./all_horizontal.patch
-  ];
-
   # Cargo.lock file is sometimes behind actual release which throws an error,
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
