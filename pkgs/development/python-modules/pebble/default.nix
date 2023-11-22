@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "API to manage threads and processes within an application";
     homepage = "https://github.com/noxdafox/pebble";
+    changelog = "https://github.com/noxdafox/pebble/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ orivej ];
   };
