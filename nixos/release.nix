@@ -263,55 +263,6 @@ in rec {
     }).config.system.build.tarball)
   );
 
-  # A disk image that can be imported to Amazon EC2 and registered as an AMI
-  amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
-        ];
-    }).config.system.build.amazonImage)
-
-  );
-  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image-zfs.nix
-        ];
-    }).config.system.build.amazonImage)
-
-  );
-
-
-  # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
-  # automatic sizing without blocking the channel.
-  amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ configuration
-          versionModule
-          ./maintainers/scripts/ec2/amazon-image.nix
-          ({ ... }: { amazonImage.sizeMB = "auto"; })
-        ];
-    }).config.system.build.amazonImage)
-
-  );
-
   # An image that can be imported into lxd and used for container creation
   lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
