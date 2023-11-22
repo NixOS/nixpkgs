@@ -76,7 +76,13 @@ self: super: {
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   chell = doJailbreak super.chell;
   Diff = dontCheck super.Diff;
-  doctest = doJailbreak super.doctest;
+  doctest = overrideCabal (drv: {
+    jailbreak = true;
+    # The test case relies on the Printf module which did not exist in base 4.13
+    testFlags = drv.testFlags or [ ] ++ [
+      "--skip=/Main/doctest (regression tests)/template-haskell-bugfix/"
+    ];
+  }) super.doctest;
   hashable-time = doJailbreak super.hashable-time;
   hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
