@@ -17726,9 +17726,7 @@ with pkgs;
 
   ### End of CuboCore
 
-  maude = callPackage ../development/interpreters/maude {
-    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
-  };
+  maude = callPackage ../development/interpreters/maude { };
 
   me_cleaner = callPackage ../tools/misc/me_cleaner { };
 
