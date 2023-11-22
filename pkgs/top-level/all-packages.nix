@@ -544,6 +544,7 @@ with pkgs;
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
   nordvpn = callPackage ../applications/networking/nordvpn { };
+  nordvpn-build = callPackage ../applications/networking/nordvpn/build.nix { };
 
   figma-agent = callPackage ../applications/graphics/figma-agent { };
 
