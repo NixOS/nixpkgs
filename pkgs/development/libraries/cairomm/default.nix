@@ -3,9 +3,9 @@
 , lib
 , pkg-config
 , darwin
+, boost
 , cairo
 , fontconfig
-, freetype
 , libsigcxx
 , meson
 , ninja
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cairomm";
-  version = "1.14.4";
+  version = "1.14.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.cairographics.org/releases/cairomm-${version}.tar.xz";
-    sha256 = "R0nSWisu9nzAwBTKr1yH+kZ5L8Sz7eGG+w/JMtIFUVg=";
+    sha256 = "cBNiA1QMiE6Jzhye37Y2m5lTk39s1ZbZfHjJdYpdSNs=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    boost # for tests
     fontconfig
-    freetype
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
   ]);
@@ -40,25 +40,20 @@ stdenv.mkDerivation rec {
     libsigcxx
   ];
 
-  doCheck = true;
+  mesonFlags = [
+    "-Dbuild-tests=true"
+  ];
+
+  # Meson is no longer able to pick up Boost automatically.
+  # https://github.com/NixOS/nixpkgs/issues/86131
+  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
+  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A 2D graphics library with support for multiple output devices";
-
-    longDescription = ''
-      Cairo is a 2D graphics library with support for multiple output
-      devices.  Currently supported output targets include the X
-      Window System, Quartz, Win32, image buffers, PostScript, PDF,
-      and SVG file output.  Experimental backends include OpenGL
-      (through glitz), XCB, BeOS, OS/2, and DirectFB.
-
-      Cairo is designed to produce consistent output on all output
-      media while taking advantage of display hardware acceleration
-      when available (e.g., through the X Render Extension).
-    '';
-
+    description = "C++ bindings for the Cairo vector graphics library";
     homepage = "https://www.cairographics.org/";
-
     license = with licenses; [ lgpl2Plus mpl10 ];
     platforms = platforms.unix;
   };

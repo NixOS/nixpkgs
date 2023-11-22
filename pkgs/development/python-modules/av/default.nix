@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, stdenv
 
 # build
 , cython
@@ -101,6 +102,10 @@ buildPythonPackage rec {
     "--deselect=tests/test_subtitles.py::TestSubtitle::test_movtext"
     "--deselect=tests/test_subtitles.py::TestSubtitle::test_vobsub"
     "--deselect=tests/test_videoframe.py::TestVideoFrameImage::test_roundtrip"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # Segmentation Faults
+    "--deselect=tests/test_encode.py::TestBasicVideoEncoding::test_encoding_with_pts"
+    "--deselect=tests/test_pyav.py::test_bayer_write"
   ];
 
   disabledTests = [
