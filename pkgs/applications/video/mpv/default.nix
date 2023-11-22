@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
+, bash
 , docutils
 , meson
 , ninja
@@ -153,19 +154,20 @@ in stdenv'.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    python3
   ]
   ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ]
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs = [
+    bash
     ffmpeg
     freetype
     libass
     libpthreadstubs
     libuchardet
     luaEnv
+    python3
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
     ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
@@ -231,6 +233,7 @@ in stdenv'.mkDerivation (finalAttrs: {
   # See the explanation in addOpenGLRunpath.
   postFixup = lib.optionalString stdenv.isLinux ''
     addOpenGLRunpath $out/bin/mpv
+    patchShebangs --update --host $out/bin/umpv $out/bin/mpv_identify.sh
   '';
 
   passthru = {
