@@ -38548,8 +38548,6 @@ with pkgs;
 
   urbanterror = callPackage ../games/urbanterror { };
 
-  ue4 = callPackage ../games/ue4 { };
-
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
   ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
