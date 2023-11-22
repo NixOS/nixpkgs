@@ -19409,6 +19409,12 @@
     githubId = 168610;
     name = "Ricardo M. Correia";
   };
+  wkral = {
+    email = "william.kral@gmail.com";
+    github = "wkral";
+    githubId = 105114;
+    name = "William Kral";
+  };
   wladmis = {
     email = "dev@wladmis.org";
     github = "wladmis";
