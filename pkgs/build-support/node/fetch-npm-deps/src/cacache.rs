@@ -43,6 +43,13 @@ impl Cache {
         Cache(path)
     }
 
+    pub fn init(&self) -> anyhow::Result<()> {
+        fs::create_dir_all(self.0.join("content-v2"))?;
+        fs::create_dir_all(self.0.join("index-v5"))?;
+
+        Ok(())
+    }
+
     pub fn put(
         &self,
         key: String,
