@@ -7,6 +7,7 @@
 , gtk-engine-murrine
 , python3
 , sassc
+, nix-update-script
 , accents ? [ "blue" ]
 , size ? "standard"
 , tweaks ? [ ]
@@ -73,6 +74,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Soothing pastel theme for GTK";
