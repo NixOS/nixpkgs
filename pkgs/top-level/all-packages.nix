@@ -24456,6 +24456,8 @@ with pkgs;
 
   overwitch = callPackage ../applications/audio/overwitch { withGui = false; };
 
+  overwitch-gtk = res.overwitch.override { withGui = true; };
+
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
 
