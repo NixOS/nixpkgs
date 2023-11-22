@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchurl, lib }:
+{ lib, stdenv, fetchurl}:
+
 stdenv.mkDerivation rec {
   pname = "secure-delete";
   version = "3.1";
