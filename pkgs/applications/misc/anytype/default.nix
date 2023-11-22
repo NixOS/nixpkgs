@@ -2,13 +2,13 @@
 
 let
   pname = "anytype";
-  version = "0.35.25-beta";
+  version = "0.36.0";
   name = "Anytype-${version}";
   nameExecutable = pname;
   src = fetchurl {
     url = "https://github.com/anyproto/anytype-ts/releases/download/v${version}/${name}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-55VT4t/SNl13Gdh7LG4SqLN9uo0cYDu0LnPFIuZ7Sm0=";
+    sha256 = "sha256-Efoqy/izULDgd2Dc3ktVZNj9/U0vCtENm0NLr5VKQpQ=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in
@@ -34,7 +34,7 @@ appimageTools.wrapType2 {
     description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ running-grass ];
     platforms = [ "x86_64-linux" ];
   };
 }
