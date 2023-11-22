@@ -199,6 +199,8 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    ./upb-clang16.patch
+
     # Force usage of the _non_ prebuilt java toolchain.
     # the prebuilt one does not work in nix world.
     ./java_toolchain.patch
