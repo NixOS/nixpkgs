@@ -852,10 +852,10 @@ substituteStream() {
                     if [ "${!var}" == "$savedvar" ]; then
                         if [ -z "$is_required" ]; then
                             if [ -z "$is_quiet" ]; then
-                                echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                                printf "substituteStream(): WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
                             fi
                         else
-                            echo "substituteStream(): ERROR: pattern '$pattern' doesn't match anything in $description" >&2
+                            printf "substituteStream(): ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
                             return 1
                         fi
                     fi
