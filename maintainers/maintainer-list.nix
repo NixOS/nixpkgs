@@ -6555,6 +6555,12 @@
     githubId = 67984144;
     name = "Gerhard Schwanzer";
   };
+  gernotfeichter = {
+    email = "gernotfeichter@gmail.com";
+    github = "gernotfeichter";
+    githubId = 23199375;
+    name = "Gernot Feichter";
+  };
   gerschtli = {
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
