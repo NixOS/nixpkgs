@@ -3,12 +3,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyatag";
   version = "0.3.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-3h9mpopTbEULCx7rcEt/I/ZnUA0L/fJ7Y3L5h/6EuC4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
