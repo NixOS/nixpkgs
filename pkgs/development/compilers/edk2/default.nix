@@ -61,6 +61,7 @@ edk2 = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pythonEnv ];
   depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.util-linux buildPackages.bash ];
+  buildInputs = [ libuuid ];
   strictDeps = true;
 
   # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
