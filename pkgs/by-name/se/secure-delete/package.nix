@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "secure-delete";
   version = "3.1";
+
   src = fetchurl {
-    url =
-      "https://github.com/hackerschoice/THC-Archive/raw/96eeadb00075097c68bc2c6d10b0a7fbd5be8fae/Tools/secure_delete-${version}.tar.gz";
-    sha256 = "1mgqvmxwy36rxjzgd1m0k0qjc7xwjs2nwc5v7gqvvwg3vk8ldn59";
+    url = "https://github.com/hackerschoice/THC-Archive/raw/96eeadb00075097c68bc2c6d10b0a7fbd5be8fae/Tools/secure_delete-${version}.tar.gz";
+    hash = "sha256-qdhG0dzj8b3xO7swboWWvB8mMZighva+7NkMz3vd+NU=";
   };
 
   patches = [
