@@ -64,15 +64,21 @@ jobs:
       - uses: cachix/install-nix-action@v23
       - name: Determining channel to use for dependencies
         run: |
-          echo "Determining which channel to use for PR base branch $GITHUB_BASE_REF"
+          echo "Determining the preferred channel to use for PR base branch $GITHUB_BASE_REF"
           if [[ "$GITHUB_BASE_REF" =~ ^(release|staging|staging-next)-([0-9][0-9]\.[0-9][0-9])$ ]]; then
               # Use the release channel for all PRs to release-XX.YY, staging-XX.YY and staging-next-XX.YY
               channel=nixos-${BASH_REMATCH[2]}
-              echo "PR is for a release branch, using release channel $channel"
+              echo "PR is for a release branch, preferred channel is $channel"
           else
               # Use the nixos-unstable channel for all other PRs
               channel=nixos-unstable
-              echo "PR is for a non-release branch, using unstable channel $channel"
+              echo "PR is for a non-release branch, preferred channel is $channel"
+          fi
+          # Check that the channel exists. It doesn't exist for fresh release branches
+          if ! curl -fSs "https://channels.nixos.org/$channel"; then
+            # Fall back to nixos-unstable, makes sense for fresh release branches
+            echo "Preferred channel $channel could not be fetched, falling back to nixos-unstable"
+            channel=nixos-unstable
           fi
           echo "channel=$channel" >> "$GITHUB_ENV"
       - name: Fetching latest version of channel
