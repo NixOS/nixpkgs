@@ -64,6 +64,12 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "$out/bin"
+    )
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-calculator";
