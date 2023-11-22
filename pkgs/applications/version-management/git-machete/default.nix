@@ -29,6 +29,12 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Requires fully functioning shells including zsh modules and bash
+    # completion.
+    "completion_e2e"
+  ];
+
   postInstall = ''
     installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
     installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
