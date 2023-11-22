@@ -54,7 +54,7 @@ let
     };
 
     meta = meta // {
-      mainProgram = "localsend_app";
+      mainProgram = "localsend";
     };
   };
 
