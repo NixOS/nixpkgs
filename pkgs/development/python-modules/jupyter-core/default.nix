@@ -64,7 +64,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = teams.jupyter.members;
   };
 }
