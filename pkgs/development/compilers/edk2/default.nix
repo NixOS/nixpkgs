@@ -82,6 +82,13 @@ edk2 = stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "fortify" ];
 
+  # Fix cross-compilation issue, use build cc/c++ for building antlr and dlg
+  postPatch = ''
+    substituteInPlace BaseTools/Source/C/VfrCompile/GNUmakefile \
+      --replace '$(MAKE) -C Pccts/antlr' '$(MAKE) -C Pccts/antlr CC=cc CXX=c++' \
+      --replace '$(MAKE) -C Pccts/dlg' '$(MAKE) -C Pccts/dlg CC=cc CXX=c++'
+  '';
+
   installPhase = ''
     mkdir -vp $out
     mv -v BaseTools $out
