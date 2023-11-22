@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
 , blas
 , cmake
@@ -35,6 +34,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if enableStatic then "OFF" else "ON"}"
+  ];
+
+  patches = [
+    (fetchurl {
+      url = "https://github.com/ceres-solver/ceres-solver/commit/352b320ab1b5438a0838aea09cbbf07fa4ff5d71.patch";
+      hash = "sha256-jUXzsv20xj/mGIJ1X2QaBzGSG3FCzsK8iZYgWiodxVw=";
+    })
   ];
 
   # The Basel BUILD file conflicts with the cmake build directory on
