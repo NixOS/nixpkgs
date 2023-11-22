@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, pythonAtLeast
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -60,7 +61,7 @@ buildPythonPackage rec {
   pname = "qiskit-terra";
   version = "0.25.1";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "qiskit";
@@ -195,7 +196,6 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
-    broken = true; # tests segfault python
     description = "Provides the foundations for Qiskit.";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.
