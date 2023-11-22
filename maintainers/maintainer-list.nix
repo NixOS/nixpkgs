@@ -14566,6 +14566,12 @@
     name = "Philipp Rintz";
     matrix = "@philipp:srv.icu";
   };
+  prit342 = {
+    email = "prithak342@gmail.com";
+    github = "prit342";
+    githubId = 20863431;
+    name = "Prithak S.";
+  };
   ProducerMatt = {
     name = "Matthew Pherigo";
     email = "ProducerMatt42@gmail.com";
@@ -19402,6 +19408,12 @@
     github = "wizeman";
     githubId = 168610;
     name = "Ricardo M. Correia";
+  };
+  wkral = {
+    email = "william.kral@gmail.com";
+    github = "wkral";
+    githubId = 105114;
+    name = "William Kral";
   };
   wladmis = {
     email = "dev@wladmis.org";

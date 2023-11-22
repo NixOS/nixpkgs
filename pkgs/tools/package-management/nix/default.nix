@@ -113,6 +113,13 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
+  patch-rapidcheck-shared = fetchpatch2 {
+    # https://github.com/NixOS/nix/pull/9431
+    name = "fix-requires-non-existing-output.patch";
+    url = "https://github.com/NixOS/nix/commit/46131567da96ffac298b9ec54016b37114b0dfd5.patch";
+    hash = "sha256-lShYxYKRDWwBqCysAFmFBudhhAL1eendWcL8sEFLCGg=";
+  };
+
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
   addTestsShallowly = tests: pkg: pkg // {
@@ -194,26 +201,41 @@ in lib.makeExtensible (self: ({
   nix_2_14 = common {
     version = "2.14.1";
     hash = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_15 = common {
     version = "2.15.3";
     hash = "sha256-sfFXbjC5iIdSAbctZIuFozxX0uux/KFBNr9oh33xINs=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_16 = common {
     version = "2.16.2";
     hash = "sha256-VXIYCDkvAWeMoU0W2ZI0TeOszCZA1o8trz6YCPFD5ac=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_17 = common {
     version = "2.17.1";
     hash = "sha256-Q5L+rHzjp0bYuR2ogg+YPCn6isjmlQ4CJVT0zpn/hFc=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   nix_2_18 = common {
     version = "2.18.1";
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
   };
 
   # The minimum Nix version supported by Nixpkgs
