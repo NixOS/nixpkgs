@@ -1,4 +1,5 @@
-# Functions for working with paths, see ./path.md
+/* Functions for working with path values. */
+# See ./README.md for internal docs
 { lib }:
 let
 

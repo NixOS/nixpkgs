@@ -6,25 +6,24 @@
 , pythonOlder
 , openssl
 , perl
-, pkgs
 }:
 
 buildPythonPackage rec {
   pname = "clvm_rs";
-  version = "0.1.19";
+  version = "0.3.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "clvm_rs";
     rev = version;
-    hash = "sha256-mCKY/PqNOUTaRsFDxQBvbTD6wC4qzP0uv5FldYkwl6c=";
+    hash = "sha256-DJviuIBJg+MF0NvmdeWK31nV+q4UZCRdmdbEAJqwXXg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-TmrR8EeySsGWXohMdo3dCX4oT3l9uLVv5TUeRxCBQeE=";
+    hash = "sha256-bgXUSm3M8J7E2ohPjPIimHJvz1ivWrsliKZlgchOdhQ=";
   };
 
   format = "pyproject";

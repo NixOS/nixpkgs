@@ -106,6 +106,7 @@ extra-packages:
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
   - ghc-lib-parser-ex == 9.4.*          # 2023-03-17: preserve for GHC 9.4
   - ghc-lib-parser-ex == 9.6.*          # 2023-10-24: preserve for GHC 9.6
+  - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
@@ -117,6 +118,7 @@ extra-packages:
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0, needed for HLS
   - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
   - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
   - http2 < 3.3                         # 2023-08-24: Needed for twain <https://github.com/alexmingoia/twain/issues/5>
@@ -130,7 +132,9 @@ extra-packages:
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
   - fourmolu == 0.11.*                  # 2023-10-22: for hls on ghc 9.0
+  - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
+  - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
@@ -669,6 +673,7 @@ unsupported-platforms:
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
   oculus:                                       [ platforms.darwin ]
+  ostree-pin:                                   [ platforms.darwin ] # depends on gi-ostree
   pam:                                          [ platforms.darwin ]
   parport:                                      [ platforms.darwin ]
   persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
@@ -681,6 +686,7 @@ unsupported-platforms:
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
   reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
+  rsi-break:                                    [ platforms.darwin ] # depends on monomer
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
   SDL-mixer:                                    [ platforms.darwin ] # depends on mesa
@@ -777,6 +783,7 @@ supported-platforms:
   systemd-api:                                  [ platforms.linux ]
   tasty-papi:                                   [ platforms.linux ] # limited by pkgs.papi
   udev:                                         [ platforms.linux ]
+  vty-windows:                                  [ platforms.windows ] # depends on Win32
   Win32-console:                                [ platforms.windows ]
   Win32-dhcp-server:                            [ platforms.windows ]
   Win32-errors:                                 [ platforms.windows ]

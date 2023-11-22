@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubedb-cli";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "kubedb";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-nDLdATiUcg5o86Pda1/Do9dPMtdNCUo/xj6ERRzih8w=";
+    sha256 = "sha256-Lm7TrdUAYPYBKC+9lPmWTDp0BQqiAc/A107wtiGDwZ4=";
   };
 
   vendorHash = null;

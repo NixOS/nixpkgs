@@ -30,13 +30,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.131.1";
+  version = "1.131.6";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-JXSZrlekvPVGKR+ritxk3Eru2DhtUN9UBtqUZ7G9/gg=";
+    hash = "sha256-/LWWqa8f+ODP4LDIx9U9kRCFYI+5N6KztFDPbc2TiF0=";
   };
 
   patches = [
@@ -69,6 +69,14 @@ in stdenv.mkDerivation rec {
   nativeCheckInputs = with rustPlatform; [
     cargoCheckHook
   ];
+
+  # Sometimes -fmacro-prefix-map= can redirect __FILE__ to non-existent
+  # paths. This breaks packages like `python3.pkgs.deltachat`. We embed
+  # absolute path to headers by expanding `__FILE__`.
+  postInstall = ''
+    substituteInPlace $out/include/deltachat.h \
+      --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
+  '';
 
   passthru = {
     inherit cargoLock;

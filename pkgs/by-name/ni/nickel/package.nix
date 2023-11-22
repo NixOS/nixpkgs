@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, stdenv
 , python3
 , nix-update-script
 }:
@@ -35,6 +36,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
 
   nativeBuildInputs = [
     python3

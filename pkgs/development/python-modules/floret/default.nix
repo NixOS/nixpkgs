@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "floret";
-  version = "0.10.4";
+  version = "0.10.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "floret";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cOVyvRwprR7SvZjH4rtDK8uifv6+JGyRR7XYzOP5NLk=";
+    hash = "sha256-7vkw6H0ZQoHEwNusY6QWh/vPbSCdP1ZaaqABHsZH6hQ=";
   };
 
   nativeBuildInputs = [

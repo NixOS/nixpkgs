@@ -277,7 +277,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
 
         if installed_version < available_version:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
+            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
 
     os.makedirs("@efiSysMountPoint@/efi/nixos", exist_ok=True)
     os.makedirs("@efiSysMountPoint@/loader/entries", exist_ok=True)

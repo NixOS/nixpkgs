@@ -21,6 +21,9 @@ buildGoModule rec {
   # used at runtime, but not installed by default
   postInstall = ''
     cp -r ${src}/jsHelper $out/bin/jsHelper
+    cp -r ${src}/CustomApps $out/bin/CustomApps
+    cp -r ${src}/Extensions $out/bin/Extensions
+    cp -r ${src}/Themes $out/bin/Themes
   '';
 
   doInstallCheck = true;

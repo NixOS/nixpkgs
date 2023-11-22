@@ -7,7 +7,6 @@
 , setuptools
 , packaging
 , tomli
-, tox
 }:
 
 buildPythonPackage rec {
@@ -24,10 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-mb43XbKypgilagXLW33kP8wXxioNsfLtl6AEnOI1WlA=";
   };
 
+  # tox is listed in build requirements but not actually used to build
+  # keeping it as a requirement breaks the build unnecessarily
+  postPatch = ''
+    sed  -i "/requires/s/, 'tox>=3.25.1'//"  pyproject.toml
+  '';
+
   nativeBuildInputs = [
     packaging
     setuptools
-    tox
   ];
 
   propagatedBuildInputs = [

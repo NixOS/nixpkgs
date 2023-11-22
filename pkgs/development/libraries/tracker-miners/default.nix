@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -11,6 +10,7 @@
 , gexiv2
 , tracker
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , vala
@@ -47,27 +47,19 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.5.3";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-drjVB3EOiX6FPsN/Ju906XqVU3CLYLjEE0lF+bgWU8s=";
+    sha256 = "Ctci89Uywh11fPSI+UKWBnnqj0V5Je+pdlbtTJ6bpP8=";
   };
-
-  patches = [
-    # Use cc.has_header_symbol to check for BTRFS_IOC_INO_LOOKUP
-    # https://github.com/NixOS/nixpkgs/issues/228639
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/c08fbe0650d4a2ae915a21764f54c02eda9406d5.patch";
-      sha256 = "U81+yfg2sUkKl4tKMeB7pXJRNSeIE+2loT3/bvnhoKM=";
-    })
-  ];
 
   nativeBuildInputs = [
     asciidoc
     docbook-xsl-nons
     docbook_xml_dtd_45
     gettext
+    glib
     itstool
     libxslt
     meson
@@ -75,6 +67,8 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsNoGuiHook
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   # TODO: add libenca, libosinfo
@@ -83,7 +77,6 @@ stdenv.mkDerivation rec {
     dbus
     exempi
     giflib
-    glib
     gexiv2
     totem-pl-parser
     tracker

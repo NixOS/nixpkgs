@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.72.2";
+  version = "0.73.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-y54EYWI1DbxosUflp5z+b4i1vO1qDju8LxEK0nt4S/g=";
+    hash = "sha256-t1m9pKsM9E2iAg9vv/nKmQioRi6kMjFGcTXzcT3cMxs=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-uXWBYZAjMA88NtADA4s2kB4Ubb2atrW6F4kAzDGA1WI=";
+    hash = "sha256-TRZlkDe7ARLGmfw5a0Dw9hSBRhqWvOfuBfPZ5/Bt/TI=";
   };
 
   configurePhase = ''

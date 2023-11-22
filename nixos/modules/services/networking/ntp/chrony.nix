@@ -162,7 +162,7 @@ in
       };
 
       extraFlags = mkOption {
-        default = [];
+        default = [ ];
         example = [ "-s" ];
         type = types.listOf types.str;
         description = lib.mdDoc "Extra flags passed to the chronyd command.";
@@ -178,7 +178,8 @@ in
     users.groups.chrony.gid = config.ids.gids.chrony;
 
     users.users.chrony =
-      { uid = config.ids.uids.chrony;
+      {
+        uid = config.ids.uids.chrony;
         group = "chrony";
         description = "chrony daemon user";
         home = stateDir;
@@ -202,12 +203,13 @@ in
     ];
 
     systemd.services.chronyd =
-      { description = "chrony NTP daemon";
+      {
+        description = "chrony NTP daemon";
 
         wantedBy = [ "multi-user.target" ];
-        wants    = [ "time-sync.target" ];
-        before   = [ "time-sync.target" ];
-        after    = [ "network.target" "nss-lookup.target" ];
+        wants = [ "time-sync.target" ];
+        before = [ "time-sync.target" ];
+        after = [ "network.target" "nss-lookup.target" ];
         conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
         path = [ chronyPkg ];
@@ -255,5 +257,18 @@ in
           SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "@clock" "@setuid" "capset" "@chown" ];
         };
       };
+
+    assertions = [
+      {
+        assertion = !(cfg.enableRTCTrimming && builtins.any (line: (builtins.match "^ *rtcsync" line) != null) (lib.strings.splitString "\n" cfg.extraConfig));
+        message = ''
+          The chrony module now configures `rtcfile` and `rtcautotrim` for you.
+          These options conflict with `rtcsync` and cause chrony to crash.
+          Unless you are very sure the former isn't what you want, please remove
+          `rtcsync` from `services.chrony.extraConfig`.
+          Alternatively, disable this behaviour by `services.chrony.enableRTCTrimming = false;`
+        '';
+      }
+    ];
   };
 }

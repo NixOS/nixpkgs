@@ -1,10 +1,13 @@
 { lib
+, stdenv
+, darwin
 , fetchFromGitHub
 , rustPlatform
 , nixosTests
 , nix-update-script
 
 , autoPatchelfHook
+, cmake
 , ncurses
 , pkg-config
 
@@ -14,18 +17,21 @@
 , vulkan-loader
 , libxkbcommon
 
-, withX11 ? true
+, withX11 ? !stdenv.isDarwin
 , libX11
 , libXcursor
 , libXi
 , libXrandr
 , libxcb
 
-, withWayland ? true
+, withWayland ? !stdenv.isDarwin
 , wayland
 }:
 let
-  rlinkLibs = [
+  rlinkLibs = if stdenv.isDarwin then [
+    darwin.libobjc
+    darwin.apple_sdk_11_0.frameworks.AppKit
+  ] else [
     (lib.getLib gcc-unwrapped)
     fontconfig
     libGL
@@ -43,21 +49,23 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.19";
+  version = "0.0.27";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-N7eHIyp2imkMUVwiOCameOROoaDJ7g+zNKdIB2aGZy0=";
+    hash = "sha256-q3Wq7jIYE4g1uPAlpzNWvwUvMy9eN6NQNmPNC4cFmYg=";
   };
 
-  cargoHash = "sha256-XD+/DaaJEJ9jHZITTUma/wfsbduPUTc/SralPOx46Yo=";
+  cargoHash = "sha256-SP85se+H4jL/cXyvfbFS2lxpNSjuptAIPs3/htcrMcw=";
 
   nativeBuildInputs = [
-    autoPatchelfHook
     ncurses
+  ] ++ lib.optionals stdenv.isLinux [
+    cmake
     pkg-config
+    autoPatchelfHook
   ];
 
   runtimeDependencies = rlinkLibs;
@@ -67,10 +75,9 @@ rustPlatform.buildRustPackage rec {
   outputs = [ "out" "terminfo" ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    (lib.optionalString withX11 "x11")
-    (lib.optionalString withWayland "wayland")
-  ];
+  buildFeatures = [ ]
+    ++ lib.optional withX11 "x11"
+    ++ lib.optional withWayland "wayland";
 
   checkFlags = [
     # Fail to run in sandbox environment.
@@ -79,13 +86,18 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D -m 644 misc/rio.desktop -t $out/share/applications
-    install -D -m 644 rio/src/screen/window/resources/images/logo.png \
-                      $out/share/icons/hicolor/scalable/apps/rio.png
+    install -D -m 644 misc/logo.svg \
+                      $out/share/icons/hicolor/scalable/apps/rio.svg
 
     install -dm 755 "$terminfo/share/terminfo/r/"
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications/
+    mv misc/osx/Rio.app/ $out/Applications/
+    mkdir $out/Applications/Rio.app/Contents/MacOS/
+    ln -s $out/bin/rio $out/Applications/Rio.app/Contents/MacOS/
   '';
 
   passthru = {

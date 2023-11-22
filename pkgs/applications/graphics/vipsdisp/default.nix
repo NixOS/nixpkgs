@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vipsdisp";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "jcupitt";
     repo = "vipsdisp";
     rev = "v${version}";
-    hash = "sha256-iLjS3vBhdPPQNtIaM++xKekYTsr1X9f6ED2A7DYV7Lc=";
+    hash = "sha256-vY3BTbCLf3JOB+eILMvaFUIgG3UBkSdckFAdC4W0OnU=";
   };
 
   postPatch = ''

@@ -772,7 +772,7 @@ with self; {
     };
     propagatedBuildInputs = [ ExceptionClass Tk X11ProtocolOther XMLSimple ];
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
-    preCheck = "rm t/30cluster.t"; # do not run failing tests
+    preCheck = "rm t/30cluster.t t/15config.t"; # do not run failing tests
     postInstall = ''
       mkdir -p $out/share/bash-completion/completions
       mv $out/bin/clusterssh_bash_completion.dist \
@@ -5619,10 +5619,14 @@ with self; {
       url = "mirror://cpan/authors/id/S/SP/SPROUT/CSS-DOM-0.17.tar.gz";
       hash = "sha256-Zbl46/PDmF5V7jK7baHp+upJSoXTAFxjuux+lphZ8CY=";
     };
+
+    patches = [
+      # Replace apostrophe as package separator
+      # https://rt.cpan.org/Public/Bug/Display.html?id=146661
+      ../development/perl-modules/CSSDOM-replace-apostrophe.patch
+    ];
+
     propagatedBuildInputs = [ Clone ];
-    preCheck = ''
-      rm t/css-dom.t # Remove test that fails due to deprecated package separator warning
-    '';
     meta = {
       description = "Document Object Model for Cascading Style Sheets";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -8840,6 +8844,19 @@ with self; {
     };
   };
 
+  ENVUtil = buildPerlPackage {
+    pname = "ENV-Util";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GARU/ENV-Util-0.03.tar.gz";
+      hash = "sha256-B1574ehSxD6wiGYvr978FS9O9WyEPB4F2QDaGQb3P60=";
+    };
+    meta = {
+      description = "Parse prefixed environment variables and dotnev (.env) files into Perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Error = buildPerlModule {
     pname = "Error";
     version = "0.17029";
@@ -11331,6 +11348,9 @@ with self; {
     buildInputs = [ BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
     propagatedBuildInputs = [ ClassLoad DBDSQLite DataDump DirSelf FileCountLines GetoptLongDescriptive IOInteractive IPCSystemSimple ListMoreUtils Moose MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk namespaceclean ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    patches = [
+      ../development/perl-modules/Hailo-fix-test-gld.patch
+    ];
     postPatch = ''
       patchShebangs bin
     '';
@@ -16561,10 +16581,10 @@ with self; {
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.34";
+    version = "9.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.34.tar.gz";
-      hash = "sha256-UGnWjk4titZj21iFm0/sDOeasTTZ5YBVqq8/DzpzosY=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.35.tar.gz";
+      hash = "sha256-akpEbuB/ynxtty9dgXVA1oMwCcuN58zkxvskoV7n1Gs=";
     };
     meta = {
       description = "Real-time web framework";
@@ -18900,6 +18920,20 @@ with self; {
     };
     meta = {
       description = "Minimal MQTT version 3 interface";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetNVD = buildPerlPackage {
+    pname = "Net-NVD";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GARU/Net-NVD-0.0.3.tar.gz";
+      hash = "sha256-uKZXEg+UsO7R2OvbA4i8M2DSj6Xw+CNrnNjNrovv5Bg=";
+    };
+    propagatedBuildInputs = [ IOSocketSSL JSON ];
+    meta = {
+      description = "Query CVE data from NIST's NVD (National Vulnerability Database)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

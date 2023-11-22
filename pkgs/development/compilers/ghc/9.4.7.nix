@@ -197,6 +197,8 @@ stdenv.mkDerivation (rec {
       extraPrefix = "libraries/Cabal/";
       sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
     })
+
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
     ./docs-sphinx-7.patch
   ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use

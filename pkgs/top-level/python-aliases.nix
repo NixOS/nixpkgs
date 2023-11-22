@@ -35,6 +35,7 @@ in
 mapAliases ({
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
+  adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute."; # Added 2023-11-19
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
   aionotify = throw "aionotify has been removed because is unmaintained and incompatible with python3.11."; # Added 2023-10-27
   aiosenseme = throw "aiosenseme has been removed, because it does no longer work with the latest firmware and has become unmaintained"; # Added 2023-07-05
@@ -349,6 +350,7 @@ mapAliases ({
   python-forecastio = throw "python-forecastio has been removed, as the Dark Sky service was shut down."; # added 2023-04-05
   python-igraph = igraph; # added 2021-11-11
   python_docs_theme = python-docs-theme; # added 2023-11-04
+  python_fedora = python-fedora; # added 2023-11-15
   python_keyczar = throw "python_keyczar has been removed because it's been archived upstream and deprecated"; # added 2023-05-16
   python-lz4 = lz4; # added 2018-06-01
   python_magic = python-magic; # added 2022-05-07

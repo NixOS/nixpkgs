@@ -1,10 +1,24 @@
 { lib
 , stdenvNoCC }:
 
-let fileName = pathStr: lib.last (lib.splitString "/" pathStr);
+let
+  escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
+  fileName = pathStr: lib.last (lib.splitString "/" pathStr);
+  scriptsDir = "$out/share/mpv/scripts";
 in
 lib.makeOverridable (
-  { pname, scriptPath ? "${pname}.lua", ... }@args:
+  { pname
+  , extraScripts ? []
+  , ... }@args:
+  let
+    # either passthru.scriptName, inferred from scriptPath, or from pname
+    scriptName = (args.passthru or {}).scriptName or (
+      if args ? scriptPath
+      then fileName args.scriptPath
+      else "${pname}.lua"
+    );
+    scriptPath = args.scriptPath or "./${scriptName}";
+  in
   stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
     dontBuild = true;
     preferLocalBuild = true;
@@ -12,11 +26,12 @@ lib.makeOverridable (
     outputHashMode = "recursive";
     installPhase = ''
       runHook preInstall
-      install -m644 -Dt $out/share/mpv/scripts ${scriptPath}
+      install -m644 -Dt "${scriptsDir}" \
+        ${escapedList ([ scriptPath ] ++ extraScripts)}
       runHook postInstall
     '';
 
-    passthru.scriptName = fileName scriptPath;
+    passthru = { inherit scriptName; };
     meta.platforms = lib.platforms.all;
   } args)
 )

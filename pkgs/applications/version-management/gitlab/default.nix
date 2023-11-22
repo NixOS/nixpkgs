@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby_3_2, tzdata, git, nettools, nixosTests, nodejs, openssl
+, ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
@@ -17,7 +17,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_2;
+    ruby = ruby_3_1;
     gemdir = ./rubyEnv;
     gemset =
       let x = import (gemdir + "/gemset.nix") src;

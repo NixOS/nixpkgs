@@ -46,8 +46,14 @@ stdenv.mkDerivation
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OWZiVw3ztx1g1slq/5a7/JcLdDNB5RqYT5U3w1UXUpg=";
+    hash = "sha256-1k0jbYMwfYuHmM/Cm76sbo3+mN6WypALMQBwlZ+9d+c=";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      # Workaround for https://github.com/NixOS/nixpkgs/issues/8567
+      cd $out
+      rm -rf .git
+    '';
   };
 
   patches = [

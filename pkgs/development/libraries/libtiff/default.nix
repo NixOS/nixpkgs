@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
   pname = "libtiff";
   version = "4.6.0";
 
+  # if you update this, please consider adding patches and/or
+  # setting `knownVulnerabilities` in libtiff `4.5.nix`
+
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";

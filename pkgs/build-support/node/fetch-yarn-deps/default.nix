@@ -62,7 +62,7 @@ in {
       dontUnpack = src == null;
       dontInstall = true;
 
-      nativeBuildInputs = [ prefetch-yarn-deps ];
+      nativeBuildInputs = [ prefetch-yarn-deps cacert ];
       GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
       buildPhase = ''

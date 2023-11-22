@@ -35,8 +35,6 @@ enum AttributeVariant {
     Other,
 }
 
-const EXPR: &str = include_str!("eval.nix");
-
 /// Check that the Nixpkgs attribute values corresponding to the packages in pkgs/by-name are
 /// of the form `callPackage <package_file> { ... }`.
 /// See the `eval.nix` file for how this is achieved on the Nix side
@@ -60,9 +58,10 @@ pub fn check_values(
         attrs_file_path.display()
     ))?;
 
+    let expr_path = std::env::var("NIX_CHECK_BY_NAME_EXPR_PATH")
+        .context("Could not get environment variable NIX_CHECK_BY_NAME_EXPR_PATH")?;
     // With restrict-eval, only paths in NIX_PATH can be accessed, so we explicitly specify the
     // ones needed needed
-
     let mut command = process::Command::new("nix-instantiate");
     command
         // Inherit stderr so that error messages always get shown
@@ -76,8 +75,6 @@ pub fn check_values(
             "--readonly-mode",
             "--restrict-eval",
             "--show-trace",
-            "--expr",
-            EXPR,
         ])
         // Pass the path to the attrs_file as an argument and add it to the NIX_PATH so it can be
         // accessed in restrict-eval mode
@@ -96,6 +93,8 @@ pub fn check_values(
         command.arg("-I");
         command.arg(path);
     }
+    command.args(["-I", &expr_path]);
+    command.arg(expr_path);
 
     let result = command
         .output()

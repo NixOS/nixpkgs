@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-RAMQC9weEvTV44nAXjwMYv+4O5aSNNM5UOf/xBb4SBE=";
+    hash = "sha256-UINjoleubgYV7qsjQyOz+8PXCmLBrXxknIc1OKuPPMU=";
   };
 
-  cargoHash = "sha256-ZBedAIHwbRiR9i6w0CWIiE+OJvTkmxiEihn7zLAV/Dg=";
+  cargoHash = "sha256-wSa70jBHNPdyf1NHj+jHr8VwGXNw8p/bJRHc8PUE7BU=";
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
@@ -58,6 +58,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.uiua.org/";
     license = lib.licenses.mit;
     mainProgram = "uiua";
-    maintainers = with lib.maintainers; [ cafkafk tomasajt ];
+    maintainers = with lib.maintainers; [ cafkafk tomasajt defelo ];
   };
 }

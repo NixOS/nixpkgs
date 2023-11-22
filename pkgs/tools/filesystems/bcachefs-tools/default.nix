@@ -81,7 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       smoke-test = nixosTests.bcachefs;
-      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+
+      inherit (nixosTests.installer)
+        bcachefsSimple
+        bcachefsEncrypted
+        bcachefsMulti
+        bcachefsLinuxTesting
+        bcachefsUpgradeToLinuxTesting;
     };
 
     updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''

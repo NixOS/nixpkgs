@@ -8,6 +8,10 @@ let
     mkRenamedOptionModule
     teams
     types;
+
+  associationOptions = with types; attrsOf (
+    coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str
+  );
 in
 
 {
@@ -72,20 +76,76 @@ in
         See [#160923](https://github.com/NixOS/nixpkgs/issues/160923) for more info.
       '';
     };
+
+    config = mkOption {
+      type = types.attrsOf associationOptions;
+      default = { };
+      example = {
+        x-cinnamon = {
+          default = [ "xapp" "gtk" ];
+        };
+        pantheon = {
+          default = [ "pantheon" "gtk" ];
+          "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+        };
+        common = {
+          default = [ "gtk" ];
+        };
+      };
+      description = lib.mdDoc ''
+        Sets which portal backend should be used to provide the implementation
+        for the requested interface. For details check {manpage}`portals.conf(5)`.
+
+        Configs will be linked to `/etx/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
+        for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.common`
+        as an exception.
+      '';
+    };
+
+    configPackages = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.gnome.gnome-session ]";
+      description = lib.mdDoc ''
+        List of packages that provide XDG desktop portal configuration, usually in
+        the form of `share/xdg-desktop-portal/$desktop-portals.conf`.
+
+        Note that configs in `xdg.portal.config` will be preferred if set.
+      '';
+    };
   };
 
   config =
     let
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
+      configPackages = cfg.configPackages;
+
       joinedPortals = pkgs.buildEnv {
         name = "xdg-portals";
         paths = packages;
         pathsToLink = [ "/share/xdg-desktop-portal/portals" "/share/applications" ];
       };
 
+      joinedPortalConfigs = pkgs.buildEnv {
+        name = "xdg-portal-configs";
+        paths = configPackages;
+        pathsToLink = [ "/share/xdg-desktop-portal" ];
+      };
     in
     mkIf cfg.enable {
+      warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
+        xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
+        should either set `xdg.portal.config` or `xdg.portal.configPackages`
+        to specify which portal backend to use for the requested interface.
+
+        https://github.com/flatpak/xdg-desktop-portal/blob/1.18.1/doc/portals.conf.rst.in
+
+        If you simply want to keep the behaviour in < 1.17, which uses the first
+        portal implementation found in lexicographical order, use the following:
+
+        xdg.portal.config.common.default = "*";
+      '';
 
       assertions = [
         {
@@ -108,7 +168,14 @@ in
           GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
           NIXOS_XDG_OPEN_USE_PORTAL = mkIf cfg.xdgOpenUsePortal "1";
           XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
+          NIXOS_XDG_DESKTOP_PORTAL_CONFIG_DIR = mkIf (cfg.configPackages != [ ]) "${joinedPortalConfigs}/share/xdg-desktop-portal";
         };
+
+        etc = lib.concatMapAttrs
+          (desktop: conf: lib.optionalAttrs (conf != { }) {
+            "xdg/xdg-desktop-portal/${lib.optionalString (desktop != "common") "${desktop}-"}portals.conf".text =
+              lib.generators.toINI { } { preferred = conf; };
+          }) cfg.config;
       };
     };
 }

@@ -1293,6 +1293,7 @@ let
           "FirewallMark"
           "Wash"
           "SplitGSO"
+          "AckFilter"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -1325,6 +1326,7 @@ let
         (assertRange "FirewallMark" 1 4294967295)
         (assertValueOneOf "Wash" boolValues)
         (assertValueOneOf "SplitGSO" boolValues)
+        (assertValueOneOf "AckFilter" (boolValues ++ ["aggressive"]))
       ];
 
       sectionControlledDelay = checkUnitConfig "ControlledDelay" [

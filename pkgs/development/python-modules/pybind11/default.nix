@@ -12,7 +12,6 @@
 , pytestCheckHook
 , libxcrypt
 , makeSetupHook
-, darwin
 }: let
   setupHook = makeSetupHook {
     name = "pybind11-setup-hook";

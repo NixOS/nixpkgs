@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trapexit/mergerfs";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jfrankenau makefu ];
+    maintainers = with lib.maintainers; [ makefu ];
   };
 }

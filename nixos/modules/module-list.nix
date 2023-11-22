@@ -799,6 +799,7 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
+  ./services/monitoring/ocsinventory-agent.nix
   ./services/monitoring/opentelemetry-collector.nix
   ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
@@ -880,6 +881,7 @@
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
+  ./services/networking/centrifugo.nix
   ./services/networking/cgit.nix
   ./services/networking/charybdis.nix
   ./services/networking/chisel-server.nix

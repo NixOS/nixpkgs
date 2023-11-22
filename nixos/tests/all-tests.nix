@@ -117,6 +117,7 @@ in {
   allTerminfo = handleTest ./all-terminfo.nix {};
   alps = handleTest ./alps.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
+  amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
   amd-sev = runTest ./amd-sev.nix;
   anbox = runTest ./anbox.nix;
   anuko-time-tracker = handleTest ./anuko-time-tracker.nix {};
@@ -173,6 +174,7 @@ in {
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
   cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
   cassandra_4 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_4; };
+  centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix {};
   ceph-single-node = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix {};
   ceph-single-node-bluestore = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node-bluestore.nix {};
@@ -330,6 +332,7 @@ in {
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glusterfs = handleTest ./glusterfs.nix {};
   gnome = handleTest ./gnome.nix {};
+  gnome-extensions = handleTest ./gnome-extensions.nix {};
   gnome-flashback = handleTest ./gnome-flashback.nix {};
   gnome-xorg = handleTest ./gnome-xorg.nix {};
   gnupg = handleTest ./gnupg.nix {};
@@ -616,6 +619,7 @@ in {
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
   opentelemetry-collector = handleTest ./opentelemetry-collector.nix {};
+  ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix {};
   owncast = handleTest ./owncast.nix {};
   outline = handleTest ./outline.nix {};
   image-contents = handleTest ./image-contents.nix {};

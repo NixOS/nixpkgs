@@ -1,5 +1,5 @@
+/* Operations on attribute sets. */
 { lib }:
-# Operations on attribute sets.
 
 let
   inherit (builtins) head tail length;

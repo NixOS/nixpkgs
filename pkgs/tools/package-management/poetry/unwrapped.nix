@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , pythonRelaxDepsHook
 , build
@@ -42,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.6.1";
+  version = "1.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -51,17 +50,8 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/OvYT4Vix1t5Yx/Tx0z3E9L9qJ4OdI4maQqUVl8H524=";
+    hash = "sha256-au+4TOh/sA1+XZqXvWkKxfSdurusBR4l8jsPg6acUM8=";
   };
-
-  patches = [
-    # Backport patch to fix pypa/build 1.0 incompatibility
-    # FIXME: remove in next release
-    (fetchpatch {
-      url = "https://github.com/python-poetry/poetry/commit/a16863d1a448ff91a7cc4e48042d3a8669b78b34.patch";
-      hash = "sha256-dWa5W1jFS7h5cTgoFy89o1Rbtmyddvme4sus+lld058=";
-    })
-  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -132,6 +122,8 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_env_system_packages_are_relative_to_lib"
+    "test_install_warning_corrupt_root"
     "test_installer_with_pypi_repository"
     # touches network
     "git"
@@ -148,6 +140,7 @@ buildPythonPackage rec {
     # fs permission errors
     "test_builder_should_execute_build_scripts"
     # poetry.installation.chef.ChefBuildError: Backend 'poetry.core.masonry.api' is not available.
+    "test_isolated_env_install_success"
     "test_prepare_sdist"
     "test_prepare_directory"
     "test_prepare_directory_with_extensions"

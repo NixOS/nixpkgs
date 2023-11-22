@@ -47,6 +47,7 @@
 , glibc # gconv + locale
 # postFixup:
 , vulkan-loader
+, libglvnd
 
 # Package customization:
 , cupsSupport ? true, cups ? null
@@ -252,6 +253,20 @@ let
         commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
         hash = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
         revert = true;
+      })
+    ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
+      # Fix build with at-spi2-core ≥ 2.49
+      # This version is still needed for electron.
+      (githubPatch {
+        commit = "fc09363b2278893790d131c72a4ed96ec9837624";
+        hash = "sha256-l60Npgs/+0ozzuKWjwiHUUV6z59ObUjAPTfXN7eXpzw=";
+      })
+    ] ++ lib.optionals (!chromiumVersionAtLeast "121.0.6104.0") [
+      # Fix build with at-spi2-core ≥ 2.49
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5001687
+      (githubPatch {
+        commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
+        hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
     ];
 
@@ -479,7 +494,7 @@ let
       # libpci (from pciutils) is needed by dlopen in angle/src/gpu_info_util/SystemInfo_libpci.cpp
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL libglvnd vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {
