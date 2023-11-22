@@ -125,6 +125,18 @@
 
           forceGitDeps = true;
         };
+
+        # This package has a lockfile v1 git dependency with no `dependencies` attribute, since it sementically has no dependencies.
+        jitsiMeet9111 = makeTest {
+          name = "jitsi-meet-9111";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/jitsi/jitsi-meet/stable/jitsi-meet_9111/package-lock.json";
+            hash = "sha256-NU+eQD4WZ4BMur8uX79uk8wUPsZvIT02KhPWHTmaihk=";
+          };
+
+          hash = "sha256-FhxlJ0HdJMPiWe7+n1HaGLWOr/2HJEPwiS65uqXZM8Y=";
+        };
       };
 
     meta = with lib; {
