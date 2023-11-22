@@ -3,8 +3,8 @@
 , fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "cp-p";
   pname = "cp-p";
+  version = "unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner = "Naheel-Azawy";
