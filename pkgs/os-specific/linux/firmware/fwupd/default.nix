@@ -19,7 +19,6 @@
 , curl
 , libjcat
 , elfutils
-, efivar
 , valgrind
 , meson
 , libuuid
@@ -123,7 +122,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.7";
+  version = "1.9.9";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -134,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-NhVCIjkwoTZptctIrkU9HgXzjr+KCUZfEKcjoYgAEdM=";
+    hash = "sha256-UUrG3CMCAC5hyy2U5I4zqvJoSP/+zuiq1P+2Pdb3QD0=";
   };
 
   patches = [
@@ -193,7 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
     pango
     tpm2-tss
-    efivar
     fwupd-efi
     protobufc
     modemmanager
@@ -207,7 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=enabled"
-    "-Dplugin_dummy=true"
     # We are building the official releases.
     "-Dsupported_build=enabled"
     "-Dlaunchd=disabled"

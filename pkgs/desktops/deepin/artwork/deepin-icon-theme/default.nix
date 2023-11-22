@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  postFixup = ''
+  preFixup = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
