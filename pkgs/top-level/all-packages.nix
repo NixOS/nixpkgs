@@ -32957,7 +32957,7 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk20.override { enableJavaFX = true; };
+    jdk = jdk21.override { enableJavaFX = true; };
     gradle = gradle_8;
   };
 
