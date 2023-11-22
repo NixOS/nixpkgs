@@ -3,7 +3,7 @@
 , jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, ffmpeg_5, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
+, ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
 , gnome/*.gnome-shell*/
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
@@ -87,7 +87,7 @@ let
 
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
             ++ lib.optional pipewireSupport pipewire
-            ++ lib.optional ffmpegSupport ffmpeg_5
+            ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)

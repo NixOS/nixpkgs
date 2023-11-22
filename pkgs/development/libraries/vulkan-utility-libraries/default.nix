@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "Vulkan-Utility-Libraries";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O1agpzZpXiQZFYx1jPosIhxJovZtfZSLBNFj1LVB1VI=";
+    hash = "sha256-l6PiHCre/JQg8PSs1k/0Zzfwwv55AqVdZtBbjeKLS6E=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
@@ -19,6 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = with maintainers; [ nickcao ];
   };
 })
