@@ -4207,6 +4207,12 @@
     githubId = 130508846;
     name = "Elliot Cameron";
   };
+  deadendpl = {
+    name = "Oliwier Czerwiński";
+    email = "oliwier.czerwi@proton.me";
+    github = "deadendpl";
+    githubId = 123810408;
+  };
   dearrude = {
     name = "Ebrahim Nejati";
     email = "dearrude@tfwno.gf";
@@ -4221,12 +4227,6 @@
     email = "declan.fraser.rixon@gmail.com";
     github = "DeclanRixon";
     githubId = 57464835;
-  };
-  deadendpl = {
-    name = "Oliwier Czerwiński";
-    email = "oliwier.czerwi@proton.me";
-    github = "deadendpl";
-    githubId = 123810408;
   };
   deejayem = {
     email = "nixpkgs.bu5hq@simplelogin.com";
