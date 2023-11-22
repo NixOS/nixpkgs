@@ -50,6 +50,7 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mongodb"
     "mysqld"
     "nextcloud"
     "nginx"
