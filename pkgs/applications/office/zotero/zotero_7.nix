@@ -145,6 +145,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ i077 ];
+    maintainers = with maintainers; [ atila ];
   };
 }
