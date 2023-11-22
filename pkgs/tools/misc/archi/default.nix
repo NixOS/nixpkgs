@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
         mv Archi.app "$out/Applications/"
       '';
 
+  passthru.updateScript = ./update.sh;
+
   passthru.tests = { inherit (nixosTests) archi; };
 
   meta = with lib; {
