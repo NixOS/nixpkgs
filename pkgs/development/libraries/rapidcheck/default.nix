@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${lib.toUpper (lib.boolToString (!stdenv.hostPlatform.isStatic))}"
+  ];
+
   # Install the extras headers
   postInstall = ''
     cp -r $src/extras $out
