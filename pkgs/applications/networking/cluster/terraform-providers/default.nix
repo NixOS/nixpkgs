@@ -14,8 +14,8 @@ let
   #
   # Is designed to combine with the terraform.withPlugins implementation.
   mkProvider = lib.makeOverridable
-    ({ owner
-     , repo
+    ({ owner ? builtins.elemAt (lib.splitString "/" homepage) 3
+     , repo ? builtins.elemAt (lib.splitString "/" homepage) 4
      , rev
      , spdx ? "UNSET"
      , version ? lib.removePrefix "v" rev
@@ -25,10 +25,10 @@ let
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
      , mkProviderGoModule ? buildGoModule
-       # "https://registry.terraform.io/providers/vancluever/acme"
+       # "https://github.com/vancluever/terraform-provider-acme"
      , homepage ? ""
        # "registry.terraform.io/vancluever/acme"
-     , provider-source-address ? lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ] homepage
+     , provider-source-address ? "registry.terraform.io/${owner}/${lib.removePrefix "terraform-provider-" repo}"
      , ...
      }@attrs:
       assert lib.stringLength provider-source-address > 0;
@@ -81,7 +81,11 @@ let
     {
       # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
       checkly = automated-providers.checkly.override { spdx = "MIT"; };
-      gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
+      gitlab = automated-providers.gitlab.override {
+        mkProviderFetcher = fetchFromGitLab;
+        owner = "gitlab-org";
+        provider-source-address = "registry.terraform.io/gitlabhq/gitlab";
+      };
       # actions update always fails but can't reproduce the failure.
       heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
