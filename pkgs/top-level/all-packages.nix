@@ -17748,7 +17748,7 @@ with pkgs;
   ### End of CuboCore
 
   maude = callPackage ../development/interpreters/maude {
-    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages_8.stdenv else stdenv;
   };
 
   me_cleaner = callPackage ../tools/misc/me_cleaner { };
@@ -40010,7 +40010,7 @@ with pkgs;
 
   root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   });
 
   rinetd = callPackage ../servers/rinetd { };
