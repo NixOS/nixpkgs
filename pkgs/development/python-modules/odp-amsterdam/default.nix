@@ -8,14 +8,15 @@
 , pytest-asyncio
 , pytestCheckHook
 , pytz
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "odp-amsterdam";
   version = "6.0.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     pytz
+    yarl
   ];
 
   nativeCheckInputs = [
