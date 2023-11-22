@@ -1,13 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapQtAppsHook
 , cmake
 , pkg-config
 , git
-, qtbase
-, qtquickcontrols
-, qtmultimedia
+, qt6Packages
 , openal
 , glew
 , vulkan-headers
@@ -34,10 +31,12 @@
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "15409-fd6829f75";
-  rpcs3Version = "0.0.28-15409-fd6829f75";
-  rpcs3Revision = "fd6829f7576da07e3bb90de8821834d3ce44610c";
-  rpcs3Hash = "sha256-I/CYDE7te8xxKjTyH1Mb45uemya5Sfjb96MQWlkFAbk=";
+  rpcs3GitVersion = "15726-ebf48800e";
+  rpcs3Version = "0.0.29-15726-ebf48800e";
+  rpcs3Revision = "ebf48800e6bf2569fa0a59974ab2daaeb3a92f23";
+  rpcs3Hash = "sha256-HJQ+DCZy8lwMCfq0N9StKD8bP1hCBxGMAucbQ9esy/I=";
+
+  inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook;
 in
 stdenv.mkDerivation {
   pname = "rpcs3";
@@ -82,7 +81,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtquickcontrols qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
+    qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
     libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
   ] ++ cubeb.passthru.backendLibs
     ++ lib.optionals faudioSupport [ faudio SDL2 ]
