@@ -202,6 +202,7 @@ in {
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
     ];
+    xdg.portal.configPackages = mkDefault [ pkgs.budgie.budgie-desktop ];
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.

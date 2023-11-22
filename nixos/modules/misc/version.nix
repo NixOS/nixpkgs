@@ -27,6 +27,7 @@ let
     HOME_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/";
     DOCUMENTATION_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/learn.html";
     SUPPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://nixos.org/community.html";
+    SUPPORT_END = "2024-06-30";
     BUG_REPORT_URL = lib.optionalString (cfg.distroId == "nixos") "https://github.com/NixOS/nixpkgs/issues";
   } // lib.optionalAttrs (cfg.variant_id != null) {
     VARIANT_ID = cfg.variant_id;

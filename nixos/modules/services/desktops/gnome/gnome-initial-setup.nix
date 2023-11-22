@@ -93,6 +93,9 @@ in
       "gnome-initial-setup.service"
     ];
 
+    programs.dconf.profiles.gnome-initial-setup.databases = [
+      "${pkgs.gnome.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
+    ];
   };
 
 }

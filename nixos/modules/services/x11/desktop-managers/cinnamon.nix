@@ -200,6 +200,9 @@ in
         })
       ];
 
+      # https://salsa.debian.org/cinnamon-team/cinnamon/-/commit/f87c64f8d35ba406eb11ad442989a0716f6620cf#
+      xdg.portal.config.x-cinnamon.default = mkDefault [ "xapp" "gtk" ];
+
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 

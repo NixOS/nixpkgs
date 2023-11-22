@@ -372,6 +372,7 @@ in
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
+      xdg.portal.configPackages = mkDefault [ plasma5.xdg-desktop-portal-kde ];
       # xdg-desktop-portal-kde expects PipeWire to be running.
       # This does not, by default, replace PulseAudio.
       services.pipewire.enable = mkDefault true;

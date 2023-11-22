@@ -77,6 +77,8 @@ in
 
     security.pam.services.mate-screensaver.unixAuth = true;
 
+    xdg.portal.configPackages = mkDefault [ pkgs.mate.mate-desktop ];
+
     environment.pathsToLink = [ "/share" ];
   };
 
