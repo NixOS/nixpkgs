@@ -9,12 +9,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "5.0.0";
-  format = "setuptools";
+  version = "6.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -22,8 +23,12 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
-    hash = "sha256-vlPAAGY6h/nV9bNOUXharm1aeKfaL7ImzbvAPlpMV5k=";
+    hash = "sha256-8ye15xn6h2YOMQTC1iJtY05WXe4bKyOn3tvPfNdS3y0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
