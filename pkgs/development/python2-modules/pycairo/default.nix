@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , buildPythonPackage
@@ -21,6 +22,13 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "142145a2whvlk92jijrbf3i2bqrzmspwpysj0bfypw0krzi0aa6j";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pygobject/pycairo/commit/678edd94d8a6dfb5d51f9c3549e6ee8c90a73744.patch";
+      sha256 = "sha256-HmP69tUGYxZvJ/M9FJHwHTCjb9Kf4aWRyMT4wSymrT0=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
