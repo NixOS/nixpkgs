@@ -595,6 +595,6 @@ in
     update-channel = products.webstorm.update-channel;
   };
 
-  plugins = callPackage ./plugins { };
+  plugins = callPackage ./plugins { } // { __attrsFailEvaluation = true; };
 
 }

@@ -61,7 +61,7 @@ in
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
     in {
       # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
+      buildRustPackages = (selectRustPackage buildPackages).packages.stable // { __attrsFailEvaluation = true; };
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
       rustc = self.callPackage ./rustc.nix ({
