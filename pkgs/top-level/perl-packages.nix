@@ -23,7 +23,7 @@ in
 with self; {
 
   inherit perl;
-  perlPackages = self;
+  perlPackages = builtins.removeAttrs self ["perlPackages"];
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule ;
