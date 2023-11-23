@@ -6,7 +6,7 @@
 , writeText
 , jq
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , jitsi-meet
 }:
@@ -33,7 +33,18 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = webYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps jq nodejs ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    export VERSION=${finalAttrs.version}
+    yarn --offline build:res
+    yarn --offline build:module_system
+    yarn --offline build:bundle
+
+    runHook postBuild
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -46,23 +57,12 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p $HOME
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $offlineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules
 
     runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    export VERSION=${finalAttrs.version}
-    yarn build:res --offline
-    yarn build:module_system --offline
-    yarn build:bundle --offline
-
-    runHook postBuild
   '';
 
   installPhase = ''
