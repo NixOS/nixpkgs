@@ -118,13 +118,13 @@ edk2 = stdenv.mkDerivation rec {
 
       prePatch = ''
         rm -rf BaseTools
-        ln -sv ${edk2}/BaseTools BaseTools
+        ln -sv ${buildPackages.edk2}/BaseTools BaseTools
       '';
 
       configurePhase = ''
         runHook preConfigure
         export WORKSPACE="$PWD"
-        . ${edk2}/edksetup.sh BaseTools
+        . ${buildPackages.edk2}/edksetup.sh BaseTools
         runHook postConfigure
       '';
 
