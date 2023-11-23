@@ -1,0 +1,203 @@
+From 04bb75ca7d95459ea14f6fde112c9ae0128c722d Mon Sep 17 00:00:00 2001
+From: Rich Ercolani <214141+rincebrain@users.noreply.github.com>
+Date: Thu, 16 Nov 2023 14:35:22 -0500
+Subject: [PATCH] Add a tunable to disable BRT support.
+
+Copy the disable parameter that FreeBSD implemented, and extend it to
+work on Linux as well, until we're sure this is stable.
+
+Reviewed-by: Alexander Motin <mav@FreeBSD.org>
+Reviewed-by: Brian Behlendorf <behlendorf1@llnl.gov>
+Signed-off-by: Rich Ercolani <rincebrain@gmail.com>
+Closes #15529
+(cherry picked from commit 03e9caaec006134b3db9d02ac40fe9369ee78b03)
+---
+ include/os/freebsd/zfs/sys/zfs_vfsops_os.h        |  1 +
+ include/os/linux/zfs/sys/zfs_vfsops_os.h          |  2 ++
+ man/man4/zfs.4                                    |  5 +++++
+ module/os/freebsd/zfs/zfs_vfsops.c                |  4 ++++
+ module/os/freebsd/zfs/zfs_vnops_os.c              |  5 +++++
+ module/os/linux/zfs/zfs_vnops_os.c                |  4 ++++
+ module/os/linux/zfs/zpl_file_range.c              |  5 +++++
+ tests/zfs-tests/include/libtest.shlib             | 15 +++++++++++++++
+ tests/zfs-tests/include/tunables.cfg              |  1 +
+ .../tests/functional/block_cloning/cleanup.ksh    |  4 ++++
+ .../tests/functional/block_cloning/setup.ksh      |  5 +++++
+ 11 files changed, 51 insertions(+)
+
+diff --git a/include/os/freebsd/zfs/sys/zfs_vfsops_os.h b/include/os/freebsd/zfs/sys/zfs_vfsops_os.h
+index 24bb03575..56a0ac96a 100644
+--- a/include/os/freebsd/zfs/sys/zfs_vfsops_os.h
++++ b/include/os/freebsd/zfs/sys/zfs_vfsops_os.h
+@@ -286,6 +286,7 @@ typedef struct zfid_long {
+ 
+ extern uint_t zfs_fsyncer_key;
+ extern int zfs_super_owner;
++extern int zfs_bclone_enabled;
+ 
+ extern void zfs_init(void);
+ extern void zfs_fini(void);
+diff --git a/include/os/linux/zfs/sys/zfs_vfsops_os.h b/include/os/linux/zfs/sys/zfs_vfsops_os.h
+index b4d5db21f..220466550 100644
+--- a/include/os/linux/zfs/sys/zfs_vfsops_os.h
++++ b/include/os/linux/zfs/sys/zfs_vfsops_os.h
+@@ -45,6 +45,8 @@ extern "C" {
+ typedef struct zfsvfs zfsvfs_t;
+ struct znode;
+ 
++extern int zfs_bclone_enabled;
++
+ /*
+  * This structure emulates the vfs_t from other platforms.  It's purpose
+  * is to facilitate the handling of mount options and minimize structural
+diff --git a/man/man4/zfs.4 b/man/man4/zfs.4
+index 71a3e67ee..e26d92526 100644
+--- a/man/man4/zfs.4
++++ b/man/man4/zfs.4
+@@ -1137,6 +1137,11 @@ Selecting any option other than
+ results in vector instructions
+ from the respective CPU instruction set being used.
+ .
++.It Sy zfs_bclone_enabled Ns = Ns Sy 1 Ns | Ns 0 Pq int
++Enable the experimental block cloning feature.
++If this setting is 0, then even if feature@block_cloning is enabled,
++attempts to clone blocks will act as though the feature is disabled.
++.
+ .It Sy zfs_blake3_impl Ns = Ns Sy fastest Pq string
+ Select a BLAKE3 implementation.
+ .Pp
+diff --git a/module/os/freebsd/zfs/zfs_vfsops.c b/module/os/freebsd/zfs/zfs_vfsops.c
+index e8b9ada13..09e18de81 100644
+--- a/module/os/freebsd/zfs/zfs_vfsops.c
++++ b/module/os/freebsd/zfs/zfs_vfsops.c
+@@ -89,6 +89,10 @@ int zfs_debug_level;
+ SYSCTL_INT(_vfs_zfs, OID_AUTO, debug, CTLFLAG_RWTUN, &zfs_debug_level, 0,
+ 	"Debug level");
+ 
++int zfs_bclone_enabled = 1;
++SYSCTL_INT(_vfs_zfs, OID_AUTO, bclone_enabled, CTLFLAG_RWTUN,
++	&zfs_bclone_enabled, 0, "Enable block cloning");
++
+ struct zfs_jailparam {
+ 	int mount_snapshot;
+ };
+diff --git a/module/os/freebsd/zfs/zfs_vnops_os.c b/module/os/freebsd/zfs/zfs_vnops_os.c
+index c498a1328..f672deed3 100644
+--- a/module/os/freebsd/zfs/zfs_vnops_os.c
++++ b/module/os/freebsd/zfs/zfs_vnops_os.c
+@@ -6243,6 +6243,11 @@ zfs_freebsd_copy_file_range(struct vop_copy_file_range_args *ap)
+ 	int error;
+ 	uint64_t len = *ap->a_lenp;
+ 
++	if (!zfs_bclone_enabled) {
++		mp = NULL;
++		goto bad_write_fallback;
++	}
++
+ 	/*
+ 	 * TODO: If offset/length is not aligned to recordsize, use
+ 	 * vn_generic_copy_file_range() on this fragment.
+diff --git a/module/os/linux/zfs/zfs_vnops_os.c b/module/os/linux/zfs/zfs_vnops_os.c
+index 33baac9db..76fac3a02 100644
+--- a/module/os/linux/zfs/zfs_vnops_os.c
++++ b/module/os/linux/zfs/zfs_vnops_os.c
+@@ -4229,4 +4229,8 @@ EXPORT_SYMBOL(zfs_map);
+ module_param(zfs_delete_blocks, ulong, 0644);
+ MODULE_PARM_DESC(zfs_delete_blocks, "Delete files larger than N blocks async");
+ 
++/* CSTYLED */
++module_param(zfs_bclone_enabled, uint, 0644);
++MODULE_PARM_DESC(zfs_bclone_enabled, "Enable block cloning");
++
+ #endif
+diff --git a/module/os/linux/zfs/zpl_file_range.c b/module/os/linux/zfs/zpl_file_range.c
+index c47fe99da..73476ff40 100644
+--- a/module/os/linux/zfs/zpl_file_range.c
++++ b/module/os/linux/zfs/zpl_file_range.c
+@@ -31,6 +31,8 @@
+ #include <sys/zfs_vnops.h>
+ #include <sys/zfeature.h>
+ 
++int zfs_bclone_enabled = 1;
++
+ /*
+  * Clone part of a file via block cloning.
+  *
+@@ -50,6 +52,9 @@ __zpl_clone_file_range(struct file *src_file, loff_t src_off,
+ 	fstrans_cookie_t cookie;
+ 	int err;
+ 
++	if (!zfs_bclone_enabled)
++		return (-EOPNOTSUPP);
++
+ 	if (!spa_feature_is_enabled(
+ 	    dmu_objset_spa(ITOZSB(dst_i)->z_os), SPA_FEATURE_BLOCK_CLONING))
+ 		return (-EOPNOTSUPP);
+diff --git a/tests/zfs-tests/include/libtest.shlib b/tests/zfs-tests/include/libtest.shlib
+index 844caa17d..d5d7bb6c8 100644
+--- a/tests/zfs-tests/include/libtest.shlib
++++ b/tests/zfs-tests/include/libtest.shlib
+@@ -3334,6 +3334,21 @@ function set_tunable_impl
+ 	esac
+ }
+ 
++function save_tunable
++{
++	[[ ! -d $TEST_BASE_DIR ]] && return 1
++	[[ -e $TEST_BASE_DIR/tunable-$1 ]] && return 2
++	echo "$(get_tunable """$1""")" > "$TEST_BASE_DIR"/tunable-"$1"
++}
++
++function restore_tunable
++{
++	[[ ! -e $TEST_BASE_DIR/tunable-$1 ]] && return 1
++	val="$(cat $TEST_BASE_DIR/tunable-"""$1""")"
++	set_tunable64 "$1" "$val"
++	rm $TEST_BASE_DIR/tunable-$1
++}
++
+ #
+ # Get a global system tunable
+ #
+diff --git a/tests/zfs-tests/include/tunables.cfg b/tests/zfs-tests/include/tunables.cfg
+index 8010a9451..1e8c8fd71 100644
+--- a/tests/zfs-tests/include/tunables.cfg
++++ b/tests/zfs-tests/include/tunables.cfg
+@@ -90,6 +90,7 @@ VOL_INHIBIT_DEV			UNSUPPORTED			zvol_inhibit_dev
+ VOL_MODE			vol.mode			zvol_volmode
+ VOL_RECURSIVE			vol.recursive			UNSUPPORTED
+ VOL_USE_BLK_MQ			UNSUPPORTED			UNSUPPORTED
++BCLONE_ENABLED			zfs_bclone_enabled		zfs_bclone_enabled
+ XATTR_COMPAT			xattr_compat			zfs_xattr_compat
+ ZEVENT_LEN_MAX			zevent.len_max			zfs_zevent_len_max
+ ZEVENT_RETAIN_MAX		zevent.retain_max		zfs_zevent_retain_max
+diff --git a/tests/zfs-tests/tests/functional/block_cloning/cleanup.ksh b/tests/zfs-tests/tests/functional/block_cloning/cleanup.ksh
+index 7ac13adb6..b985445a5 100755
+--- a/tests/zfs-tests/tests/functional/block_cloning/cleanup.ksh
++++ b/tests/zfs-tests/tests/functional/block_cloning/cleanup.ksh
+@@ -31,4 +31,8 @@ verify_runnable "global"
+ 
+ default_cleanup_noexit
+ 
++if tunable_exists BCLONE_ENABLED ; then
++	log_must restore_tunable BCLONE_ENABLED
++fi
++
+ log_pass
+diff --git a/tests/zfs-tests/tests/functional/block_cloning/setup.ksh b/tests/zfs-tests/tests/functional/block_cloning/setup.ksh
+index 512f5a064..58441bf8f 100755
+--- a/tests/zfs-tests/tests/functional/block_cloning/setup.ksh
++++ b/tests/zfs-tests/tests/functional/block_cloning/setup.ksh
+@@ -33,4 +33,9 @@ fi
+ 
+ verify_runnable "global"
+ 
++if tunable_exists BCLONE_ENABLED ; then
++    log_must save_tunable BCLONE_ENABLED
++    log_must set_tunable32 BCLONE_ENABLED 1
++fi
++
+ log_pass
+-- 
+2.42.0
+

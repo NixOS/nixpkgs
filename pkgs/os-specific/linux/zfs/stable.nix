@@ -3,7 +3,7 @@
 , stdenv
 , linuxKernel
 , removeLinuxDRM ? false
-, fetchpatch
+, fetchpatch2
 , ...
 } @ args:
 
@@ -25,4 +25,12 @@ callPackage ./generic.nix args {
   version = "2.2.0";
 
   sha256 = "sha256-s1sdXSrLu6uSOmjprbUa4cFsE2Vj7JX5i75e4vRnlvg=";
+
+  extraPatches = [
+    ./brt-tunable.patch
+    (fetchpatch2 {
+      url = "https://github.com/openzfs/zfs/commit/479dca51c66a731e637bd2d4f9bba01a05f9ac9f.patch";
+      hash = "sha256-Qil4sm2h+d2fjwuiQO1nJ63/M83K3XH2A3wEFNr2f5M=";
+    })
+  ];
 }
