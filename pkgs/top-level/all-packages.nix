@@ -17910,8 +17910,8 @@ with pkgs;
   python27Packages = python27.pkgs;
   python38Packages = python38.pkgs;
   python39Packages = python39.pkgs;
-  python310Packages = recurseIntoAttrs python310.pkgs;
-  python311Packages = recurseIntoAttrs python311.pkgs;
+  python310Packages = builtins.removeAttrs (recurseIntoAttrs python310.pkgs) [ "pythonPackages" ];
+  python311Packages = builtins.removeAttrs (recurseIntoAttrs python311.pkgs) [ "pythonPackages" ];
   python312Packages = python312.pkgs;
   python313Packages = python313.pkgs;
   pypyPackages = pypy.pkgs;
@@ -34746,7 +34746,10 @@ with pkgs;
 
   picosnitch = callPackage ../tools/networking/picosnitch { };
 
-  pidginPackages = recurseIntoAttrs (callPackage ../applications/networking/instant-messengers/pidgin/pidgin-plugins { });
+  pidginPackages =
+    builtins.removeAttrs
+      (recurseIntoAttrs (callPackage ../applications/networking/instant-messengers/pidgin/pidgin-plugins { }))
+      ["pidginPackages"];
 
   inherit (pidginPackages) pidgin;
 
