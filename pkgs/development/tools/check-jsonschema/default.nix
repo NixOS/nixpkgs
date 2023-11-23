@@ -4,7 +4,7 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.25.0";
+  version = "0.27.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     rev = version;
-    hash = "sha256-Hss4MgE09v2KvL8OIapFgocO+5EWE2WEr5xBAjhwNeE=";
+    hash = "sha256-WXvhlkU1dRNKhW3sMakd644W56xv8keMjSZL4MrQEc8=";
   };
 
   propagatedBuildInputs = [
@@ -21,6 +21,7 @@ buildPythonApplication rec {
     jsonschema
     requests
     click
+    regress
   ];
 
   nativeCheckInputs = [
