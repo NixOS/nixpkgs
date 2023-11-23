@@ -5,6 +5,7 @@
 , buildPackages
 , fetchFromGitHub
 , makeBinaryWrapper
+, nixosTests
 , callPackage
 }:
 stdenv.mkDerivation (finalAttrs:
@@ -58,6 +59,9 @@ in
   passthru = {
     inherit bundlerEnvArgs;
     updateScript = callPackage ./update.nix { };
+    tests = {
+      inherit (nixosTests) pghero;
+    };
   };
 
   meta = {
