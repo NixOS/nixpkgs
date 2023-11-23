@@ -21,7 +21,8 @@ let
       });
       urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
         pyproject = true;
-        nativeBuildInputs = with python3.pkgs; [
+        version = "1.26.18";
+        nativeBuildInputs = with final; [
           setuptools
         ];
         src = prev.src.override {
