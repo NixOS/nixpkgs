@@ -3,6 +3,8 @@
 , graalvmCEPackages
 , removeReferencesTo
 , fetchurl
+, testers
+, zprint
 }:
 
 buildGraalvmNativeImage rec {
@@ -30,6 +32,12 @@ buildGraalvmNativeImage rec {
   postInstall = ''
     remove-references-to -t ${graalvmDrv} $out/bin/${pname}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = zprint;
+    command = "zprint --version";
+  };
 
   meta = with lib; {
     description = "Clojure/EDN source code formatter and pretty printer";
