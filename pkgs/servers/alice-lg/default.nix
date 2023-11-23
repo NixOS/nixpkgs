@@ -5,6 +5,7 @@
 , stdenv
 , yarn
 , nodejs
+, nixosTests
 , git
 , prefetch-yarn-deps
 }:
@@ -73,6 +74,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/alice-lg" ];
   doCheck = false;
+
+  passthru.tests = nixosTests.alice-lg;
 
   meta = with lib; {
     homepage = "https://github.com/alice-lg/alice-lg";

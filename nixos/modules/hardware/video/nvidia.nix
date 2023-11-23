@@ -261,7 +261,16 @@ in {
         ];
         boot = {
           blacklistedKernelModules = ["nouveau" "nvidiafb"];
-          kernelModules = [ "nvidia-uvm" ];
+
+          # Don't add `nvidia-uvm` to `kernelModules`, because we want
+          # `nvidia-uvm` be loaded only after `udev` rules for `nvidia` kernel
+          # module are applied.
+          #
+          # Instead, we use `softdep` to lazily load `nvidia-uvm` kernel module
+          # after `nvidia` kernel module is loaded and `udev` rules are applied.
+          extraModprobeConfig = ''
+            softdep nvidia post: nvidia-uvm
+          '';
         };
         systemd.tmpfiles.rules =
           lib.optional config.virtualisation.docker.enableNvidia

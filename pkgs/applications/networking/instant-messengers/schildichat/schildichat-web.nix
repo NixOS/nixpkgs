@@ -3,7 +3,7 @@
 , fetchYarnDeps
 , nodejs
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , writeText, jq, conf ? {}
 }:
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     sha256 = pinData.reactSdkYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps jq nodejs ];
 
   configurePhase = ''
     runHook preConfigure
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME
 
     pushd element-web
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $webOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules
@@ -64,14 +64,14 @@ in stdenv.mkDerivation rec {
     popd
 
     pushd matrix-js-sdk
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $jsSdkOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules
     popd
 
     pushd matrix-react-sdk
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $reactSdkOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules scripts
