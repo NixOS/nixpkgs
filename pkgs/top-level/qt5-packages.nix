@@ -164,6 +164,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libqtav = callPackage ../development/libraries/libqtav { };
 
+  libquotient = callPackage ../development/libraries/libquotient { };
+
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
   kpmcore = callPackage ../development/libraries/kpmcore { };
