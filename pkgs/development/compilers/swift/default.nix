@@ -55,7 +55,8 @@ let
     darwin = pkgs.darwin.overrideScope (_: prev: {
       inherit apple_sdk;
       inherit (apple_sdk) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
-      CF = apple_sdk.CoreFoundation;
+      CF = apple_sdk.CoreFoundation // { __attrsFailEvaluation = true; };
+      __attrsFailEvaluation = true;
     });
     xcodebuild = pkgs.xcbuild.override {
       inherit (apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;

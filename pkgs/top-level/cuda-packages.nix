@@ -1,6 +1,7 @@
 { lib
 , pkgs
 , cudaVersion
+, __attrsFailEvaluation ? true
 }:
 
 with lib;
@@ -12,7 +13,9 @@ let
     inherit cudaVersion;
     cudaMajorVersion = versions.major final.cudaVersion;
     cudaMajorMinorVersion = lib.versions.majorMinor final.cudaVersion;
-    inherit lib pkgs;
+    inherit lib;
+    pkgs = pkgs // { __attrsFailEvaluation = true; };
+    inherit __attrsFailEvaluation;
 
     addBuildInputs = drv: buildInputs: drv.overrideAttrs (oldAttrs: {
       buildInputs = (oldAttrs.buildInputs or []) ++ buildInputs;
