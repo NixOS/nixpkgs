@@ -4376,8 +4376,6 @@ with pkgs;
     charles4
   ;
 
-  libquotient = libsForQt5.callPackage ../development/libraries/libquotient { };
-
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
