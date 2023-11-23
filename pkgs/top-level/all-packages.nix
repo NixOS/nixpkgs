@@ -22236,6 +22236,8 @@ with pkgs;
 
   itk = itk_5;
 
+  iup = callPackage ../development/libraries/iup { };
+
   jama = callPackage ../development/libraries/jama { };
 
   jansson = callPackage ../development/libraries/jansson { };
