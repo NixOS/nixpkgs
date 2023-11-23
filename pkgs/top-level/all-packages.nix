@@ -41298,6 +41298,8 @@ with pkgs;
 
   utf8cpp = callPackage ../development/libraries/utf8cpp { };
 
+  utf8cpp_4 = callPackage ../development/libraries/utf8cpp/4.nix { };
+
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
   unicode-paracode = callPackage ../tools/misc/unicode { };
