@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-mkdocs";
-  version = "1.0.6";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-l4B/DR0pKZG62+sBG+fiux/XeF3ewxb2TYa+Zs1O3kU=";
+    hash = "sha256-5MCsXCkYnoLEZZoj9WrO/Z3VzTKagoOrMCuTpA4dGAQ=";
   };
 
   nativeBuildInputs = [
