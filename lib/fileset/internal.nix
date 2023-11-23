@@ -52,6 +52,7 @@ let
     concatStringsSep
     substring
     stringLength
+    hasSuffix
     ;
 
 in
@@ -797,9 +798,11 @@ rec {
         if
           predicate {
             inherit name type;
+            hasExt = ext: hasSuffix ".${ext}" name;
+
             # To ensure forwards compatibility with more arguments being added in the future,
             # adding an attribute which can't be deconstructed :)
-            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file }:`, use `{ name, file, ... }:` instead." = null;
+            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file, hasExt }:`, use `{ name, file, hasExt, ... }:` instead." = null;
           }
         then
           type
