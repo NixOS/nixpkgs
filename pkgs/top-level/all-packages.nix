@@ -38439,6 +38439,8 @@ with pkgs;
 
   steam-rom-manager = callPackage ../tools/games/steam-rom-manager { };
 
+  sgdboop = callPackage ../tools/games/sgdboop { };
+
   sdlpop = callPackage ../games/sdlpop { };
 
   stepmania = callPackage ../games/stepmania { };
