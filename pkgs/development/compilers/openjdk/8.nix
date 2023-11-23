@@ -20,8 +20,8 @@ let
     powerpc64le-linux = "ppc64le";
   }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 
-  update = "362";
-  build = "ga";
+  update = "392";
+  build = "b08";
 
   # when building a headless jdk, also bootstrap it with a headless jdk
   openjdk-bootstrap = openjdk8-bootstrap.override { gtkSupport = !headless; };
@@ -34,7 +34,7 @@ let
       owner = "openjdk";
       repo = "jdk8u";
       rev = "jdk${version}";
-      sha256 = "sha256-C5dQwfIIpIrLeO3JWERyFCQHUSgG8gARuc3qXAeLkJ4=";
+      hash = "sha256-5nHhTZd/Vz7MgIiupH4pIYjENfXH5XelImVW60Swaak=";
     };
     outputs = [ "out" "jre" ];
 
