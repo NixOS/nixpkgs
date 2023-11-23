@@ -16,6 +16,7 @@
 , coreutils
 , gdb
 , gnused
+, openssl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     mariadb-connector-c
     pcre
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -42,37 +44,37 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  configurePhase = let
-    modules = [
-      "db_mysql"
-      "dialplan"
-      "jsonrpcc"
-      "json"
-      "lcr"
-      "presence"
-      "presence_conference"
-      "presence_dialoginfo"
-      "presence_mwi"
-      "presence_profile"
-      "presence_reginfo"
-      "presence_xml"
-      "pua"
-      "pua_bla"
-      "pua_dialoginfo"
-      "pua_json"
-      "pua_reginfo"
-      "pua_rpc"
-      "pua_usrloc"
-      "pua_xmpp"
-      "regex"
-      "rls"
-      "xcap_client"
-      "xcap_server"
-    ];
-   in ''
+  modules = [
+    "db_mysql"
+    "dialplan"
+    "jsonrpcc"
+    "json"
+    "lcr"
+    "presence"
+    "presence_conference"
+    "presence_dialoginfo"
+    "presence_mwi"
+    "presence_profile"
+    "presence_reginfo"
+    "presence_xml"
+    "pua"
+    "pua_bla"
+    "pua_dialoginfo"
+    "pua_json"
+    "pua_reginfo"
+    "pua_rpc"
+    "pua_usrloc"
+    "pua_xmpp"
+    "regex"
+    "rls"
+    "xcap_client"
+    "xcap_server"
+  ];
+
+  configurePhase = ''
     runHook preConfigure
 
-    make PREFIX="$out" include_modules="${lib.concatStringsSep " " modules}" cfg
+    make PREFIX="$out" include_modules="${lib.concatStringsSep " " finalAttrs.modules}" cfg
 
     runHook postConfigure
   '';
