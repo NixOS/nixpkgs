@@ -29,8 +29,7 @@
 , enablePython ? false
 , python3
 , swig
-, enableQt ? false
-, libsForQt5
+, qt ? null
 , enableSDL1 ? stdenv.isLinux
 , SDL
 , enableSDL2 ? true
@@ -59,8 +58,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enablePython [
     python3
     swig
-  ] ++ lib.optionals enableQt [
-    libsForQt5.wrapQtAppsHook
+  ] ++ lib.optionals (qt != null) [
+    qt.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -85,9 +84,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableJackrack [
     ladspa-sdk
     ladspaPlugins
-  ] ++ lib.optionals enableQt [
-    libsForQt5.qtbase
-    libsForQt5.qtsvg
+  ] ++ lib.optionals (qt != null) [
+    qt.qtbase
+    qt.qtsvg
+    (qt.qt5compat or null)
   ] ++ lib.optionals enableSDL1 [
     SDL
   ] ++ lib.optionals enableSDL2 [
@@ -102,13 +102,15 @@ stdenv.mkDerivation rec {
     "-DMOD_OPENCV=ON"
   ] ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
+  ] ++ lib.optionals (qt != null) [
+    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
   ];
 
   preFixup = ''
     wrapProgram $out/bin/melt \
       --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 \
       ${lib.optionalString enableJackrack "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"} \
-      ${lib.optionalString enableQt "\${qtWrapperArgs[@]}"}
+      ${lib.optionalString (qt != null) "\${qtWrapperArgs[@]}"}
 
   '';
 
