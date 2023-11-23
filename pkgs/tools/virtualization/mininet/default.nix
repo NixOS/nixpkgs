@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://github.com/mininet/mininet";
     maintainers = with maintainers; [ teto ];
+    mainProgram = "mnexec";
   };
 }
