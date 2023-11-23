@@ -1579,6 +1579,10 @@ let
 
     reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
+    readline = callPackage ../development/ocaml-modules/readline {
+      readline = pkgs.readline;
+    };
+
     reason = callPackage ../development/compilers/reason { };
 
     reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
