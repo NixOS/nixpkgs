@@ -379,6 +379,8 @@ else let
           "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
         ] ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
           "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
+        ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+          "-DCMAKE_LINK_SEARCH_START_STATIC=ON"
         ]);
 
       mesonFlags =
