@@ -1896,6 +1896,8 @@ let
 
     zelus-gtk = callPackage ../development/ocaml-modules/zelus-gtk { };
 
+    zipc = callPackage ../development/ocaml-modules/zipc { };
+
     zmq = callPackage ../development/ocaml-modules/zmq { };
 
     zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };

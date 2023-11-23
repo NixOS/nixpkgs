@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   #hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with lib; {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";
     homepage = "https://github.com/OSGeo/libgeotiff";
     changelog = "https://github.com/OSGeo/libgeotiff/blob/${src.rev}/libgeotiff/NEWS";
-    license = lib.licenses.mit;
-    maintainers = [lib.maintainers.marcweber];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

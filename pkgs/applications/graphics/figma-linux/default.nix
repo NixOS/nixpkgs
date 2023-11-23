@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
-    hash = "sha256-T5SFcdz5yrInE6+ydJqtstEYF0MvHquRZ7nvlCOVNzE=";
+    hash = "sha256-WKL5RabTUD8xIOUoISyn26NXYrNImKZdjXnTYkXpfkE=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];

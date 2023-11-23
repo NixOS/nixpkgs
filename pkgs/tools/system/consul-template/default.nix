@@ -27,5 +27,6 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud pradeepchhetri ];
+    mainProgram = "consul-template";
   };
 }

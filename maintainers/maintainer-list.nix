@@ -149,6 +149,12 @@
     github = "360ied";
     githubId = 19516527;
   };
+  _365tuwe = {
+    name = "Uwe Schlifkowitz";
+    email = "supertuwe@gmail.com";
+    github = "365tuwe";
+    githubId = 10263091;
+  };
   _3699n = {
     email = "nicholas@nvk.pm";
     github = "3699n";
@@ -11014,6 +11020,12 @@
     githubId = 3507;
     name = "Michael Fellinger";
   };
+  maolonglong = {
+    email = "shaolong.chen@outlook.it";
+    github = "maolonglong";
+    githubId = 50797868;
+    name = "Shaolong Chen";
+  };
   maralorn = {
     email = "mail@maralorn.de";
     matrix = "@maralorn:maralorn.de";
@@ -14553,6 +14565,12 @@
     githubId = 13933258;
     name = "Philipp Rintz";
     matrix = "@philipp:srv.icu";
+  };
+  prit342 = {
+    email = "prithak342@gmail.com";
+    github = "prit342";
+    githubId = 20863431;
+    name = "Prithak S.";
   };
   ProducerMatt = {
     name = "Matthew Pherigo";
@@ -19390,6 +19408,12 @@
     github = "wizeman";
     githubId = 168610;
     name = "Ricardo M. Correia";
+  };
+  wkral = {
+    email = "william.kral@gmail.com";
+    github = "wkral";
+    githubId = 105114;
+    name = "William Kral";
   };
   wladmis = {
     email = "dev@wladmis.org";

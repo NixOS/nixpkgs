@@ -13164,11 +13164,11 @@ with self; {
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.68";
+    version = "12.70";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-+GM3WffmDSvDCtGcSCCw6/pqfQic9Di3Umg/i22AOYc=";
+      hash = "sha256-TLJSJEXMPj870TkExq6uraX8Wl4kmNerrSlX3LQsr/4=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -16581,10 +16581,10 @@ with self; {
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.34";
+    version = "9.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.34.tar.gz";
-      hash = "sha256-UGnWjk4titZj21iFm0/sDOeasTTZ5YBVqq8/DzpzosY=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.35.tar.gz";
+      hash = "sha256-akpEbuB/ynxtty9dgXVA1oMwCcuN58zkxvskoV7n1Gs=";
     };
     meta = {
       description = "Real-time web framework";

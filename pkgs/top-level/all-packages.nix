@@ -3252,8 +3252,6 @@ with pkgs;
 
   apt-cacher-ng = callPackage ../servers/http/apt-cacher-ng { };
 
-  apt-offline = callPackage ../tools/misc/apt-offline { };
-
   aptly = callPackage ../tools/misc/aptly { };
 
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
@@ -17561,6 +17559,10 @@ with pkgs;
     jre = jre8;
   };
 
+  inherit (callPackage ../applications/editors/jupyter-kernels/xeus-cling { })
+    cpp11-kernel cpp14-kernel cpp17-kernel cpp2a-kernel;
+  xeus-cling = callPackage ../applications/editors/jupyter-kernels/xeus-cling/xeus-cling.nix { };
+
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
     jdk = jdk17;
@@ -21725,7 +21727,10 @@ with pkgs;
   gnatcoll-iconv = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "iconv"; };
   gnatcoll-lzma = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "lzma"; };
   gnatcoll-omp = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "omp"; };
-  gnatcoll-python3 = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "python3"; };
+  gnatcoll-python3 = callPackage ../development/libraries/ada/gnatcoll/bindings.nix {
+    component = "python3";
+    python3 = python39;
+  };
   gnatcoll-readline = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "readline"; };
   gnatcoll-syslog = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "syslog"; };
   gnatcoll-zlib = callPackage ../development/libraries/ada/gnatcoll/bindings.nix { component = "zlib"; };
@@ -23240,6 +23245,7 @@ with pkgs;
   libmicrohttpd_0_9_69 = callPackage ../development/libraries/libmicrohttpd/0.9.69.nix { };
   libmicrohttpd_0_9_71 = callPackage ../development/libraries/libmicrohttpd/0.9.71.nix { };
   libmicrohttpd_0_9_72 = callPackage ../development/libraries/libmicrohttpd/0.9.72.nix { };
+  libmicrohttpd_0_9_74 = callPackage ../development/libraries/libmicrohttpd/0.9.74.nix { };
   libmicrohttpd = libmicrohttpd_0_9_71;
 
   libmikmod = callPackage ../development/libraries/libmikmod {
@@ -26038,17 +26044,17 @@ with pkgs;
   };
 
   # Steel Bank Common Lisp
-  sbcl_2_3_8 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.8"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_3_9 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.9"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_3_9;
+  sbcl_2_3_10 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.10"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_3_10;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -27162,6 +27168,7 @@ with pkgs;
   prometheus-mikrotik-exporter = callPackage ../servers/monitoring/prometheus/mikrotik-exporter.nix { };
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
+  prometheus-mongodb-exporter = callPackage ../servers/monitoring/prometheus/mongodb-exporter.nix { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix { };
   prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
@@ -29149,7 +29156,9 @@ with pkgs;
 
   comfortaa = callPackage ../data/fonts/comfortaa { };
 
-  colloid-kde = callPackage ../data/themes/colloid-kde { };
+  colloid-kde = callPackage ../data/themes/colloid-kde {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   comic-mono = callPackage ../data/fonts/comic-mono { };
 
@@ -29367,7 +29376,9 @@ with pkgs;
 
   graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
-  graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme { };
+  graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   greybird = callPackage ../data/themes/greybird { };
 
@@ -29504,7 +29515,9 @@ with pkgs;
 
   layan-gtk-theme = callPackage ../data/themes/layan-gtk-theme { };
 
-  layan-kde = callPackage ../data/themes/layan-kde { };
+  layan-kde = callPackage ../data/themes/layan-kde {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   lao = callPackage ../data/fonts/lao { };
 
@@ -29869,7 +29882,9 @@ with pkgs;
 
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
-  qogir-kde = callPackage ../data/themes/qogir-kde { };
+  qogir-kde = callPackage ../data/themes/qogir-kde {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   qogir-theme = callPackage ../data/themes/qogir { };
 
@@ -30203,7 +30218,9 @@ with pkgs;
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
-  whitesur-kde = callPackage ../data/themes/whitesur-kde { };
+  whitesur-kde = callPackage ../data/themes/whitesur-kde {
+    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
+  };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
@@ -32940,7 +32957,7 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk20.override { enableJavaFX = true; };
+    jdk = jdk21.override { enableJavaFX = true; };
     gradle = gradle_8;
   };
 
@@ -37774,10 +37791,6 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
-  jazz2 = callPackage ../games/jazz2/game.nix { };
-
-  jazz2-content = callPackage ../games/jazz2/content.nix { };
-
   jumpy = callPackage ../games/jumpy { };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
@@ -40276,8 +40289,6 @@ with pkgs;
 
   eiciel = callPackage ../tools/filesystems/eiciel { };
 
-  apt = callPackage ../tools/package-management/apt { };
-
   apx = callPackage ../tools/package-management/apx { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
@@ -41660,6 +41671,8 @@ with pkgs;
     branch = "development";
   };
 
+
+  discord-screenaudio = qt6.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
 

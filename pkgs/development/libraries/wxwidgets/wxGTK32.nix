@@ -21,7 +21,7 @@
 , compat30 ? true
 , unicode ? true
 , withMesa ? !stdenv.isDarwin
-, withWebKit ? stdenv.isDarwin
+, withWebKit ? true
 , webkitgtk
 , setfile
 , AGL
