@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2023.11";
+  version = "2023.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-UTMYuSKNn5ACKg9BmeUf1SFhDV1jknbxggkmCgzB/xk=";
+    hash = "sha256-XyoyPMhp7KZrizAehuFnBAWYliv9A7D2JjGA+lO3p7Y=";
   };
 
   nativeBuildInputs = [

@@ -32,7 +32,6 @@ let
     buildInputs = [ libayatana-appindicator ];
 
     postInstall = ''
-      mv $out/bin/localsend_app $out/bin/localsend
       for s in 32 128 256 512; do
         d=$out/share/icons/hicolor/''${s}x''${s}/apps
         mkdir -p $d
