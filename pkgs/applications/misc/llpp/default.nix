@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
-    license = licenses.gpl3;
+    license = [ licenses.publicDomain licenses.bsd3 ];
   };
 }
