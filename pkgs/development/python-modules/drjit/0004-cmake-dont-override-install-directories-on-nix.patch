@@ -1,0 +1,77 @@
+From f6be0a8f2cfcd970ccd78a8f5746e17effb4659a Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 23 Nov 2023 06:29:48 +0000
+Subject: [PATCH 4/4] cmake: dont override install directories on *nix
+
+---
+ CMakeLists.txt            |  9 ++++++---
+ src/python/CMakeLists.txt | 12 +++++++++---
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6fd0de05..dc130151 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -12,6 +12,10 @@ option(DRJIT_ENABLE_AUTODIFF      "Build Dr.Jit automatic differentation library
+ option(DRJIT_ENABLE_PYTHON        "Build Python extension library?" ON)
+ option(DRJIT_ENABLE_PYTHON_PACKET "Enable packet mode in Python extension library?" OFF)
+ option(DRJIT_ENABLE_TESTS         "Build Dr.Jit test suite? (Warning, this takes *very* long to compile)" OFF)
++option(
++  CLEANUP_AFTER_SKBUILD
++  "Disable the paths hard-coding used for scikit-build and omit python components from the install targets"
++  OFF)
+ 
+ # ----------------------------------------------------------
+ #  Check if submodules have been checked out, or fail early
+@@ -39,9 +43,8 @@ if (MSVC)
+     LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_BINARY_DIR}/drjit
+     LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL     ${CMAKE_CURRENT_BINARY_DIR}/drjit
+   )
+-else()
+-  set(DRJIT_OUTPUT_DIRECTORY
+-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/drjit)
++else ()
++  set(DRJIT_OUTPUT_DIRECTORY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/drjit)
+ endif()
+ 
+ add_library(drjit INTERFACE)
+diff --git a/src/python/CMakeLists.txt b/src/python/CMakeLists.txt
+index cae62fad..1cd2a0f1 100644
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -54,7 +54,13 @@ set_target_properties(drjit-python PROPERTIES
+ target_compile_options(drjit-python PRIVATE ${DRJIT_NATIVE_FLAGS})
+ 
+ if (DRJIT_MASTER_PROJECT)
+-  install(TARGETS drjit-python EXPORT drjitTargets LIBRARY DESTINATION drjit)
++  if (CLEANUP_AFTER_SKBUILD)
++     # A copy of drjit_ext for find_package(drjit):
++     install(TARGETS drjit-python EXPORT drjitTargets LIBRARY DESTINATION lib)
++  else ()
++     # A copy for site-packages:
++     install(TARGETS drjit-python EXPORT drjitTargets LIBRARY DESTINATION drjit)
++  endif()
+ endif()
+ 
+ configure_file(
+@@ -62,7 +68,7 @@ configure_file(
+   ${CMAKE_CURRENT_SOURCE_DIR}/../../drjit/config.py
+ )
+ 
+-if (DRJIT_MASTER_PROJECT AND NOT "${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}")
++if (DRJIT_MASTER_PROJECT AND NOT "${CMAKE_CURRENT_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_BINARY_DIR}" AND NOT CLEANUP_AFTER_SKBUILD)
+   set(DRJIT_PYTHON_FILES
+      __init__.py const.py detail.py generic.py
+      matrix.py router.py traits.py tensor.py config.py
+@@ -87,7 +93,7 @@ endif()
+ #   Generate type information stubs
+ # ----------------------------------------------------------
+ 
+-if (DRJIT_MASTER_PROJECT)
++if (DRJIT_MASTER_PROJECT AND NOT CLEANUP_AFTER_SKBUILD)
+   set(DRJIT_PYTHON_STUBS_DIR "" CACHE STRING "Location of the Python typing fle stubs directory to use if the files should not be generated during the build.")
+   mark_as_advanced(DRJIT_PYTHON_STUBS_DIR)
+   if ("${DRJIT_PYTHON_STUBS_DIR}" STREQUAL "")
+-- 
+2.42.0
+

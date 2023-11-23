@@ -1,0 +1,482 @@
+From f403bbc9af374962690ef7676ec592831d71fb51 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Wed, 22 Nov 2023 20:53:58 +0000
+Subject: [PATCH 1/4] cmake: try find_package first
+
+---
+ CMakeLists.txt          |  51 ++++++++++---
+ ext/CMakeLists.txt      | 159 ++++++++++++++++++++++++++++++----------
+ src/core/CMakeLists.txt |   4 +-
+ 3 files changed, 165 insertions(+), 49 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 15103e22..17756990 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,6 +14,8 @@ project(mitsuba
+ #  Optional features available to users
+ # ----------------------------------------------------------
+ 
++option(MI_USE_SUBMODULES "Use the dependencies vendored in git-submodules instead of find_package" ON)
++
+ # A number of Mitsuba 3 features (scripting, differentiable rendering, testing
+ # infrastructure, etc.) are only available if Python bindings are built.
+ option(MI_ENABLE_PYTHON "Build Python bindings for Mitsuba, Dr.Jit, and NanoGUI?" ON)
+@@ -282,6 +284,31 @@ set(CMAKE_INSTALL_RPATH "${MI_ORIGIN};${MI_ORIGIN}/../drjit")
+ # Build the dependencies
+ add_subdirectory(ext)
+ 
++if (NOT MI_USE_SUBMODULES)
++  find_package(asmjit REQUIRED)
++  find_package(drjit REQUIRED)
++  find_package(drjit-core REQUIRED)
++  find_package(FastFloat REQUIRED)
++  find_package(JPEG REQUIRED)
++  find_package(nanothread REQUIRED)
++  find_package(OpenEXR REQUIRED)
++  find_package(PNG REQUIRED)
++  find_package(pugixml REQUIRED)
++  find_package(tinyformat REQUIRED)
++endif()
++
++if (MI_ENABLE_EMBREE AND NOT MI_USE_SUBMODULES)
++  find_package(embree REQUIRED)
++endif()
++
++if (WIN32)
++  find_package(zlib)
++endif()
++
++if (NOT TARGET OpenEXR::IlmImf)
++  message(FATAL_ERROR "NO IlmImf, something went super wrong")
++endif()
++
+ # Always add the include directories for tinyformat, Dr.Jit and Eigen
+ include_directories(include
+   ${TINYFORMAT_INCLUDE_DIRS}
+@@ -457,25 +484,27 @@ if (MI_COPIED_CONFIG_FILE AND NOT SKBUILD)
+ endif()
+ 
+ # Installation targets
++if (MI_USE_SUBMODULES)
+ set(MI_DEPEND
+-  IlmImf IlmThread Imath Iex IexMath Half pugixml
++  OpenEXR::IlmImf IlmBase::IlmThread IlmBase::Imath IlmBase::Iex IlmBase::IexMath IlmBase::Half pugixml
+ )
+ 
+ if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|(amd64)|(AMD64)")
+-  set(MI_DEPEND ${MI_DEPEND} asmjit)
++  set(MI_DEPEND ${MI_DEPEND} asmjit::asmjit)
+ endif()
+ 
+-list(APPEND MI_DEPEND png jpeg)
++list(APPEND MI_DEPEND PNG::PNG JPEG::JPEG)
++endif()
+ 
+-if (WIN32)
++if (WIN32 AND MI_USE_SUBMODULES)
+ list(APPEND MI_DEPEND zlib)
+ endif()
+ 
+-if (MI_ENABLE_EMBREE)
++if (MI_ENABLE_EMBREE AND MI_USE_SUBMODULES)
+   list(APPEND MI_DEPEND embree)
+ endif()
+ 
+-if (NOT SKBUILD)
++if (NOT SKBUILD AND MI_USE_SUBMODULES)
+   list(APPEND MI_DEPEND nanothread)
+ 
+   if (MI_ENABLE_JIT)
+@@ -538,10 +567,12 @@ install(
+   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+ )
+ 
+-install(
+-  FILES ${TINYFORMAT_INCLUDE_DIRS}/tinyformat.h
+-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+-)
++if (MI_USE_SUBMODULES)
++  install(
++    FILES ${TINYFORMAT_INCLUDE_DIRS}/tinyformat.h
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++  )
++endif()
+ 
+ install(
+   FILES ${CMAKE_CURRENT_BINARY_DIR}/include/mitsuba/core/config.h
+diff --git a/ext/CMakeLists.txt b/ext/CMakeLists.txt
+index 65ccfe79..c1d3d1e6 100644
+--- a/ext/CMakeLists.txt
++++ b/ext/CMakeLists.txt
+@@ -12,7 +12,10 @@ list(REMOVE_ITEM MI_EXT_COMPILE_OPTIONS_NOWARN -Wall -Wextra /W4)
+ 
+ if (MI_PROFILER_ITTNOTIFY)
+   set_directory_properties(PROPERTIES COMPILE_OPTIONS "${MI_EXT_COMPILE_OPTIONS_NOWARN}")
++
++  # Discontinued since January 2023, https://github.com/intel/IntelSEAPI
+   add_subdirectory(ittnotify/ittnotify)
++
+   set(ITT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/ittnotify/ittnotify/include)
+   set(ITT_INCLUDE_DIRS ${ITT_INCLUDE_DIRS} PARENT_SCOPE)
+   set_property(TARGET ittnotify PROPERTY FOLDER "dependencies")
+@@ -32,50 +35,74 @@ if (MI_PROFILER_NVTX)
+     set(DRJIT_ENABLE_NVTX ON)
+ endif()
+ 
++if (NOT MI_USE_SUBMODULES)
++    find_package(drjit REQUIRED)
++    find_package(drjit-core REQUIRED)
++    find_package(nanothread REQUIRED)
++
++    if (NOT TARGET drjit-python OR NOT TARGET drjit-autodiff)
++      message(FATAL_ERROR "Found drjit, but the targets (drjit-python or drjit-autodiff) weren't exposed")
++    endif()
++endif()
++
+ if (NOT SKBUILD)
+-  add_subdirectory(drjit)
++  if (MI_USE_SUBMODULES)
++    add_subdirectory(drjit)
++  endif()
+ 
+-  if (NOT MI_ENABLE_JIT)
++  if (NOT MI_ENABLE_JIT AND MI_USE_SUBMODULES)
+     add_subdirectory(drjit/ext/drjit-core/ext/nanothread)
+     set_target_properties(nanothread PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/drjit")
+   endif()
+ 
+-  set_target_properties(nanothread PROPERTIES FOLDER "drjit")
+-
+-  if (MI_ENABLE_JIT)
+-    set_target_properties(drjit-core PROPERTIES FOLDER "drjit")
+-  endif()
++  if (MI_USE_SUBMODULES)
++    set_target_properties(nanothread PROPERTIES FOLDER "drjit")
+ 
+-  if (MI_ENABLE_AUTODIFF)
+-    set_target_properties(drjit-autodiff PROPERTIES FOLDER "drjit")
+-    if (TARGET drjit-autodiff-scalar-f32)
+-      set_target_properties(drjit-autodiff-scalar-f32 drjit-autodiff-scalar-f64 PROPERTIES FOLDER "drjit")
++    if (MI_ENABLE_JIT)
++      set_target_properties(drjit-core PROPERTIES FOLDER "drjit")
+     endif()
+-    if (TARGET drjit-autodiff-cuda-f32)
+-      set_target_properties(drjit-autodiff-cuda-f32 drjit-autodiff-cuda-f64 PROPERTIES FOLDER "drjit")
+-    endif()
+-    if (TARGET drjit-autodiff-llvm-f32)
+-      set_target_properties(drjit-autodiff-llvm-f32 drjit-autodiff-llvm-f64 PROPERTIES FOLDER "drjit")
++
++    if (MI_ENABLE_AUTODIFF)
++      set_target_properties(drjit-autodiff PROPERTIES FOLDER "drjit")
++      if (TARGET drjit-autodiff-scalar-f32)
++        set_target_properties(drjit-autodiff-scalar-f32 drjit-autodiff-scalar-f64 PROPERTIES FOLDER "drjit")
++      endif()
++      if (TARGET drjit-autodiff-cuda-f32)
++        set_target_properties(drjit-autodiff-cuda-f32 drjit-autodiff-cuda-f64 PROPERTIES FOLDER "drjit")
++      endif()
++      if (TARGET drjit-autodiff-llvm-f32)
++        set_target_properties(drjit-autodiff-llvm-f32 drjit-autodiff-llvm-f64 PROPERTIES FOLDER "drjit")
++      endif()
+     endif()
+-  endif()
+ 
+-  if (MI_ENABLE_PYTHON)
+-    set_target_properties(drjit-python PROPERTIES FOLDER "drjit")
++    if (MI_ENABLE_PYTHON)
++      set_target_properties(drjit-python PROPERTIES FOLDER "drjit")
++    endif()
+   endif()
+ endif()
+ 
++if (MI_USE_SUBMODULES)
+ mark_as_advanced(
+   DRJIT_ENABLE_AUTODIFF DRJIT_ENABLE_JIT
+   DRJIT_ENABLE_PYTHON DRJIT_ENABLE_PYTHON_PACKET DRJIT_ENABLE_TESTS
+   DRJIT_JIT_DYNAMIC_CUDA DRJIT_JIT_DYNAMIC_LLVM DRJIT_JIT_ENABLE_OPTIX
+   DRJIT_THREAD_ENABLE_TESTS
+ )
++endif()
+ 
+ # ----------------------------------------------------------
+ #  Compile Intel Embree (optional)
+ # ----------------------------------------------------------
+ 
+-if (MI_ENABLE_EMBREE)
++if (MI_ENABLE_EMBREE AND NOT MI_USE_SUBMODULES)
++    find_package(embree REQUIRED)
++endif()
++
++if (MI_ENABLE_EMBREE AND MI_USE_SUBMODULES)
++  set_property(TARGET
++    lexers math simd sys tasking embree ${EMBREE_TARGET}
++    PROPERTY FOLDER "dependencies/embree")
++
+   set_directory_properties(PROPERTIES COMPILE_OPTIONS "")
+ 
+   set(EMBREE_ISPC_SUPPORT              OFF CACHE BOOL " " FORCE)
+@@ -138,6 +165,7 @@ if (MI_ENABLE_EMBREE)
+     PROPERTY FOLDER "dependencies/embree")
+ endif()
+ 
++if (MI_USE_SUBMODULES)
+ mark_as_advanced(FORCE EMBREE_ADDRESS_SANITIZER EMBREE_API_NAMESPACE
+   EMBREE_BACKFACE_CULLING EMBREE_COMPACT_POLYS
+   EMBREE_CURVE_SELF_INTERSECTION_AVOIDANCE_FACTOR EMBREE_FILTER_FUNCTION
+@@ -154,6 +182,7 @@ mark_as_advanced(FORCE EMBREE_ADDRESS_SANITIZER EMBREE_API_NAMESPACE
+   EMBREE_TESTING_INTENSITY EMBREE_TESTING_KLOCWORK EMBREE_TESTING_MEMCHECK
+   EMBREE_TESTING_MODEL_DIR EMBREE_TESTING_PACKAGE EMBREE_TESTING_SDE
+   EMBREE_TUTORIALS EMBRE_STATIC_LIB EMBREE_STATIC_RUNTIME)
++endif()
+ 
+ # ----------------------------------------------------------
+ #  Build OpenEXR (and zlib on Windows)
+@@ -161,12 +190,17 @@ mark_as_advanced(FORCE EMBREE_ADDRESS_SANITIZER EMBREE_API_NAMESPACE
+ 
+ set_directory_properties(PROPERTIES COMPILE_OPTIONS "${MI_EXT_COMPILE_OPTIONS_NOWARN}")
+ if (WIN32)
++  find_package(zlib)
++  if (NOT zlib_FOUND)
+   set(ZLIB_BUILD_STATIC_LIBS OFF CACHE BOOL " " FORCE)
+   set(ZLIB_BUILD_SHARED_LIBS ON  CACHE BOOL " " FORCE)
+   add_subdirectory(zlib)
++  endif()
+ 
+   set_property(TARGET zlib PROPERTY FOLDER "dependencies")
+   set(ZLIB_LIBRARY zlib)
++
++  if (NOT zlib_FOUND)
+   set(ZLIB_INCLUDE_DIR
+       ${CMAKE_CURRENT_SOURCE_DIR}/zlib
+       ${CMAKE_CURRENT_BINARY_DIR}/zlib
+@@ -174,9 +208,11 @@ if (WIN32)
+ 
+   mark_as_advanced(ZLIB_BUILD_AMD64 ZLIB_BUILD_ASM686 ZLIB_BUILD_EXAMPLES
+     ZLIB_BUILD_SHARED_LIBS ZLIB_BUILD_STATIC_LIBS)
++  endif()
+ endif()
+ 
+ # Prevents openexr to set the DEBUG_POSTFIX "_d"
++if (MI_USE_SUBMODULES)
+ set(CMAKE_DEBUG_POSTFIX "" CACHE STRING " " FORCE)
+ set(ILMBASE_LIB_SUFFIX  "" CACHE STRING "" FORCE)
+ set(OPENEXR_LIB_SUFFIX  "" CACHE STRING "" FORCE)
+@@ -187,20 +223,28 @@ set(PYILMBASE_ENABLE           OFF CACHE BOOL "" FORCE)
+ set(INSTALL_OPENEXR_DOCS OFF CACHE BOOL "" FORCE)
+ set(INSTALL_OPENEXR_EXAMPLES OFF CACHE BOOL "" FORCE)
+ set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
++endif()
+ 
+ unset(CMAKE_CXX_VISIBILITY_PRESET)
+-add_subdirectory(openexr)
++
++if (MI_USE_SUBMODULES)
++  add_subdirectory(openexr)
++else()
++  find_package(OpenEXR REQUIRED)
++endif()
+ set(CMAKE_CXX_VISIBILITY_PRESET "hidden")
+ 
++
++if (MI_USE_SUBMODULES)
+ set_property(TARGET
+-  IexMath IlmThread Half Iex Imath IlmImf IexMath IlmImfUtil
++  IlmBase::IexMath IlmBase::IlmThread IlmBase::Half IlmBase::Iex IlmBase::Imath OpenEXR::IlmImf IlmBase::IexMath OpenEXR::IlmImfUtil
+   PROPERTY FOLDER "dependencies/openexr")
+ 
+ set_property(TARGET
+-  IexMath IlmThread Half Iex Imath IlmImf IexMath
++  IlmBase::IexMath IlmBase::IlmThread IlmBase::Half IlmBase::Iex IlmBase::Imath OpenEXR::IlmImf IlmBase::IexMath
+   PROPERTY PUBLIC_HEADER "")
+ 
+-foreach(X IexMath IlmThread Half Iex Imath IlmImf IexMath IlmImfUtil)
++foreach(X IlmBase::IexMath IlmBase::IlmThread IlmBase::Half IlmBase::Iex IlmBase::Imath OpenEXR::IlmImf IlmBase::IexMath OpenEXR::IlmImfUtil)
+   set_property(TARGET ${X} PROPERTY OUTPUT_NAME "${X}-mitsuba")
+ endforeach()
+ 
+@@ -232,11 +276,19 @@ mark_as_advanced(
+   OPENEXR_USE_CLANG_TIDY OpenEXR_DIR INSTALL_OPENEXR_DOCS
+   INSTALL_OPENEXR_EXAMPLES
+ )
++endif()
+ 
+ # ----------------------------------------------------------
+ #  libpng
+ # ----------------------------------------------------------
+ 
++if (NOT MI_USE_SUBMODULES)
++  find_package(PNG REQUIRED)
++  add_library(png ALIAS PNG::PNG)
++  set(PNG_LIBRARIES PNG::PNG PARENT_SCOPE)
++endif()
++
++if (MI_USE_SUBMODULES)
+ set(PNG_SHARED ON CACHE BOOL " " FORCE)
+ set(PNG_STATIC OFF CACHE BOOL " " FORCE)
+ set(PNG_TESTS OFF CACHE BOOL " " FORCE)
+@@ -245,8 +297,9 @@ if (CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
+ set(PNG_ARM_NEON "on" CACHE STRING " " FORCE)
+ endif()
+ add_subdirectory(libpng)
+-set_property(TARGET png genfiles PROPERTY FOLDER "dependencies")
+-set_property(TARGET png PROPERTY OUTPUT_NAME "png-mitsuba")
++
++set_property(TARGET PNG::PNG PROPERTY FOLDER "dependencies")
++set_property(TARGET PNG::PNG PROPERTY OUTPUT_NAME "png-mitsuba")
+ 
+ set(PNG_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/libpng;${CMAKE_CURRENT_BINARY_DIR}/libpng" PARENT_SCOPE)
+ set(PNG_LIBRARIES    "png" PARENT_SCOPE)
+@@ -255,48 +308,70 @@ set(PNG_DEFINES      -DMI_HAS_LIBPNG PARENT_SCOPE)
+ mark_as_advanced(DFA_XTRA AWK PNG_FRAMEWORK PNG_HARDWARE_OPTIMIZATIONS
+   PNG_PREFIX PNG_SHARED PNG_STATIC PNG_TESTS PNG_BUILD_ZLIB PNG_DEBUG
+   PNG_INTEL_SSE M_LIBRARY ld-version-script)
++endif()
+ 
+ # ----------------------------------------------------------
+ #  libjpeg 7
+ # ----------------------------------------------------------
+ 
++if (MI_USE_SUBMODULES)
+ set(LIBJPEG_BUILD_SHARED ON CACHE BOOL " " FORCE)
+ set(LIBJPEG_BUILD_EXECUTABLES OFF CACHE BOOL " " FORCE)
+ add_subdirectory(libjpeg)
+-set_property(TARGET jpeg PROPERTY FOLDER "dependencies")
+-set(JPEG_LIBRARIES libjpeg PARENT_SCOPE)
++
++set_property(TARGET JPEG::JPEG PROPERTY FOLDER "dependencies")
+ 
+ set(JPEG_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/libjpeg;${CMAKE_CURRENT_BINARY_DIR}/libjpeg" PARENT_SCOPE)
+-set(JPEG_LIBRARIES    "jpeg" PARENT_SCOPE)
++set(JPEG_LIBRARIES    JPEG::JPEG PARENT_SCOPE)
+ set(JPEG_DEFINES      -DMI_HAS_LIBJPEG PARENT_SCOPE)
++else()
++  find_package(JPEG REQUIRED)
++  add_library(jpeg ALIAS JPEG::JPEG)
++  set(JPEG_LIBRARIES JPEG::JPEG PARENT_SCOPE)
++endif()
+ 
+ # Give libpng & libjpeg a name that's guaranteeed not to match other
+ # libraries that may already be loaded (e.g. into a Python interpreter)
+-set_property(TARGET jpeg PROPERTY OUTPUT_NAME "jpeg-mitsuba")
++set_property(TARGET JPEG::JPEG PROPERTY OUTPUT_NAME "jpeg-mitsuba")
+ 
++if (MI_USE_SUBMODULES)
+ mark_as_advanced(
+   LIBJPEG_BUILD_EXECUTABLES
+   LIBJPEG_BUILD_SHARED
+ )
++endif()
+ 
+ # ----------------------------------------------------------
+ #  pugixml XML parser
+ # ----------------------------------------------------------
+ 
++if (MI_USE_SUBMODULES)
+ add_library(pugixml SHARED pugixml/src/pugixml.cpp)
+ set_property(TARGET pugixml PROPERTY
+   LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/pugixml")
+ set_property(TARGET pugixml PROPERTY FOLDER "dependencies")
+ set(PUGIXML_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/pugixml/src PARENT_SCOPE)
+ target_compile_options(pugixml PRIVATE -DPUGIXML_BUILD_DLL)
++else()
++  find_package(pugixml REQUIRED)
++endif()
+ 
+-# tinyformat include path
+-set(TINYFORMAT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/tinyformat PARENT_SCOPE)
++if (MI_USE_SUBMODULES)
++  set(TINYFORMAT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/tinyformat PARENT_SCOPE)
++else()
++  find_package(tinyformat REQUIRED)
++  get_target_property(TINYFORMAT_INCLUDE_DIRS tinyformat INTERFACE_INCLUDE_DIRECTORIES)
++endif()
+ 
+ # ----------------------------------------------------------
+ #  asmjit -- x86/64 JIT compiler
+ # ----------------------------------------------------------
+ 
++if (NOT MI_USE_SUBMODULES)
++  find_package(asmjit)
++  add_library(asmjit ALIAS asmjit::asmjit)
++endif()
++
+ if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64|AMD64")
+   # Build asmjit
+   set(ASMJIT_NO_AARCH32    TRUE CACHE BOOL "" FORCE)
+@@ -306,23 +381,29 @@ if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64|AMD64")
+   if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override -Wno-undefined-inline")
+   endif()
++
++  if (MI_USE_SUBMODULES)
+   add_subdirectory(asmjit)
+   set(ASMJIT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/asmjit/src PARENT_SCOPE)
+-  set_property(TARGET asmjit PROPERTY FOLDER "dependencies")
+-  if (MSVC)
+-    target_compile_options(asmjit PRIVATE "/wd4804" "/wd4838")
++  endif()
++
++  set_property(TARGET asmjit::asmjit PROPERTY FOLDER "dependencies")
++  if (MSVC AND MI_USE_SUBMODULES)
++    target_compile_options(asmjit::asmjit PRIVATE "/wd4804" "/wd4838")
+     # Don't complain about ignoring '/INCREMENTAL'
+-    set_target_properties(asmjit PROPERTIES LINK_FLAGS "/ignore:4075")
++    set_target_properties(asmjit::asmjit PROPERTIES LINK_FLAGS "/ignore:4075")
+   endif()
+   # Avoid name clashes with pytorch (which also includes asmjit)
+-  set_property(TARGET asmjit PROPERTY OUTPUT_NAME "asmjit-mitsuba")
++  set_property(TARGET asmjit::asmjit PROPERTY OUTPUT_NAME "asmjit-mitsuba")
+ endif()
+ 
++if (MI_USE_SUBMODULES)
+ mark_as_advanced(
+   ASMJIT_DIR ASMJIT_EMBED ASMJIT_STATIC ASMJIT_NO_AARCH32 ASMJIT_NO_AARCH64
+   ASMJIT_NO_DEPRECATED ASMJIT_NO_CUSTOM_FLAGS ASMJIT_NO_FOREIGN ASMJIT_NO_NATVIS
+   ASMJIT_NO_X86 ASMJIT_TEST ASMJIT_SANITIZE
+ )
++endif()
+ 
+ # ----------------------------------------------------------
+ #  sRGB spectral upsampling model
+@@ -337,12 +418,16 @@ set_target_properties(rgb2spec rgb2spec_opt rgb2spec_opt_run PROPERTIES FOLDER "
+ #  Fast floating point parser (interface library)
+ # ----------------------------------------------------------
+ 
++if (MI_USE_SUBMODULES)
+ add_subdirectory(fastfloat EXCLUDE_FROM_ALL)
+ mark_as_advanced(
+   FASTFLOAT_SANITIZE
+   FASTFLOAT_TEST
+ )
+ unset(CMAKE_CXX_STANDARD CACHE)
++else()
++  find_package(FastFloat REQUIRED)
++endif()
+ 
+ # ----------------------------------------------------------
+ #  Hide a few more settings that aren't relevant for users
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index 9da1b648..f6087844 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -90,7 +90,7 @@ target_link_libraries(mitsuba-core PRIVATE
+   # Link pugixml parser
+   pugixml
+   # Image libraries: link to libjpeg, libpng, OpenEXR
+-  ${PNG_LIBRARIES} ${JPEG_LIBRARIES} IlmImf
++  ${PNG_LIBRARIES} ${JPEG_LIBRARIES} OpenEXR::IlmImf
+ )
+ 
+ if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|(amd64)|(AMD64)")
+@@ -102,7 +102,7 @@ if (NOT MSVC)
+ endif()
+ 
+ target_link_libraries(mitsuba-core PUBLIC drjit)
+-target_link_libraries(mitsuba-core PRIVATE fast_float)
++target_link_libraries(mitsuba-core PRIVATE FastFloat::fast_float)
+ 
+ if (MI_ENABLE_JIT)
+   target_link_libraries(mitsuba-core PUBLIC drjit-core)
+-- 
+2.42.0
+

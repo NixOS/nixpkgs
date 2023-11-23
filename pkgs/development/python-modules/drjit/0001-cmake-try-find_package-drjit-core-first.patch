@@ -1,0 +1,102 @@
+From 7fa6f3ce325352d171b98cb705adbc66729389a1 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Wed, 22 Nov 2023 18:15:53 +0000
+Subject: [PATCH 1/4] cmake: try find_package(drjit-core) first
+
+---
+ CMakeLists.txt            | 39 ++++++++++++++++++++++++++-------------
+ src/python/CMakeLists.txt |  2 +-
+ 2 files changed, 27 insertions(+), 14 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 741d8c5a..6fd0de05 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,6 +23,8 @@ if (NOT IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ext/drjit-core/ext/nanothread/
+     "by invoking\n$ git submodule update --init --recursive")
+ endif()
+ 
++find_package(drjit-core)
++
+ set(DRJIT_VERSION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/include/drjit/fwd.h")
+ include(ext/drjit-core/ext/nanothread/ext/cmake-defaults/CMakeLists.txt)
+ 
+@@ -44,13 +46,21 @@ endif()
+ 
+ add_library(drjit INTERFACE)
+ target_compile_features(drjit INTERFACE cxx_std_17)
++
+ target_include_directories(drjit
+   INTERFACE
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ext/drjit-core/include>
+-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ext/drjit-core/ext/nanothread/include>
+-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+-)
++  $<INSTALL_INTERFACE:include>)
++
++if (drjit-core_FOUND)
++  target_link_libraries(drjit INTERFACE drjit-core)
++else()
++  target_include_directories(drjit
++    INTERFACE
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ext/drjit-core/include>
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ext/drjit-core/ext/nanothread/include>
++  )
++endif()
+ 
+ if(CMAKE_CXX_COMPILER_ID STREQUAL GNU)
+   target_compile_options(drjit INTERFACE -fno-strict-aliasing)
+@@ -79,16 +89,19 @@ if (DRJIT_ENABLE_JIT)
+   else()
+     message(STATUS "Dr.Jit: building the CUDA & LLVM JIT backend.")
+   endif()
+-  add_subdirectory(ext/drjit-core)
+-  set_target_properties(drjit-core PROPERTIES ${DRJIT_OUTPUT_DIRECTORY})
+-  set_target_properties(nanothread PROPERTIES ${DRJIT_OUTPUT_DIRECTORY})
+ 
+-  if (DRJIT_MASTER_PROJECT)
+-    install(TARGETS drjit-core EXPORT drjitTargets)
+-    install(TARGETS nanothread EXPORT drjitTargets)
+-  endif()
++  if (NOT drjit-core_FOUND)
++    add_subdirectory(ext/drjit-core)
++    set_target_properties(drjit-core PROPERTIES ${DRJIT_OUTPUT_DIRECTORY})
++    set_target_properties(nanothread PROPERTIES ${DRJIT_OUTPUT_DIRECTORY})
+ 
+-  mark_as_advanced(DRJIT_THREAD_ENABLE_TESTS)
++    if (DRJIT_MASTER_PROJECT)
++      install(TARGETS drjit-core EXPORT drjitTargets)
++      install(TARGETS nanothread EXPORT drjitTargets)
++    endif()
++
++    mark_as_advanced(DRJIT_THREAD_ENABLE_TESTS)
++  endif()
+ else()
+   message(STATUS "Dr.Jit: *not* building the CUDA & LLVM JIT backend.")
+ endif()
+@@ -141,7 +154,7 @@ endif()
+ 
+ if (DRJIT_MASTER_PROJECT)
+   install(DIRECTORY include/drjit DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+-  if (DRJIT_ENABLE_JIT)
++  if (NOT drjit-core_FOUND AND DRJIT_ENABLE_JIT)
+     install(DIRECTORY ext/drjit-core/include/drjit-core DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+     install(DIRECTORY ext/drjit-core/ext/nanothread/include/nanothread DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+   endif()
+diff --git a/src/python/CMakeLists.txt b/src/python/CMakeLists.txt
+index b152c914..0f6311a8 100644
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -30,7 +30,7 @@ endif()
+ target_compile_definitions(drjit-python PRIVATE "-DDRJIT_UNROLL= ")
+ 
+ if (DRJIT_ENABLE_JIT)
+-  target_link_libraries(drjit-python PRIVATE drjit-core)
++  target_link_libraries(drjit-python PUBLIC drjit-core)
+   target_compile_definitions(drjit-python PRIVATE -DDRJIT_ENABLE_JIT=1)
+ 
+   if (NOT APPLE)
+-- 
+2.42.0
+

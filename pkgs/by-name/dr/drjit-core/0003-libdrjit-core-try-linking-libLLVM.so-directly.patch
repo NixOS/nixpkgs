@@ -1,0 +1,28 @@
+From a7eb76dcaae709161a521b6e193ea1b243a22b96 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Fri, 24 Nov 2023 02:11:55 +0000
+Subject: [PATCH 3/3] libdrjit-core: try linking libLLVM.so directly
+
+---
+ CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bb1f694..0594b04 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -166,6 +166,11 @@ add_library(
+   resources/kernels.h resources/kernels.c
+ )
+ 
++find_package(LLVM)
++if (LLVM_FOUND)
++  target_link_libraries(drjit-core PRIVATE LLVM)
++endif()
++
+ target_compile_features(drjit-core PRIVATE cxx_std_17)
+ 
+ target_link_libraries(drjit-core PRIVATE nanothread tsl::robin_map lz4 xxHash::xxhash)
+-- 
+2.42.0
+
