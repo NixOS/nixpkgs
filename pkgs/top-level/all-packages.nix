@@ -32644,6 +32644,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots {})
     wlroots_0_15
     wlroots_0_16
+    wlroots_0_17
     wlroots;
 
   sway-unwrapped = callPackage ../applications/window-managers/sway {
