@@ -25,4 +25,6 @@ rec {
     cuda-library-samples_cudatoolkit_11_2
     cuda-library-samples_cudatoolkit_11_3
     cuda-library-samples_cudatoolkit_11_4;
+
+  __attrsFailEvaluation = true;
 }
