@@ -230,11 +230,8 @@ in
             "${if hasSSL config.services.nginx.virtualHosts.${cfg.nginx.hostName} then "https" else "http"}://${cfg.nginx.hostName}"
           else
             "http://localhost";
-        defaultText = literalExpression ''
-          if cfg.webserver == "apache" then
-            "''${if cfg.httpd.virtualHost.addSSL || cfg.httpd.virtualHost.forceSSL || cfg.httpd.virtualHost.onlySSL then "https" else "http"}://''${cfg.httpd.virtualHost.hostName}"
-          else
-            "http://localhost";
+        defaultText = ''
+          if "mediawiki uses ssl" then "{"https" else "http"}://''${cfg.hostName}" else "http://localhost";
         '';
         example = "https://wiki.example.org";
         description = lib.mdDoc "URL of the wiki.";
