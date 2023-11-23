@@ -30,7 +30,7 @@
 }:
 
 let
-  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], extraPatch ? [ ], extraPostPatch ? "" }:
+  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], patches ? [ ], postPatch ? "" }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "wlroots";
       inherit version;
@@ -45,9 +45,7 @@ let
         inherit hash;
       };
 
-      patches = extraPatch;
-
-      postPatch = extraPostPatch;
+      inherit patches postPatch;
 
       # $out for the library and $examples for the example programs (in examples):
       outputs = [ "out" "examples" ];
@@ -123,7 +121,7 @@ rec {
   wlroots_0_16 = generic {
     version = "0.16.2";
     hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
-    extraPostPatch = ''
+    postPatch = ''
       substituteInPlace backend/drm/meson.build \
         --replace /usr/share/hwdata/ ${hwdata}/share/hwdata/
     '';
@@ -137,7 +135,7 @@ rec {
       libliftoff
       libdisplay-info
     ];
-    extraPatch = [
+    patches = [
       (fetchpatch {
         name = "tinywl-fix-wlroots-dependency-constraint-in-Makefile.patch";
         url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/fe53ec693789afb44c899cad8c2df70c8f9f9023.patch";
@@ -146,5 +144,5 @@ rec {
     ];
   };
 
-  wlroots = wlroots_0_16;
+  wlroots = wlroots_0_17;
 }
