@@ -413,7 +413,8 @@ expectFailure 'toSource { root = ./.; fileset = cleanSourceWith { src = ./.; }; 
 \s*Note that this only works for sources created from paths.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) is a path that does not exist.
+\s*To create a file set from a path that may not exist, use `lib.fileset.maybeMissing`.'
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
@@ -1449,6 +1450,40 @@ git -C sub rm -f -q a
 checkGitTracked
 
 rm -rf -- *
+
+## lib.fileset.maybeMissing
+
+# Argument must be a path
+expectFailure 'maybeMissing "someString"' 'lib.fileset.maybeMissing: Argument \("someString"\) is a string-like value, but it should be a path instead.'
+expectFailure 'maybeMissing null' 'lib.fileset.maybeMissing: Argument is of type null, but it should be a path instead.'
+
+tree=(
+)
+checkFileset 'maybeMissing ./a'
+checkFileset 'maybeMissing ./b'
+checkFileset 'maybeMissing ./b/c'
+
+# Works on single files
+tree=(
+    [a]=1
+    [b/c]=0
+    [b/d]=0
+)
+checkFileset 'maybeMissing ./a'
+tree=(
+    [a]=0
+    [b/c]=1
+    [b/d]=0
+)
+checkFileset 'maybeMissing ./b/c'
+
+# Works on directories
+tree=(
+    [a]=0
+    [b/c]=1
+    [b/d]=1
+)
+checkFileset 'maybeMissing ./b'
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 

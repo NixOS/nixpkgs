@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , appdirs
 , dungeon-eos
 , explorerscript
@@ -37,6 +38,20 @@ buildPythonPackage rec {
     hash = "sha256-PVHI3SuXXH+XpSaBhtSUT5I6wYK3WmwW67nJmPLKdg4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Necessary for skytemple-files to work with Pillow 10.1.0.
+    # https://github.com/SkyTemple/skytemple-files/issues/449
+    (fetchpatch {
+      url = "https://github.com/SkyTemple/skytemple-files/commit/5dc6477d5411b43b80ba79cdaf3521d75d924233.patch";
+      hash = "sha256-0511IRjOcQikhnbu3FkXn92mLAkO+kV9J94Z3f7EBcU=";
+      includes = ["skytemple_files/graphics/kao/_model.py"];
+    })
+    (fetchpatch {
+      url = "https://github.com/SkyTemple/skytemple-files/commit/9548f7cf3b1d834555b41497cfc0bddab10fd3f6.patch";
+      hash = "sha256-a3GeR5IxXRIKY7I6rhKbOcQnoKxtH7Xf3Wx/BRFQHSc=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
