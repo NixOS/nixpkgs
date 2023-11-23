@@ -102,8 +102,9 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = "https://jupyter.org/";
+    homepage = "https://github.com/jupyter/nbconvert";
+    changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = lib.teams.jupyter.members;
   };
 }
