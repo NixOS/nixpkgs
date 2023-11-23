@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = [ maintainers.getpsyched ];
     platforms = platforms.all;
+    mainProgram = "atlauncher";
   };
 })

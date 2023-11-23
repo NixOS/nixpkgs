@@ -53,5 +53,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ woky ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    mainProgram = "Ombi";
   };
 }
