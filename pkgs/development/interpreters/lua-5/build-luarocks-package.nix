@@ -114,7 +114,7 @@ let
   rocksSubdir = "${self.pname}-${self.version}-rocks";
 
   configFile = writeTextFile {
-    name = pname + "-luarocks-config";
+    name = pname + "-luarocks-config.lua";
     text = self.luarocks_content;
   };
 
