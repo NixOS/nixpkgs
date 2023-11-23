@@ -1,5 +1,7 @@
 { lib
 , buildGraalvmNativeImage
+, graalvmCEPackages
+, removeReferencesTo
 , fetchurl
 , nix-update-script
 , testers
@@ -15,6 +17,10 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-vEldQ7qV375mHMn3OUdn0FaPd+f/v9g+C+PuzbSTWtk=";
   };
 
+  graalvmDrv = graalvmCEPackages.graalvm-ce;
+
+  nativeBuildInputs = [ removeReferencesTo ];
+
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "-H:Log=registerResource:"
@@ -23,6 +29,10 @@ buildGraalvmNativeImage rec {
     "--report-unsupported-elements-at-runtime"
     "--no-fallback"
   ];
+
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${pname}
+  '';
 
   passthru.updateScript = nix-update-script { };
 
