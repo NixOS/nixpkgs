@@ -1,4 +1,9 @@
-{ lib, buildGraalvmNativeImage, fetchurl }:
+{ lib
+, buildGraalvmNativeImage
+, graalvmCEPackages
+, removeReferencesTo
+, fetchurl
+}:
 
 buildGraalvmNativeImage rec {
   pname = "zprint";
@@ -9,6 +14,10 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-o0yoW45a5r+sTGvjEqr5VZgQKm72qsPH/kbLTbMTgEM=";
   };
 
+  graalvmDrv = graalvmCEPackages.graalvm-ce;
+
+  nativeBuildInputs = [ removeReferencesTo ];
+
   extraNativeImageBuildArgs = [
     "--no-server"
     "-H:EnableURLProtocols=https,http"
@@ -17,6 +26,10 @@ buildGraalvmNativeImage rec {
     "--initialize-at-build-time"
     "--no-fallback"
   ];
+
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${pname}
+  '';
 
   meta = with lib; {
     description = "Clojure/EDN source code formatter and pretty printer";
