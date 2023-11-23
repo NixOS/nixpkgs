@@ -4,50 +4,147 @@ let
 
   bootFs = lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
+  # adapted from LUKS
   commonFunctions = ''
-    prompt() {
-        local name="$1"
-        printf "enter passphrase for $name: "
+    dev_exist() {
+        local target="$1"
+        if [ -e $target ]; then
+            return 0
+        else
+            local uuid=$(echo -n $target | sed -e 's,UUID=\(.*\),\1,g')
+            blkid --uuid $uuid >/dev/null
+            return $?
+        fi
     }
 
-    tryUnlock() {
+    wait_target() {
         local name="$1"
-        local path="$2"
-        local success=false
-        local target
-        local uuid=$(echo -n $path | sed -e 's,UUID=\(.*\),\1,g')
+        local target="$2"
+        local secs="''${3:-10}"
+        local desc="''${4:-$name $target to appear}"
 
-        printf "waiting for device to appear $path"
-        for try in $(seq 10); do
-          if [ -e $path ]; then
-              success=true
-              break
-          else
-              target=$(blkid --uuid $uuid)
-              if [ $? == 0 ]; then
-                 success=true
-                 break
-              fi
-          fi
-          echo -n "."
-          sleep 1
-        done
-        printf "\n"
-        if [ $success == true ]; then
-            path=$target
-        fi
-
-        if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
-            prompt $name
-            until bcachefs unlock $path 2> /dev/null; do              # repeat until successfully unlocked
-                printf "unlocking failed!\n"
-                prompt $name
+        if ! dev_exist $target; then
+            echo -n "Waiting $secs seconds for $desc..."
+            local success=false;
+            for try in $(seq $secs); do
+                echo -n "."
+                sleep 1
+                if dev_exist $target; then
+                    success=true
+                    break
+                fi
             done
+            if [ $success == true ]; then
+                echo " - success";
+                return 0
+            else
+                echo " - failure";
+                return 1
+            fi
+        fi
+        return 0
+    }
+
+    bcachefs_do_open_passphrase() {
+        local name="$1"
+        local target="$2"
+        local passphrase
+
+        while true; do
+            echo -n "Passphrase for $target: "
+            passphrase=
+            while true; do
+                if [ -e /bcachefs-ramfs/passphrase ]; then
+                    echo "reused"
+                    passphrase=$(cat /bcachefs-ramfs/passphrase)
+                    break
+                else
+                    # ask bcachefs-askpass
+                    echo -n "$target" > /bcachefs-ramfs/device
+
+                    # and try reading it from /dev/console with a timeout
+                    IFS= read -t 1 -r passphrase
+                    if [ -n "$passphrase" ]; then
+                       ${if true then ''
+                         # remember it for the next device
+                         echo -n "$passphrase" > /bcachefs-ramfs/passphrase
+                       '' else ''
+                         # Don't save it to ramfs. We are very paranoid
+                       ''}
+                       echo
+                       break
+                    fi
+                fi
+            done
+            echo -n "Verifying passphrase for $target..."
+            echo -n "$passphrase" | bcachefs unlock "$target" 2> /dev/null
+            if [ $? == 0 ]; then
+                echo " - success"
+                ${if true then ''
+                  # we don't rm here because we might reuse it for the next device
+                '' else ''
+                  rm -f /bcachefs-ramfs/passphrase
+                ''}
+                break
+            else
+                echo " - failure"
+                # ask for a different one
+                rm -f /bcachefs-ramfs/passphrase
+            fi
+        done
+    }
+
+    # bcachefs
+    bcachefs_open_normally() {
+        local name="$1"
+        local target="$2"
+
+        wait_target "$name" "$path" || die "$path is unavailable"
+        if bcachefs unlock -c "$path" > /dev/null 2> /dev/null; then    # test for encryption
+            bcachefs_do_open_passphrase "$name" "$path"
             printf "unlocking successful.\n"
         else
             echo "Cannot unlock device $uuid with path $path" >&2
         fi
     }
+  '';
+
+  preCommands = ''
+    # A place to store crypto things
+
+    # A ramfs is used here to ensure that the file used to update
+    # the key slot with cryptsetup will never get swapped out.
+    # Warning: Do NOT replace with tmpfs!
+    mkdir -p /bcachefs-ramfs
+    mount -t ramfs none /bcachefs-ramfs
+
+    # Disable all input echo for the whole stage. We could use read -s
+    # instead but that would occasionally leak characters between read
+    # invocations.
+    stty -echo
+  '';
+
+  postCommands = ''
+    stty echo
+    umount /bcachefs-ramfs 2>/dev/null
+  '';
+
+  askPass = pkgs.writeScriptBin "bcachefs-askpass" ''
+    #!/bin/sh
+
+    ${commonFunctions}
+
+    while true; do
+        wait_target "bcachefs" /bcachefs-ramfs/device 10 "Bcachefs to request a passphrase" || die "Passphrase is not requested now"
+        device="$(cat /bcachefs-ramfs/device)"
+
+        echo -n "Passphrase for $device: "
+        IFS= read -rs passphrase
+        echo
+
+        rm /bcachefs-ramfs/device
+        echo -n "$passphrase" > /bcachefs-ramfs/passphrase
+    done
   '';
 
   # we need only unlock one device manually, and cannot pass multiple at once
@@ -57,7 +154,7 @@ let
   firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
   openCommand = name: fs: ''
-    tryUnlock ${name} ${firstDevice fs}
+    bcachefs_open_normally ${name} ${firstDevice fs}
   '';
 
   mkUnits = prefix: name: fs: let
@@ -137,12 +234,15 @@ in
       boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/mount.bcachefs
+        copy_bin_and_libs ${askPass}/bin/bcachefs-askpass
+        sed -i s,/bin/sh,$out/bin/sh, $out/bin/bcachefs-askpass
       '';
       boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         $out/bin/bcachefs version
       '';
 
-      boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + lib.concatStrings (lib.mapAttrsToList openCommand bootFs));
+      boot.initrd.preFailCommands = lib.mkIf (!config.boot.initrd.systemd.enable) postCommands;
+      boot.initrd.postDeviceCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (commonFunctions + preCommands + lib.concatStrings (lib.mapAttrsToList openCommand bootFs) + postCommands);
 
       boot.initrd.systemd.services = lib.mapAttrs' (mkUnits "/sysroot") bootFs;
     })
