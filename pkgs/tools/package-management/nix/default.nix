@@ -4,7 +4,6 @@
 , boehmgc
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
 , fetchpatch2
 , runCommand
@@ -233,6 +232,14 @@ in lib.makeExtensible (self: ({
   nix_2_18 = common {
     version = "2.18.1";
     hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
+    patches = [
+      patch-rapidcheck-shared
+    ];
+  };
+
+  nix_2_19 = common {
+    version = "2.19.1";
+    hash = "sha256-OzAeQwlAF4l0h2uBWGIPvGBYNL6MpBfrdRKwHTRQXl4=";
     patches = [
       patch-rapidcheck-shared
     ];
