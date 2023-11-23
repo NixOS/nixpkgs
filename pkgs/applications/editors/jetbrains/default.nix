@@ -249,6 +249,6 @@ rec {
 
   webstorm = mkJetBrainsProduct { pname = "webstorm"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
 
-  plugins = callPackage ./plugins { };
+  plugins = callPackage ./plugins { } // { __attrsFailEvaluation = true; };
 
 }

@@ -23,7 +23,7 @@ in
 with self; {
 
   inherit perl;
-  perlPackages = self;
+  perlPackages = self // { perlPackages = self.perlPackages // { __attrsFailEvaluation = true; }; };
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule ;
