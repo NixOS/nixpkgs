@@ -96,7 +96,6 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       fly = archived "fly" "2023/10";
-      ksyun = removed "ksyun" "2023/04";
     };
 
   # excluding aliases, used by terraform-full
