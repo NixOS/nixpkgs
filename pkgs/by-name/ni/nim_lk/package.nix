@@ -1,4 +1,12 @@
-{ lib, buildNimPackage, fetchFromSourcehut, nim, openssl, makeWrapper }:
+{ lib
+, buildNimPackage
+, fetchFromSourcehut
+, nim
+, nix-prefetch
+, nix-prefetch-git
+, openssl
+, makeWrapper
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "nim_lk";
@@ -18,7 +26,7 @@ buildNimPackage (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/nim_lk \
-      --suffix PATH : ${lib.makeBinPath [ nim ]}
+      --suffix PATH : ${lib.makeBinPath [ nim nix-prefetch nix-prefetch-git ]}
   '';
 
   meta = finalAttrs.src.meta // {
