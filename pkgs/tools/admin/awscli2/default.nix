@@ -19,7 +19,7 @@ let
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
-      urllib3 = prev.urllib3.overridePythonAttrs (prev: {
+      urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
         pyproject = true;
         nativeBuildInputs = with python3.pkgs; [
           setuptools
