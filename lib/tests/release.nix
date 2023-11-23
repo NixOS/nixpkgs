@@ -60,6 +60,15 @@ let
       echo "Running lib/tests/systems.nix"
       [[ $(nix-instantiate --eval --strict lib/tests/systems.nix | tee /dev/stderr) == '[ ]' ]];
 
+      cp -r ${../../pkgs} pkgs
+      cp -r ${../../default.nix} default.nix
+      cp -r ${../../nixos} nixos
+      cp -r ${../../maintainers} maintainers
+      cp -r ${../../.version} .version
+      cp -r ${../../doc} doc
+      echo "Running pkgs/top-level/release-attrpaths-superset.nix"
+      nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names > /dev/null
+
       mkdir $out
       echo success > $out/${nix.version}
     '';
