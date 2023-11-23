@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-launchpad";
-  version = "0.0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-tWlh7BS+qUgzZIDGxI/giDZnU54jMtRxzRSOX76DAzk=";
+    hash = "sha256-o9YKmtaqa4ykoR75V2OpXm4GRPWHI6WKbxWAzY1b8I0=";
   };
 
   nativeBuildInputs = [
