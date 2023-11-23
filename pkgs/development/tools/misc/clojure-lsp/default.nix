@@ -1,4 +1,14 @@
-{ lib, stdenv, buildGraalvmNativeImage, babashka, fetchurl, fetchFromGitHub, clojure, writeScript }:
+{ lib
+, stdenv
+, buildGraalvmNativeImage
+, graalvmCEPackages
+, removeReferencesTo
+, babashka
+, fetchurl
+, fetchFromGitHub
+, clojure
+, writeScript
+}:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
@@ -16,10 +26,18 @@ buildGraalvmNativeImage rec {
     sha256 = "c301821ac6914999a44f5c1cd371d46b248fe9a2e31d43a666d0bc2656cfdd78";
   };
 
+  graalvmDrv = graalvmCEPackages.graalvm-ce;
+
+  nativeBuildInputs = [ removeReferencesTo ];
+
   extraNativeImageBuildArgs = [
     "--no-fallback"
     "--native-image-info"
   ];
+
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${pname}
+  '';
 
   doCheck = true;
   checkPhase = ''
