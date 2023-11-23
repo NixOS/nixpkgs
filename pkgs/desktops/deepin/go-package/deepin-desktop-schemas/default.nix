@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-lvAY0CJ+EohMK16fwIkB7Jq7gTpMhDimPYs9b/IklA4=";
   };
 
-  vendorSha256 = "sha256-q6ugetchJLv2JjZ9+nevUI0ptizh2V+6SByoY/eFJJQ=";
+  vendorHash = "sha256-q6ugetchJLv2JjZ9+nevUI0ptizh2V+6SByoY/eFJJQ=";
 
   postPatch = ''
     # Relocate files path for backgrounds and wallpapers
