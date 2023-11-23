@@ -177,7 +177,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
   mlt = pkgs.mlt.override {
-    enableQt = true;
+    qt = qt5;
   };
 
   phonon = callPackage ../development/libraries/phonon { };
