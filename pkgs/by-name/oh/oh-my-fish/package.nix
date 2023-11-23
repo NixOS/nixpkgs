@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-msItKEPe7uSUpDAfCfdYZjt5NyfM3KtOrLUTO9NGqlg=";
   };
 
+  patches = [
+    ./001-writable-omf-path.diff
+  ];
+
   buildInputs = [
     fish
   ];
@@ -54,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
       easy to use.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "omf-install";
     inherit (fish.meta) platforms;
   };
