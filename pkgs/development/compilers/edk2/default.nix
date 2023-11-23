@@ -82,11 +82,10 @@ edk2 = stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "fortify" ];
 
-  # Fix cross-compilation issue, use build cc/c++ for building antlr and dlg
-  postPatch = ''
-    substituteInPlace BaseTools/Source/C/VfrCompile/GNUmakefile \
-      --replace '$(MAKE) -C Pccts/antlr' '$(MAKE) -C Pccts/antlr CC=cc CXX=c++' \
-      --replace '$(MAKE) -C Pccts/dlg' '$(MAKE) -C Pccts/dlg CC=cc CXX=c++'
+  # For cross-compilation we need to build antlr and dlg for the build arch
+  preBuild = ''
+    BIN_DIR='.' make -C BaseTools/Source/C/VfrCompile/Pccts/antlr CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD -j$NIX_BUILD_CORES
+    BIN_DIR='.' make -C BaseTools/Source/C/VfrCompile/Pccts/dlg CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD -j$NIX_BUILD_CORES
   '';
 
   installPhase = ''
@@ -125,13 +124,13 @@ edk2 = stdenv.mkDerivation rec {
 
       prePatch = ''
         rm -rf BaseTools
-        ln -sv ${edk2}/BaseTools BaseTools
+        ln -sv ${buildPackages.edk2}/BaseTools BaseTools
       '';
 
       configurePhase = ''
         runHook preConfigure
         export WORKSPACE="$PWD"
-        . ${edk2}/edksetup.sh BaseTools
+        . ${buildPackages.edk2}/edksetup.sh BaseTools
         runHook postConfigure
       '';
 
