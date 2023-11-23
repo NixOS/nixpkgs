@@ -14,6 +14,7 @@
 , libsmartcols
 , libsolv
 , libxml2
+, libyaml
 , pcre2
 , rpm
 , sdbus-cpp
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.7";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-SXgl4YFWl1A3N2/IkDftvBl6Rwhnymxe8AqqaekGHTc=";
+    hash = "sha256-4ht2KraWKL774QPfZz1OgAuFtPVsMis9WiDS+QFP8JY=";
   };
 
   nativeBuildInputs = [ cmake createrepo_c gettext help2man pkg-config ];
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsmartcols
     libsolv
     libxml2
+    libyaml
     pcre2.dev
     rpm
     sdbus-cpp
