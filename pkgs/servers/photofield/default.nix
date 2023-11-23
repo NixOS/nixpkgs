@@ -72,6 +72,7 @@ buildGoModule rec {
     description = "Experimental fast photo viewer";
     homepage = "https://github.com/SmilyOrg/photofield";
     license = licenses.mit;
+    mainProgram = "photofield";
     maintainers = with maintainers; [ dit7ya ];
   };
 }
