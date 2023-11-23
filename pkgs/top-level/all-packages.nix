@@ -11538,8 +11538,6 @@ with pkgs;
 
   oh-my-posh = callPackage ../development/tools/oh-my-posh { };
 
-  oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
-
   ola = callPackage ../applications/misc/ola {
     protobuf = protobuf_21;
   };
@@ -15408,8 +15406,6 @@ with pkgs;
   es = callPackage ../shells/es { };
 
   fish = callPackage ../shells/fish { };
-
-  oh-my-fish = callPackage ../shells/fish/oh-my-fish { };
 
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
