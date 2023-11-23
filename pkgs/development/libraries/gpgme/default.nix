@@ -19,6 +19,7 @@
 , swig2 ? null
 # only for passthru.tests
 , libsForQt5
+, qt6Packages
 , python3
 }:
 let
@@ -109,7 +110,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     python = python3.pkgs.gpgme;
-    qt = libsForQt5.qgpgme;
+    qt5 = libsForQt5.qgpgme;
+    qt6 = qt6Packages.qgpgme;
   };
 
   meta = with lib; {
