@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/L11R/go-autoconfig";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "go-autoconfig";
   };
 }

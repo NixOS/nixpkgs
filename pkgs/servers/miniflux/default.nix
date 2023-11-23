@@ -45,5 +45,6 @@ in buildGo121Module {
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvolosatovs benpye ];
+    mainProgram = "miniflux";
   };
 }
