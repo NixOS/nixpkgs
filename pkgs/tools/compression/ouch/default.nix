@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda psibi ];
+    mainProgram = "ouch";
   };
 }

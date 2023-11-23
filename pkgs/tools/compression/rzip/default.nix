@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "rzip";
   };
 }

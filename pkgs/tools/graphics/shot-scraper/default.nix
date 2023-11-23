@@ -35,5 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/simonw/shot-scraper/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ techknowlogick ];
+    mainProgram = "shot-scraper";
   };
 }

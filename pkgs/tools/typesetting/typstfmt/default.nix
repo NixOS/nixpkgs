@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/astrale-sharp/typstfmt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda geri1701 ];
+    mainProgram = "typstfmt";
   };
 }
