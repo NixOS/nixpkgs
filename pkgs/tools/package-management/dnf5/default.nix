@@ -3,9 +3,11 @@
 , fetchFromGitHub
 , cmake
 , createrepo_c
+, doxygen
 , gettext
 , help2man
 , pkg-config
+, python3Packages
 , cppunit
 , fmt
 , json_c
@@ -18,6 +20,7 @@
 , pcre2
 , rpm
 , sdbus-cpp
+, sphinx
 , sqlite
 , systemd
 , toml11
@@ -28,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
   version = "5.1.8";
 
+  outputs = [ "out" "man" ];
+
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf5";
@@ -35,7 +40,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4ht2KraWKL774QPfZz1OgAuFtPVsMis9WiDS+QFP8JY=";
   };
 
-  nativeBuildInputs = [ cmake createrepo_c gettext help2man pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    createrepo_c
+    doxygen
+    gettext
+    help2man
+    pkg-config
+    sphinx
+  ] ++ (with python3Packages; [
+    breathe
+    sphinx-autoapi
+    sphinx-rtd-theme
+  ]);
+
   buildInputs = [
     cppunit
     fmt
@@ -62,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_PERL5=OFF"
     "-DWITH_PYTHON3=OFF"
     "-DWITH_RUBY=OFF"
-    # TODO: fix man installation paths
-    "-DWITH_MAN=OFF"
     "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
@@ -71,6 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
+
+  postBuild = ''
+    make doc
+  '';
 
   prePatch = ''
     substituteInPlace dnf5daemon-server/dbus/CMakeLists.txt \
