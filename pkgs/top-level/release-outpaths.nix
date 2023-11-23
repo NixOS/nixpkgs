@@ -5,7 +5,7 @@
 # Vendored from:
 #   https://raw.githubusercontent.com/NixOS/ofborg/74f38efa7ef6f0e8e71ec3bfc675ae4fb57d7491/ofborg/src/outpaths.nix
 { checkMeta
-, path ? ./.
+, path ? ./../..
 }:
 let
   lib = import (path + "/lib");
