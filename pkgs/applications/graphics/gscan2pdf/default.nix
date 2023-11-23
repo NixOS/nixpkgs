@@ -24,6 +24,8 @@ perlPackages.buildPerlPackage rec {
       url = "https://sourceforge.net/p/gscan2pdf/bugs/_discuss/thread/602a7cedfd/1ea4/attachment/0001-Remove-given-and-when-keywords-and-operator.patch";
       hash = "sha256-JtrHUkfEKnDhWfEVdIdYVlr5b/xChTzsrrPmruLaJ5M=";
     })
+    # fixes an error with utf8 file names. See https://sourceforge.net/p/gscan2pdf/bugs/400
+    ./image-utf8-fix.patch
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
