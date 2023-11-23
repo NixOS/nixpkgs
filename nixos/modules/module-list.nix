@@ -1155,6 +1155,7 @@
   ./services/search/qdrant.nix
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
+  ./services/security/aide.nix
   ./services/security/authelia.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
