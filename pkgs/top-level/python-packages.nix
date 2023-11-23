@@ -6691,6 +6691,8 @@ self: super: with self; {
 
   rtmixer = callPackage ../development/python-modules/rtmixer { };
 
+  regress = callPackage ../development/python-modules/regress { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   makefun = callPackage ../development/python-modules/makefun { };
