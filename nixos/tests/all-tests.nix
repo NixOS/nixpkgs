@@ -648,6 +648,7 @@ in {
   peroxide = handleTest ./peroxide.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
   pgbouncer = handleTest ./pgbouncer.nix {};
+  pghero = runTest ./pghero.nix;
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   phosh = handleTest ./phosh.nix {};
