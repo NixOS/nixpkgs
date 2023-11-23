@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
+    mainProgram = "jhead";
   };
 }

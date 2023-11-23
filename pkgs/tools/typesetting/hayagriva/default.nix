@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/typst/hayagriva/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "hayagriva";
   };
 }

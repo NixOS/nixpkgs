@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
+    mainProgram = "pixz";
   };
 }
