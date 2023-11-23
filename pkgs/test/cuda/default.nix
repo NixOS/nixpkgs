@@ -1,7 +1,7 @@
 { callPackage }:
 
 rec {
-  cuda-samplesPackages = callPackage ./cuda-samples { };
+  cuda-samplesPackages = callPackage ./cuda-samples/generic.nix { };
   inherit (cuda-samplesPackages)
     cuda-samples_cudatoolkit_10
     cuda-samples_cudatoolkit_10_0
@@ -14,7 +14,7 @@ rec {
     cuda-samples_cudatoolkit_11_3
     cuda-samples_cudatoolkit_11_4;
 
-  cuda-library-samplesPackages = callPackage ./cuda-library-samples { };
+  cuda-library-samplesPackages = callPackage ./cuda-library-samples/generic.nix { };
   inherit (cuda-library-samplesPackages)
     cuda-library-samples_cudatoolkit_10
     cuda-library-samples_cudatoolkit_10_1
