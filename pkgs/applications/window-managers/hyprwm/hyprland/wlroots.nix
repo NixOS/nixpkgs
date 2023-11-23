@@ -1,9 +1,7 @@
 { fetchFromGitLab
 , wlroots
-, libdisplay-info
-, libliftoff
-, hwdata
 }:
+
 wlroots.overrideAttrs
   (old: {
     version = "0.17.0-dev";
@@ -17,10 +15,4 @@ wlroots.overrideAttrs
     };
 
     pname = "${old.pname}-hyprland";
-
-    buildInputs = old.buildInputs ++ [
-      hwdata
-      libdisplay-info
-      libliftoff
-    ];
   })
