@@ -3,6 +3,8 @@
 , graalvmCEPackages
 , removeReferencesTo
 , fetchurl
+, testers
+, jet
 }:
 
 buildGraalvmNativeImage rec {
@@ -28,6 +30,12 @@ buildGraalvmNativeImage rec {
   postInstall = ''
     remove-references-to -t ${graalvmDrv} $out/bin/${pname}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = jet;
+    command = "jet --version";
+  };
 
   meta = with lib; {
     description = "CLI to transform between JSON, EDN, YAML and Transit, powered with a minimal query language";
