@@ -88,5 +88,6 @@ in
       url = "https://sourceforge.net/p/gnuplot/gnuplot-main/ci/master/tree/Copyright";
     };
     maintainers = with maintainers; [ lovek323 ];
+    mainProgram = "gnuplot";
   };
 }

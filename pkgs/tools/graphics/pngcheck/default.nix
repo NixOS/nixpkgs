@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = with maintainers; [ starcraft66 ];
+    mainProgram = "pngcheck";
   };
 }

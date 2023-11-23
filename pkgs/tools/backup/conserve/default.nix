@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sourcefrog/conserve";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "conserve";
   };
 }
