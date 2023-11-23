@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    mainProgram = "gromit-mpx";
   };
 }

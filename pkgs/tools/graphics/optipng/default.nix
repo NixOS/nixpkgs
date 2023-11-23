@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     description = "A PNG optimizer";
     license = licenses.zlib;
     platforms = platforms.unix;
+    mainProgram = "optipng";
   };
 }
