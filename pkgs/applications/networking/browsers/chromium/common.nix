@@ -47,7 +47,6 @@
 , glibc # gconv + locale
 # postFixup:
 , vulkan-loader
-, libglvnd
 
 # Package customization:
 , cupsSupport ? true, cups ? null
@@ -494,7 +493,7 @@ let
       # libpci (from pciutils) is needed by dlopen in angle/src/gpu_info_util/SystemInfo_libpci.cpp
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${lib.makeLibraryPath [ libGL libglvnd vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {
