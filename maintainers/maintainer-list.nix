@@ -18709,6 +18709,11 @@
     githubId = 347983;
     name = "Udo Spallek";
   };
+  ufUNnxagpM = {
+    github = "ufUNnxagpM";
+    githubId = 12422133;
+    name = "Chromo-residuum-opec";
+  };
   ulrikstrid = {
     email = "ulrik.strid@outlook.com";
     github = "ulrikstrid";
