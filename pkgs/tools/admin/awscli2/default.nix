@@ -26,7 +26,7 @@ let
           setuptools
         ];
         src = prev.src.override {
-          version = "1.26.18";
+          inherit version;
           hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
         };
       });
