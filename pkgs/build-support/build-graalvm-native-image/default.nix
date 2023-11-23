@@ -11,6 +11,7 @@
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
+    (lib.optionalString (stdenv.isLinux && stdenv.isAarch64) "-H:PageSize=64K")
     "-H:Name=${executable}"
     "-march=compatibility"
     "--verbose"
