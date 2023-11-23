@@ -18776,6 +18776,12 @@
     githubId = 223408;
     name = "Varun Madiath";
   };
+  vancluever = {
+    email = "chrism@vancluevertech.com";
+    github = "vancluever";
+    githubId = 10704423;
+    name = "Chris Marchesi";
+  };
   vandenoever = {
     email = "jos@vandenoever.info";
     github = "vandenoever";
