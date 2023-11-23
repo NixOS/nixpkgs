@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+, prefetch-yarn-deps, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
 
 let
@@ -53,7 +53,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert prefetch-yarn-deps ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -88,7 +88,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
