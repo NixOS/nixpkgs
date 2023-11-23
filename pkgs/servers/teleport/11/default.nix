@@ -1,4 +1,4 @@
-{ callPackage, ... }@args:
+{ callPackage, fetchpatch, ... }@args:
 callPackage ../generic.nix ({
   version = "11.3.25";
   hash = "sha256-KIbRn90BUJp8Uc8GMHuIMMSn5tJQbxzE0ntngx1ELaE=";
@@ -10,4 +10,11 @@ callPackage ../generic.nix ({
       "rdp-rs-0.1.0" = "sha256-GJfUyiYQwcDTMqt+iik3mFI0f6mu13RJ2XuoDzlg9sU=";
     };
   };
-} // builtins.removeAttrs args [ "callPackage" ])
+  goPatches = [
+    (fetchpatch {
+      name = "recursive-chown-vuln-fix.patch";
+      url = "https://github.com/gravitational/teleport/commit/1ffde1695bf9614df87a40a4845e315e227bb35d.patch";
+      hash = "sha256-fcAlaJEcQJQl0TuzfXKg1nNdnDYmppD+ntDOLAT8xAY=";
+    })
+  ];
+} // builtins.removeAttrs args [ "callPackage" "fetchpatch" ])

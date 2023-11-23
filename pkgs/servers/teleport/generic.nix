@@ -17,6 +17,8 @@
 , yarn2nix-moretea
 , nixosTests
 
+, goPatches ? []
+
 , withRdpClient ? true
 
 , version
@@ -118,7 +120,7 @@ buildGoModule rec {
     ./test.patch
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
-  ];
+  ] ++ goPatches;
 
   # Reduce closure size for client machines
   outputs = [ "out" "client" ];
