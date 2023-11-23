@@ -26937,6 +26937,8 @@ with pkgs;
   mariadb = mariadb_1011;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
 
+  mysqlTestHook = callPackage ../build-support/setup-hooks/mysql-test-hook { };
+
   mongodb = hiPrio mongodb-6_0;
 
   mongodb-4_4 = callPackage ../servers/nosql/mongodb/4.4.nix {
