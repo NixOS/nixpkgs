@@ -69,7 +69,7 @@
 , libmysofa
 , tinycompress
 , ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
-, ffado
+, libffado
 , libselinux
 }:
 
@@ -148,7 +148,7 @@ let
     ++ lib.optional rocSupport roc-toolkit
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
     ++ lib.optional mysofaSupport libmysofa
-    ++ lib.optional ffadoSupport ffado;
+    ++ lib.optional ffadoSupport libffado;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
