@@ -1,5 +1,26 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchFromGitHub, fetchpatch, ocaml, pkg-config, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
-libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps, darwin }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchFromGitHub
+, ocaml
+, pkg-config
+, mupdf
+, libX11
+, jbig2dec
+, openjpeg
+, libjpeg
+, lcms2
+, harfbuzz
+, libGLU
+, libGL
+, gumbo
+, freetype
+, zlib
+, xclip
+, inotify-tools
+, procps
+, darwin
+}:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
