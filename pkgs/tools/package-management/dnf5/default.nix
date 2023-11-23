@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_PERL5=OFF"
     "-DWITH_PYTHON3=OFF"
     "-DWITH_RUBY=OFF"
-    "-DWITH_TESTS=OFF"
     # TODO: fix man installation paths
     "-DWITH_MAN=OFF"
     "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
