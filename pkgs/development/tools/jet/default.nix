@@ -1,4 +1,9 @@
-{ lib, buildGraalvmNativeImage, fetchurl }:
+{ lib
+, buildGraalvmNativeImage
+, graalvmCEPackages
+, removeReferencesTo
+, fetchurl
+}:
 
 buildGraalvmNativeImage rec {
   pname = "jet";
@@ -9,12 +14,20 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-250/1DBNCXlU1b4jjLUUOXI+uSbOyPXtBN1JJRpdmFc=";
   };
 
+  graalvmDrv = graalvmCEPackages.graalvm-ce;
+
+  nativeBuildInputs = [ removeReferencesTo ];
+
   extraNativeImageBuildArgs = [
     "-H:+ReportExceptionStackTraces"
     "-H:Log=registerResource:"
     "--no-fallback"
     "--no-server"
   ];
+
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${pname}
+  '';
 
   meta = with lib; {
     description = "CLI to transform between JSON, EDN, YAML and Transit, powered with a minimal query language";
