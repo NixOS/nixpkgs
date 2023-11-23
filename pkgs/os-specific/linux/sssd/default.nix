@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, adcli, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
@@ -27,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DRENEWAL_PROG_PATH=\"${adcli}/bin/adcli\""
+    "-I${libxml2.dev}/include/libxml2"
+  ];
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
