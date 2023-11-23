@@ -6,12 +6,16 @@
 #   https://raw.githubusercontent.com/NixOS/ofborg/74f38efa7ef6f0e8e71ec3bfc675ae4fb57d7491/ofborg/src/outpaths.nix
 { checkMeta
 , path ? ./../..
+
+# used by pkgs/top-level/release-attrnames-superset.nix
+, attrNamesOnly ? false
 }:
 let
   lib = import (path + "/lib");
   hydraJobs = import (path + "/pkgs/top-level/release.nix")
     # Compromise: accuracy vs. resources needed for evaluation.
     {
+      inherit attrNamesOnly;
       supportedSystems = [
         "aarch64-linux"
         "aarch64-darwin"
