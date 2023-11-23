@@ -24,5 +24,6 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ehmry ];
     broken = stdenv.isDarwin;
+    mainProgram = "eris-go";
   };
 }

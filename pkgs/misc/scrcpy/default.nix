@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ deltaevo msfjarvis ];
+    mainProgram = "scrcpy";
   };
 }

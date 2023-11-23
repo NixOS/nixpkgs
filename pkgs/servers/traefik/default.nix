@@ -35,5 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ vdemeester ];
+    mainProgram = "traefik";
   };
 }

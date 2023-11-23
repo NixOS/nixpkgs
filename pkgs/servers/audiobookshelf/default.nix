@@ -72,5 +72,6 @@ in buildNpmPackage {
     license = licenses.gpl3;
     maintainers = [ maintainers.jvanbruegge ];
     platforms = platforms.linux;
+    mainProgram = "audiobookshelf";
   };
 }

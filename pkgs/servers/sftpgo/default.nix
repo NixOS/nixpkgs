@@ -60,5 +60,6 @@ buildGoModule rec {
     '';
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ thenonameguy yayayayaka ];
+    mainProgram = "sftpgo";
   };
 }
