@@ -27,11 +27,6 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  configurePhase = ''
-    mkdir -p build/mupdf/thirdparty
-    ln -s ${freetype.dev} build/mupdf/thirdparty/freetype
-  '';
-
   buildPhase = ''
     bash ./build.bash build
   '';
