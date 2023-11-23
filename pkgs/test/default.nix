@@ -119,11 +119,11 @@ with pkgs;
 
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
-  cross = callPackage ./cross {};
+  cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
   php = recurseIntoAttrs (callPackages ./php {});
 
-  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
+  pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { }) // { __recurseIntoDerivationForReleaseJobs = true; };
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };

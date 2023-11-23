@@ -67,6 +67,7 @@ let
     ;
   outer_types =
 rec {
+  __attrsFailEvaluation = true;
   isType = type: x: (x._type or "") == type;
 
   setType = typeName: value: value // {
