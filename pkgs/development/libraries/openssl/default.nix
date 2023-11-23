@@ -301,4 +301,27 @@ in {
       license = licenses.asl20;
     };
   };
+
+  openssl_3_2 = common {
+    version = "3.2.0";
+    hash = "sha256-FMgm8Hx+QzcG+1xp+p4l2rlWhIRLTJYqLPG/GD60aQ4=";
+
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
+    ];
+
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
+  };
 }
