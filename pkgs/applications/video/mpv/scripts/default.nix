@@ -18,7 +18,7 @@ in lib.recurseIntoAttrs
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { inherit buildLua; };
     quality-menu = callPackage ./quality-menu.nix { inherit buildLua; };
-    simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
+    simple-mpv-webui = callPackage ./simple-mpv-webui.nix { inherit buildLua; };
     sponsorblock = callPackage ./sponsorblock.nix { };
     thumbfast = callPackage ./thumbfast.nix { inherit buildLua; };
     thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
