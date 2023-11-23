@@ -5,6 +5,8 @@
 , makeWrapper
 , exiftool
 , ffmpeg
+, testers
+, photofield
 }:
 
 let
@@ -60,6 +62,11 @@ buildGoModule rec {
     wrapProgram $out/bin/photofield \
       --prefix PATH : "${lib.makeBinPath [exiftool ffmpeg]}"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = photofield;
+    command = "photofield -version";
+  };
 
   meta = with lib; {
     description = "Experimental fast photo viewer";
