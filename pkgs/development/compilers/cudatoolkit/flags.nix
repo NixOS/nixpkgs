@@ -108,7 +108,7 @@ let
 
     # archNames :: List String
     # E.g. [ "Turing" "Ampere" ]
-    archNames = lists.unique (builtins.map (cap: cudaComputeCapabilityToName.${cap}) cudaCapabilities);
+    archNames = lists.unique (builtins.map (cap: cudaComputeCapabilityToName.${cap} or (throw "missing cuda compute capability")) cudaCapabilities);
 
     # realArches :: List String
     # The real architectures are physical architectures supported by the CUDA version.
