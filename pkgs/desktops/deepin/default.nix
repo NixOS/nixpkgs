@@ -34,7 +34,6 @@ let
     dde-clipboard = callPackage ./core/dde-clipboard { };
     dde-dock = callPackage ./core/dde-dock { };
     dde-file-manager = callPackage ./core/dde-file-manager { };
-    dde-launcher = callPackage ./core/dde-launcher { };
     dde-launchpad = callPackage ./core/dde-launchpad { };
     dde-network-core = callPackage ./core/dde-network-core { };
     dde-session = callPackage ./core/dde-session { };
@@ -93,6 +92,7 @@ let
     deepin-turbo = callPackage ./misc/deepin-turbo { };
   } // lib.optionalAttrs config.allowAliases {
     dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
+    dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
   };
 in
 lib.makeScope libsForQt5.newScope packages
