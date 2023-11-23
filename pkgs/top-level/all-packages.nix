@@ -32900,6 +32900,11 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
+  inherit (callPackage ../applications/networking/cluster/k0s { })
+    k0s_1_28
+  ;
+  k0s = k0s_1_28;
+
   k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 {
     buildGoModule = buildGo120Module;
   };
