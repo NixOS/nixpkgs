@@ -7992,6 +7992,11 @@
     githubId = 2179419;
     name = "Arseniy Seroka";
   };
+  jake-arkinstall = {
+    name = "Jake Arkinstall";
+    github = "jake-arkinstall";
+    githubId = 65358059;
+  };
   jakehamilton = {
     name = "Jake Hamilton";
     email = "jake.hamilton@hey.com";
