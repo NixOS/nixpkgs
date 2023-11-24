@@ -1,0 +1,38 @@
+diff --git a/wfview.pro b/wfview.pro
+index bd9062e..5f0671f 100644
+--- a/wfview.pro
++++ b/wfview.pro
+@@ -100,9 +100,7 @@ macx:QMAKE_INFO_PLIST = ../wfview/resources/Info.plist
+
+ QMAKE_TARGET_BUNDLE_PREFIX = org.wfview
+
+-!win32:DEFINES += HOST=\\\"`hostname`\\\" UNAME=\\\"`whoami`\\\"
+-
+-!win32:DEFINES += GITSHORT="\\\"$(shell git -C \"$$PWD\" rev-parse --short HEAD)\\\""
++!win32:DEFINES += HOST=\\\"nixos\\\" UNAME=\\\"nix\\\" GITSHORT=\\\"0.0\\\"
+ win32:DEFINES += GITSHORT=\\\"$$system(git -C $$PWD rev-parse --short HEAD)\\\"
+
+ win32:DEFINES += HOST=\\\"wfview.org\\\"
+@@ -143,9 +141,7 @@ macx:LIBS += -framework CoreAudio -framework CoreFoundation -lpthread -lopus
+ # CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+
+ CONFIG(debug, release|debug) {
+-  linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlotd.so/ {print \"-lQCustomPlotd\"}'")
+-  linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd2.so/ {print \"-lqcustomplotd2\"}'")
+-  linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplotd.so/ {print \"-lqcustomplotd\"}'")
++  linux:LIBS += -lqCustomPlot
+   macos:LIBS += -lqcustomplotd
+   win32:LIBS += -lqcustomplotd2
+   win32 {
+@@ -174,10 +170,8 @@ CONFIG(debug, release|debug) {
+     }
+   }
+ } else {
+-  linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libQCustomPlot.so/ {print \"-lQCustomPlot\"}'")
+-  linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot2.so/ {print \"-lqcustomplot2\"}'")
+-  linux:LIBS += $$system("/sbin/ldconfig -p | awk '/libqcustomplot.so/ {print \"-lqcustomplot\"}'")
+   macos:LIBS += -lqcustomplot
++  linux:LIBS += -lQCustomPlot
+   win32:LIBS += -lqcustomplot2
+   win32 {
+     contains(QMAKE_TARGET.arch, x86_64) {
