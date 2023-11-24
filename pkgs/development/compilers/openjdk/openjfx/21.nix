@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
+{ stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless
 , openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
 , libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68
 , withMedia ? true
@@ -7,7 +7,7 @@
 
 let
   major = "21";
-  update = "";
+  update = ".0.1";
   build = "-ga";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
@@ -20,9 +20,9 @@ let
 
     src = fetchFromGitHub {
       owner = "openjdk";
-      repo = "jfx";
+      repo = "jfx21u";
       rev = repover;
-      hash = "sha256-deNAGfnA6gwcAa64l0AWdkX+vJd3ZOfIgAifSl+/m+s=";
+      hash = "sha256-13kQWfJ5nCppeboECrI3fEUislyXgDnp3SZPsDEHPJU=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
