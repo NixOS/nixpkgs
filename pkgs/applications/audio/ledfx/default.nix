@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonPackage rec {
   pname = "ledfx";
   version = "2.0.80";
-  format = "setuptools";
+  pyproject= true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +19,10 @@ python3.pkgs.buildPythonPackage rec {
       --replace '"sentry-sdk==1.14.0",' "" \
       --replace "~=" ">="
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
