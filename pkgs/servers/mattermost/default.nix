@@ -8,23 +8,21 @@
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "9.2.2";
+  version = "8.1.6";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-53L2F20vaLLxtQS3DP/u0ZxLtnXHmjfcOMbXd4i+A6Y=";
+    hash = "sha256-vJ5+ZiA7bOKvA2VMMIOkIEKz/XN/m/cQViJgKlyHUp0=";
   } + "/server";
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-/6SKqSXH8sW70rYt4MmABWNQP/JDAA1lxuvCJhqEoTI=";
+    hash = "sha256-crpX2creK2tbmIULWi3perRGtFWaKw9m8v7OCjBd1Fw=";
   };
 
-  vendorHash = "sha256-v8aKZyb4emrwuIgSBDgla5wzwyt6PVGakbXjB9JVaCk=";
-
-  patches = [ ./0001-module-replace-public.patch ];
+  vendorHash = "sha256-25nyneJ+ynM9WdnnLd4L3a720ecKdhJ1vyRG5lx2mgY=";
 
   subPackages = [ "cmd/mattermost" ];
 
@@ -35,12 +33,10 @@ buildGoModule rec {
     "-w"
     "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
     "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=n/a"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
     "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
     "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
     "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
-    "-X github.com/mattermost/mattermost/server/public/model.MockCWS=false"
-    "-X github.com/mattermost/mattermost/server/public/model.MattermostGiphySdkKey="
   ];
 
   postInstall = ''
