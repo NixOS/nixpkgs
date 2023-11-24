@@ -28,16 +28,16 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.0.0";
-  format = "pyproject";
+  version = "4.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-gUFd2gHWIElYfzOvg7Yx7iJyhU6+iAcJpHTVsJtxTsk=";
+    hash = "sha256-PEDPliWJX3QypwsvJTAJhrQnJx8lWXQQSdyjN0I8L+I=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -64,13 +64,13 @@ buildPythonPackage rec {
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   nativeCheckInputs = [
+    exceptiongroup
     hypothesis
     psutil
     pytest-mock
     pytest-xdist
     pytestCheckHook
     trustme
-  ] ++ lib.optionals (pythonOlder "3.12") [
     uvloop
   ] ++ passthru.optional-dependencies.trio;
 
