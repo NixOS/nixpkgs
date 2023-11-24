@@ -21,7 +21,6 @@
 , qtquickcontrols2
 , qtsvg
 , qtsystems
-, qtwayland
 , suru-icon-theme
 , wrapQtAppsHook
 , xvfb-run
@@ -236,7 +235,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtfeedback
     qtgraphicaleffects
     qtsvg
-    qtwayland
   ];
 
   nativeCheckInputs = [
