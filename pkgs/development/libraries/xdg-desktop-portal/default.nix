@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstalled-tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ] ++ lib.optionals (!enableGeoLocation) [
-    "-Dgeoclue=false"
+    "-Dgeoclue=disabled"
   ];
 
   doCheck = true;
