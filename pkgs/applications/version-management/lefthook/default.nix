@@ -6,7 +6,7 @@
 
 let
   pname = "lefthook";
-  version = "1.5.2";
+  version = "1.5.3";
 in
 buildGoModule rec {
   inherit pname version;
@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-9lAgKHcUAhg3Z8fMNYu3JrjfSd0HaT7YhvjKlpLMi0E=";
+    hash = "sha256-pC6kEDOXNcuMfDvXomPZVMWpS/aHR4P4pIhqNkXAGuc=";
   };
 
   vendorHash = "sha256-/VLS7+nPERjIU7V2CzqXH69Z3/y+GKZbAFn+KcRKRuA=";
