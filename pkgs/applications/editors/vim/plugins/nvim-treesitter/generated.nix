@@ -538,12 +538,12 @@
   };
   erlang = buildGrammar {
     language = "erlang";
-    version = "0.0.0+rev=35ae91b";
+    version = "0.0.0+rev=b7969b5";
     src = fetchFromGitHub {
       owner = "WhatsApp";
       repo = "tree-sitter-erlang";
-      rev = "35ae91b2e9f5514c0ad6d6887f9859f28907c7d5";
-      hash = "sha256-sA1Sy2yHBACDlicLYX+BLdcy4cnpleaYYVcjPcgHtW0=";
+      rev = "b7969b5f12c44038379901a6f2094c31afa2ec2f";
+      hash = "sha256-wfzfUGulZ3d7En5b/DiTrMcBNi4JHT723nSOS055v6w=";
     };
     meta.homepage = "https://github.com/WhatsApp/tree-sitter-erlang";
   };
@@ -2165,12 +2165,12 @@
   };
   ssh_config = buildGrammar {
     language = "ssh_config";
-    version = "0.0.0+rev=1651e63";
+    version = "0.0.0+rev=9ff3cab";
     src = fetchFromGitHub {
       owner = "ObserverOfTime";
       repo = "tree-sitter-ssh-config";
-      rev = "1651e637d57c667708add5440d3726f07e97d953";
-      hash = "sha256-jshQhWIeMcsUA7g2RGuH3DSfBfRhRx9dMOJVm/92Jkw=";
+      rev = "9ff3cabeb738f94bfc3c2de4d3857133ad717e3f";
+      hash = "sha256-uEm3Egz2/37TxmF24YklfVaxboQsbh5f9+TVcPAdpd0=";
     };
     meta.homepage = "https://github.com/ObserverOfTime/tree-sitter-ssh-config";
   };
@@ -2613,12 +2613,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=635fa4b";
+    version = "0.0.0+rev=d483d21";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "635fa4b72ee913f3028bf6be54c40393edbc259d";
-      hash = "sha256-ruhmgc+EhrqPBli7CkXL+MevB+fnCQIeLqQbqZhFfbY=";
+      rev = "d483d21ad212bc9641e88deee0db2dad670eaaf3";
+      hash = "sha256-EmK4xFO1WlIw3zebshrvBqJeEa/C9d2ACCzeKd4EAyM=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;
