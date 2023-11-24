@@ -2,9 +2,21 @@
 
 The Nix expressions to build the Linux kernel are in [`pkgs/os-specific/linux/kernel`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel).
 
-The function that builds the kernel has an argument `kernelPatches` which should be a list of `{name, patch, extraConfig}` attribute sets, where `name` is the name of the patch (which is included in the kernel’s `meta.description` attribute), `patch` is the patch itself (possibly compressed), and `extraConfig` (optional) is a string specifying extra options to be concatenated to the kernel configuration file (`.config`).
+The function [`pkgs.buildLinux`](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/generic.nix) builds a kernel with [common configuration values](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/common-config.nix).
+This is the preferred option unless you have a very specific use case.
+Most kernels packaged in Nixpkgs are built that way, and it will also generate kernels suitable for NixOS.
+[`pkgs.linuxManualConfig`](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/manual-config.nix) requires a complete configuration to be passed.
+It has fewer additional features than `pkgs.buildLinux`, which provides common configuration values and exposes the `features` attribute, as explained below.
 
-The kernel derivation exports an attribute `features` specifying whether optional functionality is or isn’t enabled. This is used in NixOS to implement kernel-specific behaviour. For instance, if the kernel has the `iwlwifi` feature (i.e., has built-in support for Intel wireless chipsets), then NixOS doesn’t have to build the external `iwlwifi` package:
+Both functions have an argument `kernelPatches` which should be a list of `{name, patch, extraConfig}` attribute sets, where `name` is the name of the patch (which is included in the kernel’s `meta.description` attribute), `patch` is the patch itself (possibly compressed), and `extraConfig` (optional) is a string specifying extra options to be concatenated to the kernel configuration file (`.config`).
+
+The kernel derivation created with `pkgs.buildLinux` exports an attribute `features` specifying whether optional functionality is or isn’t enabled. This is used in NixOS to implement kernel-specific behaviour.
+
+:::{.example #ex-skip-package-from-kernel-feature}
+
+# Skipping an external package because of a kernel feature
+
+For instance, if the kernel has the `iwlwifi` feature (i.e., has built-in support for Intel wireless chipsets), then NixOS doesn’t have to build the external `iwlwifi` package:
 
 ```nix
 modulesTree = [kernel]
@@ -12,30 +24,104 @@ modulesTree = [kernel]
   ++ ...;
 ```
 
-How to add a new (major) version of the Linux kernel to Nixpkgs:
+:::
 
-1.  Copy the old Nix expression (e.g., `linux-2.6.21.nix`) to the new one (e.g., `linux-2.6.22.nix`) and update it.
+If you are using a kernel packaged in Nixpkgs, you can customize it by overriding its arguments. For details on how each argument affects the generated kernel, refer to [the `pkgs.buildLinux` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/generic.nix).
 
-2.  Add the new kernel to the `kernels` attribute set in `linux-kernels.nix` (e.g., create an attribute `kernel_2_6_22`).
+:::{.example #ex-overriding-kernel-derivation}
 
-3.  Now we’re going to update the kernel configuration. First unpack the kernel. Then for each supported platform (`i686`, `x86_64`, `uml`) do the following:
+# Overriding the kernel derivation
 
-    1.  Make a copy from the old config (e.g., `config-2.6.21-i686-smp`) to the new one (e.g., `config-2.6.22-i686-smp`).
+Assuming you are using the kernel from `pkgs.linux_latest`:
 
-    2.  Copy the config file for this platform (e.g., `config-2.6.22-i686-smp`) to `.config` in the kernel source tree.
+```nix
+pkgs.linux_latest.override {
+  ignoreConfigErrors = true;
+  autoModules = false;
+  kernelPreferBuiltin = true;
+  extraStructuredConfig = with lib.kernel; {
+    DEBUG_KERNEL = yes;
+    FRAME_POINTER = yes;
+    KGDB = yes;
+    KGDB_SERIAL_CONSOLE = yes;
+    DEBUG_INFO = yes;
+  };
+}
+```
 
-    3.  Run `make oldconfig ARCH={i386,x86_64,um}` and answer all questions. (For the uml configuration, also add `SHELL=bash`.) Make sure to keep the configuration consistent between platforms (i.e., don’t enable some feature on `i686` and disable it on `x86_64`).
+:::
 
-    4.  If needed, you can also run `make menuconfig`:
+## Manual kernel configuration {#sec-manual-kernel-configuration}
 
-        ```ShellSession
-        $ nix-env -f "<nixpkgs>" -iA ncurses
-        $ export NIX_CFLAGS_LINK=-lncurses
-        $ make menuconfig ARCH=arch
-        ```
+Sometimes it may not be desirable to use kernels built with `pkgs.buildLinux`, especially if most of the common configuration has to be altered or disabled to achieve a kernel as expected by the target use case.
+An example of this is building a kernel for use in a VM or micro VM. You can use `pkgs.linuxManualConfig` in these cases. It requires the `src`, `version`, and `configfile` attributes to be specified.
 
-    5.  Copy `.config` over the new config file (e.g., `config-2.6.22-i686-smp`).
+:::{.example #ex-using-linux-manual-config}
 
-4.  Test building the kernel: `nix-build -A linuxKernel.kernels.kernel_2_6_22`. If it compiles, ship it! For extra credit, try booting NixOS with it.
+# Using `pkgs.linuxManualConfig` with a specific source, version, and config file
 
-5.  It may be that the new kernel requires updating the external kernel modules and kernel-dependent packages listed in the `linuxPackagesFor` function in `linux-kernels.nix` (such as the NVIDIA drivers, AUFS, etc.). If the updated packages aren’t backwards compatible with older kernels, you may need to keep the older versions around.
+```nix
+{ pkgs, ... }: {
+  version = "6.1.55";
+  src = pkgs.fetchurl {
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${version}.tar.xz";
+    hash = "sha256:1h0mzx52q9pvdv7rhnvb8g68i7bnlc9rf8gy9qn4alsxq4g28zm8";
+  };
+  configfile = ./path_to_config_file;
+  linux = pkgs.linuxManualConfig {
+    inherit version src configfile;
+    allowImportFromDerivation = true;
+  };
+}
+```
+
+If necessary, the version string can be slightly modified to explicitly mark it as a custom version. If you do so, ensure the `modDirVersion` attribute matches the source's version, otherwise the build will fail.
+
+```nix
+{ pkgs, ... }: {
+  version = "6.1.55-custom";
+  modDirVersion = "6.1.55";
+  src = pkgs.fetchurl {
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${modDirVersion}.tar.xz";
+    hash = "sha256:1h0mzx52q9pvdv7rhnvb8g68i7bnlc9rf8gy9qn4alsxq4g28zm8";
+  };
+  configfile = ./path_to_config_file;
+  linux = pkgs.linuxManualConfig {
+    inherit version modDirVersion src configfile;
+    allowImportFromDerivation = true;
+  };
+}
+```
+
+:::
+
+Additional attributes can be used with `linuxManualConfig` for further customisation. You're encouraged to read [the `pkgs.linuxManualConfig` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/manual-config.nix) to understand how to use them.
+
+To edit the `.config` file for Linux X.Y from within Nix, proceed as follows:
+
+```ShellSession
+$ nix-shell '<nixpkgs>' -A linuxKernel.kernels.linux_X_Y.configEnv
+$ unpackPhase
+$ cd linux-*
+$ make nconfig
+```
+
+## Developing kernel modules {#sec-linux-kernel-developing-modules}
+
+When developing kernel modules it's often convenient to run the edit-compile-run loop as quickly as possible.
+See the snippet below as an example.
+
+:::{.example #ex-edit-compile-run-kernel-modules}
+
+# Edit-compile-run loop when developing `mellanox` drivers
+
+```ShellSession
+$ nix-build '<nixpkgs>' -A linuxPackages.kernel.dev
+$ nix-shell '<nixpkgs>' -A linuxPackages.kernel
+$ unpackPhase
+$ cd linux-*
+$ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
+# insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
+```
+
+:::

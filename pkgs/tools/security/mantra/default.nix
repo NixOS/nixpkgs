@@ -27,5 +27,6 @@ buildGoModule rec {
     changelog = "https://github.com/MrEmpy/Mantra/releases/tag/v.${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mantra";
   };
 }

@@ -39,5 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dani-garcia/vaultwarden";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ msteen ivan ];
+    mainProgram = "vaultwarden";
   };
 }
