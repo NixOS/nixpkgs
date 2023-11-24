@@ -1,5 +1,4 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -8,7 +7,6 @@
 let
   release_version = "6.0.1";
   version = release_version; # differentiating these is important for rc's
-  targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
     url = "https://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
@@ -17,20 +15,7 @@ let
 
   clang-tools-extra_src = fetch "clang-tools-extra" "1w8ml7fyn4vyxmy59n2qm4r1k1kgwgwkaldp6m45fdv4g0kkfbhd";
 
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  inherit (import ../common/common-let.nix { inherit lib release_version; }) llvm_meta;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });

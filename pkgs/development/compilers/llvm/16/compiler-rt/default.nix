@@ -10,7 +10,7 @@ let
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
-  inherit (stdenv.hostPlatform) isMusl isGnu;
+  inherit (stdenv.hostPlatform) isMusl;
 
   baseName = "compiler-rt";
 

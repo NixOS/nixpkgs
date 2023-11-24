@@ -19,5 +19,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Misaka13514 ];
     platforms = with platforms; unix ++ windows;
+    mainProgram = "fscan";
   };
 }

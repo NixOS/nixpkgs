@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "heatshrink";
   };
 }

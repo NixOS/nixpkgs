@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
     "-DUSE_GITHASH=OFF"
   ];
 
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   meta = with lib; {
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";

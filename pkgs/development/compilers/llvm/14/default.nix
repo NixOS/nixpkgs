@@ -1,5 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake
-, gccForLibs, preLibcCrossHeaders
+, preLibcCrossHeaders
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -16,40 +16,48 @@
     then null
     else pkgs.bintools
 , darwin
+# LLVM release information; specify one of these but not both:
+, gitRelease ? null
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   rev = /* commit SHA */;
+  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+, officialRelease ? { version = "14.0.6"; sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE="; }
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   candidate = /* optional; if specified, should be: "rcN" */
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+# By default, we'll try to fetch a release from `github:llvm/llvm-project`
+# corresponding to the `gitRelease` or `officialRelease` specified.
+#
+# You can provide your own LLVM source by specifying this arg but then it's up
+# to you to make sure that the LLVM repo given matches the release configuration
+# specified.
+, monorepoSrc ? null
 }:
 
+assert let
+  int = a: if a then 1 else 0;
+  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
+in
+  lib.assertMsg
+    (xor
+      (gitRelease != null)
+      (officialRelease != null))
+    ("must specify `gitRelease` or `officialRelease`" +
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
-  release_version = "14.0.6";
-  candidate = ""; # empty or "rcN"
-  dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = ""; # When using a Git commit
-  rev-version = ""; # When using a Git commit
-  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
-  targetConfig = stdenv.targetPlatform.config;
-
-  monorepoSrc = fetchFromGitHub {
-    owner = "llvm";
-    repo = "llvm-project";
-    rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "sha256-vffu4HilvYwtzwgq+NlS26m65DGbp6OSSne2aje1yJE=";
-  };
-
-  llvm_meta = {
-    license     = lib.licenses.ncsa;
-    maintainers = lib.teams.llvm.members;
-
-    # See llvm/cmake/config-ix.cmake.
-    platforms   =
-      lib.platforms.aarch64 ++
-      lib.platforms.arm ++
-      lib.platforms.m68k ++
-      lib.platforms.mips ++
-      lib.platforms.power ++
-      lib.platforms.riscv ++
-      lib.platforms.s390x ++
-      lib.platforms.wasi ++
-      lib.platforms.x86;
-  };
+  monorepoSrc' = monorepoSrc;
+in let
+  # Import releaseInfo separately to avoid infinite recursion
+  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+  inherit (releaseInfo) release_version version;
+  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
 
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 release_version version monorepoSrc buildLlvmTools; });

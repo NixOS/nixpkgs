@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; unix;
+    mainProgram = "qrcode";
   };
 }
