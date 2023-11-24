@@ -14,14 +14,14 @@
 , wayland-protocols
 , wlroots_0_16
 , xwayland
-, zig_0_10
+, zig_0_11
 , withManpages ? true
 , xwaylandSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.2.4";
+  version = "0.2.5";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -30,14 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-cIcO6owM6eYn+obYVaBOVQpnBx4++KOqQk5Hzo3GcNs=";
+    hash = "sha256-Xd9hg7UGTBlEyw8BDpTQYq/IRC7vUXhMx9j7YcCaQ20=";
   };
 
   nativeBuildInputs = [
     pkg-config
     wayland
     xwayland
-    zig_0_10.hook
+    zig_0_11.hook
   ]
   ++ lib.optional withManpages scdoc;
 

@@ -15489,6 +15489,12 @@
     githubId = 69053978;
     name = "rogarb";
   };
+  rollf = {
+    email = "rolf.schroeder@limbus-medtec.com";
+    github = "rollf";
+    githubId = 58295931;
+    name = "Rolf Schröder";
+  };
   roman = {
     email = "open-source@roman-gonzalez.info";
     github = "roman";

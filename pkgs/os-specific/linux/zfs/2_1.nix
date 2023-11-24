@@ -3,8 +3,9 @@
 , stdenv
 , linuxKernel
 , removeLinuxDRM ? false
-, fetchpatch
+, lib
 , nixosTests
+, fetchpatch
 , ...
 } @ args:
 
@@ -14,7 +15,7 @@ in
 callPackage ./generic.nix args {
   # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
   # this attribute is the correct one for this package.
-  kernelModuleAttribute = "zfs";
+  kernelModuleAttribute = "zfs_2_1";
   # check the release notes for compatible kernels
   kernelCompatible =
     if stdenv'.isx86_64 || removeLinuxDRM
@@ -25,13 +26,24 @@ callPackage ./generic.nix args {
     then linuxKernel.packages.linux_6_5
     else linuxKernel.packages.linux_6_1;
 
-  # this package should point to the latest release.
-  version = "2.2.0";
+  # This is a fixed version to the 2.1.x series, move only
+  # if the 2.1.x series moves.
+  version = "2.1.13";
 
-  tests = [
-    nixosTests.zfs.installer
-    nixosTests.zfs.stable
+  extraPatches = [
+    (fetchpatch {
+      # https://github.com/openzfs/zfs/pull/15571
+      # Remove when it's backported to 2.1.x.
+      url = "https://github.com/robn/zfs/commit/617c990a4cf1157b0f8332f35672846ad16ca70a.patch";
+      hash = "sha256-j5YSrud7BaWk2npBl31qwFFLYltbut3CUjI1cjZOpag=";
+    })
   ];
 
-  hash = "sha256-s1sdXSrLu6uSOmjprbUa4cFsE2Vj7JX5i75e4vRnlvg=";
+  hash = "sha256-tqUCn/Hf/eEmyWRQthWQdmTJK2sDspnHiiEfn9rz2Kc=";
+
+  tests = [
+    nixosTests.zfs.series_2_1
+  ];
+
+  maintainers = [ lib.maintainers.raitobezarius ];
 }
