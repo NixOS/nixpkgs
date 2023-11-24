@@ -146,14 +146,14 @@
 , docbook_xml_dtd_45
 }:
 
-assert withImportd -> withCompression;
+assert withBootloader -> withEfi;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withImportd -> withCompression;
 assert withRepart -> withCryptsetup;
-assert withBootloader -> withEfi;
-# passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
+assert withUkify -> withEfi;
+# passwdqc is not in nixpkgs yet. Feel free to please submit a PR.
 assert !withPasswordQuality;
 
 let
@@ -582,17 +582,29 @@ stdenv.mkDerivation (finalAttrs: {
       # must be exhaustive. If another (unhandled) case is found in the source
       # code the build fails with an error message.
       binaryReplacements = [
-        { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
-
+        {
+          search = "/usr/bin/getent";
+          replacement = "${getent}/bin/getent";
+          where = [ "src/nspawn/nspawn-setuid.c" ];
+        }
         {
           search = "/sbin/mkswap";
           replacement = "${lib.getBin util-linux}/sbin/mkswap";
+          where = [ "man/systemd-makefs@.service.xml" ];
+        }
+        {
+          search = "/sbin/swapon";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
           where = [
-            "man/systemd-makefs@.service.xml"
+            "src/core/swap.c"
+            "src/basic/unit-def.h"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        {
+          search = "/sbin/swapoff";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
+          where = [ "src/core/swap.c" ];
+        }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -609,14 +621,15 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [
+            "test/test-execute/exec-noexecpaths-simple.service"
+            "src/journal/cat.c"
+          ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
-          where = [
-            "man/systemd-fsck@.service.xml"
-          ];
+          where = [ "man/systemd-fsck@.service.xml" ];
         }
       ] ++ lib.optionals withImportd [
         {
