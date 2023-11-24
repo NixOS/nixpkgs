@@ -67,6 +67,8 @@ buildPythonPackage rec {
     "demetriek"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Python client for LaMetric TIME devices";
     homepage = "https://github.com/frenck/python-demetriek";
