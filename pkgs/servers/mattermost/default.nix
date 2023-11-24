@@ -8,33 +8,39 @@
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "8.1.4";
+  version = "9.2.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-mubKY1nzTmysg015368z/ORqIIOAGPUEthhXNrW1sPk=";
+    hash = "sha256-53L2F20vaLLxtQS3DP/u0ZxLtnXHmjfcOMbXd4i+A6Y=";
   } + "/server";
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-st900RxTLwIXg0lyUZZnYom99fbiafF7ignaqF1YwME=";
+    hash = "sha256-/6SKqSXH8sW70rYt4MmABWNQP/JDAA1lxuvCJhqEoTI=";
   };
 
-  vendorHash = "sha256-UFZlBZJf/AtJiY+EtekSrnwUmrYnH151XnRyRQFTft0=";
+  vendorHash = "sha256-v8aKZyb4emrwuIgSBDgla5wzwyt6PVGakbXjB9JVaCk=";
+
+  patches = [ ./0001-module-replace-public.patch ];
 
   subPackages = [ "cmd/mattermost" ];
+
+  tags = [ "production" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
     "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=n/a"
     "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=v${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
     "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
+    "-X github.com/mattermost/mattermost/server/public/model.MockCWS=false"
+    "-X github.com/mattermost/mattermost/server/public/model.MattermostGiphySdkKey="
   ];
 
   postInstall = ''
@@ -51,6 +57,6 @@ buildGoModule rec {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ ryantm numinit kranzes ];
+    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
   };
 }
