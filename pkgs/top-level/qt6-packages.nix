@@ -9,15 +9,15 @@
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
 , stdenv
-, pkgsBuildHost
+, pkgsHostTarget
 }:
 
 let
   pkgs = __splicedPackages;
   # qt6 set should not be pre-spliced to prevent spliced packages being a part of an unspliced set
   # 'pkgsCross.aarch64-multiplatform.pkgsBuildTarget.targetPackages.qt6Packages.qtbase' should not have a `__spliced` but if qt6 is pre-spliced then it will have one.
-  # pkgsBuildHost == pkgs
-  qt6 = pkgsBuildHost.qt6;
+  # pkgsHostTarget == pkgs
+  qt6 = pkgsHostTarget.qt6;
 in
 
 makeScopeWithSplicing' {
