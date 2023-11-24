@@ -10,6 +10,7 @@
 , qtbase
 , qtsvg
 , qttools
+, wrapGAppsHook
 , wrapQtAppsHook
 
 , guiSupport ? true
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -74,11 +76,17 @@ stdenv.mkDerivation rec {
     "--prefix PATH : ${lib.makeBinPath [ python3 ]}"
   ];
 
+  dontWrapGApps = true;
+
   postInstall = lib.optionalString stdenv.isDarwin ''
     APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
     mkdir -p $out/{Applications,bin}
     cp -R $APP_NAME.app $out/Applications
     makeWrapper $out/{Applications/$APP_NAME.app/Contents/MacOS,bin}/$APP_NAME
+  '';
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {
