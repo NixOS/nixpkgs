@@ -48,6 +48,7 @@ while (( "$n" < "$nParams" )); do
         -nostdlib) cxxLibrary=0 ;;
         -x*-header) dontLink=1 ;; # both `-x c-header` and `-xc-header` are accepted by clang
         -xc++*) isCxx=1 ;;        # both `-xc++` and `-x c++` are accepted by clang
+        -lc++*) isCxx=1 ;;
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
