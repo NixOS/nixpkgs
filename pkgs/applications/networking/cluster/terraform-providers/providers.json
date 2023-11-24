@@ -103,11 +103,10 @@
     "hash": "sha256-EGpHajrTTOx7LrFHzsrrkGMqsuUEJLJAN6AJ48QdJis=",
     "homepage": "https://registry.terraform.io/providers/vmware/avi",
     "owner": "vmware",
-    "proxyVendor": true,
     "repo": "terraform-provider-avi",
     "rev": "v22.1.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-1+VDh9hR/2Knl5oV9ZQiPCt+F7VmaTU4MI1+o8Msu8M="
+    "vendorHash": "sha256-r42KHzvRBXuWgLgtg+WUVt0ThjSMXtUKjEE9y/s/1uQ="
   },
   "aviatrix": {
     "hash": "sha256-PRYtkq4CLEbUJ7YOSlvDyz+z4icLi0DBkDCTs/tNoIQ=",
@@ -1227,11 +1226,10 @@
     "hash": "sha256-9SOHw46KChe7bGInsIIyy0pyNG3K7CXNEomHkmpt8d4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vault",
     "owner": "hashicorp",
-    "proxyVendor": true,
     "repo": "terraform-provider-vault",
     "rev": "v3.22.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-HvjbXSAkbTmADyWQaw0lZV3nZUEIYiAB3VahYvIQeb4="
+    "vendorHash": "sha256-5rRWlInDRj7hw4GZqTxfH7Y8tyTvzJgBWA1I5j0EyaI="
   },
   "vcd": {
     "hash": "sha256-ltdkB9PqmuCs5daRjcThVhy1wIoDW21yBiwtRo/pMss=",
