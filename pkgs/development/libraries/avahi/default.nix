@@ -51,6 +51,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lathiat/avahi/commit/a2696da2f2c50ac43b6c4903f72290d5c3fa9f6f.patch";
       sha256 = "sha256-BEYFGCnQngp+OpiKIY/oaKygX7isAnxJpUPCUvg+efc=";
     })
+    # CVE-2023-38473
+    # https://github.com/lathiat/avahi/pull/486
+    (fetchpatch {
+      name = "CVE-2023-38473.patch";
+      url = "https://github.com/lathiat/avahi/commit/b448c9f771bada14ae8de175695a9729f8646797.patch";
+      sha256 = "sha256-/ZVhsBkf70vjDWWG5KXxvGXIpLOZUXdRkn3413iSlnI=";
+    })
   ];
 
   depsBuildBuild = [
