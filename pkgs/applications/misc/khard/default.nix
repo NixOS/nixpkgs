@@ -1,12 +1,14 @@
-{ lib, python3, fetchPypi, khard, testers }:
+{ lib, python3, fetchPypi, khard, testers, installShellFiles }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.18.0";
+  version = "0.19.0";
   pname = "khard";
+  format = "pyproject";
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05860fdayqap128l7i6bcmi9kdyi2gx02g2pmh88d56xgysd927y";
+    hash = "sha256-5ki+adfz7m0+FbxC9+IXHLn8oeLKLkASuU15lyDATKQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -15,6 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     sphinxHook
     sphinx-autoapi
     sphinx-autodoc-typehints
+    installShellFiles
   ];
 
   sphinxBuilders = [ "man" ];
@@ -28,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    install -D misc/zsh/_khard $out/share/zsh/site-functions/_khard
+    installShellCompletion --zsh misc/zsh/_khard
   '';
 
   preCheck = ''
