@@ -4,14 +4,14 @@
 }:
 
 buildDunePackage rec {
-  version = "2.4.1";
+  version = "2.5";
   pname = "inotify";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "ocaml-inotify";
     rev = "v${version}";
-    hash = "sha256-2ATFF3HeATjhWgW4dG4jheQ9m1oE8xTQ7mpMT/1Jdp8=";
+    hash = "sha256-3Ju6l6aF5eJgIZJKO0lQGXjjGDzCdX2fuwyNSAjIyAs=";
   };
 
   buildInputs = [ lwt ];
