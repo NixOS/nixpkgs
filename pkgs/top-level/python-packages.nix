@@ -9487,6 +9487,8 @@ self: super: with self; {
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
+  python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
+
   python-ecobee-api = callPackage ../development/python-modules/python-ecobee-api { };
 
   python-flirt = callPackage ../development/python-modules/python-flirt { };
