@@ -2533,8 +2533,6 @@ with pkgs;
     buildGoModule = buildGo120Module;
   };
 
-  lefthook = callPackage ../applications/version-management/lefthook { };
-
   legit = callPackage ../applications/version-management/legit { };
 
   legit-web = callPackage ../applications/version-management/legit-web { };
