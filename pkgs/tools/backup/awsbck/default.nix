@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/beeb/awsbck";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ beeb ];
+    mainProgram = "awsbck";
   };
 }

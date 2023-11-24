@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     description = "Persistence of Vision Raytracer";
     license = licenses.free;
     platforms = platforms.linux;
+    mainProgram = "povray";
   };
 }

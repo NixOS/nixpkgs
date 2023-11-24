@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.xzfc ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "waifu2x-converter-cpp";
   };
 }
