@@ -299,6 +299,7 @@ in {
   firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix { nftables = false; };
   firewall-nftables = handleTest ./firewall.nix { nftables = true; };
+  firewalld = handleTest ./firewalld.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   floorp = handleTest ./firefox.nix { firefoxPackage = pkgs.floorp; };

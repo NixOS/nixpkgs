@@ -31553,7 +31553,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  firewalld = callPackage ../applications/networking/firewalld { };
+  firewalld = libsForQt5.callPackage ../applications/networking/firewalld { };
 
   firewalld-gui = firewalld.override { withGui = true; };
 
