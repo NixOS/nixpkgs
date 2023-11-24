@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "unstable-2023-05-05";
+  version = "unstable-2023-09-12";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "6b0b6a1c2527e8b1ef370a308b6ef8903004ac47";
-    hash = "sha256-UUxpb5PMkFfP2JGoPMEUvKbxv+wCkTWy4uZs1MyyCes=";
+    rev = "31c32fb2959103a796e07bbe47e0a5e287c343a8";
+    hash = "sha256-wE5kHco3+FQjc+MwTPwLVqYz4hM7uno2CgXDXUFMCpc=";
   };
 
-  cargoHash = "sha256-6/VSfCNBstr+fQPdpMl5b2MwNxRjSJvTDuTGKySPGsk=";
+  cargoHash = "sha256-WqZnDWMrqWy1rzR6n+acFW6VHWbDnQmoxtPDA5B37JU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/serokell/deploy-rs";
     license = licenses.mpl20;
     maintainers = with maintainers; [ teutat3s ];
+    mainProgram = "deploy";
   };
 }

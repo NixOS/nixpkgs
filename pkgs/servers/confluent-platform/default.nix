@@ -1,19 +1,34 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub
-, jre, makeWrapper, bash, gnused }:
+{
+  bash
+, fetchurl
+, gnused
+, jre
+, lib
+, makeBinaryWrapper
+, stdenv
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "confluent-platform";
-  version = "7.3.0";
+  version = "7.5.0";
 
   src = fetchurl {
-    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}.tar.gz";
-    sha256 = "sha256-j120gSIky0CHNgzaVnodMAniecRX0RpU6+il86nxdrQ=";
+    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor finalAttrs.version}/confluent-${finalAttrs.version}.tar.gz";
+    hash = "sha256-HaK3Do6oRGm6ovvNNGvZE34rYNRQnrmt1GKglTSZ9ls=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre bash ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [
+    bash
+    jre
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R bin etc share src $out
     rm -rf $out/bin/windows
@@ -33,13 +48,15 @@ stdenv.mkDerivation rec {
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
         --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
     done
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://www.confluent.io/";
+  meta = {
     description = "Confluent event streaming platform based on Apache Kafka";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zoedsoupe ];
-    platforms = platforms.unix;
+    homepage = "https://www.confluent.io/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ zoedsoupe autophagy ];
+    platforms = lib.platforms.unix;
   };
-}
+})

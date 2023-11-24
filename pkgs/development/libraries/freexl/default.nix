@@ -1,17 +1,29 @@
-{ lib, stdenv, fetchurl, validatePkgConfig, libiconv }:
+{ lib
+, stdenv
+, fetchurl
+, validatePkgConfig
+, expat
+, minizip
+, zlib
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   pname = "freexl";
-  version = "1.0.6";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://www.gaia-gis.it/gaia-sins/freexl-${version}.tar.gz";
-    hash = "sha256-Pei1ej0TDLKIHqUtOqnOH+7bG1e32qTrN/dRQE+Q/CI=";
+    hash = "sha256-F2cF8d5Yq3we679cbeRqt2/Ni4VlCNvSj1ZI98bhp/A=";
   };
 
   nativeBuildInputs = [ validatePkgConfig ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [
+    expat
+    minizip
+    zlib
+  ] ++ lib.optional stdenv.isDarwin libiconv;
 
   enableParallelBuilding = true;
 

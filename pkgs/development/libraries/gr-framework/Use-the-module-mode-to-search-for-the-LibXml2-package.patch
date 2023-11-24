@@ -1,0 +1,25 @@
+From 5d2377ad5e99742662e056bb782d5c21afb01dfb Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloom@riseup.net>
+Date: Tue, 19 Sep 2023 13:27:39 +0300
+Subject: [PATCH] Use the module mode to search for the `LibXml2` package.
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03490335..fb69e8fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -96,7 +96,7 @@ find_package(Expat)
+ # CMake ships with a `FindLibXml2.cmake` module which does not configure needed libxml2 dependencies.
+ # Thus, use the `libxml2-config.cmake` config file shipped with libxml which configures dependencies correctly by
+ # skipping module search mode.
+-find_package(LibXml2 NO_MODULE)
++find_package(LibXml2 MODULE)
+ if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
+   find_package(
+     Qt6
+--
+2.42.0
+

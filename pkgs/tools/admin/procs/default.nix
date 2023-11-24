@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.14.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
     rev = "v${version}";
-    hash = "sha256-DoH9XxPRKGd+tex8MdbtkhM+V8C1wDMv/GZcB4aMCPc=";
+    hash = "sha256-uVbYYJgxYATEmNrMuxA7RYDJWip/paWDCf5An1VGVDo=";
   };
 
-  cargoHash = "sha256-B+LpUErsvtLYn+Xvq4KNBpLR9WYe38yMWHUNsd9jIs8=";
+  cargoHash = "sha256-eaerc6cUF35XYFTNn0upydkOIC9M1BRweknrixIEvuk=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 sciencentistguy ];
+    maintainers = with maintainers; [ Br1ght0ne sciencentistguy ];
+    mainProgram = "procs";
   };
 }

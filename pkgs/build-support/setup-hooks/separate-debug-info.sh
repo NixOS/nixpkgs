@@ -21,6 +21,9 @@ _separateDebugInfo() {
     while IFS= read -r -d $'\0' i; do
         if ! isELF "$i"; then continue; fi
 
+        [ -z "${READELF:-}" ] && echo "_separateDebugInfo: '\$READELF' variable is empty, skipping." 1>&2 && break
+        [ -z "${OBJCOPY:-}" ] && echo "_separateDebugInfo: '\$OBJCOPY' variable is empty, skipping." 1>&2 && break
+
         # Extract the Build ID. FIXME: there's probably a cleaner way.
         local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
         if [ "${#id}" != 40 ]; then

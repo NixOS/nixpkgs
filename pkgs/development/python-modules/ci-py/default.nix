@@ -1,25 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, pytest, pytest-runner, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  version = "1.0.0";
   pname = "ci-py";
+  version = "1.0.0";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12ax07n81vxbyayhwzi1q6x7gfmwmvrvwm1n4ii6qa6fqlp9pzj7";
+    hash = "sha256-R/6bLsXOKGxiJDZUvvOuvLp3usEhfg698qvvgOwBXYk=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];  # pytest-runner included in setup-requires
-  nativeCheckInputs = [ pytest pytestCheckHook ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner', " ""
+  '';
 
-  pythonImportsCheck = [ "ci" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ci"
+  ];
 
   meta = with lib; {
     description = "Library for working with Continuous Integration services";
     homepage = "https://github.com/grantmcconnaughey/ci.py";
+    changelog = "https://github.com/grantmcconnaughey/ci.py/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

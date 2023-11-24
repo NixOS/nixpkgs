@@ -3,26 +3,28 @@
 , fetchFromGitHub
 , python
 , cmake
+, ninja
 }:
 
 let
-  pyEnv = python.withPackages (ps: [ ps.setuptools ]);
+  pyEnv = python.withPackages (ps: [ ps.setuptools ps.tomli ps.pip ps.setuptools ]);
 in
 stdenv.mkDerivation rec {
   pname = "lief";
-  version = "0.12.3";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     rev = version;
-    sha256 = "sha256-wZgv4AFc7DrMCyxMLKQxO1mUTDAU4klK8aZAySqGJoY=";
+    sha256 = "sha256-lH4SqwPB2Jp/wUI2Cll67PQbHbwMqpNuLy/ei8roiHg=";
   };
 
   outputs = [ "out" "py" ];
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
 
   # Not a propagatedBuildInput because only the $py output needs it; $out is
@@ -31,33 +33,18 @@ stdenv.mkDerivation rec {
     python
   ];
 
-  dontUseCmakeConfigure = true;
+  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
 
-  buildPhase = ''
-    runHook preBuild
-
-    substituteInPlace setup.py \
-      --replace 'cmake_args = []' "cmake_args = [ \"-DCMAKE_INSTALL_PREFIX=$prefix\" ]"
-    ${pyEnv.interpreter} setup.py --sdk build --parallel=$NIX_BUILD_CORES
-
-    runHook postBuild
+  postBuild = ''
+    pushd ../api/python
+    ${pyEnv.interpreter} setup.py build --parallel=$NIX_BUILD_CORES
+    popd
   '';
 
-  # I was unable to find a way to build the library itself and have it install
-  # to $out, while also installing the Python bindings to $py without building
-  # the project twice (using cmake), so this is the best we've got. It uses
-  # something called CPack to create the tarball, but it's not obvious to me
-  # *how* that happens, or how to intercept it to just get the structured
-  # library output.
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out $py/nix-support
-    echo "${python}" >> $py/nix-support/propagated-build-inputs
-    tar xf build/*.tar.gz --directory $out --strip-components 1
+  postInstall = ''
+    pushd ../api/python
     ${pyEnv.interpreter} setup.py install --skip-build --root=/ --prefix=$py
-
-    runHook postInstall
+    popd
   '';
 
   meta = with lib; {
@@ -65,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lief.quarkslab.com/";
     license = [ licenses.asl20 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.lassulus ];
+    maintainers = with maintainers; [ lassulus genericnerdyusername ];
   };
 }

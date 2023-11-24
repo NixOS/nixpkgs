@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , base36
 , chacha20poly1305-reuseable
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.6.0";
+  version = "4.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,11 +25,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fAJB1gk8zTS/mW5KzWr3z26qctZc/EQlk//WM1Xwpl0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nnh8PSEcuPN1qGuInJ7uYe83zdne8axbTrHd4g1xoJs=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
     chacha20poly1305-reuseable
     cryptography
     h11
@@ -72,7 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HomeKit Accessory Protocol implementation";
     homepage = "https://github.com/ikalchev/HAP-python";
-    changelog = "https://github.com/ikalchev/HAP-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ikalchev/HAP-python/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ oro ];
   };

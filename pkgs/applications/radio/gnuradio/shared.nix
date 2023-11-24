@@ -5,7 +5,7 @@
 , removeReferencesTo
 , featuresInfo
 , features
-, versionAttr
+, version
 , sourceSha256
 # If overridden. No need to set default values, as they are given defaults in
 # the main expressions
@@ -13,10 +13,21 @@
 , fetchFromGitHub
 }:
 
-rec {
-  version = builtins.concatStringsSep "." (
-    lib.attrVals [ "major" "minor" "patch" ] versionAttr
+let
+  # Check if a feature is enabled, while defaulting to true if feat is not
+  # specified.
+  hasFeature = feat: (
+    if builtins.hasAttr feat features then
+      features.${feat}
+    else
+      true
   );
+  versionAttr = {
+    major = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
+    minor = builtins.elemAt (lib.splitVersion version) 2;
+    patch = builtins.elemAt (lib.splitVersion version) 3;
+  };
+in {
   src = if overrideSrc != {} then
     overrideSrc
   else
@@ -27,14 +38,6 @@ rec {
       sha256 = sourceSha256;
     }
   ;
-  # Check if a feature is enabled, while defaulting to true if feat is not
-  # specified.
-  hasFeature = feat: (
-    if builtins.hasAttr feat features then
-      features.${feat}
-    else
-      true
-  );
   nativeBuildInputs = lib.flatten (lib.mapAttrsToList (
     feat: info: (
       lib.optionals (hasFeature feat) (
@@ -109,9 +112,14 @@ rec {
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
   dontWrapQtApps = true;
-  # Tests should succeed, but it's hard to get LD_LIBRARY_PATH right in order
-  # for it to happen.
-  doCheck = false;
+  # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
+  # find libgnuradio-runtim.3.*.dylib .
+  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
+  '';
 
   meta = with lib; {
     description = "Software Defined Radio (SDR) software";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja
+{ lib, stdenv, fetchFromGitLab, fetchpatch, pkg-config, meson, ninja, cmake
 , git, criterion, gtk3, libconfig, gnuplot, opencv, json-glib
 , fftwFloat, cfitsio, gsl, exiv2, librtprocess, wcslib, ffmpeg
 , libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook
@@ -6,17 +6,25 @@
 
 stdenv.mkDerivation rec {
   pname = "siril";
-  version = "1.0.6";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "free-astro";
-    repo = pname;
+    repo = "siril";
     rev = version;
-    sha256 = "sha256-KFCA3fUMVFHmh1BdKed5/dkq0EeYcmoWec97WX9ZHUc=";
+    hash = "sha256-lCoFQ7z6cZbyNPEm5s40DNdvTwFonHK3KCd8RniqQWs=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "siril-1.2-exiv2-0.28.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-astronomy/siril/files/siril-1.2-exiv2-0.28.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
+      hash = "sha256-R1yslW6hzvJHKo0/IqBxkCuqcX6VrdRSz68gpAExxVE=";
+    })
+  ];
+
   nativeBuildInputs = [
-    meson ninja pkg-config git criterion wrapGAppsHook
+    meson ninja cmake pkg-config git criterion wrapGAppsHook
   ];
 
   buildInputs = [
@@ -26,6 +34,7 @@ stdenv.mkDerivation rec {
 
   # Necessary because project uses default build dir for flatpaks/snaps
   dontUseMesonConfigure = true;
+  dontUseCmakeConfigure = true;
 
   configureScript = ''
     ${meson}/bin/meson --buildtype release nixbld .

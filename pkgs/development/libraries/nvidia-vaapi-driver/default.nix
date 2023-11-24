@@ -14,14 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-vaapi-driver";
-  version = "0.0.9";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "elFarto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mQtprgm6QonYiMUPPIcCbWxPQ/b2XuQiOkROZNPYaQk=";
+    sha256 = "sha256-mVVRpCyT374P1Vql0yPY0e5tNktHNJ8XHoixvxp3b20=";
   };
+
+  patches = [
+    ./0001-hardcode-install_dir.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -37,14 +41,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     nv-codec-headers-11
     libva
-  ];
-
-  # Note: Attempt to remove on next release after 0.0.9
-  # nixpkgs reference: https://github.com/NixOS/nixpkgs/pull/221978#issuecomment-1483892437
-  # upstream: https://github.com/elFarto/nvidia-vaapi-driver/issues/188
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=format="
-    "-Wno-error=int-conversion"
   ];
 
   postFixup = ''

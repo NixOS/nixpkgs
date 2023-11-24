@@ -7,7 +7,7 @@
 
 let
   name = "liblc3";
-  version = "1.0.3";
+  version = "1.0.4";
 in
 stdenv.mkDerivation {
   pname = name;
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
-    sha256 = "sha256-PEnK12FWAtxOMR3WyuxOQTgF+lD9S5YX+oKuWRbFfXM=";
+    sha256 = "sha256-nQJgF/cWoCx5TkX4xOaLB9SzvhVXPY29bLh7UwPMWEE=";
   };
 
   outputs = [ "out" "dev" ];

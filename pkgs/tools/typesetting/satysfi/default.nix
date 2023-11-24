@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, ruby, ocamlPackages
+{ lib, fetchFromGitHub, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
-  camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
+  camlpdf = ocamlPackages.camlpdf.overrideAttrs {
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
       rev = "v2.3.1+satysfi";
       sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
-  });
+  };
   otfm = ocamlPackages.otfm.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";
@@ -65,10 +65,12 @@ in
       cp -r lib-satysfi/dist/ $out/share/satysfi/
       cp -r \
         ${ipaexfont}/share/fonts/opentype/* \
-        ${junicode}/share/fonts/junicode-ttf/* \
         ${lmodern}/share/fonts/opentype/public/lm/* \
         ${lmmath}/share/fonts/opentype/latinmodern-math.otf \
-        $out/share/satysfi/dist/fonts
+        ${junicode}/share/fonts/truetype/Junicode-{Bold,BoldItalic,Italic}.ttf \
+        $out/share/satysfi/dist/fonts/
+      cp ${junicode}/share/fonts/truetype/Junicode-Regular.ttf \
+        $out/share/satysfi/dist/fonts/Junicode.ttf
     '';
 
     meta = with lib; {
@@ -78,5 +80,6 @@ in
       license = licenses.lgpl3Only;
       maintainers = [ maintainers.mt-caret maintainers.marsam ];
       platforms = platforms.all;
+      mainProgram = "satysfi";
     };
   }

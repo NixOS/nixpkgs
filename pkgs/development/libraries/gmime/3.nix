@@ -2,12 +2,12 @@
 , vala }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.12";
+  version = "3.2.14";
   pname = "gmime";
 
   src = fetchurl { # https://github.com/jstedfast/gmime/releases
     url = "https://github.com/jstedfast/gmime/releases/download/${version}/gmime-${version}.tar.xz";
-    sha256 = "sha256-OPm3aBgjQsSExBIobbjVgRaX/4FiQ3wFea3w0G4icFs=";
+    sha256 = "sha256-pes91nX3LlRci8HNEhB+Sq0ursGQXre0ATzbH75eIxc=";
   };
 
   outputs = [ "out" "dev" ];

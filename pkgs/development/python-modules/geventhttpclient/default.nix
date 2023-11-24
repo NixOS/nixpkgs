@@ -8,19 +8,20 @@
 , pytestCheckHook
 , pythonOlder
 , six
+, stdenv
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.0.8";
+  version = "2.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X3gsQZZD90vk0JGMDStjlW723ceiEn8Hy7gDOnWrNm8=";
+    hash = "sha256-t8l7JlEZV6NqiU7FRlHAiJCmnhGLaXVfjnS/w3xjORs=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
     urllib3
   ];
+
+  # lots of: [Errno 48] Address already in use: ('127.0.0.1', 54323)
+  doCheck = !stdenv.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 
@@ -56,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/geventhttpclient/geventhttpclient";
     description = "High performance, concurrent HTTP client library using gevent";
+    changelog = "https://github.com/geventhttpclient/geventhttpclient/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };

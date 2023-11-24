@@ -5,11 +5,9 @@
 , pytestCheckHook
 , beartype
 , invoke
-, mypy
 , numpy
 , pandas
 , feedparser
-, typeguard
 }:
 
 buildPythonPackage rec {
@@ -34,10 +32,8 @@ buildPythonPackage rec {
     beartype
     feedparser
     invoke
-    mypy
     pandas
     pytestCheckHook
-    typeguard
   ];
 
   disabledTests = [
@@ -51,6 +47,8 @@ buildPythonPackage rec {
     # can't find mypy stubs for pandas:
     "tests/test_mypy.py"
     "tests/pandas_/test_mypy_dataframe.py"
+    # typeguard release broke nptyping compatibility:
+    "tests/test_typeguard.py"
     # tries to build wheel of package, broken/unnecessary under Nix:
     "tests/test_wheel.py"
   ];

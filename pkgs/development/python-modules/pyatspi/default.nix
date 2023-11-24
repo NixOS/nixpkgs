@@ -18,7 +18,7 @@ buildPythonPackage rec {
   ];
 
   configureFlags = [
-    "PYTHON=${python.pythonForBuild.interpreter}"
+    "PYTHON=${python.pythonOnBuildForHost.interpreter}"
   ];
 
   postPatch = ''

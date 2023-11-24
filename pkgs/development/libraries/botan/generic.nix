@@ -4,16 +4,19 @@
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , extraPatches ? [ ]
+, badPlatforms ? [ ]
 , postPatch ? null
 , knownVulnerabilities ? [ ]
-, CoreServices
-, Security
+, CoreServices ? null
+, Security ? null
 , ...
 }:
 
 stdenv.mkDerivation rec {
   pname = "botan";
   version = "${baseVersion}.${revision}";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     name = "Botan-${version}.${sourceExtension}";
@@ -26,11 +29,14 @@ stdenv.mkDerivation rec {
   patches = extraPatches;
   inherit postPatch;
 
-  buildInputs = [ python3 bzip2 zlib gmp boost ]
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"}
+    runHook preConfigure
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
@@ -50,9 +56,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic algorithms library";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin thillux ];
     platforms = platforms.unix;
     license = licenses.bsd2;
+    inherit badPlatforms;
     inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";

@@ -4,14 +4,14 @@
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "25.0";
+  version = "25.1";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
     rev = "V${version}";
     fetchSubmodules = true;
-    hash = "sha256-VHefXHUj08k53+8mAAhbR31F5uDmIxBFR1hfGfrrugM=";
+    hash = "sha256-YvYEXHC8kxviZLQwINs+pS61wITSfqfrrPmlR+zNRoE=";
   };
 
   cmakeFlags = let

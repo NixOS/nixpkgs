@@ -54,13 +54,7 @@ stdenv'.mkDerivation {
     inherit rev sha256;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "musl.patch";
-      url = "https://github.com/openzfs/zfs/commit/1f19826c9ac85835cbde61a7439d9d1fefe43a4a.patch";
-      sha256 = "XEaK227ubfOwlB2s851UvZ6xp/QOtYUWYsKTkEHzmo0=";
-    })
-  ] ++ extraPatches;
+  patches = extraPatches;
 
   postPatch = optionalString buildKernel ''
     patchShebangs scripts
@@ -82,31 +76,14 @@ stdenv'.mkDerivation {
     substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
     substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                   --replace "/etc/default"            "$out/etc/default"
-    substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
-
-    substituteInPlace ./contrib/initramfs/hooks/Makefile.am \
-      --replace "/usr/share/initramfs-tools/hooks" "$out/usr/share/initramfs-tools/hooks"
     substituteInPlace ./contrib/initramfs/Makefile.am \
       --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
-    substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
-      --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
-    substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
-      --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
-    substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
-      --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
-    substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
-      --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
-    substituteInPlace ./etc/systemd/system/Makefile.am \
-      --replace '$(DESTDIR)$(systemdunitdir)' "$out"'$(DESTDIR)$(systemdunitdir)'
-
-    substituteInPlace ./contrib/initramfs/conf.d/Makefile.am \
-      --replace "/usr/share/initramfs-tools/conf.d" "$out/usr/share/initramfs-tools/conf.d"
-    substituteInPlace ./contrib/initramfs/conf-hooks.d/Makefile.am \
-      --replace "/usr/share/initramfs-tools/conf-hooks.d" "$out/usr/share/initramfs-tools/conf-hooks.d"
-
-    substituteInPlace ./cmd/vdev_id/vdev_id \
+    substituteInPlace ./udev/vdev_id \
       --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
-      "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+       "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+    substituteInPlace ./config/zfs-build.m4 \
+      --replace "bashcompletiondir=/etc/bash_completion.d" \
+        "bashcompletiondir=$out/share/bash-completion/completions"
   '';
 
   nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
@@ -153,6 +130,14 @@ stdenv'.mkDerivation {
     "INSTALL_MOD_PATH=\${out}"
   ];
 
+  preConfigure = ''
+    # The kernel module builds some tests during the configurePhase, this envvar controls their parallelism
+    export TEST_JOBS=$NIX_BUILD_CORES
+    if [ -z "$enableParallelBuilding" ]; then
+      export TEST_JOBS=1
+    fi
+  '';
+
   # Enabling BTF causes zfs to be build with debug symbols.
   # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
   # Hence we strip modules prior to compression.
@@ -168,10 +153,12 @@ stdenv'.mkDerivation {
     # Remove provided services as they are buggy
     rm $out/etc/systemd/system/zfs-import-*.service
 
-    sed -i '/zfs-import-scan.service/d' $out/etc/systemd/system/*
-
     for i in $out/etc/systemd/system/*; do
-    substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
+       if [ -L $i ]; then
+         continue
+       fi
+       sed -i '/zfs-import-scan.service/d' $i
+       substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
     done
 
     # Remove tests because they add a runtime dependency on gcc
@@ -215,15 +202,15 @@ stdenv'.mkDerivation {
     changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
     license = lib.licenses.cddl;
 
-    # The case-block for TARGET_CPU has branches for only five CPU families,
+    # The case-block for TARGET_CPU has branches for only some CPU families,
     # which prevents ZFS from building on any other platform.  Since the NixOS
     # `boot.zfs.enabled` property is `readOnly`, excluding platforms where ZFS
     # does not build is the only way to produce a NixOS installer on such
     # platforms.
-    # https://github.com/openzfs/zfs/blob/6a6bd493988c75331deab06e5352a9bed035a87d/config/always-arch.m4#L16
+    # https://github.com/openzfs/zfs/blob/6723d1110f6daf93be93db74d5ea9f6b64c9bce5/config/always-arch.m4#L12
     platforms =
       with lib.systems.inspect.patterns;
-      map (p: p // isLinux) [ isx86_32 isx86_64 isPower isAarch64 isSparc ];
+      map (p: p // isLinux) ([ isx86_32 isx86_64 isPower isAarch64 isSparc ] ++ isArmv7);
 
     maintainers = with lib.maintainers; [ jcumming jonringer globin raitobezarius ];
     mainProgram = "zfs";
@@ -232,3 +219,4 @@ stdenv'.mkDerivation {
     broken = buildKernel && (kernelCompatible != null) && !kernelCompatible;
   };
 }
+

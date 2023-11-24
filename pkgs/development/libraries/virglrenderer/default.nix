@@ -1,23 +1,21 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3
 , libGLU, libepoxy, libX11, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "virglrenderer";
-  version = "0.10.4";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/virglrenderer-${version}/virglrenderer-virglrenderer-${version}.tar.bz2";
-    sha256 = "sha256-qqvnko2sN4bdm9+F0PVjDW5FsiL5k3UAfjPSTqG+73c=";
+    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/${version}/virglrenderer-${version}.tar.bz2";
+    hash = "sha256-KMGPP2MeuATHFXKr5oW9HuFOMmmYpmkVLvMvQi0cEdg=";
   };
 
   separateDebugInfo = true;
 
   buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
 
-  nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];
-
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ meson ninja pkg-config python3 ];
 
   meta = with lib; {
     description = "A virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";

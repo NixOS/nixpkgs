@@ -2,11 +2,9 @@
 , stdenv
 , autoconf
 , automake
-, bash
 , curl
 , fetchFromGitHub
 , fetchMavenArtifact
-, fetchurl
 , fetchpatch
 , git
 , jdk8

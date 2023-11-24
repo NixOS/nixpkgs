@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   ] ++ optionals stdenv.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
-    "OSX_MIN=${stdenv.targetPlatform.darwinMinVersion}"
+    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   postInstall = optionalString tiles

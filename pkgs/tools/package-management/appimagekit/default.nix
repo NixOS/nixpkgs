@@ -17,7 +17,7 @@ let
   };
 
   # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
-  appimagekit_squashfuse = squashfuse.overrideAttrs (attrs: rec {
+  appimagekit_squashfuse = squashfuse.overrideAttrs rec {
     pname = "squashfuse";
     version = "unstable-2016-10-09";
 
@@ -61,7 +61,7 @@ let
       cp -v ./.libs/*.a $out/lib
       cp -v ./*.h $out/include
     '';
-  });
+  };
 
 in stdenv.mkDerivation rec {
   pname = "appimagekit";

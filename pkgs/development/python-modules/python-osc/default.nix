@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "python-osc";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-69a3z4rjhzgPSOnW1zabrRwXahr2YI79eIi1C08OdK0=";
+    hash = "sha256-pc4bpWyNgt9Ryz8pRrXdM6cFInkazEuFZOYtKyCtnKo=";
   };
 
   pythonImportsCheck = [ "pythonosc" ];

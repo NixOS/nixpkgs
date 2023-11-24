@@ -26,23 +26,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal-next";
-  version = "5.beta1";
+  version = "5.beta2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    hash = "sha256-i1kz7k2BBsSmZXUk6U2eT+08T2l950eFd67Cojtd1/k=";
+    hash = "sha256-/BO+TlhLhi7BGsHq8aOpYw8AqNrJT0IJZOc1diq2Rys=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "matrix-sdk-0.6.2" = "sha256-27FYmqkzqh1wI6B2BI8LM4DoMfymyJdOn5OGsJZjBAc=";
-      "ruma-0.8.2" = "sha256-Qsk8KVY5ix7nlDG+1246vQ5HZxgmJmm3KU+RknUFFGg=";
-      "vodozemac-0.3.0" = "sha256-tAimsVD8SZmlVybb7HvRffwlNsfb7gLWGCplmwbLIVE=";
-      "x25519-dalek-1.2.0" = "sha256-AHjhccCqacu0WMTFyxIret7ghJ2V+8wEAwR5L6Hy1KY=";
+      "matrix-sdk-0.6.2" = "sha256-A1oKNbEx2A6WwvYcNSW53Fd6QWwr0QFJtrsJXO2KInE=";
+      "ruma-0.8.2" = "sha256-kCGS7ACFGgmtTUElLJQMYfjwJ3glF7bRPZYJIFcuPtc=";
+      "curve25519-dalek-4.0.0" = "sha256-sxEFR6lsX7t4u/fhWd6wFMYETI2egPUbjMeBWkB289E=";
+      "vodozemac-0.4.0" = "sha256-TCbWJ9bj/FV3ILWUTcksazel8ESTNTiDGL7kGlEGvow=";
     };
   };
 

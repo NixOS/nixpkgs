@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
     platforms = platforms.unix;
     license = with licenses; [ gpl3Plus hpnd bsd2 ];
-    maintainers = [ maintainers.srapenne ];
+    mainProgram = "pngquant";
+    maintainers = [ ];
   };
 }

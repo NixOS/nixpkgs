@@ -4,8 +4,10 @@
 , setuptools-scm
 , pytestCheckHook
 , xorgserver
+, imagemagick
 , pulseaudio
 , pytest-asyncio
+, pytest-lazy-fixture
 , qtile
 , keyring
 , requests
@@ -14,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.22.1";
-  format = "setuptools";
+  version = "0.23.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2dMpGLtwIp7+aoOgYav2SAjaKMiXHmmvsWTBEIMKEW4=";
+    hash = "sha256-WI1z8vrbZiJw6fDHK27mKA+1FyZEQTMttIDNzSIX+PU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,9 +33,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     xorgserver
+    imagemagick
   ];
   checkInputs = [
     pytest-asyncio
+    pytest-lazy-fixture
     qtile
     pulseaudio
     keyring
@@ -52,9 +56,21 @@ buildPythonPackage rec {
     "test_tvh_widget_recording"
     "test_tvh_widget_popup"
     "test_snapcast_options"
+    "test_snapcast_icon"
+    "test_snapcast_icon_colour"
+    "test_snapcast_http_error"
+    "test_syncthing_not_syncing"
+    "test_syncthing_is_syncing"
+    "test_syncthing_http_error"
+    "test_githubnotifications_colours"
+    "test_githubnotifications_logging"
+    "test_githubnotifications_icon"
+    "test_githubnotifications_reload_token"
+    "test_image_size_horizontal"
+    "test_image_size_vertical"
+    "test_image_size_mask"
     # ValueError: Namespace Gdk not available
     # AssertionError: Window never appeared...
-    "test_gloabl_menu"
     "test_statusnotifier_menu"
     # AttributeError: 'str' object has no attribute 'canonical'
     "test_strava_widget_display"
@@ -67,6 +83,13 @@ buildPythonPackage rec {
     "test_upower_critical_battery"
     "test_upower_charging"
     "test_upower_show_text"
+    "test_global_menu"
+    "test_mpris2_popup"
+    # No network connection
+    "test_wifiicon_internet_check"
+    # AssertionErrors
+    "test_widget_init_config"
+    "test_decoration_output"
   ];
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -42,6 +42,7 @@ rec {
     , nodes ? {}
     , testScript
     , enableOCR ? false
+    , globalTimeout ? (60 * 60)
     , name ? "unnamed"
     , skipTypeCheck ? false
       # Skip linting (mainly intended for faster dev cycles)

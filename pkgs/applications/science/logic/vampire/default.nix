@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
     # https://github.com/vprover/vampire/pull/54
     (fetchpatch {
       name = "fix-apple-cygwin-defines.patch";
-      url = "https://github.com/vprover/vampire/pull/54.patch";
+      url = "https://github.com/vprover/vampire/commit/b4bddd3bcac6a7688742da75c369b7b3213f6d1c.patch";
       sha256 = "0i6nrc50wlg1dqxq38lkpx4rmfb3lf7s8f95l4jkvqp0nxa20cza";
     })
     # https://github.com/vprover/vampire/pull/55
     (fetchpatch {
       name = "fix-wait-any.patch";
-      url = "https://github.com/vprover/vampire/pull/55.patch";
+      url = "https://github.com/vprover/vampire/commit/6da10eabb333aec54cdf13833ea33cb851159543.patch";
       sha256 = "1pwfpwpl23bqsgkmmvw6bnniyvp5j9v8l3z9s9pllfabnfcrcz9l";
     })
   ];

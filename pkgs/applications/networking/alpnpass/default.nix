@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-hNZqGTV17rFSKLhZzNqH2E4SSb6Jhk7YQ4TN0HnE+9g=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "Inspect the plaintext payload inside of proxied TLS connections";

@@ -3,6 +3,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, gitUpdater
 , cctools
 , sigtool
 , cereal
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.3";
+  version = "1.2.4";
 
   buildInputs = [
     AppKit
@@ -46,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GPOF2lyo1eDf1GrPjcj0y1OuUHI/c80L9gSQM+4wEp0=";
+    hash = "sha256-BL46BgZHUpk0dpzmeZ/2W0msHxFwieeGDjmVB8Nb1J4=";
   };
 
   patches = [
@@ -108,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
       -configuration Release \
       -project MoltenVKShaderConverter.xcodeproj \
       -scheme MoltenVKShaderConverter \
-      -arch ${stdenv.targetPlatform.darwinArch}
+      -arch ${stdenv.hostPlatform.darwinArch}
     declare -A products=( [MoltenVKShaderConverter]=bin [libMoltenVKShaderConverter.a]=lib )
     for product in "''${!products[@]}"; do
       cp MoltenVKShaderConverter-*/Build/Products/Release/$product "$build/''${products[$product]}/$product"
@@ -126,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       -configuration Release \
       -project MoltenVK.xcodeproj \
       -scheme MoltenVK-macOS \
-      -arch ${stdenv.targetPlatform.darwinArch}
+      -arch ${stdenv.hostPlatform.darwinArch}
     cp MoltenVK-*/Build/Products/Release/dynamic/libMoltenVK.dylib "$build/lib/libMoltenVK.dylib"
     popd
   '';
@@ -144,7 +145,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     codesign -s - -f "$out/lib/libMoltenVK.dylib"
+    codesign -s - -f "$bin/bin/MoltenVKShaderConverter"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "A Vulkan Portability implementation built on top of Apple’s Metal API";

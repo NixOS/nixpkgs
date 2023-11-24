@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchsvn, fetchFromGitHub, fpc, openssl }:
+{ lib, stdenv, fetchFromGitHub, fpc, openssl }:
 
 let
   flreSrc = fetchFromGitHub {

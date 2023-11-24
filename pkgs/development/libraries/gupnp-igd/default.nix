@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

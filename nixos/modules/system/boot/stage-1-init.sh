@@ -114,6 +114,28 @@ waitDevice() {
     done
 }
 
+# Create the mount point if required.
+makeMountPoint() {
+    local device="$1"
+    local mountPoint="$2"
+    local options="$3"
+
+    local IFS=,
+
+    # If we're bind mounting a file, the mount point should also be a file.
+    if ! [ -d "$device" ]; then
+        for opt in $options; do
+            if [ "$opt" = bind ] || [ "$opt" = rbind ]; then
+                mkdir -p "$(dirname "/mnt-root$mountPoint")"
+                touch "/mnt-root$mountPoint"
+                return
+            fi
+        done
+    fi
+
+    mkdir -m 0755 -p "/mnt-root$mountPoint"
+}
+
 # Mount special file systems.
 specialMount() {
   local device="$1"
@@ -231,9 +253,6 @@ done
 @setHostId@
 
 # Load the required kernel modules.
-mkdir -p /lib
-ln -s @modulesClosure@/lib/modules /lib/modules
-ln -s @modulesClosure@/lib/firmware /lib/firmware
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
@@ -384,7 +403,7 @@ mountFS() {
 
     info "mounting $device on $mountPoint..."
 
-    mkdir -p "/mnt-root$mountPoint"
+    makeMountPoint "$device" "$mountPoint" "$optionsPrefixed"
 
     # For ZFS and CIFS mounts, retry a few times before giving up.
     # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
@@ -475,6 +494,8 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
         echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
     fi
 fi
+
+@postResumeCommands@
 
 # If we have a path to an iso file, find the iso and link it to /dev/root
 if [ -n "$isoPath" ]; then

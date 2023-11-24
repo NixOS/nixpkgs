@@ -5,11 +5,10 @@
 , testscenarios
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cliff";
-  inherit (cliff) version;
-
-  src = cliff.src;
+  inherit (cliff) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

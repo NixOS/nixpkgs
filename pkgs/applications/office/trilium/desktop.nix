@@ -1,18 +1,19 @@
 { stdenv, lib, unzip, autoPatchelfHook
-, fetchurl, atomEnv, makeWrapper
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook, libxshmfence
+, fetchurl, makeWrapper
+, alsa-lib, mesa, nss, nspr, systemd
+, makeDesktopItem, copyDesktopItems, wrapGAppsHook
 , metaCommon
 }:
 
 let
   pname = "trilium-desktop";
-  version = "0.59.4";
+  version = "0.61.14";
 
   linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "0vv58bcwx62slrc6f7ra61m71nqh6pb2rg4h99f8krj2h56zhrij";
+  linuxSource.sha256 = "1yxkgbnajlzhc62g4siq1hs7vd5hkvmdg4zsk1wqijhp0f4iix3s";
 
   darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "18jdz32i0blh3hrdyh558fmqncjrnv1j1g3hwjcph8hi90pqycdr";
+  darwinSource.sha256 = "1pvyy1k50n90ww3spm7bkmx0lzdi22na66mcpcwyls15r9kqb1ib";
 
   meta = metaCommon // {
     mainProgram = "trilium";
@@ -20,11 +21,11 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    pname = "trilium-desktop";
-    inherit version;
+    inherit pname version meta;
 
     src = fetchurl linuxSource;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
@@ -32,7 +33,14 @@ let
       copyDesktopItems
     ];
 
-    buildInputs = atomEnv.packages ++ [ libxshmfence ];
+    buildInputs = [
+      alsa-lib
+      mesa
+      nss
+      nspr
+      stdenv.cc.cc
+      systemd
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -42,6 +50,7 @@ let
         comment = meta.description;
         desktopName = "Trilium Notes";
         categories = [ "Office" ];
+        startupWMClass = "trilium notes";
       })
     ];
 
@@ -64,8 +73,9 @@ let
     '';
 
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
+    # Error: libstdc++.so.6: cannot open shared object file: No such file or directory
     preFixup = ''
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${atomEnv.libPath})
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs})
     '';
 
     dontStrip = true;

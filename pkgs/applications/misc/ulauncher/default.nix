@@ -21,15 +21,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.15.0";
+  version = "5.15.6";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-1Qo6ffMtVRtZDPCHvHEl7T0dPdDUxP4TP2hkSVSdQpo";
+    sha256 = "sha256-WOWDekh9rcXeiN/ejiYC4BELhJwd98GkmyDOLN26ayU=";
   };
 
   nativeBuildInputs = with python3Packages; [
-    distutils_extra
+    distutils-extra
     gobject-introspection
     intltool
     wrapGAppsHook
@@ -50,8 +50,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     mock
-    mypy
-    mypy-extensions
     dbus-python
     pygobject3
     pyinotify
@@ -122,6 +120,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ aaronjanse ];
+    maintainers = with maintainers; [ aaronjanse sebtm ];
   };
 }

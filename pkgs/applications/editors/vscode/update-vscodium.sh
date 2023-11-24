@@ -36,3 +36,5 @@ update_vscodium $VSCODIUM_VER darwin-x64 x86_64-darwin zip
 update_vscodium $VSCODIUM_VER linux-arm64 aarch64-linux tar.gz
 
 update_vscodium $VSCODIUM_VER darwin-arm64 aarch64-darwin zip
+
+update_vscodium $VSCODIUM_VER linux-armhf armv7l-linux tar.gz

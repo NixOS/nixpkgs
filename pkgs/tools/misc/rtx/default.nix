@@ -1,29 +1,33 @@
 { lib
+, nix-update-script
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
 , stdenv
 , coreutils
 , bash
+, pkg-config
+, openssl
 , direnv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rtx";
-  version = "1.32.0";
+  version = "2023.11.2";
 
   src = fetchFromGitHub {
     owner = "jdxcode";
     repo = "rtx";
     rev = "v${version}";
-    sha256 = "sha256-1TaBxVu/aNZ3iZWlo1Gn9pFK5j/vKsx6yT+eAPkmYSw=";
+    hash = "sha256-OdqHyxqufJJTfP7frjLKf5R0WNySDyZc7Sh0Mpdord0=";
   };
 
-  cargoSha256 = "sha256-wgTckF1IqnTa6gYVYHDNLdyx2w2urYG5Qqkq1iyuA3M=";
+  cargoHash = "sha256-KOte3zmJllrMp6OaKuFtUsRjdRKlSAxdJp1iJEOPcF0=";
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [ openssl  ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   postPatch = ''
     patchShebangs --build ./test/data/plugins/**/bin/* ./src/fake_asdf.rs ./src/cli/reshim.rs
@@ -53,11 +57,16 @@ rustPlatform.buildRustPackage rec {
       --zsh ./completions/_rtx
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://github.com/jdxcode/rtx";
     description = "Polyglot runtime manager (asdf rust clone)";
     changelog = "https://github.com/jdxcode/rtx/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
+    mainProgram = "rtx";
   };
 }

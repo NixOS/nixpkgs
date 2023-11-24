@@ -63,6 +63,13 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
+  env = lib.optionalAttrs (stdenv.system == "x86_64-darwin") {
+    RUSTFLAGS = "-C target-feature=+avx,+avx2,+sse4.2";
+  };
+
+  # tests failed on x86_64-darwin with SIGILL: illegal instruction
+  doCheck = !(stdenv.system == "x86_64-darwin");
+
   checkFlags = [
     # all try to make a network access
     "--skip=connectors::tests::http::server::https_server_test"
@@ -77,7 +84,6 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p tremor-cli" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = ''
       Early stage event processing system for unstructured data with rich
       support for structural pattern matching, filtering and transformation

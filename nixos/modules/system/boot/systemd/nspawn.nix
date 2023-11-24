@@ -11,7 +11,7 @@ let
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
       "PivotRoot" "Capability" "DropCapability" "NoNewPrivileges" "KillSignal"
-      "Personality" "MachineId" "PrivateUsers" "NotifyReady" "SystemCallFilter"
+      "Personality" "MachineID" "PrivateUsers" "NotifyReady" "SystemCallFilter"
       "LimitCPU" "LimitFSIZE" "LimitDATA" "LimitSTACK" "LimitCORE" "LimitRSS"
       "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
       "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"

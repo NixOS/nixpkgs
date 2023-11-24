@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "repgrep";
-  version = "0.12.4";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "acheronfail";
     repo = "repgrep";
     rev = version;
-    hash = "sha256-tMv0MdFlDEYx8lNINfnhX6WgcpVLm1fTlaUddej5KRc=";
+    hash = "sha256-33b0dZJY/lnVJGMfAg/faD6PPJIFZsvMZOmKAqCZw8k=";
   };
 
-  cargoHash = "sha256-NjPFoVPHjwG74ZNStYaNMzwdX488xDjGJu92+UWC2z8=";
+  cargoHash = "sha256-UMMTdWJ0/M8lN4abTJEVUGtoNp/g49DyW+OASg3TKfg=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/acheronfail/repgrep/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit asl20 unlicense ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "rgr";
   };
 }

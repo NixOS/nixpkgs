@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "1.19.0";
+  version = "1.32.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IKgK8UQYVPV8zm0wqmVyFDeRv0h9+1iwJ3Ih6yrXIOM=";
+    hash = "sha256-vX85fDFNGJ8zJe6YCPn7VFOdvPkT35VbM3Do+cP2b/Y=";
   };
 
   propagatedBuildInputs = [

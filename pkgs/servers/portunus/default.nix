@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-+sq5Wja0tVkPZ0Z++K2A6my9LfLJ4twxtoEAS6LHqzE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postInstall = ''
     mv $out/bin/{,portunus-}orchestrator

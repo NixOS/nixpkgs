@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , buildPythonPackage
 , click
 , fetchFromGitHub
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "nessclient";
-  version = "0.10.0";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "nickw444";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zjUYdSHIMCB4cCAsOOQZ9YgmFTskzlTUs5z/xPFt01Q=";
+    hash = "sha256-UqHXKfS4zF1YhFbNKSVESmsxD0CYJKOmjMOE3blGdI8=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytest-asyncio
     pytestCheckHook
   ];
@@ -41,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation/abstraction of the Ness D8x/D16x Serial Interface ASCII protocol";
     homepage = "https://github.com/nickw444/nessclient";
+    changelog = "https://github.com/nickw444/nessclient/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-g4Z9PREOxGoN7n/XhutawsITBznJlbz6StXeDYvOQ1c=";
   };
 
-  vendorSha256 = "sha256-dPadFoymYu2Uw2AXZfbaBfxsN8IWMuK1TrcknHco3Bo=";
+  vendorHash = "sha256-dPadFoymYu2Uw2AXZfbaBfxsN8IWMuK1TrcknHco3Bo=";
 
   # tests no longer work:
   # found packages pkg (4.go) and foo (blank-import-lib.go) in /build/lint-6edffad/testdata

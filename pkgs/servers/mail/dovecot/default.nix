@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.20";
+  version = "2.3.21";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-yqgy65aBSKvfNe6dD1NLd5+nMsDOSpE9mrjDRpshhVI=";
+    hash = "sha256-BbEQk6ccI3wu8wmtWHUQchzJO77mgoJRVJ/BWGw2UC0=";
   };
 
   enableParallelBuilding = true;
@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
+    mainProgram = "dovecot";
     maintainers = with maintainers; [ fpletz globin ajs124 ];
     platforms = platforms.unix;
   };

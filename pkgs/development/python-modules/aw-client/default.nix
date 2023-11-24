@@ -10,11 +10,12 @@
 , tabulate
 , typing-extensions
 , pytestCheckHook
+, gitUpdater
 }:
 
 buildPythonPackage rec {
   pname = "aw-client";
-  version = "0.5.11";
+  version = "0.5.13";
 
   format = "pyproject";
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-client";
     rev = "v${version}";
-    sha256 = "sha256-5WKGRoZGY+QnnB1Jzlju5OmCJreYMD8am2kW3Wcjhlw=";
+    sha256 = "sha256-A9f1Wj4F6qRvCVj3iRQvsnILewJK1L5tfI2MnAXZ4nY=";
   };
 
   disabled = pythonOlder "3.8";
@@ -55,6 +56,10 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "aw_client" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Client library for ActivityWatch";

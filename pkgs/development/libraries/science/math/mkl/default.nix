@@ -34,32 +34,32 @@ let
 
   oneapi-mkl = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-${mklVersion}-${mklVersion}-${rel}.x86_64.rpm";
-    hash = "sha256-BeI5zB0rrE6C21dezNc7/WSKmTWpjsZbpg0/y0Y87VQ=";
+    hash = "sha256-PGLPNnR+11AmmaNxldeze/l2Kw/4+mfjB+RqsPhP6oM=";
   };
 
   oneapi-mkl-common = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-common-${mklVersion}-${mklVersion}-${rel}.noarch.rpm";
-    hash = "sha256-NjIqTeFppwjXFlPYHPHfZa/bWBiHJru3atC4fIMXN0w=";
+    hash = "sha256-wztTE2R/IdG6ujGf7KFocpRmXzlZSnEKopTBOlPPlBw=";
   };
 
   oneapi-mkl-common-devel = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-common-devel-${mklVersion}-${mklVersion}-${rel}.noarch.rpm";
-    hash = "sha256-GX19dlvBWRgwSOCmWcEOrnbmp4S2j0448fWpx+iPVWw=";
+    hash = "sha256-MWa8mpyFM4zgDLup+EzFRM+N2Oxf0o6FBBRM8mAanbI=";
   };
 
   oneapi-mkl-devel = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-mkl-devel-${mklVersion}-${mklVersion}-${rel}.x86_64.rpm";
-    hash = "sha256-F4XxtSPAjNaShEL/l44jJK+JdOOkYI19X/njRB6FkNw=";
+    hash = "sha256-Arq5kXktI92031XqfV0pkzQCHaFsTRKX05iOA/fPNOs=";
   };
 
   oneapi-openmp = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-openmp-${mklVersion}-${mklVersion}-${openmpRel}.x86_64.rpm";
-    hash = "sha256-1SlkI01DxFvwGPBJ73phs86ka0SmCrniwiXQ9DJwIXw=";
+    hash = "sha256-cyBD3P4AEvyreP4pP3BE+yyDB+ptblOQ9GYI8ysGsIM=";
   };
 
   oneapi-tbb = fetchurl {
     url = "https://yum.repos.intel.com/oneapi/intel-oneapi-tbb-${tbbVersion}-${tbbVersion}-${tbbRel}.x86_64.rpm";
-    hash = "sha256-wIktdf1p1SS1KrnUlc8LPkm0r9dhZE6cQNr4ZKTWI6A=";
+    hash = "sha256-pzJpQdiYVpcKDShePak2I0uEh7u08vJgX7OBF5p5yAM=";
   };
 
 in stdenvNoCC.mkDerivation ({

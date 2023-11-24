@@ -2,16 +2,17 @@
 
 buildGoModule rec {
   pname = "go-migrate";
-  version = "4.16.0";
+  version = "4.16.2";
 
   src = fetchFromGitHub {
     owner = "golang-migrate";
     repo = "migrate";
     rev = "v${version}";
-    sha256 = "sha256-4e5aLeA9c17rOh73dZL7TDQSdP/RuTSTF8DISMagmIg=";
+    sha256 = "sha256-kP9wA8LSkdICy5NfQtzxeGUrqFqf6XpzkfCBaNAP8jE=";
   };
 
-  vendorHash = "sha256-dOd5aYV7h5Bma32btEa0UpA3dnIIhwM/rl7hWrPvgMM=";
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorHash = "sha256-wP6nwXbxU2GUNUKv+hQptuS4eHWUyGlg8gkTouSx6Hg=";
 
   subPackages = [ "cmd/migrate" ];
 

@@ -133,9 +133,8 @@ let
             )
             machine.crash()
             machine.wait_for_unit("multi-user.target")
+            machine.succeed("zfs set sharesmb=on rpool/shared_smb")
             machine.succeed(
-                "zfs set sharesmb=on rpool/shared_smb",
-                "zfs share rpool/shared_smb",
                 "smbclient -gNL localhost | grep rpool_shared_smb",
                 "umount /tmp/mnt",
                 "zpool destroy rpool",

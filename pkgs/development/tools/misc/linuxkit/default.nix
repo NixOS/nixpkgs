@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-8x9oJaYb/mN2TUaVrGOYi5/6TETD78jif0SwCSc0kyo=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   modRoot = "./src/cmd/linuxkit";
 
@@ -56,6 +56,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = with maintainers; [ nicknovitski ];
-    platforms = platforms.unix;
   };
 }

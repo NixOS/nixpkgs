@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lsix";
-  version = "1.8";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "hackerb9";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Qx6/PFm1XBmEI6iI+Ref9jNe6sXIhsVL4VQ1CX+caZE=";
+    sha256 = "sha256-xlOlAfZonSo/RERt5WxPqMvppVrY5/Yhh7SgCCsYDQE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,5 +32,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ kidonng ];
+    mainProgram = "lsix";
   };
 }

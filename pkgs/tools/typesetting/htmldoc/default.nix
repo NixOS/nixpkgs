@@ -1,17 +1,17 @@
-{ lib, stdenv, testers, fetchFromGitHub, zlib, libpng, libjpeg, SystemConfiguration, Foundation, pkg-config, htmldoc }:
+{ lib, stdenv, testers, fetchFromGitHub, zlib, cups, libpng, libjpeg, SystemConfiguration, Foundation, pkg-config, htmldoc }:
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
-  version = "1.9.16";
+  version = "1.9.17";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
     rev = "v${version}";
-    sha256 = "117cj5sfzl18gan53ld8lxb0wycizcp9jcakcs3nsvnss99rw3a6";
+    sha256 = "1qq45l1vxxa970cm0wjvgj0w88hd4vsisa85pf5i54yvfzf11sqw";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib libpng libjpeg ]
+  buildInputs = [ zlib cups libpng libjpeg ]
     ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
 
   # do not generate universal binary on Darwin
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
       generates corresponding HTML, PostScript, or PDF files with an optional
       table of contents.
     '';
+    mainProgram = "htmldoc";
   };
 }

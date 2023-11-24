@@ -20,6 +20,11 @@ merging is handled.
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
 
+`types.pathInStore`
+
+:   A path that is contained in the Nix store. This can be a top-level store
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
+
 `types.package`
 
 :   A top-level store path. This can be an attribute set pointing
@@ -523,7 +528,7 @@ The only required parameter is `name`.
 
 :   A string representation of the type function name.
 
-`definition`
+`description`
 
 :   Description of the type used in documentation. Give information of
     the type and any of its arguments.

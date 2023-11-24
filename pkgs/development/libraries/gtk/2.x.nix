@@ -1,45 +1,63 @@
-{ config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk-pixbuf, gobject-introspection
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
-, gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
-, AppKit, Cocoa
-, fetchpatch, buildPackages
+{ config
+, lib
+, stdenv
+, fetchurl
+, atk
+, buildPackages
+, cairo
+, cups
+, gdk-pixbuf
+, gettext
+, glib
+, gobject-introspection
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, pango
+, perl
+, pkg-config
+, substituteAll
 , testers
+, AppKit
+, Cocoa
+, gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
+, cupsSupport ? config.gtk2.cups or stdenv.isLinux
+, xineramaSupport ? stdenv.isLinux
 }:
 
 let
-
   gtkCleanImmodulesCache = substituteAll {
     src = ./hooks/clean-immodules-cache.sh;
     gtk_module_path = "gtk-2.0";
     gtk_binary_version = "2.10.0";
   };
-
 in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+";
   version = "2.24.33";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
+    url = "mirror://gnome/sources/gtk+/2.24/gtk+-${finalAttrs.version}.tar.xz";
+    hash = "sha256-rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
-
-  enableParallelBuilding = true;
 
   setupHooks =  [
     ./hooks/drop-icon-theme-cache.sh
     gtkCleanImmodulesCache
   ];
 
-
   nativeBuildInputs = finalAttrs.setupHooks ++ [
-    perl pkg-config gettext gobject-introspection
+    gettext
+    gobject-introspection
+    perl
+    pkg-config
   ];
 
   patches = [
@@ -48,21 +66,35 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isDarwin [
     ./patches/2.0-gnome_bugzilla_557780_306776_freeciv_darwin.patch
     ./patches/2.0-darwin-x11.patch
+    # Fixes an incompatible function pointer conversion and implicit int errors with clang 16.
+    ./patches/2.0-clang.patch
   ];
 
-  propagatedBuildInputs = with xorg;
-    [ glib cairo pango gdk-pixbuf atk ]
-    ++ lib.optionals (stdenv.isLinux || stdenv.isDarwin) [
-         libXrandr libXrender libXcomposite libXi libXcursor
-       ]
-    ++ lib.optionals stdenv.isDarwin [ libXdamage ]
-    ++ lib.optional xineramaSupport libXinerama
-    ++ lib.optionals cupsSupport [ cups ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa ];
+  propagatedBuildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    pango
+  ] ++ lib.optionals (stdenv.isLinux || stdenv.isDarwin) [
+    libXcomposite
+    libXcursor
+    libXi
+    libXrandr
+    libXrender
+  ] ++ lib.optional xineramaSupport libXinerama
+  ++ lib.optional cupsSupport cups
+  ++ lib.optionals stdenv.isDarwin [
+    libXdamage
+    AppKit
+    Cocoa
+  ];
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
-  '' else null;
+  preConfigure =
+    lib.optionalString (stdenv.isDarwin
+                        && lib.versionAtLeast
+                          stdenv.hostPlatform.darwinMinVersion "11")
+      "MACOSX_DEPLOYMENT_TARGET=10.16";
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -76,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];
+
+  enableParallelBuilding = true;
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -98,11 +132,21 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://www.gtk.org/";
     description = "A multi-platform toolkit for creating graphical user interfaces";
-    homepage    = "https://www.gtk.org/";
-    license     = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ lovek323 raskin ];
+    longDescription = ''
+      GTK is a highly usable, feature rich toolkit for creating graphical user
+      interfaces which boasts cross platform compatibility and an easy to use
+      API.  GTK it is written in C, but has bindings to many other popular
+      programming languages such as C++, Python and C# among others.  GTK is
+      licensed under the GNU LGPL 2.1 allowing development of both free and
+      proprietary software with GTK without any license fees or royalties.
+    '';
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ lovek323 raskin ];
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "gdk-2.0"
       "gtk+-2.0"
@@ -110,18 +154,5 @@ stdenv.mkDerivation (finalAttrs: {
       "gdk-x11-2.0"
       "gtk+-x11-2.0"
     ];
-    platforms   = platforms.all;
-
-    longDescription = ''
-      GTK is a highly usable, feature rich toolkit for creating
-      graphical user interfaces which boasts cross platform
-      compatibility and an easy to use API.  GTK it is written in C,
-      but has bindings to many other popular programming languages
-      such as C++, Python and C# among others.  GTK is licensed
-      under the GNU LGPL 2.1 allowing development of both free and
-      proprietary software with GTK without any license fees or
-      royalties.
-    '';
-    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 })

@@ -173,7 +173,7 @@ in
           config = {
             target = mkDefault name;
             source = mkIf (config.text != null) (
-              let name' = "etc-" + baseNameOf name;
+              let name' = "etc-" + lib.replaceStrings ["/"] ["-"] name;
               in mkDerivedConfig options.text (pkgs.writeText name')
             );
           };

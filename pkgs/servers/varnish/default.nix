@@ -51,19 +51,14 @@ let
     };
 in
 {
-  # EOL TBA
+  # EOL (LTS) TBA
   varnish60 = common {
     version = "6.0.11";
     hash = "sha256-UVkA2+tH/9MOs5BlyuAzFnmD7Pm9A6lDWic2B+HRKNs=";
   };
-  # EOL 2023-09-15
-  varnish72 = common {
-    version = "7.2.1";
-    hash = "sha256-TZN9FyCo7BnFM/ly2TA6HJiJt7/KdDeJOuXCfPIEqUA=";
-  };
-  # EOL 2024-03-15
-  varnish73 = common {
-    version = "7.3.0";
-    hash = "sha256-4tu7DsJwqQZHw4aGbm4iaZOu1G5I3nUacruBlzfxSuc=";
+  # EOL 2024-09-15
+  varnish74 = common {
+    version = "7.4.1";
+    hash = "sha256-h02Deq9JuPJxjLYLjIx5AOnqEMJk8hjIjNZy1Zb0uJ8=";
   };
 }

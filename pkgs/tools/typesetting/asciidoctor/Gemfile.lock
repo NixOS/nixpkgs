@@ -2,11 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    addressable (2.8.1)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
-    asciidoctor (2.0.18)
-    asciidoctor-pdf (2.3.2)
+    asciidoctor (2.0.20)
+    asciidoctor-pdf (2.3.9)
       asciidoctor (~> 2.0)
       concurrent-ruby (~> 1.1)
       matrix (~> 0.4)
@@ -17,13 +17,13 @@ GEM
       prawn-templates (~> 0.1.0)
       treetop (~> 1.6.0)
     coderay (1.1.3)
-    concurrent-ruby (1.1.10)
-    css_parser (1.12.0)
+    concurrent-ruby (1.2.2)
+    css_parser (1.14.0)
       addressable
     hashery (2.1.2)
     matrix (0.4.2)
     pdf-core (0.9.0)
-    pdf-reader (2.10.0)
+    pdf-reader (2.11.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -44,12 +44,13 @@ GEM
     prawn-templates (0.1.2)
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
-    public_suffix (5.0.0)
-    pygments.rb (2.3.0)
-    rexml (3.2.5)
-    rouge (4.0.0)
+    public_suffix (5.0.3)
+    pygments.rb (2.4.0)
+    rexml (3.2.6)
+    rouge (4.1.3)
     ruby-rc4 (0.1.5)
-    treetop (1.6.11)
+    tilt (2.2.0)
+    treetop (1.6.12)
       polyglot (~> 0.3)
     ttfunk (1.7.0)
 
@@ -62,6 +63,7 @@ DEPENDENCIES
   coderay
   pygments.rb
   rouge
+  tilt
 
 BUNDLED WITH
-   2.3.22
+   2.4.17

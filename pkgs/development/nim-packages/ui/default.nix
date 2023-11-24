@@ -14,7 +14,6 @@ buildNimPackage rec {
   postPatch = ''
     echo {.passL: r\"$(pkg-config --libs libui)\".} >> ui/rawui.nim
   '';
-  doCheck = true;
   meta = with lib;
     src.meta // {
       description = "Nim bindings to libui";

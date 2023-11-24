@@ -2,8 +2,9 @@
 , lib
 , pkg-config
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
-, ffmpeg_5
+, ffmpeg_6
 
   # for daemon
 , autoreconfHook
@@ -11,7 +12,7 @@
 , alsa-lib
 , asio
 , dbus
-, dbus_cplusplus
+, sdbus-cpp
 , fmt
 , gmp
 , gnutls
@@ -65,14 +66,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20230323.0";
+  version = "20230619.1";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-X8iIT8UtI2Vq0Ne5e2ahSPN4g7QLZGnq3SZV/NY+1pY=";
+    hash = "sha256-gOl4GtGmEvhM8xtlyFvTwXrUsbocUKULnVy9cnCNAM0=";
     fetchSubmodules = true;
   };
 
@@ -81,16 +82,24 @@ stdenv.mkDerivation rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
-      version = "3b78ef1c48732d238ba284cdccb04dc6de79c54f";
+      version = "e4b83585a0bdf1523e808a4fc1946ec82ac733d0";
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "pjproject";
         rev = version;
-        hash = "sha256-hrm5tDM2jknU/gWMeO6/FhqOvay8bajFid39OiEtAAQ=";
+        hash = "sha256-QeD2o6uz9r5vc3Scs1oRKYZ+aNH+01TSxLBj71ssfj4=";
       };
 
-      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches)) ++ [
+        (fetchpatch {
+          name = "CVE-2023-27585.patch";
+          url = "https://github.com/pjsip/pjproject/commit/d1c5e4da5bae7f220bc30719888bb389c905c0c5.patch";
+          hash = "sha256-+yyKKTKG2FnfyLWnc4S80vYtDzmiu9yRmuqb5eIulPg=";
+        })
+      ];
+
+      patchFlags = [ "-p1" "-l" ];
 
       configureFlags = (readLinesToList ./config/pjsip_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
@@ -104,9 +113,7 @@ stdenv.mkDerivation rec {
   daemon = stdenv.mkDerivation {
     pname = "jami-daemon";
     inherit src version meta;
-    sourceRoot = "source/daemon";
-
-    patches = [ ./0001-fix-annotations-in-bin-dbus-cx.ring.Ring.CallManager.patch ];
+    sourceRoot = "${src.name}/daemon";
 
     nativeBuildInputs = [
       autoreconfHook
@@ -118,9 +125,9 @@ stdenv.mkDerivation rec {
       alsa-lib
       asio
       dbus
-      dbus_cplusplus
+      sdbus-cpp
       fmt
-      ffmpeg_5
+      ffmpeg_6
       gmp
       gnutls
       http-parser
@@ -147,6 +154,11 @@ stdenv.mkDerivation rec {
     enableParallelBuilding = true;
   };
 
+  postPatch = ''
+    substituteInPlace src/app/commoncomponents/ModalTextEdit.qml \
+      --replace 'required property string placeholderText' 'property string placeholderText: ""'
+  '';
+
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
   '';
@@ -161,7 +173,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     daemon
-    ffmpeg_5
+    ffmpeg_6
     libnotify
     networkmanager
     qtbase

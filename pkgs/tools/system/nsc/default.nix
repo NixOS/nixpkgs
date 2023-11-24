@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "nsc";
-  version = "2.8.0";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8TBg5ByR4d/AvJOiADW068W40wN7ggRT8LbZFfHeqz4=";
+    hash = "sha256-9qsHZTbK2RCDiQ5wlo2D79GeI5dbCvL2LofPnF7f8Cc=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.builtBy=nixpkgs"
   ];
 
-  vendorHash = "sha256-Yywurr+RM96qJGH/WvuLDtf6bLzw9C5hG2d0ID9w1pQ=";
+  vendorHash = "sha256-B3uIFJaEsj9tpjPBiU+rXVlfcgVwZUQe3VSSoZQqBG8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -39,12 +39,22 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
+  # Tests currently fail on darwin because of a test in nsc which
+  # expects command output to contain a specific path. However
+  # the test strips table formatting from the command output in a naive way
+  # that removes all the table characters, including '-'.
+  # The nix build directory looks something like:
+  # /private/tmp/nix-build-nsc-2.8.5.drv-0/nsc_test2000598938/keys
+  # Then the `-` are removed from the path unintentionally and the test fails.
+  # This should be fixed upstream to avoid mangling the path when
+  # removing the table decorations from the command output.
+  doCheck = !stdenv.isDarwin;
+
   meta = {
     description = "A tool for creating NATS account and user access configurations";
     homepage = "https://github.com/nats-io/nsc";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ cbrewster ];
     mainProgram = "nsc";
-    broken = stdenv.isDarwin;
   };
 }

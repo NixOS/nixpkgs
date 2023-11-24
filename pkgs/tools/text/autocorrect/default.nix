@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
-  version = "2.6.2";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "huacnlee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QHQQrUQCfDAlAtDcfrAkOwRhQkO+HcwnPfJ5+jb1290=";
+    sha256 = "sha256-j59yCGGV6yiT6o+VKM1FPh87T4QG0qAeKgcKIAqpx+8=";
   };
 
   cargoLock = {

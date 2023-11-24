@@ -4,14 +4,14 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tweeny";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "mobius3";
     repo = "tweeny";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-VmvOMK+FjYZXKH9kPUT2L7pmJMPSr5eXptCcoGWK+qo=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.doronbehar ];
     platforms = with platforms; darwin ++ linux;
   };
-}
+})

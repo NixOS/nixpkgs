@@ -1,28 +1,35 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , installShellFiles
+, nodejs
+, python3
 , runtimeShell
 , stdenv
 , testers
 , runme
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "runme";
-  version = "1.2.2";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-SVYxFutmDDHEbYLExy0IxqZZZO13gUVPAA0X1ehVXME=";
+    hash = "sha256-ZM8gdZ26XAlC+j6U0+oQJIb+5gOGFUAYHPP82kA1ogU=";
   };
 
-  vendorHash = "sha256-el+gM3GRN5KU4RlSAx02rn+22xj28IZq3erZUzPbUUw=";
+  vendorHash = "sha256-nKH4hT0J9QfrDdvovu/XNxU4PtZYKkfqEBiCTNLWyRA=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    nodejs
+    python3
   ];
 
   subPackages = [
@@ -63,7 +70,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Execute commands inside your runbooks, docs, and READMEs";
     homepage = "https://runme.dev";
-    changelog = "https://github.com/stateful/runme/releases/tag/v${src.rev}";
+    changelog = "https://github.com/stateful/runme/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
-  version = "4.5.4";
+  version = "4.5.5";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    hash = "sha256-n9KPtTj/mHXrnFJnbWPO3H+Vol3Z2mg7XLl55ynyLwY=";
+    hash = "sha256-amWYkVQr+Rmcj+32lFDRq43Q+Ojj8V8B6KoURqdwGt0=";
   };
 
   nativeBuildInputs = [

@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pick-colour-picker";
-  version = "unstable-2021-01-19";
+  version = "unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
     repo = "ColourPicker";
-    rev = "dec8f144918aa7964aaf86a346161beb7e997f09";
-    sha256 = "hW2rarfchZ3M0JVfz5RbJRvMhv2PpyLNEMyMAp2gC+o=";
-    fetchSubmodules = false;
+    rev = "e3e4c2bcec5d7285425582b92bb564c74be2cf77";
+    hash = "sha256-vW8mZiB3JFQtbOCWauhJGfZMlGsA/nNcljNNPtJtgGw=";
   };
 
   postPatch = ''
     sed "s|sys\.prefix|'\.'|g" -i setup.py
+    sed "s|os.environ.get(\"SNAP\")|'$out'|g" -i pick/__main__.py
     sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i pick/__main__.py
   '';
 

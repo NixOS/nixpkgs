@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-TGqsiYZLbXvCc30OtvNbX4INlzw3ZfjvXal47rP7NDw=";
   };
 
-  vendorSha256 = "sha256-HQ9qclaaDj0H8PL0oQG1WsH19wVQpynijHNcal4gWBE=";
+  vendorHash = "sha256-HQ9qclaaDj0H8PL0oQG1WsH19wVQpynijHNcal4gWBE=";
 
   meta = with lib; {
     description = "Java serialization protocol analysis tool";

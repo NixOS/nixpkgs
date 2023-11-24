@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "kafkactl";
-  version = "3.1.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-H6oSkPQx5bk9VBBoeGVg0Ri5LTCv96tR4Vq4guymAbQ=";
+    hash = "sha256-HGOLPns7kBq02hF5TVs0DdTdJ+16JGs996JZ66k83Os=";
   };
 
-  vendorHash = "sha256-Y3BPt3PsedrlCoKiKUObf6UQd+MuNiCGLpJUg94XSgA=";
+  vendorHash = "sha256-jUuJBGEb4pSdyuRd3qHINyC8aRwqyJnsb/raM9nEh84=";
 
   doCheck = false;
 
@@ -32,6 +32,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ grburst ];
-    platforms = platforms.unix;
   };
 }

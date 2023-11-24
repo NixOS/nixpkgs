@@ -7,10 +7,7 @@ let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
   patchelf = libPath :
-    if stdenv.isDarwin
-      then ""
-      else
-        ''
+    lib.optionalString (!stdenv.isDarwin) ''
           chmod u+w $PURS
           patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
           chmod u-w $PURS
@@ -18,7 +15,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.15.9";
+  version = "0.15.12";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
@@ -28,17 +25,17 @@ in stdenv.mkDerivation rec {
       then
       fetchurl {
         url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos-arm64.tar.gz";
-        sha256 = "16ci26pgrw0zmnyn1zj129y9624cqwzrhqglc8mgfg4k7rxvqy2a";
+        sha256 = "0s8j9svgxir0rb0wxkshwal60962g5z0pysdyrjgcr9r77y5gffk";
       }
       else
       fetchurl {
-        url = "https://123.github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-        sha256 = "1xxg79rlf7li9f73wdbwif1dyy4hnzpypy6wx4zbnvap53habq9f";
+        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+        sha256 = "13d2mmphxy9f9yy242qsm58hipr612jymwy7lhf0is4y4m2lvrk2";
       })
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "0rabinklsd8bs16f03zv7ij6d1lv4w2xwvzzgkwc862gpqvz9jq3";
+      sha256 = "05xwplibkv86iiwpv29vg3zxp5yw7waw86zh08q3p0qx355wjy73";
     };
 
 

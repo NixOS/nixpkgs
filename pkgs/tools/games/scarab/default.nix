@@ -1,7 +1,6 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
 , glibc
 , zlib
 , libX11
@@ -10,20 +9,20 @@
 , fontconfig
 , gtk3
 , copyDesktopItems
-, graphicsmagick
+, icoutils
 , wrapGAppsHook
 , makeDesktopItem
 }:
 
 buildDotnetModule rec {
   pname = "scarab";
-  version = "1.31.0.0";
+  version = "2.5.0.0";
 
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oReU0kL0wPR6oqhq/uzO7nD1qo74h36w/gyvgffwzns=";
+    sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
   nugetDeps = ./deps.nix;
@@ -46,14 +45,19 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    graphicsmagick
+    icoutils
     wrapGAppsHook
   ];
 
   postFixup = ''
-    # Icon for the desktop file
-    mkdir -p $out/share/icons/hicolor/256x256/apps/
-    gm convert $src/Scarab/Assets/omegamaggotprime.ico $out/share/icons/hicolor/256x256/apps/scarab.png
+    # Icons for the desktop file
+    icotool -x $src/Scarab/Assets/omegamaggotprime.ico
+
+    sizes=(256 128 64 48 32 16)
+    for i in ''${!sizes[@]}; do
+      size=''${sizes[$i]}x''${sizes[$i]}
+      install -D omegamaggotprime_''$((i+1))_''${size}x32.png $out/share/icons/hicolor/$size/apps/scarab.png
+    done
   '';
 
   desktopItems = [(makeDesktopItem {
@@ -65,6 +69,8 @@ buildDotnetModule rec {
     type = "Application";
     categories = [ "Game" ];
   })];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Hollow Knight mod installer and manager";

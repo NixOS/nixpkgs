@@ -29,6 +29,15 @@ let
       assert type.check value;
       setType type.name ({ inherit name; } // value));
 
+  # gnu-config will ignore the portion of a triple matching the
+  # regex `e?abi.*$` when determining the validity of a triple.  In
+  # other words, `i386-linuxabichickenlips` is a valid triple.
+  removeAbiSuffix = x:
+    let match = builtins.match "(.*)e?abi.*" x;
+    in if match==null
+       then x
+       else lib.elemAt match 0;
+
 in
 
 rec {
@@ -221,6 +230,8 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    knuth = {};
+
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = {};
@@ -464,7 +475,7 @@ rec {
         else                     vendors.unknown;
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
                else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
-               else                                   getKernel args.kernel;
+               else                                   getKernel (removeAbiSuffix args.kernel);
       abi =
         /**/ if args ? abi       then getAbi args.abi
         else if isLinux parsed || isWindows parsed then

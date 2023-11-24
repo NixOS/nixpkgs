@@ -1,21 +1,25 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
+, testers
+, sonic-server
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "sonic-server";
-  version = "1.4.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "valeriansaliou";
     repo = "sonic";
-    rev = "f5302f5c424256648ba0be32b3c5909d846821fe";
-    sha256 = "sha256-WebEluXijgJckZQOka2BDPYn7PqzPTsIcV2T380fxW8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V97K4KS46DXje4qKA11O9NEm0s13aTUnM+XW8lGc6fo=";
   };
 
-  cargoSha256 = "sha256-ObhKGjaIma6fUVUT3xadpy/GPYlnm0nKmRVxFmoePyQ=";
+  cargoHash = "sha256-vWAFWoscV0swwrBQoa3glKXMRgdGYa+QrPprlVCP1QM=";
 
+  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
   nativeBuildInputs = [
@@ -27,21 +31,32 @@ rustPlatform.buildRustPackage {
   '';
 
   postInstall = ''
-    mkdir -p $out/etc/
-    mkdir -p $out/usr/lib/systemd/system/
-
     install -Dm444 -t $out/etc/sonic config.cfg
-    substitute \
-      ./examples/config/systemd.service $out/usr/lib/systemd/system/sonic-server.service \
-      --replace /bin/sonic $out/bin/sonic \
+    install -Dm444 -t $out/lib/systemd/system debian/sonic.service
+
+    substituteInPlace \
+      $out/lib/systemd/system/sonic.service \
+      --replace /usr/bin/sonic $out/bin/sonic \
       --replace /etc/sonic.cfg $out/etc/sonic/config.cfg
   '';
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        command = "sonic --version";
+        package = sonic-server;
+      };
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Fast, lightweight and schema-less search backend";
     homepage = "https://github.com/valeriansaliou/sonic";
+    changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${version}";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pleshevskiy ];
+    mainProgram = "sonic";
+    maintainers = with maintainers; [ pleshevskiy anthonyroussel ];
   };
 }

@@ -1,33 +1,41 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
 , aiohttp
 , asn1crypto
+, buildPythonPackage
 , cryptography
+, fetchFromGitHub
 , freezegun
 , oscrypto
-, requests
-, uritools
-, openssl
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, uritools
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.20.1";
-  format = "setuptools";
+  version = "0.23.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
-    rev = version;
-    hash = "sha256-0RSveoSZb7R6d4cMlF1mIrDfnTx2DYNwfTMMtmg+RpM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-q2YxncyMHmbRmcoLb68huK02CYiKqF2CFRl8vkUfxg4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "pytest-runner",' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -71,6 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/certvalidator";
+    changelog = "https://github.com/MatthiasValvekens/certvalidator/blob/v${version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];
   };

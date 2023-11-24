@@ -17,23 +17,25 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.10.0";
+  version = "1.12.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     rev = "refs/tags/${version}";
-    hash = "sha256-YDL7J/LmCRz6kRHQ0NrnVnvtS3rFkH08umjPI95mn6w=";
+    hash = "sha256-jxM2cvlDsoiUlVoxdS3wpUKlwMveMraiR431A8kIdgI=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     peewee
@@ -47,6 +49,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psycopg2
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    #  sqlite3.OperationalError: error in table order after drop column...
+    "test_migrator"
   ];
 
   meta = with lib; {

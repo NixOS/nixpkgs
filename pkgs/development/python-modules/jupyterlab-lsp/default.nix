@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1VPRfs+F24h2xJeoJglZQpuCcPDk6Ptf8cWrAW3G5to=";
+    hash = "sha256-D4jiaAPQ8+TIyL7wip+GHycGp3ym1NkvZQJsCelYFks=";
   };
 
   propagatedBuildInputs = [

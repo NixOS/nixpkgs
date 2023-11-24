@@ -3,36 +3,39 @@
 , fetchFromGitHub
 , pkg-config
 , bzip2
+, libgit2
+, zlib
 , zstd
 , zoxide
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.3.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
-    repo = pname;
+    repo = "felix";
     rev = "v${version}";
-    sha256 = "sha256-+8tYllK8UYW7hdA4qoH8Eiu6SbXvjRe4BFfEbwabuIY=";
+    hash = "sha256-pDJW/QhkJtEAq7xusYn/t/pPizT77OYmlbVlF/RTXic=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "syntect-5.0.0" = "sha256-Ql3zpfjZ5nopmqZyVOJ8qcRA8eXm6ZYzLsAnGA1+upY=";
-    };
-  };
+  cargoHash = "sha256-AGQt06fMXuyOEmQIEiUCzuK1Atx3gQMUCB+hPWlrldk=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     bzip2
+    libgit2
+    zlib
     zstd
   ];
 
   nativeCheckInputs = [ zoxide ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   buildFeatures = [ "zstd/pkg-config" ];
 

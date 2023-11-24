@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.2.0";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xj7XJ/Wz9dmbqygKqjcvWn+zeGejYyqBzLkpNufX8lQ=";
+    hash = "sha256-6IBjA2WwP11d/vQJSIY3WhbqYvAgFRtZFFSffUqKM38=";
   };
 
   propagatedBuildInputs = [

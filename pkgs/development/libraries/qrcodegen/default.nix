@@ -3,39 +3,50 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qrcodegen";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "nayuki";
     repo = "QR-Code-generator";
-    rev = "v${version}";
-    sha256 = "sha256-aci5SFBRNRrSub4XVJ2luHNZ2pAUegjgQ6pD9kpkaTY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aci5SFBRNRrSub4XVJ2luHNZ2pAUegjgQ6pD9kpkaTY=";
   };
 
-  preBuild = ''
-    cd c/
+  sourceRoot = "${finalAttrs.src.name}/c";
+
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
+    stdenv.cc.cc.libllvm.out
+  ];
+
+  makeFlags = lib.optionals stdenv.cc.isClang [ "AR=llvm-ar" ];
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    ./qrcodegen-test
+
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib $out/include/qrcodegen
-    cp libqrcodegen.a $out/lib
-    cp qrcodegen.h $out/include/qrcodegen/
+    install -Dt $out/lib/ libqrcodegen.a
+    install -Dt $out/include/qrcodegen/ qrcodegen.h
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nayuki.io/page/qr-code-generator-library";
     description = "High-quality QR Code generator library in many languages";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mcbeth AndersonTorres ];
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
 # TODO: build the other languages
 # TODO: multiple outputs

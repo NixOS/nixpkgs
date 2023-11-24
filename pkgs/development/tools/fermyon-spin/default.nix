@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     sha256 = packageHash;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
   ];
 
@@ -43,14 +43,19 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/* $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly.";
     homepage = "https://github.com/fermyon/spin";
     license = with licenses; [ asl20 ];
+    mainProgram = "spin";
     maintainers = with maintainers; [ mglolenstine ];
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -3,10 +3,7 @@
 , darwin
 , fetchFromGitHub
 , libunwind
-, pkg-config
-, pkgsBuildBuild
 , python3
-, runCommand
 , rustPlatform
 }:
 
@@ -23,6 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nm+44YWSJOOg9a9d8b3APXW50ThV3iA2C/QsJMttscE=";
 
+  # error: linker `arm-linux-gnueabihf-gcc` not found
+  postPatch = ''
+    rm .cargo/config
+  '';
+
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
@@ -33,17 +35,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # Pull a header that contains a definition of proc_pid_rusage().
-    (runCommand "${pname}_headers" { } ''
-      install -Dm444 ${lib.getDev darwin.apple_sdk.sdk}/include/libproc.h $out/include/libproc.h
-    '')
+    darwin.apple_sdk_11_0.Libsystem
   ];
 
   env.NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
-
-  # error: linker `arm-linux-gnueabihf-gcc` not found
-  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export RUSTFLAGS="-Clinker=$CC"
-  '';
 
   checkFlags = [
     # thread 'python_data_access::tests::test_copy_string' panicked at 'called `Result::unwrap()` on an `Err`

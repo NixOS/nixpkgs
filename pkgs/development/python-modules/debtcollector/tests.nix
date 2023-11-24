@@ -3,11 +3,10 @@
 , stestr
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "debtcollector-tests";
-  inherit (debtcollector) version;
-
-  src = debtcollector.src;
+  inherit (debtcollector) version src;
+  format = "other";
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

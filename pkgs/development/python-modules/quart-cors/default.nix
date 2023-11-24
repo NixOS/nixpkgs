@@ -12,18 +12,19 @@
 
 # tests
 , pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "quart-cors";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-cors";
     rev = "refs/tags/${version}";
-    hash = "sha256-SbnYrpeyEn47JgP9p3Us0zfkjC1sJ7jPPUIHYHAiSgc=";
+    hash = "sha256-qUzs0CTZHf3fGADBXPkd3CjZ6dnz1t3cTxflMErvz/k=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +48,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
   ];
 
   meta = with lib; {

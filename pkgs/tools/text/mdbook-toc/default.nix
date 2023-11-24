@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-toc";
-  version = "0.9.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7JpMBQqglLn33HwMBuIR5Hc0ISmzLPjQXGJVRwwl4OU=";
+    sha256 = "sha256-F0dIqtDEOVUXlWhmXKPOaJTEuA3Tl3h0vaEu7VsBo7s=";
   };
 
-  cargoSha256 = "sha256-Vj9DSjJtkexKly8IWlGEQkVrjSHcK1/2i+2g2Ht0eUo=";
+  cargoHash = "sha256-gbBX6Hj+271BA9FWmkZdyR0tMP2Lny7UgW0o+kZe9bU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "sphinx-design";
-  version = "0.4.1";
+  version = "0.5.0";
 
-  format = "flit";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "sphinx_design";
-    hash = "sha256-W2QYukotw9g1kuoP9hpSqJH+chlaTDoYsvocdmjORwg=";
+    hash = "sha256-6OUTrOpvktFcbeOzTpVEWPJFuOdhtFtjlQ9lNzNSqwA=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -29,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A sphinx extension for designing beautiful, view size responsive web components";
     homepage = "https://github.com/executablebooks/sphinx-design";
+    changelog = "https://github.com/executablebooks/sphinx-design/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

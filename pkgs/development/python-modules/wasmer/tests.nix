@@ -6,7 +6,7 @@
 , wasmer-compiler-singlepass
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "wasmer-tests";
   inherit (wasmer) version;
 

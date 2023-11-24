@@ -12,26 +12,23 @@
 , coreutils
 , gitUpdater
 , busybox
+, procps
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "23.1.2";
+  version = "23.3.3";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-tn4flcrf04hVWhqkmK4qDenXcnV93pP+C+8J63b6FXQ=";
+    hash = "sha256-49UvGrv40hyR3A2BndlQKwQqCC1ZaLm97IUKNW12sJo=";
   };
 
   patches = [
     ./0001-add-nixos-support.patch
-    # upstream: https://github.com/canonical/cloud-init/pull/2125
-    ./0002-Add-Udhcpc-support.patch
-    # upstream: https://github.com/canonical/cloud-init/pull/2151
-    ./0003-vultr-remove-check_route-check.patch
   ];
 
   prePatch = ''
@@ -73,10 +70,12 @@ python3.pkgs.buildPythonApplication rec {
     httpretty
     dmidecode
     # needed for tests; at runtime we rather want the setuid wrapper
+    passlib
     shadow
     responses
     pytest-mock
     coreutils
+    procps
   ];
 
   makeWrapperArgs = [
@@ -86,8 +85,11 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # tries to create /var
     "test_dhclient_run_with_tmpdir"
+    "test_dhcp_client_failover"
     # clears path and fails because mkdir is not found
     "test_path_env_gets_set_from_main"
+    # fails to find cat
+    "test_subp_combined_stderr_stdout"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
     "TestRemoveDefaultCaCerts"
@@ -129,6 +131,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
+    changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
     license = with licenses; [ asl20 gpl3Plus ];
     maintainers = with maintainers; [ illustris jfroche ];
     platforms = platforms.all;

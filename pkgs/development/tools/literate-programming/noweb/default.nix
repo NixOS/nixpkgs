@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "1160i2ghgzqvnb44kgwd6s3p4jnk9668rmc15jlcwl7pdf3xqm95";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   patches = [
     # Remove FAQ

@@ -24,24 +24,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.9.0";
+  version = "1.9.4";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      hash = "sha256-AMYURm75gJwusjSA440ZaixXf/8nMMT4PRNbkT1HM1k=";
+      sha256 = "07d20c4c2518833e2265ca0acee15b355463361aa4efdab858dad826cf94325c";
     };
     aarch64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
-      hash = "sha256-ChQxW1Os2X8i0m1Kj9LCN+Uk6Vw77JjS14tU2Awrw2Q=";
+      sha256 = "541d0c5a9378f8d2fc384bb8595fc6ffe20d61054629a6e314fb2f8dfe2f2ade";
     };
     x86_64-darwin = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-      hash = "sha256-ALxMJ+6xvr01BZcxL/CRkXYxX9MZnGPslj+0HjsEv68=";
+      sha256 = "67eec264f6afc9e9bf72c0f62c84d91c2ebdfaed6a0aa11606e3c983d278b441";
     };
     aarch64-darwin = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
-      hash = "sha256-U+YncKaZDVqJ56AB72iqJd4lEmo76DggDEyacF2uo3w=";
+      sha256 = "67542975e86102eec95bc4bb7c30c5d8c7ea9f9a0b388f0e10f546945363b01a";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

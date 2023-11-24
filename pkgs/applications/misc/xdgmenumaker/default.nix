@@ -12,13 +12,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "gapan";
     repo = pname;
     rev = version;
-    sha256 = "CLFFsc/F6I8UOY/XbViWCAlnnu32E5gtEXg9+KSJqI0=";
+    sha256 = "K+IecWWRjnY/5TBJydTuEPqNRSg1OIE1t0u6HkLS9uI=";
   };
 
   format = "other";

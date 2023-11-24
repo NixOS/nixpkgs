@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, meson, gettext, glib, gjs, ninja, python3, gtk3
-, webkitgtk, gsettings-desktop-schemas, wrapGAppsHook, desktop-file-utils
+, webkitgtk_4_1, gsettings-desktop-schemas, wrapGAppsHook, desktop-file-utils
 , gobject-introspection, glib-networking }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pr2YA2MHXD4W7lyCxGAVLKyoZarZ8t92RSkWle3LNuc=";
   };
 
-  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook gobject-introspection ];
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/main.js \
+      --replace "'WebKit2': '4.0'" "'WebKit2': '4.1'"
   '';
 
   postFixup = ''
@@ -30,9 +33,8 @@ stdenv.mkDerivation rec {
     glib-networking
     gjs
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     desktop-file-utils
-    gobject-introspection
     gsettings-desktop-schemas
   ];
 

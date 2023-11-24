@@ -29,9 +29,12 @@ stdenv.mkDerivation rec {
   ] ++ (if stdenv.isDarwin then [ libossp_uuid ] else [ libuuid ]);
 
   postPatch = ''
+    # This lets us build the tests properly on aarch64-darwin.
+    substituteInPlace CMakeLists.txt \
+      --replace 'SET(CMAKE_OSX_ARCHITECTURES "x86_64")' ""
+
     # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
     sed -i 's,libdir=''${\(exec_\)\?prefix}/,libdir=,' lib3mf.pc.in
-
 
     # replace bundled binaries
     for i in AutomaticComponentToolkit/bin/act.*; do

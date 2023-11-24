@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "pmacct";
     repo = "pmacct";
     rev = "v${version}";
-    sha256 = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
+    hash = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
   };
 
   nativeBuildInputs = [

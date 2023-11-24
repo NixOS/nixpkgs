@@ -2,6 +2,8 @@
 , kernel ? null
 , stdenv
 , linuxKernel
+, removeLinuxDRM ? false
+, fetchpatch
 , ...
 } @ args:
 
@@ -11,13 +13,16 @@ in
 callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible =
-    if stdenv'.isx86_64
-    then kernel.kernelOlder "6.3"
+    if stdenv'.isx86_64 || removeLinuxDRM
+    then kernel.kernelOlder "6.6"
     else kernel.kernelOlder "6.2";
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_1;
+
+  latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
+    then linuxKernel.packages.linux_6_5
+    else linuxKernel.packages.linux_6_1;
 
   # this package should point to the latest release.
-  version = "2.1.11";
+  version = "2.2.0";
 
-  sha256 = "tJLwyqUj1l5F0WKZDeMGrEFa8fc/axKqm31xtN51a5M=";
+  sha256 = "sha256-s1sdXSrLu6uSOmjprbUa4cFsE2Vj7JX5i75e4vRnlvg=";
 }

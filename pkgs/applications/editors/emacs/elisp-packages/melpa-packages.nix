@@ -315,7 +315,7 @@ let
         ivy-rtags = fix-rtags super.ivy-rtags;
 
         jinx = super.jinx.overrideAttrs (old: let
-          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+          libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
         in {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.pkg-config
@@ -474,6 +474,13 @@ let
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
+        pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace pikchr-mode.el \
+              --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+          '';
+        });
+
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;
@@ -533,6 +540,13 @@ let
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+        });
+
+        typst-mode = super.typst-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace typst-mode.el \
+              --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+          '';
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
@@ -674,6 +688,27 @@ let
               --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
           '';
         });
+
+        # Build a helper executable that interacts with the macOS Dictionary.app
+        osx-dictionary =
+          if pkgs.stdenv.isDarwin
+          then super.osx-dictionary.overrideAttrs (old: {
+            buildInputs =
+              old.buildInputs ++
+              (with pkgs.darwin.apple_sdk.frameworks; [CoreServices Foundation]);
+            dontUnpack = false;
+            buildPhase = (old.buildPhase or "") + ''
+              cd source
+              $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
+            '';
+            postInstall = (old.postInstall or "") + "\n" + ''
+              outd=$out/share/emacs/site-lisp/elpa/osx-dictionary-*
+              mkdir -p $out/bin
+              install -m444 -t $out/bin osx-dictionary-cli
+              rm $outd/osx-dictionary.m
+            '';
+          })
+          else super.osx-dictionary;
       };
 
     in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);

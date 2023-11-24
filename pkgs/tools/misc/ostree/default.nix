@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , substituteAll
 , pkg-config
 , gtk-doc
@@ -38,9 +37,9 @@
 }:
 
 let
-  testPython = (python3.withPackages (p: with p; [
+  testPython = python3.withPackages (p: with p; [
     pyyaml
-  ]));
+  ]);
 in stdenv.mkDerivation rec {
   pname = "ostree";
   version = "2023.2";

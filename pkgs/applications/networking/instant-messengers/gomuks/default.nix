@@ -22,7 +22,7 @@ buildGoModule rec {
     sha256 = "sha256-gLyjqmGZudj8PmsYUGXHOjetZzi6u5CFI7Y50y2XAzk=";
   };
 
-  vendorSha256 = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
+  vendorHash = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
 
   doCheck = false;
 
@@ -53,6 +53,5 @@ buildGoModule rec {
     description = "A terminal based Matrix client written in Go";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chvp emily ];
-    platforms = platforms.unix;
   };
 }

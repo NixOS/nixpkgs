@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-model-utils";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

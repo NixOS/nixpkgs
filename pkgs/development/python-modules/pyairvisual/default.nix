@@ -2,9 +2,12 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
+, fetchpatch
 , numpy
 , poetry-core
+, pygments
 , pysmb
 , pytest-aiohttp
 , pytest-asyncio
@@ -14,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2022.12.1";
+  version = "2023.08.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,8 +26,23 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-xzTho4HsIU2YLURz9DfFfaRL3tsrtVi8n5IA2bRkyzw=";
+    hash = "sha256-+yqN3q+uA/v01uCguzUSoeCJK9lRmiiYn8d272+Dd2M=";
   };
+
+  patches = [
+    # https://github.com/bachya/pyairvisual/pull/298
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/pyairvisual/commit/eb32beb7229a53ff81917cc417ed66b26aae47dd.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace \
+      'certifi = ">=2023.07.22"' \
+      'certifi = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -32,9 +50,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     numpy
+    pygments
     pysmb
   ];
+
+  # this lets tests bind to localhost in sandbox mode on macOS
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

@@ -2,32 +2,10 @@
 , python3
 , fetchFromGitHub
 }:
-let
-  py = python3.override {
-    packageOverrides = final: prev: {
-      # required for networkx 2.5.1
-      decorator = prev.decorator.overridePythonAttrs (o: o // rec {
-        version = "4.4.2";
-        src = o.src.override {
-          inherit version;
-          hash = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
-        };
-      });
 
-      # flare-floss requires this exact version (newer versions are incompatible)
-      networkx = prev.networkx.overridePythonAttrs (o: o // rec {
-        version = "2.5.1";
-        src = o.src.override {
-          inherit version;
-          hash = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
-        };
-      });
-    };
-  };
-in
-py.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -35,7 +13,7 @@ py.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-Oa0DMl7RKNfA00shcc4y1sNd2OiKCf0sA0EUC5gByBI=";
+    hash = "sha256-tOLnve5XBc3TtSgucPIddBHD0YJhsRpRduXsKrtJ/eQ=";
   };
 
   postPatch = ''
@@ -46,17 +24,19 @@ py.pkgs.buildPythonPackage rec {
       --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
   '';
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     halo
     networkx
+    pefile
     pydantic
+    rich
     tabulate
     tqdm
     viv-utils
     vivisect
   ] ++ viv-utils.optional-dependencies.flirt;
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-sugar
     pytestCheckHook
     pyyaml

@@ -11,6 +11,8 @@
 , desktop-file-utils
 , glib
 , gobject-introspection
+, blueprint-compiler
+, libxml2
 , libnotify
 , libadwaita
 , libportal
@@ -18,17 +20,18 @@
 , librsvg
 , tesseract5
 , zbar
+, gst_all_1
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-frog";
-  version = "1.3.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "TenderOwl";
     repo = "Frog";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ErDHrdD9UZxOIGwgN5eakY6vhNvE6D9SoRYXZhzmYX4=";
+    sha256 = "sha256-w/ENUhJt7bYy5htBLolb/HysK8/scRaPQX5qEezQcXY=";
   };
 
   format = "other";
@@ -52,6 +55,8 @@ python3Packages.buildPythonApplication rec {
     glib
     wrapGAppsHook4
     gobject-introspection
+    blueprint-compiler
+    libxml2
   ];
 
   buildInputs = [
@@ -61,6 +66,7 @@ python3Packages.buildPythonApplication rec {
     libportal
     zbar
     tesseract5
+    gst_all_1.gstreamer
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -68,6 +74,7 @@ python3Packages.buildPythonApplication rec {
     pillow
     pytesseract
     pyzbar
+    gtts
   ];
 
   # This is to prevent double-wrapping the package. We'll let
@@ -83,6 +90,7 @@ python3Packages.buildPythonApplication rec {
     description =
       "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = licenses.mit;
+    mainProgram = "frog";
     maintainers = with maintainers; [ foo-dogsquared ];
     platforms = platforms.linux;
   };

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 RhythmDelay.dsp
     faust2lv2  -time -vec -t 99999 -gui RhythmDelay.dsp
@@ -19,7 +21,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp RhythmDelay $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
     mkdir -p $out/lib/lv2
     cp -r RhythmDelay.lv2/ $out/lib/lv2
   '';

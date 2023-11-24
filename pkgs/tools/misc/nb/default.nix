@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.5.1";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    sha256 = "sha256-CZcXV8ZRFnx0qI5vZ8adXUAJWAR+KG/ChTFDQWKqmsA=";
+    sha256 = "sha256-8TOEPPtwxbTlm5nGMjOmH8lvsDu0vNgvxaUOgKS1l/g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    installShellCompletion etc/nb-completion.{bash,zsh}
+    installShellCompletion --cmd nb etc/nb-completion.{bash,zsh,fish}
   '';
 
   meta = with lib; {

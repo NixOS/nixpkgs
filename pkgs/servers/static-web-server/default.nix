@@ -1,17 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.17.0";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YrcwEjLL7FRn4vod/Nd7Rh+njY/80JEnL/QetIu3YtY=";
+    hash = "sha256-U+B/k/stwjJw+mxUCb4A3yUtc/+Tg0PsWhVnovLLX4A=";
   };
 
-  cargoHash = "sha256-BtA2DsnIo1XwIOIjgmSUfuq4IrUYhp+yJMSrLd7vL5c=";
+  cargoHash = "sha256-ZDrRjIM8187nr72MlzFr0NAqH2f8qkF1sGAT9+NvfhA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -24,8 +24,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=handle_precondition"
   ];
 
+  # Need to copy in the systemd units for systemd.packages to discover them
+  postInstall = ''
+    install -Dm444 -t $out/lib/systemd/system/ systemd/static-web-server.{service,socket}
+  '';
+
+  passthru.tests = { inherit (nixosTests) static-web-server; };
+
   meta = with lib; {
-    description = "An asynchronus web server for static files-serving";
+    description = "An asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
     changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "avalanchego";
-  version = "1.10.2";
+  version = "1.10.15";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rQ7WGsDCGR2yrMpNTP3yxnRFEGkCpkFIknxuARYd7TM=";
+    hash = "sha256-vx9Vfbdxd3Y0fdjpKC6LFAUEej1RHszyM5GUUGKy0zU=";
   };
 
-  vendorHash = "sha256-v8+ASwvXhUT9cz78aWDyWpgHOSoecLCLFMGfjTtRlJQ=";
+  vendorHash = "sha256-br/z6k1D1r9JEECKNy7BOZzfHaaveCMUA1bKos0+p0Q=";
   # go mod vendor has a bug, see: https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
@@ -40,6 +40,6 @@ buildGoModule rec {
     homepage = "https://github.com/ava-labs/avalanchego";
     changelog = "https://github.com/ava-labs/avalanchego/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ urandom ];
+    maintainers = with maintainers; [ urandom qjoly ];
   };
 }

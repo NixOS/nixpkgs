@@ -5,6 +5,8 @@
 , gnupg
 , makeWrapper
 , autoPatchelfHook
+, testers
+, browserpass
 }:
 
 buildGoModule rec {
@@ -18,7 +20,7 @@ buildGoModule rec {
     sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
 
@@ -55,6 +57,11 @@ buildGoModule rec {
     mkdir -p $out/lib/mozilla/native-messaging-hosts
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = browserpass;
+    command = "browserpass --version";
+  };
 
   meta = with lib; {
     description = "Browserpass native client app";

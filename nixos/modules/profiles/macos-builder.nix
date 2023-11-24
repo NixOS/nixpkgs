@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, ... }:
 
 let
   keysDirectory = "/var/keys";
@@ -21,7 +21,8 @@ in
         ../virtualisation/nixos-containers.nix
         ../services/x11/desktop-managers/xterm.nix
       ];
-      config = { };
+      # swraid's default depends on stateVersion
+      config.boot.swraid.enable = false;
       options.boot.isContainer = lib.mkOption { default = false; internal = true; };
     }
   ];
@@ -67,9 +68,9 @@ in
        '';
     };
     hostPort = mkOption {
-      default = 22;
+      default = 31022;
       type = types.int;
-      example = 31022;
+      example = 22;
       description = ''
         The localhost host port to forward TCP to the guest port.
       '';
@@ -139,13 +140,13 @@ in
 
         hostPkgs = config.virtualisation.host.pkgs;
 
-  script = hostPkgs.writeShellScriptBin "create-builder" (
+        script = hostPkgs.writeShellScriptBin "create-builder" (
           # When running as non-interactively as part of a DarwinConfiguration the working directory
           # must be set to a writeable directory.
         (if cfg.workingDirectory != "." then ''
           ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
           cd "${cfg.workingDirectory}"
-  '' else "") + ''
+        '' else "") + ''
           KEYS="''${KEYS:-./keys}"
           ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
           PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
@@ -157,13 +158,19 @@ in
           if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
             (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
           fi
-          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${config.system.build.vm}/bin/run-nixos-vm
+          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
         '');
 
       in
       script.overrideAttrs (old: {
+        pos = __curPos; # sets meta.position to point here; see script binding above for package definition
         meta = (old.meta or { }) // {
           platforms = lib.platforms.darwin;
+        };
+        passthru = (old.passthru or { }) // {
+          # Let users in the repl inspect the config
+          nixosConfig = config;
+          nixosOptions = options;
         };
       });
 
@@ -177,7 +184,7 @@ in
         Please inspect the trace of the following command to figure out which module
         has a dependency on stateVersion.
 
-          nix-instantiate --attr darwin.builder --show-trace
+          nix-instantiate --attr darwin.linux-builder --show-trace
       '');
     };
 
@@ -234,6 +241,10 @@ in
       # This ensures that anything built on the guest isn't lost when the guest is
       # restarted.
       writableStoreUseTmpfs = false;
+
+      # Pass certificates from host to the guest otherwise when custom CA certificates
+      # are required we can't use the cached builder.
+      useHostCerts = true;
     };
   };
 }

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wego";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "schachmat";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lMcrFwYtlnivNjSbzyiAEAVX6ME87yB/Em8Cxb1LUS4=";
+    sha256 = "sha256-bkbH3RewlYYNamAhAZGWQmzNdGB06K3m/D8ScsQP9ic=";
   };
 
-  vendorSha256 = "sha256-kv8c0TZdxCIfmkgCLDiNyoGqQZEKUlrNLEbjlG9rSPs=";
+  vendorHash = "sha256-aXrXw/7ZtSZXIKDMZuWPV2zAf0e0lU0QCBhua7tHGEY=";
 
   meta = with lib; {
     homepage = "https://github.com/schachmat/wego";

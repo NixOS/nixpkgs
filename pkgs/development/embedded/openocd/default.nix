@@ -6,7 +6,7 @@
 , jimtcl
 , libjaylink
 , libusb1
-, libgpiod
+, libgpiod_1
 
 , enableFtdi ? true, libftdi1
 
@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ hidapi jimtcl libftdi1 libjaylink libusb1 ]
-    ++ lib.optional stdenv.isLinux libgpiod;
+    ++
+    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+    lib.optional stdenv.isLinux libgpiod_1;
 
   configureFlags = [
     "--disable-werror"

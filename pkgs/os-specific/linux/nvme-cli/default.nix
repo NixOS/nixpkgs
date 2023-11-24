@@ -4,18 +4,19 @@
 , libnvme
 , json_c
 , zlib
+, libhugetlbfs
 , python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    hash = "sha256-vnhvVVfEDnmEIdIkfTRoiLB7dZ1rJV3U4PmUUoaxTUs=";
+    hash = "sha256-MFyBkwTNOBQdHWj7In1OquRIAsjsd4/DHYfUyFA9YDQ=";
   };
 
   mesonFlags = [
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
     libnvme
     json_c
     zlib
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libhugetlbfs) [
+    libhugetlbfs
   ];
 
   meta = with lib; {
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ mic92 vifino ];
     mainProgram = "nvme";
   };
 }

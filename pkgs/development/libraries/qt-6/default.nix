@@ -3,12 +3,15 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchpatch2
 , makeSetupHook
 , makeWrapper
 , gst_all_1
 , libglvnd
 , darwin
+, overrideSDK
 , buildPackages
+, python3
 
   # options
 , developerBuild ? false
@@ -24,7 +27,7 @@ let
   addPackages = self: with self;
     let
       callPackage = self.newScope ({
-        inherit qtModule srcs;
+        inherit qtModule srcs python3;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
@@ -47,7 +50,11 @@ let
           ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
+          ./patches/0007-qtbase-find-tools-in-PATH.patch
+          ./patches/0008-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+          ./patches/0009-qtbase-allow-translations-outside-prefix.patch
+          ./patches/0010-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
+          ./patches/0011-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -59,6 +66,7 @@ let
         qtdatavis3d
         qtdeclarative
         qtdoc
+        qtgraphs
         qtgrpc
         qthttpserver
         qtimageformats
@@ -99,6 +107,7 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qtgraphs = callPackage ./modules/qtgraphs.nix { };
       qtgrpc = callPackage ./modules/qtgrpc.nix { };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
@@ -140,6 +149,11 @@ let
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
           ReplayKit SecurityInterface Vision;
+        qtModule = qtModule.override {
+          stdenv = if stdenv.isDarwin
+            then overrideSDK stdenv { darwinMinVersion = "10.13"; darwinSdkVersion = "11.0"; }
+            else stdenv;
+        };
         xcbuild = buildPackages.xcbuild.override {
           productBuildVer = "20A2408";
         };
@@ -166,8 +180,16 @@ let
         } ./hooks/qmake-hook.sh;
     };
 
-  # TODO(@Artturin): convert to makeScopeWithSplicing
+  # TODO(@Artturin): convert to makeScopeWithSplicing'
   # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
-  self = lib.makeScope newScope addPackages;
-in
-self
+  baseScope = lib.makeScope newScope addPackages;
+
+  bootstrapScope = baseScope.overrideScope(final: prev: {
+    qtbase = prev.qtbase.override { qttranslations = null; };
+    qtdeclarative = null;
+  });
+
+  finalScope = baseScope.overrideScope(final: prev: {
+    qttranslations = bootstrapScope.qttranslations;
+  });
+in finalScope

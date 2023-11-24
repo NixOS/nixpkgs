@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, alsa-lib, libxmp, AudioUnit, CoreAudio }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, alsa-lib, libxmp, AudioUnit, CoreAudio }:
 
 stdenv.mkDerivation rec {
   pname = "xmp";
-  version = "4.1.0";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "17i8fc7x7yn3z1x963xp9iv108gxfakxmdgmpv3mlm438w3n3g8x";
+  src = fetchFromGitHub {
+    owner = "libxmp";
+    repo = "xmp-cli";
+    rev = "${pname}-${version}";
+    hash = "sha256-037k1rFjGR6XFtr08bzs4zVz+GyUGuuutuWFlNEuATA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libxmp ]
     ++ lib.optionals stdenv.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio ];

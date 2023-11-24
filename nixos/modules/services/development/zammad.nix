@@ -204,7 +204,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.database.createLocally -> cfg.database.user == "zammad";
+        assertion = cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
       {
@@ -231,7 +231,7 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

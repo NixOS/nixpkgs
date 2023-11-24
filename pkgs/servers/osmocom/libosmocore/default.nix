@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , gnutls
 , libmnl
+, liburing
 , libusb1
 , lksctp-tools
 , pcsclite
@@ -14,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmocore";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    hash = "sha256-xs8XI6xIUIZ7e0b+z4+FB6jNGY08t1wI4Ud8EHdi93I=";
+    hash = "sha256-rFV2Sf45nq0L+65vt9a9Qz6xRoL5jReQ03ASQAD3DDg=";
   };
 
   postPatch = ''
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnutls
+    liburing
     libusb1
     lksctp-tools
     pcsclite

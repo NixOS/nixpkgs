@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-Rbg6Ghp5NdcLSLSIhwwFFMKmZPWsboDyHCG6ePqSSZA=";
   };
 
-  vendorSha256 = "sha256-pI2iucrt7XLLZNOz364kOEulXxPdvJp92OewqnkQEO4=";
+  vendorHash = "sha256-pI2iucrt7XLLZNOz364kOEulXxPdvJp92OewqnkQEO4=";
 
   postInstall = ''
     cp -r templates $out/

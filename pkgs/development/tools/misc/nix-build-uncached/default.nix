@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-n9Koi01Te77bpYbRX46UThyD2FhCu9OGHd/6xDQLqjQ=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -22,6 +22,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/Mic92/nix-build-uncached";
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.unix;
   };
 }

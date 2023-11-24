@@ -13,7 +13,6 @@ buildNimPackage rec {
 
   propagatedBuildInputs = [ vmath ];
 
-  doCheck = true;
 
   meta = with lib;
     src.meta // {

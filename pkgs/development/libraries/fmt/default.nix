@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+{ lib
+, stdenv
+, fetchFromGitHub, fetchpatch
+, cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
+
+# tests
+, mpd
+, openimageio
+, fcitx5
+, spdlog
 }:
 
 let
@@ -27,6 +36,10 @@ let
 
       doCheck = true;
 
+      passthru.tests = {
+        inherit mpd openimageio fcitx5 spdlog;
+      };
+
       meta = with lib; {
         description = "Small, safe and fast formatting library";
         longDescription = ''
@@ -34,6 +47,7 @@ let
           used as a fast and safe alternative to printf and IOStreams.
         '';
         homepage = "https://fmt.dev/";
+        changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ maintainers.jdehaas ];
         license = licenses.mit;
@@ -50,5 +64,10 @@ in
   fmt_9 = generic {
     version = "9.1.0";
     sha256 = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
+  };
+
+  fmt_10 = generic {
+    version = "10.1.1";
+    sha256 = "sha256-H9+1lEaHM12nzXSmo9m8S6527t+97e6necayyjCPm1A=";
   };
 }

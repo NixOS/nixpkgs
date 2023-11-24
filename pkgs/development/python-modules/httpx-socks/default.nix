@@ -12,16 +12,19 @@
 , pytestCheckHook
 , python-socks
 , pythonOlder
+, setuptools
 , sniffio
 , starlette
+, tiny-proxy
 , trio
+, trustme
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.7.5";
-  format = "setuptools";
+  version = "0.8.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -29,8 +32,12 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HwLJ2pScgiNmM/l14aKp47MMuGW1qSaIq7ujpCSRtqA=";
+    hash = "sha256-3Dj+rrH5Pil5xQE6sAAD5RTycwlKq+TVsAeB2NVqGjY=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     httpx
@@ -47,6 +54,8 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     flask
     hypercorn
@@ -54,6 +63,8 @@ buildPythonPackage rec {
     pytest-trio
     pytestCheckHook
     starlette
+    tiny-proxy
+    trustme
     yarl
   ];
 

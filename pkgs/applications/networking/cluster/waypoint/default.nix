@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.11.1";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8fMhwJWINazLQou/i6/BZiPtsBJLmEEX9J1EZ0rsTh8=";
+    sha256 = "sha256-Zn11mVQV8lN62BVYfhXauKets7/mIqA0r+mG2TkRyPk=";
   };
 
-  vendorHash = "sha256-er1Qvnda8pTpWuvkiFhugZ6li82ljg9mk/HrtH22laA=";
+  vendorHash = "sha256-z0qe8zSQ9PopGeyvMDhRpU+3jUgHoh+8jTsYGLPk3i4=";
 
   nativeBuildInputs = [ go-bindata installShellFiles ];
 

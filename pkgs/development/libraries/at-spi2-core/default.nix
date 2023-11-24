@@ -6,7 +6,7 @@
 , pkg-config
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gsettings-desktop-schemas
 , makeWrapper
 , dbus
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.48.0";
+  version = "2.50.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "kFpbbxeQto7oA7/6n1+rTOtZH7T64LL4xhLFTx1OijA=";
+    sha256 = "6fWoyCNcndljshcd6RIDARKcZ33ekzlV4d9hi5ScStw=";
   };
 
   nativeBuildInputs = [

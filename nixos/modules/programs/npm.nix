@@ -34,7 +34,7 @@ in
           prefix = ''${HOME}/.npm
           https-proxy=proxy.example.com
           init-license=MIT
-          init-author-url=http://npmjs.org
+          init-author-url=https://www.npmjs.com/
           color=true
         '';
       };

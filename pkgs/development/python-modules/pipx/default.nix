@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-lm/Q+8nNubhaUR1pUbSIoD4DEUEkK+pQvvUdWNquW4Q=";
+    hash = "sha256-eNZJXznKgamGR9yrswrrLEqUTxFhLGxWTkYbi13bebY=";
   };
 
   nativeBuildInputs = [

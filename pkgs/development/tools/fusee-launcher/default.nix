@@ -6,6 +6,10 @@
 , makeWrapper
 } :
 
+let
+  arm-embedded-cc = pkgsCross.arm-embedded.buildPackages.gcc;
+in
+
 stdenv.mkDerivation {
   pname = "fusee-launcher";
   version = "unstable-2018-07-14";
@@ -16,6 +20,10 @@ stdenv.mkDerivation {
     rev = "265e8f3e1987751ec41db6f1946d132b296aba43";
     sha256 = "1pqkgw5bk0xcz9x7pc1f0r0b9nsc8jnnvcs1315d8ml8mx23fshm";
   };
+
+  makeFlags = [
+    "CROSS_COMPILE=${arm-embedded-cc.targetPrefix}"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share
@@ -28,7 +36,7 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 
-  nativeBuildInputs = [ pkgsCross.arm-embedded.buildPackages.gcc makeWrapper python3Packages.wrapPython ];
+  nativeBuildInputs = [ arm-embedded-cc makeWrapper python3Packages.wrapPython ];
   buildInputs = [ python3 python3Packages.pyusb ];
   pythonPath = with python3Packages; [ pyusb ];
 

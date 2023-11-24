@@ -16,6 +16,7 @@
 , rich
 , pysocks
 # CheckInputs
+, pip
 , pytest-httpbin
 , pytest-lazy-fixture
 , pytest-mock
@@ -52,8 +53,10 @@ buildPythonPackage rec {
     rich
   ] ++ requests.optional-dependencies.socks;
 
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pip
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock
@@ -103,6 +106,11 @@ buildPythonPackage rec {
     "test_valid_xml"
     "test_xml_format_options"
     "test_xml_xhtm"
+    # httpbin compatibility issues
+    "test_compress_form"
+    "test_binary_suppresses_when_terminal"
+    "test_binary_suppresses_when_not_terminal_but_pretty"
+    "test_binary_included_and_correct_when_suitable"
   ] ++ lib.optionals stdenv.isDarwin [
     # flaky
     "test_daemon_runner"

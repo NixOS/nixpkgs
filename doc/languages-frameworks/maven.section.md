@@ -4,6 +4,87 @@ Maven is a well-known build tool for the Java ecosystem however it has some chal
 
 The following provides a list of common patterns with how to package a Maven project (or any JVM language that can export to Maven) as a Nix package.
 
+## Building a package using `maven.buildMavenPackage` {#maven-buildmavenpackage}
+
+Consider the following package:
+
+```nix
+{ lib, fetchFromGitHub, jre, makeWrapper, maven }:
+
+maven.buildMavenPackage rec {
+  pname = "jd-cli";
+  version = "1.2.1";
+
+  src = fetchFromGitHub {
+    owner = "intoolswetrust";
+    repo = pname;
+    rev = "${pname}-${version}";
+    hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
+  };
+
+  mvnHash = "sha256-kLpjMj05uC94/5vGMwMlFzLKNFOKeyNvq/vmB6pHTAo=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    mkdir -p $out/bin $out/share/jd-cli
+    install -Dm644 jd-cli/target/jd-cli.jar $out/share/jd-cli
+
+    makeWrapper ${jre}/bin/java $out/bin/jd-cli \
+      --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
+  '';
+
+  meta = with lib; {
+    description = "Simple command line wrapper around JD Core Java Decompiler project";
+    homepage = "https://github.com/intoolswetrust/jd-cli";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ majiir ];
+  };
+}:
+```
+
+This package calls `maven.buildMavenPackage` to do its work. The primary difference from `stdenv.mkDerivation` is the `mvnHash` variable, which is a hash of all of the Maven dependencies.
+
+::: {.tip}
+After setting `maven.buildMavenPackage`, we then do standard Java `.jar` installation by saving the `.jar` to `$out/share/java` and then making a wrapper which allows executing that file; see [](#sec-language-java) for additional generic information about packaging Java applications.
+:::
+
+### Stable Maven plugins {#stable-maven-plugins}
+
+Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`. If your project does not override these versions, an upgrade of Maven will change the version of the used plugins, and therefore the derivation and hash.
+
+When `maven` is upgraded, `mvnHash` for the derivation must be updated as well: otherwise, the project will be built on the derivation of old plugins, and fail because the requested plugins are missing.
+
+This clearly prevents automatic upgrades of Maven: a manual effort must be made throughout nixpkgs by any maintainer wishing to push the upgrades.
+
+To make sure that your package does not add extra manual effort when upgrading Maven, explicitly define versions for all plugins. You can check if this is the case by adding the following plugin to your (parent) POM:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-enforcer-plugin</artifactId>
+  <version>3.3.0</version>
+  <executions>
+    <execution>
+      <id>enforce-plugin-versions</id>
+      <goals>
+        <goal>enforce</goal>
+      </goals>
+      <configuration>
+        <rules>
+          <requirePluginVersions />
+        </rules>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+```
+
+## Manually using `mvn2nix` {#maven-mvn2nix}
+::: {.warning}
+This way is no longer recommended; see [](#maven-buildmavenpackage) for the simpler and preferred way.
+:::
+
 For the purposes of this example let's consider a very basic Maven project with the following `pom.xml` with a single dependency on [emoji-java](https://github.com/vdurmont/emoji-java).
 
 ```xml
@@ -41,14 +122,11 @@ public class Main {
 }
 ```
 
-You find this demo project at https://github.com/fzakaria/nixos-maven-example
+You find this demo project at [https://github.com/fzakaria/nixos-maven-example](https://github.com/fzakaria/nixos-maven-example).
 
-## Solving for dependencies {#solving-for-dependencies}
+### Solving for dependencies {#solving-for-dependencies}
 
-### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
-
-> ⚠️ Although `buildMaven` is the "blessed" way within nixpkgs, as of 2020, it hasn't seen much activity in quite a while.
-
+#### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
 `buildMaven` is an alternative method that tries to follow similar patterns of other programming languages by generating a lock file. It relies on the maven plugin [mvn2nix-maven-plugin](https://github.com/NixOS/mvn2nix-maven-plugin).
 
 First you generate a `project-info.json` file using the maven plugin.
@@ -105,9 +183,10 @@ The benefit over the _double invocation_ as we will see below, is that the _/nix
 │           ├── avalon-framework-4.1.3.jar -> /nix/store/iv5fp3955w3nq28ff9xfz86wvxbiw6n9-avalon-framework-4.1.3.jar
 ```
 
-### Double Invocation {#double-invocation}
-
-> ⚠️ This pattern is the simplest but may cause unnecessary rebuilds due to the output hash changing.
+#### Double Invocation {#double-invocation}
+::: {.note}
+This pattern is the simplest but may cause unnecessary rebuilds due to the output hash changing.
+:::
 
 The double invocation is a _simple_ way to get around the problem that `nix-build` may be sandboxed and have no Internet connectivity.
 
@@ -115,7 +194,9 @@ It treats the entire Maven repository as a single source to be downloaded, relyi
 
 The first step will be to build the Maven project as a fixed-output derivation in order to collect the Maven repository -- below is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/double-invocation-repository.nix).
 
-> Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
+::: {.note}
+Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
+:::
 
 ```nix
 { lib, stdenv, maven }:
@@ -147,7 +228,9 @@ stdenv.mkDerivation {
 
 The build will fail, and tell you the expected `outputHash` to place. When you've set the hash, the build will return with a `/nix/store` entry whose contents are the full Maven repository.
 
-> Some additional files are deleted that would cause the output hash to change potentially on subsequent runs.
+::: {.warning}
+Some additional files are deleted that would cause the output hash to change potentially on subsequent runs.
+:::
 
 ```bash
 ❯ tree $(nix-build --no-out-link double-invocation-repository.nix) | head
@@ -165,7 +248,7 @@ The build will fail, and tell you the expected `outputHash` to place. When you'v
 
 If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over-time your output hash will change since the resolved dependencies may change. Hence this method is less recommended then using `buildMaven`.
 
-## Building a JAR {#building-a-jar}
+### Building a JAR {#building-a-jar}
 
 Regardless of which strategy is chosen above, the step to build the derivation is the same.
 
@@ -191,7 +274,9 @@ in stdenv.mkDerivation rec {
 }
 ```
 
-> We place the library in `$out/share/java` since JDK package has a _stdenv setup hook_ that adds any JARs in the `share/java` directories of the build inputs to the CLASSPATH environment.
+::: {.tip}
+We place the library in `$out/share/java` since JDK package has a _stdenv setup hook_ that adds any JARs in the `share/java` directories of the build inputs to the CLASSPATH environment.
+:::
 
 ```bash
 ❯ tree $(nix-build --no-out-link build-jar.nix)
@@ -203,7 +288,7 @@ in stdenv.mkDerivation rec {
 2 directories, 1 file
 ```
 
-## Runnable JAR {#runnable-jar}
+### Runnable JAR {#runnable-jar}
 
 The previous example builds a `jar` file but that's not a file one can run.
 
@@ -215,9 +300,9 @@ We will use the same repository we built above (either _double invocation_ or _b
 
 The following two methods are more suited to Nix then building an [UberJar](https://imagej.net/Uber-JAR) which may be the more traditional approach.
 
-### CLASSPATH {#classpath}
+#### CLASSPATH {#classpath}
 
-> This is ideal if you are providing a derivation for _nixpkgs_ and don't want to patch the project's `pom.xml`.
+This method is ideal if you are providing a derivation for _nixpkgs_ and don't want to patch the project's `pom.xml`.
 
 We will read the Maven repository and flatten it to a single list. This list will then be concatenated with the _CLASSPATH_ separator to create the full classpath.
 
@@ -255,9 +340,9 @@ in stdenv.mkDerivation rec {
 }
 ```
 
-### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
+#### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
 
-> This is ideal if you are the project owner and want to change your `pom.xml` to set the CLASSPATH within it.
+This method is ideal if you are the project owner and want to change your `pom.xml` to set the CLASSPATH within it.
 
 Augment the `pom.xml` to create a JAR with the following manifest:
 
@@ -333,8 +418,9 @@ in stdenv.mkDerivation rec {
   '';
 }
 ```
-
-> Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.
+::: {.note}
+Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.
+:::
 
 This will give you an executable shell-script that launches your JAR with all the dependencies available.
 

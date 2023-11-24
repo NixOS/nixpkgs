@@ -47,6 +47,8 @@ mkDerivation rec {
     sha256 = "sha256-TpxVC0GFZD3jGISnDWHKEetgVVpznm5k/Vc2dwVfSG4=";
   };
 
+  outputs = [ "out" "terminfo" ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -86,6 +88,12 @@ mkDerivation rec {
     sed -i '/fixup_bundle/d' src/contour/CMakeLists.txt
   '';
 
+  postInstall = ''
+    mkdir -p $out/nix-support $terminfo/share
+    mv $out/share/terminfo $terminfo/share/
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
+
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 
   meta = with lib; {
@@ -95,7 +103,7 @@ mkDerivation rec {
     homepage = "https://github.com/contour-terminal/contour";
     changelog = "https://github.com/contour-terminal/contour/raw/v${version}/Changelog.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fortuneteller2k ];
+    maintainers = with maintainers; [ moni ];
     platforms = platforms.unix;
   };
 }

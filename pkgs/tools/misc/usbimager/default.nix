@@ -5,22 +5,22 @@
 
 stdenv.mkDerivation rec {
   pname = "usbimager";
-  version = "1.0.9";
+  version = "1.0.10";
 
   src = fetchFromGitLab {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CEGUXJXqXmD8uT93T9dg49Lf5vTpAzQjdnhYmbR5zTI=";
+    sha256 = "sha256-HTFopc2xrhp0XYubQtOwMKWTQ+3JSKAyL4mMyQ82kAs=";
   };
 
-  sourceRoot = "source/src/";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
-    # libui is bundled with the source of usbimager as a compiled static libary
+    # libui is bundled with the source of usbimager as a compiled static library
 
   postPatch = ''
     sed -i \

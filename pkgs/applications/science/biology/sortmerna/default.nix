@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib rocksdb rapidjson ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DPORTABLE=off"
     "-DRAPIDJSON_HOME=${rapidjson}"
     "-DROCKSDB_HOME=${rocksdb}"

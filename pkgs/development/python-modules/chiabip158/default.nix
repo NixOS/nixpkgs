@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "chiabip158";
-  version = "1.2";
+  version = "1.3";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t0Fnsh9B83KiT5dFVVfHs7sm9HyNbMsp6goj3esoph8=";
+    hash = "sha256-HUgYVVQ7yc2X3ffnV7mCZf+oFUHl/29Mb4n91dRJ7gc=";
   };
 
   nativeBuildInputs = [ cmake setuptools-scm ];

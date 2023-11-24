@@ -18,15 +18,15 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
-  version = "0.17.17";
+  version = "0.17.18";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-IOYhseRYsyADz+qZc5tngkuGZShUqLzjPiYSTjR/32w=";
+    url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-RmrT4McV5W9Q6mqWUWWCPQc6hBN6y4oeObZlc2SKmF8=";
   };
 
   patches = [
@@ -50,8 +50,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     systemd
-    libgudev
     libpcap
+  ];
+
+  checkInputs = lib.optionals finalAttrs.passthru.withGudev [
+    libgudev
   ];
 
   nativeCheckInputs = [
@@ -81,12 +84,25 @@ stdenv.mkDerivation rec {
     ln -s "$PWD/libumockdev-preload.so.0" "$out/lib/libumockdev-preload.so.0"
   '';
 
+  passthru = {
+    # libgudev is needed for an optional test but it itself relies on umockdev for testing.
+    withGudev = false;
+
+    tests = {
+      withGudev = finalAttrs.finalPackage.overrideAttrs (attrs: {
+        passthru = attrs.passthru // {
+          withGudev = true;
+        };
+      });
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/martinpitt/umockdev";
-    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${version}";
+    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${finalAttrs.version}";
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
     platforms = with platforms; linux;
   };
-}
+})

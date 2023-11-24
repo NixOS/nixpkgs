@@ -6,6 +6,7 @@
 , devtools
 , email-validator
 , fetchFromGitHub
+, fetchpatch
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.8";
+  version = "1.10.12";
   format = "setuptools";
 
   outputs = [
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4oJoDlP1grLblF0ppqYM1GYEyNMEM9FssFQjacipmms=";
+    hash = "sha256-3XnbPGU90wLCPEryFAOky6Iy73Dvgzzh+GbOKW8hZ4U=";
   };
 
   postPatch = ''

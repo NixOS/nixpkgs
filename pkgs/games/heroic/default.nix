@@ -8,25 +8,27 @@
 , python3
 , makeWrapper
 , electron
+, vulkan-helper
 , gogdl
 , legendary-gl
+, nile
 }:
 
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.8.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-AZwJRBkWuzBPT+ADVHabiK2KRXe6clZFa0IO99BO2Wk=";
+    hash = "sha256-umPQIxwIahjbO4QbkKEoeSSeYT2UatsTGRPrLgw5KW8=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-xiLK0D9+oL2UMD7b/9htOQJEpYCNayKW+KJ/vNVCgsw=";
+    hash = "sha256-o5ztk4okH21Op1jqHZfranR12M8B1Y/K95aWb10tf5o=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +38,24 @@ in stdenv.mkDerivation rec {
     python3
     makeWrapper
   ];
+
+  patches = [
+    # Reverts part of upstream PR 2761 so that we don't have to use a non-free Electron fork.
+    # https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/2761
+    ./remove-drm-support.patch
+    # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
+    ./fix-non-steam-shortcuts.patch
+    # Fix reg add infinite loop
+    # Submitted upstream: https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/pull/3210
+    ./fix-infinite-loop.patch
+  ];
+
+  postPatch = ''
+    # We are not packaging this as an Electron application bundle, so Electron
+    # reports to the application that is is not "packaged", which causes Heroic
+    # to take some incorrect codepaths meant for development environments.
+    substituteInPlace src/**/*.ts --replace 'app.isPackaged' 'true'
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -74,13 +94,18 @@ in stdenv.mkDerivation rec {
     chmod -R u+w "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
     rm -rf "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
     mkdir -p "$out/share/${appName}/build/bin/${binPlatform}"
-    ln -s "${gogdl}/bin/gogdl" "${legendary-gl}/bin/legendary" "$out/share/${appName}/build/bin/${binPlatform}"
+    ln -s \
+      "${gogdl}/bin/gogdl" \
+      "${legendary-gl}/bin/legendary" \
+      "${nile}/bin/nile" \
+      "${lib.optionalString stdenv.isLinux "${vulkan-helper}/bin/vulkan-helper"}" \
+      "$out/share/${appName}/build/bin/${binPlatform}"
 
     makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
       --inherit-argv0 \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/share/${appName} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
 
     substituteInPlace "$out/share/${appName}/flatpak/com.heroicgameslauncher.hgl.desktop" \
       --replace "Exec=heroic-run" "Exec=heroic"
@@ -92,7 +117,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
+    description = "A Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases";
     license = licenses.gpl3Only;

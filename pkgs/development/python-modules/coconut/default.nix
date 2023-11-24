@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "coconut";
-  version = "2.2.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+OrVNtre7kAfU5L7/6DadZxFNWVt5raF6HLGXHHpOvE=";
+    hash = "sha256-u1tcIu0U1VZrUx2hVdtRDv1N4jVf176kQSw47/7lOXY=";
   };
 
   propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];

@@ -4,7 +4,6 @@
 , which
 , gtk2
 , gtk3
-, qt4
 , qt5
 , libXtst
 , lib
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which pkg-config unixtools.whereis ];
-  buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase libchewing anthy ];
+  buildInputs = [ libXtst gtk2 gtk3 qt5.qtbase libchewing anthy ];
 
   preConfigure = "patchShebangs configure";
   configureFlags = [ "--disable-lib64" "--disable-qt5-immodule" ];

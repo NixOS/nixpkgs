@@ -38,14 +38,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.255";
+  version = "0.260";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-pdPKxEHxynBIB2lUG6yjKNcY8MlOlk4pfr7WwqaA9Dk=";
+    hash = "sha256-spWnaf7xXK2xzgdUagsgN5doVrpJk7EA6fzYd9FlFm0=";
   };
 
   outputs = [ "out" "tools" ];
@@ -196,5 +196,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    mainProgram = "mame";
   };
 }

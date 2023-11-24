@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bash, bzip2 }:
+{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bzip2 }:
 
 let
   zshCompletion = fetchurl {
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.unfree;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice roconnor ];
+    mainProgram = "tarsnap";
   };
 }

@@ -13,6 +13,7 @@
   "DaddyTimeMono" = "1w5n170l63hfxh1xclw3jpf8amj60br6py4yx12yhqanp2zg0shj";
   "DejaVuSansMono" = "1j22f5jnpmyli686r67c4c07g07ac78aq9wg8hy1vwblxfzdvq9f";
   "DroidSansMono" = "13r1sglgwf05swnbn0mha2gpdqammzlg0p6h7c33af1vr7n8cnca";
+  "EnvyCodeR" = "1y03cb0kq548nm8qh4jh8yw2zpx6ahl0y8561c429p5f16707qxl";
   "FantasqueSansMono" = "1k0p6gvas6mgwq0bbvpwbn3mm6yaaapgjqgk30fvpq9zvn4a26bf";
   "FiraCode" = "14vbb3w6il32kd8my75vvv786azm7sxmdpba9np0qjx4rs8xdhbn";
   "FiraMono" = "1iiz5cnhrb67793ww6pj5y5x9s1a5nlk9kqwbv92kxmbqakarlcb";
@@ -27,6 +28,7 @@
   "Inconsolata" = "02rar6g3zbbpxxxz37v7d5qzafn59bhp04iv3wk16kqxy0havgx5";
   "InconsolataGo" = "0nx6j3v2fvhdw3ygmz65zwlj6zwrkpmf59wfxirpzkcqqsdh4zwl";
   "InconsolataLGC" = "00s2051fz3k6jnsfmnlqnd2cghr9sj2pddi5gpid1i5x006rig7a";
+  "IntelOneMono" = "02cynzrpn93b1kmi21p60lhdai6rppmm3m1f872kvf08damc1660";
   "Iosevka" = "1byrmfbsqi06fsy958364jy694dnm7a7pcjsv64w6mwfsi5vjn1r";
   "IosevkaTerm" = "1k65jfa0c7c6pvns7vfcxcfc3i1qcr6wg16qafbp9zggabbvl7aa";
   "JetBrainsMono" = "0mbzvfl36a6mgb2dnjf8n3kkm28sz0xhv7s5lww141wpgj5jb4a9";

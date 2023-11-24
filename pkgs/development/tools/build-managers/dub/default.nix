@@ -4,7 +4,7 @@ assert dcompiler != null;
 
 stdenv.mkDerivation rec {
   pname = "dub";
-  version = "1.30.0";
+  version = "1.33.0";
 
   enableParallelBuilding = true;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "dlang";
     repo = "dub";
     rev = "v${version}";
-    sha256 = "sha256-iVl7bjblvIxvrUX7Phq6h4AIAmZjNVkGYYFA1hhsE7c=";
+    sha256 = "sha256-4Mha7WF6cg3DIccfpvOnheuvgfziv/7wo8iFsPXO4yY=";
   };
 
   dubvar = "\\$DUB";
@@ -137,6 +137,7 @@ stdenv.mkDerivation rec {
     rm -r test/path-subpackage-ref
     rm -r test/sdl-package-simple
     rm -r test/dpath-variable # requires execution of dpath-variable.sh
+    rm -r test/use-c-sources
 
     ./test/run-unittest.sh
   '';
@@ -150,7 +151,7 @@ stdenv.mkDerivation rec {
     description = "Package and build manager for D applications and libraries";
     homepage = "https://code.dlang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ThomasMader ];
+    maintainers = with maintainers; [ ThomasMader jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

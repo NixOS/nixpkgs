@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "iso8601";
-  version = "1.1.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MoEee4He7iBj6m0ulPiBmobR84EeSdI2I6QfqDK+8D8=";
+    hash = "sha256-c5lg03x0x3vZvVRqdlYsy1gf49SCD/XDFB60nIOf2o8=";
   };
 
   nativeBuildInputs = [
@@ -25,8 +25,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    # "hypothesis" indirectly depends on iso8601 to build its documentation
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     pytestCheckHook
     pytz
   ];

@@ -7,23 +7,19 @@
 let
   # Upstream replaces minor versions, so use cached URLs.
   srcs = {
-    "i686-linux" = fetchurl {
-      url = "https://web.archive.org/web/20220907001049/https://ftp.perforce.com/perforce/r22.1/bin.linux26x86/helix-core-server.tgz";
-      sha256 = "e9cf27c9dd2fa6432745058a93896d151543aff712fce9f7322152d6ea88a12a";
-    };
     "x86_64-linux" = fetchurl {
-      url = "https://web.archive.org/web/20220907001202/https://ftp.perforce.com/perforce/r22.1/bin.linux26x86_64/helix-core-server.tgz";
-      sha256 = "9c272b67574264a4f49fe846ccda24fbd4baeb282665af74b6fbccff26a43558";
+      url = "https://web.archive.org/web/20231109221336id_/https://ftp.perforce.com/perforce/r23.1/bin.linux26x86_64/helix-core-server.tgz";
+      sha256 = "b68c4907cf9258ab47102e8f0e489c11d528a8f614bfa45e3a2fa198639e2362";
     };
     "x86_64-darwin" = fetchurl {
-      url = "https://web.archive.org/web/20220907001334/https://ftp.perforce.com/perforce/r22.1/bin.macosx1015x86_64/helix-core-server.tgz";
-      sha256 = "2500a23fe482a303bd400f0de460b7624ad3f940fef45246004b9f956e90ea45";
+      url = "https://web.archive.org/web/20231109221937id_/https://ftp.perforce.com/perforce/r23.1/bin.macosx1015x86_64/helix-core-server.tgz";
+      sha256 = "fcbf09787ffc29f7237839711447bf19a37ae18a8a7e19b2d30deb3715ae2c11";
     };
   };
 in
 stdenv.mkDerivation {
   pname = "p4d";
-  version = "2022.1.2305383";
+  version = "2023.1.2513900";
 
   src =
     assert lib.assertMsg (builtins.hasAttr stdenv.hostPlatform.system srcs) "p4d is not available for ${stdenv.hostPlatform.system}";

@@ -166,7 +166,7 @@ in
             { command = "${pkgs.coreutils}/bin/mkdir"; options = [ "NOPASSWD" ]; }
             { command = "${pkgs.coreutils}/bin/readlink"; options = [ "NOPASSWD" ]; }
             # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
-            { command = "/run/current-system/bin/btrfs"; options = [ "NOPASSWD" ]; }
+            { command = "/run/current-system/sw/bin/btrfs"; options = [ "NOPASSWD" ]; }
             { command = "/run/current-system/sw/bin/mkdir"; options = [ "NOPASSWD" ]; }
             { command = "/run/current-system/sw/bin/readlink"; options = [ "NOPASSWD" ]; }
             ];
@@ -182,7 +182,7 @@ in
             (doasCmdNoPass "${pkgs.coreutils}/bin/mkdir")
             (doasCmdNoPass "${pkgs.coreutils}/bin/readlink")
             # for ssh, they are not the same than the one hard coded in ${pkgs.btrbk}
-            (doasCmdNoPass "/run/current-system/bin/btrfs")
+            (doasCmdNoPass "/run/current-system/sw/bin/btrfs")
             (doasCmdNoPass "/run/current-system/sw/bin/mkdir")
             (doasCmdNoPass "/run/current-system/sw/bin/readlink")
 

@@ -8,13 +8,13 @@ buildGoModule rec {
     owner = "nonoo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ycy8avq5s7zspfi0d9klqcwwkpmcaz742cigd7pmcnbbhspcicp";
+    hash = "sha256-l0V2NVzLsnpPe5EJcr5i9U7OGaYzNRDd1f/ogrdCnvk=";
   };
+
+  vendorHash = "sha256-CnZTUP2JBbhG8VUHbVX+vicfQJC9Y8endlwQHdmzMus=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pulseaudio ];
-
-  vendorSha256 = "1srjngcis42wfskwfqxxj101y9xyzrans1smy53bh1c9zm856xha";
 
   meta = with lib; {
     homepage = "https://github.com/nonoo/kappanhang";

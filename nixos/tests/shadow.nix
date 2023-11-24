@@ -32,7 +32,7 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
       };
       users.berta = {
         isNormalUser = true;
-        hashedPassword = hashed_bcrypt;
+        hashedPasswordFile = (pkgs.writeText "hashed_bcrypt" hashed_bcrypt).outPath;
         shell = pkgs.bash;
       };
       users.yesim = {

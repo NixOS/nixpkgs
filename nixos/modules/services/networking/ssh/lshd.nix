@@ -165,9 +165,7 @@ in
         ${lsh}/sbin/lshd --daemonic \
           --password-helper="${lsh}/sbin/lsh-pam-checkpw" \
           -p ${toString portNumber} \
-          ${if interfaces == [] then ""
-            else (concatStrings (map (i: "--interface=\"${i}\"")
-                                     interfaces))} \
+          ${optionalString (interfaces != []) (concatStrings (map (i: "--interface=\"${i}\"") interfaces))} \
           -h "${hostKey}" \
           ${optionalString (!syslog) "--no-syslog" } \
           ${if passwordAuthentication then "--password" else "--no-password" } \

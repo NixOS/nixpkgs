@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "skanehira";
     repo = "docui";
     rev = version;
-    sha256 = "0jya0wdp8scjmsr44krdbbb8q4gplf44gsng1nyn12a6ldqzayxl";
+    hash = "sha256-tHv1caNGiWC9Dc/qR4ij9xGM1lotT0KyrpJpdBsHyks=";
   };
 
-  vendorSha256 = "1ggdczvv03lj0g6cq26vrk1rba6pk0805n85w9hkbjx9c4r3j577";
+  vendorHash = "sha256-5xQ5MmGpyzVh4gXZAhCY16iVw8zbCMzMA5IOsPdn7b0=";
 
   meta = with lib; {
     description = "TUI Client for Docker";

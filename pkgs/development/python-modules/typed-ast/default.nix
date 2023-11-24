@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Python AST modules with type comment support";
     homepage = "https://github.com/python/typed_ast";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

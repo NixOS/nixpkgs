@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , SDL
 , SDL_net
@@ -9,6 +10,7 @@
 , graphicsmagick
 , libGL
 , libGLU
+, OpenGL
 , libpng
 , makeDesktopItem
 }:
@@ -22,6 +24,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-wNE91+0u02O2jeYVR1eB6JHNWC6BYrXDZpE3UCIiJgo=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/joncampbell123/dosbox-x/commit/006d5727d36d1ec598e387f2f1a3c521e3673dcb.patch";
+      includes = [ "src/gui/render_templates_sai.h" ];
+      hash = "sha256-HSO29/LgZRKQ3HQBA0QF5henG8pCSoe1R2joYNPcUcE=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     copyDesktopItems
@@ -32,10 +42,13 @@ stdenv.mkDerivation rec {
     SDL
     SDL_net
     SDL_sound
+    libpng
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
+    OpenGL
+  ] else [
     libGL
     libGLU
-    libpng
-  ];
+  ]);
 
   hardeningDisable = [ "format" ];
 
@@ -73,5 +86,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+    mainProgram = "dosbox";
   };
 }

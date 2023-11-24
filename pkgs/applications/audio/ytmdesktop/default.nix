@@ -32,5 +32,6 @@ in appimageTools.wrapType2 rec {
     license = licenses.cc0;
     platforms = platforms.linux;
     maintainers = [ maintainers.lgcl ];
+    mainProgram = "ytmdesktop";
   };
 }

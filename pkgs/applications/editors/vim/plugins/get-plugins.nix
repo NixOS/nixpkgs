@@ -1,10 +1,10 @@
 with import <localpkgs> {};
 let
-  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix;
-  inherit (neovimUtils) buildNeovimPluginFrom2Nix;
+  inherit (vimUtils.override {inherit vim;}) buildVimPlugin;
+  inherit (neovimUtils) buildNeovimPlugin;
 
   generated = callPackage <localpkgs/pkgs/applications/editors/vim/plugins/generated.nix> {
-    inherit buildNeovimPluginFrom2Nix buildVimPluginFrom2Nix;
+    inherit buildNeovimPlugin buildVimPlugin;
   } {} {};
   hasChecksum = value:
     lib.isAttrs value && lib.hasAttrByPath ["src" "outputHash"] value;

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hypothesis
 , ifaddr
 , lxml
 , poetry-core
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pywemo";
-  version = "0.9.2";
+  version = "1.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mrLZ8W7imM/ysJhd4OcqZFzx2z/KG8k5bOPFb4ldYzE=";
+    hash = "sha256-RZeg6/xAGRumd4aM/mQQnIrIXB/rUrdeQQxk2c1mJNI=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +37,10 @@ buildPythonPackage rec {
     lxml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
+    hypothesis
     pytest-vcr
     pytestCheckHook
   ];

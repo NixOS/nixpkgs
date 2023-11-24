@@ -44,8 +44,8 @@ updateNightly() {
 
     echo "  Successfully fetched. hash: ${NEW_NIGHTLY_HASH}"
 
-    sed -i "s/${OLD_NIGHTLY_VERSION}/${NEW_NIGHTLY_VERSION}/" ./default.nix
-    sed -i "s/${OLD_NIGHTLY_HASH}/${NEW_NIGHTLY_HASH}/" ./default.nix
+    sed -i "s|${OLD_NIGHTLY_VERSION}|${NEW_NIGHTLY_VERSION}|" ./default.nix
+    sed -i "s|${OLD_NIGHTLY_HASH}|${NEW_NIGHTLY_HASH}|" ./default.nix
 }
 
 updateCanary() {
@@ -69,8 +69,8 @@ updateCanary() {
 
     echo "  Successfully fetched. hash: ${NEW_CANARY_HASH}"
 
-    sed -i "s/${OLD_CANARY_VERSION}/${NEW_CANARY_VERSION}/" ./default.nix
-    sed -i "s/${OLD_CANARY_HASH}/${NEW_CANARY_HASH}/" ./default.nix
+    sed -i "s|${OLD_CANARY_VERSION}|${NEW_CANARY_VERSION}|" ./default.nix
+    sed -i "s|${OLD_CANARY_HASH}|${NEW_CANARY_HASH}|" ./default.nix
 }
 
 if [[ "$BRANCH" = "nightly" ]]; then

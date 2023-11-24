@@ -86,7 +86,7 @@ in
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
-      prayer = 49;
+      # prayer = 49; # dropped in 23.11
       mpd = 50;
       clamav = 51;
       #fprot = 52; # unused
@@ -411,7 +411,7 @@ in
       #rtkit = 45; # unused
       dovecot2 = 46;
       dovenull2 = 47;
-      prayer = 49;
+      # prayer = 49; # dropped in 23.11
       mpd = 50;
       clamav = 51;
       #fprot = 52; # unused

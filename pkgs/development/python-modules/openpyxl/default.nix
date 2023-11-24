@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, et_xmlfile
+, et-xmlfile
 , fetchFromGitLab
 , jdcal
 , lxml
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jdcal
-    et_xmlfile
+    et-xmlfile
     lxml
   ];
 

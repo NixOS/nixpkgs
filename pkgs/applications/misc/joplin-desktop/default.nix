@@ -2,27 +2,28 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.10.19";
-  name = "${pname}-${version}";
+  version = "2.12.18";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
   suffix = {
-    x86_64-linux = "AppImage";
-    x86_64-darwin = "dmg";
+    x86_64-linux = ".AppImage";
+    x86_64-darwin = ".dmg";
+    aarch64-darwin = "-arm64.dmg";
   }.${system} or throwSystem;
 
   src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
+    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-+QvaEB+4eA3grnqbLfFMEtNyizlvovtV/BvTa9gSZGU=";
-      x86_64-darwin = "sha256-BK951HLf+L1x9TDlqW11mNnnrnHfZ4qbKk25OIVXnuM=";
+      x86_64-linux = "1fwcqgqni7d9x0prdy3p8ccc5lzgn57rhph4498vs1q40kyq8823";
+      x86_64-darwin = "sha256-atd7nkefLvilTq39nTLbXQhm1zzBCHOLL7MRJwlTSMk=";
+      aarch64-darwin = "sha256-xiWXD+ULSVJ80uruYz0uRFkDRT1QOUd6FSWDKK9yLMc=";
     }.${system} or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   meta = with lib; {
@@ -37,23 +38,23 @@ let
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves qjoly ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
   };
 
   linux = appimageTools.wrapType2 rec {
-    inherit name src meta;
+    inherit pname version src meta;
 
     profile = ''
       export LC_ALL=C.UTF-8
     '';
 
-    multiPkgs = null; # no 32bit needed
+    multiArch = false; # no 32bit needed
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${name},${pname}}
+      mv $out/bin/{${pname}-${version},${pname}}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
@@ -63,7 +64,7 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit name src meta;
+    inherit pname version src meta;
 
     nativeBuildInputs = [ undmg ];
 

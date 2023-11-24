@@ -35,6 +35,16 @@ let
         '';
       };
 
+      path = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = [ "" ];
+        description = lib.mdDoc ''
+          Additional packages that should be added to the agent's `PATH`.
+          Mostly useful for the `local` backend.
+        '';
+      };
+
       environmentFile = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
@@ -94,7 +104,7 @@ let
           "-/etc/localtime"
         ];
       };
-      inherit (agentCfg) environment;
+      inherit (agentCfg) environment path;
     };
   };
 in
@@ -106,28 +116,41 @@ in
       agents = lib.mkOption {
         default = { };
         type = lib.types.attrsOf agentModule;
-        example = {
-          docker = {
-            environment = {
-              WOODPECKER_SERVER = "localhost:9000";
-              WOODPECKER_BACKEND = "docker";
-              DOCKER_HOST = "unix:///run/podman/podman.sock";
+        example = lib.literalExpression ''
+          {
+            podman = {
+              environment = {
+                WOODPECKER_SERVER = "localhost:9000";
+                WOODPECKER_BACKEND = "docker";
+                DOCKER_HOST = "unix:///run/podman/podman.sock";
+              };
+
+              extraGroups = [ "podman" ];
+
+              environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
             };
 
-            extraGroups = [ "docker" ];
+            exec = {
+              environment = {
+                WOODPECKER_SERVER = "localhost:9000";
+                WOODPECKER_BACKEND = "local";
+              };
 
-            environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
-          };
+              environmentFile = [ "/run/secrets/woodpecker/agent-secret.txt" ];
 
-          exec = {
-            environment = {
-              WOODPECKER_SERVER = "localhost:9000";
-              WOODPECKER_BACKEND = "exec";
+              path = [
+                # Needed to clone repos
+                git
+                git-lfs
+                woodpecker-plugin-git
+                # Used by the runner as the default shell
+                bash
+                # Most likely to be used in pipeline definitions
+                coreutils
+              ];
             };
-
-            environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
-          };
-        };
+          }
+        '';
         description = lib.mdDoc "woodpecker-agents configurations";
       };
     };

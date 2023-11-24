@@ -1,8 +1,8 @@
 diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
-index ab746724e9..1087983c87 100644
+index 3532c23114..25dfcae4c7 100644
 --- a/bin/internal/shared.sh
 +++ b/bin/internal/shared.sh
-@@ -215,8 +215,6 @@ function shared::execute() {
+@@ -229,8 +229,6 @@ function shared::execute() {
      exit 1
    fi
  
@@ -11,35 +11,11 @@ index ab746724e9..1087983c87 100644
    BIN_NAME="$(basename "$PROG_NAME")"
    case "$BIN_NAME" in
      flutter*)
-diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 738fef987d..03a152e64f 100644
---- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-+++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -241,7 +241,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
-           globals.flutterUsage.suppressAnalytics = true;
-         }
- 
--        globals.flutterVersion.ensureVersionFile();
-         final bool machineFlag = topLevelResults['machine'] as bool? ?? false;
-         final bool ci = await globals.botDetector.isRunningOnBot;
-         final bool redirectedCompletion = !globals.stdio.hasTerminal &&
-@@ -250,10 +249,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
-         final bool versionCheckFlag = topLevelResults['version-check'] as bool? ?? false;
-         final bool explicitVersionCheckPassed = topLevelResults.wasParsed('version-check') && versionCheckFlag;
- 
--        if (topLevelResults.command?.name != 'upgrade' &&
--            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
--          await globals.flutterVersion.checkFlutterVersionFreshness();
--        }
- 
-         // See if the user specified a specific device.
-         globals.deviceManager?.specifiedDeviceId = topLevelResults['device-id'] as String?;
-
 diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
-index dd80b1e46e..8e54517765 100644
+index 13efbde879..467b3a7cbf 100644
 --- a/packages/flutter_tools/lib/src/cache.dart
 +++ b/packages/flutter_tools/lib/src/cache.dart
-@@ -668,6 +668,7 @@
+@@ -664,6 +664,7 @@ class Cache {
  
    /// Update the cache to contain all `requiredArtifacts`.
    Future<void> updateAll(Set<DevelopmentArtifact> requiredArtifacts, {bool offline = false}) async {
@@ -47,3 +23,27 @@ index dd80b1e46e..8e54517765 100644
      if (!_lockEnabled) {
        return;
      }
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+index 5d6d78639f..90a4dfa555 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+@@ -297,7 +297,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+           globals.flutterUsage.suppressAnalytics = true;
+         }
+ 
+-        globals.flutterVersion.ensureVersionFile();
+         final bool machineFlag = topLevelResults[FlutterGlobalOptions.kMachineFlag] as bool? ?? false;
+         final bool ci = await globals.botDetector.isRunningOnBot;
+         final bool redirectedCompletion = !globals.stdio.hasTerminal &&
+@@ -306,11 +305,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         final bool versionCheckFlag = topLevelResults[FlutterGlobalOptions.kVersionCheckFlag] as bool? ?? false;
+         final bool explicitVersionCheckPassed = topLevelResults.wasParsed(FlutterGlobalOptions.kVersionCheckFlag) && versionCheckFlag;
+ 
+-        if (topLevelResults.command?.name != 'upgrade' &&
+-            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
+-          await globals.flutterVersion.checkFlutterVersionFreshness();
+-        }
+-
+         // See if the user specified a specific device.
+         final String? specifiedDeviceId = topLevelResults[FlutterGlobalOptions.kDeviceIdOption] as String?;
+         if (specifiedDeviceId != null) {

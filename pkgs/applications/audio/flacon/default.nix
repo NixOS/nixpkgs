@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flacon";
-  version = "11.1.0";
+  version = "11.3.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "sha256-nAJKTRkx8d53v1tPnu5ARrRoESKh4jUOCcD54bhE8TU=";
+    sha256 = "sha256-jzpD8+zhIbOYgSNsoE1Pay+FiPXtRCd6Zz6HHkzWAkY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

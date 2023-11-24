@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
+, obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
 , gnome, librsvg, wrapGAppsHook, gobject-introspection
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 networkmanager ]
+                  gnome.adwaita-icon-theme networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -36,11 +36,13 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    # Don't check for runtime dependency `ip` during the configure
+    "--disable-runtime-deps-check"
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcpcd iproute2 ]}"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
   ];
 

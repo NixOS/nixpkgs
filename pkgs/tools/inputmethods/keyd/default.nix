@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
-, pkg-config
 , systemd
 , runtimeShell
 , python3
@@ -43,7 +41,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "keyd";
   inherit version src;
 

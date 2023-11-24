@@ -1,19 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, fmt
+, catch2_3
 , staticBuild ? stdenv.hostPlatform.isStatic
+
+# tests
+, bear, tiledb
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdlog";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo  = "spdlog";
     rev   = "v${version}";
-    hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
+    hash  = "sha256-cxTaOuLXHRU8xMz9gluYz0a93O0ez2xOxbloyc1m1ns=";
   };
 
+  patches = [
+    # Fix a broken test, remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/gabime/spdlog/commit/2ee8bac78e6525a8ad9a9196e65d502ce390d83a.patch";
+      hash = "sha256-L79yOkm3VY01jmxNctfneTLmOA5DEQeNNGC8LbpJiOc=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
+  # Required to build tests, even if they aren't executed
+  buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ fmt ];
 
   cmakeFlags = [
@@ -33,6 +52,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit bear tiledb;
+  };
 
   meta = with lib; {
     description    = "Very fast, header only, C++ logging library";

@@ -14,13 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eaAbqeFY+B3CcKJywC3vaRsWZNQENTbALc7L7uW0W6U=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [
     (python3.withPackages (ps: with ps; [ pygobject3 ]))
     headsetcontrol
     gtk3
-    gobject-introspection
     libayatana-appindicator
   ];
 

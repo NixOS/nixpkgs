@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, qttools, which, bash }:
+{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, which, bash, qt5 }:
 
 buildPythonApplication rec {
   pname = "raysession";
@@ -20,8 +20,9 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     pyqt5   # pyuic5 and pyrcc5 to build resources.
-    qttools # lrelease to build translations.
+    qt5.qttools # lrelease to build translations.
     which   # which to find lrelease.
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [ libjack2 bash ];
   propagatedBuildInputs = [ pydbus pyliblo pyqt5 ];
@@ -36,6 +37,9 @@ buildPythonApplication rec {
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/raysession/src" "$out $pythonPath"
+    for file in $out/bin/*; do
+      wrapQtApp "$file"
+    done
   '';
 
   meta = with lib; {

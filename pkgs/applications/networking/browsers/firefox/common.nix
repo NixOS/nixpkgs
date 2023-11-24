@@ -1,11 +1,14 @@
 { pname
 , version
+, packageVersion ? version
 , meta
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
 , branding ? null
+, requireSigning ? true
+, allowAddonSideload ? false
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -55,6 +58,7 @@
 , gnum4
 , gtk3
 , icu
+, icu72
 , libGL
 , libGLU
 , libevent
@@ -186,7 +190,6 @@ let
       # These values are exposed through telemetry
       "app.distributor" = "nixos";
       "app.distributor.channel" = "nixpkgs";
-      "app.partner.nixos" = "nixos";
     };
   });
 
@@ -204,9 +207,9 @@ let
 
 in
 
-buildStdenv.mkDerivation ({
+buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
-  inherit version;
+  version = packageVersion;
 
   inherit src unpackPhase meta;
 
@@ -237,6 +240,17 @@ buildStdenv.mkDerivation ({
       url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
       hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
     })
+  ]
+  ++ lib.optionals (lib.versionOlder version "102.13") [
+    # cherry-pick bindgen change to fix build with clang 16
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
+      hash = "sha256-lTvgT358M4M2vedZ+A6xSKsBYhSN+McdmEeR9t75MLU=";
+    })
+    # cherry-pick mp4parse change fixing build with Rust 1.70+
+    # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
+    # vendored to update checksums
+    ./mp4parse-rust-170.patch
   ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
@@ -355,8 +369,11 @@ buildStdenv.mkDerivation ({
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString (!requireSigning) ''
+    export MOZ_REQUIRE_SIGNING=
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
@@ -395,6 +412,7 @@ buildStdenv.mkDerivation ({
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
+  ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ [
     (enableFeature alsaSupport "alsa")
     (enableFeature crashreporterSupport "crashreporter")
@@ -427,7 +445,6 @@ buildStdenv.mkDerivation ({
     freetype
     glib
     gtk3
-    icu
     libffi
     libGL
     libGLU
@@ -455,7 +472,10 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
+  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
+  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -488,6 +508,9 @@ buildStdenv.mkDerivation ({
 
   preBuild = ''
     cd mozobj
+  '' + lib.optionalString (lib.versionAtLeast version "120") ''
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   postBuild = ''
@@ -543,7 +566,6 @@ buildStdenv.mkDerivation ({
   passthru = {
     inherit application extraPatches;
     inherit updateScript;
-    inherit version;
     inherit alsaSupport;
     inherit binaryName;
     inherit jackSupport;
@@ -555,6 +577,7 @@ buildStdenv.mkDerivation ({
     inherit tests;
     inherit gtk3;
     inherit wasiSysRoot;
+    version = packageVersion;
   } // extraPassthru;
 
   hardeningDisable = [ "format" ]; # -Werror=format-security
@@ -573,4 +596,4 @@ buildStdenv.mkDerivation ({
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
-})
+}

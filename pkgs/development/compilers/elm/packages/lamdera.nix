@@ -7,16 +7,16 @@ let
   arch = if stdenv.isAarch64 then "arm64" else "x86_64";
   hashes =
     {
-      "x86_64-linux" = "443a763487366fa960120bfe193441e6bbe86fdb31baeed7dbb17d410dee0522";
-      "aarch64-linux" = "f11bec3b094df0c0958a8f1e07af5570199e671a882ad5fe979f1e7e482e986d";
-      "x86_64-darwin" = "d05a88d13e240fdbc1bf64bd1a4a9ec4d3d53c95961bb9e338449b856df91853";
-      "aarch64-darwin" = "bb105e7aebae3c637b761017c6fb49d9696eba1022f27ec594aac9c2dbffd907";
+      "x86_64-linux" = "a51d5b9a011c54b0001ff3273cee027774686e233adadb20b1978d2cabfe32a6";
+      "aarch64-linux" = "8904ce928f60e06df1f06b3af5ee5eb320c388922aa38b698d823df1d73e8e49";
+      "x86_64-darwin" = "b4d1bb5ddc3503862750e5b241f74c22dc013792bc4f410dd914a5216e20ed2f";
+      "aarch64-darwin" = "6d20e384dae90bb994c3f1e866c964124c7e8a51e9e08bad0e90a2b560bb5a18";
     };
 in
 
 stdenv.mkDerivation rec {
   pname = "lamdera";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://static.lamdera.com/bin/lamdera-${version}-${os}-${arch}";

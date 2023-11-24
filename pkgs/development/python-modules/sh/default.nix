@@ -3,23 +3,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, python
-, lsof
-, glibcLocales
-, coreutils
 , pytestCheckHook
  }:
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "2.0.2";
+  version = "2.0.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "amoffat";
     repo = "sh";
     rev = "refs/tags/${version}";
-    hash = "sha256-qMYaGNEvv2z47IHFGqb64TRpN3JHycpEmhYhDjrUi6s=";
+    hash = "sha256-c4Ms4ydcW7LgmAI1WuYD74nzILuY/Xg+JePJe0q5AQQ=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "tests/test.py"
+    "tests"
   ];
 
   # A test needs the HOME directory to be different from $TMPDIR.
@@ -47,6 +43,9 @@ buildPythonPackage rec {
     "test_unicode_path"
     # fails to import itself after modifying the environment
     "test_environment"
+    # timing sensitive through usage of sleep(1) and signal handling
+    # https://github.com/amoffat/sh/issues/684
+    "test_general_signal"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable tests that fail on Darwin sandbox
     "test_background_exception"

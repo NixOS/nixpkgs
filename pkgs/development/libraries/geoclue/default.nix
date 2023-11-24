@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
     json-glib
     libsoup_3
     avahi
-    gobject-introspection
   ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
   ] ++ lib.optionals (!stdenv.isDarwin) [

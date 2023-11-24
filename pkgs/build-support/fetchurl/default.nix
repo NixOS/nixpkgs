@@ -67,7 +67,6 @@ in
 , # Legacy ways of specifying the hash.
   outputHash ? ""
 , outputHashAlgo ? ""
-, md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
@@ -121,18 +120,26 @@ let
     else throw "fetchurl requires either `url` or `urls` to be set";
 
   hash_ =
-    # Many other combinations don't make sense, but this is the most common one:
-    if hash != "" && sha256 != "" then throw "multiple hashes passed to fetchurl" else
+    if with lib.lists; length (filter (s: s != "") [ hash outputHash sha1 sha256 sha512 ]) > 1
+    then throw "multiple hashes passed to fetchurl" else
 
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
-    else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
+    else if outputHash != "" then
+      if outputHashAlgo != "" then { inherit outputHashAlgo outputHash; }
+      else throw "fetchurl was passed outputHash without outputHashAlgo"
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else if sha1   != "" then { outputHashAlgo = "sha1";   outputHash = sha1; }
     else if cacert != null then { outputHashAlgo = "sha256"; outputHash = ""; }
     else throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
 in
+
+assert (lib.isList curlOpts) -> lib.warn ''
+    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${lib.generators.toPretty { multiline = false; } curlOpts}), which is not supported anymore.
+    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
+    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
 
 stdenvNoCC.mkDerivation ((
   if (pname != "" && version != "") then
@@ -163,12 +170,7 @@ stdenvNoCC.mkDerivation ((
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-  curlOpts = lib.warnIf (lib.isList curlOpts) ''
-    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${lib.generators.toPretty { multiline = false; } curlOpts}), which is not supported anymore.
-    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
-      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
-    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
-      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' curlOpts;
+  inherit curlOpts;
   curlOptsList = lib.escapeShellArgs curlOptsList;
   inherit showURLs mirrorsFile postFetch downloadToTemp executable;
 

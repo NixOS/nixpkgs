@@ -17,6 +17,8 @@ let
         type = with types; nullOr str;
         description = lib.mdDoc ''
           wg-quick .conf file, describing the interface.
+          Using this option can be a useful means of configuring WireGuard if
+          one has an existing .conf file.
           This overrides any other configuration interface configuration options.
           See wg-quick manpage for more details.
         '';

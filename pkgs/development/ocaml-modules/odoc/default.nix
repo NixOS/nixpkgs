@@ -6,14 +6,12 @@
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
-    sha256 = "sha256-9XTb0ozQ/DorlVJcS7ld320fZAi7T+EhV/pTeIT5h/0=";
+    sha256 = "sha256-F4blO/CCT+HHx7gdKn2EaEal0RZ3lp5jljYfd6OBaAM=";
   };
-
-  duneVersion = "3";
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ astring cmdliner fpath result tyxml odoc-parser fmt ];
@@ -35,5 +33,6 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/ocaml/odoc";
+    changelog = "https://github.com/ocaml/odoc/blob/${version}/CHANGES.md";
   };
 }

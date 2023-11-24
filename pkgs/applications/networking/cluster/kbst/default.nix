@@ -2,14 +2,16 @@
 
 buildGoModule rec {
   pname = "kbst";
-  version = "0.1.5";
+  version = "0.2.1";
 
   src = fetchFromGitHub{
     owner = "kbst";
     repo = "kbst";
     rev = "v${version}";
-    sha256 = "0cz327fl6cqj9rdi8zw6xrazzigjymhn1hsbjr9xxvfvfnn67xz2";
+    hash = "sha256-tbSYNJp/gzEz+wEAe3bvIiZL5axZvW+bxqTOBkYSpMY=";
   };
+
+  vendorHash = "sha256-+FY6KGX606CfTVKM1HeHxCm9PkaqfnT5XeOEXUX3Q5I=";
 
   ldflags =
     let package_url = "github.com/kbst/kbst"; in
@@ -21,8 +23,6 @@ buildGoModule rec {
       "-X ${package_url}.gitTag=v${version}"
       "-X ${package_url}.gitTreeState=clean"
     ];
-
-  vendorSha256 = "sha256-DZ47Bj8aFfBnxU9+e1jZiTMF75rCJtcj4yUfZRJWCic=";
 
   doCheck = false;
 

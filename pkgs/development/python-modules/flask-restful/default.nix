@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "flask-restful";
-  version = "0.3.9";
+  version = "0.3.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-RESTful";
     inherit version;
-    hash = "sha256-zOxlC4NdSBkhOMhTKa4Dc15s7VjpstnCFG1shMBvpT4=";
+    hash = "sha256-/kry7wAn34+bT3l6uiDFVmgBtq3plaxjtYir8aWc7Dc=";
   };
 
   # conditional so that overrides are easier for web applications
@@ -48,6 +48,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Broke in flask 2.2 upgrade
     "test_exception_header_forwarded"
+    # Broke in werkzeug 2.3 upgrade
+    "test_media_types_method"
+    "test_media_types_q"
   ];
 
   pythonImportsCheck = [

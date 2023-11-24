@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.16.1";
+  version = "2.16.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FJ0Rzpvn6oHUrDVE0/zUxxap7bLLd12cB1IxVwsHn7s=";
+    hash = "sha256-Nx3HL5FFrzI+ioE8jlA4DmrEvWpdvNQtzzFi2PN+UIA=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-secret-manager";
     changelog = "https://github.com/googleapis/python-secret-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli SuperSandro2000 ];
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

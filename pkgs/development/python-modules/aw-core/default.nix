@@ -5,20 +5,20 @@
 , poetry-core
 , jsonschema
 , peewee
-, appdirs
+, platformdirs
 , iso8601
 , rfc3339-validator
-, takethetime
 , strict-rfc3339
 , tomlkit
 , deprecation
 , timeslot
 , pytestCheckHook
+, gitUpdater
 }:
 
 buildPythonPackage rec {
   pname = "aw-core";
-  version = "0.5.12";
+  version = "0.5.16";
 
   format = "pyproject";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-core";
     rev = "v${version}";
-    sha256 = "sha256-DbugVMaQHlHpfbFEsM6kfpDL2VzRs0TDn9klWjAwz64=";
+    sha256 = "sha256-7xT7bOGzH5G4WpgNo8pDyiQqX0dWNLNHpgssozUa9kQ=";
   };
 
   disabled = pythonOlder "3.8";
@@ -39,10 +39,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jsonschema
     peewee
-    appdirs
+    platformdirs
     iso8601
     rfc3339-validator
-    takethetime
     strict-rfc3339
     tomlkit
     deprecation
@@ -59,6 +58,10 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "aw_core" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Core library for ActivityWatch";

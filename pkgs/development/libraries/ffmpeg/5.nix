@@ -1,4 +1,4 @@
-import ./generic.nix rec {
+import ./generic.nix {
   version = "5.1.3";
   sha256 = "sha256-twfJvANLQGO7TiyHPMPqApfHLFUlOGZTTIIGEnjyvuE=";
   extraPatches = [

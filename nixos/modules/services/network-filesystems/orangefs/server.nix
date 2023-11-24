@@ -192,7 +192,7 @@ in {
     # orangefs daemon will run as user
     users.users.orangefs = {
       isSystemUser = true;
-      group = "orangfs";
+      group = "orangefs";
     };
     users.groups.orangefs = {};
 

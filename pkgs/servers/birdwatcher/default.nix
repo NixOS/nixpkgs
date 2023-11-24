@@ -7,7 +7,7 @@ buildGoModule rec {
   pname = "birdwatcher";
   version = "2.2.4";
 
-  vendorSha256 = "sha256-NTD2pnA/GeTn4tXtIFJ227qjRtvBFCjWYZv59Rumc74=";
+  vendorHash = "sha256-NTD2pnA/GeTn4tXtIFJ227qjRtvBFCjWYZv59Rumc74=";
 
   src = fetchFromGitHub {
     owner = "alice-lg";

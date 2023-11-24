@@ -2,7 +2,7 @@
 , buildPythonPackage
 , click
 , click-completion
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
 , inquirer
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     faker
-    factory_boy
+    factory-boy
   ];
 
   postPatch = ''

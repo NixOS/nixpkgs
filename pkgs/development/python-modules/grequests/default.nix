@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "grequests";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rpnim3ppxjdsaa869h1jdimcyc66mamcs593rd7brk8cq68kv3x";
+    sha256 = "sha256-XDPxQmjfW4+hEH2FN4Fb5v67rW7FYFJNakBLd3jPa6Y=";
   };
 
   # No tests in archive

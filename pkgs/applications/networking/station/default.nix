@@ -20,7 +20,7 @@ in appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiPkgs = null;
+  multiArch = false;
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
     mv $out/bin/{${name},${pname}}

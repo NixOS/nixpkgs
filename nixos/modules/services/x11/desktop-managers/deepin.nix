@@ -15,7 +15,7 @@ in
   options = {
 
     services.xserver.desktopManager.deepin = {
-      enable = mkEnableOption (lib.mdDoc "Enable Deepin desktop manager");
+      enable = mkEnableOption (lib.mdDoc "Deepin desktop manager");
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
@@ -67,7 +67,7 @@ in
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
 
-      fonts.fonts = with pkgs; [ noto-fonts ];
+      fonts.packages = with pkgs; [ noto-fonts ];
       xdg.mime.enable = true;
       xdg.menus.enable = true;
       xdg.icons.enable = true;
@@ -77,6 +77,9 @@ in
           buildPortalsInGnome = false;
         })
       ];
+
+      # https://github.com/NixOS/nixpkgs/pull/247766#issuecomment-1722839259
+      xdg.portal.config.deepin.default = mkDefault [ "gtk" ];
 
       environment.sessionVariables = {
         NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

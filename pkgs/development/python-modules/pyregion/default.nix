@@ -29,6 +29,7 @@ buildPythonPackage rec {
     pyparsing
     numpy
     astropy
+    cython
   ];
 
   # Upstream patches needed for the tests to pass

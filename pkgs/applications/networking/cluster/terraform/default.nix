@@ -53,18 +53,19 @@ let
           "Tool for building, changing, and versioning infrastructure";
         homepage = "https://www.terraform.io/";
         changelog = "https://github.com/hashicorp/terraform/blob/v${version}/CHANGELOG.md";
-        license = licenses.mpl20;
+        license = licenses.bsl11;
         maintainers = with maintainers; [
           Chili-Man
           babariviere
           kalbasit
-          marsam
-          maxeaubrey
+          amaxine
           timstott
           zimbatm
           zowoq
           techknowlogick
+          qjoly
         ];
+        mainProgram = "terraform";
       };
     } // attrs');
 
@@ -166,9 +167,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.4.6";
-    hash = "sha256-V5sI8xmGASBZrPFtsnnfMEHapjz4BH3hvl0+DGjUSxQ=";
-    vendorHash = "sha256-OW/aS6aBoHABxfdjDxMJEdHwLuHHtPR2YVW4l0sHPjE=";
+    version = "1.6.4";
+    hash = "sha256-kA0H+JxyMV6RKRr20enTOzfwj2Lk2IP4vivfHv02+w8=";
+    vendorHash = "sha256-cxnvEwtZLXYZzCITJgYk8hDRndLLC8YTD+RvgcNska0=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

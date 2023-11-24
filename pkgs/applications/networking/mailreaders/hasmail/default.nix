@@ -15,10 +15,10 @@ buildGoModule rec {
     owner = "jonhoo";
     repo = "hasmail";
     rev = "eb52536d26815383bfe5990cd5ace8bb9d036c8d";
-    sha256 = "1p6kwa5xk1mb1fkkxz1b5rcyp5kb4zc8nfif1gk6fab6wbdj9ia1";
+    hash = "sha256-QcUk2+JmKWfmCy46i9gna5brWS4r/D6nC6uG2Yvi09w=";
   };
 
-  vendorSha256 = "129hvr8qh5mxj6mzg7793p5jsi4jmsm96f63j7r8wn544yq8sqci";
+  vendorHash = "sha256-kWGNsCekWI7ykcM4k6qukkQtyx3pnPerkb0WiFHeMIk=";
 
   doCheck = false;
 

@@ -221,6 +221,7 @@ in
         ProtectHome = "read-only";
         AmbientCapabilities = "cap_ipc_lock";
         NoNewPrivileges = true;
+        LimitCORE = 0;
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
         Restart = "on-failure";

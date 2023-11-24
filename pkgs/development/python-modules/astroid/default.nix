@@ -5,8 +5,10 @@
 , isPyPy
 , lazy-object-proxy
 , setuptools
+, wheel
 , typing-extensions
 , typed-ast
+, pip
 , pylint
 , pytestCheckHook
 , wrapt
@@ -14,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.14.2"; # Check whether the version is compatible with pylint
+  version = "2.15.6"; # Check whether the version is compatible with pylint
   format = "pyproject";
 
   disabled = pythonOlder "3.7.2";
@@ -23,11 +25,12 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SIBzn57UNn/sLuDWt391M/kcCyjCocHmL5qi2cSX2iA=";
+    hash = "sha256-0oNNEVD8rYGkM11nGUD+XMwE7xgk7mJIaplrAXaECFg=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -40,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pip
     pytestCheckHook
     typing-extensions
   ];
@@ -58,6 +62,6 @@ buildPythonPackage rec {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

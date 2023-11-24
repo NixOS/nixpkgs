@@ -152,6 +152,7 @@ let
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
         issuer = cfg.registry.issuer;
       };
+      elasticsearch.indexer_path = "${pkgs.gitlab-elasticsearch-indexer}/bin/gitlab-elasticsearch-indexer";
       extra = {};
       uploads.storage_path = cfg.statePath;
       pages = optionalAttrs cfg.pages.enable {
@@ -1087,6 +1088,11 @@ in {
         ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
           Please back up your data and migrate to the gitlab-container-registry package.''
       )
+      (mkIf
+        (versionAtLeast (getVersion cfg.packages.gitlab) "16.2.0" && versionOlder (getVersion cfg.packages.gitlab) "16.5.0")
+        ''GitLab instances created or updated between versions [15.11.0, 15.11.2] have an incorrect database schema.
+        Check the upstream documentation for a workaround: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later''
+      )
     ];
 
     assertions = [
@@ -1281,6 +1287,7 @@ in {
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/ci_secure_files 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
       "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
@@ -1633,7 +1640,7 @@ in {
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
-      wantedBy = [ "gitlab.target" ];
+      requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
@@ -1643,6 +1650,7 @@ in {
         nodejs
         procps
         gnupg
+        gzip
       ];
       serviceConfig = {
         Type = "notify";
@@ -1652,7 +1660,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart = concatStringsSep " " [
-          "${cfg.packages.gitlab.rubyEnv}/bin/puma"
+          "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
           "-e production"
           "-C ${cfg.statePath}/config/puma.rb"
           "-w ${cfg.puma.workers}"
@@ -1682,5 +1690,5 @@ in {
   };
 
   meta.doc = ./gitlab.md;
-
+  meta.maintainers = teams.gitlab.members;
 }

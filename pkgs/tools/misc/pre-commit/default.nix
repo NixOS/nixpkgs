@@ -17,7 +17,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.3.2";
+  version = "3.3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "v${version}";
-    hash = "sha256-ZPfxulGiGqPT5z+BTfMn9wl/erzyfPA4LPan/ySFTi8=";
+    hash = "sha256-6FKf4jLHUt2c7LSxFcq53IsfHOWeUSI+P9To0eh48+o=";
   };
 
   patches = [

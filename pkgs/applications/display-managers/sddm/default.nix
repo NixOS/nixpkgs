@@ -1,59 +1,63 @@
 { mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkg-config, libxcb, libpthreadstubs
-, libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
+, cmake, extra-cmake-modules, pkg-config, qttools
+, libxcb, libXau, pam, qtbase, qtdeclarative, qtquickcontrols2, systemd, xkeyboardconfig
 }:
-
-let
-  version = "0.19.0";
-
-in mkDerivation {
+mkDerivation rec {
   pname = "sddm";
-  inherit version;
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
+    hash = "sha256-ctZln1yQov+p/outkQhcWZp46IKITC04e22RfePwEM4=";
   };
 
   patches = [
     ./sddm-ignore-config-mtime.patch
     ./sddm-default-session.patch
-    # Load `/etc/profile` for `environment.variables` with zsh default shell.
-    # See: https://github.com/sddm/sddm/pull/1382
+
+    # FIXME: all of the following are Wayland related backports, drop in next release
+    # Don't use Qt virtual keyboard on Wayland
     (fetchpatch {
-      url = "https://github.com/sddm/sddm/commit/e1dedeeab6de565e043f26ac16033e613c222ef9.patch";
-      sha256 = "sha256-OPyrUI3bbH+PGDBfoL4Ohb4wIvmy9TeYZhE0JxR/D58=";
+      url = "https://github.com/sddm/sddm/commit/07631f2ef00a52d883d0fd47ff7d1e1a6bc6358f.patch";
+      hash = "sha256-HTSw3YeT4z9ldr4sLmsnrPQ+LA8/a6XxrF+KUFqXUlM=";
     })
-    # Fix build with Qt 5.15.3
-    # See: https://github.com/sddm/sddm/pull/1325
+
+    # Fix running sddm-greeter manually in Wayland sessions
     (fetchpatch {
-      url = "https://github.com/sddm/sddm/commit/e93bf95c54ad8c2a1604f8d7be05339164b19308.patch";
-      sha256 = "sha256:1rh6sdvzivjcl5b05fczarvxhgpjhi7019hvf2gadnwgwdg104r4";
+      url = "https://github.com/sddm/sddm/commit/e27b70957505dc7b986ab2fa68219af546c63344.patch";
+      hash = "sha256-6hzrFeS2epL9vzLOA29ZA/dD3Jd4rPMBHhNp+FBq1bA=";
     })
-    # Fix fails to start while starting X server
-    # See: https://github.com/sddm/sddm/pull/1324
+
+    # Prefer GreeterEnvironment over PAM environment
     (fetchpatch {
-      url = "https://github.com/sddm/sddm/commit/adfaa222fdfa6115ea2b320b0bbc2126db9270a5.patch";
-      sha256 = "sha256-q/YLlAjxluzHMKUUQglLo3RyyhERQGPHXGr56+4R9VU=";
+      url = "https://github.com/sddm/sddm/commit/9e7791d5fb375933d20f590daba9947195515b26.patch";
+      hash = "sha256-JNsVTJNZV6T+SPqPkaFf3wg8NDqXGx8NZ4qQfZWOli4=";
     })
   ];
 
-  postPatch =
-    # Fix missing include for gettimeofday()
-    ''
-      sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
-    '';
+  postPatch = ''
+    substituteInPlace src/greeter/waylandkeyboardbackend.cpp \
+      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+  '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config qttools ];
 
   buildInputs = [
-    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative qtquickcontrols2 systemd
+    libxcb
+    libXau
+    pam
+    qtbase
+    qtdeclarative
+    qtquickcontrols2
+    systemd
   ];
 
   cmakeFlags = [
     "-DCONFIG_FILE=/etc/sddm.conf"
+    "-DCONFIG_DIR=/etc/sddm.conf.d"
+
     # Set UID_MIN and UID_MAX so that the build script won't try
     # to read them from /etc/login.defs (fails in chroot).
     # The values come from NixOS; they may not be appropriate
@@ -62,9 +66,15 @@ in mkDerivation {
     "-DUID_MIN=1000"
     "-DUID_MAX=29999"
 
+    # we still want to run the DM on VT 7 for the time being, as 1-6 are
+    # occupied by getties by default
+    "-DSDDM_INITIAL_VT=7"
+
     "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
+    "-DSYSTEMD_SYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+    "-DSYSTEMD_TMPFILES_DIR=${placeholder "out"}/lib/tmpfiles.d"
     "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 

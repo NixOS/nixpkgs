@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preBuild = ''
-    ${python3Packages.python.pythonForBuild.interpreter} ./setup.py build_cython build_ext --inplace
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} ./setup.py build_cython build_ext --inplace
   '';
 
   checkPhase = ''

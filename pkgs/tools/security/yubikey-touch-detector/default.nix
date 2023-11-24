@@ -49,5 +49,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ sumnerevans ];
     license = with licenses; [ bsd2 isc ];
     platforms = platforms.linux;
+    mainProgram = "yubikey-touch-detector";
   };
 }

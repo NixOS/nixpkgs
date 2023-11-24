@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "smokeping_prober";
-  version = "0.6.1";
+  version = "0.7.1";
 
   ldflags = let
     setVars = rec {
@@ -20,9 +20,9 @@ buildGoModule rec {
     owner = "SuperQ";
     repo = "smokeping_prober";
     rev = "v${version}";
-    sha256 = "sha256-tph9TZwMWKlJC/YweO9BU3+QRIugqc3ob5rqXThyR1c=";
+    sha256 = "sha256-kpg4oUDv1C5NQuxfFNLmRIMkc8hbMkjiKL16HkYrUyU=";
   };
-  vendorHash = "sha256-emabuOm5tuPNZWmPHJWUWzFVjuLrY7biv8V/3ru73aU=";
+  vendorHash = "sha256-TgieqjE23gwyKLuKSqc5pkxRpou8lg+yVnVoINZDkGU=";
 
   doCheck = true;
 
@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/SuperQ/smokeping_prober";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = platforms.unix;
   };
 }

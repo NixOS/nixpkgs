@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libdmapsharing";
-  version = "3.9.12";
+  version = "3.9.13";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = pname;
     rev = "${lib.toUpper pname}_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "tnQ25RR/bAZJKa8vTwzkGK1iPc7CMGFbyX8mBf6TKr4=";
+    sha256 = "oR9lpOFxgGfrtzncFT6dbmhKQfcuH/NvhOR/USHAHQc=";
   };
 
   nativeBuildInputs = [

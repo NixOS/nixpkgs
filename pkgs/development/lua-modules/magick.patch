@@ -1,0 +1,53 @@
+diff --git a/magick/wand/lib.lua b/magick/wand/lib.lua
+index 21940a0..0d103dc 100644
+--- a/magick/wand/lib.lua
++++ b/magick/wand/lib.lua
+@@ -134,15 +134,6 @@ get_filters = function()
+   local prefixes = {
+     "/usr/include/ImageMagick",
+     "/usr/local/include/ImageMagick",
+-    unpack((function()
+-      local _accum_0 = { }
+-      local _len_0 = 1
+-      for p in get_flags():gmatch("-I([^%s]+)") do
+-        _accum_0[_len_0] = p
+-        _len_0 = _len_0 + 1
+-      end
+-      return _accum_0
+-    end)())
+   }
+   for _index_0 = 1, #prefixes do
+     local p = prefixes[_index_0]
+@@ -204,12 +195,7 @@ try_to_load = function(...)
+           break
+         end
+       end
+-      if pcall(function()
+-        out = ffi.load(name)
+-      end) then
+-        return out
+-      end
+-      _continue_0 = true
++      return ffi.load(name)
+     until true
+     if not _continue_0 then
+       break
+@@ -217,17 +203,7 @@ try_to_load = function(...)
+   end
+   return error("Failed to load ImageMagick (" .. tostring(...) .. ")")
+ end
+-lib = try_to_load("MagickWand", function()
+-  local lname = get_flags():match("-l(MagickWand[^%s]*)")
+-  local suffix
+-  if ffi.os == "OSX" then
+-    suffix = ".dylib"
+-  elseif ffi.os == "Windows" then
+-    suffix = ".dll"
+-  else
+-    suffix = ".so"
+-  end
+-  return lname and "lib" .. lname .. suffix
++lib = try_to_load("@nix_wand@", function()
+ end)
+ return {
+   lib = lib,

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ipmi_exporter";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "ipmi_exporter";
     rev = "v${version}";
-    hash = "sha256-hifG1lpFUVLoy7Ol3N6h+s+hZjnQxja5svpY4lFFsxw=";
+    hash = "sha256-yVFpYedWELqDNzmHQfMJa95iKQsn1N/wa82sQEQh1Uw=";
   };
 
-  vendorHash = "sha256-UuPZmxoKVj7FusOS6H1gn6SAzQIZAKyX+m+QS657yXw=";
+  vendorHash = "sha256-1ntFcOmVN4I1aa/5gWnzkYNYxxFT9ZM1usNnE23KfR0=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -1,34 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , pyopenssl
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "netio";
-  version = "1.0.7";
-  format = "setuptools";
+  version = "1.0.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "netioproducts";
     repo = "PyNetio";
-    rev = "v${version}";
-    hash = "sha256-07GzT9j27KmrTQ7naIdlIz7HB9knHpjH4mQhlwUKucU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-s/X2WGhQXYsbo+ZPpkVSF/vclaThYYNHu0UY0yCnfPA=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     requests
     pyopenssl
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "import py2exe" ""
-  '';
 
   pythonImportsCheck = [
     "Netio"

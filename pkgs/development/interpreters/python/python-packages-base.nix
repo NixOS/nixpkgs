@@ -13,7 +13,7 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overridden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
-  makeOverridablePythonPackage = f: origArgs:
+  makeOverridablePythonPackage = f: lib.mirrorFunctionArgs f (origArgs:
     let
       args = lib.fix (lib.extends
         (_: previousAttrs: {
@@ -30,14 +30,19 @@ let
         overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
         __functor = self: result;
       }
-      else result;
+      else result);
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+  mkPythonDerivation = if python.isPy3k then
+    ./mk-python-derivation.nix
+  else
+    ./python2/mk-python-derivation.nix;
+
+  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
   }));

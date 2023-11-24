@@ -12,20 +12,22 @@
 , wayland-scanner
 , wayland-protocols
 , gtk3
+, gtkmm3
 , libevdev
 , libxml2
+, libxkbcommon
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wcm";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
-    repo = pname;
-    rev = "v${version}";
+    repo = "wcm";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-LJR9JGl49o4O6LARofz3jOeAqseGcmzVhMnhk/aobUU=";
+    hash = "sha256-UwHJ4Wi83ATnA1CQKNSt8Qga7ooLnAY7QARz2FXvUIo=";
   };
 
   nativeBuildInputs = [
@@ -43,19 +45,22 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     gtk3
+    gtkmm3
     libevdev
     libxml2
+    libxkbcommon
   ];
 
   mesonFlags = [
     "-Denable_wdisplays=false"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/WayfireWM/wcm";
     description = "Wayfire Config Manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 rewine ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss wucke13 rewine ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wcm";
   };
-}
+})

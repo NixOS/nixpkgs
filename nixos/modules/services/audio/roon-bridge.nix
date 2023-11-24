@@ -70,12 +70,11 @@ in {
 
     users.groups.${cfg.group} = {};
     users.users.${cfg.user} =
-      if cfg.user == "roon-bridge" then {
+      optionalAttrs (cfg.user == "roon-bridge") {
         isSystemUser = true;
         description = "Roon Bridge user";
         group = cfg.group;
         extraGroups = [ "audio" ];
-      }
-      else {};
+      };
   };
 }

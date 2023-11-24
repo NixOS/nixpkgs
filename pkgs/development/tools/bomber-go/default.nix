@@ -5,20 +5,24 @@
 
 buildGoModule rec {
   pname = "bomber-go";
-  version = "0.3.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "devops-kung-fu";
     repo = "bomber";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q30wTM8HQURDBUReQsXgKHI4m4sSdHbWPwUld0sAays=";
+    hash = "sha256-TsN/1ZtxVLJIWa7YkkCBzDF3xTeFKzSPLA7tIVe1oCI=";
   };
 
-  vendorHash = "sha256-tkjwnc5EquAuIfYKy8u6ZDFJPl/UTW6x7vvY1QTsBXg=";
+  vendorHash = "sha256-P2g8KfQ+jNZla5GKONtB4MjDnTGBUtd9kmCi0j1xq7s=";
 
   ldflags = [
     "-w"
     "-s"
+  ];
+
+  checkFlags = [
+    "-skip=TestEnrich" # Requires network access
   ];
 
   meta = with lib; {

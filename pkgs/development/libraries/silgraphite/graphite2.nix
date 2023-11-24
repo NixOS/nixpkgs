@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+  postPatch = ''
+    # disable broken 'nametabletest' test, fails on gcc-13:
+    #   https://github.com/silnrsi/graphite/pull/74
+    substituteInPlace tests/CMakeLists.txt \
+      --replace 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
+  '';
 
   cmakeFlags = lib.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"

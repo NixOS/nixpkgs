@@ -12,18 +12,21 @@
 , bzip2
 , xz
 , zstd
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "kbd";
-  version = "2.5.1";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
+    sha256 = "sha256-BJlsCNfRxGCWb7JEo9OIM1LCZ0t61SIAPZ9Oy4q0jes=";
   };
 
-  outputs = [ "out" "dev" ];
+  # vlock is moved into its own output, since it depends on pam. This
+  # reduces closure size for most use cases.
+  outputs = [ "out" "vlock" "dev" ];
 
   configureFlags = [
     "--enable-optional-progs"
@@ -55,6 +58,12 @@ stdenv.mkDerivation rec {
         --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
         --replace 'xz '    '${xz.bin}/bin/xz ' \
         --replace 'zstd '  '${zstd.bin}/bin/zstd '
+
+      sed -i '
+        1i prefix:=$(vlock)
+        1i bindir := $(vlock)/bin' \
+        src/vlock/Makefile.in \
+        src/vlock/Makefile.am
     '';
 
   postInstall = ''
@@ -71,7 +80,14 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
   };
-  passthru.gzip = gzip;
+  passthru = {
+    gzip = gzip;
+    updateScript = gitUpdater {
+       # No nicer place to find latest release.
+       url = "https://github.com/legionus/kbd.git";
+       rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";

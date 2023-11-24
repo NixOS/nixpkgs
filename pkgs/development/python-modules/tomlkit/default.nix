@@ -1,28 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, enum34
-, functools32, typing ? null
+
+# build-system
+, poetry-core
+
+# tests
 , pytestCheckHook
-, pyaml
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.11.6";
+  version = "0.12.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cblS5XIWiJN/sCz501TbzweFBmFJ0oVeRFMevdK2XXM=";
+    hash = "sha256-OOH/jtuZEnPsn2GBJEpqORrDDp9QmOdTVkDqa+l6fIY=";
   };
 
-  propagatedBuildInputs =
-    lib.optionals isPy27 [ enum34 functools32 ]
-    ++ lib.optional isPy27 typing;
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   nativeCheckInputs = [
-    pyaml
+    pyyaml
     pytestCheckHook
   ];
 

@@ -5,6 +5,7 @@
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2022.10.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,8 +25,22 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-plgO+pyKmG0mYnFZxDcrENcuEg5AG2Og2xWipzuzyHo=";
+    hash = "sha256-/UNSAfAkOXPJQDWBZIe/AYIhx83kPCjGzZjn4oh+gfY=";
   };
+
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/aioguardian/pull/288
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/aioguardian/commit/ffaad4b396645f599815010995fb71ca976e761e.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core

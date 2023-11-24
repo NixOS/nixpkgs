@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
+, fetchpatch
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.57";
+  version = "2.4.58";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "sha256-28y4Su6V4JXt+7geXrkmzNJOatpV3Ng8rssmLlz5TSo=";
+    sha256 = "sha256-+hbXKgeCEKVMR91b7y+Lm4oB2UkJpRRTlWs+xkQupMU=";
   };
 
   # FIXME: -dev depends on -doc
@@ -34,6 +35,14 @@ stdenv.mkDerivation rec {
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
     lib.optional stdenv.isDarwin libiconv;
+
+  patches = lib.optionals modTlsSupport [
+    (fetchpatch {
+      name = "compat-with-rustls-ffi-0.10.0.patch";
+      url = "https://github.com/apache/httpd/commit/918620a183d843fb393ed939423a25d42c1044ec.patch";
+      hash = "sha256-YZi3t++hjM0skisax2xuh9DifZVZjCjVn6XQr6QKGEs=";
+    })
+  ];
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"

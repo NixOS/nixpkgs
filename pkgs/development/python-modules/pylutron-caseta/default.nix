@@ -1,9 +1,9 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
 , pytest-asyncio
-, pytest-sugar
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.18.1";
+  version = "0.18.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O4PNlL3lPSIyFw9MtPP678ggLBQRPedbZn1gWys7DPQ=";
+    hash = "sha256-tjmMu7LUne+hLLTXGqHhci9/PZiuQ10mQaARvL2sdIM=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-sugar
     pytest-timeout
     pytestCheckHook
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   pytestFlagsArray = [

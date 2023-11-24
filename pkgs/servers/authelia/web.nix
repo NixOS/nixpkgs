@@ -7,7 +7,7 @@ buildNpmPackage {
   pname = "${pname}-web";
   inherit src version npmDepsHash;
 
-  sourceRoot = "source/web";
+  sourceRoot = "${src.name}/web";
 
   patches = [
     ./change-web-out-dir.patch

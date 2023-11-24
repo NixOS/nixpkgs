@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "cubical";
-  version = "unstable-2023-02-09";
+  version = "0.6";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
-    rev = "6b1ce0b67fd94693c1a3e340c8e8765380de0edc";
-    hash = "sha256-XRCaW94oAgy2GOnFiI9c5A8mEx7AzlbT4pFd+PMmc9o=";
+    rev = "v${version}";
+    hash = "sha256-2quAZ/j7kQaFkh9W5Bj1y7YQj9BT7FwHqVWyj8T4AH8=";
   };
 
   # The cubical library has several `Everything.agda` files, which are

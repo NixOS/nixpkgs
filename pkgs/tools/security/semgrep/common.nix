@@ -1,54 +1,39 @@
-{ lib, fetchFromGitHub, fetchzip, stdenv }:
+{ lib }:
 
 rec {
-  version = "1.15.0";
+  version = "1.37.0";
 
-  src = fetchFromGitHub {
-    owner = "returntocorp";
-    repo = "semgrep";
-    rev = "v${version}";
-    sha256 = "sha256-x+AOt6nn2hN4MODFZCvlq0kZ3VLoS7rVcFGGCEssIu0=";
-  };
+  srcHash = "sha256-oFJ43dq3DAhux0UEFDKFZnxruoRdOfCndKY6XgG3d5I=";
 
   # submodule dependencies
   # these are fetched so we:
   #   1. don't fetch the many submodules we don't need
   #   2. avoid fetchSubmodules since it's prone to impurities
   submodules = {
-    "cli/src/semgrep/lang" = fetchFromGitHub {
-      owner = "returntocorp";
-      repo = "semgrep-langs";
-      rev = "08656cdefc9e6818c64e168cf51ee1e76ea8829e";
-      sha256 = "sha256-vYf33JhfvEDmt/VW0hBOmqailIERS0GdUgrPuCxWt9I=";
-    };
-    "cli/src/semgrep/semgrep_interfaces" = fetchFromGitHub {
+    "cli/src/semgrep/semgrep_interfaces" = {
       owner = "returntocorp";
       repo = "semgrep-interfaces";
-      rev = "ba9241ca8f13dea72a4ca5c5eae99f45c071c8b4";
-      sha256 = "sha256-2rcMmN42445AivcyYLPeE+HBYOyxJijQME1UUr9HISA=";
+      rev = "331603197022625f50a64dd5e3029a96a5f03ada";
+      hash = "sha256-UAcWbTSCIdBGvgGSbdQ+miFOEuBvQ6m42MkU3VeErKY=";
     };
   };
 
   # fetch pre-built semgrep-core since the ocaml build is complex and relies on
   # the opam package manager at some point
-  core = rec {
-    data = {
-      x86_64-linux = {
-        suffix = "-ubuntu-16.04.tgz";
-        sha256 = "sha256-vLtV1WAnOD6HhgrWYIP0NfXHKfvXORksdNp5UTG1QWc=";
-      };
-      x86_64-darwin = {
-        suffix = "-osx.zip";
-        sha256 = "sha256-6+ENjOOIJ5TSjpnJ5pDudblrWj/FLUe66UGr6V9c0HQ=";
-      };
+  # pulling it out of the python wheel as r2c no longer release a built binary
+  # on github releases
+  core = {
+    x86_64-linux = {
+      platform = "any";
+      hash = "sha256-Sj/6tzZMyRQAJL09X/3zgvdGTIhNibqO8usKsus9Xss=";
     };
-    src = let
-      inherit (stdenv.hostPlatform) system;
-      selectSystemData = data: data.${system} or (throw "Unsupported system: ${system}");
-      inherit (selectSystemData data) suffix sha256;
-    in fetchzip {
-      url = "https://github.com/returntocorp/semgrep/releases/download/v${version}/semgrep-v${version}${suffix}";
-      inherit sha256;
+    x86_64-darwin = {
+      platform = "macosx_10_14_x86_64";
+      hash = "sha256-hC04VknZG6aYYNX7lqvkcOoVslewNqlYax+o1nV2TcM=";
+    };
+    aarch64-darwin = {
+      platform = "macosx_11_0_arm64";
+      hash = "sha256-0F+ndM4+0dnxf9acwWvGdIy9iYWSqixS9IzOxa95/yM=";
     };
   };
 
@@ -66,7 +51,5 @@ rec {
     '';
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jk ambroisie ];
-    # limited by semgrep-core
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

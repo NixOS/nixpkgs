@@ -1,13 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
-, cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+, cacert
+, moreutils
+, jq
+, git
+, pkg-config
+, yarn
+, python3
+, esbuild
+, nodejs
+, node-gyp
+, libsecret
+, libkrb5
+, xorg
+, ripgrep
+, AppKit
+, Cocoa
+, Security
+, cctools
+, nixosTests
+}:
 
 let
   system = stdenv.hostPlatform.system;
 
   yarn' = yarn.override { inherit nodejs; };
-  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
+  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress" ];
 
   vsBuildTarget = {
     x86_64-linux = "linux-x64";
@@ -18,39 +39,39 @@ let
 
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.16.17";
+      version = "0.17.14";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+        hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 
   # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path : version : ''
+  patchEsbuild = path: version: ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
     sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.78.2";
+  version = "1.84.0";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
-    rev = "openvscode-server-v${version}";
-    sha256 = "sha256-+Q/j3h7ZvNDxrjEk01QUOrVwcwGW4OBBpmfjEtHQj2o=";
+    rev = "openvscode-server-v${finalAttrs.version}";
+    hash = "sha256-kYKvJrHWKHDIqJsN0j1WFN3OBWwEyNgY5hjNHBg+kKQ=";
   };
 
   yarnCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-${system}-yarn-cache";
-    inherit src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
+    inherit (finalAttrs) src;
     nativeBuildInputs = [ cacert yarn' git ];
     buildPhase = ''
       export HOME=$PWD
@@ -68,17 +89,28 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-XOFBXYP3c4vbvl0/uXsmo8FdO/2PudzJhm9L+9VArdI=";
+    outputHash = "sha256-oW/JngHpXb8kscikscI7N9csSyZsZQgG75jOdWll6dw=";
   };
 
   nativeBuildInputs = [
-    nodejs yarn' python3 pkg-config makeWrapper git jq moreutils
+    nodejs
+    yarn'
+    python3
+    pkg-config
+    makeWrapper
+    git
+    jq
+    moreutils
   ];
+
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile ])
+    ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
     ++ lib.optionals stdenv.isDarwin [
-      AppKit Cocoa Security cctools
-    ];
+    AppKit
+    Cocoa
+    Security
+    cctools
+  ];
 
   patches = [
     # Patch out remote download of nodejs from build script
@@ -100,19 +132,33 @@ in stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     # set default yarn opts
     ${lib.concatMapStrings (option: ''
       yarn --offline config set ${option}
     '') defaultYarnOpts}
 
     # set offline mirror to yarn cache we created in previous steps
-    yarn --offline config set yarn-offline-mirror "${yarnCache}"
+    yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
 
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodejs}"
+    # set nodedir to prevent node-gyp from downloading headers
+    # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
+    mkdir -p $HOME/.node-gyp/${nodejs.version}
+    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
+    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
+    export npm_config_nodedir=${nodejs}
+
+    # use updated node-gyp. fixes the following error on Darwin:
+    # PermissionError: [Errno 1] Operation not permitted: '/usr/sbin/pkgutil'
+    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     # install dependencies
     yarn --offline --ignore-scripts
 
@@ -155,27 +201,34 @@ in stdenv.mkDerivation rec {
 
     # build and minify
     yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
     ln -s ${nodejs}/bin/node $out
+
+    runHook postInstall
   '';
 
   passthru.tests = {
     inherit (nixosTests) openvscode-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run VS Code on a remote machine";
     longDescription = ''
       Run upstream VS Code on a remote machine with access through a modern web
       browser from any device, anywhere.
     '';
     homepage = "https://github.com/gitpod-io/openvscode-server";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dguenther ghuntley emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dguenther ghuntley emilytrau ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "openvscode-server";
   };
-}
+})

@@ -1,22 +1,37 @@
-{ lib, stdenv, fetchurl, substituteAll, meson, ninja, pkg-config, gettext, gobject-introspection
-, gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, python3
-, glib, libusb1, vala, hwdata
+{ lib
+, stdenv
+, fetchFromGitHub
+, substituteAll
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, gi-docgen
+, python3
+, glib
+, libusb1
+, json-glib
+, vala
+, hwdata
+, umockdev
 }:
 
 let
-  pythonEnv = python3.pythonForBuild.withPackages(ps: with ps; [
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (ps: with ps; [
     setuptools
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
-  version = "0.3.10";
+  version = "0.4.8";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "https://people.freedesktop.org/~hughsient/releases/libgusb-${version}.tar.xz";
-    sha256 = "sha256-DrC5qw+LugxZYxyAnDe2Fu806zyOAAsLm3HPEeSTG9w=";
+  src = fetchFromGitHub {
+    owner = "hughsie";
+    repo = "libgusb";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xhWx45uOh8Yokd3/32CQ6tsdkgGaYUOvaylrq/jmoP0=";
   };
 
   patches = [
@@ -26,20 +41,44 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson ninja pkg-config gettext pythonEnv
-    gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44
-    gobject-introspection vala
-  ];
-  buildInputs = [ glib ];
+  strictDeps = true;
 
-  propagatedBuildInputs = [ libusb1 ];
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    gi-docgen
+    vala
+  ];
+
+  # all required in gusb.pc
+  propagatedBuildInputs = [
+    glib
+    libusb1
+    json-glib
+  ];
 
   mesonFlags = [
-    "-Dusb_ids=${hwdata}/share/hwdata/usb.ids"
+    (lib.mesonBool "tests" doCheck)
+    (lib.mesonOption "usb_ids" "${hwdata}/share/hwdata/usb.ids")
+  ];
+
+  checkInputs = [
+    umockdev
   ];
 
   doCheck = false; # tests try to access USB
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    ls -la "$out/share/doc"
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   meta = with lib; {
     description = "GLib libusb wrapper";

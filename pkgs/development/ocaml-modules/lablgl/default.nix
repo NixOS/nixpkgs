@@ -1,24 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut, darwin } :
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut, camlp-streams, darwin } :
 
-if lib.versionOlder ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.06"
 then throw "lablgl is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-lablgl";
-  version = "1.06";
+  version = "1.07";
 
   src = fetchFromGitHub {
     owner = "garrigue";
     repo = "lablgl";
     rev = "v${version}";
-    sha256 = "sha256:141kc816iv59z96738i3vn9m9iw9g2zhi45hk4cchpwd99ar5l6k";
+    hash = "sha256-GiQKHMn5zHyvDrA2ve12X5YTm3/RZp8tukIqifgVaW4=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ freeglut ];
+  buildInputs = [ freeglut camlp-streams ];
   propagatedBuildInputs = [
     libGLU
     libGL

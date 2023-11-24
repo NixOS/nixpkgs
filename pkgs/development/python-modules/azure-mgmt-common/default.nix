@@ -26,7 +26,7 @@ buildPythonPackage rec {
     msrestazure
   ];
 
-  postInstall = if isPy3k then "" else ''
+  postInstall = pkgs.lib.optionalString (!isPy3k) ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
   '';

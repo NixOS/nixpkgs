@@ -72,7 +72,7 @@ let
           --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
           --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
-          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
+          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename 2>/dev/null
       ${optionalString (initrdBin != null) ''
         substituteInPlace $i --replace '/run/current-system/systemd' "${removeSuffix "/bin" initrdBin}"
       ''}
@@ -279,7 +279,7 @@ in
       default = true;
       type = types.bool;
       description = lib.mdDoc ''
-        Whether to assign [predictable names to network interfaces](http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames).
+        Whether to assign [predictable names to network interfaces](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/).
         If enabled, interfaces
         are assigned names that contain topology information
         (e.g. `wlp3s0`) and thus should be stable
@@ -296,7 +296,6 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 
@@ -311,7 +310,6 @@ in
       binPackages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 
@@ -352,7 +350,7 @@ in
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
-    boot.initrd.extraUdevRulesCommands = optionalString (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
+    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
       ''
         cat <<'EOF' > $out/99-local.rules
         ${config.boot.initrd.services.udev.rules}

@@ -5,31 +5,30 @@
 , gtest
 , pcsclite
 , pkg-config
-, qmake
-, qttranslations
+, qttools
 }:
 
 mkDerivation rec {
   pname = "web-eid-app";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    sha256 = "sha256-X6/vfCDEGXFn05DUSyy7koGVxUAPJ0lv8dnTaoansKk=";
+    sha256 = "sha256-xWwguxs/121BFF1zhb/HxS9b1vTwQRemhPKOfHEXVZQ=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    qttools
   ];
 
   buildInputs = [
     gtest # required during build of lib/libelectronic-id/lib/libpcsc-cpp
     pcsclite
-    qttranslations
   ];
 
   meta = with lib; {

@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5wBKo24EKdEUoYhhv1EqMPOjdwUS31d3R24kLdbyvPA=";
+    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ (with python3.pkgs; [
     setuptools-scm
     sphinx
-    sphinxcontrib_newsfeed
+    sphinxcontrib-newsfeed
   ]);
 
   propagatedBuildInputs = with python3.pkgs;[
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
-    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \
+    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib-newsfeed ])}/bin:$PATH" \
     make -C doc man
     installManPage doc/build/man/khal.1
 

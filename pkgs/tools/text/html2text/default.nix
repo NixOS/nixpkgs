@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     substituteInPlace configure \
         --replace /bin/echo echo \
         --replace CXX=unknown ':'
+  '' + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace HTMLParser.C \
+      --replace "register " ""
   '';
 
   # the --prefix has no effect

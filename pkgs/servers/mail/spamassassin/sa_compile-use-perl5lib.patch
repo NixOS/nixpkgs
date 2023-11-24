@@ -1,0 +1,23 @@
+diff -ru orig/t/sa_compile.t new/t/sa_compile.t
+--- orig/t/sa_compile.t	2022-12-14 06:03:26.000000000 +0000
++++ new/t/sa_compile.t	2023-06-25 12:30:39.735577152 +0000
+@@ -40,7 +40,7 @@
+ 
+ # we now have an "installed" version we can run sa-compile with.  Ensure
+ # sarun() will use it appropriately
+-$scr = "$instdir/$temp_binpath/spamassassin";
++$scr = "$perl_cmd -T $instdir/$temp_binpath/spamassassin";
+ $scr_localrules_args = $scr_cf_args = "";      # use the default rules dir, from our "install"
+ 
+ &set_rules('
+@@ -86,8 +86,8 @@
+ # -------------------------------------------------------------------
+ 
+ rmtree( glob "~/.spamassassin/sa-compile.cache". { safe => 1 }); # reset test
+-system_or_die "TMP=$instdir TMPDIR=$instdir $instdir/$temp_binpath/sa-compile --quiet -p $cwd/$workdir/user.cf --keep-tmps -D 2>$instdir/sa-compile.debug";  # --debug
+-$scr = "$instdir/$temp_binpath/spamassassin";
++system_or_die "TMP=$instdir TMPDIR=$instdir $perl_cmd -T $instdir/$temp_binpath/sa-compile --quiet -p $cwd/$workdir/user.cf --keep-tmps -D 2>$instdir/sa-compile.debug";  # --debug
++$scr = "$perl_cmd -T $instdir/$temp_binpath/spamassassin";
+ $scr_localrules_args = $scr_cf_args = "";      # use the default rules dir, from our "install"
+ 
+ %patterns = (

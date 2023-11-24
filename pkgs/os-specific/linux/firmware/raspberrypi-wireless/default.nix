@@ -41,6 +41,13 @@ stdenvNoCC.mkDerivation {
     # See https://github.com/RPi-Distro/firmware-nonfree/issues/26
     ln -s "./cyfmac43455-sdio-standard.bin" "$out/lib/firmware/cypress/cyfmac43455-sdio.bin"
 
+    pushd $out/lib/firmware/brcm &>/dev/null
+    # Symlinks for Zero 2W
+    ln -s "./brcmfmac43436-sdio.bin" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.bin"
+    ln -s "./brcmfmac43436-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.raspberrypi,model-zero-2-w.txt"
+    ln -s "./brcmfmac43436-sdio.clm_blob" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.clm_blob"
+    popd &>/dev/null
+
     runHook postInstall
   '';
 

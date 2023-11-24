@@ -180,14 +180,16 @@ index d9fc8251..d8ddb96e 100755
 @@ -1,10 +1,10 @@
  #!/bin/sh
  
- if command -v gtk-update-icon-cache >/dev/null && test -d "$1/exports/share/icons/hicolor"; then
+-if command -v gtk-update-icon-cache >/dev/null && test -d "$1/exports/share/icons/hicolor"; then
 -    cp /usr/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
-+    cp @hicolorIconTheme@/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
++if test -d "$1/exports/share/icons/hicolor"; then
++    @coreutils@/bin/cp -f @hicolorIconTheme@/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
      for dir in "$1"/exports/share/icons/*; do
          if test -f "$dir/index.theme"; then
 -            if ! gtk-update-icon-cache --quiet "$dir"; then
+-                echo "Failed to run gtk-update-icon-cache for $dir"
 +            if ! @gtk3@/bin/gtk-update-icon-cache --quiet "$dir"; then
-                 echo "Failed to run gtk-update-icon-cache for $dir"
++                @coreutils@/bin/echo "Failed to run gtk-update-icon-cache for $dir"
                  exit 1
              fi
 diff --git a/triggers/mime-database.trigger b/triggers/mime-database.trigger

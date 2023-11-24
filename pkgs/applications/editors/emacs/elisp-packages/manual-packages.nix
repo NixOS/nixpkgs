@@ -13,11 +13,17 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
+  beancount = callPackage ./manual-packages/beancount { };
+
   cask = callPackage ./manual-packages/cask { };
+
+  consult-gh = callPackage ./manual-packages/consult-gh { };
 
   control-lock = callPackage ./manual-packages/control-lock { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
+
+  el-easydraw = callPackage ./manual-packages/el-easydraw { };
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
@@ -53,17 +59,21 @@ in
     inherit (pkgs) python3 git go gopls pyright;
   };
 
+  lspce = callPackage ./manual-packages/lspce { };
+
   matrix-client = callPackage ./manual-packages/matrix-client {
     _map = self.map;
   };
+
+  mu4e = callPackage ./manual-packages/mu4e { };
+
+  notdeft = callPackage ./manual-packages/notdeft { };
 
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
-
-  power-mode = callPackage ./manual-packages/power-mode { };
 
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 

@@ -1,7 +1,8 @@
 { cmake, cudatoolkit, fetchFromGitHub, gfortran, lib, llvmPackages, python3Packages, stdenv
+, config
 , enableCfp ? true
-, enableCuda ? false
-, enableFortran ? builtins.elem stdenv.targetPlatform.system gfortran.meta.platforms
+, enableCuda ? config.cudaSupport
+, enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms
 , enableOpenMP ? true
 , enablePython ? true
 , enableUtilities ? true }:
@@ -51,5 +52,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.spease ];
     # 64-bit only
     platforms = platforms.aarch64 ++ platforms.x86_64;
+    mainProgram = "zfp";
   };
 }

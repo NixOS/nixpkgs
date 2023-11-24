@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.3.1";
+  version = "4.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i18RwOalMICGtI6PaEEiOk+ho31RNoRhK37oVLUzAV8=";
+    hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
   };
 
   nativeBuildInputs = [

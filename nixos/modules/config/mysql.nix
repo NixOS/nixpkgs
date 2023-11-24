@@ -429,11 +429,11 @@ in
       '';
     };
 
-    # Activation script to append the password from the password file
+    # preStart script to append the password from the password file
     # to the configuration files. It also fixes the owner of the
     # libnss-mysql-root.cfg because it is changed to root after the
     # password is appended.
-    system.activationScripts.mysql-auth-passwords = ''
+    systemd.services.mysql.preStart = ''
       if [[ -r ${cfg.passwordFile} ]]; then
         org_umask=$(umask)
         umask 0077

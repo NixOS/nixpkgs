@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
+    mainProgram = "cuneiform";
   };
 }

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.13p3";
+  version = "1.9.15p2";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    hash = "sha256-kjNKEruT4MBWsJ9T4lXMt9b2fGNQ4oE82Vk87sp4Vgs=";
+    hash = "sha256-GZwM2/p+/P/6nIhoSo4vsgamK3CjFlB+SpHInIc7vMg=";
   };
 
   prePatch = ''
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     license = "https://www.sudo.ws/sudo/license.html";
 
-    maintainers = with lib.maintainers; [ eelco delroth ];
+    maintainers = with lib.maintainers; [ delroth ];
 
     platforms = lib.platforms.linux;
   };

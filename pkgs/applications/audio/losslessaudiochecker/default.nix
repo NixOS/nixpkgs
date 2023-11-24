@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  setSourceRoot = "sourceRoot=$PWD";
+  sourceRoot = ".";
 
   dontBuild = true;
 

@@ -28,7 +28,7 @@ mkFranzDerivation' rec {
     homepage = "https://getferdi.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ma27 ];
+    maintainers = with maintainers; [ davidtwco ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
     knownVulnerabilities = [

@@ -1,22 +1,26 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkg-config
+, cmake, pkg-config, gtest
 , withZlibCompat ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "zlib-ng";
-  version = "2.0.7";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "zlib-ng";
     rev = version;
-    sha256 = "sha256-Q+u71XXfHafmTL8tmk4XcgpbSdBIunveL9Q78LqiZF0=";
+    hash = "sha256-okNmobCVAC9y7tjZqFd0DBhOjs3WWRPK8jvK1j9G29k=";
   };
 
   outputs = [ "out" "dev" "bin" ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [ cmake pkg-config ];
+
+  buildInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=/"

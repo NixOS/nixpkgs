@@ -3,7 +3,7 @@
 , pkg-config, cython, docutils
 , kivy-garden
 , mesa, mtdev, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
-, ApplicationServices, AVFoundation, libcxx
+, Accelerate, ApplicationServices, AVFoundation, libcxx
 , withGstreamer ? true
 , gst_all_1
 , pillow, requests, pygments
@@ -20,6 +20,15 @@ buildPythonPackage rec {
     hash = "sha256-k9LIiLtlHY6H1xfVylI/Xbm7R6pCpC5UHe8GWnCwEGA=";
   };
 
+  patches = [
+    # Fixes incompatible function pointer conversion errors with clang 16.
+    # https://github.com/kivy/kivy/pull/8415
+    (fetchpatch {
+      url = "https://github.com/kivy/kivy/commit/a0ec8ff79fcbc1b82391132a89c8fc21ef1c5c55.patch";
+      hash = "sha256-2Kpkx75uWPiEiEqkOxBKl3HENKUGVHbQV4haeI5Gl3A=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cython
@@ -35,6 +44,7 @@ buildPythonPackage rec {
     mesa
     mtdev
   ] ++ lib.optionals stdenv.isDarwin [
+    Accelerate
     ApplicationServices
     AVFoundation
     libcxx

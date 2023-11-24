@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , matplotlib
@@ -24,6 +25,15 @@ buildPythonPackage rec {
     hash = "sha256-1CU/Iz83CKRx7dsOTGfdJm98TUfc2kxCHKIEUXP36HQ=";
   };
 
+  # patch dated use of private matplotlib interface
+  # https://github.com/aresio/simpful/issues/22
+  postPatch = ''
+    substituteInPlace simpful/simpful.py \
+      --replace \
+        "next(ax._get_lines.prop_cycler)['color']" \
+        "ax._get_lines.get_next_color()"
+  '';
+
   propagatedBuildInputs = [
     numpy
     scipy
@@ -46,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Library for fuzzy logic";
     homepage = "https://github.com/aresio/simpful";
     changelog = "https://github.com/aresio/simpful/releases/tag/${version}";

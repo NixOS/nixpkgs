@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
-    repo = "tldr-cpp-client";
+    repo = "tldr-c-client";
     rev = "v${version}";
     sha256 = "sha256-9pBMo+t/44tuT/CisS0w60KaKXjPfNTMr2v6Ftjaf1k=";
   };

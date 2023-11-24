@@ -1,23 +1,23 @@
-{ lib
-, stdenv
+{ AppKit
 , cmake
-, libGL
-, jsoncpp
 , fetchFromGitHub
 , fetchpatch2
 , Foundation
-, AppKit
+, jsoncpp
+, lib
+, libGL
+, stdenv
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "1.23.8";
+  version = "1.26.7";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ZdL1HDRSpPykbV3M0CjCZkOt7XlF7Z7OAhOey2ALeHg=";
+    repo = "openvr";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-verVIRyDdpF8lIjjjG8GllDJG7nhqByIfs/8O5TMOyc=";
   };
 
   patches = [
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     (fetchpatch2 {
       name = "use-correct-CPP11-definition-for-vsprintf_s.patch";
       url = "https://github.com/ValveSoftware/openvr/commit/0fa21ba17748efcca1816536e27bdca70141b074.patch";
-      sha256 = "sha256-0sPNDx5qKqCzN35FfArbgJ0cTztQp+SMLsXICxneLx4=";
+      hash = "sha256-0sPNDx5qKqCzN35FfArbgJ0cTztQp+SMLsXICxneLx4=";
     })
     # https://github.com/ValveSoftware/openvr/pull/1716
     (fetchpatch2 {
       name = "add-ability-to-build-with-system-installed-jsoncpp.patch";
       url = "https://github.com/ValveSoftware/openvr/commit/54a58e479f4d63e62e9118637cd92a2013a4fb95.patch";
-      sha256 = "sha256-aMojjbNjLvsGev0JaBx5sWuMv01sy2tG/S++I1NUi7U=";
+      hash = "sha256-aMojjbNjLvsGev0JaBx5sWuMv01sy2tG/S++I1NUi7U=";
     })
   ];
 
@@ -42,17 +42,26 @@ stdenv.mkDerivation rec {
     mv source/src/json source/thirdparty/jsoncpp
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ jsoncpp libGL ] ++ lib.optionals stdenv.isDarwin [ Foundation AppKit ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    jsoncpp
+    libGL
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
+  ];
 
   cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.isDarwin;
-    homepage = "https://github.com/ValveSoftware/openvr";
     description = "An API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ pedrohlc Scrumplex ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/ValveSoftware/openvr";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ pedrohlc Scrumplex ];
+    platforms = lib.platforms.unix;
   };
-}
+})

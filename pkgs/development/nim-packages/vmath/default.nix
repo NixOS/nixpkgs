@@ -11,6 +11,8 @@ buildNimPackage rec {
     hash = "sha256-/v0lQIOMogTxFRtbssziW4W6VhMDepM6Si8igLgcx30=";
   };
 
+  nimFlags = [ "--mm:refc" ];
+
   doCheck = !stdenv.isDarwin;
 
   meta = with lib;

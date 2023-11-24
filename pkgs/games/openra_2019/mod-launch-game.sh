@@ -8,7 +8,7 @@ show_error() {
   exit 1
 }
 
-cd "@out@/lib/openra-@name@"
+pushd "@out@/lib/openra_2019-@name@" > /dev/null
 
 # Check for missing assets
 assetsError='@assetsError@'
@@ -17,7 +17,7 @@ if [[ -n "$assetsError" && ! -d "$HOME/.openra/Content/@name@" ]]; then
 fi
 
 # Run the game
-mono --debug OpenRA.Game.exe Game.Mod=@name@ Engine.LaunchPath="@out@/bin/openra-@name@" Engine.ModSearchPaths="@out@/lib/openra-@name@/mods" "$@"
+mono --debug OpenRA.Game.exe Game.Mod=@name@ Engine.LaunchPath="@out@/bin/openra-@name@" Engine.ModSearchPaths="@out@/lib/openra_2019-@name@/mods" "$@"
 
 # Show a crash dialog if something went wrong
 if (( $? != 0 && $? != 1 )); then

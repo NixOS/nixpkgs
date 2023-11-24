@@ -1,5 +1,7 @@
 { stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
 , csmSupport ? false, seabios ? null
+, fdSize2MB ? csmSupport
+, fdSize4MB ? false
 , secureBoot ? false
 , httpSupport ? false
 , tpmSupport ? false
@@ -49,7 +51,9 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     ++ lib.optionals debug [ "-D DEBUG_ON_SERIAL_PORT=TRUE" ]
     ++ lib.optionals sourceDebug [ "-D SOURCE_DEBUG_ENABLE=TRUE" ]
     ++ lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
-    ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
+    ++ lib.optionals csmSupport [ "-D CSM_ENABLE" ]
+    ++ lib.optionals fdSize2MB ["-D FD_SIZE_2MB"]
+    ++ lib.optionals fdSize4MB ["-D FD_SIZE_4MB"]
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals tlsSupport [ "-D NETWORK_TLS_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
@@ -100,6 +104,6 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
     inherit (edk2.meta) platforms;
-    maintainers = [ lib.maintainers.raitobezarius ];
+    maintainers = with lib.maintainers; [ adamcstephens raitobezarius ];
   };
 })

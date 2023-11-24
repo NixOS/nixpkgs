@@ -1,32 +1,65 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, wayland-scanner, ninja
-, wayland, wayland-protocols, freetype,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, freetype
+, libglvnd
+, libxkbcommon
+, wayland
+, wayland-protocols
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sov";
-  version = "0.73";
+  version = "0.92b";
 
   src = fetchFromGitHub {
     owner = "milgra";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-cjbTSvW1fCPl2wZ848XrUPU0bDQ4oXy+D8GqyBMaTwQ=";
+    repo = "sov";
+    rev = finalAttrs.version;
+    hash = "sha256-1L5D0pzcXbkz3VS7VB6ID8BJEbGeNxjo3xCr71CGcIo=";
   };
 
-  postPatch = ''
-    substituteInPlace src/sov/main.c --replace '/usr' $out
-  '';
+  patches = [
+    # mark wayland-scanner as build-time dependency
+    # https://github.com/milgra/sov/pull/45
+    (fetchpatch2 {
+      url = "https://github.com/milgra/sov/commit/8677dcfc47e440157388a8f15bdda9419d84db04.patch";
+      hash = "sha256-P1k1zosHcVO7hyhD1JWbj07h7pQ7ybgDHfoufBinEys=";
+    })
+  ];
 
   strictDeps = true;
-  nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
-  buildInputs = [ wayland wayland-protocols freetype ];
 
-  meta = with lib; {
-    description = "An overlay that shows schemas for all workspaces to make navigation in sway easier.";
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    freetype
+    libglvnd
+    libxkbcommon
+    wayland
+    wayland-protocols
+  ];
+
+  meta = {
+    description = "Workspace overview app for sway";
     homepage = "https://github.com/milgra/sov";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ travisdavis-ops ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "sov";
+    maintainers = with lib.maintainers; [ eclairevoyant ];
+    platforms = lib.platforms.linux;
   };
-}
+})

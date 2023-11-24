@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.2";
+  version = "0.11.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ol-iver";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Sa5pfvSzshgwHh9LGWPBVIC7pXouZbTmSMYncT46phU=";
+    hash = "sha256-0+BjakGGnCbmiSHSipRifPkasfP1vvAWGvzyRufpsOk=";
   };
 
   nativeBuildInputs = [
