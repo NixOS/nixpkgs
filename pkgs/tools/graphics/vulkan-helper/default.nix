@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aidalgol ];
     platforms = platforms.linux;
+    mainProgram = "vulkan-helper";
   };
 }

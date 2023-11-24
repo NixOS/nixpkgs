@@ -32,5 +32,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ kidonng ];
+    mainProgram = "lsix";
   };
 }

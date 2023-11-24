@@ -20,6 +20,7 @@ let
         printf "waiting for device to appear $path"
         for try in $(seq 10); do
           if [ -e $path ]; then
+              target=$(readlink -f $path)
               success=true
               break
           else

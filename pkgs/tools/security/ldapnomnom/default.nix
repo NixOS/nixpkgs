@@ -22,5 +22,6 @@ buildGoModule rec {
     changelog = "https://github.com/lkarlslund/ldapnomnom/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ldapnomnom";
   };
 }

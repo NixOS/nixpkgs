@@ -604,6 +604,7 @@ in {
         ({
           name :: String,
           type :: String,
+          hasExt :: String -> Bool,
           ...
         } -> Bool)
         -> Path
@@ -614,7 +615,7 @@ in {
       fileFilter (file: file.name == "default.nix") ./.
 
       # Include all non-Nix files from the current directory
-      fileFilter (file: ! hasSuffix ".nix" file.name) ./.
+      fileFilter (file: ! file.hasExt "nix") ./.
 
       # Include all files that start with a "." in the current directory
       fileFilter (file: hasPrefix "." file.name) ./.
@@ -633,6 +634,12 @@ in {
 
       - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
         This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+
+      - `hasExt` (String -> Bool): Whether the file has a certain file extension.
+        `hasExt ext` is true only if `hasSuffix ".${ext}" name`.
+
+        This also means that e.g. for a file with name `.gitignore`,
+        `hasExt "gitignore"` is true.
 
       Other attributes may be added in the future.
     */
