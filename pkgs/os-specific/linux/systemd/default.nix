@@ -826,15 +826,31 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    longDescription = ''
+      systemd is a suite of basic building blocks for a Linux system. It
+      provides a system and service manager that runs as PID 1 and starts the
+      rest of the system. systemd provides aggressive parallelization
+      capabilities, uses socket and D-Bus activation for starting services,
+      offers on-demand starting of daemons, keeps track of processes using Linux
+      control groups, maintains mount and automount points, and implements an
+      elaborate transactional dependency-based service control logic. systemd
+      supports SysV and LSB init scripts and works as a replacement for
+      sysvinit. Other parts include a logging daemon, utilities to control basic
+      system configuration like the hostname, date, locale, maintain a list of
+      logged-in users and running containers and virtual machines, system
+      accounts, runtime directories and settings, and daemons to manage simple
+      network configuration, network time synchronization, log forwarding, and
+      name resolution.
+    '';
+    license = with lib.licenses; [ lgpl21Plus ];
+    maintainers = with lib.maintainers; [ flokli kloenk ];
+    platforms = lib.platforms.linux;
+    priority = 10;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
     broken = stdenv.hostPlatform.isStatic;
-    priority = 10;
-    maintainers = with maintainers; [ flokli kloenk ];
   };
 })
