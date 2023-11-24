@@ -13011,6 +13011,8 @@ self: super: with self; {
 
   skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
 
+  skytemple-ssb-emulator = callPackage ../development/python-modules/skytemple-ssb-emulator { };
+
   slack-bolt = callPackage ../development/python-modules/slack-bolt { };
 
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
