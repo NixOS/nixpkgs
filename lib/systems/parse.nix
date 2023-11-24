@@ -408,11 +408,17 @@ rec {
     assert types.parsedPlatform.check components;
     setType "system" components;
 
-  mkSkeletonFromList = l: {
-    "1" = if elemAt l 0 == "avr"
+  mkSkeletonFromList = l:
+    let
+      len = length l;
+    in
+    if len == 1 then (
+      if elemAt l 0 == "avr"
       then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
-      else throw "Target specification with 1 components is ambiguous";
-    "2" = # We only do 2-part hacks for things Nix already supports
+      else throw "Target specification with 1 components is ambiguous"
+    )
+    else if len == 2 then (
+      # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
       # MSVC ought to be the default ABI so this case isn't needed. But then it
@@ -423,8 +429,9 @@ rec {
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "msvc";     }
       else if (elemAt l 1) == "elf"
         then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
-      else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
-    "3" =
+      else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   }
+    )
+    else if len == 3 then (
       # cpu-kernel-environment
       if elemAt l 1 == "linux" ||
          elem (elemAt l 2) ["eabi" "eabihf" "elf" "gnu"]
@@ -447,10 +454,12 @@ rec {
                  then "windows"  # autotools breaks on -gnu for window
                  else elemAt l 2;
       }
-      else throw "Target specification with 3 components is ambiguous";
-    "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
-  }.${toString (length l)}
-    or (throw "system string has invalid number of hyphen-separated components");
+      else throw "Target specification with 3 components is ambiguous"
+    )
+    else if len == 4 then (
+      { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; }
+    )
+    else throw "system string has invalid number of hyphen-separated components";
 
   # This should revert the job done by config.guess from the gcc compiler.
   mkSystemFromSkeleton = { cpu
