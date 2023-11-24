@@ -210,11 +210,13 @@ let
     };
 
     meta = {
-      description = "ZFS Filesystem Linux Kernel module";
+      description = "ZFS Filesystem Linux" + (if buildUser then " Userspace Tools" else " Kernel Module");
       longDescription = ''
         ZFS is a filesystem that combines a logical volume manager with a
         Copy-On-Write filesystem with data integrity detection and repair,
         snapshotting, cloning, block devices, deduplication, and more.
+
+        ${if buildUser then "This is the userspace tools package." else "This is the kernel module package."}
       '';
       homepage = "https://github.com/openzfs/zfs";
       changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
