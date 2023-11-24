@@ -58,6 +58,10 @@ in
         '';
       };
 
+      prompt = {
+        enable = mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
+      };
+
       lfs = {
         enable = mkEnableOption (lib.mdDoc "git-lfs");
 
@@ -88,6 +92,11 @@ in
           required = true;
         };
       };
+    })
+    (mkIf (cfg.enable && cfg.prompt.enable) {
+      environment.interactiveShellInit = ''
+        source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
+      '';
     })
   ];
 
