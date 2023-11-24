@@ -101,7 +101,7 @@ let
       text = ''
         # WARNING: this file is generated from the nix.* options in
         # your NixOS configuration, typically
-        # /etc/nixos/configuration.nix.  Do not edit it!
+        # /etc/nixos/configuration.nix. Do not edit it!
         ${mkKeyValuePairs cfg.settings}
         ${cfg.extraOptions}
       '';
