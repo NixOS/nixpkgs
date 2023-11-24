@@ -120,7 +120,7 @@ in
     ];
 
     # this will most likely need to be updated when azuredatastudio's version changes
-    sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/4.7.1.6";
+    sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/4.10.1.3/";
 
     rpath = lib.concatStringsSep ":" [
       (lib.makeLibraryPath [
