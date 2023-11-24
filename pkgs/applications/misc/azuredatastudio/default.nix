@@ -1,6 +1,4 @@
-{
-  stdenv
-  
+{ stdenv
 , lib
 , fetchurl
 , copyDesktopItems
