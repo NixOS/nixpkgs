@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     description = "ustream SSL wrapper";
     homepage = "https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary";
     license = licenses.isc;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz mkg20001 ];
     platforms = platforms.all;
   };
 }
