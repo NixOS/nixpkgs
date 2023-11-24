@@ -32,6 +32,7 @@
 , AVFoundation
 , AVKit
 , WebKit
+, fetchpatch
 }:
 let
   catch = fetchFromGitHub {
@@ -58,6 +59,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-YkV150sDsfBEHvHne0GF6i8Y5881NrByPkLtPAmb24E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "avoid_gtk3_crash.patch";
+      url = "https://github.com/wxWidgets/wxWidgets/commit/8ea22b5e92bf46add0b20059f6e39a938858ff97.patch";
+      hash = "sha256-zAyqVTdej4F3R7vVMLiKkXqJTAHDtGYJnyjaRyDmMOM=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
