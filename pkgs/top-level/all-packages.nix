@@ -16672,6 +16672,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvm = targetPackages.llvmPackages_6.llvm or llvmPackages_6.llvm;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries or llvmPackages_6.libraries;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   });
 
   llvmPackages_8 = recurseIntoAttrs (callPackage ../development/compilers/llvm/8 {
@@ -16679,6 +16680,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_8.tools;
     targetLlvm = targetPackages.llvmPackages_8.llvm or llvmPackages_8.llvm;
     targetLlvmLibraries = targetPackages.llvmPackages_8.libraries or llvmPackages_8.libraries;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   });
 
   llvmPackages_9 = recurseIntoAttrs (callPackage ../development/compilers/llvm/9 {
@@ -16686,6 +16688,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_9.tools;
     targetLlvm = targetPackages.llvmPackages_9.llvm or llvmPackages_9.llvm;
     targetLlvmLibraries = targetPackages.llvmPackages_9.libraries or llvmPackages_9.libraries;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   });
 
   llvmPackages_10 = recurseIntoAttrs (callPackage ../development/compilers/llvm/10 {
@@ -16693,6 +16696,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvm = targetPackages.llvmPackages_10.llvm or llvmPackages_10.llvm;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries or llvmPackages_10.libraries;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   });
 
   llvmPackages_11 = recurseIntoAttrs (callPackage ../development/compilers/llvm/11 ({
@@ -16714,6 +16718,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_13.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
     targetLlvm = targetPackages.llvmPackages_13.llvm or llvmPackages_13.llvm;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   }));
 
   llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 ({
@@ -16721,6 +16726,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_14.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_14.libraries or llvmPackages_14.libraries;
     targetLlvm = targetPackages.llvmPackages_14.llvm or llvmPackages_14.llvm;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   }));
 
   llvmPackages_15 = recurseIntoAttrs (callPackage ../development/compilers/llvm/15 ({
