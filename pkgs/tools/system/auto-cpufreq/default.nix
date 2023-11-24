@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.9.9";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
