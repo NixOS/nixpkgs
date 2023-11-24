@@ -1,38 +1,41 @@
 {
-  stdenv,
-  lib,
-  fetchurl,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  cairo,
-  cups,
-  curl,
-  dbus,
-  expat,
-  gdk-pixbuf,
-  glib,
-  gnutar,
-  gtk3,
-  icu,
-  libdrm,
-  libunwind,
-  libuuid,
-  libxkbcommon,
-  mesa,
-  nspr,
-  nss,
-  openssl,
-  pango,
-  systemd,
-  xorg,
-  zlib,
+  stdenv
+  
+, lib
+, fetchurl
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gnutar
+, gtk3
+, icu
+, libdrm
+, libunwind
+, libuuid
+, libxkbcommon
+, mesa
+, nspr
+, nss
+, openssl
+, pango
+, systemd
+, xorg
+, zlib
 }:
+
 # from justinwoo/azuredatastudio-nix
 # https://github.com/justinwoo/azuredatastudio-nix/blob/537c48aa3981cd1a82d5d6e508ab7e7393b3d7c8/default.nix
+
 let
   desktopItem = makeDesktopItem {
     name = "azuredatastudio";
@@ -43,9 +46,9 @@ let
     icon = "azuredatastudio";
     startupNotify = true;
     startupWMClass = "azuredatastudio";
-    categories = ["Utility" "TextEditor" "Development" "IDE"];
-    mimeTypes = ["text/plain" "inode/directory" "application/x-azuredatastudio-workspace"];
-    keywords = ["azuredatastudio"];
+    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    mimeTypes = [ "text/plain" "inode/directory" "application/x-azuredatastudio-workspace" ];
+    keywords = [ "azuredatastudio" ];
     actions.new-empty-window = {
       name = "New Empty Window";
       exec = "azuredatastudio --no-sandbox --new-window %F";
@@ -62,9 +65,9 @@ let
     icon = "azuredatastudio";
     startupNotify = true;
     startupWMClass = "azuredatastudio";
-    categories = ["Utility" "TextEditor" "Development" "IDE"];
-    mimeTypes = ["x-scheme-handler/azuredatastudio"];
-    keywords = ["azuredatastudio"];
+    categories = [ "Utility" "TextEditor" "Development" "IDE" ];
+    mimeTypes = [ "x-scheme-handler/azuredatastudio" ];
+    keywords = [ "azuredatastudio" ];
     noDisplay = true;
   };
 in
@@ -77,7 +80,7 @@ in
     src = fetchurl {
       name = "${pname}-${version}.tar.gz";
       url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
-      sha256 = "sha256-DglBef+4g9Daj9vpchoyQCMDv2j0EURfLdhzEvw8Jsc=";
+      hash = "sha256-DglBef+4g9Daj9vpchoyQCMDv2j0EURfLdhzEvw8Jsc=";
     };
 
     nativeBuildInputs = [
@@ -185,11 +188,11 @@ in
     '';
 
     meta = {
-      maintainers = with lib.maintainers; [xavierzwirtz];
+      maintainers = with lib.maintainers; [ xavierzwirtz ];
       description = "A data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
       homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
-      sourceProvenance = with lib.sourceTypes; [binaryNativeCode];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfreeRedistributable;
-      platforms = ["x86_64-linux"];
+      platforms = [ "x86_64-linux" ];
     };
   }
