@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.7.3";
+  version = "2.10.1";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-1JFshYHE67xTTOvaqOyiR42fO/3Yjq4p/KsBIOrFdkk=";
+    hash = "sha256-5tomV6lUp4ee7SjMCOCBewH/2B1+q4Y0ZgOXtV+SZHI=";
   };
 
   nativeBuildInputs = [
@@ -90,9 +90,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_server_extension_list"
     "test_cull_idle"
     "test_server_extension_list"
+    "test_subscribe_websocket"
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"

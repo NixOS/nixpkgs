@@ -7,7 +7,7 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
 , libpulseaudio
 , pipewire
@@ -19,28 +19,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.19";
+  version = "1.3.22";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+n26VTNRymPdzMbSz8AZsQ73xOHizOFAstw6toKfZQM=";
+    hash = "sha256-nyhAq06k0nNrGSbD0N1RNwcplYf5vO1BvnvEfNYGG0A=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-SxUdTzk8WngkKwT05U8HJsK8+8ezcJWdiT/ettxpeEE=";
+    hash = "sha256-ydhJXAvz3k6GwpnSL6brl9xFpb+ooi8Am89TkcE00hc=";
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

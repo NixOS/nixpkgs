@@ -16592,6 +16592,13 @@
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
   };
+  sinanmohd = {
+    name = "Sinan Mohd";
+    email = "sinan@firemail.cc";
+    matrix = "@sinan:sinanmohd.com";
+    github = "sinanmohd";
+    githubId = 69694713;
+  };
   sioodmy = {
     name = "Antoni Sokołowski";
     github = "sioodmy";

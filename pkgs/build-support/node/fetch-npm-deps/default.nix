@@ -36,8 +36,8 @@
           '';
         };
 
-        makeTest = { name, src, hash, forceGitDeps ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
-          inherit name hash forceGitDeps;
+        makeTest = { name, src, hash, forceGitDeps ? false, forceEmptyCache ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
+          inherit name hash forceGitDeps forceEmptyCache;
 
           src = makeTestSrc { inherit name src; };
         };
@@ -98,6 +98,20 @@
           hash = "sha256-VzQhArHoznYSXUT7l9HkJV4yoSOmoP8eYTLel1QwmB4=";
         };
 
+        # This package has no resolved deps whatsoever, which will not actually work but does test the forceEmptyCache option.
+        emptyCache = makeTest {
+          name = "empty-cache";
+
+          src = fetchurl {
+            url = "https://raw.githubusercontent.com/bufbuild/protobuf-es/v1.2.1/package-lock.json";
+            hash = "sha256-UdBUEb4YRHsbvyjymIyjemJEiaI9KQRirqt+SFSK0wA=";
+          };
+
+          hash = "sha256-Cdv40lQjRszzJtJydZt25uYfcJVeJGwH54A+agdH9wI=";
+
+          forceEmptyCache = true;
+        };
+
         # This package contains both hosted Git shorthand, and a bundled dependency that happens to override an existing one.
         etherpadLite1818 = makeTest {
           name = "etherpad-lite-1.8.18";
@@ -124,6 +138,7 @@
     { name ? "npm-deps"
     , hash ? ""
     , forceGitDeps ? false
+    , forceEmptyCache ? false
     , ...
     } @ args:
     let
@@ -136,6 +151,7 @@
         };
 
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
+      forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
     in
     stdenvNoCC.mkDerivation (args // {
       inherit name;
@@ -174,5 +190,5 @@
         else "/no-cert-file.crt";
 
       outputHashMode = "recursive";
-    } // hash_ // forceGitDeps_);
+    } // hash_ // forceGitDeps_ // forceEmptyCache_);
 }

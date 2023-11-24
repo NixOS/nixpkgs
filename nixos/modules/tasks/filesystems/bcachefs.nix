@@ -20,6 +20,7 @@ let
         printf "waiting for device to appear $path"
         for try in $(seq 10); do
           if [ -e $path ]; then
+              target=$(readlink -f $path)
               success=true
               break
           else
@@ -97,7 +98,7 @@ let
           lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
             lib.kernel.module
             lib.kernel.yes
-            lib.kernel.option.yes
+            (lib.kernel.option lib.kernel.yes)
           ]
         )
       );

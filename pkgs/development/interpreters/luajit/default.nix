@@ -1,11 +1,9 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , buildPackages
 , version
 , src
 , extraMeta ? { }
-, callPackage
 , self
 , packageOverrides ? (final: prev: {})
 , pkgsBuildBuild

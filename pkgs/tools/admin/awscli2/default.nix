@@ -19,10 +19,14 @@ let
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
-      urllib3 = prev.urllib3.overridePythonAttrs (prev: {
-        format = "setuptools";
+      urllib3 = prev.urllib3.overridePythonAttrs (prev: rec {
+        pyproject = true;
+        version = "1.26.18";
+        nativeBuildInputs = with final; [
+          setuptools
+        ];
         src = prev.src.override {
-          version = "1.26.18";
+          inherit version;
           hash = "sha256-+OzBu6VmdBNFfFKauVW/jGe0XbeZ0VkGYmFxnjKFgKA=";
         };
       });
