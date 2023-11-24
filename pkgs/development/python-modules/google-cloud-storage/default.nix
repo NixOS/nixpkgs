@@ -12,12 +12,13 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
   version = "2.13.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-9i3Ex7bNQ2DQcuPesoA1+9rUkaw9mwsYFaEtrqEPN8c=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     google-auth
