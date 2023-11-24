@@ -34896,6 +34896,8 @@ with pkgs;
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
+  
+  qcustomplot = callPackage ../applications/graphics/qcustomplot { };
 
   qelectrotech = libsForQt5.callPackage ../applications/misc/qelectrotech { };
 
