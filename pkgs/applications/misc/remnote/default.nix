@@ -44,7 +44,7 @@ in
   meta = with lib; {
     description = "A note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ max-niederman jgarcia ];
+    maintainers = with maintainers; [ max-niederman chewblacka ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";
