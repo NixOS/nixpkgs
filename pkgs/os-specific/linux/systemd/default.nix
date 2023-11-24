@@ -161,8 +161,9 @@ let
   wantGcrypt = withResolved || withImportd;
   version = "254.3";
 
-  # Bump this variable on every (major) version change. See below (in the meson options list) for why.
-  # command:
+  # Bump this variable on every (major) version change. See below (in the meson
+  # options list) for why.
+  # Use the script below to do this:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1690536449";
@@ -170,8 +171,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
-  # This has proven to be less error-prone than the previous systemd fork.
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches
+  # inside nixpkgs directly This has proven to be less error-prone than the
+  # previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
@@ -179,9 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ObnsAiKwhwEb4ti611eS/wGpg3Sss/pUy/gANPAbXbs=";
   };
 
-  # On major changes, or when otherwise required, you *must* reformat the patches,
-  # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
-  # systemd version, and export the patches again via
+  # On major changes, or when otherwise required, you *must* reformat the
+  # patches, `git am path/to/00*.patch` them into a systemd worktree, rebase to
+  # the more recent systemd version, and export the patches again via
   # `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
@@ -450,10 +452,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "version-tag" version)
-    # We bump this variable on every (major) version change to ensure
-    # that we have known-good value for a timestamp that is in the (not so distant) past.
-    # This serves as a lower bound for valid system timestamps during startup. Systemd will
-    # reset the system timestamp if this date is +- 15 years from the system time.
+    # We bump this variable on every (major) version change to ensure that we
+    # have known-good value for a timestamp that is in the (not so distant)
+    # past.
+    # This serves as a lower bound for valid system timestamps during
+    # startup. Systemd will reset the system timestamp if this date is +- 15
+    # years from the system time.
+    #
     # See the systemd v250 release notes for further details:
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
     (lib.mesonOption "time-epoch" releaseTimestamp)
@@ -569,8 +574,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure =
     let
-      # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
-      # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
+      # A list of all the runtime binaries that the systemd executables, tests
+      # and libraries are referencing in their source code, scripts and unit
+      # files.
+      # As soon as a dependency isn't required anymore we should remove it from
+      # the list. The `where` attribute for each of the replacement patterns
+      # must be exhaustive. If another (unhandled) case is found in the source
+      # code the build fails with an error message.
       binaryReplacements = [
         { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
 
@@ -680,14 +690,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([
-    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-    # lead to a cyclic dependency.
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would lead to a
+    # cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
     "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-    # Set the release_agent on /sys/fs/cgroup/systemd to the
-    # currently running systemd (/run/current-system/systemd) so
-    # that we don't use an obsolete/garbage-collected release agent.
+    # Set the release_agent on /sys/fs/cgroup/systemd to the currently running
+    # systemd (/run/current-system/systemd) so that we don't use an
+    # obsolete/garbage-collected release agent.
     "-USYSTEMD_CGROUP_AGENTS_PATH"
     "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
@@ -731,11 +741,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/sysusers.d $out/example
   '';
 
-  # Avoid *.EFI binary stripping. At least on aarch64-linux strip
-  # removes too much from PE32+ files:
+  # Avoid *.EFI binary stripping. At least on aarch64-linux strip removes too
+  # much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
-  # The hack is to move EFI file out of lib/ before doStrip
-  # run and return it after doStrip run.
+  # The hack is to move EFI file out of lib/ before doStrip run and return it
+  # after doStrip run.
   preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
@@ -743,15 +753,16 @@ stdenv.mkDerivation (finalAttrs: {
   # Wrap in the correct path for LUKS2 tokens.
   postFixup = lib.optionalString withCryptsetup ''
     for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
-      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not
+      # propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
   '' + lib.optionalString withBootloader ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '' + lib.optionalString withUkify ''
-    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
-    # ukify with the correct binutils. When wrapping, no splicing happens so we
-    # have to explicitly pull binutils from targetPackages.
+    # To cross compile a derivation that builds a UKI with ukify, we need to
+    # wrap ukify with the correct binutils. When wrapping, no splicing happens
+    # so we have to explicitly pull binutils from targetPackages.
     wrapProgram $out/lib/systemd/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
@@ -760,12 +771,13 @@ stdenv.mkDerivation (finalAttrs: {
     (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
 
   passthru = {
-    # The interface version prevents NixOS from switching to an
-    # incompatible systemd at runtime.  (Switching across reboots is
-    # fine, of course.)  It should be increased whenever systemd changes
-    # in a backwards-incompatible way.  If the interface version of two
-    # systemd builds is the same, then we can switch between them at
-    # runtime; otherwise we can't and we need to reboot.
+    # The interface version prevents NixOS from switching to an incompatible
+    # systemd at runtime.
+    # (Switching across reboots is fine, of course.)
+    # It should be increased whenever systemd changes in a
+    # backwards-incompatible way.
+    # If the interface version of two systemd builds is the same, then we can
+    # switch between them at runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
