@@ -1948,4 +1948,24 @@ runTests {
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
   );
+
+  testPlatformMatch = {
+    expr = meta.platformMatch { system = "x86_64-linux"; } "x86_64-linux";
+    expected = true;
+  };
+
+  testPlatformMatchAttrs = {
+    expr = meta.platformMatch (systems.elaborate "x86_64-linux") (systems.elaborate "x86_64-linux").parsed;
+    expected = true;
+  };
+
+  testPlatformMatchNoMatch = {
+    expr = meta.platformMatch { system = "x86_64-darwin"; } "x86_64-linux";
+    expected = false;
+  };
+
+  testPlatformMatchMissingSystem = {
+    expr = meta.platformMatch { } "x86_64-linux";
+    expected = false;
+  };
 }
