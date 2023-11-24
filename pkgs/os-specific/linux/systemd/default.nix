@@ -449,73 +449,74 @@ stdenv.mkDerivation (finalAttrs: {
   mesonBuildType = "release";
 
   mesonFlags = [
-    "-Dversion-tag=${version}"
+    (lib.mesonOption "version-tag" version)
     # We bump this variable on every (major) version change to ensure
     # that we have known-good value for a timestamp that is in the (not so distant) past.
     # This serves as a lower bound for valid system timestamps during startup. Systemd will
     # reset the system timestamp if this date is +- 15 years from the system time.
     # See the systemd v250 release notes for further details:
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
-    "-Dtime-epoch=${releaseTimestamp}"
+    (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    "-Dmode=release"
-    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
-    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
-    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dpam=${lib.boolToString withPam}"
-    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
-    "-Drootprefix=${placeholder "out"}"
-    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
-    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
-    "-Dloadkeys-path=${kbd}/bin/loadkeys"
-    "-Dsetfont-path=${kbd}/bin/setfont"
-    "-Dtty-gid=3" # tty in NixOS has gid 3
-    "-Ddebug-shell=${bashInteractive}/bin/bash"
-    "-Dglib=${lib.boolToString withTests}"
+    (lib.mesonOption "mode" "release")
+    (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.mesonOption "dbussessionservicedir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+
+    (lib.mesonBool "pam" withPam)
+    (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
+    (lib.mesonOption "rootprefix" "${placeholder "out"}")
+    (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
+    (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+    (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
+    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
+    (lib.mesonBool "glib" withTests)
     # while we do not run tests we should also not build them. Removes about 600 targets
-    "-Dtests=false"
-    "-Dacl=${lib.boolToString withAcl}"
-    "-Danalyze=${lib.boolToString withAnalyze}"
-    "-Daudit=${lib.boolToString withAudit}"
-    "-Dgcrypt=${lib.boolToString wantGcrypt}"
-    "-Dimportd=${lib.boolToString withImportd}"
-    "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=${lib.boolToString withHomed}"
-    "-Dlogind=${lib.boolToString withLogind}"
-    "-Dlocaled=${lib.boolToString withLocaled}"
-    "-Dhostnamed=${lib.boolToString withHostnamed}"
-    "-Dmachined=${lib.boolToString withMachined}"
-    "-Dnetworkd=${lib.boolToString withNetworkd}"
-    "-Doomd=${lib.boolToString withOomd}"
-    "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dlibcryptsetup=${lib.boolToString withCryptsetup}"
-    "-Dportabled=${lib.boolToString withPortabled}"
-    "-Dhwdb=${lib.boolToString withHwdb}"
-    "-Dremote=${lib.boolToString withRemote}"
-    "-Dtimedated=${lib.boolToString withTimedated}"
-    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
-    "-Duserdb=${lib.boolToString withUserDb}"
-    "-Dcoredump=${lib.boolToString withCoredump}"
-    "-Dfirstboot=false"
-    "-Dresolve=${lib.boolToString withResolved}"
-    "-Dsplit-usr=false"
-    "-Dlibcurl=${lib.boolToString wantCurl}"
-    "-Dlibidn=false"
-    "-Dlibidn2=${lib.boolToString withLibidn2}"
-    "-Dfirstboot=${lib.boolToString withFirstboot}"
-    "-Dsysusers=${lib.boolToString withSysusers}"
-    "-Drepart=${lib.boolToString withRepart}"
-    "-Dsysupdate=${lib.boolToString withSysupdate}"
-    "-Dquotacheck=false"
-    "-Dldconfig=false"
-    "-Dsmack=true"
-    "-Db_pie=true"
-    "-Dinstall-sysconfdir=false"
-    "-Dsbat-distro=nixos"
-    "-Dsbat-distro-summary=NixOS"
-    "-Dsbat-distro-url=https://nixos.org/"
-    "-Dsbat-distro-pkgname=${pname}"
-    "-Dsbat-distro-version=${version}"
+    (lib.mesonBool "tests" false)
+    (lib.mesonBool "acl" withAcl)
+    (lib.mesonBool "analyze" withAnalyze)
+    (lib.mesonBool "audit" withAudit)
+    (lib.mesonBool "gcrypt" wantGcrypt)
+    (lib.mesonBool "importd" withImportd)
+    (lib.mesonBool "lz4" withCompression)
+    (lib.mesonBool "homed" withHomed)
+    (lib.mesonBool "logind" withLogind)
+    (lib.mesonBool "localed" withLocaled)
+    (lib.mesonBool "hostnamed" withHostnamed)
+    (lib.mesonBool "machined" withMachined)
+    (lib.mesonBool "networkd" withNetworkd)
+    (lib.mesonBool "oomd" withOomd)
+    (lib.mesonBool "polkit" withPolkit)
+    (lib.mesonBool "libcryptsetup" withCryptsetup)
+    (lib.mesonBool "portabled" withPortabled)
+    (lib.mesonBool "hwdb" withHwdb)
+    (lib.mesonBool "remote" withRemote)
+    (lib.mesonBool "timedated" withTimedated)
+    (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "userdb" withUserDb)
+    (lib.mesonBool "coredump" withCoredump)
+    (lib.mesonBool "firstboot" false)
+    (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "split-usr" false)
+    (lib.mesonBool "libcurl" wantCurl)
+    (lib.mesonBool "libidn" false)
+    (lib.mesonBool "libidn2" withLibidn2)
+    (lib.mesonBool "firstboot" withFirstboot)
+    (lib.mesonBool "sysusers" withSysusers)
+    (lib.mesonBool "repart" withRepart)
+    (lib.mesonBool "sysupdate" withSysupdate)
+    (lib.mesonBool "quotacheck" false)
+    (lib.mesonBool "ldconfig" false)
+    (lib.mesonBool "smack" true)
+    (lib.mesonBool "b_pie" true)
+    (lib.mesonBool "install-sysconfdir" false)
+    (lib.mesonOption "sbat-distro" "nixos")
+    (lib.mesonOption "sbat-distro-summary" "NixOS")
+    (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
+    (lib.mesonOption "sbat-distro-pkgname" "${pname}")
+    (lib.mesonOption "sbat-distro-version" "${version}")
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
@@ -526,49 +527,50 @@ stdenv.mkDerivation (finalAttrs: {
       - https://github.com/systemd/systemd/issues/9843
       - https://github.com/systemd/systemd/issues/10184
     */
-    "-Dsystem-uid-max=999"
-    "-Dsystem-gid-max=999"
+    (lib.mesonOption "system-uid-max" "999")
+    (lib.mesonOption "system-gid-max" "999")
 
-    "-Dsysvinit-path="
-    "-Dsysvrcnd-path="
+    (lib.mesonOption "sysvinit-path" "")
+    (lib.mesonOption "sysvrcnd-path" "")
 
-    "-Dsulogin-path=${util-linux.login}/bin/sulogin"
-    "-Dnologin-path=${util-linux.login}/bin/nologin"
-    "-Dmount-path=${lib.getOutput "mount" util-linux}/bin/mount"
-    "-Dumount-path=${lib.getOutput "mount" util-linux}/bin/umount"
-    "-Dcreate-log-dirs=false"
+    (lib.mesonOption "sulogin-path" "${util-linux.login}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${util-linux.login}/bin/nologin")
+    (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
+    (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+    (lib.mesonBool "create-log-dirs" false)
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
-    "-Ddefault-hierarchy=unified"
+    (lib.mesonOption "default-hierarchy" "unified")
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
-    "-Dman=true"
+    (lib.mesonBool "man" true)
 
-    "-Defi=${lib.boolToString withEfi}"
-    "-Dbootloader=${lib.boolToString withBootloader}"
+    (lib.mesonBool "efi" withEfi)
+    (lib.mesonBool "bootloader" withBootloader)
 
-    "-Dukify=${lib.boolToString withUkify}"
+    (lib.mesonBool "ukify" withUkify)
   ] ++ lib.optionals (withShellCompletions == false) [
-    "-Dbashcompletiondir=no"
-    "-Dzshcompletiondir=no"
+    (lib.mesonOption "bashcompletiondir" "no")
+    (lib.mesonOption "zshcompletiondir" "no")
   ] ++ lib.optionals (!withNss) [
-    "-Dnss-myhostname=false"
-    "-Dnss-mymachines=false"
-    "-Dnss-resolve=false"
-    "-Dnss-systemd=false"
+    (lib.mesonBool "nss-myhostname" false)
+    (lib.mesonBool "nss-mymachines" false)
+    (lib.mesonBool "nss-resolve" false)
+    (lib.mesonBool "nss-systemd" false)
   ] ++ lib.optionals withLibBPF [
-    "-Dbpf-framework=true"
+    (lib.mesonBool "bpf-framework" true)
   ] ++ lib.optionals withTpm2Tss [
-    "-Dtpm2=true"
+    (lib.mesonBool "tpm2" true)
   ] ++ lib.optionals (!withUtmp) [
-    "-Dutmp=false"
+    (lib.mesonBool "utmp" false)
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "-Dgshadow=false"
-    "-Didn=false"
+    (lib.mesonBool "gshadow" false)
+    (lib.mesonBool "idn" false)
   ] ++ lib.optionals withKmod [
-    "-Dkmod=true"
-    "-Dkmod-path=${kmod}/bin/kmod"
+    (lib.mesonBool "kmod" true)
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ];
+
   preConfigure =
     let
       # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
