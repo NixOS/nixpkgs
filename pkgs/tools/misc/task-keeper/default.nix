@@ -2,18 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "task-keeper";
-  version = "0.12.2";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
-    owner = "linux-china";
+    owner = "tennox"; # Using my fork because of https://github.com/linux-china/task-keeper/pull/5
     repo = "task-keeper";
-    rev = "55bf587871de49cd9ac703e42218e970749a689a";
-    hash = "sha256-P6RUENjK2UQ5/utW2umBTVnahf1xvbvLa3PMaD/2B6I=";
+    rev = "2a793dd7082259eab084f62bfd3a281f93c82a74";
+    hash = "sha256-oPdg8abAM+uSzx0OhRjDlTf4GdfmT9ALqTaH8u/9PUk=";
   };
 
   cargoLock = {
-    # lockFile = "${src}/Cargo.lock"; # pending PR: https://github.com/linux-china/task-keeper/pull/2
-    lockFile = ./Cargo.lock;
+    lockFile = "${src}/Cargo.lock";
   };
   doCheck = false; # tests depend on many packages (java, node, python, sbt, ...) - which I'm not currently willing to set up 😅
 
@@ -22,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "A cli to manage tasks from different task runners or package managers";
     license = licenses.asl20;
     maintainers = with maintainers; [ tennox ];
+    mainProgram = "tk";
   };
 }
