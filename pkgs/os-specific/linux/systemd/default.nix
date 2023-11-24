@@ -552,20 +552,16 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (withShellCompletions == false) [
     (lib.mesonOption "bashcompletiondir" "no")
     (lib.mesonOption "zshcompletiondir" "no")
-  ] ++ lib.optionals (!withNss) [
-    (lib.mesonBool "nss-myhostname" false)
-    (lib.mesonBool "nss-mymachines" false)
-    (lib.mesonBool "nss-resolve" false)
-    (lib.mesonBool "nss-systemd" false)
-  ] ++ lib.optionals withLibBPF [
-    (lib.mesonBool "bpf-framework" true)
-  ] ++ lib.optionals withTpm2Tss [
-    (lib.mesonBool "tpm2" true)
-  ] ++ lib.optionals (!withUtmp) [
-    (lib.mesonBool "utmp" false)
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    (lib.mesonBool "gshadow" false)
-    (lib.mesonBool "idn" false)
+
+    (lib.mesonBool "nss-myhostname" withNss)
+    (lib.mesonBool "nss-mymachines" withNss)
+    (lib.mesonBool "nss-resolve" withNss)
+    (lib.mesonBool "nss-systemd" withNss)
+    (lib.mesonBool "bpf-framework" withLibBPF)
+    (lib.mesonBool "tpm2" withTpm2Tss)
+    (lib.mesonBool "utmp" withUtmp)
+    (lib.mesonBool "gshadow" (!stdenv.hostPlatform.isMusl))
+    (lib.mesonBool "idn" (!stdenv.hostPlatform.isMusl))
   ] ++ lib.optionals withKmod [
     (lib.mesonBool "kmod" true)
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
