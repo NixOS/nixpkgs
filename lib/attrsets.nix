@@ -883,7 +883,10 @@ rec {
     recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs)) lhs rhs;
 
 
-  /* Returns true if the pattern is contained in the set. False otherwise.
+  /*
+    Recurse into every attribute set of the first argument and check that:
+    - Each attribute path also exists in the second argument.
+    - If the attribute's value is not a nested attribute set, it must have the same value in the right argument.
 
      Example:
        matchAttrs { cpu = {}; } { cpu = { bits = 64; }; }
@@ -895,16 +898,24 @@ rec {
   matchAttrs =
     # Attribute set structure to match
     pattern:
-    # Attribute set to find patterns in
+    # Attribute set to check
     attrs:
     assert isAttrs pattern;
-    all id (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
-      let pat = head values; val = elemAt values 1; in
-      if length values == 1 then false
-      else if isAttrs pat then isAttrs val && matchAttrs pat val
-      else pat == val
-    ) [pattern attrs]));
-
+    all
+    ( # Compare equality between `pattern` & `attrs`.
+      attr:
+      # Missing attr, not equal.
+      attrs ? ${attr} && (
+        let
+          lhs = pattern.${attr};
+          rhs = attrs.${attr};
+        in
+        # If attrset check recursively
+        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs
+        else lhs == rhs
+      )
+    )
+    (attrNames pattern);
 
   /* Override only the attributes that are already present in the old set
     useful for deep-overriding.
