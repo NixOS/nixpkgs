@@ -516,6 +516,11 @@ buildStdenv.mkDerivation ({
     LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
   };
 
+  # workaround for clang statically linking against libstdc++
+  NIX_LDFLAGS = lib.optionals stdenv.cc.isGNU [
+    "-L${stdenv.cc.cc.lib}/lib"
+  ];
+
   # tests were disabled in configureFlags
   doCheck = false;
 
