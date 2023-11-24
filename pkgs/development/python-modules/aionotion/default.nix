@@ -74,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${src.rev}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
