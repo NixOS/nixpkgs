@@ -11832,6 +11832,8 @@ self: super: with self; {
     inherit (pkgs) cmake ninja;
   });
 
+  pyside6-essentials = callPackage ../development/python-modules/pyside6-essentials { };
+
   pysigma = callPackage ../development/python-modules/pysigma { };
 
   pysigma-backend-elasticsearch = callPackage ../development/python-modules/pysigma-backend-elasticsearch { };
