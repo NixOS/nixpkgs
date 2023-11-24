@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/typst/svg2pdf/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ doronbehar figsoda ];
+    mainProgram = "svg2pdf";
   };
 }

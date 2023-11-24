@@ -95,5 +95,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin averelld ];
     platforms = platforms.unix;
+    mainProgram = "pdftk";
   };
 }
