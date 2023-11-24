@@ -29,6 +29,7 @@
   ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/stevenblack.nix
+  ./config/stub-ld.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix
