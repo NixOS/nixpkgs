@@ -23,6 +23,7 @@
 , sphinx
 , sqlite
 , systemd
+, testers
 , toml11
 , zchunk
 }:
@@ -103,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontFixCmake = true;
+
+  passthru.tests = {
+    version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     description = "Next-generation RPM package management system";
