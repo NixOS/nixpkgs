@@ -32,6 +32,8 @@
 , orjson
 , email-validator
 , uvicorn
+, pydantic-settings
+, pydantic-extra-types
 }:
 
 buildPythonPackage rec {
@@ -75,8 +77,9 @@ buildPythonPackage rec {
     orjson
     email-validator
     uvicorn
-    # pydantic-settings
-    # pydantic-extra-types
+  ] ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+    pydantic-settings
+    pydantic-extra-types
   ] ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = [
