@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , pythonOlder
 , hatch-jupyter-builder
@@ -44,6 +45,19 @@ buildPythonPackage rec {
     inherit version;
     hash= "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-39968.patch";
+      url = "https://github.com/jupyter-server/jupyter_server/commit/290362593b2ffb23c59f8114d76f77875de4b925.patch";
+      hash = "sha256-EhWKTpjPp2iwLWpR4O6oZpf3yJmwe25SEG288wAiOJE=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-40170.patch";
+      url = "https://github.com/jupyter-server/jupyter_server/commit/87a4927272819f0b1cae1afa4c8c86ee2da002fd.patch";
+      hash = "sha256-D+Dk2dQKNrpXMer0Ezo7PlBwRzHmEi7bGZ45+uNChF8=";
+    })
+  ];
 
   nativeBuildInputs = [
     hatch-jupyter-builder
