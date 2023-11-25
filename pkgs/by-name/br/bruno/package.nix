@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Open-source IDE For exploring and testing APIs.";
     homepage = "https://www.usebruno.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew ];
+    maintainers = with maintainers; [ water-sucks lucasew kashw2 ];
     platforms = [ "x86_64-linux" ];
   };
 }
