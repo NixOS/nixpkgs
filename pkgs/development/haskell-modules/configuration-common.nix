@@ -2713,4 +2713,10 @@ self: super: {
     ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
   });
 
+  # lhs2tex is GPL with additional permissions. We can treat it as GPL for
+  # our purposes
+  lhs2tex = super.lhs2tex.override {
+    license = lib.licenses.gpl2Plus;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
