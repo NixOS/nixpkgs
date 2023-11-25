@@ -78,5 +78,6 @@ python.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 nickcao ];
+    mainProgram = "mautrix-telegram";
   };
 }

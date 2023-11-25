@@ -44,6 +44,7 @@ in buildGoModule {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ MayNiklas ];
+    mainProgram = "owncast";
   };
 
 }
