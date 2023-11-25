@@ -5,7 +5,7 @@
 set -euo pipefail
 
 declare -A SELECTORS=( [handle]= [email]= [github]= [githubId]= [matrix]= [name]= )
-MAINTAINERS_DIR="$(dirname $0)/.."
+MAINTAINERS_DIR="$(dirname "$0")/.."
 
 die() {
   tput setaf 1 # red
@@ -31,7 +31,7 @@ parseArgs() {
     shift
   fi
   [ -z "${SELECTORS[$selector]-n}" ] || {
-    echo "Valid selectors are: ${!SELECTORS[@]}" >&2
+    echo "Valid selectors are:" "${!SELECTORS[@]}" >&2
     die "invalid selector '$selector'"
   }
 
