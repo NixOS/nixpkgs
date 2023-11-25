@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=unused-private-field"
     "-faligned-allocation"
+  ] ++ lib.optionals (lib.versionOlder finalAttrs.version "8") [
+    "-Wno-error=unused-but-set-variable"
+  ] ++ lib.optionals (lib.versionOlder finalAttrs.version "7") [
+    "-Wno-error=deprecated-copy"
   ]);
 
   cmakeFlags = [
