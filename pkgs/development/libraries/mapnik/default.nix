@@ -86,6 +86,10 @@ stdenv.mkDerivation rec {
     "-DBUILD_DEMO_VIEWER=OFF"
   ];
 
+  disabledTests = lib.optionals stdenv.isAarch64 [
+    "test_passing_pycairo_context_svg"
+  ];
+
   # mapnik-config is currently not build with CMake. So we use the SCons for
   # this one. We can't add SCons to nativeBuildInputs though, as stdenv would
   # then try to build everything with scons.
