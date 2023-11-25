@@ -95,6 +95,9 @@ buildPythonPackage rec {
     "test_custom_value_not_implemented"
     # Calibration issue
     "test_xeb_to_calibration_layer"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    # https://github.com/quantumlib/Cirq/issues/5924
+    "test_prepare_two_qubit_state_using_sqrt_iswap"
   ];
 
   meta = with lib; {
