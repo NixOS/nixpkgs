@@ -4477,6 +4477,8 @@ self: super: with self; {
 
   gflags = callPackage ../development/python-modules/gflags { };
 
+  gflanguages = callPackage ../development/python-modules/gflanguages { };
+
   ghapi = callPackage ../development/python-modules/ghapi { };
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
