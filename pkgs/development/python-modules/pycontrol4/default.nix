@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , aiohttp
 , xmltodict
 , python-socketio
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lawtancool";
@@ -27,6 +28,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "python-socketio>=4,<5" "python-socketio>=4"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
