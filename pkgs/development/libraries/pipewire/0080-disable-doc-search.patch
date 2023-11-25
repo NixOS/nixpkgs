@@ -1,0 +1,13 @@
+diff --git a/doc/Doxyfile.in b/doc/Doxyfile.in
+index 15f9ae1ba..91cbd379d 100644
+--- a/doc/Doxyfile.in
++++ b/doc/Doxyfile.in
+@@ -33,7 +33,7 @@ IGNORE_PREFIX          = pw_ \
+                          spa_ \
+                          SPA_
+ GENERATE_TREEVIEW      = YES
+-SEARCHENGINE           = YES
++SEARCHENGINE           = NO
+ GENERATE_LATEX         = NO
+ 
+ MACRO_EXPANSION        = YES

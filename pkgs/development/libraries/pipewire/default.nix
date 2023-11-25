@@ -105,6 +105,9 @@ let
       ./0060-libjack-path.patch
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
+      # Disable documentation search due to reproducibility issues
+      # https://github.com/NixOS/nixpkgs/issues/230279
+      ./0080-disable-doc-search.patch
     ];
 
     strictDeps = true;
