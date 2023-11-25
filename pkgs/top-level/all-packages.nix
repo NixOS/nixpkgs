@@ -23389,6 +23389,7 @@ with pkgs;
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libpostal = callPackage ../development/libraries/libpostal { };
+  libpostalWithData = callPackage ../development/libraries/libpostal { withData = true; };
 
   libpaper = callPackage ../development/libraries/libpaper { };
 
