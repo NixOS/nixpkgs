@@ -35,6 +35,7 @@
 , waylandSupport ? stdenv.isLinux
 , libxkbcommon
 , libdrm
+, libGL
 
 , mediaSupport ? true
 , ffmpeg
@@ -82,7 +83,7 @@ let
       stdenv.cc.libc
       zlib
     ] ++ lib.optionals libnotifySupport [ libnotify ]
-      ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
+      ++ lib.optionals waylandSupport [ libxkbcommon libdrm libGL ]
       ++ lib.optionals pipewireSupport [ pipewire ]
       ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
       ++ lib.optionals libvaSupport [ libva ]
