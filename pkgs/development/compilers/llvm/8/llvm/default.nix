@@ -292,6 +292,9 @@ in stdenv.mkDerivation (rec {
       widely used in academic research. Code in the LLVM project is licensed
       under the "Apache 2.0 License with LLVM exceptions".
     '';
+
+    # polly is broken on Darwin.
+    broken = (llvm_meta.broken or false) || (enablePolly && stdenv.isDarwin);
   };
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
