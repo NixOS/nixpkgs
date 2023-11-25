@@ -9,7 +9,7 @@ MAINTAINERS_DIR="$(dirname $0)/.."
 
 die() {
   tput setaf 1 # red
-  echo "$@"
+  echo "'$0': $*"
   tput setaf 0 # back to black
   exit 1
 }
@@ -19,8 +19,10 @@ listAsJSON() {
 }
 
 parseArgs() {
-  [ $# -gt 0 -a $# -lt 3 ] || \
-    die "usage: '$0' [selector] value"
+  [ $# -gt 0 -a $# -lt 3 ] || {
+      usage
+      die "invalid number of arguments (must be 1 or 2)"
+  }
 
   if [ $# -eq 1 ]; then
     selector=handle
@@ -30,11 +32,22 @@ parseArgs() {
   fi
   [ -z "${SELECTORS[$selector]-n}" ] || {
     echo "Valid selectors are: ${!SELECTORS[@]}" >&2
-    die "'$0': invalid selector '$selector'"
+    die "invalid selector '$selector'"
   }
 
   value="$1"
   shift
+}
+
+usage() {
+    local name="$(basename "$0")"
+    cat <<MSG
+usage: '$0' [selector] value
+example: $name nicoo; $name githubId 1155801
+
+selector defaults to 'handle', can be one of:
+  ${!SELECTORS[*]}
+MSG
 }
 
 query() {
