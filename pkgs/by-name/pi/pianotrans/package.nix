@@ -18,8 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     piano-transcription-inference
-    torch
+    resampy
     tkinter
+    torch
   ];
 
   # Project has no tests
