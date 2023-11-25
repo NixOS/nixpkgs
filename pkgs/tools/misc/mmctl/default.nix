@@ -28,9 +28,7 @@ buildGoModule rec {
     "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
     "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
     "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=n/a"
     "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
-    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=v${version}"
     "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
     "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
   ];
