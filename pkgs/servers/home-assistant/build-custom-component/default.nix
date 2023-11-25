@@ -23,7 +23,7 @@ home-assistant.python.pkgs.buildPythonPackage (
       runHook preInstall
 
       mkdir $out
-      cp -r $src/custom_components/ $out/
+      cp -r ./custom_components/ $out/
 
       runHook postInstall
     '';
