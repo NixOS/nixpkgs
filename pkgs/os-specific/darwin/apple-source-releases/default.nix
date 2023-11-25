@@ -338,6 +338,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                                             # rather than previous versions.
                       )
                       { CommonCrypto = "CommonCrypto/10.13.6.nix";
+                        ICU = "ICU/10.13.6.nix";
                       }."${namePath}"
                       or namePath;
                  in import ./macos-10.13.6.nix
