@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "tcxreader";
-  version = "0.4.4";
+  version = "0.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alenrajsp";
     repo = "tcxreader";
-    rev = "v${version}";
-    hash = "sha256-UJ6F+GcdF0b2gALQWepLyCnWm+6RKBRnBt1eJNoRRzo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CiOLcev9fo2BPgnPZZ2borU25f/gKISqRAapAHgLN3w=";
   };
 
   nativeCheckInputs = [
