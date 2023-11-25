@@ -12553,6 +12553,8 @@ self: super: with self; {
 
   rstcheck-core = callPackage ../development/python-modules/rstcheck-core { };
 
+  rstr = callPackage ../development/python-modules/rstr { };
+
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
   };
