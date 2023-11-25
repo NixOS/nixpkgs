@@ -7,7 +7,9 @@
 , tpmSupport ? false
 , tlsSupport ? false
 , debug ? false
-, sourceDebug ? debug
+# Usually, this option is broken, do not use it except if you know what you are
+# doing.
+, sourceDebug ? false
 }:
 
 assert csmSupport -> seabios != null;
