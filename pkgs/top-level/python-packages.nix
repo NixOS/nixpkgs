@@ -4198,6 +4198,8 @@ self: super: with self; {
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
+  glyphsets = callPackage ../development/python-modules/glyphsets { };
+
   glyphslib = callPackage ../development/python-modules/glyphslib { };
 
   foobot-async = callPackage ../development/python-modules/foobot-async { };
