@@ -5,11 +5,7 @@
 , ninja
 , nixosTests
 }:
-let
-  libDir = if builtins.elem stdenv.system [ "x86_64-linux" "mips64-linux" "powerpc64le-linux" ]
-           then "/lib64"
-           else "/lib";
-in
+
 stdenv.mkDerivation rec {
   pname = "nix-ld";
   version = "1.2.2";
@@ -36,7 +32,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/nix-support
 
-    ldpath=${libDir}/$(basename $(< ${stdenv.cc}/nix-support/dynamic-linker))
+    ldpath=/${stdenv.hostPlatform.libDir}/$(basename $(< ${stdenv.cc}/nix-support/dynamic-linker))
     echo "$ldpath" > $out/nix-support/ldpath
     mkdir -p $out/lib/tmpfiles.d/
     cat > $out/lib/tmpfiles.d/nix-ld.conf <<EOF
