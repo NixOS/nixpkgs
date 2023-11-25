@@ -132,6 +132,8 @@ buildPythonPackage rec {
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
+
   meta = with lib; {
     description = "Python bindings for Qt6";
     homepage = "https://riverbankcomputing.com/";

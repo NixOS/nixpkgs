@@ -5,13 +5,13 @@
 , cargo
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
 , installShellFiles
 , lame
 , mpv-unwrapped
 , ninja
 , nodejs
 , nodejs-slim
+, prefetch-yarn-deps
 , protobuf
 , python3
 , qt6
@@ -100,15 +100,15 @@ let
     inherit version src yarnOfflineCache;
 
     nativeBuildInputs = [
-      fixup_yarn_lock
       nodejs-slim
+      prefetch-yarn-deps
       yarn
     ];
 
     configurePhase = ''
       export HOME=$NIX_BUILD_TOP
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-      fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
     '';
@@ -135,8 +135,8 @@ python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [
     fakeGit
-    fixup_yarn_lock
     offlineYarn
+    prefetch-yarn-deps
 
     cargo
     installShellFiles
@@ -232,7 +232,7 @@ python3.pkgs.buildPythonApplication {
 
     export HOME=$NIX_BUILD_TOP
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     patchShebangs ./ninja
     PIP_USER=1 ./ninja build wheels
