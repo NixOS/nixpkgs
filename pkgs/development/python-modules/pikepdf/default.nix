@@ -5,10 +5,9 @@
 , hypothesis
 , pythonOlder
 , jbig2dec
-, deprecated
+, deprecation
 , lxml
 , mupdf
-, numpy
 , packaging
 , pillow
 , psutil
@@ -25,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "8.7.1";
+  version = "8.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-uAx3Egz/woJINpruDaZOyuAlbIZUMv93VNaFHLmUjCY=";
+    hash = "sha256-48tb5bhmBdKVjMld07303qIi5C16yaf+5TpRPVC6EQk=";
   };
 
   patches = [
@@ -69,7 +68,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     attrs
     hypothesis
-    numpy
     pytest-xdist
     psutil
     pytestCheckHook
@@ -78,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    deprecated
+    deprecation
     lxml
     packaging
     pillow
