@@ -21,6 +21,8 @@ else if stdenv.isAarch32 then
   "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
+else if stdenv.hostPlatform.isRiscV64 then
+  "RISCV64"
 else
   throw "Unsupported architecture";
 
@@ -92,7 +94,7 @@ edk2 = stdenv.mkDerivation rec {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ riscv64;
   };
 
   passthru = {
