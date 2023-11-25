@@ -32647,10 +32647,11 @@ with pkgs;
     wlroots_0_16
     wlroots;
 
+  wrapSway = callPackage ../applications/window-managers/sway/wrapper.nix { };
   sway-unwrapped = callPackage ../applications/window-managers/sway {
     wlroots = wlroots_0_16;
   };
-  sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
+  sway = wrapSway sway-unwrapped;
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
@@ -32661,7 +32662,8 @@ with pkgs;
 
   swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
 
-  swayfx = callPackage ../applications/window-managers/sway/fx.nix { };
+  swayfx-unwrapped = callPackage ../applications/window-managers/sway/fx.nix { };
+  swayfx = wrapSway swayfx-unwrapped;
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
