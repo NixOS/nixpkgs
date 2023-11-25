@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 # libhdhomerun requires UDP port 65001 to be open in order to detect and communicate with tuners.
 # If your firewall is enabled, make sure to have something like:
@@ -6,21 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libhdhomerun";
-  version = "20220303";
+  version = "20231109";
 
-  src = fetchurl {
-    url = "https://download.silicondust.com/hdhomerun/libhdhomerun_${version}.tgz";
-    sha256 = "sha256-HlT/78LUiTkRUB2jHmYrnQY+bBiv4stcZlMyUnelSpc=";
+  src = fetchFromGitHub {
+    owner = "Silicondust";
+    repo = "${pname}";
+    rev = "e8f29fd4e071580ffb583cbeb9cf720c96a4e75f"; # 20231109
+    sha256 = "sha256-ni6bhvTXbFzNnKr6cgG0m7o3JEIDY7jouT88rfSf66A=";
   };
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "-arch x86_64" "-arch ${stdenv.hostPlatform.darwinArch}"
-  '';
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
+  patches = [ ./nixos-darwin-no-fat-dylib.patch ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,include/hdhomerun}
