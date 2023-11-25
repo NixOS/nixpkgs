@@ -234,6 +234,8 @@ with pkgs;
 
   adcli = callPackage ../os-specific/linux/adcli { };
 
+  aider = callPackage ../tools/llm/aider { };
+
   alda = callPackage ../development/interpreters/alda { };
 
   align = callPackage ../tools/text/align { };

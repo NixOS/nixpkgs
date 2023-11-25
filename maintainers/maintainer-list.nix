@@ -13316,6 +13316,12 @@
     githubId = 16027994;
     name = "Nathan Viets";
   };
+  nwjsmith = {
+    email = "nate@theinternate.com";
+    github = "nwjsmith";
+    githubId = 1348;
+    name = "Nate Smith";
+  };
   nyanbinary = {
     email = "vextium@skiff.com";
     github = "nyabinary";
