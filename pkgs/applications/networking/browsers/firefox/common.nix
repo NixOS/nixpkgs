@@ -568,6 +568,7 @@ buildStdenv.mkDerivation {
     inherit updateScript;
     inherit alsaSupport;
     inherit binaryName;
+    inherit requireSigning allowAddonSideload;
     inherit jackSupport;
     inherit pipewireSupport;
     inherit sndioSupport;
