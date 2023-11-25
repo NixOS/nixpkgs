@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cargo
 , cmake
+, deltachat-desktop
 , deltachat-repl
 , openssl
 , perl
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     inherit cargoLock;
     tests = {
-      inherit deltachat-repl;
+      inherit deltachat-desktop deltachat-repl;
       python = python3.pkgs.deltachat;
     };
   };
