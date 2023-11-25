@@ -61,6 +61,12 @@ buildPythonPackage rec {
       url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
     })
+    (fetchpatch {
+      # https://github.com/strawberry-graphql/strawberry/pull/3255
+      name = "fix-tests-with-pydantic_2.patch";
+      url = "https://github.com/strawberry-graphql/strawberry/commit/0a0dc284ee6d31d4e82ac7ff1ed9fea4dff39fa6.patch";
+      hash = "sha256-LACWD7XA6YL/apJwhpx3LPCKxKUfa+XWyTLK+Zkxlaw=";
+    })
   ];
 
   postPatch = ''
