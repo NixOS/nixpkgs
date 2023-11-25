@@ -8641,6 +8641,8 @@ self: super: with self; {
 
   opentsne = callPackage ../development/python-modules/opentsne { };
 
+  opentypespec = callPackage ../development/python-modules/opentypespec { };
+
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override {
       inherit python;
