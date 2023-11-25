@@ -8,6 +8,8 @@
 , libusb1
 , udev
 , nix-update-script
+, testers
+, cyme
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,7 +48,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_run"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = cyme;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";
