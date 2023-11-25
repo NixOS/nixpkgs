@@ -3067,6 +3067,8 @@ with pkgs;
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
+  oscilloscope-terminal = callPackage ../applications/terminal-emulators/oscilloscope-terminal { };
+
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
   rxvt = callPackage ../applications/terminal-emulators/rxvt { };
