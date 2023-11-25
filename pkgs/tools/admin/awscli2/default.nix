@@ -138,7 +138,7 @@ with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     description = "Unified tool to manage your AWS services";
-    homepage = "https://docs.aws.amazon.com/cli/latest/userguide/";
+    homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
