@@ -41,7 +41,7 @@ buildRubyGem rec {
       The output is then usable by the bundlerEnv derivation to list all the
       dependencies of a ruby package.
     '';
-    homepage = "https://github.com/manveru/bundix";
+    homepage = "https://github.com/nix-community/bundix";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
     platforms = lib.platforms.all;
