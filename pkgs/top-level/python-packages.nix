@@ -2216,6 +2216,8 @@ self: super: with self; {
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
+  collidoscope = callPackage ../development/python-modules/collidoscope { };
+
   colorama = callPackage ../development/python-modules/colorama { };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
