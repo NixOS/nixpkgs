@@ -2,7 +2,7 @@
 , stdenv
 , yarn
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , electron
 , fetchFromGitHub
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     makeWrapper
     copyDesktopItems
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     export NODE_OPTIONS="--openssl-legacy-provider"
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

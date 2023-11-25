@@ -49,5 +49,6 @@ buildGoModule rec {
     homepage = "https://kubevirt.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ haslersn ];
+    mainProgram = "virtctl";
   };
 }

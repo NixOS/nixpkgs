@@ -141,7 +141,6 @@ in {
     platform = "rk3328";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
-    platformCanUseHDCPBlob = true;
   };
 
   armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {

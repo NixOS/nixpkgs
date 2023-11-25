@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     maintainers = with maintainers; [ arti5an ];
     platforms = platforms.linux;
+    mainProgram = "mount-zip";
   };
 })

@@ -130,5 +130,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ wyvie pstn cpu ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
+    mainProgram = "mudlet";
   };
 }

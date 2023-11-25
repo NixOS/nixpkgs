@@ -228,6 +228,8 @@ self: super: with self; {
 
   aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
 
+  aiohttp-client-cache = callPackage ../development/python-modules/aiohttp-client-cache { };
+
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
@@ -3415,6 +3417,8 @@ self: super: with self; {
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
   dynd = callPackage ../development/python-modules/dynd { };
+
+  e3-core = callPackage ../development/python-modules/e3-core { };
 
   eagle100 = callPackage ../development/python-modules/eagle100 { };
 

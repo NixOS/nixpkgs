@@ -1585,6 +1585,13 @@
     githubId = 1482768;
     name = "Benjamin Asbach";
   };
+  asbjornolling = {
+    email = "asbjorn@olli.ng";
+    matrix = "@asbjorn:olli.ng";
+    github = "AsbjornOlling";
+    githubId = 11493130;
+    name = "Asbjørn Olling";
+  };
   asciimoth = {
     name = "Andrew";
     email = "ascii@moth.contact";
@@ -4981,6 +4988,12 @@
     github = "earldouglas";
     githubId = 424946;
     name = "James Earl Douglas";
+  };
+  EBADBEEF = {
+    name = "EBADBEEF";
+    email = "errno@ebadf.com";
+    github = "EBADBEEF";
+    githubId = 4167946;
   };
   ebbertd = {
     email = "daniel@ebbert.nrw";
