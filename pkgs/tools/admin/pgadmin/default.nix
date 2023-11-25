@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , fetchYarnDeps
+, fetchpatch
 , zlib
 , nixosTests
 , postgresqlTestHook
@@ -43,6 +44,22 @@ pythonPackages.buildPythonApplication rec {
   format = "setuptools";
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2023-5002.part-1.patch";
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/02ecc82e73f12e84e54c3947ada943d80f746c87.patch";
+      excludes = [ "docs/en_US/release_notes_7_7.rst" ];
+      hash = "sha256-9a7X+UtHOMB2GgOvup0IgEbRgJu/mAcmTvc1GOrs1Vg=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-5002.part-2.patch";
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/35f05e49b3632a0a674b9b36535a7fe2d93dd0c2.patch";
+      hash = "sha256-OHco1of/1BPKewDFvkxGZWEx7uazzZs9vr0ziDf7zhM=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-5002.part-3.patch";
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/3b616b2fb1cf0dc31933aec751aea8ec266e5bcc.patch";
+      hash = "sha256-EhpnAdWN8yfVmUv2JxQT1hIcV6mJxxFcsSFwxXX0qYw=";
+    })
     # Expose setup.py for later use
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
