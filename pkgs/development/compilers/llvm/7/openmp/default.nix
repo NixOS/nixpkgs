@@ -33,5 +33,7 @@ stdenv.mkDerivation {
     # "All of the code is dual licensed under the MIT license and the UIUC
     # License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
+    # Broken on aarch64-darwin.
+    broken = (llvm_meta.broken or false) || (stdenv.isAarch64 && stdenv.isDarwin);
   };
 }
