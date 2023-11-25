@@ -1766,6 +1766,8 @@ with pkgs;
 
   davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
 
+  dehinter = with python3Packages; toPythonApplication dehinter;
+
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };

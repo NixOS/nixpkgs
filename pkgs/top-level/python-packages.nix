@@ -2736,6 +2736,8 @@ self: super: with self; {
 
   defusedxml = callPackage ../development/python-modules/defusedxml { };
 
+  dehinter = callPackage ../development/python-modules/dehinter { };
+
   deid = callPackage ../development/python-modules/deid { };
 
   delegator-py = callPackage ../development/python-modules/delegator-py { };
