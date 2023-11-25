@@ -73,6 +73,7 @@ let
       maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
       knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
       inherit broken;
+      mainProgram = "garage";
     };
   };
 in

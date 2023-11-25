@@ -2533,8 +2533,6 @@ with pkgs;
     buildGoModule = buildGo120Module;
   };
 
-  lefthook = callPackage ../applications/version-management/lefthook { };
-
   legit = callPackage ../applications/version-management/legit { };
 
   legit-web = callPackage ../applications/version-management/legit-web { };
@@ -9128,7 +9126,8 @@ with pkgs;
     llvmPackages = llvmPackages_14;
   };
 
-  harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
+  harePackages = recurseIntoAttrs (callPackage ./hare-packages.nix { });
+  inherit (harePackages) hare harec;
 
   ham = pkgs.perlPackages.ham;
 
@@ -15568,8 +15567,6 @@ with pkgs;
     openjdk = openjdk17_headless;
   };
 
-  beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
-
   bfc = callPackage ../development/compilers/bfc { };
 
   bigloo = callPackage ../development/compilers/bigloo { };
@@ -15750,6 +15747,10 @@ with pkgs;
   };
 
   copper = callPackage ../development/compilers/copper { };
+
+  corretto11 = javaPackages.compiler.corretto11;
+  corretto17 = javaPackages.compiler.corretto17;
+  corretto19 = javaPackages.compiler.corretto19;
 
   cotton = callPackage ../development/tools/cotton {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -16933,13 +16934,10 @@ with pkgs;
   # https://github.com/NixOS/nixpkgs/issues/89426
   rustc-wasm32 = (rustc.override {
     stdenv = stdenv.override {
-      targetPlatform = stdenv.targetPlatform // {
-        parsed = {
-          cpu.name = "wasm32";
-          vendor.name = "unknown";
-          kernel.name = "unknown";
-          abi.name = "unknown";
-        };
+      targetPlatform = lib.systems.elaborate {
+        # lib.systems.elaborate won't recognize "unknown" as the last component.
+        config = "wasm32-unknown-wasi";
+        rust.config = "wasm32-unknown-unknown";
       };
     };
   }).overrideAttrs (old: {
@@ -19774,12 +19772,12 @@ with pkgs;
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
-  pkgconf-unwrapped = callPackage ../development/tools/misc/pkgconf { };
+  pkgconf-unwrapped = libpkgconf;
+
   pkgconf = callPackage ../build-support/pkg-config-wrapper {
     pkg-config = pkgconf-unwrapped;
     baseBinName = "pkgconf";
   };
-  libpkgconf = pkgconf-unwrapped;
 
   pkg-config-unwrapped = callPackage ../development/tools/misc/pkg-config { };
   pkg-config = callPackage ../build-support/pkg-config-wrapper {
@@ -24664,7 +24662,7 @@ with pkgs;
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
-    inherit lib pkgs qt6;
+    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   });
 
@@ -28985,6 +28983,9 @@ with pkgs;
 
   zenmonitor = callPackage ../os-specific/linux/zenmonitor { };
 
+  zfs_2_1 = callPackage ../os-specific/linux/zfs/2_1.nix {
+    configFile = "user";
+  };
   zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
     configFile = "user";
   };
@@ -30859,8 +30860,6 @@ with pkgs;
 
   cyan = callPackage ../applications/graphics/cyan { };
 
-  cyanrip = callPackage ../applications/audio/cyanrip { };
-
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 
   chatty = callPackage ../applications/networking/instant-messengers/chatty { };
@@ -31311,7 +31310,9 @@ with pkgs;
 
   oed = callPackage ../applications/editors/oed { };
 
-  ekho = callPackage ../applications/audio/ekho { };
+  ekho = callPackage ../applications/audio/ekho {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
+  };
 
   electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
 
@@ -35044,7 +35045,11 @@ with pkgs;
   };
 
   qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
+    inherit (__splicedPackages.qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
+  };
+
+  qutebrowser-qt5 = callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (__splicedPackages.libsForQt5) qtbase qtwebengine wrapQtAppsHook qtwayland;
   };
 
   qxw = callPackage ../applications/editors/qxw { };

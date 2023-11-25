@@ -4,6 +4,7 @@
 , linuxKernel
 , removeLinuxDRM ? false
 , fetchpatch
+, nixosTests
 , ...
 } @ args:
 
@@ -11,6 +12,9 @@ let
   stdenv' = if kernel == null then stdenv else kernel.stdenv;
 in
 callPackage ./generic.nix args {
+  # You have to ensure that in `pkgs/top-level/linux-kernels.nix`
+  # this attribute is the correct one for this package.
+  kernelModuleAttribute = "zfs";
   # check the release notes for compatible kernels
   kernelCompatible =
     if stdenv'.isx86_64 || removeLinuxDRM
@@ -24,5 +28,10 @@ callPackage ./generic.nix args {
   # this package should point to the latest release.
   version = "2.2.0";
 
-  sha256 = "sha256-s1sdXSrLu6uSOmjprbUa4cFsE2Vj7JX5i75e4vRnlvg=";
+  tests = [
+    nixosTests.zfs.installer
+    nixosTests.zfs.stable
+  ];
+
+  hash = "sha256-s1sdXSrLu6uSOmjprbUa4cFsE2Vj7JX5i75e4vRnlvg=";
 }

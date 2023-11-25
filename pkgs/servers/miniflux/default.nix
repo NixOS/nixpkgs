@@ -1,4 +1,4 @@
-{ lib, buildGo121Module, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGo121Module, fetchFromGitHub, fetchpatch, installShellFiles, nixosTests }:
 
 let
   pname = "miniflux";
@@ -13,6 +13,15 @@ in buildGo121Module {
     rev = version;
     sha256 = "sha256-+oNF/Zwc1Z/cu3SQC/ZTekAW5Qef9RKrdszunLomGII=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/miniflux/v2/pull/2193, remove after 2.0.50
+      name = "miniflux-user-agent-regression.patch";
+      url = "https://github.com/miniflux/v2/commit/7a03291442a4e35572c73a2fcfe809fa8e03063e.patch";
+      hash = "sha256-tJ1l5rqD0x0xtQs+tDwpFHOY+7k6X02bkwVJo6RAdb8=";
+    })
+  ];
 
   vendorHash = "sha256-jLyjQ+w/QS9uA0pGWF2X6dEfOifcI2gC2sgi1STEzpU=";
 
@@ -36,5 +45,6 @@ in buildGo121Module {
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvolosatovs benpye ];
+    mainProgram = "miniflux";
   };
 }

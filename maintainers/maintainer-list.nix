@@ -4976,6 +4976,12 @@
     githubId = 424946;
     name = "James Earl Douglas";
   };
+  EBADBEEF = {
+    name = "EBADBEEF";
+    email = "errno@ebadf.com";
+    github = "EBADBEEF";
+    githubId = 4167946;
+  };
   ebbertd = {
     email = "daniel@ebbert.nrw";
     github = "ebbertd";
@@ -15489,6 +15495,12 @@
     githubId = 69053978;
     name = "rogarb";
   };
+  rollf = {
+    email = "rolf.schroeder@limbus-medtec.com";
+    github = "rollf";
+    githubId = 58295931;
+    name = "Rolf Schröder";
+  };
   roman = {
     email = "open-source@roman-gonzalez.info";
     github = "roman";
@@ -18775,6 +18787,12 @@
     github = "vamega";
     githubId = 223408;
     name = "Varun Madiath";
+  };
+  vancluever = {
+    email = "chrism@vancluevertech.com";
+    github = "vancluever";
+    githubId = 10704423;
+    name = "Chris Marchesi";
   };
   vandenoever = {
     email = "jos@vandenoever.info";
