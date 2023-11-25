@@ -9,21 +9,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.30.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    hash = "sha256-mBKedJvb67FR4e8ZzdL8umg9XTgch1OWhbR1k46Lkn4=";
+    hash = "sha256-9JCrEe0tla4v207XPgprLqP3g0BslpX8f7xa9aUhQcg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rocket-0.5.0-rc.3" = "sha256-E71cktkHCbmQyjkjWWJ20KfCm3B/h3jQ2TMluYhvCQw=";
-    };
-  };
+  cargoHash = "sha256-4KyBMOdTAHe5uD6X69gMd0aqIo4w2Rqrlg+25yY2B6o=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
