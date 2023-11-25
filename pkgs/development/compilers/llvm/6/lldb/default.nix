@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
       disassembler.
     '';
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    # stopped building on x86_64-darwin at some point because of the missing DebugSymbols framework.
+    broken = (llvm_meta.broken or false) || stdenv.isDarwin;
   };
 }
