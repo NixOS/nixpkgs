@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   pname = "moonlander";
   version = "unstable-2021-05-23";
 
+  cargoPatches = [ ./update-num-bigint.patch ];
+
   src = fetchFromSourcehut {
     owner = "~admicos";
     repo = "moonlander";
@@ -22,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-kpaJRZPPVj8QTFfOx7nq3wN2jmyYASou7cgf+XY2RVU=";
   };
 
-  cargoHash = "sha256-DL/EtZomrZlOFjUgNm6qnrB1MpXApkYKGubi+dB8aho=";
+  cargoHash = "sha256-VXKFS9FRfTKPHuy7YhNGdF9n9BKevhM6/t2dX7JrhLg=";
 
   nativeBuildInputs = [ pkg-config ];
 
