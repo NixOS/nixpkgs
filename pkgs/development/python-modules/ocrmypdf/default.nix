@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "15.4.0";
+  version = "15.4.3";
 
   disabled = pythonOlder "3.9";
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-cbKqisaRAeT8ljANbYiUDrptAoQmmIkMu1ya8O6nXvQ=";
+    hash = "sha256-mMop5BpODzorRgvGbpHCR80uKYT/CE2VEX8RF4Dh1hw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
