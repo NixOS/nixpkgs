@@ -56,6 +56,8 @@ in {
           # use the setuid wrapped bubblewrap
           bubblewrap = "${config.security.wrapperDir}/..";
         };
+      } // optionalAttrs cfg.extest.enable {
+        extraEnv.LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
       });
       description = lib.mdDoc ''
         The Steam package to use. Additional libraries are added from the system
@@ -113,6 +115,15 @@ in {
           };
         };
       };
+    };
+
+    extest.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Load the extest library into Steam, to translate X11 input events to
+        uinput events (e.g. for using Steam Input on Wayland)
+      '';
     };
   };
 
