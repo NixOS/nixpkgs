@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     libGLU
     opencl-clhpp
     SDL2
-  ] ++ lib.optionals (!stdenv.isDarwin) [
     mesa
   ];
 
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     homepage = "https://arrayfire.com/";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ chessai twesterhout ];
   };
 }
