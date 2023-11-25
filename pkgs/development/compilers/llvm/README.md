@@ -1,4 +1,7 @@
-## How to upgrade llvm_git
+## How to upgrade llvmPackages_git
+
+`llvmPackages_git` has been removed for now pending deduplication of the llvm sets.
+Once the deduplication is completed it can be re-added.
 
 - Run `update-git.py`.
   This will set the github revision and sha256 for `llvmPackages_git.llvm` to whatever the latest chromium build is using.

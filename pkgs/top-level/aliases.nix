@@ -1032,12 +1032,7 @@ mapAliases ({
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
   llvmPackages_latest = llvmPackages_16;
-  llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_git.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_git.libraries or llvmPackages_git.libraries;
-    targetLlvm = targetPackages.llvmPackages_git.llvm or llvmPackages_git.llvm;
-  });
+  llvmPackages_git = throw "'llvmPackages_git has been removed, it had not been a git version for a long time and often lags behind the latest stable llvm.";
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
