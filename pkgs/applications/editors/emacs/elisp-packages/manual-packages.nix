@@ -29,6 +29,8 @@ in
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
 
+  emacspy = callPackage ./manual-packages/emacspy { };
+
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
