@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/commit/4f999077dc6bc5591bdfede64fd21cb3acdcaac1.patch";
       hash = "sha256-5VCQFOykxgspNBxH94XYuBpdHsH9a3+8FwV6xQE55Xc=";
     })
+
+    ./2001-Mark-problematic-tests.patch
   ];
 
   postPatch = ''
@@ -118,96 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
       tests/unit/visual/tst_icon.{11,13}.qml \
       tests/unit/visual/tst_imageprovider.11.qml \
       --replace '/usr/share' '${suru-icon-theme}/share'
-
-    # Disable tests
-
-    # These tests are detected via wildcard, so delete the actual files to disable them
-    for badQmlTest in ${lib.strings.concatStringsSep " " [
-      # Requires a working Qt OpenGL context in ShapeMaterial
-      "tst_actionbar.13.qml"
-      "tst_actionlist.13.qml"
-      "tst_adaptivepagelayout.13.qml"
-      "tst_adaptivepagelayout_configuration.13.qml"
-      "tst_combobutton.11.qml"
-      "tst_combobutton.13.qml"
-      "tst_contextual_actions.13.qml"
-      "tst_focus.13.qml"
-      "tst_header.13.qml"
-      "tst_hide_chrome.11.qml"
-      "tst_listitem.12.qml"
-      "tst_listitem.13.qml"
-      "tst_listitem_actions_breaks_selectmode.12.qml"
-      "tst_listitem_extras.13.qml"
-      "tst_listitem_focus.13.qml"
-      "tst_listitem_horizontal_navigation.13.qml"
-      "tst_listitem_selectmode.12.qml"
-      "tst_listitem_selectmode.13.qml"
-      "tst_listitems_itemselector.11.qml"
-      "tst_listitems_standard.11.qml"
-      "tst_listitems_standard.13.qml"
-      "tst_lomirilistview.11.qml"
-      "tst_lomiritestcase.qml"
-      "tst_multicolumnheader.13.qml"
-      "tst_optionselector.11.qml"
-      "tst_optionselector.13.qml"
-      "tst_page_with_header.13.qml"
-      "tst_pagehead_back_action.13.qml"
-      "tst_pagehead_contents_width.13.qml"
-      "tst_pagehead_sections.13.qml"
-      "tst_pagehead_visible.13.qml"
-      "tst_pageheader.13.qml"
-      "tst_pagestack.13.qml"
-      "tst_pagestack.DEPRECATED_APPHEADER_TABS.13.qml"
-      "tst_picker.11.qml"
-      "tst_picker.13.qml"
-      "tst_popover.12.qml"
-      "tst_popover.13.qml"
-      "tst_popups_dialog.13.qml"
-      "tst_popups_pagestack.13.qml"
-      "tst_pulltorefresh_pagestack_topmargin.13.qml"
-      "tst_slider.11.qml"
-      "tst_slider.13.qml"
-      "tst_switch_bug1510919.13.qml"
-      "tst_tabs.11.qml"
-      "tst_tabs.13.qml"
-      "tst_tabs.DEPRECATED_TOOLBAR.11.qml"
-      "tst_textarea.11.qml"
-      "tst_textarea_in_flickable.11.qml"
-      "tst_textfield.11.qml"
-      "tst_textinput_common.12.qml"
-      "tst_textinput_common.13.qml"
-      "tst_toggles.13.qml"
-
-      # SignalSpy on QML shader compilers are failing for unknown reasons
-      "tst_icon.11.qml"
-      "tst_icon.13.qml"
-    ]}; do
-      find tests/unit -name $badQmlTest -delete
-    done
-
-    # These tests are registered explicitly, just removing them from the list is enough
-    for badUnitTest in ${lib.strings.concatStringsSep " " [
-      # Requires a working Qt OpenGL context in ShapeMaterial
-      "inversemousearea"
-      "layouts"
-      "recreateview"
-      "subtheming"
-      "swipearea"
-
-      # Intended scaling value gets overridden since Qt 5.15.11
-      "dpr1"
-    ]}; do
-      sed -i -e "/$badUnitTest/d" tests/unit/unit.pro tests/unit/units/units.pro
-    done
-
-    # These tests don't fail explicitly, but issue warnings that the test suite doesn't expect, which it turns into errors
-    for unexpectedWarningTest in ${lib.strings.concatStringsSep "" [
-      # qml/Lomiri/Components/1.2/Toolbar.qml:96: TypeError: Cannot read property 'locked' of null
-      # I don't know QML enough to fix this, tracked upstream at https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/9
-      "tst_pagestack.DEPRECATED_TOOLBAR.11.qml"
-    ]}; do
-      sed -i -e "/EXCEPTIONS=/a '$unexpectedWarningTest' \\" tests/checkresults.sh
-    done
   '';
 
   # With strictDeps, QMake only picks up Qt dependencies from nativeBuildInputs
