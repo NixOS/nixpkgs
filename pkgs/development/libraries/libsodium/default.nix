@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchurl, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.18";
+  version = "1.0.19";
 
   src = fetchurl {
     url = "https://download.libsodium.org/libsodium/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "1h9ncvj23qbbni958knzsli8dvybcswcjbx0qjjgi922nf848l3g";
+    hash = "sha256-AY15/goEXMoHMx03vQy1ey6DjFG8SP2DehRy5QBou+o=";
   };
 
   outputs = [ "out" "dev" ];
 
-  patches = lib.optional stdenv.hostPlatform.isMinGW ./mingw-no-fortify.patch;
+  patches = [
+    # Drop -Ofast as it breaks floating point arithmetics in downstream
+    # users.
+    (fetchpatch {
+      name = "drop-Ofast.patch";
+      url  = "https://github.com/jedisct1/libsodium/commit/ffd1e374989197b44d815ac8b5d8f0b43b6ce534.patch";
+      hash = "sha256-jG0VirIoFBwYmRx6zHSu2xe6pXYwbeqNVhPJxO6eJEY=";
+    })
+  ] ++ lib.optional stdenv.hostPlatform.isMinGW ./mingw-no-fortify.patch;
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
+  nativeBuildInputs = [ autoreconfHook ];
 
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
