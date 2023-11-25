@@ -5,6 +5,7 @@
 , buildGoModule
 , esbuild
 , fetchFromGitHub
+, jq
 , libdeltachat
 , makeDesktopItem
 , makeWrapper
@@ -46,7 +47,15 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-c9ZwShmHIoFJ2mAabKyYkYsCMXqxUf+tAS1a1/7s0qo=";
 
+  postPatch = ''
+    test \
+      $(jq -r '.packages."node_modules/@deltachat/jsonrpc-client".version' package-lock.json) \
+      = $(pkg-config --modversion deltachat) \
+      || (echo "error: libdeltachat version does not match jsonrpc-client" && exit 1)
+  '';
+
   nativeBuildInputs = [
+    jq
     makeWrapper
     pkg-config
     python3
