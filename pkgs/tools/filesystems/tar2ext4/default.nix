@@ -18,5 +18,6 @@ buildGoModule rec {
     description = "Convert a tar archive to an ext4 image";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
+    mainProgram = "tar2ext4";
   };
 }

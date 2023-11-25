@@ -23,5 +23,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];
     homepage = "https://nats.io/";
+    mainProgram = "nats-streaming-server";
   };
 }
