@@ -228,6 +228,8 @@ self: super: with self; {
 
   aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
 
+  aiohttp-client-cache = callPackage ../development/python-modules/aiohttp-client-cache { };
+
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
