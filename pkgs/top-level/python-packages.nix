@@ -4169,6 +4169,8 @@ self: super: with self; {
 
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
+  fontfeatures = callPackage ../development/python-modules/fontfeatures { };
+
   fontforge = toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
