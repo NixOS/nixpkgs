@@ -4,8 +4,8 @@
 , writeText
 , copyDesktopItems
 , makeDesktopItem
-, makeWrapper
 , onedrive
+, qt6
 }:
 
 let
@@ -34,12 +34,17 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-HutziAzhIDYP8upNPieL2GNrxPBHUCVs09FFxdSqeBs=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems qt6.wrapQtAppsHook ];
+
+  buildInputs = with qt6; [
+    qtbase qtwayland
+  ];
 
   propagatedBuildInputs = with python3Packages; [ pyside6 requests ];
 
   # wrap manually to avoid having a bash script in $out/bin with a .py extension
   dontWrapPythonPrograms = true;
+  dontWrapQtApps = true;
 
   doCheck = false; # No tests defined
   pythonImportsCheck = [ "OneDriveGUI" ];
@@ -71,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     # we put our own executable wrapper in place instead
     rm -r $out/bin/*
 
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
+    makeQtWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
       --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
       --add-flags $out/lib/${python3Packages.python.libPrefix}/site-packages/OneDriveGUI.py
