@@ -4177,6 +4177,8 @@ self: super: with self; {
 
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
+  fontbakery = callPackage ../development/python-modules/fontbakery { };
+
   fontfeatures = callPackage ../development/python-modules/fontfeatures { };
 
   fontforge = toPythonModule (pkgs.fontforge.override {

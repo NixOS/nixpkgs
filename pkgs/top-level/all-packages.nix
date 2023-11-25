@@ -1810,6 +1810,8 @@ with pkgs;
 
   font-v = with python3Packages; toPythonApplication font-v;
 
+  fontbakery = with python3Packages; toPythonApplication fontbakery;
+
   weidu = callPackage ../tools/games/weidu { };
 
   weylus = callPackage ../applications/graphics/weylus  {
