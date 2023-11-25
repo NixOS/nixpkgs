@@ -12919,6 +12919,8 @@ self: super: with self; {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
+  shaperglot = callPackage ../development/python-modules/shaperglot { };
+
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
