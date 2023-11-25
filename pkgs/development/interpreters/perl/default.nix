@@ -65,8 +65,8 @@ in rec {
   # Maint version
   perl538 = callPackage ./intepreter.nix {
     self = perl538;
-    version = "5.38.0";
-    sha256 = "sha256-IT71gInS8sly6jU1F9xg7DZW8FDcwCdmbhGLUIQj5Rc=";
+    version = "5.38.2";
+    sha256 = "sha256-oKMVNEUet7g8fWWUpJdUOlTUiLyQygD140diV39AZV4=";
     inherit passthruFun;
   };
 }
