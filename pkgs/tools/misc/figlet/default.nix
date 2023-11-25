@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   makeFlags = [ "prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)" ];
 
   postInstall = "cp -ar ${contributed}/* $out/share/figlet/";
