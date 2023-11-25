@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.titanous ];
+    maintainers = [ maintainers.titanous maintainers.sielicki ];
   };
 }
