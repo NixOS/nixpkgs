@@ -16395,6 +16395,8 @@ with pkgs;
     indradb-server
     indradb-client;
 
+  instawow = callPackage ../games/instawow/default.nix { };
+
   intel-graphics-compiler = callPackage ../development/compilers/intel-graphics-compiler { };
 
   intercal = callPackage ../development/compilers/intercal { };
@@ -28321,9 +28323,9 @@ with pkgs;
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
-  nushellPlugins = callPackage ../shells/nushell/plugins {
+  nushellPlugins = recurseIntoAttrs (callPackage ../shells/nushell/plugins {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation Security;
-  };
+  });
 
   nettools = if stdenv.isLinux
     then callPackage ../os-specific/linux/net-tools { }
@@ -28876,6 +28878,7 @@ with pkgs;
     ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
     ubootRock64
+    ubootRock64v2
     ubootRockPi4
     ubootRockPro64
     ubootROCPCRK3399

@@ -321,6 +321,7 @@ in {
   mimir = handleTest ./mimir.nix {};
   garage = handleTest ./garage {};
   gemstash = handleTest ./gemstash.nix {};
+  geoserver = runTest ./geoserver.nix;
   gerrit = handleTest ./gerrit.nix {};
   geth = handleTest ./geth.nix {};
   ghostunnel = handleTest ./ghostunnel.nix {};
