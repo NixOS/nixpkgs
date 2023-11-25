@@ -62,6 +62,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "radios" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Asynchronous Python client for the Radio Browser API";
     homepage = "https://github.com/frenck/python-radios";
