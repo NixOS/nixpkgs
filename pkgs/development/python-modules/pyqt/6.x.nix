@@ -133,7 +133,10 @@ buildPythonPackage rec {
   ;
 
   # fix build with qt 6.6
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-fpermissive"
+  ]
+  ++ lib.optional (stdenv.isDarwin) "-Wno-address-of-temporary");
 
   meta = with lib; {
     description = "Python bindings for Qt6";
