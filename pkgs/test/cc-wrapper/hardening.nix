@@ -31,8 +31,11 @@ let
 
   stdenvUnsupport = additionalUnsupported: stdenv.override {
     cc = stdenv.cc.override {
-      cc = (lib.extendDerivation true {
-        hardeningUnsupportedFlags = (stdenv.cc.cc.hardeningUnsupportedFlags or []) ++ additionalUnsupported;
+      cc = (lib.extendDerivation' {
+        passthru = {
+          hardeningUnsupportedFlags = (stdenv.cc.cc.hardeningUnsupportedFlags or []) ++ additionalUnsupported;
+        };
+        keepOverriders = true;
       } stdenv.cc.cc);
     };
     allowedRequisites = null;

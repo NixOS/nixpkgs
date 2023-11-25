@@ -26,8 +26,8 @@ let
   };
   assertCondition = true;
 in
-lib.extendDerivation
-  assertCondition
-  passthruExtra
-  cudaStdenv
+lib.extendDerivation' {
+  condition = assertCondition;
+  passthru = passthruExtra;
+} cudaStdenv
 

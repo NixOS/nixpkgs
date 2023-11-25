@@ -230,5 +230,7 @@ let
     in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
-  finalKernel = lib.extendDerivation true passthru kernel;
+  finalKernel = lib.extendDerivation' {
+    inherit passthru;
+  } kernel;
 in finalKernel
