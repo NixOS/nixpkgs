@@ -311,10 +311,11 @@ final: prev: {
     };
   };
 
-  teck-programmer = prev.teck-programmer.override {
+  teck-programmer = prev.teck-programmer.override ({ meta, ... }: {
     nativeBuildInputs = [ final.node-gyp-build ];
     buildInputs = [ pkgs.libusb1 ];
-  };
+    meta = meta // { license = lib.licenses.gpl3Plus; };
+  });
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
