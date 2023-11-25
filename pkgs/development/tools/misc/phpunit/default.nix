@@ -2,19 +2,19 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpunit";
-  version = "10.4.1";
+  version = "10.4.2";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-AKUMCa8QuXqE0HrMaxR8SvhdoYjL/CmaTzf5UhszPPw=";
+    hash = "sha256-7hgDeg8K+Iuo8Lb8mV5ACQV3BDBotKIZ0/IdlLCXuIc=";
   };
 
-  # TODO: Open a PR against https://github.com/sebastianbergmann/phpunit
-  # Missing `composer.lock` from the repository.
+  # Add missing composer.lock
+  # https://github.com/sebastianbergmann/phpunit/pull/5576
   composerLock = ./composer.lock;
-  vendorHash = "sha256-xFXf9Nc6OxvZJ4Bt9zFhhdsJY4VwnztfCE4j5tOqQKQ=";
+  vendorHash = "sha256-PYcXB8MEhZabAreR2GluyrEkgnTvUEgEkfFnUT5Fqps=";
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";
