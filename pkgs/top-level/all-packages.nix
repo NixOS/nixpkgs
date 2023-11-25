@@ -2094,6 +2094,8 @@ with pkgs;
 
   ttchat = callPackage ../tools/misc/ttchat { };
 
+  ufolint = with python3Packages; toPythonApplication ufolint;
+
   ukmm = callPackage ../tools/games/ukmm { };
 
   unflac = callPackage ../tools/audio/unflac { };

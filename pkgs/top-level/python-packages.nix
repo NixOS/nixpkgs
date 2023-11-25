@@ -15307,6 +15307,8 @@ self: super: with self; {
 
   ufoLib2 = callPackage ../development/python-modules/ufoLib2 { };
 
+  ufolint = callPackage ../development/python-modules/ufolint { };
+
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
