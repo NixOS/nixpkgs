@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "stepmania";
     repo  = "stepmania";
     rev   = "v${version}";
-    sha256 = "0a7y9l7xm510vgnpmj1is7p9m6d6yd0fcaxrjcickz295k5w3rdn";
+    hash = "sha256-tuXByyxJ/Mkik7kr5kDzppma7tExyHrt2yCU2g9N/ig=";
   };
 
   patches = [
