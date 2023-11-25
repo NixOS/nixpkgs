@@ -1253,6 +1253,8 @@ self: super: with self; {
 
   babelfish = callPackage ../development/python-modules/babelfish { };
 
+  babelfont = callPackage ../development/python-modules/babelfont { };
+
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
   bambi = callPackage ../development/python-modules/bambi { };
