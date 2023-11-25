@@ -182,6 +182,8 @@ buildPythonPackage rec {
     "tests/websockets/test_graphql_transport_ws.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
