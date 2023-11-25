@@ -8,15 +8,15 @@
 , libX11
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "coin";
-  version = "unstable-2022-07-27";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "coin";
-    rev = "4c67945a58d2a6e5adb4d2332ab08007769130ef";
-    hash = "sha256-lXS7GxtoPsZe2SJfr0uY99Q0ZtYG0KFlauY1PBuFleo=";
+    rev = "v${version}";
+    hash = "sha256-r4dN+uoFEndRa/NFs6wYUhMcUN07CaTja6sNPaOnCIY=";
   };
 
   nativeBuildInputs = [ cmake ];
