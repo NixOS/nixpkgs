@@ -143,6 +143,8 @@ lib.makeScope newScope (self:
 
     vmath = callPackage ../development/nim-packages/vmath { };
 
+    wcwidth = callPackage ../development/nim-packages/wcwidth { };
+
     ws = callPackage ../development/nim-packages/ws { };
 
     x11 = callPackage ../development/nim-packages/x11 { };
