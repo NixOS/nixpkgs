@@ -42,7 +42,7 @@ buildRubyGem rec {
       dependencies of a ruby package.
     '';
     homepage = "https://github.com/manveru/bundix";
-    license = "MIT";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
     platforms = lib.platforms.all;
   };
