@@ -341,5 +341,12 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                         "bsdmake" "24" "developer-tools-313"
                         "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI="
                         {};
+                      configdHeaders = applePackageMapping
+                        "configd" "963.50.8" "macos-10.13.6"
+                        "18bfmylqpff3f2davs1g5a9ciawigysrx9pjvrzcrc4b751aqimn"
+                        { headersOnly = true;
+                          Security = null;
+                          xpc = null;
+                        };
                     };
 }
