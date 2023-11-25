@@ -288,8 +288,8 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     _links_in_last_description: Optional[list[str]] = None
 
     def __init__(self, revision: str,
-                 header: Path | None,
-                 footer: Path | None,
+                 header: list[str] | None,
+                 footer: list[str] | None,
                  *,
                  # only for parallel rendering
                  _options_by_id: Optional[dict[str, str]] = None):
@@ -353,8 +353,7 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
         result = []
 
         if self._header is not None:
-            with self._header.open() as f:
-                result += f.read().splitlines()
+            result += self._header
         else:
             result += [
                 r'''.TH "CONFIGURATION\&.NIX" "5" "01/01/1980" "NixOS" "NixOS Reference Pages"''',
@@ -398,8 +397,7 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
             result.append(".RE")
 
         if self._footer is not None:
-            with self._footer.open() as f:
-                result += f.read().splitlines()
+            result += self._footer
         else:
             result += [
                 r'''.SH "AUTHORS"''',
@@ -623,10 +621,21 @@ def _run_cli_db(args: argparse.Namespace) -> None:
             f.write(md.finalize())
 
 def _run_cli_manpage(args: argparse.Namespace) -> None:
+    header = None
+    footer = None
+
+    if args.header is not None:
+        with args.header.open() as f:
+            header = f.read().splitlines()
+
+    if args.footer is not None:
+        with args.footer.open() as f:
+            footer = f.read().splitlines()
+
     md = ManpageConverter(
         revision = args.revision,
-        header = args.header,
-        footer = args.footer,
+        header = header,
+        footer = footer,
     )
 
     with open(args.infile, 'r') as f:
