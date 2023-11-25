@@ -575,7 +575,7 @@ in
 
           # Explicit access to the root website, redirect to main page (adapt as needed)
           "= /".extraConfig = ''
-            return 301 /wiki/Main_Page;
+            return 301 /wiki/;
           '';
 
           # Every other entry point will be disallowed.
