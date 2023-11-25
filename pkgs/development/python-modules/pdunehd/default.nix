@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pdunehd";
-  version = "1.3.2";
+  version = "1.3.3";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "valentinalexeev";
     repo = "pdunehd";
     rev = version;
-    sha256 = "06p0k82nf89rsakr8d2hdb19dp1wqp9bsf54lwb0qma47iakljjh";
+    sha256 = "sha256-8CL7ZQ+tV0CKdqWWiPDbo6Q5d1iIj/vNbYshdjUpYSw=";
   };
 
   propagatedBuildInputs = [
