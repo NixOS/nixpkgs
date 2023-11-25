@@ -21,6 +21,11 @@
 , tests ? []
 }:
 
+let
+  # Rename the variables to prevent infinite recursion
+  requireSigningDefault = requireSigning;
+  allowAddonSideloadDefault = allowAddonSideload;
+in
 
 { lib
 , pkgs
@@ -79,6 +84,10 @@
 , pkgsBuildBuild
 
 # optionals
+
+## addon signing/sideloading
+, requireSigning ? requireSigningDefault
+, allowAddonSideload ? allowAddonSideloadDefault
 
 ## debugging
 
