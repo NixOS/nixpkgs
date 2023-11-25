@@ -1806,6 +1806,8 @@ with pkgs;
 
   ethq = callPackage ../os-specific/linux/ethq { };
 
+  font-v = with python3Packages; toPythonApplication font-v;
+
   weidu = callPackage ../tools/games/weidu { };
 
   weylus = callPackage ../applications/graphics/weylus  {

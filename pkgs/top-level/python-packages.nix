@@ -4192,6 +4192,8 @@ self: super: with self; {
 
   fontmake = callPackage ../development/python-modules/fontmake { };
 
+  font-v = callPackage ../development/python-modules/font-v { };
+
   skia-pathops = callPackage ../development/python-modules/skia-pathops {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
