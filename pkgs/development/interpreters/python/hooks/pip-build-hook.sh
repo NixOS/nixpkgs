@@ -16,6 +16,7 @@ pipBuildPhase() {
        --no-clean \
        --no-build-isolation \
        --wheel-dir dist \
+       --check-build-dependencies \
        $pipBuildFlags .
     echo "Finished creating a wheel..."
 
