@@ -160,7 +160,7 @@ rec {
 
       # a list of argument names that the function requires, but
       # wouldn't be passed to it
-      missingArgs = attrNames
+      missingArgs =
         # Filter out arguments that have a default value
         (filterAttrs (name: value: ! value)
         # Filter out arguments that would be passed
@@ -198,9 +198,9 @@ rec {
         + "${loc'}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
-      error = errorForArg (head missingArgs);
+      error = errorForArg missingArgs.${head (attrNames missingArgs)};
 
-    in if missingArgs == [] then makeOverridable f allArgs else abort error;
+    in if missingArgs == {} then makeOverridable f allArgs else abort error;
 
 
   /* Like callPackage, but for a function that returns an attribute
