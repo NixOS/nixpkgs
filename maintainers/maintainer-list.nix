@@ -13462,6 +13462,12 @@
     githubId = 72201;
     name = "Ole Jørgen Brønner";
   };
+  oliver-koss = {
+    email = "oliver.koss06@gmail.com";
+    github = "oliver-koss";
+    githubId = 39134647;
+    name = "Oliver Koss";
+  };
   ollieB = {
     github = "oliverbunting";
     githubId = 1237862;
