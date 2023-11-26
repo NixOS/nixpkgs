@@ -252,6 +252,16 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     runHook postInstall
   '';
 
+  # For Ruby-generated binstubs, shebang paths are already in Nix store but for
+  # ruby used to build the package. Update them to match the host system. Note
+  # that patchShebangsAuto ignores scripts where shebang line is already in Nix
+  # store.
+  fixupPhase = attrs.fixupPhase or ''
+    runHook preFixup
+    patchShebangs --update --host $out/${ruby.gemPath}/bin
+    runHook postFixup
+  '';
+
   propagatedBuildInputs = gemPath ++ propagatedBuildInputs;
   propagatedUserEnvPkgs = gemPath ++ propagatedUserEnvPkgs;
 
