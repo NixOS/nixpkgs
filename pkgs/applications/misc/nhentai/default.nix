@@ -31,5 +31,6 @@ python3Packages.buildPythonApplication rec {
     description = "nHentai is a CLI tool for downloading doujinshi from <http://nhentai.net>";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "nhentai";
   };
 }
