@@ -16146,6 +16146,10 @@ self: super: with self; {
 
   vllm = callPackage ../development/python-modules/vllm { };
 
+  vl-convert-python = callPackage ../development/python-modules/vl-convert {
+    inherit (pkgs) protobuf;
+  };
+
   vmprof = callPackage ../development/python-modules/vmprof { };
 
   vncdo = callPackage ../development/python-modules/vncdo { };
