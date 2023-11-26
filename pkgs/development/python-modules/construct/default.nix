@@ -7,7 +7,6 @@
 , fetchFromGitHub
 , lz4
 , numpy
-, pytest-benchmark
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
