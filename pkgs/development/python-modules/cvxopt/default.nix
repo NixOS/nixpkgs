@@ -33,25 +33,25 @@ buildPythonPackage rec {
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
   # but dsdp is not yet packaged in nixpkgs
-  preConfigure = ''
-    export CVXOPT_BLAS_LIB=blas
-    export CVXOPT_LAPACK_LIB=lapack
-    export CVXOPT_BUILD_DSDP=0
-    export CVXOPT_SUITESPARSE_LIB_DIR=${lib.getLib suitesparse}/lib
-    export CVXOPT_SUITESPARSE_INC_DIR=${lib.getDev suitesparse}/include
-  '' + lib.optionalString withGsl ''
-    export CVXOPT_BUILD_GSL=1
-    export CVXOPT_GSL_LIB_DIR=${lib.getLib gsl}/lib
-    export CVXOPT_GSL_INC_DIR=${lib.getDev gsl}/include
-  '' + lib.optionalString withGlpk ''
-    export CVXOPT_BUILD_GLPK=1
-    export CVXOPT_GLPK_LIB_DIR=${lib.getLib glpk}/lib
-    export CVXOPT_GLPK_INC_DIR=${lib.getDev glpk}/include
-  '' + lib.optionalString withFftw ''
-    export CVXOPT_BUILD_FFTW=1
-    export CVXOPT_FFTW_LIB_DIR=${lib.getLib fftw}/lib
-    export CVXOPT_FFTW_INC_DIR=${lib.getDev fftw}/include
-  '';
+  env = {
+    CVXOPT_BLAS_LIB = "blas";
+    CVXOPT_LAPACK_LIB = "lapack";
+    CVXOPT_BUILD_DSDP = "0";
+    CVXOPT_SUITESPARSE_LIB_DIR = "${lib.getLib suitesparse}/lib";
+    CVXOPT_SUITESPARSE_INC_DIR = "${lib.getDev suitesparse}/include";
+  } // lib.optionalAttrs withGsl {
+    CVXOPT_BUILD_GSL = "1";
+    CVXOPT_GSL_LIB_DIR= "${lib.getLib gsl}/lib";
+    CVXOPT_GSL_INC_DIR= "${lib.getDev gsl}/include";
+  } // lib.optionalAttrs withGlpk {
+    CVXOPT_BUILD_GLPK = "1";
+    CVXOPT_GLPK_LIB_DIR = "${lib.getLib glpk}/lib";
+    CVXOPT_GLPK_INC_DIR = "${lib.getDev glpk}/include";
+  } // lib.optionalAttrs withFftw {
+    CVXOPT_BUILD_FFTW = "1";
+    CVXOPT_FFTW_LIB_DIR = "${lib.getLib fftw}/lib";
+    CVXOPT_FFTW_INC_DIR = "${lib.getDev fftw}/include";
+  };
 
   nativeCheckInputs = [ unittestCheckHook ];
 
