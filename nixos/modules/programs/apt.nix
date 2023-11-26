@@ -1,17 +1,15 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.apt;
 in
 
 {
-  meta.maintainers = [ maintainers.MakiseKurisu ];
+  meta.maintainers = with lib.maintainers; [ MakiseKurisu ];
 
   ###### interface
   options.programs.apt = {
-    enable = mkEnableOption (mdDoc ''
+    enable = lib.mkEnableOption (lib.mdDoc ''
       Whether to enable {command}`apt`, the package manager for Debian-based systems.
 
       Please be aware that this option **DOES NOT** enable {command}`apt` as a
@@ -19,26 +17,26 @@ in
       to work on Debian-based root file systems.
     '');
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = with lib; with types; package;
       default = pkgs.apt;
-      defaultText = literalExpression "pkgs.apt";
-      description = mdDoc ''
+      defaultText = lib.literalExpression "pkgs.apt";
+      description = lib.mdDoc ''
         {command}`apt` package to use.
       '';
     };
 
-    keyringPackages = mkOption {
-      type = with types; listOf package;
+    keyringPackages = lib.mkOption {
+      type = with lib; with types; listOf package;
       default = with pkgs; [
           debian-archive-keyring
       ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         with pkgs; [
           debian-archive-keyring
         ];
       '';
-      description = mdDoc ''
+      description = lib.mdDoc ''
         Archive keyring packages for {command}`apt`.
 
         Packages specified here will have its `/etc/apt/trusted.gpg.d` content symbolic
@@ -49,7 +47,7 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     users.users._apt = {
       isSystemUser = true;
@@ -57,14 +55,14 @@ in
     };
     environment.etc =
       let
-        trusted = pkgs: map (p: "${getBin p}/etc/apt/trusted.gpg.d") pkgs;
-        buildEtc = p: attrsets.concatMapAttrs (n: v: {
+        trusted = pkgs: map (p: "${lib.getBin p}/etc/apt/trusted.gpg.d") pkgs;
+        buildEtc = p: lib.attrsets.concatMapAttrs (n: v: {
           "apt/trusted.gpg.d/${n}" = {
             source = "${p}/${n}";
           };
         }) (builtins.readDir p);
         buildEtcForEach = t: map buildEtc t;
-        keyrings = pkgs: attrsets.mergeAttrsList (buildEtcForEach (trusted pkgs));
+        keyrings = pkgs: lib.attrsets.mergeAttrsList (buildEtcForEach (trusted pkgs));
       in
       keyrings cfg.keyringPackages;
   };
