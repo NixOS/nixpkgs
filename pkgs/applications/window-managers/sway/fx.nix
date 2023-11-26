@@ -30,7 +30,7 @@ sway-unwrapped.overrideAttrs (oldAttrs: rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ricarch97 ];
     platforms = platforms.linux;
-    mainProgram = "swayfx";
+    mainProgram = "sway";
 
     longDescription = ''
       Fork of Sway, an incredible and one of the most well established Wayland
