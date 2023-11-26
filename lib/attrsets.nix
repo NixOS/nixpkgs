@@ -58,13 +58,17 @@ rec {
     attrPath:
     # The nested attribute set to check
     e:
-    let attr = head attrPath;
+    let
+      lenAttrPath = length attrPath;
+      hasAttrByPath' = n: s: let
+        attr = elemAt attrPath n;
+      in (
+        if n == lenAttrPath then true
+        else if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr}
+        else false
+      );
     in
-      if attrPath == [] then true
-      else if e ? ${attr}
-      then hasAttrByPath (tail attrPath) e.${attr}
-      else false;
-
+      hasAttrByPath' 0 e;
 
   /* Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
 
