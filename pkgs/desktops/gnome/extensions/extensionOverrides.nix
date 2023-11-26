@@ -51,7 +51,6 @@ super: lib.trivial.pipe super [
     buildInputs = [ vte ];
     postFixup = ''
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
-      wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/ddterm/app/dependencies-notification.js"
     '';
   }))
 
