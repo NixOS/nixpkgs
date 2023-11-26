@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A tiling window manager";
     homepage    = "https://github.com/conformal/spectrwm";
-    maintainers = with maintainers; [ christianharke ];
+    maintainers = with maintainers; [ rake5k ];
     license     = licenses.isc;
     platforms   = platforms.all;
 
