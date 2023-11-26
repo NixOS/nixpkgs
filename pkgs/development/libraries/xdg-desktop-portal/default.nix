@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.1";
+  version = "1.18.2";
 
   outputs = [ "out" "installedTests" ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    sha256 = "sha256-S4I578gX1ONbixWGcQLY3WqzACoVfAtLuOFBhh36hFY=";
+    hash = "sha256-Pd5IKrVp/OOE10Ozy4R3XbubVc6iz0znG+YB0Uu+68E=";
   };
 
   patches = [
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstalled-tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ] ++ lib.optionals (!enableGeoLocation) [
-    "-Dgeoclue=false"
+    "-Dgeoclue=disabled"
   ];
 
   doCheck = true;
