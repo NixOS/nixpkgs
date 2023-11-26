@@ -18514,6 +18514,10 @@ self: super: with self; {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
   };
 
+  vl-convert-python = callPackage ../development/python-modules/vl-convert-python {
+    inherit (pkgs) protobuf;
+  };
+
   vllm = callPackage ../development/python-modules/vllm { };
 
   vmprof = callPackage ../development/python-modules/vmprof { };
