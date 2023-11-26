@@ -17790,6 +17790,8 @@ self: super: with self; {
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
 
+  vegafusion = callPackage ../development/python-modules/vegafusion { };
+
   vegafusion-embed = callPackage ../development/python-modules/vegafusion-embed {
     inherit (pkgs) protobuf;
   };
