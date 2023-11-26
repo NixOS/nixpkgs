@@ -4,7 +4,7 @@
 , SDL2
 , callPackage
 , cmake
-, espeak
+, espeak-ng
 , ffmpeg
 , file
 , freetype
@@ -55,11 +55,15 @@
 
 let
   allSources = {
-    letoram-arcan-src = fetchFromGitHub {
-      owner = "letoram";
-      repo = "arcan";
-      rev = "85c8564bdbee8468a5716bea64daf1d78937ffbf";
-      hash = "sha256-etmj1vpZTjxbmr4UiLBEK57WFJ1NeEnY5WfBYajX3ls=";
+    letoram-arcan = {
+      pname = "arcan";
+      version = "0.6.2.1-unstable-2023-11-18";
+      src = fetchFromGitHub {
+        owner = "letoram";
+        repo = "arcan";
+        rev = "0950ee236f96a555729498d0fdf91c16901037f5";
+        hash = "sha256-TxadRlidy4KRaQ4HunPO6ISJqm6JwnMRM8y6dX6vqJ4=";
+      };
     };
     letoram-openal-src = fetchFromGitHub {
       owner = "letoram";
@@ -88,10 +92,7 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "arcan";
-  version = "0.6.2.1-unstable-2023-10-14";
-
-  src = allSources.letoram-arcan-src;
+  inherit (allSources.letoram-arcan) pname version src;
 
   nativeBuildInputs = [
     cmake
@@ -141,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     xz
   ]
   ++ lib.optionals useEspeak [
-    espeak
+    espeak-ng
   ];
 
   # Emulate external/git/clone.sh
