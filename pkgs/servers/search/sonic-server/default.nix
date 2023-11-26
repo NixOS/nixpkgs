@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
+, nixosTests
 , testers
 , sonic-server
 }:
@@ -42,6 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests = {
+      inherit (nixosTests) sonic-server;
       version = testers.testVersion {
         command = "sonic --version";
         package = sonic-server;

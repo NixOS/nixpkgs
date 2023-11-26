@@ -766,6 +766,7 @@ in {
   sogo = handleTest ./sogo.nix {};
   solanum = handleTest ./solanum.nix {};
   sonarr = handleTest ./sonarr.nix {};
+  sonic-server = handleTest ./sonic-server.nix {};
   sourcehut = handleTest ./sourcehut.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};

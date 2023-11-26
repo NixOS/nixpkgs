@@ -1153,6 +1153,7 @@
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
+  ./services/search/sonic-server.nix
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
