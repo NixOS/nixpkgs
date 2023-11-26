@@ -1,0 +1,24 @@
+From e2799dcc468b7fea5179983d34b002a441e679cc Mon Sep 17 00:00:00 2001
+From: Dan Callaghan <djc@djc.id.au>
+Date: Sun, 7 May 2023 15:30:39 +1000
+Subject: [PATCH] pybind11 is not required at runtime
+
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index d5108f1c..1e6b92ea 100644
+--- a/setup.py
++++ b/setup.py
+@@ -189,7 +189,6 @@ def build_extensions(self):
+     ext_modules=[extension],
+     install_requires=[
+         'numpy',
+-        'pybind11>=2.6'
+     ],
+     setup_requires=['pybind11>=2.6'],
+     cmdclass={'build_ext': BuildExt},
+-- 
+2.38.4
+
