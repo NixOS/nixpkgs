@@ -4,6 +4,8 @@
 , pkg-config
 , udev
 , nix-update-script
+, testers
+, ravedude
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ udev ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = ravedude;
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "Tool to easily flash code onto an AVR microcontroller with avrdude";
