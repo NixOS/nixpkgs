@@ -35,6 +35,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # fails on filesystem that doesn't accept non-utf8 characters
+    # https://github.com/pallets/click/issues/2634
+    "test_file_surrogates"
+  ];
+
   passthru.tests = {
     inherit black flask magic-wormhole mitmproxy typer;
   };
