@@ -789,6 +789,13 @@ runTests {
     expr = attrsets.genAttrs [ "foo" "bar" ] (name: "${name}123");
     expected = { foo = "foo123"; bar = "bar123"; };
   };
+  testGenAttrsPrime = {
+    expr = attrsets.genAttrs' [ { foo = "a"; bar = "b"; } { foo = "c"; bar = "d"; } ] (x: x.foo) (x: "${toString x.foo}${toString x.bar}");
+    expected = {
+      a = "ab";
+      c = "cd";
+    };
+  };
 
   testMergeAttrsListExample1 = {
     expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
