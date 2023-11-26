@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   patches = [
     (fetchpatch {
+      # Add offline mode to skip tests that require an internet connection, https://github.com/webrecorder/warcio/pull/135
       name = "add-offline-option.patch";
       url = "https://github.com/webrecorder/warcio/pull/135/commits/2546fe457c57ab0b391764a4ce419656458d9d07.patch";
       hash = "sha256-3izm9LvAeOFixiIUUqmd5flZIxH92+NxL7jeu35aObQ=";
@@ -49,6 +50,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--offline"
+  ];
+
+  disabledTests = [
+    # Tests require network access, see above
+    "test_get_cache_to_file"
   ];
 
   pythonImportsCheck = [
