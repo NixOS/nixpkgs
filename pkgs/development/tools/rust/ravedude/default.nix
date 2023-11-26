@@ -3,6 +3,8 @@
 , fetchCrate
 , pkg-config
 , udev
+, avrdude
+, makeBinaryWrapper
 , nix-update-script
 , testers
 , ravedude
@@ -19,9 +21,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Uo8wlTAHBkn/WeGPhPP+BU80wjSyNHsWQj8QvA7mHrk=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
 
   buildInputs = [ udev ];
+
+  postInstall = ''
+    wrapProgram $out/bin/ravedude --suffix PATH : ${lib.makeBinPath [ avrdude ]}
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
