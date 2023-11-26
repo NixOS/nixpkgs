@@ -27426,7 +27426,8 @@ with pkgs;
     unifiLTS
     unifi5
     unifi6
-    unifi7;
+    unifi7
+    unifi8;
 
   unifi = unifi7;
 
