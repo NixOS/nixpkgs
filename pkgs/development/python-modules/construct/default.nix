@@ -3,6 +3,7 @@
 , arrow
 , buildPythonPackage
 , cloudpickle
+, cryptography
 , fetchFromGitHub
 , lz4
 , numpy
@@ -36,13 +37,19 @@ buildPythonPackage rec {
     lz4
   ];
 
+  passthru.optional-dependencies = {
+    extras = [
+      arrow
+      cloudpickle
+      cryptography
+      numpy
+      ruamel-yaml
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
-    numpy
-    arrow
-    ruamel-yaml
-    cloudpickle
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "construct"
