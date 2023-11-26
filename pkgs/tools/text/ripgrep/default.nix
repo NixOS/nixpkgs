@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , rustPlatform
-, asciidoctor
 , installShellFiles
 , pkg-config
 , Security
@@ -11,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "13.0.0";
+  version = "14.0.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "0pdcjzfi0fclbzmmf701fdizb95iw427vy3m1svy6gdn2zwj3ldr";
+    sha256 = "sha256-yVRjOwifxjxuvuwF2d7QCNb7PaT3ELoGP34T2RE1ZVY=";
   };
 
-  cargoSha256 = "1kfdgh8dra4jxgcdb0lln5wwrimz0dpp33bq3h7jgs8ngaq2a9wp";
+  cargoSha256 = "sha256-c4rJYZkAa8vqw3/ccOjGMoyzqq7CVDAMOme9/ORmx9M=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ]
+  nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2
     ++ lib.optional stdenv.isDarwin Security;
@@ -30,10 +29,13 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
   preFixup = ''
-    installManPage $releaseDir/build/ripgrep-*/out/rg.1
+    $out/bin/rg --generate man > rg.1
+    installManPage rg.1
 
-    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
-    installShellCompletion --zsh complete/_rg
+    installShellCompletion --cmd rg \
+      --bash <($out/bin/rg --generate complete-bash) \
+      --fish <($out/bin/rg --generate complete-fish) \
+      --zsh <($out/bin/rg --generate complete-zsh)
   '';
 
   doInstallCheck = true;
