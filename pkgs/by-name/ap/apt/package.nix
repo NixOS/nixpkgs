@@ -1,4 +1,5 @@
 { lib
+, config
 , stdenv
 , fetchurl
 , bzip2
@@ -30,6 +31,7 @@
 , zstd
 , withDocs ? true
 , withNLS ? true
+, nixStoreDir ? config.nix.storeDir or builtins.storeDir
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # apt-key is a shell script, as such, we need to specify its dependencies,
     # since $PATH could be controlled by other packages
-    patsh -f $out/bin/apt-key -s ${builtins.storeDir}
+    patsh -f $out/bin/apt-key -s ${nixStoreDir}
   '';
 
   patches = [
