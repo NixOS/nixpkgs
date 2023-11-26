@@ -77,6 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
+  postInstall = ''
+    # apt assumes dpkg is installed under the same $BIN_DIR folder on a Debian
+    # system (among a few other things), otherwise it will refuse to run with
+    # the following error:
+    # E: Unable to determine a suitable packaging system type
+    ln -s ${lib.getBin dpkg}/bin/dpkg $out/bin/dpkg
+  '';
+
   patches = [
     # We must specify the config and state dir outside of Nix store to be
     # writable by apt. However, this has the side effect of CMake trying to create
