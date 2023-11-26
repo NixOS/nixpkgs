@@ -4131,9 +4131,7 @@ with pkgs;
 
   wiiload = callPackage ../development/tools/wiiload { };
 
-  winhelpcgi = callPackage ../development/tools/winhelpcgi {
-    libpng = libpng12;
-  };
+  winhelpcgi = callPackage ../development/tools/winhelpcgi { };
 
   wiimms-iso-tools = callPackage ../tools/filesystems/wiimms-iso-tools { };
 
