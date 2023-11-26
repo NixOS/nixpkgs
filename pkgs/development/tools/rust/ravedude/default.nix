@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit /* or */ asl20 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ rvarago ];
+    mainProgram = "ravedude";
   };
 }
