@@ -4,7 +4,7 @@
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
-, openssl, openssl_1_1
+, openssl
 , linuxPackages, libsystemtap
 } @ args:
 
@@ -30,7 +30,7 @@ let
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
-      , openssl, openssl_1_1, opensslSupport ? true
+      , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
       , groff, docSupport ? true
@@ -85,7 +85,6 @@ let
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
           ++ (op (atLeast30 && opensslSupport) openssl)
-          ++ (op (!atLeast30 && opensslSupport) openssl_1_1)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses
