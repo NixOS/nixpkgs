@@ -203,14 +203,9 @@ let
     withPackages = reqs: self (args // { requiredTeXPackages = ps: requiredTeXPackages ps ++ reqs ps; __fromCombineWrapper = false; });
   };
 
-  out = (if (! __combine)
-    # meta.outputsToInstall = [ "out" "man" ] is invalid within buildEnv:
-    # checkMeta will notice that there is no actual "man" output, and fail
-    # so we set outputsToInstall from the outside, where it is safe
-    then lib.addMetaAttrs { inherit (pkgList) outputsToInstall; }
-    else x: x) # texlive.combine: man pages used to be part of out
+  out =
 # no indent for git diff purposes
-((buildEnv {
+(buildEnv {
 
   inherit name;
 
@@ -240,6 +235,14 @@ let
   inherit meta passthru;
 
   postBuild =
+    # create outputs
+  lib.optionalString (! __combine) ''
+    for otherOutputName in $outputs ; do
+      if [[ "$otherOutputName" == 'out' ]] ; then continue ; fi
+      otherOutput="otherOutput_$otherOutputName"
+      ln -s "''${!otherOutput}" "''${!otherOutputName}"
+    done
+  '' +
     # environment variables (note: only export the ones that are used in the wrappers)
   ''
     TEXMFROOT="${texmfroot}"
@@ -431,5 +434,16 @@ let
     ln -s "$TEXMFDIST" "$out"/share/texmf
   ''
   ;
-}).overrideAttrs (_: { allowSubstitutes = true; }));
+}).overrideAttrs (prev:
+  { allowSubstitutes = true; }
+  # the outputsToInstall must be built by the main derivation for nix-profile-install to work
+  // lib.optionalAttrs (! __combine) ({
+    outputs = pkgList.outputsToInstall;
+    meta = prev.meta // { inherit (pkgList) outputsToInstall; };
+  } // (lib.mapAttrs'
+    (out: drv: { name = "otherOutput_" + out; value = drv; })
+    (lib.getAttrs (builtins.tail pkgList.outputsToInstall) splitOutputs)
+    )
+  )
+);
 in out)
