@@ -14,6 +14,12 @@
 , zope_event
 , zope_interface
 , pythonOlder
+
+# for passthru.tests
+, dulwich
+, gunicorn
+, opentracing
+, pika
 }:
 
 buildPythonPackage rec {
@@ -65,6 +71,14 @@ buildPythonPackage rec {
     "gevent"
     "gevent.events"
   ];
+
+  passthru.tests = {
+    inherit
+      dulwich
+      gunicorn
+      opentracing
+      pika;
+  } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
 
   meta = with lib; {
     description = "Coroutine-based networking library";
