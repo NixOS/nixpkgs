@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "release-team";
-    repo = "${finalAttrs.pname}";
+    repo = "debian-archive-keyring";
     rev = "${finalAttrs.version}";
     hash = "sha256-RjHC4AJ0xyVmELVjX/WBmZYsKWFqcg8F5j+9+18jwj4=";
   };
