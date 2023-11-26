@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , SDL2
+, callPackage
 , cmake
 , espeak
 , ffmpeg
@@ -196,6 +197,10 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     "format"
   ];
+
+  passthru = {
+    wrapper = callPackage ./wrapper.nix { };
+  };
 
   meta = {
     homepage = "https://arcan-fe.com/";
