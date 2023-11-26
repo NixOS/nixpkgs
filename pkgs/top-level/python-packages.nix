@@ -18358,6 +18358,10 @@ self: super: with self; {
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
 
+  vegafusion-embed = callPackage ../development/python-modules/vegafusion-embed {
+    inherit (pkgs) protobuf;
+  };
+
   vehicle = callPackage ../development/python-modules/vehicle { };
 
   velbus-aio = callPackage ../development/python-modules/velbus-aio { };
