@@ -177,6 +177,10 @@ let
       orga = "nvim-neorg";
       repo = "tree-sitter-norg";
     };
+    "tree-sitter-norg-meta" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg-meta";
+    };
     "tree-sitter-commonlisp" = {
       orga = "thehamsta";
       repo = "tree-sitter-commonlisp";
