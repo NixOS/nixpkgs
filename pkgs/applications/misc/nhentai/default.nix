@@ -18,6 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     requests
+    img2pdf
     iso8601
     beautifulsoup4
     soupsieve
