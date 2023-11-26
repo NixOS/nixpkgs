@@ -11538,8 +11538,6 @@ with pkgs;
 
   oh-my-posh = callPackage ../development/tools/oh-my-posh { };
 
-  oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
-
   ola = callPackage ../applications/misc/ola {
     protobuf = protobuf_21;
   };
@@ -15408,8 +15406,6 @@ with pkgs;
   es = callPackage ../shells/es { };
 
   fish = callPackage ../shells/fish { };
-
-  oh-my-fish = callPackage ../shells/fish/oh-my-fish { };
 
   wrapFish = callPackage ../shells/fish/wrapper.nix { };
 
@@ -28740,7 +28736,7 @@ with pkgs;
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../os-specific/linux/systemd {
+  systemd = callPackage ../by-name/sy/systemd/package.nix {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
@@ -31995,10 +31991,6 @@ with pkgs;
   foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
-
-  fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
-  };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
 

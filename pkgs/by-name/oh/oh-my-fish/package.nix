@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fish
 , runtimeShell
-, writeShellScript
+, substituteAll
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,16 +11,21 @@ stdenv.mkDerivation (finalAttrs: {
   version = "unstable-2022-03-27";
 
   src = fetchFromGitHub {
-    owner = finalAttrs.pname;
-    repo = finalAttrs.pname;
+    owner = "oh-my-fish";
+    repo = "oh-my-fish";
     rev = "d428b723c8c18fef3b2a00b8b8b731177f483ad8";
     hash = "sha256-msItKEPe7uSUpDAfCfdYZjt5NyfM3KtOrLUTO9NGqlg=";
   };
 
-  strictDeps = true;
+  patches = [
+    ./001-writable-omf-path.diff
+  ];
+
   buildInputs = [
     fish
   ];
+
+  strictDeps = true;
 
   dontConfigure = true;
   dontBuild = true;
@@ -28,24 +33,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -pv $out/bin $out/share/${finalAttrs.pname}
-    cp -vr * $out/share/${finalAttrs.pname}
+    mkdir -pv $out/bin $out/share/oh-my-fish
+    cp -vr * $out/share/oh-my-fish
 
-    cat << EOF > $out/bin/omf-install
-    #!${runtimeShell}
+    cp -v ${substituteAll {
+      name = "omf-install";
+      src = ./omf-install;
+      OMF = placeholder "out";
+      inherit fish runtimeShell;
+    }} $out/bin/omf-install
 
-    ${fish}/bin/fish \\
-      $out/share/${finalAttrs.pname}/bin/install \\
-      --noninteractive \\
-      --offline=$out/share/${finalAttrs.pname}
-
-    EOF
     chmod +x $out/bin/omf-install
+    cat $out/bin/omf-install
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/oh-my-fish/oh-my-fish";
     description = "The Fish Shell Framework";
     longDescription = ''
@@ -53,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
       which extend or modify the look of your shell. It's fast, extensible and
       easy to use.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "omf-install";
-    platforms = fish.meta.platforms;
+    inherit (fish.meta) platforms;
   };
 })
 # TODO: customize the omf-install script
