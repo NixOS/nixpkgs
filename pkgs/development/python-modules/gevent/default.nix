@@ -23,6 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-HKAdoXbuN7NSeicC99QNvJ/7jPx75aA7+k+e7EXlXEY=";
   };
 
+  patches = [
+    ./22.10.2-CVE-2023-41419.patch
+  ];
+
   nativeBuildInputs = [
     setuptools
   ];
