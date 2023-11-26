@@ -1,24 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, requests
 , pythonOlder
+, requests
+, setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "5.5.0";
-  format = "setuptools";
+  version = "7.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BKlzKzekYijs8OSWFjo+3ZNZaw5iAAKfvEiRFjhifhk=";
+    hash = "sha256-duDfcHHaXvORNNkpuMf6zxMZqkfCIr8ScrSKxVq/PW8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
+    typing-extensions
   ];
 
   # Tests require network connectivity and there's no easy way to disable them

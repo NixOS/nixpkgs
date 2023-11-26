@@ -1,4 +1,5 @@
 { lib
+, async-interrupt
 , async-timeout
 , bleak
 , bleak-retry-connector
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.2.0";
+  version = "2.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ei/+QfDjuzbKFZ8Nl+KnCJB6xu7xZh0m6LnzHUEg790=";
+    hash = "sha256-uHkJEtaohuTRs1RXDPbe4dohbjBnYi9MFguP9CTwM5w=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-interrupt
     async-timeout
     bleak
     bleak-retry-connector

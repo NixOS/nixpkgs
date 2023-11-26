@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , meson
 , nasm
 , ninja
@@ -9,6 +10,7 @@
 , orc
 , bzip2
 , gettext
+, libGL
 , libv4l
 , libdv
 , libavc1394
@@ -45,17 +47,19 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
+# MMAL is not supported on aarch64, see:
+# https://github.com/raspberrypi/userland/issues/688
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.4";
+  version = "1.22.6";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-1xIMEUap1yPVPVv+gHTaJXWoHwWYQ4dSk385u3yDO2o=";
+    hash = "sha256-s7B/4/HOf+k6qb5yF4ZgRFSPNcSneSKA7sfhCKMvmBc=";
   };
 
   strictDeps = true;
@@ -76,6 +80,7 @@ stdenv.mkDerivation rec {
     hotdoc
   ] ++ lib.optionals qt5Support (with qt5; [
     qtbase
+    qttools
   ]) ++ lib.optionals qt6Support (with qt6; [
     qtbase
     qttools
@@ -125,6 +130,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
     libv4l
     libpulseaudio
     libavc1394
@@ -156,9 +162,11 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # TODO check if we can keep this enabled
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
-  ] ++ lib.optionals (!raspiCameraSupport) [
+  ] ++ (if raspiCameraSupport then [
+    "-Drpi-lib-dir=${libraspberrypi}/lib"
+  ] else [
     "-Drpicamsrc=disabled"
-  ];
+  ]);
 
   postPatch = ''
     patchShebangs \

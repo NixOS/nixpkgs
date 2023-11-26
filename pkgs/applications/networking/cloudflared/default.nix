@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2023.7.0";
+  version = "2023.10.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     rev = "refs/tags/${version}";
-    hash = "sha256-/ELKUjo16BbPhQu1Gzj68peaAy83sGteqolR+BDIA2k=";
+    hash = "sha256-T+hxNvsckL8PAVb4GjXhnkVi3rXMErTjRgGxCUypwVA=";
   };
 
   vendorHash = null;
@@ -78,6 +78,7 @@ buildGoModule rec {
     changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe ];
+    maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe qjoly ];
+    mainProgram = "cloudflared";
   };
 }

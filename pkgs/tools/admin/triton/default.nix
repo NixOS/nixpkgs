@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "triton";
-  version = "7.15.4";
+  version = "7.16.0";
 
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-triton";
     rev = version;
-    hash = "sha256-RjYJT8Iw9JZzvd2d9zh2CS27qUx12nDi12k+YuTh7tk=";
+    hash = "sha256-JjQAf1pbNraatWvrfys3ydqk3FPOoJ5XWJH/4qgfINk=";
   };
 
-  npmDepsHash = "sha256-2ZTTgJ4LzmlfFoNNNPrrmna5pbREshdw5x9w5N7nasc=";
+  npmDepsHash = "sha256-E5yJwLSNLkK3OfwJrm59C4qfrd2y3nw/45B68MVBqV8=";
 
   dontBuild = true;
 

@@ -10,7 +10,6 @@
 , wayland-protocols
 , wl-clipboard
 , libxkbcommon
-, cmake
 , libressl
 }:
 stdenv.mkDerivation rec {

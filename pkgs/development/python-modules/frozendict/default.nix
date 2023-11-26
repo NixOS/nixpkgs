@@ -20,12 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-4a0DvZOzNJqpop7wi+FagUR+8oaekz4EDNIYdUaAWC8=";
   };
 
-  postPatch = ''
-    # https://github.com/Marco-Sulla/python-frozendict/pull/69
-    substituteInPlace setup.py \
-      --replace 'if impl == "PyPy":' 'if impl == "PyPy" or not src_path.exists():'
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -48,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Marco-Sulla/python-frozendict";
     changelog = "https://github.com/Marco-Sulla/python-frozendict/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pbsds ];
   };
 }

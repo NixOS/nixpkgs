@@ -2,13 +2,13 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
-  version = "1.25.2";
+  version = "1.25.5";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-7D3C1W2Y7FJnLxbXKXFFPDf+EXhLgPEj0APc2ZFYUlM=";
+    hash = "sha256-N0bL/kgw5tIVcD4fGYrahdola/w9ouct0+AUqw+dUOg=";
   };
 
   # Remove some Electron stuff from package.json
@@ -16,7 +16,7 @@ buildNpmPackage rec {
     sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
   '';
 
-  npmDepsHash = "sha256-M+6+zrxy8VpJQS0dG/xORMbflKEq8wO2DEOjGrA6OUw=";
+  npmDepsHash = "sha256-unjoBWVwmUqxAU3mDC37sXzoh7aEOdny4Asa70+sZnk=";
 
   nativeBuildInputs = [
     copyDesktopItems

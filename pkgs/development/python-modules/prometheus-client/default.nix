@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.17.0";
+  version = "0.17.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,8 +16,10 @@ buildPythonPackage rec {
     owner = "prometheus";
     repo = "client_python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0qh6OorIIs3WfneZavzwTTZFwIRXCJzezks/qihu8xo=";
+    hash = "sha256-ag9gun47Ar0Sw3ZGIXAHjtv4GdhX8x51UVkgwdQ8A+s=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytestCheckHook

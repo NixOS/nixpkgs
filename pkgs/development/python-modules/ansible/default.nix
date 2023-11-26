@@ -7,6 +7,7 @@
 , ncclient
 , netaddr
 , paramiko
+, ansible-pylibssh
 , pynetbox
 , scp
 , textfsm
@@ -20,7 +21,7 @@
 
 let
   pname = "ansible";
-  version = "8.1.0";
+  version = "8.6.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -30,7 +31,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kfILW/z18phTPBdKk4geALyea0FBFGT0TAVKONcWpWo=";
+    hash = "sha256-lfTlkydNWdU/NvYiB1NbfScq3CcBrHoO169qbYFjemA=";
   };
 
   postPatch = ''
@@ -45,6 +46,7 @@ buildPythonPackage {
     ncclient
     netaddr
     paramiko
+    ansible-pylibssh
     xmltodict
     # ansible.posix
     # ansible.utils
@@ -62,6 +64,7 @@ buildPythonPackage {
     jxmlease
     ncclient
     paramiko
+    ansible-pylibssh
     scp
     xmltodict
   ] ++ lib.optionals (withNetbox) [

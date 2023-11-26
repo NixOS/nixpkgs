@@ -7,11 +7,11 @@
 # Optional dependencies
 , enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
 , c-aresMinimal, libev, openssl, zlib
-, enableAsioLib ? false, boost
 , enableGetAssets ? false, libxml2
 , enableHpack ? false, jansson
+, enableHttp3 ? false, ngtcp2, nghttp3, quictls
 , enableJemalloc ? false, jemalloc
-, enablePython ? false, python3Packages, ncurses
+, enablePython ? false, python3, ncurses
 
 # Unit tests ; we have to set TZDIR, which is a GNUism.
 , enableTests ? stdenv.hostPlatform.isGnu, cunit, tzdata
@@ -27,41 +27,38 @@
 
 assert enableGetAssets -> enableApp;
 assert enableHpack -> enableApp;
+assert enableHttp3 -> enableApp;
 assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.51.0";
+  version = "1.57.0";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-6z6m9bYMbT7b8GXgT0NOjtYpGlyxoHkZxBcwqx/MAOA=";
+    sha256 = "sha256-xjdnfLrESU6q+LDgOGFzFGhFgw76/+To3JL7O0KOWtI=";
   };
 
-  outputs = [ "bin" "out" "dev" "lib" ]
-    ++ lib.optionals (enablePython) [ "python" ];
+  outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (enableApp) [ installShellFiles ]
-    ++ lib.optionals (enablePython) [ python3Packages.cython ];
+    ++ lib.optionals (enableApp) [ installShellFiles ];
 
-  buildInputs = lib.optionals enableApp [ c-aresMinimal libev openssl zlib ]
-    ++ lib.optionals (enableAsioLib) [ boost ]
+  buildInputs = lib.optionals enableApp [ c-aresMinimal libev zlib ]
+    ++ lib.optionals (enableApp && !enableHttp3) [ openssl ]
     ++ lib.optionals (enableGetAssets) [ libxml2 ]
     ++ lib.optionals (enableHpack) [ jansson ]
     ++ lib.optionals (enableJemalloc) [ jemalloc ]
-    ++ lib.optionals (enablePython) [ python3Packages.python ncurses python3Packages.setuptools ];
+    ++ lib.optionals (enableHttp3) [ ngtcp2 nghttp3 quictls ]
+    ++ lib.optionals (enablePython) [ python3 ];
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--disable-examples"
     (lib.enableFeature enableApp "app")
-  ] ++ lib.optionals (enableAsioLib) [ "--enable-asio-lib" "--with-boost-libdir=${boost}/lib" ]
-    ++ lib.optionals (enablePython) [
-      "--enable-python-bindings"
-      "--with-cython=${python3Packages.cython}/bin/cython"
-    ];
+    (lib.enableFeature enableHttp3 "http3")
+  ];
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
@@ -70,22 +67,18 @@ stdenv.mkDerivation rec {
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
-  preInstall = lib.optionalString (enablePython) ''
-    mkdir -p $out/${python3Packages.python.sitePackages}
-    # convince installer it's ok to install here
-    export PYTHONPATH="$PYTHONPATH:$out/${python3Packages.python.sitePackages}"
-  '';
-  postInstall = lib.optionalString (enablePython) ''
-    mkdir -p $python/${python3Packages.python.sitePackages}
-    mv $out/${python3Packages.python.sitePackages}/* $python/${python3Packages.python.sitePackages}
-    rm -r $out/lib
-  '' + lib.optionalString (enableApp) ''
+  postInstall = lib.optionalString (enableApp) ''
     installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
+  '' + lib.optionalString (!enableApp) ''
+    rm -r $out/bin
+  '' + lib.optionalString (enablePython) ''
+    patchShebangs $out/share/nghttp2
+  '' + lib.optionalString (!enablePython) ''
+    rm -r $out/share
   '';
 
   passthru.tests = {
     inherit curl libsoup;
-    python-nghttp2 = python3Packages.nghttp2;
   };
 
   meta = with lib; {

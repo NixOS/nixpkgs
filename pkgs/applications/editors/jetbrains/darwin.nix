@@ -22,11 +22,12 @@ stdenvNoCC.mkDerivation {
   inherit pname meta src version plugins;
   passthru.buildNumber = buildNumber;
   desktopName = product;
+  dontFixup = true;
   installPhase = ''
     runHook preInstall
     APP_DIR="$out/Applications/${product}.app"
     mkdir -p "$APP_DIR"
-    cp -Tr "${product}.app" "$APP_DIR"
+    cp -Tr *.app "$APP_DIR"
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/${loname}"
     open -na '$APP_DIR' --args "\$@"

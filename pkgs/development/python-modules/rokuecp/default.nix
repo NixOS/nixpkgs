@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.18.0";
+  version = "0.18.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = "refs/tags/${version}";
-    hash = "sha256-YvJ1+o7/S/QNROedYGsP8m99Dr+WpAkfe5YPEN+2ZhU=";
+    hash = "sha256-fgnR3TZh+cHvC8qJnvwfrrtxCdEr89Uw8ciACzaQPYE=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace " --cov" ""
+      --replace "--cov" ""
   '';
 
   disabledTests = [

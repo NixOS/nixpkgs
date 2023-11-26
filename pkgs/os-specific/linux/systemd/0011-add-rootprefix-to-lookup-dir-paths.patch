@@ -12,10 +12,10 @@ files that I might have missed.
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/src/basic/constants.h b/src/basic/constants.h
-index 5d68cc6332..33c06c1f65 100644
+index 3f96786da9..6e8fb40c08 100644
 --- a/src/basic/constants.h
 +++ b/src/basic/constants.h
-@@ -73,13 +73,15 @@
+@@ -74,13 +74,15 @@
          "/run/" n "\0"                          \
          "/usr/local/lib/" n "\0"                \
          "/usr/lib/" n "\0"                      \

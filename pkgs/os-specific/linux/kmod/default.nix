@@ -12,7 +12,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "30";
+  version = "31";
 
   # autogen.sh is missing from the release tarball,
   # and we need to run it to regenerate gtk_doc.make,
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   # https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/commit/.gitignore?id=61a93a043aa52ad62a11ba940d4ba93cb3254e78
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${version}.tar.gz";
-    sha256 = "sha256-/dih2LoqgRrAsVdHRwld28T8pXgqnzapnQhqkXnxbbc=";
+    hash = "sha256-FNR015/AoYBbi7Eb1M2TXH3yxUuddKICCu+ot10CdeQ=";
   };
 
   outputs = [ "out" "dev" "lib" ] ++ lib.optional withDevdoc "devdoc";

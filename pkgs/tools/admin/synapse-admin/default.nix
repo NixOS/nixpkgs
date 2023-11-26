@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchYarnDeps
 , mkYarnPackage
 , baseUrl ? null
 }:
@@ -14,9 +15,13 @@ mkYarnPackage rec {
     sha256 = "sha256-kvQBzrCu1sgDccKhr0i2DgDmO5z6u6s+vw5KymttoK4=";
   };
 
-  yarnNix = ./yarn.nix;
   yarnLock = ./yarn.lock;
   packageJSON = ./package.json;
+
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    hash = "sha256-f0ilsF3lA+134qUaX96mdntjpR4gRlmtRIh/xEFhtXQ=";
+  };
 
   NODE_ENV = "production";
   ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;

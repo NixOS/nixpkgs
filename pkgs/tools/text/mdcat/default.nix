@@ -6,26 +6,27 @@
 , asciidoctor
 , openssl
 , Security
+, SystemConfiguration
 , ansi2html
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-S47xJmwOCDrJJSYP9WiUKFWR9UZDNgY3mc/fTHaKsvA=";
+    hash = "sha256-b/iLjqNcCUGaGllSXA5eq04mz/I8cbz0pXJ/Dn+yDDo=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoSha256 = "sha256-g/Il3Sff9NtEfGTXBOGyRw6/GXje9kVwco0URyhv4TI=";
+  cargoHash = "sha256-RGpqTVafG7YzeUwTj8uU0PsqX2bq3BVg/ci9MVyeH80=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-SQ+LcHeHDB1Hd5wXGDJBZmBG4KEZ3NsV4+4X9WgPb9E=";
   };
 
-  sourceRoot = "source/gremlin-python/src/main/python";
+  sourceRoot = "${src.name}/gremlin-python/src/main/python";
 
   postPatch = ''
     sed -i '/pytest-runner/d' setup.py
@@ -79,6 +79,6 @@ buildPythonPackage rec {
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ turion ris ];
+    maintainers = with maintainers; [ ris ];
   };
 }

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "3.5.2";
+  version = "3.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "cdent";
     repo = "paste";
     rev = "refs/tags/${version}";
-    hash = "sha256-lpQMzrRpcG5TqWm/FJn4oo9TV8Skf0ypZVeQC4y8p1U=";
+    hash = "sha256-xp8FU4MR79/leBSJvSk8J2GdWW32AW2I5i3Y6DsRPLw=";
   };
 
   postPatch = ''
@@ -35,15 +35,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # broken test
-    "test_file_cache"
-    # requires network connection
-    "test_proxy_to_website"
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # https://github.com/cdent/paste/issues/72
-    "test_form"
-  ];
+  preCheck = ''
+    # needs to be modified after Sat, 1 Jan 2005 12:00:00 GMT
+    touch tests/urlparser_data/secured.txt
+  '';
 
   pythonNamespaces = [
     "paste"

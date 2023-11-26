@@ -1,21 +1,21 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
-, pytestCheckHook
 , pyyaml
 , ruamel-yaml
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "hyperpyyaml";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "speechbrain";
     repo = "hyperpyyaml";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tC4kLJAY9MVgjWwU2Qu0rPCVDw7CjKVIciRZgYhnR9I=";
+    hash = "sha256-eA4/wXmqlqomfRbJNi7dkBRoxneCbCbURSPvASF2sgA=";
   };
 
   propagatedBuildInputs = [

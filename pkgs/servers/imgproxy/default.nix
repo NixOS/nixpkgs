@@ -3,20 +3,20 @@
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "3.18.1";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    hash = "sha256-gtCDeWQLXdhNc5Gn9020ib0IZxjVkHnOUHNf1vqsc0k=";
+    hash = "sha256-qTOMoeTk9fGBSmioTRBUa3xRXOIW6OJj8aH0b/vP7dw=";
     rev = "v${version}";
   };
 
-  vendorHash = "sha256-5o1i88v+1UGYXP2SzyM6seyidrj1Z3Q64w/gi07xf4w=";
+  vendorHash = "sha256-SaxoFCEDniphr1ZZ5prE996CeHegB+a8dpGaMpjsrtQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
 
-  buildInputs = [ gobject-introspection vips ]
+  buildInputs = [ vips ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ];
 
   preBuild = ''

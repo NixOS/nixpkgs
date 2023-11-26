@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lcdf-typetools";
-  version = "2.108";
+  version = "2.110";
 
   src = fetchFromGitHub {
     owner = "kohler";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0a6jqaqwq43ldjjjlnsh6mczs2la9363qav7v9fyrfzkfj8kw9ad";
+    sha256 = "sha256-hoILYYCef2R1v6aN9V+FoYnXYaKsnGN2jlpb/QFAN/w=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

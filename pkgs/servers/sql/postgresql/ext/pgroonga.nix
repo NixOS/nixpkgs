@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D pgroonga.so -t $out/lib/
+    install -D pgroonga${postgresql.dlSuffix} -t $out/lib/
     install -D pgroonga.control -t $out/share/postgresql/extension
     install -D data/pgroonga-*.sql -t $out/share/postgresql/extension
 
-    install -D pgroonga_database.so -t $out/lib/
+    install -D pgroonga_database${postgresql.dlSuffix} -t $out/lib/
     install -D pgroonga_database.control -t $out/share/postgresql/extension
     install -D data/pgroonga_database-*.sql -t $out/share/postgresql/extension
   '';

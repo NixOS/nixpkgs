@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "gitea-actions-runner";
-  version = "0.2.3";
+  version = "0.2.6";
 
   src = fetchFromGitea {
     domain = "gitea.com";
     owner = "gitea";
     repo = "act_runner";
     rev = "v${version}";
-    hash = "sha256-RNH/12XV07nWhGnmR4FKJSSK/KnLA76+pKFHTPG8AAk=";
+    hash = "sha256-GE9yqp5zWJ4lL0L/w3oSvU72AiHBNb+yh2qBPKPe9X0=";
   };
 
-  vendorHash = "sha256-VS1CIxV0e01h5L1UA4p8R1Z28yLOEZTMxS+gbEaJwKs=";
+  vendorHash = "sha256-NoaLq5pCwTuPd9ne5LYcvJsgUXAqcfkcW3Ck2K350JE=";
 
   ldflags = [
     "-s"

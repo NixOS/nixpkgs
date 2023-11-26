@@ -35,8 +35,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libelf freeglut libGLU libGL ]
     ++ lib.optional stdenv.isDarwin GLUT;
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
+  '';
 
   doCheck = true;
   checkTarget = "-C tests run_tests";

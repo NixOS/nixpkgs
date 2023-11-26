@@ -5,9 +5,9 @@
 , fetchFromGitHub
 , fetchPypi
 , importlib-resources
-, jaraco_classes
-, jaraco_collections
-, jaraco_itertools
+, jaraco-classes
+, jaraco-collections
+, jaraco-itertools
 , jaraco-context
 , jaraco-net
 , keyring
@@ -55,15 +55,15 @@ buildPythonPackage rec {
     colorlog
     keyring
     requests-toolbelt
-    jaraco_collections
+    jaraco-collections
     jaraco-context
-    jaraco_classes
+    jaraco-classes
     jaraco-net
     more-itertools
     importlib-resources
     bx-py-utils
     platformdirs
-    jaraco_itertools
+    jaraco-itertools
   ];
 
   nativeCheckInputs = [

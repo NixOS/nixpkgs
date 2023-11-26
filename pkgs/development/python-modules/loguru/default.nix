@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "loguru";
-  version = "0.7.0";
+  version = "0.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Delgan";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-JwhJPX58KrPdX237L43o77spycLAVFv3K9njJiRK30Y=";
+    hash = "sha256-1xcPAOOhjFmWSxmPj6NICRur3ITOuQRNNKPJlfp89Jw=";
   };
 
   nativeCheckInputs = [

@@ -4,13 +4,13 @@
 }:
 buildGoModule rec {
   pname = "protoc-gen-go-vtproto";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "vtprotobuf";
     rev = "v${version}";
-    sha256 = "sha256-WtiXoQWjjFf+TP2zpAXNH05XdcrLSpw3S0TG4lkzp2E=";
+    sha256 = "sha256-2DpL8CYl0MWpr7TBJPwDlgKvOoa5RrVwMjOxrEP5Wio=";
   };
 
   vendorHash = "sha256-JpSVO8h7+StLG9/dJQkmrIlh9zIHABoqP1hq+X5ajVs=";

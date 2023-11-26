@@ -2,17 +2,18 @@
 , x11Support ? false
 , libX11
 , cairo
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport
 , cudaPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "hwloc";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/hwloc/v${lib.versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
-    sha256 = "sha256-Cof99nf4sAtWfSKbYyC/ayXGk+2qQ+C4UmjZmdawYM8=";
+    sha256 = "sha256-XEBizlVvbTRR/Bd/+4ZzohIPgd9oNd6mohqQ+9//Dew=";
   };
 
   configureFlags = [

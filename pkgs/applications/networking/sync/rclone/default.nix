@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles, fetchpatch
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
 , enableCmount ? true, fuse, macfuse-stubs
 , librclone
@@ -6,25 +6,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.63.0";
+  version = "1.64.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ojP1Uf9iP6kOlzW8qsUx1SnMRxFZLsgkjFD4LVH0oTI=";
+    hash = "sha256-gOFOcqCgFAiTc6W3v8Z917hGCzxluswqnuOoUht73GA=";
   };
 
-  patches = [
-    # Fix build on aarch64-darwin. Remove with the next release.
-    # https://github.com/rclone/rclone/pull/7099
-    (fetchpatch {
-      url = "https://github.com/rclone/rclone/commit/fb5125ecee4ae1061ff933bb3b9b19243e022241.patch";
-      hash = "sha256-3SzU9iiQM8zeL7VQhmq0G6e0km8WBRz4BSplRLE1vpM=";
-    })
-  ];
-
-  vendorSha256 = "sha256-AXgyyI6ZbTepC/TGkHQvHiwpQOjzwG5ung71nKE5d1Y=";
+  vendorHash = "sha256-eYIGVCTvUfGbsIMFthEfD0r6aeA7Ly9xJ8PJ6hR2SjA=";
 
   subPackages = [ "." ];
 
@@ -50,6 +41,10 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
+
+      # filesystem helpers
+      ln -s $out/bin/rclone $out/bin/rclonefs
+      ln -s $out/bin/rclone $out/bin/mount.rclone
     '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
       # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
       # as the setuid wrapper is required as non-root on NixOS.
@@ -68,6 +63,7 @@ buildGoModule rec {
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
+    mainProgram = "rclone";
     maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

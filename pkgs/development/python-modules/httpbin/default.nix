@@ -1,43 +1,40 @@
 { lib
-, brotlipy
+, brotlicffi
 , buildPythonPackage
 , decorator
-, fetchpatch
 , fetchPypi
 , flask
 , flask-limiter
+, flasgger
 , itsdangerous
 , markupsafe
 , raven
 , six
 , pytestCheckHook
+, setuptools
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.10.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y7N3kMkVdfTxV1f0KtQdn3KesifV7b6J5OwXVIbbjfo=";
+    hash = "sha256-e4WWvrDnWntlPDnR888mPW1cR20p4d9ve7K3C/nwaj0=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Replaces BaseResponse class with Response class for Werkezug 2.1.0 compatibility
-      # https://github.com/postmanlabs/httpbin/pull/674
-      url = "https://github.com/postmanlabs/httpbin/commit/5cc81ce87a3c447a127e4a1a707faf9f3b1c9b6b.patch";
-      hash = "sha256-SbEWjiqayMFYrbgAPZtSsXqSyCDUz3z127XgcKOcrkE=";
-    })
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
-    brotlipy
+    brotlicffi
     decorator
     flask
     flask-limiter
+    flasgger
     itsdangerous
     markupsafe
     raven
@@ -47,10 +44,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "test_httpbin.py"
   ];
 
   disabledTests = [
@@ -70,7 +63,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTTP Request and Response Service";
-    homepage = "https://github.com/kennethreitz/httpbin";
+    homepage = "https://github.com/psf/httpbin";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

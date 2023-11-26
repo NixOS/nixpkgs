@@ -2,31 +2,42 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptoverif";
-  version = "2.05";
+  version = "2.07";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    sha256 = "sha256-F5eVN5ATYo9Ivpi2eYh96ktuTWUeoqgWMR4BqHu8EFs=";
+    hash   = "sha256-GXXql4+JZ396BM6W2I3kN0u59xos7UCAtzR0IjMIETY=";
   };
+
+  /* Fix up the frontend to load the 'default' cryptoverif library
+  ** from under $out/libexec. By default, it expects to find the files
+  ** in $CWD which doesn't work. */
+  postPatch = ''
+    substituteInPlace ./src/syntax.ml \
+      --replace \"default\" \"$out/libexec/default\"
+  '';
 
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml ];
 
-  /* Fix up the frontend to load the 'default' cryptoverif library
-  ** from under $out/libexec. By default, it expects to find the files
-  ** in $CWD which doesn't work. */
-  patchPhase = ''
-    substituteInPlace ./src/syntax.ml \
-      --replace \"default\" \"$out/libexec/default\"
+  buildPhase = ''
+    runHook preBuild
+
+    ./build
+
+    runHook postBuild
   '';
 
-  buildPhase = "./build";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec
     cp ./cryptoverif   $out/bin
     cp ./default.cvl   $out/libexec
     cp ./default.ocvl  $out/libexec
+
+    runHook postInstall
   '';
 
   meta = {

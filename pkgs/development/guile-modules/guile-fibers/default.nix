@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , guile
+, libevent
 , pkg-config
 , texinfo
 }:
@@ -18,22 +19,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
-  ];
-  buildInputs = [
     guile
-    texinfo
+    pkg-config
+    texinfo # for makeinfo
   ];
 
-  autoreconfPhase = "./autogen.sh";
+  buildInputs = [
+    guile
+    libevent
+  ];
+
+  makeFlags = [
+    "GUILE_AUTO_COMPILE=0"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/wingo/fibers";
     description = "Concurrent ML-like concurrency for Guile";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

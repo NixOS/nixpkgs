@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.4.5";
+    version = "6.5.2";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-sLSwC4smOci+OHOUeW8EJb6zOTFN9+cpN/jd0qQbG4o=";
+      sha256 = "sha256-r8OdcGeXZZPIMyuOl6Eq/Tk7VQN8X7nDyrGkLHVg9go=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-shB2MRGATTg4l6pJ9FVYfBtnrX/eEHRvPhc8GZTA9ns=";
+      sha256 = "sha256-dcyHmLkRadNK30Vv0XsCEaZGTIcF/L29lLe58ggB3Lg=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -90,6 +90,7 @@ let
       description = "A fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
+      changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zfs_exporter";
-  version = "2.2.8";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "pdf";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-NTlYMznUfDfLftvuR5YWOW4Zu0rWfLkKPHPTrD/62+Q=";
+    hash = "sha256-JpLrCkPg0vVR0bKKHY5qf1/OD+O7yvWxS7kb7Yg3+c4=";
   };
 
-  vendorHash = "sha256-ZJRxH9RhNSnVmcsonaakbvvjQ+3ovnyMny1Pe/vyQxE=";
+  vendorHash = "sha256-uIilESEmAxANxFOy7qvYxlF/bId/Kqh4jUspNknlhlc=";
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} *.md

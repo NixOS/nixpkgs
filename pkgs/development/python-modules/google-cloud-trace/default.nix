@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.11.2";
+  version = "1.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pn2ofYfcHBxAw7IK5lKqf1AGj8e+DU8W++9XVFPZ5Ws=";
+    hash = "sha256-ud0MLfv5Oy3AV6RdAkyMbCxM2+55txtfoekTB1eznFE=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-trace";
     changelog = "https://github.com/googleapis/python-trace/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

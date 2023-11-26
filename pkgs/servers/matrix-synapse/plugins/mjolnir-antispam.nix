@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse-unwrapped }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
@@ -11,9 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
   };
 
-  sourceRoot = "./source/synapse_antispam";
+  sourceRoot = "${src.name}/synapse_antispam";
 
-  buildInputs = [ matrix-synapse ];
+  buildInputs = [ matrix-synapse-unwrapped ];
 
   doCheck = false; # no tests
   pythonImportsCheck = [ "mjolnir" ];

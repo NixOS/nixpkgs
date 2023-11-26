@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "mermerd";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "KarnerTh";
     repo = "mermerd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L/ieDhducOpdJ0vu578YcjSLTARlih81xAyly4pVE80=";
+    hash = "sha256-oYX1473bfZHwCscIpZSDfkKgIsGMcmkFGfWI400Maao=";
   };
 
   vendorHash = "sha256-RSCpkQymvUvY2bOkjhsyKnDa3vezUjC33Nwv0+O4OOQ=";

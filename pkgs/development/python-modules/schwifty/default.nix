@@ -8,6 +8,9 @@
 , pytestCheckHook
 , pytest-cov
 , pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -21,6 +24,12 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-hDNAoITt2Ak5aVWmMgqg2oA9rDFsiuum5JXc7v7sspU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [
     iso3166

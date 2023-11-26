@@ -2,6 +2,7 @@
 , lib
 , nixosTests
 , fetchFromGitHub
+, fetchYarnDeps
 , applyPatches
 , bundlerEnv
 , defaultGemConfig
@@ -95,9 +96,12 @@ let
   yarnEnv = yarn2nix-moretea.mkYarnPackage {
     pname = "${pname}-node-modules";
     inherit version src;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
     packageJSON = ./package.json;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-HI4RR4/ll/zNBNtDCb8OvEsG/BMVYacM0CcYqbkNHEY=";
+    };
 
     yarnPreBuild = ''
       mkdir -p deps/Zammad

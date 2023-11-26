@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.8.10";
+  version = "10.8.12";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-web";
     rev = "v${version}";
-    hash = "sha256-fJmGiHLwhgd3Ac7ggCbkMu6llob3qN87EpHpCO4K29I=";
+    hash = "sha256-T5MACoNg6yADfM7eike3f6V/ELZXrZYP+3Cz6ea8WtQ=";
   };
 
-  npmDepsHash = "sha256-X8a/pmQGAhoGKhThJ86b50sf0nlsCXGgvLQaxRsmA5Q=";
+  npmDepsHash = "sha256-s+14x/jucCAxDWlQjCngjGtLB+4PCuO6R0qxP+SZ1+s=";
 
   npmBuildScript = [ "build:production" ];
 

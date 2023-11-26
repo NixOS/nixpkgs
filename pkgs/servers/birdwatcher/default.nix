@@ -7,7 +7,7 @@ buildGoModule rec {
   pname = "birdwatcher";
   version = "2.2.4";
 
-  vendorSha256 = "sha256-NTD2pnA/GeTn4tXtIFJ227qjRtvBFCjWYZv59Rumc74=";
+  vendorHash = "sha256-NTD2pnA/GeTn4tXtIFJ227qjRtvBFCjWYZv59Rumc74=";
 
   src = fetchFromGitHub {
     owner = "alice-lg";
@@ -24,5 +24,6 @@ buildGoModule rec {
     changelog = "https://github.com/alice-lg/birdwatcher/blob/master/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "birdwatcher";
   };
 }

@@ -9,6 +9,7 @@
 , kio
 , kirigami2
 , mauikit
+, mauikit-documents
 , mauikit-filebrowsing
 , mauikit-texteditor
 , qtmultimedia
@@ -32,6 +33,7 @@ mkDerivation {
     kio
     kirigami2
     mauikit
+    mauikit-documents
     mauikit-filebrowsing
     mauikit-texteditor
     qtmultimedia

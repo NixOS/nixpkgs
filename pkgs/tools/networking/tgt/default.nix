@@ -1,16 +1,16 @@
 { stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
-, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+, docbook_xsl, coreutils, lsof, makeWrapper, sg3_utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.86";
+  version = "1.0.89";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xQzTGFptw/L+o8ivXGTxIzVFbAMrsMXvwUjCFS4rhdw=";
+    sha256 = "sha256-sgflHkG4FncQ31+BwcZsp7LRgqeqANCIKGysxUk8aEs=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];

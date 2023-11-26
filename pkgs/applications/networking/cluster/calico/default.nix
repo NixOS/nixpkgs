@@ -2,16 +2,16 @@
 
 builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: buildGoModule rec {
   inherit pname;
-  version = "3.26.1";
+  version = "3.26.4";
 
   src = fetchFromGitHub {
     owner = "projectcalico";
     repo = "calico";
     rev = "v${version}";
-    hash = "sha256-QSebSc4V8DFSKufSB6M4YSuwDJ9rn/6IR6Fr38F8BBQ=";
+    hash = "sha256-idpvGgtvjtLuW+eQIldWihqgzWIFEM0bK0Ux61dD//w=";
   };
 
-  vendorHash = "sha256-SuV7OEt0ZlVt0i8L5rgQd0HJn63XuDHi7+pe+bq+6Yw=";
+  vendorHash = "sha256-Dl0YLXrw/roKLmp8cZUa1v2n/UwzOGoL0AN8fNVMknU=";
 
   inherit doCheck subPackages;
 

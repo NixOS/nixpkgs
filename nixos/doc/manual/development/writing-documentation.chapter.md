@@ -16,7 +16,7 @@ You can quickly validate your edits with `make`:
 ```ShellSession
 $ cd /path/to/nixpkgs/nixos/doc/manual
 $ nix-shell
-nix-shell$ make
+nix-shell$ devmode
 ```
 
 Once you are done making modifications to the manual, it's important to
@@ -33,13 +33,13 @@ symlink at `./result/share/doc/nixos/index.html`.
 ## Editing DocBook XML {#sec-writing-docs-editing-docbook-xml}
 
 For general information on how to write in DocBook, see [DocBook 5: The
-Definitive Guide](http://www.docbook.org/tdg5/en/html/docbook.html).
+Definitive Guide](https://tdg.docbook.org/tdg/5.1/).
 
 Emacs nXML Mode is very helpful for editing DocBook XML because it
 validates the document as you write, and precisely locates errors. To
 use it, see [](#sec-emacs-docbook-xml).
 
-[Pandoc](http://pandoc.org) can generate DocBook XML from a multitude of
+[Pandoc](https://pandoc.org/) can generate DocBook XML from a multitude of
 formats, which makes a good starting point. Here is an example of Pandoc
 invocation to convert GitHub-Flavoured MarkDown to DocBook 5 XML:
 
@@ -50,7 +50,7 @@ pandoc -f markdown_github -t docbook5 docs.md -o my-section.md
 Pandoc can also quickly convert a single `section.xml` to HTML, which is
 helpful when drafting.
 
-Sometimes writing valid DocBook is simply too difficult. In this case,
+Sometimes writing valid DocBook is too difficult. In this case,
 submit your documentation updates in a [GitHub
 Issue](https://github.com/NixOS/nixpkgs/issues/new) and someone will
 handle the conversion to XML for you.
@@ -62,9 +62,9 @@ topic from scratch.
 
 Keep the following guidelines in mind when you create and add a topic:
 
--   The NixOS [`book`](http://www.docbook.org/tdg5/en/html/book.html)
+-   The NixOS [`book`](https://tdg.docbook.org/tdg/5.0/book.html)
     element is in `nixos/doc/manual/manual.xml`. It includes several
-    [`parts`](http://www.docbook.org/tdg5/en/html/book.html) which are in
+    [`parts`](https://tdg.docbook.org/tdg/5.0/book.html) which are in
     subdirectories.
 
 -   Store the topic file in the same directory as the `part` to which it

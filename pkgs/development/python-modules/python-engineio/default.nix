@@ -10,13 +10,14 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, simple-websocket
 , tornado
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.4.1";
+  version = "4.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +26,21 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sE6AlT01Rou427i9w+xwUTMflKxUr0Heqt2l+Y2AMmU=";
+    hash = "sha256-jHXpPnrQlIpmQ2sY4y6AUx/6W8Pf+683s4NmmlwZO58=";
+  };
+
+  propagatedBuildInputs = [
+    simple-websocket
+  ];
+
+  passthru.optional-dependencies = {
+    client = [
+      requests
+      websocket-client
+    ];
+    asyncio_client = [
+      aiohttp
+    ];
   };
 
   nativeCheckInputs = [

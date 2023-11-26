@@ -12,6 +12,7 @@
 , libepoxy
 , libpcap
 , libsamplerate
+, libslirp
 , makeDesktopItem
 , mesa
 , meson
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.97";
+  version = "0.7.117";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Doyn+EHZ9nlYjufHnHARLXbyDjYIEGIHuLOXFHU5f3w=";
+    hash = "sha256-R6BPDBMrVhxUkjMWK8Jz9vqEz5P3v62PIyulHp6Q+KM=";
     fetchSubmodules = true;
   };
 
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libpcap
     libsamplerate
+    libslirp
     mesa
     openssl
     vte
@@ -131,5 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres genericnerdyusername ];
     platforms = lib.platforms.linux;
+    mainProgram = "xemu";
   };
 })

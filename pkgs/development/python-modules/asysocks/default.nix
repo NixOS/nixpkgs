@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "asysocks";
-  version = "0.2.7";
+  version = "0.2.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kf2KDonjb+t7sA4jnC8mTh7fWoEDfRPhDkggb9A5E0Q=";
+    hash = "sha256-Fwm898mU7wvH5OkYVUrw3rL4VT5yyvoHxVtfcuL+4bQ=";
   };
 
   propagatedBuildInputs = [

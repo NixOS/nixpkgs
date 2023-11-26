@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.unfree;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice roconnor ];
+    mainProgram = "tarsnap";
   };
 }

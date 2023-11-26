@@ -31,7 +31,7 @@
 , gdk-pixbuf
 }:
 let
-  version = "0.21.1";
+  version = "0.24.0";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -44,7 +44,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-uJ/47cQZsGgrExemWCWeSM/U6eW2HoKWHCsVE2KypVQ=";
+    hash = "sha256-n0OiNxw9QDibX5HBSzq6jdOxyUd0bPkjKd+mtb/S/BY=";
     fetchSubmodules = true;
   };
 
@@ -121,7 +121,7 @@ buildDotnetModule rec {
 
   postInstall = ''
     mkdir -p $out/lib/space-station-14-launcher/loader
-    cp -r SS14.Loader/bin/${buildType}/*/* $out/lib/space-station-14-launcher/loader/
+    cp -r SS14.Loader/bin/${buildType}/*/*/* $out/lib/space-station-14-launcher/loader/
 
     icoFileToHiColorTheme SS14.Launcher/Assets/icon.ico space-station-14-launcher $out
   '';

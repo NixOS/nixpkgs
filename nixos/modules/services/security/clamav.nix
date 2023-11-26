@@ -15,6 +15,9 @@ let
 
   clamdConfigFile = pkgs.writeText "clamd.conf" (toKeyValue cfg.daemon.settings);
   freshclamConfigFile = pkgs.writeText "freshclam.conf" (toKeyValue cfg.updater.settings);
+  fangfrischConfigFile = pkgs.writeText "fangfrisch.conf" ''
+    ${lib.generators.toINI {} cfg.fangfrisch.settings}
+  '';
 in
 {
   imports = [
@@ -66,6 +69,36 @@ in
           '';
         };
       };
+      fangfrisch = {
+        enable = mkEnableOption (lib.mdDoc "ClamAV fangfrisch updater");
+
+        interval = mkOption {
+          type = types.str;
+          default = "hourly";
+          description = lib.mdDoc ''
+            How often freshclam is invoked. See systemd.time(7) for more
+            information about the format.
+          '';
+        };
+
+        settings = mkOption {
+          type = lib.types.submodule {
+            freeformType = with types; attrsOf (attrsOf (oneOf [ str int bool ]));
+          };
+          default = { };
+          example = {
+            securiteinfo = {
+              enabled = "yes";
+              customer_id = "your customer_id";
+            };
+          };
+          description = lib.mdDoc ''
+            fangfrisch configuration. Refer to <https://rseichter.github.io/fangfrisch/#_configuration>,
+            for details on supported values.
+            Note that by default urlhaus and sanesecurity are enabled.
+          '';
+        };
+      };
     };
   };
 
@@ -98,6 +131,15 @@ in
       DatabaseMirror = [ "database.clamav.net" ];
     };
 
+    services.clamav.fangfrisch.settings = {
+      DEFAULT.db_url = mkDefault "sqlite:////var/lib/clamav/fangfrisch_db.sqlite";
+      DEFAULT.local_directory = mkDefault stateDir;
+      DEFAULT.log_level = mkDefault "INFO";
+      urlhaus.enabled = mkDefault "yes";
+      urlhaus.max_size = mkDefault "2MB";
+      sanesecurity.enabled = mkDefault "yes";
+    };
+
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;
 
@@ -107,14 +149,13 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
-      preStart = ''
-        mkdir -m 0755 -p ${runDir}
-        chown ${clamavUser}:${clamavGroup} ${runDir}
-      '';
-
       serviceConfig = {
         ExecStart = "${pkg}/bin/clamd";
         ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
+        User = clamavUser;
+        Group = clamavGroup;
+        StateDirectory = "clamav";
+        RuntimeDirectory = "clamav";
         PrivateTmp = "yes";
         PrivateDevices = "yes";
         PrivateNetwork = "yes";
@@ -134,15 +175,63 @@ in
       description = "ClamAV virus database updater (freshclam)";
       restartTriggers = [ freshclamConfigFile ];
       after = [ "network-online.target" ];
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}
-        chown ${clamavUser}:${clamavGroup} ${stateDir}
-      '';
 
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkg}/bin/freshclam";
         SuccessExitStatus = "1"; # if databases are up to date
+        StateDirectory = "clamav";
+        RuntimeDirectory = "clamav";
+        User = clamavUser;
+        Group = clamavGroup;
+        PrivateTmp = "yes";
+        PrivateDevices = "yes";
+      };
+    };
+
+    systemd.services.clamav-fangfrisch-init = mkIf cfg.fangfrisch.enable {
+      wantedBy = [ "multi-user.target" ];
+      # if the sqlite file can be found assume the database has already been initialised
+      script = ''
+        db_url="${cfg.fangfrisch.settings.DEFAULT.db_url}"
+        db_path="''${db_url#sqlite:///}"
+
+        if [ ! -f "$db_path" ]; then
+          ${pkgs.fangfrisch}/bin/fangfrisch --conf ${fangfrischConfigFile} initdb
+        fi
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        StateDirectory = "clamav";
+        RuntimeDirectory = "clamav";
+        User = clamavUser;
+        Group = clamavGroup;
+        PrivateTmp = "yes";
+        PrivateDevices = "yes";
+      };
+    };
+
+    systemd.timers.clamav-fangfrisch = mkIf cfg.fangfrisch.enable {
+      description = "Timer for ClamAV virus database updater (fangfrisch)";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.fangfrisch.interval;
+        Unit = "clamav-fangfrisch.service";
+      };
+    };
+
+    systemd.services.clamav-fangfrisch = mkIf cfg.fangfrisch.enable {
+      description = "ClamAV virus database updater (fangfrisch)";
+      restartTriggers = [ fangfrischConfigFile ];
+      after = [ "network-online.target" "clamav-fangfrisch-init.service" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.fangfrisch}/bin/fangfrisch --conf ${fangfrischConfigFile} refresh";
+        StateDirectory = "clamav";
+        RuntimeDirectory = "clamav";
+        User = clamavUser;
+        Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
       };

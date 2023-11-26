@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "async-tkinter-loop";
-  version = "0.8.1";
+  version = "0.9.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "async_tkinter_loop";
-    hash = "sha256-+9AvnYIZMWCbpCEKdbIadyU8zgyUlW/fRYYyDOxAzeg=";
+    hash = "sha256-YwmW+zXAx9TAxgoRLEr7/3o1rrO4eSNScuoTh3ud2Vo=";
   };
 
   nativeBuildInputs = [

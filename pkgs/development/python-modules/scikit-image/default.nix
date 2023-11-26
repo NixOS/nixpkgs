@@ -3,52 +3,100 @@
 , fetchFromGitHub
 , buildPythonPackage
 , python
-, cython
-, pythran
-, numpy
-, scipy
-, matplotlib
-, networkx
-, six
-, pillow
-, pywavelets
-, dask
+, pythonOlder
+, astropy
 , cloudpickle
+, cython
+, dask
 , imageio
-, tifffile
+, lazy-loader
+, matplotlib
+, meson-python
+, networkx
+, numpy
+, packaging
+, pillow
+, pooch
+, pyamg
 , pytestCheckHook
+, pythran
+, pywavelets
+, scikit-learn
+, scipy
+, setuptools
+, simpleitk
+, six
+, tifffile
+, wheel
 }:
 
 let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.19.3";
+    version = "0.21.0";
+    format = "pyproject";
+
+    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
-      owner = pname;
-      repo = pname;
+      owner = "scikit-image";
+      repo = "scikit-image";
       rev = "v${version}";
-      hash = "sha256-zvXgZdvYycFbbMsBFSqMDzLanEtF9+JuVSQ3AM8/LQk=";
+      hash = "sha256-WJ2WNlcFCEtPr+bV/af6MoBBhbXDpOBEsJu4FmudoIo=";
     };
 
-    patches = [ ./add-testing-data.patch ];
+    patches = [
+      # https://github.com/scikit-image/scikit-image/pull/7052
+      # prepare a patch file because the commit contains additional changes
+      ./suppress-deprecation-warning.patch
+    ];
 
-    nativeBuildInputs = [ cython pythran ];
+    postPatch = ''
+      patchShebangs skimage/_build_utils/{version,cythoner}.py
+
+      substituteInPlace pyproject.toml \
+        --replace "numpy==" "numpy>="
+    '';
+
+    nativeBuildInputs = [
+      cython
+      meson-python
+      numpy
+      packaging
+      pythran
+      setuptools
+      wheel
+    ];
 
     propagatedBuildInputs = [
-      cloudpickle
-      dask
       imageio
+      lazy-loader
       matplotlib
       networkx
       numpy
+      packaging
       pillow
       pywavelets
       scipy
-      six
       tifffile
     ];
+
+    passthru.optional-dependencies = {
+      data = [
+        pooch
+      ];
+      optional = [
+        astropy
+        cloudpickle
+        dask
+        matplotlib
+        pooch
+        pyamg
+        scikit-learn
+        simpleitk
+      ] ++ dask.optional-dependencies.array;
+    };
 
     # test suite is very cpu intensive, move to passthru.tests
     doCheck = false;
@@ -78,6 +126,10 @@ let
       "skimage/feature/tests/test_util.py::test_plot_matches"
       "skimage/filters/tests/test_thresholding.py::TestSimpleImage::test_try_all_threshold"
       "skimage/io/tests/test_mpl_imshow.py::"
+    ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # https://github.com/scikit-image/scikit-image/issues/7104
+      "skimage/measure/tests/test_fit.py"
+      "skimage/measure/tests/test_moments.py"
     ]);
 
     # Check cythonized modules
@@ -88,7 +140,6 @@ let
       "skimage.feature"
       "skimage.restoration"
       "skimage.filters"
-      "skimage.future.graph"
       "skimage.graph"
       "skimage.io"
       "skimage.measure"
@@ -105,6 +156,7 @@ let
     meta = {
       description = "Image processing routines for SciPy";
       homepage = "https://scikit-image.org";
+      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${src.rev}";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ yl3dy ];
     };

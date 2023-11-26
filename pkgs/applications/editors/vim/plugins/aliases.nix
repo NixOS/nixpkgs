@@ -127,6 +127,7 @@ mapAliases (with prev; {
   tlib                = tlib_vim;
   tmux-navigator      = vim-tmux-navigator;
   tmuxNavigator       = vim-tmux-navigator; # backwards compat, added 2014-10-18
+  todo-nvim           = throw "todo-nvim has been removed: abandoned by upstream"; # Added 2023-08-23
   tslime              = tslime-vim;
   unite               = unite-vim;
   UltiSnips           = ultisnips;

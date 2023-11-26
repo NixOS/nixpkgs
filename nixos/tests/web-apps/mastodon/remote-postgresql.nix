@@ -13,10 +13,10 @@ let
 in
 {
   name = "mastodon-remote-postgresql";
-  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin turion ];
+  meta.maintainers = with pkgs.lib.maintainers; [ erictapen izorkin ];
 
   nodes = {
-    database = {
+    database = { config, ... }: {
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -24,11 +24,13 @@ in
           ];
         };
         extraHosts = hosts;
-        firewall.allowedTCPPorts = [ 5432 ];
+        firewall.allowedTCPPorts = [ config.services.postgresql.port ];
       };
 
       services.postgresql = {
         enable = true;
+        # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
+        package = pkgs.postgresql_14;
         enableTCPIP = true;
         authentication = ''
           hostnossl mastodon_local mastodon_test 192.168.2.201/32 md5
@@ -41,7 +43,7 @@ in
       };
     };
 
-    nginx = {
+    nginx = { nodes, ... }: {
       networking = {
         interfaces.eth1 = {
           ipv4.addresses = [
@@ -69,18 +71,14 @@ in
             tryFiles = "$uri @proxy";
           };
           locations."@proxy" = {
-            proxyPass = "http://192.168.2.201:55001";
-            proxyWebsockets = true;
-          };
-          locations."/api/v1/streaming/" = {
-            proxyPass = "http://192.168.2.201:55002";
+            proxyPass = "http://192.168.2.201:${toString nodes.server.services.mastodon.webPort}";
             proxyWebsockets = true;
           };
         };
       };
     };
 
-    server = { pkgs, ... }: {
+    server = { config, pkgs, ... }: {
       virtualisation.memorySize = 2048;
 
       environment = {
@@ -98,7 +96,10 @@ in
           ];
         };
         extraHosts = hosts;
-        firewall.allowedTCPPorts = [ 55001 55002 ];
+        firewall.allowedTCPPorts = [
+          config.services.mastodon.webPort
+          config.services.mastodon.sidekiqPort
+        ];
       };
 
       services.mastodon = {
@@ -106,6 +107,7 @@ in
         configureNginx = false;
         localDomain = "mastodon.local";
         enableUnixSocket = false;
+        streamingProcesses = 2;
         database = {
           createLocally = false;
           host = "192.168.2.102";

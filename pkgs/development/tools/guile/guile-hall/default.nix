@@ -20,15 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall =
-    let
-      guileVersion = lib.versions.majorMinor guile.version;
-    in
-    ''
-      wrapProgram $out/bin/hall \
-        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/hall \
+      --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
+      --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

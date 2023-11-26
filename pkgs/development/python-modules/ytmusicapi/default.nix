@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , requests
 , setuptools
@@ -9,20 +9,24 @@
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "1.1.1";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UCWNub0FErdmF3kGSIJlpIcKdPZdPzJ5y8yx9ZPBUlw=";
+  src = fetchFromGitHub {
+    owner = "sigma67";
+    repo = "ytmusicapi";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vDkrKVqyisPkswvfb+UPH95mehwNgyFxRmeT+1UHvXs=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     requests

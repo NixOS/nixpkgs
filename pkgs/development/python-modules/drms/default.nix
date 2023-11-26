@@ -5,10 +5,12 @@
 , pandas
 , six
 , astropy
+, oldest-supported-numpy
 , pytestCheckHook
 , pytest-doctestplus
 , pythonOlder
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,7 +25,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    numpy
+    oldest-supported-numpy
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -52,6 +57,6 @@ buildPythonPackage rec {
     description = "Access HMI, AIA and MDI data with Python";
     homepage = "https://github.com/sunpy/drms";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

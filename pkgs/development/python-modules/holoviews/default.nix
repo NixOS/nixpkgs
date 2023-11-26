@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.16.2";
+  version = "1.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RcVorlekOvc4k6CT5vrelrdxPLsP5v/0ZCamthMSJ0Y=";
+    hash = "sha256-urcpYat6GHlNsmk1HZBVI/Kq3K1ZOzIVEpJ86T3J35E=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Python data analysis and visualization seamless and simple";
     homepage = "https://www.holoviews.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

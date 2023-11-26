@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pyenv";
-  version = "2.3.22";
+  version = "2.3.32";
 
   src = fetchFromGitHub {
     owner = "pyenv";
     repo = "pyenv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kIjhxr39r8PT3pMvUQohkS2QHwX3QwtZn9n1Z7/nOxc=";
+    hash = "sha256-miJ/WONNDieLryD2J9JmkmSCG5Iesg2N2GT/FI9NGY0=";
   };
 
   postPatch = ''
@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ tjni ];
     platforms = platforms.all;
+    mainProgram = "pyenv";
   };
 }

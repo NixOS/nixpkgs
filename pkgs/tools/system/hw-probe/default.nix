@@ -1,6 +1,5 @@
-{ config
+{ lib
 , stdenv
-, lib
 , fetchFromGitHub
 , makeWrapper
 , makePerlPath

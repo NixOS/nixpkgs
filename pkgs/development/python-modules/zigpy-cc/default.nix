@@ -32,6 +32,8 @@ buildPythonPackage rec {
     zigpy
   ];
 
+  doCheck = pythonOlder "3.11"; # asynctest is unsupported on python3.11
+
   nativeCheckInputs = [
     asynctest
     pytest-asyncio

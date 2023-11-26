@@ -51,7 +51,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       '';
     };
 
-    fonts.fonts = [ pkgs.inconsolata ];
+    fonts.packages = [ pkgs.inconsolata ];
 
     # Automatically configure and start Sway when logging in on tty1:
     programs.bash.loginShellInit = ''

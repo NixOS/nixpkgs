@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-o5nTxTyLuKtWcJvcWZuVwK970DMJfEaJw8vDcShulr0=";
   };
 
-  vendorSha256 = "sha256-rBSRZ7gKUx3tBXqhkTOmAyEx9pLw41/Bt3O+AiHqXpw=";
+  vendorHash = "sha256-rBSRZ7gKUx3tBXqhkTOmAyEx9pLw41/Bt3O+AiHqXpw=";
   excludedPackages = "integrationtest";
 
   meta = with lib; {

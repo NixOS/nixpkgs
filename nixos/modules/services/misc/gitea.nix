@@ -15,6 +15,7 @@ let
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
+    WORK_PATH = ${cfg.stateDir}
 
     ${generators.toINI {} cfg.settings}
 
@@ -245,6 +246,13 @@ in
         description = lib.mdDoc "Path to a file containing the SMTP password.";
       };
 
+      metricsTokenFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/metrics_token";
+        description = lib.mdDoc "Path to a file containing the metrics authentication token.";
+      };
+
       settings = mkOption {
         default = {};
         description = lib.mdDoc ''
@@ -386,6 +394,14 @@ in
       { assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
+      { assertion = cfg.database.createDatabase && usePostgresql -> cfg.database.user == cfg.database.name;
+        message = ''
+          When creating a database via NixOS, the db user and db name must be equal!
+          If you already have an existing DB+user and this assertion is new, you can safely set
+          `services.gitea.createDatabase` to `false` because removal of `ensureUsers`
+          and `ensureDatabases` doesn't have any effect.
+        '';
+      }
     ];
 
     services.gitea.settings = {
@@ -432,6 +448,10 @@ in
         PASSWD = "#mailerpass#";
       };
 
+      metrics = mkIf (cfg.metricsTokenFile != null) {
+        TOKEN = "#metricstoken#";
+      };
+
       oauth2 = {
         JWT_SECRET = "#oauth2jwtsecret#";
       };
@@ -439,6 +459,8 @@ in
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
+
+      packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
     };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -447,7 +469,7 @@ in
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         { name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };
@@ -556,6 +578,10 @@ in
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
             ''}
+
+            ${lib.optionalString (cfg.metricsTokenFile != null) ''
+              ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
+            ''}
             chmod u-w '${runConfig}'
           }
           (umask 027; gitea_setup)
@@ -583,7 +609,7 @@ in
         Restart = "always";
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
-        RuntimeDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0755";
         # Proc filesystem
         ProcSubset = "pid";
         ProtectProc = "invisible";
@@ -663,6 +689,7 @@ in
          USER = cfg.user;
          HOME = cfg.stateDir;
          GITEA_WORK_DIR = cfg.stateDir;
+         GITEA_CUSTOM = cfg.customDir;
        };
 
        serviceConfig = {

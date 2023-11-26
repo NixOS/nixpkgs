@@ -2,7 +2,9 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , setuptools-scm
+, wheel
 , pytestCheckHook
 , pytest-asyncio
 , pytest-timeout
@@ -14,15 +16,18 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.64.1";
+  version = "4.66.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X09oKgBJUcG0ULx1PHEOkoDFdGzm/+3uJT3by/VM8eQ=";
+    hash = "sha256-2I5lH5242FUaYlVtPP+eMDQnTKXWbpMZfPJJDi3Lacc=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
+    wheel
   ];
 
   nativeCheckInputs = [
@@ -38,8 +43,7 @@ buildPythonPackage rec {
     lib.optional (!stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
 
   pytestFlagsArray = [
-    # pytest-asyncio 0.17.0 compat; https://github.com/tqdm/tqdm/issues/1289
-    "--asyncio-mode=strict"
+    "-W" "ignore::FutureWarning"
   ];
 
   # Remove performance testing.

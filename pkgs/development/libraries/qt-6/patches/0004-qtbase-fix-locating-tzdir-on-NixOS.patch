@@ -1,18 +1,18 @@
-From dd0dfc9cf87966f5d7493a943ec04c665be83cb6 Mon Sep 17 00:00:00 2001
+From b1533ac42718835499ec633ffb3b1bed0d040719 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Fri, 14 Apr 2023 09:35:25 +0800
-Subject: [PATCH 4/6] qtbase: fix locating tzdir on NixOS
+Subject: [PATCH 04/11] qtbase: fix locating tzdir on NixOS
 
 ---
  src/corelib/time/qtimezoneprivate_tz.cpp | 27 +++++++++++++++---------
  1 file changed, 17 insertions(+), 10 deletions(-)
 
 diff --git a/src/corelib/time/qtimezoneprivate_tz.cpp b/src/corelib/time/qtimezoneprivate_tz.cpp
-index 960a0944185..a5186acbd91 100644
+index e702a5d6b43..2ac88c1cd10 100644
 --- a/src/corelib/time/qtimezoneprivate_tz.cpp
 +++ b/src/corelib/time/qtimezoneprivate_tz.cpp
-@@ -51,7 +51,11 @@ typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
- // Parse zone.tab table, assume lists all installed zones, if not will need to read directories
+@@ -56,7 +56,11 @@ static bool isTzFile(const QString &name);
+ // zone1970.tab).
  static QTzTimeZoneHash loadTzTimeZones()
  {
 -    QString path = QStringLiteral("/usr/share/zoneinfo/zone.tab");
@@ -24,7 +24,7 @@ index 960a0944185..a5186acbd91 100644
      if (!QFile::exists(path))
          path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
  
-@@ -730,18 +734,21 @@ QTzTimeZoneCacheEntry QTzTimeZoneCache::findEntry(const QByteArray &ianaId)
+@@ -773,18 +777,21 @@ QTzTimeZoneCacheEntry QTzTimeZoneCache::findEntry(const QByteArray &ianaId)
          if (!tzif.open(QIODevice::ReadOnly))
              return ret;
      } else {
@@ -56,5 +56,5 @@ index 960a0944185..a5186acbd91 100644
          }
      }
 -- 
-2.39.2
+2.42.0
 

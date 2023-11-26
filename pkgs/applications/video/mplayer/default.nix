@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
          (stdenv.hostPlatform.isx86 && !crossBuild)
          "--enable-runtime-cpudetection"
     ++ optional fribidiSupport "--enable-fribidi"
-    ++ optional stdenv.isLinux "--enable-vidix"
+    ++ optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
     ++ optional stdenv.isLinux "--enable-fbdev"
     ++ optionals (crossBuild) [
     "--enable-cross-compile"
@@ -203,6 +203,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }

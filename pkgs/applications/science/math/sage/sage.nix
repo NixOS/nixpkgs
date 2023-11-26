@@ -47,10 +47,11 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = sage-tests;
     quicktest = sage-tests.override { longTests = false; timeLimit = 600; }; # as many tests as possible in ~10m
-    doc = sagedoc;
     lib = sage-with-env.env.lib;
     with-env = sage-with-env;
     kernelspec = jupyter-kernel-definition;
+  } // lib.optionalAttrs withDoc {
+    doc = sagedoc;
   };
 
   meta = with lib; {

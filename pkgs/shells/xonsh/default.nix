@@ -9,16 +9,17 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "xonsh";
   version = "0.14.0";
+  format = "pyproject";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
+    hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
@@ -30,6 +31,11 @@ python3.pkgs.buildPythonApplication rec {
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
 
   disabledTests = [
     # fails on sandbox
@@ -63,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [ glibcLocales git ] ++
-    (with python3.pkgs; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+    (with python3.pkgs; [ pip pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
   propagatedBuildInputs = with python3.pkgs; [ ply prompt-toolkit pygments ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
-, libarchive, db, pcre, libedit, libossp_uuid, libxcrypt,libXpm
+, libarchive, db, pcre2, libedit, libossp_uuid, libxcrypt,libXpm
 , libSM, libXt, freetype, pkg-config, fontconfig
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ gmp readline openssl
-    libarchive libyaml db pcre libedit libossp_uuid libxcrypt
+    libarchive libyaml db pcre2 libedit libossp_uuid libxcrypt
     zlib ]
   ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries

@@ -31,19 +31,20 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2023.6.0.rc1";
-  format = "pyproject";
+  version = "2023.10.0.rc1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
-    repo = pname;
+    repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TEtQ2KnwcylQbprlRtgHv7HIFg7roDWD4TihrQE4icU=";
+    hash = "sha256-1mfTuZDfkD0NjcmSoXN3BLC5o+dWvw+r65ukZTZf8j4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numba>=0.57.0" "numba"
+      --replace "numba>=0.58.0" "numba" \
+      --replace "numpy>=1.22.0,<1.26" "numpy"
   '';
 
   nativeBuildInputs = [

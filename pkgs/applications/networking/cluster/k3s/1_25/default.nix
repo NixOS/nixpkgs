@@ -51,7 +51,7 @@ let
   k3sVersion = "1.25.3+k3s1";     # k3s git tag
   k3sCommit = "f2585c1671b31b4b34bddbb3bf4e7d69662b0821"; # k3s git commit at the above version
   k3sRepoSha256 = "0zwf3iwjcidx14zw36s1hr0q8wmmbfc0rfqwd7fmpjq597h8zkms";
-  k3sVendorSha256 = "sha256-U67tJRGqPFk5AfRe7I50zKGC9HJ2oh+iI/C7qF/76BQ=";
+  k3sVendorHash = "sha256-U67tJRGqPFk5AfRe7I50zKGC9HJ2oh+iI/C7qF/76BQ=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
@@ -116,7 +116,7 @@ let
   k3sCNIPlugins = buildGoModule rec {
     pname = "k3s-cni-plugins";
     version = k3sCNIVersion;
-    vendorSha256 = null;
+    vendorHash = null;
 
     subPackages = [ "." ];
 
@@ -169,7 +169,7 @@ let
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = k3sVendorSha256;
+    vendorHash = k3sVendorHash;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];
@@ -208,7 +208,7 @@ let
       rev = "v${containerdVersion}";
       sha256 = containerdSha256;
     };
-    vendorSha256 = null;
+    vendorHash = null;
     buildInputs = [ btrfs-progs ];
     subPackages = [ "cmd/containerd" "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
@@ -219,7 +219,7 @@ buildGoModule rec {
   version = k3sVersion;
 
   src = k3sRepo;
-  vendorSha256 = k3sVendorSha256;
+  vendorHash = k3sVendorHash;
 
   patches = [
     ./0001-script-download-strip-downloading-just-package-CRD.patch
@@ -281,7 +281,7 @@ buildGoModule rec {
   # Specifically, it has a 'go generate' which runs part of the package. See
   # this comment:
   # https://github.com/NixOS/nixpkgs/pull/158089#discussion_r799965694
-  # So, why do we use buildGoModule at all? For the `vendorSha256` / `go mod download` stuff primarily.
+  # So, why do we use buildGoModule at all? For the `vendorHash` / `go mod download` stuff primarily.
   buildPhase = ''
     patchShebangs ./scripts/package-cli ./scripts/download ./scripts/build-upload
 

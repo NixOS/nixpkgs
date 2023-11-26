@@ -22,15 +22,17 @@
 , pypugjs
 , boto3
 , moto
-, mock
+, markdown
 , lz4
-, setuptoolsTrial
+, setuptools-trial
 , buildbot-worker
 , buildbot-plugins
 , buildbot-pkg
 , parameterized
 , git
 , openssh
+, setuptools
+, pythonRelaxDepsHook
 , glibcLocales
 , nixosTests
 , callPackage
@@ -65,14 +67,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.8.0";
-    format = "setuptools";
+    version = "3.9.2";
+    format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Z4BmC6Ed+7y4rJologiLXhkIvucXz65KEBxX3LFqExY=";
+      hash = "sha256-7QhIMUpzmxbh8qjz0hgqzibLkWADhTV523neo1wpGSA=";
     };
 
     propagatedBuildInputs = [
@@ -88,6 +90,7 @@ let
       autobahn
       pyjwt
       pyyaml
+      setuptools
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
@@ -98,9 +101,9 @@ let
       pypugjs
       boto3
       moto
-      mock
+      markdown
       lz4
-      setuptoolsTrial
+      setuptools-trial
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
@@ -108,7 +111,10 @@ let
       git
       openssh
       glibcLocales
+      pythonRelaxDepsHook
     ];
+
+    pythonRelaxDeps = [ "Twisted" ];
 
     patches = [
       # This patch disables the test that tries to read /etc/os-release which
@@ -119,6 +125,9 @@ let
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
+
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;

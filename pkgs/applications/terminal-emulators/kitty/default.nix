@@ -1,12 +1,13 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
-, libxkbcommon, libXi, libXext, wayland-protocols, wayland
+, libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
 , lcms2
 , librsync
 , openssl
 , installShellFiles
 , dbus
+, sudo
 , Libsystem
 , Cocoa
 , Kernel
@@ -29,21 +30,21 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.29.0";
+  version = "0.31.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FTitj43RFCNvSWInXHALyIljfcBBkaq/XI1ZA1k0glk=";
+    hash = "sha256-VWWuC4T0pyTgqPNm0gNL1j3FShU5b8S157C1dKLon1g=";
   };
 
   goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-jk2EcYVuhV/UQfHAIfpnn8ZIZnwjA/o8YRXmpoC85Vc=";
-  }).go-modules;
+    vendorHash = "sha256-OyZAWefSIiLQO0icxMIHWH3BKgNas8HIxLcse/qWKcU=";
+  }).goModules;
 
   buildInputs = [
     harfbuzz
@@ -51,6 +52,7 @@ buildPythonApplication rec {
     lcms2
     librsync
     openssl.dev
+    xxHash
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     Kernel
@@ -102,9 +104,6 @@ buildPythonApplication rec {
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    # Causes build failure due to warning
-    "strictoverflow"
   ];
 
   CGO_ENABLED = 0;
@@ -130,17 +129,17 @@ buildPythonApplication rec {
     runHook preBuild
     ${ lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.isDarwin then ''
-      ${python.pythonForBuild.interpreter} setup.py build ${darwinOptions}
+      ${python.pythonOnBuildForHost.interpreter} setup.py build ${darwinOptions}
       make docs
-      ${python.pythonForBuild.interpreter} setup.py kitty.app ${darwinOptions}
+      ${python.pythonOnBuildForHost.interpreter} setup.py kitty.app ${darwinOptions}
     '' else ''
-      ${python.pythonForBuild.interpreter} setup.py linux-package \
+      ${python.pythonOnBuildForHost.interpreter} setup.py linux-package \
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
       --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
-      ${python.pythonForBuild.interpreter} setup.py build-launcher
+      ${python.pythonOnBuildForHost.interpreter} setup.py build-launcher
     ''}
     runHook postBuild
   '';
@@ -152,13 +151,17 @@ buildPythonApplication rec {
     bashInteractive
     zsh
     fish
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # integration tests need sudo
+    sudo
   ];
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
-      --replace test_path_mapping_receive dont_test_path_mapping_receive
+      --replace test_path_mapping_receive dont_test_path_mapping_receive \
+      --replace test_transfer_send dont_test_transfer_send
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_fish_integration dont_test_fish_integration
     substituteInPlace kitty_tests/shell_integration.py \
@@ -190,8 +193,8 @@ buildPythonApplication rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    mkdir -p $kitten/bin
+    mkdir -p "$out"
+    mkdir -p "$kitten/bin"
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
@@ -202,8 +205,8 @@ buildPythonApplication rec {
 
     installManPage 'docs/_build/man/kitty.1'
     '' else ''
-    cp -r linux-package/{bin,share,lib} $out
-    cp linux-package/bin/kitten $kitten/bin/kitten
+    cp -r linux-package/{bin,share,lib} "$out"
+    cp linux-package/bin/kitten "$kitten/bin/kitten"
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
@@ -220,7 +223,7 @@ buildPythonApplication rec {
     mkdir -p $terminfo/share
     mv "$terminfo_src" $terminfo/share/terminfo
 
-    mkdir -p $out/nix-support
+    mkdir -p "$out/nix-support"
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     cp -r 'shell-integration' "$shell_integration"
@@ -229,7 +232,6 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    go-modules = goModules; # allow for updateScript to handle vendorHash
     tests.test = nixosTests.terminal-emulators.kitty;
     updateScript = nix-update-script {};
   };
@@ -240,6 +242,7 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
+    mainProgram = "kitty";
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
   };
 }

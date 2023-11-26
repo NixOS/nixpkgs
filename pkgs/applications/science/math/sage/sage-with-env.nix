@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, makeWrapper
 , sage-env
 , blas
 , lapack
@@ -72,7 +71,7 @@ let
       []
     );
 
-  allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs ++ [ makeWrapper ]);
+  allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs);
   transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs ));
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)

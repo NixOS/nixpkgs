@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-ssh";
-  version = "2.22.1";
+  version = "2.22.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WHFfq0Cw17AWgmUlkZUOO6t6XcPYjLHUz4s0wcVYklc=";
+    hash = "sha256-eJwNCZvdBqYKEbX4On3pGm2bzCvH9G7rdsgeN7XPJB0=";
   };
 
   # Prevent circular dependency

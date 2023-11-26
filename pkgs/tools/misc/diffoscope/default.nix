@@ -18,7 +18,6 @@
 , dtc
 , e2fsprogs
 , enableBloat ? true
-, enableUnfree ? false
 , enjarify
 , fetchurl
 , file
@@ -79,11 +78,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "243";
+  version = "252";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-lqI9MOZJxgHZ87kax343t6Wylzv1NWcQZ1cMWgmpnRo=";
+    hash = "sha256-NmYv5htZT2v04vVksIWGuaPI1rXfNmrVSmErT/faBbQ=";
   };
 
   outputs = [
@@ -174,6 +173,7 @@ python3.pkgs.buildPythonApplication rec {
       abootimg
       apksigcopier
       apksigner
+      apktool
       cbfstool
       colord
       enjarify
@@ -214,8 +214,6 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
     ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-    # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
-    ++ lib.optionals enableUnfree [ apktool ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [
@@ -246,8 +244,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_symlink_root"
   ];
 
+  disabledTestPaths = [
+    # fails due to https://github.com/NixOS/nixpkgs/issues/256896
+    # should be removed once that issue is resolved in coreboot or diffoscope
+    "tests/comparators/test_cbfs.py"
+  ]
   # Flaky tests on Darwin
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"

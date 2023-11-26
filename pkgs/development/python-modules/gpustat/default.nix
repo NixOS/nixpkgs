@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gpustat";
-  version = "1.1";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yPwQVASqwRiE9w7S+gbP0hDTzTicyuSpvDhXnHJGDO4=";
+    hash = "sha256-wY0+1VGPwWMAxC1pTevHCuuzvlXK6R8dtk1jtfqK+dg=";
   };
 
   pythonRelaxDeps = [

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stratovirt";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchgit {
     url = "https://gitee.com/openeuler/stratovirt.git";
     rev = "v${version}";
-    sha256 = "sha256-K99CmaBrJu30/12FxnsNsDKsTyX4f2uQSO7cwHsPuDw=";
+    sha256 = "sha256-f5710f7Lz7ul1DYrC0CAfDR+7e1NrE9ESPdB8nlVUKw=";
   };
   patches = [ ./micro_vm-allow-SYS_clock_gettime.patch ];
 
-  cargoSha256 = "sha256-SFIOGGRzGkVWHIXkviVWuhDN29pa0uD3GqKh+G421xI=";
+  cargoSha256 = "sha256-prs7zkPAKQ99gjW7gy+4+CgEgGhaTTCLPTbLk/ZHdts=";
 
   nativeBuildInputs = [
     pkg-config

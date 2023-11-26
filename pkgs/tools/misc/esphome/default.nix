@@ -1,6 +1,6 @@
 { lib
 , callPackage
-, python3
+, python3Packages
 , fetchFromGitHub
 , platformio
 , esptool_3
@@ -8,7 +8,7 @@
 }:
 
 let
-  python = python3.override {
+  python = python3Packages.python.override {
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix {};
     };
@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.6.5";
+  version = "2023.11.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3CuIAzw4AxvpUw69WEq99XIv0D+TqwejqEGPvG2Zdpw=";
+    hash = "sha256-KIDqIf9aJP5IS+qE0Gy5j3F2DGz/WGbN4Wf9SGzgnzA=";
   };
 
   postPatch = ''
@@ -45,6 +45,7 @@ python.pkgs.buildPythonApplication rec {
   # - validate_pillow_installed
   propagatedBuildInputs = with python.pkgs; [
     aioesphomeapi
+    argcomplete
     click
     colorama
     cryptography
@@ -56,6 +57,7 @@ python.pkgs.buildPythonApplication rec {
     protobuf
     pyparsing
     pyserial
+    python-magic
     pyyaml
     requests
     tornado
@@ -72,7 +74,7 @@ python.pkgs.buildPythonApplication rec {
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     hypothesis
     mock
     pytest-asyncio

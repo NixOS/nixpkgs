@@ -198,6 +198,39 @@ let
         fi
       ''}
 
+      ${lib.optionalString cfg.tpm.enable ''
+        NIX_SWTPM_DIR=$(readlink -f "''${NIX_SWTPM_DIR:-${config.system.name}-swtpm}")
+        mkdir -p "$NIX_SWTPM_DIR"
+        ${lib.getExe cfg.tpm.package} \
+          socket \
+          --tpmstate dir="$NIX_SWTPM_DIR" \
+          --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+          --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+          --tpm2 \
+          --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+        # Enable `fdflags` builtin in Bash
+        # We will need it to perform surgical modification of the file descriptor
+        # passed in the coprocess to remove `FD_CLOEXEC`, i.e. close the file descriptor
+        # on exec.
+        # If let alone, it will trigger the coprocess to read EOF when QEMU is `exec`
+        # at the end of this script. To work around that, we will just clear
+        # the `FD_CLOEXEC` bits as a first step.
+        enable -f ${hostPkgs.bash}/lib/bash/fdflags fdflags
+        # leave a dangling subprocess because the swtpm ctrl socket has
+        # "terminate" when the last connection disconnects, it stops swtpm.
+        # When qemu stops, or if the main shell process ends, the coproc will
+        # get signaled by virtue of the pipe between main and coproc ending.
+        # Which in turns triggers a socat connect-disconnect to swtpm which
+        # will stop it.
+        coproc waitingswtpm {
+          read || :
+          echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        }
+        # Clear `FD_CLOEXEC` on the coprocess' file descriptor stdin.
+        fdflags -s-cloexec ''${waitingswtpm[1]}
+      ''}
+
       cd "$TMPDIR"
 
       ${lib.optionalString (cfg.emptyDiskImages != []) "idx=0"}
@@ -267,6 +300,7 @@ let
   };
 
   storeImage = import ../../lib/make-disk-image.nix {
+    name = "nix-store-image";
     inherit pkgs config lib;
     additionalPaths = [ regInfo ];
     format = "qcow2";
@@ -647,7 +681,7 @@ in
         import pkgs.path { system = "x86_64-darwin"; }
       '';
       description = lib.mdDoc ''
-        pkgs set to use for the host-specific packages of the vm runner.
+        Package set to use for the host-specific packages of the VM runner.
         Changing this to e.g. a Darwin package set allows running NixOS VMs on Darwin.
       '';
     };
@@ -656,8 +690,8 @@ in
       package =
         mkOption {
           type = types.package;
-          default = hostPkgs.qemu_kvm;
-          defaultText = literalExpression "config.virtualisation.host.pkgs.qemu_kvm";
+          default = if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then hostPkgs.qemu_kvm else hostPkgs.qemu;
+          defaultText = literalExpression "if hostPkgs.stdenv.hostPlatform.qemuArch == pkgs.stdenv.hostPlatform.qemuArch then config.virtualisation.host.pkgs.qemu_kvm else config.virtualisation.host.pkgs.qemu";
           example = literalExpression "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
         };
@@ -862,6 +896,32 @@ in
       };
     };
 
+    virtualisation.tpm = {
+      enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
+
+      package = mkPackageOptionMD cfg.host.pkgs "swtpm" { };
+
+      deviceModel = mkOption {
+        type = types.str;
+        default = ({
+          "i686-linux" = "tpm-tis";
+          "x86_64-linux" = "tpm-tis";
+          "ppc64-linux" = "tpm-spapr";
+          "armv7-linux" = "tpm-tis-device";
+          "aarch64-linux" = "tpm-tis-device";
+        }.${pkgs.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU"));
+        defaultText = ''
+          Based on the guest platform Linux system:
+
+          - `tpm-tis` for (i686, x86_64)
+          - `tpm-spapr` for ppc64
+          - `tpm-tis-device` for (armv7, aarch64)
+        '';
+        example = "tpm-tis-device";
+        description = lib.mdDoc "QEMU device model for the TPM, uses the appropriate default based on th guest platform system and the package passed.";
+      };
+    };
+
     virtualisation.useDefaultFilesystems =
       mkOption {
         type = types.bool;
@@ -937,7 +997,7 @@ in
               virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
             '';
           }
-          { assertion = cfg.directBoot.initrd != options.virtualisation.directBoot.initrd.default -> cfg.directBoot.enable;
+          { assertion = cfg.directBoot.enable || cfg.directBoot.initrd == options.virtualisation.directBoot.initrd.default;
             message =
               ''
                 You changed the default of `virtualisation.directBoot.initrd` but you are not
@@ -1027,7 +1087,8 @@ in
 
     boot.initrd.availableKernelModules =
       optional cfg.writableStore "overlay"
-      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
+      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      ++ optional (cfg.tpm.enable) "tpm_tis";
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -1098,6 +1159,11 @@ in
       (mkIf (!cfg.graphics) [
         "-nographic"
       ])
+      (mkIf (cfg.tpm.enable) [
+        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
+        "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
+        "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
+      ])
     ];
 
     virtualisation.qemu.drives = mkMerge [
@@ -1121,11 +1187,12 @@ in
       }) cfg.emptyDiskImages)
     ];
 
-    # Use mkVMOverride to enable building test VMs (e.g. via `nixos-rebuild
-    # build-vm`) of a system configuration, where the regular value for the
-    # `fileSystems' attribute should be disregarded (since those filesystems
-    # don't necessarily exist in the VM).
-    fileSystems = mkVMOverride cfg.fileSystems;
+    # By default, use mkVMOverride to enable building test VMs (e.g. via
+    # `nixos-rebuild build-vm`) of a system configuration, where the regular
+    # value for the `fileSystems' attribute should be disregarded (since those
+    # filesystems don't necessarily exist in the VM). You can disable this
+    # override by setting `virtualisation.fileSystems = lib.mkForce { };`.
+    fileSystems = lib.mkIf (cfg.fileSystems != { }) (mkVMOverride cfg.fileSystems);
 
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:

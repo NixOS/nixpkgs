@@ -78,6 +78,7 @@ let
 
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
+    export NIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
     export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'

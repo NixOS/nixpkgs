@@ -213,7 +213,6 @@ rec {
   bluefield2 = {
     gcc = {
       arch = "armv8-a+fp+simd+crc+crypto";
-      cpu = "cortex-a72";
     };
   };
 

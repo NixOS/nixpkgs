@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "upx";
-  version = "4.0.2";
+  version = "4.2.0";
   src = fetchFromGitHub {
     owner = "upx";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-5jqEdMlHmsD88kT/EGieL7DktppVdfWyJWGRNRKbRc4=";
+    sha256 = "sha256-PRfIJSjmeXjbslqWnKrHUPdOJfZU08nr4wXoAnP9qm0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "The Ultimate Packer for eXecutables";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    mainProgram = "upx";
   };
 }

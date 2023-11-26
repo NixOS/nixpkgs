@@ -104,6 +104,7 @@ in {
       '';
 
     services.phpfpm.pools.engelsystem = {
+      phpPackage = pkgs.php81;
       user = "engelsystem";
       settings = {
         "listen.owner" = config.services.nginx.user;

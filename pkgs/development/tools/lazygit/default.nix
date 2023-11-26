@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, lazygit, testers }:
 
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.38.2";
+  version = "0.40.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HxOM2M2EoeM0IHCrFQqLdP9Rai6DbC1uRG0CiQyqRdE=";
+    hash = "sha256-xj5WKAduaJWA3NhWuMsF5EXF91+NTGAXkbdhpeFqLxE=";
   };
 
   vendorHash = null;
@@ -16,11 +16,16 @@ buildGoModule rec {
 
   ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
 
+  passthru.tests.version = testers.testVersion {
+    package = lazygit;
+  };
+
   meta = with lib; {
     description = "Simple terminal UI for git commands";
     homepage = "https://github.com/jesseduffield/lazygit";
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ equirosa Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne equirosa paveloom ];
+    mainProgram = "lazygit";
   };
 }

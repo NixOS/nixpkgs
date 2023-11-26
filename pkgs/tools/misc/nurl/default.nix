@@ -7,24 +7,24 @@
 , darwin
 , gitMinimal
 , mercurial
-, nixVersions
+, nix
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nurl";
-  version = "0.3.12";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
     rev = "v${version}";
-    hash = "sha256-L9lYFPUk8B34vEtHZZ/9v1cEzQXoNo3Rc0e9/lwMrU0=";
+    hash = "sha256-rVqF+16esE27G7GS55RT91tD4x/GAzfVlIR0AgSknz0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "nix-compat-0.1.0" = "sha256-8QP9qEUtCvSvv1LcMPg04RrSagpINZeh4o2CBMzUjn4=";
+      "nix-compat-0.1.0" = "sha256-xHwBlmTggcZBFSh4EOY888AbmGQxhwvheJSStgpAj48=";
     };
   };
 
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/nurl \
-      --prefix PATH : ${lib.makeBinPath [ gitMinimal mercurial nixVersions.unstable ]}
+      --prefix PATH : ${lib.makeBinPath [ gitMinimal mercurial nix ]}
     installManPage artifacts/nurl.1
     installShellCompletion artifacts/nurl.{bash,fish} --zsh artifacts/_nurl
   '';
@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "nurl";
   };
 }

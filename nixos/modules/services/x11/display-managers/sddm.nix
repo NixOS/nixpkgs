@@ -33,6 +33,8 @@ let
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
       DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+
+      DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     };
 
     Theme = {
@@ -62,6 +64,7 @@ let
     Wayland = {
       EnableHiDPI = cfg.enableHidpi;
       SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
     };
   } // lib.optionalAttrs dmcfg.autoLogin.enable {
     Autologin = {
@@ -184,6 +187,32 @@ in
           '';
         };
       };
+
+      # Experimental Wayland support
+      wayland = {
+        enable = mkEnableOption "experimental Wayland support";
+
+        compositorCommand = mkOption {
+          type = types.str;
+          internal = true;
+
+          # This is basically the upstream default, but with Weston referenced by full path
+          # and the configuration generated from NixOS options.
+          default = let westonIni = (pkgs.formats.ini {}).generate "weston.ini" {
+              libinput = {
+                enable-tap = xcfg.libinput.mouse.tapping;
+                left-handed = xcfg.libinput.mouse.leftHanded;
+              };
+              keyboard = {
+                keymap_model = xcfg.xkb.model;
+                keymap_layout = xcfg.xkb.layout;
+                keymap_variant = xcfg.xkb.variant;
+                keymap_options = xcfg.xkb.options;
+              };
+            }; in "${pkgs.weston}/bin/weston --shell=fullscreen-shell.so -c ${westonIni}";
+          description = lib.mdDoc "Command used to start the selected compositor";
+        };
+      };
     };
   };
 
@@ -267,6 +296,7 @@ in
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
+    systemd.tmpfiles.packages = [ sddm ];
 
     # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
     systemd.services.display-manager.after = [

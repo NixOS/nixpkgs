@@ -14,25 +14,23 @@
 , sphinx-togglebutton
 , typing-extensions
 , ipykernel
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "myst-nb";
-  version = "0.17.2";
+  version = "1.0.0";
+  pyproject = true;
 
-  format = "flit";
-
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-D2E4ZRX6sHxzZGrcqX//L2n0HpDTE6JgIXxbvkGdhYs=";
+    inherit version;
+    pname = "myst_nb";
+    hash = "sha256-kHfkKhxrRB6lUHhQb4NVXdpdbIFu9JMIQdcdI54+DF4=";
   };
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -49,11 +47,10 @@ buildPythonPackage rec {
     ipykernel
   ];
 
-  pythonRelaxDeps = [
-    "myst-parser"
+  pythonImportsCheck = [
+    "myst_nb"
+    "myst_nb.sphinx_ext"
   ];
-
-  pythonImportsCheck = [ "myst_nb" ];
 
   meta = with lib; {
     description = "A Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";

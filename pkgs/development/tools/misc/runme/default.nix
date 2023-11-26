@@ -1,28 +1,35 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , installShellFiles
+, nodejs
+, python3
 , runtimeShell
 , stdenv
 , testers
 , runme
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "runme";
-  version = "1.4.1";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-VA5YgPq/zr3yN59VyrFoIlr/Utvq1P7wyPdsXpyFdxQ=";
+    hash = "sha256-ZM8gdZ26XAlC+j6U0+oQJIb+5gOGFUAYHPP82kA1ogU=";
   };
 
-  vendorHash = "sha256-BJhda5mE5f4kvi8CLjgMJYjdUS3vsUSwmHhTW/AVKCI=";
+  vendorHash = "sha256-nKH4hT0J9QfrDdvovu/XNxU4PtZYKkfqEBiCTNLWyRA=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  nativeCheckInputs = [
+    nodejs
+    python3
   ];
 
   subPackages = [

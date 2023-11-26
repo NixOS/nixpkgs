@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "pydata-sphinx-theme";
-  version = "0.13.3";
+  version = "0.14.3";
 
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version format;
     dist = "py3";
     python = "py3";
     pname = "pydata_sphinx_theme";
-    hash = "sha256-v0HKbBxiFukp4og05AS/yQ4IC1GRW751Y7Xm/acDVPA=";
+    hash = "sha256-t+QM11ogRJrf4tdSW+N5uf6S9tMeUjPkSfo03c1DmNk=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bootstrap-based Sphinx theme from the PyData community";
     homepage = "https://github.com/pydata/pydata-sphinx-theme";
+    changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
   };

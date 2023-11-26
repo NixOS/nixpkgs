@@ -239,7 +239,7 @@ in
       enable = mkEnableOption (lib.mdDoc "I2Pd daemon") // {
         description = lib.mdDoc ''
           Enables I2Pd as a running service upon activation.
-          Please read http://i2pd.readthedocs.io/en/latest/ for further
+          Please read <https://i2pd.readthedocs.io/en/latest/> for further
           configuration help.
         '';
       };
@@ -265,7 +265,7 @@ in
         '';
       };
 
-      logCLFTime = mkEnableOption (lib.mdDoc "Full CLF-formatted date and time to log");
+      logCLFTime = mkEnableOption (lib.mdDoc "full CLF-formatted date and time to log");
 
       address = mkOption {
         type = with types; nullOr str;
@@ -456,7 +456,7 @@ in
         '';
       };
 
-      trust.enable = mkEnableOption (lib.mdDoc "Explicit trust options");
+      trust.enable = mkEnableOption (lib.mdDoc "explicit trust options");
 
       trust.family = mkOption {
         type = with types; nullOr str;
@@ -474,7 +474,7 @@ in
         '';
       };
 
-      trust.hidden = mkEnableOption (lib.mdDoc "Router concealment");
+      trust.hidden = mkEnableOption (lib.mdDoc "router concealment");
 
       websocket = mkEndpointOpt "websockets" "127.0.0.1" 7666;
 
@@ -552,7 +552,7 @@ in
 
       proto.http = (mkEndpointOpt "http" "127.0.0.1" 7070) // {
 
-        auth = mkEnableOption (lib.mdDoc "Webconsole authentication");
+        auth = mkEnableOption (lib.mdDoc "webconsole authentication");
 
         user = mkOption {
           type = types.str;

@@ -68,6 +68,8 @@ rec {
   # Only use if you know what youre doing
   raw = { inherit files byId byName; };
 
+  tests = callPackage ./tests.nix {};
+
   addPlugins = ide: unprocessedPlugins:
     let
 
@@ -98,14 +100,6 @@ rec {
         let
           pluginCmdsLines = map (plugin: "ln -s ${plugin} \"$out\"/${meta.mainProgram}/plugins/${baseNameOf plugin}") plugins;
           pluginCmds = builtins.concatStringsSep "\n" pluginCmdsLines;
-          extraBuildPhase = rec {
-            clion = ''
-              sed "s|${ide}|$out|" -i $out/bin/.clion-wrapped
-            '';
-            goland = ''
-              sed "s|${ide}|$out|" -i $out/bin/.goland-wrapped
-            '';
-          };
         in
         ''
           cp -r ${ide} $out
@@ -115,8 +109,10 @@ rec {
           do
             ln -s "$plugin" -t $out/${meta.mainProgram}/plugins/
           done
-          sed "s|${ide.outPath}|$out|" -i $out/bin/${meta.mainProgram}
+          sed "s|${ide.outPath}|$out|" \
+            -i $(realpath $out/bin/${meta.mainProgram}) \
+            -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
           autoPatchelf $out/${meta.mainProgram}/bin
-        '' + (extraBuildPhase."${ide.meta.mainProgram}" or "");
+        '';
     };
 }

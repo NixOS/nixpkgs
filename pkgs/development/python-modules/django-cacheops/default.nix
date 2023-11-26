@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.0.1";
+  version = "7.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ed3qh90DlWiXikCD2JyJ37hm6lWnpI+2haaPwZiotlA=";
+    hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,8 @@ buildPythonPackage rec {
     six
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
@@ -55,10 +57,15 @@ buildPythonPackage rec {
 
   preCheck = ''
     redis-server &
+    REDIS_PID=$!
     while ! redis-cli --scan ; do
       echo waiting for redis to be ready
       sleep 1
     done
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
   '';
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
@@ -69,7 +76,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
-    # Times out for unknown reasons
-    broken = stdenv.isDarwin;
   };
 }

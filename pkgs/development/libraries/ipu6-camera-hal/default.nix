@@ -38,6 +38,7 @@ stdenv.mkDerivation {
   ];
 
   NIX_CFLAGS_COMPILE = [
+    "-Wno-error"
     "-I${lib.getDev ipu6-camera-bin}/include/ia_imaging"
     "-I${lib.getDev ipu6-camera-bin}/include/ia_camera"
   ];

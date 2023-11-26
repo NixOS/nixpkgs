@@ -11,8 +11,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional stdenv.isDarwin darwin.cctools;
 
-  configureFlags = lib.optionals disablePosixThreads
-    [ "--disable-posix-threads" ];
+  configureFlags = lib.optionals disablePosixThreads [ "--disable-posix-threads" ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # AC_FUNC_MALLOC is broken on cross builds.
+      "ac_cv_func_malloc_0_nonnull=yes"
+      "ac_cv_func_realloc_0_nonnull=yes"
+    ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
+  };
 
   meta = {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";

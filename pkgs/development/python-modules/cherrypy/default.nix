@@ -3,7 +3,7 @@
 , buildPythonPackage
 , cheroot
 , fetchPypi
-, jaraco_collections
+, jaraco-collections
 , more-itertools
 , objgraph
 , path
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   version = "18.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "CherryPy";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     portend
     more-itertools
     zc_lockfile
-    jaraco_collections
+    jaraco-collections
   ];
 
   nativeCheckInputs = [
@@ -86,6 +86,20 @@ buildPythonPackage rec {
     "test_basic_request"
     "test_3_Redirect"
     "test_4_File_deletion"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    "testErrorHandling"
+    "testHookErrors"
+    "test_HTTP10_KeepAlive"
+    "test_No_Message_Body"
+    "test_HTTP11_Timeout"
+    "testGzip"
+    "test_malformed_header"
+    "test_no_content_length"
+    "test_post_filename_with_special_characters"
+    "test_post_multipart"
+    "test_iterator"
+    "test_1_Ram_Concurrency"
+    "test_2_File_Concurrency"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];

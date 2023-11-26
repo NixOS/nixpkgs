@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs nss
 
-    for f in nss/coreconf/config.gypi nss/build.sh nss/coreconf/config.gypi; do
+    for f in nss/coreconf/config.gypi nss/build.sh; do
       substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
     done
 
@@ -182,9 +182,9 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.sh;
 
   passthru.tests = lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
-    inherit (nixosTests) firefox-esr-102;
+    inherit (nixosTests) firefox-esr-115;
   } // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
-    inherit (nixosTests) firefox firefox-esr-115;
+    inherit (nixosTests) firefox;
   };
 
   meta = with lib; {

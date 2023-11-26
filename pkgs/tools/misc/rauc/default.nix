@@ -1,7 +1,6 @@
 { curl
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , glib
 , json-glib
 , lib
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
-  version = "1.10";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WiN2lTS6LCVCeVyX0/2rSDLL2tKsAhWSMa95fK05UOg=";
+    sha256 = "sha256-KxU8/ExRsyqhV3np1EqAzpFm0Uy4fY/oi9lS2GBYHZE=";
   };
 
   passthru = {

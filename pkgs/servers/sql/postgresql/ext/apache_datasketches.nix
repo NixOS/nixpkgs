@@ -1,32 +1,38 @@
 { stdenv, lib, fetchFromGitHub, postgresql, boost182, nixosTests }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "apache_datasketches";
+let
   version = "1.6.0";
 
-  srcs = [
-    ( fetchFromGitHub {
-        name   = "datasketches-postgresql";
-        owner  = "apache";
-        repo   = "datasketches-postgresql";
-        rev    = "refs/tags/${finalAttrs.version}";
-        hash   = "sha256-sz94fIe7nyWhjiw8FAm6ZzVpB0sAK5YxUrtbaZt/guA=";
-    })
-    ( fetchFromGitHub {
-        name   = "datasketches-cpp";
-        owner  = "apache";
-        repo   = "datasketches-cpp";
-        rev    = "refs/tags/4.1.0";
-        hash   = "sha256-vPoFzRxOXlEAiiHH9M5S6255ahzaKsGNYS0cdHwrRYw=";
-    })
-  ];
-  sourceRoot = "datasketches-postgresql";
+  main_src = fetchFromGitHub {
+    name   = "datasketches-postgresql";
+    owner  = "apache";
+    repo   = "datasketches-postgresql";
+    rev    = "refs/tags/${version}";
+    hash   = "sha256-sz94fIe7nyWhjiw8FAm6ZzVpB0sAK5YxUrtbaZt/guA=";
+  };
+
+  cpp_src = fetchFromGitHub {
+    name   = "datasketches-cpp";
+    owner  = "apache";
+    repo   = "datasketches-cpp";
+    rev    = "refs/tags/4.1.0";
+    hash   = "sha256-vPoFzRxOXlEAiiHH9M5S6255ahzaKsGNYS0cdHwrRYw=";
+  };
+in
+
+stdenv.mkDerivation {
+  pname = "apache_datasketches";
+  inherit version;
+
+  srcs = [ main_src cpp_src ];
+
+  sourceRoot = main_src.name;
 
   buildInputs = [ postgresql boost182 ];
 
   patchPhase = ''
     runHook prePatch
-    cp -r ../datasketches-cpp .
+    cp -r ../${cpp_src.name} .
     runHook postPatch
   '';
 
@@ -43,10 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
       sql/datasketches_aod_sketch.sql \
       sql/datasketches_req_float_sketch.sql \
       sql/datasketches_quantiles_double_sketch.sql \
-      > sql/datasketches--${finalAttrs.version}.sql
+      > sql/datasketches--${version}.sql
     install -D -m 644 ./datasketches.control -t $out/share/postgresql/extension
     install -D -m 644 \
-      ./sql/datasketches--${finalAttrs.version}.sql \
+      ./sql/datasketches--${version}.sql \
       ./sql/datasketches--1.3.0--1.4.0.sql \
       ./sql/datasketches--1.4.0--1.5.0.sql \
       ./sql/datasketches--1.5.0--1.6.0.sql \
@@ -68,4 +74,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mmusnjak ];
   };
-})
+}

@@ -15,7 +15,7 @@ mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
 
-  sourceRoot = "source/MiniZincIDE";
+  sourceRoot = "${src.name}/MiniZincIDE";
 
   dontWrapQtApps = true;
 

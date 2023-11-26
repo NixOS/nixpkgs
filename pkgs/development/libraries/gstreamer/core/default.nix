@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.22.4";
+  version = "1.22.6";
 
   outputs = [
     "bin"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-EcsEmLwWuT2LmdIvdfgpuNCr/YJUhAshIGGNtVMtxlU=";
+    hash = "sha256-9QDmz93/VZCPk3cR/CaghA3iih6exJYhwLbxrb2PgY4=";
   };
 
   depsBuildBuild = [
@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
-    gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind

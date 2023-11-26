@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    sha256 = "sha256-BSJu3jB7b5G2ThXBUHUNnBGl55EXe3nIzdBdgfOWDSM=";
+    hash = "sha256-3qLmo9Ibl44v6Jj5Ix17ixwqfPt3ITTXUqBETF5pzE4=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Denable-framework=off"
-    # set CMAKE_INSTALL_NAME_DIR to correct value on darwin
-    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   meta = with lib; {

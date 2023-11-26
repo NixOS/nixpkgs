@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Account abstraction library for web3.py";
     homepage = "https://github.com/ethereum/eth-account";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

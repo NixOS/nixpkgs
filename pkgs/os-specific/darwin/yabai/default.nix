@@ -3,7 +3,6 @@
 , stdenvNoCC
 , fetchFromGitHub
 , fetchzip
-, writeShellScript
 , installShellFiles
 , testers
 , yabai
@@ -18,7 +17,7 @@
 
 let
   pname = "yabai";
-  version = "5.0.6";
+  version = "6.0.1";
 
   test-version = testers.testVersion {
     package = yabai;
@@ -37,10 +36,12 @@ let
     changelog = "https://github.com/koekeishiya/yabai/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.darwin;
+    mainProgram = "yabai";
     maintainers = with maintainers; [
       cmacrae
       shardy
       ivar
+      khaneliman
     ];
   };
 in
@@ -52,7 +53,7 @@ in
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
-      sha256 = "sha256-wpm9VnR4yPk6Ybo/V2DMLgRcSzDl3dWGSKDCjYfz+xQ=";
+      hash = "sha256-CXkGVoJcGSkooxe7eIhwaM6FkOI45NVw5jdLJAzgFBM=";
     };
 
     nativeBuildInputs = [
@@ -88,7 +89,7 @@ in
       owner = "koekeishiya";
       repo = "yabai";
       rev = "v${version}";
-      sha256 = "sha256-1/h8f1FQNHn5eVprPVd0can8XHjNyF7j4H3LSN0K8rI=";
+      hash = "sha256-u+MkGd/rkT1RVkzC2IcAcFM9eClFdj3WBFnftUVwkwc=";
     };
 
     nativeBuildInputs = [

@@ -18,9 +18,9 @@ index def65fe..f4f8efb 100644
 @@ -1,4 +1,4 @@
 -#include <malloc.h>
 +#include <stdlib.h>
+ #include <string.h>
  #include "config.h"
  #include "aalib.h"
- #include "aaint.h"
 diff --git a/src/aalib.c b/src/aalib.c
 index 11fecc8..e3063b4 100644
 --- a/src/aalib.c
@@ -40,9 +40,9 @@ index 0380828..bb55fe3 100644
 @@ -1,4 +1,4 @@
 -#include <malloc.h>
 +#include <stdlib.h>
+ #include <string.h>
  #include "config.h"
  #include "aalib.h"
- #include "aaint.h"
 diff --git a/src/aarec.c b/src/aarec.c
 index 70f4ebc..ee43e8a 100644
 --- a/src/aarec.c
@@ -61,9 +61,9 @@ index 54abec0..765155e 100644
 @@ -1,4 +1,4 @@
 -#include <malloc.h>
 +#include <stdlib.h>
+ #include <string.h>
  #include "config.h"
  #include "aalib.h"
- #include "aaint.h"
 diff --git a/src/aax.c b/src/aax.c
 index adcbd82..36e3294 100644
 --- a/src/aax.c

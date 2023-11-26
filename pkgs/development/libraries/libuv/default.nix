@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoconf
 , automake
 , libtool
@@ -32,6 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-Lrsyh4qd3OkTw1cSPfahzfSGNt6+pRN1X21iiv1SsFo=";
   };
+
+  patches = [
+    # Disable io_uring close on selected kernels. Remove on next release
+    # https://github.com/libuv/libuv/pull/4141
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/c811169f91b2101f7302e96de3d2dc366ade3a25.patch";
+      hash = "sha256-7vk6XGXwJcwYUQPqIJ3JPd/fPIGrjE5WRDSJCMQfKeU=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -93,7 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/NixOS/nixpkgs/issues/219466
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  doCheck = true;
+  doCheck =
+    # routinely hangs on powerpc64le
+    !stdenv.hostPlatform.isPower64;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -113,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ marsam ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };

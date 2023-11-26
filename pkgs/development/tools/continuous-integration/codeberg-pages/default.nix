@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "sha256-mL2Xs7eyldoZK4zrX6WFlFtwdLN0iVyl1Qh8X6b2u9c=";
   };
 
-  vendorSha256 = "sha256-R/LuZkA2xHmu7SO3BVyK1C6n9U+pYn50kNkyLltn2ng=";
+  vendorHash = "sha256-R/LuZkA2xHmu7SO3BVyK1C6n9U+pYn50kNkyLltn2ng=";
 
   patches = [ ./disable_httptest.patch ];
 

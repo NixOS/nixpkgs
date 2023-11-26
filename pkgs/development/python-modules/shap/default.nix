@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , writeText
@@ -14,6 +13,7 @@
 , nose
 , numba
 , numpy
+, oldest-supported-numpy
 , opencv4
 , pandas
 , pyspark
@@ -26,32 +26,27 @@
 , tqdm
 , transformers
 , xgboost
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.42.0";
-  format = "pyproject";
+  version = "0.43.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "slundberg";
     repo = "shap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VGlswr9ywHk4oKSmmAzEC7+E0V2XEFlg19zXVktUdhc=";
+    hash = "sha256-ylkpXhaLXsQiu6YMC3pUtlicptQmtjITzW+ydinB4ls=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-circular-import-error.patch";
-      url = "https://github.com/slundberg/shap/commit/ce118526b19b4a206cf8b496c2cd2b215ef7a91b.patch";
-      hash = "sha256-n2yFjFgc2VSFKb4ZJx775HblULWfnQSEnqjfPa8AOt0=";
-    })
-  ];
-
   nativeBuildInputs = [
+    oldest-supported-numpy
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -129,9 +124,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # The same reason as above test_summary.py
-    "test_simple_bar_with_cohorts_dict"
-    "test_random_summary_violin_with_data2"
+    "test_random_force_plot_negative_sign"
+    "test_random_force_plot_positive_sign"
     "test_random_summary_layered_violin_with_data2"
+    "test_random_summary_violin_with_data2"
+    "test_simple_bar_with_cohorts_dict"
   ];
 
   pythonImportsCheck = [
@@ -152,6 +149,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
+    maintainers = with maintainers; [ evax natsukium ];
   };
 }

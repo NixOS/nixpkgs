@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fFOr4bc7RT9Z2ntzZ5w7dZtI5RuLBUhktf3qLqgnJ9Y=";
+    hash = "sha256-m6C9+NAwh+WFtAqNzEKc673V/ewkwdYKECv58zEyDfE=";
   };
 
   nativeBuildInputs = [

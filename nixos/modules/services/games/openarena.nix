@@ -1,14 +1,14 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption types;
   cfg = config.services.openarena;
 in
 {
   options = {
     services.openarena = {
       enable = mkEnableOption (lib.mdDoc "OpenArena");
+      package = lib.mkPackageOptionMD pkgs "openarena" { };
 
       openPorts = mkOption {
         type = types.bool;
@@ -43,7 +43,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "openarena";
-        ExecStart = "${pkgs.openarena}/bin/oa_ded +set fs_basepath ${pkgs.openarena}/openarena-0.8.8 +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/oa_ded +set fs_basepath ${cfg.package}/share/openarena +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
         Restart = "on-failure";
 
         # Hardening

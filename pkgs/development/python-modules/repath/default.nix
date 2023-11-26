@@ -1,7 +1,7 @@
 { lib
-, python3
 , buildPythonPackage
 , fetchPypi
+, six
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-gpITm6xqDkP9nXBgXU6NrrJdRmcuSE7TGiTHzgrvD7c=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     six
   ];
 

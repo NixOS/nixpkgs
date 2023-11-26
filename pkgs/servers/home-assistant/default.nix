@@ -30,6 +30,26 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.4";
+        src = fetchFromGitHub {
+          owner = "CorantGmbH";
+          repo = "aioairq";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
+        };
+      });
+
+      # https://github.com/home-assistant/core/pull/101913
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.8.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+        };
+      });
+
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -49,21 +69,12 @@ let
         };
         postPatch = ''
           substituteInPlace pyproject.toml \
+            --replace "poetry>=1.0.0b1" "poetry-core" \
             --replace "poetry.masonry" "poetry.core.masonry"
         '';
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
           self.pytz
         ];
-      });
-
-      dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
-        version = "0.33";
-        src = fetchFromGitHub {
-          owner = "ndokter";
-          repo = "dsmr_parser";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
-        };
       });
 
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
@@ -76,6 +87,35 @@ let
         doCheck = false;
       });
 
+      ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
+        pname = "ha-av";
+        version = "10.1.1";
+
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
+        };
+      });
+
+      intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.2";
+        src = fetchFromGitHub {
+          owner = "jeeftor";
+          repo = "intellifire4py";
+          rev = "refs/tags/${version}";
+          hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
+        };
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+        propagatedBuildInputs = with super; [
+          aenum
+          aiohttp
+          pydantic
+        ];
+        doCheck = false; # requires asynctest, which does not work on python 3.11
+      });
+
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.0";
         src = fetchFromGitHub {
@@ -85,14 +125,13 @@ let
         };
       });
 
-      # Pinned due to API changes in 10.0
-      mcstatus = super.mcstatus.overridePythonAttrs (oldAttrs: rec {
-        version = "9.3.0";
+      justnimbus = super.justnimbus.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.0";
         src = fetchFromGitHub {
-          owner = "py-mine";
-          repo = "mcstatus";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
+          owner = "kvanzuijlen";
+          repo = "justnimbus";
+          rev = "refs/tags/${version}";
+          hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
         };
       });
 
@@ -153,6 +192,15 @@ let
         };
       });
 
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "5.9.6";
+        src = fetchPypi {
+          pname = "psutil";
+          inherit version;
+          hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
+        };
+      });
+
       py-synologydsm-api = super.py-synologydsm-api.overridePythonAttrs (oldAttrs: rec {
         version = "2.1.4";
         src = fetchFromGitHub {
@@ -160,6 +208,15 @@ let
           repo = "py-synologydsm-api";
           rev = "refs/tags/v${version}";
           hash = "sha256-37JzdhMny6YDTBO9NRzfrZJAVAOPnpcr95fOKxisbTg=";
+        };
+      });
+
+      pyasn1 = super.pyasn1.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.8";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-rvd8n7lKOsWI6HhBIIvexGRHHZhxvVBQoofMmkdc0Lo=";
         };
       });
 
@@ -174,6 +231,16 @@ let
         };
       });
 
+      pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.3";
+        src = fetchFromGitHub {
+          owner = "gagebenne";
+          repo = "pydexcom";
+          rev = "refs/tags/${version}";
+          hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
+        };
+      });
+
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -183,12 +250,32 @@ let
         };
       });
 
+      pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.6";
+        src = fetchFromGitHub {
+          owner = "AustinBrunkhorst";
+          repo = "pysnooz";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
         src = fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
+        };
+      });
+
+      python-tado = super.python-tado.overridePythonAttrs (oldAttrs: rec {
+        version = "0.15.0";
+        src = fetchFromGitHub {
+          owner = "wmalgadey";
+          repo = "PyTado";
+          rev = "refs/tags/${version}";
+          hash = "sha256-gduqQVw/a64aDzTHFmgZu7OVB53jZb7L5vofzL3Ho6s=";
         };
       });
 
@@ -202,46 +289,6 @@ let
         };
       });
 
-      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
-        version = "13.15";
-        src = fetchFromGitHub {
-          owner = "python-telegram-bot";
-          repo = "python-telegram-bot";
-          rev = "v${version}";
-          hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
-        };
-        propagatedBuildInputs = [
-          self.apscheduler
-          self.cachetools
-          self.certifi
-          self.cryptography
-          self.decorator
-          self.future
-          self.tornado
-          self.urllib3
-        ];
-        setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
-        postPatch = ''
-          rm -r telegram/vendor
-          substituteInPlace requirements.txt \
-            --replace "APScheduler==3.6.3" "APScheduler" \
-            --replace "cachetools==4.2.2" "cachetools" \
-            --replace "tornado==6.1" "tornado"
-        '';
-        doCheck = false;
-      });
-
-      # Pinned due to API changes in 0.3.0
-      tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.0";
-        src = fetchFromGitHub {
-          owner = "frenck";
-          repo = "python-tailscale";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -250,16 +297,6 @@ let
           repo = "python-vultr";
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
-      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.1";
-        src = fetchFromGitHub {
-          owner = "aaugustin";
-          repo = "websockets";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
         };
       });
 
@@ -287,7 +324,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.7.2";
+  hassVersion = "2023.11.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -303,7 +340,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fESzpOOEGFOJJ0ldI/VaVN0kH/zbCCq25s8vNnCUOFs=";
+    hash = "sha256-llGHI6LVpTo9m2RMtcDSkW2wWraje2OkVFx5P7lzZ30=";
   };
 
   # Secondary source is git for tests
@@ -311,11 +348,12 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-HW+XO84enAA3BH4nppkXvAERT74y5m5jvz0uHWkkS6k=";
+    hash = "sha256-KD53O+UlAjGfVGp4kbLgpgU7j0A+KqZZT492WmeCOnQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
+    wheel
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -326,6 +364,10 @@ in python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    # Follow symlinks in /var/lib/hass/www
+    ./patches/static-symlinks.patch
+
+    # Patch path to ffmpeg binary
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
@@ -347,8 +389,9 @@ in python.pkgs.buildPythonApplication rec {
       "pip"
       "PyJWT"
       "pyOpenSSL"
+      "PyYAML"
       "requests"
-      "typing_extensions"
+      "typing-extensions"
       "voluptuous-serialize"
       "yarl"
     ];
@@ -359,6 +402,9 @@ in python.pkgs.buildPythonApplication rec {
       ) relaxedConstraints)}
       pyproject.toml
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+
+    sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+    sed -i 's/wheel[~=]/wheel>/' pyproject.toml
   '';
 
   propagatedBuildInputs = with python.pkgs; [
@@ -379,6 +425,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     lru-dict
     orjson
+    packaging
     pip
     pyopenssl
     pyjwt
@@ -413,7 +460,6 @@ in python.pkgs.buildPythonApplication rec {
     pytestCheckHook
     requests-mock
     respx
-    stdlib-list
     syrupy
     tomli
     # required through tests/auth/mfa_modules/test_otp.py
@@ -440,6 +486,12 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 2 == 1
     "--deselect=tests/helpers/test_translation.py::test_caching"
+    # AssertionError: assert None == RegistryEntry
+    "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
+    # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
+    "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
     # tests are located in tests/
     "tests"
   ];

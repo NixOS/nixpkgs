@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Java Native Access";
     license = with licenses; [ lgpl21 asl20 ];
     maintainers = with maintainers; [ nagy ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     changelog = "https://github.com/java-native-access/jna/blob/${version}/CHANGES.md";
   };
 }

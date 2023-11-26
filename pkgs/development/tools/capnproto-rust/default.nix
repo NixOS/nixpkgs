@@ -6,15 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "capnproto-rust";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchCrate {
     crateName = "capnpc";
     inherit version;
-    sha256 = "sha256-7RfJUYV3X9w0FALP3pbhmeIqrWLqlgr4oNvPnBc+RY8=";
+    hash = "sha256-WVjXVLVoTCAtA8a6+zaX4itAaPCWb2c0trtSsxBopO4=";
   };
 
-  cargoHash = "sha256-wmoXdukXWagW61jbFBODnIjlBrV6Q+wgvuFG/TqkvVk=";
+  cargoHash = "sha256-h9YArxHnY14T8eQCS4JVItjaCjv+2dorcOVBir7r6SY=";
+
+  postInstall = ''
+    mkdir -p $out/include/capnp
+    cp rust.capnp $out/include/capnp
+  '';
 
   nativeCheckInputs = [
     capnproto
@@ -24,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Cap'n Proto codegen plugin for Rust";
     homepage = "https://github.com/capnproto/capnproto-rust";
     license = licenses.mit;
-    maintainers = with maintainers; [ mikroskeem ];
+    maintainers = with maintainers; [ mikroskeem solson ];
   };
 }

@@ -14,15 +14,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.4.2";
+  version = "2.5.1";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-lQMJVSY3JeZYYOFDyV29Ye2j8r+ngE/ta2wQYipy4hU=";
+    hash = "sha256-bmpofyW5IBRmVlzHP9YRlI/JNnnamKfF9jCG85G0wBc=";
   };
 
   patches = [
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     asciidoc # Man page
     gobject-introspection
     installShellFiles
+    python3.pkgs.setuptools
     wrapGAppsHook
   ];
 
@@ -63,6 +64,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     installManPage doc/udiskie.8
+
+    installShellCompletion \
+      --bash completions/bash/* \
+      --zsh completions/zsh/*
   '';
 
   preFixup = ''

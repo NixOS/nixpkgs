@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+    # https://gitlab.com/kicad/code/kicad/-/issues/15687
+    ./runtime_stock_data_path.patch
   ];
 
   # tagged releases don't have "unknown"
@@ -104,7 +106,6 @@ stdenv.mkDerivation rec {
     "-DKICAD_BUILD_QA_TESTS=OFF"
   ]
   ++ optionals (debug) [
-    "-DCMAKE_BUILD_TYPE=Debug"
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
   ]
@@ -114,6 +115,8 @@ stdenv.mkDerivation rec {
   ++ optionals (sanitizeThreads) [
     "-DKICAD_SANITIZE_THREADS=ON"
   ];
+
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake

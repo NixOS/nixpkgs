@@ -17,6 +17,7 @@
 , gtest
 , doxygen
 , fixDarwinDylibNames
+, useAVX2 ? stdenv.hostPlatform.avx2Support
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   # unaccelerated routines.
   cmakeFlags = [
     "-DTILEDB_WERROR=0"
-  ];
+  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
     clang-tools
@@ -64,6 +65,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mkdir -p build/externals/src/ep_catch
     ln -sf ${catch2}/include/catch2 build/externals/src/ep_catch/single_include
+
+    sed -i '38i list(APPEND OPENSSL_PATHS "${openssl.dev}" "${openssl.out}")' \
+      cmake/Modules/FindOpenSSL_EP.cmake
   '';
 
   doCheck = true;

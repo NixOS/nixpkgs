@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "cohttp";
-  version = "5.1.0";
+  version = "5.3.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";
-    hash = "sha256-mINgeBO7DSsWd84gYjQNUQFqbh8KBZ+S2bYI/iVWMAc=";
+    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
+    hash = "sha256-s72RxwTl6lEOkkuDqy7eH8RqLM5Eiw+M70iDuaFu7d0=";
   };
 
   postPatch = ''

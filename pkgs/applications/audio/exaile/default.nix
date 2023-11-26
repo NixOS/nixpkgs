@@ -8,28 +8,26 @@
 , notificationSupport ? true
 , scalableIconSupport ? true
 , translationSupport ? true
-, bpmCounterSupport ? false
 , ipythonSupport ? false
+, cdMetadataSupport ? false
 , lastfmSupport ? false
 , lyricsManiaSupport ? false
-, lyricsWikiSupport ? false
 , multimediaKeySupport ? false
 , musicBrainzSupport ? false
 , podcastSupport ? false
 , streamripperSupport ? false
 , wikipediaSupport ? false
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "exaile";
-  version = "4.1.2";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "exaile";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GZyCuPy57NhGwgbLMrRKW5xmc1Udon7WtsrD4upviuQ=";
+    sha256 = "sha256-9SK0nvGdz2j6qp1JTmSuLezxX/kB93CZReSfAnfKZzg=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +47,9 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
   ]) ++ (with python3.pkgs; [
     bsddb3
     dbus-python
@@ -59,13 +60,12 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optional deviceDetectionSupport udisks
   ++ lib.optional notificationSupport libnotify
   ++ lib.optional scalableIconSupport librsvg
-  ++ lib.optional bpmCounterSupport gst_all_1.gst-plugins-bad
   ++ lib.optional ipythonSupport python3.pkgs.ipython
+  ++ lib.optional cdMetadataSupport python3.pkgs.discid
   ++ lib.optional lastfmSupport python3.pkgs.pylast
-  ++ lib.optional (lyricsManiaSupport || lyricsWikiSupport) python3.pkgs.lxml
-  ++ lib.optional lyricsWikiSupport python3.pkgs.beautifulsoup4
+  ++ lib.optional lyricsManiaSupport python3.pkgs.lxml
   ++ lib.optional multimediaKeySupport keybinder3
-  ++ lib.optional musicBrainzSupport python3.pkgs.musicbrainzngs
+  ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
   ++ lib.optional podcastSupport python3.pkgs.feedparser
   ++ lib.optional wikipediaSupport webkitgtk;
 

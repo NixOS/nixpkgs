@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sLqkDuohCgHJTMte1WIa2Yu43oWXVvnIpeiDBoQpKY8=";
+    sha256 = "sha256-e9Uo0IJYL9/6/nNL27zfUYnsTwDaOJOcR2CY6t++jDE=";
   };
 
-  cargoHash = "sha256-ffADKoMysYY2vwX3asHnjR2EiND4RJsf/W334PWvkGs=";
+  cargoHash = "sha256-QSgTpmSojZrwZ0RsUL6c2xO310RZX3gkyGl6oNf6pYI=";
 
   buildFeatures = lib.optional withTTS "tts";
 
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
         "test_lua_script"
         "timer_test"
         "validate_assertion_fail"
+        "regex_smoke_test"
       ];
       skipFlag = test: "--skip " + test;
     in

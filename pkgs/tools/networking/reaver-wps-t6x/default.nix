@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap pixiewps ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   meta = with lib; {
     description = "Online and offline brute force attack against WPS";

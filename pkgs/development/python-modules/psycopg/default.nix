@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.9";
+  version = "3.1.13";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yRb6yRpX1vDmXpYu4O50MYMpP2j75aSqhXCWMF1xVH0=";
+    hash = "sha256-N+x8RErlId1uBgXZjBBjtPxqJXGuXZEl78DKVKjhy9w=";
   };
 
   patches = [
@@ -50,10 +50,13 @@ let
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
-    # mark additional tests as timing sensitive
+
     (fetchpatch {
-      url = "https://github.com/psycopg/psycopg/commit/762bb2e4c840886acca12a3676296e10a7114fa2.patch";
-      hash = "sha256-1uAcZqLhCAM9oOd7oOZDjyhKpo59fscEJ+L8KSWhnzM=";
+      # fix environment variables leaking into test environment
+      # https://github.com/psycopg/psycopg/pull/683
+      # https://github.com/psycopg/psycopg/issues/681
+      url = "https://github.com/psycopg/psycopg/commit/f060855aa6126e811de243c7213d2caff9c88123.patch";
+      hash = "sha256-QsFxK8Qasw9kbNCUUCqbOHaf53kT5NONlr28vGoPda0=";
     })
   ];
 
@@ -185,12 +188,13 @@ buildPythonPackage rec {
   env = {
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
+    PGDATABASE = "psycopg";
   };
 
   preCheck = ''
     cd ..
   '' + lib.optionalString (stdenv.isLinux) ''
-    export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
+    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
   '';
 
   disabledTests = [

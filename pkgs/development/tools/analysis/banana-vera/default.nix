@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "banana-vera";
-  version = "1.3.0-python3.10";
+  version = "1.3.0-fedora38";
 
   src = fetchFromGitHub {
     owner = "Epitech";
     repo = "banana-vera";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-1nAKhUltQS1301JNrr0PQQrrf2W9Hj5gk1nbUhN4cXw=";
+    sha256 = "sha256-sSN3trSySJe3KVyrb/hc5HUGRS4M3c4UX9SLlzBM43c";
   };
 
   nativeBuildInputs = [ cmake ];

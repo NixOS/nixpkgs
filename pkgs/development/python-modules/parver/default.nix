@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "parver";
-  version = "0.4";
+  version = "0.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1KPbuTxTNz7poLoFXkhYxEFpsgS5EuSdAD6tlduam8o=";
+    hash = "sha256-uf3h5ruc6fB+COnEvqjYglxeeOGKAFLQLgK/lRfrR3c=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Allows parsing and manipulation of PEP 440 version numbers";
     homepage = "https://github.com/RazerM/parver";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

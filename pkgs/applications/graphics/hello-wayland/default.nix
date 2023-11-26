@@ -5,14 +5,16 @@
 
 stdenv.mkDerivation {
   pname = "hello-wayland";
-  version = "unstable-2023-04-23";
+  version = "unstable-2023-10-26";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hello-wayland";
-    rev = "77e270c19672f3ad863e466093f429cde8eb1f16";
-    sha256 = "NMQE2zU858b6OZhdS2oZnGvLK+eb7yU0nFaMAcpNw04=";
+    rev = "b631afa4f6fd86560ccbdb8c7b6fe42851c06a57";
+    sha256 = "MaBzGZ05uCoeeiglFYHC40hQlPvtDw5sQhqXgtVDySc=";
   };
+
+  separateDebugInfo = true;
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ imagemagick pkg-config wayland-scanner ];

@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "2.6.0";
+  version = "2.9.0";
 
   completion = fetchurl {
     url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${pname}-${version}.phar";
-    hash = "sha256-0WZSjKtgvIIpwGcp5wc4OPu6aNaytXRQTLAniDXIeIg=";
+    hash = "sha256-r2t8zCHtCQfLUE21oFnw4SAReQWmAXv91Ddc7jyT2GQ=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

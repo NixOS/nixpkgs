@@ -116,10 +116,17 @@ in
       };
 
       persistentKeys = mkEnableOption (lib.mdDoc ''
-        If enabled then keys will be generated once and Yggdrasil
+        persistent keys. If enabled then keys will be generated once and Yggdrasil
         will retain the same IPv6 address when the service is
-        restarted. Keys are stored at ${keysPath}.
+        restarted. Keys are stored at ${keysPath}
       '');
+
+      extraArgs = mkOption {
+        type = listOf str;
+        default = [ ];
+        example = [ "-loglevel" "info" ];
+        description = lib.mdDoc "Extra command line arguments.";
+      };
 
     };
   };
@@ -181,7 +188,7 @@ in
             "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
 
           # start yggdrasil
-          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf
+          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf ${lib.strings.escapeShellArgs cfg.extraArgs}
         '';
 
         serviceConfig = {

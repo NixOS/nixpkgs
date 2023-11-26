@@ -17,17 +17,18 @@
 , gtk3
 , darwin
 , perl
+, wrapGAppsHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.6.68";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
-    hash = "sha256-afkRId4PuRKnnloFLh2rD+npcCCUqDngKcnWbEf+6vk=";
+    hash = "sha256-uDSZ7qwDC/eR0aZN372ju21PBGuBiiYmlx/26Ta3luE=";
   };
 
   cargoLock = {
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     nasm
     perl
+    wrapGAppsHook
   ];
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
@@ -74,6 +76,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "oculante";
     maintainers = with maintainers; [ dit7ya figsoda ];
   };
 }

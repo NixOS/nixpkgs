@@ -5,7 +5,20 @@
 , version ? null
 }:
 
-let compcert = mkCoqDerivation rec {
+let
+
+# https://compcert.org/man/manual002.html
+targets = {
+  x86_64-linux = "x86_64-linux";
+  aarch64-linux = "aarch64-linux";
+  x86_64-darwin = "x86_64-macos";
+  aarch64-darwin = "aarch64-macos";
+};
+
+target = targets.${stdenv.hostPlatform.system}
+  or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+compcert = mkCoqDerivation {
 
   pname = "compcert";
   owner = "AbsInt";
@@ -49,7 +62,7 @@ let compcert = mkCoqDerivation rec {
     -coqdevdir $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/ \
     -toolprefix ${tools}/bin/ \
     -use-external-Flocq \
-    ${if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux"}
+    ${target}
   '';
 
   installTargets = "documentation install";
@@ -80,7 +93,7 @@ let compcert = mkCoqDerivation rec {
     description = "Formally verified C compiler";
     homepage    = "https://compcert.org";
     license     = licenses.inria-compcert;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms   = builtins.attrNames targets;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
 }; in

@@ -2,7 +2,7 @@
 
 The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 [Nix package manager](https://nixos.org/nix/), released under a
-[permissive MIT/X11 license](https://github.com/NixOS/nixpkgs/blob/master/COPYING).
+[permissive MIT license](https://github.com/NixOS/nixpkgs/blob/master/COPYING).
 Packages are available for several platforms, and can be used with the Nix
 package manager on most GNU/Linux distributions as well as [NixOS](https://nixos.org/nixos).
 

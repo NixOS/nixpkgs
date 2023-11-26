@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-codereview";
-  version = "1.4.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "review";
     rev = "v${version}";
-    hash = "sha256-N6L+TlPU/lStMPTFYKFH2GiwyGkEJJuKtkH7wKLuM00=";
+    hash = "sha256-E6KgFSlWa/MKG6R2P+K4T+P/JOqaIfxdWpsSFGHbihg=";
   };
 
   vendorHash = null;

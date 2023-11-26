@@ -1,16 +1,16 @@
 { fetchurl, lib, stdenv, makeWrapper, perl, perlPackages }:
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amtterm";
-  version = "1.6-1";
+  version = "1.7-1";
 
   buildInputs = with perlPackages; [ perl SOAPLite ];
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
-    url = "https://www.kraxel.org/cgit/amtterm/snapshot/${pname}-${version}.tar.gz";
-    sha256 = "1jxcsqkag2bxmrnr4m6g88sln1j2d9liqlna57fj8kkc85316vlc";
+    url = "https://www.kraxel.org/cgit/amtterm/snapshot/amtterm-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-WrYWAXLW74hb/DfSiPyiFIGAUfDQFdNEPx+XevZYcyk=";
   };
 
   makeFlags = [ "prefix=$(out)" "STRIP=" ];
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
       maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;
     };
-}
+})

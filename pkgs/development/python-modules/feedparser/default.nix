@@ -22,6 +22,8 @@ buildPythonPackage rec {
     sgmllib3k
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkPhase = ''
     # Tests are failing
     # AssertionError: unexpected '~' char in declaration

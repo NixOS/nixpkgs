@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-moU/bZ2mS1QfKPP6HaAwWP1nRNZ4Ue5DFl9zBBrJiHw=";
   };
 
-  sourceRoot = "source/prboom2";
+  sourceRoot = "${src.name}/prboom2";
 
   nativeBuildInputs = [
     cmake

@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "23.02.3.1";
+  version = "23.02.6.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-YMm8a7uyZpPEuWQcgddX+0Me+ndgbYoDnC+sbmN/Hh8=";
+    sha256 = "sha256-azgGM4qfS0xtUaiGfXtu8MNYdgpZRUfx+zBgAAlmt6g=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     # increase string length to allow for full
     # path of 'echo' in nix store
     ./common-env-echo.patch
-    # Required for configure to pick up the right dlopen path
-    ./pmix-configure.patch
   ];
 
   prePatch = ''
@@ -68,10 +66,11 @@ stdenv.mkDerivation rec {
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
       "--with-yaml=${libyaml.dev}"
-      "--with-ofed=${rdma-core}"
+      "--with-ofed=${lib.getDev rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
       "--with-bpf=${libbpf}"
+      "--without-rpath" # Required for configure to pick up the right dlopen path
     ] ++ (optional enableGtk2  "--disable-gtktest")
       ++ (optional (!enableX11) "--disable-x11");
 

@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     fuzzywuzzy
     jsbeautifier
     pycryptodome
-    pySmartDL
+    pysmartdl
     pyqt5
     requests
     requests-cache

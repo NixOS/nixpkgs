@@ -1,19 +1,47 @@
-{ lib, stdenv, fetchurl, perl, php, gd, libpng, zlib, unzip, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, php
+, gd
+, libpng
+, openssl
+, zlib
+, unzip
+, nixosTests
+, nix-update-script
+}:
 
 stdenv.mkDerivation rec {
   pname = "nagios";
-  version = "4.4.6";
+  version = "4.5.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/nagios/nagios-4.x/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1x5hb97zbvkm73q53ydp1gwj8nnznm72q9c4rm6ny7phr995l3db";
+  src = fetchFromGitHub {
+    owner = "NagiosEnterprises";
+    repo = "nagioscore";
+    rev = "refs/tags/nagios-${version}";
+    hash = "sha256-km0vB/bopysS7eejDFDKaonXzTzBonIqiw1T+C2lKiQ=";
   };
 
   patches = [ ./nagios.patch ];
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ php perl gd libpng zlib ];
 
-  configureFlags = [ "--localstatedir=/var/lib/nagios" ];
+  buildInputs = [
+    php
+    perl
+    gd
+    libpng
+    openssl
+    zlib
+  ];
+
+  configureFlags = [
+    "--localstatedir=/var/lib/nagios"
+    "--with-ssl=${openssl.dev}"
+    "--with-ssl-inc=${openssl.dev}/include"
+    "--with-ssl-lib=${lib.getLib openssl}/lib"
+  ];
+
   buildFlags = [ "all" ];
 
   # Do not create /var directories
@@ -28,15 +56,22 @@ stdenv.mkDerivation rec {
     sed -i 's@/bin/@@g' $out/etc/objects/commands.cfg
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) nagios;
+  passthru = {
+    tests = {
+      inherit (nixosTests) nagios;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "nagios-(.*)" ];
+    };
   };
 
   meta = {
     description = "A host, service and network monitoring program";
-    homepage    = "https://www.nagios.org/";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ immae thoughtpolice relrod ];
+    homepage = "https://www.nagios.org/";
+    changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${version}/Changelog";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    mainProgram = "nagios";
+    maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];
   };
 }

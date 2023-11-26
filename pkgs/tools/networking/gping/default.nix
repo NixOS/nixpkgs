@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , libiconv
 , Security
 , iputils
@@ -9,20 +10,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.13.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
     rev = "gping-v${version}";
-    hash = "sha256-EkoOHyHYcbyqtT1zCq0kmXND1eSADE7QD3QQ01RJtvM=";
+    hash = "sha256-22Nio6yfkL9HWNrI+kk5dGfojTtB/h0sizCWH9w9so8=";
   };
 
-  cargoHash = "sha256-iDB3ZIlSLEBf+nSxLeQcE93nqMjH29w+z7kwCNksuSk=";
+  cargoHash = "sha256-YfvcCnFXDoZXp/Aug0jVQkilsvSzS+JF90U0QvVFksE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   nativeCheckInputs = lib.optionals stdenv.isLinux [ iputils ];
+
+  postInstall = ''
+    installManPage gping.1
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

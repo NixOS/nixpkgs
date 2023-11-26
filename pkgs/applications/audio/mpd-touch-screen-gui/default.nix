@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
 , pkg-config
+, autoreconfHook
 , SDL2
 , SDL2_ttf
 , SDL2_image
@@ -14,13 +14,13 @@
 , dejavu_fonts
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpd-touch-screen-gui";
   version = "unstable-2022-12-30";
 
   src = fetchFromGitHub {
     owner = "muesli4";
-    repo = pname;
+    repo = "mpd-touch-screen-gui";
     rev = "156eaebede89da2b83a98d8f9dfa46af12282fb4";
     sha256 = "sha256-vr/St4BghrndjUQ0nZI/uJq+F/MjEj6ulc4DYwQ/pgU=";
   };
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;
   };
-}
+})

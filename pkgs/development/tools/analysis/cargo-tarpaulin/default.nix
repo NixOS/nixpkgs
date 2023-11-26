@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tarpaulin";
-  version = "0.26.1";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "xd009642";
     repo = "tarpaulin";
     rev = version;
-    hash = "sha256-FQdYos8hnQMkl/3vM9kSj0LM8fIZcsWMLKimpNXnrFo=";
+    hash = "sha256-Mr1thOGqpLcMUBbmD6YzU9WlyOvlPHSqyiU/wtb4edo=";
   };
 
-  cargoHash = "sha256-fCoZ1pSKPXvNSWiAfhPygidkM0Ek7DYtHHv/sdPptvM=";
+  cargoHash = "sha256-UrDyAS/SIrXWsYucmjj6URjqjjWB40wxLF0rXHmB2Tw=";
 
   nativeBuildInputs = [
     pkg-config

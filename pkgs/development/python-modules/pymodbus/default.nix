@@ -3,60 +3,76 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
-, mock
 , prompt-toolkit
 , pygments
 , pyserial
-, pyserial-asyncio
 , pytest-asyncio
-, pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , redis
+, setuptools
 , sqlalchemy
-, tornado
 , twisted
+, typer
 }:
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.3.2";
-  format = "setuptools";
+  version = "3.5.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-EGJyb0AVLKN7FEoeWF4rVqmJBNbXHent9P+cxc13rQs=";
+    hash = "sha256-IgGDYNIRS39t8vHkJSGnDGCTKxpeIYZyedLzyS5pOI0=";
   };
 
-  # Twisted asynchronous version is not supported due to a missing dependency
-  propagatedBuildInputs = [
-    aiohttp
-    click
-    prompt-toolkit
-    pygments
-    pyserial
-    pyserial-asyncio
-    tornado
+  nativeBuildInputs = [
+    setuptools
   ];
 
+  passthru.optional-dependencies = {
+    repl = [
+      aiohttp
+      typer
+      prompt-toolkit
+      pygments
+      click
+    ] ++ typer.optional-dependencies.all;
+    serial = [
+      pyserial
+    ];
+  };
+
   nativeCheckInputs = [
-    mock
     pytest-asyncio
-    pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     redis
     sqlalchemy
     twisted
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  preCheck = ''
+    pushd test
+  '';
+
+  postCheck = ''
+    popd
+  '';
+
+  pythonImportsCheck = [
+    "pymodbus"
   ];
 
-  pytestFlagsArray = [
-    "--reruns" "3" # Racy socket tests
+  disabledTests = [
+    # Tests often hang
+    "test_connected"
   ];
-
-  pythonImportsCheck = [ "pymodbus" ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";

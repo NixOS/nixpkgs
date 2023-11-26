@@ -1,54 +1,51 @@
 { buildNpmPackage
 , fetchFromGitHub
 , lib
-, substituteAll
 , esbuild
-, buildGoModule
 , buildWebExtension ? false
 }:
+let
+  version = "1.6.3";
+  gitHash = "86e9434";
+in
 buildNpmPackage rec {
   pname = "vencord";
-  version = "1.3.4";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    sha256 = "sha256-r+VgxXwsBOfMggcVlr5q1/ONfp13CpX4ssrLQtmdLe8=";
+    hash = "sha256-AqyUnDMIASJ/kUTeICdN94W5U0E52RFs6hM2/E8AjXI=";
   };
 
-  ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.15.18";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
-  });
+  ESBUILD_BINARY_PATH = lib.getExe (esbuild.overrideAttrs (final: _: {
+    version = "0.15.18";
+    src = fetchFromGitHub {
+      owner = "evanw";
+      repo = "esbuild";
+      rev = "v${final.version}";
+      hash = "sha256-b9R1ML+pgRg9j2yrkQmBulPuLHYLUQvW+WTyR/Cq6zE=";
+    };
+    vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+  }));
 
   # Supresses an error about esbuild's version.
   npmRebuildFlags = [ "|| true" ];
 
-  npmDepsHash = "sha256-HJK88z4Gs8mqd28zKrsTtk34VcRqIyb6aURbvRZLN0I=";
+  makeCacheWritable = true;
+  npmDepsHash = "sha256-i6hTMYyseoHnAGBezG5fdniBA9yXylCbAgAcjGH+wfM=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
-  npmBuildFlags = [ "--" "--standalone" ];
+  npmBuildFlags = [ "--" "--standalone" "--disable-updater" ];
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
+    chmod +w ./package-lock.json
   '';
 
-  patches = [
-    (substituteAll {
-      src = ./replace-git.patch;
-      inherit version;
-    })
-    ./disable-updater-ui.patch
-  ];
+  VENCORD_HASH = gitHash;
+  VENCORD_REMOTE = "${src.owner}/${src.repo}";
 
   installPhase =
     if buildWebExtension then ''
@@ -57,10 +54,12 @@ buildNpmPackage rec {
       cp -r dist/ $out
     '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ FlafyDev NotAShelf Scrumplex ];
+    maintainers = with maintainers; [ FlafyDev fwam NotAShelf Scrumplex ];
   };
 }

@@ -102,8 +102,6 @@ with lib;
         jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-        systemdStage1
-        systemdStage1Network
       ];
 
     boot.swraid.enable = true;
@@ -120,5 +118,8 @@ with lib;
       [PStore]
       Unlink=no
     '';
+
+    # allow nix-copy to live system
+    nix.settings.trusted-users = [ "root" "nixos" ];
   };
 }

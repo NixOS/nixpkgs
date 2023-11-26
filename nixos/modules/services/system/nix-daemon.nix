@@ -168,14 +168,16 @@ in
 
     systemd.packages = [ nixPackage ];
 
-    systemd.tmpfiles =
-      if (isNixAtLeast "2.8") then {
+    systemd.tmpfiles = mkMerge [
+      (mkIf (isNixAtLeast "2.8") {
         packages = [ nixPackage ];
-      } else {
+      })
+      (mkIf (!isNixAtLeast "2.8") {
         rules = [
           "d /nix/var/nix/daemon-socket 0755 root root - -"
         ];
-      };
+      })
+    ];
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
@@ -246,11 +248,6 @@ in
     users.users = nixbldUsers;
 
     services.xserver.displayManager.hiddenUsers = attrNames nixbldUsers;
-
-    system.activationScripts.nix = stringAfter [ "etc" "users" ]
-      ''
-        install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
-      '';
 
     # Legacy configuration conversion.
     nix.settings = mkMerge [

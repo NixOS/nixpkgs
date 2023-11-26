@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib }:
+{ stdenv, fetchFromGitHub, fetchpatch, lib }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blink";
@@ -10,6 +10,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-W7yL7Ut3MRygJhFGr+GIj/CK57MkuDTcenft8IvH7jU=";
   };
+
+  # Drop after next release
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/jart/blink/commit/b31fed832b10d32eadaec885fb20dacbb0eb6986.patch";
+      hash = "sha256-DfZxW/H58qXAjkQz31YS4SPMz7152ZzNHK7wHopgnQA=";
+    })
+  ];
 
   # 'make check' requires internet connection
   doCheck = true;

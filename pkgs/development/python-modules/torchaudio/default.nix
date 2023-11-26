@@ -6,7 +6,7 @@
 , ninja
 , pybind11
 , torch
-, cudaSupport ? false
+, cudaSupport ? torch.cudaSupport
 , cudaPackages
 }:
 
@@ -27,17 +27,30 @@ buildPythonPackage rec {
       --replace "_fetch_archives(_parse_sources())" "pass"
   '';
 
+  env = {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  };
+
   nativeBuildInputs = [
     cmake
     pkg-config
     ninja
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_nvcc
   ];
   buildInputs = [
     pybind11
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.cudnn
+    cudaPackages.libcurand.dev
+    cudaPackages.libcurand.lib
+    cudaPackages.cuda_cudart # cuda_runtime.h and libraries
+    cudaPackages.cuda_cccl.dev # <thrust/*>
+    cudaPackages.cuda_nvtx.dev
+    cudaPackages.cuda_nvtx.lib # -llibNVToolsExt
+    cudaPackages.libcublas.dev
+    cudaPackages.libcublas.lib
+    cudaPackages.libcufft.dev
+    cudaPackages.libcufft.lib
   ];
   propagatedBuildInputs = [
     torch

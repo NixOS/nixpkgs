@@ -5,7 +5,7 @@ let
 in
 {
   options.services.homed.enable = lib.mkEnableOption (lib.mdDoc ''
-    Enable systemd home area/user account manager
+    systemd home area/user account manager
   '');
 
   config = lib.mkIf cfg.enable {

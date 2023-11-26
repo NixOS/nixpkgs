@@ -11,7 +11,7 @@ buildGoModule {
     hash = "sha256-Bp1cST6/8ppvpgNxjUpwL498C9vTJmoWOKLJgmWqfEs=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/cidrgrep

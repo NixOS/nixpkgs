@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.10.3";
+  version = "2.10.5";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    sha256 = "sha256-0Mg+jBuj12GlNdKoyUcB1YDv2oGl9OARKdTzQ+WIWfw=";
+    hash = "sha256-b6CqpVDgyZvgBInlgni1+zukZ7DMzFUV3JdXmh+A+18=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-sCylkXFg3cGm2ksN9TYV6hxdDqwlxfhZLQtjbZq7LBQ=";
+  vendorHash = "sha256-bQy003IqezNSZU4K9qvApvYW+W4g6RkIqr4okkN/0gI=";
 
   subPackages = [ "cmd/traefik" ];
 
@@ -35,5 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ vdemeester ];
+    mainProgram = "traefik";
   };
 }

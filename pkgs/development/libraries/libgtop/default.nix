@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgtop";
-  version = "2.41.1";
+  version = "2.41.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Q+qa0T98r5gwPmQXKxkb6blrqzQLAZ3u7HIlHuFA/js=";
+    hash = "sha256-2QJs2KSNJ83/0zL41gqSdktWQk5SLEIM0ToB9A2vksM=";
   };
 
   nativeBuildInputs = [

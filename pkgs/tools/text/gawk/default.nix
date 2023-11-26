@@ -82,5 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
+    mainProgram = "gawk";
   };
 }

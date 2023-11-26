@@ -10,7 +10,7 @@ wrapDotnetProgram() {
     if [ ! "${selfContainedBuild-}" ]; then
         if [ "${useDotnetFromEnv-}" ]; then
             # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
-            dotnetRootFlags+=("--run" 'command -v dotnet &>/dev/null && export DOTNET_ROOT="$(@dirname@ "$(@dirname@ "$(@which@ dotnet)")")" || export DOTNET_ROOT="@dotnetRuntime@"')
+            dotnetRootFlags+=("--run" 'command -v dotnet &>/dev/null && export DOTNET_ROOT="$(@dirname@ "$(@realpath@ "$(@which@ dotnet)")")" || export DOTNET_ROOT="@dotnetRuntime@"')
             dotnetRootFlags+=("--suffix" "PATH" ":" "@dotnetRuntime@/bin")
         else
             dotnetRootFlags+=("--set" "DOTNET_ROOT" "@dotnetRuntime@")

@@ -35,6 +35,8 @@ let tests = {
 
       darktile.pkg = p: p.darktile;
 
+      deepin-terminal.pkg = p: p.deepin.deepin-terminal;
+
       eterm.pkg = p: p.eterm;
       eterm.executable = "Eterm";
       eterm.pinkValue = "#D40055";
@@ -74,6 +76,7 @@ let tests = {
 
       rio.pkg = p: p.rio;
       rio.cmd = "rio -e $command";
+      rio.pinkValue = "#FF1261";
 
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";
@@ -121,7 +124,7 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
     maintainers = [ jjjollyjim ];
   };
 
-  machine = { pkgsInner, ... }:
+  nodes.machine = { pkgsInner, ... }:
 
   {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

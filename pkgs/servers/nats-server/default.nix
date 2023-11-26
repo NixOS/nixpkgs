@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "nats-server";
-  version = "2.9.19";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CiDvDnnUR/jaEWU+bceH6uIr9QBtsAz+6vnQjT3sNQQ=";
+    hash = "sha256-jcN/ycRj8DksBj/Qy0IhoVwQsKuMF+sBkaKM1rZYJPc=";
   };
 
-  vendorHash = "sha256-m/15F0BHCAEcNlRf71jJP5bjrrqRgX/CQm8SddpTkYw=";
+  vendorHash = "sha256-5p23qIWN7+nL+NKbKpBqov7+isNXKmJQRzzojTqKIU4=";
 
   doCheck = false;
 
@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "High-Performance server for NATS";
+    mainProgram = "nats-server";
     homepage = "https://nats.io/";
     changelog = "https://github.com/nats-io/nats-server/releases/tag/v${version}";
     license = licenses.asl20;

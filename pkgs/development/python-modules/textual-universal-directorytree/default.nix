@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "textual-universal-directorytree";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "textual-universal-directorytree";
-    rev = "v${version}";
-    hash = "sha256-a7alxVmHTKJnJiU7X6UlUD2y7MY4O5TMR+02KcyPwEs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FL2bwPGqBmDn33Rhj7+VEpuqB4znEAw+GGAODTs25oo=";
   };
 
   nativeBuildInputs = [

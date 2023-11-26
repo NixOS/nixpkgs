@@ -23,24 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "1.6.1";
+  version = "2.6.6";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-AiDQleRMuLExaVuiLvubebobDaK2YJTWjZ00F5UptuQ=";
+    hash = "sha256-ZpN+SgBq2vA2p4MjrT07j22VB67FdiXIIl9puGiGJA4=";
   };
 
-  sourceRoot = "source/src-tauri";
+  sourceRoot = "${src.name}/src-tauri";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-
-    chmod -R +w ..
-    # Disable auto update check by default
-    sed -i -e '/auto_check/s/true/false/' src/main.rs ../src/windows/Config/index.jsx
   '';
 
   pnpm-deps = stdenvNoCC.mkDerivation {
@@ -70,16 +66,15 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-HJdVAjvHmhvztJMR9rVniWl12sGQYTyZojEYaoKnn5M=";
+    outputHash = "sha256-PqdwoGPsu1j4sDTvBAguDhB2v1yaNWybluLiN37SDa4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
-      "tauri-plugin-autostart-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
-      "enigo-0.1.2" = "sha256-99VJ0WYD8jV6CYUZ1bpYJBwIE2iwOZ9SjOvyA2On12Q=";
-      "selection-0.1.0" = "sha256-85NUACRi7TjyMNKVz93G+W1EXKIVZZge/h/HtDwiW/Q=";
+      # All other crates in the same workspace reuse this hash.
+      "tauri-plugin-autostart-0.0.0" = "sha256-wgVsF3H9BT8lBew7tQ308eIQ6cLZT93hD/4eYCDEq98=";
+      "tauri-plugin-sql-0.0.0" = "sha256-e9iwcHwW8MaRzkaAbewrq6b9+n3ZofMTBnvA23ZF2ro=";
     };
   };
 
@@ -104,12 +99,12 @@ stdenv.mkDerivation rec {
 
   ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.17.19";
+      version = "0.18.20";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
+        hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
@@ -118,6 +113,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export HOME=$(mktemp -d)
     pnpm config set store-dir ${pnpm-deps}
+    chmod +w ..
     pnpm install --offline --frozen-lockfile --no-optional --ignore-script
     chmod -R +w ../node_modules
     pnpm rebuild

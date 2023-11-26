@@ -7,7 +7,7 @@ in
 {
   options = {
     services.supergfxd = {
-      enable = lib.mkEnableOption (lib.mdDoc "Enable the supergfxd service");
+      enable = lib.mkEnableOption (lib.mdDoc "the supergfxd service");
 
       settings = lib.mkOption {
         type = lib.types.nullOr json.type;

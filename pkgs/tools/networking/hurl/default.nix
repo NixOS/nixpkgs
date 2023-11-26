@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    hash = "sha256-ubzcCY3ccjt2VSZNx9+l3M/z4o7wWcE7USAlA9BnQY0=";
+    hash = "sha256-JsgAdLjDQQkLyLFoZCVG2jZ8vQDaGUPtPmHYAcwADQg";
   };
 
-  cargoHash = "sha256-C8WeYFaqF748QZkp/CppqJjF3QW1k7OWXycxSoxKPOI=";
+  cargoHash = "sha256-IE9c57rj8EANyj4KmbyagafJyMovzHOhp0PFCQBzqdA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,5 +47,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ eonpatapon figsoda ];
     license = licenses.asl20;
+    mainProgram = "hurl";
   };
 }

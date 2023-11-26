@@ -1,6 +1,6 @@
 {
   "name": "matrix-appservice-slack",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "A Matrix <--> Slack bridge",
   "engines": {
     "node": ">=16 <=18"
@@ -42,12 +42,13 @@
     "axios": "^0.27.2",
     "classnames": "^2.3.2",
     "escape-string-regexp": "^4.0.0",
-    "matrix-appservice-bridge": "^8.1.1",
+    "https-proxy-agent": "^5.0.1",
+    "matrix-appservice-bridge": "^8.1.2",
     "matrix-widget-api": "^1.1.1",
     "minimist": "^1.2.6",
     "nedb": "^1.8.0",
     "node-emoji": "^1.10.0",
-    "nunjucks": "^3.2.3",
+    "nunjucks": "^3.2.4",
     "p-queue": "^6.0.0",
     "pg-promise": "^10.11.1",
     "randomstring": "^1.2.1",

@@ -4,11 +4,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "pipreqs";
-  version = "0.4.11";
+  version = "0.4.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c793b4e147ac437871b3a962c5ce467e129c859ece5ba79aca83c20f4d9c3aef";
+    hash = "sha256-oX8WeIC2khvjdTPOTIHdxuIrRlwQeq1VfbQ7Gt1WqZs=";
   };
 
   propagatedBuildInputs = [ yarg docopt ];

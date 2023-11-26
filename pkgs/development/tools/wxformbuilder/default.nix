@@ -10,21 +10,28 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "wxFormBuilder";
-  version = "unstable-2023-04-21";
+  pname = "wxformbuilder";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
-    rev = "f026a8e1a7f68e794638f637e53845f8f04869ef";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-48J8osSBb5x9b8MYWZ5QGF6rWgwtcJ0PLLAYViDr50M=";
+    leaveDotGit = true;
+    postFetch = ''
+      substituteInPlace $out/.git-properties \
+        --replace "\$Format:%h\$" "$(git -C $out rev-parse --short HEAD)" \
+        --replace "\$Format:%(describe)\$" "$(git -C $out rev-parse --short HEAD)"
+      rm -rf $out/.git
+    '';
+    hash = "sha256-Lqta+u9WVwUREsR7aH+2DJn0oM5QwlwRSBImuwNkmS4=";
   };
 
   postPatch = ''
-    substituteInPlace .git-properties \
-      --replace "\$Format:%h\$" "${builtins.substring 0 7 finalAttrs.src.rev}" \
-      --replace "\$Format:%(describe)\$" "${builtins.substring 0 7 finalAttrs.src.rev}"
+    substituteInPlace third_party/tinyxml2/cmake/tinyxml2.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
     sed -i '/fixup_bundle/d' cmake/macros.cmake
   '';
 
@@ -47,13 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/wxFormBuilder.app $out/Applications
-    makeWrapper $out/{Applications/wxFormBuilder.app/Contents/MacOS,bin}/wxFormBuilder
+    makeWrapper $out/Applications/wxFormBuilder.app/Contents/MacOS/wxFormBuilder $out/bin/wxformbuilder
   '';
 
   meta = with lib; {
     description = "RAD tool for wxWidgets GUI design";
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
     license = licenses.gpl2Only;
+    mainProgram = "wxformbuilder";
     maintainers = with maintainers; [ matthuszagh wegank ];
     platforms = platforms.unix;
   };

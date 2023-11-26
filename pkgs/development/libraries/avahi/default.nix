@@ -36,13 +36,20 @@ stdenv.mkDerivation rec {
   patches = [
     # CVE-2021-36217 / CVE-2021-3502
     (fetchpatch {
+      name = "CVE-2021-3502.patch";
       url = "https://github.com/lathiat/avahi/commit/9d31939e55280a733d930b15ac9e4dda4497680c.patch";
       sha256 = "sha256-BXWmrLWUvDxKPoIPRFBpMS3T4gijRw0J+rndp6iDybU=";
     })
     # CVE-2021-3468
     (fetchpatch {
+      name = "CVE-2021-3468.patch";
       url = "https://github.com/lathiat/avahi/commit/447affe29991ee99c6b9732fc5f2c1048a611d3b.patch";
       sha256 = "sha256-qWaCU1ZkCg2PmijNto7t8E3pYRN/36/9FrG8okd6Gu8=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-1981.patch";
+      url = "https://github.com/lathiat/avahi/commit/a2696da2f2c50ac43b6c4903f72290d5c3fa9f6f.patch";
+      sha256 = "sha256-BEYFGCnQngp+OpiKIY/oaKygX7isAnxJpUPCUvg+efc=";
     })
   ];
 

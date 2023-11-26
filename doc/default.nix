@@ -3,6 +3,8 @@ let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
 
+  common = import ./common.nix;
+
   lib-docs = import ./doc-support/lib-function-docs.nix {
     inherit pkgs nixpkgs;
     libsets = [
@@ -17,8 +19,12 @@ let
       { name = "options"; description = "NixOS / nixpkgs option handling"; }
       { name = "path"; description = "path functions"; }
       { name = "filesystem"; description = "filesystem functions"; }
+      { name = "fileset"; description = "file set functions"; }
       { name = "sources"; description = "source filtering functions"; }
       { name = "cli"; description = "command-line serialization functions"; }
+      { name = "gvariant"; description = "GVariant formatted string serialization functions"; }
+      { name = "customisation"; description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets"; }
+      { name = "meta"; description = "functions for derivation metadata"; }
     ];
   };
 
@@ -132,15 +138,15 @@ in pkgs.stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    dest="$out/share/doc/nixpkgs"
+    dest="$out/${common.outputPath}"
     mkdir -p "$(dirname "$dest")"
     mv out "$dest"
-    mv "$dest/index.html" "$dest/manual.html"
+    mv "$dest/index.html" "$dest/${common.indexPath}"
 
     cp ${epub} "$dest/nixpkgs-manual.epub"
 
     mkdir -p $out/nix-support/
-    echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
 }

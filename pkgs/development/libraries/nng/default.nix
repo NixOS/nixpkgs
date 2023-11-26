@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nng";
-    rev = "8e1836f57e8bcdb228dd5baadc71dfbf30b544e0";
-    sha256 = "sha256-Q08/Oxv9DLCHp7Hf3NqNa0sHq7qwM6TfGT8gNyiwin8=";
+    rev = "a54820ff0e1b74554c7f649e8386ee8c4ecd98f5";
+    sha256 = "sha256-4Vj8nf3c45Y8LJ79YUOrNAAGMmfygdPtAJrs+JuFiUM=";
   };
 
   nativeBuildInputs = [ cmake ninja ]

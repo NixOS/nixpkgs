@@ -1,13 +1,15 @@
 { config, pkgs, lib, ... }:
-with lib;
 
 let
+  inherit (lib) literalMD mkEnableOption mkIf mkOption types;
   cfg = config.services.quake3-server;
+
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
     set net_port ${builtins.toString cfg.port}
 
     ${cfg.extraConfig}
   '';
+
   defaultBaseq3 = pkgs.requireFile rec {
     name = "baseq3";
     hashMode = "recursive";
@@ -25,6 +27,7 @@ let
       $services.quake3-server.baseq3/.q3a/
     '';
   };
+
   home = pkgs.runCommand "quake3-home" {} ''
       mkdir -p $out/.q3a/baseq3
 
@@ -38,6 +41,7 @@ in {
   options = {
     services.quake3-server = {
       enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
+      package = lib.mkPackageOptionMD pkgs "ioquake3" { };
 
       port = mkOption {
         type = types.port;
@@ -103,10 +107,10 @@ in {
         ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
         ExecStartPre = optionalString (!baseq3InStore) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
-        ExecStart = "${pkgs.ioquake3}/ioq3ded.x86_64 +exec nix.cfg";
+        ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ f4814n ];
+  meta.maintainers = with lib.maintainers; [ f4814n ];
 }

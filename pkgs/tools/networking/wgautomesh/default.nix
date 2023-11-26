@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.deuxfleurs.fr/Deuxfleurs/wgautomesh";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.lx ];
+    mainProgram = "wgautomesh";
   };
 }

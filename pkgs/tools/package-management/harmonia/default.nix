@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "0.6.7";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-3tf2lFMrZowRL3v4bkkhyPdULKUZ5w7zJLXlWyMJg3k=";
+    hash = "sha256-XtnK54HvZMKZGSCrVD0FO5PQLMo3Vkj8ezUlsfqStq0=";
   };
 
-  cargoHash = "sha256-g/f0+sj3XBjDFfSCLNlyqFehODsmf87hwbmobo6Tehg=";
+  cargoHash = "sha256-oQVHrfNPhslYk6APB/bhW+h+vk/gNTW/ZypoGGb5zPk=";
 
   nativeBuildInputs = [
     pkg-config nix
@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/harmonia";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
+    mainProgram = "harmonia";
   };
 }

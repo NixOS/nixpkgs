@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-8x9oJaYb/mN2TUaVrGOYi5/6TETD78jif0SwCSc0kyo=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   modRoot = "./src/cmd/linuxkit";
 

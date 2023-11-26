@@ -15,18 +15,20 @@
 , glib
 , gtk4
 , libadwaita
+, Security
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.5.4";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-twK0C2BvD3GLmJ9H05sas0bce/dIMIWeCoFRU/f+1eg=";
+    hash = "sha256-Uc9N2kRTpi9cCFskngkiclLpEcp4dtI2mhldG4s/GFY=";
   };
 
   postPatch = ''
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-mxM+V4gWGfW8M56+kV/Ljtzde7oRPH0twJtEImkUIF4=";
+    hash = "sha256-GN9TjsGBU3D/mc6/XtRAk5pliKRPTQ9f3fMdS6weCaE=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +59,9 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    Foundation
   ];
 
   meta = {
@@ -64,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/app/app.drey.Warp";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

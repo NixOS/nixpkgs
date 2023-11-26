@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "kamilalisp";
-  version = "0.2p";
+  version = "0.3.0.1";
 
   src = fetchurl {
-    url = "https://github.com/kspalaiologos/kamilalisp/releases/download/v${version}/kamilalisp-${lib.versions.majorMinor version}.jar";
-    hash = "sha256-6asl9zRTidDxWsgIRxUA1ygYug/aqiQ5XAEwWYNOfKE=";
+    url = "https://github.com/kspalaiologos/kamilalisp/releases/download/v${version}/kamilalisp-${version}.jar";
+    hash = "sha256-SW0U483eHptkYw+yJV/2cImfK3uEjkl8ma54yeagF6s=";
   };
 
   dontUnpack = true;

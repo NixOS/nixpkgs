@@ -1,5 +1,4 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , dpkg
 , fetchurl
 , makeDesktopItem
@@ -8,6 +7,11 @@
 , stdenv
 , lib
 , wrapGAppsHook
+, alsa-lib
+, nss
+, nspr
+, systemd
+, xorg
 }:
 let
   desktopItem = makeDesktopItem {
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
+  # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
@@ -46,7 +51,14 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = atomEnv.packages;
+  buildInputs = [
+    alsa-lib
+    nss
+    nspr
+    xorg.libXScrnSaver
+    xorg.libXtst
+    systemd
+  ];
 
   unpackPhase = ''
     # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here

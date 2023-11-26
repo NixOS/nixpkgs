@@ -3,6 +3,8 @@
 , fetchPypi
 , pythonRelaxDepsHook
 , setuptools
+, setuptools-scm
+, wheel
 , pillow
 , psutil
 , async-tkinter-loop
@@ -23,6 +25,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools-scm
+    wheel
   ];
 
   buildInputs = [

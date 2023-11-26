@@ -1,32 +1,30 @@
 { lib
 , stdenv
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
 , fetchzip
+, makeDesktopItem
+, nix-update-script
+
+, copyDesktopItems
+, icoutils
+, makeWrapper
+
 , ffmpeg
 , gtk2
 , hunspell
-, icoutils
 , mono
 , mpv
 , tesseract4
-, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "3.6.13";
+  version = "4.0.2";
 
   src = fetchzip {
     url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${lib.replaceStrings [ "." ] [ "" ] version}.zip";
-    sha256 = "sha256-LoACcpeK1s6EyM5svnsncTENLAEuRqonNLaQ2q4UFxM=";
+    hash = "sha256-kcs2h6HeWniJhGDNsy+EBauXbiDIlLCOJkVOCIzLBzM=";
     stripRoot = false;
   };
-
-  preUnpack = ''
-    rm -rf source
-  '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -84,16 +82,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A subtitle editor";
-    homepage = "https://nikse.dk/subtitleedit/";
-    license = licenses.gpl3Plus;
     longDescription = ''
       With Subtitle Edit you can easily adjust a subtitle if it is out of sync with
       the video in several different ways. You can also use it for making
       new subtitles from scratch (using the time-line /waveform/spectrogram)
       or for translating subtitles.
     '';
-    maintainers = with maintainers; [ paveloom ];
+    homepage = "https://nikse.dk/subtitleedit";
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [ paveloom ];
   };
 }

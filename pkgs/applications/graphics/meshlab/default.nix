@@ -27,8 +27,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
-    rev = "Meshlab-${version}";
-    sha256 = "sha256-MP+jkiV6yS1T1eWClxM56kZWLXwu0g4w/zBHy6CSL6Y=";
+    rev = "MeshLab-${version}";
+    sha256 = "sha256-jcc3PfsiIeYyipteZgzd0NwZgFFgR/mMBiaInzhOcDY=";
     fetchSubmodules = true; # for vcglib
   };
 

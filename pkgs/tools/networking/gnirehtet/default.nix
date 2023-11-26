@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , fetchzip
 , androidenv
 , makeWrapper
@@ -22,7 +21,7 @@ apk = stdenv.mkDerivation {
   '';
 };
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "gnirehtet";
   inherit version;
 
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage {
     inherit apk;
   };
 
-  sourceRoot = "source/relay-rust";
+  sourceRoot = "${src.name}/relay-rust";
 
   cargoHash = "sha256-3oVWFMFzYsuCec1wxZiHXW6O45qbdL1npqYrg/m4SPc=";
 

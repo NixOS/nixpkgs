@@ -2,13 +2,13 @@
 
 buildNimPackage rec {
   pname = "jsony";
-  version = "d0e69bddf83874e15b5c2f52f8b1386ac080b443";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "treeform";
     repo = pname;
     rev = version;
-    sha256 = "1p250wb97nzz2g0vvq6mn521fx7sn1jpk1ralbzqh5q8clh4g7wr";
+    sha256 = "1720iqsxjhqmhw1zhhs7d2ncdz25r8fqadls1p1iry1wfikjlnba";
   };
 
 

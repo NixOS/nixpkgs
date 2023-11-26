@@ -2,12 +2,13 @@
 , stdenv
 , pythonOlder
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ruff
 , pygls
 , lsprotocol
 , hatchling
 , typing-extensions
+, packaging
 , pytestCheckHook
 , python-lsp-jsonrpc
 , pytest-asyncio
@@ -15,14 +16,15 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.35";
-  format = "pyproject";
+  version = "0.0.45";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "ruff_lsp";
-    hash = "sha256-qRNpswpQitvVczFBKsUFlew+W1uEjtkbWnmwBRUHq0w=";
+  src = fetchFromGitHub {
+    owner = "astral-sh";
+    repo = "ruff-lsp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jTLkex2K/IQTKZp2duM26/EaYhG5E2bGs/QKt5PA7lc=";
   };
 
   postPatch = ''
@@ -35,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     pygls
     lsprotocol
     typing-extensions

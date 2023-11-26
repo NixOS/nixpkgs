@@ -5,7 +5,7 @@
 , poetry-core
 , jsonschema
 , peewee
-, appdirs
+, platformdirs
 , iso8601
 , rfc3339-validator
 , strict-rfc3339
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aw-core";
-  version = "0.5.14";
+  version = "0.5.16";
 
   format = "pyproject";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-core";
     rev = "v${version}";
-    sha256 = "sha256-+XmFh4/wPUpuoRVi8OdzFs/3dwoI1Mjx1hnTiGj+12I=";
+    sha256 = "sha256-7xT7bOGzH5G4WpgNo8pDyiQqX0dWNLNHpgssozUa9kQ=";
   };
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jsonschema
     peewee
-    appdirs
+    platformdirs
     iso8601
     rfc3339-validator
     strict-rfc3339

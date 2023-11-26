@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd2;
     maintainers = [ maintainers.dit7ya ];
     platforms = platforms.linux;
+    mainProgram = "wayshot";
   };
 }

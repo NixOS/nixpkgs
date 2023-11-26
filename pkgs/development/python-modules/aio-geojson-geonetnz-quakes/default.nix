@@ -30,6 +30,8 @@ buildPythonPackage rec {
     pytz
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     aresponses
     pytest-asyncio

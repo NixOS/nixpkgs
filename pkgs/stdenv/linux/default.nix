@@ -59,24 +59,24 @@
 , bootstrapFiles ?
   let table = {
     glibc = {
-      i686-linux = import ./bootstrap-files/i686.nix;
-      x86_64-linux = import ./bootstrap-files/x86_64.nix;
-      armv5tel-linux = import ./bootstrap-files/armv5tel.nix;
-      armv6l-linux = import ./bootstrap-files/armv6l.nix;
-      armv7l-linux = import ./bootstrap-files/armv7l.nix;
-      aarch64-linux = import ./bootstrap-files/aarch64.nix;
-      mipsel-linux = import ./bootstrap-files/mipsel.nix;
+      i686-linux = import ./bootstrap-files/i686-unknown-linux-gnu.nix;
+      x86_64-linux = import ./bootstrap-files/x86_64-unknown-linux-gnu.nix;
+      armv5tel-linux = import ./bootstrap-files/armv5tel-unknown-linux-gnueabi.nix;
+      armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-gnueabihf.nix;
+      armv7l-linux = import ./bootstrap-files/armv7l-unknown-linux-gnueabihf.nix;
+      aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-gnu.nix;
+      mipsel-linux = import ./bootstrap-files/mipsel-unknown-linux-gnu.nix;
       mips64el-linux = import
        (if localSystem.isMips64n32
-        then ./bootstrap-files/mips64el-n32.nix
-        else ./bootstrap-files/mips64el.nix);
-      powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
-      riscv64-linux = import ./bootstrap-files/riscv64.nix;
+        then ./bootstrap-files/mips64el-unknown-linux-gnuabin32.nix
+        else ./bootstrap-files/mips64el-unknown-linux-gnuabi64.nix);
+      powerpc64le-linux = import ./bootstrap-files/powerpc64le-unknown-linux-gnu.nix;
+      riscv64-linux = import ./bootstrap-files/riscv64-unknown-linux-gnu.nix;
     };
     musl = {
-      aarch64-linux = import ./bootstrap-files/aarch64-musl.nix;
-      armv6l-linux  = import ./bootstrap-files/armv6l-musl.nix;
-      x86_64-linux  = import ./bootstrap-files/x86_64-musl.nix;
+      aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-musl.nix;
+      armv6l-linux  = import ./bootstrap-files/armv6l-unknown-linux-musleabihf.nix;
+      x86_64-linux  = import ./bootstrap-files/x86_64-unknown-linux-musl.nix;
     };
   };
 
@@ -194,6 +194,7 @@ let
           inherit lib;
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
+          fortify-headers = prevStage.fortify-headers;
         }).overrideAttrs(a: lib.optionalAttrs (prevStage.gcc-unwrapped.passthru.isXgcc or false) {
           # This affects only `xgcc` (the compiler which compiles the final compiler).
           postFixup = (a.postFixup or "") + ''
@@ -568,6 +569,7 @@ in
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         shell = self.bash + "/bin/bash";
+        fortify-headers = self.fortify-headers;
       };
     };
     extraNativeBuildInputs = [
@@ -645,6 +647,7 @@ in
         ++  [ linuxHeaders # propagated from .dev
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params gcc.cc.libgcc glibc.passthru.libgcc
           ]
+        ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
         ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
         ++ (with gcc-unwrapped.passthru; [
           gmp libmpc mpfr isl

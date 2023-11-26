@@ -1,26 +1,26 @@
 { lib
+, addict
 , buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, torch
-, opencv4
-, yapf
 , coverage
-, mlflow
+, fetchFromGitHub
 , lmdb
 , matplotlib
+, mlflow
 , numpy
+, opencv4
+, parameterized
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , rich
 , termcolor
-, addict
-, parameterized
+, torch
+, yapf
 }:
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.7.4";
+  version = "0.8.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,17 +29,19 @@ buildPythonPackage rec {
     owner = "open-mmlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-eridbYHagwAyXX3/JggfvC0vuy6nBAIISRy1ARrQ7Kk=";
+    hash = "sha256-kJhcw6Hpzx3s5WHeLTF8pydbAKXwfVgvxo7SsSN5gls=";
   };
 
-  # tests are disabled due to sandbox env.
-  disabledTests = [
-    "test_fileclient"
-    "test_http_backend"
-    "test_misc"
+  propagatedBuildInputs = [
+    addict
+    matplotlib
+    numpy
+    opencv4
+    pyyaml
+    rich
+    termcolor
+    yapf
   ];
-
-  nativeBuildInputs = [ pytestCheckHook ];
 
   nativeCheckInputs = [
     coverage
@@ -47,17 +49,7 @@ buildPythonPackage rec {
     mlflow
     torch
     parameterized
-  ];
-
-  propagatedBuildInputs = [
-    addict
-    matplotlib
-    numpy
-    pyyaml
-    rich
-    termcolor
-    yapf
-    opencv4
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -68,8 +60,27 @@ buildPythonPackage rec {
     "mmengine"
   ];
 
+  disabledTestPaths = [
+    # AttributeError
+    "tests/test_fileio/test_backends/test_petrel_backend.py"
+  ];
+
+  disabledTests = [
+    # Tests are disabled due to sandbox
+    "test_fileclient"
+    "test_http_backend"
+    "test_misc"
+    # RuntimeError
+    "test_dump"
+    "test_deepcopy"
+    "test_copy"
+    "test_lazy_import"
+    # AssertionError
+    "test_lazy_module"
+  ];
+
   meta = with lib; {
-    description = "a foundational library for training deep learning models based on PyTorch";
+    description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

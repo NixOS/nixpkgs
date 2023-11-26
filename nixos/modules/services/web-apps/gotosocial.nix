@@ -128,9 +128,7 @@ in
       ensureUsers = [
         {
           name = "gotosocial";
-          ensurePermissions = {
-            "DATABASE gotosocial" = "ALL PRIVILEGES";
-          };
+          ensureDBOwnership = true;
         }
       ];
     };

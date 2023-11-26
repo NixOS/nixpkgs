@@ -1,23 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitLab
+, flit-core
 , python
 }:
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.0.1";
-  format = "flit";
+  version = "4.0.2";
+  format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "Taywee";
     repo = "asyncinotify";
     rev = "v${version}";
-    hash = "sha256-DMRuj16KjO+0uAB33UCVPdUiQGzri1b/z9KVqQYp2Po=";
+    hash = "sha256-Q7b406UENCmD9SGbaml+y2YLDi7VLZBmDkYMo8CLuVw=";
   };
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
   checkPhase = ''
-    ${python.pythonForBuild.interpreter} ${src}/test.py
+    ${python.pythonOnBuildForHost.interpreter} ${src}/test.py
   '';
   pythonImportsCheck = ["asyncinotify"];
 

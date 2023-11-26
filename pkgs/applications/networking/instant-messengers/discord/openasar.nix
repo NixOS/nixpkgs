@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, bash, nodePackages, unzip }:
+{ lib, stdenv, fetchFromGitHub, nodejs, bash, asar, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "openasar";
-  version = "unstable-2023-07-07";
+  version = "unstable-2023-10-24";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "5ac246dc92e9a2a9b314d899df728f37096c482b";
-    hash = "sha256-ODeVru4LCSl3rIeJCdezAwqzKP6IRo5WDaaUymqEcBs=";
+    rev = "eee9bab822e3dbd97a735d0050ddd41ba27917f2";
+    hash = "sha256-SSWQSqGgTZjowgrzF6qHZDTw/Y9xFHNTZvetxqZubYI=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     bash scripts/injectPolyfills.sh
     substituteInPlace src/index.js --replace 'nightly' '${version}'
     ${nodejs}/bin/node scripts/strip.js
-    ${nodePackages.asar}/bin/asar pack src app.asar
+    ${asar}/bin/asar pack src app.asar
 
     runHook postBuild
   '';

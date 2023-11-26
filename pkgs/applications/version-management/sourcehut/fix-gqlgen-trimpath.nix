@@ -1,9 +1,9 @@
 { unzip
-, gqlgenVersion ? "0.17.2"
+, gqlgenVersion ? "0.17.20"
 }:
 {
   overrideModAttrs = (_: {
-    # No need to workaround -trimpath: it's not used in go-modules,
+    # No need to workaround -trimpath: it's not used in goModules,
     # but do download `go generate`'s dependencies nonetheless.
     preBuild = ''
       go generate ./loaders

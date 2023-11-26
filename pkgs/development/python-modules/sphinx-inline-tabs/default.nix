@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , sphinx
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
   version = "2023.04.21";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
@@ -15,6 +16,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-1oZheHDNOQU0vWL3YClQrJe94WyUJ72bCAF1UKtjJ0w=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     sphinx

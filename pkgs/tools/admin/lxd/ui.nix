@@ -1,40 +1,65 @@
-{ mkYarnPackage
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchYarnDeps
-, lib
+, nodejs
+, prefetch-yarn-deps
+, yarn
 }:
 
-mkYarnPackage rec {
+stdenv.mkDerivation rec {
   pname = "lxd-ui";
-  version = "unstable-2023-07-03";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
-    rev = "c2e819a027d440cbb1cb9d450aad280dde68e231";
-    sha256 = "sha256-lEzGACSv6CpxnfkOcsdPrH6KRKDkoKv63m8Gsodk8uc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-l9Fp/Vm7NxMCp5QcM8+frFyfahhPG7TyF6NhfU1SEaA=";
   };
 
-  packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-SLkgJDb9lwz/ShZh+H4YKAFRc1BdANWI5ndM2O6NzXE=";
+    hash = "sha256-R6OeaBC6xBHa229YGyc2LDjjenwvS805PW8ueU/o99I=";
   };
 
+  nativeBuildInputs = [
+    nodejs
+    prefetch-yarn-deps
+    yarn
+  ];
+
+  configurePhase = ''
+    runHook preConfigure
+
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror "$offlineCache"
+    fixup-yarn-lock yarn.lock
+    yarn --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive install
+    patchShebangs node_modules
+
+    runHook postConfigure
+  '';
+
   buildPhase = ''
+    runHook preBuild
+
     yarn --offline build
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    cp -rv deps/lxd-ui/build/ui/ $out
-  '';
+    runHook preInstall
 
-  doDist = false;
+    cp -r build/ui/ $out
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Web user interface for LXD.";
-    homepage = "https://linuxcontainers.org/lxd/";
-    changelog = "https://github.com/canonical/lxd-ui";
+    homepage = "https://github.com/canonical/lxd-ui";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

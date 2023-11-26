@@ -8,13 +8,19 @@
 , boost
 , ncurses
 , enableCApi ? true
-# requires numpy
+# Although we handle the Python API's dependencies in pythonEnvArg, this
+# feature is currently disabled as upstream attempts to run `python setup.py
+# install` by itself, and it fails because the Python's environment's prefix is
+# not a writable directly. Adding support for this feature would require using
+# python's pypa/build nad pypa/install hooks directly, and currently it is hard
+# to do that because it all happens after a long buildPhase of the C API.
 , enablePythonApi ? false
 , python3
 , buildPackages
 , enableExamples ? false
-, enableUtils ? false
+, enableUtils ? true
 , libusb1
+# Disable dpdk for now due to compilation issues.
 , enableDpdk ? false
 , dpdk
 # Devices
@@ -41,24 +47,37 @@ let
   );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uhd";
-  # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
-  # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "4.4.0.0";
+  # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
+  #
+  #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
+  #
+  version = "4.6.0.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "v${version}";
-    sha256 = "sha256-khVOHlvacZc4EMg4m55rxEqPvLY1xURpAfOW905/3jg=";
+    rev = "v${finalAttrs.version}";
+    # The updateScript relies on the `src` using `hash`, and not `sha256. To
+    # update the correct hash for the `src` vs the `uhdImagesSrc`
+    hash = "sha256-9ZGt0ZrGbprCmpAuOue6pg2gliu4MvlRFHGxyMJeKAc=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
-    url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
-    sha256 = "V8ldW8bvYWbrDAvpWpHcMeLf9YvF8PIruDAyNK/bru4=";
+    url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
+    # Please don't convert this to a hash, in base64, see comment near src's
+    # hash.
+    sha256 = "17g503mhndaabrdl7qai3rdbafr8xx8awsyr7h2bdzwzprzmh4m3";
+  };
+  passthru = {
+    updateScript = [
+      ./update.sh
+      # Pass it this file name as argument
+      (builtins.unsafeGetAttrPos "pname" finalAttrs.finalPackage).file
+    ];
   };
 
   cmakeFlags = [
@@ -105,7 +124,7 @@ stdenv.mkDerivation rec {
     # pythonEnv for runtime as well. The utilities' runtime dependencies are
     # handled at the environment
     ++ optionals (enableExamples) [ ncurses ncurses.dev ]
-    ++ optionals (enablePythonApi || enableUtils) [ pythonEnv ]
+    ++ optionals (enablePythonApi || enableUtils) [ finalAttrs.pythonEnv ]
     ++ optionals (enableDpdk) [ dpdk ]
   ;
 
@@ -122,13 +141,13 @@ stdenv.mkDerivation rec {
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
-    ++ optionals (enableUtils && stdenv.targetPlatform.isLinux) [ "moveUdevRules" ]
+    ++ optionals (enableUtils && stdenv.hostPlatform.isLinux) [ "moveUdevRules" ]
   ;
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
     mkdir -p "$out/share/uhd/images"
-    tar --strip-components=1 -xvf "${uhdImagesSrc}" -C "$out/share/uhd/images"
+    tar --strip-components=1 -xvf "${finalAttrs.uhdImagesSrc}" -C "$out/share/uhd/images"
   '';
 
   # -DENABLE_TESTS=ON installs the tests, we don't need them in the output
@@ -142,6 +161,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/udev/rules.d
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
+
+  disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
+    python3
+  ];
 
   meta = with lib; {
     description = "USRP Hardware Driver (for Software Defined Radio)";
@@ -157,4 +180,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz tomberek doronbehar ];
   };
-}
+})

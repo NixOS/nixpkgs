@@ -1,6 +1,6 @@
 # Test configuration switching.
 
-import ./make-test-python.nix ({ pkgs, ...} : let
+import ./make-test-python.nix ({ lib, pkgs, ...} : let
 
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
@@ -58,6 +58,37 @@ in {
       '');
 
       specialisation = rec {
+        brokenInitInterface.configuration.config.system.extraSystemBuilderCmds = ''
+          echo "systemd 0" > $out/init-interface-version
+        '';
+
+        modifiedSystemConf.configuration.systemd.extraConfig = ''
+          # Hello world!
+        '';
+
+        addedMount.configuration.virtualisation.fileSystems."/test" = {
+          device = "tmpfs";
+          fsType = "tmpfs";
+        };
+
+        addedMountOptsModified.configuration = {
+          imports = [ addedMount.configuration ];
+          virtualisation.fileSystems."/test".options = [ "x-test" ];
+        };
+
+        addedMountDevModified.configuration = {
+          imports = [ addedMountOptsModified.configuration ];
+          virtualisation.fileSystems."/test".device = lib.mkForce "ramfs";
+        };
+
+        storeMountModified.configuration = {
+          virtualisation.fileSystems."/".device = lib.mkForce "auto";
+        };
+
+        swap.configuration.swapDevices = lib.mkVMOverride [
+          { device = "/swapfile"; size = 1; }
+        ];
+
         simpleService.configuration = {
           systemd.services.test = {
             wantedBy = [ "multi-user.target" ];
@@ -279,6 +310,28 @@ in {
           systemd.services.test-service.unitConfig.RefuseManualStart = true;
         };
 
+        unitWithTemplate.configuration = {
+          systemd.services."instantiated@".serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.coreutils}/bin/true";
+            ExecReload = "${pkgs.coreutils}/bin/true";
+          };
+          systemd.services."instantiated@one" = {
+            wantedBy = [ "multi-user.target" ];
+            overrideStrategy = "asDropin";
+          };
+          systemd.services."instantiated@two" = {
+            wantedBy = [ "multi-user.target" ];
+            overrideStrategy = "asDropin";
+          };
+        };
+
+        unitWithTemplateModified.configuration = {
+          imports = [ unitWithTemplate.configuration ];
+          systemd.services."instantiated@".serviceConfig.X-Test = "test";
+        };
+
         restart-and-reload-by-activation-script.configuration = {
           systemd.services = rec {
             simple-service = {
@@ -290,26 +343,47 @@ in {
                 ExecReload = "${pkgs.coreutils}/bin/true";
               };
             };
+            "templated-simple-service@" = simple-service;
+            "templated-simple-service@instance".overrideStrategy = "asDropin";
 
             simple-restart-service = simple-service // {
               stopIfChanged = false;
             };
+            "templated-simple-restart-service@" = simple-restart-service;
+            "templated-simple-restart-service@instance".overrideStrategy = "asDropin";
 
             simple-reload-service = simple-service // {
               reloadIfChanged = true;
             };
+            "templated-simple-reload-service@" = simple-reload-service;
+            "templated-simple-reload-service@instance".overrideStrategy = "asDropin";
 
             no-restart-service = simple-service // {
               restartIfChanged = false;
             };
+            "templated-no-restart-service@" = no-restart-service;
+            "templated-no-restart-service@instance".overrideStrategy = "asDropin";
 
             reload-triggers = simple-service // {
               wantedBy = [ "multi-user.target" ];
             };
+            "templated-reload-triggers@" = simple-service;
+            "templated-reload-triggers@instance" = {
+              overrideStrategy = "asDropin";
+              wantedBy = [ "multi-user.target" ];
+            };
 
             reload-triggers-and-restart-by-as = simple-service;
+            "templated-reload-triggers-and-restart-by-as@" = reload-triggers-and-restart-by-as;
+            "templated-reload-triggers-and-restart-by-as@instance".overrideStrategy = "asDropin";
 
             reload-triggers-and-restart = simple-service // {
+              stopIfChanged = false; # easier to check for this
+              wantedBy = [ "multi-user.target" ];
+            };
+            "templated-reload-triggers-and-restart@" = simple-service;
+            "templated-reload-triggers-and-restart@instance" = {
+              overrideStrategy = "asDropin";
               stopIfChanged = false; # easier to check for this
               wantedBy = [ "multi-user.target" ];
             };
@@ -332,12 +406,20 @@ in {
               simple-reload-service.service
               no-restart-service.service
               reload-triggers-and-restart-by-as.service
+              templated-simple-service@instance.service
+              templated-simple-restart-service@instance.service
+              templated-simple-reload-service@instance.service
+              templated-no-restart-service@instance.service
+              templated-reload-triggers-and-restart-by-as@instance.service
               EOF
 
               cat <<EOF >> "$g"
               reload-triggers.service
               reload-triggers-and-restart-by-as.service
               reload-triggers-and-restart.service
+              templated-reload-triggers@instance.service
+              templated-reload-triggers-and-restart-by-as@instance.service
+              templated-reload-triggers-and-restart@instance.service
               EOF
             '';
           };
@@ -346,6 +428,10 @@ in {
         restart-and-reload-by-activation-script-modified.configuration = {
           imports = [ restart-and-reload-by-activation-script.configuration ];
           systemd.services.reload-triggers-and-restart.serviceConfig.X-Modified = "test";
+          systemd.services."templated-reload-triggers-and-restart@instance" = {
+            overrideStrategy = "asDropin";
+            serviceConfig.X-Modified = "test";
+          };
         };
 
         simple-socket.configuration = {
@@ -395,12 +481,25 @@ in {
           ];
         };
 
-        mountModified.configuration = {
+        mountOptionsModified.configuration = {
           systemd.mounts = [
             {
               description = "Testmount";
               what = "tmpfs";
               type = "tmpfs";
+              where = "/testmount";
+              options = "size=10M";
+              wantedBy = [ "local-fs.target" ];
+            }
+          ];
+        };
+
+        mountModified.configuration = {
+          systemd.mounts = [
+            {
+              description = "Testmount";
+              what = "ramfs";
+              type = "ramfs";
               where = "/testmount";
               options = "size=10M";
               wantedBy = [ "local-fs.target" ];
@@ -507,6 +606,10 @@ in {
       set -o pipefail
       exec env -i "$@" | tee /dev/stderr
     '';
+
+    # Returns a comma separated representation of the given list in sorted
+    # order, that matches the output format of switch-to-configuration.pl
+    sortedUnits = xs: lib.concatStringsSep ", " (builtins.sort builtins.lessThan xs);
   in /* python */ ''
     def switch_to_specialisation(system, name, action="test", fail=False):
         if name == "":
@@ -570,6 +673,97 @@ in {
         machine.succeed("test -f /tmp/bootloader-installed")
 
         # test and dry-activate actions are tested further down below
+
+        # invalid action fails the script
+        switch_to_specialisation("${machine}", "", action="broken-action", fail=True)
+        # no action fails the script
+        assert "Usage:" in machine.fail("${machine}/bin/switch-to-configuration 2>&1")
+
+    with subtest("init interface version"):
+        # Do not try to switch to an invalid init interface version
+        assert "incompatible" in switch_to_specialisation("${machine}", "brokenInitInterface", fail=True)
+
+    with subtest("systemd restarts"):
+        # systemd is restarted when its system.conf changes
+        out = switch_to_specialisation("${machine}", "modifiedSystemConf")
+        assert_contains(out, "restarting systemd...")
+
+    with subtest("continuing from an aborted switch"):
+        # An aborted switch will write into a file what it tried to start
+        # and a second switch should continue from this
+        machine.succeed("echo dbus.service > /run/nixos/start-list")
+        out = switch_to_specialisation("${machine}", "modifiedSystemConf")
+        assert_contains(out, "starting the following units: dbus.service\n")
+
+    with subtest("fstab mounts"):
+        switch_to_specialisation("${machine}", "")
+        # add a mountpoint
+        out = switch_to_specialisation("${machine}", "addedMount")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test.mount\n")
+        # modify the mountpoint's options
+        out = switch_to_specialisation("${machine}", "addedMountOptsModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: test.mount\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # modify the device
+        out = switch_to_specialisation("${machine}", "addedMountDevModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # modify both
+        out = switch_to_specialisation("${machine}", "addedMount")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: test.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # remove the mount
+        out = switch_to_specialisation("${machine}", "")
+        assert_contains(out, "stopping the following units: test.mount\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # change something about the / mount
+        out = switch_to_specialisation("${machine}", "storeMountModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_contains(out, "NOT restarting the following changed units: -.mount")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+
+    with subtest("swaps"):
+        switch_to_specialisation("${machine}", "")
+        # add a swap
+        out = switch_to_specialisation("${machine}", "swap")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: swapfile.swap")
+        # remove it
+        out = switch_to_specialisation("${machine}", "")
+        assert_contains(out, "stopping swap device: /swapfile")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus.service\n")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
 
     with subtest("services"):
         switch_to_specialisation("${machine}", "")
@@ -731,6 +925,16 @@ in {
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")
         assert_contains(out, "\nstarting the following units: required-service.service\n")
+        assert_lacks(out, "the following new units were started:")
+
+        # Ensure templated units are restarted when the base unit changes
+        switch_to_specialisation("${machine}", "unitWithTemplate")
+        out = switch_to_specialisation("${machine}", "unitWithTemplateModified")
+        assert_contains(out, "stopping the following units: instantiated@one.service, instantiated@two.service\n")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_contains(out, "\nstarting the following units: instantiated@one.service, instantiated@two.service\n")
         assert_lacks(out, "the following new units were started:")
 
     with subtest("failing units"):
@@ -896,15 +1100,62 @@ in {
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "restarting the following units:")
-        assert_contains(out, "\nstarting the following units: no-restart-service.service, reload-triggers-and-restart-by-as.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
-        assert_contains(out, "the following new units were started: no-restart-service.service, reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "\nstarting the following units: ${sortedUnits [
+          "no-restart-service.service"
+          "reload-triggers-and-restart-by-as.service"
+          "simple-reload-service.service"
+          "simple-restart-service.service"
+          "simple-service.service"
+          "templated-no-restart-service@instance.service"
+          "templated-reload-triggers-and-restart-by-as@instance.service"
+          "templated-simple-reload-service@instance.service"
+          "templated-simple-restart-service@instance.service"
+          "templated-simple-service@instance.service"
+        ]}\n")
+        assert_contains(out, "the following new units were started: ${sortedUnits [
+          "no-restart-service.service"
+          "reload-triggers-and-restart-by-as.service"
+          "reload-triggers-and-restart.service"
+          "reload-triggers.service"
+          "simple-reload-service.service"
+          "simple-restart-service.service"
+          "simple-service.service"
+          "system-templated\\\\x2dno\\\\x2drestart\\\\x2dservice.slice"
+          "system-templated\\\\x2dreload\\\\x2dtriggers.slice"
+          "system-templated\\\\x2dreload\\\\x2dtriggers\\\\x2dand\\\\x2drestart.slice"
+          "system-templated\\\\x2dreload\\\\x2dtriggers\\\\x2dand\\\\x2drestart\\\\x2dby\\\\x2das.slice"
+          "system-templated\\\\x2dsimple\\\\x2dreload\\\\x2dservice.slice"
+          "system-templated\\\\x2dsimple\\\\x2drestart\\\\x2dservice.slice"
+          "system-templated\\\\x2dsimple\\\\x2dservice.slice"
+          "templated-no-restart-service@instance.service"
+          "templated-reload-triggers-and-restart-by-as@instance.service"
+          "templated-reload-triggers-and-restart@instance.service"
+          "templated-reload-triggers@instance.service"
+          "templated-simple-reload-service@instance.service"
+          "templated-simple-restart-service@instance.service"
+          "templated-simple-service@instance.service"
+        ]}\n")
         # Switch to the same system where the example services get restarted
         # and reloaded by the activation script
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service\n")
-        assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "reloading the following units: ${sortedUnits [
+          "reload-triggers-and-restart.service"
+          "reload-triggers.service"
+          "simple-reload-service.service"
+          "templated-reload-triggers-and-restart@instance.service"
+          "templated-reload-triggers@instance.service"
+          "templated-simple-reload-service@instance.service"
+        ]}\n")
+        assert_contains(out, "restarting the following units: ${sortedUnits [
+          "reload-triggers-and-restart-by-as.service"
+          "simple-restart-service.service"
+          "simple-service.service"
+          "templated-reload-triggers-and-restart-by-as@instance.service"
+          "templated-simple-restart-service@instance.service"
+          "templated-simple-service@instance.service"
+        ]}\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
         # Switch to the same system and see if the service gets restarted when it's modified
@@ -912,16 +1163,44 @@ in {
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script-modified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
-        assert_contains(out, "reloading the following units: reload-triggers.service, simple-reload-service.service\n")
-        assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "reloading the following units: ${sortedUnits [
+          "reload-triggers.service"
+          "simple-reload-service.service"
+          "templated-reload-triggers@instance.service"
+          "templated-simple-reload-service@instance.service"
+        ]}\n")
+        assert_contains(out, "restarting the following units: ${sortedUnits [
+          "reload-triggers-and-restart-by-as.service"
+          "reload-triggers-and-restart.service"
+          "simple-restart-service.service"
+          "simple-service.service"
+          "templated-reload-triggers-and-restart-by-as@instance.service"
+          "templated-reload-triggers-and-restart@instance.service"
+          "templated-simple-restart-service@instance.service"
+          "templated-simple-service@instance.service"
+        ]}\n")
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
         # The same, but in dry mode
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
         assert_lacks(out, "would stop the following units:")
         assert_lacks(out, "would NOT stop the following changed units:")
-        assert_contains(out, "would reload the following units: reload-triggers.service, simple-reload-service.service\n")
-        assert_contains(out, "would restart the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "would reload the following units: ${sortedUnits [
+          "reload-triggers.service"
+          "simple-reload-service.service"
+          "templated-reload-triggers@instance.service"
+          "templated-simple-reload-service@instance.service"
+        ]}\n")
+        assert_contains(out, "would restart the following units: ${sortedUnits [
+          "reload-triggers-and-restart-by-as.service"
+          "reload-triggers-and-restart.service"
+          "simple-restart-service.service"
+          "simple-service.service"
+          "templated-reload-triggers-and-restart-by-as@instance.service"
+          "templated-reload-triggers-and-restart@instance.service"
+          "templated-simple-restart-service@instance.service"
+          "templated-simple-service@instance.service"
+        ]}\n")
         assert_lacks(out, "\nwould start the following units:")
 
     with subtest("socket-activated services"):
@@ -993,7 +1272,8 @@ in {
         switch_to_specialisation("${machine}", "mount")
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=1024k")
-        out = switch_to_specialisation("${machine}", "mountModified")
+        # Changing options reloads the unit
+        out = switch_to_specialisation("${machine}", "mountOptionsModified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: testmount.mount\n")
@@ -1003,6 +1283,17 @@ in {
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=10240k")
+        # Changing anything but `Options=` restarts the unit
+        out = switch_to_specialisation("${machine}", "mountModified")
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_contains(out, "\nrestarting the following units: testmount.mount\n")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        # It changed
+        out = machine.succeed("mount | grep 'on /testmount'")
+        assert_contains(out, "ramfs")
 
     with subtest("timers"):
         switch_to_specialisation("${machine}", "timer")

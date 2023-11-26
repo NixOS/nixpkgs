@@ -26,7 +26,7 @@ directory which is scanned by the ICL loader for ICD files. For example:
 
 ```ShellSession
 $ export \
-  OCL_ICD_VENDORS=`nix-build '<nixpkgs>' --no-out-link -A rocm-opencl-icd`/etc/OpenCL/vendors/
+  OCL_ICD_VENDORS=`nix-build '<nixpkgs>' --no-out-link -A rocmPackages.clr.icd`/etc/OpenCL/vendors/
 ```
 
 The second mechanism is to add the OpenCL driver package to
@@ -50,13 +50,13 @@ Platform Vendor      Advanced Micro Devices, Inc.
 
 Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
-supported through the rocm-opencl-icd package. Adding this package to
+supported through the rocmPackages.clr.icd package. Adding this package to
 [](#opt-hardware.opengl.extraPackages)
 enables OpenCL support:
 
 ```nix
 hardware.opengl.extraPackages = [
-  rocm-opencl-icd
+  rocmPackages.clr.icd
 ];
 ```
 

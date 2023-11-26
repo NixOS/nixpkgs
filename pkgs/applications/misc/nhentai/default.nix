@@ -1,12 +1,20 @@
-{ lib, python3Packages, fetchPypi }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "nhentai";
-  version = "0.4.16";
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-2lzrQqUx3lPM+OAUO/SwT+fAuG7kWmUnTACNUiP7d1M=";
+  version = "0.5.3";
+  src = fetchFromGitHub {
+    owner = "RicterZ";
+    repo = pname;
+    rev = version;
+    hash = "sha256-SjWIctAyczjYGP4buXQBA/RcrdikMSuSBtfhORNmXMc=";
   };
+
+  # tests require a network connection
+  doCheck = false;
 
   propagatedBuildInputs = with python3Packages; [
     requests
@@ -21,6 +29,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/RicterZ/nhentai";
     description = "nHentai is a CLI tool for downloading doujinshi from <http://nhentai.net>";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisdavis-ops ];
+    maintainers = with maintainers; [ ];
   };
 }

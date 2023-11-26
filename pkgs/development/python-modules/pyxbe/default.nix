@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyxbe";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mborgerson";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sm8/Lcsk3aL8/MB0cVrKNb8MoQPxGCGpHkEPWv+mPdo=";
+    hash = "sha256-iLzGGgizUbaEG1xrNq4WDaWrGtcaLwAYgn4NGYiSDBo=";
   };
 
   nativeCheckInputs = [

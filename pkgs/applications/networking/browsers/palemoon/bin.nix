@@ -14,22 +14,21 @@
 , makeDesktopItem
 , wrapGAppsHook
 , testers
-, palemoon-bin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.2.1";
+  version = "32.5.0";
 
   src = fetchzip {
     urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-eu.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-brF9ACAG+JM7bk/JarB208f8ihI/1d90l+6e1pHmC20="
+      "sha256-1MJ5K9Zc/BHeQwwlq3XyUV8XTFEpPytNyTnsDpE1tBI="
     else
-      "sha256-205rhW89Jlk4ICraqndTbJ6/88+ZqhtDOIvhFTiEUz0=";
+      "sha256-xXunZTqoc2A+ilosRUUluxDwewD3xwITF5nb5Lbyv7Y=";
   };
 
   preferLocalBuild = true;
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   desktopItems = [(makeDesktopItem rec {
-    name = pname;
+    name = "palemoon-bin";
     desktopName = "Pale Moon Web Browser";
     comment = "Browse the World Wide Web";
     keywords = [
@@ -155,7 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = palemoon-bin;
+    package = finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -164,6 +163,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
+
       Pale Moon offers you a browsing experience in a browser completely built
       from its own, independently developed source that has been forked off from
       Firefox/Mozilla code a number of years ago, with carefully selected
@@ -186,4 +186,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
   };
-}
+})

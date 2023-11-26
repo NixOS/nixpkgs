@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "0.1.1";
 
   src = fetchFromGitHub {
-    owner = "zseri";
+    owner = "fogti";
     repo = "libowlevelzs";
     rev = "v${version}";
     sha256 = "y/EaMMsmJEmnptfjwiat4FC2+iIKlndC2Wdpop3t7vY=";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Zscheile Lowlevel (utility) library";
-    homepage = "https://github.com/zseri/libowlevelzs";
+    homepage = "https://github.com/fogti/libowlevelzs";
     license = licenses.mit;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = [ maintainers.fogti ];
     platforms = platforms.all;
   };
 }

@@ -8,12 +8,13 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, syrupy
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "python-opensky";
-  version = "0.0.10";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-opensky";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QhcnbFp37gj1/37OlRxnQnIhgyNi/D19PXRh5hagHvE=";
+    hash = "sha256-xNXFvCUZ/x5ox3KxmG3eA73wpX4fwhvAVmlfcKiT1V8=";
   };
 
   postPatch = ''
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [

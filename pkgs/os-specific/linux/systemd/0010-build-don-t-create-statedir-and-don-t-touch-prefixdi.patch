@@ -8,10 +8,10 @@ Subject: [PATCH] build: don't create statedir and don't touch prefixdir
  1 file changed, 3 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index b1f5477836..1a39484855 100644
+index 395eca1943..082cd748bb 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -4278,9 +4278,6 @@ install_data('LICENSE.GPL2',
+@@ -4707,9 +4707,6 @@ install_data('LICENSE.GPL2',
  install_subdir('LICENSES',
                 install_dir : docdir)
  

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.9";
+  version = "0.0.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pytest-examples";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ecxSLbPnHdL60vlc7EjKmw5rATTePqJCa5QIdyxevv0=";
+    hash = "sha256-jCxOGDJlFkMH9VtaaPsE5zt+p3Z/mrVzhdNSI51/nVM=";
   };
 
   postPatch = ''
@@ -54,6 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pytest_examples"
+  ];
+
+  disabledTests = [
+    # Test fails with latest ruff v0.1.2
+    # See https://github.com/pydantic/pytest-examples/issues/26
+    "test_ruff_error"
   ];
 
   meta = with lib; {

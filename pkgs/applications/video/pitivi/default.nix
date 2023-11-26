@@ -16,6 +16,7 @@
 , meson
 , ninja
 , gsettings-desktop-schemas
+, hicolor-icon-theme
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -74,6 +75,13 @@ python3.pkgs.buildPythonApplication rec {
     librosa
   ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
+    )
+  '';
+
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
@@ -94,7 +102,7 @@ python3.pkgs.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ akechishiro ];
     platforms = platforms.linux;
   };
 }

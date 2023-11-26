@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "gtts";
-  version = "2.3.2";
+  version = "2.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pndurette";
     repo = "gTTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z5dM/PzIA8qtw0RepTKmHpqBwYMRwNLhWuEC0aBGL3U=";
+    hash = "sha256-M/RbNw5SJb1R78MDTqBHNWE0I/9PlqikrrJAy1r02f8=";
   };
 
   propagatedBuildInputs = [

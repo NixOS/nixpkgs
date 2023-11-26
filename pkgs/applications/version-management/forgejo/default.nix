@@ -6,6 +6,7 @@
 , gzip
 , lib
 , makeWrapper
+, nix-update-script
 , nixosTests
 , openssh
 , pam
@@ -23,7 +24,7 @@ let
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-dB/uBuS0kgaTwsPYnqklT450ejLHcPAqBdDs3JT8Uxg=";
+    npmDepsHash = "sha256-YZzVw+WWqTmJafqnZ5vrzb7P6V4DTMNQwW1/+wvZEM8=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -38,17 +39,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.19.4-0";
+  version = "1.20.5-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-pTcnST8A4gADPBkNago9uwRFEmTx8vNONL/Emer4xLI=";
+    hash = "sha256-4arWZge+RC2lwa6CQIEsDHo229cElspm0TJo3JHz2WQ=";
   };
 
-  vendorHash = "sha256-LKxhNbSIRaP4EGWX6mE26G9CWfoFTrPRjrL4ShpRHWo=";
+  vendorHash = "sha256-dgtZjsLBwblhdge3BvdbK/mN/TeZKps9K5dJbqomtjo=";
 
   subPackages = [ "." ];
 
@@ -88,13 +89,16 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  # $data is not available in go-modules.drv and preBuild isn't needed
+  # $data is not available in goModules.drv and preBuild isn't needed
   overrideModAttrs = (_: {
     postPatch = null;
     preBuild = null;
   });
 
   passthru = {
+    # allow nix-update to handle npmDepsHash
+    inherit (frontend) npmDeps;
+
     data-compressed = runCommand "forgejo-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
@@ -108,6 +112,7 @@ buildGoModule rec {
     '';
 
     tests = nixosTests.forgejo;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -115,7 +120,7 @@ buildGoModule rec {
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilylange urandom bendlas ];
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

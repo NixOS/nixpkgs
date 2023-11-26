@@ -5,7 +5,6 @@
 , stdenv
 , darwin
 , unixtools
-, rust
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,7 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/helper/args/mod.rs \
-      --subst-var-by releaseDir target/${rust.toRustTargetSpec stdenv.hostPlatform}/$cargoCheckType
+      --subst-var-by releaseDir target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$cargoCheckType
   '';
 
   preCheck = ''

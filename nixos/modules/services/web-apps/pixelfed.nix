@@ -271,7 +271,6 @@ in {
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
           name = user;
-          ensurePermissions = { };
         }];
       };
 

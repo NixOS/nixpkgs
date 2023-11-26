@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "paho.mqtt.cpp";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.cpp";
     rev = "v${version}";
-    hash = "sha256-tcq0a4X5dKE4rnczRMAVe3Wt43YzUKbxsv9Sk+q+IB8=";
+    hash = "sha256-QV6r4GzSVghgVQtF8OQ1a23PtCdjg7PeuGRBdA+WbE0=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,4 +1,13 @@
-{ lib, buildPythonApplication, nix-update-script, python3Packages, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildPythonApplication
+, nix-update-script
+, python3Packages
+, fetchFromGitHub
+, iproute2
+, iptables
+, unixtools
+}:
 
 buildPythonApplication rec {
   pname = "vpn-slice";
@@ -10,6 +19,15 @@ buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace vpn_slice/mac.py \
+      --replace "'/sbin/route'" "'${unixtools.route}/bin/route'"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace vpn_slice/linux.py \
+      --replace "'/sbin/ip'" "'${iproute2}/bin/ip'" \
+      --replace "'/sbin/iptables'" "'${iptables}/bin/iptables'"
+  '';
 
   propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ];
 
@@ -24,6 +42,6 @@ buildPythonApplication rec {
     description =
       "vpnc-script replacement for easy and secure split-tunnel VPN setup";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jdbaldry ];
+    maintainers = with maintainers; [ liketechnik ];
   };
 }

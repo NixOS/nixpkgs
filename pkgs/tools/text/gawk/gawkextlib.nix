@@ -9,12 +9,12 @@ let
       let is_extension = gawkextlib != null;
       in stdenv.mkDerivation rec {
         pname = "gawkextlib-${name}";
-        version = "unstable-2019-11-21";
+        version = "unstable-2022-10-20";
 
         src = fetchgit {
           url = "git://git.code.sf.net/p/gawkextlib/code";
-          rev = "f70f10da2804e4fd0a0bac57736e9c1cf21e345d";
-          sha256 = "0r8fz89n3l4dfszs1980yqj0ah95430lj0y1lb7blfkwxa6c2xik";
+          rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
+          sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
         };
 
         postPatch = ''
@@ -83,11 +83,12 @@ let
       name = "gd";
       extraBuildInputs = [ gd ];
     };
-    haru = buildExtension {
-      inherit gawkextlib;
-      name = "haru";
-      extraBuildInputs = [ libharu ];
-    };
+    # Build has been broken: https://github.com/NixOS/nixpkgs/issues/191072
+    # haru = buildExtension {
+    #   inherit gawkextlib;
+    #   name = "haru";
+    #   extraBuildInputs = [ libharu ];
+    # };
     json = buildExtension {
       inherit gawkextlib;
       name = "json";

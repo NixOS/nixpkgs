@@ -1,39 +1,42 @@
-{ fetchCrate
-, lib
+{ lib
 , rustPlatform
+, fetchCrate
 , pkg-config
+, libgit2_1_6
+, libssh2
 , openssl
 , zlib
 , stdenv
-, libssh2
-, libgit2
-, IOKit
-, Security
-, CoreFoundation
-, AppKit
-, System
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.2.43";
+  version = "0.2.44";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-xLwDCXJ/Ab4H1U4M9z3Xx7WWCr0Po2mvbL6jWtU/4K4=";
+    hash = "sha256-5r5XRb/RWHv0Am58VPOxe+QSKn2QT4JZYp5LjTh20KM=";
   };
 
-  cargoHash = "sha256-jia2n+rKIDewDLPZPvJ+7jdF9uT/afwDhu6aEgpX9Kc=";
+  cargoHash = "sha256-p+7CWvspYk1LRO2s8Sstlven/2edNe+JYFQHaDFlGkM=";
 
-  # needed to get libssh2/libgit2 to link properly
-  LIBGIT2_SYS_USE_PKG_CONFIG = true;
-  LIBSSH2_SYS_USE_PKG_CONFIG = true;
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl zlib libssh2 libgit2 ] ++ (
-    lib.optionals stdenv.isDarwin ([ IOKit Security CoreFoundation AppKit ]
-      ++ (lib.optionals stdenv.isAarch64 [ System ]))
-  );
+  buildInputs = [
+    libgit2_1_6
+    libssh2
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  env = {
+    LIBSSH2_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "A tool for managing cargo workspaces and their crates, inspired by lerna";
@@ -43,7 +46,9 @@ rustPlatform.buildRustPackage rec {
       commands and more.
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
+    changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ macalinao ];
+    maintainers = with maintainers; [ figsoda macalinao matthiasbeyer ];
+    mainProgram = "cargo-workspaces";
   };
 }

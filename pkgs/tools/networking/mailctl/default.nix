@@ -1,7 +1,8 @@
 { mkDerivation
-, fetchFromSourcehut
+, fetchFromGitHub
 , aeson
 , base
+, base64
 , bytestring
 , containers
 , directory
@@ -12,23 +13,26 @@
 , optparse-applicative
 , pretty-simple
 , process
+, random
+, strings
 , template-haskell
 , text
 , time
 , twain
+, unix
 , utf8-string
 , warp
 , yaml
 }:
 mkDerivation rec {
   pname = "mailctl";
-  version = "0.8.8";
+  version = "0.9.2";
 
-  src = fetchFromSourcehut {
-    owner = "~petrus";
+  src = fetchFromGitHub {
+    owner = "pdobsan";
     repo = "mailctl";
     rev = version;
-    hash = "sha256-aFt6y2DzreROLcOLU8ynnSSVQW840T5wFqSRdSODQX4=";
+    hash = "sha256-frT+fRJpixSvpb2+C34Z47zbMqvmDHdESItXb9YVbfU=";
   };
 
   isLibrary = true;
@@ -37,6 +41,7 @@ mkDerivation rec {
   libraryHaskellDepends = [
     aeson
     base
+    base64
     bytestring
     containers
     directory
@@ -46,10 +51,13 @@ mkDerivation rec {
     optparse-applicative
     pretty-simple
     process
+    random
+    strings
     template-haskell
     text
     time
     twain
+    unix
     utf8-string
     warp
     yaml
@@ -58,6 +66,7 @@ mkDerivation rec {
   executableHaskellDepends = [
     aeson
     base
+    base64
     bytestring
     containers
     directory
@@ -67,18 +76,21 @@ mkDerivation rec {
     optparse-applicative
     pretty-simple
     process
+    random
+    strings
     template-haskell
     text
     time
     twain
+    unix
     utf8-string
     warp
     yaml
   ];
 
   description = "OAuth2 tool for mail clients";
-  homepage = "https://sr.ht/~petrus/mailctl/";
-  changelog = "https://git.sr.ht/~petrus/mailctl/refs/${version}";
+  homepage = "https://github.com/pdobsan/mailctl";
+  changelog = "https://github.com/pdobsan/mailctl/releases/tag/${version}";
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ aidalgol ];
   mainProgram = "mailctl";

@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nickclyde/rofi-bluetooth";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ MoritzBoehme ];
+    mainProgram = "rofi-bluetooth";
     platforms = platforms.linux;
   };
 })

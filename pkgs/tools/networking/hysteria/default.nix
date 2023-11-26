@@ -4,16 +4,16 @@
 }:
 buildGoModule rec {
   pname = "hysteria";
-  version = "1.3.5";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gNAK+WOowBlEzUYX25cQxywerNlMIx7cqG1wV9iLS5s=";
+    rev = "app/v${version}";
+    hash = "sha256-5j24wIZ4LloE9t0sv5p+oiYmexOaORASNN9JylXxrk4=";
   };
 
-  vendorHash = "sha256-Ixfwqrg+4/dzJLj3q7NbgpUXFj4qGKT0QVFQV/X4pqw=";
+  vendorHash = "sha256-ErU1yEtSuMVkoJv9hyaE4OZS5o7GxuleoK0Q9BI2skw=";
   proxyVendor = true;
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/hysteria
+    mv $out/bin/app $out/bin/hysteria
   '';
 
   # Network required

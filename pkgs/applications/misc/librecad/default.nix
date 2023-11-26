@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0.1";
+  version = "2.2.0.2";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "sha256-5tezXhkInOG+TBjEixXL/qUOHUXD9dR8vu06zl3p4Ek=";
+    sha256 = "sha256-Vj6nvOfmhzou2hhmujm47a7aKBzmgchDb/BbwCb3/hI=";
   };
 
   buildInputs = [

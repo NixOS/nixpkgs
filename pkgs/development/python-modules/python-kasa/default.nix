@@ -1,5 +1,6 @@
 { lib
 , anyio
+, async-timeout
 , asyncclick
 , buildPythonPackage
 , fetchFromGitHub
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.5.2";
+  version = "0.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+ezs8mj3TRmeIhKPxyov9BPdNkhj0ri4FgoZdW7O8tA=";
+    hash = "sha256-wGPMrYaTtKkkNW88eyiiciFcBSTRqqChYi6e15WUCHo=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     anyio
+    async-timeout
     asyncclick
     pydantic
   ];

@@ -1,30 +1,51 @@
-{ lib, stdenv, fetchurl, autoreconfHook, gettext, makeWrapper
-, alsa-lib, libjack2, tk, fftw
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gettext
+, makeWrapper
+, alsa-lib
+, libjack2
+, tk
+, fftw
+, portaudio
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "puredata";
-  version = "0.50-2";
+  version = "0.54-0";
 
   src = fetchurl {
     url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
-    sha256 = "0dz6r6jy0zfs1xy1xspnrxxks8kddi9c7pxz4vpg2ygwv83ghpg5";
+    hash = "sha256-6MFKfYV5CWxuOsm1V4LaYChIRIlx0Qcwah5SbtBFZIU=";
   };
 
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
 
-  buildInputs = [ alsa-lib libjack2 fftw ];
+  buildInputs = [
+    fftw
+    libjack2
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    portaudio
+  ];
 
   configureFlags = [
-    "--enable-alsa"
-    "--enable-jack"
+    "--enable-universal"
     "--enable-fftw"
-    "--disable-portaudio"
-    "--disable-oss"
+    "--enable-jack"
+  ] ++ lib.optionals stdenv.isLinux [
+    "--enable-alsa"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--enable-portaudio"
+    "--without-local-portaudio"
+    "--disable-jack-framework"
+    "--with-wish=${tk}/bin/wish8.6"
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/pd --prefix PATH : ${tk}/bin
+    wrapProgram $out/bin/pd --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
   meta = with lib; {
@@ -32,7 +53,9 @@ stdenv.mkDerivation  rec {
                     audio, video, and graphical processing'';
     homepage = "http://puredata.info";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ goibhniu carlthome ];
+    mainProgram = "pd";
+    changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };
 }

@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cozette";
-  version = "1.20.1";
+  version = "1.22.2";
 
   src = fetchzip {
     url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts-v-${builtins.replaceStrings ["."] ["-"] version}.zip";
-    hash = "sha256-5JODQhwKJRRBypAuVFulv9FiaVNchVi/TPb4HYQgvzk=";
+    hash = "sha256-Y6StCbAsFJrRZtJu1IAsMYuyNhwe3YIlT41EhSXhCUE=";
   };
 
   installPhase = ''
@@ -16,6 +16,8 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 *.otf -t $out/share/fonts/opentype
     install -Dm644 *.bdf -t $out/share/fonts/misc
     install -Dm644 *.otb -t $out/share/fonts/misc
+    install -Dm644 *.woff -t $out/share/fonts/woff
+    install -Dm644 *.woff2 -t $out/share/fonts/woff2
 
     runHook postInstall
   '';

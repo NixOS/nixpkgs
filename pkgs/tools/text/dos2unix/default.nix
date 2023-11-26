@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dos2unix";
-  version = "7.5.0";
+  version = "7.5.1";
 
   src = fetchurl {
     url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ejsB0B4hTWLCs+BMOpLg3ccoo4VWbkwDVu+mb9brla8=";
+    sha256 = "sha256-2gd4i7LgKbDWP2Rx0Wb2hSis2Nos8UgjoYjoqdXB/BU=";
   };
 
   nativeBuildInputs = [ perl gettext ];

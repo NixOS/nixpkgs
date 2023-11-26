@@ -1,5 +1,4 @@
-{ config
-, stdenv
+{ stdenv
 , lib
 , fetchgit
 , pkg-config
@@ -9,9 +8,6 @@
 , liburing
 , zstd
 }:
-let
-  dbfile = lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
-in
 stdenv.mkDerivation rec {
   pname = "plocate";
   version = "1.1.19";
@@ -33,8 +29,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    "-Dsharedstatedir=${builtins.dirOf dbfile}"
-    "-Ddbpath=${builtins.baseNameOf dbfile}"
+    "-Dsharedstatedir=/var/cache"
+    "-Ddbpath=locatedb"
   ];
 
   meta = with lib; {

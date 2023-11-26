@@ -135,7 +135,7 @@ in {
           ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
         };
         restartTriggers = [
-          config.environment.etc."sssd/sssd.conf".source
+          settingsFileUnsubstituted
         ];
       };
       systemd.sockets.sssd-kcm = {

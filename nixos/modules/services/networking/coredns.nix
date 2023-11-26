@@ -29,6 +29,13 @@ in {
       type = types.package;
       description = lib.mdDoc "Coredns package to use.";
     };
+
+    extraArgs = mkOption {
+      default = [];
+      example = [ "-dns.port=53" ];
+      type = types.listOf types.str;
+      description = lib.mdDoc "Extra arguments to pass to coredns.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -44,7 +51,7 @@ in {
         AmbientCapabilities = "cap_net_bind_service";
         NoNewPrivileges = true;
         DynamicUser = true;
-        ExecStart = "${getBin cfg.package}/bin/coredns -conf=${configFile}";
+        ExecStart = "${getBin cfg.package}/bin/coredns -conf=${configFile} ${lib.escapeShellArgs cfg.extraArgs}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR1 $MAINPID";
         Restart = "on-failure";
       };

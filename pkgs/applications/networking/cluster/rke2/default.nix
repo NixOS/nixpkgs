@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "rke2";
-  version = "1.27.3+rke2r1";
+  version = "1.28.2+rke2r1";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-M/3F97iNeXdMMhs0eoPODeBC6Jp+yo/PwlPiG28SfYU=";
+    hash = "sha256-PkBnM6mKE90e8VZ3QHYp2mM4RgD9u1gNjFea3RaPGy0=";
   };
 
-  vendorHash = "sha256-7Za8PQr22kvZBvoYRVbI4bXUvGWkfILQC+kAmw9ZCro=";
+  vendorHash = "sha256-aW8en8KJsPITKT4fIyhhtLiYdk+98iL14wQXG4HsM3U=";
 
   postPatch = ''
     # Patch the build scripts so they work in the Nix build environment.
@@ -35,5 +35,7 @@ buildGoModule rec {
     changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm zygot ];
+    mainProgram = "rke2";
+    broken = stdenv.isDarwin;
   };
 }

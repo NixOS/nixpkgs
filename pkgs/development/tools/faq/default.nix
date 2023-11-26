@@ -16,7 +16,7 @@ buildGoModule rec {
     rev = "594bb8e15dc4070300f39c168354784988646231";
     sha256 = "1lqrchj4sj16n6y5ljsp8v4xmm57gzkavbddq23dhlgkg2lfyn91";
   };
-  vendorSha256 = "sha256-731eINkboZiuPXX/HQ4r/8ogLedKBWx1IV7BZRKwU3A";
+  vendorHash = "sha256-731eINkboZiuPXX/HQ4r/8ogLedKBWx1IV7BZRKwU3A";
 
   buildInputs = [
     jq

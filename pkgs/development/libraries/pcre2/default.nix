@@ -34,5 +34,11 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.all;
+    pkgConfigModules = [
+      "libpcre2-posix"
+      "libpcre2-8"
+      "libpcre2-16"
+      "libpcre2-32"
+    ];
   };
 }

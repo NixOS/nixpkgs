@@ -6,21 +6,10 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
-        version = "0.25.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
-        };
-      });
-    };
-  };
+  python = python3;
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.0";
+  version = "4.2.1";
 
   format = "pyproject";
 
@@ -28,7 +17,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-miIDasbOKmfYESiEIlMxEUfPkLLBz4s1rX2eMz3MrzA=";
+    hash = "sha256-xKas3WO3uigY1iFfxIN3+d+5U31vM7cLv08oMef8trc=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -84,21 +73,13 @@ in python.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # require networking
-    "test_album_from_string"
     "test_album_from_url"
-    "test_album_length"
-    "test_artist_from_string"
-    "test_artist_from_url"
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
-    "test_playlist_from_string"
-    "test_playlist_from_url"
-    "test_playlist_length"
     "test_preload_song"
-    "test_song_from_search_term"
-    "test_song_from_url"
-    "test_yt_search"
+    "test_ytm_get_results"
+    "test_ytm_search"
   ];
 
   makeWrapperArgs = [

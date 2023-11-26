@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
-, python
 , libosmium
 , protozero
 , boost
@@ -31,6 +31,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-+YJQGPQm2FGOPhNzlXX2GM+ad4QdipJhwViOKGHtqBk=";
   };
+
+  patches = [
+    # Compatibility with recent pybind versions
+    (fetchpatch {
+      url = "https://github.com/osmcode/pyosmium/commit/31b1363389b423f49e14140ce868ecac83e92f69.patch";
+      hash = "sha256-maBuwzyZ4/wVLLGVr4gZFZDKvJckUXiBluxZRPGETag=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "ahsNiac/3I2+PUqc90E73Brb99M68ewh9nWXoupfE3g=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # Avoid building example
   subPackages = [ "." "fs" ];

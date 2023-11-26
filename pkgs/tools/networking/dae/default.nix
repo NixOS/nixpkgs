@@ -5,17 +5,17 @@
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
-    repo = pname;
+    repo = "dae";
     rev = "v${version}";
-    sha256 = "sha256-J2FFD6/+Of1UcBmgzlAfmX5QvEgJY4P1EttlNaqW4P0=";
+    hash = "sha256-WiJqhXYehuUCLEuVbsQkmTntuH1srtePtZgYBSTbxiw=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-2KKlbhJtoHUa02juXuS1QgvDD5LA5Tg/f0hNFscLJIQ=";
+  vendorHash = "sha256-fb4PEMhV8+5zaRJyl+nYi2BHcOUDUVAwxce2xaRt5JA=";
 
   proxyVendor = true;
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector" \
+    make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
     NOSTRIP=y \
     ebpf
   '';
@@ -37,11 +37,18 @@ buildGoModule rec {
   # network required
   doCheck = false;
 
+  postInstall = ''
+    install -Dm444 install/dae.service $out/lib/systemd/system/dae.service
+    substituteInPlace $out/lib/systemd/system/dae.service \
+      --replace /usr/bin/dae $out/bin/dae
+  '';
+
   meta = with lib; {
     description = "A Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ oluceps ];
+    maintainers = with maintainers; [ oluceps pokon548 ];
     platforms = platforms.linux;
+    mainProgram = "dae";
   };
 }

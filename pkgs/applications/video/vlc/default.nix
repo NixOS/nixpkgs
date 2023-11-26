@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, pkgsBuildBuild
 , fetchurl
 , fetchpatch
 , SDL
@@ -101,21 +102,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.18";
+  version = "3.0.20";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VwlEOcNl2KqLm0H6MIDMDu8r7+YCW7XO9yKszGJa7ew=";
+    hash = "sha256-rccoW00nIc3fQOtScMraKqoQozTLVG/VWgY1NEe6KbU=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    lua5
     perl
     pkg-config
     removeReferencesTo
     unzip
     wrapGAppsHook
   ]
+  ++ optional chromecastSupport protobuf
   ++ optionals withQt5 [ wrapQtAppsHook ]
   ++ optionals waylandSupport [
     wayland
@@ -204,7 +207,8 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # vlc depends on a c11-gcc wrapper script which we don't have so we need to
     # set the path to the compiler
-    BUILDCC = "${stdenv.cc}/bin/gcc";
+    BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
+    PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = "wayland-scanner";
   } // lib.optionalAttrs (!stdenv.hostPlatform.isAarch) {
     LIVE555_PREFIX = live555;
   };
@@ -216,17 +220,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
     })
-    # patch to build with recent libplacebo
-    # https://code.videolan.org/videolan/vlc/-/merge_requests/3027
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/vlc/-/commit/65ea8d19d91ac1599a29e8411485a72fe89c45e2.patch";
-      hash = "sha256-Zz+g75V6X9OZI3sn614K9Uenxl3WtRHKSdLkWP3b17w=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
+  '' + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+    # Upstream luac can't cross compile, so we have to install the lua
+    # sources, not bytecode:
+    # https://www.lua.org/wshop13/Jericke.pdf#page=39
+    substituteInPlace share/Makefile.am --replace $'.luac \\\n' $'.lua \\\n'
   '';
 
   enableParallelBuilding = true;
@@ -240,9 +243,13 @@ stdenv.mkDerivation (finalAttrs: {
   # - Touch plugins (plugins cache keyed off mtime and file size:
   #     https://github.com/NixOS/nixpkgs/pull/35124#issuecomment-370552830
   # - Remove references to the Qt development headers (used in error messages)
+  #
+  # pkgsBuildBuild is used here because buildPackages.libvlc somehow
+  # depends on a qt5.qttranslations that doesn't build, even though it
+  # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup = ''
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
-    $out/lib/vlc/vlc-cache-gen $out/vlc/plugins
+    ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc}/lib/vlc/vlc-cache-gen $out/vlc/plugins
   '' + optionalString withQt5 ''
     remove-references-to -t "${qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';

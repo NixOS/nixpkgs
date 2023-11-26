@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib mpv-unwrapped ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+  '';
+
   installFlags = [ "SCRIPTS_DIR=$(out)/share/mpv/scripts" ];
 
   # Otherwise, the shared object isn't `strip`ped. See:
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hoyon/mpv-mpris";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
     changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }

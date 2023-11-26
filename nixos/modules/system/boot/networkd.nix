@@ -83,7 +83,7 @@ let
         (assertByteFormat "BitsPerSecond")
         (assertValueOneOf "Duplex" ["half" "full"])
         (assertValueOneOf "AutoNegotiation" boolValues)
-        (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
+        (assertValuesSomeOfOr "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"] "off")
         (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
         (assertValueOneOf "ReceiveChecksumOffload" boolValues)
         (assertValueOneOf "TransmitChecksumOffload" boolValues)
@@ -122,6 +122,16 @@ let
         (assertValueOneOf "PacketInfo" boolValues)
         (assertValueOneOf "VNetHeader" boolValues)
       ];
+
+      # See https://www.freedesktop.org/software/systemd/man/latest/systemd.netdev.html#%5BIPVTAP%5D%20Section%20Options
+      ipVlanVtapChecks = [
+        (assertOnlyFields [
+          "Mode"
+          "Flags"
+        ])
+        (assertValueOneOf "Mode" ["L2" "L3" "L3S" ])
+        (assertValueOneOf "Flags" ["private" "vepa" "bridge" ])
+      ];
     in {
 
       sectionNetdev = checkUnitConfig "Netdev" [
@@ -146,6 +156,7 @@ let
           "ip6gretap"
           "ipip"
           "ipvlan"
+          "ipvtap"
           "macvlan"
           "macvtap"
           "sit"
@@ -159,6 +170,7 @@ let
           "geneve"
           "l2tp"
           "macsec"
+          "wlan"
           "vrf"
           "vcan"
           "vxcan"
@@ -171,7 +183,7 @@ let
           "batadv"
         ])
         (assertByteFormat "MTUBytes")
-        (assertMacAddress "MACAddress")
+        (assertNetdevMacAddress "MACAddress")
       ];
 
       sectionVLAN = checkUnitConfig "VLAN" [
@@ -189,6 +201,10 @@ let
         (assertValueOneOf "LooseBinding" boolValues)
         (assertValueOneOf "ReorderHeader" boolValues)
       ];
+
+      sectionIPVLAN = checkUnitConfig "IPVLAN" ipVlanVtapChecks;
+
+      sectionIPVTAP = checkUnitConfig "IPVTAP" ipVlanVtapChecks;
 
       sectionMACVLAN = checkUnitConfig "MACVLAN" [
         (assertOnlyFields [
@@ -223,6 +239,7 @@ let
           "PortRange"
           "FlowLabel"
           "IPDoNotFragment"
+          "Independent"
         ])
         (assertInt "VNI")
         (assertRange "VNI" 1 16777215)
@@ -242,6 +259,7 @@ let
         (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+        (assertValueOneOf "Independent" boolValues)
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
@@ -466,6 +484,30 @@ let
         (assertMinimum "Table" 0)
       ];
 
+      sectionWLAN = checkUnitConfig "WLAN" [
+        (assertOnlyFields [
+          "PhysicalDevice"  # systemd supports both strings ("phy0") and indexes (0) here.
+          "Type"
+          "WDS"
+        ])
+        # See https://github.com/systemd/systemd/blob/main/src/basic/linux/nl80211.h#L3382
+        (assertValueOneOf "Type" [
+          "ad-hoc"
+          "station"
+          "ap"
+          "ap-vlan"
+          "wds"
+          "monitor"
+          "mesh-point"
+          "p2p-client"
+          "p2p-go"
+          "p2p-device"
+          "ocb"
+          "nan"
+        ])
+        (assertValueOneOf "WDS" boolValues)
+      ];
+
       sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
         (assertOnlyFields [
           "GatewayMode"
@@ -515,17 +557,24 @@ let
         (assertValueOneOf "Unmanaged" boolValues)
         (assertInt "Group")
         (assertRange "Group" 0 2147483647)
-        (assertValueOneOf "RequiredForOnline" (boolValues ++ [
-          "missing"
-          "off"
-          "no-carrier"
-          "dormant"
-          "degraded-carrier"
-          "carrier"
-          "degraded"
-          "enslaved"
-          "routable"
-        ]))
+        (assertValueOneOf "RequiredForOnline" (boolValues ++ (
+          let
+            # https://freedesktop.org/software/systemd/man/networkctl.html#missing
+            operationalStates = [
+              "missing"
+              "off"
+              "no-carrier"
+              "dormant"
+              "degraded-carrier"
+              "carrier"
+              "degraded"
+              "enslaved"
+              "routable"
+            ];
+            operationalStateRanges = concatLists (imap0 (i: min: map (max: "${min}:${max}") (drop i operationalStates)) operationalStates);
+          in
+          operationalStates ++ operationalStateRanges
+        )))
         (assertValueOneOf "RequiredFamilyForOnline" [
           "ipv4"
           "ipv6"
@@ -581,6 +630,7 @@ let
           "VRF"
           "VLAN"
           "IPVLAN"
+          "IPVTAP"
           "MACVLAN"
           "MACVTAP"
           "VXLAN"
@@ -797,6 +847,8 @@ let
           "UseAddress"
           "UseDNS"
           "UseNTP"
+          "UseHostname"
+          "UseDomains"
           "RouteMetric"
           "RapidCommit"
           "MUDURL"
@@ -811,16 +863,20 @@ let
           "DUIDRawData"
           "IAID"
           "UseDelegatedPrefix"
+          "SendRelease"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "UseHostname" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "WithoutRA" ["no" "solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
+        (assertValueOneOf "SendRelease" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -900,6 +956,9 @@ let
           "RelayTarget"
           "RelayAgentCircuitId"
           "RelayAgentRemoteId"
+          "BootServerAddress"
+          "BootServerName"
+          "BootFilename"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -943,10 +1002,12 @@ let
           "Prefix"
           "PreferredLifetimeSec"
           "ValidLifetimeSec"
+          "Assign"
           "Token"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
+        (assertValueOneOf "Assign" boolValues)
       ];
 
       sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
@@ -975,7 +1036,7 @@ let
           "MulticastToUnicast"
           "NeighborSuppression"
           "Learning"
-          "Hairpin"
+          "HairPin"
           "Isolated"
           "UseBPDU"
           "FastLeave"
@@ -991,7 +1052,7 @@ let
         (assertValueOneOf "MulticastToUnicast" boolValues)
         (assertValueOneOf "NeighborSuppression" boolValues)
         (assertValueOneOf "Learning" boolValues)
-        (assertValueOneOf "Hairpin" boolValues)
+        (assertValueOneOf "HairPin" boolValues)
         (assertValueOneOf "Isolated" boolValues)
         (assertValueOneOf "UseBPDU" boolValues)
         (assertValueOneOf "FastLeave" boolValues)
@@ -1232,6 +1293,7 @@ let
           "FirewallMark"
           "Wash"
           "SplitGSO"
+          "AckFilter"
         ])
         (assertValueOneOf "AutoRateIngress" boolValues)
         (assertInt "OverheadBytes")
@@ -1264,6 +1326,7 @@ let
         (assertRange "FirewallMark" 1 4294967295)
         (assertValueOneOf "Wash" boolValues)
         (assertValueOneOf "SplitGSO" boolValues)
+        (assertValueOneOf "AckFilter" (boolValues ++ ["aggressive"]))
       ];
 
       sectionControlledDelay = checkUnitConfig "ControlledDelay" [
@@ -1578,6 +1641,26 @@ let
       '';
     };
 
+    ipvlanConfig = mkOption {
+      default = {};
+      example = { Mode = "L2"; Flags = "private"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
+    ipvtapConfig = mkOption {
+      default = {};
+      example = { Mode = "L3"; Flags = "vepa"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionIPVTAP;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[IPVTAP]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
+      '';
+    };
+
     macvlanConfig = mkOption {
       default = {};
       example = { Mode = "private"; };
@@ -1756,6 +1839,16 @@ let
         {manpage}`systemd.netdev(5)` for details.
         A detailed explanation about how VRFs work can be found in the
         [kernel docs](https://www.kernel.org/doc/Documentation/networking/vrf.txt).
+      '';
+    };
+
+    wlanConfig = mkOption {
+      default = {};
+      example = { PhysicalDevice = 0; Type = "station"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
@@ -2704,9 +2797,12 @@ let
         description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
           This is useful on portable machines with a wired and a wireless interface, for example.
+
+          This is on by default if {option}`networking.useDHCP` is enabled.
         '';
         type = types.bool;
-        default = false;
+        defaultText = "config.networking.useDHCP";
+        default = config.networking.useDHCP;
       };
 
       ignoredInterfaces = mkOption {
@@ -2810,9 +2906,15 @@ let
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
-      systemd.services.systemd-networkd = {
+      systemd.services.systemd-networkd = let
+        isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
+        reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
+        nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
+        unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
+      in {
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+        reloadTriggers = unitFileSources reloadableUnitFiles;
+        restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
@@ -2832,6 +2934,17 @@ let
     })
   ];
 
+  stage1Options = {
+    options.boot.initrd.systemd.network.networks = mkOption {
+      type = with types; attrsOf (submodule {
+        # Default in initrd is dhcp-on-stop, which is correct if flushBeforeStage2 = false
+        config = mkIf config.boot.initrd.network.flushBeforeStage2 {
+          networkConfig.KeepConfiguration = mkDefault false;
+        };
+      });
+    };
+  };
+
   stage1Config = let
     cfg = config.boot.initrd.systemd.network;
   in mkMerge [
@@ -2849,8 +2962,6 @@ let
     }
 
     (mkIf cfg.enable {
-
-      systemd.package = mkDefault pkgs.systemdStage1Network;
 
       # For networkctl
       systemd.dbus.enable = mkDefault true;
@@ -2895,45 +3006,14 @@ let
       ];
       kernelModules = [ "af_packet" ];
 
-      systemd.services.nixos-flush-networkd = mkIf config.boot.initrd.network.flushBeforeStage2 {
-        description = "Flush Network Configuration";
-        wantedBy = ["initrd.target"];
-        after = ["systemd-networkd.service" "dbus.socket" "dbus.service"];
-        before = ["shutdown.target" "initrd-switch-root.target"];
-        conflicts = ["shutdown.target" "initrd-switch-root.target"];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig = {
-          # This service does nothing when starting, but brings down
-          # interfaces when switching root. This is the easiest way to
-          # ensure proper ordering while stopping. See systemd.unit(5)
-          # section on Before= and After=. The important part is that
-          # we are stopped before units we need, like dbus.service,
-          # and that we are stopped before starting units like
-          # initrd-switch-root.target
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "/bin/true";
-        };
-        # systemd-networkd doesn't bring down interfaces on its own
-        # when it exits (see: systemd-networkd(8)), so we have to do
-        # it ourselves. The networkctl command doesn't have a way to
-        # bring all interfaces down, so we have to iterate over the
-        # list and filter out unmanaged interfaces to bring them down
-        # individually.
-        preStop = ''
-          networkctl list --full --no-legend | while read _idx link _type _operational setup _; do
-            [ "$setup" = unmanaged ] && continue
-            networkctl down "$link"
-          done
-        '';
-      };
-
     })
   ];
 
 in
 
 {
+  imports = [ stage1Options ];
+
   options = {
     systemd.network = commonOptions true;
     boot.initrd.systemd.network = commonOptions "shallow";
@@ -2943,10 +3023,10 @@ in
     stage2Config
     (mkIf config.boot.initrd.systemd.enable {
       assertions = [{
-        assertion = config.boot.initrd.network.udhcpc.extraArgs == [];
+        assertion = !config.boot.initrd.network.udhcpc.enable && config.boot.initrd.network.udhcpc.extraArgs == [];
         message = ''
-          boot.initrd.network.udhcpc.extraArgs is not supported when
-          boot.initrd.systemd.enable is enabled
+          systemd stage 1 networking does not support 'boot.initrd.network.udhcpc'. Configure
+          DHCP with 'networking.*' options or with 'boot.initrd.systemd.network' options.
         '';
       }];
 

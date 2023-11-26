@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0xzsvhpllmzmyfg8sj1dpp02826j1plmyrdvqbwryzhf2ci33nqr";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://github.com/valyala/quicktemplate";

@@ -35,14 +35,14 @@
 
 stdenv.mkDerivation rec {
   pname = "workrave";
-  version = "1.10.51.1";
+  version = "1.10.52";
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
     rev = with lib;
       "v" + concatStringsSep "_" (splitVersion version);
-    sha256 = "sha256-rx3k4U5igRYxzuVke+x926K1Pso32iGob4Ccp0jdKds=";
+    sha256 = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
     jinja2
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -62,7 +63,6 @@ stdenv.mkDerivation rec {
     libSM
     libXScrnSaver
     libXtst
-    gobject-introspection
     glib
     glibmm
     gtkmm3

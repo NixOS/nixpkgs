@@ -1,10 +1,3 @@
-##
-## Caveat: a copy of configuration-ghc-8.6.x.nix with minor changes:
-##
-##  1. "8.7" strings
-##  2. llvm 6
-##  3. disabled library update: parallel
-##
 { pkgs, haskellLib }:
 
 with haskellLib;
@@ -70,7 +63,6 @@ self: super: {
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
-  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
   binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
 
@@ -79,10 +71,4 @@ self: super: {
 
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
-
-  # https://github.com/fpco/inline-c/pull/131
-  # and/or https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7739
-  inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
 }

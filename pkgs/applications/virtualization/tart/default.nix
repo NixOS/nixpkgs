@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tart";
-  version = "1.6.0";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://github.com/cirruslabs/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
-    sha256 = "1n052nwsccc3sr0jqnvhyl0six8wi46vysxjchwrdm8brnsdpf84";
+    sha256 = "sha256-LdzP0Vovda0W6uBg71dJlTxP+Qly+c2Shv3xrMmxYDg=";
   };
   sourceRoot = ".";
 
@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://tart.run";
     license = licenses.fairsource09;
     maintainers = with maintainers; [ emilytrau Enzime ];
+    mainProgram = finalAttrs.pname;
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

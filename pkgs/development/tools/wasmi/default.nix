@@ -5,13 +5,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmi";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "wasmi";
     rev = "v${version}";
-    hash = "sha256-0G/K61JP4SehhP+wD9uwCU1GRjzJdz4fkePv+IiqUY4=";
+    hash = "sha256-chLWrZ+OLUTSFmTu+qKpjApXDmJFhS68N2RKjaql75U=";
     fetchSubmodules = true;
   };
 

@@ -37,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
   };
 
+  patches = [
+    ./001-backport-pr296.patch
+  ];
+
   nativeBuildInputs = [
     bash-completion
     # cmake # currently conflicts with meson
@@ -70,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/functions.vala --replace /usr/local/etc $out/etc
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , deprecation
 , hatchling
 , pythonOlder
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "setuptools-68-test-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter-packaging/commit/e963fb27aa3b58cd70c5ca61ebe68c222d803b7e.patch";
+      hash = "sha256-NlO07wBCutAJ1DgoT+rQFkuC9Y+DyF1YFlTwWpwsJzo=";
+    })
+  ];
 
   nativeBuildInputs = [
     hatchling

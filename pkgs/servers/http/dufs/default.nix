@@ -1,26 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.34.2";
+  version = "0.37.1";
 
   src = fetchFromGitHub {
     owner = "sigoden";
-    repo = pname;
+    repo = "dufs";
     rev = "v${version}";
-    sha256 = "sha256-NkH7w5HEQFhnovUmjN/qW5QZwO8mVQZMbhpNFkKtLTI=";
+    hash = "sha256-Q5t3FUT/ukGME+ZJXpLWnii2XCPrBVDAlbjW8FrpOZs=";
   };
 
-  cargoHash = "sha256-bUznaVyhZswLaXUgC+GUh5ZpJQW7Vkcoui6CO9ds22g=";
+  cargoHash = "sha256-6ybYfeufHr3ulTbKe27CDS5m1mCluPwS/5GYemYXat8=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   # FIXME: checkPhase on darwin will leave some zombie spawn processes
@@ -31,10 +33,18 @@ rustPlatform.buildRustPackage rec {
     "--skip=validate_printed_urls"
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd dufs \
+      --bash <($out/bin/dufs --completions bash) \
+      --fish <($out/bin/dufs --completions fish) \
+      --zsh <($out/bin/dufs --completions zsh)
+  '';
+
   meta = with lib; {
     description = "A file server that supports static serving, uploading, searching, accessing control, webdav";
     homepage = "https://github.com/sigoden/dufs";
+    changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.holymonson ];
+    maintainers = with maintainers; [ figsoda holymonson ];
   };
 }

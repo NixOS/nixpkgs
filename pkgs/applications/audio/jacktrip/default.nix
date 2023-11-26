@@ -12,17 +12,22 @@
 , python3
 , rtaudio
 , ninja
+, qtquickcontrols2
+, qtnetworkauth
+, qtwebsockets
+, qtgraphicaleffects
 }:
 
 mkDerivation rec {
-  version = "1.5.3";
+  version = "1.10.1";
   pname = "jacktrip";
 
   src = fetchFromGitHub {
     owner = "jacktrip";
     repo = "jacktrip";
     rev = "v${version}";
-    sha256 = "sha256-sfAYMTnBjT4LkgksyzDGGy97NLX5ljjhNDFioQnTzLs=";
+    fetchSubmodules = true;
+    sha256 = "sha256-bdYhyLsdL4LDkCzJiWXdi+7CTtqhSiA7HNYhg190NWs=";
   };
 
   preConfigure = ''
@@ -46,6 +51,10 @@ mkDerivation rec {
     meson
     qmake
     qttools
+    qtquickcontrols2
+    qtnetworkauth
+    qtwebsockets
+    qtgraphicaleffects
     pkg-config
   ];
 

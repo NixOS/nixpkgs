@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "msune";
     repo = "libcdada";
     rev = "v${version}";
-    sha256 = "sha256-vUasCukDRZYB67eu87ckEZG9i6rsNf0aKY2kZsVezRE=";
+    hash = "sha256-vUasCukDRZYB67eu87ckEZG9i6rsNf0aKY2kZsVezRE=";
   };
 
   nativeBuildInputs = [

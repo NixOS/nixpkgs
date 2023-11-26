@@ -8,13 +8,14 @@
 , click-plugins
 , cligj
 , certifi
-, cython
+, cython_3
 , fetchFromGitHub
 , gdal
 , hypothesis
 , matplotlib
 , ipython
 , numpy
+, oldest-supported-numpy
 , packaging
 , pytest-randomly
 , pytestCheckHook
@@ -22,11 +23,12 @@
 , setuptools
 , shapely
 , snuggs
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.8";
+  version = "1.3.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -35,12 +37,16 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-8kPzUvTZ/jRDXlYMAZkG1xdLAQuzxnvHXBzwWizMOTo=";
+    hash = "sha256-Tp6BSU33FaszrIXQgU0Asb7IMue0C939o/atAKz+3Q4=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
     gdal
+    numpy
+    oldest-supported-numpy
+    setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

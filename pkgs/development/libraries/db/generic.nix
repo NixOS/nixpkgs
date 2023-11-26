@@ -10,9 +10,6 @@
 , drvArgs ? {}
 }:
 
-let
-  shouldReconfigure = stdenv.cc.isClang;
-in
 stdenv.mkDerivation (rec {
   pname = "db";
   inherit version;
@@ -24,16 +21,16 @@ stdenv.mkDerivation (rec {
 
   # The provided configure script features `main` returning implicit `int`, which causes
   # configure checks to work incorrectly with clang 16.
-  nativeBuildInputs = lib.optionals stdenv.cc.isClang [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   patches = extraPatches;
 
   outputs = [ "bin" "out" "dev" ];
 
   # Required when regenerated the configure script to make sure the vendored macros are found.
-  autoreconfFlags = lib.optionalString shouldReconfigure [ "-fi" "-Iaclocal" "-Iaclocal_java" ];
+  autoreconfFlags = [ "-fi" "-Iaclocal" "-Iaclocal_java" ];
 
-  preAutoreconf = lib.optionalString shouldReconfigure ''
+  preAutoreconf = ''
     pushd dist
     # Upstream’s `dist/s_config` cats everything into `aclocal.m4`, but that doesn’t work with
     # autoreconfHook, so cat `config.m4` to another file. Otherwise, it won’t be found by `aclocal`.
@@ -43,7 +40,7 @@ stdenv.mkDerivation (rec {
   # This isn’t pretty. The version information is kept separate from the configure script.
   # After the configure script is regenerated, the version information has to be replaced with the
   # contents of `dist/RELEASE`.
-  postAutoreconf = lib.optionalString shouldReconfigure ''
+  postAutoreconf = ''
     (
       declare -a vars=(
         "DB_VERSION_FAMILY"

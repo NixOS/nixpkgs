@@ -36,6 +36,7 @@ verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+json=
 
 # log the given argument to stderr
 log() {
@@ -48,7 +49,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
@@ -116,11 +117,11 @@ while [ "$#" -gt 0 ]; do
         specialisation="$1"
         shift 1
         ;;
-      --build-host|h)
+      --build-host)
         buildHost="$1"
         shift 1
         ;;
-      --target-host|t)
+      --target-host)
         targetHost="$1"
         shift 1
         ;;
@@ -145,6 +146,9 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         k="$1"; shift 1
         lockFlags+=("$i" "$j" "$k")
+        ;;
+      --json)
+        json=1
         ;;
       *)
         log "$0: unknown option \`$i'"
@@ -507,6 +511,87 @@ if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
 fi
 
+if [ "$action" = list-generations ]; then
+    if [ ! -L "$profile" ]; then
+        log "No profile \`$(basename "$profile")' found"
+        exit 1
+    fi
+
+    generation_from_dir() {
+        generation_dir="$1"
+        generation_base="$(basename "$generation_dir")" # Has the format "system-123-link" for generation 123
+        no_link_gen="${generation_base%-link}"  # remove the "-link"
+        echo "${no_link_gen##*-}" # remove everything before the last dash
+    }
+    describe_generation(){
+        generation_dir="$1"
+        generation_number="$(generation_from_dir "$generation_dir")"
+        nixos_version="$(cat "$generation_dir/nixos-version" 2> /dev/null || echo "Unknown")"
+
+        kernel_dir="$(dirname "$(realpath "$generation_dir/kernel")")"
+        kernel_version="$(ls "$kernel_dir/lib/modules" || echo "Unknown")"
+
+        configurationRevision="$("$generation_dir/sw/bin/nixos-version" --configuration-revision 2> /dev/null || true)"
+
+        # Old nixos-version output ignored unknown flags and just printed the version
+        # therefore the following workaround is done not to show the default output
+        nixos_version_default="$("$generation_dir/sw/bin/nixos-version")"
+        if [ "$configurationRevision" == "$nixos_version_default" ]; then
+             configurationRevision=""
+        fi
+
+        # jq automatically quotes the output => don't try to quote it in output!
+        build_date="$(stat "$generation_dir" --format=%W | jq 'todate')"
+
+        pushd "$generation_dir/specialisation/" > /dev/null || :
+        specialisation_list=(*)
+        popd > /dev/null || :
+
+        specialisations="$(jq --compact-output --null-input '$ARGS.positional' --args -- "${specialisation_list[@]}")"
+
+        if [ "$(basename "$generation_dir")" = "$(readlink "$profile")" ]; then
+            current_generation_tag="true"
+        else
+            current_generation_tag="false"
+        fi
+
+        # Escape userdefined strings
+        nixos_version="$(jq -aR <<< "$nixos_version")"
+        kernel_version="$(jq -aR <<< "$kernel_version")"
+        configurationRevision="$(jq -aR <<< "$configurationRevision")"
+        cat << EOF
+{
+  "generation": $generation_number,
+  "date": $build_date,
+  "nixosVersion": $nixos_version,
+  "kernelVersion": $kernel_version,
+  "configurationRevision": $configurationRevision,
+  "specialisations": $specialisations,
+  "current": $current_generation_tag
+}
+EOF
+    }
+
+    find "$(dirname "$profile")" -regex "$profile-[0-9]+-link" |
+        sort -Vr |
+        while read -r generation_dir; do
+            describe_generation "$generation_dir"
+        done |
+        if [ -z "$json" ]; then
+            jq --slurp -r '.[] | [
+                    ([.generation, (if .current == true then "current" else "" end)] | join(" ")),
+                    (.date | fromdate | strflocaltime("%Y-%m-%d %H:%M:%S")),
+                    .nixosVersion, .kernelVersion, .configurationRevision,
+                    (.specialisations | join(" "))
+                ] | @tsv' |
+                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation" |
+                ${PAGER:cat}
+        else
+            jq --slurp .
+        fi
+    exit 0
+fi
+
 
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
@@ -568,18 +653,54 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    if [[ -z "$specialisation" ]]; then
-        cmd="$pathToConfig/bin/switch-to-configuration"
+    # Using systemd-run here to protect against PTY failures/network
+    # disconnections during rebuild.
+    # See: https://github.com/NixOS/nixpkgs/issues/39118
+    cmd=(
+        "systemd-run"
+        "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
+        "-E" "NIXOS_INSTALL_BOOTLOADER"
+        "--collect"
+        "--no-ask-password"
+        "--pty"
+        "--quiet"
+        "--same-dir"
+        "--service-type=exec"
+        "--unit=nixos-rebuild-switch-to-configuration"
+        "--wait"
+    )
+    # Check if we have a working systemd-run. In chroot environments we may have
+    # a non-working systemd, so we fallback to not using systemd-run.
+    # You may also want to explicitly set NIXOS_SWITCH_USE_DIRTY_ENV environment
+    # variable, since systemd-run runs inside an isolated environment and
+    # this may break some post-switch scripts. However keep in mind that this
+    # may be dangerous in remote access (e.g. SSH).
+    if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
+        log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
+        cmd=()
+    elif ! targetHostCmd "${cmd[@]}" true &>/dev/null; then
+        logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
+        cmd=(
+            "env"
+            "-i"
+            "LOCALE_ARCHIVE=$LOCALE_ARCHIVE"
+            "NIXOS_INSTALL_BOOTLOADER=$NIXOS_INSTALL_BOOTLOADER"
+        )
     else
-        cmd="$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration"
+        logVerbose "Using systemd-run to switch configuration."
+    fi
+    if [[ -z "$specialisation" ]]; then
+        cmd+=("$pathToConfig/bin/switch-to-configuration")
+    else
+        cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
 
-        if [[ ! -f "$cmd" ]]; then
+        if [[ ! -f "${cmd[-1]}" ]]; then
             log "error: specialisation not found: $specialisation"
             exit 1
         fi
     fi
 
-    if ! targetHostCmd "$cmd" "$action"; then
+    if ! targetHostCmd "${cmd[@]}" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

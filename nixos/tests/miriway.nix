@@ -83,7 +83,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-    fonts.fonts = [ pkgs.inconsolata ];
+    fonts.packages = [ pkgs.inconsolata ];
   };
 
   enableOCR = true;

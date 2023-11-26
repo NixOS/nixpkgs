@@ -5,7 +5,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , wrapGAppsHook4
 , elementary-gtk-theme
@@ -18,20 +17,19 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-iconbrowser";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "iconbrowser";
     rev = version;
-    sha256 = "sha256-xooZfQmeB4rvlO8zKWnUuXPCFQNCTdjd7C53/j9EoHg=";
+    sha256 = "sha256-F0HxwyXAMAQyGRMhtsuKdmyyrCweM+ImJokN/KN3Kiw=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
   ];
@@ -43,11 +41,6 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

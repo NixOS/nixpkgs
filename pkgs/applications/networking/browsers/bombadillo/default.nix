@@ -12,7 +12,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   outputs = [ "out" "man" ];
 

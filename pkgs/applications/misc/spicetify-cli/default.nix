@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "spicetify-cli";
-  version = "2.20.3";
+  version = "2.27.1";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "spicetify-cli";
     rev = "v${version}";
-    hash = "sha256-1Auvx2KZ97iD9EDm6QQdgS5YF9smw4dTvXF1IXtYrSI=";
+    hash = "sha256-Z+paJAuzUnCdCSx2UHg1HV14vDo3jWsyUrcbEnvqTm0=";
   };
 
-  vendorHash = "sha256-61j3HVDe6AbXpdmxhQQctv4C2hNBK/rWvZeC+KtISKY=";
+  vendorHash = "sha256-H2kSTsYiD9HResHes+7YxUyNcjtM0SLpDPUC0Y518VM=";
 
   ldflags = [
     "-s -w"
@@ -21,6 +21,9 @@ buildGoModule rec {
   # used at runtime, but not installed by default
   postInstall = ''
     cp -r ${src}/jsHelper $out/bin/jsHelper
+    cp -r ${src}/CustomApps $out/bin/CustomApps
+    cp -r ${src}/Extensions $out/bin/Extensions
+    cp -r ${src}/Themes $out/bin/Themes
   '';
 
   doInstallCheck = true;
@@ -38,5 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/spicetify/spicetify-cli/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonringer mdarocha ];
+    mainProgram = "spicetify-cli";
   };
 }

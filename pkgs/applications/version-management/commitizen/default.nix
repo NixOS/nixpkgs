@@ -3,19 +3,24 @@
 , fetchFromGitHub
 , git
 , python3
+, stdenv
+, installShellFiles
+, nix-update-script
 , testers
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "3.5.2";
+  version = "3.12.0";
   format = "pyproject";
+
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4m3NCnGUX9lHCk6czwzxXLqf8GLi2u2A/crBZYTyplA=";
+    hash = "sha256-Gzx2DdCX8GyxYEi8OH2a21V6JkA50qA+39IInEjLReI=";
   };
 
   pythonRelaxDeps = [
@@ -25,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
     pythonRelaxDepsHook
+    installShellFiles
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -77,7 +83,20 @@ python3.pkgs.buildPythonApplication rec {
     "test_commitizen_debug_excepthook"
   ];
 
+  postInstall =
+    let
+      argcomplete = lib.getExe' python3.pkgs.argcomplete "register-python-argcomplete";
+    in
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      ''
+        installShellCompletion --cmd cz \
+          --bash <(${argcomplete} --shell bash $out/bin/cz) \
+          --zsh <(${argcomplete} --shell zsh $out/bin/cz) \
+          --fish <(${argcomplete} --shell fish $out/bin/cz)
+      '';
+
   passthru = {
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = commitizen;
       command = "cz version";
@@ -89,6 +108,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/commitizen-tools/commitizen";
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "cz";
     maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };
 }

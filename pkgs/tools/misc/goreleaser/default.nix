@@ -4,19 +4,21 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, testers
+, goreleaser
 }:
 buildGoModule rec {
   pname = "goreleaser";
-  version = "1.19.2";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T8mLbEJ0fGm+rxwFVHziQyq+JcXC0OrThwyDPxcPHB0=";
+    hash = "sha256-Okuiicq1CAVrE3YPe/aF/HZbf23p6ulz//BRGX77cnw=";
   };
 
-  vendorHash = "sha256-2m81ELHWbF9WKEMXmr5E8QReClWdVhPRJ+ZstrM6qY0=";
+  vendorHash = "sha256-+ac4q820gETsNRVpW2u0MXU6HfoztLdsWK2HYqJ4mqo=";
 
   ldflags =
     [ "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs" ];
@@ -36,6 +38,12 @@ buildGoModule rec {
         --fish <(${emulator} $out/bin/goreleaser completion fish) \
         --zsh  <(${emulator} $out/bin/goreleaser completion zsh)
     '';
+
+  passthru.tests.version = testers.testVersion {
+    package = goreleaser;
+    command = "goreleaser -v";
+    inherit version;
+  };
 
   meta = with lib; {
     description = "Deliver Go binaries as fast and easily as possible";

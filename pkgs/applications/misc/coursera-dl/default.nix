@@ -15,17 +15,23 @@ python3.pkgs.buildPythonApplication rec {
     owner = "coursera-dl";
     repo = "coursera-dl";
     rev = "refs/tags/${version}";
-    sha256 = "0akgwzrsx094jj30n4bd2ilwgva4qxx38v3bgm69iqfxi8c2bqbk";
+    hash = "sha256-c+ElGIrd4ZhMfWtsNHrHRO3HaRRtEQuGlCSBrvPnbyo=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://github.com/coursera-dl/coursera-dl/commit/c8796e567698be166cb15f54e095140c1a9b567e.patch";
-      sha256 = "sha256:07ca6zdyw3ypv7yzfv2kzmjvv86h0rwzllcg0zky27qppqz917bv";
+      hash = "sha256-e52QPr4XH+HnB49R+nkG0KC9Zf1TbPf92dcP7ts3ih0=";
     })
     (fetchpatch {
       url = "https://github.com/coursera-dl/coursera-dl/commit/6c221706ba828285ca7a30a08708e63e3891b36f.patch";
-      sha256 = "sha256-/AKFvBPInSq/lsz+G0jVSl/ukVgCnt66oePAb+66AjI=";
+      hash = "sha256-/AKFvBPInSq/lsz+G0jVSl/ukVgCnt66oePAb+66AjI=";
+    })
+    # https://github.com/coursera-dl/coursera-dl/pull/857
+    (fetchpatch {
+      name = "python-3.11-compatibility.patch";
+      url = "https://github.com/coursera-dl/coursera-dl/commit/7b0783433b6b198fca9e51405b18386f90790892.patch";
+      hash = "sha256-OpW8gqzrMyaE69qH3uGsB5TNQTYaO7pn3uJ7NU5SrcM=";
     })
   ];
 

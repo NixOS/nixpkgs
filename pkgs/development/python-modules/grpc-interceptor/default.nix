@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , poetry-core
 , grpcio
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "grpc-interceptor";
-  version = "0.15.2";
+  version = "0.15.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,13 +21,17 @@ buildPythonPackage rec {
     owner = "d5h-foss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-zulK0SVehzHcrmgIyH0D5sUOiAN53eIg88IoVyF6/DA=";
+    hash = "sha256-tTi1X1r7584ZXa12eLp2G/Am8G6Dnd18eE5wF/Lp/EY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-  '';
+  patches = [
+    # https://github.com/d5h-foss/grpc-interceptor/pull/44
+    (fetchpatch {
+      name = "replace-poetry-with-poetry-core.patch";
+      url = "https://github.com/d5h-foss/grpc-interceptor/commit/916cb394acd8dd7abb4f5edcb4e88aee961a32d0.patch";
+      hash = "sha256-W2SF2zyjusTxgvCxBDLpisD03bofzDug1eyd4FLJmKs=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -36,6 +41,8 @@ buildPythonPackage rec {
     grpcio
     protobuf
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-asyncio

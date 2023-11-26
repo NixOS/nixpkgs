@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "movit";
-  version = "1.6.3";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://movit.sesse.net/${pname}-${version}.tar.gz";
-    sha256 = "164lm5sg95ca6k546zf775g3s79mgff0az96wl6hbmlrxh4z26gb";
+    sha256 = "sha256-szBztwXwzLasSULPURUVFUB7QLtOmi3QIowcLLH7wRo=";
   };
 
   outputs = [ "out" "dev" ];

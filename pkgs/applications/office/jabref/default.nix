@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, fetchurl
 , fetchFromGitHub
+, fetchpatch
 , wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
@@ -10,6 +12,7 @@
 , jdk
 , gradle
 , perl
+, python3
 }:
 
 let
@@ -18,32 +21,29 @@ let
       snapshot = "2.2.1-SNAPSHOT";
       pin = "2.2.1-20230117.075740-16";
     };
-    afterburner = {
-      snapshot = "testmoduleinfo-SNAPSHOT";
-      pin = "0e337d8773";
-    };
   };
 in
 stdenv.mkDerivation rec {
-  version = "5.9";
+  version = "5.11";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-uACmXas5L1NcxLwllkcbgCCt9bRicpQkiJkhkkVWDDY=";
+    hash = "sha256-MTnM4QHTFXJt/T8SOWwHlZ1CuegSGjpT3qDaMRi5n18=";
+    fetchSubmodules = true;
   };
 
   desktopItems = [
     (makeDesktopItem {
       comment = meta.description;
-      name = "JabRef %U";
+      name = "JabRef";
       desktopName = "JabRef";
       genericName = "Bibliography manager";
       categories = [ "Office" ];
       icon = "jabref";
-      exec = "JabRef";
+      exec = "JabRef %U";
       startupWMClass = "org.jabref.gui.JabRefMain";
       mimeTypes = [ "text/x-bibtex" ];
     })
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit src version postPatch;
+    inherit src version patches postPatch;
 
     nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
@@ -70,26 +70,51 @@ stdenv.mkDerivation rec {
     # Don't move info to share/
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
-    outputHash = "sha256-s6GA8iT3UEVuELBgpBvzPJlVX+9DpfOQrEd3KIth8eA=";
+    outputHash = "sha256-sMbAv122EcLPOqbEVKowfxp9B71iJaccLRlKS75b3Xc=";
   };
+
+  patches = [
+    # Use JavaFX 21
+    (fetchpatch {
+      url = "https://github.com/JabRef/jabref/commit/2afd1f622a3ab85fc2cf5fa879c5a4d41c245eca.patch";
+      hash = "sha256-cs7TSSnEY4Yf5xrqMOpfIA4jVdzM3OQQV/anQxJyy64=";
+    })
+  ];
 
   postPatch = ''
     # Pin the version
     substituteInPlace build.gradle \
-      --replace 'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.snapshot}' \
-        'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.pin}' \
       --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
         'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
+
+    # Disable update check
+    substituteInPlace src/main/java/org/jabref/preferences/JabRefPreferences.java \
+      --replace 'VERSION_CHECK_ENABLED, Boolean.TRUE' \
+        'VERSION_CHECK_ENABLED, Boolean.FALSE'
+
+    # Add back downloadDependencies task for deps download which is removed upstream in https://github.com/JabRef/jabref/pull/10326
+    cat <<EOF >> build.gradle
+    task downloadDependencies {
+      description "Pre-downloads *most* dependencies"
+      doLast {
+        configurations.getAsMap().each { name, config ->
+          println "Retrieving dependencies for $name"
+          try {
+            config.files
+          } catch (e) {
+            // some cannot be resolved, just log them
+            project.logger.info e.message
+          }
+        }
+      }
+    }
+    EOF
   '';
 
   preBuild = ''
-    # Include CSL styles and locales in our build
-    cp -r buildres/csl/* src/main/resources/
-
     # Use the local packages from -deps
     sed -i -e '/repositories {/a maven { url uri("${deps}") }' \
       build.gradle \
-      buildSrc/build.gradle \
       settings.gradle
   '';
 
@@ -101,7 +126,10 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [
+    gtk3
+    python3
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -129,6 +157,7 @@ stdenv.mkDerivation rec {
 
     # script to support browser extensions
     install -Dm755 buildres/linux/jabrefHost.py $out/lib/jabrefHost.py
+    patchShebangs $out/lib/jabrefHost.py
     install -Dm644 buildres/linux/native-messaging-host/firefox/org.jabref.jabref.json $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
     sed -i -e "s|/opt/jabref|$out|" $out/lib/mozilla/native-messaging-hosts/org.jabref.jabref.json
 
@@ -137,15 +166,18 @@ stdenv.mkDerivation rec {
 
     tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
 
-    # remove openjfx libs for other platforms
-    rm $out/lib/javafx-*-win.jar ${lib.optionalString stdenv.isAarch64 "$out/lib/javafx-*-linux.jar"}
-
     # workaround for https://github.com/NixOS/nixpkgs/issues/162064
-    unzip $out/lib/javafx-web-*.jar libjfxwebkit.so -d $out/lib/
+    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
     rm $out/bin/*
 
+    # put this in postFixup because some gappsWrapperArgs are generated in gappsWrapperArgsHook in preFixup
     makeWrapper ${jdk}/bin/java $out/bin/JabRef \
       "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
@@ -154,8 +186,6 @@ stdenv.mkDerivation rec {
 
     # lowercase alias (for convenience and required for browser extensions)
     ln -sf $out/bin/JabRef $out/bin/jabref
-
-    runHook postInstall
   '';
 
   meta = with lib; {

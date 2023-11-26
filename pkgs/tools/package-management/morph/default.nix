@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    sha256 = "sha256-0CHmjqPxBgALGZYjfJFLoLBnoI0U7oZ8WyCtu1bkzZg=";
+    hash = "sha256-0CHmjqPxBgALGZYjfJFLoLBnoI0U7oZ8WyCtu1bkzZg=";
   };
 
-  vendorSha256 = "08zzp0h4c4i5hk4whz06a3da7qjms6lr36596vxz0d8q0n7rspr9";
+  vendorHash = "sha256-KV+djwUYNfD7NqmYkanRVeKj2lAGfMjJhCUSRiC4/yM=";
 
   nativeBuildInputs = [ makeWrapper ];
 

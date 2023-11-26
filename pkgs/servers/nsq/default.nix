@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "nsqio";
     repo = "nsq";
     rev = "v${version}";
-    sha256 = "0ajqjwfn06zsmz21z9mkl4cblarypaf20228pqcd1293zl6y3ry8";
+    hash = "sha256-yOfhDf0jidAYvkgIIJy6Piu6GKGzph/Er/obYB2XWCo=";
   };
 
-  vendorSha256 = "11sx96zshaciqrm8rqmhz1sf6nd4lczqwiha031xyyifvmpp2hsa";
+  vendorHash = "sha256-SkNxb90uet/DAApGjj+jpFnjdPiw4oxqxpEpqL9JXYc=";
 
   excludedPackages = [ "bench" ];
 

@@ -9,7 +9,7 @@
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(with stdenv.hostPlatform; isStatic || libc == "msvcrt") # problems for now
+, enableShared ? !(with stdenv.hostPlatform; isStatic || isMinGW) # problems for now
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
@@ -91,7 +91,7 @@ let
     ++ lib.optional (!enablePython) "--without-python"
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
-    ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "threadapi=win32"
   ] ++ extraB2Args
   );
@@ -112,6 +112,13 @@ stdenv.mkDerivation {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
+  })
+  # Fixes ABI detection
+  ++ lib.optional (version == "1.83.0") (fetchpatch {
+    url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
+    stripLen = 1;
+    extraPrefix = "libs/context/";
+    sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
   })
   # This fixes another issue regarding ill-formed constant expressions, which is a default error
   # in clang 16 and will be a hard error in clang 17.
@@ -134,6 +141,14 @@ stdenv.mkDerivation {
       relative = "include";
       hash = "sha256-dq4SVgxkPJSC7Fvr59VGnXkM4Lb09kYDaBksCHo9C0s=";
     })
+    # This fixes an issue in Python 3.11 about Py_TPFLAGS_HAVE_GC
+    (fetchpatch {
+      name = "python311-compatibility.patch";
+      url = "https://github.com/boostorg/python/commit/a218babc8daee904a83f550fb66e5cb3f1cb3013.patch";
+      hash = "sha256-IHxLtJBx0xSy7QEr8FbCPofsjcPuSYzgtPwDlx1JM+4=";
+      stripLen = 1;
+      extraPrefix = "libs/python/";
+    })
   ];
 
   meta = with lib; {
@@ -141,13 +156,11 @@ stdenv.mkDerivation {
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
+    # boost-context lacks support for the N32 ABI on mips64.  The build
+    # will succeed, but packages depending on boost-context will fail with
+    # a very cryptic error message.
+    badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
-
-    broken =
-      # boost-context lacks support for the N32 ABI on mips64.  The build
-      # will succeed, but packages depending on boost-context will fail with
-      # a very cryptic error message.
-      stdenv.hostPlatform.isMips64n32;
   };
 
   passthru = {
@@ -246,7 +259,7 @@ stdenv.mkDerivation {
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
-  '' + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
     $RANLIB "$out/lib/"*.a
   '';
 

@@ -1,9 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
+, cmake
 , zlib
 , stdenv
 , darwin
@@ -12,38 +10,34 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.22.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Qb01NLWCD7nglceJdUTnlf/XtPHl1P6ukr+QsjxMMos=";
+    hash = "sha256-cy1YgNBxVSxdoVq/2t6Uf4PBQf54degabtEYfIeIBDU=";
   };
 
-  cargoHash = "sha256-Qe/AGLoaCpbo001JkCN5qFytL4vWIPWhy3/pfBRoMmo=";
+  cargoHash = "sha256-Xl6wneomb5NeqhA9pMyNkCtc6FgYtx7k2zgQ3oBHP/Q=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
-    libgit2
-    openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
     git
   ];
 
-  # use system openssl
-  buildNoDefaultFeatures = true;
-
   checkFlags = [
     # requires nightly version of cargo-rustdoc
     "--skip=both_passing_manifest_path_and_directory_works"
-    "--skip=rustdoc_cmd::tests"
     "--skip=verify_binary_contains_lints"
 
     # requires internet access

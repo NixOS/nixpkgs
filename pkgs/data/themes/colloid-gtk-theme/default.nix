@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, gitUpdater
 , gnome-themes-extra
 , gtk-engine-murrine
 , jdupes
@@ -19,17 +18,17 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dracula" "gruvbox" "rimless" "normal" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "all" "black" "rimless" "normal" "float" ] tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023.04.11";
+  version = "2023-10-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-lVHDQmu9GLesasmI2GQ0hx4f2NtgaM4IlJk/hXe2XzY=";
+    hash = "sha256-NxIWH3qLW8sEguovAv9wfgnlnmPlTipRJTmMo3rSHNY=";
   };
 
   nativeBuildInputs = [
@@ -63,8 +62,6 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A modern and clean Gtk theme";

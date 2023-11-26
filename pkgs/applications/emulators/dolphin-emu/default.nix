@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -12,6 +13,7 @@
 , enet
 , ffmpeg
 , fmt_8
+, gtest
 , hidapi
 , libevdev
 , libGL
@@ -22,15 +24,15 @@
 , libXdmcp
 , libXext
 , libXrandr
+, lzo
 , mbedtls_2
-, mgba
 , miniupnpc
 , minizip-ng
 , openal
 , pugixml
 , qtbase
+, qtsvg
 , sfml
-, soundtouch
 , udev
 , vulkan-loader
 , xxHash
@@ -55,15 +57,26 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-19368";
+  version = "5.0-19870";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "dadbeb4bae7e7fa23af2b46e0add4143094dc107";
-    sha256 = "sha256-XLtFn2liONPizvrKyySZx0mY7qC2fpwhAWaRZLlEzh8=";
+    rev = "032c77b462a220016f23c5079e71bb23e0ad2adf";
+    sha256 = "sha256-TgRattksYsMGcbfu4T5mCFO9BkkHRX0NswFxGwZWjEw=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dolphin-emu/dolphin/commit/c43c9101c07376297abbbbc40ef9a1965a1681cd.diff";
+      sha256 = "sha256-yHlyG86ta76YKrJsyefvFh521dNbQOqiPOpRUVxKuZM=";
+    })
+    # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
+    ./find-minizip-ng.patch
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     stdenv.cc
@@ -87,22 +100,24 @@ stdenv.mkDerivation rec {
     enet
     ffmpeg
     fmt_8
+    gtest
     hidapi
     libiconv
     libpulseaudio
     libspng
     libusb1
     libXdmcp
+    lzo
     mbedtls_2
     miniupnpc
     minizip-ng
     openal
     pugixml
     qtbase
+    qtsvg
     sfml
-    soundtouch
     xxHash
-    xz
+    xz # LibLZMA
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
@@ -110,7 +125,7 @@ stdenv.mkDerivation rec {
     libGL
     libXext
     libXrandr
-    # FIXME: Remove comment on next mgba version
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
     #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
@@ -118,7 +133,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DUSE_SHARED_ENET=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
@@ -160,6 +174,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
+      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''

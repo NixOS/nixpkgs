@@ -1,0 +1,17 @@
+diff --git a/serlib/ser_stdlib.ml b/serlib/ser_stdlib.ml
+index 894d300..11c9217 100644
+--- a/serlib/ser_stdlib.ml
++++ b/serlib/ser_stdlib.ml
+@@ -28,6 +28,7 @@ let ref_to_yojson f x = f !x
+ let ref_of_yojson f x = Result.map (fun x -> ref x) (f x)
+ let hash_fold_ref = hash_fold_ref_frozen
+ let compare_ref = compare_ref
++let (==) x y = (==) x y
+ 
+ module Lazy = struct
+   type 'a t = 'a lazy_t
+@@ -35,3 +36,4 @@ module Lazy = struct
+ end
+ 
+ module Option = Stdlib.Option
++module List = Stdlib.List

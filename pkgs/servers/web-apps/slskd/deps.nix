@@ -102,6 +102,7 @@
   (fetchNuGet { pname = "NETStandard.Library"; version = "1.6.1"; sha256 = "1z70wvsx2d847a2cjfii7b83pjfs34q05gb037fdjikv5kbagml8"; })
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "9.0.1"; sha256 = "0mcy0i7pnfpqm4pcaiyzzji4g0c8i3a5gjz28rrr28110np8304r"; })
   (fetchNuGet { pname = "NuGet.Frameworks"; version = "5.0.0"; sha256 = "18ijvmj13cwjdrrm52c8fpq021531zaz4mj4b4zapxaqzzxf2qjr"; })
+  (fetchNuGet { pname = "OneOf"; version = "3.0.255"; sha256 = "17m7nqiwfvpbmy0c9l1i71hh1n2vnjm7hdmb6ppgwmbq6ypnxy4a"; })
   (fetchNuGet { pname = "prometheus-net"; version = "7.0.0"; sha256 = "13h42444mx4nbafhn0aw7xg8gg5dxjszv3qxfz1dflayzmcwganf"; })
   (fetchNuGet { pname = "prometheus-net.AspNetCore"; version = "7.0.0"; sha256 = "0cjdh47qimcg6bmflnwl5xv77vxn4h4hmd1znv8b5a7krg1hrf5k"; })
   (fetchNuGet { pname = "prometheus-net.AspNetCore.HealthChecks"; version = "7.0.0"; sha256 = "0q9gal3hkd45d78s1p0f3dv0kxr0byq69k0aq6pmmh9h6rpx56dl"; })
