@@ -10,111 +10,6 @@ let
       -addext 'subjectAltName = DNS:*.${domain}'
     install -D -t $out key.pem cert.pem
   '';
-
-  images = {
-    nixos.unstable.x86_64 =
-      let
-        systemConfig = { pkgs, ... }: {
-          # passwordless ssh server
-          services.openssh = {
-            enable = true;
-            settings = {
-              PermitRootLogin = "yes";
-              PermitEmptyPasswords = true;
-            };
-          };
-
-          users = {
-            mutableUsers = false;
-            # build user
-            extraUsers."build" = {
-              isNormalUser = true;
-              uid = 1000;
-              extraGroups = [ "wheel" ];
-              password = "";
-            };
-            users.root.password = "";
-          };
-
-          security.sudo.wheelNeedsPassword = false;
-          nix.settings.trusted-users = [ "root" "build" ];
-          documentation.nixos.enable = false;
-
-          # builds.sr.ht-image-specific network settings
-          networking = {
-            hostName = "build";
-            dhcpcd.enable = false;
-            defaultGateway.address = "10.0.2.2";
-            usePredictableInterfaceNames = false;
-            interfaces."eth0".ipv4.addresses = [{
-              address = "10.0.2.15";
-              prefixLength = 25;
-            }];
-            enableIPv6 = false;
-            nameservers = [
-              # OpenNIC anycast
-              "185.121.177.177"
-              "169.239.202.202"
-              # Google
-              "8.8.8.8"
-            ];
-            firewall.allowedTCPPorts = [ 22 ];
-          };
-
-          environment.systemPackages = [
-            pkgs.gitMinimal
-            #pkgs.mercurial
-            pkgs.curl
-            pkgs.gnupg
-          ];
-        };
-        qemuConfig = { pkgs, ... }: {
-          imports = [ systemConfig ];
-          fileSystems."/".device = "/dev/disk/by-label/nixos";
-          boot.initrd.availableKernelModules = [
-            "ahci"
-            "ehci_pci"
-            "sd_mod"
-            "usb_storage"
-            "usbhid"
-            "virtio_balloon"
-            "virtio_blk"
-            "virtio_pci"
-            "virtio_ring"
-            "xhci_pci"
-          ];
-          boot.loader = {
-            grub = {
-              version = 2;
-              device = "/dev/vda";
-            };
-            timeout = 0;
-          };
-        };
-        config = (import (pkgs.path + "/nixos/lib/eval-config.nix") {
-          inherit pkgs; modules = [ qemuConfig ];
-          system = "x86_64-linux";
-        }).config;
-      in
-      import (pkgs.path + "/nixos/lib/make-disk-image.nix") {
-        inherit pkgs lib config;
-        diskSize = 16000;
-        format = "qcow2-compressed";
-        contents = [
-          { source = pkgs.writeText "gitconfig" ''
-              [user]
-                name = builds.sr.ht
-                email = build@sr.ht
-            '';
-            target = "/home/build/.gitconfig";
-            user = "build";
-            group = "users";
-            mode = "644";
-          }
-        ];
-      };
-  };
-
 in
 {
   name = "sourcehut";
@@ -149,7 +44,7 @@ in
         enable = true;
         # FIXME: see why it does not seem to activate fully.
         #enableWorker = true;
-        inherit images;
+        images = { };
       };
       git.enable = true;
 
