@@ -1,12 +1,12 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitLab
 , gnupg
 , perl
 , jetring
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jetring";
   version = "0.31";
 
