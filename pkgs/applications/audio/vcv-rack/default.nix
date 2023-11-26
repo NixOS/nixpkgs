@@ -115,7 +115,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "VCV-Rack";
-  version = "2.4.0";
+  version = "2.4.1";
 
   desktopItems = [
     (makeDesktopItem {
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "0azrqyx5as4jmk9dxb7cj7x9dha81i0mm9pkvdv944qyccqwg55i";
+    sha256 = "sha256-Gn/sFltLXX2mLv4dDqmr/UPd+JBXVkIZGwMI6Rm0Ih4=";
   };
 
   patches = [
