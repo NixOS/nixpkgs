@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , pytestCheckHook
+, clvm
+, clvm-tools
 , rustPlatform
 }:
 
@@ -42,6 +44,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  checkInputs = [ clvm clvm-tools ];
 
   buildAndTestSubdir = "wheel";
 
