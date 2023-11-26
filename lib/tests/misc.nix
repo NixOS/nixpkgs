@@ -785,6 +785,10 @@ runTests {
     };
   };
 
+  testGenAttrs = {
+    expr = attrsets.genAttrs [ "foo" "bar" ] (name: "${name}123");
+    expected = { foo = "foo123"; bar = "bar123"; };
+  };
 
   testMergeAttrsListExample1 = {
     expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
