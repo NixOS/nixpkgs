@@ -28734,7 +28734,7 @@ with pkgs;
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../by-name/sy/systemd/package.nix {
+  systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
