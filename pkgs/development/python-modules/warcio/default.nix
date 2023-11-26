@@ -2,14 +2,14 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, six
-, setuptools
-, pytestCheckHook
 , httpbin
-, requests
-, wsgiprox
 , multidict
+, pytestCheckHook
 , pythonOlder
+, requests
+, setuptools
+, six
+, wsgiprox
 }:
 
 buildPythonPackage rec {
@@ -40,16 +40,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     httpbin
+    multidict # Optional. Without this, one test in test/test_utils.py is skipped.
+    pytestCheckHook
     requests
     wsgiprox
-    multidict # Optional. Without this, one test in test/test_utils.py is skipped.
   ];
 
-  pytestFlagsArray = [ "--offline" ];
+  pytestFlagsArray = [
+    "--offline"
+  ];
 
-  pythonImportsCheck = [ "warcio" ];
+  pythonImportsCheck = [
+    "warcio"
+  ];
 
   meta = with lib; {
     description = "Streaming WARC/ARC library for fast web archive IO";
