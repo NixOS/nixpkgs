@@ -28,9 +28,9 @@ sway-unwrapped.overrideAttrs (oldAttrs: rec {
     description = "Sway, but with eye candy!";
     homepage = "https://github.com/WillPower3309/swayfx";
     license = licenses.mit;
-    maintainers = with maintainers; [ ricarch97 ];
+    maintainers = with maintainers; [ eclairevoyant ricarch97 ];
     platforms = platforms.linux;
-    mainProgram = "swayfx";
+    mainProgram = "sway";
 
     longDescription = ''
       Fork of Sway, an incredible and one of the most well established Wayland
