@@ -117,7 +117,8 @@ in stdenv.mkDerivation (rec {
       relative = "llvm";
       hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
     })
-  ] ++ lib.optionals enablePolly [
+  ]
+  ++ lib.optionals enablePolly [
     ./gnu-install-dirs-polly.patch
     # Add missing isl header includess required to build LLVM 8 + Polly with clang 16.
     (fetchpatch {
@@ -127,7 +128,12 @@ in stdenv.mkDerivation (rec {
       extraPrefix = "tools/polly/lib/External/ppcg/";
       stripLen = 1;
     })
-  ];
+  ]
+  ++ lib.optional stdenv.targetPlatform.isPower (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/009d08f313c46915930ca617946033a487933b73.patch";
+    hash = "sha256-THvD8riHt3iqC+dHfNwFxOEe+i6/bsCMbvQSzvteXQY=";
+    relative = "llvm";
+  });
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
