@@ -38,5 +38,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
+    #   = note: Undefined symbols for architecture x86_64:
+    #       "_utimensat", referenced from:
+    #           rustpython_vm::function::builtin::IntoPyNativeFn::into_func::... in
+    #           rustpython-10386d81555652a7.rustpython_vm-f0b5bedfcf056d0b.rustpython_vm.7926b68e665728ca-cgu.08.rcgu.o.rcgu.o
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
