@@ -3959,6 +3959,8 @@ self: super: with self; {
 
   duo-client = callPackage ../development/python-modules/duo-client { };
 
+  durationpy = callPackage ../development/python-modules/durationpy {  };
+
   durus = callPackage ../development/python-modules/durus {  };
 
   dvc = callPackage ../development/python-modules/dvc {  };
