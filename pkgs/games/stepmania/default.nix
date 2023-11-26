@@ -1,10 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , nasm
 , alsa-lib
-, ffmpeg_4
+, ffmpeg_6
 , glew
 , glib
 , gtk2
@@ -13,21 +14,27 @@
 , libpulseaudio
 , libvorbis
 , udev
+, xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stepmania";
-  version = "5.1.0-b2";
+  version = "5.1.0-b2-unstable-2022-11-14";
 
   src = fetchFromGitHub {
     owner = "stepmania";
     repo  = "stepmania";
-    rev   = "v${version}";
-    hash = "sha256-tuXByyxJ/Mkik7kr5kDzppma7tExyHrt2yCU2g9N/ig=";
+    rev   = "d55acb1ba26f1c5b5e3048d6d6c0bd116625216f";
+    hash = "sha256-49H2Q61R4l/G0fWsjCjiAUXeWwG3lcsDpV5XvR3l3QE=";
   };
 
   patches = [
-    ./0001-fix-build-with-ffmpeg-4.patch
+    # https://github.com/stepmania/stepmania/pull/2247
+    (fetchpatch {
+      name = "fix-building-with-ffmpeg6.patch";
+      url = "https://github.com/stepmania/stepmania/commit/3fef5ef60b7674d6431f4e1e4ba8c69b0c21c023.patch";
+      hash = "sha256-m+5sP+mIpcSjioRBdzChqja5zwNcwdSNAfvSJ2Lww+g=";
+    })
   ];
 
   postPatch = ''
@@ -38,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsa-lib
-    ffmpeg_4
+    ffmpeg_6
     glew
     glib
     gtk2
@@ -47,6 +54,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libvorbis
     udev
+    xorg.libXtst
   ];
 
   cmakeFlags = [
