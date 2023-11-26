@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     fcft
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/dnkl/fnott";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
-    license = with licenses; [ mit zlib ];
-    maintainers = with maintainers; [ polykernel ];
+    license = with lib.licenses; [ mit zlib ];
+    maintainers = with lib.maintainers; [ polykernel ];
     mainProgram = "fnott";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
