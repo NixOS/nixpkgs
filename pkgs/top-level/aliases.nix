@@ -767,6 +767,7 @@ mapAliases ({
   qtcurve = libsForQt5.qtcurve; # Added 2020-11-07
   qtile-unwrapped = python3.pkgs.qtile; # Added 2023-05-12
   qutebrowser-qt6 = throw "'qutebrowser-qt6' has been replaced by 'qutebrowser', since the the qt5 version has been removed"; # Added 2023-08-19
+  quvi = throw "'quvi' has been removed, as it was broken and unmaintained"; # Added 2023-11-25
 
   ### R ###
 

@@ -723,6 +723,7 @@
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
+  ./services/misc/preload.nix
   ./services/misc/prowlarr.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix
@@ -1153,6 +1154,7 @@
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
+  ./services/search/sonic-server.nix
   ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix

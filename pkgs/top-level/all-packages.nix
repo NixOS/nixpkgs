@@ -2800,8 +2800,6 @@ with pkgs;
 
   rpcemu = callPackage ../applications/emulators/rpcemu { };
 
-  rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
-
   ruffle = callPackage ../applications/emulators/ruffle { };
 
   ryujinx = callPackage ../applications/emulators/ryujinx { };
@@ -27283,7 +27281,9 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
-  rustic-rs = callPackage ../tools/backup/rustic-rs { inherit (darwin) Security; };
+  rustic-rs = callPackage ../tools/backup/rustic-rs {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   supervise = callPackage ../tools/system/supervise { };
 
@@ -28736,7 +28736,7 @@ with pkgs;
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = callPackage ../by-name/sy/systemd/package.nix {
+  systemd = callPackage ../os-specific/linux/systemd {
     # break some cyclic dependencies
     util-linux = util-linuxMinimal;
     # provide a super minimal gnupg used for systemd-machined
@@ -32135,8 +32135,6 @@ with pkgs;
 
   lemonade = callPackage ../applications/misc/lemonade { };
 
-  libquvi = callPackage ../applications/video/quvi/library.nix { };
-
   LibreArp = callPackage ../applications/audio/LibreArp { };
 
   LibreArp-lv2 = callPackage ../applications/audio/LibreArp/lv2.nix { };
@@ -32184,13 +32182,6 @@ with pkgs;
   };
 
   praat = callPackage ../applications/audio/praat { };
-
-  quvi = callPackage ../applications/video/quvi/tool.nix {
-    lua5_sockets = lua51Packages.luasocket;
-    lua5 = lua5_1;
-  };
-
-  quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
   rhvoice = callPackage ../applications/audio/rhvoice { };
 
@@ -32641,10 +32632,11 @@ with pkgs;
     wlroots_0_16
     wlroots;
 
+  wrapSway = callPackage ../applications/window-managers/sway/wrapper.nix { };
   sway-unwrapped = callPackage ../applications/window-managers/sway {
     wlroots = wlroots_0_16;
   };
-  sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
+  sway = wrapSway sway-unwrapped;
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
@@ -32655,7 +32647,8 @@ with pkgs;
 
   swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
 
-  swayfx = callPackage ../applications/window-managers/sway/fx.nix { };
+  swayfx-unwrapped = callPackage ../applications/window-managers/sway/fx.nix { };
+  swayfx = wrapSway swayfx-unwrapped;
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
