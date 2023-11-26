@@ -18,7 +18,7 @@ buildGoModule rec {
     ++ lib.optionals stdenv.isLinux [ libX11 ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "Print x509 certificate info";
