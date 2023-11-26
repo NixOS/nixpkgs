@@ -66,6 +66,11 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p $out/bin
     ln -s $out/stepmania-5.1/stepmania $out/bin/stepmania
+
+    mkdir -p $out/share/
+    cp -r $src/icons $out/share/
+
+    install -Dm444 $src/stepmania.desktop -t $out/share/applications
   '';
 
   meta = with lib; {
