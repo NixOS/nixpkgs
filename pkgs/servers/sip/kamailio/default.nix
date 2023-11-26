@@ -16,7 +16,6 @@
 , coreutils
 , gdb
 , gnused
-, openssl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     mariadb-connector-c
     pcre
-    openssl
   ];
 
   nativeBuildInputs = [
