@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitea
 
 , glibc
@@ -23,7 +23,7 @@
 , mmdebstrap
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mmdebstrap";
   version = "1.4.0";
 
