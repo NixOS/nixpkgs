@@ -13421,6 +13421,8 @@ self: super: with self; {
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
 
+  sqlmodel = callPackage ../development/python-modules/sqlmodel { };
+
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 
   sqlparse = callPackage ../development/python-modules/sqlparse { };
