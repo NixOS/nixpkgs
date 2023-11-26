@@ -59,6 +59,7 @@ let
           ./patches/0009-qtbase-allow-translations-outside-prefix.patch
           ./patches/0010-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
           ./patches/0011-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0012-qtbase-derive-plugin-load-path-from-PATH.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
