@@ -5,6 +5,7 @@
 # Vendored from:
 #   https://raw.githubusercontent.com/NixOS/ofborg/74f38efa7ef6f0e8e71ec3bfc675ae4fb57d7491/ofborg/src/outpaths.nix
 { checkMeta
+, includeBroken ? true  # set this to false to exclude meta.broken packages from the output
 , path ? ./../..
 
 # used by pkgs/top-level/release-attrnames-superset.nix
@@ -32,7 +33,7 @@ let
       nixpkgsArgs = {
         config = {
           allowAliases = false;
-          allowBroken = true;
+          allowBroken = includeBroken;
           allowUnfree = true;
           allowInsecurePredicate = x: true;
           checkMeta = checkMeta;
@@ -46,6 +47,8 @@ let
             in
             if builtins.elem reason fatalErrors
             then abort errormsg
+            else if !includeBroken && builtins.elem reason [ "broken" ]
+            then throw "broken"
             else true;
 
           inHydra = true;
