@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "unstable-2022-06-14";
+  version = "unstable-2023-11-03";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "xarcan";
-    rev = "02111f4925453c0c545e9193c6a5e22c0d4e98c3";
-    hash = "sha256-rp2sNRbv0OZdfyqZfsv/v3TGQY5uyXWqbvlmUDd7iBk=";
+    rev = "380ea856307f593535dfc8b23799938db69e31b0";
+    hash = "sha256-RdizezCbJylQDkOmUdqL0lBTNLsjyvo+lKAjfZXTXf4=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
 
-  meta = with lib; {
+  meta =  {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
     longDescription = ''
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalPackages: {
       arcan-shmif to map Xlib/Xcb/X clients to a running arcan instance. It
       allows running an X session as a window under Arcan.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 })
