@@ -34,12 +34,20 @@ rec {
     default:
     # The nested attribute set to select values from
     set:
-    let attr = head attrPath;
+    let
+      lenAttrPath = length attrPath;
+      attrByPath' = n: s: (
+        if n == lenAttrPath then s
+        else (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then attrByPath' (n + 1) s.${attr}
+          else default
+        )
+      );
     in
-      if attrPath == [] then set
-      else if set ? ${attr}
-      then attrByPath (tail attrPath) default set.${attr}
-      else default;
+      attrByPath' 0 set;
 
   /* Return if an attribute from nested attribute set exists.
 
@@ -60,12 +68,14 @@ rec {
     e:
     let
       lenAttrPath = length attrPath;
-      hasAttrByPath' = n: s: let
-        attr = elemAt attrPath n;
-      in (
-        if n == lenAttrPath then true
-        else if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr}
-        else false
+      hasAttrByPath' = n: s: (
+        n == lenAttrPath || (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr}
+          else false
+        )
       );
     in
       hasAttrByPath' 0 e;
