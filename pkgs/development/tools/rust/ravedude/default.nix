@@ -3,6 +3,7 @@
 , fetchCrate
 , pkg-config
 , udev
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,6 +20,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ udev ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Tool to easily flash code onto an AVR microcontroller with avrdude";
