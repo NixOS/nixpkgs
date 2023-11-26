@@ -24772,6 +24772,10 @@ with pkgs;
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
+  qadwaitadecorations-qt6 = callPackage ../by-name/qa/qadwaitadecorations/package.nix {
+    useQt6 = true;
+  };
+
   qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
   qgnomeplatform-qt6 = qt6Packages.callPackage ../development/libraries/qgnomeplatform {
