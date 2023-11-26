@@ -6838,6 +6838,8 @@ self: super: with self; {
 
   mhcgnomes = callPackage ../development/python-modules/mhcgnomes { };
 
+  miauth = callPackage ../development/python-modules/miauth { };
+
   micawber = callPackage ../development/python-modules/micawber { };
 
   microdata = callPackage ../development/python-modules/microdata { };
@@ -8152,6 +8154,8 @@ self: super: with self; {
   nimfa = callPackage ../development/python-modules/nimfa { };
 
   nine = callPackage ../development/python-modules/nine { };
+
+  ninebot-ble = callPackage ../development/python-modules/ninebot-ble { };
 
   ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 

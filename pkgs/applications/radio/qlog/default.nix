@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Amateur radio logbook software";
     license = with licenses; [ gpl3Only ];
     homepage = "https://github.com/foldynl/QLog";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [ oliver-koss mkg20001 ];
     platforms = with platforms; unix;
   };
 }
