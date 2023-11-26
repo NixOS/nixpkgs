@@ -10232,6 +10232,8 @@ with pkgs;
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
+  mtv-dl = python3Packages.callPackage ../tools/misc/mtv-dl { };
+
   mujmap = callPackage ../applications/networking/mujmap {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
