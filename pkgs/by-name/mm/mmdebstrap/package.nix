@@ -103,9 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     do
       h2ph -d $out ${glibc.dev}/include/$h
       mkdir -p $out/include/$(dirname $h)
-      mv $out${glibc.dev}/include/''${h%.h}.ph $out/include/$(dirname $h)
+      mv $out/${glibc.dev}/include/''${h%.h}.ph $out/include/$(dirname $h)
     done
     mv $out/_h2ph_pre.ph $out/include/
+    rm -rf $out/${glibc.dev}
 
     runHook postInstall
   '';
