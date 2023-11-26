@@ -10,11 +10,12 @@
 
 buildPythonPackage rec {
   pname = "freetype-py";
-  version = "2.1.0.post1";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k62fx53qrv9nb73mpqi2r11wzbx41qfv5qppvh6rylywnrknf3n";
+    extension = "zip";
+    hash = "sha256-itgRldL48zmrphcAzr+9d9760UnFH1m3WipeN4M64S4=";
   };
 
   patches = [
@@ -42,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rougier/freetype-py";
     description = "FreeType (high-level Python API)";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goertzenator ];
+    maintainers = with maintainers; [ danc86 ];
   };
 }
