@@ -5,6 +5,7 @@
 , installShellFiles
 , scdoc
 , Security
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +22,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-8VrEZZNSFLAjUagsiRApvjiXusBHLLn1O/+QKtQY4wg=";
 
   doCheck = false; # Uses external testing framework that requires network
+
+  passthru.tests = {
+    basic-functionality = nixosTests.stargazer;
+  };
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 
