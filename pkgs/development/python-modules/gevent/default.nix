@@ -29,6 +29,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    ./22.10.2-CVE-2023-41419.patch
     # Replace deprecated pkg_resources with importlib-metadata
     (fetchpatch {
       url = "https://github.com/gevent/gevent/commit/bd96d8e14dc99f757de22ab4bb98439f912dab1e.patch";
