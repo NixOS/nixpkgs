@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitLab
+, installShellFiles
 , gnupg
 , perl
 , jetring
@@ -17,6 +18,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = "debian/${finalAttrs.version}";
     hash = "sha256-IXm0N5HAzm+o5ipULYQQo+VmQ9MbIrwZ+xRD9O6q43A=";
   };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = [
     gnupg
@@ -35,9 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin/
     mv "''${PROGS[@]}" $out/bin/
 
-    mkdir -p $out/man/man{1,7}
-    mv *.1 $out/man/man1
-    mv *.7 $out/man/man7
+    installManPage *.1 *.7
 
     runHook postInstall
   '';
