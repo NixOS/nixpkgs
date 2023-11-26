@@ -29,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";
     homepage = "https://construct.readthedocs.org/";
+    changelog = "https://github.com/construct/construct/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };
