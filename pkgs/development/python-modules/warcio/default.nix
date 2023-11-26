@@ -9,11 +9,15 @@
 , requests
 , wsgiprox
 , multidict
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "warcio";
   version = "1.7.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "webrecorder";
