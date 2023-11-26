@@ -4,6 +4,7 @@
 
 , glibc
 , help2man
+, installShellFiles
 , makeWrapper
 , patsh
 
@@ -38,6 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     glibc
     help2man
+    installShellFiles
     makeWrapper
     patsh
   ];
@@ -68,10 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mv mmdebstrap-autopkgtest-build-qemu $out/bin/
     mv tarfilter $out/bin/mmtarfilter
 
-    mkdir -p $out/man/man1/
-    mv mmdebstrap.1 $out/man/man1/
-    mv mmdebstrap-autopkgtest-build-qemu.1 $out/man/man1/
-    mv tarfilter.1 $out/man/man1/mmtarfilter.1
+    installManPage *.1
 
     mkdir -p $out/lib/apt/solvers/
     mv proxysolver $out/lib/apt/solvers/mmdebstrap-dump-solution
