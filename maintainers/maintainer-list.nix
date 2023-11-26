@@ -1771,6 +1771,12 @@
     github = "auchter";
     githubId = 1190483;
   };
+  augustebaum = {
+    email = "auguste.apple@gmail.com";
+    github = "augustebaum";
+    githubId = 52001167;
+    name = "Auguste Baum";
+  };
   auntie = {
     email = "auntieNeo@gmail.com";
     github = "auntieNeo";
