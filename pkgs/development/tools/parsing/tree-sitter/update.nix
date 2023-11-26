@@ -75,6 +75,8 @@ let
     "tree-sitter-agda"
     # abandoned
     "tree-sitter-fluent"
+    # to unblock my update
+    "csharp-tree-sitter"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
