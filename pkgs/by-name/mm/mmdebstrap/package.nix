@@ -114,11 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.mister-muffin.de/josch/mmdebstrap/src/tag/${finalAttrs.version}/CHANGELOG.md";
     description = "An alternative to debootstrap which uses apt internally";
     homepage = "https://gitlab.mister-muffin.de/josch/mmdebstrap";
-    # The source repo does not contain a LICENSE file.
-    # However, the author is part of the Debian team, and the MIT license is
-    # included in the Debian packaging repo for all source files:
-    # https://salsa.debian.org/debian/mmdebstrap/-/blob/master/debian/copyright
-    license = licenses.mit;
+    license = with lib.licenses; [ mit publicDomain ];
     maintainers = with maintainers; [ MakiseKurisu ];
     mainProgram = "mmdebstrap";
     platforms = platforms.linux;
