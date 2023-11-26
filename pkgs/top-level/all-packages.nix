@@ -41540,10 +41540,7 @@ with pkgs;
 
   xpad = callPackage ../applications/misc/xpad { };
 
-  xsane = callPackage ../applications/graphics/sane/xsane.nix {
-    libpng = libpng12;
-    sane-backends = sane-backends.override { libpng = libpng12; };
-  };
+  xsane = callPackage ../applications/graphics/sane/xsane.nix { };
 
   xsser = python3Packages.callPackage ../tools/security/xsser { };
 
