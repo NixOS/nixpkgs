@@ -6665,6 +6665,8 @@ self: super: with self; {
 
   mhcgnomes = callPackage ../development/python-modules/mhcgnomes { };
 
+  miauth = callPackage ../development/python-modules/miauth { };
+
   micawber = callPackage ../development/python-modules/micawber { };
 
   microdata = callPackage ../development/python-modules/microdata { };
