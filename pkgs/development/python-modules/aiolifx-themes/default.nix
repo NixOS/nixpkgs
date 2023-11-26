@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "aiolifx-themes";
   version = "0.4.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -29,11 +29,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
       --replace "typer = " "# unused: typer = "
-  '';
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiolifx = "^0.8.6"' 'aiolifx = "*"'
   '';
 
   nativeBuildInputs = [
