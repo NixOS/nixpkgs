@@ -17,7 +17,7 @@ let
     inherit version;
     src = fetchgit { inherit url rev sha256; };
     nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
-    buildInputs = [ elfutils gettext ];
+    buildInputs = [ elfutils gettext python3 ];
     enableParallelBuilding = true;
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
