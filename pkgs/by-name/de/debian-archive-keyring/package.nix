@@ -1,12 +1,12 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitLab
 , gnupg
 , jetring
 , debian-archive-keyring
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "debian-archive-keyring";
   version = "2023.4";
 
