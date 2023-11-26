@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Degl_device=true"
     "-Dprofiler=true"
     "-Ddocs=true"
-    "-Dwith_shared_components=true"
   ];
 
   propagatedBuildInputs = [
