@@ -2,13 +2,13 @@
 
 ## Using Ruby {#using-ruby}
 
-Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 2.6. It's also possible to refer to specific versions, e.g. `ruby_2_y`, `jruby`, or `mruby`.
+Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 2.6. It's also possible to refer to specific versions, e.g. `ruby_3_y`, `jruby`, or `mruby`.
 
 In the Nixpkgs tree, Ruby packages can be found throughout, depending on what they do, and are called from the main package set. Ruby gems, however are separate sets, and there's one default set for each interpreter (currently MRI only).
 
 There are two main approaches for using Ruby with gems. One is to use a specifically locked `Gemfile` for an application that has very strict dependencies. The other is to depend on the common gems, which we'll explain further down, and rely on them being updated regularly.
 
-The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_2_7.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
+The interpreters have common attributes, namely `gems`, and `withPackages`. So you can refer to `ruby.gems.nokogiri`, or `ruby_3_2.gems.nokogiri` to get the Nokogiri gem already compiled and ready to use.
 
 Since not all gems have executables like `nokogiri`, it's usually more convenient to use the `withPackages` function like this: `ruby.withPackages (p: with p; [ nokogiri ])`. This will also make sure that the Ruby in your environment will be able to find the gem and it can be used in your Ruby code (for example via `ruby` or `irb` executables) via `require "nokogiri"` as usual.
 

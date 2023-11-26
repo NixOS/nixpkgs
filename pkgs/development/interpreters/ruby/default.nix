@@ -316,11 +316,6 @@ in {
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "8" "";
-    hash = "sha256-wtq2PLyPKgVSYQitQZ76Y6Z+1AdNu8+fwrHKZky0W6A=";
-  };
-
   ruby_3_1 = generic {
     version = rubyVersion "3" "1" "4" "";
     hash = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
