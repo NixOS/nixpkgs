@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildPackages, pkg-config, cmake
-, alsa-lib, glib, libjack2, libsndfile, libpulseaudio
+, alsa-lib, glib, libjack2, libsndfile, libpulseaudio, pipewire
 , AppKit, AudioUnit, CoreAudio, CoreMIDI, CoreServices
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libjack2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio pipewire ]
     ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = [
