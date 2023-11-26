@@ -28,4 +28,8 @@ callPackage ./generic.nix args {
   sha256 = "sha256-2Q/Nhp3YKgMCLPNRNBq5r9U4GeuYlWMWAsjsQy3vFW4=";
 
   isUnstable = true;
+
+  extraPatches = [
+    ./patches/disable-zfs-dmu-offset-next-sync-by-default-v2-2.patch
+  ];
 }

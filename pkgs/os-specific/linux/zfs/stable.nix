@@ -3,7 +3,6 @@
 , stdenv
 , linuxKernel
 , removeLinuxDRM ? false
-, fetchpatch
 , ...
 } @ args:
 
@@ -23,6 +22,10 @@ callPackage ./generic.nix args {
 
   # this package should point to the latest release.
   version = "2.2.1";
+
+  extraPatches = [
+    ./patches/disable-zfs-dmu-offset-next-sync-by-default-v2-2.patch
+  ];
 
   sha256 = "sha256-2Q/Nhp3YKgMCLPNRNBq5r9U4GeuYlWMWAsjsQy3vFW4=";
 }
