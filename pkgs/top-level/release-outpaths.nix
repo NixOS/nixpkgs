@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 # When using as a callable script, passing `--argstr path some/path` overrides $PWD.
-#!nix-shell -p nix -i "nix-env -qaP --no-name --out-path --arg checkMeta true --argstr path $PWD -f"
+#!nix-shell -p nix -i "nix-env -qaP --no-name --out-path --arg checkMeta true -f pkgs/top-level/release-outpaths.nix"
 
 # Vendored from:
 #   https://raw.githubusercontent.com/NixOS/ofborg/74f38efa7ef6f0e8e71ec3bfc675ae4fb57d7491/ofborg/src/outpaths.nix
