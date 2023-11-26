@@ -1,6 +1,7 @@
 { lib
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , git
 , llvmPackages
 , nixosTests
@@ -32,6 +33,15 @@ buildStdenv.mkDerivation rec {
     ./Remove-circular-definition-of-AUDIT_FILTER_EXCLUDE.patch
     # For current state of compilation against glibc in the clangWithLLVM toolchain, refer to the upstream issue in https://github.com/osquery/osquery/issues/7823.
     ./Remove-system-controls-table.patch
+
+    # osquery uses a vendored boost library that still relies on old standard types (e.g. `std::unary_function`)
+    # which have been removed as of C++17. The patch is already checked in upstream, but there have been no
+    # releases yet. Can likely be removed with versions > 5.10.2.
+    (fetchpatch {
+      name = "fix-build-on-clang-16.patch";
+      url  = "https://github.com/osquery/osquery/commit/222991a15b4ae0a0fb919e4965603616536e1b0a.patch";
+      hash = "sha256-PdzEoeR1LXVri1Cd+7KMhKmDC8yZhAx3f1+9tjLJKyo=";
+    })
   ];
 
 
