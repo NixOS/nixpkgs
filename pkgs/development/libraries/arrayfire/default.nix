@@ -10,7 +10,6 @@
 , fmt_9
 , forge
 , freeimage
-, git
 , gtest
 , lapack
 , lib
@@ -131,7 +130,7 @@ stdenv.mkDerivation rec {
 
   # ArrayFire have a repo with assets for the examples. Since we don't build
   # the examples anyway, remove the dependency on assets.
-  patches = [ ./no-assets.patch ];
+  patches = [ ./no-assets.patch ./no-download.patch ];
 
   postPatch = ''
     mkdir -p ./extern/af_glad-src
@@ -209,11 +208,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    # ArrayFire have their own CMake functions for downloading the
-    # dependencies, and it uses git. Even though we bypass that system by
-    # downloading the dependencies beforehand, CMake files still invoke git for
-    # checking...
-    git
     pkg-config
     python3
   ];

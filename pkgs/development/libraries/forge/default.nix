@@ -5,7 +5,6 @@
 , fontconfig
 , freeimage
 , freetype
-, git
 , glfw3
 , glm
 , lib
@@ -32,27 +31,23 @@ stdenv.mkDerivation rec {
     owner = "arrayfire";
     repo = "glad";
     rev = "b94680aee5b8ce01ae1644c5f2661769366c765a";
-    sha256 = "sha256-CrZy76gOGMpy9f1NuMK4tokZ57U//zYeNH5ZYY0SC2U=";
+    hash = "sha256-CrZy76gOGMpy9f1NuMK4tokZ57U//zYeNH5ZYY0SC2U=";
   };
 
-  postPatch = ''
-    mkdir -p ./extern/fg_glad-src
-    cp -R --no-preserve=mode,ownership ${glad}/* ./extern/fg_glad-src/
-    ln -s ${opencl-clhpp} ./extern/cl2hpp
+  # This patch ensures that Forge does not try to fetch glad from GitHub and
+  # uses our sources that we've checked out via Nix.
+  patches = [ ./no-download-glad.patch ];
 
-    substituteInPlace CMakeModules/ForgeConfigureDepsVars.cmake \
-      --replace 'set(BUILD_OFFLINE OFF)' 'set(BUILD_OFFLINE ON)'
+  postPatch = ''
+    mkdir -p ./extern
+    cp -R --no-preserve=mode,ownership ${glad} ./extern/fg_glad-src
+    ln -s ${opencl-clhpp} ./extern/cl2hpp
   '';
 
   cmakeFlags = [ "-DFETCHCONTENT_FULLY_DISCONNECTED=ON" ];
 
   nativeBuildInputs = [
     cmake
-    # ArrayFire have their own CMake functions for downloading the
-    # dependencies, and it uses git. Even though we bypass that system by
-    # downloading the dependencies beforehand, CMake files still invoke git for
-    # checking...
-    git
     pkg-config
   ];
 
