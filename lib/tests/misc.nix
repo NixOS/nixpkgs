@@ -52,6 +52,7 @@ let
     functionArgs
     generators
     genList
+    getAttrs
     getExe
     getExe'
     groupBy
@@ -1852,6 +1853,25 @@ runTests {
       a.b = 1;
       a.x = 1;
     };
+  };
+
+  testGetAttrsExample = {
+    expr = [
+      (getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; })
+    ];
+    expected = [
+      { a = 1; b = 2; }
+    ];
+  };
+
+  testGetAttrsEmptyList = {
+    expr = getAttrs [ ] { a = 1; b = 2; c = 3; };
+    expected = { };
+  };
+
+  testGetAttrsEmpty = {
+    expr = getAttrs [ ] { };
+    expected = { };
   };
 
   ## Levenshtein distance functions and co.
