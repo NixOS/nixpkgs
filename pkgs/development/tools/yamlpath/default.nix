@@ -46,5 +46,6 @@ python3.pkgs.buildPythonApplication rec {
      '';
     license = licenses.isc;
     maintainers = with maintainers; [ Flakebi ];
+    broken = true;
   };
 }
