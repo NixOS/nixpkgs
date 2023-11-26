@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, gitUpdater
 , fetchFromGitea
 , pkg-config
 , meson
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "fnott";
     rev = version;
-    sha256 = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
+    hash = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
   };
 
   depsBuildBuild = [
@@ -50,6 +51,8 @@ stdenv.mkDerivation rec {
     dbus
     fcft
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://codeberg.org/dnkl/fnott";
