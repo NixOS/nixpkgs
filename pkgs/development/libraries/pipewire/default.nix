@@ -81,14 +81,14 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.84";
+    version = "1.0.0";
 
     outputs = [
       "out"
       "jack"
       "dev"
       "doc"
-      "man"
+      #"man"
       "installedTests"
     ];
 
@@ -97,7 +97,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-9W9y+wtS/CYUaPRrCRmRDeyvuS1XllMBNQLy6GAMqBM=";
+      hash = "sha256-mfnMluxJAxDbB6JlIM6HJ0zg7e1q3ia3uFbht6zeHCk=";
     };
 
     patches = [
@@ -155,6 +155,7 @@ let
 
     mesonFlags = [
       "-Ddocs=enabled"
+      "-Dman=disabled"
       "-Dudevrulesdir=lib/udev/rules.d"
       "-Dinstalled_tests=enabled"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
