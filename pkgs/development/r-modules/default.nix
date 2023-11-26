@@ -489,6 +489,7 @@ let
     QF = [ pkgs.gsl ];
     PICS = [ pkgs.gsl ];
     RcppCWB = [ pkgs.pkg-config ];
+    redux = [ pkgs.pkg-config ];
     rrd = [ pkgs.pkg-config ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
@@ -618,6 +619,7 @@ let
     scModels = [ pkgs.mpfr.dev ];
     multibridge = [ pkgs.mpfr.dev ];
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
+    redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     rrd = [ pkgs.rrdtool ];
