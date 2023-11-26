@@ -19,6 +19,7 @@
 , libxslt
 , lz4
 , p11-kit
+, patsh
 , perlPackages
 , pkg-config
 , triehash
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     gtest
     (lib.getBin libxslt)
+    patsh
     pkg-config
     triehash
   ];
@@ -83,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     # the following error:
     # E: Unable to determine a suitable packaging system type
     ln -s ${lib.getBin dpkg}/bin/dpkg $out/bin/dpkg
+
+    # apt-key is a shell script, as such, we need to specify its dependencies,
+    # since $PATH could be controlled by other packages
+    patsh -f $out/bin/apt-key -s ${builtins.storeDir}
   '';
 
   patches = [
