@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
   };
 
+  strictDeps = true;
   depsBuildBuild = [
     pkg-config
   ];
