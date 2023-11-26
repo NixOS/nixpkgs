@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 62182cddf..024a0e0bc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -262,16 +262,3 @@ if(TARGET update-po AND TARGET update-po4a)
+ add_dependencies(update-po update-po4a)
+ endif()
+ 
+-# Create our directories.
+-install_empty_directories(
+-  ${CONF_DIR}/apt.conf.d
+-  ${CONF_DIR}/auth.conf.d
+-  ${CONF_DIR}/preferences.d
+-  ${CONF_DIR}/sources.list.d
+-  ${CONF_DIR}/trusted.gpg.d
+-  ${CACHE_DIR}/archives/partial
+-  ${STATE_DIR}/lists/partial
+-  ${STATE_DIR}/mirrors/partial
+-  ${STATE_DIR}/periodic
+-  ${LOG_DIR}
+-)

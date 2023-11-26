@@ -77,7 +77,17 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
+  patches = [
+    # We must specify the config and state dir outside of Nix store to be
+    # writable by apt. However, this has the side effect of CMake trying to create
+    # folder structure during install phase in those places.
+    ./dont-install-outside.patch
+  ];
+
   cmakeFlags = [
+    # apt cannot work when those 2 are set to Nix's readonly store
+    (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "/etc")
+    (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_LOCALSTATEDIR" "/var")
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")
     (lib.cmakeOptionType "filepath" "DOCBOOK_XSL""${docbook_xsl}/share/xml/docbook-xsl")
     (lib.cmakeOptionType "filepath" "GNUTLS_INCLUDE_DIR" "${lib.getDev gnutls}/include")
