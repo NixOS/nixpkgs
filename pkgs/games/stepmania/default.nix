@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     description = "Free dance and rhythm game for Windows, Mac, and Linux";
     platforms = platforms.linux;
     license = licenses.mit; # expat version
-    maintainers = [ ];
+    maintainers = with maintainers; [ h7x4 ];
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;
     mainProgram = "stepmania";
