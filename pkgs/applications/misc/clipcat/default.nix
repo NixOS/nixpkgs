@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sofP+zyyakB4w1R3wS/FNDTOWwNeDJyB5CBtR3yZsmE=";
+    hash = "sha256-MEyKUSEGVELk00TtKdfEgfzc3zwBllYrIjtC4NVbmRo=";
   };
 
-  cargoHash = "sha256-aOXAjxmk5uqBOw/l1CW/LbeBucr7p4iudbVY6d7yEjg=";
+  cargoHash = "sha256-LiTZfkp0uuKgfl4uaxNEJAn7UlrHHaWh/ivaJxYhULY=";
 
   nativeBuildInputs = [
     protobuf
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   # cargo-nextest help us retry the failed test cases
   NEXTEST_RETRIES = 5;
 
-  # Some test cases need to interactive with X11, we use xvfb-run here
+  # Some test cases interact with X11, we use xvfb-run here
   checkPhase = ''
     xvfb-run --auto-servernum cargo nextest run --release --workspace --no-fail-fast --no-capture
   '';
