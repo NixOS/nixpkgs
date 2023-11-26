@@ -92,6 +92,12 @@ buildGoModule rec {
     rm server/server_test.go
   '';
 
+  # Tests start http servers which need to bind to local addresses,
+  # but that fails in the Darwin sandbox by default unless this option is turned on
+  # Error is: panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
+  # See also https://github.com/NixOS/nix/pull/1646
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Open source framework for processing, monitoring, and alerting on time series data";
     homepage = "https://influxdata.com/time-series-platform/kapacitor/";
