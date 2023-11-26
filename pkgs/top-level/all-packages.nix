@@ -5440,7 +5440,7 @@ with pkgs;
 
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
-  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
+  tetex = callPackage ../tools/typesetting/tex/tetex { };
 
   tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
