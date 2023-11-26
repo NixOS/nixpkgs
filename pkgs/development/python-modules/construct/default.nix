@@ -24,6 +24,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
+  pythonImportsCheck = [
+    "construct"
+  ];
+
   disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
