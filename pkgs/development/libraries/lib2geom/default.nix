@@ -70,7 +70,13 @@ stdenv.mkDerivation rec {
         # Broken on all platforms, test just accidentally passes on some.
         # https://gitlab.com/inkscape/lib2geom/-/issues/63
         "elliptical-arc-test"
-      ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isMusl [
+        # Fails due to rounding differences
+        # https://gitlab.com/inkscape/lib2geom/-/issues/70
+        "circle-test"
+      ]
+      ;
   in ''
     runHook preCheck
     ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
