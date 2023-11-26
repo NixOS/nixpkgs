@@ -58,6 +58,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lathiat/avahi/commit/b448c9f771bada14ae8de175695a9729f8646797.patch";
       sha256 = "sha256-/ZVhsBkf70vjDWWG5KXxvGXIpLOZUXdRkn3413iSlnI=";
     })
+    # CVE-2023-38469
+    # https://github.com/lathiat/avahi/pull/500 merged Oct 25
+    # (but with the changes to '.github/workflows/smoke-tests.sh removed)
+    ./CVE-2023-38469.patch
   ];
 
   depsBuildBuild = [
