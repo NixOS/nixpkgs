@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , grafana-agent
 , nixosTests
 , nodejs
@@ -43,7 +43,7 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
-  nativeBuildInputs = [ fixup_yarn_lock nodejs yarn ];
+  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
 
   tags = [
     "builtinassets"
@@ -62,7 +62,7 @@ buildGoModule rec {
     export HOME="$TMPDIR"
 
     pushd web/ui
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $frontendYarnOfflineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules

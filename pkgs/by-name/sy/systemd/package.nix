@@ -146,14 +146,14 @@
 , docbook_xml_dtd_45
 }:
 
-assert withImportd -> withCompression;
+assert withBootloader -> withEfi;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
-assert withUkify -> withEfi;
+assert withImportd -> withCompression;
 assert withRepart -> withCryptsetup;
-assert withBootloader -> withEfi;
-# passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
+assert withUkify -> withEfi;
+# passwdqc is not in nixpkgs yet. Feel free to please submit a PR.
 assert !withPasswordQuality;
 
 let
@@ -161,8 +161,9 @@ let
   wantGcrypt = withResolved || withImportd;
   version = "254.3";
 
-  # Bump this variable on every (major) version change. See below (in the meson options list) for why.
-  # command:
+  # Bump this variable on every (major) version change. See below (in the meson
+  # options list) for why.
+  # Use the script below to do this:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1690536449";
@@ -170,8 +171,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
-  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
-  # This has proven to be less error-prone than the previous systemd fork.
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches
+  # inside nixpkgs directly This has proven to be less error-prone than the
+  # previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
@@ -179,9 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ObnsAiKwhwEb4ti611eS/wGpg3Sss/pUy/gANPAbXbs=";
   };
 
-  # On major changes, or when otherwise required, you *must* reformat the patches,
-  # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
-  # systemd version, and export the patches again via
+  # On major changes, or when otherwise required, you *must* reformat the
+  # patches, `git am path/to/00*.patch` them into a systemd worktree, rebase to
+  # the more recent systemd version, and export the patches again via
   # `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
@@ -449,73 +451,77 @@ stdenv.mkDerivation (finalAttrs: {
   mesonBuildType = "release";
 
   mesonFlags = [
-    "-Dversion-tag=${version}"
-    # We bump this variable on every (major) version change to ensure
-    # that we have known-good value for a timestamp that is in the (not so distant) past.
-    # This serves as a lower bound for valid system timestamps during startup. Systemd will
-    # reset the system timestamp if this date is +- 15 years from the system time.
+    (lib.mesonOption "version-tag" version)
+    # We bump this variable on every (major) version change to ensure that we
+    # have known-good value for a timestamp that is in the (not so distant)
+    # past.
+    # This serves as a lower bound for valid system timestamps during
+    # startup. Systemd will reset the system timestamp if this date is +- 15
+    # years from the system time.
+    #
     # See the systemd v250 release notes for further details:
     # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
-    "-Dtime-epoch=${releaseTimestamp}"
+    (lib.mesonOption "time-epoch" releaseTimestamp)
 
-    "-Dmode=release"
-    "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
-    "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
-    "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
-    "-Dpam=${lib.boolToString withPam}"
-    "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
-    "-Drootprefix=${placeholder "out"}"
-    "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
-    "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
-    "-Dloadkeys-path=${kbd}/bin/loadkeys"
-    "-Dsetfont-path=${kbd}/bin/setfont"
-    "-Dtty-gid=3" # tty in NixOS has gid 3
-    "-Ddebug-shell=${bashInteractive}/bin/bash"
-    "-Dglib=${lib.boolToString withTests}"
+    (lib.mesonOption "mode" "release")
+    (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.mesonOption "dbussessionservicedir" "${placeholder "out"}/share/dbus-1/services")
+    (lib.mesonOption "dbussystemservicedir" "${placeholder "out"}/share/dbus-1/system-services")
+
+    (lib.mesonBool "pam" withPam)
+    (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
+    (lib.mesonOption "rootprefix" "${placeholder "out"}")
+    (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
+    (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+    (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
+    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
+    (lib.mesonBool "glib" withTests)
     # while we do not run tests we should also not build them. Removes about 600 targets
-    "-Dtests=false"
-    "-Dacl=${lib.boolToString withAcl}"
-    "-Danalyze=${lib.boolToString withAnalyze}"
-    "-Daudit=${lib.boolToString withAudit}"
-    "-Dgcrypt=${lib.boolToString wantGcrypt}"
-    "-Dimportd=${lib.boolToString withImportd}"
-    "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=${lib.boolToString withHomed}"
-    "-Dlogind=${lib.boolToString withLogind}"
-    "-Dlocaled=${lib.boolToString withLocaled}"
-    "-Dhostnamed=${lib.boolToString withHostnamed}"
-    "-Dmachined=${lib.boolToString withMachined}"
-    "-Dnetworkd=${lib.boolToString withNetworkd}"
-    "-Doomd=${lib.boolToString withOomd}"
-    "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dlibcryptsetup=${lib.boolToString withCryptsetup}"
-    "-Dportabled=${lib.boolToString withPortabled}"
-    "-Dhwdb=${lib.boolToString withHwdb}"
-    "-Dremote=${lib.boolToString withRemote}"
-    "-Dtimedated=${lib.boolToString withTimedated}"
-    "-Dtimesyncd=${lib.boolToString withTimesyncd}"
-    "-Duserdb=${lib.boolToString withUserDb}"
-    "-Dcoredump=${lib.boolToString withCoredump}"
-    "-Dfirstboot=false"
-    "-Dresolve=${lib.boolToString withResolved}"
-    "-Dsplit-usr=false"
-    "-Dlibcurl=${lib.boolToString wantCurl}"
-    "-Dlibidn=false"
-    "-Dlibidn2=${lib.boolToString withLibidn2}"
-    "-Dfirstboot=${lib.boolToString withFirstboot}"
-    "-Dsysusers=${lib.boolToString withSysusers}"
-    "-Drepart=${lib.boolToString withRepart}"
-    "-Dsysupdate=${lib.boolToString withSysupdate}"
-    "-Dquotacheck=false"
-    "-Dldconfig=false"
-    "-Dsmack=true"
-    "-Db_pie=true"
-    "-Dinstall-sysconfdir=false"
-    "-Dsbat-distro=nixos"
-    "-Dsbat-distro-summary=NixOS"
-    "-Dsbat-distro-url=https://nixos.org/"
-    "-Dsbat-distro-pkgname=${pname}"
-    "-Dsbat-distro-version=${version}"
+    (lib.mesonBool "tests" false)
+    (lib.mesonBool "acl" withAcl)
+    (lib.mesonBool "analyze" withAnalyze)
+    (lib.mesonBool "audit" withAudit)
+    (lib.mesonBool "gcrypt" wantGcrypt)
+    (lib.mesonBool "importd" withImportd)
+    (lib.mesonBool "lz4" withCompression)
+    (lib.mesonBool "homed" withHomed)
+    (lib.mesonBool "logind" withLogind)
+    (lib.mesonBool "localed" withLocaled)
+    (lib.mesonBool "hostnamed" withHostnamed)
+    (lib.mesonBool "machined" withMachined)
+    (lib.mesonBool "networkd" withNetworkd)
+    (lib.mesonBool "oomd" withOomd)
+    (lib.mesonBool "polkit" withPolkit)
+    (lib.mesonBool "libcryptsetup" withCryptsetup)
+    (lib.mesonBool "portabled" withPortabled)
+    (lib.mesonBool "hwdb" withHwdb)
+    (lib.mesonBool "remote" withRemote)
+    (lib.mesonBool "timedated" withTimedated)
+    (lib.mesonBool "timesyncd" withTimesyncd)
+    (lib.mesonBool "userdb" withUserDb)
+    (lib.mesonBool "coredump" withCoredump)
+    (lib.mesonBool "firstboot" false)
+    (lib.mesonBool "resolve" withResolved)
+    (lib.mesonBool "split-usr" false)
+    (lib.mesonBool "libcurl" wantCurl)
+    (lib.mesonBool "libidn" false)
+    (lib.mesonBool "libidn2" withLibidn2)
+    (lib.mesonBool "firstboot" withFirstboot)
+    (lib.mesonBool "sysusers" withSysusers)
+    (lib.mesonBool "repart" withRepart)
+    (lib.mesonBool "sysupdate" withSysupdate)
+    (lib.mesonBool "quotacheck" false)
+    (lib.mesonBool "ldconfig" false)
+    (lib.mesonBool "smack" true)
+    (lib.mesonBool "b_pie" true)
+    (lib.mesonBool "install-sysconfdir" false)
+    (lib.mesonOption "sbat-distro" "nixos")
+    (lib.mesonOption "sbat-distro-summary" "NixOS")
+    (lib.mesonOption "sbat-distro-url" "https://nixos.org/")
+    (lib.mesonOption "sbat-distro-pkgname" "${pname}")
+    (lib.mesonOption "sbat-distro-version" "${version}")
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
@@ -526,65 +532,79 @@ stdenv.mkDerivation (finalAttrs: {
       - https://github.com/systemd/systemd/issues/9843
       - https://github.com/systemd/systemd/issues/10184
     */
-    "-Dsystem-uid-max=999"
-    "-Dsystem-gid-max=999"
+    (lib.mesonOption "system-uid-max" "999")
+    (lib.mesonOption "system-gid-max" "999")
 
-    "-Dsysvinit-path="
-    "-Dsysvrcnd-path="
+    (lib.mesonOption "sysvinit-path" "")
+    (lib.mesonOption "sysvrcnd-path" "")
 
-    "-Dsulogin-path=${util-linux.login}/bin/sulogin"
-    "-Dnologin-path=${util-linux.login}/bin/nologin"
-    "-Dmount-path=${lib.getOutput "mount" util-linux}/bin/mount"
-    "-Dumount-path=${lib.getOutput "mount" util-linux}/bin/umount"
-    "-Dcreate-log-dirs=false"
+    (lib.mesonOption "sulogin-path" "${util-linux.login}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${util-linux.login}/bin/nologin")
+    (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
+    (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
+    (lib.mesonBool "create-log-dirs" false)
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
-    "-Ddefault-hierarchy=unified"
+    (lib.mesonOption "default-hierarchy" "unified")
     # Upstream defaulted to disable manpages since they optimize for the much
     # more frequent development builds
-    "-Dman=true"
+    (lib.mesonBool "man" true)
 
-    "-Defi=${lib.boolToString withEfi}"
-    "-Dbootloader=${lib.boolToString withBootloader}"
+    (lib.mesonBool "efi" withEfi)
+    (lib.mesonBool "bootloader" withBootloader)
 
-    "-Dukify=${lib.boolToString withUkify}"
+    (lib.mesonBool "ukify" withUkify)
   ] ++ lib.optionals (withShellCompletions == false) [
-    "-Dbashcompletiondir=no"
-    "-Dzshcompletiondir=no"
-  ] ++ lib.optionals (!withNss) [
-    "-Dnss-myhostname=false"
-    "-Dnss-mymachines=false"
-    "-Dnss-resolve=false"
-    "-Dnss-systemd=false"
-  ] ++ lib.optionals withLibBPF [
-    "-Dbpf-framework=true"
-  ] ++ lib.optionals withTpm2Tss [
-    "-Dtpm2=true"
-  ] ++ lib.optionals (!withUtmp) [
-    "-Dutmp=false"
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "-Dgshadow=false"
-    "-Didn=false"
+    (lib.mesonOption "bashcompletiondir" "no")
+    (lib.mesonOption "zshcompletiondir" "no")
+
+    (lib.mesonBool "nss-myhostname" withNss)
+    (lib.mesonBool "nss-mymachines" withNss)
+    (lib.mesonBool "nss-resolve" withNss)
+    (lib.mesonBool "nss-systemd" withNss)
+    (lib.mesonBool "bpf-framework" withLibBPF)
+    (lib.mesonBool "tpm2" withTpm2Tss)
+    (lib.mesonBool "utmp" withUtmp)
+    (lib.mesonBool "gshadow" (!stdenv.hostPlatform.isMusl))
+    (lib.mesonBool "idn" (!stdenv.hostPlatform.isMusl))
   ] ++ lib.optionals withKmod [
-    "-Dkmod=true"
-    "-Dkmod-path=${kmod}/bin/kmod"
+    (lib.mesonBool "kmod" true)
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ];
+
   preConfigure =
     let
-      # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
-      # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
+      # A list of all the runtime binaries that the systemd executables, tests
+      # and libraries are referencing in their source code, scripts and unit
+      # files.
+      # As soon as a dependency isn't required anymore we should remove it from
+      # the list. The `where` attribute for each of the replacement patterns
+      # must be exhaustive. If another (unhandled) case is found in the source
+      # code the build fails with an error message.
       binaryReplacements = [
-        { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
-
+        {
+          search = "/usr/bin/getent";
+          replacement = "${getent}/bin/getent";
+          where = [ "src/nspawn/nspawn-setuid.c" ];
+        }
         {
           search = "/sbin/mkswap";
           replacement = "${lib.getBin util-linux}/sbin/mkswap";
+          where = [ "man/systemd-makefs@.service.xml" ];
+        }
+        {
+          search = "/sbin/swapon";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon";
           where = [
-            "man/systemd-makefs@.service.xml"
+            "src/core/swap.c"
+            "src/basic/unit-def.h"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        {
+          search = "/sbin/swapoff";
+          replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff";
+          where = [ "src/core/swap.c" ];
+        }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -601,14 +621,15 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [
+            "test/test-execute/exec-noexecpaths-simple.service"
+            "src/journal/cat.c"
+          ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
           replacement = "$out/lib/systemd/systemd-fsck";
-          where = [
-            "man/systemd-fsck@.service.xml"
-          ];
+          where = [ "man/systemd-fsck@.service.xml" ];
         }
       ] ++ lib.optionals withImportd [
         {
@@ -682,14 +703,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([
-    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-    # lead to a cyclic dependency.
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would lead to a
+    # cyclic dependency.
     "-UPOLKIT_AGENT_BINARY_PATH"
     "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-    # Set the release_agent on /sys/fs/cgroup/systemd to the
-    # currently running systemd (/run/current-system/systemd) so
-    # that we don't use an obsolete/garbage-collected release agent.
+    # Set the release_agent on /sys/fs/cgroup/systemd to the currently running
+    # systemd (/run/current-system/systemd) so that we don't use an
+    # obsolete/garbage-collected release agent.
     "-USYSTEMD_CGROUP_AGENTS_PATH"
     "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
@@ -733,11 +754,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/sysusers.d $out/example
   '';
 
-  # Avoid *.EFI binary stripping. At least on aarch64-linux strip
-  # removes too much from PE32+ files:
+  # Avoid *.EFI binary stripping. At least on aarch64-linux strip removes too
+  # much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
-  # The hack is to move EFI file out of lib/ before doStrip
-  # run and return it after doStrip run.
+  # The hack is to move EFI file out of lib/ before doStrip run and return it
+  # after doStrip run.
   preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
@@ -745,15 +766,16 @@ stdenv.mkDerivation (finalAttrs: {
   # Wrap in the correct path for LUKS2 tokens.
   postFixup = lib.optionalString withCryptsetup ''
     for f in lib/systemd/systemd-cryptsetup bin/systemd-cryptenroll; do
-      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
+      # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not
+      # propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
   '' + lib.optionalString withBootloader ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '' + lib.optionalString withUkify ''
-    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
-    # ukify with the correct binutils. When wrapping, no splicing happens so we
-    # have to explicitly pull binutils from targetPackages.
+    # To cross compile a derivation that builds a UKI with ukify, we need to
+    # wrap ukify with the correct binutils. When wrapping, no splicing happens
+    # so we have to explicitly pull binutils from targetPackages.
     wrapProgram $out/lib/systemd/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
@@ -762,12 +784,13 @@ stdenv.mkDerivation (finalAttrs: {
     (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
 
   passthru = {
-    # The interface version prevents NixOS from switching to an
-    # incompatible systemd at runtime.  (Switching across reboots is
-    # fine, of course.)  It should be increased whenever systemd changes
-    # in a backwards-incompatible way.  If the interface version of two
-    # systemd builds is the same, then we can switch between them at
-    # runtime; otherwise we can't and we need to reboot.
+    # The interface version prevents NixOS from switching to an incompatible
+    # systemd at runtime.
+    # (Switching across reboots is fine, of course.)
+    # It should be increased whenever systemd changes in a
+    # backwards-incompatible way.
+    # If the interface version of two systemd builds is the same, then we can
+    # switch between them at runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
     inherit withCryptsetup withHostnamed withImportd withKmod withLocaled withMachined withPortabled withTimedated withUtmp util-linux kmod kbd;
@@ -781,6 +804,22 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
+    longDescription = ''
+      systemd is a suite of basic building blocks for a Linux system. It
+      provides a system and service manager that runs as PID 1 and starts the
+      rest of the system. systemd provides aggressive parallelization
+      capabilities, uses socket and D-Bus activation for starting services,
+      offers on-demand starting of daemons, keeps track of processes using Linux
+      control groups, maintains mount and automount points, and implements an
+      elaborate transactional dependency-based service control logic. systemd
+      supports SysV and LSB init scripts and works as a replacement for
+      sysvinit. Other parts include a logging daemon, utilities to control basic
+      system configuration like the hostname, date, locale, maintain a list of
+      logged-in users and running containers and virtual machines, system
+      accounts, runtime directories and settings, and daemons to manage simple
+      network configuration, network time synchronization, log forwarding, and
+      name resolution.
+    '';
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

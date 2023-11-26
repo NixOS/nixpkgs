@@ -3348,12 +3348,12 @@ final: prev:
 
   fidget-nvim = buildVimPlugin {
     pname = "fidget.nvim";
-    version = "2023-11-09";
+    version = "2023-11-20";
     src = fetchFromGitHub {
       owner = "j-hui";
       repo = "fidget.nvim";
-      rev = "2f7c08f45639a64a5c0abcf67321d52c3f499ae6";
-      sha256 = "0x4vbqbpzsw1pkqnm6l8hymm35vnfpl5vdaa91g6890q9q57csgh";
+      rev = "a1493d94ecb3464ab3ae4d5855765310566dace4";
+      sha256 = "sha256-701UBfmtSH/XyEq80EfoGlukLpAVdwRGHpIs4AcVGSY=";
     };
     meta.homepage = "https://github.com/j-hui/fidget.nvim/";
   };
