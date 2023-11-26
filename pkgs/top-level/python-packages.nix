@@ -4732,6 +4732,8 @@ self: super: with self; {
 
   fitfile = callPackage ../development/python-modules/fitfile { };
 
+  fitdecode = callPackage ../development/python-modules/fitdecode { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
