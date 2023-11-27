@@ -1,7 +1,7 @@
-From 95b6bc2a414d381fdeab0899a3b02499c43695e7 Mon Sep 17 00:00:00 2001
+From a8b9fae710a2bd5e743f5e16364eaa8c38dbd784 Mon Sep 17 00:00:00 2001
 From: rewine <luhongxu@deepin.org>
 Date: Wed, 29 Mar 2023 11:51:33 +0800
-Subject: [PATCH 07/11] qtbase-find-tools-in-PATH
+Subject: [PATCH 06/11] qtbase-find-tools-in-PATH
 
 1. find qt's tools in `QTTOOLSPATH` env
    qt assumes that all components use the same install prefix

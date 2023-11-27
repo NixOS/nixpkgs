@@ -1,7 +1,7 @@
-From 617d27ee91aaa59c59c4f3a2cca7bab8167d9f5f Mon Sep 17 00:00:00 2001
+From c00e310092d9aeb48adf21dd22f1ee4dbdbf5ebb Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 10 Oct 2023 10:17:00 -0400
-Subject: [PATCH 11/11] qtbase: check in the QML folder of this library does
+Subject: [PATCH 10/11] qtbase: check in the QML folder of this library does
  actually exist
 
 In a modularized installation, this folder will be the location where
@@ -12,10 +12,10 @@ code, and `qmlimportscanner` will complain that it does not exist.
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
-index 48979195f40..8415680ecda 100644
+index 320095a972d..87ba0d4e24b 100644
 --- a/src/tools/macdeployqt/shared/shared.cpp
 +++ b/src/tools/macdeployqt/shared/shared.cpp
-@@ -1293,9 +1293,12 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+@@ -1297,9 +1297,12 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
      }
      for (const QString &importPath : qmlImportPaths)
          argumentList << "-importPath" << importPath;
