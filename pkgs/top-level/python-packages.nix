@@ -6838,6 +6838,8 @@ self: super: with self; {
 
   mhcgnomes = callPackage ../development/python-modules/mhcgnomes { };
 
+  miauth = callPackage ../development/python-modules/miauth { };
+
   micawber = callPackage ../development/python-modules/micawber { };
 
   microdata = callPackage ../development/python-modules/microdata { };
@@ -8153,6 +8155,8 @@ self: super: with self; {
 
   nine = callPackage ../development/python-modules/nine { };
 
+  ninebot-ble = callPackage ../development/python-modules/ninebot-ble { };
+
   ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
   nipy = callPackage ../development/python-modules/nipy { };
@@ -8858,8 +8862,6 @@ self: super: with self; {
   paypal-checkout-serversdk = callPackage ../development/python-modules/paypal-checkout-serversdk { };
 
   paypalhttp = callPackage ../development/python-modules/paypalhttp { };
-
-  paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
@@ -13420,6 +13422,8 @@ self: super: with self; {
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
+
+  sqlmodel = callPackage ../development/python-modules/sqlmodel { };
 
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 

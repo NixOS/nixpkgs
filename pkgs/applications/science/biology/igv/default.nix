@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jdk11 }:
+{ lib, stdenv, fetchzip, jdk11, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/igv
     chmod +x $out/bin/igvtools
   '';
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   meta = with lib; {
     homepage = "https://www.broadinstitute.org/igv/";

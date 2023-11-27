@@ -3,6 +3,7 @@
 , glibcLocales
   # The GraalVM derivation to use
 , graalvmDrv
+, removeReferencesTo
 , executable ? args.pname
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
@@ -38,12 +39,13 @@ let
     "buildPhase"
     "nativeBuildInputs"
     "installPhase"
+    "postInstall"
   ];
 in
 stdenv.mkDerivation ({
   inherit dontUnpack jar;
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales removeReferencesTo ];
 
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
@@ -61,6 +63,11 @@ stdenv.mkDerivation ({
     install -Dm755 ${executable} -t $out/bin
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${executable}
+    ${args.postInstall or ""}
   '';
 
   disallowedReferences = [ graalvmDrv ];

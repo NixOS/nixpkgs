@@ -1,31 +1,61 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, pytest, pytest-cov }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "1.0.4";
+  version = "1.0.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y7d7CuGuKYEUCjFHvWb+iDI6oDeVsTzBNPSySzxu1Zk=";
+    hash = "sha256-xabbGnvzXNiE0koQVq9dmEib5Cv7kg1JjpZAyb7IZM0=";
   };
 
-  # win_inet_pton is required for windows support
+  # win_inet_pton is required for Windows support
   prePatch = ''
-    substituteInPlace setup.py --replace "install_requires=['win_inet_pton']," ""
-    substituteInPlace python_hosts/utils.py --replace "import win_inet_pton" ""
+    substituteInPlace setup.py \
+      --replace "install_requires=['win_inet_pton']," ""
+    substituteInPlace python_hosts/utils.py \
+      --replace "import win_inet_pton" ""
   '';
 
-  nativeCheckInputs = [ pyyaml pytest pytest-cov ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  # Removing 1 test file (it requires internet connection) and keeping the other two
-  checkPhase = ''
-    pytest tests/test_hosts_entry.py
-    pytest tests/test_utils.py
-  '';
+  nativeCheckInputs = [
+    pyyaml
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "python_hosts"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_import_from_url_counters_for_part_success"
+    "test_import_from_url_with_force"
+    "test_import_from_url_without_force"
+    "test_import_from_url"
+  ];
 
   meta = with lib; {
-    description = "A library for managing a hosts file. It enables adding and removing entries, or importing them from a file or URL";
+    description = "Library for managing a hosts file";
+    longDescription = ''
+      python-hosts is a Python library for managing a hosts file. It enables you to add
+      and remove entries, or import them from a file or URL.
+    '';
     homepage = "https://github.com/jonhadfield/python-hosts";
+    changelog = "https://github.com/jonhadfield/python-hosts/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

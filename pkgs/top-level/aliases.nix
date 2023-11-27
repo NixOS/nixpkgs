@@ -585,6 +585,7 @@ mapAliases ({
   miopen-opencl = throw "'miopen-opencl' has been replaced with 'rocmPackages.miopen-opencl'"; # Added 2023-10-08
   mime-types = mailcap; # Added 2022-01-21
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
+  mirage-im = throw "'mirage-im' has been removed, as it was broken and unmaintained"; # Added 2023-11-26
   monero = monero-cli; # Added 2021-11-28
   mongodb-4_0 = throw "mongodb-4_0 has been removed, it's end of life since April 2022"; # Added 2023-01-05
   mongodb-4_2 = throw "mongodb-4_2 has been removed, it's end of life since April 2023"; # Added 2023-06-06
@@ -767,6 +768,7 @@ mapAliases ({
   qtcurve = libsForQt5.qtcurve; # Added 2020-11-07
   qtile-unwrapped = python3.pkgs.qtile; # Added 2023-05-12
   qutebrowser-qt6 = throw "'qutebrowser-qt6' has been replaced by 'qutebrowser', since the the qt5 version has been removed"; # Added 2023-08-19
+  quvi = throw "'quvi' has been removed, as it was broken and unmaintained"; # Added 2023-11-25
 
   ### R ###
 
@@ -923,6 +925,7 @@ mapAliases ({
   uade123 = uade; # Added 2022-07-30
   uberwriter = apostrophe; # Added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # Added 2020-01-21
+  ue4 = throw "ue4 has been removed, because the package was broken for years"; # Added 2023-11-22
   uhd3_5 = throw "uhd3_5 has been removed, because it was no longer needed"; # Added 2023-10-07
   uhhyou.lv2 = throw "'uhhyou.lv2' has been removed, upstream gone"; # Added 2023-06-21
   unicorn-emu = unicorn; # Added 2020-10-29

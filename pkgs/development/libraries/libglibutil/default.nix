@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s@Cflags: @Cflags: $($PKG_CONFIG --cflags glib-2.0) @g" $dev/lib/pkgconfig/$pname.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library of glib utilities.";
     homepage = "https://git.sailfishos.org/mer-core/libglibutil";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }
