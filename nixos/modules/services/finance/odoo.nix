@@ -11,12 +11,7 @@ in
     services.odoo = {
       enable = mkEnableOption (lib.mdDoc "odoo");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.odoo;
-        defaultText = literalExpression "pkgs.odoo";
-        description = lib.mdDoc "Odoo package to use.";
-      };
+      package = mkPackageOption pkgs "odoo" { };
 
       addons = mkOption {
         type = with types; listOf package;

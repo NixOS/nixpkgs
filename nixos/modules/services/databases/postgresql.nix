@@ -53,12 +53,8 @@ in
 
       enableJIT = mkEnableOption (lib.mdDoc "JIT support");
 
-      package = mkOption {
-        type = types.package;
-        example = literalExpression "pkgs.postgresql_15";
-        description = lib.mdDoc ''
-          PostgreSQL package to use.
-        '';
+      package = mkPackageOption pkgs "postgresql" {
+        example = "postgresql_15";
       };
 
       port = mkOption {
