@@ -51,7 +51,7 @@ in
     ]
   );
 
-  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (_: {
+  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (oldAttrs: {
     # Required by cmake's enable_language(CUDA) to build a test program
     # When implementing cross-compilation support: this is
     # final.pkgs.targetPackages.cudaPackages.cuda_cudart
@@ -82,6 +82,10 @@ in
     depsTargetTargetPropagated = [
       final.setupCudaHook
     ];
+
+    meta = (oldAttrs.meta or { }) // {
+      mainProgram = "nvcc";
+    };
   });
 
   cuda_nvprof = prev.cuda_nvprof.overrideAttrs (oldAttrs: {
