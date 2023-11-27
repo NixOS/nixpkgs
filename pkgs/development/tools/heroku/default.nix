@@ -3,9 +3,9 @@
 let
   # version and commit pairs can be found in the URLs at
   # https://cli-assets.heroku.com/versions/heroku-linux-x64-tar-xz.json
-  version = "8.4.3";
-  commit = "8226515";
-  hash = "sha256-G3WlHEV3qGMDH9vVu7PU33JUOAyLryW/Xm0fejn5F58=";
+  version = "8.7.1";
+  commit = "3f5e369";
+  hash = "sha256-3pCutQBS8N1Yw4JKTvU046UrOxBi0wLRQywxwezAEeU";
 in
 stdenv.mkDerivation {
   pname = "heroku";
