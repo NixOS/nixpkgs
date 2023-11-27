@@ -8,12 +8,7 @@
 { blas
 , cmake
 , cudaPackages
-  # FIXME: cuda being unfree means ofborg won't eval "magma".
-  # respecting config.cudaSupport -> false by default
-  # -> ofborg eval -> throws "no GPU targets specified".
-  # Probably should delete everything but "magma-cuda" and "magma-hip"
-  # from all-packages.nix
-, cudaSupport ? true
+, cudaSupport ? config.cudaSupport
 , fetchurl
 , gfortran
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
@@ -25,8 +20,10 @@
 , magmaRelease
 , ninja
 , config
-, rocmSupport ? config.rocmSupport
-, static ? false
+  # At least one back-end has to be enabled,
+  # and we can't default to CUDA since it's unfree
+, rocmSupport ? !cudaSupport
+, static ? stdenv.hostPlatform.isStatic
 , stdenv
 , symlinkJoin
 }:
@@ -133,6 +130,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DGPU_TARGET=${gpuTargetString}"
+    (lib.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
+    (lib.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
   ] ++ lists.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"
   ] ++ lists.optionals cudaSupport [
@@ -140,11 +139,9 @@ stdenv.mkDerivation {
     "-DMIN_ARCH=${minArch}" # Disarms magma's asserts
     "-DCMAKE_C_COMPILER=${backendStdenv.cc}/bin/cc"
     "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
-    "-DMAGMA_ENABLE_CUDA=ON"
   ] ++ lists.optionals rocmSupport [
     "-DCMAKE_C_COMPILER=${rocmPackages.clr}/bin/hipcc"
     "-DCMAKE_CXX_COMPILER=${rocmPackages.clr}/bin/hipcc"
-    "-DMAGMA_ENABLE_HIP=ON"
   ];
 
   buildFlags = [
@@ -155,7 +152,7 @@ stdenv.mkDerivation {
   doCheck = false;
 
   passthru = {
-    inherit cudaPackages cudaSupport;
+    inherit cudaPackages cudaSupport rocmSupport gpuTargets;
   };
 
   meta = with lib; {
@@ -164,7 +161,11 @@ stdenv.mkDerivation {
     homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
     maintainers = with maintainers; [ connorbaker ];
-    # CUDA and ROCm are mutually exclusive
-    broken = cudaSupport && rocmSupport || cudaSupport && strings.versionOlder cudaVersion "9";
+
+    # Cf. https://bitbucket.org/icl/magma/src/fcfe5aa61c1a4c664b36a73ebabbdbab82765e9f/CMakeLists.txt#lines-20
+    broken =
+      !(cudaSupport || rocmSupport) # At least one back-end enabled
+      || (cudaSupport && rocmSupport) # Mutually exclusive
+      || (cudaSupport && strings.versionOlder cudaVersion "9");
   };
 }
