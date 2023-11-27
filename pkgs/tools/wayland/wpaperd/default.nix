@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/danyspin97/wpaperd";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "wpaperd";
     maintainers = with maintainers; [ DPDmancul ];
   };
 }
