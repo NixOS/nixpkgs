@@ -1,4 +1,5 @@
 { lib
+, sway-unwrapped
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
 , withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
@@ -9,8 +10,6 @@
 , enableXWayland ? true
 , dbusSupport ? true
 }:
-
-sway-unwrapped:
 
 assert extraSessionCommands != "" -> withBaseWrapper;
 

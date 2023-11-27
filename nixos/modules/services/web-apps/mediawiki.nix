@@ -20,21 +20,21 @@ let
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
-    version = src.version;
+    inherit (src) version;
     src = cfg.package;
 
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
 
-      rm -rf $out/share/mediawiki/skins/*
-      rm -rf $out/share/mediawiki/extensions/*
-
+      # try removing directories before symlinking to allow overwriting any builtin extension or skin
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+        rm -rf $out/share/mediawiki/skins/${k}
         ln -s ${v} $out/share/mediawiki/skins/${k}
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+        rm -rf $out/share/mediawiki/extensions/${k}
         ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
@@ -540,9 +540,8 @@ in
         locations = {
           "~ ^/w/(index|load|api|thumb|opensearch_desc|rest|img_auth)\\.php$".extraConfig = ''
             rewrite ^/w/(.*) /$1 break;
-            include ${config.services.nginx.package}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi.conf;
             fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
             fastcgi_pass unix:${config.services.phpfpm.pools.mediawiki.socket};
           '';
           "/w/images/".alias = withTrailingSlash cfg.uploadsDir;
@@ -573,7 +572,7 @@ in
 
           # Explicit access to the root website, redirect to main page (adapt as needed)
           "= /".extraConfig = ''
-            return 301 /wiki/Main_Page;
+            return 301 /wiki/;
           '';
 
           # Every other entry point will be disallowed.
@@ -634,7 +633,7 @@ in
       ++ optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
 
     users.users.${user} = {
-      group = group;
+      inherit group;
       isSystemUser = true;
     };
     users.groups.${group} = {};

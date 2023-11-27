@@ -108,6 +108,11 @@ in
     dontConfigure = true;
     enableParallelBuilding = true;
 
+    env = {
+      # silence service.h error
+      NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+    };
+
     postPatch = ''
       # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
       # Since multilib doesnt work on darwin i dont know of a better way of handling this.
