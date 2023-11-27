@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "10.0.0";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mikeboers";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XcHP8RwC2iwD64Jc7SS+t9OxjFTsz3FbrnjMgJnN7Ak=";
+    hash = "sha256-pCKP+4ZmZCJcG7/Qy9H6aS4svQdgaRA9S1QVNWFYhSQ=";
   };
 
   nativeBuildInputs = [
