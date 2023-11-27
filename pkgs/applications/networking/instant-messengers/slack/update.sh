@@ -33,7 +33,7 @@ sed -i "s/x86_64-linux-sha256 = \".*\"/x86_64-linux-sha256 = \"${linux_sha256}\"
 sed -i "s/x86_64-darwin-sha256 = \".*\"/x86_64-darwin-sha256 = \"${mac_sha256}\"/" "$slack_nix"
 sed -i "s/aarch64-darwin-sha256 = \".*\"/aarch64-darwin-sha256 = \"${mac_arm_sha256}\"/" "$slack_nix"
 
-if ! nix-build -A slack "$nixpkgs"; then
+if ! nix-build -A slack "$nixpkgs" --arg config '{ allowUnfree = true; }'; then
   echo "The updated slack failed to build."
   exit 1
 fi
