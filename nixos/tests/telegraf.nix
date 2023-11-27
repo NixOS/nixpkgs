@@ -12,6 +12,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     services.telegraf.extraConfig = {
       agent.interval = "1s";
       agent.flush_interval = "1s";
+      inputs.procstat = {};
       inputs.exec = {
         commands = [
           "${pkgs.runtimeShell} -c 'echo $SECRET,tag=a i=42i'"

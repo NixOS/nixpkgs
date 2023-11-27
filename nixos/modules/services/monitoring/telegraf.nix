@@ -53,6 +53,10 @@ in {
 
   ###### implementation
   config = mkIf config.services.telegraf.enable {
+    services.telegraf.extraConfig = {
+      inputs = {};
+      outputs = {};
+    };
     systemd.services.telegraf = let
       finalConfigFile = if config.services.telegraf.environmentFiles == []
                         then configFile
@@ -61,6 +65,7 @@ in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])
