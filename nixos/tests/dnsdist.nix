@@ -1,12 +1,11 @@
-{ pkgs, lib, ... }:
+{ pkgs, runTest }:
 
-{
-  name = "dnsdist";
-  meta = with lib; {
-    maintainers = with maintainers; [ jojosch ];
-  };
+let
 
-  nodes.machine = { pkgs, lib, ... }: {
+  inherit (pkgs) lib;
+
+  baseConfig = {
+    networking.nameservers = [ "::1" ];
     services.bind = {
       enable = true;
       extraOptions = "empty-zones-enable no;";
@@ -32,17 +31,83 @@
         newServer({address="127.0.0.1:53", name="local-bind"})
       '';
     };
-
-    environment.systemPackages = with pkgs; [ dig ];
   };
 
-  testScript = ''
-    machine.wait_for_unit("bind.service")
-    machine.wait_for_open_port(53)
-    machine.succeed("dig @127.0.0.1 +short -x 192.168.0.1 | grep -qF ns.example.org")
+in
 
-    machine.wait_for_unit("dnsdist.service")
-    machine.wait_for_open_port(5353)
-    machine.succeed("dig @127.0.0.1 -p 5353 +short -x 192.168.0.1 | grep -qF ns.example.org")
-  '';
+{
+
+  base = runTest {
+    name = "dnsdist-base";
+    meta.maintainers = with lib.maintainers; [ jojosch ];
+
+    nodes.machine = baseConfig;
+
+    testScript = ''
+      machine.wait_for_unit("bind.service")
+      machine.wait_for_open_port(53)
+      machine.succeed("host -p 53 192.168.0.1 | grep -qF ns.example.org")
+
+      machine.wait_for_unit("dnsdist.service")
+      machine.wait_for_open_port(5353)
+      machine.succeed("host -p 5353 192.168.0.1 | grep -qF ns.example.org")
+    '';
+  };
+
+  dnscrypt = runTest {
+    name = "dnsdist-dnscrypt";
+    meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
+    nodes.server = lib.mkMerge [
+      baseConfig
+      {
+        networking.firewall.allowedTCPPorts = [ 443 ];
+        networking.firewall.allowedUDPPorts = [ 443 ];
+        services.dnsdist.dnscrypt.enable = true;
+        services.dnsdist.dnscrypt.providerKey = "${./dnscrypt-wrapper/secret.key}";
+      }
+    ];
+
+    nodes.client = {
+      services.dnscrypt-proxy2.enable = true;
+      services.dnscrypt-proxy2.upstreamDefaults = false;
+      services.dnscrypt-proxy2.settings =
+        { server_names = [ "server" ];
+          listen_addresses = [ "[::1]:53" ];
+          cache = false;
+          # Computed using https://dnscrypt.info/stamps/
+          static.server.stamp =
+            "sdns://AQAAAAAAAAAADzE5Mi4xNjguMS4yOjQ0MyAUQdg6_RIIpK6pHkINhrv7nxwIG5c7b_m5NJVT3A1AXRYyLmRuc2NyeXB0LWNlcnQuc2VydmVy";
+        };
+      networking.nameservers = [ "::1" ];
+    };
+
+    testScript = ''
+      with subtest("The DNSCrypt server is accepting connections"):
+          server.wait_for_unit("bind.service")
+          server.wait_for_unit("dnsdist.service")
+          server.wait_for_open_port(443)
+          almost_expiration = server.succeed("date --date '14min'").strip()
+
+      with subtest("The DNSCrypt client can connect to the server"):
+          client.wait_until_succeeds("journalctl -u dnscrypt-proxy2 --grep '\[server\] OK'")
+
+      with subtest("DNS queries over UDP are working"):
+          client.wait_for_open_port(53)
+          client.succeed("host -U 192.168.0.1 | grep -qF ns.example.org")
+
+      with subtest("DNS queries over TCP are working"):
+          client.wait_for_open_port(53)
+          client.succeed("host -T 192.168.0.1 | grep -qF ns.example.org")
+
+      with subtest("The server rotates the ephemeral keys"):
+          server.succeed(f"date -s '{almost_expiration}'")
+          client.succeed(f"date -s '{almost_expiration}'")
+          server.wait_until_succeeds("journalctl -u dnsdist --grep 'rotated certificate'")
+
+      with subtest("The client can still connect to the server"):
+          client.wait_until_succeeds("host -T 192.168.0.1")
+          client.wait_until_succeeds("host -U 192.168.0.1")
+    '';
+  };
 }
