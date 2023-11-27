@@ -20,4 +20,8 @@ in
   k3s_1_27 = common ((import ./1_27/versions.nix) // {
     updateScript = [ ./update-script.sh "27" ];
   }) extraArgs;
+
+  k3s_1_28 = common ((import ./1_28/versions.nix) // {
+    updateScript = [ ./update-script.sh "28" ];
+  }) extraArgs;
 }
