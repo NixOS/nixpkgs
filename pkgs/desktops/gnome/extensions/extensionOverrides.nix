@@ -23,7 +23,6 @@
 , vte
 , wrapGAppsHook
 , xdg-utils
-, xprop
 }:
 let
   # Helper method to reduce redundancy
@@ -135,12 +134,6 @@ super: lib.trivial.pipe super [
         gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
-  }))
-
-  (patchExtension "unite@hardpixel.eu" (old: {
-    buildInputs = [ xprop ];
-
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   }))
 
   (patchExtension "x11gestures@joseexposito.github.io" (old: {
