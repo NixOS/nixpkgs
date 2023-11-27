@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.5.0";
+  version = "0.5.1";
   disabled = isPy27;
 
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "josch";
     repo = "img2pdf";
     rev = version;
-    hash = "sha256-k0GqBTS8PvYDmjzyLCSdQB7oBakrEQYJcQykDNrzgcA=";
+    hash = "sha256-mrNTc37GrHTc7NW0sYI1FlAOlnvXum02867enqHsAEQ=";
   };
 
   patches = [
