@@ -1317,6 +1317,8 @@ with pkgs;
 
   compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
 
+  copy-modules-closure = callPackage ../build-support/kernel/copy-modules-closure {};
+
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel firmware rootModules allowMissing;
