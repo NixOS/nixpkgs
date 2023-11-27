@@ -1,17 +1,17 @@
-From a5cbfb30fc53b3290578af4a87fe4c0463df4247 Mon Sep 17 00:00:00 2001
+From d7a9a3b0ecdbb1b5829f25954d763d767f1c8794 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 10 Oct 2023 10:12:56 -0400
-Subject: [PATCH 08/11] qtbase: pass to qmlimportscanner the QML2_IMPORT_PATH
+Subject: [PATCH 07/11] qtbase: pass to qmlimportscanner the QML2_IMPORT_PATH
 
 ---
  src/tools/macdeployqt/shared/shared.cpp | 7 +++++++
  1 file changed, 7 insertions(+)
 
 diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
-index f637416cf22..77749506ccb 100644
+index 2ae4f998944..ba10ae02bcd 100644
 --- a/src/tools/macdeployqt/shared/shared.cpp
 +++ b/src/tools/macdeployqt/shared/shared.cpp
-@@ -1293,6 +1293,13 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+@@ -1297,6 +1297,13 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
      argumentList.append( "-importPath");
      argumentList.append(qmlImportsPath);
  

@@ -1,7 +1,7 @@
-From 28220453d157c0825669145c94ab86e9603265fa Mon Sep 17 00:00:00 2001
+From 79da6bb6ff075e8cf972be8a462630f1ec86bf0a Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Tue, 10 Oct 2023 10:14:40 -0400
-Subject: [PATCH 09/11] qtbase: allow translations outside prefix
+Subject: [PATCH 08/11] qtbase: allow translations outside prefix
 
 ---
  cmake/QtBuild.cmake | 2 +-
