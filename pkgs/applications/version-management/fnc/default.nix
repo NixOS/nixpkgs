@@ -1,12 +1,12 @@
 { lib, fetchurl, fetchpatch, stdenv, zlib, ncurses, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fnc";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchurl {
-    url = "https://fnc.bsdbox.org/tarball/${version}/fnc-${version}.tar.gz";
-    sha256 = "sha256-8up844ekIOMcPlfB2DJzR/GgJY9s/sBeYpG+YtdauvU=";
+    url = "https://fnc.bsdbox.org/tarball/${finalAttrs.version}/fnc-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6I6wtSMHaKdnlUK4pYiaybJeODGu2P+smYW8lQDIWGM=";
   };
 
   buildInputs = [ libiconv ncurses zlib ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbe ];
     mainProgram = "fnc";
   };
-}
+})
