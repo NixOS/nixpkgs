@@ -1,0 +1,26 @@
+From bc3dc0b63f7e4f029f8fce25891d2ce9724dfd80 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=A9clairevoyant?=
+ <848000+eclairevoyant@users.noreply.github.com>
+Date: Sun, 26 Nov 2023 21:58:38 -0500
+Subject: [PATCH] patch resource path
+
+---
+ dangerzone/util.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dangerzone/util.py b/dangerzone/util.py
+index e19a174..cc37128 100644
+--- a/dangerzone/util.py
++++ b/dangerzone/util.py
+@@ -37,7 +37,7 @@ def get_resource_path(filename: str) -> str:
+             app_path = bin_path.parent.parent
+             prefix = app_path.joinpath("Resources", "share")
+         elif platform.system() == "Linux":
+-            prefix = pathlib.Path(sys.prefix).joinpath("share", "dangerzone")
++            prefix = pathlib.Path("@resourcePath@")
+         elif platform.system() == "Windows":
+             exe_path = pathlib.Path(sys.executable)
+             dz_install_path = exe_path.parent
+-- 
+2.42.0
+
