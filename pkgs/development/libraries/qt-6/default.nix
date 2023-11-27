@@ -55,6 +55,13 @@ let
           ./patches/0009-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
           ./patches/0010-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
           ./patches/0011-qtbase-derive-plugin-load-path-from-PATH.patch
+          # Revert "macOS: Silence warning about supporting secure state restoration"
+          # fix build with macOS sdk < 12.0
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
+            revert = true;
+            hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };
