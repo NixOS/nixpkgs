@@ -27,5 +27,6 @@ nimPackages.buildNimPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michaelBelsanti ];
+    mainProgram = "nitch";
   };
 }

@@ -18,5 +18,6 @@ nimPackages.buildNimPackage rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ marcusramberg ];
+    mainProgram = "promexplorer";
   };
 }

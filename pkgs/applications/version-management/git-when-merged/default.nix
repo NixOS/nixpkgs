@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = python3.meta.platforms;
     maintainers = with maintainers; [ DamienCassou ];
+    mainProgram = "git-when-merged";
   };
 }

@@ -33,5 +33,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
     license = licenses.unfree;  # Package does not state a license
+    mainProgram = "panoply";
   };
 }

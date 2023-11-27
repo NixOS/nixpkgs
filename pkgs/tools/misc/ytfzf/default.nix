@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "ytfzf";
   };
 }

@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     description = "A software MIDI renderer";
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
+    mainProgram = "timidity";
   };
 }

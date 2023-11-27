@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gitext-rs/git-stack/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ stehessel ];
+    mainProgram = "git-stack";
   };
 }

@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = with maintainers; [ somasis ];
+    mainProgram = "rwc";
   };
 }

@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Search parent directories for sentinel files";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ booniepepper ];
+    mainProgram = "findup";
   };
 })
