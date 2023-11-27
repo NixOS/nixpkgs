@@ -115,7 +115,7 @@ let
 
   patch-rapidcheck-shared = fetchpatch2 {
     # https://github.com/NixOS/nix/pull/9431
-    name = "fix-requires-non-existing-output.patch";
+    name = "fix-missing-librapidcheck.patch";
     url = "https://github.com/NixOS/nix/commit/46131567da96ffac298b9ec54016b37114b0dfd5.patch";
     hash = "sha256-lShYxYKRDWwBqCysAFmFBudhhAL1eendWcL8sEFLCGg=";
   };
