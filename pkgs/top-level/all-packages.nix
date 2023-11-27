@@ -15581,10 +15581,10 @@ with pkgs;
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
-  binaryen = callPackage ../development/compilers/binaryen {
+  binaryen = pin-to-gcc12-if-gcc13 (callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
-  };
+  });
 
   blueprint-compiler = callPackage ../development/compilers/blueprint { };
 
