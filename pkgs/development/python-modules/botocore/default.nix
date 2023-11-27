@@ -6,6 +6,7 @@
 , urllib3
 , pytestCheckHook
 , jsonschema
+, awscrt
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "botocore"
   ];
+
+  passthru.optional-dependencies = {
+    crt = [ awscrt ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/boto/botocore";
