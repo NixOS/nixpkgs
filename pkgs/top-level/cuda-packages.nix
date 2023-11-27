@@ -24,6 +24,7 @@ let
 
     buildCuTensorPackage = final.callPackage ../development/libraries/science/math/cutensor/generic.nix;
 
+    # FIXME: Include non-x86_64 platforms
     cuTensorVersions = {
       "1.2.2.5" = {
         hash = "sha256-lU7iK4DWuC/U3s1Ct/rq2Gr3w4F2U7RYYgpmF05bibY=";
@@ -31,12 +32,24 @@ let
       "1.5.0.3" = {
         hash = "sha256-T96+lPC6OTOkIs/z3QWg73oYVSyidN0SVkBWmT9VRx0=";
       };
+      "2.0.0.7" = {
+        hash = "sha256-32M4rtGOW2rgxJUhBT0WBtKkHhh9f17M+RgK9rvE72g=";
+      };
     };
 
     inherit (final) cudaMajorMinorVersion cudaMajorVersion;
 
+    cudaToCutensor = {
+      "10" = "1.2.25";
+      "11" = "1.5.0.3";
+      "12" = "2.0.0.7";
+    };
+
+    versionNewer = lib.flip lib.versionOlder;
+    latestVersion = (builtins.head (lib.sort versionNewer (builtins.attrNames cuTensorVersions)));
+
     cutensor = buildCuTensorPackage rec {
-      version = if cudaMajorMinorVersion == "10.1" then "1.2.2.5" else "1.5.0.3";
+      version = cudaToCutensor.${cudaMajorVersion} or latestVersion;
       inherit (cuTensorVersions.${version}) hash;
       # This can go into generic.nix
       libPath = "lib/${if cudaMajorVersion == "10" then cudaMajorMinorVersion else cudaMajorVersion}";
