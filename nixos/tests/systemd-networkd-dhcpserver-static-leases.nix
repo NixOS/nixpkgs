@@ -10,7 +10,6 @@ import ./make-test-python.nix ({ lib, ... }: {
       virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
       };
@@ -39,10 +38,12 @@ import ./make-test-python.nix ({ lib, ... }: {
     };
 
     client = {
-      virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
+      virtualisation.interfaces.eth1 = {
+        vlan = 1;
+        assignIP = false;
+      };
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.enable = false;
         interfaces.eth1 = {

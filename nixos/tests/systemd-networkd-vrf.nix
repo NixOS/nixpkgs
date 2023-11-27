@@ -5,7 +5,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
     virtualisation.vlans = [ vlan ];
     networking = {
       useDHCP = false;
-      useNetworkd = true;
     };
 
     systemd.network = {
@@ -31,7 +30,6 @@ in {
 
       networking = {
         useDHCP = false;
-        useNetworkd = true;
         firewall.checkReversePath = "loose";
       };
 

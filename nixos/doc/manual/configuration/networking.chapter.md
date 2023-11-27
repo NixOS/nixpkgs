@@ -10,7 +10,6 @@ ipv4-config.section.md
 ipv6-config.section.md
 firewall.section.md
 wireless.section.md
-ad-hoc-network-config.section.md
 renaming-interfaces.section.md
 ```
 <!-- TODO: OpenVPN, NAT -->

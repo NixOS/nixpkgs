@@ -57,6 +57,7 @@ in {
           { address = "fd00::1"; prefixLength = 64; }
         ];
       };
+
       services.knot.enable = true;
       services.knot.extraArgs = [ "-v" ];
       services.knot.keyFiles = [ tsigFile ];
@@ -109,6 +110,7 @@ in {
           { address = "fd00::2"; prefixLength = 64; }
         ];
       };
+
       services.knot.enable = true;
       services.knot.keyFiles = [ tsigFile ];
       services.knot.extraArgs = [ "-v" ];

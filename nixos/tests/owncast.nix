@@ -5,16 +5,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     client = { pkgs, ... }: with pkgs.lib; {
       networking = {
-        dhcpcd.enable = false;
         interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::2"; prefixLength = 64; } ];
         interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.2"; prefixLength = 24; } ];
       };
     };
     server = { pkgs, ... }: with pkgs.lib; {
       networking = {
-        dhcpcd.enable = false;
-        useNetworkd = true;
-        useDHCP = false;
         interfaces.eth1.ipv6.addresses = mkOverride 0 [ { address = "fd00::1"; prefixLength = 64; } ];
         interfaces.eth1.ipv4.addresses = mkOverride 0 [ { address = "192.168.1.1"; prefixLength = 24; } ];
 

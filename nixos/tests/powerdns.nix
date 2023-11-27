@@ -13,6 +13,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       zone-cache-refresh-interval=0
     '';
 
+    # Occupies port 53 otherwise
+    services.resolved.enable = false;
+
     services.mysql = {
       enable = true;
       package = pkgs.mariadb;

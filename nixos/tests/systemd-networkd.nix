@@ -1,7 +1,6 @@
 let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       imports = [ common/user-account.nix ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-      networking.useNetworkd = true;
       networking.useDHCP = false;
       networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];

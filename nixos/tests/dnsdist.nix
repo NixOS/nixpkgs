@@ -33,6 +33,9 @@ import ./make-test-python.nix (
       };
 
       environment.systemPackages = with pkgs; [ dig ];
+
+      # Occupies port 53 otherwise
+      services.resolved.enable = false;
     };
 
     testScript = ''
