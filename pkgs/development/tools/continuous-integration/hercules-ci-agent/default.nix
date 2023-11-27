@@ -32,6 +32,7 @@ let
 in pkg.overrideAttrs (finalAttrs: o: {
     meta = o.meta // {
       position = toString ./default.nix + ":1";
+      mainProgram = "hercules-ci-agent";
     };
     passthru = o.passthru // {
       tests = {
@@ -44,7 +45,7 @@ in pkg.overrideAttrs (finalAttrs: o: {
         nixos-simple-config = (nixos {
           boot.loader.grub.enable = false;
           fileSystems."/".device = "bogus";
-          services.hercules-ci-agent.enable = true;
+          services.hercules-ci-agents."binted".enable = true;
           # Dummy value for testing only.
           system.stateVersion = lib.trivial.release; # TEST ONLY
         }).config.system.build.toplevel;
@@ -52,7 +53,7 @@ in pkg.overrideAttrs (finalAttrs: o: {
         nixos-many-options-config = (nixos ({ pkgs, ... }: {
           boot.loader.grub.enable = false;
           fileSystems."/".device = "bogus";
-          services.hercules-ci-agent = {
+          services.hercules-ci-agents."test" = {
             enable = true;
             package = pkgs.hercules-ci-agent;
             settings = {
