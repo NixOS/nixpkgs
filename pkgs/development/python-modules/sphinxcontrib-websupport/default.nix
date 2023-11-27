@@ -26,6 +26,8 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
   ];
 
+  # circular dependency on sphinx
+  dontCheckRuntimeDeps = true;
   doCheck = false;
 
   pythonNamespaces = [ "sphinxcontrib" ];
