@@ -39,5 +39,9 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.lf- ];
     platforms = platforms.unix;
     mainProgram = "nix-doc";
+
+    # `nix-doc` currently contains a broken unit test, which causes the check phase to fail.
+    # https://github.com/lf-/nix-doc/issues/24
+    broken = true;
   };
 }
