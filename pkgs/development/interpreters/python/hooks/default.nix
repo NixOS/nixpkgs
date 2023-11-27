@@ -172,6 +172,16 @@ in {
       };
     } ./python-remove-tests-dir-hook.sh) {};
 
+  pythonRuntimeDepsCheckHook = callPackage ({ makePythonHook, packaging }:
+    makePythonHook {
+      name = "python-runtime-deps-check-hook.sh";
+      propagatedBuildInputs = [ packaging ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        hook = ./python-runtime-deps-check-hook.py;
+      };
+    } ./python-runtime-deps-check-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ makePythonHook, setuptools, wheel }:
     makePythonHook {
       name = "setuptools-setup-hook";
