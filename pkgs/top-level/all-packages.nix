@@ -15587,6 +15587,7 @@ with pkgs;
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen {
+    stdenv = gcc12Stdenv;
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
   };
