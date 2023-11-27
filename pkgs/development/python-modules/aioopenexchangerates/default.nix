@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioopenexchangerates";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wts2qVTZFTLR2Ru3bSiobGOyegiNoGl3xOrZdDRh7iU=";
+    hash = "sha256-4mvd5G4qpebocg74Kz/+XtJovDnGJJYPigyhke9YDjA=";
   };
 
   postPatch = ''
