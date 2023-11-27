@@ -222,6 +222,9 @@ in buildFHSEnv rec {
     libpsl
     nghttp2.lib
     rtmpdump
+
+    # Crusader Kings III
+    ncurses6 # for libtinfo.so.6
   ]
   # This needs to come from pkgs as the passed-in steam-runtime-wrapped may not be the same architecture
   ++ pkgs.steamPackages.steam-runtime-wrapped.overridePkgs
