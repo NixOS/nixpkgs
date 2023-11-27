@@ -131,6 +131,8 @@ buildPythonPackage rec {
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
   ++ lib.optional withLocation "PyQt6.QtPositioning"
   ;
+  env.NIX_CFLAGS_COMPILE = toString ([]
+  ++ lib.optional (stdenv.isDarwin) "-Wno-address-of-temporary");
 
   meta = with lib; {
     description = "Python bindings for Qt6";

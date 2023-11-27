@@ -39,5 +39,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.lodi ];
     platforms = platforms.linux;
+    mainProgram = "persistent-evdev.py";
   };
 }

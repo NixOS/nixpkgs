@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sersorrel ];
     platforms = platforms.linux;
+    mainProgram = "eiciel";
   };
 }
