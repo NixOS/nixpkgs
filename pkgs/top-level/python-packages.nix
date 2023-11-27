@@ -2447,7 +2447,8 @@ self: super: with self; {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  cupy = callPackage ../development/python-modules/cupy { };
+  # cupy 12.2.0 possibly incompatible with cutensor 2.0 that comes with cudaPackages_12
+  cupy = callPackage ../development/python-modules/cupy { cudaPackages = pkgs.cudaPackages_11; };
 
   curio = callPackage ../development/python-modules/curio { };
 
