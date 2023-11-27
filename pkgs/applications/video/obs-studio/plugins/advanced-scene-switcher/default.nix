@@ -7,26 +7,29 @@
 , alsa-lib
 , asio
 , curl
+, nlohmann_json
 , obs-studio
 , opencv
 , procps
 , qtbase
 , stdenv
+, tesseract
 , websocketpp
 , xorg
 
+, httplib
 , libremidi
 }:
 
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-rpZ/vR9QbWgr8n6LDv6iTRsKXSIDGy0IpPu1Uatb0zw=";
+    hash = "sha256-Xnf8Vz6I5EfiiVoG0JRd0f0IJHw1IVkTLL4Th/hWYrc=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +42,12 @@ stdenv.mkDerivation rec {
     asio
     curl
     libremidi
+    nlohmann_json
     obs-studio
     opencv
     procps
     qtbase
+    tesseract
     websocketpp
     xorg.libXScrnSaver
   ];
@@ -50,7 +55,9 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   postUnpack = ''
+    cp -r ${httplib.src}/* $sourceRoot/deps/cpp-httplib
     cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
+    chmod -R +w $sourceRoot/deps/cpp-httplib
     chmod -R +w $sourceRoot/deps/libremidi
   '';
 
