@@ -18,12 +18,7 @@ in
   options.services.tmate-ssh-server = {
     enable = mkEnableOption (mdDoc "tmate ssh server");
 
-    package = mkOption {
-      type = types.package;
-      description = mdDoc "The package containing tmate-ssh-server";
-      defaultText = literalExpression "pkgs.tmate-ssh-server";
-      default = pkgs.tmate-ssh-server;
-    };
+    package = mkPackageOption pkgs "tmate-ssh-server" { };
 
     host = mkOption {
       type = types.str;

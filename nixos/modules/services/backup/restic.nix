@@ -245,14 +245,7 @@ in
           '';
         };
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.restic;
-          defaultText = literalExpression "pkgs.restic";
-          description = lib.mdDoc ''
-            Restic package to use.
-          '';
-        };
+        package = mkPackageOption pkgs "restic" { };
 
         createWrapper = lib.mkOption {
           type = lib.types.bool;

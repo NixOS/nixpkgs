@@ -27,14 +27,7 @@ in
     '';
   };
 
-  options.services.zerotierone.package = mkOption {
-    default = pkgs.zerotierone;
-    defaultText = literalExpression "pkgs.zerotierone";
-    type = types.package;
-    description = lib.mdDoc ''
-      ZeroTier One package to use.
-    '';
-  };
+  options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
 
   config = mkIf cfg.enable {
     systemd.services.zerotierone = {

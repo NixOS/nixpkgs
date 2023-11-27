@@ -47,14 +47,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.chrony;
-        defaultText = literalExpression "pkgs.chrony";
-        description = lib.mdDoc ''
-          Which chrony package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "chrony" { };
 
       servers = mkOption {
         default = config.networking.timeServers;

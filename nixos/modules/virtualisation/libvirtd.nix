@@ -64,25 +64,14 @@ let
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.swtpm;
-        defaultText = literalExpression "pkgs.swtpm";
-        description = lib.mdDoc ''
-          swtpm package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "swtpm" { };
     };
   };
 
   qemuModule = types.submodule {
     options = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.qemu;
-        defaultText = literalExpression "pkgs.qemu";
-        description = lib.mdDoc ''
-          Qemu package to use with libvirt.
+      package = mkPackageOption pkgs "qemu" {
+        extraDescription = ''
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
         '';
@@ -224,14 +213,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.libvirt;
-      defaultText = literalExpression "pkgs.libvirt";
-      description = lib.mdDoc ''
-        libvirt package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "libvirt" { };
 
     extraConfig = mkOption {
       type = types.lines;

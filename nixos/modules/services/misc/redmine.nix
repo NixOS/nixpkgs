@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkBefore mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
+  inherit (lib) mkBefore mkDefault mkEnableOption mkPackageOption
+                mkIf mkOption mkRemovedOptionModule types;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
   inherit (lib) optional optionalAttrs optionalString;
 
@@ -51,12 +52,8 @@ in
     services.redmine = {
       enable = mkEnableOption (lib.mdDoc "Redmine");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.redmine;
-        defaultText = literalExpression "pkgs.redmine";
-        description = lib.mdDoc "Which Redmine package to use.";
-        example = literalExpression "pkgs.redmine.override { ruby = pkgs.ruby_2_7; }";
+      package = mkPackageOption pkgs "redmine" {
+        example = "redmine.override { ruby = pkgs.ruby_2_7; }";
       };
 
       user = mkOption {

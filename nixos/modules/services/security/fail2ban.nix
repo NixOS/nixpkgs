@@ -77,12 +77,8 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.fail2ban;
-        defaultText = literalExpression "pkgs.fail2ban";
-        type = types.package;
-        example = literalExpression "pkgs.fail2ban_0_11";
-        description = lib.mdDoc "The fail2ban package to use for running the fail2ban service.";
+      package = mkPackageOption pkgs "fail2ban" {
+        example = "fail2ban_0_11";
       };
 
       packageFirewall = mkOption {

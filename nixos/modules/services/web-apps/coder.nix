@@ -36,14 +36,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.coder;
-        description = lib.mdDoc ''
-          Package to use for the service.
-        '';
-        defaultText = literalExpression "pkgs.coder";
-      };
+      package = mkPackageOption pkgs "coder" { };
 
       homeDir = mkOption {
         type = types.str;

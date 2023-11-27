@@ -135,12 +135,7 @@ let
         default = [];
       };
 
-      package = mkOption {
-        default = pkgs.go-ethereum.geth;
-        defaultText = literalExpression "pkgs.go-ethereum.geth";
-        type = types.package;
-        description = lib.mdDoc "Package to use as Go Ethereum node.";
-      };
+      package = mkPackageOption pkgs [ "go-ethereum" "geth" ] { };
     };
   };
 in

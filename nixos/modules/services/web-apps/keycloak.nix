@@ -11,6 +11,7 @@ let
     mkChangedOptionModule
     mkRenamedOptionModule
     mkRemovedOptionModule
+    mkPackageOption
     concatStringsSep
     mapAttrsToList
     escapeShellArg
@@ -246,14 +247,7 @@ in
         };
       };
 
-      package = mkOption {
-        type = package;
-        default = pkgs.keycloak;
-        defaultText = literalExpression "pkgs.keycloak";
-        description = lib.mdDoc ''
-          Keycloak package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "keycloak" { };
 
       initialAdminPassword = mkOption {
         type = str;

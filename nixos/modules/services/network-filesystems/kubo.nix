@@ -101,12 +101,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.kubo;
-        defaultText = literalExpression "pkgs.kubo";
-        description = lib.mdDoc "Which Kubo package to use.";
-      };
+      package = mkPackageOption pkgs "kubo" { };
 
       user = mkOption {
         type = types.str;

@@ -79,12 +79,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        default = pkgs.jenkins;
-        defaultText = literalExpression "pkgs.jenkins";
-        type = types.package;
-        description = lib.mdDoc "Jenkins package to use.";
-      };
+      package = mkPackageOption pkgs "jenkins" { };
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ];

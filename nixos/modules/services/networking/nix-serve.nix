@@ -26,14 +26,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nix-serve;
-        defaultText = literalExpression "pkgs.nix-serve";
-        description = lib.mdDoc ''
-          nix-serve package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "nix-serve" { };
 
       openFirewall = mkOption {
         type = types.bool;

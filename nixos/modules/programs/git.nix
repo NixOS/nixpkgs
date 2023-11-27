@@ -11,12 +11,8 @@ in
     programs.git = {
       enable = mkEnableOption (lib.mdDoc "git");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.git;
-        defaultText = literalExpression "pkgs.git";
-        example = literalExpression "pkgs.gitFull";
-        description = lib.mdDoc "The git package to use";
+      package = mkPackageOption pkgs "git" {
+        example = "gitFull";
       };
 
       config = mkOption {
@@ -65,12 +61,7 @@ in
       lfs = {
         enable = mkEnableOption (lib.mdDoc "git-lfs");
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.git-lfs;
-          defaultText = literalExpression "pkgs.git-lfs";
-          description = lib.mdDoc "The git-lfs package to use";
-        };
+        package = mkPackageOption pkgs "git-lfs" { };
       };
     };
   };

@@ -310,12 +310,7 @@ in
       apply = x: if isList x then lib.unique x else x;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use.";
-      default = pkgs.grafana;
-      defaultText = literalExpression "pkgs.grafana";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "grafana" { };
 
     dataDir = mkOption {
       description = lib.mdDoc "Data directory.";

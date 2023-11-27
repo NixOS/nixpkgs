@@ -108,12 +108,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = package;
-        default = pkgs.yggdrasil;
-        defaultText = literalExpression "pkgs.yggdrasil";
-        description = lib.mdDoc "Yggdrasil package to use.";
-      };
+      package = mkPackageOption pkgs "yggdrasil" { };
 
       persistentKeys = mkEnableOption (lib.mdDoc ''
         persistent keys. If enabled then keys will be generated once and Yggdrasil

@@ -29,14 +29,7 @@ in
 {
 
   options.programs.gnupg = {
-    package = mkOption {
-      type = types.package;
-      default = pkgs.gnupg;
-      defaultText = literalExpression "pkgs.gnupg";
-      description = lib.mdDoc ''
-        The gpg package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "gnupg" { };
 
     agent.enable = mkOption {
       type = types.bool;

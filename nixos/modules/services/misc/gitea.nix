@@ -51,12 +51,7 @@ in
         description = lib.mdDoc "Enable Gitea Service.";
       };
 
-      package = mkOption {
-        default = pkgs.gitea;
-        type = types.package;
-        defaultText = literalExpression "pkgs.gitea";
-        description = lib.mdDoc "gitea derivation to use";
-      };
+      package = mkPackageOption pkgs "gitea" { };
 
       useWizard = mkOption {
         default = false;

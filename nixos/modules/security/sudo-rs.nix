@@ -60,14 +60,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.sudo-rs;
-      defaultText = literalExpression "pkgs.sudo-rs";
-      description = mdDoc ''
-        Which package to use for `sudo`.
-      '';
-    };
+    package = mkPackageOption pkgs "sudo-rs" { };
 
     wheelNeedsPassword = mkOption {
       type = types.bool;

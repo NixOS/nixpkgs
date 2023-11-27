@@ -26,12 +26,7 @@ in {
       type = types.separatedString " ";
     };
 
-    package = mkOption {
-      description = lib.mdDoc "Package to use by heapster";
-      default = pkgs.heapster;
-      defaultText = literalExpression "pkgs.heapster";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "heapster" { };
   };
 
   config = mkIf cfg.enable {

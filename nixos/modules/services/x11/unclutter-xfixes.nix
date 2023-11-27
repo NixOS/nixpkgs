@@ -13,12 +13,7 @@ in {
       default = false;
     };
 
-    package = mkOption {
-      description = lib.mdDoc "unclutter-xfixes derivation to use.";
-      type = types.package;
-      default = pkgs.unclutter-xfixes;
-      defaultText = literalExpression "pkgs.unclutter-xfixes";
-    };
+    package = mkPackageOption pkgs "unclutter-xfixes" { };
 
     timeout = mkOption {
       description = lib.mdDoc "Number of seconds before the cursor is marked inactive.";

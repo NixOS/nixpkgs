@@ -13,12 +13,7 @@ in {
     services.telegraf = {
       enable = mkEnableOption (lib.mdDoc "telegraf server");
 
-      package = mkOption {
-        default = pkgs.telegraf;
-        defaultText = literalExpression "pkgs.telegraf";
-        description = lib.mdDoc "Which telegraf derivation to use";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "telegraf" { };
 
       environmentFiles = mkOption {
         type = types.listOf types.path;

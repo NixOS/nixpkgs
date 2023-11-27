@@ -26,12 +26,7 @@ in
   options.services.esphome = {
     enable = mkEnableOption (mdDoc "esphome");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.esphome;
-      defaultText = literalExpression "pkgs.esphome";
-      description = mdDoc "The package to use for the esphome command.";
-    };
+    package = lib.mkPackageOption pkgs "esphome" { };
 
     enableUnixSocket = mkOption {
       type = types.bool;

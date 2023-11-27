@@ -215,14 +215,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gerbera;
-        defaultText = literalExpression "pkgs.gerbera";
-        description = lib.mdDoc ''
-          Underlying package to be used with the module.
-        '';
-      };
+      package = mkPackageOption pkgs "gerbera" { };
 
       ps3Support = mkOption {
         type = types.bool;

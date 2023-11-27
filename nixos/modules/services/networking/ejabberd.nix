@@ -29,12 +29,7 @@ in {
         description = lib.mdDoc "Whether to enable ejabberd server";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ejabberd;
-        defaultText = literalExpression "pkgs.ejabberd";
-        description = lib.mdDoc "ejabberd server package to use";
-      };
+      package = mkPackageOption pkgs "ejabberd" { };
 
       user = mkOption {
         type = types.str;

@@ -671,14 +671,8 @@ in
     };
 
     git = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.git;
-        defaultText = literalExpression "pkgs.git";
-        example = literalExpression "pkgs.gitFull";
-        description = lib.mdDoc ''
-          Git package for git.sr.ht. This can help silence collisions.
-        '';
+      package = mkPackageOption pkgs "git" {
+        example = "gitFull";
       };
       fcgiwrap.preforkProcess = mkOption {
         description = lib.mdDoc "Number of fcgiwrap processes to prefork.";
@@ -688,14 +682,7 @@ in
     };
 
     hg = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.mercurial;
-        defaultText = literalExpression "pkgs.mercurial";
-        description = lib.mdDoc ''
-          Mercurial package for hg.sr.ht. This can help silence collisions.
-        '';
-      };
+      package = mkPackageOption pkgs "mercurial" { };
       cloneBundles = mkOption {
         type = types.bool;
         default = false;

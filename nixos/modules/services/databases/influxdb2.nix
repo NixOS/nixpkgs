@@ -19,6 +19,7 @@ let
     mapAttrsToList
     mdDoc
     mkEnableOption
+    mkPackageOption
     mkIf
     mkOption
     nameValuePair
@@ -278,12 +279,7 @@ in
     services.influxdb2 = {
       enable = mkEnableOption (mdDoc "the influxdb2 server");
 
-      package = mkOption {
-        default = pkgs.influxdb2-server;
-        defaultText = literalExpression "pkgs.influxdb2";
-        description = mdDoc "influxdb2 derivation to use.";
-        type = types.package;
-      };
+      package = mkPackageOption pkgs "influxdb2" { };
 
       settings = mkOption {
         default = { };
