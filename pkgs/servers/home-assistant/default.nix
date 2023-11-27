@@ -432,6 +432,9 @@ in python.pkgs.buildPythonApplication rec {
     voluptuous
     voluptuous-serialize
     yarl
+    # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
+    pyotp
+    pyqrcode
     # Implicit dependency via homeassistant/requirements.py
     setuptools
   ];
@@ -458,8 +461,6 @@ in python.pkgs.buildPythonApplication rec {
     respx
     syrupy
     tomli
-    # required through tests/auth/mfa_modules/test_otp.py
-    pyotp
     # Sneakily imported in tests/conftest.py
     paho-mqtt
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
