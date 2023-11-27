@@ -548,7 +548,7 @@ rec {
 
     `names`
 
-    : A list of attribute names to get out of `set`
+    : A list of attribute names to get out of `attrs`
 
     `attrs`
 
