@@ -618,10 +618,14 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.9.9";
-          sha256 = "sha256-QyB6DtKe9KH2UizLZQfP4YlHz2yF8H9Ehj+M+OdIYe4=";
+          version = "0.11.30";
+          sha256 = "sha256-1CxyvQu7WQJw87sTcpnILztt1WeSpWOgij0dEIXebPU=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bradlc.vscode-tailwindcss/changelog";
+          description = "Tailwind CSS tooling for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss";
+          homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense";
           license = lib.licenses.mit;
         };
       };
