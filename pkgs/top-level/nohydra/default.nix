@@ -209,7 +209,8 @@ let
             # triggering it being built (yet)
             let
               path = builtins.unsafeDiscardStringContext outPath;
-              exists = builtins.pathExists path;
+              exists = builtins.pathExists path ||
+                       builtins.pathExists "/mnt/coldstore/${path}";
             in
               if !exists
               then
