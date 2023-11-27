@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ taeer carlosdagos kbdharun];
     platforms = platforms.all;
+    mainProgram = "tldr";
   };
 }

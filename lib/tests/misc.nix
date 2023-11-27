@@ -831,6 +831,26 @@ runTests {
     };
   };
 
+  testMatchAttrsMatchingExact = {
+    expr = matchAttrs { cpu = { bits = 64; }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMismatch = {
+    expr = matchAttrs { cpu = { bits = 128; }; } { cpu = { bits = 64; }; };
+    expected = false;
+  };
+
+  testMatchAttrsMatchingImplicit = {
+    expr = matchAttrs { cpu = { }; } { cpu = { bits = 64; }; };
+    expected = true;
+  };
+
+  testMatchAttrsMissingAttrs = {
+    expr = matchAttrs { cpu = {}; } { };
+    expected = false;
+  };
+
   testOverrideExistingEmpty = {
     expr = overrideExisting {} { a = 1; };
     expected = {};

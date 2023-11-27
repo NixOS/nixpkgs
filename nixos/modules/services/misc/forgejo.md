@@ -20,7 +20,7 @@ If you experience issues with your instance using `services.gitea`,
 
 ::: {.note}
 Migrating is, while not strictly necessary at this point, highly recommended.
-Both modules and projects are likely to divide further with each release.
+Both modules and projects are likely to diverge further with each release.
 Which might lead to an even more involved migration.
 :::
 

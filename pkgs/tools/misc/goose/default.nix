@@ -43,5 +43,6 @@ buildGoModule rec {
     homepage = "https://pressly.github.io/goose/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuka ];
+    mainProgram = "goose";
   };
 }

@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl2Plus ];
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.all;
+    mainProgram = "flashrom";
   };
 }

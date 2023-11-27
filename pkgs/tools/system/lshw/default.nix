@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.linux;
+    mainProgram = "lshw";
   };
 }

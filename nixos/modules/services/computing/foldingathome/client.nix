@@ -63,7 +63,7 @@ in
       default = [];
       description = lib.mdDoc ''
         Extra startup options for the FAHClient. Run
-        `FAHClient --help` to find all the available options.
+        `fah-client --help` to find all the available options.
       '';
     };
   };
@@ -74,7 +74,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        exec ${cfg.package}/bin/FAHClient ${lib.escapeShellArgs args}
+        exec ${lib.getExe cfg.package} ${lib.escapeShellArgs args}
       '';
       serviceConfig = {
         DynamicUser = true;
