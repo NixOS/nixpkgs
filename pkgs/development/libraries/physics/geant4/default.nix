@@ -47,13 +47,19 @@ in
 lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
 
 stdenv.mkDerivation rec {
-  version = "11.0.4";
+  version = "11.1.3";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-4wofoo0vLPd8/9CFY8EonpL8R9mcg5Wa9H/ve9UDSyc=";
+    hash = "sha256-TF++pnidjWGe2sygYx1rUhGmDhv5l0w9P6ue+eImkvU=";
   };
+
+  # Fix broken paths in a .pc
+  postPatch = ''
+    substituteInPlace source/externals/ptl/cmake/Modules/PTLPackageConfigHelpers.cmake \
+      --replace '${"$"}{prefix}/${"$"}{PTL_INSTALL_' '${"$"}{PTL_INSTALL_'
+  '';
 
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
