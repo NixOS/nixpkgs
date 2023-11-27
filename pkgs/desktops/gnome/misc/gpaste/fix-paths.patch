@@ -1,40 +1,53 @@
+diff --git a/src/gnome-shell/__nix-prepend-search-paths.js b/src/gnome-shell/__nix-prepend-search-paths.js
+new file mode 100644
+index 00000000..e8e20c67
+--- /dev/null
++++ b/src/gnome-shell/__nix-prepend-search-paths.js
+@@ -0,0 +1,3 @@
++import GIRepository from 'gi://GIRepository';
++
++GIRepository.Repository.prepend_search_path('@typelibDir@');
 diff --git a/src/gnome-shell/extension.js b/src/gnome-shell/extension.js
-index cb862a30..2bd41363 100644
+index cb862a30..980767c9 100644
 --- a/src/gnome-shell/extension.js
 +++ b/src/gnome-shell/extension.js
-@@ -10,6 +10,10 @@ import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/ex
- import checkerBypass from './checkerBypass.js';
- import { GPasteIndicator } from './indicator.js';
- 
-+import GIRepository from 'gi://GIRepository';
-+
-+GIRepository.Repository.prepend_search_path('@typelibDir@');
-+
- export default class GPasteExtension extends Extension {
-     enable() {
-         checkerBypass();
-diff --git a/src/gnome-shell/prefs.js b/src/gnome-shell/prefs.js
-index 4c0d9bde..5740d8f6 100644
---- a/src/gnome-shell/prefs.js
-+++ b/src/gnome-shell/prefs.js
-@@ -5,8 +5,11 @@
+@@ -4,6 +4,8 @@
+  * Copyright (c) 2010-2023, Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
   */
  
- import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
-+import GIRepository from 'gi://GIRepository';
- 
--import GPasteGtk from 'gi://GPasteGtk?version=4';
-+GIRepository.Repository.prepend_search_path('@typelibDir@');
++import './__nix-prepend-search-paths.js';
 +
-+const {default: GPasteGtk} = await import('gi://GPasteGtk?version=4');
+ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+ import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
  
- export default class GPastePreferences extends ExtensionPreferences {
-     getPreferencesWidget() {
+diff --git a/src/gnome-shell/meson.build b/src/gnome-shell/meson.build
+index 86cbb0b2..80fc4d67 100644
+--- a/src/gnome-shell/meson.build
++++ b/src/gnome-shell/meson.build
+@@ -1,4 +1,5 @@
+ shell_extension_files = [
++  '__nix-prepend-search-paths.js',
+   'aboutItem.js',
+   'actionButton.js',
+   'actionButtonActor.js',
+diff --git a/src/gnome-shell/prefs.js b/src/gnome-shell/prefs.js
+index 4c0d9bde..58f54f9a 100644
+--- a/src/gnome-shell/prefs.js
++++ b/src/gnome-shell/prefs.js
+@@ -4,6 +4,8 @@
+  * Copyright (c) 2010-2023, Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+  */
+ 
++import './__nix-prepend-search-paths.js';
++
+ import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+ 
+ import GPasteGtk from 'gi://GPasteGtk?version=4';
 diff --git a/src/libgpaste/gpaste/gpaste-settings.c b/src/libgpaste/gpaste/gpaste-settings.c
-index 7e53eb64..ee620070 100644
+index 830f5e0b..c8df0e11 100644
 --- a/src/libgpaste/gpaste/gpaste-settings.c
 +++ b/src/libgpaste/gpaste/gpaste-settings.c
-@@ -1013,7 +1013,10 @@ create_g_settings (void)
+@@ -1039,7 +1039,10 @@ create_g_settings (void)
      }
      else
      {
