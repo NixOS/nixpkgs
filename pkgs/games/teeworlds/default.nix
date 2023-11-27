@@ -1,7 +1,6 @@
 { fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsa-lib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 , nixosTests
-, Carbon
 , Cocoa
 , buildClient ? true
 }:
@@ -45,17 +44,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python3 lua5_3 zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
   ] ++ lib.optionals buildClient ([
-    libGLU
     SDL2
     freetype
     wavpack
   ] ++ lib.optionals stdenv.isLinux [
+    libGLU
     alsa-lib
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-    Cocoa
   ]);
 
   cmakeFlags = [
