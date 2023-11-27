@@ -26,6 +26,18 @@
                   ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
                 system.nixos.revision = final.mkIf (self ? rev) self.rev;
               }];
+
+              # Provide an `inputs` argument to all modules, containing the nixpkgs flake itself.
+              #
+              # Merge specialArgs with those provided by the caller,
+              # in order to allow the caller to provide its own
+              # specialArgs, including replacing inputs if desired.
+              specialArgs = {
+                inputs = {
+                  nixpkgs = self;
+                } // args.specialArgs.inputs or {};
+              } // args.specialArgs or {};
+
             } // lib.optionalAttrs (! args?system) {
               # Allow system to be set modularly in nixpkgs.system.
               # We set it to null, to remove the "legacy" entrypoint's
