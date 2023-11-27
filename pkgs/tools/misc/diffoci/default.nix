@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/reproducible-containers/diffoci/";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
+    mainProgram = "diffoci";
   };
 }

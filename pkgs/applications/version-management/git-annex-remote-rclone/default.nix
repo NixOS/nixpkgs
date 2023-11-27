@@ -25,5 +25,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = [ maintainers.montag451 ];
+    mainProgram = "git-annex-remote-rclone";
   };
 }

@@ -54,5 +54,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/atuinsh/atuin";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
+    mainProgram = "atuin";
   };
 }

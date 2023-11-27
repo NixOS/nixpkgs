@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.lf- ];
     platforms = platforms.unix;
+    mainProgram = "nix-doc";
   };
 }

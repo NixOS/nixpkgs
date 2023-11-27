@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ maxbrunet ];
     platforms = platforms.linux;
+    mainProgram = "automatic-timezoned";
   };
 }

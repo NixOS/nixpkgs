@@ -288,5 +288,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
     platforms = platforms.unix;
+    mainProgram = "diffoscope";
   };
 }

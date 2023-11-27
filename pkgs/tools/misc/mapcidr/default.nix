@@ -31,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/mapcidr/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hanemile ];
+    mainProgram = "mapcidr";
   };
 }

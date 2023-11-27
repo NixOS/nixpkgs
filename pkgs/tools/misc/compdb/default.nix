@@ -19,5 +19,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.mit;
     homepage = "https://github.com/Sarcasm/compdb";
     maintainers = [ maintainers.detegr ];
+    mainProgram = "compdb";
   };
 }

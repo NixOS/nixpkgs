@@ -92,5 +92,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Run ruff, isort, pyupgrade, mypy, pylint, flake8, black, blacken-docs, and more on Jupyter Notebooks";
     license = licenses.mit;
     maintainers = with maintainers; [ l0b0 ];
+    mainProgram = "nbqa";
   };
 }
