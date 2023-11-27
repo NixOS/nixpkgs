@@ -1,12 +1,13 @@
 { stdenv, lib, fetchFromGitLab, qcustomplot, qt5, libopus, eigen, portaudio
 , rtaudio, hidapi, udev, pulseaudio }:
-stdenv.mkDerivation {
-  name = "wfview";
+stdenv.mkDerivation rec {
+  pname = "wfview";
+  version = "1.64";
   src = fetchFromGitLab {
     owner = "eliggett";
     repo = "wfview";
-    rev = "b68874d32878278e6e84668aaa44534255e7e1f5";
-    sha256 = "fCb7KSHv7J8DHfr4KYUeaR1lbqaI6IYTvU2O8/iejuQ=";
+    rev = "v${version}";
+    sha256 = "QdrCji+gktrWfJKf9+yPkmdzfXOMIh4lwG2JA8WVUT8=";
   };
   patches = [ ./remove-syscalls.patch ];
   nativeBuildInputs = [ qt5.qmake qt5.wrapQtAppsHook ];
@@ -36,7 +37,6 @@ stdenv.mkDerivation {
     mkdir -p $out/usr/share/wfview/stylesheets;
     cp $src/resources/wfview.desktop $out/usr/share/applications;
     cp $src/resources/wfview.png $out/usr/share/icons/hicolor/256x256/apps;
-    cp $src/resources/org.wfview.wfview.metainfo.xml $out/usr/share/metainfo;
     cp -r $src/qdarkstyle $out/usr/share/wfview/stylesheets;
   '';
   qmakeFlags = [ "../wfview.pro" ];

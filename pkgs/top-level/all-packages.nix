@@ -31853,7 +31853,7 @@ with pkgs;
 
   welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
 
-  wfview = callPackage ../applications/radio/wfview { };
+  wfview = libsForQt5.callPackage ../applications/radio/wfview { };
 
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
@@ -34899,7 +34899,7 @@ with pkgs;
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
-  qcustomplot = callPackage ../applications/graphics/qcustomplot { };
+  qcustomplot = libsForQt5.callPackage ../applications/graphics/qcustomplot { };
 
   qelectrotech = libsForQt5.callPackage ../applications/misc/qelectrotech { };
 
