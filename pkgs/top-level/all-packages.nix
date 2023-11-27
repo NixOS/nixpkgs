@@ -13135,6 +13135,8 @@ with pkgs;
 
   sftpgo = callPackage ../servers/sftpgo { };
 
+  scanservjs = callPackage ../applications/graphics/scanservjs { };
+
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
