@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ geri1701 ];
     platforms = platforms.linux;
+    mainProgram = "amdgpu_top";
   };
 }

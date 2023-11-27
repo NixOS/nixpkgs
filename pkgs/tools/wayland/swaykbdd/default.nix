@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ivankovnatsky ];
     platforms = platforms.linux;
+    mainProgram = "swaykbdd";
   };
 }

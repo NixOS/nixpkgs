@@ -63,5 +63,6 @@ resholve.mkDerivation {
     license = licenses.mit;
     maintainers = [ maintainers.roman ];
     platforms = platforms.all;
+    mainProgram = "locate-dominating-file";
   };
 }

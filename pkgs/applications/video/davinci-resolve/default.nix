@@ -230,5 +230,6 @@ buildFHSEnv {
     maintainers = with maintainers; [ jshcmpbll ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "davinci-resolve";
   };
 }

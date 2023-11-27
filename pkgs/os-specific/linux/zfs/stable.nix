@@ -28,6 +28,10 @@ callPackage ./generic.nix args {
   # this package should point to the latest release.
   version = "2.2.1";
 
+  extraPatches = [
+    ./patches/disable-zfs-dmu-offset-next-sync-by-default-v2-2.patch
+  ];
+
   tests = [
     nixosTests.zfs.installer
     nixosTests.zfs.stable

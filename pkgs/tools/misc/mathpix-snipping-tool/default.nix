@@ -27,5 +27,6 @@ in appimageTools.wrapType2 {
     license = licenses.unfree;
     maintainers = [ maintainers.hiro98 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "mathpix-snipping-tool";
   };
 }

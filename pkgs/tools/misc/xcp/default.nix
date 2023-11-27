@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tarka/xcp";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lom ];
+    mainProgram = "xcp";
   };
 }

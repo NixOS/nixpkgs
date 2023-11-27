@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ primeos ];
     platforms = platforms.linux;
+    mainProgram = "wob";
   };
 }
