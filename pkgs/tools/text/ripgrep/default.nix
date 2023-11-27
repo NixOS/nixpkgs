@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildPackages
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
@@ -6,6 +7,7 @@
 , Security
 , withPCRE2 ? true
 , pcre2
+, enableManpages ? stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,10 +30,10 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  preFixup = ''
-    $out/bin/rg --generate man > rg.1
+  preFixup = lib.optionalString enableManpages ''
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate man > rg.1
     installManPage rg.1
-
+  '' + ''
     installShellCompletion --cmd rg \
       --bash <($out/bin/rg --generate complete-bash) \
       --fish <($out/bin/rg --generate complete-fish) \
