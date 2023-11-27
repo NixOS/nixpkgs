@@ -35,7 +35,7 @@ in appimageTools.wrapType2 rec {
         $out/share/applications/Chrysalis.desktop \
         --replace 'Exec=Chrysalis' 'Exec=${pname}'
 
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
   '';
 
   meta = with lib; {
