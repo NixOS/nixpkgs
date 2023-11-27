@@ -1,6 +1,15 @@
 { config, pkgs, lib, ... }:
-with lib;
+
 let
+  inherit (builtins) head tail;
+  inherit (lib) generators maintainers types;
+  inherit (lib.attrsets) attrValues filterAttrs mapAttrs mapAttrsToList recursiveUpdate;
+  inherit (lib.lists) flatten optional optionals;
+  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.strings) concatMapStringsSep concatStringsSep optionalString versionOlder;
+  inherit (lib.trivial) mapNullable;
+  inherit (lib.modules) mkBefore mkDefault mkForce mkIf mkMerge
+    mkRemovedOptionModule mkRenamedOptionModule;
   inherit (config.services) nginx postfix postgresql redis;
   inherit (config.users) users groups;
   cfg = config.services.sourcehut;
@@ -1369,5 +1378,5 @@ in
   ];
 
   meta.doc = ./default.md;
-  meta.maintainers = with maintainers; [ tomberek ];
+  meta.maintainers = with maintainers; [ tomberek nessdoor ];
 }
