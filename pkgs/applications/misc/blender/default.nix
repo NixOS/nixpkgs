@@ -52,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs =
     [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
     ]
-    ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
+    ++ lib.optionals cudaSupport [
+      addOpenGLRunpath
+      cudaPackages.cuda_nvcc
+    ]
     ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
@@ -87,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       llvmPackages.openmp SDL Cocoa CoreGraphics ForceFeedback OpenAL OpenGL
     ])
     ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional spaceNavSupport libspnav;
   pythonPath = with python310Packages; [ numpy requests zstandard ];
