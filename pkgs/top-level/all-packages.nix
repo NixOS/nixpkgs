@@ -9129,7 +9129,7 @@ with pkgs;
   halibut = callPackage ../tools/typesetting/halibut { };
 
   halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_14;
+    llvmPackages = llvmPackages_16;
   };
 
   harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
@@ -27281,7 +27281,9 @@ with pkgs;
 
   roon-server = callPackage ../servers/roon-server { };
 
-  rustic-rs = callPackage ../tools/backup/rustic-rs { inherit (darwin) Security; };
+  rustic-rs = callPackage ../tools/backup/rustic-rs {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
 
   supervise = callPackage ../tools/system/supervise { };
 
