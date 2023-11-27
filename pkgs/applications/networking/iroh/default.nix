@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://iroh.computer";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ cameronfyfe ];
+    mainProgram = "iroh";
   };
 }

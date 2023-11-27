@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;
+    mainProgram = "vbetool";
   };
 }

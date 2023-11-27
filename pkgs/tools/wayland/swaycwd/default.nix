@@ -29,5 +29,6 @@ nimPackages.buildNimPackage rec{
     maintainers = with maintainers; [ cab404 ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
+    mainProgram = "swaycwd";
   };
 }

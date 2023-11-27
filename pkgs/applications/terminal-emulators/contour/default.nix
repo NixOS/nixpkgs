@@ -105,5 +105,6 @@ mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ moni ];
     platforms = platforms.unix;
+    mainProgram = "contour";
   };
 }

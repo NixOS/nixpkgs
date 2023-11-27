@@ -52,5 +52,6 @@ buildGoModule rec {
     changelog = "https://github.com/k1LoW/tbls/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
+    mainProgram = "tbls";
   };
 }

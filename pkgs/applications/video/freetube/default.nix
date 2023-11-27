@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ ryneeverett alyaeanyx ];
     inherit (electron.meta) platforms;
+    mainProgram = "freetube";
   };
 }

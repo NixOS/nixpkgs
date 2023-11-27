@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ederoyd46 ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "goaccess";
   };
 }

@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = [];
     platforms = platforms.linux;
+    mainProgram = "youki";
   };
 }

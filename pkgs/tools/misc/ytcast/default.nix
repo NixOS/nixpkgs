@@ -19,5 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/MarcoLucidi01/ytcast";
     license = licenses.mit;
     maintainers = with maintainers; [ waelwindows ];
+    mainProgram = "ytcast";
   };
 }

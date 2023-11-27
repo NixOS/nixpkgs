@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/brocode/fw";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "fw";
   };
 }

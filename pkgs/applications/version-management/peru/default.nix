@@ -23,6 +23,7 @@ python3Packages.buildPythonApplication rec {
     description = "A tool for including other people's code in your projects";
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "peru";
   };
 
 }

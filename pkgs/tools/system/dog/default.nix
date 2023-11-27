@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight ];
     platforms = platforms.all;
+    mainProgram = "dog";
   };
 }
