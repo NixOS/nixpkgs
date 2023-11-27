@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , scipy
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -14,11 +15,11 @@ buildPythonPackage rec {
   version = "0.1.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
-    repo = pname;
+    repo = "aeppl";
     rev = "refs/tags/v${version}";
     hash = "sha256-mqBbXwWJwQA2wSHuEdBeXQMfTIcgwYEjpq8AVmOjmHM=";
   };
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     aesara
     numpy
     scipy
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -40,6 +42,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "aeppl"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+    "-W"
+    "ignore::UserWarning"
   ];
 
   disabledTests = [
