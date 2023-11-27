@@ -20718,7 +20718,9 @@ with pkgs;
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
 
-  bobcat = callPackage ../development/libraries/bobcat { };
+  bobcat = callPackage ../development/libraries/bobcat {
+    stdenv = gcc12Stdenv;
+  };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
