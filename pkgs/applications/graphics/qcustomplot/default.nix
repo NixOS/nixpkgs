@@ -1,14 +1,14 @@
 { stdenv, lib, fetchurl, qt5, gcc, cmake, pkg-config }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qcustomplot";
   version = "2.1.1";
   src = fetchurl {
-    url = "https://www.qcustomplot.com/release/2.1.1/QCustomPlot-source.tar.gz";
+    url = "https://www.qcustomplot.com/release/${version}/QCustomPlot-source.tar.gz";
     sha256 = "sha256:Xi0i3sd5248B81fL2yXlT7z5ca2u516ujXrSRESHGC8=";
   };
   patches = [ ./add-cmake.patch ];
   cmakeFlags = [ "-DUSE_QT_VERSION=5" ];
-  nativeBuildInputs = [ gcc cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
   dontWrapQtApps = true;
   buildInputs = [ qt5.qtbase ];
   meta = with lib; {
