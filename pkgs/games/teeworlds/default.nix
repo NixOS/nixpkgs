@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
     substituteInPlace 'other/bundle/client/Info.plist.in' \
       --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
       --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+
+    # Make sure some bundled dependencies are actually unbundled.
+    # This will fail compilation if one of these dependencies could not
+    # be found, instead of falling back to the bundled version.
+    rm -rf 'src/engine/external/wavpack/'
+    rm -rf 'src/engine/external/zlib/'
+    # md5, pnglite and json-parser (https://github.com/udp/json-parser)
+    # don't seem to be packaged in Nixpkgs, so don't unbundle them.
   '';
 
   nativeBuildInputs = [
@@ -44,12 +52,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python3 lua5_3 zlib
+    wavpack
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals buildClient ([
     SDL2
     freetype
-    wavpack
   ] ++ lib.optionals stdenv.isLinux [
     libGLU
     alsa-lib
