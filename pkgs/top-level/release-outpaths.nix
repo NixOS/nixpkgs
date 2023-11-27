@@ -10,6 +10,16 @@
 
 # used by pkgs/top-level/release-attrnames-superset.nix
 , attrNamesOnly ? false
+
+# Set this to `null` to build for the currentSystem only, *and also*
+# to omit the `.system-name` attrpath suffix
+, systems ? [
+    "aarch64-linux"
+    "aarch64-darwin"
+    #"i686-linux"  # !!!
+    "x86_64-linux"
+    "x86_64-darwin"
+  ]
 }:
 let
   lib = import (path + "/lib");
@@ -17,14 +27,10 @@ let
     # Compromise: accuracy vs. resources needed for evaluation.
     {
       inherit attrNamesOnly;
-      supportedSystems = [
-        "aarch64-linux"
-        "aarch64-darwin"
-        #"i686-linux"  # !!!
-        "x86_64-linux"
-        "x86_64-darwin"
-      ];
-
+      supportedSystems =
+        if systems == null
+        then [ builtins.currentSystem ]
+        else systems;
       nixpkgsArgs = {
         config = {
           allowAliases = false;
