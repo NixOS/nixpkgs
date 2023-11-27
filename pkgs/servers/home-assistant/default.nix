@@ -352,8 +352,30 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python.pkgs; [
+    pythonRelaxDepsHook
     setuptools
     wheel
+  ];
+
+  pythonRelaxDeps = [
+    "aiohttp"
+    "attrs"
+    "awesomeversion"
+    "bcrypt"
+    "ciso8601"
+    "cryptography"
+    "home-assistant-bluetooth"
+    "httpx"
+    "ifaddr"
+    "orjson"
+    "pip"
+    "PyJWT"
+    "pyOpenSSL"
+    "PyYAML"
+    "requests"
+    "typing-extensions"
+    "voluptuous-serialize"
+    "yarl"
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -374,33 +396,7 @@ in python.pkgs.buildPythonApplication rec {
     })
   ];
 
-  postPatch = let
-    relaxedConstraints = [
-      "aiohttp"
-      "attrs"
-      "awesomeversion"
-      "bcrypt"
-      "ciso8601"
-      "cryptography"
-      "home-assistant-bluetooth"
-      "httpx"
-      "ifaddr"
-      "orjson"
-      "pip"
-      "PyJWT"
-      "pyOpenSSL"
-      "PyYAML"
-      "requests"
-      "typing-extensions"
-      "voluptuous-serialize"
-      "yarl"
-    ];
-  in ''
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's/${package}[<>=]+.*/${package}",/g' \''
-      ) relaxedConstraints)}
-      pyproject.toml
+  postPatch = ''
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
