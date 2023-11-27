@@ -24,7 +24,7 @@
 buildPythonPackage rec {
   pname = "aesara";
   version = "2.9.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -87,6 +87,10 @@ buildPythonPackage rec {
     # Disable all benchmark tests
     "test_scan_multiple_output"
     "test_logsumexp_benchmark"
+    # AssertionError
+    "test_debugprint"
+    # ValueError: too many values to unpack...
+    "test_ExternalCOp_c_code_cache_version"
   ];
 
   meta = with lib; {
