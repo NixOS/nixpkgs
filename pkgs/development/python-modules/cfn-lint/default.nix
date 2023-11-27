@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
-    repo = "cfn-python-lint";
+    repo = "cfn-lint";
     rev = "refs/tags/v${version}";
     hash = "sha256-0NHD8P+lKsrsEX/ypUS5dIwHOLudQcqkH8zG5RxANxE=";
   };
@@ -76,7 +76,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
-    homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
+    homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
