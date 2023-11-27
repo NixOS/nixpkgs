@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ckie ];
     license = licenses.gpl2;
+    mainProgram = "l3afpad";
   };
 }

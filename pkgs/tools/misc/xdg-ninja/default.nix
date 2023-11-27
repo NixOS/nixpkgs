@@ -32,5 +32,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ arcuru ];
+    mainProgram = "xdg-ninja";
   };
 }

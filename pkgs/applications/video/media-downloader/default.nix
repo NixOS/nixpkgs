@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zendo ];
     platforms = lib.platforms.linux;
+    mainProgram = "media-downloader";
   };
 })

@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sigoden/aichat";
     license = licenses.mit;
     maintainers = with maintainers; [ mwdomino ];
+    mainProgram = "aichat";
   };
 }

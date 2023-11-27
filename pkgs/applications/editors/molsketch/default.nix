@@ -49,5 +49,6 @@ mkDerivation rec {
     homepage = "https://sourceforge.net/projects/molsketch/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.moni ];
+    mainProgram = "molsketch";
   };
 }

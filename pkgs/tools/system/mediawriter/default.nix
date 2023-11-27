@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/FedoraQt/MediaWriter/releases/tag/${version}";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mediawriter";
   };
 }

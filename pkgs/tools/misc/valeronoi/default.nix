@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nova-madeline maeve ];
+    mainProgram = "valeronoi";
   };
 }

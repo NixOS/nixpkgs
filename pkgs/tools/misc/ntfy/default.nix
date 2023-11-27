@@ -98,5 +98,6 @@ in python.pkgs.buildPythonApplication rec {
     homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kamilchm ];
+    mainProgram = "ntfy";
   };
 }
