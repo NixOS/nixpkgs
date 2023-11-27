@@ -154,7 +154,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Allows your tests to easily mock out AWS Services";
-    homepage = "https://github.com/spulec/moto";
+    homepage = "https://github.com/getmoto/moto";
     changelog = "https://github.com/getmoto/moto/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
