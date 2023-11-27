@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build-system
 , setuptools
@@ -16,10 +17,12 @@ let
     version = "23.10.4";
     pyproject = true;
 
+    disabled = pythonOlder "3.8";
+
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
-      rev = version;
+      rev = "refs/tags/${version}";
       hash = "sha256-HTj6zbrCrxvh0PeSkeCSOCloTrVGUX6+o57snrKf6PA=";
     };
 
@@ -41,15 +44,17 @@ let
       runHook postCheck
     '';
 
-    pythonImportsCheck = [ "constantly" ];
+    pythonImportsCheck = [
+      "constantly"
+    ];
 
     passthru.tests.constantly = self.overridePythonAttrs { doCheck = true; };
 
     meta = with lib; {
+      description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
-      description = "symbolic constant support";
       license = licenses.mit;
-      maintainers = [ ];
+      maintainers =  with maintainers; [ ];
     };
   };
 in
