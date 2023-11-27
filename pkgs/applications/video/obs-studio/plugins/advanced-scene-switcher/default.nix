@@ -1,10 +1,12 @@
-{ alsa-lib
-, asio
-, cmake
-, curl
+{ lib
 , fetchFromGitHub
-, lib
-, libremidi
+
+, cmake
+, ninja
+
+, alsa-lib
+, asio
+, curl
 , obs-studio
 , opencv
 , procps
@@ -12,6 +14,8 @@
 , stdenv
 , websocketpp
 , xorg
+
+, libremidi
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +29,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-rpZ/vR9QbWgr8n6LDv6iTRsKXSIDGy0IpPu1Uatb0zw=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs = [
     alsa-lib
@@ -53,11 +60,11 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
-  meta = {
+  meta = with lib; {
     description = "An automated scene switcher for OBS Studio";
     homepage = "https://github.com/WarmUpTill/SceneSwitcher";
-    maintainers = with lib.maintainers; [ paveloom ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ paveloom ];
   };
 }
