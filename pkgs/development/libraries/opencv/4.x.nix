@@ -476,6 +476,8 @@ effectiveStdenv.mkDerivation {
   '';
 
   passthru = {
+    cudaSupport = enableCuda;
+
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
     }
