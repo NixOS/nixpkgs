@@ -252,9 +252,18 @@ buildStdenv.mkDerivation {
     # vendored to update checksums
     ./mp4parse-rust-170.patch
   ]
+  ++ lib.optionals (lib.versionAtLeast version "120" && lib.versionOlder version "122") [
+    # dbus cflags regression fix
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/f1f5f98290b3";
+      hash = "sha256-5PzVNJvPNX8irCqj1H38SFDydNJZuBHx167e1TQehaI=";
+    })
+  ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
-  ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
+  ++ lib.optional (lib.versionAtLeast version "96" && lib.versionOlder version "121") ./no-buildconfig-ffx96.patch
+  ++ lib.optional (lib.versionAtLeast version "121") ./no-buildconfig-ffx121.patch
   ++ extraPatches;
 
   postPatch = ''
@@ -508,9 +517,6 @@ buildStdenv.mkDerivation {
 
   preBuild = ''
     cd mozobj
-  '' + lib.optionalString (lib.versionAtLeast version "120") ''
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1864083
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
   postBuild = ''
