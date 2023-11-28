@@ -30,6 +30,11 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
+  };
+
   cargoHash = "sha256-k+gPCkf8DCnuv/aLXcQwjmsDUu/eqSEqKXlUyj8bRq8=";
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
