@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mkdocs-minify";
+  pname = "mkdocs-minify-plugin";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "byrnereese";
-    repo = "${pname}-plugin";
+    repo = "mkdocs-minify-plugin";
     rev = "refs/tags/${version}";
     hash = "sha256-LDCAWKVbFsa6Y/tmY2Zne4nOtxe4KvNplZuWxg4e4L8=";
   };
