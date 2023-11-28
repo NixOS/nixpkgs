@@ -1,18 +1,20 @@
 { lib, stdenv, fetchFromGitHub }: {
-  bats-assert = stdenv.mkDerivation rec {
+  bats-assert = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-assert";
     version = "2.1.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-assert";
-      rev = "v${version}";
-      sha256 = "sha256-opgyrkqTwtnn/lUjMebbLfS/3sbI2axSusWd5i/5wm4=";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-opgyrkqTwtnn/lUjMebbLfS/3sbI2axSusWd5i/5wm4=";
     };
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p "$out/share/bats/bats-assert"
       cp load.bash "$out/share/bats/bats-assert"
       cp -r src "$out/share/bats/bats-assert"
+      runHook postInstall
     '';
     meta = {
       description = "Common assertions for Bats";
@@ -21,22 +23,24 @@
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [ infinisil ];
     };
-  };
+  });
 
-  bats-file = stdenv.mkDerivation rec {
+  bats-file = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-file";
     version = "0.4.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-file";
-      rev = "v${version}";
-      sha256 = "sha256-NJzpu1fGAw8zxRKFU2awiFM2Z3Va5WONAD2Nusgrf4o=";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-NJzpu1fGAw8zxRKFU2awiFM2Z3Va5WONAD2Nusgrf4o=";
     };
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p "$out/share/bats/bats-file"
       cp load.bash "$out/share/bats/bats-file"
       cp -r src "$out/share/bats/bats-file"
+      runHook postInstall
     '';
     meta = {
       description = "Common filesystem assertions for Bats";
@@ -45,7 +49,7 @@
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [ infinisil ];
     };
-  };
+  });
 
   bats-detik = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-detik";
@@ -72,20 +76,22 @@
     };
   });
 
-  bats-support = stdenv.mkDerivation rec {
+  bats-support = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-support";
     version = "0.3.0";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-support";
-      rev = "v${version}";
-      sha256 = "sha256-4N7XJS5XOKxMCXNC7ef9halhRpg79kUqDuRnKcrxoeo=";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-4N7XJS5XOKxMCXNC7ef9halhRpg79kUqDuRnKcrxoeo=";
     };
     dontBuild = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p "$out/share/bats/bats-support"
       cp load.bash "$out/share/bats/bats-support"
       cp -r src "$out/share/bats/bats-support"
+      runHook postInstall
     '';
     meta = {
       description = "Supporting library for Bats test helpers";
@@ -94,5 +100,5 @@
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [ infinisil ];
     };
-  };
+  });
 }
