@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-4ht2KraWKL774QPfZz1OgAuFtPVsMis9WiDS+QFP8JY=";
+    hash = "sha256-1g3g+6EborZd2ppPMZcy0Wjv07zetATHb/sCkuZz5UM=";
   };
 
   nativeBuildInputs = [
