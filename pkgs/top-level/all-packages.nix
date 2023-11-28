@@ -9293,9 +9293,7 @@ with pkgs;
 
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
-  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
-    stdenv = gcc8Stdenv;
-  };
+  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
   hylafaxplus = callPackage ../servers/hylafaxplus {
     # libtiff >= 4.6 dropped many executables needed by hylafaxplus
