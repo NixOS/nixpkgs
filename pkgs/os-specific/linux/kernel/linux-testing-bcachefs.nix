@@ -22,7 +22,7 @@
     extraMeta = {
       homepage = "https://bcachefs.org/";
       branch = "master";
-      maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius YellowOnion ];
+      maintainers = with lib.maintainers; [ davidak Madouura raitobezarius YellowOnion ];
     };
   } // argsOverride;
 
