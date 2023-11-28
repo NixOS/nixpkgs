@@ -1,5 +1,5 @@
-{ config
-, lib
+{ lib
+, config
 , stdenv
 , fetchFromGitHub
 , fetchpatch
@@ -82,7 +82,8 @@
 
 let
   inherit (darwin.apple_sdk_11_0.frameworks)
-    AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
+    AVFoundation Accelerate Cocoa CoreAudio CoreFoundation CoreMedia
+    MediaPlayer;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 
   overrideSDK = platform: version:
@@ -99,36 +100,31 @@ let
     else stdenv;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.36.0";
+  version = "0.37.0";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-82moFbWvfc1awXih0d0D+dHqYbIoGNZ77RmafQ80IOY=";
+    hash = "sha256-izAz9Iiam7tJAWIQkmn2cKOfoaog8oPKq4sOUtp1nvU=";
   };
 
-  patches = [
-    # Revert "meson: use the new build_options method" to avoid a
-    # cycle between the out and dev outputs.
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/3c1686488b48bd2760e9b19f42e7d3be1363d00a.patch";
-      hash = "sha256-eYXfX8Y08q4Bl41VHBpwbxYRMZgm/iziXeK6AOp8O6I=";
-      revert = true;
-    })
-  ];
+  env.NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
 
+  # A trick to patchShebang everything except mpv_identify.sh
   postPatch = ''
-    patchShebangs version.* ./TOOLS/
+    pushd TOOLS
+    mv mpv_identify.sh mpv_identify
+    patchShebangs *.py *.sh
+    mv mpv_identify mpv_identify.sh
+    popd
   '';
 
-  NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext ";
-
+  # Ensure we reference 'lib' (not 'out') of Swift.
   preConfigure = lib.optionalString swiftSupport ''
-    # Ensure we reference 'lib' (not 'out') of Swift.
-    export SWIFT_LIB_DYNAMIC=${lib.getLib swift.swift}/lib/swift/macosx
+    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
   '';
 
   mesonFlags = [
@@ -206,7 +202,8 @@ in stdenv'.mkDerivation (finalAttrs: {
   postBuild = lib.optionalString stdenv.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
-    # Swap binary and bundle symlink to sign bundle executable as symlinks cannot be signed
+    # Swap binary and bundle symlink to sign bundle executable as symlinks
+    # cannot be signed
     rm build/mpv.app/Contents/MacOS/mpv-bundle
     mv build/mpv.app/Contents/MacOS/mpv build/mpv.app/Contents/MacOS/mpv-bundle
     ln -s mpv-bundle build/mpv.app/Contents/MacOS/mpv
@@ -219,11 +216,14 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
-    cp ../TOOLS/mpv_identify.sh $out/bin
-    cp ../TOOLS/umpv $out/bin
-    cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
-    sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
-    printf "NoDisplay=true\n" >> $out/share/applications/umpv.desktop
+    pushd ../TOOLS
+    cp mpv_identify.sh umpv $out/bin/
+    popd
+    pushd $out/share/applications
+    sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
+      mpv.desktop > umpv.desktop
+    printf "NoDisplay=true\n" >> umpv.desktop
+    popd
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications
@@ -250,7 +250,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mpv.io";
     description = "General-purpose media player, fork of MPlayer and mplayer2";
     longDescription = ''
@@ -258,9 +258,11 @@ in stdenv'.mkDerivation (finalAttrs: {
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
-    maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      AndersonTorres fpletz globin ma27 tadeokondrak
+    ];
+    platforms = lib.platforms.unix;
   };
 })
