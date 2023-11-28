@@ -24,5 +24,6 @@ buildGoModule {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.adisbladis ];
     platforms = lib.platforms.linux;
+    mainProgram = "paperlike-cli";
   };
 }

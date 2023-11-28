@@ -114,5 +114,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
     ];
     platforms = platforms.unix;
+    mainProgram = "Sharedown";
   };
 }

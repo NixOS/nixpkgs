@@ -52,5 +52,6 @@ buildGoModule rec {
     homepage = "https://www.mattermost.org";
     license = with licenses; [ agpl3 asl20 ];
     maintainers = with maintainers; [ ryantm numinit kranzes ];
+    mainProgram = "mattermost";
   };
 }

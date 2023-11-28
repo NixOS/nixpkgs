@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ totoroot ];
     platforms = lib.platforms.linux;
+    mainProgram = "inklingreader";
   };
 }

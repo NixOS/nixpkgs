@@ -60,5 +60,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "gigalixir";
   };
 }

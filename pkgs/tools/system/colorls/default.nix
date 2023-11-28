@@ -14,5 +14,6 @@ bundlerApp {
     license     = with licenses; mit;
     maintainers = with maintainers; [ lukebfox nicknovitski cbley ];
     platforms   = ruby.meta.platforms;
+    mainProgram = "colorls";
   };
 }

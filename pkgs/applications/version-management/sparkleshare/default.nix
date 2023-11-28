@@ -87,5 +87,6 @@ stdenv.mkDerivation rec {
     homepage = "https://sparkleshare.org";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ kevincox ];
+    mainProgram = "sparkleshare";
   };
 }

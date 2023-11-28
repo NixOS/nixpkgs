@@ -34,12 +34,20 @@ rec {
     default:
     # The nested attribute set to select values from
     set:
-    let attr = head attrPath;
+    let
+      lenAttrPath = length attrPath;
+      attrByPath' = n: s: (
+        if n == lenAttrPath then s
+        else (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then attrByPath' (n + 1) s.${attr}
+          else default
+        )
+      );
     in
-      if attrPath == [] then set
-      else if set ? ${attr}
-      then attrByPath (tail attrPath) default set.${attr}
-      else default;
+      attrByPath' 0 set;
 
   /* Return if an attribute from nested attribute set exists.
 
@@ -58,13 +66,19 @@ rec {
     attrPath:
     # The nested attribute set to check
     e:
-    let attr = head attrPath;
+    let
+      lenAttrPath = length attrPath;
+      hasAttrByPath' = n: s: (
+        n == lenAttrPath || (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr}
+          else false
+        )
+      );
     in
-      if attrPath == [] then true
-      else if e ? ${attr}
-      then hasAttrByPath (tail attrPath) e.${attr}
-      else false;
-
+      hasAttrByPath' 0 e;
 
   /* Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
 
@@ -883,7 +897,10 @@ rec {
     recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs)) lhs rhs;
 
 
-  /* Returns true if the pattern is contained in the set. False otherwise.
+  /*
+    Recurse into every attribute set of the first argument and check that:
+    - Each attribute path also exists in the second argument.
+    - If the attribute's value is not a nested attribute set, it must have the same value in the right argument.
 
      Example:
        matchAttrs { cpu = {}; } { cpu = { bits = 64; }; }
@@ -895,16 +912,24 @@ rec {
   matchAttrs =
     # Attribute set structure to match
     pattern:
-    # Attribute set to find patterns in
+    # Attribute set to check
     attrs:
     assert isAttrs pattern;
-    all id (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
-      let pat = head values; val = elemAt values 1; in
-      if length values == 1 then false
-      else if isAttrs pat then isAttrs val && matchAttrs pat val
-      else pat == val
-    ) [pattern attrs]));
-
+    all
+    ( # Compare equality between `pattern` & `attrs`.
+      attr:
+      # Missing attr, not equal.
+      attrs ? ${attr} && (
+        let
+          lhs = pattern.${attr};
+          rhs = attrs.${attr};
+        in
+        # If attrset check recursively
+        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs
+        else lhs == rhs
+      )
+    )
+    (attrNames pattern);
 
   /* Override only the attributes that are already present in the old set
     useful for deep-overriding.

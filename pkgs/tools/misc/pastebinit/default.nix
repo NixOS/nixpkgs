@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raboof ];
     license = licenses.gpl2;
     platforms = platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "pastebinit";
   };
 }

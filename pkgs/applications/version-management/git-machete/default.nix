@@ -55,5 +55,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ blitz ];
+    mainProgram = "git-machete";
   };
 }

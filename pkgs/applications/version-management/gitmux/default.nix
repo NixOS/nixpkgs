@@ -31,5 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/arl/gitmux";
     license = licenses.mit;
     maintainers = with maintainers; [ nialov ];
+    mainProgram = "gitmux";
   };
 }

@@ -35,4 +35,8 @@ callPackage ./generic.nix args {
   tests = [
     nixosTests.zfs.unstable
   ];
+
+  extraPatches = [
+    ./patches/disable-zfs-dmu-offset-next-sync-by-default-v2-2.patch
+  ];
 }
