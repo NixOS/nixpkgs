@@ -7,6 +7,7 @@ gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.9.0";
 
+  # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
