@@ -1,5 +1,8 @@
 { lib, fetchgit, fetchzip }:
 
+let
+  passthruAttrs' = [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
+in
 lib.makeOverridable (
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
@@ -23,7 +26,7 @@ let
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args passthruAttrs';
   varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
