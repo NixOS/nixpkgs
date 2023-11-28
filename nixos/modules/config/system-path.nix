@@ -41,20 +41,13 @@ let
       pkgs.zstd
     ];
 
-  defaultPackageNames =
-    [ "perl"
-      "rsync"
-      "strace"
-    ];
-  defaultPackages =
-    map
-      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
-      defaultPackageNames;
-  defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
-
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "environment" "defaultPackages" ] "Use environment.systemPackages instead")
+  ];
+
   options = {
 
     environment = {
@@ -71,29 +64,6 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           {file}`/nix/var/nix/profiles/default`.
-        '';
-      };
-
-      defaultPackages = mkOption {
-        type = types.listOf types.package;
-        default = defaultPackages;
-        defaultText = literalMD ''
-          these packages, with their `meta.priority` numerically increased
-          (thus lowering their installation priority):
-
-              ${defaultPackagesText}
-        '';
-        example = [];
-        description = lib.mdDoc ''
-          Set of default packages that aren't strictly necessary
-          for a running system, entries can be removed for a more
-          minimal NixOS installation.
-
-          Like with systemPackages, packages are installed to
-          {file}`/run/current-system/sw`. They are
-          automatically available to all users, and are
-          automatically updated every time you rebuild the system
-          configuration.
         '';
       };
 
@@ -142,7 +112,7 @@ in
 
   config = {
 
-    environment.systemPackages = requiredPackages ++ config.environment.defaultPackages;
+    environment.systemPackages = requiredPackages;
 
     environment.pathsToLink =
       [ "/bin"
