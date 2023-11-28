@@ -163,7 +163,7 @@ let
                 zeroconf
                 zipstream-ng
                 class-doc
-                pydantic
+                pydantic_1
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
               ] ++ lib.optionals (!stdenv.isDarwin) [
