@@ -33,6 +33,7 @@
 , pkgs
 , pkgsi686Linux
 , fetchurl
+, fetchzip
 , kernel ? null
 , perl
 , nukeReferences
@@ -177,6 +178,22 @@ let
     disallowedReferences = optionals (!libsOnly) [ kernel.dev ];
 
     passthru =
+      let
+        fetchFromGithubOrNvidia = { owner, repo, rev, ... }@args:
+          let
+            args' = builtins.removeAttrs args [ "owner" "repo" "rev" ];
+            baseUrl = "https://github.com/${owner}/${repo}";
+          in
+          fetchzip (args' // {
+            urls = [
+              "${baseUrl}/archive/${rev}.tar.gz"
+              "https://download.nvidia.com/XFree86/${repo}/${repo}-${rev}.tar.bz2"
+            ];
+            # github and nvidia use different compression algorithms,
+            #  use an invalid file extension to force detection.
+            extension = "tar.??";
+          });
+      in
       {
         open = mapNullable
           (hash: callPackage ./open.nix {
@@ -191,11 +208,14 @@ let
               {
                 withGtk2 = preferGtk2;
                 withGtk3 = !preferGtk2;
+                fetchFromGitHub = fetchFromGithubOrNvidia;
               } else { };
         persistenced =
           if usePersistenced then
             mapNullable
-              (hash: callPackage (import ./persistenced.nix self hash) { })
+              (hash: callPackage (import ./persistenced.nix self hash) {
+                fetchFromGitHub = fetchFromGithubOrNvidia;
+              })
               persistencedSha256
           else { };
         fabricmanager =
