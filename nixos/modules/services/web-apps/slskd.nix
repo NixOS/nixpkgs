@@ -41,7 +41,8 @@ in {
       type = path;
       description = ''
         Path to a file containing secrets.
-        It must at least contain the variable `SLSKD_SLSK_PASSWORD`
+        It must at least contain the variable `SLSKD_SLSK_PASSWORD`,
+        and if `services.slskd.settings.soulseek.username == null` then `SLSKD_SLSK_USERNAME` too.
       '';
     };
 
@@ -67,8 +68,9 @@ in {
 
           soulseek = {
             username = mkOption {
-              type = str;
+              type = types.nullOr str;
               description = "Username on the Soulseek Network";
+              default = null;
             };
             listen_port = mkOption {
               type = port;
