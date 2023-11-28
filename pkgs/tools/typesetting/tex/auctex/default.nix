@@ -4,14 +4,14 @@ let auctex = stdenv.mkDerivation ( rec {
   # Make this a valid tex(live-new) package;
   # the pkgs attribute is provided with a hack below.
   pname = "auctex";
-  version = "12.3";
+  version = "13.2";
   tlType = "run";
 
   outputs = [ "out" "tex" ];
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-L9T+MLaUV8knf+IE0+g8hHK89QDI/kqBDXREBhdMqd0=";
+    hash = "sha256-Hn5AKrz4RmlOuncZklvwlcI+8zpeZgIgHHS2ymCUQDU=";
   };
 
   buildInputs = [
@@ -22,6 +22,7 @@ let auctex = stdenv.mkDerivation ( rec {
 
   preConfigure = ''
     mkdir -p "$tex"
+    export HOME=$(mktemp -d)
   '';
 
   configureFlags = [
