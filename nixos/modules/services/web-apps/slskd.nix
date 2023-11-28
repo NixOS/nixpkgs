@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, options, ... }:
 
 let
   settingsFormat = pkgs.formats.yaml {};
@@ -10,31 +10,20 @@ in {
 
     package = mkPackageOptionMD pkgs "slskd" { };
 
-    nginx = mkOption {
-      description = lib.mdDoc "options for nginx";
-      example = {
-        enable = true;
-        domain = "example.com";
-        contextPath = "/slskd";
-      };
-      type = submodule ({name, config, ...}: {
-        options = {
-          enable = mkEnableOption "enable nginx as a reverse proxy";
-
-          domainName = mkOption {
-            type = str;
-            description = "Domain you want to use";
-          };
-          contextPath = mkOption {
-            type = types.path;
-            default = "/";
-            description = lib.mdDoc ''
-              The context path, i.e., the last part of the slskd
-              URL. Typically '/' or '/slskd'. Default '/'
-            '';
-          };
-        };
-      });
+    nginx.enable = mkEnableOption "enable nginx as a reverse proxy";
+    nginx.domainName = mkOption {
+      type = str;
+      description = "Domain you want to use";
+      example = "example.com";
+    };
+    nginx.contextPath = mkOption {
+      type = types.path;
+      default = "/";
+      description = lib.mdDoc ''
+        The context path, i.e., the last part of the slskd
+        URL. Typically '/' or '/slskd'. Default '/'
+      '';
+      example = "/slskd";
     };
 
     environmentFile = mkOption {
@@ -143,17 +132,22 @@ in {
     };
 
     # Reverse proxy configuration
-    services.nginx.enable = true;
-    services.nginx.virtualHosts."${cfg.nginx.domainName}" = {
-      forceSSL = true;
-      enableACME = true;
-      locations = {
-        "${cfg.nginx.contextPath}" = {
-          proxyPass = "http://localhost:${toString cfg.settings.web.port}";
-          proxyWebsockets = true;
+    services.nginx = lib.warnIf
+      (options.services.slskd.nginx.domainName.isDefined && options.services.slskd.nginx.enable.highestPrio == (lib.mkOptionDefault { }).priority)
+      "`services.slskd.nginx` has non-default settings, but `enable` is unassigned. Did you forget to set `services.slskd.nginx.enable = true`?"
+      (lib.mkIf cfg.nginx.enable {
+        enable = true;
+        virtualHosts."${cfg.nginx.domainName}" = {
+          forceSSL = true;
+          enableACME = true;
+          locations = {
+            "${cfg.nginx.contextPath}" = {
+              proxyPass = "http://localhost:${toString cfg.settings.web.port}";
+              proxyWebsockets = true;
+            };
+          };
         };
-      };
-    };
+      });
 
     # Hide state & logs
     systemd.tmpfiles.rules = [
