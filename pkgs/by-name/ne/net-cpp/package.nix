@@ -49,6 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-91YuEgV+Q9INN4BJXYwWgKUNHHtUYz3CG+ROTy24GIE=";
     })
 
+    # Enable opting out of tests
+    # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/merge_requests/14
+    (fetchpatch {
+      name = "0002-net-cpp-Make-tests-optional.patch";
+      url = "https://gitlab.com/OPNA2608/net-cpp/-/commit/cfbcd55446a4224a4c913ead3a370cd56d07a71b.patch";
+      hash = "sha256-kt48txzmWNXyxvx3DWAJl7I90c+o3KlgveNQjPkhfxA=";
+    })
+
     # Be more lenient with how quickly HTTP test server must be up, for slower hardware / archs
     (fetchpatch {
       url = "https://salsa.debian.org/ubports-team/net-cpp/-/raw/941d9eceaa66a06eabb1eb79554548b47d4a60ab/debian/patches/1007_wait-for-flask.patch";
@@ -56,12 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = if finalAttrs.doCheck then ''
+  postPatch = lib.optionalString finalAttrs.doCheck ''
     # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
     substituteInPlace tests/httpbin.h.in \
       --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
-  '' else ''
-    sed -i CMakeLists.txt -e '/add_subdirectory(tests)/d'
   '';
 
   strictDeps = true;
