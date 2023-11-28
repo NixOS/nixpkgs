@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, xxd }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otus-lisp";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "yuriy-chumak";
     repo = "ol";
-    rev = version;
-    sha256 = "sha256-+6qH1BhvMkuG2rUOfo9qMjMjhCib9KONQTBWS27c3Ts=";
+    rev = finalAttrs.version;
+    hash = "sha256-xwn2cvtw3co7MJ4J0FraEtZhKWVaaaoJYMrohyFF+us=";
   };
 
   nativeBuildInputs = [ xxd ];
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ mit lgpl3Only ]; # dual licensed
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nagy ];
+    mainProgram = "ol";
   };
-}
+})
