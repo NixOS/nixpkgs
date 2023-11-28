@@ -150,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "VencordDesktop";
       genericName = "Internet Messenger";
       keywords = [ "discord" "vencord" "electron" "chat" ];
+      categories = [ "Network" "InstantMessaging" "Chat" ];
     })
   ];
 
