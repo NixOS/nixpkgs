@@ -1,4 +1,6 @@
-{ pkgs ? import ../../../.. { config = {}; overlays = []; } }:
+{ pkgs
+, writeReferencesToFile ? pkgs.writeReferencesToFile
+}:
 pkgs.lib.mapAttrs
-  (k: v: pkgs.writeReferencesToFile v)
+  (k: v: writeReferencesToFile v)
   (import ./sample.nix { inherit pkgs; })

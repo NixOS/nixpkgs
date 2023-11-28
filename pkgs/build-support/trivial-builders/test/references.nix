@@ -36,6 +36,8 @@ testers.nixosTest {
       SAMPLE = invokeSamples ./sample.nix;
       REFERENCES = invokeSamples ./invoke-writeReferencesToFile.nix;
       DIRECT_REFS = invokeSamples ./invoke-writeDirectReferencesToFile.nix;
+      REFERENCES_TEST_MULTIPLE = invokeSamples ./invoke-writeMultipleReferencesToFile-single.nix;
+      ALL_REFERENCE = import ./invoke-writeMultipleReferencesToFile.nix { inherit lib pkgs; };
     };
   };
   testScript =
