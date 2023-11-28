@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     attrs
     click
     cloudflare
-    pydantic
+    pydantic_1
     requests
   ];
 
