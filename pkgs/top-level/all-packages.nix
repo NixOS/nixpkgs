@@ -20848,9 +20848,7 @@ with pkgs;
 
   cln = callPackage ../development/libraries/cln { };
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
   clucene_core_1 = callPackage ../development/libraries/clucene-core {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
