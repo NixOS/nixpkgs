@@ -14,6 +14,12 @@
 let
   inherit (pkgs) fetchpatch fetchpatch2 lib;
   inherit (lib) throwIfNot versionOlder versions;
+  csound_src_git = pkgs.fetchFromGitHub {
+    owner = "spell-music";
+    repo = "csound-expression";
+    rev = "345df2c91c9831dd895f58951990165598504814";
+    hash = "sha256-6qPiKsZwZpqB2kmckKDKyQPTcWPIaVwi+EYs74tRod0=";
+  };
 in
 
 with haskellLib;
@@ -917,6 +923,18 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
   }) super.structured-haskell-mode;
+
+  csound-expression-dynamic =
+    assert super.csound-expression-dynamic.version == "0.3.9";
+    overrideCabal (drv: {
+      src = csound_src_git + "/csound-expression-dynamic";
+      editedCabalFile = null;
+      libraryHaskellDepends = drv.libraryHaskellDepends ++ [
+        self.base64-bytestring self.cereal self.cereal-text
+        self.cryptohash-sha256 self.pretty-show self.safe
+        self.unordered-containers self.vector self.wl-pprint-text
+      ];
+    }) super.csound-expression-dynamic;
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal (drv: {
