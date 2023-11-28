@@ -6110,6 +6110,8 @@ self: super: with self; {
 
   ldaptor = callPackage ../development/python-modules/ldaptor { };
 
+  ldfparser = callPackage ../development/python-modules/ldfparser { };
+
   leather = callPackage ../development/python-modules/leather { };
 
   leb128 = callPackage ../development/python-modules/leb128 { };
