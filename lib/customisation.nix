@@ -149,7 +149,17 @@ rec {
     Type:
       callPackageWith :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
   */
-  callPackageWith = autoArgs: fn: args:
+  callPackageWith =
+    # Extra arguments that should be passed to all packages.
+    # This is usually set to `pkgs` itself so that package names can be used as
+    # function arguments.
+    autoArgs:
+    # A function that produces a package, or a path to a file containing such a function.
+    # This function is called with arguments from `autoArgs` and `args`.
+    fn:
+    # Extra function arguments, to override argument values or supply values
+    # for arguments that aren't contained in `autoArgs`.
+    args:
     let
       f = if isFunction fn then fn else import fn;
       fargs = functionArgs f;
@@ -308,10 +318,32 @@ rec {
      provided by `newScope` and the set provides a `newScope` attribute
      which can form the parent scope for later package sets.
 
+     Example:
+       makeScope pkgs.newScope (self: {
+         myPackage = "my-package";
+       })
+       => { callPackage = ...; foo = "bar"; newScope = ...; overrideScope = ...; overrideScope' = ...; packages = ...; }
+
+       # Using `callPackage` to construct packages; note that `foo.nix` and
+       # `bar.nix` can depend on each other.
+       makeScope pkgs.newScope (self: {
+         foo = self.callPackage ./foo.nix { };
+         bar = self.callPackage ./bar.nix { };
+       })
+       => { foo = ...; bar = ...; ...}
+
      Type:
        makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> AttrSet
   */
-  makeScope = newScope: f:
+  makeScope =
+    # A scope creation function, typically `pkgs.newScope`, which is defined
+    # (almost like) `extra: callPackageWith (pkgs // extra)`.
+    #
+    # `newScope` is passed an AttrSet of new package definitions and returns a
+    # function with [`pkgs.callPackage`'s interface](#sec-callpackage).
+    newScope:
+    # Package set creation function
+    f:
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
