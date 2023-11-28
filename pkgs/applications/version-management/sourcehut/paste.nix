@@ -3,8 +3,11 @@
 , buildGoModule
 , buildPythonPackage
 , srht
+, pip
 , pyyaml
 , python
+, pythonOlder
+, setuptools
 , unzip
 }:
 
@@ -28,11 +31,19 @@ in
 buildPythonPackage rec {
   inherit src version;
   pname = "pastesrht";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api" ""
   '';
+
+  nativeBuildInputs = [
+    pip
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     srht
