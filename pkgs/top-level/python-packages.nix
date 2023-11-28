@@ -8833,6 +8833,8 @@ self: super: with self; {
 
   pagelabels = callPackage ../development/python-modules/pagelabels { };
 
+  paginate = callPackage ../development/python-modules/paginate { };
+
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
   palace = callPackage ../development/python-modules/palace { };
