@@ -47,6 +47,31 @@
     };
   };
 
+  bats-detik = stdenv.mkDerivation (finalAttrs: {
+    pname = "bats-detik";
+    version = "1.2.1";
+    src = fetchFromGitHub {
+      owner = "bats-core";
+      repo = "bats-detik";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-2BEIqRSc21oPjd9BgTLg5mGyAdNJYA2b7gZe7Nj2dks=";
+    };
+    dontBuild = true;
+    installPhase = ''
+      runHook preInstall
+      mkdir -p "$out/share/bats/bats-detik"
+      cp -r lib/* "$out/share/bats/bats-detik"
+      runHook postInstall
+    '';
+    meta = {
+      description = "Library to ease e2e tests of applications in K8s environments";
+      platforms = lib.platforms.all;
+      homepage = "https://github.com/bats-core/bats-detik";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ brokenpip3 ];
+    };
+  });
+
   bats-support = stdenv.mkDerivation rec {
     pname = "bats-support";
     version = "0.3.0";
