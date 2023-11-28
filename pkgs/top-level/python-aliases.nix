@@ -246,6 +246,7 @@ mapAliases ({
   memory_profiler = memory-profiler; # added 2023-10-09
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
+  mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mrkd = throw "mrkd has been promoted to a top-level attribute"; # added 2023-08-01
   multi_key_dict = multi-key-dict; # added 2023-11-05
