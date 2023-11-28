@@ -67,7 +67,7 @@ stdenvNoCC.mkDerivation {
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
 
-  nativeBuildInputs = [ git ]
+  nativeBuildInputs = [ git cacert ]
     ++ lib.optionals fetchLFS [ git-lfs ];
 
   outputHashAlgo = if hash != "" then null else "sha256";
@@ -92,8 +92,6 @@ stdenvNoCC.mkDerivation {
     mv {,.}netrc
     export HOME=$PWD
   '';
-
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
