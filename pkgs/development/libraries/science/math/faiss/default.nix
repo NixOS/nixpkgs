@@ -6,8 +6,6 @@
 , cmake
 , cudaPackages ? { }
 , cudaSupport ? config.cudaSupport
-, nvidia-thrust
-, useThrustSourceBuild ? true
 , pythonSupport ? true
 , pythonPackages
 , llvmPackages
@@ -27,8 +25,6 @@
 , runCommand
 }@inputs:
 
-assert cudaSupport -> nvidia-thrust.cudaSupport;
-
 let
   pname = "faiss";
   version = "1.7.4";
@@ -44,9 +40,6 @@ let
       cuda_cudart # cuda_runtime.h
       libcublas
       libcurand
-    ] ++ lib.optionals useThrustSourceBuild [
-      nvidia-thrust
-    ] ++ lib.optionals (!useThrustSourceBuild) [
       cuda_cccl
     ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
       cuda_profiler_api # cuda_profiler_api.h
