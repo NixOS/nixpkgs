@@ -1,10 +1,17 @@
-{ buildPythonPackage, lib, fetchFromGitHub, pytest
-, typing ? null, funcsigs ? null, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, typing ? null
+, funcsigs ? null
 }:
 
 buildPythonPackage rec {
   pname = "gentools";
   version = "1.2.1";
+  pyproject = true;
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
@@ -14,12 +21,15 @@ buildPythonPackage rec {
     sha256 = "sha256-RBUIji3FOIRjfp4t7zBAVSeiWaYufz4ID8nTWmhDkf8=";
   };
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs =
     lib.optionals (pythonOlder "3.5") [ typing ] ++
     lib.optionals (pythonOlder "3.4") [ funcsigs ];
 
-  nativeCheckInputs = [ pytest ];
-  checkPhase = "pytest";
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportCheck = [ "gentools" ];
 
   meta = with lib; {
     description = "Tools for generators, generator functions, and generator-based coroutines";
@@ -27,5 +37,4 @@ buildPythonPackage rec {
     homepage = "https://gentools.readthedocs.io/";
     maintainers = with maintainers; [ mredaelli ];
   };
-
 }
