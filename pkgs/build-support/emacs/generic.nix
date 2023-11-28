@@ -2,6 +2,10 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
+let
+  handledArgs = [ "buildInputs" "packageRequires" "meta" ];
+in
+
 { pname
 , version
 , buildInputs ? []
@@ -83,4 +87,4 @@ stdenv.mkDerivation (finalAttrs: ({
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires" "meta" ]))
+// removeAttrs args handledArgs))
