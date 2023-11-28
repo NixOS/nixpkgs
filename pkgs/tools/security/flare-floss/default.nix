@@ -28,7 +28,7 @@ python3.pkgs.buildPythonPackage rec {
     halo
     networkx
     pefile
-    pydantic
+    pydantic_1
     rich
     tabulate
     tqdm
