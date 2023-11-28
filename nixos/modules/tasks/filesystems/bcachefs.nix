@@ -98,7 +98,7 @@ let
           lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
             lib.kernel.module
             lib.kernel.yes
-            lib.kernel.option.yes
+            (lib.kernel.option lib.kernel.yes)
           ]
         )
       );
