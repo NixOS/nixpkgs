@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
       "ac_cv_func_realloc_0_nonnull=yes"
     ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
+  };
+
   meta = {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
     homepage = "https://mcrypt.sourceforge.net";

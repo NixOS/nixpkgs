@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cargo
 , cmake
+, deltachat-desktop
 , deltachat-repl
 , openssl
 , perl
@@ -30,13 +31,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.131.6";
+  version = "1.131.7";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
-    hash = "sha256-/LWWqa8f+ODP4LDIx9U9kRCFYI+5N6KztFDPbc2TiF0=";
+    hash = "sha256-QzNZBBQ0fFqQByaNRNebtnoljC4rQqVTxbNz2M3LDAc=";
   };
 
   patches = [
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     inherit cargoLock;
     tests = {
-      inherit deltachat-repl;
+      inherit deltachat-desktop deltachat-repl;
       python = python3.pkgs.deltachat;
     };
   };
