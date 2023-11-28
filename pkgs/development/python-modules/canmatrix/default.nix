@@ -55,8 +55,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "canmatrix" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ebroecker/canmatrix";
     description = "Support and convert several CAN (Controller Area Network) database formats .arxml .dbc .dbf .kcd .sym fibex xls(x)";
+    homepage = "https://github.com/ebroecker/canmatrix";
+    changelog = "https://github.com/ebroecker/canmatrix/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sorki ];
   };
