@@ -2605,6 +2605,13 @@
     githubId = 1071610;
     name = "Gunnar Nitsche";
   };
+  brokenpip3 = {
+    email = "brokenpip3@gmail.com";
+    matrix = "@brokenpip3:matrix.org";
+    github = "brokenpip3";
+    githubId = 40476330;
+    name = "brokenpip3";
+  };
   bryanasdev000 = {
     email = "bryanasdev000@gmail.com";
     matrix = "@bryanasdev000:matrix.org";
