@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "23.11.0";
+  version = "23.11.2";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-eXMMk12ZxRs5k3DaRhGADwLbE62L8e4N3R5Rw8kZMKI=";
+    hash = "sha256-pPzm57ZtsLLD7P0xIi+egKcQ3dcOGH6JV+C9u4uGGRM=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "cpp_demangle-0.4.1" = "sha256-9QopX2TOJc8bZ+UlSOFdjoe8NTJLVGrykyFL732tE3A=";
-      "reqwest-0.11.18" = "sha256-t6fs2bbBfgcspCrGfWIFCYbYZ7GPcBWI0dy68YdklOQ=";
+      "reqwest-0.11.22" = "sha256-0IPpirvQSpwaF3bc5jh67UdJtKen3uumNgz5L4iqmYg=";
     };
   };
 
