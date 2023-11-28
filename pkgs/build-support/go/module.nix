@@ -114,6 +114,7 @@ let
         exit 10
       fi
 
+      export GIT_SSL_CAINFO="''${NIX_SSL_CERT_FILE}"
       ${if proxyVendor then ''
         mkdir -p "''${GOPATH}/pkg/mod/cache/download"
         go mod download
