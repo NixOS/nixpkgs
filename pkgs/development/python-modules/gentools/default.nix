@@ -1,17 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, typing ? null
-, funcsigs ? null
 }:
 
 buildPythonPackage rec {
   pname = "gentools";
   version = "1.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ariebovenberg";
@@ -20,15 +21,21 @@ buildPythonPackage rec {
     hash = "sha256-RBUIji3FOIRjfp4t7zBAVSeiWaYufz4ID8nTWmhDkf8=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs =
-    lib.optionals (pythonOlder "3.5") [ typing ] ++
-    lib.optionals (pythonOlder "3.4") [ funcsigs ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportCheck = [ "gentools" ];
+  pythonImportCheck = [
+    "gentools"
+  ];
 
   meta = with lib; {
     description = "Tools for generators, generator functions, and generator-based coroutines";
