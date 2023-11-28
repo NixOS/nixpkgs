@@ -1,7 +1,7 @@
-From 7f573f00fb850a08017d9f1e3c73b4d7efeb84f2 Mon Sep 17 00:00:00 2001
+From b480022b364b262d5ff63738c02318da925f5c79 Mon Sep 17 00:00:00 2001
 From: Nick Cao <nickcao@nichi.co>
 Date: Wed, 12 Apr 2023 10:13:50 +0800
-Subject: [PATCH 06/11] qtbase: qt-cmake: always use cmake from path
+Subject: [PATCH 05/11] qtbase: qt-cmake: always use cmake from path
 
 The generated qt-cmake scripts embeds the absolute path of cmake used
 during the build of qtbase, bloating the runtime closure of qtbase.

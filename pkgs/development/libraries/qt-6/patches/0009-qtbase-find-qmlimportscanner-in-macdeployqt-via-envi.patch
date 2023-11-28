@@ -1,7 +1,7 @@
-From bbd9cf61b686f68d5e5eb78fb0b96a74a8921cef Mon Sep 17 00:00:00 2001
+From d503be89320f0b89b80acb19769971e855be6ae1 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Juan=20Pedro=20Bol=C3=ADvar=20Puente?= <raskolnikov@gnu.org>
 Date: Wed, 9 Aug 2023 16:16:21 +0200
-Subject: [PATCH 10/11] qtbase: find qmlimportscanner in macdeployqt via
+Subject: [PATCH 09/11] qtbase: find qmlimportscanner in macdeployqt via
  environment
 
 The qmlimportscanner tool is provided by qtdeclarative. Because of the
@@ -17,10 +17,10 @@ a workaround for users.
  1 file changed, 4 insertions(+)
 
 diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
-index 77749506ccb..48979195f40 100644
+index ba10ae02bcd..320095a972d 100644
 --- a/src/tools/macdeployqt/shared/shared.cpp
 +++ b/src/tools/macdeployqt/shared/shared.cpp
-@@ -1273,6 +1273,10 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+@@ -1277,6 +1277,10 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
      if (!QFile::exists(qmlImportScannerPath))
          qmlImportScannerPath = QCoreApplication::applicationDirPath() + "/qmlimportscanner";
  
