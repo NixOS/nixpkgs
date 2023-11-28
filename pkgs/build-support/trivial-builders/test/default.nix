@@ -14,7 +14,7 @@
 { callPackage, lib, stdenv }:
 let
   inherit (lib) recurseIntoAttrs;
-  references = callPackage ./references.nix {};
+  references = callPackage ./references {};
 in
 recurseIntoAttrs {
   concat = callPackage ./concat-test.nix {};
