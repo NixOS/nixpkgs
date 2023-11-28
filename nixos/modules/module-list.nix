@@ -621,6 +621,7 @@
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
+  ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix

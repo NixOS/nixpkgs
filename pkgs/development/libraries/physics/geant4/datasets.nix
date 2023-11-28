@@ -35,15 +35,15 @@ in
   builtins.listToAttrs (map (a: { name = a.pname; value = mkDataset a; }) [
     {
       pname = "G4NDL";
-      version = "4.6";
-      sha256 = "sha256-nSh88q4PuIeirc6AHudPub4hsNFm2rSby+6UCKUUVAg=";
+      version = "4.7";
+      sha256 = "sha256-fn09JiEQLcYU91OtkocwopDRlmDu2WMEqdJLRT1nAwk=";
       envvar = "NEUTRONHP";
     }
 
     {
       pname = "G4EMLOW";
-      version = "8.0";
-      sha256 = "sha256-2Rmo5YOGiCV7kkimE5EOsqdjMFngMMi1DAosKtn9Kzs=";
+      version = "8.2";
+      sha256 = "sha256-PXdoJk/1pTvLlgh2BLvhHGC3/qkKqsj30SUhg+Go5Cc=";
       envvar = "LE";
     }
 
