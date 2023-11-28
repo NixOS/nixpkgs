@@ -6,6 +6,7 @@
 , ninja
 , python3
 , gtk4
+, glib
 , glibmm_2_68
 , cairomm_1_16
 , pangomm_2_48
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
+    glib # glib-compile-resources
   ];
 
   buildInputs = [
