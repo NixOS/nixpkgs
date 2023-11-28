@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     description = "a pretty good mpd client";
     homepage = "https://sr.ht/~sfr/mus";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfr ];
+    maintainers = with maintainers; [ nbsp ];
     mainProgram = "mus";
   };
 }

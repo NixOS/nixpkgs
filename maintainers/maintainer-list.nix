@@ -12740,6 +12740,13 @@
     githubId = 1386642;
     name = "Noah Brenowitz";
   };
+  nbsp = {
+    email = "aoife@enby.space";
+    matrix = "@nbsp:enby.space";
+    github = "enbyspace";
+    githubId = 57151943;
+    name = "aoife cassidy";
+  };
   ncfavier = {
     email = "n@monade.li";
     matrix = "@ncfavier:matrix.org";
@@ -16353,13 +16360,6 @@
     keys = [{
       fingerprint = "7246 B6E1 ABB9 9A48 4395  FD11 DC26 B921 A9E9 DBDE";
     }];
-  };
-  sfr = {
-    email = "sol@solfisher.com";
-    matrix = "@sfr:enby.space";
-    github = "solfisher";
-    githubId = 57151943;
-    name = "Sol Fisher Romanoff";
   };
   sfrijters = {
     email = "sfrijters@gmail.com";
