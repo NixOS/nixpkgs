@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
      cp -r lib ${INSTALL_PATH}/lib
      install -D fzf-tab.zsh ${INSTALL_PATH}/fzf-tab.zsh
      install -D fzf-tab.plugin.zsh ${INSTALL_PATH}/fzf-tab.plugin.zsh
+  '' + lib.optionalString (!stdenv.isDarwin) ''
      install -D modules/Src/aloxaf/fzftab.so ${INSTALL_PATH}/modules/Src/aloxaf/fzftab.so
   '';
 
