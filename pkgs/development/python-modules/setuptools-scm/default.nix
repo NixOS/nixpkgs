@@ -11,13 +11,12 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "7.1.0";
+  version = "8.0.4";
   format = "pyproject";
 
   src = fetchPypi {
-    pname = "setuptools_scm";
-    inherit version;
-    hash = "sha256-bFCDRadxqtfVbr/w5wYovysOx1c3Yr6ZYCFHMN4njyc=";
+    inherit pname version;
+    hash = "sha256-tfQ/9oAGaVlRk/0JiRVk7p0dfcsZbKtLJQbVOi4clcc=";
   };
 
   nativeBuildInputs = [
