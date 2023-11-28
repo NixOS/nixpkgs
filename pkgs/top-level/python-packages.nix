@@ -10159,6 +10159,8 @@ self: super: with self; {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+  pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
+
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
   pydantic-extra-types = callPackage ../development/python-modules/pydantic-extra-types { };
