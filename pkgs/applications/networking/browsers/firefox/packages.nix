@@ -10,13 +10,6 @@
     };
 
     extraPatches = [
-      (fetchpatch {
-        # Do not crash on systems without an expected statically assumed page size.
-        # https://phabricator.services.mozilla.com/D194458
-        name = "mozbz1866025.patch";
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
-        hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
-      })
     ];
 
     meta = {
