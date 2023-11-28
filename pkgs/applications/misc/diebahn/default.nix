@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     description = "Travel with all your train information in one place";
     homepage = "https://gitlab.com/schmiddi-on-mobile/diebahn";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "diebahn";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

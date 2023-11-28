@@ -3310,8 +3310,6 @@ with pkgs;
 
   owl-lisp = callPackage ../development/compilers/owl-lisp { };
 
-  otus-lisp = callPackage ../development/compilers/otus-lisp { };
-
   ascii = callPackage ../tools/text/ascii { };
 
   asciinema = callPackage ../tools/misc/asciinema { };
