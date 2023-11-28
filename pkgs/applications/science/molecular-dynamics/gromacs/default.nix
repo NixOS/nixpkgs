@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, hwloc
+, fftw
+, perl
+, blas
+, lapack
+, mpi
+, cudaPackages
 , singlePrec ? true
 , config
 , enableMpi ? false
@@ -7,6 +17,8 @@
 }:
 
 let
+  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
+
   # Select reasonable defaults for all major platforms
   # The possible values are defined in CMakeLists.txt:
   # AUTO None SSE2 SSE4.1 AVX_128_FMA AVX_256 AVX2_256
@@ -31,7 +43,9 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     fftw
@@ -40,13 +54,17 @@ in stdenv.mkDerivation rec {
     blas
     lapack
   ] ++ lib.optional enableMpi mpi
-    ++ lib.optional enableCuda cudatoolkit
-  ;
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcufft
+    cudaPackages.cuda_profiler_api
+  ];
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
   cmakeFlags = [
+    (lib.cmakeBool "GMX_HWLOC" true)
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"
     "-DGMX_OPENMP:BOOL=TRUE"
     "-DBUILD_SHARED_LIBS=ON"
@@ -66,7 +84,13 @@ in stdenv.mkDerivation rec {
      else [
        "-DGMX_MPI:BOOL=FALSE"
      ]
-  ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
+  ) ++ lib.optionals enableCuda [
+    "-DGMX_GPU=CUDA"
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+
+    # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+  ];
 
   postInstall = ''
     moveToOutput share/cmake $dev
