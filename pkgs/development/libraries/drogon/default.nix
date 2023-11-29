@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KZRW/ra84RegCCT6J0k+N7XqZF+xW+Ecq2TVdPZnM7M=";
+    sha256 = "sha256-6F+LRcoBqHEbweqbVFHlR3I9nj1NaYty8zKcR4ZHKxg=";
     fetchSubmodules = true;
   };
 
