@@ -299,6 +299,7 @@ with lib.maintainers; {
       theuni
       dpausp
       leona
+      philtaken
     ];
     scope = "Team for Flying Circus employees who collectively maintain packages.";
     shortName = "Flying Circus employees";
