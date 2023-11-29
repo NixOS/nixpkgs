@@ -506,6 +506,7 @@
   ./services/hardware/argonone.nix
   ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
+  ./services/hardware/auto-epp.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
   ./services/hardware/brltty.nix
