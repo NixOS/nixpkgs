@@ -479,7 +479,7 @@ in
         extraConfig =
         let
           templatedJitsiMeet = pkgs.runCommand "templated-jitsi-meet" { } ''
-            cp -R ${pkgs.jitsi-meet}/* .
+            cp -R --no-preserve=all ${pkgs.jitsi-meet}/* .
             for file in *.html **/*.html ; do
               ${pkgs.sd}/bin/sd '<!--#include virtual="(.*)" -->' '{{ include "$1" }}' $file
             done
