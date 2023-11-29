@@ -1,13 +1,12 @@
 { stdenv, lib, fetchurl, nixosTests, testers, jre }:
 
 let
-
-  common = { versionMajor, versionMinor, hash }: stdenv.mkDerivation (finalAttrs: {
+  common = { version, hash }: stdenv.mkDerivation (finalAttrs: {
     pname = "apache-tomcat";
-    version = "${versionMajor}.${versionMinor}";
+    inherit version;
 
     src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${finalAttrs.version}/bin/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+      url = "mirror://apache/tomcat/tomcat-${lib.versions.major version}/v${version}/bin/apache-tomcat-${version}.tar.gz";
       inherit hash;
     };
 
@@ -40,14 +39,12 @@ let
 
 in {
   tomcat9 = common {
-    versionMajor = "9";
-    versionMinor = "0.83";
-    hash = "hash-dgktroncHzrm3RFATWSFJ2GkAfGM03PJO1/37yzk+Qo=";
+    version = "9.0.83";
+    hash = "sha256-dgktroncHzrm3RFATWSFJ2GkAfGM03PJO1/37yzk+Qo=";
   };
 
   tomcat10 = common {
-    versionMajor = "10";
-    versionMinor = "1.16";
-    hash = "hash-QysLmKN3RQ8TuaR7gup9947QvPLuS3WRgrTH/cH+WEE=";
+    version = "10.1.16";
+    hash = "sha256-QysLmKN3RQ8TuaR7gup9947QvPLuS3WRgrTH/cH+WEE=";
   };
 }
