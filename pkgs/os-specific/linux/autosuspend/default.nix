@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchPypi
 , python3
 }:
 
@@ -8,11 +9,16 @@ let
     packageOverrides = self: super: {
       # autosuspend is incompatible with tzlocal v5
       # See https://github.com/regebro/tzlocal#api-change
-      tzlocal = super.tzlocal.overridePythonAttrs (prev: {
-        src = prev.src.override {
-          version = "4.3.1";
+      tzlocal = super.tzlocal.overridePythonAttrs (prev: rec {
+        version = "4.3.1";
+        src = fetchPypi {
+          inherit (prev) pname;
+          inherit version;
           hash = "sha256-7jLvjCCAPBmpbtNmrd09SnKe9jCctcc1mgzC7ut/pGo=";
         };
+        propagatedBuildInputs = with self; [
+          pytz-deprecation-shim
+        ];
       });
     };
   };
