@@ -45,6 +45,7 @@ let
       }
       // (optionalAttrs (cfg'.user == null) {
         DynamicUser = true;
+        ProtectHome = true;
       })
       // (optionalAttrs (cfg'.additionalGroups != [ ]) {
         SupplementaryGroups = cfg'.additionalGroups;
@@ -63,7 +64,6 @@ let
       PrivateTmp = true;
       NoNewPrivileges = true;
       ProtectSystem = "strict";
-      ProtectHome = true;
       ProtectKernelTunables = true;
       ProtectKernelModules = true;
       ProtectControlGroups = true;
