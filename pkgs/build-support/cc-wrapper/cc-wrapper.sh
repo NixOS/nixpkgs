@@ -236,6 +236,14 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
+# Resolve mktemp and rm before resetting the PATH.
+# If coreutils was added to the PATH above,
+# we want to use the configured coreutils versions
+# (@coreutils_bin@) of these commands.
+# Since rm is used in the trap below, we have no
+# choice but to resolve it here.
+MKTEMP=$(command -v mktemp)
+RM=$(command -v rm)
 PATH="$path_backup"
 # Old bash workaround, see above.
 
@@ -246,8 +254,8 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
-    trap 'rm -f -- "$responseFile"' EXIT
+    responseFile=$("${MKTEMP}" "${TMPDIR:-/tmp}/cc-params.XXXXXX")
+    trap '"${RM}" -f -- "$responseFile"' EXIT
     printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
