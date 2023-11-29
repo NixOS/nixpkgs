@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://nerdfonts.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ doronbehar philtaken ];
     hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
 })
