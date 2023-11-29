@@ -22,5 +22,6 @@ buildPythonApplication rec {
     description = "A git credential helper interfacing with pass, the standard unix password manager";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hmenke vanzef ];
+    mainProgram = "pass-git-helper";
   };
 }

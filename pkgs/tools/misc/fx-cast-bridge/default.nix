@@ -51,5 +51,6 @@ buildNpmPackage rec {
     homepage = "https://hensm.github.io/fx_cast/";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill pedrohlc ];
+    mainProgram = "fx_cast_bridge";
   };
 }

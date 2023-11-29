@@ -47,5 +47,6 @@ stdenv.mkDerivation  rec {
     homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
+    mainProgram = "clipster";
   };
 }

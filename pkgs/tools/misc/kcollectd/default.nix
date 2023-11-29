@@ -52,5 +52,6 @@ mkDerivation rec {
     maintainers = [ maintainers.symphorien ];
     license = [ lib.licenses.gpl3Plus ];
     platforms = lib.platforms.linux;
+    mainProgram = "kcollectd";
   };
 }

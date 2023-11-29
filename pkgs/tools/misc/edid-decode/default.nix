@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
+    mainProgram = "edid-decode";
   };
 }

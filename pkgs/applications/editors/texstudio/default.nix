@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ajs124 cfouche ];
+    mainProgram = "texstudio";
   };
 })

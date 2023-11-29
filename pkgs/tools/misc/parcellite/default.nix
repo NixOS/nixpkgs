@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rickyrockrat/parcellite";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "parcellite";
   };
 }

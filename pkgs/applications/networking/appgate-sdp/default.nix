@@ -155,5 +155,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ymatsiuk ];
+    mainProgram = "appgate";
   };
 }
