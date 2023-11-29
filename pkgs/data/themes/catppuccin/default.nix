@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -38,6 +38,14 @@ let
       repo = "btop";
       rev = "1.0.0";
       hash = "sha256-J3UezOQMDdxpflGax0rGBF/XMiKqdqZXuX4KMVGTxFk=";
+    };
+
+    grub = fetchFromGitHub {
+      name = "grub";
+      owner = "catppuccin";
+      repo = "grub";
+      rev = "v1.0.0";
+      hash = "sha256-/bSolCta8GCZ4lP0u5NVqYQ9Y3ZooYCNdTwORNvR7M0=";
     };
 
     hyprland = fetchFromGitHub {
@@ -139,6 +147,10 @@ stdenvNoCC.mkDerivation {
   '' + lib.optionalString (lib.elem "bottom" themeList) ''
     mkdir -p $out/bottom
     cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
+
+  '' + lib.optionalString (lib.elem "grub" themeList) ''
+    mkdir -p $out/grub
+    cp -r ${sources.grub}/src/catppuccin-${variant}-grub-theme/* "$out/grub/"
 
   '' + lib.optionalString (lib.elem "hyprland" themeList) ''
     mkdir -p $out/hyprland
