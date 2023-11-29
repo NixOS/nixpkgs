@@ -9,6 +9,16 @@
       sha512 = "31d5f9e1d4173280c8de6d9b8551bc6bba5e2c49b84f944f50d42002d5b39c2fb743bc130f26c81160388a102b8301b94a0a378ecdfa6f943860f971a860df8c";
     };
 
+    extraPatches = [
+      (fetchpatch {
+        # Do not crash on systems without an expected statically assumed page size.
+        # https://phabricator.services.mozilla.com/D194458
+        name = "mozbz1866025.patch";
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
+        hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
+      })
+    ];
+
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
       description = "A web browser built from Firefox source tree";
@@ -30,11 +40,11 @@
 
   firefox-beta = buildMozillaMach rec {
     pname = "firefox-beta";
-    version = "121.0b3";
+    version = "121.0b4";
     applicationName = "Mozilla Firefox Beta";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "95dd68c50af5784c44e40ad3a8ac6b4fb259fa8f56bc5e5de940d03dec1838b143712680826b4d260fefdad314464d24679911f21b1095512a86cdf4eb2648c9";
+      sha512 = "b8c1be63be633744b249d2e0ffe77abcc92f0f70c0d7084395031643fb68c0b1fc32a6fcb55a25fc255e4eb8c40e818b209bb0077e416e652ae0c9463045fc12";
     };
 
     meta = {
@@ -59,13 +69,13 @@
 
   firefox-devedition = buildMozillaMach rec {
     pname = "firefox-devedition";
-    version = "121.0b3";
+    version = "121.0b4";
     applicationName = "Mozilla Firefox Developer Edition";
     requireSigning = false;
     branding = "browser/branding/aurora";
     src = fetchurl {
       url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "a5ed25159e63122f27bd05810eaf665834022ae407c029734ad41ef1ed5e3956497873f5210b7c385245056718837bd17c47cfc2e2e438a4c3274d2462ce51f8";
+      sha512 = "11234fda39c80a217a715884524e12febf5f920a680b0828d3619ec6ae97fe6e377c36ac86353f1aadb0569e4f04e4105714c29b447eb80ea9bad18bdd664e75";
     };
 
     meta = {
