@@ -58,6 +58,7 @@ let
       license = licenses.mpl20;
       maintainers = with maintainers; [
         gmemstr
+        nickcao
       ];
       mainProgram = "tofu";
     };
