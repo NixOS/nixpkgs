@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=int-conversion";
+
   passthru = {
     updateScript = nix-update-script { };
   };
