@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  configureFlags = [ "--enable-doxygen" ];
+  configureFlags = [
+    "--enable-doxygen"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "CFLAGS=-Wno-error=strict-prototypes"
+  ];
 
   postInstall = ''
     # remove useless man pages about directories
