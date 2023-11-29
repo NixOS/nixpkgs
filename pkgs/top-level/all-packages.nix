@@ -26297,6 +26297,10 @@ with pkgs;
   clickhouse = callPackage ../servers/clickhouse {
     llvmPackages = llvmPackages_16;
   };
+  clickhouse-23_3_x = callPackage ../servers/clickhouse/23.3.nix {
+    llvmPackages = llvmPackages_16;
+  };
+  clickhouse-lts = clickhouse-23_3_x;
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
