@@ -128,8 +128,8 @@ in
       };
 
       banaction-allports = mkOption {
-        default = if config.networking.nftables.enable then "nftables-allport" else "iptables-allport";
-        defaultText = literalExpression ''if config.networking.nftables.enable then "nftables-allport" else "iptables-allport"'';
+        default = if config.networking.nftables.enable then "nftables-allports" else "iptables-allports";
+        defaultText = literalExpression ''if config.networking.nftables.enable then "nftables-allports" else "iptables-allports"'';
         type = types.str;
         description = lib.mdDoc ''
           Default banning action (e.g. iptables, iptables-new, iptables-multiport,
