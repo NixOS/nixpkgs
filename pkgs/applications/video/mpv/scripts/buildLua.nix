@@ -6,8 +6,16 @@ let
   escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
   fileName = pathStr: lib.last (lib.splitString "/" pathStr);
   scriptsDir = "$out/share/mpv/scripts";
+
+  # similar to `lib.extends`, but with inverted precedence and recursive update
+  extendedBy = args: orig: self:
+    let super = args self;
+    in lib.recursiveUpdate (orig super) super
+  ;
 in
-lib.makeOverridable (
+
+lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
+  (if lib.isFunction args then args else (_: args)) (
   { pname
   , extraScripts ? []
   , ... }@args:
@@ -19,8 +27,7 @@ lib.makeOverridable (
       else "${pname}.lua"
     );
     scriptPath = args.scriptPath or "./${scriptName}";
-  in
-  stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
+  in {
     dontBuild = true;
     preferLocalBuild = true;
 
@@ -50,5 +57,5 @@ lib.makeOverridable (
 
     passthru = { inherit scriptName; };
     meta.platforms = lib.platforms.all;
-  } args)
-)
+  })
+))
