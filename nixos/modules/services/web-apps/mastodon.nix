@@ -33,6 +33,7 @@ let
 
     TRUSTED_PROXY_IP = cfg.trustedProxy;
   }
+  // lib.optionalAttrs (cfg.redis.createLocally && cfg.redis.enableUnixSocket) { REDIS_URL = "unix://${config.services.redis.servers.mastodon.unixSocket}"; }
   // lib.optionalAttrs (cfg.database.host != "/run/postgresql" && cfg.database.port != null) { DB_PORT = toString cfg.database.port; }
   // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN  = cfg.smtp.user; }
   // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
@@ -116,9 +117,11 @@ let
       threads = toString (if processCfg.threads == null then cfg.sidekiqThreads else processCfg.threads);
     in {
       after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional cfg.redis.createLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional cfg.redis.createLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       description = "Mastodon sidekiq${jobClassLabel}";
@@ -146,9 +149,11 @@ let
         name = "mastodon-streaming-${toString i}";
         value = {
           after = [ "network.target" "mastodon-init-dirs.service" ]
+            ++ lib.optional cfg.redis.createLocally "redis-mastodon.service"
             ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
             ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
           requires = [ "mastodon-init-dirs.service" ]
+            ++ lib.optional cfg.redis.createLocally "redis-mastodon.service"
             ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
             ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
           wantedBy = [ "mastodon.target" "mastodon-streaming.target" ];
@@ -403,6 +408,12 @@ in {
           description = lib.mdDoc "Redis port.";
           type = lib.types.port;
           default = 31637;
+        };
+
+        enableUnixSocket = lib.mkOption {
+          description = lib.mdDoc "Use Unix socket";
+          type = lib.types.bool;
+          default = true;
         };
       };
 
@@ -751,9 +762,11 @@ in {
 
     systemd.services.mastodon-web = {
       after = [ "network.target" "mastodon-init-dirs.service" ]
+        ++ lib.optional cfg.redis.createLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       requires = [ "mastodon-init-dirs.service" ]
+        ++ lib.optional cfg.redis.createLocally "redis-mastodon.service"
         ++ lib.optional databaseActuallyCreateLocally "postgresql.service"
         ++ lib.optional cfg.automaticMigrations "mastodon-init-db.service";
       wantedBy = [ "mastodon.target" ];
@@ -834,11 +847,14 @@ in {
       enable = true;
       hostname = lib.mkDefault "${cfg.localDomain}";
     };
-    services.redis.servers.mastodon = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
-      enable = true;
-      port = cfg.redis.port;
-      bind = "127.0.0.1";
-    };
+    services.redis.servers.mastodon = lib.mkIf cfg.redis.createLocally (lib.mkMerge [
+      {
+        enable = true;
+      }
+      (lib.mkIf (!cfg.redis.enableUnixSocket) {
+        port = cfg.redis.port;
+      })
+    ]);
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
       ensureUsers = [
@@ -859,6 +875,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package pkgs.imagemagick ])
+      (lib.mkIf (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {${config.services.mastodon.user}.extraGroups = [ "redis-mastodon" ];})
     ];
 
     users.groups.${cfg.group}.members = lib.optional cfg.configureNginx config.services.nginx.user;
