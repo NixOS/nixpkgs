@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "fluidd";
-  version = "1.26.0";
+  version = "1.26.3";
 
   src = fetchurl {
     name = "fluidd-v${version}.zip";
     url = "https://github.com/cadriel/fluidd/releases/download/v${version}/fluidd.zip";
-    sha256 = "sha256-Y0d3TgSLrxA2kPWlHrNC8GlEcD7s4VZR2YZlderZ3gI=";
+    sha256 = "sha256-42Whp2U6gq8vOjmQnU4Yy8EBsQ21av7wIQhMVFmiFfU=";
   };
 
   nativeBuildInputs = [ unzip ];
