@@ -125,6 +125,7 @@
 
   # Mirrors from https://download.kde.org/ls-lR.mirrorlist
   kde = [
+    "https://cdn.download.kde.org/"
     "https://download.kde.org/download.php?url="
     "https://ftp.gwdg.de/pub/linux/kde/"
     "https://mirrors.ocf.berkeley.edu/kde/"
