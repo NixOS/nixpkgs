@@ -1,14 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, setuptools
-, wheel
-, bluepy
 , pythonOlder
+, pythonRelaxDepsHook
+
+# build-system
+, setuptools
+
+# dependencies
+, bluepy
 , cryptography
+
+# tests
+, pytestCheckHook
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "miauth";
   version = "0.9.1";
   pyproject = true;
@@ -26,7 +33,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "cryptography"
   ];
 
   propagatedBuildInputs = [
@@ -37,6 +48,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "miauth"
   ];
+
+  doCheck = false; # no tests
 
   meta = with lib; {
     description = "Authenticate and interact with Xiaomi devices over BLE";
