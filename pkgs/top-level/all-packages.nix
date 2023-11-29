@@ -38216,6 +38216,18 @@ with pkgs;
 
   prismlauncher = qt6Packages.callPackage ../games/prismlauncher/wrapper.nix { };
 
+  pollymc-qt5-unwrapped = libsForQt5.callPackage ../games/pollymc {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  pollymc-qt5 = libsForQt5.callPackage ../games/pollymc/wrapper.nix { pollymc-unwrapped = pollymc-qt5-unwrapped; };
+
+  pollymc-unwrapped = qt6Packages.callPackage ../games/pollymc {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  pollymc = qt6Packages.callPackage ../games/pollymc/wrapper.nix { };
+
   pong3d = callPackage ../games/pong3d { };
 
   pokerth = libsForQt5.callPackage ../games/pokerth {
