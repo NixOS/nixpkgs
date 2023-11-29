@@ -45,6 +45,20 @@ in
         '';
       };
 
+      showPrompt = mkOption {
+        default = true;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Whether to prompt for user selection in boot menu.
+
+          When enabled, the bootloader will show a menu allowing to select
+          a generation to boot.
+
+          Disabling the prompt will not show the menu and always boot into
+          the default boot entry regardless of timeout or configuration limit.
+        '';
+      };
+
       configurationLimit = mkOption {
         default = 20;
         example = 10;
@@ -70,6 +84,7 @@ in
 
   config = let
     builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+      + lib.optionalString cfg.showPrompt " -p"
       + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
