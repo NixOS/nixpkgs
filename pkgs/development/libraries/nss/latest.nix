@@ -6,5 +6,5 @@
 
 import ./generic.nix {
   version = "3.95";
-  hash = "sha256-RpiI5B6KeABRzgDtzZFOimvTjaiKgs+4SJjdOIY1gio=";
+  hash = "sha256-qgSbzlRbU+gElC2ae3FEGRUFSM1JHd/lNGNXC0x4xt4=";
 }

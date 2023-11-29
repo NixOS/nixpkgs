@@ -159,7 +159,7 @@ assert !withPasswordQuality;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "254.3";
+  version = "254.6";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -176,7 +176,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-ObnsAiKwhwEb4ti611eS/wGpg3Sss/pUy/gANPAbXbs=";
+    hash = "sha256-Ku24ecDeQt0t7A8/adR3Jm47QZ19+wdMPyJRzCxU4uU=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -204,14 +204,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
-
-    # Fix for `RuntimeError: ELF .dynamic section is missing.`
-    # https://github.com/systemd/systemd/issues/29381
-    # https://github.com/systemd/systemd/pull/29392
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/cecbb162a3134b43d2ca160e13198c73ff34c3ef.patch";
-      hash = "sha256-hWpUosTDA18mYm5nIb9KnjwOlnzbEHgzha/WpyHoC54=";
-    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
