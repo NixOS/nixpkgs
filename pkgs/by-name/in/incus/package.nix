@@ -95,23 +95,39 @@ let
     { name = "OVMF_VARS.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
     { name = "OVMF_VARS.ms.fd"; path = "${ovmf-2mb.fd}/FV/${ovmf-prefix}_VARS.fd"; }
   ];
+
+  client = symlinkJoin {
+    name = "incus-client-${incus-unwrapped.version}";
+
+    paths = [ incus-unwrapped.client ];
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    postBuild = ''
+      wrapProgram $out/bin/incus --prefix PATH : ${lib.makeBinPath clientBinPath}
+    '';
+
+    inherit (incus-unwrapped) meta version;
+    pname = "incus-client";
+  };
 in
 symlinkJoin {
   name = "incus-${incus-unwrapped.version}";
 
-  paths = [ incus-unwrapped ];
+  paths = [ incus-unwrapped client  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/incusd --prefix PATH : ${lib.escapeShellArg binPath}:${qemu_kvm}/libexec:$out/bin --set INCUS_OVMF_PATH ${ovmf}
-
-    wrapProgram $out/bin/incus --prefix PATH : ${lib.makeBinPath clientBinPath}
   '';
 
   passthru = {
     inherit (incus-unwrapped) tests;
   };
 
-  inherit (incus-unwrapped) meta pname version;
+  inherit (incus-unwrapped) pname version;
+  meta = incus-unwrapped.meta // { platforms = lib.platforms.linux; };
+
+  inherit client;
 }

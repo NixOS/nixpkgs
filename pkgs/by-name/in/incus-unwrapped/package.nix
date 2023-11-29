@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
@@ -18,6 +19,8 @@
 buildGoModule rec {
   pname = "incus-unwrapped";
   version = "0.4.0";
+
+  outputs = [ "out" "client" ];
 
   src = fetchFromGitHub {
     owner = "lxc";
@@ -41,11 +44,14 @@ buildGoModule rec {
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
-  excludedPackages = [
+  excludedPackages = if stdenv.isLinux then [
     "cmd/incus-agent"
     "cmd/incus-migrate"
     "cmd/lxd-to-incus"
     "test/mini-oidc"
+  ] else [
+    # non-linux only supports the client, installed in postBuild
+    ".*"
   ];
 
   nativeBuildInputs = [
@@ -53,7 +59,7 @@ buildGoModule rec {
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     lxc
     acl
     libcap
@@ -69,7 +75,9 @@ buildGoModule rec {
   CGO_LDFLAGS_ALLOW = "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)";
 
   postBuild = ''
-    make incus-agent incus-migrate
+    ${lib.optionalString stdenv.isLinux "make incus-agent incus-migrate"}
+
+    CGO_ENABLED=0 go install ./cmd/incus
   '';
 
   preCheck =
@@ -92,6 +100,10 @@ buildGoModule rec {
     installShellCompletion --cmd incus \
       --fish <($out/bin/incus completion fish) \
       --zsh <($out/bin/incus completion zsh)
+
+    mkdir -p $client/bin
+    mv $out/bin/incus $client/bin/
+    mv $out/share $client/
   '';
 
 
