@@ -1,7 +1,7 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, stdenv }:
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
 
 let
-  inherit (dotnetCorePackages) combinePackages sdk_6_0 sdk_7_0;
+  inherit (dotnetCorePackages) sdk_7_0;
 in
 buildDotnetModule rec {
   pname = "fsautocomplete";
@@ -23,11 +23,8 @@ buildDotnetModule rec {
       --replace TargetFrameworks TargetFramework \
   '';
 
-  dotnet-sdk = combinePackages [
-    sdk_7_0
-    sdk_6_0
-  ];
-  dotnet-runtime = sdk_6_0;
+  dotnet-sdk = sdk_7_0;
+  dotnet-runtime = sdk_7_0;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];
