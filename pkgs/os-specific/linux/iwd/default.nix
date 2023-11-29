@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchgit
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -19,6 +20,16 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-i+2R8smgLXooApj0Z5e03FybhYgw1X/kIsJkrDzW8y4=";
   };
+
+  patches = [
+    # ell-0.61 compatibility:
+    # TODO: remove with update to 2.10
+    (fetchpatch {
+      name = "rtnetlink-headers.patch";
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=653122498aaf660d3bf9263bf95aa6544ef154c6";
+      hash = "sha256-z+TSWwJkSZm9IbKnJUHwcGannhgeiCiPurh/0a8TwKA=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
