@@ -1888,6 +1888,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  ayes-web = {
+    email = "ayes2022@protonmail.com";
+    github = "ayes-web";
+    githubId = 52951851;
+    name = "ayes-web";
+  };
   aynish = {
     github = "Chickensoupwithrice";
     githubId = 22575913;
@@ -2666,6 +2672,13 @@
     github = "broke";
     githubId = 1071610;
     name = "Gunnar Nitsche";
+  };
+  brokenpip3 = {
+    email = "brokenpip3@gmail.com";
+    matrix = "@brokenpip3:matrix.org";
+    github = "brokenpip3";
+    githubId = 40476330;
+    name = "brokenpip3";
   };
   bryanasdev000 = {
     email = "bryanasdev000@gmail.com";
@@ -18434,6 +18447,12 @@
     github = "trepetti";
     githubId = 25440339;
     name = "Tom Repetti";
+  };
+  trespaul = {
+    email = "paul@trespaul.com";
+    github = "trespaul";
+    githubId = 7453891;
+    name = "Paul Joubert";
   };
   trevdev = {
     email = "trev@trevdev.ca";

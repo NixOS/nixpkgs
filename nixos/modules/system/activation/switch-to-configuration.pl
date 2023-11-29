@@ -889,6 +889,10 @@ while (my $f = <$list_active_users>) {
 
 close($list_active_users) || die("Unable to close the file handle to loginctl");
 
+# Set the new tmpfiles
+print STDERR "setting up tmpfiles\n";
+system("$new_systemd/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+
 # Before reloading we need to ensure that the units are still active. They may have been
 # deactivated because one of their requirements got stopped. If they are inactive
 # but should have been reloaded, the user probably expects them to be started.

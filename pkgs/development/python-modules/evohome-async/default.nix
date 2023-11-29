@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , buildPythonPackage
+, click
 , fetchFromGitHub
 , hatchling
 , pythonOlder
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "evohome-async";
-  version = "0.4.9";
+  version = "0.4.11";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "zxdavb";
     repo = "evohome-async";
     rev = "refs/tags/${version}";
-    hash = "sha256-4AhxvUkLiej7OSj9Y19tJnVCzNlC5PF6KB5zTHN8gLA=";
+    hash = "sha256-mx4nBEgXeBxcN1pYZfTKPGbNhvSz8l38MyRRpL82lf0=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    click
     voluptuous
   ];
 

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "oelint-parser";
-  version = "2.11.4";
+  version = "2.11.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "oelint_parser";
-    hash = "sha256-r8qpD7UDh8ZfsdwVuv0ipihPEX3263t929mMYf143iA=";
+    hash = "sha256-CTZxxKZPrAvuWGhwD7qAPG10rry0H71QSRXbGT0J3J0=";
   };
 
   buildInputs = [ pip ];
