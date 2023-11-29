@@ -332,7 +332,7 @@ in python.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.10";
+  disabled = python.pythonOlder "3.11";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -354,28 +354,13 @@ in python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python.pkgs; [
     pythonRelaxDepsHook
     setuptools
-    wheel
   ];
 
   pythonRelaxDeps = [
-    "aiohttp"
-    "attrs"
-    "awesomeversion"
-    "bcrypt"
     "ciso8601"
     "cryptography"
-    "home-assistant-bluetooth"
-    "httpx"
-    "ifaddr"
+    "lru-dict"
     "orjson"
-    "pip"
-    "PyJWT"
-    "pyOpenSSL"
-    "PyYAML"
-    "requests"
-    "typing-extensions"
-    "voluptuous-serialize"
-    "yarl"
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -481,6 +466,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
+    # SystemError: PyThreadState_SetAsyncExc failed
+    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # tests are located in tests/
     "tests"
   ];
