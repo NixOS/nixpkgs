@@ -12994,6 +12994,8 @@ with pkgs;
 
   saldl = callPackage ../tools/networking/saldl { };
 
+  salesforce-cli = nodePackages."@salesforce/cli";
+
   salt = callPackage ../tools/admin/salt { };
 
   samim-fonts = callPackage ../data/fonts/samim-fonts { };
