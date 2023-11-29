@@ -621,6 +621,7 @@
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
+  ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
@@ -1440,6 +1441,7 @@
   ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/unl0kr.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix

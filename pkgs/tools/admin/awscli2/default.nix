@@ -36,21 +36,21 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.13.33"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.38"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-5ANfMa7b72z5E1EH9+dJ9avLDBnSEFGqvDOFFzLbZcM=";
+    hash = "sha256-BsdvmF2ZoiO5uTkrd1G0cgP3/nAPR+nDMO2Se4Tt990=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
-      --replace 'awscrt>=0.16.4,<=0.19.6' 'awscrt>=0.16.4' \
+      --replace 'awscrt>=0.16.4,<=0.19.12' 'awscrt>=0.16.4' \
       --replace 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
@@ -138,7 +138,7 @@ with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     description = "Unified tool to manage your AWS services";
-    homepage = "https://docs.aws.amazon.com/cli/latest/userguide/";
+    homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];

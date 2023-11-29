@@ -2814,8 +2814,6 @@ with pkgs;
 
   simplenes = callPackage ../applications/emulators/simplenes { };
 
-  snekim = callPackage ../games/snekim { };
-
   snes9x = callPackage ../applications/emulators/snes9x { };
 
   snes9x-gtk = callPackage ../applications/emulators/snes9x {
@@ -2973,8 +2971,6 @@ with pkgs;
   };
 
   mucommander = callPackage ../applications/file-managers/mucommander { };
-
-  nimmm = callPackage ../applications/file-managers/nimmm { };
 
   nnn = callPackage ../applications/file-managers/nnn { };
 
@@ -4795,8 +4791,6 @@ with pkgs;
 
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
-  swaycwd = callPackage ../tools/wayland/swaycwd { };
-
   swayr = callPackage ../tools/wayland/swayr { };
 
   swayrbar = callPackage ../tools/wayland/swayrbar { };
@@ -6095,8 +6089,6 @@ with pkgs;
   nfdump = callPackage ../tools/networking/nfdump { };
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
-
-  nitch = callPackage ../tools/misc/nitch { };
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
@@ -7831,8 +7823,6 @@ with pkgs;
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
 
   tracy = callPackage ../development/tools/tracy { };
-
-  tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
   trivy = callPackage ../tools/admin/trivy { };
 
@@ -11225,8 +11215,6 @@ with pkgs;
 
   nifi = callPackage ../servers/web-apps/nifi { };
 
-  nitter = nim2Packages.callPackage ../servers/nitter { };
-
   noip = callPackage ../tools/networking/noip { };
 
   inherit (callPackage ../applications/networking/cluster/nomad { })
@@ -11339,8 +11327,6 @@ with pkgs;
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
   present-cli = callPackage ../tools/misc/present-cli { };
-
-  promexplorer = callPackage ../tools/misc/promexplorer { };
 
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
 
@@ -14155,8 +14141,6 @@ with pkgs;
   };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
-  ttop = callPackage ../tools/system/ttop { };
-
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
   tty-share = callPackage ../applications/misc/tty-share { };
@@ -16806,13 +16790,10 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim
                         { inherit (darwin) Security;  }
-          ) nim-unwrapped nim-unwrapped-2 nim nim2;
-  nimPackages = recurseIntoAttrs nim.pkgs;
-  nim2Packages = recurseIntoAttrs nim2.pkgs;
-
-  nrpl = callPackage ../development/tools/nrpl { };
-
-  nimlsp = callPackage ../development/tools/misc/nimlsp { };
+          ) nim-unwrapped-1 nim-unwrapped-2 nim1 nim2;
+  nim = nim2;
+  buildNimPackage = callPackage ../development/compilers/nim/build-nim-package.nix { };
+  nimOverrides = callPackage ./nim-overrides.nix { };
 
   neko = callPackage ../development/compilers/neko { };
 
@@ -31509,8 +31490,6 @@ with pkgs;
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
 
-  keepass = callPackage ../applications/misc/keepass { };
-
   keepass-charactercopy = callPackage ../applications/misc/keepass-plugins/charactercopy { };
 
   keepass-keeagent = callPackage ../applications/misc/keepass-plugins/keeagent { };
@@ -33806,8 +33785,6 @@ with pkgs;
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
-  moonlander = callPackage ../applications/networking/browsers/moonlander { };
-
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
   moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt {
@@ -34394,8 +34371,6 @@ with pkgs;
   };
 
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
-
-  nimdow = callPackage ../applications/window-managers/nimdow { };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
@@ -39083,8 +39058,6 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  mosdepth = nim2Packages.callPackage ../applications/science/biology/mosdepth { };
-
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
 
   niftyseg = callPackage ../applications/science/biology/niftyseg { };
@@ -39423,6 +39396,12 @@ with pkgs;
     singlePrec = true;
     fftw = fftwSinglePrec;
   };
+
+  gromacsPlumed = lowPrio (gromacs.override {
+    singlePrec = true;
+    enablePlumed = true;
+    fftw = fftwSinglePrec;
+  });
 
   gromacsMpi = lowPrio (gromacs.override {
     singlePrec = true;
