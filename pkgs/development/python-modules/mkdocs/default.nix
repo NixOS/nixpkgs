@@ -23,23 +23,26 @@
 , pyyaml-env-tag
 , watchdog
 
-# testing deps
+# optional-dependencies
 , babel
+
+# testing deps
 , mock
 , unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.5.2";
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  version = "1.5.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9sV1bewsHVJEc2kTyGxDM6SjDTEKEc/HSY6gWBC5tvE=";
+    hash = "sha256-axH4AeL+osxoUIVJbW6YjiTfUr6TAXMB4raZ3oO0fyw=";
   };
 
   nativeBuildInputs = [
@@ -63,18 +66,25 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+  passthru.optional-dependencies = {
+    i18n = [
+      babel
+    ];
+  };
+
   nativeCheckInputs = [
     unittestCheckHook
-    babel
     mock
-  ];
+  ] ++ passthru.optional-dependencies.i18n;
 
   unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
 
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
     description = "Project documentation with Markdown / static website generator";
+    downloadPage = "https://github.com/mkdocs/mkdocs";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's
       geared towards building project documentation. Documentation source files
