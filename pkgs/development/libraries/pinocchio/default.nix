@@ -23,12 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IaWAXzdzhU/wov+9ChzUeCp9SFNFV2/vGToXC35dkb8=";
   };
 
-  # error: use of undeclared identifier '__sincos'
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
-    substituteInPlace src/math/sincos.hpp \
-      --replace "__APPLE__" "0"
-  '';
-
   strictDeps = true;
 
   nativeBuildInputs = [
