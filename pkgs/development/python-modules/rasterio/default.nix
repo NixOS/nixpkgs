@@ -1,26 +1,27 @@
 { lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonOlder
 , stdenv
+
 , affine
 , attrs
 , boto3
-, buildPythonPackage
+, certifi
 , click
 , click-plugins
 , cligj
-, certifi
 , cython_3
-, fetchFromGitHub
-, fetchpatch
 , gdal
 , hypothesis
-, matplotlib
 , ipython
+, matplotlib
 , numpy
 , oldest-supported-numpy
 , packaging
 , pytest-randomly
-, pytestCheckHook
-, pythonOlder
 , setuptools
 , shapely
 , snuggs
@@ -65,13 +66,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     affine
     attrs
+    certifi
     click
     click-plugins
     cligj
-    certifi
     numpy
-    snuggs
     setuptools
+    snuggs
   ];
 
   passthru.optional-dependencies = {
@@ -90,8 +91,8 @@ buildPythonPackage rec {
     boto3
     hypothesis
     packaging
-    pytest-randomly
     pytestCheckHook
+    pytest-randomly
     shapely
   ];
 
