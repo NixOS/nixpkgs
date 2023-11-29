@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module and CLI for controlling Linklink devices locally";
     homepage = "https://github.com/xuanxuan000/python-linknlink";
-    changelog = "";
+    changelog = "https://github.com/xuanxuan000/python-linknlink/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
