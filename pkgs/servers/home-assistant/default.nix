@@ -319,7 +319,7 @@ in python.pkgs.buildPythonApplication rec {
   format = "pyproject";
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.10";
+  disabled = python.pythonOlder "3.11";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -341,28 +341,13 @@ in python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python.pkgs; [
     pythonRelaxDepsHook
     setuptools
-    wheel
   ];
 
   pythonRelaxDeps = [
-    "aiohttp"
-    "attrs"
-    "awesomeversion"
-    "bcrypt"
     "ciso8601"
     "cryptography"
-    "home-assistant-bluetooth"
-    "httpx"
-    "ifaddr"
+    "lru-dict"
     "orjson"
-    "pip"
-    "PyJWT"
-    "pyOpenSSL"
-    "PyYAML"
-    "requests"
-    "typing-extensions"
-    "voluptuous-serialize"
-    "yarl"
   ];
 
   # extract translations from pypi sdist
