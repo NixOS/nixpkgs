@@ -34,12 +34,6 @@ in
         pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];
       };
 
-      services.redis.servers.mastodon = {
-        enable = true;
-        bind = "127.0.0.1";
-        port = 31637;
-      };
-
       # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
       services.postgresql.package = pkgs.postgresql_14;
 
