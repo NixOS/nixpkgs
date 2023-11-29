@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "zamg";
   version = "0.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
