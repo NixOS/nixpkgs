@@ -1,0 +1,370 @@
+diff --git a/demos/gtk-demo/application.c b/demos/gtk-demo/application.c
+index 289f73a..9ce0466 100644
+--- a/demos/gtk-demo/application.c
++++ b/demos/gtk-demo/application.c
+@@ -384,7 +384,16 @@ demo_application_init (DemoApplication *app)
+   GSettings *settings;
+   GAction *action;
+ 
+-  settings = g_settings_new ("org.gtk.Demo");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source, "org.gtk.Demo",
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_action_map_add_action_entries (G_ACTION_MAP (app),
+                                    app_entries, G_N_ELEMENTS (app_entries),
+@@ -411,7 +420,16 @@ demo_application_window_store_state (DemoApplicationWindow *win)
+ {
+   GSettings *settings;
+ 
+-  settings = g_settings_new ("org.gtk.Demo");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source, "org.gtk.Demo",
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++  }
+   g_settings_set (settings, "window-size", "(ii)", win->width, win->height);
+   g_settings_set_boolean (settings, "maximized", win->maximized);
+   g_settings_set_boolean (settings, "fullscreen", win->fullscreen);
+@@ -423,7 +441,16 @@ demo_application_window_load_state (DemoApplicationWindow *win)
+ {
+   GSettings *settings;
+ 
+-  settings = g_settings_new ("org.gtk.Demo");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source, "org.gtk.Demo",
++                                             FALSE);
++    settings = g_settings_new_full(schema, NULL, NULL);
++  }
+   g_settings_get (settings, "window-size", "(ii)", &win->width, &win->height);
+   win->maximized = g_settings_get_boolean (settings, "maximized");
+   win->fullscreen = g_settings_get_boolean (settings, "fullscreen");
+diff --git a/examples/application10/exampleappprefs.c b/examples/application10/exampleappprefs.c
+index 9b3cc33..23022fd 100644
+--- a/examples/application10/exampleappprefs.c
++++ b/examples/application10/exampleappprefs.c
+@@ -27,7 +27,16 @@ example_app_prefs_init (ExampleAppPrefs *prefs)
+ 
+   priv = example_app_prefs_get_instance_private (prefs);
+   gtk_widget_init_template (GTK_WIDGET (prefs));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "font",
+                    priv->font, "font",
+diff --git a/examples/application10/exampleappwin.c b/examples/application10/exampleappwin.c
+index 294650f..918eea9 100644
+--- a/examples/application10/exampleappwin.c
++++ b/examples/application10/exampleappwin.c
+@@ -203,7 +203,16 @@ example_app_window_init (ExampleAppWindow *win)
+ 
+   priv = example_app_window_get_instance_private (win);
+   gtk_widget_init_template (GTK_WIDGET (win));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "transition",
+                    priv->stack, "transition-type",
+diff --git a/examples/application5/exampleappwin.c b/examples/application5/exampleappwin.c
+index d716f2a..898f43a 100644
+--- a/examples/application5/exampleappwin.c
++++ b/examples/application5/exampleappwin.c
+@@ -25,7 +25,16 @@ example_app_window_init (ExampleAppWindow *win)
+ 
+   priv = example_app_window_get_instance_private (win);
+   gtk_widget_init_template (GTK_WIDGET (win));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "transition",
+                    priv->stack, "transition-type",
+diff --git a/examples/application6/exampleappprefs.c b/examples/application6/exampleappprefs.c
+index 9b3cc33..23022fd 100644
+--- a/examples/application6/exampleappprefs.c
++++ b/examples/application6/exampleappprefs.c
+@@ -27,7 +27,16 @@ example_app_prefs_init (ExampleAppPrefs *prefs)
+ 
+   priv = example_app_prefs_get_instance_private (prefs);
+   gtk_widget_init_template (GTK_WIDGET (prefs));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "font",
+                    priv->font, "font",
+diff --git a/examples/application6/exampleappwin.c b/examples/application6/exampleappwin.c
+index 45e7de4..a911c25 100644
+--- a/examples/application6/exampleappwin.c
++++ b/examples/application6/exampleappwin.c
+@@ -25,7 +25,16 @@ example_app_window_init (ExampleAppWindow *win)
+ 
+   priv = example_app_window_get_instance_private (win);
+   gtk_widget_init_template (GTK_WIDGET (win));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "transition",
+                    priv->stack, "transition-type",
+diff --git a/examples/application7/exampleappprefs.c b/examples/application7/exampleappprefs.c
+index 9b3cc33..23022fd 100644
+--- a/examples/application7/exampleappprefs.c
++++ b/examples/application7/exampleappprefs.c
+@@ -27,7 +27,16 @@ example_app_prefs_init (ExampleAppPrefs *prefs)
+ 
+   priv = example_app_prefs_get_instance_private (prefs);
+   gtk_widget_init_template (GTK_WIDGET (prefs));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "font",
+                    priv->font, "font",
+diff --git a/examples/application7/exampleappwin.c b/examples/application7/exampleappwin.c
+index 2980393..f7d5835 100644
+--- a/examples/application7/exampleappwin.c
++++ b/examples/application7/exampleappwin.c
+@@ -77,7 +77,16 @@ example_app_window_init (ExampleAppWindow *win)
+ 
+   priv = example_app_window_get_instance_private (win);
+   gtk_widget_init_template (GTK_WIDGET (win));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "transition",
+                    priv->stack, "transition-type",
+diff --git a/examples/application8/exampleappprefs.c b/examples/application8/exampleappprefs.c
+index 9b3cc33..23022fd 100644
+--- a/examples/application8/exampleappprefs.c
++++ b/examples/application8/exampleappprefs.c
+@@ -27,7 +27,16 @@ example_app_prefs_init (ExampleAppPrefs *prefs)
+ 
+   priv = example_app_prefs_get_instance_private (prefs);
+   gtk_widget_init_template (GTK_WIDGET (prefs));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "font",
+                    priv->font, "font",
+diff --git a/examples/application8/exampleappwin.c b/examples/application8/exampleappwin.c
+index 3570d45..65198c7 100644
+--- a/examples/application8/exampleappwin.c
++++ b/examples/application8/exampleappwin.c
+@@ -166,7 +166,16 @@ example_app_window_init (ExampleAppWindow *win)
+ 
+   priv = example_app_window_get_instance_private (win);
+   gtk_widget_init_template (GTK_WIDGET (win));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "transition",
+                    priv->stack, "transition-type",
+diff --git a/examples/application9/exampleappprefs.c b/examples/application9/exampleappprefs.c
+index 9b3cc33..23022fd 100644
+--- a/examples/application9/exampleappprefs.c
++++ b/examples/application9/exampleappprefs.c
+@@ -27,7 +27,16 @@ example_app_prefs_init (ExampleAppPrefs *prefs)
+ 
+   priv = example_app_prefs_get_instance_private (prefs);
+   gtk_widget_init_template (GTK_WIDGET (prefs));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "font",
+                    priv->font, "font",
+diff --git a/examples/application9/exampleappwin.c b/examples/application9/exampleappwin.c
+index 15ceb1e..26b4124 100644
+--- a/examples/application9/exampleappwin.c
++++ b/examples/application9/exampleappwin.c
+@@ -203,7 +203,16 @@ example_app_window_init (ExampleAppWindow *win)
+ 
+   priv = example_app_window_get_instance_private (win);
+   gtk_widget_init_template (GTK_WIDGET (win));
+-  priv->settings = g_settings_new ("org.gtk.exampleapp");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.exampleapp", FALSE);
++    priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   g_settings_bind (priv->settings, "transition",
+                    priv->stack, "transition-type",
+diff --git a/gtk/gtkcolorchooserwidget.c b/gtk/gtkcolorchooserwidget.c
+index 9fca31d..285f484 100644
+--- a/gtk/gtkcolorchooserwidget.c
++++ b/gtk/gtkcolorchooserwidget.c
+@@ -545,7 +545,17 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
+   gtk_color_swatch_set_selectable (GTK_COLOR_SWATCH (button), FALSE);
+   gtk_container_add (GTK_CONTAINER (box), button);
+ 
+-  cc->priv->settings = g_settings_new ("org.gtk.Settings.ColorChooser");
++  {
++      g_autoptr(GSettingsSchemaSource) schema_source;
++      g_autoptr(GSettingsSchema) schema;
++      schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                  g_settings_schema_source_get_default(),
++                                                                  TRUE, NULL);
++      schema = g_settings_schema_source_lookup(schema_source,
++                                               "org.gtk.Settings.ColorChooser",
++                                               FALSE);
++      cc->priv->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+   variant = g_settings_get_value (cc->priv->settings, "custom-colors");
+   g_variant_iter_init (&iter, variant);
+   i = 0;
+diff --git a/gtk/gtkemojichooser.c b/gtk/gtkemojichooser.c
+index 1ef9e51..511eeeb 100644
+--- a/gtk/gtkemojichooser.c
++++ b/gtk/gtkemojichooser.c
+@@ -851,7 +851,17 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
+ {
+   GtkAdjustment *adj;
+ 
+-  chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gtk.Settings.EmojiChooser",
++                                             FALSE);
++    chooser->settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ 
+   gtk_widget_init_template (GTK_WIDGET (chooser));
+ 
+diff --git a/gtk/gtkfilechooserutils.c b/gtk/gtkfilechooserutils.c
+index 7965ab0..2039f53 100644
+--- a/gtk/gtkfilechooserutils.c
++++ b/gtk/gtkfilechooserutils.c
+@@ -455,7 +455,18 @@ _gtk_file_chooser_get_settings_for_widget (GtkWidget *widget)
+ 
+   if (G_UNLIKELY (settings == NULL))
+     {
+-      settings = g_settings_new ("org.gtk.Settings.FileChooser");
++      {
++        g_autoptr(GSettingsSchemaSource) schema_source;
++        g_autoptr(GSettingsSchema) schema;
++        schema_source = g_settings_schema_source_new_from_directory("@gtk@",
++                                                                    g_settings_schema_source_get_default(),
++                                                                    TRUE,
++                                                                    NULL);
++        schema = g_settings_schema_source_lookup(schema_source,
++                                                 "org.gtk.Settings.FileChooser",
++                                                 FALSE);
++        settings = g_settings_new_full(schema, NULL, NULL);
++      }
+       g_settings_delay (settings);
+ 
+       g_object_set_qdata_full (G_OBJECT (gtksettings),
