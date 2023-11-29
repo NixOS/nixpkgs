@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchgit
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -9,27 +8,18 @@
 , readline
 , openssl
 , python3Packages
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "2.8";
+  version = "2.10";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-i+2R8smgLXooApj0Z5e03FybhYgw1X/kIsJkrDzW8y4=";
+    hash = "sha256-zePFmcQRFjcH6KToTpBFMQzGY+Eq7jijfn0R/MMKGrw=";
   };
-
-  patches = [
-    # ell-0.61 compatibility:
-    # TODO: remove with update to 2.10
-    (fetchpatch {
-      name = "rtnetlink-headers.patch";
-      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=653122498aaf660d3bf9263bf95aa6544ef154c6";
-      hash = "sha256-z+TSWwJkSZm9IbKnJUHwcGannhgeiCiPurh/0a8TwKA=";
-    })
-  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
@@ -97,6 +87,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
+  };
 
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
