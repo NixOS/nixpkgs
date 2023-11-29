@@ -36,21 +36,21 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.13.38"; # N.B: if you change this, check if overrides are still up-to-date
-  format = "pyproject";
+  version = "2.14.2"; # N.B: if you change this, check if overrides are still up-to-date
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-BsdvmF2ZoiO5uTkrd1G0cgP3/nAPR+nDMO2Se4Tt990=";
+    hash = "sha256-ECP22D4lQzJ/13/oXkOgn97EhRRuXv4vW0FtlwugrNs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
       --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
-      --replace 'awscrt>=0.16.4,<=0.19.12' 'awscrt>=0.16.4' \
+      --replace 'awscrt==0.19.18' 'awscrt>=0.19' \
       --replace 'docutils>=0.10,<0.20' 'docutils>=0.10' \
       --replace 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
