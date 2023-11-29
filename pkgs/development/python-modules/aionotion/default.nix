@@ -39,6 +39,9 @@ buildPythonPackage rec {
       url = "https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83.patch";
       hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
     })
+
+    # based on https://github.com/bachya/aionotion/pull/235
+    ./pydantic_2-compatibility.patch
   ];
 
   nativeBuildInputs = [
