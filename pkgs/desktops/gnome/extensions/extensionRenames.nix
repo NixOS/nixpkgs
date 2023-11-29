@@ -47,6 +47,9 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
+  "FuzzyClock@johngoetz" = "fuzzy-clock";
+
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
 
@@ -75,9 +78,6 @@
 
   "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
   "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
-
-  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
-  "FuzzyClock@johngoetz" = "fuzzy-clock";
 
   # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
   # there seem to be upstream plans, so this should be checked periodically:
