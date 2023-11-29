@@ -1,18 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+
+# build-system
+, setuptools
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-osc";
   version = "1.8.3";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pc4bpWyNgt9Ryz8pRrXdM6cFInkazEuFZOYtKyCtnKo=";
   };
 
-  pythonImportsCheck = [ "pythonosc" ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  pythonImportsCheck = [
+    "pythonosc"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Open Sound Control server and client in pure python";
