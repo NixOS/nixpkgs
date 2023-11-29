@@ -1,6 +1,6 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeFontsConf }:
+{ buildLua, lib, fetchFromGitHub, makeFontsConf }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildLua (finalAttrs: {
   pname = "uosc";
   version = "4.7.0";
 
@@ -16,19 +16,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --replace "mp.find_config_file('scripts')" "\"$out/share/mpv/scripts\""
   '';
 
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/mpv/
-    cp -r scripts $out/share/mpv
+  scriptPath = "scripts/uosc.lua";
+  postInstall = ''
+    cp -r scripts/uosc_shared $out/share/mpv/
     cp -r fonts $out/share
-
-    runHook postInstall
   '';
 
-  passthru.scriptName = "uosc.lua";
   # the script uses custom "texture" fonts as the background for ui elements.
   # In order for mpv to find them, we need to adjust the fontconfig search path.
   passthru.extraWrapperArgs = [

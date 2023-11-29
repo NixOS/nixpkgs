@@ -22,7 +22,7 @@ in lib.recurseIntoAttrs
     sponsorblock = callPackage ./sponsorblock.nix { };
     thumbfast = callPackage ./thumbfast.nix { inherit buildLua; };
     thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
-    uosc = callPackage ./uosc.nix { };
+    uosc = callPackage ./uosc.nix { inherit buildLua; };
     visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
