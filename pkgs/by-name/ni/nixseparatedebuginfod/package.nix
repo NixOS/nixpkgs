@@ -5,6 +5,7 @@
 , openssl
 , sqlite
 , pkg-config
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) nixseparatedebuginfod;
+    };
+  };
 
   meta = with lib; {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";

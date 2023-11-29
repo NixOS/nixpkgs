@@ -489,6 +489,7 @@
   ./services/development/jupyterhub/default.nix
   ./services/development/livebook.nix
   ./services/development/lorri.nix
+  ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
   ./services/development/zammad.nix
   ./services/display-managers/greetd.nix
