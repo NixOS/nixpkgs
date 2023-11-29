@@ -7,12 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.31.1";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
-    rev = version;
+    # rev = version;
+    rev = "1.31.1"; # upstream tagged incorrectly
     hash = "sha256-JzQReCX1AfFhbVbSPOIAKAVvNoddrWFHaJ1AxlsIPA0=";
   };
 
