@@ -12,6 +12,7 @@
 , mkdocs-material-extensions
 , pygments
 , pymdown-extensions
+, trove-classifiers
 , pythonOlder
 , regex
 , requests
@@ -19,8 +20,8 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.3.1";
-  format = "pyproject";
+  version = "9.4.14";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,13 +29,14 @@ buildPythonPackage rec {
     owner = "squidfunk";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2Z1U71agXxkYp1OFYd/xInAfN5SVI9FQf39b8DkX10o=";
+    hash = "sha256-oP0DeSRgoLx6boEOa3if5BitGXmJ11DoUVZK16Sjlwg=";
   };
 
   nativeBuildInputs = [
     hatch-requirements-txt
     hatch-nodejs-version
     hatchling
+    trove-classifiers
   ];
 
   propagatedBuildInputs = [
@@ -58,8 +60,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Material for mkdocs";
+    changelog = "https://github.com/squidfunk/mkdocs-material/blob/${src.rev}/CHANGELOG";
     homepage = "https://squidfunk.github.io/mkdocs-material/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dandellion ];
+    maintainers = with maintainers; [ dandellion caarlos0 ];
   };
 }
