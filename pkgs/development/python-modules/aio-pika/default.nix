@@ -16,13 +16,13 @@
 buildPythonPackage rec {
   pname = "aio-pika";
   version = "9.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
+    repo = "aio-pika";
     rev = "refs/tags/${version}";
     hash = "sha256-RbDiJvbFNuXIqFvevLpk5sy5WDinwaWwSqa+XI6Dljo=";
   };
