@@ -38,6 +38,9 @@ buildPythonPackage rec {
       url = "https://github.com/bachya/aiopurpleair/commit/8c704c51ea50da266f52a7f53198d29d643b30c5.patch";
       hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
     })
+
+    # based on https://github.com/bachya/aiopurpleair/pull/176
+    ./pydantic_2-compatibility.patch
   ];
 
   postPatch = ''
