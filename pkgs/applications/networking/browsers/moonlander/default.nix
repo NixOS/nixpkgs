@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "Just another \"fancy\" Gemini client";
     homepage = "https://sr.ht/~admicos/moonlander/";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [];
+    broken = true; # on hydra as of 2023-11-16, upstream is inactive
   };
 }
