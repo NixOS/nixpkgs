@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
-  mvnHash = "sha256-sIiCp1AorVQXt13Tq0vw9jGioG3zcQMqqKS/Q0Tf4MQ=";
+  mvnHash = "sha256-LSnClLdAuqSyyT7O4f4aVaPBxdkkZQz60wTmqwQuzdU=";
 
   buildOffline = true;
 
