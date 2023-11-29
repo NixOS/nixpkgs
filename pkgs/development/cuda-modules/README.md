@@ -47,3 +47,51 @@ scope. These are typically required for the creation of the finalized
 - `saxpy`: Example CMake project that uses CUDA.
 - `setup-hooks`: Nixpkgs setup hooks for CUDA.
 - `tensorrt`: NVIDIA TensorRT library.
+
+## Distinguished packages
+
+### Cuda compatibility
+
+[Cuda Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/),
+available as `cudaPackages.cuda_compat`, is a component which makes it possible
+to run applications built against a newer CUDA toolkit (for example CUDA 12) on
+a machine with an older CUDA driver (for example CUDA 11), which isn't possible
+out of the box. At the time of writing, Cuda Compatibility is only available on
+the Nvidia Jetson architecture, but Nvidia might release support for more
+architectures in the future.
+
+As Cuda Compatibility strictly increases the range of supported applications, we
+try our best to enable it by default on supported platforms.
+
+#### Functioning
+
+`cuda_compat` simply provides a new `libcuda.so` (and associated variants) that
+needs to be used in place of the default CUDA driver's `libcuda.so`. However,
+the other shared libraries of the default driver must still be accessible:
+`cuda_compat` isn't a complete drop-in replacement for the driver (and that's
+the point, otherwise, it would just be a newer driver).
+
+Nvidia's recommendation is to set `LD_LIBRARY_PATH` to points to `cuda_compat`'s
+driver. This is fine for a manual, one-shot usage, but in general setting
+`LD_LIBRARY_PATH` is a red flag. This is global state which short-circuits most
+of other dynamic libraries resolution mechanisms and can break things in
+non-obvious ways, especially with other Nix-built software.
+
+#### Cuda compat with Nix
+
+Since `cuda_compat` is a known derivation, the easy way to do this in Nix would
+be to add `cuda_compat` as a dependency of CUDA libraries and applications and
+let Nix does its magic by filling the `DT_RUNPATH` fields. However,
+`cuda_compat` itself depends on `libnvrm_mem` and `libnvrm_gpu` which are loaded
+dynamically at runtime from `/run/opengl-driver`. This doesn't please the Nix
+sandbox when building, which can't find those (a second minor issue is that
+`addOpenGLRunpathHook` prepends the `/run/opengl-driver` path, so that would
+still take precedence).
+
+The current solution is to do something similar to `addOpenGLRunpathHook`: the
+`addCudaCompatRunpathHook` prepends to the path to `cuda_compat`'s `libcuda.so`
+to the `DT_RUNPATH` of whichever package includes the hook as a dependency, and
+we include the hook by default for packages in `cudaPackages` (by adding it as a
+inputs in `genericManifestBuilder`). We also make sure it's included after
+`addOpenGLRunpathHook`, so that it appears _before_ in the `DT_RUNPATH` and
+takes precedence.
