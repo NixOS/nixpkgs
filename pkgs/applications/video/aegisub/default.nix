@@ -158,5 +158,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres wegank ];
     platforms = platforms.unix;
+    mainProgram = "aegisub";
   };
 }

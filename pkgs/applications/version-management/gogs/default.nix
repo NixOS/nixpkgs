@@ -44,5 +44,6 @@ buildGoModule rec {
     homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
+    mainProgram = "gogs";
   };
 }

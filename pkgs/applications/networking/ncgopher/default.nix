@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
+    mainProgram = "ncgopher";
   };
 }

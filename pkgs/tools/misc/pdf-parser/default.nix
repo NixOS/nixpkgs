@@ -30,5 +30,6 @@ python3Packages.buildPythonApplication {
     license = licenses.publicDomain;
     maintainers = [ maintainers.lightdiscord ];
     platforms = platforms.all;
+    mainProgram = "pdf-parser.py";
   };
 }

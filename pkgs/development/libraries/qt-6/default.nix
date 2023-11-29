@@ -47,14 +47,21 @@ let
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
           ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
-          ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
-          ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
-          ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
-          ./patches/0007-qtbase-find-tools-in-PATH.patch
-          ./patches/0008-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
-          ./patches/0009-qtbase-allow-translations-outside-prefix.patch
-          ./patches/0010-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
-          ./patches/0011-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0004-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
+          ./patches/0005-qtbase-qt-cmake-always-use-cmake-from-path.patch
+          ./patches/0006-qtbase-find-tools-in-PATH.patch
+          ./patches/0007-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+          ./patches/0008-qtbase-allow-translations-outside-prefix.patch
+          ./patches/0009-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
+          ./patches/0010-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
+          ./patches/0011-qtbase-derive-plugin-load-path-from-PATH.patch
+          # Revert "macOS: Silence warning about supporting secure state restoration"
+          # fix build with macOS sdk < 12.0
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
+            revert = true;
+            hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };

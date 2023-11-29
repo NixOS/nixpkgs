@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.all;
     maintainers = [ ];
+    mainProgram = "duc";
   };
 }

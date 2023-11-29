@@ -68,5 +68,6 @@ buildGoModule rec {
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
     maintainers = with maintainers; [ aaschmid tricktron ];
+    mainProgram = "colima";
   };
 }

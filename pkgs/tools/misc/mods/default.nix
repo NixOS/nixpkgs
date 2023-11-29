@@ -38,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/mods";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "mods";
   };
 }

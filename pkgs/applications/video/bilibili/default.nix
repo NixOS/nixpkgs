@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ jedsek kashw2 ];
     platforms = platforms.unix;
+    mainProgram = "bilibili";
   };
 }
