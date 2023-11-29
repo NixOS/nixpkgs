@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.19.0";
+  version = "0.20.0";
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-KUXXOySuPFNKcW3O08FBYIfm4WwVjOuIF+GefmKnwl0=";
+    hash = "sha256-Ja9U/X9YblS6uUD7MX3t2tItG9AMiNF7OFgvIotdvQs=";
   };
 
   buildInputs = [
