@@ -69,7 +69,7 @@ perlPackages.buildPerlPackage rec {
     license = licenses.gpl1Plus;
     homepage = "https://github.com/dave-theunsub/clamtk";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgarcia ShamrockLee ];
+    maintainers = with maintainers; [ chewblacka ShamrockLee ];
   };
 
 }
