@@ -107,10 +107,10 @@ in
         ProtectClock = true;
         ProtectControlGroups = true;
         ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
+        ProtectHostname = false; # breaks bwrap
+        ProtectKernelLogs = false; # breaks bwrap
         ProtectKernelModules = true;
-        ProtectKernelTunables = true;
+        ProtectKernelTunables = false; # breaks bwrap
         ProtectProc = "invisible";
         ProcSubset = "all"; # Using "pid" breaks bwrap
         ProtectSystem = "strict";
