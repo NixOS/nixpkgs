@@ -36,6 +36,9 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
     dontBuild = true;
     preferLocalBuild = true;
 
+    # Prevent `patch` from emitting `.orig` files (that end up in the output)
+    patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
+
     outputHashMode = "recursive";
     installPhase = ''
       runHook preInstall
