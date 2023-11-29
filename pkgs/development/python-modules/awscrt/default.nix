@@ -12,25 +12,19 @@
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.19.17";
+  version = "0.19.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v3CANF5cfUG31AiqAFpRmnLeOfGm7I8H+VIUTo6qVJI=";
+    hash = "sha256-NQtu/Y6+4ILqPz5SxZo8PsWUza8B24tIU9zrn+yQyJ0=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security
-  ];
-
-  # Required to suppress -Werror
-  # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optionals stdenv.cc.isClang [
-    "strictoverflow"
   ];
 
   # gcc <10 is not supported, LLVM on darwin is just fine
