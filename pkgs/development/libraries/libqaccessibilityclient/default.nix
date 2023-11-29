@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libqaccessibilityclient";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/libqaccessibilityclient/libqaccessibilityclient-${version}.tar.xz";
-    sha256 = "sha256-HHaLT0MU/K4qB8t958sq4FIrXwK0Fzrz7ti/sqTYNCk=";
+    sha256 = "sha256-cEdyVDo7AFuUBhpT6vn51klE5oGLBMWcD7ClA8gaxKA=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
