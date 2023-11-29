@@ -4488,6 +4488,8 @@ self: super: with self; {
 
   gitdb = callPackage ../development/python-modules/gitdb { };
 
+  githubkit = callPackage ../development/python-modules/githubkit { };
+
   github-to-sqlite = callPackage ../development/python-modules/github-to-sqlite { };
 
   github-webhook = callPackage ../development/python-modules/github-webhook { };
