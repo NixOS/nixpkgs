@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zamg";
-  version = "0.3.1";
+  version = "0.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "killer0071234";
     repo = "python-zamg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-snYRYwJc9H6H+dxaQM4beGvu5AuaXv7W8w5xjR6RPyw=";
+    hash = "sha256-hgJtM208xsDh9RbxOFu5DOiKonLMj8aWyu9+EhpE6TA=";
   };
 
   postPatch = ''
