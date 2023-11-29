@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -28,6 +27,7 @@
 , nettle
 , udev
 , wayland
+, wayland-scanner
 , xorg
 , xwayland
 , dbus
@@ -39,24 +39,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.15.0";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";
+    hash = "sha256-TGhR6JjazbOQw8lTOLshtbs6gPBXp1jvEvYdYeaFzeE=";
   };
-
-  patches = [
-    # Fix gbm-kms tests
-    # Remove when version > 2.15.0
-    (fetchpatch {
-      name = "0001-mir-Fix-the-signature-of-drmModeCrtcSetGamma.patch";
-      url = "https://github.com/MirServer/mir/commit/98250e9c32c5b9b940da2fb0a32d8139bbc68157.patch";
-      hash = "sha256-tTtOHGNue5rsppOIQSfkOH5sVfFSn/KPGHmubNlRtLI=";
-    })
-  ];
 
   postPatch = ''
     # Fix scripts that get run in tests
@@ -98,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       python-dbusmock
     ]))
     validatePkgConfig
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -139,28 +130,35 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_DOXYGEN=OFF"
-    "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
-    "-DMIR_ENABLE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_DOXYGEN" false)
+    (lib.cmakeFeature "MIR_PLATFORM" (lib.strings.concatStringsSep ";" [
+      "gbm-kms"
+      "x11"
+      "eglstream-kms"
+      "wayland"
+    ]))
+    (lib.cmakeBool "MIR_ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
     # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
-    "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
-    "-DMIR_EXCLUDE_TESTS=${lib.strings.concatStringsSep ";" [
-    ]}"
+    (lib.cmakeBool "MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN" true)
+    (lib.cmakeFeature "MIR_EXCLUDE_TESTS" (lib.strings.concatStringsSep ";" [
+    ]))
     # These get built but don't get executed by default, yet they get installed when tests are enabled
-    "-DMIR_BUILD_PERFORMANCE_TESTS=OFF"
-    "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
+    (lib.cmakeBool "MIR_BUILD_PERFORMANCE_TESTS" false)
+    (lib.cmakeBool "MIR_BUILD_PLATFORM_TEST_HARNESS" false)
     # https://github.com/MirServer/mir/issues/2987
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
-    "-DMIR_USE_PRECOMPILED_HEADERS=OFF"
+    (lib.cmakeBool "MIR_USE_PRECOMPILED_HEADERS" false)
+    (lib.cmakeFeature "MIR_COMPILER_QUIRKS" (lib.strings.concatStringsSep ";" [
+      # https://github.com/MirServer/mir/issues/3017 actually affects x86_64 as well
+      "test_touchspot_controller.cpp:array-bounds"
+    ]))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck = ''
-    # Needs to be exactly /tmp so some failing tests don't get run, don't know why they fail yet
-    # https://github.com/MirServer/mir/issues/2801
-    export XDG_RUNTIME_DIR=/tmp
+    export XDG_RUNTIME_DIR=$TMP
   '';
 
   outputs = [ "out" "dev" ];
@@ -170,14 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
-    # More of an example than a fully functioning shell, some notes for the adventurous:
-    # - ~/.config/miral-shell.config is one possible user config location,
-    #   accepted options=value are according to `mir-shell --help`
-    # - default icon theme setting is DMZ-White, needs vanilla-dmz installed & on XCURSOR_PATH
-    #   or setting to be changed to an available theme
-    # - terminal emulator setting may need to be changed if miral-terminal script
-    #   does not know about preferred terminal
-    providedSessions = [ "mir-shell" ];
   };
 
   meta = with lib; {
