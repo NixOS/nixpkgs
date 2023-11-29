@@ -208,6 +208,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phpmd = callPackage ../development/php-packages/phpmd { };
 
+    phpspy = callPackage ../development/php-packages/phpspy { };
+
     phpstan = callPackage ../development/php-packages/phpstan { };
 
     psalm = callPackage ../development/php-packages/psalm { };
