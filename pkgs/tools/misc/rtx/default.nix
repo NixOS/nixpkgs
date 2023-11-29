@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   version = "2023.11.2";
 
   src = fetchFromGitHub {
-    owner = "jdxcode";
+    owner = "jdx";
     repo = "rtx";
     rev = "v${version}";
     hash = "sha256-OdqHyxqufJJTfP7frjLKf5R0WNySDyZc7Sh0Mpdord0=";
@@ -62,9 +62,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    homepage = "https://github.com/jdxcode/rtx";
+    homepage = "https://github.com/jdx/rtx";
     description = "Polyglot runtime manager (asdf rust clone)";
-    changelog = "https://github.com/jdxcode/rtx/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/rtx/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "rtx";
