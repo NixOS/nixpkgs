@@ -217,13 +217,6 @@ import ./make-test-python.nix (
           };
         };
 
-        # ProtectHome is the default, but we must access our storage
-        # in ~.
-        systemd.services = {
-          "vdirsyncer@alice".serviceConfig.ProtectHome = lib.mkForce false;
-          "vdirsyncer@bob".serviceConfig.ProtectHome = lib.mkForce false;
-        };
-
         users.users = {
           alice.isNormalUser = true;
           bob.isNormalUser = true;
