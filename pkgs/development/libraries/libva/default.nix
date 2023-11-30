@@ -9,6 +9,7 @@
 , mpv
 , intel-vaapi-driver
 , vlc
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     # other drivers depending on libva and selected application users.
     # Please get a confirmation from the maintainer before adding more applications.
     inherit intel-compute-runtime intel-media-driver intel-vaapi-driver mpv vlc;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -55,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    pkgConfigModules = [ "libva" "libva-drm" ] ++ lib.optionals (!minimal) [
+      "libva-glx" "libva-wayland" "libva-x11"
+    ];
     platforms = platforms.unix;
   };
 })
