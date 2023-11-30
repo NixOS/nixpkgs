@@ -10,7 +10,7 @@ let
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    sha256 = "sha256-RmWRNKy2w3BM/ipQyFpkNC3+XXsJXjN6VYWNo8OKpy0=";
+    sha256 = "sha256-kacJSlctE1bNAByH26Qpu609ZNbdkYTx6OUEgCmefqg=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -24,7 +24,6 @@ in appimageTools.wrapType2 rec {
   ];
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
     install -m 444 -D ${appimageContents}/timeular.png $out/share/icons/hicolor/512x512/apps/timeular.png
     substituteInPlace $out/share/applications/timeular.desktop \
