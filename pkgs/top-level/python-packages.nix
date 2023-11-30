@@ -13246,6 +13246,8 @@ self: super: with self; {
 
   smpp_pdu = callPackage ../development/python-modules/smpp.pdu { };
 
+  smtpdfix = callPackage ../development/python-modules/smtpdfix { };
+
   snack = toPythonModule (pkgs.newt.override {
     inherit (self) python;
   });
