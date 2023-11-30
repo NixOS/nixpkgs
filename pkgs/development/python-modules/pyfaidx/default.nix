@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, importlib-metadata
 , nose
 , numpy
 , setuptools
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    importlib-metadata
     six
   ];
 
