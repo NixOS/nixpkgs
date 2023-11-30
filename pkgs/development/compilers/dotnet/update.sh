@@ -281,6 +281,13 @@ sdk_packages () {
         )
     fi
 
+    # Packages that only apply to .NET 8 and up
+    if ! version_older "$version" "8"; then
+        pkgs+=( \
+            "Microsoft.NET.ILLink.Tasks" \
+        )
+    fi
+
     generate_package_list "$version" "${pkgs[@]}"
 }
 
