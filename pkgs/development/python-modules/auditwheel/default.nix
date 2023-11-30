@@ -9,8 +9,8 @@
 , pytestCheckHook
 # non-python dependencies
 , bzip2
-, patchelf
 , gnutar
+, patchelf
 , unzip
 }:
 
@@ -63,6 +63,7 @@ buildPythonPackage rec {
       bsd2  # from https://github.com/matthew-brett/delocate
       bsd3  # from https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-projects/pax-utils/lddtree.py
     ];
+    mainProgram = "auditwheel";
     maintainers = with maintainers; [ davhau ];
     platforms = platforms.linux;
   };
