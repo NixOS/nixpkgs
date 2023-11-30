@@ -37,9 +37,12 @@ maven.buildMavenPackage rec {
 
   installPhase = ''
     mkdir -p $out/share/icons
+    mkdir -p $out/share/applications
 
     cp target/RuneLite.jar $out/share
     cp appimage/runelite.png $out/share/icons
+
+    ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
 
     makeWrapper ${jre}/bin/java $out/bin/runelite \
       --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
