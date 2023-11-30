@@ -25,6 +25,12 @@
 , mixEnv ? "prod"
 , compileFlags ? [ ]
 
+  # Options to be passed to the Erlang compiler. As documented in the reference
+  # manual, these must be valid Erlang terms. They will be turned into an
+  # erlang list and set as the ERL_COMPILER_OPTIONS environment variable.
+  # See https://www.erlang.org/doc/man/compile
+, erlangCompilerOptions ? [ ]
+
   # Mix dependencies provided as a fixed output derivation
 , mixFodDeps ? null
 
@@ -63,7 +69,7 @@
 }@attrs:
 let
   # Remove non standard attributes that cannot be coerced to strings
-  overridable = builtins.removeAttrs attrs [ "compileFlags" "mixNixDeps" ];
+  overridable = builtins.removeAttrs attrs [ "compileFlags" "erlangCompilerOptions" "mixNixDeps" ];
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
 assert stripDebug -> !enableDebugInfo;
@@ -88,6 +94,8 @@ stdenv.mkDerivation (overridable // {
   # some older dependencies still use rebar.
   MIX_REBAR = "${rebar}/bin/rebar";
   MIX_REBAR3 = "${rebar3}/bin/rebar3";
+
+  ERL_COMPILER_OPTIONS = "[${lib.strings.concatStringsSep "," ([ "deterministic" ] ++ erlangCompilerOptions)}]";
 
   LC_ALL = "C.UTF-8";
 
