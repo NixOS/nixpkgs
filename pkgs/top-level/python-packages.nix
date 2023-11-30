@@ -12931,6 +12931,8 @@ self: super: with self; {
 
   sigrok = callPackage ../development/python-modules/sigrok { };
 
+  sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
+
   sigtools = callPackage ../development/python-modules/sigtools { };
 
   simanneal = callPackage ../development/python-modules/simanneal { };
