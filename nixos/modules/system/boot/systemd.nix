@@ -185,6 +185,12 @@ in
 
     package = mkPackageOption pkgs "systemd" {};
 
+    enableStrictShellChecks = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to run shellcheck on the generated scripts for systemd units.";
+    };
+
     units = mkOption {
       description = "Definition of systemd units; see {manpage}`systemd.unit(5)`.";
       default = {};
