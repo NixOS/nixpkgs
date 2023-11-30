@@ -400,8 +400,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  # FIXME: https://github.com/NixOS/nixpkgs/pull/269828#issuecomment-1829260859
-  doCheck = variant == "fresh";
+  doCheck = true;
 
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
