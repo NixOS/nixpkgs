@@ -66,6 +66,9 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
       hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # fix timespec calls
+    ./timespec.patch
   ];
 
   configureFlags = [
