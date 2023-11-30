@@ -35,7 +35,7 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "8.2.0";
+  mysqlShellVersion = "8.2.1";
   mysqlServerVersion = "8.2.0";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-kuRo+3vcDtc9aOgAuxJTy0e6E85iOFfCx/ZHtrNg08k=";
+      hash = "sha256-m6WdFow28bxW52q+m8PniZCU/1Ej4secdPQi8GKlziE=";
     })
   ];
 
