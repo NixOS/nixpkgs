@@ -19307,7 +19307,7 @@ with pkgs;
   gqlint = callPackage ../development/tools/gqlint { };
 
   gradle-packages = import ../development/tools/build-managers/gradle {
-    inherit jdk8 jdk11 jdk17;
+    inherit jdk11 jdk17 jdk21;
   };
   gradleGen = gradle-packages.gen;
   gradle_6 = callPackage gradle-packages.gradle_6 { };

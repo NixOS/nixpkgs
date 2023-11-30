@@ -1,4 +1,4 @@
-{ jdk8, jdk11, jdk17 }:
+{ jdk11, jdk17, jdk21 }:
 
 rec {
   gen =
@@ -7,7 +7,7 @@ rec {
 
       # The default JDK/JRE that will be used for derived Gradle packages.
       # A current LTS version of a JDK is a good choice.
-      defaultJava ? jdk8,
+      defaultJava,
 
       # The platforms supported by this Gradle package.
       # Gradle Native-Platform ships some binaries that
@@ -128,10 +128,10 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.4";
+    version = "8.5";
     nativeVersion = "0.22-milestone-25";
-    sha256 = "1bkjxw7i0lm17pdyyvka4xpl6z0cdj0izagphync6839i2pg66iy";
-    defaultJava = jdk17;
+    sha256 = "09hhlka9vc4xr8xa68d8qcvyhsaaicrmh210x0wif23a0s3ng4lx";
+    defaultJava = jdk21;
   };
 
   gradle_7 = gen {
