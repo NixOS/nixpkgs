@@ -32,7 +32,6 @@ in
   extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},losslesscut}
     (
       mkdir -p $out/share
       cd ${extracted}/usr
