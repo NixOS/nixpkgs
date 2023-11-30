@@ -92,6 +92,24 @@ To use your custom kernel package in your NixOS configuration, set
 boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
 ```
 
+## Rust
+
+The Linux kernel does not have Rust language support enabled by
+default. For kernels newer than 6.6, experimental Rust support can be
+enabled. In a NixOS configuration, set:
+
+```nix
+boot.kernelPatches = [
+  {
+    name = "Rust Support";
+    patch = null;
+    features = {
+      rust = true;
+    };
+  }
+];
+```
+
 ## Developing kernel modules {#sec-linux-config-developing-modules}
 
 This section was moved to the [Nixpkgs manual](https://nixos.org/nixpkgs/manual#sec-linux-kernel-developing-modules).
