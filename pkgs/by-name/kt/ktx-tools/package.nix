@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   cmakeBuildType = "RelWithDebInfo";
 
   cmakeFlags = [
-    "-DKTX_FEATURE_DOC=ON"
+    (lib.cmakeBool  "KTX_FEATURE_DOC" true)
   ];
 
   postPatch = ''
