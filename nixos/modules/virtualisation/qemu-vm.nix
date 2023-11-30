@@ -1256,6 +1256,8 @@ in
         unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
       }];
       services.rw-store = {
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         unitConfig = {
           DefaultDependencies = false;
           RequiresMountsFor = "/sysroot/nix/.rw-store";
