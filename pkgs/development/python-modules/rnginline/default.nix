@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , poetry-core
+, pythonRelaxDepsHook
 , lxml
 , docopt-ng
 , typing-extensions
@@ -14,21 +15,20 @@
 buildPythonPackage rec {
   pname = "rnginline";
   version = "1.0.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JWqzs+OqOynIAWYVgGrZiuiCqObAgGe6rBt0DcP3U6E=";
   };
 
-  format = "pyproject";
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'importlib-metadata = "^6.6.0"' 'importlib-metadata = "^6.0.0"'
-  '';
-
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "docopt-ng"
   ];
 
   propagatedBuildInputs = [
