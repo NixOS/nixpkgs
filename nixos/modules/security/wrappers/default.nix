@@ -278,7 +278,8 @@ in
     systemd.services.suid-sgid-wrappers = {
       description = "Create SUID/SGID Wrappers";
       wantedBy = [ "sysinit.target" ];
-      before = [ "sysinit.target" ];
+      before = [ "sysinit.target" "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
       unitConfig.DefaultDependencies = false;
       unitConfig.RequiresMountsFor = [ "/nix/store" "/run/wrappers" ];
       serviceConfig.Type = "oneshot";
