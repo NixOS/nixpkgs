@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildPackages
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
@@ -6,20 +7,21 @@
 , Security
 , withPCRE2 ? true
 , pcre2
+, enableManpages ? stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "14.0.2";
+  version = "14.0.3";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    hash = "sha256-r0o2hT5t4x7fmVVxE3x+vHQnEzY9E4nvLyZ4DDNCY9o=";
+    hash = "sha256-NBGbiy+1AUIBJFx6kcGPSKo08a+dkNo4rNH2I1pki4U=";
   };
 
-  cargoHash = "sha256-J7vEeHSCQ4xbKMUOQ/lCcnnwmnKaz7neOvrY1pAVtXg=";
+  cargoHash = "sha256-s6oK0/eL+NAhG3ySUlJBRatUuWXxfRVgAvlJm++0lkg=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
@@ -28,10 +30,10 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  preFixup = ''
-    $out/bin/rg --generate man > rg.1
+  preFixup = lib.optionalString enableManpages ''
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate man > rg.1
     installManPage rg.1
-
+  '' + ''
     installShellCompletion --cmd rg \
       --bash <($out/bin/rg --generate complete-bash) \
       --fish <($out/bin/rg --generate complete-fish) \
@@ -51,6 +53,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
+    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ globin ma27 zowoq ];
     mainProgram = "rg";

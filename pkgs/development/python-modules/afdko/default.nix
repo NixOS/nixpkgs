@@ -64,6 +64,11 @@ buildPythonPackage rec {
     ./use-dynamic-system-antlr4-runtime.patch
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
+    "-Wno-error=incompatible-function-pointer-types"
+    "-Wno-error=int-conversion"
+  ]);
+
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
 

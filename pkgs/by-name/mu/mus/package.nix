@@ -5,7 +5,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.2.0";
 
   src = fetchFromSourcehut {
-    owner = "~sfr";
+    owner = "~nbsp";
     repo = pname;
     rev = version;
     hash = "sha256-yvMV+lhU9Wtwrhw0RKRUNFNznvZP0zcnT6jqPaqzhUs=";
@@ -15,9 +15,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "a pretty good mpd client";
-    homepage = "https://sr.ht/~sfr/mus";
+    homepage = "https://sr.ht/~nbsp/mus";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfr ];
+    maintainers = with maintainers; [ nbsp ];
     mainProgram = "mus";
   };
 }
