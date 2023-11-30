@@ -77,5 +77,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ anderspapitto rewine ];
     mainProgram = "clerk";
+    platforms = platforms.linux;
   };
 }
