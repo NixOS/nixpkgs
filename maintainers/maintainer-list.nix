@@ -14609,6 +14609,12 @@
     githubId = 5737016;
     name = "Philipp Schuster";
   };
+  phlip9 = {
+    email = "philiphayes9@gmail.com";
+    github = "phlip9";
+    githubId = 918989;
+    name = "Philip Hayes";
+  };
   Phlogistique = {
     email = "noe.rubinstein@gmail.com";
     github = "Phlogistique";
