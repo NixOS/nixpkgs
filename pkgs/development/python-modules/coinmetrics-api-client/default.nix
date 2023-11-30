@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nix-update-script
 , orjson
 , pandas
 , poetry-core
@@ -19,7 +18,7 @@
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
   version = "2023.11.27.17";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -64,7 +63,6 @@ buildPythonPackage rec {
         pandas
       ];
     };
-    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
