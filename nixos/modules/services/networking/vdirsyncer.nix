@@ -71,7 +71,7 @@ in
     services.vdirsyncer = {
       enable = mkEnableOption (mdDoc "vdirsyncer");
 
-      package = mkPackageOptionMD pkgs "vdirsyncer" {};
+      package = mkPackageOption pkgs "vdirsyncer" {};
 
       jobs = mkOption {
         description = mdDoc "vdirsyncer job configurations";

@@ -17,9 +17,9 @@ in
         {command}`incus` command line tool, among others.
       '');
 
-      package = lib.mkPackageOptionMD pkgs "incus" { };
+      package = lib.mkPackageOption pkgs "incus" { };
 
-      lxcPackage = lib.mkPackageOptionMD pkgs "lxc" { };
+      lxcPackage = lib.mkPackageOption pkgs "lxc" { };
 
       preseed = lib.mkOption {
         type = lib.types.nullOr (

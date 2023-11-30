@@ -8,7 +8,7 @@ in {
   options.services.grocy = {
     enable = mkEnableOption (lib.mdDoc "grocy");
 
-    package = mkPackageOptionMD pkgs "grocy" { };
+    package = mkPackageOption pkgs "grocy" { };
 
     hostName = mkOption {
       type = types.str;
