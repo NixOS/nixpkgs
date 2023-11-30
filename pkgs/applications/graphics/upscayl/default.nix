@@ -26,8 +26,6 @@ in
       cp ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
       cp ${appimageContents}/${pname}.png $out/share/pixmaps/${pname}.png
 
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
