@@ -15329,6 +15329,15 @@
     githubId = 44014925;
     name = "Rexx Larsson";
   };
+  RGBCube = {
+    name = "RGBCube";
+    email = "rgbsphere+nixpkgs@gmail.com";
+    github = "RGBCube";
+    githubId = 78925721;
+    keys = [{
+      fingerprint = "jPaU3Vpm/GN0tUuDg72n2+bd9dDMWe4bnKM325eP7eI";
+    }];
+  };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";
