@@ -27,14 +27,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type        = types.package;
-      default     = pkgs.i3;
-      defaultText = literalExpression "pkgs.i3";
-      description = lib.mdDoc ''
-        i3 package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "i3" { };
 
     extraPackages = mkOption {
       type = with types; listOf package;

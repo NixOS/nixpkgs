@@ -141,12 +141,7 @@ in {
       ];
     };
 
-    package = mkOption {
-      description = lib.mdDoc "The kafka package to use";
-      default = pkgs.apacheKafka;
-      defaultText = literalExpression "pkgs.apacheKafka";
-      type = types.package;
-    };
+    package = mkPackageOption pkgs "apacheKafka" { };
 
     jre = mkOption {
       description = lib.mdDoc "The JRE with which to run Kafka";

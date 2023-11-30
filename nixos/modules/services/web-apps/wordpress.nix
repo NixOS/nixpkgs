@@ -104,12 +104,7 @@ let
   siteOpts = { lib, name, config, ... }:
     {
       options = {
-        package = mkOption {
-          type = types.package;
-          default = pkgs.wordpress;
-          defaultText = literalExpression "pkgs.wordpress";
-          description = lib.mdDoc "Which WordPress package to use.";
-        };
+        package = mkPackageOption pkgs "wordpress" { };
 
         uploadsDir = mkOption {
           type = types.path;
