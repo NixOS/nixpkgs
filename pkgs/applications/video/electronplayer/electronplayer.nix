@@ -2,21 +2,18 @@
 let
   pname = "electronplayer";
   version = "2.0.8";
-  name = "${pname}-${version}";
 
   #TODO: remove the -rc4 from the tag in the url when possible
   src = fetchurl {
-    url = "https://github.com/oscartbeaumont/ElectronPlayer/releases/download/v${version}-rc4/${name}.AppImage";
+    url = "https://github.com/oscartbeaumont/ElectronPlayer/releases/download/v${version}-rc4/${pname}-${version}.AppImage";
     sha256 = "wAsmSFdbRPnYnDyWQSbtyj+GLJLN7ibksUE7cegfkhI=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=ElectronPlayer'
