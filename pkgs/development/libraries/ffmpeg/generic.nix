@@ -179,8 +179,8 @@
  */
 , alsa-lib
 , bzip2
-, clang
 , celt
+, clang
 , dav1d
 , fdk_aac
 , fontconfig
@@ -188,27 +188,31 @@
 , frei0r
 , fribidi
 , game-music-emu
+, glslang
 , gnutls
 , gsm
-, libjack2
+, intel-media-sdk
 , ladspaH
 , lame
-, libass
 , libaom
+, libass
 , libbluray
 , libbs2b
 , libcaca
 , libdc1394
-, libraw1394
 , libdrm
+, libGL
+, libGLU
 , libiconv
-, intel-media-sdk
+, libjack2
 , libmodplug
 , libmysofa
 , libogg
 , libopenmpt
 , libopus
 , libplacebo
+, libpulseaudio
+, libraw1394
 , librsvg
 , libssh
 , libtensorflow
@@ -223,41 +227,37 @@
 , libwebp
 , libX11
 , libxcb
-, libXv
 , libXext
 , libxml2
-, xz
+, libXv
 , nv-codec-headers
 , nv-codec-headers-11
-, openal
 , ocl-icd # OpenCL ICD
+, openal
 , opencl-headers  # OpenCL headers
 , opencore-amr
-, libGL
-, libGLU
 , openh264
 , openjpeg
-, libpulseaudio
 , rav1e
-, svt-av1
 , rtmpdump
 , samba
 , SDL2
 , soxr
 , speex
 , srt
+, svt-av1
 , vid-stab
 , vo-amrwbenc
+, vulkan-headers
+, vulkan-loader
 , x264
 , x265
 , xavs
 , xvidcore
+, xz
 , zeromq4
 , zimg
 , zlib
-, vulkan-headers
-, vulkan-loader
-, glslang
 /*
  *  Darwin frameworks
  */
