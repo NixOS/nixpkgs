@@ -18,8 +18,6 @@ appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/HiFile.desktop $out/share/applications/HiFile.desktop
     install -m 444 -D ${appimageContents}/HiFile.png $out/share/icons/hicolor/512x512/apps/HiFile.png
     substituteInPlace $out/share/applications/HiFile.desktop \
