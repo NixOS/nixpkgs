@@ -200,7 +200,7 @@ in
               # Install plugins
 
               # remove plugins directory if it is empty.
-              if [ -z "$(ls -A ${cfg.dataDir}/plugins)" ]; then
+              if [[ -d ${cfg.dataDir}/plugins && -z "$(ls -A ${cfg.dataDir}/plugins)" ]]; then
                 rm -r "${cfg.dataDir}/plugins"
               fi
 
