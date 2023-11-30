@@ -17,7 +17,6 @@ appimageTools.wrapType2 {
   extraPkgs = pkgs: with pkgs; [ R zlib libusb-compat-0_1 ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/GoldenCheetah
     mkdir -p $out/share/applications
     mkdir -p $out/share/pixmaps
     cp ${appimageContents}/GoldenCheetah.desktop $out/share/applications/
