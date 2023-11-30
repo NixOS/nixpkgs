@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -31,6 +32,8 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/base $out/bin/pocketbase
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Open Source realtime backend in 1 file";
