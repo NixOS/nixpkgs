@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
     "-DHybridReverb2_UseLocalDatabase=ON"
   ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mkdir -p $out/share/${pname}/
     cp  -r ${impulseDB}/* $out/share/${pname}/
