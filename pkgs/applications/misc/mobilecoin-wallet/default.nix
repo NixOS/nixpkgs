@@ -3,21 +3,18 @@
 let
   pname = "mobilecoin-wallet";
   version = "1.5.0";
-  name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/mobilecoinofficial/desktop-wallet/releases/download/v${version}/MobileCoin-Wallet-${version}.AppImage";
     sha256 = "sha256-zSTtnKvgcDSiicEDuVK2LN2d8WHiGReYI3XLBmm3Fbo=";
   };
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
 in appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
-
     mkdir -p $out/share/${pname}
     cp -a ${appimageContents}/locales $out/share/${pname}
     cp -a ${appimageContents}/resources $out/share/${pname}
