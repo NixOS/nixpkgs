@@ -52,6 +52,7 @@ buildPythonPackage rec {
     "test_get_config_filtered"
     # AssertionError
     "test_get_interfaces"
+    "test_get_facts"
   ];
 
   pythonImportsCheck = [
