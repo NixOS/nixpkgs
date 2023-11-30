@@ -325,7 +325,7 @@ rec {
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
           in rust.config
-            or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+            or "${cpu_}-${vendor_}-${kernel.name}${lib.optionalString (abi.name != "unknown" && abi.name != "") "-${abi.name}"}";
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.
