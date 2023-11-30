@@ -6,7 +6,6 @@
 , devtools
 , email-validator
 , fetchFromGitHub
-, fetchpatch
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
@@ -53,6 +52,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i '/flake8/ d' Makefile
+
+    # Disable strict docs build due warnings being treated as errors
+    substituteInPlace mkdocs.yml \
+      --replace "strict: true" "strict: false"
   '';
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
