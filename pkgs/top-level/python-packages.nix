@@ -11951,8 +11951,6 @@ self: super: with self; {
 
   qcodes-contrib-drivers = callPackage ../development/python-modules/qcodes-contrib-drivers { };
 
-  qcodes-loop = callPackage ../development/python-modules/qcodes-loop { };
-
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
