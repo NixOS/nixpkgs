@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "553";
+  version = "554";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AQq5ljaxNzh0ZsoUqKgzz5kZKZMav99Jj8fI+e0wv7s=";
+    hash = "sha256-BNAEM9XFkdKLQUAWerM6IWts04FWdd8SSCJZaymmxGo=";
   };
 
   nativeBuildInputs = [
@@ -106,7 +106,7 @@ python3Packages.buildPythonPackage rec {
   installPhase = ''
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
-    mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    mv {hydrus,static,db} $out/${python3Packages.python.sitePackages}
     # Fix random files being marked with execute permissions
     chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
     # Build docs
