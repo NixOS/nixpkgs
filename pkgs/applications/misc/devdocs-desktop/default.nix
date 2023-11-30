@@ -3,7 +3,6 @@
 let
   version = "0.7.2";
   pname = "devdocs-desktop";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/egoist/devdocs-desktop/releases/download/v${version}/DevDocs-${version}.AppImage";
@@ -11,14 +10,13 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
 in appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/devdocs.desktop $out/share/applications/devdocs.desktop
     install -m 444 -D ${appimageContents}/devdocs.png $out/share/icons/hicolor/0x0/apps/devdocs.png
     substituteInPlace $out/share/applications/devdocs.desktop \
