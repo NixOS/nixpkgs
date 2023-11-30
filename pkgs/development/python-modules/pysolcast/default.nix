@@ -1,4 +1,5 @@
 { lib
+, anyconfig
 , buildPythonPackage
 , fetchFromGitHub
 , isodate
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    anyconfig
     isodate
     pyyaml
     requests
