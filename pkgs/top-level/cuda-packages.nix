@@ -69,7 +69,10 @@ let
 
         # Loose packages
         cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit {};
-        saxpy = final.callPackage ../development/cuda-modules/saxpy {};
+        # SaxPy is only available after 11.4 because it requires redistributable versions of CUDA libraries.
+        saxpy = attrsets.optionalAttrs (strings.versionAtLeast cudaVersion "11.4") (
+          final.callPackage ../development/cuda-modules/saxpy {}
+        );
       }
       # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
       # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
