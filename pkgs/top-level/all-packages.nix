@@ -20066,7 +20066,9 @@ with pkgs;
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
-  sparse = callPackage ../development/tools/analysis/sparse { };
+  sparse = callPackage ../development/tools/analysis/sparse {
+    llvm = llvm_14;
+  };
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
