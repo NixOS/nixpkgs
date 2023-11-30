@@ -9,6 +9,7 @@
 , python3
 , stdenv
 , wrapGAppsHook4
+, nix-update-script
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";
@@ -39,6 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     wrapGAppsHook4
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A GTK4 + Libadwaita game launcher";
