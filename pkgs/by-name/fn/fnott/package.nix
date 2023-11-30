@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, gitUpdater
 , fetchFromGitea
 , pkg-config
 , meson
@@ -26,9 +27,10 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "fnott";
     rev = version;
-    sha256 = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
+    hash = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
   };
 
+  strictDeps = true;
   depsBuildBuild = [
     pkg-config
   ];
@@ -51,11 +53,14 @@ stdenv.mkDerivation rec {
     fcft
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     homepage = "https://codeberg.org/dnkl/fnott";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
-    license = with licenses; [ mit zlib ];
-    maintainers = with maintainers; [ polykernel ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ mit zlib ];
+    maintainers = with lib.maintainers; [ polykernel ];
+    mainProgram = "fnott";
+    platforms = lib.platforms.linux;
   };
 }
