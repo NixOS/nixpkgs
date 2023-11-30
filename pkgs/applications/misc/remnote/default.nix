@@ -35,7 +35,7 @@ in
   installPhase = ''
     runHook preInstall
 
-    install -D ${appexec}/bin/remnote-${version} $out/bin/remnote
+    install -D ${appexec}/bin/remnote $out/bin/remnote
     install -m 444 -D "${desktopItem}/share/applications/"* -t $out/share/applications/
     install -m 444 -D ${icon} $out/share/pixmaps/remnote.png
 
