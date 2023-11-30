@@ -49,6 +49,7 @@ in
       git.enable = true;
 
       settings."sr.ht" = {
+        environment = "production";
         global-domain = config.networking.domain;
         service-key = pkgs.writeText "service-key" "8b327279b77e32a3620e2fc9aabce491cc46e7d821fd6713b2a2e650ce114d01";
         network-key = pkgs.writeText "network-key" "cEEmc30BRBGkgQZcHFksiG7hjc6_dK1XR2Oo5Jb9_nQ=";
