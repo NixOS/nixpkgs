@@ -11,14 +11,14 @@
 , vlc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
   version = "2.20.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
-    rev    = version;
+    rev    = finalAttrs.version;
     sha256 = "sha256-ENAsytjqvS8xHZyZLPih3bzBgQ1f/j+s3dWZs1GTWHs=";
   };
 
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
       driver-specific acceleration backends for each supported hardware vendor.
     '';
     homepage = "https://01.org/linuxmedia/vaapi";
-    changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
   };
-}
+})
