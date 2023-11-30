@@ -899,7 +899,7 @@ in
     virtualisation.tpm = {
       enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
 
-      package = mkPackageOptionMD cfg.host.pkgs "swtpm" { };
+      package = mkPackageOption cfg.host.pkgs "swtpm" { };
 
       deviceModel = mkOption {
         type = types.str;

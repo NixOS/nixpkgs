@@ -31,7 +31,7 @@ let
   inherit (lib)
     getBin optionalAttrs optionalString literalExpression
     mkRemovedOptionModule mkRenamedOptionModule
-    mkDefault mkIf mkMerge mkOption mkPackageOptionMD types;
+    mkDefault mkIf mkMerge mkOption mkPackageOption types;
 
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
@@ -108,7 +108,7 @@ in
         default = true;
       };
 
-      notoPackage = mkPackageOptionMD pkgs "Noto fonts" {
+      notoPackage = mkPackageOption pkgs "Noto fonts" {
         default = [ "noto-fonts" ];
         example = "noto-fonts-lgc-plus";
       };

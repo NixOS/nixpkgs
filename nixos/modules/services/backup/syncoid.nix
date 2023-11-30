@@ -87,7 +87,7 @@ in
   options.services.syncoid = {
     enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
-    package = lib.mkPackageOptionMD pkgs "sanoid" {};
+    package = lib.mkPackageOption pkgs "sanoid" {};
 
     interval = mkOption {
       type = types.str;

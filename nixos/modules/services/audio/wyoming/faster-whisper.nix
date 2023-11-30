@@ -12,7 +12,7 @@ let
     mkOption
     mdDoc
     mkEnableOption
-    mkPackageOptionMD
+    mkPackageOption
     types
     ;
 
@@ -24,7 +24,7 @@ in
 
 {
   options.services.wyoming.faster-whisper = with types; {
-    package = mkPackageOptionMD pkgs "wyoming-faster-whisper" { };
+    package = mkPackageOption pkgs "wyoming-faster-whisper" { };
 
     servers = mkOption {
       default = {};

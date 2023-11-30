@@ -231,7 +231,7 @@ in {
 
   ###### interface
 
-  options.services.borgbackup.package = mkPackageOptionMD pkgs "borgbackup" { };
+  options.services.borgbackup.package = mkPackageOption pkgs "borgbackup" { };
 
   options.services.borgbackup.jobs = mkOption {
     description = lib.mdDoc ''
