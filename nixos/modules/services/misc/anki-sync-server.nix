@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
 with lib; let
@@ -41,19 +40,14 @@ with lib; let
   '';
 in {
   options.services.anki-sync-server = {
-    enable = mkEnableOption (lib.mdDoc "anki-sync-server");
+    enable = mkEnableOption "anki-sync-server";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.anki-sync-server;
-      defaultText = literalExpression "pkgs.anki-sync-server";
-      description = lib.mdDoc "The package to use for the anki-sync-server command.";
-    };
+    package = mkPackageOption pkgs "anki-sync-server" { };
 
     address = mkOption {
       type = types.str;
       default = "::1";
-      description = lib.mdDoc ''
+      description = ''
         IP address anki-sync-server listens to.
         Note host names are not resolved.
       '';
@@ -62,13 +56,13 @@ in {
     port = mkOption {
       type = types.port;
       default = 27701;
-      description = lib.mdDoc "port anki-sync-server listens to";
+      description = "Port number anki-sync-server listens to.";
     };
 
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     users = mkOption {
@@ -77,12 +71,12 @@ in {
           options = {
             username = mkOption {
               type = str;
-              description = lib.mdDoc "User name accepted by anki-sync-server.";
+              description = "User name accepted by anki-sync-server.";
             };
             password = mkOption {
               type = nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Password accepted by anki-sync-server for the associated username.
                 **WARNING**: This option is **not secure**. This password will
                 be stored in *plaintext* and will be visible to *all users*.
@@ -93,7 +87,7 @@ in {
             passwordFile = mkOption {
               type = nullOr path;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 File containing the password accepted by anki-sync-server for
                 the associated username.  Make sure to make readable only by
                 root.
@@ -101,7 +95,7 @@ in {
             };
           };
         });
-      description = lib.mdDoc "List of user-password pairs to provide to the sync server.";
+      description = "List of user-password pairs to provide to the sync server.";
     };
   };
 
