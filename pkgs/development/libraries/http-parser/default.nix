@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
   patches = [
     ./build-shared.patch
   ] ++ lib.optionals stdenv.isAarch32 [
@@ -21,18 +22,36 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-rZZMJeow3V1fTnjadRaRa+xTq3pdhZn/eJ4xjxEDoU4=";
     })
   ];
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+
+  makeFlags = [
+    "DESTDIR="
+    "PREFIX=$(out)"
+    "SOEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.sharedLibrary}"
+    "BINEXT=${stdenv.hostPlatform.extensions.executable}"
+    "Platform=${lib.toLower stdenv.hostPlatform.uname.system}"
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "SONAME=$(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOEXT)"
+    "LIBNAME=$(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOREV).$(SOEXT)"
+    "LDFLAGS=-Wl,--out-implib=$(LIBNAME).a"
+  ];
+
   buildFlags = [ "library" ];
+
   doCheck = true;
   checkTarget = "test";
 
   enableParallelBuilding = true;
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isWindows ''
+    install -D *.dll.a $out/lib
+    ln -sf libhttp_parser.${version}.dll.a $out/lib/libhttp_parser.dll.a
+  '';
 
   meta = with lib; {
     description = "An HTTP message parser written in C";
     homepage = "https://github.com/nodejs/http-parser";
     maintainers = with maintainers; [ matthewbauer ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }
