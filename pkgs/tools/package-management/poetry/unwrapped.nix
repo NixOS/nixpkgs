@@ -41,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-au+4TOh/sA1+XZqXvWkKxfSdurusBR4l8jsPg6acUM8=";
+    hash = "sha256-PM3FIZYso7p0Oe0RpiPuxHrQrgnMlkT5SVeaJPK/J94=";
   };
 
   nativeBuildInputs = [
@@ -166,5 +166,6 @@ buildPythonPackage rec {
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum dotlambda ];
+    mainProgram = "poetry";
   };
 }

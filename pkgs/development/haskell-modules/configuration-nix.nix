@@ -625,8 +625,6 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
   fsnotify = dontCheck super.fsnotify;
 
-  hidapi = addExtraLibrary pkgs.udev super.hidapi;
-
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
   discount = super.discount.override { markdown = pkgs.discount; };

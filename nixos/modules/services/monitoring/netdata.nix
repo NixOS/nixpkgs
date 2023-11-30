@@ -52,12 +52,7 @@ in {
     services.netdata = {
       enable = mkEnableOption (lib.mdDoc "netdata");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.netdata;
-        defaultText = literalExpression "pkgs.netdata";
-        description = lib.mdDoc "Netdata package to use.";
-      };
+      package = mkPackageOption pkgs "netdata" { };
 
       user = mkOption {
         type = types.str;

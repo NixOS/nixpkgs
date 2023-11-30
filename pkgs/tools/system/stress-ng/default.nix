@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ c0bw3b ];
     platforms = platforms.unix;
+    mainProgram = "stress-ng";
   };
 }

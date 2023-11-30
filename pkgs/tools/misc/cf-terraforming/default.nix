@@ -28,5 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/cloudflare/cf-terraforming/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ benley ];
+    mainProgram = "cf-terraforming";
   };
 }

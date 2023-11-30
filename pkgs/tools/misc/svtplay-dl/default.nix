@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
     platforms = lib.platforms.unix;
+    mainProgram = "svtplay-dl";
   };
 }

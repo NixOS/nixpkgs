@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ simoneruffini ];
     platforms = platforms.linux;
+    mainProgram = "way-displays";
   };
 }

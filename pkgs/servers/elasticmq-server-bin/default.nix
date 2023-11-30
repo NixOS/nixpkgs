@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ peterromfeldhk ];
+    mainProgram = "elasticmq-server";
   };
 })

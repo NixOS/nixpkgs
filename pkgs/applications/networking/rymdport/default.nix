@@ -48,5 +48,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
+    mainProgram = "rymdport";
   };
 }

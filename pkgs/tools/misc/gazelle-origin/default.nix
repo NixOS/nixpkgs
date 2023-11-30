@@ -33,5 +33,6 @@ buildPythonApplication rec {
     # TODO license is unspecified in the upstream, as well as the fork
     license = licenses.unfree;
     maintainers = with maintainers; [ somasis ];
+    mainProgram = "gazelle-origin";
   };
 }

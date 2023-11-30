@@ -1,4 +1,4 @@
-{ channel, version, revision, sha256 }:
+{ channel, version, revision, hash }:
 
 { stdenv
 , fetchurl
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-${revision}_amd64.deb";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [
@@ -129,12 +129,12 @@ stdenv.mkDerivation rec {
       opt/microsoft/${shortName}/libGLESv2.so
 
     patchelf \
-      --set-rpath "${libPath.libsmartscreenn}" \
-      opt/microsoft/${shortName}/libsmartscreenn.so
-
-    patchelf \
       --set-rpath "${libPath.liboneauth}" \
       opt/microsoft/${shortName}/liboneauth.so
+  '' + lib.optionalString (lib.versionOlder version "120") ''
+    patchelf \
+      --set-rpath "${libPath.libsmartscreenn}" \
+      opt/microsoft/${shortName}/libsmartscreenn.so
   '';
 
   installPhase = ''

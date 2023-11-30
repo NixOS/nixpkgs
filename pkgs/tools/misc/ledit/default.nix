@@ -34,5 +34,6 @@ stdenv.mkDerivation {
     description = "A line editor, allowing to use shell commands with control characters like in emacs";
     license = licenses.bsd3;
     maintainers = [ maintainers.delta ];
+    mainProgram = "ledit";
   };
 }

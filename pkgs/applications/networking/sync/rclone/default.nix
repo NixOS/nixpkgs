@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.64.2";
+  version = "1.65.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gOFOcqCgFAiTc6W3v8Z917hGCzxluswqnuOoUht73GA=";
+    hash = "sha256-hlkX8JrBz/hFwQj0xCZfuBt2t3CP3Xa1JkNDH0zomxg=";
   };
 
-  vendorHash = "sha256-eYIGVCTvUfGbsIMFthEfD0r6aeA7Ly9xJ8PJ6hR2SjA=";
+  vendorHash = "sha256-qKRIT2HqNDpEtZBNHZMXp4Yhh5fCkQSTPU5MQ7FmCHI=";
 
   subPackages = [ "." ];
 

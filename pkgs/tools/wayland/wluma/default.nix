@@ -51,5 +51,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [ yshym jmc-figueira ];
     platforms = platforms.linux;
+    mainProgram = "wluma";
   };
 }

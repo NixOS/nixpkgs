@@ -5,6 +5,7 @@
 , python3
 , bubblewrap
 , systemd
+, pandoc
 
   # Python packages
 , setuptools
@@ -60,14 +61,16 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "18";
+  version = "19";
   format = "pyproject";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-bnd2P6lq1XqKed3m4hDYrR9IcdrPaJxNBL2Z6jCruV4=";
+    hash = "sha256-KjJM+KZCgUnsaEN2ZorhH0AR5nmiV2h3i7Vb3KdGFtI=";
   };
 
   # Fix ctypes finding library
@@ -84,13 +87,10 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
+    pandoc
     setuptools
     setuptools-scm
     wheel
-  ];
-
-  makeWrapperArgs = [
-    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
   ];
 
   propagatedBuildInputs = [
@@ -100,13 +100,26 @@ buildPythonApplication rec {
     qemu
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/mkosi \
-      --prefix PYTHONPATH : "$PYTHONPATH"
+  postBuild = ''
+    ./tools/make-man-page.sh
   '';
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mkosi"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    mv mkosi/resources/mkosi.1 $out/share/man/man1/
+  '';
+
+  makeWrapperArgs = [
+    "--set MKOSI_INTERPRETER ${python3pefile}/bin/python3"
+    "--prefix PYTHONPATH : \"$PYTHONPATH\""
   ];
 
   meta = with lib; {

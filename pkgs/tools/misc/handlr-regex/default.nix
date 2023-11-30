@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
     license = licenses.mit;
     maintainers = with maintainers; [ anomalocaris ];
+    mainProgram = "handlr";
   };
 }

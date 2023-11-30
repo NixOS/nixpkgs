@@ -32,5 +32,6 @@ stdenv.mkDerivation {
       license     = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];
       platforms   = platforms.linux;
+      mainProgram = "windowlab";
     };
 }

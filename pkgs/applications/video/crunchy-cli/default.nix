@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/crunchy-labs/crunchy-cli";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ stepbrobd ];
+    mainProgram = "crunchy-cli";
   };
 }
 

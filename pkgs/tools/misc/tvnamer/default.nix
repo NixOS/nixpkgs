@@ -48,5 +48,6 @@ pypkgs.buildPythonApplication rec {
     homepage = "https://github.com/dbr/tvnamer";
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "tvnamer";
   };
 }

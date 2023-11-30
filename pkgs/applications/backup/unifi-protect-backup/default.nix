@@ -50,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ajs124 ];
+    mainProgram = "unifi-protect-backup";
   };
 }

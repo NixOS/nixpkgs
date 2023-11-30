@@ -53,5 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/nedbat/scriv/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ amesgen ];
+    mainProgram = "scriv";
   };
 }

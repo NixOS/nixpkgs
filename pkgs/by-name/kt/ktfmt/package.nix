@@ -30,7 +30,7 @@ maven.buildMavenPackage rec {
   meta = with lib; {
     description = "A program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions.";
     homepage = "https://github.com/facebook/ktfmt";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     mainProgram = "ktfmt";
     maintainers = with maintainers; [ ghostbuster91 ];
     inherit (jre_headless.meta) platforms;

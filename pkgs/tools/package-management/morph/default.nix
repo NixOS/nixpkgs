@@ -33,5 +33,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/dbcdk/morph";
     maintainers = with maintainers; [adamt johanot];
+    mainProgram = "morph";
   };
 }

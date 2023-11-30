@@ -583,14 +583,7 @@ in {
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.syncthing;
-        defaultText = literalExpression "pkgs.syncthing";
-        description = lib.mdDoc ''
-          The Syncthing package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "syncthing" { };
     };
   };
 

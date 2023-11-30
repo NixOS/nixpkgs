@@ -1,7 +1,7 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
 
 { lib, stdenv, fetchurl, cmake, darwin, doxygen, libidn2, libyaml, openssl
-, systemd, unbound, yq, nimPackages }:
+, systemd, unbound, yq }:
 let
   metaCommon = with lib; {
     maintainers = with maintainers; [ leenaars ehmry ];
@@ -33,8 +33,6 @@ in rec {
     '';
 
     postInstall = "rm -r $out/share/doc";
-
-    passthru.tests.nim = nimPackages.getdns;
 
     meta = with lib;
       metaCommon // {

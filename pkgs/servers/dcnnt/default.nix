@@ -22,5 +22,6 @@ buildPythonApplication rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ arnoutkroeze ];
+    mainProgram = "dcnnt";
   };
 }

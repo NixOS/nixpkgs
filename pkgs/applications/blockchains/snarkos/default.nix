@@ -55,5 +55,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     platforms = platforms.unix;
+    mainProgram = "snarkos";
   };
 }

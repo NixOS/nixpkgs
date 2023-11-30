@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , qttools
@@ -16,22 +17,37 @@
 , gst_all_1
 , gtest
 }:
+
 stdenv.mkDerivation rec {
   pname = "deepin-voice-note";
-  version = "5.11.1";
+  version = "6.0.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JX4OuVu+5/a3IhkfnvaWVDaKl+xg/8qxlvp9hM0nHNU=";
+    hash = "sha256-yDlWyMGkSToGCN7tuZNR8Mz7MUOZ7355w4H0OzeHBrs=";
   };
 
+  patches = [
+    ./use_v23_dbus_interface.diff
+    (fetchpatch {
+      name = "Adjust-the-audio-port-available-range.patch";
+      url = "https://github.com/linuxdeepin/deepin-voice-note/commit/a876e4c4cf7d77e50071246f9fb6998aa62def77.patch";
+      hash = "sha256-J/PPdj1Am/v2Sw2Dv2XvZJAy/6Tf7OoTfrbOB9rc5m8=";
+    })
+    (fetchpatch {
+      name = "fix-build-error-with-new-dtk.patch";
+      url = "https://github.com/linuxdeepin/deepin-voice-note/commit/9ce211f603deaff21b881e1c4f43d53e33a85347.patch";
+      hash = "sha256-oP+AzMniONxjYIFust8fGaD8/UOjKr4yZiRUkdTMd5w=";
+    })
+  ];
+
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "/usr" "$out"
     substituteInPlace src/common/audiowatcher.cpp \
       --replace "/usr/share" "$out/share"
-    substituteInPlace assets/deepin-voice-note.desktop \
-      --replace "/usr/bin" "$out/bin"
   '';
 
   nativeBuildInputs = [
@@ -60,8 +76,6 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   cmakeFlags = [ "-DVERSION=${version}" ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${dde-qt-dbus-factory}/include/libdframeworkdbus-2.0";
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

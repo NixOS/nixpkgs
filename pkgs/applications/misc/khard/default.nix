@@ -1,12 +1,12 @@
 { lib, python3, fetchPypi, khard, testers }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.18.0";
+  version = "0.19.0";
   pname = "khard";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05860fdayqap128l7i6bcmi9kdyi2gx02g2pmh88d56xgysd927y";
+    sha256 = "sha256-5ki+adfz7m0+FbxC9+IXHLn8oeLKLkASuU15lyDATKQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -1,13 +1,11 @@
 diff -rupN hivex-1.3.14/lib/Makefile.am hivex-1.3.14-new/lib/Makefile.am
 --- hivex-1.3.14/lib/Makefile.am	2013-09-10 13:04:12.000000000 +0200
 +++ hivex-1.3.14-new/lib/Makefile.am	2014-11-06 01:31:05.956106861 +0100
-@@ -40,8 +40,7 @@ libhivex_la_SOURCES = \
- 
- libhivex_la_LIBADD =  ../gnulib/lib/libgnu.la $(LTLIBOBJS)
- libhivex_la_LDFLAGS = \
--	-version-info 0:0:0 \
+@@ -51,7 +51,6 @@
+ 	-pthread \
+ 	-version-info 0:0:0 \
+ 	-no-undefined \
 -	$(VERSION_SCRIPT_FLAGS)$(srcdir)/hivex.syms \
-+	-version-info 0:0:0
  	$(LTLIBICONV) \
  	$(LTLIBINTL) \
  	$(LTLIBTHREAD)

@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.linux;
+    mainProgram = "jitsi-videobridge";
   };
 }

@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jhspetersson/fselect";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "fselect";
   };
 }

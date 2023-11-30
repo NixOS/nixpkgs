@@ -94,14 +94,7 @@ in
       '';
     };
 
-    package = mkOption {
-      default = pkgs.caddy;
-      defaultText = literalExpression "pkgs.caddy";
-      type = types.package;
-      description = lib.mdDoc ''
-        Caddy package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "caddy" { };
 
     dataDir = mkOption {
       type = types.path;

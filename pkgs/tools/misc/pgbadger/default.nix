@@ -36,5 +36,6 @@ buildPerlPackage rec {
     changelog = "https://github.com/darold/pgbadger/raw/v${version}/ChangeLog";
     license = lib.licenses.postgresql;
     maintainers = lib.teams.determinatesystems.members;
+    mainProgram = "pgbadger";
   };
 }

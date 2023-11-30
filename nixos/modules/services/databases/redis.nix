@@ -54,12 +54,7 @@ in {
   options = {
 
     services.redis = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.redis;
-        defaultText = literalExpression "pkgs.redis";
-        description = lib.mdDoc "Which Redis derivation to use.";
-      };
+      package = mkPackageOption pkgs "redis" { };
 
       vmOverCommit = mkEnableOption (lib.mdDoc ''
         setting of vm.overcommit_memory to 1
@@ -393,9 +388,7 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies =
-          optionals (conf.port != 0) ["AF_INET" "AF_INET6"] ++
-          optional (conf.unixSocket != null) "AF_UNIX";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;

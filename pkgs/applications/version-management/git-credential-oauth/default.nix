@@ -25,5 +25,6 @@ buildGoModule rec {
     changelog = "https://github.com/hickford/git-credential-oauth/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shyim ];
+    mainProgram = "git-credential-oauth";
   };
 }

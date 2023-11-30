@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://juju.is";
     license = licenses.mit;
     maintainers = with maintainers; [ citadelcore ];
+    mainProgram = "juju";
   };
 }

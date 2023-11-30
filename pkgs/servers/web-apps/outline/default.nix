@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
+, prefetch-yarn-deps
 , nodejs
 , yarn
-, yarn2nix-moretea
 , nixosTests
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-t1m9pKsM9E2iAg9vv/nKmQioRi6kMjFGcTXzcT3cMxs=";
   };
 
-  nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps ];
   buildInputs = [ yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     export NODE_OPTIONS=--openssl-legacy-provider
 
     yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
 
     yarn install --offline \
       --frozen-lockfile \

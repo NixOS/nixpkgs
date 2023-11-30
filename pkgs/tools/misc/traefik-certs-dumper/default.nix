@@ -19,5 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/ldez/traefik-certs-dumper";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "traefik-certs-dumper";
   };
 }

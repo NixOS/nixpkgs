@@ -53,5 +53,6 @@ buildGoModule rec {
     homepage = "https://skeema.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "skeema";
   };
 }

@@ -51,6 +51,7 @@ python3Packages.buildPythonPackage rec {
     description = "Flash TI SimpleLink chips (CC2538, CC13xx, CC26xx) over serial";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lorenz ];
+    mainProgram = "cc2538-bsl";
   };
 }
 

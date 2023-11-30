@@ -52,5 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/uetchy/gst";
     maintainers = with lib.maintainers; [ _0x4A6F ];
     license = lib.licenses.asl20;
+    mainProgram = "gst";
   };
 }

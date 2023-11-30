@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.gpl3;
+    mainProgram = "diskscan";
   };
 }

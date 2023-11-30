@@ -1,25 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, gnugrep
 , nix
 }:
 stdenv.mkDerivation (finalAttrs:{
   pname = "nix-direnv";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = finalAttrs.version;
-    hash = "sha256-h49uz+/YDRwbusiVx6I3HP9P3UZROIOlwjlYYqRjesE=";
+    hash = "sha256-rMQ+Nb6WqXm66g2TpF8E0Io9WBR0ve06MW8I759gl2M=";
   };
 
   # Substitute instead of wrapping because the resulting file is
   # getting sourced, not executed:
   postPatch = ''
     sed -i "1a NIX_BIN_PREFIX=${nix}/bin/" direnvrc
-    substituteInPlace direnvrc --replace "grep" "${lib.getExe gnugrep}"
   '';
 
   installPhase = ''

@@ -121,5 +121,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "pcloud";
   };
 }

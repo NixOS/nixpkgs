@@ -34,5 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/Baldomo/open-in-mpv";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "open-in-mpv";
   };
 }

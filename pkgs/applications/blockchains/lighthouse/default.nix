@@ -152,5 +152,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://lighthouse.sigmaprime.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ centromere pmw ];
+    mainProgram = "lighthouse";
   };
 }

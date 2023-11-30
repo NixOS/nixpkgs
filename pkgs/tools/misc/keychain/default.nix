@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ sigma ];
+    mainProgram = "keychain";
   };
 }

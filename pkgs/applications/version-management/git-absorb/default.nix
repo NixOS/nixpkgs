@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
     maintainers = [ maintainers.marsam ];
+    mainProgram = "git-absorb";
   };
 }

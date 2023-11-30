@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://nextdns.io";
     license = licenses.mit;
     maintainers = with maintainers; [ pnelson ];
+    mainProgram = "nextdns";
   };
 }

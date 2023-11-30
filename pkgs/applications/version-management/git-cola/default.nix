@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-LNzsG6I4InygpfbzTikJ1gxTFkVrkDV1eS0CJwKT26A=";
+    hash = "sha256-PtV2mzxOfZ88THiFD4K+qtOi41GeLF1GcdiFFhUR8Ak=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

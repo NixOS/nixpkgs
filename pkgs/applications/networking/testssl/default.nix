@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://testssl.sh/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ etu ];
+    mainProgram = "testssl.sh";
   };
 }

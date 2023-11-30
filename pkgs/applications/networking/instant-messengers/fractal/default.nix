@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-bad
+    gst-plugins-good
   ]);
 
   passthru = {

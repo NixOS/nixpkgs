@@ -190,13 +190,8 @@ in {
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud26" "nextcloud27" ];
     };
-    phpPackage = mkOption {
-      type = types.package;
-      relatedPackages = [ "php81" "php82" ];
-      defaultText = "pkgs.php";
-      description = lib.mdDoc ''
-        PHP package to use for Nextcloud.
-      '';
+    phpPackage = mkPackageOption pkgs "php" {
+      example = "php82";
     };
 
     maxUploadSize = mkOption {

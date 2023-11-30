@@ -276,8 +276,8 @@ let
         mktplcRef = {
           name = "nix-env-selector";
           publisher = "arrterian";
-          version = "1.0.9";
-          sha256 = "sha256-TkxqWZ8X+PAonzeXQ+sI9WI+XlqUHll7YyM7N9uErk0=";
+          version = "1.0.10";
+          sha256 = "sha256-b3Sr0bwU2VJgl2qcdsUROZ3jnK+YUuzJMySvSD7goj8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -618,10 +618,14 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.9.9";
-          sha256 = "sha256-QyB6DtKe9KH2UizLZQfP4YlHz2yF8H9Ehj+M+OdIYe4=";
+          version = "0.11.30";
+          sha256 = "sha256-1CxyvQu7WQJw87sTcpnILztt1WeSpWOgij0dEIXebPU=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bradlc.vscode-tailwindcss/changelog";
+          description = "Tailwind CSS tooling for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss";
+          homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense";
           license = lib.licenses.mit;
         };
       };
@@ -969,15 +973,15 @@ let
         mktplcRef = {
           name = "composer-php-vscode";
           publisher = "devsense";
-          version = "1.36.13428";
-          sha256 = "sha256-dzRuD0XBWU+xUtr86eN8zbZ6bVIq1BP0/EqgQG4JbvY=";
+          version = "1.41.14332";
+          sha256 = "sha256-qRgncn6u40Igd40OZShRHXqdgjFqRLNb0hPirwc+DoU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
           description = "A visual studio code extension for full development integration for Composer, the PHP package manager.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.composer-php-vscode";
           homepage = "https://github.com/DEVSENSE/phptools-docs";
-          license = lib.licenses.asl20;
+          license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.drupol ];
         };
       };
@@ -987,25 +991,25 @@ let
           sources = {
             "x86_64-linux" = {
               arch = "linux-x64";
-              sha256 = "sha256-x4Vsr/79vZuNPGQqwOVdIMi2Ba9DfnKM1AjxCZbzJms=";
+              sha256 = "sha256-8i5nRlzd+LnpEh9trWECxfiC1W4S0ekBab5vo18OlsA=";
             };
             "x86_64-darwin" = {
               arch = "darwin-x64";
-              sha256 = "0c9jcjavkjiv92cd4wrvgcv70igghi5ha96hg7h63cgmxg7b87gk";
+              sha256 = "14crw56277rdwhigabb3nsndkfcs3yzzf7gw85jvryxviq32chgy";
             };
             "aarch64-linux" = {
               arch = "linux-arm64";
-              sha256 = "0b3w3ssxymf9p1h4amnqimbsjf1wpxsi55b05wgqwh2w2zfxd91l";
+              sha256 = "1j1xlvbg3nrfmdd9zm6kywwicdwdkrq0si86lcndaii8m7sj5pfp";
             };
             "aarch64-darwin" = {
               arch = "darwin-arm64";
-              sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+              sha256 = "0nlks6iqxkx1xlicsa8lrb1319rgznlxkv2gg7wkwgzph97ik8bi";
             };
           };
         in {
           name = "phptools-vscode";
           publisher = "devsense";
-          version = "1.36.13428";
+          version = "1.41.14332";
         } // sources.${stdenv.system};
 
         nativeBuildInputs = [
@@ -1026,7 +1030,7 @@ let
           description = "A visual studio code extension for full development integration for the PHP language.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.phptools-vscode";
           homepage = "https://github.com/DEVSENSE/phptools-docs";
-          license = lib.licenses.asl20;
+          license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.drupol ];
           platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
         };
@@ -1036,15 +1040,15 @@ let
         mktplcRef = {
           name = "profiler-php-vscode";
           publisher = "devsense";
-          version = "1.36.13428";
-          sha256 = "sha256-/CT83LdQkEvsWrQX30bgnklgGKduYC0LqZ8gaexqu60=";
+          version = "1.41.14332";
+          sha256 = "sha256-u2lNqG6FUhWnnNGtv+sjTbP/hbu4Da/8xjLzmPZkZOA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
           description = "A visual studio code extension for PHP and XDebug profiling and inspecting.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.profiler-php-vscode";
           homepage = "https://github.com/DEVSENSE/phptools-docs";
-          license = lib.licenses.asl20;
+          license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.drupol ];
         };
       };
@@ -1689,10 +1693,14 @@ let
         mktplcRef = {
           name = "Go";
           publisher = "golang";
-          version = "0.38.0";
-          sha256 = "sha256-wOWouVz4mE4BzmgQOLQyVWsMadMqeUkFWHnruxStU0Q=";
+          version = "0.40.0";
+          sha256 = "sha256-otAq6ul2l64zpRJdekCb7XZiE2vgpLUfM4NUdRPZX8w=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/golang.Go/changelog";
+          description = "Go extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=golang.Go";
+          homepage = "https://github.com/golang/vscode-go";
           license = lib.licenses.mit;
         };
       };
@@ -2304,8 +2312,8 @@ let
         mktplcRef = {
           name = "typst-preview";
           publisher = "mgt19937";
-          version = "0.9.1";
-          sha256 = "sha256-GHD/i+QOnItGEYG0bl/pVl+a4Dvn7SHhICJ14VfqMjE=";
+          version = "0.9.2";
+          sha256 = "sha256-/2ZD5LOQ1vTIKab2qX+5AqNqaRs90MNz1jUMDaV1wUY=";
         };
 
         buildInputs = [

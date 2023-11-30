@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s@Cflags: @Cflags: $($PKG_CONFIG --cflags libglibutil) @g" $dev/lib/pkgconfig/$pname.pc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GLib-style interface to binder";
     homepage = "https://github.com/mer-hybris/libgbinder";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mcaju ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mcaju ];
   };
 }

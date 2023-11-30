@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
     platforms = lib.platforms.all;
+    mainProgram = "warp";
   };
 }

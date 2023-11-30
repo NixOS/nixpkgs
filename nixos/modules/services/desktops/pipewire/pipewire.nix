@@ -25,14 +25,7 @@ in {
     services.pipewire = {
       enable = mkEnableOption (lib.mdDoc "pipewire service");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.pipewire;
-        defaultText = literalExpression "pkgs.pipewire";
-        description = lib.mdDoc ''
-          The pipewire derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "pipewire" { };
 
       socketActivation = mkOption {
         default = true;

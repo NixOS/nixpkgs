@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/anatawa12/vrc-get";
     license = licenses.mit;
     maintainers = with maintainers; [ bddvlpr ];
+    mainProgram = "vrc-get";
   };
 }

@@ -480,6 +480,7 @@
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
+  ./services/development/athens.nix
   ./services/development/blackfire.nix
   ./services/development/bloop.nix
   ./services/development/distccd.nix
@@ -621,6 +622,7 @@
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
   ./services/matrix/dendrite.nix
+  ./services/matrix/maubot.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mautrix-whatsapp.nix
@@ -1218,6 +1220,7 @@
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
+  ./services/torrent/torrentstream.nix
   ./services/tracing/tempo.nix
   ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
@@ -1439,6 +1442,7 @@
   ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/unl0kr.nix
   ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix
@@ -1536,9 +1540,10 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
-  { documentation.nixos.extraModules = [
-    ./virtualisation/qemu-vm.nix
-    ./image/repart.nix
+  {
+    documentation.nixos.extraModules = [
+      ./virtualisation/qemu-vm.nix
+      ./image/repart.nix
     ];
   }
 ]

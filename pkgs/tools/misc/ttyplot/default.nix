@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tenox7/ttyplot";
     license = licenses.unlicense;
     maintainers = with maintainers; [ lassulus ];
+    mainProgram = "ttyplot";
   };
 }

@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.azazak123 ];
     platforms = platforms.linux;
+    mainProgram = "hyprland-per-window-layout";
   };
 }

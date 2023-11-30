@@ -39,5 +39,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ zaninime ];
+    mainProgram = "libgen-cli";
   };
 }

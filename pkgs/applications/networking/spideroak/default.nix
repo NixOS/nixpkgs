@@ -57,5 +57,6 @@ in stdenv.mkDerivation {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ amorsillo ];
     platforms = lib.platforms.linux;
+    mainProgram = "spideroak";
   };
 }

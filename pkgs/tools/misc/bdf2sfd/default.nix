@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "bdf2sfd";
   };
 }

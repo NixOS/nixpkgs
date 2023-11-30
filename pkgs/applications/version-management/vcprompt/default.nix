@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms   = with platforms; linux ++ darwin;
     license = licenses.gpl2Plus;
+    mainProgram = "vcprompt";
   };
 }

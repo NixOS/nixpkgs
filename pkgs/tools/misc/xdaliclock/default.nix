@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ freebsd;
     license = licenses.free; #TODO BSD on Gentoo, looks like MIT
     downloadPage = "http://www.jwz.org/xdaliclock/";
+    mainProgram = "xdaliclock";
   };
 }

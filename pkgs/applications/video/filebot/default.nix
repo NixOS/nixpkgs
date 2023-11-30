@@ -67,5 +67,6 @@ in stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;
+    mainProgram = "filebot";
   };
 })

@@ -89224,7 +89224,7 @@ in
   "pgrok-build-deps-../../tools/networking/pgrok/build-deps" = nodeEnv.buildNodePackage {
     name = "pgrokd";
     packageName = "pgrokd";
-    version = "1.4.0";
+    version = "1.4.1";
     src = ../../tools/networking/pgrok/build-deps;
     dependencies = [
       sources."@aashutoshrathi/word-wrap-1.2.6"

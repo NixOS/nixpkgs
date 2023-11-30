@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -31,45 +30,31 @@
 , gst_all_1
 , gtest
 , libpulseaudio
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "5.10.28";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aILaiVkApXBKJUxvQ1k7CHzL3IOwshsTTjW5Ak31xEM=";
+    hash = "sha256-dWN2IVVpwYwzEuLtT3JvhzKiBwaBq4lzmaEhA9S1hjE=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "feat-rewrite-libPath-to-read-LD_LIBRARY_PATH.patch";
-      url = "https://github.com/linuxdeepin/deepin-movie-reborn/commit/432bf452ed244c256e99ecaf80bb6a0eef9b4a74.patch";
-      sha256 = "sha256-5hRQ8D9twBKgouVpIBa1pdAGk0lI/wEdQaHBBHFCZBA";
-    })
+    ./dont_use_libPath.diff
   ];
 
   postPatch = ''
     # https://github.com/linuxdeepin/deepin-movie-reborn/pull/198
     substituteInPlace src/common/diskcheckthread.cpp \
       --replace "/usr/include/linux/cdrom.h" "linux/cdrom.h"
-    substituteInPlace src/widgets/toolbox_proxy.cpp \
-      --replace "/bin/bash" "${runtimeShell}"
-
-    # libdmr always assume that these libraries exist
-    # otherwise it will lead to coredump
-    # This affects the preview plugin for dde-file-manager
-
-    substituteInPlace src/libdmr/{filefilter.cpp,playlist_model.cpp,gstutils.cpp} \
-      --replace 'LibraryLoader::libPath("libavcodec.so")' '"${lib.getLib ffmpeg}/lib/libavcodec.so"' \
-      --replace 'LibraryLoader::libPath("libavformat.so")' '"${lib.getLib ffmpeg}/lib/libavformat.so"' \
-      --replace 'LibraryLoader::libPath("libavutil.so")' '"${lib.getLib ffmpeg}/lib/libavutil.so"' \
-      --replace 'LibraryLoader::libPath("libffmpegthumbnailer.so")' '"${lib.getLib ffmpegthumbnailer}/lib/libffmpegthumbnailer.so"' \
-      --replace 'LibraryLoader::libPath("libgstreamer-1.0.so")' '"${lib.getLib gst_all_1.gstreamer}/lib/libgstreamer-1.0.so"' \
-      --replace 'LibraryLoader::libPath("libgstpbutils-1.0.so")' '"${lib.getLib gst_all_1.gst-plugins-base}/lib/libgstpbutils-1.0.so"'
+    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/337
+    substituteInPlace src/libdmr/playlist_model.cpp \
+      --replace "DGuiApplicationHelper" "Dtk::Gui::DGuiApplicationHelper"
   '';
 
   outputs = [ "out" "dev" ];
@@ -90,7 +75,7 @@ stdenv.mkDerivation rec {
     qtdbusextended
     qtmpris
     gsettings-qt
-    elfutils.dev
+    elfutils
     ffmpeg
     ffmpegthumbnailer
     xorg.libXtst
@@ -101,7 +86,7 @@ stdenv.mkDerivation rec {
     libdvdnav
     libunwind
     libva
-    zstd.dev
+    zstd
     mpv
     gtest
     libpulseaudio
@@ -109,6 +94,12 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
   ]);
+
+  propagatedBuildInputs = [
+    qtmultimedia
+    qtx11extras
+    ffmpegthumbnailer
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${gst_all_1.gstreamer.dev}/include/gstreamer-1.0"

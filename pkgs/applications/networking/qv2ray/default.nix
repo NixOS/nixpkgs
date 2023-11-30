@@ -79,5 +79,6 @@ mkDerivation rec {
     platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
     broken = stdenv.isDarwin;
+    mainProgram = "qv2ray";
   };
 }

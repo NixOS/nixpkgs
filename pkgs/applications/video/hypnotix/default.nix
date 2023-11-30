@@ -85,5 +85,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda bobby285271 ];
     platforms = lib.platforms.linux;
+    mainProgram = "hypnotix";
   };
 }

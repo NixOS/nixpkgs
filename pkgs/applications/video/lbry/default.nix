@@ -45,5 +45,6 @@ in appimageTools.wrapAppImage rec {
     changelog = "https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md";
     maintainers = with maintainers; [ enderger ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "lbry";
   };
 }

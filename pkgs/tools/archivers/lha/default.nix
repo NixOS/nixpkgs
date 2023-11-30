@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     # not a free software license (it has additional requirements on commercial
     # use).
     license = licenses.unfree;
+    mainProgram = "lha";
   };
 }

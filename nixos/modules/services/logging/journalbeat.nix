@@ -20,14 +20,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "journalbeat");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.journalbeat;
-        defaultText = literalExpression "pkgs.journalbeat";
-        description = lib.mdDoc ''
-          The journalbeat package to use
-        '';
-      };
+      package = mkPackageOption pkgs "journalbeat" { };
 
       name = mkOption {
         type = types.str;

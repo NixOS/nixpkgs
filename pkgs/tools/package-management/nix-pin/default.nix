@@ -46,5 +46,6 @@ let self = stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.timbertson ];
     platforms = platforms.all;
+    mainProgram = "nix-pin";
   };
 }; in self

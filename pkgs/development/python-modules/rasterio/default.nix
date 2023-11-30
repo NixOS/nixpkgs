@@ -1,25 +1,27 @@
 { lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonOlder
 , stdenv
+
 , affine
 , attrs
 , boto3
-, buildPythonPackage
+, certifi
 , click
 , click-plugins
 , cligj
-, certifi
 , cython_3
-, fetchFromGitHub
 , gdal
 , hypothesis
-, matplotlib
 , ipython
+, matplotlib
 , numpy
 , oldest-supported-numpy
 , packaging
 , pytest-randomly
-, pytestCheckHook
-, pythonOlder
 , setuptools
 , shapely
 , snuggs
@@ -40,6 +42,18 @@ buildPythonPackage rec {
     hash = "sha256-Tp6BSU33FaszrIXQgU0Asb7IMue0C939o/atAKz+3Q4=";
   };
 
+  patches = [
+    # fix tests failing with GDAL 3.8.0
+    (fetchpatch {
+      url = "https://github.com/rasterio/rasterio/commit/54ec554a6d9ee52207ad17dee42cbc51c613f709.diff";
+      hash = "sha256-Vjt9HRYNAWyj0myMdtSUENbcLjACfzegEClzZb4BxY8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/rasterio/rasterio/commit/5a72613c58d1482bf297d08cbacf27992f52b2c4.diff";
+      hash = "sha256-bV6rh3GBmeqq9+Jff2b8/1wOuyF3Iqducu2eN4CT3lM=";
+    })
+  ];
+
   nativeBuildInputs = [
     cython_3
     gdal
@@ -52,13 +66,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     affine
     attrs
+    certifi
     click
     click-plugins
     cligj
-    certifi
     numpy
-    snuggs
     setuptools
+    snuggs
   ];
 
   passthru.optional-dependencies = {
@@ -77,8 +91,8 @@ buildPythonPackage rec {
     boto3
     hypothesis
     packaging
-    pytest-randomly
     pytestCheckHook
+    pytest-randomly
     shapely
   ];
 

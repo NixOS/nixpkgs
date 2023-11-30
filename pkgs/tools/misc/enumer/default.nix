@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/dmarkham/enumer";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "enumer";
   };
 }

@@ -640,7 +640,6 @@ unsupported-platforms:
   haskell-snake:                                [ platforms.darwin ]
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
-  hidapi:                                       [ platforms.darwin ]
   hinotify-bytestring:                          [ platforms.darwin ]
   honk:                                         [ platforms.darwin ]
   HSoM:                                         [ platforms.darwin ]
