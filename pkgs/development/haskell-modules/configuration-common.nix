@@ -897,6 +897,20 @@ self: super: {
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
 
+  # Compilation on recent GHC is fixed on git, but not yet on hackage
+  # https://github.com/spell-music/csound-expression/pull/68
+  csound-expression-typed =
+    assert super.csound-expression-typed.version == "0.2.7";
+    overrideCabal (drv: {
+      src = (pkgs.fetchFromGitHub {
+        owner = "spell-music";
+        repo = "csound-expression";
+        rev = "345df2c91c9831dd895f58951990165598504814";
+        hash = "sha256-6qPiKsZwZpqB2kmckKDKyQPTcWPIaVwi+EYs74tRod0=";
+      }) + "/csound-expression-typed";
+      editedCabalFile = null;
+    }) super.csound-expression-typed;
+
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = overrideCabal (drv: {
