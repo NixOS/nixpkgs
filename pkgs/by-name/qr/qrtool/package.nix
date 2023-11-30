@@ -4,16 +4,15 @@
 , rustPlatform
 , asciidoctor
 , installShellFiles
-}: let
-  name = "qrtool";
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "qrtool";
   version = "0.8.5";
-in rustPlatform.buildRustPackage {
-  pname = name;
-  inherit version;
 
   src = fetchFromGitHub {
     owner = "sorairolake";
-    repo = name;
+    repo = "qrtool";
     rev = "v${version}";
     sha256 = "sha256-jrvNZGO1VIDo6Mz3NKda1C7qZUtF9T00CAFK8yoGWjc=";
   };
@@ -24,20 +23,20 @@ in rustPlatform.buildRustPackage {
 
   postInstall = ''
     # Built by ./build.rs using `asciidoctor`
-    installManPage ./target/*/release/build/${name}*/out/*.?
+    installManPage ./target/*/release/build/qrtool*/out/*.?
 
-    installShellCompletion --cmd ${name} \
-      --bash <($out/bin/${name} --generate-completion bash) \
-      --fish <($out/bin/${name} --generate-completion fish) \
-      --zsh <($out/bin/${name} --generate-completion zsh)
+    installShellCompletion --cmd qrtool \
+      --bash <($out/bin/qrtool --generate-completion bash) \
+      --fish <($out/bin/qrtool --generate-completion fish) \
+      --zsh <($out/bin/qrtool --generate-completion zsh)
   '';
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
-    description = "An utility for encoding or decoding QR code";
+    description = "A utility for encoding and decoding QR code images";
     license = licenses.asl20;
-    homepage = "https://sorairolake.github.io/${name}/book/index.html";
-    changelog = "https://sorairolake.github.io/${name}/book/changelog.html";
-    mainProgram = name;
+    homepage = "https://sorairolake.github.io/qrtool/book/index.html";
+    changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";
+    mainProgram = "qrtool";
   };
 }
