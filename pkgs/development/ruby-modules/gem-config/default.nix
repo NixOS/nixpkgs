@@ -554,6 +554,18 @@ in
     ];
   };
 
+  nio4r = attrs:
+    lib.optionalAttrs ((lib.versionOlder attrs.version "2.5.9") && stdenv.cc.cc.isClang) {
+      dontBuild = false;
+      patches = [
+        (fetchpatch {
+          # fix building older versions with new LLVM
+          url = "https://github.com/socketry/nio4r/commit/dd69a1c053bf13a580ec6a4e392c15c269239fd6.patch";
+          hash = "sha256-rvOBBa2Pok95pwI9T2WaNFzHJPgsPUq8O08PIJCH8zk=";
+        })
+      ];
+    };
+
   nokogiri = attrs: {
     buildFlags = [
       "--use-system-libraries"
