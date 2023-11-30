@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "http-parser";
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   patches = [
-    ./build-shared.patch
+    ./enable-static-shared.patch
   ] ++ lib.optionals stdenv.isAarch32 [
     # https://github.com/nodejs/http-parser/pull/510
     (fetchpatch {
@@ -26,16 +29,23 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "DESTDIR="
     "PREFIX=$(out)"
-    "SOEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.sharedLibrary}"
     "BINEXT=${stdenv.hostPlatform.extensions.executable}"
     "Platform=${lib.toLower stdenv.hostPlatform.uname.system}"
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "AEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.staticLibrary}"
+    "ENABLE_SHARED=${if enableShared then "1" else "0"}"
+    "ENABLE_STATIC=${if enableStatic then "1" else "0"}"
+  ] ++ lib.optionals enableShared [
+    "SOEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ lib.optionals enableStatic [
+    "AEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.staticLibrary}"
+  ] ++ lib.optionals (enableShared && stdenv.hostPlatform.isWindows) [
     "SONAME=$(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOEXT)"
     "LIBNAME=$(SOLIBNAME).$(SOMAJOR).$(SOMINOR).$(SOREV).$(SOEXT)"
     "LDFLAGS=-Wl,--out-implib=$(LIBNAME).a"
   ];
 
-  buildFlags = [ "library" ];
+  buildFlags = lib.optional enableShared "library"
+    ++ lib.optional enableStatic "package";
 
   doCheck = true;
   checkTarget = "test";
