@@ -14,8 +14,7 @@
 , libXdmcp
 , libxkbcommon
 , libepoxy
-, at-spi2-core
-, dbus
+, dbusSupport ? stdenv.hostPlatform.isLinux, at-spi2-core, dbus
 , curl
 , fftwFloat
 }:
@@ -59,8 +58,10 @@ stdenv.mkDerivation rec {
     libXdmcp
     libxkbcommon
     libepoxy
+  ] ++ lib.optionals dbusSupport [
     at-spi2-core
     dbus
+  ] ++ [
     curl
     fftwFloat
   ];
