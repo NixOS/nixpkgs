@@ -3,20 +3,13 @@
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "120.0";
+    version = "120.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "31d5f9e1d4173280c8de6d9b8551bc6bba5e2c49b84f944f50d42002d5b39c2fb743bc130f26c81160388a102b8301b94a0a378ecdfa6f943860f971a860df8c";
+      sha512 = "dd0e3eb234d58c39431d1f100834ef4bcc8cfb89ff471a37b948eda4dd3874b63b1979cda39a0db0dd3b4a579b5f09a7d2d1f39d26fd9f2b8d5635e4b8738b6c";
     };
 
     extraPatches = [
-      (fetchpatch {
-        # Do not crash on systems without an expected statically assumed page size.
-        # https://phabricator.services.mozilla.com/D194458
-        name = "mozbz1866025.patch";
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
-        hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
-      })
     ];
 
     meta = {

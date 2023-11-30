@@ -3951,6 +3951,23 @@ let
         };
       };
 
+      ziglang.vscode-zig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-zig";
+          publisher = "ziglang";
+          version = "0.5.1";
+          sha256 = "sha256-ygxvkewK5Tf1zNIXxzu6D/tKYNVcNsU9cKij7d5aRdQ=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";
+          description = "Zig support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ziglang.vscode-zig";
+          homepage = "https://github.com/ziglang/vscode-zig";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
+        };
+      };
+
       zxh404.vscode-proto3 = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-proto3";

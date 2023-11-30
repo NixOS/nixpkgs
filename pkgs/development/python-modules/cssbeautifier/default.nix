@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "cssbeautifier";
-  version = "1.14.9";
+  version = "1.14.11";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LaQyRy9oFw64VK/5exaiRyH1CQ7javLjEZlZConn9x8=";
+    hash = "sha256-QFRMK2K7y2TKpefzegLflWVOXOG8rK2sTKHz3InDFRM=";
   };
 
   nativeBuildInputs = [
