@@ -323,6 +323,11 @@ self: super: {
     inherit (nodePackages."@yaegassy/coc-nginx") version meta;
     src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
   };
+  coc-ruff = buildVimPlugin {
+    pname = "coc-ruff";
+    inherit (nodePackages."@yaegassy/coc-ruff") version meta;
+    src = "${nodePackages."@yaegassy/coc-ruff"}/lib/node_modules/@yaegassy/coc-ruff";
+  };
 
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [ getconf ruby ];
