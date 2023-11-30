@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6W65dg2pZeio3ZVgVLQZrz/eReYcPiYf52zjcaRfE8E=";
+    hash = "sha256-6W65dg2pZeio3ZVgVLQZrz/eReYcPiYf52zjcaRfE8E=";
   };
 
   outputs = [ "out" "dev" "doc" ];

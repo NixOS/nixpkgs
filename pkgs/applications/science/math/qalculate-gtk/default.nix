@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "qalculate";
     repo = "qalculate-gtk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-rQxOOxM4TazkDs/H3KEPbdo6WBl0ptyAlZwv8nnGMss=";
+    hash = "sha256-rQxOOxM4TazkDs/H3KEPbdo6WBl0ptyAlZwv8nnGMss=";
   };
 
   hardeningDisable = [ "format" ];
