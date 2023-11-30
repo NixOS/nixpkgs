@@ -804,6 +804,15 @@ in
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
     ];
+  } // lib.optionalAttrs stdenv.cc.cc.isClang {
+    patches = [
+      (fetchpatch {
+        # fix building older versions with new LLVM
+        url = "https://github.com/sparklemotion/sqlite3-ruby/commit/abdbfd5f5d2feb5ec280811b10c8fc0dc14a6729.patch";
+        hash = "sha256-vaJy00WdjzHR0bVc3tlY3caixuH51rETinS3JeySKqs=";
+      })
+    ];
+    dontBuild = false;
   };
 
   rb-readline = attrs: {
