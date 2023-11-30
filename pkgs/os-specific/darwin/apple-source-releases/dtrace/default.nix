@@ -21,6 +21,8 @@ appleDerivation {
       --replace /usr/bin/ld ${stdenv.cc.bintools.bintools}/bin/ld \
       --replace /usr/lib/dtrace/dt_cpp.h $out/include/dt_cpp.h \
       --replace /usr/lib/dtrace $out/lib/dtrace
+    substituteInPlace libdtrace/dt_proc_apple.c \
+      --replace "extern dt_proc_rdwatch" "extern int dt_proc_rdwatch"
     substituteInPlace libproc/libproc.c \
       --replace "#include <sandbox/rootless.h>" ""
   '';
