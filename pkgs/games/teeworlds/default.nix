@@ -99,7 +99,18 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://teeworlds.com/";
-    license = "BSD-style, see `license.txt'";
+    license = with lib.licenses; [
+      # See https://github.com/teeworlds/teeworlds/blob/master/license.txt
+      lib.licenses.zlib # Main license
+      cc-by-sa-30 # All content under 'datasrc' except the fonts
+      ofl  # datasrc/fonts/SourceHanSans.ttc
+      free # datasrc/fonts/DejaVuSans.ttf
+      bsd2 # src/engine/external/json-parser/
+      bsd3 # src/engine/external/wavpack
+      # zlib src/engine/external/md5/
+      # zlib src/engine/external/pnglite/
+      # zlib src/engine/external/zlib/
+    ];
     maintainers = with lib.maintainers; [ astsmtl Luflosi ];
     platforms = lib.platforms.unix;
   };
