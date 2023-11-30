@@ -93,6 +93,8 @@ mapAliases (with prev; {
   neoinclude          = neoinclude-vim;
   neomru              = neomru-vim;
   neosnippet          = neosnippet-vim;
+  nvim-ts-rainbow     = throw "nvim-ts-rainbow has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
+  nvim-ts-rainbow2    = throw "nvim-ts-rainbow2 has been deprecated: Use rainbow-delimiters-nvim"; # Added 2023-11-30
   The_NERD_Commenter  = nerdcommenter;
   The_NERD_tree       = nerdtree;
   open-browser        = open-browser-vim;
