@@ -501,7 +501,7 @@ with prev;
 
     postPatch = ''
       substituteInPlace magick/wand/lib.lua \
-        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI.so
+        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI${stdenv.hostPlatform.extensions.sharedLibrary}
     '';
 
     # Requires ffi
