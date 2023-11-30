@@ -31641,7 +31641,9 @@ with pkgs;
 
   gaucheBootstrap = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche/boot.nix { };
 
-  gauche = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche { };
+  gauche = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
+  };
 
   gazelle-origin = python3Packages.callPackage ../tools/misc/gazelle-origin { };
 
