@@ -9,6 +9,16 @@
       sha512 = "31d5f9e1d4173280c8de6d9b8551bc6bba5e2c49b84f944f50d42002d5b39c2fb743bc130f26c81160388a102b8301b94a0a378ecdfa6f943860f971a860df8c";
     };
 
+    extraPatches = [
+      (fetchpatch {
+        # Do not crash on systems without an expected statically assumed page size.
+        # https://phabricator.services.mozilla.com/D194458
+        name = "mozbz1866025.patch";
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/42c80086da4468f407648f2f57a7222aab2e9951";
+        hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
+      })
+    ];
+
     meta = {
       changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
       description = "A web browser built from Firefox source tree";
