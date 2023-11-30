@@ -38,7 +38,7 @@ let
     fetchSubmodules = true;
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "fsrs-0.1.0" = "sha256-bnLmJk2aaWBdgdsiasRrDG4NiTDMCDCXotCSoc0ldlk=";
@@ -46,6 +46,7 @@ let
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
   };
+  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
@@ -265,6 +266,11 @@ python3.pkgs.buildPythonApplication {
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
     )
   '';
+
+  passthru = {
+    # cargoLock is reused in anki-sync-server
+    inherit cargoLock;
+  };
 
   meta = with lib; {
     description = "Spaced repetition flashcard program";
