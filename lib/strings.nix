@@ -530,7 +530,7 @@ rec {
        escapeRegex "[^a-z]*"
        => "\\[\\^a-z]\\*"
   */
-  escapeRegex = escape (stringToCharacters "\\[{()^$?*+|.");
+  escapeRegex = escape (stringToCharacters "\\[{}()^$?*+|.");
 
   /* Quotes a string if it can't be used as an identifier directly.
 
