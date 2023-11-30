@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix ({ pkgs, lib, ... }:
 let
   domain = "sourcehut.localdomain";
 
@@ -118,30 +118,47 @@ in
       enableTCPIP = false;
       settings.unix_socket_permissions = "0770";
     };
+
+    environment.systemPackages = with pkgs; [
+      (callPackage ./srht-gen-oauth-tok.nix { }) # To automatically generate OAuth tokens
+    ];
   };
 
-  testScript = ''
-    start_all()
-    machine.wait_for_unit("multi-user.target")
+  testScript =
+    let
+      userName = "nixos-test";
+      userPass = "AutoNixosTestPwd";
+    in
+    ''
+      start_all()
+      machine.wait_for_unit("multi-user.target")
 
-    # Testing metasrht
-    machine.wait_for_unit("metasrht-api.service")
-    machine.wait_for_unit("metasrht.service")
-    machine.wait_for_unit("metasrht-webhooks.service")
-    machine.wait_for_open_port(5000)
-    machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
-    machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")
+      # Testing metasrht
+      machine.wait_for_unit("metasrht-api.service")
+      machine.wait_for_unit("metasrht.service")
+      machine.wait_for_unit("metasrht-webhooks.service")
+      machine.wait_for_open_port(5000)
+      machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
+      machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")
 
-    # Testing buildsrht
-    machine.wait_for_unit("buildsrht.service")
-    machine.wait_for_open_port(5002)
-    machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
-    #machine.wait_for_unit("buildsrht-worker.service")
+      ## Create a test user for subsequent tests
+      machine.succeed("echo ${userPass} | metasrht-manageuser -ps -e ${userName}@${domain}\
+                       -t active_free ${userName}");
 
-    # Testing gitsrht
-    machine.wait_for_unit("gitsrht-api.service")
-    machine.wait_for_unit("gitsrht.service")
-    machine.wait_for_unit("gitsrht-webhooks.service")
-    machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
-  '';
+      ## Obtain a OAuth token to be used for querying APIs directly
+      (_, token) = machine.execute("srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}")
+      print(token)
+
+      # Testing buildsrht
+      machine.wait_for_unit("buildsrht.service")
+      machine.wait_for_open_port(5002)
+      machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
+      #machine.wait_for_unit("buildsrht-worker.service")
+
+      # Testing gitsrht
+      machine.wait_for_unit("gitsrht-api.service")
+      machine.wait_for_unit("gitsrht.service")
+      machine.wait_for_unit("gitsrht-webhooks.service")
+      machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
+    '';
 })

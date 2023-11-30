@@ -768,7 +768,7 @@ in {
   solanum = handleTest ./solanum.nix {};
   sonarr = handleTest ./sonarr.nix {};
   sonic-server = handleTest ./sonic-server.nix {};
-  sourcehut = handleTest ./sourcehut.nix {};
+  sourcehut = handleTest ./sourcehut/sourcehut.nix {};
   spacecookie = handleTest ./spacecookie.nix {};
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
