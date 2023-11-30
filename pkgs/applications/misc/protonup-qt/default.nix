@@ -12,7 +12,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
     mkdir -p $out/share/{applications,pixmaps}
     cp ${appimageContents}/net.davidotek.pupgui2.desktop $out/share/applications/${pname}.desktop
     cp ${appimageContents}/net.davidotek.pupgui2.png $out/share/pixmaps/${pname}.png
