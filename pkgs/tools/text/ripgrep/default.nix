@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "14.0.2";
+  version = "14.0.3";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    hash = "sha256-r0o2hT5t4x7fmVVxE3x+vHQnEzY9E4nvLyZ4DDNCY9o=";
+    hash = "sha256-NBGbiy+1AUIBJFx6kcGPSKo08a+dkNo4rNH2I1pki4U=";
   };
 
-  cargoHash = "sha256-J7vEeHSCQ4xbKMUOQ/lCcnnwmnKaz7neOvrY1pAVtXg=";
+  cargoHash = "sha256-s6oK0/eL+NAhG3ySUlJBRatUuWXxfRVgAvlJm++0lkg=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
