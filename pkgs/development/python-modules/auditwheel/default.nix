@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "5.1.2";
+  version = "5.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PuWDABSTHqhK9c0GXGN7ZhTvoD2biL2Pv8kk5+0B1ro=";
+    hash = "sha256-qvgVOreinMmaZjziSYgE2vGIfqG3oyMboNP+5oo8zxk=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/pypa/auditwheel/blob/${version}/CHANGELOG.md";
     description = "Auditing and relabeling cross-distribution Linux wheels";
     homepage = "https://github.com/pypa/auditwheel";
     license = with licenses; [
