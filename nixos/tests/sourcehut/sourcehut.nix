@@ -103,7 +103,7 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 443 ];
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
     security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
     services.nginx = {
       enable = true;
