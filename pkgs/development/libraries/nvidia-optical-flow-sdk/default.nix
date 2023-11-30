@@ -18,6 +18,11 @@ stdenv.mkDerivation {
     cp -R * $out/include
   '';
 
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo $pname >> "$out/nix-support/include-in-cudatoolkit-root"
+  '';
+
   meta = with lib; {
     description = "Nvidia optical flow headers for computing the relative motion of pixels between images";
     homepage = "https://developer.nvidia.com/opticalflow-sdk";

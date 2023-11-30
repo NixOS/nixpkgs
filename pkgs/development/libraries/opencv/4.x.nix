@@ -334,6 +334,7 @@ effectiveStdenv.mkDerivation {
       cuda_cudart
       cuda_cccl # <thrust/*>
       libnpp # npp.h
+      nvidia-optical-flow-sdk
     ] ++ lib.optionals enableCublas [
       libcublas # cublas_v2.h
     ] ++ lib.optionals enableCudnn [
@@ -342,8 +343,7 @@ effectiveStdenv.mkDerivation {
       libcufft # cufft.h
     ]);
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
-    ++ lib.optionals enableCuda [ nvidia-optical-flow-sdk ];
+  propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
   nativeBuildInputs = [ cmake pkg-config unzip ]
   ++ lib.optionals enablePython [
