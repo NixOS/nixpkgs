@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.pbsds ];
     platforms = lib.platforms.linux;
+    mainProgram = "lxterminal";
   };
 }

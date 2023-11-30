@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = with platforms; linux;
+    mainProgram = "xtrace";
   };
 }

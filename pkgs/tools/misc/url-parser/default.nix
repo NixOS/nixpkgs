@@ -29,5 +29,6 @@ buildGoModule rec {
     changelog = "https://github.com/thegeeklab/url-parser/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
+    mainProgram = "url-parser";
   };
 }

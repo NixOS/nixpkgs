@@ -51,5 +51,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     broken = stdenv.isx86_64 && stdenv.isDarwin;
+    mainProgram = "ghostie";
   };
 }

@@ -56,5 +56,6 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "opcua-client";
   };
 }

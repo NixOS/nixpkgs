@@ -11,7 +11,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_formats";
   inherit (nushell) version src;
-  cargoHash = "sha256-fpqXXgvTuRnU4NkJ/B4m3VTkeujE7sMWOma4KEvlxYw=";
+  cargoHash = "sha256-rryKNRCf8i/jlqN5O6+UDvV5tDNxcVxS+KewCaIlZVM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];

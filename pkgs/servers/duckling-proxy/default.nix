@@ -18,5 +18,6 @@ buildGoModule {
     homepage = "https://github.com/LukeEmmet/duckling-proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];
+    mainProgram = "duckling-proxy";
   };
 }

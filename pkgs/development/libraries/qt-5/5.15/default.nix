@@ -375,6 +375,5 @@ let
       if stdenv.buildPlatform == stdenv.hostPlatform
       then bootstrapScope.qttranslations
       else null;
-    qutebrowser = final.callPackage ../../../../applications/networking/browsers/qutebrowser { };
   });
 in finalScope

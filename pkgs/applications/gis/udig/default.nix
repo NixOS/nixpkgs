@@ -22,6 +22,7 @@ let
     license = with licenses; [ epl10 bsd3 ];
     maintainers = with maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;
+    mainProgram = "udig";
   };
 
   linux = stdenv.mkDerivation {

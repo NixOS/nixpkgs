@@ -30,12 +30,7 @@ in
     services.zammad = {
       enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.zammad;
-        defaultText = literalExpression "pkgs.zammad";
-        description = lib.mdDoc "Zammad package to use.";
-      };
+      package = mkPackageOption pkgs "zammad" { };
 
       dataDir = mkOption {
         type = types.path;

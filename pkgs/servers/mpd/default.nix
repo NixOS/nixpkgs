@@ -190,6 +190,7 @@ let
         license     = licenses.gpl2Only;
         maintainers = with maintainers; [ astsmtl ehmry tobim ];
         platforms   = platforms.unix;
+        mainProgram = "mpd";
 
         longDescription = ''
           Music Player Daemon (MPD) is a flexible, powerful daemon for playing

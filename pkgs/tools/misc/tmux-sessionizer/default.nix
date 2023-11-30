@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jrmoulton/tmux-sessionizer";
     license = licenses.mit;
     maintainers = with maintainers; [ vinnymeller ];
+    mainProgram = "tms";
   };
 }

@@ -50,5 +50,6 @@ in buildPythonApplication rec {
     homepage = src.meta.homepage;
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "sonota";
   };
 }

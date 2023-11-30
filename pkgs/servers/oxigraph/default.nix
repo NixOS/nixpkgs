@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ astro ];
     license = with licenses; [ asl20 mit ];
+    mainProgram = "oxigraph_server";
   };
 }

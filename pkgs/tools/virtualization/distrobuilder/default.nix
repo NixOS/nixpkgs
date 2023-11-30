@@ -69,5 +69,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ megheaiulian ];
     platforms = platforms.linux;
+    mainProgram = "distrobuilder";
   };
 }

@@ -33,5 +33,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda seqizz ];
+    mainProgram = "rustypaste";
   };
 }

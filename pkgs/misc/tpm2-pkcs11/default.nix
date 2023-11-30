@@ -81,5 +81,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ matthiasbeyer ];
+    mainProgram = "tpm2_ptool";
   };
 }

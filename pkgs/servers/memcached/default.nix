@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "memcached";
   };
   passthru.tests = {
     smoke-tests = nixosTests.memcached;

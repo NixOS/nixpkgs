@@ -35,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ActivityWatch/aw-watcher-window-wayland";
     license = licenses.mpl20;
     maintainers = with maintainers; [ esau79p ];
+    mainProgram = "aw-watcher-window-wayland";
   };
 }

@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = jdk17_headless.meta.platforms;
     maintainers = with maintainers; [ govanify ];
+    mainProgram = "komga";
   };
 
 }

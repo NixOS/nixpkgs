@@ -70,5 +70,6 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ sander rszibele kashw2 ];
     platforms = lib.platforms.unix;
+    mainProgram = "netbeans";
   };
 }

@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svlint";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-bd0epx3AciECCYi4OYG2WzTVhZ+JYnf5ebDZoMrPfmo=";
+    sha256 = "sha256-PfevtQpbJeo2U/qeYcJP4Et/HUASOZssRu2IXtOLWKw=";
   };
 
-  cargoHash = "sha256-RjjYfdcdJzIxnJFZqx93KADihN5YK+bCuk1QaPhVuGQ=";
+  cargoHash = "sha256-1nPXyFzRmum1CvOFdcqNOQzFVcFFKwPdt2qzXxMssf0=";
 
   cargoBuildFlags = [ "--bin" "svlint" ];
 

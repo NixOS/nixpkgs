@@ -258,6 +258,7 @@ stdenv.mkDerivation rec {
       the MTProto secure protocol.
     '';
     license = licenses.gpl3Only;
+    platforms = platforms.all;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];

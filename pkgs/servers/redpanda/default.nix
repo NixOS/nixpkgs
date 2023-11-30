@@ -48,5 +48,6 @@ buildGoModule rec {
     license = licenses.bsl11;
     maintainers = with maintainers; [ avakhrenev happysalada ];
     platforms = platforms.all;
+    mainProgram = "rpk";
   };
 }

@@ -50,6 +50,7 @@ buildNpmPackage rec {
     description = "Implementation of the Chrome Sender API (Chromecast) within Firefox";
     homepage = "https://hensm.github.io/fx_cast/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill pedrohlc ];
+    maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "fx_cast_bridge";
   };
 }

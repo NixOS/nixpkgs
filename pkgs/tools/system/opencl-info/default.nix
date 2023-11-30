@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "opencl-info";
   };
 }

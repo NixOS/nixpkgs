@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, Security, installShellFiles, nix-update-script }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, Security
+, SystemConfiguration
+, installShellFiles
+, nix-update-script
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic-rs";
@@ -15,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   postInstall = ''
     for shell in {ba,fi,z}sh; do

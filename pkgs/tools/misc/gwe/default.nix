@@ -84,5 +84,6 @@ in stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3Only;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "gwe";
   };
 }

@@ -83,5 +83,6 @@ buildGoModule rec {
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ janik ];
+    mainProgram = "alice-lg";
   };
 }

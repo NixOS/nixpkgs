@@ -53,5 +53,6 @@ buildGoModule rec {
     changelog = "https://github.com/sahib/brig/releases/tag/${src.rev}";
     license = licenses.agpl3;
     maintainers = with maintainers; [ offline ];
+    mainProgram = "brig";
   };
 }

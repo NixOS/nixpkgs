@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ zendo ];
     license = [ licenses.mit ];
     platforms = platforms.linux;
+    mainProgram = "ikill";
   };
 }

@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ madjar kashw2 ];
     platforms = platforms.linux;
     homepage = "https://gottcode.org/focuswriter/";
+    mainProgram = "focuswriter";
   };
 }

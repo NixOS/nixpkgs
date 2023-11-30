@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mstrobel/procyon/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+    mainProgram = "procyon";
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "peg";
-  version = "0.1.18";
+  version = "0.1.19";
 
   src = fetchurl {
     url = "${meta.homepage}/${pname}-${version}.tar.gz";
-    sha256 = "114h1y4k8fwcq9m0hfk33dsp7ah8zxzjjzlk71x4iirzczfkn690";
+    sha256 = "sha256-ABPdg6Zzl3hEWmS87T10ufUMB1U/hupDMzrl+rXCu7Q=";
   };
 
   preBuild="makeFlagsArray+=( PREFIX=$out )";

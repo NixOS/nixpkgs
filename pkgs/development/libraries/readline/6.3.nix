@@ -34,6 +34,10 @@ stdenv.mkDerivation {
      in
        import ./readline-6.3-patches.nix patch);
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     description = "Library for interactive line editing";
 

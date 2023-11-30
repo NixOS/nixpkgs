@@ -64,5 +64,6 @@ buildGoModule rec {
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ allonsy blaggacao ];
+    mainProgram = "git-town";
   };
 }

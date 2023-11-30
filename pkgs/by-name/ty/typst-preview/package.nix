@@ -14,13 +14,13 @@
 let
   # Keep the vscode "mgt19937.typst-preview" extension in sync when updating
   # this package at pkgs/applications/editors/vscode/extensions/default.nix
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typst-preview";
     rev = "v${version}";
-    hash = "sha256-VmUcnmTe5Ngcje0SSpOY13HUIfdxBMg8KwvZ1wupCqc=";
+    hash = "sha256-P11Nkn9Md5xsB9Z7v9O+CRvP18vPEC0Y973Or7i0y/4=";
   };
 
   frontendSrc = "${src}/addons/frontend";

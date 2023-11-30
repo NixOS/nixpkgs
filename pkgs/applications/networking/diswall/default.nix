@@ -36,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.diswall.stream";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "diswall";
   };
 }

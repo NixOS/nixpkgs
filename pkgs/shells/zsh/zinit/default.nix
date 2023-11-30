@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zinit";
-  version = "3.12.0";
+  version = "3.12.1";
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AiYK1pRFD4CGvBcQg9QwgFjc5Z564TVlWW0MzxoxdWU=";
+    hash = "sha256-REd997dop9gAosG4QkEKIc3jYIRLeB3MYBPiYMlDGUs=";
   };
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;

@@ -44,5 +44,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     changelog = "https://github.com/jelmer/xandikos/blob/v${version}/NEWS";
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "xandikos";
   };
 }

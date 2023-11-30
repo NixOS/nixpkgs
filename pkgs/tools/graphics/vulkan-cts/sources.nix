@@ -32,8 +32,8 @@ rec {
   nvidia-video-samples = fetchFromGitHub {
     owner = "Igalia";
     repo = "vk_video_samples";
-    rev = "cts-integration-0.9.9-1";
-    hash = "sha256-vHUyGAx/n8yTnrFjeefbb8LsHxONxsjH3BG2D/RO99E=";
+    rev = "cts-integration-0.9.9-2";
+    hash = "sha256-ftHhb5u3l7WbgEu6hHynBnvNbVOn5TFne915M17jiAQ=";
   };
 
   spirv-headers = fetchFromGitHub {

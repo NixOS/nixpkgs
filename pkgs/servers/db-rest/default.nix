@@ -40,5 +40,6 @@ buildNpmPackage rec {
     homepage = "https://v6.db.transport.rest/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ marie ];
+    mainProgram = "db-rest";
   };
 }

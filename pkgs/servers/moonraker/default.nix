@@ -52,5 +52,6 @@ in stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Arksine/moonraker";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ zhaofengli ];
+    mainProgram = "moonraker";
   };
 }

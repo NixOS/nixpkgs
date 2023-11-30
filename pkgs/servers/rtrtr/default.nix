@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/NLnetLabs/rtrtr/blob/v${version}/Changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ steamwalker ];
+    mainProgram = "rtrtr";
   };
 }

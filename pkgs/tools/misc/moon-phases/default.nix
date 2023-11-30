@@ -16,5 +16,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mirrorwitch/moon-phases";
     license = licenses.acsl14;
     maintainers = with maintainers; [ mirrorwitch ];
+    mainProgram = "moon-phases";
   };
 }

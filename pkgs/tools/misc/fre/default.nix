@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/camdencheek/fre/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gaykitty ];
+    mainProgram = "fre";
   };
 }

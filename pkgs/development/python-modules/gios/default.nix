@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "3.2.1";
+  version = "3.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ACWaYXAxLpqfjPG7KngFrErbMKo9iSsW2Yi8V0q9Ie0=";
+    hash = "sha256-5CiKikhIZ+1pb5/NJ2XzpG1XHrkyuW1WUvvNEpxJIcw=";
   };
 
   propagatedBuildInputs = [

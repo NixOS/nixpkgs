@@ -1,39 +1,43 @@
 { lib, stdenv
+, buildPackages
 , fetchFromGitHub
 , rustPlatform
-, asciidoctor
 , installShellFiles
 , pkg-config
 , Security
 , withPCRE2 ? true
 , pcre2
+, enableManpages ? stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "13.0.0";
+  version = "14.0.3";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "0pdcjzfi0fclbzmmf701fdizb95iw427vy3m1svy6gdn2zwj3ldr";
+    hash = "sha256-NBGbiy+1AUIBJFx6kcGPSKo08a+dkNo4rNH2I1pki4U=";
   };
 
-  cargoSha256 = "1kfdgh8dra4jxgcdb0lln5wwrimz0dpp33bq3h7jgs8ngaq2a9wp";
+  cargoHash = "sha256-s6oK0/eL+NAhG3ySUlJBRatUuWXxfRVgAvlJm++0lkg=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ]
+  nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2
     ++ lib.optional stdenv.isDarwin Security;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  preFixup = ''
-    installManPage $releaseDir/build/ripgrep-*/out/rg.1
-
-    installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
-    installShellCompletion --zsh complete/_rg
+  preFixup = lib.optionalString enableManpages ''
+    ${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg --generate man > rg.1
+    installManPage rg.1
+  '' + ''
+    installShellCompletion --cmd rg \
+      --bash <($out/bin/rg --generate complete-bash) \
+      --fish <($out/bin/rg --generate complete-fish) \
+      --zsh <($out/bin/rg --generate complete-zsh)
   '';
 
   doInstallCheck = true;
@@ -49,6 +53,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
+    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ globin ma27 zowoq ];
     mainProgram = "rg";

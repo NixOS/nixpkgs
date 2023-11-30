@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ztzg ];
     license = licenses.asl20;
+    mainProgram = "zkfuse";
   };
 }

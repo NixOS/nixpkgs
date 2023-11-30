@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://jumppad.dev";
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "jumppad";
   };
 }

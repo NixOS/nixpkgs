@@ -4,6 +4,7 @@
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
 , libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
+, libfaketime
 
 , homepage, version, prefix, hash
 
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     more
     which
     wrapGAppsHook
+    libfaketime
   ];
 
   buildInputs = [
@@ -153,7 +155,8 @@ stdenv.mkDerivation rec {
 
     # Run upstream installer in the store-path.
     sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
-    ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
+    source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
+    faketime -f "$source_date" ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
 
     if [ -f "$ICAInstDir/util/setlog" ]; then
       chmod +x "$ICAInstDir/util/setlog"

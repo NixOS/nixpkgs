@@ -77,20 +77,18 @@ with lib;
         description = lib.mdDoc "Spark log directory.";
         default = "/var/log/spark";
       };
-      package = mkOption {
-        type = types.package;
-        description = lib.mdDoc "Spark package.";
-        default = pkgs.spark;
-        defaultText = literalExpression "pkgs.spark";
-        example = literalExpression ''pkgs.spark.overrideAttrs (super: rec {
-          pname = "spark";
-          version = "2.4.4";
+      package = mkPackageOption pkgs "spark" {
+        example = ''
+          spark.overrideAttrs (super: rec {
+            pname = "spark";
+            version = "2.4.4";
 
-          src = pkgs.fetchzip {
-            url    = "mirror://apache/spark/"''${pname}-''${version}/''${pname}-''${version}-bin-without-hadoop.tgz";
-            sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g";
-          };
-        })'';
+            src = pkgs.fetchzip {
+              url    = "mirror://apache/spark/"''${pname}-''${version}/''${pname}-''${version}-bin-without-hadoop.tgz";
+              sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g";
+            };
+          })
+        '';
       };
     };
   };

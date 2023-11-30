@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ _0x4A6F ] ;
     license = lib.licenses.gpl2Only;
+    mainProgram = "w_scan2";
   };
 }

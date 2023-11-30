@@ -30,5 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/skynetservices/skydns";
     license = lib.licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "skydns";
   };
 }

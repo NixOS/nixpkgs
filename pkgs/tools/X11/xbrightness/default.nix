@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://shallowsky.com/software";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    mainProgram = "xbrightness";
   };
 }

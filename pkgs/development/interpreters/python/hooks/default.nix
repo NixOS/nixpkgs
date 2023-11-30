@@ -107,7 +107,7 @@ in {
     makePythonHook {
       name = "python-catch-conflicts-hook";
       substitutions = let
-        useLegacyHook = lib.versionOlder python.version "3.10";
+        useLegacyHook = lib.versionOlder python.pythonVersion "3.10";
       in {
         inherit pythonInterpreter pythonSitePackages;
         catchConflicts = if useLegacyHook then

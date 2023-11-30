@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ esclear ];
     platforms = platforms.linux;
+    mainProgram = "swaysome";
   };
 }

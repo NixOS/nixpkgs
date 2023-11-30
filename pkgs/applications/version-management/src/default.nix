@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ calvertvl AndersonTorres ];
     inherit (python.meta) platforms;
+    mainProgram = "src";
   };
 }

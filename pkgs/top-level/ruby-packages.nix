@@ -1168,6 +1168,17 @@
     };
     version = "2.0.4";
   };
+  gdk3 = {
+    dependencies = ["cairo-gobject" "gdk_pixbuf2" "pango"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0dpqlsfv44bxzixh386qwz28wfynhwkp9qz97b6zjx4wjh4fg4gj";
+      type = "gem";
+    };
+    version = "4.2.0";
+  };
   gdk_pixbuf2 = {
     dependencies = ["gio2"];
     groups = ["default"];
@@ -1297,15 +1308,16 @@
     };
     version = "2.0.23";
   };
-  gtk2 = {
+  gtk3 = {
+    dependencies = ["atk" "gdk3"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "09n8gz5h0d0wwrifr8c8z0b4vrd64xdi4lws8p6gpz0j0pxm5fzh";
+      sha256 = "15jk1q82g6jfswmz4b20kg2nxq4yc8wpidn9si9j7n0haxph3vxy";
       type = "gem";
     };
-    version = "3.2.6";
+    version = "4.2.0";
   };
   haml = {
     dependencies = ["temple" "thor" "tilt"];

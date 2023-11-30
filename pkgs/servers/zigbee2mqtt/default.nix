@@ -39,5 +39,6 @@ buildNpmPackage rec {
     '';
     maintainers = with maintainers; [ sweber hexa ];
     platforms = platforms.linux;
+    mainProgram = "zigbee2mqtt";
   };
 }

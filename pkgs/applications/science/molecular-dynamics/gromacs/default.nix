@@ -1,8 +1,10 @@
 { lib, stdenv, fetchurl, cmake, hwloc, fftw, perl, blas, lapack, mpi, cudatoolkit
+, plumed
 , singlePrec ? true
 , config
-, enableMpi ? false
 , enableCuda ? config.cudaSupport
+, enableMpi ? false
+, enablePlumed ? false
 , cpuAcceleration ? null
 }:
 
@@ -18,20 +20,39 @@ let
     if stdenv.hostPlatform.system == "aarch64-linux" then "ARM_NEON_ASIMD" else
     "None";
 
+  source =
+    if enablePlumed then
+      {
+        version = "2023";
+        hash = "sha256-rJLG2nL7vMpBT9io2Xnlbs8XxMHNq+0tpc+05yd7e6g=";
+      }
+    else
+      {
+        version = "2023.3";
+        hash = "sha256-Tsj40MevdrE/j9FtuOLBIOdJ3kOa6VVNn2U/gS140cs=";
+      };
+
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2023.3";
+  version = source.version;
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "sha256-Tsj40MevdrE/j9FtuOLBIOdJ3kOa6VVNn2U/gS140cs=";
+    inherit (source) hash;
   };
 
   patches = [ ./pkgconfig.patch ];
 
+  postPatch = lib.optionalString enablePlumed ''
+    plumed patch -p -e gromacs-2023
+  '';
+
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optional enablePlumed plumed
+    ;
 
   buildInputs = [
     fftw

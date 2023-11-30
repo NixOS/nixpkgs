@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/vi/websocat/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice Br1ght0ne ];
+    mainProgram = "websocat";
   };
 }

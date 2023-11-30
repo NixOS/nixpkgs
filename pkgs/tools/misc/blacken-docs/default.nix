@@ -34,5 +34,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Run Black on Python code blocks in documentation files";
     license = licenses.mit;
     maintainers = with maintainers; [ l0b0 ];
+    mainProgram = "blacken-docs";
   };
 }

@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ adisbladis mic92 ];
     platforms = lib.platforms.unix;
+    mainProgram = "nix-eval-jobs";
   };
 }

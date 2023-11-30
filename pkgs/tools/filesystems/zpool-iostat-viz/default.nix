@@ -37,5 +37,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/chadmiller/zpool-iostat-viz";
     license = licenses.bsd2;
     maintainers = with maintainers; [ julm ];
+    mainProgram = "zpool-iostat-viz";
   };
 }

@@ -47,14 +47,7 @@ in {
         '';
       };
 
-      javaPackage = mkOption {
-        default = pkgs.jdk;
-        defaultText = literalExpression "pkgs.jdk";
-        description = lib.mdDoc ''
-          Java package to install.
-        '';
-        type = types.package;
-      };
+      javaPackage = mkPackageOption pkgs "jdk" { };
     };
   };
 

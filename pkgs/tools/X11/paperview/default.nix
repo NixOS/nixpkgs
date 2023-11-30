@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ _3JlOy-PYCCKUi ];
+    mainProgram = "paperview";
   };
 }

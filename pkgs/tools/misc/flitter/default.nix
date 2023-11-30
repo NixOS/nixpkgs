@@ -56,5 +56,6 @@ ocamlPackages.buildDunePackage {
     maintainers = with maintainers; [ fgaz ];
     homepage = "https://github.com/alexozer/flitter";
     platforms = platforms.unix;
+    mainProgram = "flitter";
   };
 }

@@ -29,5 +29,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ _0x4A6F ];
+    mainProgram = "routinator";
   };
 }

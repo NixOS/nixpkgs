@@ -83,5 +83,6 @@ buildPerlModule rec {
     license = licenses.artistic2;
     maintainers = with maintainers; [ julm ];
     platforms = platforms.all;
+    mainProgram = "pipe-viewer";
   };
 }

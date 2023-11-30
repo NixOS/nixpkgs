@@ -37,19 +37,20 @@
 # tests
 , freezegun
 , pytestCheckHook
+, pytest-order
 , pytest-xdist
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.2.6";
+  version = "4.2.10";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zgpV1+dWxZpaQ5LHCXqlylPgCqLdP3AACTNWvhXnrvk=";
+    hash = "sha256-kllf4odHSjGsPvhHlB67CX6P+ww9bBBuR89XPbBpM7I=";
   };
 
   nativeBuildInputs = [
@@ -95,11 +96,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     pytestCheckHook
+    pytest-order
     pytest-xdist
   ] ++ passthru.optional-dependencies.all;
 
+  # Some tests depend on AWS credentials environment variables to be set.
+  env.AWS_ACCESS_KEY_ID = "ak";
+  env.AWS_SECRET_ACCESS_KEY = "sk";
+
   pytestFlagsArray = [
     "-m" "'not network and not requires_docker'"
+
+    # Matches upstream configuration, presumably due to expensive setup/teardown.
+    "--dist" "loadscope"
 
     # Fails at local name resolution
     "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
@@ -120,21 +129,17 @@ buildPythonPackage rec {
     # https://github.com/getmoto/moto/pull/6938
     "--deselect=tests/test_awslambda/test_lambda_layers_invoked.py::test_invoke_local_lambda_layers"
 
-    # Racy, expects two timestamp two differ
-    # https://github.com/getmoto/moto/issues/6946
-    "--deselect=tests/test_databrew/test_databrew_recipes.py::test_publish_recipe"
+    # Flaky under parallel execution
+    "--deselect=tests/test_cloudformation/test_server.py::test_cloudformation_server_get"
+    "--deselect=tests/test_core/test_moto_api.py::TestModelDataResetForClassDecorator::test_should_find_bucket"
   ];
 
   disabledTestPaths = [
-    # Requires pytest-ordering, which is unmaintained
-    # https://github.com/getmoto/moto/issues/6937
-    # botocore.exceptions.NoCredentialsError: Unable to locate credentials
-    "tests/test_dynamodb/test_dynamodb_statements.py"
-    "tests/test_lakeformation/test_resource_tags_integration.py"
-    "tests/test_redshiftdata/test_redshiftdata.py"
-    "tests/test_s3/test_s3_file_handles.py"
-    "tests/test_s3/test_s3.py"
-    "tests/test_s3/test_s3_select.py"
+    # Flaky under parallel execution, Connection Reset errors to localhost.
+    "tests/test_moto_api/recorder/test_recorder.py"
+
+    # Flaky under parallel execution
+    "tests/test_resourcegroupstaggingapi/*.py"
 
     # Tries to access the network
     "tests/test_batch/test_batch_jobs.py"

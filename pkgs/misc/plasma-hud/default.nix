@@ -37,5 +37,6 @@ python3.pkgs.buildPythonApplication rec{
     platforms = platforms.unix;
     description = "Run menubar commands, much like the Unity 7 Heads-Up Display (HUD)";
     maintainers = with maintainers; [ pasqui23 ];
+    mainProgram = "plasma-hud";
   };
 }

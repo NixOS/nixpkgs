@@ -31,5 +31,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/tomduck/pandoc-eqnos";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ppenguin ];
+    mainProgram = "pandoc-eqnos";
   };
 }

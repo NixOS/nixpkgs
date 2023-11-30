@@ -94,14 +94,7 @@ in
       '';
     };
 
-    package = mkOption {
-      default = pkgs.caddy;
-      defaultText = literalExpression "pkgs.caddy";
-      type = types.package;
-      description = lib.mdDoc ''
-        Caddy package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "caddy" { };
 
     dataDir = mkOption {
       type = types.path;
@@ -378,7 +371,7 @@ in
         LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
         Restart = "on-failure";
         RestartPreventExitStatus = 1;
-        RestartSecs = "5s";
+        RestartSec = "5s";
 
         # TODO: attempt to upstream these options
         NoNewPrivileges = true;

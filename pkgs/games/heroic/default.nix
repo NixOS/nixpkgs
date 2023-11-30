@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , nodejs
 , python3
 , makeWrapper
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     yarn
-    fixup_yarn_lock
+    prefetch-yarn-deps
     nodejs
     python3
     makeWrapper
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
 

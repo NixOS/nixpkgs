@@ -111,12 +111,7 @@ in
         description = lib.mdDoc "Whether to run squid web proxy.";
       };
 
-      package = mkOption {
-        default = pkgs.squid;
-        defaultText = literalExpression "pkgs.squid";
-        type = types.package;
-        description = lib.mdDoc "Squid package to use.";
-      };
+      package = mkPackageOption pkgs "squid" { };
 
       proxyAddress = mkOption {
         type = types.nullOr types.str;

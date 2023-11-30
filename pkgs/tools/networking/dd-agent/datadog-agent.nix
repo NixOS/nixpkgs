@@ -64,6 +64,7 @@ in buildGoModule rec {
     "process"
     "log"
     "secrets"
+    "zlib"
   ]
   ++ lib.optionals withSystemd [ "systemd" ]
   ++ extraTags;

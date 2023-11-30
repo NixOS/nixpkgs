@@ -93,6 +93,8 @@ in
 
   wat-mode = callPackage ./manual-packages/wat-mode { };
 
+  xapian-lite = callPackage ./manual-packages/xapian-lite { };
+
   yes-no = callPackage ./manual-packages/yes-no { };
 
   youtube-dl = callPackage ./manual-packages/youtube-dl { };

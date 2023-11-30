@@ -2,10 +2,12 @@
 , aiohttp
 , aioresponses
 , buildPythonPackage
+, ciso8601
 , click
 , fetchFromGitHub
-, pydantic
+, mashumaro
 , poetry-core
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , yarl
@@ -13,17 +15,22 @@
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.6.4";
-  format = "pyproject";
+  version = "0.8.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
-    repo = pname;
+    repo = "aiortm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PFZ8B2Wtjg3xUFYcnthTW5QXLk//lFH25jwpF7hygxQ=";
+    hash = "sha256-bchfFtggmKXjAVTeFFy+3YXF3PCfAcFPC5fanw3l/RE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=aiortm --cov-report=term-missing:skip-covered" ""
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -31,20 +38,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    ciso8601
     click
-    pydantic
+    mashumaro
     yarl
   ];
 
   nativeCheckInputs = [
     aioresponses
+    pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiortm --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "aiortm"

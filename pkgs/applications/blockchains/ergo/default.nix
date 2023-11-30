@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.cc0;
     platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];
+    mainProgram = "ergo";
   };
 }

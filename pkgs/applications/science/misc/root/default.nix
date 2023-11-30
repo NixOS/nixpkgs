@@ -195,6 +195,9 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
+  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
+
   # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
   # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.
   postInstall = ''

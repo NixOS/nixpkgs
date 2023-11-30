@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/ViRb3/wgcf";
     license = licenses.mit;
     maintainers = with maintainers; [ yureien ];
+    mainProgram = "wgcf";
   };
 }

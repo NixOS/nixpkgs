@@ -36,5 +36,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/jitsi/excalidraw-backend";
     license = licenses.mit;
     maintainers = with maintainers; [ camillemndn ];
+    mainProgram = "jitsi-excalidraw-backend";
   };
 }

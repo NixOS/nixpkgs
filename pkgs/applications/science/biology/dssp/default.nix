@@ -29,13 +29,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dssp";
-  version = "4.4.4.1";
+  version = "4.4.5";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = "dssp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-sy6GBCnTGRD1YP00dKIolkr1RMboLGcd0f4kU8gCOnA=";
+    hash = "sha256-X0aMWqoMhmQVRHWKVm2S6JAOYiBuBBMzMoivMdpNx0M=";
   };
 
   nativeBuildInputs = [

@@ -40,6 +40,7 @@ let
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ xnwdd evanjs arkivm ];
+    mainProgram = "gitkraken";
   };
 
   linux = stdenv.mkDerivation rec {

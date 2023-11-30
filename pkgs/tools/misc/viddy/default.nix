@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/sachaos/viddy";
     license = licenses.mit;
     maintainers = with maintainers; [ j-hui ];
+    mainProgram = "viddy";
   };
 }

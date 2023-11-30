@@ -29,5 +29,6 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = [ maintainers.gabesoft ];
+    mainProgram = "mmake";
   };
 }

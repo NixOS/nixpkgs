@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.elohmeier ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "wvkbd-mobintl";
   };
 }
