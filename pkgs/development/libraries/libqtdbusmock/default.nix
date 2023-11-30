@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Workaround for "error: expected unqualified-id before 'public'" on "**signals"
     sed -i -e '/add_definitions/a -DQT_NO_KEYWORDS' CMakeLists.txt
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Don't build tests when we're not running them
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';

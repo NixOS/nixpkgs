@@ -57,7 +57,7 @@ in {
     "-Dspectre=disabled"
 
     (lib.mesonEnable "glib" gobjectSupport)
-    (lib.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "xlib" x11Support)
     (lib.mesonEnable "xcb" xcbSupport)
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

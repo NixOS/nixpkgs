@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=man"
-    (lib.mesonBool "tests" finalAttrs.doCheck)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonBool "docs-build" withDocs)
   ];
 

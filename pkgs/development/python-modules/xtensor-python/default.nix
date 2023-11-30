@@ -31,7 +31,7 @@ toPythonModule (stdenv.mkDerivation(finalAttrs: {
   ];
   doCheck = true;
   cmakeFlags = [
-    "-DBUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
 
   propagatedBuildInputs = [

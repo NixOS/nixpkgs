@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DDISABLE_TESTS=${lib.boolToString (!finalAttrs.doCheck)}"
+    "-DDISABLE_TESTS=${lib.boolToString (!finalAttrs.finalPackage.doCheck)}"
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
