@@ -591,12 +591,12 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.9.5";
-          sha256 = "sha256-KqWSQ+p5KqRVULwjoWuNE+lIEYkaUVkeOwMpXUxccqw=";
+          version = "1.10.1";
+          sha256 = "sha256-VZQ3dpwj4RWZuyMba8DM7+JcIBSYB8zimZOkP5mJbms=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
-          license = lib.licenses.mit;
+          license = lib.licenses.unfree;
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client";
           maintainers = [ lib.maintainers.drupol ];
         };
