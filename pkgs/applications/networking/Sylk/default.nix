@@ -6,7 +6,7 @@ let
 in
 
 appimageTools.wrapType2 rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "http://download.ag-projects.com/Sylk/Sylk-${version}-x86_64.AppImage";
@@ -19,7 +19,6 @@ appimageTools.wrapType2 rec {
 
   multiArch = false; # no 32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
-  extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
     description = "Sylk WebRTC client";
