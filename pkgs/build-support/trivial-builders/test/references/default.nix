@@ -118,6 +118,7 @@ testers.nixosTest {
   meta = {
     maintainers = with lib.maintainers; [
       roberth
+      ShamrockLee
     ];
   };
 }
