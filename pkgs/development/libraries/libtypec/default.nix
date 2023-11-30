@@ -9,24 +9,31 @@
 
 stdenv.mkDerivation rec {
   pname = "libtypec";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Rajaram-Regupathy";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-C3ShLkwhWosq+P0R2igIx70V2ZfquSOdfPek1m/84ms=";
+    hash = "sha256-8b+gkfghhUFDW0bVl0Gl0Q63ptLJqSuNTLMJ/fDndBE=";
   };
 
-  patches = [
-    ./cmake-utils-rpath-install.patch
-  ];
+  outputs = [ "out" "bin" ];
+
+  # patches = [
+  #   ./cmake-utils-rpath-install.patch
+  # ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     libusb1
     systemd
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=${placeholder "out"}/lib"
+    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
   ];
 
   # postInstall = ''
