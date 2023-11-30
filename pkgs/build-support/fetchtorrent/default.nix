@@ -14,6 +14,7 @@ in
 , recursiveHash ? true
 , postFetch ? ""
 , postUnpack ? ""
+, meta ? {}
 }:
 let
   afterSuccess = writeShellScript "fetch-bittorrent-done.sh" ''
@@ -34,6 +35,7 @@ runCommand name {
   outputHashAlgo = if hash != "" then null else "sha256";
   outputHash = hash;
   outputHashMode = if recursiveHash then "recursive" else "flat";
+  meta = { license = lib.licenses.unfree; } // meta;
 
   # url will be written to the derivation, meaning it can be parsed and utilized
   # by external tools, such as tools that may want to seed fetchtorrent calls
