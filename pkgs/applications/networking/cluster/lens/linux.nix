@@ -6,18 +6,16 @@ let
 
   inherit (common) pname version;
   src = common.sources.${stdenv.hostPlatform.system} or (throw "Source for ${pname} is not available for ${system}");
-  name = "${pname}-${version}";
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in
 appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands =
     ''
-      mv $out/bin/${name} $out/bin/${pname}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
