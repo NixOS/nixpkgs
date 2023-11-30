@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     Cocoa
   ];
 
+  # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
+
   configureFlags = [ "--enable-sdl2" ];
 
   enableParallelBuilding = true;
