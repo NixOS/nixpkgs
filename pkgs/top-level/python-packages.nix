@@ -11086,6 +11086,8 @@ self: super: with self; {
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
+  pyspx = callPackage ../development/python-modules/pyspx { };
+
   pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 {
     inherit (pkgs) sqlcipher;
   };
