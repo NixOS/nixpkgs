@@ -1,32 +1,42 @@
 { lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools-scm
+, pyelftools
+, importlib-metadata
+, pretend
+, pytestCheckHook
+# non-python dependencies
 , bzip2
 , patchelf
-, python3
-, fetchPypi
 , gnutar
 , unzip
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "auditwheel";
   version = "5.1.2";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-PuWDABSTHqhK9c0GXGN7ZhTvoD2biL2Pv8kk5+0B1ro=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pbr
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     pyelftools
-    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     pretend
     pytestCheckHook
   ];
