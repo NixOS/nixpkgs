@@ -384,9 +384,7 @@ let
     # of time to appear and this would hold up Linux kernel and Rust toolchain updates.
     #
     # Once Rust in the kernel has more users, we can reconsider enabling it by default.
-    rust = optionalAttrs ((features.rust or false)
-                          && versionAtLeast version "6.6"
-                          && stdenv.hostPlatform.system == "x86_64-linux") {
+    rust = optionalAttrs ((features.rust or false) && versionAtLeast version "6.6") {
       RUST = yes;
       GCC_PLUGINS = no;
     };
