@@ -146,8 +146,10 @@ in buildPythonPackage {
       rrPathArr=(
         "$out/${python.sitePackages}/tensorflow/"
         "$out/${python.sitePackages}/tensorflow/core/kernels"
+        "$out/${python.sitePackages}/tensorflow/compiler/mlir/stablehlo/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
+        "$out/${python.sitePackages}/tensorflow/include/external/ml_dtypes/"
         "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
         "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
