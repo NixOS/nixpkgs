@@ -14327,6 +14327,8 @@ self: super: with self; {
 
   tubes = callPackage ../development/python-modules/tubes { };
 
+  tuf = callPackage ../development/python-modules/tuf { };
+
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
