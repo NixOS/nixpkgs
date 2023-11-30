@@ -5292,6 +5292,8 @@ self: super: with self; {
 
   icontract = callPackage ../development/python-modules/icontract { };
 
+  id = callPackage ../development/python-modules/id { };
+
   identify = callPackage ../development/python-modules/identify { };
 
   idna = callPackage ../development/python-modules/idna { };
