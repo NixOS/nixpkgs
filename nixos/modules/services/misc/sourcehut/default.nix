@@ -5,7 +5,7 @@ let
   inherit (lib) generators maintainers types;
   inherit (lib.attrsets) attrValues filterAttrs mapAttrs mapAttrsToList recursiveUpdate;
   inherit (lib.lists) flatten optional optionals;
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatMapStringsSep concatStringsSep optionalString versionOlder;
   inherit (lib.trivial) mapNullable;
   inherit (lib.modules) mkBefore mkDefault mkForce mkIf mkMerge
