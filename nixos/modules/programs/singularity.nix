@@ -45,6 +45,18 @@ in
         Use `lib.mkForce` to forcefully specify the overridden package.
       '';
     };
+    enableExternalLocalStateDir = mkOption {
+      type = types.bool;
+      default = true;
+      example = false;
+      description = mdDoc ''
+        Whether to use top-level directories as LOCALSTATEDIR
+        instead of the store path ones.
+        This affects the SESSIONDIR of Apptainer/Singularity.
+        If set to true, the SESSIONDIR will become
+        `/var/lib/''${projectName}/mnt/session`.
+      '';
+    };
     enableFakeroot = mkOption {
       type = types.bool;
       default = true;
@@ -65,7 +77,9 @@ in
 
   config = mkIf cfg.enable {
     programs.singularity.packageOverriden = (cfg.package.override (
-      optionalAttrs cfg.enableFakeroot {
+      optionalAttrs cfg.enableExternalLocalStateDir {
+        externalLocalStateDir = "/var/lib";
+      } // optionalAttrs cfg.enableFakeroot {
         newuidmapPath = "/run/wrappers/bin/newuidmap";
         newgidmapPath = "/run/wrappers/bin/newgidmap";
       } // optionalAttrs cfg.enableSuid {
@@ -80,12 +94,8 @@ in
       group = "root";
       source = "${cfg.packageOverriden}/libexec/${cfg.packageOverriden.projectName}/bin/starter-suid.orig";
     };
-    systemd.tmpfiles.rules = [
+    systemd.tmpfiles.rules = mkIf cfg.enableExternalLocalStateDir [
       "d /var/lib/${cfg.packageOverriden.projectName}/mnt/session 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/final 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/overlay 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/container 0770 root root -"
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/source 0770 root root -"
     ];
   };
 

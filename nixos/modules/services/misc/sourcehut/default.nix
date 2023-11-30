@@ -1316,6 +1316,11 @@ in
     (import ./service.nix "paste" {
       inherit configIniOfService;
       port = 5011;
+      extraServices.pastesrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.pastesrht}/bin/pastesrht-api -b ${cfg.listenAddress}:${toString (cfg.paste.port + 100)}";
+      };
     })
 
     (import ./service.nix "todo" {
