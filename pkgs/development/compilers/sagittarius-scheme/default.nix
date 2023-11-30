@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=int-conversion";
 
   meta = with lib; {
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     description = "An R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting
