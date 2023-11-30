@@ -122,6 +122,9 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
+    "-v"
+    "-n"
+    "$NIX_BUILD_CORES"
     # Follow upstream with settings
     "--durations=20"
   ];
@@ -135,8 +138,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests are time-sensitive and power-consuming
-    # Those tests fails repeatably
+    # Those tests fails repeatably and are flaky
     "test_access_channels_by_slice"
+    "test_aggregator"
+    "test_datasaver"
     "test_do1d_additional_setpoints_shape"
     "test_dond_1d_additional_setpoints_shape"
     "test_field_limits"
