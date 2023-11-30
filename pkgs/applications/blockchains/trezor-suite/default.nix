@@ -9,7 +9,6 @@
 let
   pname = "trezor-suite";
   version = "23.10.1";
-  name = "${pname}-${version}";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -25,16 +24,15 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
 in
 
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     mkdir -p $out/bin $out/share/${pname} $out/share/${pname}/resources
 
     cp -a ${appimageContents}/locales/ $out/share/${pname}
