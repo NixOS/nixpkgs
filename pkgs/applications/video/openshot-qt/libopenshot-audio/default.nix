@@ -19,20 +19,20 @@
 , Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot-audio";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
-    rev = "v${version}";
-    sha256 = "sha256-PLpB9sy9xehipN5S9okCHm1mPm5MaZMVaFqCBvFUiTw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PLpB9sy9xehipN5S9okCHm1mPm5MaZMVaFqCBvFUiTw=";
   };
 
   patches = [
     # https://forum.juce.com/t/juce-and-macos-11-arm/40285/24
-    ./undef-fpret-on-aarch64-darwin.patch
+    ./0001-undef-fpret-on-aarch64-darwin.patch
   ];
 
   nativeBuildInputs = [
@@ -58,9 +58,11 @@ stdenv.mkDerivation rec {
     libXrandr
   ]);
 
-  doCheck = false;
+  strictDeps = true;
 
-  meta = with lib; {
+  doCheck = true;
+
+  meta = {
     homepage = "http://openshot.org/";
     description = "High-quality sound editing library";
     longDescription = ''
@@ -68,8 +70,8 @@ stdenv.mkDerivation rec {
       high-quality editing and playback of audio, and is based on the amazing
       JUCE library.
     '';
-    license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
