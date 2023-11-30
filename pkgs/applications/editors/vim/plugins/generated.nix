@@ -1997,6 +1997,18 @@ final: prev:
     meta.homepage = "https://github.com/neoclide/coc-neco/";
   };
 
+  coc-ruff = buildVimPlugin {
+    pname = "coc-ruff";
+    version = "2023-11-10";
+    src = fetchFromGitHub {
+      owner = "yaegassy";
+      repo = "coc-ruff";
+      rev = "c517f4ee80d2681586fe65aa6dc764cb3cd981c0";
+      sha256 = "08x6lgni06n9pyyw7gi9pvzhpi1gs2p2az89rpypqary8dhsarkh";
+    };
+    meta.homepage = "https://github.com/yaegassy/coc-ruff/";
+  };
+
   coc-svelte = buildVimPlugin {
     pname = "coc-svelte";
     version = "2023-10-08";
