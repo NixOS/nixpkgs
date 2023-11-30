@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , asciidoctor
+, installShellFiles
 }: let
   name = "qrtool";
   version = "0.8.5";
@@ -19,7 +20,17 @@ in rustPlatform.buildRustPackage {
 
   cargoSha256 = "sha256-JOnvlabCr3fZsIIRc2qTjf50Ga83zL8Aoo2sqzMBs7g=";
 
-  nativeBuildInputs = [ asciidoctor ];
+  nativeBuildInputs = [ asciidoctor installShellFiles ];
+
+  postInstall = ''
+    # Built by ./build.rs using `asciidoctor`
+    installManPage ./target/*/release/build/${name}*/out/*.?
+
+    installShellCompletion --cmd ${name} \
+      --bash <($out/bin/${name} --generate-completion bash) \
+      --fish <($out/bin/${name} --generate-completion fish) \
+      --zsh <($out/bin/${name} --generate-completion zsh)
+  '';
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
