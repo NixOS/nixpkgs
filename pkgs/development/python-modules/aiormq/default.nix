@@ -6,9 +6,7 @@
 , pytestCheckHook
 , pamqp
 , yarl
-, setuptools
 , poetry-core
-, aiomisc
 }:
 
 buildPythonPackage rec {
@@ -20,13 +18,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-X5Uy1DGxvsyEFR1UgVYqxOX6mESLnNzQl7sVkvzjcw4=";
+    repo = "aiormq";
+    # https://github.com/mosquito/aiormq/issues/189
+    rev = "72c44f55313fc14e2a760a45a09831237b64c48d";
+    hash = "sha256-IIlna8aQY6bIA7OZHthfvMFFWnf3DDRBP1uiFCD7+Do=";
   };
 
   nativeBuildInputs = [
-    setuptools
     poetry-core
   ];
 
