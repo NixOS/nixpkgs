@@ -31,7 +31,6 @@
 , pythonOlder
 , pyvisa
 , pyvisa-sim
-, qcodes-loop
 , rsa
 , ruamel-yaml
 , setuptools
@@ -98,12 +97,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
-
-  passthru.optional-dependencies = {
-    loop = [
-      qcodes-loop
-    ];
-  };
 
   nativeCheckInputs = [
     deepdiff

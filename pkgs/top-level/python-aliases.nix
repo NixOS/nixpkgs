@@ -374,6 +374,7 @@ mapAliases ({
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
+  qcodes-loop = throw "qcodes-loop has been removed due to deprecation"; # added 2023-11-30
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
   rabbitpy = throw "rabbitpy has been removed, since it is unmaintained and broken"; # added 2023-07-01
   radio_beam = radio-beam; # added 2023-11-04
