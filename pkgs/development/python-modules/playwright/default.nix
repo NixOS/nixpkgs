@@ -10,6 +10,7 @@
 , setuptools
 , setuptools-scm
 , playwright-driver
+, pythonRelaxDepsHook
 }:
 
 let
@@ -69,7 +70,17 @@ buildPythonPackage rec {
   '';
 
 
-  nativeBuildInputs = [ git setuptools-scm setuptools auditwheel ];
+  nativeBuildInputs = [
+    git
+    setuptools-scm
+    setuptools
+    auditwheel
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pyee"
+  ];
 
   propagatedBuildInputs = [
     greenlet
