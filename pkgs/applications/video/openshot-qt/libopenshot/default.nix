@@ -18,28 +18,23 @@
 , zeromq
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot";
-    rev = "v${version}";
-    sha256 = "sha256-axFGNq+Kg8atlaSlG8EKvxj/FwLfpDR8/e4otmnyosM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-axFGNq+Kg8atlaSlG8EKvxj/FwLfpDR8/e4otmnyosM=";
   };
 
-  postPatch = ''
-    sed -i 's/{UNITTEST++_INCLUDE_DIR}/ENV{UNITTEST++_INCLUDE_DIR}/g' tests/CMakeLists.txt
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Darwin requires both Magick++ and MagickCore or it will fail to link.
-    substituteInPlace src/CMakeLists.txt \
-      --replace 'target_link_libraries(openshot PUBLIC ImageMagick::Magick++)' 'target_link_libraries(openshot PUBLIC ImageMagick::Magick++ ImageMagick::MagickCore)'
-  '';
+  patches = lib.optionals stdenv.isDarwin [
+    # Darwin requires both Magick++ and MagickCore for a successful linkage
+    ./0001-link-magickcore.diff
+  ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ [
+  nativeBuildInputs = [
     cmake
     doxygen
     pkg-config
@@ -56,20 +51,28 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     zeromq
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     llvmPackages.openmp
   ];
 
+  strictDeps = true;
+
   dontWrapQtApps = true;
 
-  doCheck = false;
+  doCheck = true;
 
   cmakeFlags = [
-    "-DENABLE_RUBY=OFF"
-    "-DPYTHON_MODULE_PATH=${python3.sitePackages}"
+    (lib.cmakeBool "ENABLE_RUBY" false)
+    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
   ];
 
-  meta = with lib; {
+  passthru = {
+    inherit libopenshot-audio;
+  };
+
+  meta = {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor library";
     longDescription = ''
@@ -77,12 +80,8 @@ stdenv.mkDerivation rec {
       delivering high quality video editing, animation, and playback solutions
       to the world. API currently supports C++, Python, and Ruby.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-
-  passthru = {
-    inherit libopenshot-audio;
-  };
-}
+})

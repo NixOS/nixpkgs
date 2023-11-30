@@ -140,7 +140,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
+  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot {
     stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
   };
 
