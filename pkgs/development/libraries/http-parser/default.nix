@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   patches = [
-    ./build-shared.patch
   ] ++ lib.optionals stdenv.isAarch32 [
     # https://github.com/nodejs/http-parser/pull/510
     (fetchpatch {
