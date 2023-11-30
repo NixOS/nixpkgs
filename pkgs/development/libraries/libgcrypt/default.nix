@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  enableParallelChecking = true;
 
   passthru.tests = {
     inherit gnupg libotr rsyslog;
