@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , lib
 , substituteAll
 , pam
@@ -218,6 +219,12 @@ in stdenv.mkDerivation (finalAttrs: {
     # runtime closure. This behavior was introduced by upstream in commit
     # cbfac11330882c7d0a817b6c37a08b2ace2b66f4
     ./0001-Strip-away-BUILDCONFIG.patch
+
+    # Backport fix for tests broken by expired test certificates.
+    (fetchpatch {
+      url = "https://cgit.freedesktop.org/libreoffice/core/patch/?id=ececb678b8362e3be8e02768ddd5e4197d87dc2a";
+      hash = "sha256-TUfKlwNxUTOJ95VLqwVD+ez1xhu7bW6xZlgIaCyIiNg=";
+    })
   ];
 
   # libreoffice tries to reference the BUILDCONFIG (e.g. PKG_CONFIG_PATH)
@@ -393,8 +400,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  # FIXME: https://github.com/NixOS/nixpkgs/pull/269828#issuecomment-1829260859
-  doCheck = variant == "fresh";
+  doCheck = true;
 
   # It installs only things to $out/lib/libreoffice
   postInstall = ''
