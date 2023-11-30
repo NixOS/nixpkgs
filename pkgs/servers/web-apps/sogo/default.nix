@@ -45,6 +45,8 @@ gnustep.stdenv.mkDerivation rec {
     "--enable-mfa"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int";
+
   preFixup = ''
     # Create gnustep.conf
     mkdir -p $out/share/GNUstep
