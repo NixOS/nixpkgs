@@ -476,6 +476,9 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
+      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
+      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
       F2FS_FS             = module;
