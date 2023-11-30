@@ -58,6 +58,10 @@ makeScopeWithSplicing' {
     suffix = "qt6";
   };
 
+  # Not a library, but we do want it to be built for every qt version there
+  # is, to allow users to choose the right build if needed.
+  sddm = callPackage ../applications/display-managers/sddm {};
+
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Convert to a throw on 01-01-2023.
     # Warnings show up in various cli tool outputs, throws do not.
