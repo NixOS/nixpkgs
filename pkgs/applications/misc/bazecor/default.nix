@@ -37,8 +37,6 @@ appimageTools.wrapAppImage rec {
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    mv $out/bin/bazecor-* $out/bin/bazecor
-
     mkdir -p $out/lib/udev/rules.d
     ln -s --target-directory=$out/lib/udev/rules.d ${./10-dygma.rules}
   '';
