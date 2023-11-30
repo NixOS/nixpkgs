@@ -39,13 +39,9 @@ in
     services.usbguard = {
       enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.usbguard;
-        defaultText = literalExpression "pkgs.usbguard";
-        description = lib.mdDoc ''
-          The usbguard package to use. If you do not need the Qt GUI, use
-          `pkgs.usbguard-nox` to save disk space.
+      package = mkPackageOption pkgs "usbguard" {
+        extraDescription = ''
+          If you do not need the Qt GUI, use `pkgs.usbguard-nox` to save disk space.
         '';
       };
 

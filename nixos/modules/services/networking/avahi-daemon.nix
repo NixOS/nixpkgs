@@ -56,14 +56,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.avahi;
-      defaultText = literalExpression "pkgs.avahi";
-      description = lib.mdDoc ''
-        The avahi package to use for running the daemon.
-      '';
-    };
+    package = mkPackageOption pkgs "avahi" { };
 
     hostName = mkOption {
       type = types.str;

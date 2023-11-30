@@ -12,14 +12,8 @@ in
         Whether to install Singularity/Apptainer with system-level overriding such as SUID support.
       '';
     };
-    package = mkOption {
-      type = types.package;
-      default = pkgs.singularity;
-      defaultText = literalExpression "pkgs.singularity";
-      example = literalExpression "pkgs.apptainer";
-      description = mdDoc ''
-        Singularity/Apptainer package to override and install.
-      '';
+    package = mkPackageOption pkgs "singularity" {
+      example = "apptainer";
     };
     packageOverriden = mkOption {
       type = types.nullOr types.package;

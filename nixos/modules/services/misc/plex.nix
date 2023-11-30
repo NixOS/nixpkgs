@@ -93,13 +93,10 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.plex;
-        defaultText = literalExpression "pkgs.plex";
-        description = lib.mdDoc ''
-          The Plex package to use. Plex subscribers may wish to use their own
-          package here, pointing to subscriber-only server versions.
+      package = mkPackageOption pkgs "plex" {
+        extraDescription = ''
+          Plex subscribers may wish to use their own package here,
+          pointing to subscriber-only server versions.
         '';
       };
     };
