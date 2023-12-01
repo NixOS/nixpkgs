@@ -11,8 +11,6 @@ let
   iniFmt = pkgs.formats.ini {};
 
   configIni = iniFmt.generate "etebase-server.ini" cfg.settings;
-
-  defaultUser = "etebase-server";
 in
 {
   imports = [
@@ -32,19 +30,14 @@ in
 
   options = {
     services.etebase-server = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        example = true;
-        description = lib.mdDoc ''
+      enable = mkEnableOption (mdDoc ''
           Whether to enable the Etebase server.
 
           Once enabled you need to create an admin user by invoking the
           shell command `etebase-server createsuperuser` with
           the user specified by the `user` option or a superuser.
           Then you can login and create accounts on your-etebase-server.com/admin
-        '';
-      };
+      '');
 
       dataDir = mkOption {
         type = types.str;
@@ -110,7 +103,7 @@ in
             allowed_hosts = {
               allowed_host1 = mkOption {
                 type = types.str;
-                default = "0.0.0.0";
+                default = "127.0.0.1";
                 example = "localhost";
                 description = lib.mdDoc ''
                   The main host that is allowed access.
@@ -149,12 +142,6 @@ in
           };
         };
       };
-
-      user = mkOption {
-        type = types.str;
-        default = defaultUser;
-        description = lib.mdDoc "User under which Etebase server runs.";
-      };
     };
   };
 
@@ -171,19 +158,16 @@ in
       '')
     ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-    ];
-
     systemd.services.etebase-server = {
       description = "An Etebase (EteSync 2.0) server";
       after = [ "network.target" "systemd-tmpfiles-setup.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pythonEnv ];
       serviceConfig = {
-        User = cfg.user;
+        User = "etebase-server";
+        DynamicUser = true;
         Restart = "always";
-        WorkingDirectory = cfg.dataDir;
+        StateDirectory = cfg.dataDir;
       };
       environment = {
         ETEBASE_EASY_CONFIG_PATH = configIni;
@@ -201,22 +185,12 @@ in
         let
           networking = if cfg.unixSocket != null
           then "-u ${cfg.unixSocket}"
-          else "-b 0.0.0.0 -p ${toString cfg.port}";
+          else "-b 127.0.0.1 -p ${toString cfg.port}";
         in ''
           cd "${pythonEnv}/lib/etebase-server";
           daphne ${networking} \
             etebase_server.asgi:application
         '';
-    };
-
-    users = optionalAttrs (cfg.user == defaultUser) {
-      users.${defaultUser} = {
-        isSystemUser = true;
-        group = defaultUser;
-        home = cfg.dataDir;
-      };
-
-      groups.${defaultUser} = {};
     };
 
     networking.firewall = mkIf cfg.openFirewall {
