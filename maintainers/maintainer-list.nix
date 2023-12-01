@@ -10099,6 +10099,12 @@
     githubId = 45168934;
     name = "Louis Blin";
   };
+  lcscosta = {
+    email = "lcscosta@disroot.org";
+    github = "lcscosta";
+    githubId = 	45444800;
+    name = "Lucas da Costa";
+  };
   lde = {
     email = "lilian.deloche@puck.fr";
     github = "lde";
