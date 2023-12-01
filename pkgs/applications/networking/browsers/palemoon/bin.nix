@@ -9,6 +9,7 @@
 , gtk2-x11
 , withGTK3 ? true
 , gtk3
+, libglvnd
 , libXt
 , libpulseaudio
 , makeDesktopItem
@@ -147,6 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         ffmpeg
+        libglvnd
         libpulseaudio
       ]}"
     )
