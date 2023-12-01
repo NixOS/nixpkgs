@@ -21,6 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-cEhWXGtMSXVjT5QigDedjT/lwYQnVqPCE5vbctXWznk=";
   };
 
+  postPatch = ''
+    sed -i '/"black"/d' pyproject.toml
+  '';
+
   propagatedBuildInputs = [
     unidecode
     sphinx
