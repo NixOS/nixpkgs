@@ -37738,6 +37738,8 @@ with pkgs;
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
+  en-croissant = callPackage ../games/en-croissant { };
+
   endgame-singularity = callPackage ../games/endgame-singularity { };
 
   endless-sky = callPackage ../games/endless-sky { };
