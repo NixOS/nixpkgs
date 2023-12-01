@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "downloader-cli";
-  version = "0.3.3";
+  version = "0.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
-    rev = version;
-    hash = "sha256-Dl5XIvdZInz+edL9uQv7V6Kc6FB+7hFAGe/nybnqvQU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-E2K3n9qCQofm4gXu1l7/0iMoJsniuzhsBUplr4aZ39s=";
   };
 
   propagatedBuildInputs = [
