@@ -23,6 +23,7 @@
 #
 { lib ? import (path + "/lib")
 , trace ? false
+, enableWarnings ? true
 , path ? ./../..
 }:
 let
@@ -142,9 +143,11 @@ let
       tried = builtins.tryEval seq;
 
       result =
-        if !tried.success
+        if tried.success
+        then tried.value
+        else if enableWarnings
         then lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" []
-        else tried.value;
+        else [];
     in
       if !trace
       then result
