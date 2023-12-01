@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "unstable-2023-10-22";
+  version = "unstable-2023-11-29";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = "64dea196ce040fbf3417e1b4fb11331688672aca";
-    hash = "sha256-2Aeb+OZ/hYUyyxx6aTw+Oxiac+p+SClxtg0h68ZBSHc=";
+    rev = "ec3193e3870436180b0f3df82b769adc57a1c099";
+    hash = "sha256-HXQIgFC4YVDJjo5xbyg1ea3jWYKLEwKkD1KFzWFz9UI= ";
   };
 
   nativeBuildInputs = [
