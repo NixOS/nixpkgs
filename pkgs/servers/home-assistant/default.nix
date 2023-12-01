@@ -332,10 +332,15 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "awesomeversion"
     "ciso8601"
     "cryptography"
+    "httpx"
     "lru-dict"
     "orjson"
+    "pyopenssl"
+    "voluptuous"
+    "yarl"
   ];
 
   # extract translations from pypi sdist
