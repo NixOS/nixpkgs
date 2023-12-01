@@ -13,9 +13,9 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Zren";
-    repo = pname;
+    repo = "plasma-hud";
     rev = version;
-    sha256 = "19vlc156jfdamw7q1pc78fmlf0h3sff5ar3di9j316vbb60js16l";
+    hash = "sha256-1AQtgVlrmzBkim1kVZzTAwJHq0OH3YAPr6o5aUpgdKc=";
   };
 
   nativeBuildInputs = [
