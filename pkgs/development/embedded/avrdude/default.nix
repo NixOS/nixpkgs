@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex, libusb-compat-0_1, libelf
-, libftdi1, readline
-# documentation building is broken on darwin
-, docSupport ? (!stdenv.isDarwin), texliveMedium, texinfo, texi2html, unixtools }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, bison
+, flex
+, libusb-compat-0_1
+, libelf
+, libftdi1
+, readline
+  # documentation building is broken on darwin
+, docSupport ? (!stdenv.isDarwin)
+, texliveMedium
+, texinfo
+, texi2html
+, unixtools
+}:
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
