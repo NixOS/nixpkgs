@@ -9370,6 +9370,8 @@ self: super: with self; {
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
 
+  python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
+
   python-memcached = callPackage ../development/python-modules/python-memcached { };
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
