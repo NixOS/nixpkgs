@@ -4,26 +4,33 @@
 , isPyPy
 , pythonAtLeast
 , pythonOlder
-, tzdata
+
+# build-system
+, setuptools
 
 # tests
 , freezegun
 , pytestCheckHook
 , pytz
+, tzdata
 }:
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.12.1";
-  format = "setuptools";
+  version = "2.13.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Babel";
     inherit version;
-    hash = "sha256-zC2ZmZzQHURCCuclohyeNxGzqtx5dtYUf2IthYGWNFU=";
+    hash = "sha256-M+CVLX3WN0r42/Z2jMTd88z+/CRPmYbUB0cE8vvRiQA=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
     pytz
