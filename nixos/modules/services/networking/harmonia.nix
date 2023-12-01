@@ -14,7 +14,7 @@ in
         description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
       };
 
-      package = lib.mkPackageOptionMD pkgs "harmonia" { };
+      package = lib.mkPackageOption pkgs "harmonia" { };
 
       settings = lib.mkOption {
         inherit (format) type;

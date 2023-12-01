@@ -1,32 +1,42 @@
 { lib
-, bzip2
-, patchelf
-, python3
+, buildPythonPackage
+, pythonOlder
 , fetchPypi
+, setuptools-scm
+, pyelftools
+, importlib-metadata
+, pretend
+, pytestCheckHook
+# non-python dependencies
+, bzip2
 , gnutar
+, patchelf
 , unzip
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "auditwheel";
-  version = "5.1.2";
-  format = "setuptools";
+  version = "5.4.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PuWDABSTHqhK9c0GXGN7ZhTvoD2biL2Pv8kk5+0B1ro=";
+    hash = "sha256-qvgVOreinMmaZjziSYgE2vGIfqG3oyMboNP+5oo8zxk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pbr
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     pyelftools
-    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = [
     pretend
     pytestCheckHook
   ];
@@ -46,6 +56,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/pypa/auditwheel/blob/${version}/CHANGELOG.md";
     description = "Auditing and relabeling cross-distribution Linux wheels";
     homepage = "https://github.com/pypa/auditwheel";
     license = with licenses; [
@@ -53,6 +64,7 @@ python3.pkgs.buildPythonApplication rec {
       bsd2  # from https://github.com/matthew-brett/delocate
       bsd3  # from https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-projects/pax-utils/lddtree.py
     ];
+    mainProgram = "auditwheel";
     maintainers = with maintainers; [ davhau ];
     platforms = platforms.linux;
   };

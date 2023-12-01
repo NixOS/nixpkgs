@@ -12,7 +12,7 @@ let
     mkOption
     mdDoc
     mkEnableOption
-    mkPackageOptionMD
+    mkPackageOption
     types
     ;
 
@@ -26,7 +26,7 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.wyoming.piper = with types; {
-    package = mkPackageOptionMD pkgs "wyoming-piper" { };
+    package = mkPackageOption pkgs "wyoming-piper" { };
 
     servers = mkOption {
       default = {};
@@ -38,7 +38,7 @@ in
           options = {
             enable = mkEnableOption (mdDoc "Wyoming Piper server");
 
-            piper = mkPackageOptionMD pkgs "piper-tts" { };
+            piper = mkPackageOption pkgs "piper-tts" { };
 
             voice = mkOption {
               type = str;

@@ -21,7 +21,7 @@ let
     mkIf
     mkMerge
     mkOption
-    mkPackageOptionMD
+    mkPackageOption
     mkRemovedOptionModule
     mkRenamedOptionModule
     optionalAttrs
@@ -57,7 +57,7 @@ in
     services.forgejo = {
       enable = mkEnableOption (mdDoc "Forgejo");
 
-      package = mkPackageOptionMD pkgs "forgejo" { };
+      package = mkPackageOption pkgs "forgejo" { };
 
       useWizard = mkOption {
         default = false;

@@ -16,7 +16,7 @@ in
         group.
       '';
     };
-    package = mkPackageOptionMD pkgs "flashrom" { };
+    package = mkPackageOption pkgs "flashrom" { };
   };
 
   config = mkIf cfg.enable {

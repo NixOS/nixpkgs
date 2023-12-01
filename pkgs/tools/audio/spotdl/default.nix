@@ -9,15 +9,14 @@ let
   python = python3;
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.1";
-
-  format = "pyproject";
+  version = "4.2.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xKas3WO3uigY1iFfxIN3+d+5U31vM7cLv08oMef8trc=";
+    hash = "sha256-pJr0OGUI3OcFsmvn9eqkvpFeF1EkHDdNoWc91s8h9O8=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -66,6 +65,9 @@ in python.pkgs.buildPythonApplication rec {
     # require networking
     "tests/test_init.py"
     "tests/test_matching.py"
+    "tests/providers/lyrics"
+    "tests/types"
+    "tests/utils/test_github.py"
     "tests/utils/test_m3u.py"
     "tests/utils/test_metadata.py"
     "tests/utils/test_search.py"
@@ -73,7 +75,6 @@ in python.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # require networking
-    "test_album_from_url"
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
