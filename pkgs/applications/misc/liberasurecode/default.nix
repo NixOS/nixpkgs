@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace doc/doxygen.cfg.in \
       --replace "GENERATE_MAN           = NO" "GENERATE_MAN           = YES"
+
+    substituteInPlace Makefile.am src/Makefile.am \
+      --replace "-Werror" ""
   '';
 
   nativeBuildInputs = [ autoreconfHook doxygen installShellFiles ];
@@ -30,9 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   configureFlags = [
+    "--disable-werror"
     "--enable-doxygen"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "CFLAGS=-Wno-error=strict-prototypes"
   ];
 
   postInstall = ''
