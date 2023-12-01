@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ytree";
-  version = "2.05";
+  version = "2.06";
 
   src = fetchurl {
     url = "https://han.de/~werner/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jPixUeSRO1t/epHf/VxzBhBqQkd+xE5x1ix19mq2Glc=";
+    sha256 = "sha256-QRqI779ZnnytVUC7A7Zt0zyWexRwBnp+CVQcNvnvWeY=";
   };
 
   buildInputs = [
