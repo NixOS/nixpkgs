@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "A Modern Chess Database";
     homepage = "https://github.com/franciscoBSalgueiro/en-croissant/";
     maintainers = [ maintainers.lcscosta ];
-    license = licenses.mit;
+    license = licenses.gpl3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     mainProgram = "en-croissant";
