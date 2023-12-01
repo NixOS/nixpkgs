@@ -17773,6 +17773,11 @@
     githubId = 7914437;
     name = "Thomas Cheronneau";
   };
+  tc-kaluza = {
+    github = "tc-kaluza";
+    githubId = 101565936;
+    name = "Tautvydas Cerniauskas";
+  };
   tckmn = {
     email = "andy@tck.mn";
     github = "tckmn";
