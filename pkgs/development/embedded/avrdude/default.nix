@@ -1,12 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
 , bison
+, cmake
+, elfutils
 , flex
-, libusb-compat-0_1
-, libelf
 , libftdi1
+, libusb-compat-0_1
 , readline
   # documentation building is broken on darwin
 , docSupport ? (!stdenv.isDarwin)
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     texi2html
   ];
 
-  buildInputs = [ libusb-compat-0_1 libelf libftdi1 readline ];
+  buildInputs = [ elfutils libusb-compat-0_1 libftdi1 readline ];
 
   cmakeFlags = lib.optionals docSupport [
     "-DBUILD_DOC=ON"
