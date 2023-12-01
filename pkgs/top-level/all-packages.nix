@@ -39766,7 +39766,9 @@ with pkgs;
 
   avy = callPackage ../applications/science/logic/avy { };
 
-  btor2tools = callPackage ../applications/science/logic/btor2tools { };
+  btor2tools = callPackage ../applications/science/logic/btor2tools {
+    stdenv = gcc12Stdenv;
+  };
 
   boolector = callPackage ../applications/science/logic/boolector {
     stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_14.stdenv else stdenv;
