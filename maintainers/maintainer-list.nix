@@ -13257,6 +13257,12 @@
     githubId = 3521180;
     name = "Tom Sydney Kerckhove";
   };
+  nosewings = {
+    name = "Nicholas Coltharp";
+    email = "coltharpnicholas@gmail.com";
+    github = "nosewings";
+    githubId = 24929858;
+  };
   NotAShelf = {
     name = "NotAShelf";
     email = "raf@notashelf.dev";
@@ -16323,6 +16329,12 @@
     githubId = 4927883;
     matrix = "@seirl:matrix.org";
   };
+  selfuryon = {
+    name = "Sergei Iakovlev";
+    email = "siakovlev@pm.me";
+    github = "selfuryon";
+    githubId = 2993917;
+  };
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
@@ -17017,6 +17029,12 @@
     githubId = 9720532;
     name = "Sergei K";
   };
+  sontek = {
+    email = "sontek@gmail.com";
+    github = "sontek";
+    githubId = 151924;
+    name = "John Anderson";
+  };
   sophrosyne = {
     email = "joshuaortiz@tutanota.com";
     github = "sophrosyne97";
@@ -17371,6 +17389,12 @@
     github = "stites";
     githubId = 1694705;
     name = "Sam Stites";
+  };
+  stnley = {
+    email = "michael@stnley.io";
+    github = "stnley";
+    githubId = 64174376;
+    name = "Michael Stanley";
   };
   strager = {
     email = "strager.nds@gmail.com";
