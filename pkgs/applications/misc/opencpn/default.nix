@@ -7,6 +7,7 @@
 , cmake
 , curl
 , dbus
+, elfutils
 , fetchFromGitHub
 , fetchpatch
 , flac
@@ -15,7 +16,6 @@
 , libGLU
 , libarchive
 , libdatrie
-, libelf
 , libepoxy
 , libexif
 , libogg
@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     # gtk3 propagates AppKit from the 10.12 SDK
     AppKit
   ] ++ [
+    elfutils
     gtk3
     jasper
     libGLU
     libarchive
     libdatrie
-    libelf
     libepoxy
     libexif
     libogg
