@@ -16063,7 +16063,6 @@ self: super: with self; {
 
   yosys = toPythonModule (pkgs.yosys.override {
     python3 = python;
-    enablePython = true;
   });
 
   youless-api = callPackage ../development/python-modules/youless-api { };

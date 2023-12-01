@@ -19,7 +19,7 @@
 , yosys-bluespec
 , yosys-ghdl
 , yosys-symbiflow
-, enablePython ? false # enable python binding
+, enablePython ? true # enable python binding
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
