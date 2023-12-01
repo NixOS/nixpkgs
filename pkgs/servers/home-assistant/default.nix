@@ -386,8 +386,10 @@ in python.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "ciso8601"
     "cryptography"
+    "httpx"
     "lru-dict"
     "orjson"
+    "yarl"
   ];
 
   # copy tests early, so patches apply as they would to the git repo
