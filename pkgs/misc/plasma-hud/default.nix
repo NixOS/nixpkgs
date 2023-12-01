@@ -16,13 +16,12 @@ python3.pkgs.buildPythonApplication rec{
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    rofi
+  propagatedBuildInputs = (with python3.pkgs; [
     dbus-python
     pygobject3
     setproctitle
     xlib
-  ];
+  ]) ++ [ rofi ];
   format = "other";
   postPatch = ''
     sed -i "s:/usr/lib/plasma-hud:$out/bin:" etc/xdg/autostart/plasma-hud.desktop
