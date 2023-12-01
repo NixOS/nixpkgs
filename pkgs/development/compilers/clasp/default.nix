@@ -3,11 +3,11 @@
 , fetchFromGitHub
 , boost
 , cacert
+, elfutils
 , fmt_9
 , git
 , gmpxx
 , libclang
-, libelf
 , libunwind
 , llvm
 , ninja
@@ -71,17 +71,17 @@ stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = [
-    sbcl
-    git
-    pkg-config
-    fmt_9
-    gmpxx
-    libelf
     boost
-    libunwind
-    ninja
-    llvm
+    elfutils
+    fmt_9
+    git
+    gmpxx
     libclang
+    libunwind
+    llvm
+    ninja
+    pkg-config
+    sbcl
   ];
 
   configurePhase = ''
