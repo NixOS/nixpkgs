@@ -20,6 +20,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/sontek/snowmachine";
     mainProgram = "snowmachine";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ djanatyn ];
+    maintainers = with maintainers; [ djanatyn sontek ];
   };
 }
