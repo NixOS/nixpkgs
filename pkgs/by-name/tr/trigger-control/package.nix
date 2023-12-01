@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , makeWrapper
 , pkg-config
@@ -16,15 +17,17 @@ let
   inherit (gnome) zenity;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-control";
-  version = "unstable-2023-06-18";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "Etaash-mathamsetty";
     repo = "trigger-control";
-    rev = "d457ebd9e0844cfc456bfa4fa4bb694bb8ad982a";
-    hash = "sha256-QWhUQ8xqS8oRVF0KUpEthlrOoXmhcfEkIHauDI1/5a8=";
+    # upstream does not use consistant tags pattern, so we use git commit hash
+    # https://github.com/Etaash-mathamsetty/trigger-control/tags
+    rev = "7b46e743227830d3a97720067d0a6cf20133af90";
+    hash = "sha256-nWSvsgksZ4Cxy1+i0xy8pNalgsiAuaqxNVwT/CThaBI=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +42,15 @@ stdenv.mkDerivation rec {
     libnotify
   ] ++ lib.optionals stdenv.isLinux [
     libdecor
+  ];
+
+  patches = [
+    # Fix build on clang https://github.com/Etaash-mathamsetty/trigger-control/pull/23
+    (fetchpatch {
+      name = "clang.patch";
+      url = "https://github.com/Etaash-mathamsetty/trigger-control/commit/bbec33296fdac7e2ca0398ae19ca8de8ad883407.patch";
+      hash = "sha256-x6RymdzBlzAJ8O8QGqXQtvkZkjdTaC5X8syFPunqZik=";
+    })
   ];
 
   # The app crashes without a changed fontdir and upstream recommends dejavu as font
@@ -63,7 +75,8 @@ stdenv.mkDerivation rec {
     description = "Control the dualsense's triggers on Linux (and Windows) with a gui and C++ api";
     homepage = "https://github.com/Etaash-mathamsetty/trigger-control";
     license = licenses.mit;
+    mainProgram = "trigger-control";
     maintainers = with maintainers; [ azuwis ];
     platforms = platforms.all;
   };
-}
+})
