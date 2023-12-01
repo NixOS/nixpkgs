@@ -13,6 +13,11 @@
 let
   py = python3 // {
     pkgs = python3.pkgs.overrideScope (final: prev: {
+      sphinx = prev.sphinx.overridePythonAttrs (prev: {
+        disabledTests = prev.disabledTests ++ [
+          "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
+        ];
+      });
       ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
         src = prev.src.override {
           version = "0.17.21";
