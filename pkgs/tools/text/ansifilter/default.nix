@@ -2,18 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
-  version = "2.19";
+  version = "2.20";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    hash = "sha256-+cJ7GIORShsdSWX0xJsr5QLiqfyd0/YRI6vq6YnDVLw=";
+    hash = "sha256-Neydcaf05WATN5N8dzSzKm40bA8FT00xY3aCPP5nkGc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost lua ];
 
   postPatch = ''
-    substituteInPlace src/makefile --replace "CC=g++" "CC=c++"
     # avoid timestamp non-determinism with '-n'
     substituteInPlace makefile --replace 'gzip -9f' 'gzip -9nf'
   '';

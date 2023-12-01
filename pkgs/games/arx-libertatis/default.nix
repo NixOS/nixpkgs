@@ -10,15 +10,15 @@
 
 with lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "arx-libertatis";
-  version = "2020-10-20";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "arx";
     repo = "ArxLibertatis";
-    rev = "21df2e37664de79e117eff2af164873f05600f4c";
-    sha256 = "06plyyh0ddqv1j04m1vclz9j72609pgrp61v8wfjdcln8djm376i";
+    rev = version;
+    sha256 = "GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
   };
 
   nativeBuildInputs = [

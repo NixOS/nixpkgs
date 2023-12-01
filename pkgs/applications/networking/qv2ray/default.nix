@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "qv2ray";
-  version = "unstable-2022-09-25";
+  version = "unstable-2023-07-11";
 
   src = fetchFromGitHub {
     owner = "Qv2ray";
     repo = "Qv2ray";
-    rev = "fb44fb1421941ab192229ff133bc28feeb4a8ce5";
-    sha256 = "sha256-TngDgLXKyAoQFnXpBNaz4QjfkVwfZyuQwatdhEiI57U=";
+    rev = "b3080564809dd8aef864a54ca1b79f0984fe986b";
+    hash = "sha256-LwBjuX5x3kQcdEfPLEirWpkMqOigkhNoh/VNmBfPAzw=";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,6 @@ mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DQV2RAY_DISABLE_AUTO_UPDATE=on"
     "-DQV2RAY_USE_V5_CORE=on"
     "-DQV2RAY_TRANSLATION_PATH=${placeholder "out"}/share/qv2ray/lang"
@@ -80,5 +79,6 @@ mkDerivation rec {
     platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
     broken = stdenv.isDarwin;
+    mainProgram = "qv2ray";
   };
 }

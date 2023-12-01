@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  sourceRoot = "source/picoloop";
+  sourceRoot = "${src.name}/picoloop";
 
   makeFlags = [ "-f Makefile.PatternPlayer_debian_RtAudio_sdl20" ];
 

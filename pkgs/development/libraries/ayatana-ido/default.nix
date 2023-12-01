@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ayatana-ido";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0LswdcV4VSg5o5uJ6vfw713eDnMbodZPQ9d2djxHc6k=";
+    sha256 = "sha256-uecUyqSL02SRdlLbWIy0luHACTFoyMXQ6rOIYuisZsw=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

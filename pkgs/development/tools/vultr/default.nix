@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-kyB6gUbc32NsSDqDy1zVT4HXn0pWxHdBOEBOSaI0Xro=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # There are not test files
   doCheck = false;

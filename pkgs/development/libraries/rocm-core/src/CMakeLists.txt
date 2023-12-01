@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 3.23)
-project(rocm-core)
-add_library(rocm-core SHARED rocm_version.c)
-set_target_properties(rocm-core PROPERTIES VERSION "1.0.@rocm_version@")
-install(TARGETS rocm-core LIBRARY DESTINATION lib)

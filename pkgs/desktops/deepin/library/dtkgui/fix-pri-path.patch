@@ -1,0 +1,17 @@
+diff --git a/misc/qt_lib_dtkgui.pri.in b/misc/qt_lib_dtkgui.pri.in
+index 28308ee..9fb25e6 100644
+--- a/misc/qt_lib_dtkgui.pri.in
++++ b/misc/qt_lib_dtkgui.pri.in
+@@ -4,9 +4,9 @@ QT.dtkgui.MINOR_VERSION = @PROJECT_VERSION_MINOR@
+ QT.dtkgui.PATCH_VERSION = @PROJECT_VERSION_PATCH@
+ QT.dtkgui.name = dtkgui
+ QT.dtkgui.module = dtk@DTK_VERSION_MAJOR@gui
+-QT.dtkgui.tools = @CMAKE_INSTALL_PREFIX@/@TOOL_INSTALL_DIR@
+-QT.dtkgui.libs = @CMAKE_INSTALL_PREFIX@/@LIBRARY_INSTALL_DIR@
+-QT.dtkgui.includes = @CMAKE_INSTALL_PREFIX@/@INCLUDE_INSTALL_DIR@
++QT.dtkgui.tools = @TOOL_INSTALL_DIR@
++QT.dtkgui.libs = @LIBRARY_INSTALL_DIR@
++QT.dtkgui.includes = @INCLUDE_INSTALL_DIR@
+ QT.dtkgui.frameworks =
+ QT.dtkgui.depends = core gui dtkcore gui_private dbus network
+ QT.dtkgui.module_config = v2 internal_module ltcg

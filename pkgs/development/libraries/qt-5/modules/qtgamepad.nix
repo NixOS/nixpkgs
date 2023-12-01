@@ -2,7 +2,7 @@
 
 qtModule {
   pname = "qtgamepad";
-  qtInputs = [ qtbase qtdeclarative ]
+  propagatedBuildInputs = [ qtbase qtdeclarative ]
     ++ lib.optional stdenv.isDarwin GameController;
   buildInputs = [ ];
   nativeBuildInputs = [ pkg-config ];

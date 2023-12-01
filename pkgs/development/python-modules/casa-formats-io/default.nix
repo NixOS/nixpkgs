@@ -4,20 +4,26 @@
 , astropy
 , dask
 , numpy
+, oldest-supported-numpy
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "casa-formats-io";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
+    hash = "sha256-EOX+tal9nrON2K7mHVYSTTxja6mu2k3Bag8bhL3JHJs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [ astropy dask numpy ];
 

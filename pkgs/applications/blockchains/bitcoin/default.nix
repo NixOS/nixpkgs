@@ -3,6 +3,7 @@
 , fetchurl
 , autoreconfHook
 , pkg-config
+, installShellFiles
 , util-linux
 , hexdump
 , autoSignDarwinBinariesHook
@@ -32,18 +33,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "25.0";
+  version = "25.1";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "5df67cf42ca3b9a0c38cdafec5bbb517da5b58d251f32c8d2a47511f9be1ebc2";
+    sha256 = "bec2a598d8dfa8c2365b77f13012a733ec84b8c30386343b7ac1996e901198c9";
   };
 
   nativeBuildInputs =
-    [ autoreconfHook pkg-config ]
+    [ autoreconfHook pkg-config installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ util-linux ]
     ++ lib.optionals stdenv.isDarwin [ hexdump ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
@@ -53,7 +54,19 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withWallet [ db48 sqlite ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
-  postInstall = lib.optionalString withGui ''
+  postInstall = ''
+    installShellCompletion --cmd bitcoin-cli --bash contrib/completions/bash/bitcoin-cli.bash-completion
+    installShellCompletion --cmd bitcoind --bash contrib/completions/bash/bitcoind.bash-completion
+    installShellCompletion --cmd bitcoin-tx --bash contrib/completions/bash/bitcoin-tx.bash-completion
+
+    installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoind.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
+    installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
+  '' + lib.optionalString withGui ''
+    installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
+
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
     substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
     install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png

@@ -1,25 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, Security }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "manix";
-  version = "0.6.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
-    owner = "mlvzk";
-    repo  = pname;
-    rev = "v${version}";
-    sha256 = "1b7xi8c2drbwzfz70czddc4j33s7g1alirv12dwl91hbqxifx8qs";
+    repo = pname;
+    owner = "lecoqjacob";
+    rev = "${version}";
+    hash = "sha256-kTQbeOIGG1HmbsXKfXw5yCZ49kGufbGiCkkIRMTwcsg=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
-
-  cargoSha256 = "1yivx9vzk2fvncvlkwq5v11hb9llr1zlcmy69y12q6xnd9rd8x1b";
+  buildInputs = lib.optionals stdenv.isDarwin [Security];
+  cargoSha256 = "sha256-7SHUi1qH9Dr4Oi7A6gRmZqhAIr8RzLNU1l1x4WGtQYI=";
 
   meta = with lib; {
+    license = [licenses.mpl20];
+    platforms = platforms.unix;
+    homepage = "https://github.com/lecoqjacob/manix";
     description = "A Fast Documentation Searcher for Nix";
-    homepage    = "https://github.com/mlvzk/manix";
-    license     = [ licenses.mpl20 ];
-    maintainers = [ maintainers.mlvzk ];
-    platforms   = platforms.unix;
+    maintainers = [maintainers.lecoqjacob];
   };
 }

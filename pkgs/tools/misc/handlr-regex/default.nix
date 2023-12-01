@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
+{ lib, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
     license = licenses.mit;
     maintainers = with maintainers; [ anomalocaris ];
+    mainProgram = "handlr";
   };
 }

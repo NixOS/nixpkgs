@@ -5,18 +5,20 @@
 
 buildGoModule rec {
   pname = "ooniprobe-cli";
-  version = "3.17.3";
+  version = "3.19.1";
 
   src = fetchFromGitHub {
     owner = "ooni";
     repo = "probe-cli";
     rev = "v${version}";
-    hash = "sha256-kqjTYowAEfJ+um9DQQXIMLVWlEGJ9intbdTSJukSvVc=";
+    hash = "sha256-sYIp5zl49waERfTYPfNjbyzep7p4sRlweDVcuTtWB28=";
   };
 
-  vendorHash = "sha256-kS5HWiATn2WT6E5gb0Gve83hHJ++xHmPSsgJu/5GqO4=";
+  vendorHash = "sha256-6RyK0oy9Lcuh2TXpQqAqmrA+bS9hug6+il7L1z+kYvs=";
 
   subPackages = [ "cmd/ooniprobe" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     changelog = "https://github.com/ooni/probe-cli/releases/tag/${src.rev}";

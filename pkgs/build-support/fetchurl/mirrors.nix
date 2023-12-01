@@ -175,12 +175,6 @@
     "https://download.qt.io/"
   ];
 
-  # Roy marples mirrors
-  roy = [
-    "https://roy.marples.name/downloads/"
-    "https://cflags.cc/roy/"
-  ];
-
   # Sage mirrors (https://www.sagemath.org/mirrors.html)
   sageupstream = [
     # Africa (HTTPS)

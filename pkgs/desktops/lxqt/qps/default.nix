@@ -14,18 +14,19 @@
 
 mkDerivation rec {
   pname = "qps";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "70mANEnui/orN+8eIBzCCSsh5wvPXuPUAAwRcXtHsaY=";
+    hash = "sha256-Xr+61t6LzoXASHuXrE5ro3eWGxMSDCVnck49dCtiaww=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
@@ -33,7 +34,6 @@ mkDerivation rec {
     liblxqt
     libqtxdg
     qtbase
-    qttools
     qtx11extras
   ];
 

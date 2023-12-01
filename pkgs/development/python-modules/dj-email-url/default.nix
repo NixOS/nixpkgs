@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Use an URL to configure email backend settings in your Django Application";
     homepage = "https://github.com/migonzalvar/dj-email-url";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

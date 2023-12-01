@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ hrdinka ];
     platforms = platforms.all;
+    mainProgram = "cdi2iso";
   };
 }

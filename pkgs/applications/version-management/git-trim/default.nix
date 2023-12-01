@@ -51,5 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/foriequal0/git-trim";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "git-trim";
   };
 }

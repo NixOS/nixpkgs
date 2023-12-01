@@ -22,14 +22,14 @@
 
 let self = buildPythonPackage rec {
   pname = "pytest-jupyter";
-  version = "0.6.2";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pytest-jupyter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kY4QHrlj0opEBywe4SpwE4Ck6l6JIzEosx6uuXh+yCQ=";
+    hash = "sha256-ZocpIBHnXTvQdjWU8yVhGK49I+FFct+teDhghiMnvW0=";
   };
 
   nativeBuildInputs = [

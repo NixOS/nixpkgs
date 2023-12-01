@@ -1,27 +1,28 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
+{ lib, fetchFromGitHub, gerbilPackages, ... }:
 
-gerbil-support.gerbilPackage {
-  pname = "gerbil-ethereum";
-  version = "unstable-2020-10-17";
-  git-version = "0.0-35-g44d490d";
-  gerbil-package = "clan/poo";
-  gerbil = gerbil-unstable;
-  gerbilInputs = with gerbil-support.gerbilPackages-unstable; [gerbil-utils gerbil-crypto];
-  buildInputs = [];
-  gambit-params = gambit-support.unstable-params;
-  version-path = "version";
+{
+  pname = "gerbil-poo";
+  version = "unstable-2023-10-07";
+  git-version = "0.1-1-g367ab43";
   softwareName = "Gerbil-POO";
-  src = fetchFromGitHub {
-    owner = "fare";
+  gerbil-package = "clan/poo";
+  version-path = "version";
+
+  gerbilInputs = with gerbilPackages; [ gerbil-utils ];
+
+  pre-src = {
+    fun = fetchFromGitHub;
+    owner = "mighty-gerbils";
     repo = "gerbil-poo";
-    rev = "44d490d95b9d1b5d54eaedf2602419af8e086837";
-    sha256 = "082ndpy281saybcnp3bdidcibkk2ih6glrkbb5fdj1524ban4d0k";
+    rev = "367ab4376fdd6fc0b0892da2becef35a5039c583";
+    sha256 = "0ci88zqi7gb55ahl0n7dk1ihij2j6dn8jb6rzfiilck773x46kdh";
   };
-  meta = {
+
+  meta = with lib; {
     description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";
     homepage    = "https://github.com/fare/gerbil-poo";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    license     = licenses.asl20;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ fare ];
   };
 }

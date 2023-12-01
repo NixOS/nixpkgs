@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     python3
     desktop-file-utils
     gtk3
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
     python3.pkgs.gatt
-    gobject-introspection
   ];
 
   pythonPath = with python3.pkgs; [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/theironrobin/siglo";
     changelog = "https://github.com/theironrobin/siglo/tags/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

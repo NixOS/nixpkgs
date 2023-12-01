@@ -1,24 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyusb
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pyusb }:
 
 buildPythonPackage rec {
   pname = "blinkstick";
-  version = "1.2.0";
+  version = "unstable-2023-05-04";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0rdk3i81s6byw23za0bxvkh7sj5l16qxxgc2c53qjg3klc24wcm9";
+  src = fetchFromGitHub {
+    owner = "arvydas";
+    repo = "blinkstick-python";
+    rev = "8140b9fa18a9ff4f0e9df8e70c073f41cb8f1d35";
+    hash = "sha256-9bc7TD/Ilc952ywLauFd0+3Lh64lQlYuDC1KG9eWDgs=";
   };
-
-  # Upstream fix https://github.com/arvydas/blinkstick-python/pull/54
-  # https://github.com/arvydas/blinkstick-python/pull/54/commits/b9bee2cd72f799f1210e5d9e13207f93bbc2d244.patch
-  # has line ending issues after 1.2.0
-  postPatch = ''
-    substituteInPlace setup.py --replace "pyusb==1.0.0" "pyusb>=1.0.0"
-  '';
 
   propagatedBuildInputs = [ pyusb ];
 
@@ -26,10 +18,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "blinkstick" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to control BlinkStick USB devices";
     homepage = "https://github.com/arvydas/blinkstick-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ np perstark ];
   };
 }

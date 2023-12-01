@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , vala
@@ -19,27 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "msitools";
-  version = "0.101";
+  version = "0.103";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "DMTS4NEI+m8rQIW5qX3VvG2fyt7N2TPyCU+Guv2+hf4=";
+    url = "mirror://gnome/sources/msitools/${lib.versions.majorMinor version}/msitools-${version}.tar.xz";
+    hash = "sha256-0XYi7rvzf6TAm1m+C8jbCLJr4wCmcxx02h684mK86Dk=";
   };
-
-  patches = [
-    # Fix executable bit on tools (regression in Meson migration).
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/msitools/commit/25c4353cf173cddeb76c0a2dd6621bcb753cabf8.patch";
-      sha256 = "VknfZCCn4jxwn9l9noXdGczv2kV+IbOsw9cNBE67P1U=";
-    })
-
-    # Fix failure on big-endian platforms.
-    # https://gitlab.gnome.org/GNOME/msitools/issues/31
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/skitt/msitools/commit/3668c8288085d5beefae7c1387330ce9599b8365.patch";
-      sha256 = "x3Mp+9TRqBAJIdzVn68HyYt0lujyMk5h5xSBUQHe9Oo=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson

@@ -1,30 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , click
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "click-command-tree";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "whwright";
     repo = pname;
     rev = version;
-    hash = "sha256-vFOcn+ibyLZnhU3OQMtnHI04UqAY2/CCvhq4EEU4XFo=";
+    hash = "sha256-uBp7462LutL8aFRFix3pbVYbSf1af6k0nW0J0HhJa1U=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-setup-downloading-flake8.patch";
-      url = "https://github.com/whwright/click-command-tree/commit/1ecfcfa29bf01e1131e6ec712bd7338ac1283dc8.patch";
-      hash = "sha256-u5jsNfEo1+XNlkVGPCM/rsDPnYko6cr2z2si9nq+sLA=";
-    })
-  ];
 
   propagatedBuildInputs = [
     click

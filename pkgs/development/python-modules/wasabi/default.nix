@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "wasabi";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9e58YJAngRvRbmIPL9enMZRmAFhI5BsFGmIFOrj9cNY=";
+    hash = "sha256-Gq7zrOqjLtuckTMNKdOTbAw5/blldDVJwXPLVLFsMLU=";
   };
 
   nativeCheckInputs = [

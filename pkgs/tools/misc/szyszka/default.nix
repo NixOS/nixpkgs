@@ -7,24 +7,26 @@
 , pango
 , atk
 , gdk-pixbuf
-, gtk3
+, gtk4
+, wrapGAppsHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "szyszka";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
-    repo = pname;
+    repo = "szyszka";
     rev = version;
-    sha256 = "sha256-TQwDvkWWlk09kVVaVI56isJi+X9UXWnoz+2PVyK9BGc=";
+    hash = "sha256-LkXGKDFKaY+mg53ZEO4h2br/4eRle/QbSQJTVEMpAoY=";
   };
 
-  cargoSha256 = "sha256-2uyMA2nIOPkc5+qImFn3eUVq2AxHu3Xj91TpkKswjao=";
+  cargoHash = "sha256-WJR1BogNnQoZeOt5yBFzjYNZS8OmE84R1FbQpHTb7V0=";
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -33,13 +35,14 @@ rustPlatform.buildRustPackage rec {
     pango
     atk
     gdk-pixbuf
-    gtk3
+    gtk4
   ];
 
   meta = with lib; {
     description = "A simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];
+    mainProgram = "szyszka";
   };
 }

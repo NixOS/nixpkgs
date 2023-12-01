@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "elmax-api";
-  version = "0.0.4";
+  version = "0.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "albertogeniola";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+dR1ccRa4G91yFeSwjgdZ1lEXV/PIgnKN8e9tfy5fTU=";
+    hash = "sha256-57pmmH7f893H71CMhdnahvbN/5F2yfrVZ6MFpYQ4+mQ=";
   };
 
   propagatedBuildInputs = [

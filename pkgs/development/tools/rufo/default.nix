@@ -12,5 +12,6 @@ bundlerApp {
     homepage = "https://github.com/ruby-formatter/rufo";
     license = licenses.mit;
     maintainers = with maintainers; [ andersk ];
+    mainProgram = "rufo";
   };
 }

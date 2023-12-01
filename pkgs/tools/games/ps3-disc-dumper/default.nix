@@ -1,6 +1,5 @@
 { lib
 , buildDotnetModule
-, dotnetCorePackages
 , fetchFromGitHub
 , zlib
 , openssl

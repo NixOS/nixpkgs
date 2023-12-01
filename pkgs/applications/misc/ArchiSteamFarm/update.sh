@@ -3,8 +3,6 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-deps_file="$(realpath ./deps.nix)"
-
 new_version="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/releases" | jq -r  'map(select(.prerelease == false)) | .[0].tag_name')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
@@ -16,13 +14,13 @@ if [[ "$new_version" == "$old_version" ]]; then
 fi
 
 asf_path=$PWD
-pushd ../../../..
+cd ../../../..
 
 if [[ "${1:-}" != "--deps-only" ]]; then
     update-source-version ArchiSteamFarm "$new_version"
 fi
 
-$(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link) "$deps_file"
+$(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link)
 
-popd
-"$asf_path/web-ui/update.sh"
+cd "$asf_path/web-ui"
+./update.sh

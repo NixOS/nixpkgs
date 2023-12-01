@@ -7,6 +7,15 @@ make_vala_find_vapi_files() {
 
 addEnvHooks "$hostOffset" make_vala_find_vapi_files
 
+disable_incompabile_pointer_conversion_warning() {
+    # Work around incompatible function pointer conversion errors with clang 16
+    # by setting ``-Wno-incompatible-function-pointer-types` in an env hook.
+    # See https://gitlab.gnome.org/GNOME/vala/-/issues/1413.
+    NIX_CFLAGS_COMPILE+=" -Wno-incompatible-function-pointer-types"
+}
+
+addEnvHooks "$hostOffset" disable_incompabile_pointer_conversion_warning
+
 _multioutMoveVapiDirs() {
   moveToOutput share/vala/vapi "${!outputDev}"
   moveToOutput share/vala-@apiVersion@/vapi "${!outputDev}"

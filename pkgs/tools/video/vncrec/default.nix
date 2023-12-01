@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     homepage = "http://ronja.twibright.com/utils/vncrec/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
+    mainProgram = "vncrec";
   };
 }

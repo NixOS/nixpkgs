@@ -143,13 +143,11 @@ in
 
     environment.systemPackages = [ pkgs.mlmmj ];
 
-    system.activationScripts.mlmmj = ''
-          ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
-          ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
-          ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
-          ${pkgs.postfix}/bin/postmap /etc/postfix/transport
-      '';
+    systemd.tmpfiles.rules = [
+      ''d "${stateDir}" -''
+      ''d "${spoolDir}/${cfg.listDomain}" -''
+      ''Z "${spoolDir}" - "${cfg.user}" "${cfg.group}" -''
+    ];
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";
@@ -158,6 +156,11 @@ in
         Group = cfg.group;
         ExecStart = "${pkgs.mlmmj}/bin/mlmmj-maintd -F -d ${spoolDir}/${cfg.listDomain}";
       };
+      preStart = ''
+        ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+        ${pkgs.postfix}/bin/postmap /etc/postfix/virtual
+        ${pkgs.postfix}/bin/postmap /etc/postfix/transport
+      '';
     };
 
     systemd.timers.mlmmj-maintd = {

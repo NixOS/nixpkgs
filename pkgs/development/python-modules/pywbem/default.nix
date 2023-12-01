@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.6.1";
+  version = "1.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q9vWzgi2xZfN1sdzDmtJqELZE/L2s8xitYXFjsPueUU=";
+    hash = "sha256-JugXm8F+MXa0zVdrn1p3MPhI1RvgUTdo/X8x/ZsnCpY=";
   };
 
   propagatedBuildInputs = [
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://pywbem.github.io";
     changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ ];
   };
 }

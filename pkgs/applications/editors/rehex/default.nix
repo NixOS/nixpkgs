@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
-  version = "0.5.4";
+  version = "0.60.1";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
-    hash = "sha256-UgwCfy2ssaPuSWeN2SXHBDXv/uLdrDoGr/Q9wXiuCnc=";
+    hash = "sha256-oF8XtxKqyo6c2lNH6WDq6aEPeZw8RqBinDVhPpaDAWg=";
   };
 
   nativeBuildInputs = [ pkg-config which zip ]
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ markus1189 wegank ];
     platforms = platforms.all;
+    mainProgram = "rehex";
   };
 }

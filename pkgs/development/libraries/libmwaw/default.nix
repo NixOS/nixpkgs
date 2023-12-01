@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmwaw";
-  version = "0.3.21";
+  version = "0.3.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmwaw/libmwaw/libmwaw-${version}/libmwaw-${version}.tar.xz";
-    sha256 = "sha256-6HUBI6eNYblDzveLdzbIp/ILsKZJqhEkAhJPunlPwhw=";
+    sha256 = "sha256-oaOf/Oo/8qenquDCOHfd9JGLVUv4Kw3l186Of2HqjjI=";
   };
 
   nativeBuildInputs = [ pkg-config ];

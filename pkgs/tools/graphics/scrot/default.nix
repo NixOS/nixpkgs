@@ -8,19 +8,20 @@
 , libXext
 , libXfixes
 , libXcomposite
+, libXinerama
 , pkg-config
 , libbsd
 }:
 
 stdenv.mkDerivation rec {
   pname = "scrot";
-  version = "1.7";
+  version = "1.10";
 
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oVmEPkEK1xDcIRUQjCp6CKf+aKnnVe3L7aRTdSsCmmY=";
+    sha256 = "sha256-ypPUQt3N30qUw5ecVRhwz3Hnh9lTOnbAm7o5tdxjyds=";
   };
 
   nativeBuildInputs = [
@@ -35,14 +36,16 @@ stdenv.mkDerivation rec {
     libXext
     libXfixes
     libXcomposite
+    libXinerama
     libbsd
   ];
 
   meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
     description = "A command-line screen capture utility";
+    mainProgram = "scrot";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     license = licenses.mitAdvertising;
   };
 }

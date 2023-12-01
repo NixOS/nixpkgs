@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, faust, meson, ninja, pkg-config
-, boost, cairo, fftw, ladspa-sdk, libxcb, lv2, xcbutilwm
+, boost, cairo, fftw, ladspa-sdk, libxcb, lv2, xcbutilwm, xorg
 , zita-convolver, zita-resampler
  }:
 
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     libxcb
     lv2
     xcbutilwm
+    xorg.xcbutil
     zita-convolver
     zita-resampler
   ];

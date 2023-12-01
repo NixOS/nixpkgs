@@ -1,11 +1,14 @@
 /**
- * Since Nix does not have a standard location like /usr/share,
- * where GSettings system could look for schemas, we need to point the software to a correct location somehow.
+ * Since Nix does not have a standard location like /usr/share where GSettings system
+ * could look for schemas, we need to point the software to a correct location somehow.
  * For executables, we handle this using wrappers but this is not an option for libraries like e-d-s.
- * Instead, we hardcode the schema path when creating the settings.
- * A schema path (ie org.gnome.evolution) can be replaced by @EVOLUTION_SCHEMA_ID@
- * which is then replaced at build time by substituteAll.
- * The mapping is provided in a json file ./glib-schema-to-var.json
+ * Instead, we patch the source code to look for the schema in a schema source
+ * through a hardcoded path to the schema.
+ *
+ * For each schema id referenced in the source code (e.g. org.gnome.evolution),
+ * a variable name such as `EVOLUTION` must be provided in the ./glib-schema-to-var.json JSON file.
+ * It will end up in the resulting patch as `@EVOLUTION@` placeholder, which should be replaced at build time
+ * with a path to the directory containing a `gschemas.compiled` file that includes the schema.
  */
 
 @initialize:python@

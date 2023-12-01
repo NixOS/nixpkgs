@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.9.3";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,9 +18,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "ion-python";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-FLwzHcge+vLcRY4gOzrxS3kWlprCkRXX5KeGOoTJDSw=";
+    hash = "sha256-pCm3jd/dVqO/uIvT5N/w5yoUWU6ni62Pl2A862e+qSk=";
   };
 
   postPatch = ''

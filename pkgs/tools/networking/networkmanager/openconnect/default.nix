@@ -7,12 +7,12 @@
 , openconnect
 , intltool
 , pkg-config
-, autoreconfHook
 , networkmanager
 , gcr
 , libsecret
 , file
 , gtk3
+, webkitgtk_4_1
 , libnma
 , libnma-gtk4
 , gtk4
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-openconnect";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Xe2qeF2C2OI53dCCv6xSUMaR6WRGS+GAe2gnJjYzzcw=";
+    sha256 = "hEtr9k7K25e0pox3bbiapebuflm9JLAYAihAaGMTZGQ=";
   };
 
   patches = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     libxml2
     openconnect
     networkmanager
+    webkitgtk_4_1 # required, for SSO
   ] ++ lib.optionals withGnome [
     gtk3
     libnma

@@ -9,12 +9,12 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-zarith";
-  version = "1.12";
+  version = "1.13";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "Zarith";
     rev = "release-${version}";
-    sha256 = "1jslm1rv1j0ya818yh23wf3bb6hz7qqj9pn5fwl45y9mqyqa01s9";
+    sha256 = "sha256-CNVKoJeO3fsmWaV/dwnUA8lgI4ZlxR/LKCXpCXUrpSg=";
   };
 
   nativeBuildInputs = [ pkg-config ocaml findlib ];
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast, arbitrary precision OCaml integers";
-    homepage    = "http://forge.ocamlcore.org/projects/zarith";
+    homepage    = "https://github.com/ocaml/Zarith";
+    changelog   = "https://github.com/ocaml/Zarith/raw/${src.rev}/Changes";
     license     = licenses.lgpl2;
     inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ thoughtpolice vbgl ];

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hatch-jupyter-builder";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "hatch-jupyter-builder";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ns5jrVfTAA7NuvUok3/13nIpXSSVZ6WRkgHyTuxkSKA=";
+    hash = "sha256-UywhFJ8d1+lSFOF5ECsknDeQuO7ppckdy5IqAT14ius=";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "librarian-puppet-go";
-  version = "0.3.9";
+  version = "0.3.10";
 
   goPackagePath = "github.com/tmtk75/librarian-puppet-go";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "tmtk75";
     repo = "librarian-puppet-go";
     rev = "v${version}";
-    sha256 = "19x2hz3b8xkhy2nkyjg6s4qvs55mh84fvjwp157a86dmxwkdf45y";
+    sha256 = "sha256-IEhqyowyLTXDEhg4nkix1N45S0+k+RngMP6TsaZQ4mI=";
   };
 
   goDeps = ./deps.nix;

@@ -41,9 +41,9 @@
   ]
 }:
 let
-  version = "1.14.17";
-  sha256 = "sha256-pYbnEF8MgF7fCBf/MOPT//UCeOQj9tuIkDj8UIVFz3E=";
-  cargoSha256 = "sha256-n9nuBiKV3FCgq5fJ5BuqIIAp1yZ6IO+zHjrMaUBfgzs=";
+  version = "1.14.23";
+  sha256 = "sha256-NUkkLzLNh8P7PFh/SVtd9JM18w3egDaaK80urGw1SSs=";
+  cargoSha256 = "sha256-7t8Quh6T2MzJWEM5Y50CgCyFfx2ZJRAdCpZyyYvJrt4=";
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
   inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   strictDeps = true;
-  verifyCargoDeps = true;
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC

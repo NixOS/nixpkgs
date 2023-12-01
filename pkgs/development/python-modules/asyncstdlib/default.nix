@@ -2,14 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , typing-extensions
+, flit-core
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
-  version = "3.10.8";
-  format = "flit";
+  version = "3.10.9";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +18,12 @@ buildPythonPackage rec {
     owner = "maxfischer2781";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7HQFyIR+NWRzbFkzkZiuEQotZfCXpCzrWfWIFg1lWv4=";
+    hash = "sha256-Wvp2orIGxy10jJOyskY3QMCciH33pPgX4Yd0nHjRjsM=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     typing-extensions

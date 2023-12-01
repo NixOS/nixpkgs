@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-grpc-web";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-web";
     rev = finalAttrs.version;
-    sha256 = "sha256-OetDAZ6zC8r7e82FILpQQnM+JHG9eludwhEuPaklrnw=";
+    sha256 = "sha256-yqiSuqan4vynE3AS8OnYdzA+3AVlVFTBkxTuJe17114=";
   };
 
-  sourceRoot = "source/javascript/net/grpc/web/generator";
+  sourceRoot = "${finalAttrs.src.name}/javascript/net/grpc/web/generator";
 
   enableParallelBuilding = true;
   strictDeps = true;

@@ -1,9 +1,9 @@
+/* Operations on attribute sets. */
 { lib }:
-# Operations on attribute sets.
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) flip id mergeAttrs pipe;
+  inherit (lib.trivial) id mergeAttrs;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
@@ -34,12 +34,20 @@ rec {
     default:
     # The nested attribute set to select values from
     set:
-    let attr = head attrPath;
+    let
+      lenAttrPath = length attrPath;
+      attrByPath' = n: s: (
+        if n == lenAttrPath then s
+        else (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then attrByPath' (n + 1) s.${attr}
+          else default
+        )
+      );
     in
-      if attrPath == [] then set
-      else if set ? ${attr}
-      then attrByPath (tail attrPath) default set.${attr}
-      else default;
+      attrByPath' 0 set;
 
   /* Return if an attribute from nested attribute set exists.
 
@@ -58,13 +66,19 @@ rec {
     attrPath:
     # The nested attribute set to check
     e:
-    let attr = head attrPath;
+    let
+      lenAttrPath = length attrPath;
+      hasAttrByPath' = n: s: (
+        n == lenAttrPath || (
+          let
+            attr = elemAt attrPath n;
+          in
+          if s ? ${attr} then hasAttrByPath' (n + 1) s.${attr}
+          else false
+        )
+      );
     in
-      if attrPath == [] then true
-      else if e ? ${attr}
-      then hasAttrByPath (tail attrPath) e.${attr}
-      else false;
-
+      hasAttrByPath' 0 e;
 
   /* Create a new attribute set with `value` set at the nested attribute location specified in `attrPath`.
 
@@ -338,7 +352,7 @@ rec {
     );
 
    /*
-    Like builtins.foldl' but for attribute sets.
+    Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
@@ -372,9 +386,9 @@ rec {
         123
 
       foldlAttrs
-        (_: _: v: v)
-        (throw "initial accumulator not needed")
-        { z = 3; a = 2; };
+        (acc: _: _: acc)
+        3
+        { z = throw "value not needed"; a = throw "value not needed"; };
       ->
         3
 
@@ -541,6 +555,36 @@ rec {
     # Attribute set to map over.
     attrs:
     map (name: f name attrs.${name}) (attrNames attrs);
+
+  /*
+    Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
+    Each element of the resulting list is an attribute set with these attributes:
+    - `name` (string): The name of the attribute
+    - `value` (any): The value of the attribute
+
+    The following is always true:
+    ```nix
+    builtins.listToAttrs (attrsToList attrs) == attrs
+    ```
+
+    :::{.warning}
+    The opposite is not always true. In general expect that
+    ```nix
+    attrsToList (builtins.listToAttrs list) != list
+    ```
+
+    This is because the `listToAttrs` removes duplicate names and doesn't preserve the order of the list.
+    :::
+
+    Example:
+      attrsToList { foo = 1; bar = "asdf"; }
+      => [ { name = "bar"; value = "asdf"; } { name = "foo"; value = 1; } ]
+
+    Type:
+      attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+
+  */
+  attrsToList = mapAttrsToList nameValuePair;
 
 
   /* Like `mapAttrs`, except that it recursively applies itself to
@@ -738,6 +782,42 @@ rec {
     sets:
     zipAttrsWith (name: values: values) sets;
 
+  /*
+    Merge a list of attribute sets together using the `//` operator.
+    In case of duplicate attributes, values from later list elements take precedence over earlier ones.
+    The result is the same as `foldl mergeAttrs { }`, but the performance is better for large inputs.
+    For n list elements, each with an attribute set containing m unique attributes, the complexity of this operation is O(nm log n).
+
+    Type:
+      mergeAttrsList :: [ Attrs ] -> Attrs
+
+    Example:
+      mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ]
+      => { a = 0; b = 1; c = 2; d = 3; }
+      mergeAttrsList [ { a = 0; } { a = 1; } ]
+      => { a = 1; }
+  */
+  mergeAttrsList = list:
+    let
+      # `binaryMerge start end` merges the elements at indices `index` of `list` such that `start <= index < end`
+      # Type: Int -> Int -> Attrs
+      binaryMerge = start: end:
+        # assert start < end; # Invariant
+        if end - start >= 2 then
+          # If there's at least 2 elements, split the range in two, recurse on each part and merge the result
+          # The invariant is satisfied because each half will have at least 1 element
+          binaryMerge start (start + (end - start) / 2)
+          // binaryMerge (start + (end - start) / 2) end
+        else
+          # Otherwise there will be exactly 1 element due to the invariant, in which case we just return it directly
+          elemAt list start;
+    in
+    if list == [ ] then
+      # Calling binaryMerge as below would not satisfy its invariant
+      { }
+    else
+      binaryMerge 0 (length list);
+
 
   /* Does the same as the update operator '//' except that attributes are
      merged until the given predicate is verified.  The predicate should
@@ -817,7 +897,10 @@ rec {
     recursiveUpdateUntil (path: lhs: rhs: !(isAttrs lhs && isAttrs rhs)) lhs rhs;
 
 
-  /* Returns true if the pattern is contained in the set. False otherwise.
+  /*
+    Recurse into every attribute set of the first argument and check that:
+    - Each attribute path also exists in the second argument.
+    - If the attribute's value is not a nested attribute set, it must have the same value in the right argument.
 
      Example:
        matchAttrs { cpu = {}; } { cpu = { bits = 64; }; }
@@ -829,16 +912,24 @@ rec {
   matchAttrs =
     # Attribute set structure to match
     pattern:
-    # Attribute set to find patterns in
+    # Attribute set to check
     attrs:
     assert isAttrs pattern;
-    all id (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
-      let pat = head values; val = elemAt values 1; in
-      if length values == 1 then false
-      else if isAttrs pat then isAttrs val && matchAttrs pat val
-      else pat == val
-    ) [pattern attrs]));
-
+    all
+    ( # Compare equality between `pattern` & `attrs`.
+      attr:
+      # Missing attr, not equal.
+      attrs ? ${attr} && (
+        let
+          lhs = pattern.${attr};
+          rhs = attrs.${attr};
+        in
+        # If attrset check recursively
+        if isAttrs lhs then isAttrs rhs && matchAttrs lhs rhs
+        else lhs == rhs
+      )
+    )
+    (attrNames pattern);
 
   /* Override only the attributes that are already present in the old set
     useful for deep-overriding.

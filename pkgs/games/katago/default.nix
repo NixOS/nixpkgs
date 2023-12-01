@@ -1,6 +1,7 @@
 { stdenv
 , boost
 , cmake
+, config
 , cudaPackages
 , eigen
 , fetchFromGitHub
@@ -14,7 +15,7 @@
 , openssl
 , writeShellScriptBin
 , enableAVX2 ? stdenv.hostPlatform.avx2Support
-, backend ? "opencl"
+, backend ? if config.cudaSupport then "cuda" else "opencl"
 , enableBigBoards ? false
 , enableContrib ? false
 , enableTcmalloc ? true

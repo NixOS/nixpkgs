@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

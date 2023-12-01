@@ -1,14 +1,17 @@
 { lib
-, stdenvNoCC
 , fetchFromGitHub
+, buildLua
 }:
 
 let
-  script = { n, ... }@p:
-    stdenvNoCC.mkDerivation (lib.attrsets.recursiveUpdate {
-      pname = "mpv_${n}";
-      passthru.scriptName = "${n}.lua";
+  camelToKebab = let
+    inherit (lib.strings) match stringAsChars toLower;
+    isUpper = match "[A-Z]";
+  in stringAsChars (c: if isUpper c != null then "-${toLower c}" else c);
 
+  mkScript = name: args:
+    buildLua (lib.attrsets.recursiveUpdate rec {
+      pname = camelToKebab name;
       src = fetchFromGitHub {
         owner = "occivink";
         repo = "mpv-scripts";
@@ -17,37 +20,26 @@ let
       };
       version = "unstable-2022-10-02";
 
-      dontBuild = true;
-      installPhase = ''
-        mkdir -p $out/share/mpv/scripts
-        cp -r scripts/${n}.lua $out/share/mpv/scripts/
-      '';
+      scriptPath = "scripts/${pname}.lua";
 
       meta = with lib; {
         homepage = "https://github.com/occivink/mpv-scripts";
         license = licenses.unlicense;
-        platforms = platforms.all;
         maintainers = with maintainers; [ nicoo ];
       };
-
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-    } p);
+    } args);
 
 in
-{
+lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  seekTo = script {
-    n = "seek-to";
+  seekTo = {
     meta.description = "Mpv script for seeking to a specific position";
     outputHash = "sha256-3RlbtUivmeoR9TZ6rABiZSd5jd2lFv/8p/4irHMLshs=";
   };
 
-  blacklistExtensions = script {
-    n = "blacklist-extensions";
+  blacklistExtensions = {
     meta.description = "Automatically remove playlist entries based on their extension.";
     outputHash = "sha256-qw9lz8ofmvvh23F9aWLxiU4YofY+YflRETu+nxMhvVE=";
   };
-
 }

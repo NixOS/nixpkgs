@@ -5,27 +5,27 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "elasticsearch-curator";
-  version = "8.0.4";
+  version = "8.0.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FPp2BpfYsmNwwevYQ6EH3N1q0TjyeEsBeDM9EUbLl+Q=";
+    hash = "sha256-G8wKeEr7TuUWlqz9hJmnJW7yxn+4WPoStVC0AX5jdHI=";
   };
 
-  pythonRelaxDeps = [
-    "click"
-    "ecs-logging"
-    "elasticsearch8"
-    "es_client"
-    "pyyaml"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "elasticsearch8==" "elasticsearch8>=" \
+      --replace "es_client==" "es_client>=" \
+      --replace "ecs-logging==" "ecs-logging>=" \
+      --replace "click==" "click>="\
+      --replace "pyyaml==" "pyyaml>="
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -77,8 +77,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/elastic/curator";
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
+    homepage = "https://github.com/elastic/curator";
+    changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
     license = licenses.asl20;
     longDescription = ''
       Elasticsearch Curator helps you curate, or manage, your Elasticsearch
@@ -92,7 +93,6 @@ python3.pkgs.buildPythonApplication rec {
 
       * Perform various actions on the items which remain in the actionable list.
     '';
-    changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
     maintainers = with maintainers; [ basvandijk ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitLab, ocaml
+{ lib, buildDunePackage, fetchFromGitLab, fetchpatch, ocaml
 , fmt, lwt_ppx, menhir, ocf_ppx, ppx_blob, xtmpl_ppx
 , dune-build-info, dune-site, higlo, logs, lwt, ocf, ptime, uri, uutf, xtmpl
 }:
@@ -10,7 +10,6 @@ else
 buildDunePackage rec {
   pname = "stog";
   version = "0.20.0";
-  duneVersion = "3";
   minimalOCamlVersion = "4.12";
   src = fetchFromGitLab {
     domain = "framagit.org";
@@ -18,6 +17,12 @@ buildDunePackage rec {
     repo = "stog";
     rev = version;
     sha256 = "sha256:0krj5w4y05bcfx7hk9blmap8avl31gp7yi01lpqzs6ync23mvm0x";
+  };
+
+  # Compatibility with higlo 0.9
+  patches = fetchpatch {
+    url = "https://framagit.org/zoggy/stog/-/commit/ea0546ab4cda8cc5c4c820ebaf2e3dfddc2ab101.patch";
+    hash = "sha256-86GRHF9OjfcalGfA0Om2wXH99j4THCs9a4+o5ghuiJc=";
   };
 
   nativeBuildInputs = [ menhir ];

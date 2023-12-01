@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     # ld: unknown option: --export-dynamic
     broken = stdenv.isDarwin;
+    mainProgram = "yaup";
   };
 }

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "klavaro";
-  version = "3.13";
+  version = "3.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
-    sha256 = "0z6c3lqikk50mkz3ipm93l48qj7b98lxyip8y6ndg9y9k0z0n878";
+    hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
   };
 
   nativeBuildInputs = [ intltool makeWrapper pkg-config ];
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
   '';
-
-  patches = [ ./icons.patch ./trans_lang_get_similar.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \
@@ -39,8 +37,14 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   meta = with lib; {
     description = "Free touch typing tutor program";

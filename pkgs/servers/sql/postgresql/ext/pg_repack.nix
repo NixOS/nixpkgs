@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack.so -t $out/lib/
+    install -D lib/pg_repack${postgresql.dlSuffix} -t $out/lib/
     install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/postgresql/extension
   '';
 

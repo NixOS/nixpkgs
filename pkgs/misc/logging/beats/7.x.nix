@@ -24,6 +24,7 @@ let beat = package: extraArgs: buildGoModule (rec {
 } // extraArgs);
 in
 rec {
+  auditbeat7 = beat "auditbeat" { meta.description = "Lightweight shipper for audit data"; };
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
     buildInputs = [ systemd ];

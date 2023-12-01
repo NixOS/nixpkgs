@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ttuegel alerque ];
     platforms = platforms.unix;
+    mainProgram = "vcsh";
   };
 }

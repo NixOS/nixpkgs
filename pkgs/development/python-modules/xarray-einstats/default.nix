@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "xarray-einstats";
-  version = "0.5.1";
+  version = "0.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-oDrNR7iVDg7Piti6JNaXGekfrUfK5GWJYbH/g6m4570=";
+    hash = "sha256-TXuNqXsny7VpJqV5/3riKzXLheZl+qF+zf4SCMipzmw=";
   };
 
   nativeBuildInputs = [

@@ -31,6 +31,8 @@ buildPythonPackage rec {
     pytz
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     aresponses
     mock

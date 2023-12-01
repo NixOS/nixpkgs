@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils }:
+{ lib, stdenv, fetchgit, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];
+    mainProgram = "datefudge";
   };
 }

@@ -1,13 +1,10 @@
 import argparse
-import os
 import sys
 import textwrap
 import traceback
 from io import StringIO
 from pprint import pprint
-from typing import Any, Dict
 
-from .md import Converter
 from . import manual
 from . import options
 from . import parallel
@@ -26,7 +23,7 @@ def pretty_print_exc(e: BaseException, *, _desc_text: str = "error") -> None:
         for arg in args:
             pprint(arg, stream=buf)
         if extra_info := buf.getvalue():
-            print(f"\x1b[1;34mextra info:\x1b[0m", file=sys.stderr)
+            print("\x1b[1;34mextra info:\x1b[0m", file=sys.stderr)
             print(textwrap.indent(extra_info, "\t"), file=sys.stderr, end="")
     else:
         print(e)

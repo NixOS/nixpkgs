@@ -1,23 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub, nix, nix-update-script }:
+{ lib, rustPlatform, fetchFromGitHub, nixVersions, nix-update-script }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nil";
-  version = "2023-05-09";
+  version = "2023-08-09";
 
   src = fetchFromGitHub {
     owner = "oxalica";
     repo = pname;
     rev = version;
-    hash = "sha256-Xg3Cux5wQDatXRvQWsVD0YPfmxfijjG8+gxYqgoT6JE=";
+    hash = "sha256-fZ8KfBMcIFO/R7xaWtB85SFeuUjb9SCH8fxYBnY8068=";
   };
 
-  cargoHash = "sha256-N7flQRIc0CXTuKjy9tVZapu+CXUT4rg66VLLT/vMUoc=";
-
-  CFG_RELEASE = version;
+  cargoHash = "sha256-lyKPmzuZB9rCBI9JxhxlyDtNHLia8FXGnSgV+D/dwgo=";
 
   nativeBuildInputs = [
-    (lib.getBin nix)
+    (lib.getBin nixVersions.unstable)
   ];
+
+  env.CFG_RELEASE = version;
 
   # might be related to https://github.com/NixOS/nix/issues/5884
   preBuild = ''
@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/oxalica/nil/releases/tag/${version}";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ figsoda oxalica ];
+    mainProgram = "nil";
   };
 }

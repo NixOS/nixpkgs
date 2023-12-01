@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Unified interface to relational database libraries";
-    license = "LGPL-3.0-or-later WITH OCaml-LGPL-linking-exception";
+    license = with lib.licenses; [ lgpl3Plus ocamlLgplLinkingException ];
     maintainers = with lib.maintainers; [ bcc32 ];
     homepage = "https://github.com/paurkedal/ocaml-caqti";
   };

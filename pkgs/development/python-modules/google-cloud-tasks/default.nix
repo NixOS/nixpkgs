@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.13.1";
+  version = "2.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mbhFBVx6Gye3M0lCny1vag659Am0ze7InfmeFr0ZeDM=";
+    hash = "sha256-PvsoDnpjX1eGCgajRhMcEXBC6CCtSDr9JWgA+uG01wE=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-tasks";
     changelog = "https://github.com/googleapis/python-tasks/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

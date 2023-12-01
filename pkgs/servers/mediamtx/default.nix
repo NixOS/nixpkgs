@@ -1,20 +1,21 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "mediamtx";
-  version = "0.23.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "aler9";
+    owner = "bluenviron";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-z9fqR2iK7HOpWNFnrIkNzy0peY6v9QLOyUYbVXp1aNU=";
+    hash = "sha256-Upm/fiW3hXzBS+IpwzE3C6h6Z7ZpA2k+j2UqAWT8hF0=";
   };
 
-  vendorHash = "sha256-az2jHhd3YzI7phRRXBWRcAsISgipPN20SRncsfu58fM=";
+  vendorHash = "sha256-uaOfULtZ+BdbX1TmDyZtYnoXV8579RSW6eocmPsXyP8=";
 
   # Tests need docker
   doCheck = false;
@@ -23,13 +24,15 @@ buildGoModule rec {
     "-X github.com/bluenviron/mediamtx/internal/core.version=v${version}"
   ];
 
+  passthru.tests = { inherit (nixosTests) mediamtx; };
+
   meta = with lib; {
     description =
       "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams"
     ;
     inherit (src.meta) homepage;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    mainProgram = "mediamtx";
+    maintainers = with maintainers; [ fpletz ];
   };
-
 }

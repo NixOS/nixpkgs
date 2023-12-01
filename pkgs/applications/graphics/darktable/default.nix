@@ -10,7 +10,7 @@
 , ninja
 , curl
 , perl
-, llvm_13
+, llvmPackages_13
 , desktop-file-utils
 , exiv2
 , glib
@@ -53,20 +53,21 @@
 , libheif
 , libaom
 , portmidi
-, fetchpatch
 , lua
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.1";
+  version = "4.4.2";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "603a39c6074291a601f7feb16ebb453fd0c5b02a6f5d3c7ab6db612eadc97bac";
+    sha256 = "c11d28434fdf2e9ce572b9b1f9bc4e64dcebf6148e25080b4c32eb51916cfa98";
   };
 
-  nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja llvmPackages_13.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ]
+    # LLVM Clang C compiler version 11.1.0 is too old and is unsupported. Version 12+ is required.
+    ++ lib.optionals stdenv.isDarwin [ llvmPackages_13.clang ];
 
   buildInputs = [
     cairo
@@ -147,6 +148,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits ];
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits freyacodes ];
   };
 }

@@ -2,26 +2,31 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, bitarray
 , setuptools
 , unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "4.0.2";
-  format = "pyproject";
+  version = "4.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
     repo = pname;
-    rev = "bitstring-${version}";
-    hash = "sha256-LghfDjf/Z1dEU0gjH1cqMb04ChnW+aGDjmN+RAhMWW8=";
+    rev = "refs/tags/bitstring-${version}";
+    hash = "sha256-RbHy36AnDlu/Ym5Ty2O9XfPj5xXd9hTgoClvISPoGBc=";
   };
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = [
+    bitarray
   ];
 
   nativeCheckInputs = [ unittestCheckHook ];

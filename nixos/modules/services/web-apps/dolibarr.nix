@@ -1,8 +1,8 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) any boolToString concatStringsSep isBool isString mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption optionalAttrs types;
+  inherit (lib) any boolToString concatStringsSep isBool isString mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption optionalAttrs types mkPackageOption;
 
-  package = pkgs.dolibarr.override { inherit (cfg) stateDir; };
+  package = cfg.package.override { inherit (cfg) stateDir; };
 
   cfg = config.services.dolibarr;
   vhostCfg = lib.optionalAttrs (cfg.nginx != null) config.services.nginx.virtualHosts."${cfg.domain}";
@@ -49,6 +49,8 @@ in
   # interface
   options.services.dolibarr = {
     enable = mkEnableOption (lib.mdDoc "dolibarr");
+
+    package = mkPackageOption pkgs "dolibarr" { };
 
     domain = mkOption {
       type = types.str;

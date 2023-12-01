@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${version}";
-    hash = "sha256-7mVLfzguQ7eNIFTJMLJyoM+/pveGO88j2JUEOqvnqvk=";
+    hash = "sha256-SGOxy0gyR2RQn5sj28RPhDNmESd7LhNj9nlOoCZSEJs=";
   };
 
   strictDeps = true;
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
+    mainProgram = "tio";
   };
 }

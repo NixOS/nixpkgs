@@ -1,4 +1,4 @@
-{ lib, stdenv, crossStageStatic, langD ? false, libcCross, threadsCross }:
+{ lib, stdenv, withoutTargetLibc, langD ? false, libcCross, threadsCross }:
 
 let
   inherit (stdenv) hostPlatform targetPlatform;
@@ -11,23 +11,23 @@ in
   EXTRA_FLAGS_FOR_TARGET = let
       mkFlags = dep: langD: lib.optionals (targetPlatform != hostPlatform && dep != null && !langD) ([
         "-O2 -idirafter ${lib.getDev dep}${dep.incdir or "/include"}"
-      ] ++ lib.optionals (! crossStageStatic) [
+      ] ++ lib.optionals (! withoutTargetLibc) [
         "-B${lib.getLib dep}${dep.libdir or "/lib"}"
       ]);
     in mkFlags libcCross langD
-       ++ lib.optionals (!crossStageStatic) (mkFlags (threadsCross.package or null) langD)
+       ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null) langD)
     ;
 
   EXTRA_LDFLAGS_FOR_TARGET = let
       mkFlags = dep: lib.optionals (targetPlatform != hostPlatform && dep != null) ([
         "-Wl,-L${lib.getLib dep}${dep.libdir or "/lib"}"
-      ] ++ (if crossStageStatic then [
+      ] ++ (if withoutTargetLibc then [
           "-B${lib.getLib dep}${dep.libdir or "/lib"}"
         ] else [
           "-Wl,-rpath,${lib.getLib dep}${dep.libdir or "/lib"}"
           "-Wl,-rpath-link,${lib.getLib dep}${dep.libdir or "/lib"}"
       ]));
     in mkFlags libcCross
-       ++ lib.optionals (!crossStageStatic) (mkFlags (threadsCross.package or null))
+       ++ lib.optionals (!withoutTargetLibc) (mkFlags (threadsCross.package or null))
     ;
 }

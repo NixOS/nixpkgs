@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ylwghst ];
+    mainProgram = "notify-desktop";
   };
 }

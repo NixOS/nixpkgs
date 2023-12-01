@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "mods";
-  version = "0.1.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
     rev = "v${version}";
-    hash = "sha256-r7j7iMkfkFsohguu2vkhyxUbaMwJQURfUJrnC6yUCFI=";
+    hash = "sha256-ZWH3YuN1cmdw96/HVzsp1u70ziUfupUeBjJiNI5a538=";
   };
 
-  vendorHash = "sha256-+0yGFCGd/9bIBjXYp8UPGqKum2di5O1ALMyDSxcVujg=";
+  vendorHash = "sha256-PgaxqfgtwBYnzyL2F/OPJP1rdmLOtBCTKEPhMgvC6XA=";
 
-  ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   passthru = {
     updateScript = gitUpdater {
@@ -29,6 +29,7 @@ buildGoModule rec {
 
     tests.version = testers.testVersion {
       package = mods;
+      command = "HOME=$(mktemp -d) mods -v";
     };
   };
 
@@ -37,5 +38,6 @@ buildGoModule rec {
     homepage = "https://github.com/charmbracelet/mods";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "mods";
   };
 }

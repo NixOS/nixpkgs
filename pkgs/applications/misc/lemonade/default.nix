@@ -22,7 +22,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "sha256-wjQfTKVNmehu4aU5425gS0YWKj53dosVSTLgdu9KjKc=";
+  vendorHash = "sha256-wjQfTKVNmehu4aU5425gS0YWKj53dosVSTLgdu9KjKc=";
 
   subPackages = [ "." ];
 
@@ -30,6 +30,6 @@ buildGoModule rec {
     description = "Remote utility tool that to copy, paste and open browsers over TCP";
     homepage = "https://github.com/lemonade-command/lemonade/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -36,6 +36,7 @@
 , wayland-protocols
 , wayland-scanner
 , zlib
+, wrapGAppsHook
 , withPolkit ? stdenv.isLinux
 }:
 
@@ -88,18 +89,16 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
     python3.pkgs.six
     vala
+    wrapGAppsHook
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     mesonEmulatorHook
   ] ++ lib.optionals stdenv.isLinux [
     wayland-scanner
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-  ];
-
-  buildInputs = [
     cyrus_sasl
     libepoxy
     gtk3

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.18.1";
+  version = "0.20.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-E7uC+l0Yjol8UPLF4CV+PN49tOUJXNUS5yYdF1oyfwU=";
+    hash = "sha256-v3CaLMTo/zbNEoE3K+aWnFTCgLetcnN7vOU/sFqLq2k=";
   };
 
   nativeBuildInputs = [

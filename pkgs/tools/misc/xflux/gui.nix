@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildPythonApplication, python3Packages, wrapGAppsHook
-, xflux, librsvg, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
+, xflux, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
 , pexpect, pygobject3, pyxdg, libappindicator-gtk3
 }:
 buildPythonApplication rec {

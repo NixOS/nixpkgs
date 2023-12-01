@@ -6,24 +6,25 @@
 , libsecret
 , python3
 , pkg-config
-, nodejs
+, nodePackages
 , electron
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , yarn2nix-moretea
+, fetchYarnDeps
 , chromium
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.2.2";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kdntnzGpu1NUP6rrBaH7ASwE7XT18vHcgf39bp5A4ds=";
+    sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
         yt-dlp
       ]);
 
-      modules = yarn2nix-moretea.mkYarnModules {
+      modules = yarn2nix-moretea.mkYarnModules rec {
         name = "${pname}-modules-${version}";
         inherit pname version;
 
@@ -62,6 +63,7 @@ stdenvNoCC.mkDerivation rec {
             nativeBuildInputs = [
               python3
               pkg-config
+              nodePackages.node-gyp
             ];
             buildInputs = [
               libsecret
@@ -74,20 +76,13 @@ stdenvNoCC.mkDerivation rec {
           };
         };
 
-        preBuild = ''
-          # Set up headers for node-gyp, which is needed to build keytar.
-          mkdir -p "$HOME/.cache/node-gyp/${nodejs.version}"
-
-          # Set up version which node-gyp checks in <https://github.com/nodejs/node-gyp/blob/4937722cf597ccd1953628f3d5e2ab5204280051/lib/install.js#L87-L96> against the version in <https://github.com/nodejs/node-gyp/blob/4937722cf597ccd1953628f3d5e2ab5204280051/package.json#L15>.
-          echo 9 > "$HOME/.cache/node-gyp/${nodejs.version}/installVersion"
-
-          # Link node headers so that node-gyp does not try to download them.
-          ln -sfv "${nodejs}/include" "$HOME/.cache/node-gyp/${nodejs.version}"
-        '';
-
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
-        yarnNix = ./yarndeps.nix;
+
+        offlineCache = fetchYarnDeps {
+          inherit yarnLock;
+          hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
+        };
       };
     in
     ''
@@ -119,5 +114,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [
     ];
     platforms = platforms.unix;
+    mainProgram = "Sharedown";
   };
 }

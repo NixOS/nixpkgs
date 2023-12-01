@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
         bin = "source/macos/fasmg";
         asm = "source/macos/fasmg.asm";
       };
-    }.${system} or (throw "Unsopported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 
   in ''
     chmod +x ${path.bin}

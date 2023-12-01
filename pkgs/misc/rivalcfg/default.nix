@@ -36,5 +36,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/flozz/rivalcfg";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ ornxka ];
+    mainProgram = "rivalcfg";
   };
 }

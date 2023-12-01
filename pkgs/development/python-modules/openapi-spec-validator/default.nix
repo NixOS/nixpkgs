@@ -2,6 +2,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+
+# build-system
 , poetry-core
 
 # propagates
@@ -10,30 +12,29 @@
 , jsonschema-spec
 , lazy-object-proxy
 , openapi-schema-validator
-, pyyaml
-
-# optional
-, requests
 
 # tests
-, mock
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.5.6";
+  version = "0.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
+    repo = "openapi-spec-validator";
     rev = "refs/tags/${version}";
-    hash = "sha256-BIGHaZhrEc7wcIesBIXdVRzozllCNOz67V+LmQfZ8oY=";
+    hash = "sha256-sGr4dH6Twyi4OeCAXZiboN75dYZ6wJ0pWMzV9zOfee0=";
   };
+
+  postPatch = ''
+    sed -i '/--cov/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -47,14 +48,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
-
-  passthru.optional-dependencies.requests = [
-    requests
-  ];
-
-  preCheck = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook

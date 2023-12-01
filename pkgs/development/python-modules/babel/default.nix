@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPyPy
 , pythonAtLeast
 , pythonOlder
+, tzdata
 
 # tests
 , freezegun
@@ -31,11 +33,12 @@ buildPythonPackage rec {
   doCheck = pythonAtLeast "3.9";
 
   nativeCheckInputs = [
-    # via setup.py
     freezegun
     pytestCheckHook
-    # via tox.ini
+    # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
+  ] ++ lib.optionals isPyPy [
+    tzdata
   ];
 
   disabledTests = [
@@ -49,6 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
     description = "Collection of internationalizing tools";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

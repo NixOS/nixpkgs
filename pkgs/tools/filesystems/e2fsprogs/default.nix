@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
       excludes = [ "lib/ext2fs/hashmap.h" ];
       extraPrefix = "";
     })
+    # Avoid trouble with older systems like NixOS 23.05.
+    # TODO: most likely drop this at some point, e.g. when 23.05 loses support.
+    (fetchurl {
+      name = "mke2fs-avoid-incompatible-features.patch";
+      url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/plain/debian/patches/disable-metadata_csum_seed-and-orphan_file-by-default?h=debian/master&id=3fb3d18baba90e5d48d94f4c0b79b2d271b0c913";
+      hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
+    })
   ];
 
   configureFlags =

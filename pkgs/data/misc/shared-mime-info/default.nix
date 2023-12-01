@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "shared-mime-info";
-  version = "2.2";
+  version = "2.3";
 
   outputs = [ "out" "dev" ];
 
@@ -23,8 +23,14 @@ stdenv.mkDerivation rec {
     owner = "xdg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QrRe/DcjpTMejHXDSOLbjpJywod8qIjP6/leTZ21rhE=";
+    sha256 = "sha256-cEfknRVtOJykEO9Iqlb0UoiayYtu+ugvmmZqAD5cGnE=";
   };
+
+  patches = [
+    # Submitted upstream at
+    # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/issues/211
+    ./fix-clang-warnings.patch
+  ];
 
   nativeBuildInputs = [
     meson

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sdds";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylhc";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-lb4awMQ7GE7m2N2yiCpJ976I2j8hE98/93zCX7Rp4qU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8tnJAptTUsC0atxM9Dpn90drcprdWrs8fYoX8RDkLyQ=";
   };
 
   propagatedBuildInputs = [

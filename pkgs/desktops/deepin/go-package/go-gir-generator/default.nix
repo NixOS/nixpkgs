@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     go
+    gobject-introspection
   ];
 
   buildInputs = [
     libgudev
-    gobject-introspection
   ];
 
   makeFlags = [

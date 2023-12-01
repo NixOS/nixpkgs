@@ -19,6 +19,7 @@ let
       Libinfo       = "503.50.4";
       Libsystem     = "1238.60.2";
       removefile    = "45";
+      libmalloc     = "116.50.8";
       libresolv     = "64";
       libplatform   = "126.50.8";
       mDNSResponder = "765.50.9";
@@ -248,6 +249,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "sha256-FLgODBrfv+XsGaAjddncYAm/BIJJYw6LcwX/z7ncKFM=" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
       Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
+      inherit (pkgs.darwin.apple_sdk.libs) xpc;
     };
     copyfile        = applePackage "copyfile"          "osx-10.12.6"     "sha256-uHqLFOIpXK+n0RHyOZzVsP2DDZcFDivKCnqHBaXvHns=" {};
     Csu             = applePackage "Csu"               "osx-10.11.6"     "sha256-h6a/sQMEVeFxKNWAPgKBXjWhyL2L2nvX9BQUMaTQ6sY=" {};
@@ -264,7 +266,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
         rev    = "Libc-997.90.3";
         hash   = "sha256-B18RNO+Rai5XE52TKdJV7eknosTZ+bRERkiU12d/kPU=";
       };
-      Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "sha256-JvPSY7FzraGpqF/jYLfhU2o/2195NuKrXsryYfVtx3s=" {};
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "sha256-jfAEk0OLrJa9AIZVikIoHomd+l+4rCfc320Xh50qK5M=" {};
@@ -272,6 +273,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "sha256-6F7wiwerv4nz/xXHtp1qCHSaFzZgzcRN+jbmXA5oWOQ=" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es=" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};
+    libmalloc       = if stdenv.isx86_64 then
+      applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
+    else macosPackages_11_0_1.libmalloc;
     libplatform     = applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {};
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=" {};
@@ -310,6 +314,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     configdHeaders  = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
       headersOnly = true;
       Security    = null;
+      xpc         = null;
     };
     libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };

@@ -1,65 +1,39 @@
 { lib
 , nixosTests
-, stdenv
+, buildNpmPackage
 , fetchFromGitHub
-, makeWrapper
-, nodejs_18
-, pkgs
 }:
 
-let
-  nodejs = nodejs_18;
-in
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "haste-server";
-  version = "b52b394bad909ddf151073987671e843540d91d6";
+  version = "unstable-2023-03-06";
 
   src = fetchFromGitHub {
     owner = "toptal";
     repo = "haste-server";
-    rev = version;
+    rev = "b52b394bad909ddf151073987671e843540d91d6";
     hash = "sha256-AVoz5MY5gNxQrHtDMPbQ85IjmHii1v6C2OXpEQj9zC8=";
   };
 
-  nativeBuildInputs = [
-    nodejs
-    makeWrapper
-  ];
+  npmDepsHash = "sha256-FEuqKbblAts0WTnGI9H9bRBOwPvkahltra1zl3sMPJs=";
 
-  installPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook postInstall
+  dontNpmBuild = true;
 
-      mkdir -p $out/share
-      cp -ra . $out/share/haste-server
-      ln -s ${nodeDependencies}/lib/node_modules $out/share/haste-server/node_modules
-      makeWrapper ${nodejs}/bin/node $out/bin/haste-server \
-        --add-flags $out/share/haste-server/server.js
-
-      runHook postBuild
-    '';
+  postInstall = ''
+    install -Dt "$out/share/haste-server" about.md
+  '';
 
   passthru = {
     tests = {
       inherit (nixosTests) haste-server;
     };
-    updateScript = ./update.sh;
   };
 
   meta = with lib; {
-    description = "open source pastebin written in node.js";
-    homepage = "https://www.toptal.com/developers/hastebin/about.md";
+    description = "Open source pastebin written in Node.js";
+    homepage = "https://github.com/toptal/haste-server";
     license = licenses.mit;
+    mainProgram = "haste-server";
     maintainers = with maintainers; [ mkg20001 ];
   };
 }

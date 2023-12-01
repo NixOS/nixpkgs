@@ -39,7 +39,7 @@ index 69e41c1fe9..5456c3d59b 100644
      ENDIF(_qsci_metadata)
  
      IF(QSCI_MOD_VERSION_STR)
--      SET(QSCI_SIP_DIR "${PYQT5_SIP_DIR}")
+-      SET(QSCI_SIP_DIR "${PYQT_SIP_DIR}")
 +      SET(QSCI_SIP_DIR "@qsciPackageDir@/PyQt5/bindings")
        SET(QSCI_FOUND TRUE)
      ENDIF(QSCI_MOD_VERSION_STR)
@@ -48,7 +48,7 @@ diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
 index 4cd19c3af4..668cc6a5e6 100644
 --- a/python/CMakeLists.txt
 +++ b/python/CMakeLists.txt
-@@ -206,7 +206,7 @@ if (WITH_GUI)
+@@ -212,7 +212,7 @@ if (WITH_GUI)
      install(FILES ${QGIS_PYTHON_OUTPUT_DIRECTORY}/_gui.pyi DESTINATION ${QGIS_PYTHON_DIR})
    endif()
    if(QSCI_SIP_DIR)

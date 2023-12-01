@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "unstable-2023-02-05";
+  version = "unstable-2023-03-02";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "pipeworld";
-    rev = "58b2e9fe15ef0baa4b04c27079bfa386ec62b28e";
-    hash = "sha256-PbKejghMkLZdeQJD9fObw9xhGH24IX72X7pyjapTXJM=";
+    rev = "9ea79f72ad500fe78b9f46e680be87eaac3bfb0e";
+    hash = "sha256-/cjse6XXrdLoUB35GLgl871qINOm4SvKPTbfoBceLu0=";
   };
 
   dontConfigure = true;

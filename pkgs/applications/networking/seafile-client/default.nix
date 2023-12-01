@@ -1,26 +1,45 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools
-, seafile-shared, jansson, libsearpc
-, withShibboleth ? true, qtwebengine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, qtbase
+, qttools
+, libuuid
+, seafile-shared
+, jansson
+, libsearpc
+, withShibboleth ? true
+, qtwebengine
+, wrapQtAppsHook
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "8.0.7";
+  version = "9.0.4";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    # Tag v8.0.7 used to point to this commit, but was re-tagged later to a state
-    # that fails to link properly
-    rev = "8b96abf64e6aa19e3beeff6b322bcd6d28120bdd";
-    sha256 = "00wfr7dvbyl7pg1xgssgz8a94c7c4n5r9266lhy9qcbz456hdcgj";
+    rev = "v${version}";
+    sha256 = "sha256-Qt4Y7s2BMwuKXTYjHAzK40HgAsxlk98af3irOXT4/Vs=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ qtbase qttools seafile-shared jansson libsearpc ]
-    ++ lib.optional withShibboleth qtwebengine;
+  nativeBuildInputs = [
+    libuuid
+    pkg-config
+    cmake
+    wrapQtAppsHook
+    qttools
+  ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
-    ++ lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
+  buildInputs = [
+    seafile-shared
+    jansson
+    libsearpc
+  ] ++ lib.optional withShibboleth qtwebengine;
+
+  cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   qtWrapperArgs = [
     "--suffix PATH : ${lib.makeBinPath [ seafile-shared ]}"
@@ -32,5 +51,6 @@ mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ schmittlauch greizgh ];
+    mainProgram = "seafile-applet";
   };
 }

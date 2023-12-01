@@ -48,6 +48,6 @@ buildGoModule rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    mainProgram = "mirrorbits";
   };
 }

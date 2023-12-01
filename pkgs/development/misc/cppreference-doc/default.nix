@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cppreference-doc";
-  version = "20220730";
+  version = "20230810";
 
   src = fetchurl {
     url = "https://github.com/PeterFeicht/${pname}/releases/download/v${version}/html-book-${version}.tar.xz";
-    hash = "sha256-cfFQA8FouNxaAMuvGbZICps+h6t+Riqjnttj11EcAos=";
+    hash = "sha256-McCOTZnobH9j8yTT/1ME7/IDATHEoKwNHjwZxiyO1oQ=";
   };
 
   sourceRoot = ".";

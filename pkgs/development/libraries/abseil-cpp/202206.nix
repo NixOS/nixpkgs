@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-Od1FZOOWEXVQsnZBwGjDIExi6LdYtomyL0STR44SsG8=";
   };
 
+  patches = lib.optionals stdenv.isDarwin [
+    # Don’t propagate the path to CoreFoundation. Otherwise, it’s impossible to build packages
+    # that require a different SDK other than the default one.
+    ./cmake-core-foundation.patch
+  ];
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
   ] ++ lib.optionals (cxxStandard != null) [

@@ -3,7 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , anyio
-, async_generator
+, async-generator
 , h11
 , curio
 , overly
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     anyio
-    async_generator
+    async-generator
     h11
   ];
 

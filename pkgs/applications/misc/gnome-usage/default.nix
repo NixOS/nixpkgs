@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -7,23 +8,23 @@
 , gettext
 , libxml2
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib
-, gtk3
+, gtk4
+, libadwaita
+, libgee
 , libgtop
-, libdazzle
 , gnome
 , tracker
-, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-usage";
-  version = "3.38.1";
+  version = "45.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "mMdm4X4VZXEfx0uaJP0u0NX618y0VRlhLdTiFHaO05M=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "5nfE/iwBSXqE/x4RV+kTHp+ZmfGnjTUjSvHXfYJ18pQ=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +35,16 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gnome.adwaita-icon-theme
-    gtk3
-    libdazzle
+    gtk4
+    libadwaita
+    libgee
     libgtop
     tracker
-    libhandy
   ];
 
   postPatch = ''
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A nice way to view information about use of system resources, like memory and disk space";
-    license = licenses.gpl3;
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-usage";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

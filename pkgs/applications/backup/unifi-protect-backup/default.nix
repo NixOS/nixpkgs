@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.9.1";
+  version = "0.10.2";
 
   format = "pyproject";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ep1cman";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-L7uM5v2CYGFHYxzBUKlMF+ChtjBM24GZ8NuyoQaOU6U=";
+    hash = "sha256-EQCI7TkkOhDASMo5yKfAca/gB4ayyPOaDVK6WEaAIgc=";
   };
 
   pythonRelaxDeps = [
@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     aiorun
     aiosqlite
     apprise
+    async-lru
     click
     expiring-dict
     python-dateutil
@@ -49,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ajs124 ];
+    mainProgram = "unifi-protect-backup";
   };
 }

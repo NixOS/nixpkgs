@@ -5,7 +5,7 @@ assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.9.1";
+  version = "1.9.2";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -15,7 +15,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-DqxdZtSW8TZaOFGXOZQ7a4tmgRj6iAWDppCNomdfVxY=";
+    hash = "sha256-6QmYRlSv8jY3OE3RcYuZt+c3z6GhFc8ESETVfCfF5RI=";
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
@@ -25,7 +25,7 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
-    cargoSha256 = "sha256-+hfNkr9cZbOcWdWKUWUqDj9a0PKjKeApFXYZzS1XokE=";
+    cargoHash = "sha256-Qq2igtH1XIB+NAEES6hdNZcMbEmaFN69qIJ+gTYupvQ=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -38,6 +38,8 @@ let
       "--bin=codelldb"
     ];
 
+    patches = [ ./adapter-output-shared_object.patch ];
+
     # Tests are linked to liblldb but it is not available here.
     doCheck = false;
   };
@@ -46,7 +48,7 @@ let
     pname = "${pname}-node-deps";
     inherit version src;
 
-    npmDepsHash = "sha256-Cdlq1jxHSCfPjXhasClc6XzEUp3vlLgkStbhYtCyc7E=";
+    npmDepsHash = "sha256-fMKGi+AJTMlWl7SQtZ21hUwOLgqlFYDhwLvEergQLfI=";
 
     nativeBuildInputs = [
       python3
@@ -82,12 +84,6 @@ in stdenv.mkDerivation {
 
   patches = [ ./cmake-build-extension-only.patch ];
 
-  postPatch = ''
-    # temporary patch for forgotten version updates
-    substituteInPlace CMakeLists.txt \
-      --replace "1.9.0" ${version}
-  '';
-
   postConfigure = ''
     cp -r ${nodeDeps}/lib/node_modules .
   '';
@@ -110,7 +106,8 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
-    cp -t $ext/adapter ${adapter}/{bin,lib}/* ../adapter/*.py
+    cp -t $ext/adapter ${adapter}/{bin,lib}/*
+    cp -r ../adapter/scripts $ext/adapter
     wrapProgram $ext/adapter/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     cp -t $ext/formatters ../formatters/*.py

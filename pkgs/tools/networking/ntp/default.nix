@@ -2,17 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ntp";
-  version = "4.2.8p15";
+  version = "4.2.8p17";
 
   src = fetchurl {
-    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
-    sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
+    url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
+    hash = "sha256-ED3ScuambFuN8H3OXpoCVV/NbxOXvft4IjcyjonTqGY=";
   };
-
-  patches = [
-    # From https://patchwork.openembedded.org/patch/180019/
-    ./glibc-2.34-fix.patch
-  ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -33,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.ntp.org/";
+    homepage = "https://www.ntp.org/";
     description = "An implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2

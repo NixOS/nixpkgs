@@ -16,7 +16,7 @@
 , poppler
 , libspectre
 , libgxps
-, webkitgtk
+, webkitgtk_4_1
 , nodePackages
 , ninja
 , gsettings-desktop-schemas
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "3.6.3";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KuCcOnhM8AzKC8hfBpdcnC/ubDVsElKMZuxEnTcJLn0=";
+    sha256 = "sha256-fLnpBJJzrsQSyN+Ok1u/+CwHzBg+bzFR2Jwkc5mpMPA=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     poppler
     libspectre
     libgxps
-    webkitgtk
+    webkitgtk_4_1
     nodePackages.mathjax
     djvulibre
   ];

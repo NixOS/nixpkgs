@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "http://pkg-config.freedesktop.org/wiki/";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
+    mainProgram = "pkg-config";
   };
 }

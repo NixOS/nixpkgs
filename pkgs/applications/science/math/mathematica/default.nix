@@ -2,7 +2,7 @@
 , config
 , lib
 , cudaPackages
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , lang ? "en"
 , webdoc ? false
 , version ? null
@@ -77,7 +77,7 @@ callPackage real-drv {
     homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ herberteuler ];
+    maintainers = with maintainers; [ herberteuler rafaelrc ];
     platforms = [ "x86_64-linux" ];
   };
 }

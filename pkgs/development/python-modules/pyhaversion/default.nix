@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-HMJqZn0yzN2dP5WTRCbem1Xw8nyH2Hy7oVP4kEKHHAo=";
   };
 
+  postPatch = ''
+    # Upstream doesn't set a version for the tagged releases
+    substituteInPlace setup.py \
+      --replace "main" ${version}
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     awesomeversion
@@ -34,15 +40,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Upstream doesn't set a version for the tagged releases
-    substituteInPlace setup.py \
-      --replace "main" ${version}
-  '';
-
-
   pythonImportsCheck = [
     "pyhaversion"
+  ];
+
+  disabledTests = [
+    # Error fetching version information from HaVersionSource.SUPERVISOR Server disconnected
+    "test_stable_version"
+    "test_etag"
   ];
 
   meta = with lib; {

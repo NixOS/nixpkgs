@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/zenity' '${gnome.zenity}/bin/zenity'
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DSFIZZ_TESTS=ON" ];
+  cmakeFlags = [ "-DSFIZZ_TESTS=ON" ];
 
   doCheck = true;
 

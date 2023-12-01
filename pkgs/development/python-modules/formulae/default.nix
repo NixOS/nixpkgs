@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , numpy
 , pandas
@@ -10,15 +11,19 @@
 
 buildPythonPackage rec {
   pname = "formulae";
-  version = "0.3.4";
+  version = "0.5.1";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6IGTn3griooslN6+qRYLJiWaJhvsxa1xj1+1kQ57yN0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nmqGdXqsesRhR06FDS5t64C6+Bz1B97W+PkHrfV7Qmg=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -37,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://bambinos.github.io/formulae";
     description = "Formulas for mixed-effects models in Python";
+    changelog = "https://github.com/bambinos/formulae/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

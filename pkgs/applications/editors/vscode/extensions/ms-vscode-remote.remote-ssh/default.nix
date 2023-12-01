@@ -1,4 +1,5 @@
 { lib
+, nixosTests
 , vscode-utils
 , useLocalExtensions ? false
 }:
@@ -8,8 +9,6 @@
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
-
-  nodeVersion = "16";
 
   # As VS Code executes this code on the remote machine
   # we test to see if we can build Node from Nixpkgs
@@ -23,38 +22,44 @@ let
     serverNode="$serverDir/node"
     echo "VS Code Node: $serverNode"
 
-    # Check if VS Code Server has a non-working Node or the wrong version of Node
-    if ! nodeVersion=$($serverNode -v) || [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+    # Check if Node included with VS Code Server runs
+    if ! nodeVersion=$($serverNode -v); then
       echo "VS Code Node Version: $nodeVersion"
 
-      if nix-build "<nixpkgs>" -A nodejs-${nodeVersion}_x --out-link "$serverDir/nix" && [ -e "$serverDir/nix/bin/node" ]; then
-        nodePath="$serverDir/nix/bin/node"
+      if ! nix-build "<nixpkgs>" -A patchelf --out-link "$serverDir/patchelf" || ! "$serverDir/patchelf/bin/patchelf" --version; then
+        echo "Failed to get patchelf from nixpkgs"
       fi
 
-      echo "Node from Nix: $nodePath"
-
-      nodeVersion=$($nodePath -v)
-      echo "Node from Nix Version: $nodeVersion"
-
-      if [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
-        echo "Getting Node from Nix failed, use Local Node instead"
-        nodePath=$(which node)
-        echo "Local Node: $nodePath"
-        nodeVersion=$($nodePath -v)
-        echo "Local Node Version: $nodeVersion"
+      if [ -e $serverNode.orig ]; then
+        cp $serverNode.orig $serverNode
+      else
+        cp $serverNode $serverNode.orig
       fi
 
-      if [ "\''${nodeVersion:1:2}" == "${nodeVersion}" ]; then
-        echo PATCH: replacing $serverNode with $nodePath
-        ln -sf $nodePath $serverNode
+      if ! nix-build "<nixpkgs>" -A bintools --out-link $serverDir/bintools; then
+        echo "Failed to build bintools from nixpkgs"
       fi
+
+      INTERPRETER=$(cat $serverDir/bintools/nix-support/dynamic-linker)
+
+      echo "Interpreter from bintools: $INTERPRETER"
+
+      if ! nix-build "<nixpkgs>" -A stdenv.cc.cc.lib --out-link $serverDir/cc; then
+        echo "Failed to build stdenv.cc.cc.lib from nixpkgs"
+      fi
+
+      if ! $serverDir/patchelf/bin/patchelf --set-interpreter $INTERPRETER --set-rpath $serverDir/cc-lib/lib $serverNode; then
+        echo "Failed to patch Node binary"
+      fi
+
+      rm "$serverDir/patchelf"
     fi
 
     nodeVersion=$($serverNode -v)
     echo "VS Code Node Version: $nodeVersion"
 
-    if [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
-      echo "Unsupported VS Code Node version: $nodeVersion", quitting
+    if ! nodeVersion=$($serverNode -v); then
+      echo "Unable to fix Node binary, quitting"
       fail_with_exitcode ''${o.InstallExitCode.ServerTransferFailed}
     fi
 
@@ -87,9 +92,11 @@ buildVscodeMarketplaceExtension {
       --replace '# Start the server\n' '${patch}'
   '';
 
+  passthru.tests = { inherit (nixosTests) vscode-remote-ssh; };
+
   meta = {
     description = "Use any remote machine with a SSH server as your development environment.";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.SuperSandro2000 lib.maintainers.tbenst ];
+    maintainers = [ lib.maintainers.tbenst ];
   };
 }

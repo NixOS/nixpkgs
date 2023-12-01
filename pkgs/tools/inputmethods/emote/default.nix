@@ -1,20 +1,18 @@
-{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook, gobject-introspection, gtk3, keybinder3, xdotool, pango, gdk-pixbuf, atk }:
+{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook, gobject-introspection, keybinder3, xdotool }:
 
 python3Packages.buildPythonApplication rec {
   pname = "emote";
-  version = "3.1.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
     rev = "v${version}";
-    sha256 = "sha256-brGU5LzE9A1F5AVNIuyd8vFKEh58ijRB5qVEID/KJfY=";
+    sha256 = "sha256-+GpL4Rp0ECsxXGP9dWZbVNkH7H2GF1brDTLsB+TQY5A=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pygobject==3.36.0" "pygobject" \
-      --replace "manimpango==0.3.0" "manimpango"
+    sed -i setup.py -e '/==.*/d'
     substituteInPlace emote/config.py --replace 'os.environ.get("SNAP")' "'$out/share/emote'"
     substituteInPlace emote/picker.py --replace 'os.environ.get("SNAP_VERSION", "dev build")' "'$version'"
     substituteInPlace snap/gui/emote.desktop --replace "Icon=\''${SNAP}/usr/share/icons/emote.svg" "Icon=emote.svg"
@@ -26,22 +24,21 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    atk
-    gdk-pixbuf
-    gtk3
+    # used by gobject-introspection's setup-hook and only detected at runtime
     keybinder3
-    pango
   ];
 
-  propagatedBuildInputs = [
-    python3Packages.manimpango
-    python3Packages.pygobject3
+  propagatedBuildInputs = with python3Packages; [
+    dbus-python.out # don't propagate dev output
+    manimpango
+    pygobject3.out # not listed in setup.py, don't propagate dev output
+    setproctitle
   ];
 
   postInstall = ''
     install -D snap/gui/emote.desktop $out/share/applications/emote.desktop
     install -D snap/gui/emote.svg $out/share/pixmaps/emote.svg
-    install -D -t $out/share/emote/static static/{NotoColorEmoji.ttf,emojis.csv,logo.svg,style.css}
+    install -D -t $out/share/emote/static static/{emojis.csv,logo.svg,style.css}
   '';
 
   dontWrapGApps = true;

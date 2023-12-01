@@ -99,6 +99,7 @@ in {
     systemd.units."kmsconvt@.service".aliases = [ "autovt@.service" ];
 
     systemd.services.systemd-vconsole-setup.enable = false;
+    systemd.services.reload-systemd-vconsole-setup.enable = false;
 
     services.kmscon.extraConfig =
       let
@@ -110,7 +111,7 @@ in {
 
     fonts = mkIf (cfg.fonts != null) {
       fontconfig.enable = true;
-      fonts = map (f: f.package) cfg.fonts;
+      packages = map (f: f.package) cfg.fonts;
     };
   };
 }

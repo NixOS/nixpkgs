@@ -30,12 +30,7 @@ in
     services.zammad = {
       enable = mkEnableOption (lib.mdDoc "Zammad, a web-based, open source user support/ticketing solution");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.zammad;
-        defaultText = literalExpression "pkgs.zammad";
-        description = lib.mdDoc "Zammad package to use.";
-      };
+      package = mkPackageOption pkgs "zammad" { };
 
       dataDir = mkOption {
         type = types.path;
@@ -204,7 +199,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.database.createLocally -> cfg.database.user == "zammad";
+        assertion = cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
       {
@@ -231,7 +226,7 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

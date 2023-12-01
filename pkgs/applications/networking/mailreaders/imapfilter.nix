@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, openssl, lua, pcre2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imapfilter";
   version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "lefcha";
     repo = "imapfilter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-nHKZ3skRbDhKWocaw5mbaRnZC37FxFIVd08iFgrEA0s=";
   };
   makeFlags = [
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

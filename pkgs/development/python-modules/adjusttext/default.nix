@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "adjusttext";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Phlya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-N+eCDwK5E9zGKG7uruuhnpTlJeiXG2a15PKW0gJFAqw=";
+    hash = "sha256-Lhl6ykx5ynf+pBub5tBUaALm1w/88jbuSXPigE216NY=";
   };
 
   nativeBuildInputs = [

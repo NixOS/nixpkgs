@@ -131,8 +131,8 @@ let
         # chromium-based browsers refuse to run as root
         test-support.displayManager.auto.user = "alice";
 
-        # browsers may hang with the default memory
-        virtualisation.memorySize = 600;
+        # machine often runs out of memory with less
+        virtualisation.memorySize = 1024;
 
         environment.systemPackages = [ pkgs.xdotool pkgs.${browser} ];
       };

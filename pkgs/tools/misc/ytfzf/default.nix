@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    hash = "sha256-b/rsujR3GRwxrVc0iPVbxyPTRTr8kk2WKqEMwdb9lac=";
+    hash = "sha256-wd7IgJRSh8UJ28slItIz1OhAg7cgVSDUldCyaObn6Ak=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "ytfzf";
   };
 }

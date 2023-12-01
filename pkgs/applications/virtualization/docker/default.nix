@@ -7,12 +7,13 @@ rec {
       , mobyRev, mobyHash
       , runcRev, runcHash
       , containerdRev, containerdHash
-      , tiniRev, tiniHash, buildxSupport ? true, composeSupport ? true
+      , tiniRev, tiniHash
+      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, docker-buildx, docker-compose
+      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
@@ -97,7 +98,7 @@ rec {
 
       extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
-      patches = [
+      patches = lib.optionals (lib.versionOlder version "23") [
         # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
         # It could be removed when a version incorporating this patch is released.
         (fetchpatch {
@@ -153,7 +154,8 @@ rec {
     });
 
     plugins = lib.optional buildxSupport docker-buildx
-      ++ lib.optional composeSupport docker-compose;
+      ++ lib.optional composeSupport docker-compose
+      ++ lib.optional sbomSupport docker-sbom;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
   buildGoPackage (lib.optionalAttrs (!clientOnly) {
@@ -176,12 +178,11 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
-    buildInputs = lib.optional (!clientOnly) sqlite
-      ++ lib.optional withLvm lvm2
-      ++ lib.optional withBtrfs btrfs-progs
-      ++ lib.optional withSystemd systemd
-      ++ lib.optional withSeccomp libseccomp
-      ++ plugins;
+
+    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.isLinux) [
+      glibc
+      glibc.static
+    ];
 
     postPatch = ''
       patchShebangs man scripts/build/
@@ -209,7 +210,7 @@ rec {
       cd -
     '';
 
-    outputs = ["out" "man"];
+    outputs = ["out"] ++ lib.optional (lib.versionOlder version "23") "man";
 
     installPhase = ''
       cd ./go/src/${goPackagePath}
@@ -231,13 +232,13 @@ rec {
       installShellCompletion --bash ./contrib/completion/bash/docker
       installShellCompletion --fish ./contrib/completion/fish/docker.fish
       installShellCompletion --zsh  ./contrib/completion/zsh/_docker
-    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && lib.versionOlder version "23") ''
       # Generate man pages from cobra commands
       echo "Generate man pages from cobra"
       mkdir -p ./man/man1
       go build -o ./gen-manpages github.com/docker/cli/man
       ./gen-manpages --root . --target ./man/man1
-    '' + ''
+    '' + lib.optionalString (lib.versionOlder version "23") ''
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
@@ -260,22 +261,37 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
+      maintainers = with maintainers; [ offline vdemeester periklis amaxine ];
+      mainProgram = "docker";
     };
   });
 
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.23";
+    version = "20.10.26";
     cliRev = "v${version}";
-    cliHash = "sha256-fNaRpstyG90Jzq3+U2A42Jj+ixb+m7tXLioIcsegPbQ=";
+    cliHash = "sha256-EPhsng0kLnweVbC8ZnH0NK1/yHlYSA5Sred4rWJX/Gs=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-nBPw/M4VC9XeZ9S33HWdWSjY2J2mYpI/TPOzvLjSmJM=";
-    runcRev = "v1.1.4";
-    runcHash = "sha256-ougJHW1Z+qZ324P8WpZqawY1QofKnn8WezP7orzRTdA=";
-    containerdRev = "v1.6.15";
-    containerdHash = "sha256-Vlftq//mLYZPoT2R/lHJA6wLnqiuC+Cpy4lGQC8jCPA=";
+    mobyHash = "sha256-IJ7m2mQnsLiom0EuZLpuLY6fYEko7rEy35igJv1AY04=";
+    runcRev = "v1.1.8";
+    runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
+    containerdRev = "v1.6.22";
+    containerdHash = "sha256-In7OkK3xm7Cz3H1jzG9b4tsZbmo44QCq8pNU+PPy8dY=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
+  docker_24 = callPackage dockerGen rec {
+    version = "24.0.5";
+    cliRev = "v${version}";
+    cliHash = "sha256-u1quVGTx/p8BDyRn33vYyyuE5BOhWMnGQ5uVX0PZ5mg=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-JQjRz1fHZlQRkNw/R8WWLV8caN3/U3mrKKQXbZt2crU=";
+    runcRev = "v1.1.8";
+    runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
+    containerdRev = "v1.7.1";
+    containerdHash = "sha256-WwedtcsrDQwMQcKFO5nnPiHyGJpl5hXZlmpbBe1/ftY=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

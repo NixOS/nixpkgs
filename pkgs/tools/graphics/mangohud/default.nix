@@ -15,6 +15,7 @@
 , mangohud32
 , addOpenGLRunpath
 , appstream
+, git
 , glslang
 , mako
 , meson
@@ -30,13 +31,13 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
-, lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
+, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
 , nix-update-script
 }:
 
 let
   # Derived from subprojects/cmocka.wrap
-  cmocka = rec {
+  cmocka = {
     version = "1.81";
     src = fetchFromGitLab {
       owner = "cmocka";
@@ -78,14 +79,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.6.9-1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AX4m1XZ+yXp74E3slFGyI3CGu2eYU+eXNN2EY+ivdfk=";
+    hash = "sha256-KkMN7A3AcS/v+b9GCs0pI6MBBk3WwOMciaoiBzL5xOQ=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -132,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optionals lowerBitnessSupport [
         mangohud32
       ])} \
+      --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by dataDir ${placeholder "out"}/share
 
     (
@@ -153,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     addOpenGLRunpath
+    git
     glslang
     mako
     meson

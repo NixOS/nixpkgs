@@ -95,6 +95,6 @@ in python3.pkgs.buildPythonApplication rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

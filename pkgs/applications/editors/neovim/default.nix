@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
 , fetchurl
+, buildPackages
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
+, fixDarwinDylibNames
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
@@ -15,34 +17,66 @@
 }:
 
 let
-  neovimLuaEnv = lua.withPackages(ps:
-    (with ps; [ lpeg luabitop mpack ]
-    ++ lib.optionals doCheck [
-        nvim-client luv coxpcall busted luafilesystem penlight inspect
-      ]
-    ));
+  nvim-lpeg-dylib = luapkgs: if stdenv.isDarwin
+    then (luapkgs.lpeg.overrideAttrs (oa: {
+      preConfigure = ''
+        # neovim wants clang .dylib
+        sed -i makefile -e "s/CC = gcc/CC = clang/"
+        sed -i makefile -e "s/-bundle/-dynamiclib/"
+      '';
+      preBuild = ''
+        # there seems to be implicit calls to Makefile from luarocks, we need to
+        # add a stage to build our dylib
+        make macosx
+        mkdir -p $out/lib
+        mv lpeg.so $out/lib/lpeg.dylib
+      '';
+      nativeBuildInputs =
+        oa.nativeBuildInputs
+        ++ (
+          lib.optional stdenv.isDarwin fixDarwinDylibNames
+        );
+    }))
+    else luapkgs.lpeg;
+  requiredLuaPkgs = ps: (with ps; [
+    (nvim-lpeg-dylib ps)
+    luabitop
+    mpack
+  ] ++ lib.optionals doCheck [
+    nvim-client
+    luv
+    coxpcall
+    busted
+    luafilesystem
+    penlight
+    inspect
+  ]
+  );
+  neovimLuaEnv = lua.withPackages requiredLuaPkgs;
+  neovimLuaEnvOnBuild = lua.luaOnBuild.withPackages requiredLuaPkgs;
   codegenLua =
-    if lua.pkgs.isLuaJIT
+    if lua.luaOnBuild.pkgs.isLuaJIT
       then
         let deterministicLuajit =
-          lua.override {
+          lua.luaOnBuild.override {
             deterministicStringIds = true;
             self = deterministicLuajit;
           };
-        in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
-      else lua;
+        in deterministicLuajit.withPackages(ps: [ ps.mpack (nvim-lpeg-dylib ps) ])
+      else lua.luaOnBuild;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
+
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.9.1";
+    version = "0.9.4";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      hash = "sha256-G51qD7GklEn0JrneKSSqDDx0Odi7W2FjdQc0ZDE9ZK4=";
+      hash = "sha256-Lyo98cAs7Zhx23N4s4f3zpWFKYJMmXleWpt3wiVDQZo=";
     };
 
     patches = [
@@ -66,7 +100,7 @@ in
       # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
-      msgpack
+      msgpack-c
       ncurses
       neovimLuaEnv
       tree-sitter
@@ -99,6 +133,11 @@ in
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+    '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      sed -i runtime/CMakeLists.txt \
+        -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
+      sed -i src/nvim/po/CMakeLists.txt \
+        -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
     # check that the above patching actually works
     disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
@@ -117,6 +156,7 @@ in
       cmakeFlagsArray+=(
         "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
         "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+        "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""

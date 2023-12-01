@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-cg4aZmpTysc8m1euxIO2XPv8OMnBk1DwhFcuIFHF/1o=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = {
     description = "Access Windows named pipes from WSL";

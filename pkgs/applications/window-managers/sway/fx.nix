@@ -2,13 +2,13 @@
 
 sway-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "swayfx";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
     rev = version;
-    sha256 = "sha256-Ox+ror8sCc4mFOqZ1H9782hWbkTSUs5IVYEubHuyoJQ=";
+    sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
   };
 
   # This patch was backported into SwayFX
@@ -27,9 +27,10 @@ sway-unwrapped.overrideAttrs (oldAttrs: rec {
   meta = with lib; {
     description = "Sway, but with eye candy!";
     homepage = "https://github.com/WillPower3309/swayfx";
-    maintainers = with maintainers; [ ricarch97 ];
     license = licenses.mit;
+    maintainers = with maintainers; [ eclairevoyant ricarch97 ];
     platforms = platforms.linux;
+    mainProgram = "sway";
 
     longDescription = ''
       Fork of Sway, an incredible and one of the most well established Wayland

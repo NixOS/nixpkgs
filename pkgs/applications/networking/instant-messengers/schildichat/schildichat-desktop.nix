@@ -9,7 +9,7 @@
 , fetchYarnDeps
 , yarn
 , nodejs
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , electron
 , Security
 , AppKit
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     sha256 = pinData.desktopYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs makeWrapper copyDesktopItems ];
   inherit (element-desktop) seshat keytar;
 
   configurePhase = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     pushd element-desktop
     yarn config --offline set yarn-offline-mirror $offlineCache
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     rm -rf node_modules/matrix-seshat node_modules/keytar
     ln -s $keytar node_modules/keytar

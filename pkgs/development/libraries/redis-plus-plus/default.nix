@@ -8,14 +8,18 @@ assert enableShared || enableStatic;
 
 stdenv.mkDerivation rec {
   pname = "redis-plus-plus";
-  version = "1.3.7";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "sewenew";
     repo = "redis-plus-plus";
     rev = version;
-    sha256 = "sha256-QCNN85syxw2EGPdyTV3bL0txcHl7t2YhsKwK9lgnexY=";
+    sha256 = "sha256-lupS4WoJ4r0Vsh3sEGSuka0TtEBo2FPX2eks2blqRGk=";
   };
+
+  patches = [
+    ./0001-Fix-pkg-config-paths.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ hiredis ];

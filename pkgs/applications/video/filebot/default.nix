@@ -8,13 +8,13 @@ let
     url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
     hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
-  version = "5.0.2";
+  version = "5.1.1";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230418205553/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    hash = "sha256-XnzBXZy/gNA8qf7XairoviRmdQiXHbW19BgbHL52SP0=";
+    url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
+    hash = "sha256-BCsZBRtT2Ka7WZw7WFnagwoJwIO1L3qpFk/6nlGdpmQ=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -67,5 +67,6 @@ in stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;
+    mainProgram = "filebot";
   };
-}
+})

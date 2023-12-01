@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "sem";
-  version = "0.28.1";
+  version = "0.28.4";
 
   src = fetchFromGitHub {
     owner = "semaphoreci";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-pyin05mPIAq5dJebLehsCYDaIf5eGCcGzF5uz8egJV8=";
+    sha256 = "sha256-T7f/yfzNITlU03N059y1B/I1H77Pji34EK+x0Qs6XwQ=";
   };
 
-  vendorSha256 = "sha256-kuLN3r6CGL/fGQ5ggSLZWNC4AVvvGn6znTFGqkS4AXg=";
+  vendorHash = "sha256-CDjfhnnt4+ml8k/2QPGaSlJFpxDYWNjA5nzLXL2APX4=";
   subPackages = [ "." ];
 
   ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];

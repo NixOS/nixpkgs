@@ -31,7 +31,7 @@ let
     if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
-        { buildInputs = [ cfg.package.cli ]; } ''
+        { nativeBuildInputs = [ cfg.package.cli ]; } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;
@@ -1564,14 +1564,7 @@ in
 
     enable = mkEnableOption (lib.mdDoc "Prometheus monitoring daemon");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.prometheus;
-      defaultText = literalExpression "pkgs.prometheus";
-      description = lib.mdDoc ''
-        The prometheus package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "prometheus" { };
 
     port = mkOption {
       type = types.port;

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "espeak-phonemizer";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "espeak-phonemizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F+A2ge9YAib6IjDW3RNi7QqKnh1RGy2mlPFEB+OLCJU=";
+    hash = "sha256-K0s24mzXUqG0Au40jjGbpKNAznBkMHQzfh2/CDBN0F8=";
   };
 
   patches = [

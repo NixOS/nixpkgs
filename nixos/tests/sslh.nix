@@ -10,21 +10,13 @@ import ./make-test-python.nix {
           prefixLength = 64;
         }
       ];
-      # sslh is really slow when reverse dns does not work
-      networking.hosts = {
-        "fe00:aa:bb:cc::2" = [ "server" ];
-        "fe00:aa:bb:cc::1" = [ "client" ];
-      };
       services.sslh = {
         enable = true;
-        transparent = true;
-        appendConfig = ''
-          protocols:
-          (
-            { name: "ssh"; service: "ssh"; host: "localhost"; port: "22"; probe: "builtin"; },
-            { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-          );
-        '';
+        settings.transparent = true;
+        settings.protocols = [
+          { name = "ssh"; service = "ssh"; host = "localhost"; port = "22"; probe = "builtin"; }
+          { name = "http"; host = "localhost"; port = "80"; probe = "builtin"; }
+        ];
       };
       services.openssh.enable = true;
       users.users.root.openssh.authorizedKeys.keyFiles = [ ./initrd-network-ssh/id_ed25519.pub ];

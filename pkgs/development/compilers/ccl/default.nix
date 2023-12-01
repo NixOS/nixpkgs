@@ -2,10 +2,10 @@
 
 let
   options = rec {
-    /* TODO: there are also FreeBSD and Windows versions */
+    # TODO: there are also FreeBSD and Windows versions
     x86_64-linux = {
       arch = "linuxx86";
-      sha256 = "0d5bsizgpw9hv0jfsf4bp5sf6kxh8f9hgzz9hsjzpfhs3npmmac4";
+      sha256 = "0mhmm8zbk42p2b9amy702365m687k5p0xnz010yqrki6mwyxlkx9";
       runtime = "lx86cl64";
       kernel = "linuxx8664";
     };
@@ -17,13 +17,13 @@ let
     };
     armv7l-linux = {
       arch = "linuxarm";
-      sha256 = throw "ccl all-in-one linuxarm archive missing upstream";
+      sha256 = "1a4y07cmmn1r88b4hl4msb0bvr2fxd2vw9lf7h4j9f7a5rpq7124";
       runtime = "armcl";
       kernel = "linuxarm";
     };
     x86_64-darwin = {
       arch = "darwinx86";
-      sha256 = "1l060719k8mjd70lfdnr0hkybk7v88zxvfrsp7ww50q808cjffqk";
+      sha256 = "1xclnik6pqhkmr15cbqa2n1ddzdf0rs452lyiln3c42nmkf9jjb6";
       runtime = "dx86cl64";
       kernel = "darwinx8664";
     };
@@ -31,48 +31,14 @@ let
   };
   cfg = options.${stdenv.hostPlatform.system} or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 
-  # The 1.12 github release of CCL seems to be missing the usual
-  # ccl-1.12-linuxarm.tar.gz tarball, so we build it ourselves here
-  linuxarm-src = runCommand "ccl-1.12-linuxarm.tar.gz" {
-    outer = fetchurl {
-      url = "https://github.com/Clozure/ccl/archive/v1.12.tar.gz";
-      sha256 = "0lmxhll6zgni0l41h4kcf3khbih9r0f8xni6zcfvbi3dzfs0cjkp";
-    };
-    inner = fetchurl {
-      url = "https://github.com/Clozure/ccl/releases/download/v1.12/linuxarm.tar.gz";
-      sha256 = "0x4bjx6cxsjvxyagijhlvmc7jkyxifdvz5q5zvz37028va65243c";
-    };
-  } ''
-    tar xf $outer
-    tar xf $inner -C ccl
-    tar czf $out ccl
-  '';
-
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "ccl";
-  version  = "1.12";
+  version = "1.12.2";
 
-  src = if cfg.arch == "linuxarm" then linuxarm-src else fetchurl {
+  src = fetchurl {
     url = "https://github.com/Clozure/ccl/releases/download/v${version}/ccl-${version}-${cfg.arch}.tar.gz";
     sha256 = cfg.sha256;
   };
-
-  patches = [
-    # Pull upstream fiux for -fno-common toolchains:
-    #  https://github.com/Clozure/ccl/pull/316
-    (fetchpatch {
-      name = "fno-common-p1.patch";
-      url = "https://github.com/Clozure/ccl/commit/185dc1a00e7492f8be98e5f93b561758423595f1.patch";
-      sha256 = "0wqfds7346qdwdsxz3bl2p601ib94rdp9nknj7igj01q8lqfpajw";
-    })
-    (fetchpatch {
-      name = "fno-common-p2.patch";
-      url = "https://github.com/Clozure/ccl/commit/997de91062d1f152d0c3b322a1e3694243e4a403.patch";
-      sha256 = "10w6zw8wgalkdyya4m48lgca4p9wgcp1h44hy9wqr94dzlllq0f6";
-    })
-  ];
 
   buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
 

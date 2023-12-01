@@ -23,7 +23,7 @@ fi
 
 package_src="https://raw.githubusercontent.com/TandoorRecipes/recipes/$version"
 
-src_hash=$(nix-prefetch-github TandoorRecipes recipes --rev "${version}" | jq -r .sha256)
+src_hash=$(nix-prefetch-github TandoorRecipes recipes --rev "${version}" | jq -r .hash)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -34,9 +34,8 @@ yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
 # Use friendlier hashes
-src_hash=$(nix hash to-sri --type sha256 "$src_hash")
 yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
 
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
-sed -i -E -e "s#sha256 = \".*\"#sha256 = \"$src_hash\"#" common.nix
-sed -i -E -e "s#yarnSha256 = \".*\"#yarnSha256 = \"$yarn_hash\"#" common.nix
+sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" common.nix
+sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" common.nix

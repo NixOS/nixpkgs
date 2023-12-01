@@ -1,4 +1,5 @@
 { lib
+, autoPatchelfHook
 , copyDesktopItems
 , fetchFromGitHub
 , makeDesktopItem
@@ -6,8 +7,8 @@
 , alsa-lib
 , gcc-unwrapped
 , git
-, godot-export-templates
-, godot-headless
+, godot3-export-templates
+, godot3-headless
 , libGLU
 , libX11
 , libXcursor
@@ -36,8 +37,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    autoPatchelfHook
     copyDesktopItems
-    godot-headless
+    godot3-headless
   ];
 
   buildInputs = [
@@ -89,10 +91,10 @@ stdenv.mkDerivation rec {
     # expects the template-file at .../templates/3.2.3.stable/linux_x11_64_release
     # with 3.2.3 being the version of godot.
     mkdir -p $HOME/.local/share/godot
-    ln -s ${godot-export-templates}/share/godot/templates $HOME/.local/share/godot
+    ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
 
     mkdir -p $out/share/oh-my-git
-    godot-headless --export "Linux" $out/share/oh-my-git/oh-my-git
+    godot3-headless --export "Linux" $out/share/oh-my-git/oh-my-git
 
     runHook postBuild
   '';
@@ -115,6 +117,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  runtimeDependencies = map lib.getLib [
+    alsa-lib
+    libpulseaudio
+    udev
+  ];
 
   meta = with lib; {
     homepage = "https://ohmygit.org/";

@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchzip }:
+{ pkgs, lib, stdenv, fetchzip, nixosTests }:
 
 let
 
@@ -36,7 +36,14 @@ let
         echo "${metadata}" | base64 --decode > $out/metadata.json
       '';
     };
-    dontBuild = true;
+    nativeBuildInputs = with pkgs; [ buildPackages.glib ];
+    buildPhase = ''
+      runHook preBuild
+      if [ -d schemas ]; then
+        glib-compile-schemas --strict schemas
+      fi
+      runHook postBuild
+    '';
     installPhase = ''
       runHook preInstall
       mkdir -p $out/share/gnome-shell/extensions/
@@ -54,6 +61,10 @@ let
       extensionPortalSlug = pname;
       # Store the extension's UUID, because we might need it at some places
       extensionUuid = uuid;
+
+      tests = {
+        gnome-extensions = nixosTests.gnome-extensions;
+      };
     };
   };
 in

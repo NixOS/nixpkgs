@@ -18,13 +18,13 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "a
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-02-23";
+  version = "2023-06-05";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yXpHm/iXtBdEo6m8W7Itp3N9vrWRTb7S3aKi0X2RObo=";
+    sha256 = "sha256-qiHmA/K4hdXVSFzergGhgssKR+kXp3X0cqtX1X5ayM4=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

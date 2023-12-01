@@ -24,6 +24,6 @@ buildPythonPackage rec {
     description = "Formulate and solve resource-constrained scheduling problems";
     homepage = "https://github.com/timnon/pyschedule";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

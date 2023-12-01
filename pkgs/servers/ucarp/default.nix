@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ isc bsdOriginal bsd2 gpl2Plus ];
     maintainers = with maintainers; [ oxzi ];
+    mainProgram = "ucarp";
   };
 }

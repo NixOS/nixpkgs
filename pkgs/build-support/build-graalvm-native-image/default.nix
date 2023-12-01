@@ -3,7 +3,7 @@
 , glibcLocales
   # The GraalVM derivation to use
 , graalvmDrv
-, name ? "${args.pname}-${args.version}"
+, removeReferencesTo
 , executable ? args.pname
   # JAR used as input for GraalVM derivation, defaults to src
 , jar ? args.src
@@ -12,15 +12,17 @@
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
+    (lib.optionalString (stdenv.isLinux && stdenv.isAarch64) "-H:PageSize=64K")
     "-H:Name=${executable}"
+    "-march=compatibility"
     "--verbose"
+    "-J-Dsun.stdout.encoding=UTF-8"
+    "-J-Dsun.stderr.encoding=UTF-8"
   ]
   # Extra arguments to be passed to the native-image
 , extraNativeImageBuildArgs ? [ ]
   # XMX size of GraalVM during build
 , graalvmXmx ? "-J-Xmx6g"
-  # Locale to be used by GraalVM compiler
-, LC_ALL ? "en_US.UTF-8"
 , meta ? { }
 , ...
 } @ args:
@@ -37,12 +39,13 @@ let
     "buildPhase"
     "nativeBuildInputs"
     "installPhase"
+    "postInstall"
   ];
 in
 stdenv.mkDerivation ({
-  inherit dontUnpack LC_ALL jar;
+  inherit dontUnpack jar;
 
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales removeReferencesTo ];
 
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
@@ -62,6 +65,11 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
+  postInstall = ''
+    remove-references-to -t ${graalvmDrv} $out/bin/${executable}
+    ${args.postInstall or ""}
+  '';
+
   disallowedReferences = [ graalvmDrv ];
 
   passthru = { inherit graalvmDrv; };
@@ -71,7 +79,5 @@ stdenv.mkDerivation ({
     platforms = graalvmDrv.meta.platforms;
     # default to executable name
     mainProgram = executable;
-    # need to have native-image-installable-svm available
-    broken = !(builtins.any (p: (p.product or "") == "native-image-installable-svm") graalvmDrv.products);
   } // meta;
 } // extraArgs)

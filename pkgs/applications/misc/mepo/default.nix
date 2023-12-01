@@ -1,66 +1,60 @@
 { lib
 , stdenv
 , fetchFromSourcehut
-, pkg-config
-, zig
-, makeWrapper
-, busybox
-, curl
 , SDL2
 , SDL2_gfx
 , SDL2_image
 , SDL2_ttf
+, busybox
+, curl
 , findutils
-, jq
-, ncurses
-, gnome
-, xorg
-, util-linux
-, gpsd
 , geoclue2-with-demo-agent
+, gpsd
+, jq
+, makeWrapper
+, ncurses
+, pkg-config
+, util-linux
+, xwininfo
+, zenity
+, zig_0_11
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mepo";
-  version = "1.1";
+  version = "1.2.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
-    repo = pname;
-    rev = version;
-    hash = "sha256-OIZ617QLjiTiDwcsn0DnRussYtjDkVyifr2mdSqA98A=";
+    repo = "mepo";
+    rev = finalAttrs.version;
+    hash = "sha256-sxN7yTnk3KDAkP/d3miKa2bEgB3AUaf9/M9ajJyRt3g=";
   };
 
-  nativeBuildInputs = [ pkg-config zig makeWrapper ];
-
-  buildInputs = [
-    curl SDL2 SDL2_gfx SDL2_image SDL2_ttf jq ncurses
+  nativeBuildInputs = [
+    pkg-config
+    zig_0_11.hook
+    makeWrapper
   ];
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
+  buildInputs = [
+    curl
+    SDL2
+    SDL2_gfx
+    SDL2_image
+    SDL2_ttf
+    jq
+    ncurses
+  ];
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-
-    zig build test
-
-    runHook postCheck
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    zig build -Drelease-safe=true -Dcpu=baseline --prefix $out install
-    install -d $out/share/man/man1
-    $out/bin/mepo -docman > $out/share/man/man1/mepo.1
-
-    runHook postInstall
-  '';
 
   postInstall = ''
+    install -d $out/share/man/man1
+    $out/bin/mepo -docman > $out/share/man/man1/mepo.1
+  '';
+
+  postFixup = ''
     substituteInPlace $out/bin/mepo_ui_menu_user_pin_updater.sh \
       --replace /usr/libexec/geoclue-2.0 ${geoclue2-with-demo-agent}/libexec/geoclue-2.0
     substituteInPlace $out/bin/mepo_ui_central_menu.sh \
@@ -68,19 +62,37 @@ stdenv.mkDerivation rec {
       --replace " ls " " ls -a " #circumvent wrapping for script detection
     for program in $out/bin/* ; do
       wrapProgram $program \
-        --suffix PATH : $out/bin:${lib.makeBinPath ([ jq ncurses curl busybox findutils util-linux gpsd gnome.zenity xorg.xwininfo ])}
+        --suffix PATH : $out/bin:${lib.makeBinPath ([
+          busybox
+          curl
+          findutils
+          gpsd
+          jq
+          ncurses
+          util-linux
+          xwininfo
+          zenity
+        ])}
     done
   '';
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://mepo.milesalan.com";
     description = "Fast, simple, and hackable OSM map viewer";
     longDescription = ''
-      It is recommended to use the corresponding NixOS module.
+      Mepo is a fast, simple, and hackable OSM map viewer for desktop & mobile
+      Linux devices (like the PinePhone, Librem 5, postmarketOS devices etc.)
+      and both environment's various user interfaces (Wayland & X
+      inclusive). Environments supported include Phosh, Sxmo, Plasma Mobile,
+      desktop X, and desktop Wayland. Mepo works both offline and online,
+      features a minimalist both touch/mouse and keyboard compatible interface,
+      and offers a UNIX-philosophy inspired underlying design, exposing a
+      powerful command language called Mepolang capable of being scripted to
+      provide things like custom bounding-box search scripts, bookmarks, and
+      more.
     '';
-
-    homepage = "https://mepo.milesalan.com";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sikmir McSinyx laalsaas ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ sikmir McSinyx laalsaas ];
+    platforms = lib.platforms.linux;
   };
-}
+})

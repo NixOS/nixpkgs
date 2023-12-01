@@ -32,6 +32,7 @@ appleDerivation {
   ];
 
   meta = {
+    mainProgram = "iconv";
     platforms = lib.platforms.darwin;
   };
 }

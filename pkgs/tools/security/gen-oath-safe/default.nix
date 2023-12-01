@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     platforms =  platforms.unix;
     license = licenses.mit;
     maintainers = [ maintainers.makefu ];
+    mainProgram = "gen-oath-safe";
   };
 
 }

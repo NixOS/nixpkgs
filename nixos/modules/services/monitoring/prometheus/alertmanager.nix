@@ -8,7 +8,7 @@ let
 
   checkedConfig = file:
     if cfg.checkConfig then
-      pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+      pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
         ln -s ${file} $out
         amtool check-config $out
       '' else file;
@@ -44,14 +44,7 @@ in {
     services.prometheus.alertmanager = {
       enable = mkEnableOption (lib.mdDoc "Prometheus Alertmanager");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.prometheus-alertmanager;
-        defaultText = literalExpression "pkgs.alertmanager";
-        description = lib.mdDoc ''
-          Package that should be used for alertmanager.
-        '';
-      };
+      package = mkPackageOption pkgs "prometheus-alertmanager" { };
 
       configuration = mkOption {
         type = types.nullOr types.attrs;

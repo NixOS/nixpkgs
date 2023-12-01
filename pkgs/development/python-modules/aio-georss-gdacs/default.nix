@@ -28,6 +28,8 @@ buildPythonPackage rec {
     dateparser
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     aresponses
     pytest-asyncio

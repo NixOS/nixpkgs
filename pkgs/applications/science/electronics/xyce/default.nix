@@ -16,7 +16,7 @@
 , trilinos
 , withMPI ? false
   # for doc
-, texlive
+, texliveMedium
 , pandoc
 , enableDocs ? true
   # for tests
@@ -31,27 +31,32 @@
 
 assert withMPI -> trilinos.withMPI;
 
-stdenv.mkDerivation rec {
-  pname = "xyce";
+let
   version = "7.6.0";
 
-  srcs = [
-    # useing fetchurl or fetchFromGitHub doesn't include the manuals
-    # due to .gitattributes files
-    (fetchgit {
-      url = "https://github.com/Xyce/Xyce.git";
-      rev = "Release-${version}";
-      sha256 = "sha256-HYIzmODMWXBuVRZhcC7LntTysuyXN5A9lb2DeCQQtVw=";
-    })
-    (fetchFromGitHub {
-      owner = "Xyce";
-      repo = "Xyce_Regression";
-      rev = "Release-${version}";
-      sha256 = "sha256-uEoiKpYyHmdK7LZ1UNm2d3Jk8+sCwBwB0TCoHilIh74=";
-    })
-  ];
+  # useing fetchurl or fetchFromGitHub doesn't include the manuals
+  # due to .gitattributes files
+  xyce_src = fetchgit {
+    url = "https://github.com/Xyce/Xyce.git";
+    rev = "Release-${version}";
+    sha256 = "sha256-HYIzmODMWXBuVRZhcC7LntTysuyXN5A9lb2DeCQQtVw=";
+  };
 
-  sourceRoot = "./Xyce";
+  regression_src = fetchFromGitHub {
+    owner = "Xyce";
+    repo = "Xyce_Regression";
+    rev = "Release-${version}";
+    sha256 = "sha256-uEoiKpYyHmdK7LZ1UNm2d3Jk8+sCwBwB0TCoHilIh74=";
+  };
+in
+
+stdenv.mkDerivation rec {
+  pname = "xyce";
+  inherit version;
+
+  srcs = [ xyce_src regression_src ];
+
+  sourceRoot = xyce_src.name;
 
   preConfigure = "./bootstrap";
 
@@ -76,16 +81,14 @@ stdenv.mkDerivation rec {
     gfortran
     libtool_2
   ] ++ lib.optionals enableDocs [
-    (texlive.combine {
-      inherit (texlive)
-        scheme-medium
+    (texliveMedium.withPackages (ps: with ps; [
         koma-script
         optional
         framed
         enumitem
         multirow
-        preprint;
-    })
+        preprint
+      ]))
   ];
 
   buildInputs = [
@@ -101,7 +104,7 @@ stdenv.mkDerivation rec {
   doCheck = enableTests;
 
   postPatch = ''
-    pushd ../source
+    pushd ../${regression_src.name}
     find Netlists -type f -regex ".*\.sh\|.*\.pl" -exec chmod ugo+x {} \;
     # some tests generate new files, some overwrite netlists
     find . -type d -exec chmod u+w {} \;
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
-    TEST_ROOT="$(pwd)/../source"
+    TEST_ROOT="$(pwd)/../${regression_src.name}"
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh

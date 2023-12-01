@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.8.1";
+  version = "1.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JVXRVq7yrRLj15ZMKVCBvCsrRP8KcRj9XNvfeH0rXVc=";
+    hash = "sha256-VU+vB+x2DElwzl1cO7qTdV91Mn1i2Dsq2safnMrwuqI=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-org-policy";
     changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+    maintainers = with maintainers; [ austinbutler ];
   };
 }

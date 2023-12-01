@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "http://swfmill.org";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    mainProgram = "swfmill";
   };
 }

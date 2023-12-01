@@ -8,7 +8,6 @@
 , flatpak
 , fwupd
 , ostree
-, packagekit-qt
 , pcre
 , util-linux
 , qtquickcontrols2
@@ -42,7 +41,6 @@ mkDerivation {
     flatpak
     fwupd
     ostree
-    packagekit-qt
     pcre
     util-linux
     qtquickcontrols2

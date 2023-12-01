@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ColinIanKing/eventstat";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

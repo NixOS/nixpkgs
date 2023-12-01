@@ -6,6 +6,7 @@
 , ninja
 , pkg-config
 , glib
+, glib-networking
 , desktop-file-utils
 , gettext
 , librsvg
@@ -50,6 +51,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+    glib-networking
     libadwaita
     libportal
     libportal-gtk4

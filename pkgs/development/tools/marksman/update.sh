@@ -15,4 +15,4 @@ fi
 
 update-source-version marksman "$version"
 
-$(nix-build -A marksman.fetch-deps --no-out-link) "$(dirname -- "${BASH_SOURCE[0]}")/deps.nix"
+$(nix-build -A marksman.fetch-deps --no-out-link)

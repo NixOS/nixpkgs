@@ -1,4 +1,4 @@
-{ stdenv, ffmpeg-full, tone, pname, nodejs }: ''
+{ stdenv, ffmpeg-full, tone, pname, nodejs, getopt }: ''
     #!${stdenv.shell}
 
     port=8000
@@ -7,7 +7,7 @@
     metadata=$(pwd)/metadata
 
     LONGOPTS=host:,port:,config:,metadata:,help
-    args=$(getopt -l "$LONGOPTS" -o h -- "$@")
+    args=$(${getopt}/bin/getopt -l "$LONGOPTS" -o h -- "$@")
 
     eval set -- "$args"
 
@@ -44,7 +44,7 @@
           ;;
         --help|-h)
           echo "Usage: audiobookshelf [--host <host>] [--port <port>] [--metadata <dir>] [--config <dir>]"
-          shift
+          exit 0
           ;;
       esac
       shift

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, installShellFiles
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ea";
@@ -8,12 +15,22 @@ rustPlatform.buildRustPackage rec {
     owner = "dduan";
     repo = "ea";
     rev = version;
-    sha256 = "VXSSe5d7VO3LfjumzN9a7rrKRedOtOzTdLVQWgV1ED8=";
+    hash = "sha256-VXSSe5d7VO3LfjumzN9a7rrKRedOtOzTdLVQWgV1ED8=";
   };
 
-  cargoSha256 = "sha256-YP7OJaIWTXJHe3qF+a3zCFnCHnELX0rAWqnJPaC1T7I=";
+  cargoPatches = [
+    # https://github.com/dduan/ea/pull/64
+    (fetchpatch {
+      name = "update-guard.patch";
+      url = "https://github.com/dduan/ea/commit/068aa36d7a472c7a4bac855f2404e7094dec7d58.patch";
+      hash = "sha256-iK3fjB6zSDqe0yMUIFjP1nEFLYLFg7dy6+b0T6mC1GA=";
+    })
+  ];
+
+  cargoHash = "sha256-/MkLWAbEr14CYdqSwJP1vNYxK7pAmMLdhiV61UQEbME=";
 
   nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
   ];

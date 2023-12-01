@@ -1,9 +1,9 @@
-{ wxGTK, stdenv, newScope }:
+{ fmt, wxGTK, stdenv, newScope }:
 let
   callPackage = newScope self;
 
   self = {
-    zeroad-unwrapped = callPackage ./game.nix { inherit wxGTK stdenv; };
+    zeroad-unwrapped = callPackage ./game.nix { inherit fmt wxGTK stdenv; };
 
     zeroad-data = callPackage ./data.nix { inherit stdenv; };
 

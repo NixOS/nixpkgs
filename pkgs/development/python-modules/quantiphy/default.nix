@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , pytestCheckHook
 , pythonOlder
 , inform
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
 
   propagatedBuildInputs = [

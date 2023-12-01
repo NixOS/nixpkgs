@@ -1,21 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, pygobject3, pythonAtLeast }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pygobject3
+}:
 
 buildPythonPackage rec {
   pname = "pydbus";
   version = "0.6.0";
+  pyproject = true;
 
-  # Python 3.11 changed the API of the `inspect` module and pydbus was never
-  # updated to adapt; last commit was in 2018.
-  disabled = pythonAtLeast "3.11";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0b0gipvz7vcfa9ddmwq2jrx16d4apb0hdnl5q4i3h8jlzwp1c1s2";
+  src = fetchFromGitHub {
+    owner = "LEW21";
+    repo = "pydbus";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-F1KKXG+7dWlEbToqtF3G7wU0Sco7zH5NqzlL58jyDGw=";
   };
 
-  propagatedBuildInputs = [ pygobject3 ];
+  postPatch = ''
+    substituteInPlace pydbus/_inspect3.py \
+      --replace "getargspec" "getfullargspec"
+  '';
 
-  pythonImportsCheck = [ "pydbus" ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    pygobject3
+  ];
+
+  pythonImportsCheck = [
+    "pydbus"
+    "pydbus.generic"
+  ];
+
+  doCheck = false; # requires a working dbus setup
 
   meta = {
     homepage = "https://github.com/LEW21/pydbus";

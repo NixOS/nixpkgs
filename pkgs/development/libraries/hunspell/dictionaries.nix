@@ -1,6 +1,6 @@
 /* hunspell dictionaries */
 
-{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, hunspell }:
+{ lib, stdenv, fetchurl, fetchzip, fetchFromGitHub, unzip, coreutils, bash, which, zip, ispell, perl, python3, hunspell }:
 
 
 let
@@ -913,5 +913,58 @@ rec {
     readmeFile = "README_en.txt";
     # the README doesn't specify versions of licenses :/
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
+  };
+
+  /* PORTUGUESE */
+
+  pt_BR = pt-br;
+  pt-br = mkDictFromLibreOffice {
+    shortName = "pt-br";
+    dictFileName = "pt_BR";
+    shortDescription = "Portuguese (Brazil)";
+    readmeFile = "README_pt_BR.txt";
+    license = with lib.licenses; [ lgpl3 ];
+  };
+
+  pt_PT = pt-pt;
+  pt-pt = mkDictFromLibreOffice {
+    shortName = "pt-pt";
+    dictFileName = "pt_PT";
+    shortDescription = "Portuguese (Portugal)";
+    readmeFile = "README_pt_PT.txt";
+    license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
+  };
+
+  /* PERSIAN */
+
+  fa_IR = fa-ir;
+  fa-ir = mkDict {
+    pname = "hunspell-dict-fa-ir";
+    version = "experimental-2022-09-04";
+    dictFileName = "fa-IR";
+    readmeFile = "README.md";
+    src = fetchFromGitHub {
+      owner = "b00f";
+      repo = "lilak";
+      rev = "1a80a8e5c9377ac424d29ef20be894e250bc9765";
+      hash = "sha256-xonnrclzgFEHdQ9g8ijm0bo9r5a5Y0va52NoJR5d8mo=";
+    };
+    nativeBuildInputs = [ python3 ];
+    buildPhase = ''
+      runHook preBuild
+      mkdir build
+      (cd src && python3 lilak.py)
+      mv build/* ./
+      # remove timestamp from file
+      sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
+      runHook postBuild
+    '';
+    meta = with lib; {
+      description = "Hunspell dictionary for Persian (Iran)";
+      homepage = "https://github.com/b00f/lilak";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ nix-julia ];
+      platforms = platforms.all;
+    };
   };
 }

@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "art";
-  version = "5.9";
+  version = "6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "art";
     rev = "v${version}";
-    hash = "sha256-3fX0kYYyeJ9tHX8/+hlv5aRE6LujXW915N5Ov6Q+EW8=";
+    hash = "sha256-RJexYOGWwAwxQ7lWGgXzFSR2aly1twB9pC4QFs5m7k8=";
   };
 
   pythonImportsCheck = [ "art" ];

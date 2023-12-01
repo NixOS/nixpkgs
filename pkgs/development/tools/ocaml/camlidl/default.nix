@@ -5,13 +5,13 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.03")
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-camlidl";
-  version = "1.11";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "camlidl";
-    rev = "camlidl111";
-    sha256 = "sha256-8m0zem/6nvpEJtjJNP/+vafeVLlMvNQGdl8lyf/OeBg=";
+    rev = "camlidl112";
+    hash = "sha256-ONPQMDFaU2OzFa5jgMVKx+ZRKk8ZgBZyk42vDvbM7E0=";
   };
 
   nativeBuildInputs = [ ocaml ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
     substituteInPlace config/Makefile --replace 'OCAMLLIB=$(shell $(OCAMLC) -where)' OCAMLLIB=$out/lib/ocaml/${ocaml.version}/site-lib/camlidl
     substituteInPlace config/Makefile --replace CPP=cpp CPP=${stdenv.cc}/bin/cpp
+    substituteInPlace lib/Makefile --replace '$(OCAMLLIB)/Makefile.config' "${ocaml}/lib/ocaml/Makefile.config"
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/caml
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/camlidl/stublibs
   '';

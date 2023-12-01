@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , dm-haiku
 , chex
 , cloudpickle
@@ -16,9 +15,10 @@
 , rlax
 , distrax
 , tensorflow-probability
-, optax }:
+, optax
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dm-haiku-tests";
   inherit (dm-haiku) version;
 

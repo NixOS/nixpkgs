@@ -16,7 +16,7 @@ replaceHash() {
 }
 extractVendorHash() {
   original="${1?original hash missing}"
-  result="$(nix-build -A grafana.go-modules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+  result="$(nix-build -A grafana.goModules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
   [ -z "$result" ] && { echo "$original"; } || { echo "$result"; }
 }
 
@@ -28,9 +28,10 @@ if [ ! "${oldVersion}" = "${targetVersion}" ]; then
   update-source-version grafana "${targetVersion#v}"
   oldStaticHash="$(nix-instantiate --eval -A grafana.srcStatic.outputHash | tr -d '"')"
   newStaticHash="$(nix-prefetch-url "https://dl.grafana.com/oss/release/grafana-${targetVersion#v}.linux-amd64.tar.gz")"
+  newStaticHash="$(nix hash to-sri --type sha256 $newStaticHash)"
   replaceHash "$oldStaticHash" "$newStaticHash"
-  goHash="$(nix-instantiate --eval -A grafana.vendorSha256 | tr -d '"')"
-  emptyHash="$(nix-instantiate --eval -A lib.fakeSha256 | tr -d '"')"
+  goHash="$(nix-instantiate --eval -A grafana.vendorHash | tr -d '"')"
+  emptyHash="$(nix-instantiate --eval -A lib.fakeHash | tr -d '"')"
   replaceHash "$goHash" "$emptyHash"
   replaceHash "$emptyHash" "$(extractVendorHash "$goHash")"
   nix-build -A grafana

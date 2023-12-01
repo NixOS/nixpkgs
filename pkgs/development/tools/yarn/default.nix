@@ -36,5 +36,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ offline screendriver marsam ];
     platforms = nodejs.meta.platforms;
+    mainProgram = "yarn";
   };
 })

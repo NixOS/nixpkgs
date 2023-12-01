@@ -18,6 +18,7 @@ let
     lxqt-admin = callPackage ./lxqt-admin {};
     lxqt-config = callPackage ./lxqt-config {};
     lxqt-globalkeys = callPackage ./lxqt-globalkeys {};
+    lxqt-menu-data = callPackage ./lxqt-menu-data {};
     lxqt-notificationd = callPackage ./lxqt-notificationd {};
     lxqt-openssh-askpass = callPackage ./lxqt-openssh-askpass {};
     lxqt-policykit = callPackage ./lxqt-policykit {};
@@ -26,7 +27,7 @@ let
     lxqt-session = callPackage ./lxqt-session {};
     lxqt-sudo = callPackage ./lxqt-sudo {};
     lxqt-themes = callPackage ./lxqt-themes {};
-    pavucontrol-qt = libsForQt5.callPackage ./pavucontrol-qt {};
+    pavucontrol-qt = callPackage ./pavucontrol-qt {};
     qtermwidget = callPackage ./qtermwidget {};
 
     ### CORE 2
@@ -36,7 +37,7 @@ let
 
     ### OPTIONAL
     qterminal = callPackage ./qterminal {};
-    compton-conf = qt5.callPackage ./compton-conf {};
+    compton-conf = callPackage ./compton-conf {};
     obconf-qt = callPackage ./obconf-qt {};
     lximage-qt = callPackage ./lximage-qt {};
     qps = callPackage ./qps {};
@@ -50,7 +51,6 @@ let
       libsForQt5.libkscreen # provides plugins for screen management software
       pkgs.libfm
       pkgs.libfm-extra
-      pkgs.lxmenu-data
       pkgs.menu-cache
       pkgs.openbox # default window manager
       qt5.qtsvg # provides QT5 plugins for svg icons
@@ -68,6 +68,7 @@ let
       lxqt-admin
       lxqt-config
       lxqt-globalkeys
+      lxqt-menu-data
       lxqt-notificationd
       lxqt-openssh-askpass
       lxqt-policykit

@@ -1,39 +1,44 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
+, buildPythonPackage
+, fetchPypi
+, isodate
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-redis";
-  version = "14.1.0";
+  version = "14.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-LO92Wc2+VvsEKiOjVSHXw2o3D69NQlL58m+YqWl6+ig=";
+    hash = "sha256-eoMbY4oNzYXkn3uFUhxecJQD+BxYkGTbWhAWSgAoLyA=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
+   ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "azure.mgmt.redis"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Redis Cache Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-redis_${version}/sdk/redis/azure-mgmt-redis/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

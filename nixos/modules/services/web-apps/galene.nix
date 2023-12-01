@@ -110,14 +110,7 @@ in
         description = lib.mdDoc "Web server directory.";
       };
 
-      package = mkOption {
-        default = pkgs.galene;
-        defaultText = literalExpression "pkgs.galene";
-        type = types.package;
-        description = lib.mdDoc ''
-          Package for running Galene.
-        '';
-      };
+      package = mkPackageOption pkgs "galene" { };
     };
   };
 
@@ -186,7 +179,7 @@ in
           ProtectSystem = "strict";
           ReadWritePaths = cfg.recordingsDir;
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

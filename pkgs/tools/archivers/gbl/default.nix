@@ -52,5 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jonas-schievink/gbl";
     license = licenses.mit;
     maintainers = [ maintainers.raboof ];
+    mainProgram = "gbl";
   };
 }

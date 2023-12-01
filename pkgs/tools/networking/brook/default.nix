@@ -17,7 +17,6 @@ buildGoModule rec {
     homepage = "https://github.com/txthinking/brook";
     description = "A cross-platform Proxy/VPN software";
     license = with licenses; [ gpl3Only ];
-    platforms = platforms.unix;
     maintainers = with maintainers; [ xrelkd ];
   };
 }

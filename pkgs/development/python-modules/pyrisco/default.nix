@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyrisco";
-  version = "0.5.7";
+  version = "0.5.8";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ySFHB+PZmjsqKJQrfFoupylowsOiV5B2feHX7nF8dUA=";
+    hash = "sha256-PQ1h9UVQ2DQMInxdAaLES7uDWAxwDra+YfAmz5jjV6g=";
   };
 
   propagatedBuildInputs = [

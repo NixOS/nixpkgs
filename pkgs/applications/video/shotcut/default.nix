@@ -93,5 +93,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
+    mainProgram = "shotcut";
   };
 }

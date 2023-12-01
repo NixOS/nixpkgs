@@ -43,9 +43,9 @@
 } @ args:
 
 let
-  version = "2.37";
-  patchSuffix = "-8";
-  sha256 = "sha256-Ilfv8RGhgV109GhW2q9AsBnB5VMVbGnUi6DL/Bu5GkM=";
+  version = "2.38";
+  patchSuffix = "-27";
+  sha256 = "sha256-+4KZiZiyspllRnvBtp0VLpwwfSzzAcnq+0VVt3DvP9I=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,14 +59,14 @@ stdenv.mkDerivation ({
   patches =
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.36/master && git describe
-          glibc-2.37-8-g590d0e089b
-          $ git show --minimal --reverse glibc-2.37.. | gzip -9n --rsyncable - > 2.37-master.patch.gz
+          $ git fetch --all -p && git checkout origin/release/2.38/master && git describe
+          glibc-2.38-27-g750a45a783
+          $ git show --minimal --reverse glibc-2.38.. | gzip -9n --rsyncable - > 2.38-master.patch.gz
 
          To compare the archive contents zdiff can be used.
-          $ zdiff -u 2.37-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.37-master.patch.gz
+          $ zdiff -u 2.38-master.patch.gz ../nixpkgs/pkgs/development/libraries/glibc/2.38-master.patch.gz
        */
-      ./2.37-master.patch.gz
+      ./2.38-master.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -89,13 +89,26 @@ stdenv.mkDerivation ({
 
       ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
 
-      /* Patch derived from archlinux (at the time of adding they're at 2.37),
-         https://github.com/archlinux/svntogit-packages/blob/packages/glibc/trunk/reenable_DT_HASH.patch
+      /* Patch derived from archlinux,
+         https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
 
-        See https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991 for context.
+         See also https://github.com/ValveSoftware/Proton/issues/6051
+         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
       */
       ./reenable_DT_HASH.patch
     ]
+    /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
+       every HPC piece of software, without this patch CUDA compilation on ARM
+       is effectively broken. See
+       https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
+    */
+    ++ (
+      let
+        isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
+        isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
+      in
+      lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
+    )
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
@@ -135,6 +148,7 @@ stdenv.mkDerivation ({
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
+      "--enable-fortify-source"
     ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
       # This feature is currently supported on
       # i386, x86_64 and x32 with binutils 2.29 or later,
@@ -159,16 +173,24 @@ stdenv.mkDerivation ({
       "libc_cv_as_needed=no"
     ]
     ++ lib.optional withGd "--with-gd"
-    ++ lib.optional (!withLibcrypt) "--disable-crypt";
+    ++ lib.optional withLibcrypt "--enable-crypt";
 
-  makeFlags = [
+  makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
+
+  postInstall = (args.postInstall or "") + ''
+    moveToOutput bin/getent $getent
+  '';
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   # out as the first output is an exception exclusive to glibc
-  outputs = [ "out" "bin" "dev" "static" ];
+
+  # getent is its own output, not kept in bin, since many things
+  # depend on getent but not on the locale generation tools in the bin
+  # output. This saves a couple of megabytes of closure size in many cases.
+  outputs = [ "out" "bin" "dev" "static" "getent" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -188,7 +210,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
@@ -266,7 +288,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 ];
+    maintainers = with maintainers; [ eelco ma27 connorbaker ];
     platforms = platforms.linux;
   } // (args.meta or {});
 })

@@ -39,11 +39,15 @@ stdenv.mkDerivation rec {
                      "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
                    ];
 
+  # https://github.com/NixOS/nixpkgs/pull/240893#issuecomment-1635347507
+  NIX_LDFLAGS = [ "-lwebp" ];
+
   meta = with lib; {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.mog ];
+    mainProgram = "chafa";
   };
 }

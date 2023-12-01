@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jluttine/rofi-power-menu";
     maintainers = with maintainers; [ ikervagyok ];
     platforms = platforms.linux;
+    mainProgram = "rofi-power-menu";
   };
 }

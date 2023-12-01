@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnet";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "sam-github";
     repo = "libnet";
     rev = "v${version}";
-    sha256 = "sha256-Y/wd9c4whUbfpvWvKzJV6vJN3AlA14XBejchRG6wBc4=";
+    hash = "sha256-P3LaDMMNPyEnA8nO1Bm7H0mW/hVBr0cFdg+p2JmWcGI=";
   };
 
   nativeBuildInputs = [

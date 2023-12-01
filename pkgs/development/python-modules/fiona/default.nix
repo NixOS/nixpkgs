@@ -2,9 +2,11 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython
+, cython_3
 , gdal
+, oldest-supported-numpy
 , setuptools
+, wheel
 , attrs
 , certifi
 , click
@@ -19,23 +21,24 @@
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.9.1";
+  version = "1.9.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Toblerity";
     repo = "Fiona";
     rev = "refs/tags/${version}";
-    hash = "sha256-2CGLkgnpCAh9G+ILol5tmRj9S6/XeKk8eLzGEODiyP8=";
+    hash = "sha256-fq/BuyzuK4iOxdpE4h+KRH0CxOEk/wdmbb9KgCfJ1cw=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
     gdal # for gdal-config
+    oldest-supported-numpy
     setuptools
+    wheel
   ];
 
   buildInputs = [
@@ -49,7 +52,6 @@ buildPythonPackage rec {
     cligj
     click-plugins
     munch
-    setuptools
   ];
 
   passthru.optional-dependencies = {
@@ -66,18 +68,33 @@ buildPythonPackage rec {
     rm -r fiona # prevent importing local fiona
   '';
 
-  disabledTests = [
-    # Some tests access network, others test packaging
-    "http" "https" "wheel"
+  pytestFlagsArray = [
+    # Tests with gdal marker do not test the functionality of Fiona,
+    # but they are used to check GDAL driver capabilities.
+    "-m 'not gdal'"
   ];
 
-  pythonImportsCheck = [ "fiona" ];
+  disabledTests = [
+    # Some tests access network, others test packaging
+    "http"
+    "https"
+    "wheel"
+
+    # see: https://github.com/Toblerity/Fiona/issues/1273
+    "test_append_memoryfile_drivers"
+  ];
+
+  pythonImportsCheck = [
+    "fiona"
+  ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

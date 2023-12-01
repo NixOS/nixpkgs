@@ -4,10 +4,8 @@
 , perlPackages
 , buildEnv
 , makeWrapper
-, libtool
 , unzip
 , pkg-config
-, sqlite
 , libpqxx
 , top-git
 , mercurial
@@ -22,7 +20,6 @@
 , prometheus-cpp
 , nukeReferences
 , git
-, boehmgc
 , nlohmann_json
 , docbook_xsl
 , openssh
@@ -126,13 +123,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-03-27";
+  version = "2023-11-17";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "082495e34e094cae1eb49dbfc5648938e23c6355";
-    sha256 = "sha256-Nj9U0V7Zv7XoRDdO7ECphTk6jHfOgeZe6G0x4FQLpJ0=";
+    rev = "8f48e4ddecbf403be35f8243b97d73cb39dd61bb";
+    hash = "sha256-5q/7yz6jJedD8YU3SuYyXtN3qEAlOBRKGZxOcYt/0X8=";
   };
 
   buildInputs = [
@@ -248,6 +245,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nix-based continuous build system";
+    homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lheckemann mindavi das_j ];

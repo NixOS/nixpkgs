@@ -31,12 +31,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2021-04-03";
+  version = "2023.9.0";
+
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "d49e916705092f3d765d85d276b283b9e7e232a6";
-    sha256 = "0sdcz2vc8i2z50nj7zbkdpxx2mvx0m0927lfsj7d7qr0p8vkm0wa";
+    rev = "v${version}";
+    hash = "sha256-KvYfWdpgN72F8Y5iFNba0SCjPoS33O3FAdrrC49xoGo=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -77,7 +78,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    homepage = "http://ultrastardx.sourceforge.net/";
+    homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];

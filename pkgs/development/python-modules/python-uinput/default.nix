@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, udev }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, udev
+}:
 
 buildPythonPackage rec {
   pname = "python-uinput";
@@ -13,6 +16,8 @@ buildPythonPackage rec {
   buildInputs = [ udev ];
 
   NIX_CFLAGS_LINK = "-ludev";
+
+  doCheck = false; # no tests
 
   meta = with lib; {
     description = "Pythonic API to Linux uinput kernel module";

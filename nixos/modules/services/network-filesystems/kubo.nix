@@ -101,12 +101,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "Interplanetary File System (WARNING: may cause severe network degradation)");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.kubo;
-        defaultText = literalExpression "pkgs.kubo";
-        description = lib.mdDoc "Which Kubo package to use.";
-      };
+      package = mkPackageOption pkgs "kubo" { };
 
       user = mkOption {
         type = types.str;
@@ -203,10 +198,8 @@ in
               default = [
                 "/ip4/0.0.0.0/tcp/4001"
                 "/ip6/::/tcp/4001"
-                "/ip4/0.0.0.0/udp/4001/quic"
                 "/ip4/0.0.0.0/udp/4001/quic-v1"
                 "/ip4/0.0.0.0/udp/4001/quic-v1/webtransport"
-                "/ip6/::/udp/4001/quic"
                 "/ip6/::/udp/4001/quic-v1"
                 "/ip6/::/udp/4001/quic-v1/webtransport"
               ];
@@ -277,6 +270,12 @@ in
         message = ''
           You can't set services.kubo.settings.Pinning.RemoteServices because the ``config replace`` subcommand used at startup does not work with it.
         '';
+      }
+      {
+        assertion = !((lib.versionAtLeast cfg.package.version "0.21") && (builtins.hasAttr "Experimental" cfg.settings) && (builtins.hasAttr "AcceleratedDHTClient" cfg.settings.Experimental));
+        message = ''
+    The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
+  '';
       }
     ];
 

@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unscii";
-  version = "1.1";
+  version = "2.1";
 
   src = fetchurl {
-    url = "http://pelulamu.net/${pname}/${pname}-${version}-src.tar.gz";
-    sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
+    url = "http://viznut.fi/${pname}/${pname}-${version}-src.tar.gz";
+    sha256 = "0msvqrq7x36p76a2n5bzkadh95z954ayqa08wxd017g4jpa1a4jd";
   };
 
   nativeBuildInputs =
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     # version. The reduced version is public domain.
     license = "http://unifoundry.com/LICENSE.txt";
     maintainers = [ lib.maintainers.raskin ];
-    homepage = "http://pelulamu.net/unscii/";
+    homepage = "http://viznut.fi/unscii/";
   };
 }

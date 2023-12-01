@@ -67,7 +67,7 @@ rec {
       networking.hosts."127.0.0.1" = [ "site1.local" "site2.local" ];
     };
   }) {} [
-    "6_1" "6_2"
+    "6_3" "6_4"
   ];
 
   testScript = ''

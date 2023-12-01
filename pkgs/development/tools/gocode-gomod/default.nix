@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "YAOYrPPKgnjCErq8+iW0Le51clGBv0MJy2Nnn7UVo/s=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postInstall = ''
     mv $out/bin/gocode $out/bin/gocode-gomod

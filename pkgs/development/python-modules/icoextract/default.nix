@@ -22,10 +22,15 @@ buildPythonPackage rec {
     "icoextract"
   ];
 
+  postInstall = ''
+    mkdir -p $out/share/thumbnailers
+    substituteAll ${./exe-thumbnailer.thumbnailer} $out/share/thumbnailers/exe-thumbnailer.thumbnailer
+  '';
+
   meta = with lib; {
     description = "Extract icons from Windows PE files";
     homepage = "https://github.com/jlu5/icoextract";
     license = licenses.mit;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 donovanglover ];
   };
 }

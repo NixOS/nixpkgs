@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i 's/{UNITTEST++_INCLUDE_DIR}/ENV{UNITTEST++_INCLUDE_DIR}/g' tests/CMakeLists.txt
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Darwin requires both Magick++ and MagickCore or it will fail to link.
+    substituteInPlace src/CMakeLists.txt \
+      --replace 'target_link_libraries(openshot PUBLIC ImageMagick::Magick++)' 'target_link_libraries(openshot PUBLIC ImageMagick::Magick++ ImageMagick::MagickCore)'
   '';
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [

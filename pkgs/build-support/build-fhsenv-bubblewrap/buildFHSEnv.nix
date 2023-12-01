@@ -12,6 +12,7 @@
 , profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
+, multiArch ? false # Whether to include 32bit packages
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -35,8 +36,8 @@
 let
   inherit (stdenv) is64bit;
 
-  # use of glibc_multi is only supported on x86_64-linux
-  isMultiBuild  = multiPkgs != null && stdenv.isx86_64 && stdenv.isLinux;
+  # "use of glibc_multi is only supported on x86_64-linux"
+  isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -51,25 +52,38 @@ let
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
-  basePkgs = with pkgs;
-    [ glibcLocales
-      (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
-      gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz
-    ];
-  baseMultiPkgs = with pkgsi686Linux;
-    [ (toString gcc.cc.lib)
-    ];
+  baseTargetPaths = with pkgs; [
+    glibcLocales
+    (if isMultiBuild then glibc_multi else glibc)
+    (toString gcc.cc.lib)
+    bashInteractiveFHS
+    coreutils
+    less
+    shadow
+    su
+    gawk
+    diffutils
+    findutils
+    gnused
+    gnugrep
+    gnutar
+    gzip
+    bzip2
+    xz
+  ];
+  baseMultiPaths = with pkgsi686Linux; [
+    (toString gcc.cc.lib)
+  ];
 
   ldconfig = writeShellScriptBin "ldconfig" ''
     # due to a glibc bug, 64-bit ldconfig complains about patchelf'd 32-bit libraries, so we're using 32-bit ldconfig
-    exec ${if stdenv.isx86_64 && stdenv.isLinux then pkgsi686Linux.glibc.bin else pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
+    exec ${if stdenv.system == "x86_64-linux" then pkgsi686Linux.glibc.bin else pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
   '';
+
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
-    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
 
@@ -91,6 +105,7 @@ let
 
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
+    export NIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
     export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
@@ -104,7 +119,7 @@ let
   # Compose /etc for the chroot environment
   etcPkg = runCommandLocal "${name}-chrootenv-etc" { } ''
     mkdir -p $out/etc
-    cd $out/etc
+    pushd $out/etc
 
     # environment variables
     ln -s ${etcProfile} profile
@@ -117,7 +132,7 @@ let
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
     # ldconfig wrapper must come first so it overrides the original ldconfig
-    paths = [ etcPkg ldconfig ] ++ basePkgs ++ targetPaths;
+    paths = [ etcPkg ldconfig ] ++ baseTargetPaths ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
     postBuild = ''
@@ -153,7 +168,7 @@ let
 
   staticUsrProfileMulti = buildEnv {
     name = "${name}-usr-multi";
-    paths = baseMultiPkgs ++ multiPaths;
+    paths = baseMultiPaths ++ multiPaths;
     extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
@@ -172,13 +187,18 @@ let
     ln -s lib64 lib
 
     # copy glibc stuff
-    cp -rsHf ${staticUsrProfileTarget}/lib/32/* lib32/ && chmod u+w -R lib32/
+    cp -rsHf ${staticUsrProfileTarget}/lib/32/* lib32/
+    chmod u+w -R lib32/
 
     # copy content of multiPaths (32bit libs)
-    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsHf ${staticUsrProfileMulti}/lib/* lib32/ && chmod u+w -R lib32/
+    if [ -d ${staticUsrProfileMulti}/lib ]; then
+      cp -rsHf ${staticUsrProfileMulti}/lib/* lib32/
+      chmod u+w -R lib32/
+    fi
 
     # copy content of targetPaths (64bit libs)
-    cp -rsHf ${staticUsrProfileTarget}/lib/* lib64/ && chmod u+w -R lib64/
+    cp -rsHf ${staticUsrProfileTarget}/lib/* lib64/
+    chmod u+w -R lib64/
 
     # symlink 32-bit ld-linux.so
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
@@ -191,13 +211,15 @@ let
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
     mkdir -m0755 usr
-    cd usr
+    pushd usr
+
     ${setupLibDirs}
-    ${lib.optionalString isMultiBuild ''
+
+    '' + lib.optionalString isMultiBuild ''
     if [ -d "${staticUsrProfileMulti}/share" ]; then
       cp -rLf ${staticUsrProfileMulti}/share share
     fi
-    ''}
+    '' + ''
     if [ -d "${staticUsrProfileTarget}/share" ]; then
       if [ -d share ]; then
         chmod -R 755 share
@@ -223,18 +245,19 @@ let
         ln -s "$i"
       fi
     done
+
+    popd
   '';
 
 in runCommandLocal "${name}-fhs" {
   passthru = {
-    inherit args multiPaths targetPaths;
+    inherit args baseTargetPaths targetPaths baseMultiPaths multiPaths ldconfig;
   };
 } ''
   mkdir -p $out
-  cd $out
+  pushd $out
+
   ${setupTargetProfile}
-  cd $out
   ${extraBuildCommands}
-  cd $out
   ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
 ''

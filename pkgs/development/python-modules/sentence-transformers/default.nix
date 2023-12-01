@@ -47,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/UKPLab/sentence-transformers";
+    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
   };

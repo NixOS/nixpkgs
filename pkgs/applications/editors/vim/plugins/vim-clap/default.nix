@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.44";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
     rev = "v${version}";
-    hash = "sha256-3kPRntl5tHsITrEJaRRcidowcyMpXDTVV5jFN/GV8Sk=";
+    hash = "sha256-CYv5AZsGvN2dtN7t58b50a8PH7804Lnm4d4wAX6Mm5Q=";
   };
 
   meta = with lib; {
@@ -47,13 +47,12 @@ let
       libgit2
       zlib
     ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.CoreServices
     ];
   };
 in
 
-vimUtils.buildVimPluginFrom2Nix {
+vimUtils.buildVimPlugin {
   pname = "vim-clap";
   inherit version src meta;
 

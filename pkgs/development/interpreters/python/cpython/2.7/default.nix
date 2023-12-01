@@ -56,11 +56,11 @@ assert lib.assertMsg (reproducibleBuild -> (!rebuildBytecode))
 
 let
   buildPackages = pkgsBuildHost;
-  inherit (passthru) pythonForBuild;
+  inherit (passthru) pythonOnBuildForHost;
 
-  pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
-  else pythonForBuild.interpreter;
+  else pythonOnBuildForHost.interpreter;
 
   passthru = passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -133,6 +133,11 @@ let
 
     ] ++ lib.optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
+
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Fix darwin build https://bugs.python.org/issue34027
+      ../3.7/darwin-libutil.patch
+
     ] ++ lib.optionals stdenv.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -297,9 +302,9 @@ in with passthru; stdenv.mkDerivation ({
         # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
         # is not reproducible yet. https://bugs.python.org/issue29708
         # Not creating bytecode will result in a large performance loss however, so we do build it.
-        find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
       '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';

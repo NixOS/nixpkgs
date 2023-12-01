@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Small utility to convert a set of PNG images to Microsoft ICO format";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
+    mainProgram = "pngtoico";
   };
 }

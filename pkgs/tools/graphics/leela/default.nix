@@ -17,10 +17,11 @@ stdenv.mkDerivation {
   installFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
 
   meta = {
-    description = "CLI frontend to the poppler-glib libary of PDF tools";
+    description = "CLI frontend to the poppler-glib library of PDF tools";
     homepage = "https://github.com/TrilbyWhite/Leela";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.puffnfresh ];
     platforms = lib.platforms.linux;
+    mainProgram = "leela";
   };
 }

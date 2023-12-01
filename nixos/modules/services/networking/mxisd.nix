@@ -39,12 +39,7 @@ in {
     services.mxisd = {
       enable = mkEnableOption (lib.mdDoc "matrix federated identity server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ma1sd;
-        defaultText = literalExpression "pkgs.ma1sd";
-        description = lib.mdDoc "The mxisd/ma1sd package to use";
-      };
+      package = mkPackageOption pkgs "ma1sd" { };
 
       environmentFile = mkOption {
         type = types.nullOr types.str;

@@ -1,6 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttranslations, SDL, gtest
+, qtbase, qtmultimedia, qttools, SDL, gtest
 , dfu-util
 }:
 
@@ -16,9 +16,9 @@ mkDerivation rec {
     sha256 = "sha256-bKMAyONy1Udd+2nDVEMrtIsnfqrNuBVMWU7nCqvZ+3E=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
-  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+  buildInputs = [ qtbase qtmultimedia SDL ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -27,7 +27,6 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
-    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     "-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

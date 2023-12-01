@@ -28,7 +28,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     glib-networking
-    gobject-introspection
     gst-libav
     gst-plugins-base
     gst-plugins-ugly

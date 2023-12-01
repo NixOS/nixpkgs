@@ -3,6 +3,7 @@
 , buildPythonPackage
 , orjson
 , fetchFromGitHub
+, pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "2.0.6";
+  version = "2.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VBK+h5K/irI0T0eUaYC1iouzMUo/lJshLTe0h5CtnAQ=";
+    hash = "sha256-1uCmlFkha5oaNm5N0/8402ulBr7fNRUbDDASECfN9r8=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     requests-mock
+    pytest-asyncio
     pytestCheckHook
   ];
 

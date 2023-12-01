@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 }:
 
 buildGoModule rec {
@@ -12,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-m+Sc/rsYIbvd1oOqG4OT+wPtSxlgFq8m03n28eZIWJU=";
   };
 
@@ -25,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/getAlby/lndhub.go";
     license = licenses.gpl3;
     maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.unix;
+    mainProgram = "lndhub.go";
   };
 }

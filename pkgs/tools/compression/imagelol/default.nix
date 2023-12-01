@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     platforms = platforms.unix;
+    mainProgram = "ImageLOL";
   };
 }

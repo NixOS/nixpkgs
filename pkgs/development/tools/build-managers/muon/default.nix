@@ -130,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin; # typical `ar failure`
+    mainProgram = "muon";
   };
 })
 # TODO LIST:

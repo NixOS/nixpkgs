@@ -4,6 +4,8 @@
 , cmake
 , glib
 , gtk3
+, gettext
+, pango
 , makeWrapper
 , pcre2
 , perl
@@ -12,19 +14,20 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sakura";
-  version = "3.8.5";
+  version = "3.8.7";
 
   src = fetchFromGitHub {
     owner = "dabisu";
-    repo = pname;
-    rev = "SAKURA_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-eMGhPkfhpPHMg69J+XgK/ssJjwRSFgd/a64lAYi7hd0=";
+    repo = "sakura";
+    rev = "SAKURA_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-mDYwqRPezHEgLyZlJQ6taTQiP9HDWmN09mapfp7/TPs=";
   };
 
   nativeBuildInputs = [
     cmake
+    gettext
     makeWrapper
     perl
     pkg-config
@@ -33,9 +36,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
+    pango
     pcre2
     vte
   ];
+
+  strictDeps = true;
 
   # Set path to gsettings-schemata so sakura knows where to find colorchooser,
   # fontchooser etc.
@@ -46,7 +52,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.sakura;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.pleyades.net/david/projects/sakura";
     description = "A terminal emulator based on GTK and VTE";
     longDescription = ''
@@ -59,8 +65,9 @@ stdenv.mkDerivation rec {
       terminals in one window and adds a contextual menu with some basic
       options. No more no less.
     '';
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astsmtl codyopel AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ astsmtl codyopel AndersonTorres ];
+    platforms = lib.platforms.linux;
+    mainProgram = "sakura";
  };
-}
+})

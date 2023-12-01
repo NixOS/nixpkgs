@@ -10,6 +10,7 @@
   # libraries
 , brotli
 , bzip2
+, darwin
 , gpgme
 , libhsts
 , libidn2
@@ -26,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wget2";
-  version = "2.0.1";
+  version = "2.1.0";
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "gnuwget";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9IOM8IA8Kezk3SP3YVenxQkm8UMZgD8/ztWoDNqM0vc=";
+    sha256 = "sha256-+xw1nQMBs0m9RlunyrAYaSDPnLY1yRX8zt8hKOMXQT8=";
   };
 
   # wget2_noinstall contains forbidden reference to /build/
@@ -65,7 +66,11 @@ stdenv.mkDerivation rec {
     xz
     zlib
     zstd
-  ] ++ lib.optional sslSupport openssl;
+  ] ++ lib.optionals sslSupport [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   # TODO: include translation files
   autoreconfPhase = ''

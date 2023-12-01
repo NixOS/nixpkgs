@@ -11,7 +11,7 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "Navidrome music server");
 
-      package = mkPackageOptionMD pkgs "navidrome" { };
+      package = mkPackageOption pkgs "navidrome" { };
 
       settings = mkOption rec {
         type = settingsFormat.type;
@@ -28,10 +28,17 @@ in {
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to open the TCP port in the firewall";
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.settings.Port];
+
     systemd.services.navidrome = {
       description = "Navidrome Media Server";
       after = [ "network.target" ];

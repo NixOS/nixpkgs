@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2
-, which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2, gzip
+, which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd, gnutar
 , buildPackages
 }:
 
@@ -88,9 +88,9 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "ASCIIDOC=${buildPackages.asciidoc}/bin/asciidoc"
     "XMLTO=${buildPackages.xmlto}/bin/xmlto"
-  ] ++ (lib.optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
-    "ARCH=${linuxArchMapping."${stdenv.targetPlatform.linuxArch}"}"
-    "CROSS_COMPILE=${stdenv.targetPlatform.config}-"
+  ] ++ (lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ARCH=${linuxArchMapping."${stdenv.hostPlatform.linuxArch}"}"
+    "CROSS_COMPILE=${stdenv.hostPlatform.config}-"
   ]);
 
   outputs = [ "out" "dev" "man" ];
@@ -107,7 +107,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/criu \
       --set-default CR_IPTABLES ${iptables}/bin/iptables \
-      --set-default CR_IP_TOOL ${iproute2}/bin/ip
+      --set-default CR_IP_TOOL ${iproute2}/bin/ip \
+      --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
     wrapPythonPrograms
   '';
 

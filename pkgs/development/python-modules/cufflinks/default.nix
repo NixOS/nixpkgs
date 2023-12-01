@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Productivity Tools for Plotly + Pandas";
     homepage = "https://github.com/santosjorge/cufflinks";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
   };
 }

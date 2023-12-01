@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, backports_csv
 , configobj
 , mock
 , pytestCheckHook

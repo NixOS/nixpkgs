@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/SethMichaelLarson/selectors2";
     description = "Back-ported, durable, and portable selectors";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

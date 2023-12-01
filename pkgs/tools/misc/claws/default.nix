@@ -19,7 +19,7 @@ buildGoModule rec {
     homepage = "https://github.com/thehowl/claws";
     description = "Interactive command line client for testing websocket servers";
     license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aaronjheng ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "claws";
   };
 }

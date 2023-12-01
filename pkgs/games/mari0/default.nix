@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, zip, love, makeWrapper, makeDesktopItem
-, copyDesktopItems }:
+{ lib
+, copyDesktopItems
+, fetchFromGitHub
+, love
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, strip-nondeterminism
+, zip
+}:
 
 stdenv.mkDerivation rec {
   pname = "mari0";
@@ -12,7 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "1zqaq4w599scsjvy1rsb21fd2r8j3srx9vym4ir9bh666dp36gxa";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems zip ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    strip-nondeterminism
+    zip
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -28,6 +41,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zip -9 -r mari0.love ./*
+    strip-nondeterminism --type zip mari0.love
     install -Dm444 -t $out/share/games/lovegames/ mari0.love
     makeWrapper ${love}/bin/love $out/bin/mari0 \
       --add-flags $out/share/games/lovegames/mari0.love

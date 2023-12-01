@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.11";
+  version = "1.1.13";
 
   outputs = [ "out" "dev" ];
 
@@ -24,17 +24,8 @@ stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xb0d8spr4GoGZl/8C8BoPMPN7PAlzuQV11tEJbOQQ4U=";
+    hash = "sha256-NA+jr27aYu0XPG9sxnBtjeBTFHmV7TENRsFy8dDdNUc=";
   };
-
-  patches = [
-    # remove after next update
-    # https://github.com/NVIDIA/egl-wayland/pull/79
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/egl-wayland/commit/13737c6af4c0a7cfef5ec9013a4382bbeb7b495c.patch";
-      hash = "sha256-EEqI6iJb+uv0HkhnauYNxSzny4YapTm73PLgK8A9Km8=";
-    })
-  ];
 
   postPatch = ''
     # Declares an includedir but doesn't install any headers

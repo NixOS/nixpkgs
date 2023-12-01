@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gtk-doc python3 ];
-  buildInputs = [ gtk3 cairo glib gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gettext gtk-doc python3 gobject-introspection ];
+  buildInputs = [ gtk3 cairo glib ];
 
   configureFlags = [
     "--disable-python"

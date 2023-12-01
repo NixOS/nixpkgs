@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mill";
-  version = "0.10.12";
+  version = "0.11.6";
 
   src = fetchurl {
     url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
-    hash = "sha256-MlPnJMuz35Zd+VQwvsadRRPULebR7GWN1vGV+cJ7s4c=";
+    hash = "sha256-vGhjnOKvR2RdgFx3WsM217SO9gcKZknPaf7LKo3SJPU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [ scalavision zenithal ];
     platforms = lib.platforms.all;
   };
 }

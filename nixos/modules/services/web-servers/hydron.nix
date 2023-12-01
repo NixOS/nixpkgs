@@ -93,7 +93,7 @@ in with lib; {
       ensureDatabases = [ "hydron" ];
       ensureUsers = [
         { name = "hydron";
-          ensurePermissions = { "DATABASE hydron" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }
       ];
     };

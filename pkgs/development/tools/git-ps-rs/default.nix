@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "6.7.0";
+  version = "6.9.0";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-yBZ+YJxiVO8+rI7FLtI0xse8hoirjt5Bc2KxPeBidd0=";
+    hash = "sha256-D6613T87jLEur8WXHed2cSKVafKVfgGWap/z/UBe31U=";
   };
 
   cargoLock = {

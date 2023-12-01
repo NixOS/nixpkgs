@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, xz, pkg-config}:
+{lib, stdenv, fetchurl, fetchFromGitHub, cmake, boost179, gmp, htslib, zlib, xz, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "octopus";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ boost gmp htslib zlib xz ];
+  buildInputs = [ boost179 gmp htslib zlib xz ];
 
   patches = [ (fetchurl {
     url = "https://github.com/luntergroup/octopus/commit/17a597d192bcd5192689bf38c5836a98b824867a.patch";

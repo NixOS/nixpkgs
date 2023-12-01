@@ -35,6 +35,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.theleagueofmoveabletype.com/raleway";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson Profpatsch ];
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 })

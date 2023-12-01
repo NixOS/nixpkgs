@@ -8,7 +8,7 @@ in
       export ESBUILD_BINARY_PATH="${pkgs.esbuild_netlify}/bin/esbuild"
     '';
     src = fetchFromGitHub {
-      inherit (sourceInfo) owner repo rev sha256;
+      inherit (sourceInfo) owner repo rev hash;
     };
     bypassCache = true;
     reconstructLock = true;

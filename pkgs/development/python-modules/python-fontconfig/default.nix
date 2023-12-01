@@ -17,7 +17,7 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
 
   preBuild = ''
-    ${python.pythonForBuild.interpreter} setup.py build_ext -i
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext -i
   '';
 
   checkPhase = ''

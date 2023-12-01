@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , m17n_db
 , autoreconfHook
 , pkg-config

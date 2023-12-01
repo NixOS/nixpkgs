@@ -1,20 +1,21 @@
-From 65ed69a38a9ffee21f0eb36de1f7a3f152111cad Mon Sep 17 00:00:00 2001
-From: Tom Hall <tahall256@protonmail.ch>
-Date: Mon, 7 Sep 2020 18:09:52 +0100
-Subject: [PATCH] startkde
-
----
- startkde/plasma-session/startup.cpp     | 2 +-
- startkde/startplasma-waylandsession.cpp | 2 +-
- startkde/startplasma-x11.cpp            | 2 +-
- startkde/startplasma.cpp                | 8 ++++----
- 4 files changed, 7 insertions(+), 7 deletions(-)
-
+diff --git a/kcms/krdb/krdb.cpp b/kcms/krdb/krdb.cpp
+index 46363ddcb..d787f9993 100644
+--- a/kcms/krdb/krdb.cpp
++++ b/kcms/krdb/krdb.cpp
+@@ -468,7 +468,7 @@ void runRdb(unsigned int flags)
+     proc.execute();
+ 
+     // Needed for applications that don't set their own cursor.
+-    QProcess::execute(QStringLiteral("xsetroot"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
++    QProcess::execute(QStringLiteral(NIXPKGS_XSETROOT), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
+ 
+     applyGtkStyles(1);
+     applyGtkStyles(2);
 diff --git a/startkde/plasma-session/startup.cpp b/startkde/plasma-session/startup.cpp
-index 270744053..356160e96 100644
+index ffec07ebf..11e70fef8 100644
 --- a/startkde/plasma-session/startup.cpp
 +++ b/startkde/plasma-session/startup.cpp
-@@ -179,7 +179,7 @@ Startup::Startup(QObject *parent)
+@@ -176,7 +176,7 @@ Startup::Startup(QObject *parent)
      }
  
      // Keep for KF5; remove in KF6 (KInit will be gone then)
@@ -24,10 +25,10 @@ index 270744053..356160e96 100644
      KJob *phase1 = nullptr;
      m_lock.reset(new QEventLoopLocker);
 diff --git a/startkde/startplasma-wayland.cpp b/startkde/startplasma-wayland.cpp
-index 3a054a04f..b2e7ab3fb 100644
+index 04875c358..5822af37c 100644
 --- a/startkde/startplasma-wayland.cpp
 +++ b/startkde/startplasma-wayland.cpp
-@@ -91,7 +91,7 @@ int main(int argc, char **argv)
+@@ -89,7 +89,7 @@ int main(int argc, char **argv)
      out << "startplasma-wayland: Shutting down...\n";
  
      // Keep for KF5; remove in KF6 (KInit will be gone then)
@@ -37,10 +38,10 @@ index 3a054a04f..b2e7ab3fb 100644
      out << "startplasmacompositor: Shutting down...\n";
      cleanupPlasmaEnvironment(oldSystemdEnvironment);
 diff --git a/startkde/startplasma-x11.cpp b/startkde/startplasma-x11.cpp
-index d6b2c5439..534eeb0e5 100644
+index 8e82e29c3..1ed176706 100644
 --- a/startkde/startplasma-x11.cpp
 +++ b/startkde/startplasma-x11.cpp
-@@ -89,7 +89,7 @@ int main(int argc, char **argv)
+@@ -87,7 +87,7 @@ int main(int argc, char **argv)
      out << "startkde: Shutting down...\n";
  
      // Keep for KF5; remove in KF6 (KInit will be gone then)
@@ -50,10 +51,10 @@ index d6b2c5439..534eeb0e5 100644
      cleanupPlasmaEnvironment(oldSystemdEnvironment);
  
 diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
-index 008fdfcaf..72468f21c 100644
+index b0158c97d..c8f7fe223 100644
 --- a/startkde/startplasma.cpp
 +++ b/startkde/startplasma.cpp
-@@ -50,7 +50,7 @@ QTextStream out(stderr);
+@@ -50,7 +50,7 @@ void sigtermHandler(int signalNumber)
  void messageBox(const QString &text)
  {
      out << text;
@@ -62,16 +63,7 @@ index 008fdfcaf..72468f21c 100644
  }
  
  QStringList allServices(const QLatin1String &prefix)
-@@ -412,7 +412,7 @@ void setupX11()
-     //     If the user has overwritten fonts, the cursor font may be different now
-     //     so don't move this up.
- 
--    runSync(QStringLiteral("xsetroot"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
-+    runSync(QStringLiteral(NIXPKGS_XSETROOT), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
- }
- 
- void cleanupPlasmaEnvironment(const std::optional<QProcessEnvironment> &oldSystemdEnvironment)
-@@ -501,7 +501,7 @@ QProcess *setupKSplash()
+@@ -484,7 +484,7 @@ QProcess *setupKSplash()
          if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
              p = new QProcess;
              p->setProcessChannelMode(QProcess::ForwardedChannels);
@@ -80,5 +72,3 @@ index 008fdfcaf..72468f21c 100644
          }
      }
      return p;
--- 
-2.33.0

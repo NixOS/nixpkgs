@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , lvm2
 , libuuid
 , gettext

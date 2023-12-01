@@ -1,32 +1,27 @@
-{ lib, stdenv, fetchFromGitLab, substituteAll, installShellFiles
+{ lib, stdenv, fetchFromGitLab, installShellFiles
 , qmake, qttools
-, qtsvg, qttranslations, qtxmlpatterns
+, qtsvg, qtxmlpatterns
 , wrapQtAppsHook
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "valentina";
-  version = "0.7.51";
+  version = "0.7.52";
 
   src = fetchFromGitLab {
     owner = "smart-pattern";
     repo = "valentina";
     rev = "v${version}";
-    hash = "sha256-N9fC2tCP4TVNncatHaz5W5Mp3jOmAcEWYCl30+0myaE=";
+    hash = "sha256-DmNRBxqyBvDTdA7Sz9X04Dhejtxx7tOVpST+SkUNguM=";
   };
-
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.patch;
-    inherit qttranslations;
-  });
 
   postPatch = ''
     substituteInPlace src/app/translations.pri \
       --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'
   '';
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook installShellFiles ];
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook installShellFiles autoPatchelfHook ];
 
   buildInputs = [ qtsvg qtxmlpatterns ];
 
@@ -50,6 +45,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/smart-pattern/valentina/-/blob/v${version}/ChangeLog.txt";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ ];
   };
 }

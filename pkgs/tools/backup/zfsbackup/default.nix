@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, zfs
 }:
 
 buildGoModule rec {
@@ -16,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-ZJ7gtT4AdMLEs2+hJa2Sia0hSoQd3CftdqRsH/oJxd8=";
   };
 
-  vendorSha256 = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";
+  vendorHash = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";
 
   ldflags = [ "-w" "-s" ];
 

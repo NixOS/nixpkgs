@@ -26,5 +26,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/oath-toolkit/";
     maintainers = with maintainers; [ schnusch ];
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "oathtool";
   };
 }

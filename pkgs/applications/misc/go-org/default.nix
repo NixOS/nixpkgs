@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-org";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "niklasfasching";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Wp8WEfRcrtn+VdcbehYcOJI5FkPQiyo6nLsTDvR7riE=";
+    hash = "sha256-BPCQxl0aJ9PrEC5o5dc5uBbX8eYAxqB+qMLXo1LwCoA=";
   };
 
-  vendorSha256 = "sha256-njx89Ims7GZql8sbVmH/E9gM/ONRWiPRLVs+FzsCSzI=";
+  vendorHash = "sha256-HbNYHO+tqFEs9VXdxyA+r/7mM/p+NBn8PomT8JAyKR8=";
 
   postInstallCheck = ''
     $out/bin/go-org > /dev/null

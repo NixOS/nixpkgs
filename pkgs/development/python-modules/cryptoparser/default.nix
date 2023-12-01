@@ -1,26 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , attrs
-, six
 , asn1crypto
+, cryptodatahub
 , python-dateutil
+, urllib3
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.8.4";
+  version = "0.11.0";
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Sn4sfzu1Y1gC+4K9WdiZW92cYuVbUsBXcNbNQOv0BRw=";
+    pname = "CryptoParser";
+    inherit version;
+    hash = "sha256-fgPmgZxv/UpaoeBO08xcUbPxmjVV4AUEgivNOvWxd04=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    attrs
-    six
     asn1crypto
+    attrs
+    cryptodatahub
     python-dateutil
+    urllib3
   ];
 
   pythonImportsCheck = [

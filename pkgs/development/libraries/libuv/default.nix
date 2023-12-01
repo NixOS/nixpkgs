@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , autoconf
 , automake
 , libtool
@@ -22,16 +23,25 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.45.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.46.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-qKw9QFR24Uw7pVA9isPH8Va+9/5DYuqXz6l6jWcXn+4=";
+    owner = "libuv";
+    repo = "libuv";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Lrsyh4qd3OkTw1cSPfahzfSGNt6+pRN1X21iiv1SsFo=";
   };
+
+  patches = [
+    # Disable io_uring close on selected kernels. Remove on next release
+    # https://github.com/libuv/libuv/pull/4141
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/c811169f91b2101f7302e96de3d2dc366ade3a25.patch";
+      hash = "sha256-7vk6XGXwJcwYUQPqIJ3JPd/fPIGrjE5WRDSJCMQfKeU=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -62,7 +72,7 @@ stdenv.mkDerivation rec {
         "tcp_create_early" "tcp_close" "tcp_bind_error_inval"
         "tcp_bind_error_addrinuse" "tcp_shutdown_after_write"
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
-        "multiple_listen" "delayed_accept"
+        "multiple_listen" "delayed_accept" "udp_recv_in_a_row"
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
         "tty_pty" "condvar_5" "hrtime" "udp_multicast_join"
         # Tests that fail when sandboxing is enabled.
@@ -76,7 +86,7 @@ stdenv.mkDerivation rec {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
-    in lib.optionalString doCheck ''
+    in lib.optionalString (finalAttrs.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
@@ -93,7 +103,9 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/219466
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  doCheck = true;
+  doCheck =
+    # routinely hangs on powerpc64le
+    !stdenv.hostPlatform.isPower64;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -112,10 +124,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
-    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
-    maintainers = with maintainers; [ cstrahan ];
+    changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
+    maintainers = with maintainers; [ marsam ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
-}
+})

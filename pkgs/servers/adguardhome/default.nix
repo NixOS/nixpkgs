@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.29";
+  version = "0.107.36";
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    schema_version = 20;
+    schema_version = 24;
     tests.adguardhome = nixosTests.adguardhome;
   };
 
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
+    mainProgram = "adguardhome";
   };
 }

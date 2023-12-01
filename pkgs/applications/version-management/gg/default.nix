@@ -20,7 +20,7 @@ in buildGoModule {
     owner = "gg-scm";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "e628aeddb94d2470de860df09ef65499f8c5493fb336bf3df8502842ee02487f";
+    hash = "sha256-5iiu3blNJHDehg3wnvZUmfjFST+zNr89+FAoQu4CSH8=";
   };
   postPatch = ''
     substituteInPlace cmd/gg/editor_unix.go \
@@ -33,7 +33,7 @@ in buildGoModule {
     "-X" "main.buildCommit=${commit}"
   ];
 
-  vendorSha256 = "214dc073dad7b323ea449acf24c5b578d573432eeaa1506cf5761a2d7f5ce405";
+  vendorHash = "sha256-IU3Ac9rXsyPqRJrPJMW1eNVzQy7qoVBs9XYaLX9c5AU=";
 
   nativeBuildInputs = [ pandoc installShellFiles makeWrapper ];
   nativeCheckInputs = [ bash coreutils git ];

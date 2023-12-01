@@ -6,6 +6,7 @@
 , syrupy
 , pillow
 , rich
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -35,6 +37,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pillow
     rich
+  ];
+
+  pythonRelaxDeps = [
+    "pillow"
   ];
 
   pythonImportsCheck = [ "rich_pixels" ];

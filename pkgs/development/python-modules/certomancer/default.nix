@@ -1,69 +1,94 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
 , asn1crypto
+, buildPythonPackage
 , click
-, oscrypto
-, pyyaml
-, python-dateutil
-, tzlocal
-, pytest-aiohttp
-, pytz
+, cryptography
+, fetchFromGitHub
 , freezegun
 , jinja2
+, oscrypto
 , pyhanko-certvalidator
+, pytest-aiohttp
+, pytestCheckHook
+, python-dateutil
+, python-pkcs11
+, pythonOlder
+, pytz
+, pyyaml
 , requests
 , requests-mock
+, setuptools
+, tzlocal
 , werkzeug
-, pytestCheckHook
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.9.1";
-  format = "setuptools";
+  version = "0.11.0";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
-  # Tests are only available on GitHub
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
-    rev = version;
-    sha256 = "4v2e46ZrzhKXpMULj0vmDRoLOypi030eaADAYjLMg5M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UQV0Tk4C5b5iBZ34Je59gK2dLTaJusnpxdyNicIh2Q8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ' "pytest-runner",' "" \
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
     click
     oscrypto
-    pyyaml
     python-dateutil
+    pyyaml
     tzlocal
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace ", 'pytest-runner'" ""
-  '';
+  passthru.optional-dependencies = {
+    requests-mocker = [
+      requests-mock
+    ];
+    web-api = [
+      jinja2
+      werkzeug
+    ];
+    pkcs12 = [
+      cryptography
+    ];
+    pkcs11 = [
+      python-pkcs11
+    ];
+  };
 
   nativeCheckInputs = [
     freezegun
-    jinja2
     pyhanko-certvalidator
     pytest-aiohttp
+    pytestCheckHook
     pytz
     requests
-    requests-mock
-    werkzeug
-    pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # pyhanko_certvalidator.errors.DisallowedAlgorithmError
     "test_validate"
   ];
 
-  pythonImportsCheck = [ "certomancer" ];
+  pythonImportsCheck = [
+    "certomancer"
+  ];
 
   meta = with lib; {
     description = "Quickly construct, mock & deploy PKI test configurations using simple declarative configuration";

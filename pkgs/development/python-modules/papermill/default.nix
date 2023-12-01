@@ -84,6 +84,6 @@ buildPythonPackage rec {
     description = "Parametrize and run Jupyter and interact with notebooks";
     homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

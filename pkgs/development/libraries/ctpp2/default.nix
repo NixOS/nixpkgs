@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.8.3";
 
   src = fetchurl {
-    url = "http://ctpp.havoc.ru/download/${pname}-${version}.tar.gz";
+    url = "https://ctpp.havoc.ru/download/${pname}-${version}.tar.gz";
     sha256 = "1z22zfw9lb86z4hcan9hlvji49c9b7vznh7gjm95gnvsh43zsgx8";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A high performance templating engine";
-    homepage = "http://ctpp.havoc.ru";
+    homepage = "https://ctpp.havoc.ru/";
     maintainers = [ maintainers.robbinch ];
     platforms = platforms.linux;
     license = licenses.bsd2;

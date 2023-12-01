@@ -6,26 +6,45 @@ with lib;
 
 {
 
-  options.environment.enableAllTerminfo = with lib; mkOption {
-    default = false;
-    type = types.bool;
-    description = lib.mdDoc ''
-      Whether to install all terminfo outputs
-    '';
+  options = with lib; {
+    environment.enableAllTerminfo = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to install all terminfo outputs
+      '';
+    };
+
+    security.sudo.keepTerminfo = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to preserve the `TERMINFO` and `TERMINFO_DIRS`
+        environment variables, for `root` and the `wheel` group.
+      '';
+    };
   };
 
   config = {
 
-    # can be generated with: filter (drv: (builtins.tryEval (drv ? terminfo)).value) (attrValues pkgs)
+    # can be generated with:
+    # attrNames (filterAttrs
+    #  (_: drv: (builtins.tryEval (isDerivation drv && drv ? terminfo)).value)
+    #  pkgs)
     environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs; [
       alacritty
+      contour
       foot
       kitty
       mtm
+      rio
       rxvt-unicode-unwrapped
       rxvt-unicode-unwrapped-emoji
+      st
       termite
+      tmux
       wezterm
+      yaft
     ]));
 
     environment.pathsToLink = [
@@ -46,7 +65,7 @@ with lib;
       export TERM=$TERM
     '';
 
-    security.sudo.extraConfig = ''
+    security.sudo.extraConfig = mkIf config.security.sudo.keepTerminfo ''
 
       # Keep terminfo database for root and %wheel.
       Defaults:root,%wheel env_keep+=TERMINFO_DIRS

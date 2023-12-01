@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "clairvoyance";
-  version = "2.0.6";
+  version = "2.5.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "nikitastupin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jsb/UjqAppAUz9AGgON6AyVgUdOY6aswjQ9EL939Kro=";
+    hash = "sha256-CVXa2HvX7M0cwqnTeZVETg07j324ATQuMNreEgAC2QA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
+    rich
   ];
 
   nativeCheckInputs = with python3.pkgs; [
@@ -45,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to obtain GraphQL API schemas";
     homepage = "https://github.com/nikitastupin/clairvoyance";
+    changelog = "https://github.com/nikitastupin/clairvoyance/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

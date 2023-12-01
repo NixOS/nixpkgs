@@ -6,11 +6,12 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.21.3";
+  version = "0.25.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "Colin-b";
     repo = "pytest_httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+jOPbEul/mkZbaR6ZqwLTgVtemi18vOYgqJcgv6JSII=";
+    hash = "sha256-8cuXsHyS9OaYXzKXgwan+mBFocyr39B9G8wr8I1pmg4=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   buildInputs = [
     pytest
@@ -28,6 +33,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     httpx
+  ];
+
+  pythonRelaxDeps = [
+    "httpx"
   ];
 
   nativeCheckInputs = [

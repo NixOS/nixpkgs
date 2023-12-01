@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "oss2";
-  version = "2.17.0";
+  version = "2.18.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
     rev = "refs/tags/${version}";
-    hash = "sha256-EL6qbtVyOJ2RGw3sZiRJouqVNLBMUKGycAZl31M1+oQ=";
+    hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,9 @@ buildPythonPackage rec {
     "tests/test_api_base.py"
     "tests/test_async_fetch_task.py"
     "tests/test_bucket_access_monitor.py"
+    "tests/test_bucket_callback_policy.py"
     "tests/test_bucket_cname.py"
+    "tests/test_bucket_describe_regions.py"
     "tests/test_bucket_inventory.py"
     "tests/test_bucket_meta_query.py"
     "tests/test_bucket_replication.py"
@@ -75,6 +77,7 @@ buildPythonPackage rec {
     "tests/test_crypto_object.py"
     "tests/test_crypto.py"
     "tests/test_download.py"
+    "tests/test_exception_ec.py"
     "tests/test_headers.py"
     "tests/test_image.py"
     "tests/test_init.py"
@@ -103,6 +106,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_crypto_get_compact_deprecated_kms"
+    # RuntimeError
+    "test_crypto_put"
+    # Tests require network access
+    "test_write_get_object_response"
   ];
 
   meta = with lib; {

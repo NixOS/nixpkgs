@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "mathaou";
     repo = "termdbms";
     rev = "d46e72c796e8aee0def71b8e3499b0ebe5ca3385";
-    sha256 = "1c3xgidhmvlcdw7v5gcqzv27cb58f1ix8sfd4r14rfz7c8kbv37v";
+    hash = "sha256-+4y9JmLnu0xCJs1p1GNwqCx2xP6YvbIPb4zuClt8fbA=";
   };
 
-  vendorSha256 = "0h9aw68niizd9gs0i890g6ij13af04qgpfy1g5pskyr4ryx0gn26";
+  vendorHash = "sha256-RtgHus8k+6lvecG7+zABTo0go3kgoQj0S+3HaJHhKkE=";
 
   patches = [ ./viewer.patch ];
 

@@ -1,12 +1,11 @@
 { lib
-, stdenv
 , ocamlPackages
 , fetchFromGitHub
 , makeWrapper
 , python3
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "flitter";
   # request to tag releases: https://github.com/alexozer/flitter/issues/34
   version = "unstable-2020-10-05";
@@ -57,5 +56,6 @@ ocamlPackages.buildDunePackage rec {
     maintainers = with maintainers; [ fgaz ];
     homepage = "https://github.com/alexozer/flitter";
     platforms = platforms.unix;
+    mainProgram = "flitter";
   };
 }

@@ -4,6 +4,7 @@
   "date": "2023-04-03T22:59:58+05:30",
   "path": "/nix/store/lqqls8g9zhiv2v32if429cwycn092zq6-tree-sitter-svelte",
   "sha256": "1kp91sarydq41zznwxwxdv2i2pflgzhmpfv0iqgq47fma9bcv2wy",
+  "hash": "sha256-novNVlLVHYIfjmC7W+F/1F0RxW6dd27/DwQ3n5UO6c4=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -13,6 +14,12 @@ python3.pkgs.buildPythonApplication rec {
     repo = "baboossh";
     rev = "refs/tags/v${version}";
     hash = "sha256-dorIqnJuAS/y9W6gyt65QjwGwx4bJHKLmdqRPzY25yA=";
+  };
+
+  patches = fetchpatch {
+    name = "py3compat-utils.patch";
+    url = "https://github.com/cybiere/baboossh/commit/f7a75ebeda0c69ab5b119894b9e1488fc0a935a8.patch";
+    hash = "sha256-gctuu/Qd3nmJIWv2mTyrGwjlQD1U+OhGK6Zh/Un06/E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

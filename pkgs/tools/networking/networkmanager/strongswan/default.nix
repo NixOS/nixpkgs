@@ -7,7 +7,6 @@
 , strongswanNM
 , gtk3
 , gtk4
-, gnome
 , libsecret
 , libnma
 , libnma-gtk4

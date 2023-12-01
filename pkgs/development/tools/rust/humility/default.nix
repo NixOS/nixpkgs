@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "humility";
-  version = "unstable-2022-09-15";
+  version = "unstable-2023-11-08";
 
   nativeBuildInputs = [ pkg-config cargo-readme ];
   buildInputs = [ libusb1 libftdi ] ++ lib.optionals stdenv.isDarwin [
@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = pname;
-    rev = "d336c21c7b6da7f8203a9331c7657581de2bc6ad";
-    sha256 = "sha256-yW7QcxTWbL2YsV2bvfhbqQ2nawlPQbYxBfIGCWo28GY=";
+    rev = "67d932edde8b32c11e5d6356a54e97d65f7b9b2b";
+    sha256 = "sha256-3EVNlOAVfx/wUFn83VBKs1N5PanS4jVADUPlhCIok5M=";
   };
 
   cargoLock = {
@@ -31,15 +31,14 @@ rustPlatform.buildRustPackage rec {
       "capstone-0.10.0" = "sha256-x0p005W6u3QsTKRupj9HEg+dZB3xCXlKb9VCKv+LJ0U=";
       "hidapi-1.4.1" = "sha256-2SBQu94ArGGwPU3wJYV0vwwVOXMCCq+jbeBHfKuE+pA=";
       "hif-0.3.1" = "sha256-o3r1akaSARfqIzuP86SJc6/s0b2PIkaZENjYO3DPAUo=";
-      "idol-0.2.0" = "sha256-T4wxeSTH2tFBR8L5wL5a0gLDfcRLpALyGBE0dYNQwLI=";
+      "humpty-0.1.3" = "sha256-efeb+RaAjQs9XU3KkfVo8mVK2dGyv+2xFKSVKS0vyTc=";
+      "idol-0.3.0" = "sha256-s6ZM/EyBE1eOySPah5GtT0/l7RIQKkeUPybMmqUpmt8=";
       "idt8a3xxxx-0.1.0" = "sha256-S36fS9hYTIn57Tt9msRiM7OFfujJEf8ED+9R9p0zgK4=";
       "libusb1-sys-0.5.0" = "sha256-7Bb1lpZvCb+OrKGYiD6NV+lMJuxFbukkRXsufaro5OQ=";
-      "pmbus-0.1.0" = "sha256-KBc7gFwrN1jv1HXygda7qE3ZYNWAO10Wl3X6alc2JOE=";
-      "probe-rs-0.12.0" = "sha256-L2kQNAdSvv5x1goELuy3pZZzmoUDc4tMX3OJ7A5rAD0=";
-      "serialport-4.2.1-alpha.0" = "sha256-a2A2rKll2RTSyvohqRUSQ4Sw6puJdlTZoof5rePxPVE=";
+      "pmbus-0.1.0" = "sha256-20peEHZl6aXcLhw/OWb4RHAXWRNqoMcDXXglwNP+Gpc=";
+      "probe-rs-0.12.0" = "sha256-/L+85K6uxzUmz/TlLLFbMlyekoXC/ClO33EQ/yYjQKU=";
       "spd-0.1.0" = "sha256-X6XUx+huQp77XF5EZDYYqRqaHsdDSbDMK8qcuSGob3E=";
-      "tlvc-0.1.0" = "sha256-SKaVDKFUveZ/iSbKUrVbFIbni7HxCZG4P7fZxkBxY1k=";
-      "tlvc-text-0.1.0" = "sha256-uHPPyc3Ns5L1/EFNCzH8eBEoqLlJoqguZxwNCNxfM6Q=";
+      "tlvc-0.2.0" = "sha256-HiqDRqmKOTxz6UQSXNMOZdWdc5W+cFGuKBkNrqFvIIE=";
       "vsc7448-info-0.1.0" = "sha256-otNLdfGIzuyu03wEb7tzhZVVMdS0of2sU/AKSNSsoho=";
     };
   };

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "versioneer";
-  version = "0.28";
+  version = "0.29";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "python-versioneer";
     repo = "python-versioneer";
     rev = "refs/tags/${version}";
-    hash = "sha256-Jy0c1I3kLgJAeGWzcgl5qVAWesf4EXaMIOW03B+1yWE=";
+    hash = "sha256-3b7Wfhd24Vym5XCeN/M1832Q1VzvlWi3quTRaZrID2s=";
   };
 
   nativeBuildInputs = [

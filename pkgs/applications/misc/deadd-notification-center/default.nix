@@ -1,4 +1,4 @@
-{ mkDerivation, haskellPackages, fetchFromGitHub, lib, writeText }:
+{ mkDerivation, haskellPackages, fetchFromGitHub, lib }:
 
 let
   # deadd-notification-center.service
@@ -17,13 +17,13 @@ let
   '';
 in mkDerivation rec {
   pname = "deadd-notification-center";
-  version = "unstable-2022-11-07";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
-    rev = "f4b8e2b724d86def9e7b0e12ea624f95760352d5";
-    hash = "sha256-ClJfWqStULvmj5YRAUDAmn2WOSA2sVtyZsa+qSY51Gk=";
+    rev = version;
+    hash = "sha256-VU9NaQVS0n8hFRjWMvCMkaF5mZ4hpnluV31+/SAK7tU=";
   };
 
   isLibrary = false;
@@ -31,11 +31,11 @@ in mkDerivation rec {
   isExecutable = true;
 
   libraryHaskellDepends = with haskellPackages; [
-    base bytestring ConfigFile containers dbus directory env-locale
+    aeson base bytestring ConfigFile containers dbus directory env-locale
     filepath gi-cairo gi-gdk gi-gdkpixbuf gi-gio gi-glib gi-gobject
     gi-gtk gi-pango haskell-gettext haskell-gi haskell-gi-base
     hdaemonize here lens mtl process regex-tdfa setlocale split stm
-    tagsoup text time transformers tuple unix
+    tagsoup text time transformers tuple unix yaml
   ];
 
   executableHaskellDepends = with haskellPackages; [ base ];

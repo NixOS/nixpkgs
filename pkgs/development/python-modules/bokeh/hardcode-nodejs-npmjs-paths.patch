@@ -1,9 +1,8 @@
-diff --git a/bokeh/util/compiler.py b/bokeh/util/compiler.py
-index a752aad7d..8af05ff63 100644
---- a/bokeh/util/compiler.py
-+++ b/bokeh/util/compiler.py
-@@ -442,8 +442,8 @@ def _detect_nodejs():
-     raise RuntimeError('node.js v%s or higher is needed to allow compilation of custom models ' % version +
+diff -ru a/src/bokeh/util/compiler.py b/src/bokeh/util/compiler.py
+--- a/src/bokeh/util/compiler.py
++++ b/src/bokeh/util/compiler.py
+@@ -411,8 +411,8 @@
+     raise RuntimeError(f'node.js v{version_repr} or higher is needed to allow compilation of custom models ' +
                         '("conda install nodejs" or follow https://nodejs.org/en/download/)')
  
 -_nodejs = None
@@ -11,5 +10,5 @@ index a752aad7d..8af05ff63 100644
 +_nodejs = "@node_bin@"
 +_npmjs = "@npm_bin@"
  
- def _nodejs_path():
+ def _nodejs_path() -> str:
      global _nodejs

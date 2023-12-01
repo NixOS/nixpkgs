@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2023.04.0";
+  version = "2023.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ar2UGSlVukMD5EZsEn7TFfIOovaI+B3Ym+UeGo95oks=";
+    hash = "sha256-Q7jb0tJsbVM2vEqKgjXOWJN2OwR9qLchU/4ShOUGPT4=";
   };
 
   postPatch = ''
@@ -42,6 +42,8 @@ buildPythonPackage rec {
     python-socketio
     websockets
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

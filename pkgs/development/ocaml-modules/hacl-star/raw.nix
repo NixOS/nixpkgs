@@ -12,19 +12,17 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchzip {
     url = "https://github.com/cryspen/hacl-packages/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
-    sha256 = "sha256-jJtxVYhQgP8ItfLhQ2wcF8RKNRnYhB2j0nR7/YH1NfY=";
+    hash = "sha256-TcAEaJou4BOVXSz5DYewzKfvIpjXmhLAlgF0hlq3ToQ=";
     stripRoot = false;
   };
 
   patches = [
     ./aligned-alloc.patch
   ];
-
-  minimalOCamlVersion = "4.08";
 
   # strictoverflow is disabled because it breaks aarch64-darwin
   hardeningDisable = [ "strictoverflow" ];

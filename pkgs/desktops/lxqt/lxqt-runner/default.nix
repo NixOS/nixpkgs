@@ -20,24 +20,24 @@
 
 mkDerivation rec {
   pname = "lxqt-runner";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "iC0XTdgB1+hwMfc/45JiEfAhwadbFOgTTJj9Kvxx+l4=";
+    hash = "sha256-NGytLQ2D5t1UdMGZoeHxHaXPwbRFDx+11ocjImXqZBU=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     lxqt-build-tools
+    qttools
   ];
 
   buildInputs = [
     qtbase
-    qttools
     qtsvg
     qtx11extras
     kwindowsystem

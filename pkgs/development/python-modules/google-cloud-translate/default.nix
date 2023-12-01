@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.11.1";
+  version = "3.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-keQK0Lc34yphEQZFEU6T/7rfXS/9clwSreE0frWO+s8=";
+    hash = "sha256-Zhy4h5qjxjovclo+po+QGZvTVMlcoWnMLoOlEFmH0p4=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-translate";
     changelog = "https://github.com/googleapis/python-translate/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

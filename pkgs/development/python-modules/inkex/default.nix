@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, inkscape
 , fetchFromGitLab
 , poetry-core
 , cssselect
@@ -8,6 +9,7 @@
 , packaging
 , pillow
 , pygobject3
+, pyparsing
 , pyserial
 , scour
 , gobject-introspection
@@ -15,24 +17,13 @@
 , gtk3
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "inkex";
-  version = "1.2.2";
+  inherit (inkscape) version;
 
   format = "pyproject";
 
-  src = fetchFromGitLab {
-    owner = "inkscape";
-    repo = "extensions";
-    rev = "EXTENSIONS_AT_INKSCAPE_${version}";
-    hash = "sha256-jw7daZQTBxLHWOpjZkMYtP1vIQvd/eLgiktWqVSjEgU=";
-  };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"1.2.0"' '"${version}"' \
-      --replace 'scour = "^0.37"' 'scour = ">=0.37"'
-  '';
+  inherit (inkscape) src;
 
   nativeBuildInputs = [
     poetry-core
@@ -42,11 +33,8 @@ buildPythonPackage rec {
     cssselect
     lxml
     numpy
-    packaging
-    pillow
     pygobject3
     pyserial
-    scour
   ];
 
   pythonImportsCheck = [ "inkex" ];
@@ -58,6 +46,10 @@ buildPythonPackage rec {
 
   checkInputs = [
     gtk3
+    packaging
+    pillow
+    pyparsing
+    scour
   ];
 
   disabledTests = [
@@ -73,6 +65,13 @@ buildPythonPackage rec {
     # Failed to find pixmap 'image-missing' in /build/source/tests/data/
     "tests/test_inkex_gui_pixmaps.py"
   ];
+
+  postPatch = ''
+    cd share/extensions
+
+    substituteInPlace pyproject.toml \
+      --replace 'scour = "^0.37"' 'scour = ">=0.37"'
+  '';
 
   meta = {
     description = "Library for manipulating SVG documents which is the basis for Inkscape extensions";

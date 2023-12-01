@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
-  version = "2.4.1";
+  version = "2.6.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "jieter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04vvgf18diwp0mgp14b71a0dxhgrcslv1ljybi300gvzvzjnp3qv";
+    hash = "sha256-n8qvsm/i+2VclFc00jQGO0Z4l6Ke8qZ03EYuEQcPuVQ=";
   };
 
   propagatedBuildInputs = [

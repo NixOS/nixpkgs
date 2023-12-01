@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-c6xAgOxle51waiFsSWvwO9eyt1KXuM0dEeepVsRQHkk=";
   };
 
-  vendorSha256 = "sha256-j0UzucZ6kDwM+6U0ZyIW9u8XG/Bn+VUCO2vV1BbnQo0=";
+  vendorHash = "sha256-j0UzucZ6kDwM+6U0ZyIW9u8XG/Bn+VUCO2vV1BbnQo0=";
 
   meta = with lib; {
     description = "IP lookups for open ports and vulnerabilities from internetdb.shodan.io";

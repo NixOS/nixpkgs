@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # remove vendored libraries
     rm -r external/{miniupnpc,rapidjson}
+
+    # include missing headers
+    sed -i "1i #include <map>" src/device/device_default.hpp
+    sed -i "1i #include <boost/mpl/contains.hpp>" contrib/epee/include/storages/portable_storage.h
   '';
 
   nativeBuildInputs = [ cmake pkg-config git ];

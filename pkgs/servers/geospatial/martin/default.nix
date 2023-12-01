@@ -1,21 +1,21 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.8.4";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
     rev = "v${version}";
-    hash = "sha256-8TuEwJEtJSyGPrqTPo145oGszyFyGiok9xWm9MkOxzw=";
+    hash = "sha256-Jq72aEwM5bIaVywmS3HetR6nnBZnr3oa9a/4ZbgeL9E=";
   };
 
-  cargoHash = "sha256-+Mj2mKLRh6ZLERAi2kyMzjlgY4tgOGYyn/ZoVPz+1BY=";
+  cargoHash = "sha256-RO9nUH2+0jOCbvGtZ5j802mL85tY+Jz7ygPrNuFeE98=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   checkFlags = [
     "--skip function_source_schemas"

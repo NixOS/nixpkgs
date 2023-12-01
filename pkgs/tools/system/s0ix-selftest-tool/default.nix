@@ -12,7 +12,6 @@
   pciutils,
   powertop,
   resholve,
-  stdenv,
   util-linux,
   xorg,
   xxd,
@@ -77,5 +76,6 @@ resholve.mkDerivation {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [adamcstephens];
+    mainProgram = "s0ix-selftest-tool";
   };
 }

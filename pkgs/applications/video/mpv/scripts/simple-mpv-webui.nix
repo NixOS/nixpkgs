@@ -1,21 +1,18 @@
-{ lib, stdenvNoCC
+{ lib, buildLua
 , fetchFromGitHub }:
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "simple-mpv-ui";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "open-dynaMIX";
     repo = "simple-mpv-webui";
     rev = "v${version}";
-    sha256 = "1z0y8sdv5mbxznxqh43w5592ym688vkvqg7w26p8cinrhf09pbw8";
+    hash = "sha256-I8lwpo3Hfpy3UnPMmHEJCdArVQnNL245NkxsYVmnMF0=";
+    sparseCheckout = [ "main.lua" "webui-page" ];
   };
 
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/share/mpv/scripts
-    cp -r webui.lua webui-page $out/share/mpv/scripts/
-  '';
+  scriptPath = ".";
   passthru.scriptName = "webui.lua";
 
   meta = with lib; {
@@ -30,4 +27,3 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
   };
 }
-

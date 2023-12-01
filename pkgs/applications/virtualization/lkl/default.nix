@@ -56,6 +56,10 @@ stdenv.mkDerivation rec {
        tools/lkl/lib/hijack/liblkl-hijack.so $lib/lib
   '';
 
+  postFixup = ''
+    ln -s $out/bin/lklfuse $out/bin/mount.fuse.lklfuse
+  '';
+
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):
   #   fs/xfs/xfs_log_recover.c:2575:3: error: format not a string literal and no format arguments [-Werror=format-security]
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."

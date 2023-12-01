@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "kube-router";
-  version = "1.5.4";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/ruSSq+iHmJDFHH+mLoqtdljAGlc15lXjTqq+luJIU8=";
+    hash = "sha256-Iwo+I1EfclkF4FL8QM3xGkIFxakmelI+hSUepLwfFSw=";
   };
 
-  vendorHash = "sha256-U2TvH4TPBI6verEcyv0Z+ZFAKbADgzncJhW1IAJw4Ms=";
+  vendorHash = "sha256-VjPesQ27GcwnFQrNI+VYzJ4/aahcjASbfMi//Zs/KLM=";
 
   CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudnativelabs/kube-router/pkg/version.Version=${version}"
-    "-X github.com/cloudnativelabs/kube-router/pkg/version.BuildDate=Nix"
+    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.Version=${version}"
+    "-X github.com/cloudnativelabs/kube-router/v2/pkg/version.BuildDate=Nix"
   ];
 
   passthru.tests.version = testers.testVersion {

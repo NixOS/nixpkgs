@@ -12,12 +12,7 @@ in
   options.services.ntfy-sh = {
     enable = mkEnableOption (mdDoc "[ntfy-sh](https://ntfy.sh), a push notification service");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.ntfy-sh;
-      defaultText = literalExpression "pkgs.ntfy-sh";
-      description = mdDoc "The ntfy.sh package to use.";
-    };
+    package = mkPackageOption pkgs "ntfy-sh" { };
 
     user = mkOption {
       default = "ntfy-sh";
@@ -32,7 +27,25 @@ in
     };
 
     settings = mkOption {
-      type = types.submodule { freeformType = settingsFormat.type; };
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+        options = {
+          base-url = mkOption {
+            type = types.str;
+            example = "https://ntfy.example";
+            description = lib.mdDoc ''
+              Public facing base URL of the service
+
+              This setting is required for any of the following features:
+              - attachments (to return a download URL)
+              - e-mail sending (for the topic URL in the email footer)
+              - iOS push notifications for self-hosted servers
+                (to calculate the Firebase poll_request topic)
+              - Matrix Push Gateway (to validate that the pushkey is correct)
+            '';
+          };
+        };
+      };
 
       default = { };
 

@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pizarra";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitLab {
     owner = "categulario";
     repo = "pizarra-gtk";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-fWwAmzF3ppCvJZ0K4EDrmP8SVPVRayEQTtbhNscZIF0=";
+    sha256 = "sha256-vnjhveX3EVIfJLiHWhlvhoPcRx1a8Nnjj7hIaPgU3Zw=";
   };
 
-  cargoSha256 = "sha256-pxRJXUeFGdVj6iCFZ4Y8b9z5hw83g8YywpKztTZ0g+4=";
+  cargoHash = "sha256-btvMUKADGHlXLmeKF1K9Js44SljZ0MejGId8aDwPhVU=";
 
   nativeBuildInputs = [ wrapGAppsHook pkg-config gdk-pixbuf ];
 

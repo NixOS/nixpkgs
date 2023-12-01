@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "okonomiyaki";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "enthought";
     repo = pname;
-    rev = version;
-    hash = "sha256-eWCOuGtdjBGThAyu15aerclkSWC593VGDPHJ98l30iY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MEll1H7l41m8uz2/WK/Ilm7Dubg0uqYwe+ZgakO1aXQ=";
   };
 
   propagatedBuildInputs = [ distro attrs jsonschema six zipfile2 ];

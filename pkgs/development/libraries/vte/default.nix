@@ -20,6 +20,7 @@
 , gperf
 , pango
 , pcre2
+, cairo
 , fribidi
 , zlib
 , icu
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.72.1";
+  version = "0.74.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BVT5+I1Wzi14OY/Mf2m8AOU7u8X2lOCuHcr1KG+J1+Q=";
+    sha256 = "sha256-IyjD8cmYNQoY4OUTNI6fxYHVfqTnuJrt8R4OPGUEK08=";
   };
 
   patches = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     fribidi
     gnutls
     pcre2
@@ -82,11 +84,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonBool "gtk3" (gtkVersion == "3"))
+    (lib.mesonBool "gtk4" (gtkVersion == "4"))
   ] ++ lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals (gtkVersion == "4") [
-    "-Dgtk3=false"
-    "-Dgtk4=true"
   ] ++ lib.optionals stdenv.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"

@@ -1,20 +1,40 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
 , pytest
 , unicodecsv
+, rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.9.0";
+  version = "1.0.0";
 
   disabled = !isPy3k;
 
+  format = "pyproject";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40c9a2ffd8bd3016f7611d424120442f627f56d518a106847dc93f0ead6ad79a";
+    hash = "sha256-iBquNnGZm7B85QwnaW8pyn6ELz4SOswNtlJcmZmIG9Q=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [
+    maturinBuildHook
+    cargoSetupHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}-rust-dependencies";
+    hash = "sha256-Grk+n4VCPjirafcRWWI51jHw/IFUYkBtbXY739j0MFI=";
   };
 
   nativeCheckInputs = [ pytest unicodecsv ];

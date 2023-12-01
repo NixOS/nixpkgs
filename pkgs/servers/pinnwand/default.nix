@@ -50,6 +50,7 @@ with python3.pkgs; buildPythonApplication rec {
     homepage = "https://supakeen.com/project/pinnwand/";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "pinnwand";
   };
 }
 

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "pprof";
-  version = "unstable-2022-05-09";
+  version = "unstable-2023-07-05";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "59ca7ad80af3faf4f87f4d82ff02f5d390c08ed6";
-    sha256 = "0jni73ila3glg7rl11v0al947d94dd0syhkjqnliaryh8dkxbx80";
+    rev = "200ffdc848b879f8aff937ffeba601c186916257";
+    hash = "sha256-/Y1Tj9z+2MNe+b2vzd4F+PwHGSbCYP7HpbaDUL9ZzKQ=";
   };
 
-  vendorSha256 = "0vr8jp3kxgadb73g67plfrl5dkxfwrxaxjs664918jssy25vyk2y";
+  vendorHash = "sha256-MuejFoK49VMmLt7xsiX/4Av7TijPwM9/mewXlfdufd8=";
 
   meta = with lib; {
     description = "A tool for visualization and analysis of profiling data";

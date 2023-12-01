@@ -1,20 +1,23 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, python3
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.22";
+  version = "0.4.23";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-v1fXEC+bV561cewH17x+1anhfXstGBOHG5rHvhYIvLo=";
+    hash = "sha256-LNMc+3pXx7VyNq0dws+s13ZA3+f8aJzgbAxzI71NKx0=";
   };
 
-  cargoSha256 = "sha256-krQTa9R3hmMVKLoBgnbCw+aSQu9HUXfA3XflB8AZv6w=";
+  cargoHash = "sha256-UjXJmH4UI5Vey2rBy57CI1r13bpGYhIozEoOoyoRDLQ=";
+
+  nativeBuildInputs = [ python3 ];
 
   # fix for compilation on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726

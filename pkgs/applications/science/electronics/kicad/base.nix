@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+    # https://gitlab.com/kicad/code/kicad/-/issues/15687
+    ./runtime_stock_data_path.patch
   ];
 
   # tagged releases don't have "unknown"
@@ -77,13 +79,12 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString (!stable) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
+
+    substituteInPlace cmake/CreateGitVersionHeader.cmake \
+      --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
-
-  # some ngspice tests attempt to write to $HOME/.cache/
-  XDG_CACHE_HOME = "$TMP";
-  # failing tests still attempt to create $HOME though
 
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
@@ -105,7 +106,6 @@ stdenv.mkDerivation rec {
     "-DKICAD_BUILD_QA_TESTS=OFF"
   ]
   ++ optionals (debug) [
-    "-DCMAKE_BUILD_TYPE=Debug"
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
   ]
@@ -115,6 +115,8 @@ stdenv.mkDerivation rec {
   ++ optionals (sanitizeThreads) [
     "-DKICAD_SANITIZE_THREADS=ON"
   ];
+
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake
@@ -165,9 +167,23 @@ stdenv.mkDerivation rec {
   ++ optional (withNgspice) libngspice
   ++ optional (debug) valgrind;
 
+  # some ngspice tests attempt to write to $HOME/.cache/
+  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
+  # but failing tests still attempt to create $HOME
+  # and the newer CLI tests seem to also use $HOME...
+  HOME = "$TMP";
+
   # debug builds fail all but the python test
   doInstallCheck = !(debug);
   installCheckTarget = "test";
+
+  pythonForTests = python.withPackages(ps: with ps; [
+    numpy
+    pytest
+    cairosvg
+    pytest-image-diff
+  ]);
+  nativeInstallCheckInputs = optional (!stable) pythonForTests;
 
   dontStrip = debug;
 

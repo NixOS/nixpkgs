@@ -10,7 +10,7 @@ buildGoModule {
     sha256 = "sha256-SdD4EE/rc85H7xqKB/kU8XFsC63i1sVObPha/zrxFGk=";
   };
 
-  vendorSha256 = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
+  vendorHash = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
 
   meta = with lib; {
     description = "A file system based matrix client";

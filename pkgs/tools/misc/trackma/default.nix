@@ -24,27 +24,28 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "trackma";
-  version = "0.8.5";
+  version = "0.8.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
     rev = "v${version}";
-    sha256 = "sha256-BjZw/AYFlTYtgJTDFOALHx1d71ZQsYZ2TXnEUeQVvpw=";
+    sha256 = "qlkFQSJFjxkGd5WkNGfyAo64ys8VJLep/ZOL6icXQ4c=";
     fetchSubmodules = true; # for anime-relations submodule
   };
 
-  nativeBuildInputs = [ copyDesktopItems ]
+  nativeBuildInputs = [ copyDesktopItems python3.pkgs.poetry-core ]
     ++ lib.optionals withGTK [ wrapGAppsHook gobject-introspection ]
     ++ lib.optionals withQT [ qt5.wrapQtAppsHook ];
 
   buildInputs = lib.optionals withGTK [ glib gtk3 ];
 
-  propagatedBuildInputs = with python3.pkgs; ([ urllib3 ]
+  propagatedBuildInputs = with python3.pkgs; ([ requests ]
     ++ lib.optionals withQT [ pyqt5 ]
-    ++ lib.optionals withGTK [ pycairo ]
+    ++ lib.optionals withGTK [ pycairo pygobject3 ]
     ++ lib.optionals withCurses [ urwid ]
-    ++ lib.optionals stdenv.isLinux [ dbus-python pygobject3 pyinotify ]
+    ++ lib.optionals stdenv.isLinux [ pydbus pyinotify ]
     ++ lib.optionals (withGTK || withQT) [ pillow ]);
 
   dontWrapQtApps = true;

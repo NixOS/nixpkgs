@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hZK+lLH9fCEvujLuvAqkVVmRCRM9DfhCUv7JbirTIu4=";
+    hash = "sha256-wIyPb1RxvjkGu3Gs69HyL1WuLZUIFWB8URJjkz3oar0=";
   };
 
-  cargoHash = "sha256-hAxIS9gc5EBDy00U1JSnLZYifCzJAEcwhaalzrUjT9M=";
+  cargoHash = "sha256-iB8KL0ad+rI4HuZLgb7KqfrUBTQuKRWjqaa6BnHU5eg=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -61,5 +61,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "sniffnet";
   };
 }

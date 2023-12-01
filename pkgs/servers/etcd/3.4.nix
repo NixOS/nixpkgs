@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "etcd";
-  version = "3.4.26";
+  version = "3.4.27";
 
   vendorHash = "sha256-duqOIMIXAuJjvKDM15mDdi+LZUZm0uK0MjTv2Dsl3FA=";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "sha256-EobwFYdFVCal7V1KyODuIry3ZBvRUG1/XYZkVQoibkg=";
+    sha256 = "sha256-iw9rWfloK1h0M0O10AqCFKETSN6Adn71ujn4twVgsnk=";
   };
 
   buildPhase = ''
@@ -29,6 +29,6 @@ buildGoModule rec {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline zowoq ];
+    maintainers = with maintainers; [ offline ];
   };
 }

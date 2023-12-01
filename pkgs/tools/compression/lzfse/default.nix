@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    mainProgram = "lzfse";
   };
 }

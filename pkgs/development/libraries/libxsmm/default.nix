@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PpMiD/PeQ0pe5hqFG6VFHWpR8y3wnO2z1dJfHHeItlQ=";
   };
 
+  outputs = [ "out" "dev" "doc" ];
   nativeBuildInputs = [
     gfortran
     python3
@@ -33,6 +34,13 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "STATIC=${static}"
   ];
+
+  postInstall = ''
+    mkdir -p $dev/lib/pkgconfig
+    mv $out/lib/*.pc $dev/lib/pkgconfig
+
+    moveToOutput "share/libxsmm" "$doc"
+  '';
 
   prePatch = ''
     patchShebangs .

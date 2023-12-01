@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ms-sys.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = with platforms; linux;
+    mainProgram = "ms-sys";
   };
 }

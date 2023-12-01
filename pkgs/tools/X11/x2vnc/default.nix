@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "A program to control a remote VNC server";
     platforms = platforms.unix;
     license = licenses.gpl2;
+    mainProgram = "x2vnc";
   };
 }

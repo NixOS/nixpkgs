@@ -7,15 +7,12 @@
 #include "libnix-copy-paste.hh"
 #include <boost/format/alt_sstream.hpp>           // for basic_altstringbuf...
 #include <boost/format/alt_sstream_impl.hpp>      // for basic_altstringbuf...
-#include <boost/format/format_class.hpp>          // for basic_format
-#include <boost/format/format_fwd.hpp>            // for format
-#include <boost/format/format_implementation.hpp> // for basic_format::basi...
 #include <boost/optional/optional.hpp>            // for get_pointer
 #include <iostream>                               // for operator<<, basic_...
-#include <nix/types.hh>                           // for Strings, Error
+#include <nix/types.hh>                           // for Strings
+#include <nix/error.hh>                           // for Error
 #include <string>                                 // for string, basic_string
 
-using boost::format;
 using nix::Error;
 using nix::Strings;
 using std::string;
@@ -34,7 +31,7 @@ Strings parseAttrPath(const string & s)
             ++i;
             while (1) {
                 if (i == s.end())
-                    throw Error(format("missing closing quote in selection path '%1%'") % s);
+                    throw Error("missing closing quote in selection path '%1%'", s);
                 if (*i == '"')
                     break;
                 cur.push_back(*i++);

@@ -4,27 +4,27 @@
 , pefile
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dnfile";
-  version = "0.13.0";
-  format = "setuptools";
+  version = "0.14.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "malwarefrank";
-    repo = pname;
+    repo = "dnfile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TH30gEoxXkaDac6hJsGQFWzwDeqzdZ19HK8i/3Dlh8k=";
+    hash = "sha256-5xkoG7c9Piwrv+9qour7MZ+rabdngtd05b0T+AU8tSo=";
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pefile

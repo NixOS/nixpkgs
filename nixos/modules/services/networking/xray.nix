@@ -16,14 +16,7 @@ with lib;
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xray;
-        defaultText = literalExpression "pkgs.xray";
-        description = lib.mdDoc ''
-          Which xray package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "xray" { };
 
       settingsFile = mkOption {
         type = types.nullOr types.path;
@@ -90,6 +83,9 @@ with lib;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/xray -config ${settingsFile}";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        NoNewPrivileges = true;
       };
     };
   };

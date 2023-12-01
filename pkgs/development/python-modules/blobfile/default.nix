@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";
     homepage = "https://github.com/christopher-hesse/blobfile";
     changelog = "https://github.com/christopher-hesse/blobfile/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
+    license = licenses.unlicense;
     maintainers = with maintainers; [ happysalada ];
   };
 }

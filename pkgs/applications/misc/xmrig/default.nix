@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.19.1";
+  version = "6.21.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    hash = "sha256-m8ot/IbpxdzHOyJymzZ7MWt4p78GTUuTjYZ9P1oGpWI=";
+    hash = "sha256-7OHfFo8+MUNSI3vpOIODKQH41jmraHDJOyqfLBp/v9o=";
   };
 
   patches = [
@@ -59,10 +59,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/245534
+  hardeningDisable = [ "fortify" ];
+
   meta = with lib; {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
+    mainProgram = "xmrig";
     platforms = platforms.unix;
     maintainers = with maintainers; [ kim0 ];
   };

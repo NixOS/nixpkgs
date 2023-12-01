@@ -1,27 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, python
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
 , pygments
+, rich
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "1.1.1";
+  version = "1.3.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mHNuV3yIuFL2cixDOr+//+/b9iD2fN82cfLzZkegxKc=";
+  src = fetchFromGitHub {
+    owner = "catppuccin";
+    repo = "python";
+    rev = "v${version}";
+    hash = "sha256-spPZdQ+x3isyeBXZ/J2QE6zNhyHRfyRQGiHreuXzzik=";
   };
 
-  propagatedBuildInputs = [ pygments ];
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
+
+  passthru.optional-dependencies = {
+    pygments = [ pygments ];
+    rich = [ rich ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    "tests/test_flavour.py" # would download a json to check correctness of flavours
+  ];
 
   pythonImportsCheck = [ "catppuccin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Soothing pastel theme for Python";
     homepage = "https://github.com/catppuccin/python";
-    maintainers = with maintainers; [ fufexan ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ fufexan tomasajt ];
+    license = lib.licenses.mit;
   };
 }

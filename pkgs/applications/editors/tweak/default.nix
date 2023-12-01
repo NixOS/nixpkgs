@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
   preBuild = "substituteInPlace Makefile --replace '$(DESTDIR)/usr/local' $out";
+  makeFlags = [ "CC:=$(CC)" "LINK:=$(CC)" ];
 
   meta = with lib; {
     description = "An efficient hex editor";
     homepage = "http://www.chiark.greenend.org.uk/~sgtatham/tweak";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "tweak";
   };
 }

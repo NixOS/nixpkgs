@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2023.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "aioguardian";
     rev = "refs/tags/${version}";
-    hash = "sha256-plgO+pyKmG0mYnFZxDcrENcuEg5AG2Og2xWipzuzyHo=";
+    hash = "sha256-hTV6P9J7SS5lnV/9eFUCFPZu1GIeshytWQvNTbGs52w=";
   };
 
   nativeBuildInputs = [

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ghostie";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "attriaayush";
     repo = "ghostie";
     rev = "v${version}";
-    sha256 = "sha256-kdDdKI4nJqomA2h370JT180qQ+EkcLaF4NAG+PjydGE=";
+    sha256 = "sha256-lEjJLmBA3dlIVxc8E+UvR7u154QGeCfEbxdgUxAS3Cw=";
   };
 
   cargoLock = {
@@ -51,5 +51,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     broken = stdenv.isx86_64 && stdenv.isDarwin;
+    mainProgram = "ghostie";
   };
 }

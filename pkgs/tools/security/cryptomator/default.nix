@@ -4,51 +4,30 @@
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook
 }:
 
+
 let
+  mavenJdk = maven.override {
+    jdk = jdk;
+  };
+in
+assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
+mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.8.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
+    hash = "sha256-NMNlDEUpwKUywzhXhxlNX7NiE+6wOov2Yt8nTfbKTNI=";
   };
 
-  # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
-  deps = stdenv.mkDerivation {
-    name = "cryptomator-${version}-deps";
-    inherit src;
+  mvnParameters = "-Dmaven.test.skip=true";
+  mvnHash = "sha256-jIHMUj7ZQFu4XAvWUywj4f0PbmLHGtU5VRG0ZuKm3mA=";
 
-    nativeBuildInputs = [ jdk maven ];
-    buildInputs = [ jdk ];
-
-    buildPhase = ''
-      while mvn -Plinux package -Dmaven.test.skip=true -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
-        echo "timeout, restart maven to continue downloading"
-      done
-    '';
-
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''
-      find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete
-      find $out/.m2 -type f -iname '*.pom' -exec sed -i -e 's/\r\+$//' {} \;
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
-
-    doCheck = false;
-  };
-
-in stdenv.mkDerivation rec {
-  inherit pname version src;
-
-  buildPhase = ''
+  preBuild = ''
     VERSION=${version}
     SEMVER_STR=${version}
-
-    mvn -Plinux package --offline -Dmaven.test.skip=true -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
 
 
@@ -63,11 +42,13 @@ in stdenv.mkDerivation rec {
       --add-flags "--enable-preview" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
-      --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
-      --add-flags "-Dcryptomator.pluginDir='~/.local/share/Cryptomator/plugins'" \
-      --add-flags "-Dcryptomator.settingsPath='~/.config/Cryptomator/settings.json'" \
-      --add-flags "-Dcryptomator.ipcSocketPath='~/.config/Cryptomator/ipc.socket'" \
-      --add-flags "-Dcryptomator.mountPointsDir='~/.local/share/Cryptomator/mnt'" \
+      --add-flags "-Dfile.encoding='utf-8'" \
+      --add-flags "-Dcryptomator.logDir='@{userhome}/.local/share/Cryptomator/logs'" \
+      --add-flags "-Dcryptomator.pluginDir='@{userhome}/.local/share/Cryptomator/plugins'" \
+      --add-flags "-Dcryptomator.settingsPath='@{userhome}/.config/Cryptomator/settings.json'" \
+      --add-flags "-Dcryptomator.p12Path='@{userhome}/.config/Cryptomator/key.p12'" \
+      --add-flags "-Dcryptomator.ipcSocketPath='@{userhome}/.config/Cryptomator/ipc.socket'" \
+      --add-flags "-Dcryptomator.mountPointsDir='@{userhome}/.local/share/Cryptomator/mnt'" \
       --add-flags "-Dcryptomator.showTrayIcon=false" \
       --add-flags "-Dcryptomator.buildNumber='nix'" \
       --add-flags "-Dcryptomator.appVersion='${version}'" \
@@ -95,7 +76,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    maven
     makeShellWrapper
     wrapGAppsHook
     jdk

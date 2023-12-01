@@ -1,15 +1,13 @@
 { lib
 , qt5
 , qtbase
-, qtsvg
-, qtx11extras
 , qttools
 , qtwebsockets
 , qtmultimedia
 , fetchFromGitHub
 }:
 
-qt5.mkDerivation rec {
+qt5.mkDerivation {
   pname = "r3ctl";
   version = "a82cb5b3123224e706835407f21acea9dc7ab0f0";
 

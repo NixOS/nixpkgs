@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0b3sz8zp1nwcjl02b3lli5yjc7vfay1ig6fs8bgxwz22imfx076p";
   };
 
-  vendorSha256 = "sha256-puCqql77kvdWTcwp8z6LExBt/HbNRNe0f+wtM0kLoWM=";
+  vendorHash = "sha256-puCqql77kvdWTcwp8z6LExBt/HbNRNe0f+wtM0kLoWM=";
 
   excludedPackages = ".nap";
 

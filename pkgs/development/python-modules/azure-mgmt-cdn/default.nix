@@ -1,31 +1,28 @@
 { lib
+, azure-common
+, azure-mgmt-core
 , buildPythonPackage
 , fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-nspkg
-, azure-mgmt-core
-, isPy3k
+, isodate
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cdn";
-  version = "12.0.0";
+  version = "13.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
+    hash = "sha256-yJ8jTeT4Gu23YSHl5GZ0+zdlC3s+GIxS4ir8z/HBkA4=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
   # has no tests
@@ -34,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This is the Microsoft Azure CDN Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-cdn_${version}/sdk/cdn/azure-mgmt-cdn/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ maxwilson ];
   };

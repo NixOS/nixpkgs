@@ -31,11 +31,12 @@ buildPythonPackage rec {
     "terminado"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Terminals served by Tornado websockets";

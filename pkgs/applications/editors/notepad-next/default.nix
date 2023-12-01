@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "notepad-next";
-  version = "0.6.1";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    sha256 = "sha256-4OjthXAzcAVwDA7+oK7sKiOiB7i/cYIdxyrz+9wPvDg=";
+    sha256 = "sha256-m8+kM9uz3gJ3kvpgZdoonSvYlh/f1WiGZlB8JKMTXh4=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
@@ -27,12 +27,18 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mv $out/bin $out/Applications
+    rm -fr $out/share
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
-    description = "Notepad++-like editor for the Linux desktop";
+    description = "A cross-platform, reimplementation of Notepad++";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];
     broken = stdenv.isAarch64;
+    mainProgram = "NotepadNext";
   };
 }

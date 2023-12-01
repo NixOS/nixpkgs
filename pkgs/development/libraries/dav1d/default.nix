@@ -4,19 +4,26 @@
 , withTools ? false # "dav1d" binary
 , withExamples ? false, SDL2 # "dav1dplay" binary
 , useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+
+# for passthru.tests
+, ffmpeg
+, gdal
+, handbrake
+, libavif
+, libheif
 }:
 
 assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = pname;
     rev = version;
-    hash = "sha256-Y9wqa6lIs0eKT+q+95gjzfHIc3pglXzLNaDjsWy1gok=";
+    hash = "sha256-RrEim3HXXjx2RUU7K3wPH3QbhNTRN9ZX/oAcyE9aV8I=";
   };
 
   outputs = [ "out" "dev" ];
@@ -33,6 +40,15 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit
+      ffmpeg
+      gdal
+      handbrake
+      libavif
+      libheif;
+  };
 
   meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";

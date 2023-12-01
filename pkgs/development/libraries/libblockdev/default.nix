@@ -1,41 +1,81 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkg-config, gtk-doc
-, docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
-, cryptsetup, lvm2, dmraid, util-linux, libbytesize, libndctl, nss, volume_key
-, libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
-, thin-provisioning-tools, makeWrapper
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gtk-doc
+, docbook_xml_dtd_43
+, python3
+, gobject-introspection
+, glib
+, udev
+, kmod
+, parted
+, cryptsetup
+, lvm2
+, util-linux
+, libbytesize
+, libndctl
+, nss
+, volume_key
+, libxslt
+, docbook_xsl
+, gptfdisk
+, libyaml
+, autoconf-archive
+, thin-provisioning-tools
+, makeBinaryWrapper
+, e2fsprogs
+, libnvme
+, keyutils
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libblockdev";
-  version = "2.28";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
-    rev = "${version}-1";
-    sha256 = "sha256-6MrM3psLqMcpf4haaEHg3FwrhUDz5h/DeY1w96T0UlE=";
+    rev = "${finalAttrs.version}-1";
+    hash = "sha256-9tPI8FyHQ9i7p4HLrxiseIH8Y5uqnlsNjcZ1qIHCcRY=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      sgdisk = "${gptfdisk}/bin/sgdisk";
-    })
-  ];
 
   postPatch = ''
     patchShebangs scripts
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config gtk-doc libxslt docbook_xsl docbook_xml_dtd_43
-    python3 gobject-introspection autoconf-archive makeWrapper
+    autoconf-archive
+    autoreconfHook
+    docbook_xsl
+    docbook_xml_dtd_43
+    gobject-introspection
+    gtk-doc
+    libxslt
+    makeBinaryWrapper
+    pkg-config
+    python3
   ];
 
   buildInputs = [
-    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid util-linux libbytesize
-    libndctl nss volume_key libyaml
+    cryptsetup
+    e2fsprogs
+    glib
+    gptfdisk
+    keyutils
+    kmod
+    libbytesize
+    libndctl
+    libnvme
+    libyaml
+    lvm2
+    nss
+    parted
+    udev
+    util-linux
+    volume_key
   ];
 
   postInstall = ''
@@ -43,12 +83,12 @@ stdenv.mkDerivation rec {
       ${lib.makeBinPath [ thin-provisioning-tools ]}
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/storaged-project/libblockdev/raw/${finalAttrs.src.rev}/NEWS.rst";
     description = "A library for manipulating block devices";
     homepage = "http://storaged.org/libblockdev/";
-    changelog = "https://github.com/storaged-project/libblockdev/raw/${src.rev}/NEWS.rst";
-    license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils
-    maintainers = with maintainers; [ johnazoidberg ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the utils
+    maintainers = with lib.maintainers; [ johnazoidberg ];
+    platforms = lib.platforms.linux;
   };
-}
+})

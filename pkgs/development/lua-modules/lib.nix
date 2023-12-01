@@ -82,14 +82,20 @@ rec {
   };
   */
   generateLuarocksConfig = {
-      externalDeps
+    externalDeps ? []
     # a list of lua derivations
-    , requiredLuaRocks
+    , requiredLuaRocks ? []
     , extraVariables ? {}
-    , rocksSubdir
+    , rocksSubdir ? "rocks-subdir"
     }: let
       rocksTrees = lib.imap0
-        (i: dep: { name = "dep-${toString i}"; root = "${dep}"; rocks_dir = "${dep}/${dep.rocksSubdir}"; })
+        (i: dep: {
+          name = "dep-${toString i}";
+          root = "${dep}";
+          # packages built by buildLuaPackage or luarocks doesn't contain rocksSubdir
+          # hence a default here
+          rocks_dir = if dep ? rocksSubdir then "${dep}/${dep.rocksSubdir}" else "${dep.pname}-${dep.version}-rocks";
+        })
         requiredLuaRocks;
 
       # Explicitly point luarocks to the relevant locations for multiple-output

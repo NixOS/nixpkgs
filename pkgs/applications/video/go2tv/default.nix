@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     rev = "v${version}";
-    sha256 = "sha256-t+T3zerFvEdMYoe8GYSCGgwiXw528Lrs/EjPsXr6I98=";
+    sha256 = "sha256-5GOhTDlUpzInMm8hVcBjbf1CXRw2GQITRtj6UaxYHtE=";
   };
 
   vendorHash = null;
@@ -53,5 +53,6 @@ buildGoModule rec {
     homepage = "https://github.com/alexballas/go2tv";
     license = licenses.mit;
     maintainers = with maintainers; [ gdamjan ];
+    mainProgram = "go2tv";
   };
 }

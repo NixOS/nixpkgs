@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubeswitch";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "danielfoehrKn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-p4/nYZt+OwNsFX9f9ySfQaz6gbz+8Mvt00W2Rs4dpCY=";
+    sha256 = "sha256-7BQhkFvOgmLuzBEvAou8KANhxWna5KVokIF4DEIVU2g=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/main.go" ];
 

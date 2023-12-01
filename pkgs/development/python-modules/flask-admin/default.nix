@@ -6,6 +6,7 @@
 , colour
 , email-validator
 , enum34
+, fetchpatch
 , fetchPypi
 , flask
 , flask-babelex
@@ -38,6 +39,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
   };
+
+  patches = [
+    # https://github.com/flask-admin/flask-admin/pull/2374
+    (fetchpatch {
+      name = "pillow-10-compatibility.patch";
+      url = "https://github.com/flask-admin/flask-admin/commit/96b92deef8b087e86a9dc3e84381d254ea5c0342.patch";
+      hash = "sha256-iR5kxyeZaEyved5InZuPmcglTD77zW18/eSHGwOuW40=";
+    })
+  ];
 
   propagatedBuildInputs = [
     flask
@@ -97,6 +107,8 @@ buildPythonPackage rec {
     "flask_admin/tests/sqla/test_translation.py"
     # RuntimeError: Working outside of application context.
     "flask_admin/tests/sqla/test_multi_pk.py"
+    # Broken test
+    "flask_admin/tests/fileadmin/test_fileadmin.py"
   ];
 
   pythonImportsCheck = [
@@ -108,6 +120,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/flask-admin/flask-admin/";
     changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

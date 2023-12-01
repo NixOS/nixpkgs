@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ pcsclite libusb1 ];
 
+  # The resulting shared object ends up outside of the default paths which are
+  # usually getting stripped.
+  stripDebugList = ["pcsc"];
+
   meta = with lib; {
     description = "ccid drivers for pcsclite";
     homepage = "https://ccid.apdu.fr/";

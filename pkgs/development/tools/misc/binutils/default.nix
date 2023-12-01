@@ -18,6 +18,7 @@ in
 , zlib
 
 , enableGold ? withGold stdenv.targetPlatform
+, enableGoldDefault ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
   # WARN: Enabling all targets increases output size to a multiple.
 , withAllTargets ? false
@@ -26,6 +27,7 @@ in
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
 # make sure that intent matches result ourselves.
 assert enableGold -> withGold stdenv.targetPlatform;
+assert enableGoldDefault -> enableGold;
 
 
 let
@@ -217,8 +219,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lib-path=:"
   ]
   ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
-  ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
-  ++ (if enableShared
+  ++ lib.optionals enableGold [
+    "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
+    "--enable-plugins"
+  ] ++ (if enableShared
       then [ "--enable-shared" "--disable-static" ]
       else [ "--disable-shared" "--enable-static" ])
   ;

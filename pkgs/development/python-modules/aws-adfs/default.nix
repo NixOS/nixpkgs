@@ -5,7 +5,6 @@
 , click
 , configparser
 , fetchFromGitHub
-, fetchpatch
 , fido2
 , lxml
 , poetry-core
@@ -19,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.2.1";
-  format = "pyproject";
+  version = "2.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "venth";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-REJYuOGq22onMj4WcfA7i4/cG99UGZA9D99ESIKY1A8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IZeEb87NX3fyw1hENF1LldbgbaXXPG3u2AiCeci6MIw=";
   };
 
   nativeBuildInputs = [
@@ -47,20 +46,6 @@ buildPythonPackage rec {
     requests-kerberos
   ];
 
-  patches = [
-    # Apply new fido2 api (See: venth/aws-adfs#243)
-    (fetchpatch {
-      url = "https://github.com/venth/aws-adfs/commit/09836d89256f3537270d760d8aa30ab9284725a8.diff";
-      hash = "sha256-pAAJvOa43BXtyWvV8hsLe2xqd5oI+vzndckRTRol61s=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'boto3 = "^1.20.50"' 'boto3 = "*"' \
-      --replace 'botocore = ">=1.12.6"' 'botocore = "*"'
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     toml
@@ -77,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/v${version}";
     license = licenses.psfl;
     maintainers = with maintainers; [ bhipple ];
   };

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -12,6 +13,7 @@
 , enet
 , ffmpeg
 , fmt_8
+, gtest
 , hidapi
 , libevdev
 , libGL
@@ -22,15 +24,15 @@
 , libXdmcp
 , libXext
 , libXrandr
+, lzo
 , mbedtls_2
-, mgba
 , miniupnpc
 , minizip-ng
 , openal
 , pugixml
 , qtbase
+, qtsvg
 , sfml
-, soundtouch
 , udev
 , vulkan-loader
 , xxHash
@@ -55,57 +57,35 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-19368";
+  version = "5.0-19870";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "dadbeb4bae7e7fa23af2b46e0add4143094dc107";
-    sha256 = "sha256-XLtFn2liONPizvrKyySZx0mY7qC2fpwhAWaRZLlEzh8=";
+    rev = "032c77b462a220016f23c5079e71bb23e0ad2adf";
+    sha256 = "sha256-TgRattksYsMGcbfu4T5mCFO9BkkHRX0NswFxGwZWjEw=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dolphin-emu/dolphin/commit/c43c9101c07376297abbbbc40ef9a1965a1681cd.diff";
+      sha256 = "sha256-yHlyG86ta76YKrJsyefvFh521dNbQOqiPOpRUVxKuZM=";
+    })
+    # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
+    ./find-minizip-ng.patch
+  ];
+
+  strictDeps = true;
+
   nativeBuildInputs = [
+    stdenv.cc
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    bzip2
-    cubeb
-    curl
-    enet
-    ffmpeg
-    fmt_8
-    hidapi
-    libGL
-    libiconv
-    libpulseaudio
-    libspng
-    libusb1
-    libXdmcp
-    mbedtls_2
-    miniupnpc
-    minizip-ng
-    openal
-    pugixml
-    qtbase
-    sfml
-    soundtouch
-    xxHash
-    xz
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    bluez
-    libevdev
-    libXext
-    libXrandr
-    # FIXME: Remove comment on next mgba version
-    #mgba # Derivation doesn't support Darwin
-    udev
-    vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     CoreBluetooth
     ForceFeedback
     IOBluetooth
@@ -113,17 +93,53 @@ stdenv.mkDerivation rec {
     moltenvk
     OpenGL
     VideoToolbox
+  ] ++ [
+    bzip2
+    cubeb
+    curl
+    enet
+    ffmpeg
+    fmt_8
+    gtest
+    hidapi
+    libiconv
+    libpulseaudio
+    libspng
+    libusb1
+    libXdmcp
+    lzo
+    mbedtls_2
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qtbase
+    qtsvg
+    sfml
+    xxHash
+    xz # LibLZMA
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    bluez
+    libevdev
+    libGL
+    libXext
+    libXrandr
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
+    #mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
   ];
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DUSE_SHARED_ENET=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
+    "-DMACOS_CODE_SIGNING=OFF"
     # Bundles the application folder into a standalone executable, so we cannot devendor libraries
     "-DSKIP_POSTPROCESS_BUNDLE=ON"
     # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
@@ -158,6 +174,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = dolphin-emu;
       command = "dolphin-emu-nogui --version";
+      version = if stdenv.hostPlatform.isDarwin then "Dolphin 5.0" else version;
     };
 
     updateScript = writeShellScript "dolphin-update-script" ''
@@ -184,7 +201,5 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
-    # Requires both LLVM and SDK bump
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

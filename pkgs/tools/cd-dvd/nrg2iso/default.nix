@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gregory.kokanosky.free.fr/v4/linux/nrg2iso.en.html";
     license = licenses.gpl2;
     platforms = platforms.all;
+    mainProgram = "nrg2iso";
   };
 }

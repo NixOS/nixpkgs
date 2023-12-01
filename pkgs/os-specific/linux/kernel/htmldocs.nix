@@ -51,6 +51,6 @@ stdenv.mkDerivation {
     homepage = "https://www.kernel.org/doc/htmldocs/";
     platforms = platforms.linux;
     inherit (linux_latest.meta) license;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

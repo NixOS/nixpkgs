@@ -4,11 +4,11 @@ let inherit (lib) getDev; in
 
 mkDerivation rec {
   pname = "qt5ct";
-  version = "1.5";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-1j0M4W4CQnIH2GUx9wpxxbnIUARN1bLcsihVMfQW5JA=";
+    sha256 = "sha256-I7dAVEFepBJDKHcu+ab5UIOpuGVp4SgDSj/3XfrYCOk=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -18,6 +18,7 @@ mkDerivation rec {
   qmakeFlags = [
     "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
     "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "LIBDIR=${placeholder "out"}/lib"
   ];
 
   meta = with lib; {
@@ -26,5 +27,6 @@ mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ ralith ];
+    mainProgram = "qt5ct";
   };
 }

@@ -21,13 +21,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage rec {
   pname = "cvxopt";
-  version = "1.3.0";
+  version = "1.3.2";
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ALGyMvnR+QLVeKnXWBS2f6AgdY1a5CLijKjO9iafpcY=";
+    hash = "sha256-NGH6QsGyJAuk2h2YXKc1A5FBV/xMd0FzJ+1tfYWs2+Y=";
   };
 
   buildInputs = (if stdenv.isDarwin then [ openblas ] else [ blas lapack ]);
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
-    homepage = "http://cvxopt.org/";
+    homepage = "https://cvxopt.org/";
     description = "Python Software for Convex Optimization";
     longDescription = ''
       CVXOPT is a free software package for convex optimization based on the

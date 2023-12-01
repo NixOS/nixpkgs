@@ -4,7 +4,6 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -14,26 +13,17 @@
 
 buildPythonPackage rec {
   pname = "pyopenuv";
-  version = "2023.02.0";
-  format = "pyproject";
+  version = "2023.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyopenuv";
     rev = "refs/tags/${version}";
-    hash = "sha256-EiTTck6hmOGSQ7LyZsbhnH1zgkH8GccejLdJaH2m0F8=";
+    hash = "sha256-qlyKLovM0h3iWvhGecaFPswnchZXPNkr0PbSqK2UW0c=";
   };
-
-  patches = [
-    # Remove asynctest, https://github.com/bachya/pyopenuv/pull/108
-    (fetchpatch {
-      name = "remove-asynctest.patch";
-      url = "https://github.com/bachya/pyopenuv/commit/af15736b0d82ef811c3f380f5da32007752644fe.patch";
-      hash = "sha256-5uQS3DoM91mhfyxLTNii3JBxwXIDK4/GwtadkVagjuw=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -43,6 +33,8 @@ buildPythonPackage rec {
     aiohttp
     backoff
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

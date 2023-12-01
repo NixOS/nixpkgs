@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hmat-oss";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = "hmat-oss";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-N6VSQeq2BS/PLcMbyIn/OQfd45zyJJHuOD5bho2nue8=";
+    sha256 = "sha256-JW6zghoYnF7NcAuAACgTQoxANEnmwjUAB8jCpof7Ums=";
   };
 
   cmakeFlags = [

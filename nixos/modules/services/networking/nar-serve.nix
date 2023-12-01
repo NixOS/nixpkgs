@@ -6,11 +6,11 @@ let
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary ];
+    maintainers = [ maintainers.rizary maintainers.zimbatm ];
   };
   options = {
     services.nar-serve = {
-      enable = mkEnableOption (lib.mdDoc "Serve NAR file contents via HTTP");
+      enable = mkEnableOption (lib.mdDoc "serving NAR file contents via HTTP");
 
       port = mkOption {
         type = types.port;

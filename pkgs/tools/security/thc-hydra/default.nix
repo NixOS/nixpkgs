@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.4";
+  version = "9.5";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-+UkMJmIUIt/yTGY07Q4nu1zbWQq5chTvMNQSh5U/fTU=";
+    sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
   };
 
   postPatch = let
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       --replace "libcurses.so" "libncurses.so" \
       --replace "-lcurses" "-lncurses"
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-undef-prefix";
 
   nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
 
@@ -45,6 +47,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
-    badPlatforms = platforms.darwin; # fails to build since v9.4
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , mako
 , parse
 , parse-type
@@ -8,7 +9,6 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
-, setuptools
 , typing-extensions
 }:
 
@@ -25,6 +25,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-+76jIgfDQPdIoesTr1+QUu8wmOnrdf4KT+TJr9F2Hqk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "remove-setuptools.patch";
+      url = "https://github.com/pytest-dev/pytest-bdd/commit/5d8eda3a30b47d3bd27849884a851adafca765cb.patch";
+      hash = "sha256-G2WHaRKlQ9HINufh8wl7+ly7HfDGobMLzzlbwDwd+o8=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -43,7 +51,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    setuptools
   ];
 
   preCheck = ''

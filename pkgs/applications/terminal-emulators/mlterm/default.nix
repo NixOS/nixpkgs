@@ -96,14 +96,14 @@ let
   in
     lib.withFeatureAs (commaSepList != "") featureName commaSepList
   ;
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
   version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "arakiken";
-    repo = pname;
-    rev = version;
+    repo = "mlterm";
+    rev = finalAttrs.version;
     sha256 = "sha256-gfs5cdwUUwSBWwJJSaxrQGWJvLkI27RMlk5QvDALEDg=";
   };
 
@@ -217,4 +217,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
     mainProgram = desktopBinary;
   };
-}
+})

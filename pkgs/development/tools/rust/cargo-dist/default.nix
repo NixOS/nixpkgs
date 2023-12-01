@@ -6,21 +6,23 @@
 , xz
 , zstd
 , stdenv
+, darwin
+, git
 , rustup
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.0.7";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-uXC+iaOcEIyGMVNtAduhT68GuE29aL/3S6uEMllAWNA=";
+    hash = "sha256-Km/vaEOna+RvckNawIQTSp+FW49P5jx9euKeMaLuOsw=";
   };
 
-  cargoHash = "sha256-/TLi+ESOZhJ4Xg3hdUEWhM0K4asI9+L1M1+hWuDOj9Q=";
+  cargoHash = "sha256-ccVflBHwEAuG0Y9Mmit1X6FLsM4bbt8Kd7fB6zBwKMc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,21 +32,29 @@ rustPlatform.buildRustPackage rec {
     bzip2
     xz
     zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  nativeCheckInputs = [
+    git
+    rustup
   ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  nativeCheckInputs = lib.optionals stdenv.isDarwin [
-    rustup
-  ];
+  # remove tests that require internet access
+  postPatch = ''
+    rm cargo-dist/tests/integration-tests.rs
+  '';
 
   meta = with lib; {
     description = "A tool for building final distributable artifacts and uploading them to an archive";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

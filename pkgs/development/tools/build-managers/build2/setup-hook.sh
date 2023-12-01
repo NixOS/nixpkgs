@@ -19,6 +19,12 @@ build2ConfigurePhase() {
         $build2ConfigureFlags "${build2ConfigureFlagsArray[@]}"
     )
 
+    if [ -n "@isTargetDarwin@" ]; then
+        flagsArray+=("config.bin.ld=ld64-lld")
+        flagsArray+=("config.cc.loptions+=-fuse-ld=lld")
+        flagsArray+=("config.cc.loptions+=-headerpad_max_install_names")
+    fi
+
     echo 'configure flags' "${flagsArray[@]}"
 
     b configure "${flagsArray[@]}"

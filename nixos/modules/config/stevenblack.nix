@@ -15,7 +15,7 @@ let
 in
 {
   options.networking.stevenblack = {
-    enable = mkEnableOption (mdDoc "Enable the stevenblack hosts file blocklist");
+    enable = mkEnableOption (mdDoc "the stevenblack hosts file blocklist");
 
     block = mkOption {
       type = types.listOf (types.enum [ "fakenews" "gambling" "porn" "social" ]);
@@ -30,5 +30,5 @@ in
       ++ optionals (activatedHosts == [ ]) [ "${pkgs.stevenblack-blocklist}/hosts" ];
   };
 
-  meta.maintainers = [ maintainers.fortuneteller2k maintainers.artturin ];
+  meta.maintainers = [ maintainers.moni maintainers.artturin ];
 }

@@ -21,7 +21,7 @@ buildGoModule rec {
     installShellCompletion scripts/cheat.{bash,fish,zsh}
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

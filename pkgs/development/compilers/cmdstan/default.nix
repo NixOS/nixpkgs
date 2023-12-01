@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.32.2";
+  version = "2.33.1";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-obV+R1ZjBgunXndCNry+MEne1nQawo81IV2DWwYbbIQ=";
+    hash = "sha256-c+L/6PjW7YgmXHuKhKjiRofBRAhKYCzFCZ6BOX5AmC4=";
   };
 
   nativeBuildInputs = [ stanc ];

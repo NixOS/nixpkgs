@@ -1,31 +1,36 @@
-{ lib, stdenv, fetchFromGitHub }:
-
-stdenv.mkDerivation {
+{ lib, stdenv, fetchzip, mbedtls, meson, ninja }:
+let
+  webManModVersion = "1.47.42";
+in
+stdenv.mkDerivation rec {
   pname = "ps3netsrv";
-  version = "1.1.0";
+  version = "20220813";
 
-  enableParallelBuilding = true;
-
-  src = fetchFromGitHub {
-    owner = "dirkvdb";
-    repo = "ps3netsrv--";
-    rev = "e54a66cbf142b86e2cffc1701984b95adb921e81";
-    sha256 = "sha256-SpPyRhPwOhTONAYH/eqLGmVl2XzhA1r1nUwKj7+rGyY=";
-    fetchSubmodules = true;
+  src = fetchzip {
+    url = "https://github.com/aldostools/webMAN-MOD/releases/download/${webManModVersion}/${pname}_${version}.zip";
+    hash = "sha256-ynFuCD+tp8E/DDdB/HU9BCmwKcmQy6NBx26MKnP4W0o=";
   };
 
-  buildPhase = "make CXX=$CXX";
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ps3netsrv++ $out/bin
+  sourceRoot = "./source/${pname}";
+
+  buildInputs = [
+    meson
+    ninja
+    mbedtls
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Doff64_t=off_t";
+
+  postInstall = ''
+    install -Dm644 ../LICENSE.TXT $out/usr/share/licenses/${pname}/LICENSE.TXT
   '';
 
   meta = {
-    description = "C++ implementation of the ps3netsrv server";
-    homepage = "https://github.com/dirkvdb/ps3netsrv--";
-    license = lib.licenses.mit;
+    description = "PS3 Net Server (mod by aldostools)";
+    homepage = "https://github.com/aldostools/webMAN-MOD/";
+    license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ makefu ];
-    mainProgram = "ps3netsrv++";
+    mainProgram = "ps3netsrv";
   };
 }

@@ -176,22 +176,22 @@ import ../make-test-python.nix ({ package, ... }: {
     nn2.succeed("systemctl stop hdfs-zkfc")
 
     # Initialize zookeeper for failover controller
-    nn1.succeed("sudo -u hdfs hdfs zkfc -formatZK 2>&1 | systemd-cat")
+    nn1.succeed("sudo -u hdfs systemd-cat hdfs zkfc -formatZK")
 
     # Format NN1 and start it
-    nn1.succeed("sudo -u hdfs hadoop namenode -format 2>&1 | systemd-cat")
+    nn1.succeed("sudo -u hdfs systemd-cat hadoop namenode -format")
     nn1.succeed("systemctl start hdfs-namenode")
     nn1.wait_for_open_port(9870)
     nn1.wait_for_open_port(8022)
     nn1.wait_for_open_port(8020)
 
     # Bootstrap NN2 from NN1 and start it
-    nn2.succeed("sudo -u hdfs hdfs namenode -bootstrapStandby 2>&1 | systemd-cat")
+    nn2.succeed("sudo -u hdfs systemd-cat hdfs namenode -bootstrapStandby")
     nn2.succeed("systemctl start hdfs-namenode")
     nn2.wait_for_open_port(9870)
     nn2.wait_for_open_port(8022)
     nn2.wait_for_open_port(8020)
-    nn1.succeed("netstat -tulpne | systemd-cat")
+    nn1.succeed("systemd-cat netstat -tulpne")
 
     # Start failover controllers
     nn1.succeed("systemctl start hdfs-zkfc")
@@ -200,10 +200,10 @@ import ../make-test-python.nix ({ package, ... }: {
     # DN should have started by now, but confirm anyway
     dn1.wait_for_unit("hdfs-datanode")
     # Print states of namenodes
-    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u hdfs systemd-cat hdfs haadmin -getAllServiceState")
     # Wait for cluster to exit safemode
     client.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
-    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u hdfs systemd-cat hdfs haadmin -getAllServiceState")
     # test R/W
     client.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
     assert "testfilecontents" in client.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
@@ -211,7 +211,7 @@ import ../make-test-python.nix ({ package, ... }: {
     # Test NN failover
     nn1.succeed("systemctl stop hdfs-namenode")
     assert "active" in client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState")
-    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u hdfs systemd-cat hdfs haadmin -getAllServiceState")
     assert "testfilecontents" in client.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
 
     nn1.succeed("systemctl start hdfs-namenode")
@@ -219,7 +219,7 @@ import ../make-test-python.nix ({ package, ... }: {
     nn1.wait_for_open_port(8022)
     nn1.wait_for_open_port(8020)
     assert "standby" in client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState")
-    client.succeed("sudo -u hdfs hdfs haadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u hdfs systemd-cat hdfs haadmin -getAllServiceState")
 
     #### YARN tests ####
 
@@ -236,20 +236,20 @@ import ../make-test-python.nix ({ package, ... }: {
     nm1.wait_for_open_port(8042)
     nm1.wait_for_open_port(8040)
     client.wait_until_succeeds("yarn node -list | grep Nodes:1")
-    client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
-    client.succeed("sudo -u yarn yarn node -list | systemd-cat")
+    client.succeed("sudo -u yarn systemd-cat yarn rmadmin -getAllServiceState")
+    client.succeed("sudo -u yarn systemd-cat yarn node -list")
 
     # Test RM failover
     rm1.succeed("systemctl stop yarn-resourcemanager")
     assert "standby" not in client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
-    client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u yarn systemd-cat yarn rmadmin -getAllServiceState")
     rm1.succeed("systemctl start yarn-resourcemanager")
     rm1.wait_for_unit("yarn-resourcemanager")
     rm1.wait_for_open_port(8088)
     assert "standby" in client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
-    client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
+    client.succeed("sudo -u yarn systemd-cat yarn rmadmin -getAllServiceState")
 
-    assert "Estimated value of Pi is" in client.succeed("HADOOP_USER_NAME=hdfs yarn jar $(readlink $(which yarn) | sed -r 's~bin/yarn~lib/hadoop-*/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar~g') pi 2 10")
+    assert "Estimated value of Pi is" in client.succeed("HADOOP_USER_NAME=hdfs yarn jar $(readlink $(which yarn) | sed -r 's~bin/yarn~share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar~g') pi 2 10")
     assert "SUCCEEDED" in client.succeed("yarn application -list -appStates FINISHED")
   '';
 })

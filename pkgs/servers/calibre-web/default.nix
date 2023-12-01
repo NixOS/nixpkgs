@@ -15,19 +15,23 @@ let
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+        disabledTestPaths = [
+           "test/aaa_profiling"
+           "test/ext/mypy"
+        ];
       });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.20";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-0lArY1aTpO4sgIVDSqClYMGlip92f9hE/L2UouTLK8Q=";
+    hash = "sha256-tRrOquetn3P2NmrXq7DQHRGP1sWnLR7bV2Lw0W/lUPQ=";
   };
 
   propagatedBuildInputs = with python.pkgs; [
@@ -36,10 +40,11 @@ python.pkgs.buildPythonApplication rec {
     chardet
     flask-babel
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     flask-limiter
     iso-639
+    jsonschema
     lxml
     pypdf
     requests
@@ -98,5 +103,6 @@ python.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pborzenkov ];
     platforms = platforms.all;
+    mainProgram = "calibre-web";
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 
 # build
 , hatchling
@@ -9,6 +10,7 @@
 , jsonschema
 , python-json-logger
 , pyyaml
+, referencing
 , traitlets
 
 # optionals
@@ -23,14 +25,16 @@
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.6.3";
-  format = "pyproject";
+  version = "0.9.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k+OyCKUN9hC6J1Ff2DDb2ECLvmWkkK1HtNxfKVXyl8g=";
+    hash = "sha256-LDj6dTtq3npJxLKBQEEwGQFeDPvWF2adHeJhOai2MRU=";
   };
 
   nativeBuildInputs = [
@@ -41,9 +45,9 @@ buildPythonPackage rec {
     jsonschema
     python-json-logger
     pyyaml
+    referencing
     traitlets
   ]
-  ++ jsonschema.optional-dependencies.format
   ++ jsonschema.optional-dependencies.format-nongpl;
 
   passthru.optional-dependencies = {
@@ -62,6 +66,10 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH="$out/bin:$PATH"
   '';
+
+  pythonImportsCheck = [
+    "jupyter_events"
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";

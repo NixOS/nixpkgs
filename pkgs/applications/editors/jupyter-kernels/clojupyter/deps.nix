@@ -31,8 +31,8 @@
       inherit repos;
       artifactId = "data.json";
       groupId = "org.clojure";
-      sha512 = "b767973db8b5b36aeb5c55f082e020a5c3f657bee1eede018e68ccaa2c535005759bc8a162fce7bb63eee1c14c6f29ec1c6080978a08817189864cbd40f154fa";
-      version = "2.3.1";
+      sha512 = "04b7c0c90cb26d643a0b3e7e1ffa2d2d423e977c1454ee5ea7c2e75547ecbc113838df17b797902a975f5ea2184a81a45b605a4d82970805e2bbb02feebc578d";
+      version = "2.4.0";
     };
   }
 
@@ -42,8 +42,8 @@
       inherit repos;
       artifactId = "clojure";
       groupId = "org.clojure";
-      sha512 = "f28178179483531862afae13e246386f8fda081afa523d3c4ea3a083ab607d23575d38ecb9ec0ee7f4d65cbe39a119f680e6de4669bc9cf593aa92be0c61562b";
-      version = "1.10.1";
+      sha512 = "1925300a0fe4cc9fc3985910bb04ae65a19ce274dacc5ec76e708cfa87a7952a0a77282b083d0aebb2206afff619af73a57f0d661a3423601586f0829cc7956b";
+      version = "1.11.1";
     };
   }
 
@@ -64,8 +64,8 @@
       inherit repos;
       artifactId = "clojupyter";
       groupId = "clojupyter";
-      sha512 = "d030ae69cdadecbcec9a052e4ad91ba4f47cdc4bb3fb780317f337af62d8c34d12ef05d132d6c9a4ce790008c979919c22162432c1b9bcf4e0a470020d585dbe";
-      version = "0.3.3";
+      sha512 = "9a4f001cbde7a4de2d27859b25e508ba649225acf9dabad4c1c274e86674e0dcde250a49cacd0767bb99f5b15a61e2f1c829fb2fe7b7dfc4b87681b7ae0b04ae";
+      version = "0.3.6";
     };
   }
 
@@ -86,8 +86,8 @@
       inherit repos;
       artifactId = "tools.analyzer";
       groupId = "org.clojure";
-      sha512 = "e02d7baec926e0e0a7d9c71f09fee627fbde59ae7f3cbd4abcdf0533c8a87fba8c7cf4503df34bf33777063f4b6353a022552fd003fdbea9fad5752d53609bb8";
-      version = "1.0.0";
+      sha512 = "c51752a714848247b05c6f98b54276b4fe8fd44b3d970070b0f30cd755ac6656030fd8943a1ffd08279af8eeff160365be47791e48f05ac9cc2488b6e2dfe504";
+      version = "1.1.0";
     };
   }
 
@@ -130,8 +130,8 @@
       inherit repos;
       artifactId = "core.specs.alpha";
       groupId = "org.clojure";
-      sha512 = "348c0ea0911bc0dcb08655e61b97ba040649b4b46c32a62aa84d0c29c245a8af5c16d44a4fa5455d6ab076f4bb5bbbe1ad3064a7befe583f13aeb9e32a169bf4";
-      version = "0.2.44";
+      sha512 = "f521f95b362a47bb35f7c85528c34537f905fb3dd24f2284201e445635a0df701b35d8419d53c6507cc78d3717c1f83cda35ea4c82abd8943cd2ab3de3fcad70";
+      version = "0.2.62";
     };
   }
 
@@ -152,8 +152,8 @@
       inherit repos;
       artifactId = "jeromq";
       groupId = "org.zeromq";
-      sha512 = "0965b82a10136a656dfe48268008536a57b26be9190ff2f3d5dbf3fa298e21bc754e70b1e7fae1aca782d25c397c9ce8fa3832783665391142b31dc4a1bd0233";
-      version = "0.5.1";
+      sha512 = "bd502d345926160b1a09e45f60eb81254dc67d6d9d7b79e025c08018dd16a18d32ff85b2440c352d530e61c96cd3b2d88fee2a8a912b436015ed31039e308ff4";
+      version = "0.5.2";
     };
   }
 
@@ -163,8 +163,8 @@
       inherit repos;
       artifactId = "spec.alpha";
       groupId = "org.clojure";
-      sha512 = "18c97fb2b74c0bc2ff4f6dc722a3edec539f882ee85d0addf22bbf7e6fe02605d63f40c2b8a2905868ccd6f96cfc36a65f5fb70ddac31c6ec93da228a456edbd";
-      version = "0.2.176";
+      sha512 = "ddfe4fa84622abd8ac56e2aa565a56e6bdc0bf330f377ff3e269ddc241bb9dbcac332c13502dfd4c09c2c08fe24d8d2e8cf3d04a1bc819ca5657b4e41feaa7c2";
+      version = "0.3.218";
     };
   }
 
@@ -174,8 +174,8 @@
       inherit repos;
       artifactId = "pandect";
       groupId = "pandect";
-      sha512 = "8c265289f46a94cf2400f05223cdd3f9faee9a39e6ed5a55a3e89b09334a61e928c0f27e2db834edf3b544e2148a511bccf1ef73132bd9263659bed381abb59a";
-      version = "0.6.1";
+      sha512 = "6179967af34e1abbe0dda2bd0961f101d016df6b1ce5bf4bb823794b07ee551d245d09e957a9c47bc3a15d306cca80ad1b9b11be99e1b3feb245c26e1b9154a3";
+      version = "1.0.2";
     };
   }
 
@@ -185,8 +185,8 @@
       inherit repos;
       artifactId = "tools.cli";
       groupId = "org.clojure";
-      sha512 = "9baf3fafe2e92b846404ef1bd897a4a335fe4bc1f78a2408ee93c09dc960a630f58a0e863b2d299624783f2851bb5d83f93fa627276d28d66c92764c46f27efe";
-      version = "0.4.2";
+      sha512 = "1d88aa03eb6a664bf2c0ce22c45e7296d54d716e29b11904115be80ea1661623cf3e81fc222d164047058239010eb678af92ffedc7c3006475cceb59f3b21265";
+      version = "1.0.206";
     };
   }
 
@@ -196,8 +196,8 @@
       inherit repos;
       artifactId = "encore";
       groupId = "com.taoensso";
-      sha512 = "bb9510a88bca86f9cfc4a2e5c8a85782bc71d961a0a639735edafb61df130422488ee40d1db4cb6ad961e40acdb07259052937391c32f1e54c71f09dd63d33e5";
-      version = "3.12.1";
+      sha512 = "43dbec081c4ad7b21526371bc78844877d50dd08580c4c039c4dac7e854247a6b145bda835460863fa91d270e81783ddcdad3aaa1a902575be5b21ac0a95c7d0";
+      version = "3.21.0";
     };
   }
 
@@ -218,8 +218,8 @@
       inherit repos;
       artifactId = "jcl-over-slf4j";
       groupId = "org.slf4j";
-      sha512 = "d9c08c3e4cb18b2d69ba8bcd4bbf3955dbc287e20141d244486f6237c36e8e2cf86ae48c295b5dd579219b5c7b1197658153f10fce73d155a4a1d4e6c7943952";
-      version = "1.7.22";
+      sha512 = "17aca766b01f136d39bda982a6046d01d296ee076d9628e9776256bd931bbd88437377d5f1cc196d75bd7fa1672dd131311dbf567b4c3a618dd538a6905fbb64";
+      version = "2.0.3";
     };
   }
 
@@ -229,8 +229,8 @@
       inherit repos;
       artifactId = "tools.analyzer.jvm";
       groupId = "org.clojure";
-      sha512 = "ce9c7b51fa61c12c539f3c5c1c7fa1caf123497553d4e566c13895312faad2d2657fe6e54fe88110a6c87accb10c4c3b6ccfa87a035a7321da6c859da1d192d0";
-      version = "1.1.0";
+      sha512 = "36ad50a7a79c47dea16032fc4b927bd7b56b8bedcbd20cc9c1b9c85edede3a455369b8806509b56a48457dcd32e1f708f74228bce2b4492bd6ff6fc4f1219d56";
+      version = "1.2.2";
     };
   }
 
@@ -251,19 +251,8 @@
       inherit repos;
       artifactId = "pedestal.log";
       groupId = "io.pedestal";
-      sha512 = "f6c4d8e1b202af9ef7950ec6d02b96f0e598e8d1f9ffffe8e5650e8ffdebd6c4919166aa83e34f47407870473024d28e7a49a2a0ad2b9af221514e42c518baae";
-      version = "0.5.7";
-    };
-  }
-
-  {
-    name = "org.clojure/tools.macro";
-    path = pkgs.fetchMavenArtifact {
-      inherit repos;
-      artifactId = "tools.macro";
-      groupId = "org.clojure";
-      sha512 = "18fb889ec7f0c8f23084f01587582be3c1baaa475249c40cfa8edc78c75079807ed49f2fb714a5c79b16bcf233142abcf571b12fff4e29cd78850c0016d6b4b9";
-      version = "0.1.1";
+      sha512 = "229c6c73dc7ec39aee15f54ce81cf2b33301e444241f2dff2066b4c10ff47968f3caa95a8a918601e8f3e7563b34da6925e533615e7ce8b1f39bdb97ca082757";
+      version = "0.5.10";
     };
   }
 
@@ -273,19 +262,8 @@
       inherit repos;
       artifactId = "jackson-dataformat-cbor";
       groupId = "com.fasterxml.jackson.dataformat";
-      sha512 = "575a00fec1760571403aaadbe0aa6c74f8bb01f40feae00741df6604e7c2bf199ac739a789bbd5d83af75ec6d9fcc55f5a1515b05aef33e0d3cc3046acad9e89";
-      version = "2.10.2";
-    };
-  }
-
-  {
-    name = "org.flatland/useful";
-    path = pkgs.fetchMavenArtifact {
-      inherit repos;
-      artifactId = "useful";
-      groupId = "org.flatland";
-      sha512 = "b97c92692e36be3e4bdfe4a6b1f1ecb2729c960c25884d1cb12218d0b807789dc37120022b4dd0fd5daba1dd16f892ac134576f84ef301c23525ba55cb041e2d";
-      version = "0.11.6";
+      sha512 = "b6e16c43fb3e71f82f8e7dc558f53cbcc8fea31efa59f40d22220f6e40167cf32c150efa18a81f839008d6a042e201bf17d8fd52a4fecbe8f356454f2d6a6170";
+      version = "2.13.3";
     };
   }
 
@@ -339,8 +317,8 @@
       inherit repos;
       artifactId = "pretty";
       groupId = "io.aviso";
-      sha512 = "512454e5296c54e2d2f3ddb3122e99edae3286b7e7f9a63dd453c96225b6aa5d0fb0972d58d7dac434b297f47a1f27d1b2021c126064af020f0c3040097226d6";
-      version = "0.1.37";
+      sha512 = "416433ae5c5773a3a12e7cff3f75a43f1a2d3f4454aad04d065c1e4e13627130f289dbb41355a5665236082b6535939fc4c40a2fddcc22a40d0d4ba290544bfb";
+      version = "1.1.1";
     };
   }
 
@@ -350,8 +328,8 @@
       inherit repos;
       artifactId = "rewrite-clj";
       groupId = "rewrite-clj";
-      sha512 = "14018072e5c9466e8cafc08d68633f0d0a410ceb6631bd48cf7d67056e5bc972618f1b3f80ba00c4fdf88ad884fe58b636945ec6f053cbe14aee61ef173e12d3";
-      version = "0.6.1";
+      sha512 = "04850f7b29be722be6c01760705be43e1b5b93315baa096925ceac94835b58702913c45c8166dadf193fb8f5150ff2c5539ae3ec85c37331727e5d0accfefcca";
+      version = "1.1.45";
     };
   }
 
@@ -394,8 +372,8 @@
       inherit repos;
       artifactId = "ordered";
       groupId = "org.flatland";
-      sha512 = "16ba9c232cefcf363c603af95343db3f86538e3829dce9fba9adce48c3bf2e80c24e4e30a4583750d124aeb9f1031cdbe93d08796366484495b1b22857de3045";
-      version = "1.5.7";
+      sha512 = "849f115d8dc22122577bb6c2af383663488a84125303ba90559f4f5d8538693a5797d95aca608e6844413b925ea6e12112f0cf2d3dcacfcc603b50d749f7a25e";
+      version = "1.15.10";
     };
   }
 
@@ -427,8 +405,8 @@
       inherit repos;
       artifactId = "jackson-core";
       groupId = "com.fasterxml.jackson.core";
-      sha512 = "5055943790cea2c3abbacbe91e63634e6d2e977cd59b08ce102c0ee7d859995eb5d150d530da3848235b2b1b751a8df55cff2c33d43da695659248187ddf1bff";
-      version = "2.10.2";
+      sha512 = "d5337db908b2c56dcb911e3d1a5f671456c13f254fe8d2a620823bc15b2db6aaa8325a86b436b5d181f2584b533158fd14d140b98305ac252f8dfd9a627da859";
+      version = "2.13.3";
     };
   }
 
@@ -438,8 +416,8 @@
       inherit repos;
       artifactId = "snakeyaml";
       groupId = "org.yaml";
-      sha512 = "b7ef491ded21c61260d6ad68b1541d0c753f01f3f065b66a31c8e4d8f5f6b5eff31e82a7cc68562567811cc0d540c980e8a42714574f50e7713b4799192f50f9";
-      version = "1.19";
+      sha512 = "4322e41c6fc5114521da21787ab313fa74bf8449ab0c23ec830627b8121504f70d4522e880aec64df227164729d40b2fbd9670e3a046dd5a5aabc1f71e91c16c";
+      version = "1.25";
     };
   }
 
@@ -449,8 +427,8 @@
       inherit repos;
       artifactId = "asm";
       groupId = "org.ow2.asm";
-      sha512 = "40614e658138f2eb95bc26999545f996794c622c4d68efb9e10093743504c4b58bf22590767bc6bd93b77cdfb202c507144ba867bbc8b54d74fe7621cbc55e3a";
-      version = "5.2";
+      sha512 = "876eac7406e60ab8b9bd6cd3c221960eaa53febea176a88ae02f4fa92dbcfe80a3c764ba390d96b909c87269a30a69b1ee037a4c642c2f535df4ea2e0dd499f2";
+      version = "9.2";
     };
   }
 
@@ -460,8 +438,8 @@
       inherit repos;
       artifactId = "jul-to-slf4j";
       groupId = "org.slf4j";
-      sha512 = "e76ee7ee3e1852be55c18ccb7a8f4a7005807da3cbd97f4b4895632fee92cc64785491d4f6384ae4ebd0f73a1ee4893dc1adf7119da056300f21eb2e7d3f233f";
-      version = "1.7.14";
+      sha512 = "152f153c42e5f69c95e3caeed5ab519e975d7ad79ac0199f31699646299b7ddab58068d5964fbd2170eed29966c3d8d1b00b0a1a4a6f698f9a9eb9c9b9d30dcb";
+      version = "2.0.3";
     };
   }
 
@@ -482,8 +460,8 @@
       inherit repos;
       artifactId = "pedestal.interceptor";
       groupId = "io.pedestal";
-      sha512 = "9767bb8df4ec3d1ee1468c22afd64adc689bb0ae15e98dfc04ef98e65f237f67ded3ade9c1514d2e44e1dd56dbff6cafbc9795a5c57e166cb924f43175c3be83";
-      version = "0.5.7";
+      sha512 = "b6d99300e2c656fc63841449067d74893c63f884d282ff1af40510e5e53baac0f17ac869212e0023dc01d3766248ce28e93e32a57239926254e3af0240c82178";
+      version = "0.5.10";
     };
   }
 
@@ -504,19 +482,8 @@
       inherit repos;
       artifactId = "omniconf";
       groupId = "com.grammarly";
-      sha512 = "f9b162b98676cb5073310309aac9678725cb4a7eec3fe00803b21ce4abcea3cc1c41df5e970105ed18352619dfab40c0736ae78e9206165f17b0094107b2594b";
-      version = "0.3.2";
-    };
-  }
-
-  {
-    name = "clj-tuple/clj-tuple";
-    path = pkgs.fetchMavenArtifact {
-      inherit repos;
-      artifactId = "clj-tuple";
-      groupId = "clj-tuple";
-      sha512 = "dd626944d0aba679a21b164ed0c77ea84449359361496cba810f83b9fdeab751e5889963888098ce4bf8afa112dbda0a46ed60348a9c01ad36a2e255deb7ab6d";
-      version = "0.2.2";
+      sha512 = "2b13138090c9706af014b7d22b316af5300f41bfc70ee1f604ee6d817f70ca6227951f673231830c81888db2c50533f9c53de3e314d725a60b8eee99718655af";
+      version = "0.4.3";
     };
   }
 
@@ -537,8 +504,8 @@
       inherit repos;
       artifactId = "zprint";
       groupId = "zprint";
-      sha512 = "379b6f9228ec0b5ae1a24b0cce4c41e273534b456cf356ac67b7f72a7506345eddf7f7ac75c2c200864d5372c1fb0331d2b31bc22a21c496cafdfe839241e9f9";
-      version = "0.4.15";
+      sha512 = "2f29288a1d9dd7e76689b32616049af8ebc0e98f0994f1eae1c8e6e725084df23de11a4d6231d2712167ef4adfdfffe494cea2c11b6e752f81acd641381516eb";
+      version = "1.2.4";
     };
   }
 
@@ -625,8 +592,8 @@
       inherit repos;
       artifactId = "slf4j-timbre";
       groupId = "com.fzakaria";
-      sha512 = "93ecc0e133a3f02f521cac125fd8842f94f2c284000b6b9f1cda7ef2841567bd674facea1f8c4e32da2321f414c1f2590ac58abf37f23347f6f551fcd9039339";
-      version = "0.3.14";
+      sha512 = "9a25ed545a7dac8fb74096ed531fa4362989a1ed68350e63f403a871fdf19ab582c6f2c1c8e08978a431d8da31d8226bf34f1d0263ac5f6a14955ff56fdf9e17";
+      version = "0.3.21";
     };
   }
 
@@ -636,8 +603,8 @@
       inherit repos;
       artifactId = "clojure.java-time";
       groupId = "clojure.java-time";
-      sha512 = "a7111b5c78d7f920d74793d410f81c9ca3c9a8c4d652f132be55eb15f6d03a413cee1ae46bad6d3189c045d422a33c7320fbd02055c351779c379f75db48cbbd";
-      version = "0.3.2";
+      sha512 = "cd27eddad69554fcc443603bb69ab7dbe5d4cc937080f4b4d1ef3590e855faef2366dda77724da6c9b8941c340f8b5c5cb1345855f946718bd3ceb9c124a226a";
+      version = "1.1.0";
     };
   }
 
@@ -664,13 +631,24 @@
   }
 
   {
+    name = "borkdude/edamame";
+    path = pkgs.fetchMavenArtifact {
+      inherit repos;
+      artifactId = "edamame";
+      groupId = "borkdude";
+      sha512 = "5f5f36a85521464e97c0ada94581b37d7ffc7d1b9adaf7b3b509447bc0d6cedf339f12ae75d6bf679b69f9e1b582d0ee1a995bfd039657b17ec9a85516700fbe";
+      version = "0.0.19";
+    };
+  }
+
+  {
     name = "com.taoensso/timbre";
     path = pkgs.fetchMavenArtifact {
       inherit repos;
       artifactId = "timbre";
       groupId = "com.taoensso";
-      sha512 = "2570f1d59d98034d8425598ab676f4c1e17f9da9926def2e142296377ddccf0fe3a894ba023114d614ca728c77c11d50927a709bfa896e9c5cce0854be31e32d";
-      version = "5.1.2";
+      sha512 = "8c88eea8f0a94a3fc14f450a03e76ce0573d31f6c301252d3f9afc177f87a03326966197e8508e766f3caab61ef356142c6dc002e07ed09771f341dd6b290edf";
+      version = "5.2.1";
     };
   }
 
@@ -680,8 +658,8 @@
       inherit repos;
       artifactId = "java.jdbc";
       groupId = "org.clojure";
-      sha512 = "50c263853f0b88d4b46746bf8f5efb8536f38dde2a08c26e5d26c2bd3bd851c0c0f0814d7899019c3879de2667b3b432a23de091bd8f8cea3e28bd00f0b715cb";
-      version = "0.7.9";
+      sha512 = "19e37ee3a16ccfdeb299e72ee0ae64a557b20296dd9461bf2288d0507e1d915ad6fcc56e4aadd712340f5c21e2c764ed7d4ad074eb8e4c82dc6ba5fe96111930";
+      version = "0.7.12";
     };
   }
 
@@ -768,8 +746,8 @@
       inherit repos;
       artifactId = "cheshire";
       groupId = "cheshire";
-      sha512 = "5b2a339f8d90951a80105729a080b841e0de671f576bfa164a78bccc08691d548cff6a7124224444f7b3a267c9aca69c18e347657f1d66e407167c9b5b8b52cb";
-      version = "5.10.0";
+      sha512 = "2262573047d194bba28b3d2ca4b00b12f8171d6f8f7f5449df35f10ab1ef5902a9ba2f9937399d6e4b54a78bda919fa205a22a44cde998019bc0cfc508e90f29";
+      version = "5.11.0";
     };
   }
 
@@ -801,8 +779,8 @@
       inherit repos;
       artifactId = "tools.reader";
       groupId = "org.clojure";
-      sha512 = "03677c7eb85d294f878f13066bbd841e788ec1267285690e65c2eb342b02aecd028679509b7f1d192cf5631b0839a92abfe36e93237bf5e2544c14e6cebe7452";
-      version = "1.3.3";
+      sha512 = "3481259c7a1eac719db2921e60173686726a0c2b65879d51a64d516a37f6120db8ffbb74b8bd273404285d7b25143ab5c7ced37e7c0eaf4ab1e44586ccd3c651";
+      version = "1.3.6";
     };
   }
 
@@ -814,6 +792,17 @@
       groupId = "org.tcrawley";
       sha512 = "1b0caf390515212e6b151d6c227b1a62e430e682b6c811736edba3cc918344053e35c092e12afd523198ed6244018450931776f8388e61a593f266476b6db19e";
       version = "1.0.0";
+    };
+  }
+
+  {
+    name = "org.babashka/sci";
+    path = pkgs.fetchMavenArtifact {
+      inherit repos;
+      artifactId = "sci";
+      groupId = "org.babashka";
+      sha512 = "2897029dba4917facf93935229f1288d9e90973e8dbc8ff84448335452815274c23371ab643c35df0b1854ff6de1574c37880267fd0edd900039f5a1678d73c5";
+      version = "0.3.4";
     };
   }
 
@@ -845,8 +834,8 @@
       inherit repos;
       artifactId = "nrepl";
       groupId = "nrepl";
-      sha512 = "663906ff1c8768c4a73fa9f32619da4c244cc86c93d86e8439eb8de81c79486be5a04140c1df6199ba475b3a3e7fd36304faef8b330672dd644945820cc6eb67";
-      version = "0.8.3";
+      sha512 = "92534555cc5fa45e8990b8566996fe784df368849e0938fbc7a89909ccbb62dd7d4fca9b7aa3c615702ec30f9962a460c500f6b60abc72661c5f4c66414fc395";
+      version = "1.0.0";
     };
   }
 
@@ -867,8 +856,8 @@
       inherit repos;
       artifactId = "sqlite-jdbc";
       groupId = "org.xerial";
-      sha512 = "efd1ea26d7f4f9bc66bf0d5f80234a0c535829bd498e4c5a0cab42873b58ac69133497d8c45689a1d3a39e657a2d0474d6b930c7bc415dd623801ee4a7354ffb";
-      version = "3.25.2";
+      sha512 = "f4c27027fe3cb7914aaf155a1afaa0c8b455e5d142b4e5f31d87bfe619c9949e1981ba7eed1f7a8a3cd27edba1321cc4cd74cf4321ae800e8a911b4d94e03930";
+      version = "3.39.3.0";
     };
   }
 
@@ -889,8 +878,8 @@
       inherit repos;
       artifactId = "slf4j-api";
       groupId = "org.slf4j";
-      sha512 = "a944468440a883bb3bde1f78d39abe43a90b6091fd9f1a70430ac10ea91b308b2ef035e4836d68ba97afdba2b04f62edece204278aaa416276a5f8596f8688af";
-      version = "1.7.26";
+      sha512 = "cf50d5cc86404fefa49730da36147db5f6d65c8b06163bbf62311e6874c20ca46db02ab6bda27c9c1485a5c57fe63b89fd3000b8d838c429240ee95734f5901e";
+      version = "2.0.3";
     };
   }
 
@@ -911,8 +900,8 @@
       inherit repos;
       artifactId = "test.check";
       groupId = "org.clojure";
-      sha512 = "ba7b5c915c1e7bd5e9e398f8cd9d74340ca3c4846483bae8f2191e40ea42bdd4d8019ec108c2bd64451f418abebed2258cf0ee5be597cc0bc8a02d772c6385ed";
-      version = "0.10.0-RC1";
+      sha512 = "b8d7a330b0b5514cd6a00c4382052fab51c3c9d3bc53133f8506791fa670e7c5ecd65094977ea5ced91f59623b0abd1ab8feeec96d63c5c6e459b265a655c577";
+      version = "1.1.1";
     };
   }
 
@@ -944,8 +933,8 @@
       inherit repos;
       artifactId = "yaml";
       groupId = "io.forward";
-      sha512 = "561cfe0e92689b95008948a0a8aa839b9932ffd13791fdbd9ce55e0b0e3c895be6441ccd050b62ff671c747373fcba1199246c8bfb4206cb05584d06dea99b7c";
-      version = "1.0.9";
+      sha512 = "e2d3b7aea260346a1db44bcc3c363877d0ff2b327c4fd287759782949b1a498bc8019f06ddabee84443b96b07ea4765443f8190e04f5f903de049e2cc0fd63e9";
+      version = "1.0.11";
     };
   }
 
@@ -966,19 +955,8 @@
       inherit repos;
       artifactId = "core.memoize";
       groupId = "org.clojure";
-      sha512 = "37308fcbbe64d0a2802917ef5a589075f81086d63e08c71a9a1b648b73dd362e5bdc8f756084fde1f4b1964ba82a6dc06b2119460281b7949a271d82e6a47a7e";
-      version = "1.0.236";
-    };
-  }
-
-  {
-    name = "camel-snake-kebab/camel-snake-kebab";
-    path = pkgs.fetchMavenArtifact {
-      inherit repos;
-      artifactId = "camel-snake-kebab";
-      groupId = "camel-snake-kebab";
-      sha512 = "3108a207378e8b6199ae6c71517fcc65dde97d2bab67d533a618c7ff50ea8b849ead3880857d00629d6c269499384b564ed43b631e6b06f283af94e8cae89144";
-      version = "0.4.0";
+      sha512 = "67196537084b7cc34a01454d2a3b72de3fddce081b72d7a6dc1592d269a6c2728b79630bd2d52c1bf2d2f903c12add6f23df954c02ef8237f240d7394ccc3dde";
+      version = "1.0.253";
     };
   }
 
@@ -1010,8 +988,19 @@
       inherit repos;
       artifactId = "data.priority-map";
       groupId = "org.clojure";
-      sha512 = "fb2d703468fb6d5f28c38f25e8e7acdaf02d2fa1ac23c14a9ff065873e88c9b74e155e73e5069436d674d7ef8547f01bc9777b7ae3b9dcde67cbd327d4a20c06";
-      version = "1.0.0";
+      sha512 = "bb8bc5dbfd3738c36b99a51880ac3f1381d6564e67601549ef5e7ae2b900e53cdcdfb8d0fa4bf32fb8ebc4de89d954bfa3ab7e8a1122bc34ee5073c7c707ac13";
+      version = "1.1.0";
+    };
+  }
+
+  {
+    name = "borkdude/sci.impl.reflector";
+    path = pkgs.fetchMavenArtifact {
+      inherit repos;
+      artifactId = "sci.impl.reflector";
+      groupId = "borkdude";
+      sha512 = "c747fd347e6aba9578d105298b7c7402f53e8639d5c8e6dc83b127f3c413feeb1b9dead7405ac2c4345f02290902e8a2affbec749474481e9c9f19b3d049f18f";
+      version = "0.0.1";
     };
   }
 
@@ -1032,8 +1021,8 @@
       inherit repos;
       artifactId = "log4j-over-slf4j";
       groupId = "org.slf4j";
-      sha512 = "d0a13ae82823b921b308c897ec9a11ef86cb1b52dd81343f856224c65851f70eae0890a88550daa3a4ed57e7e2c150018a3cdc2345924a4e489a88827fc639b6";
-      version = "1.7.14";
+      sha512 = "a1f90d8ea338660cc0e38073752cf32e46a042bc408477d841ba7ad69ad0d066bbbf9d4c399a34352d620ba9d2402c7a51574a88f314ddcc796c35adc99c37f4";
+      version = "2.0.3";
     };
   }
 
@@ -1043,19 +1032,8 @@
       inherit repos;
       artifactId = "core.cache";
       groupId = "org.clojure";
-      sha512 = "6e4e126f23b20120c50a4dbefbe1b3b9bd98f0a7b8fa83affa267ff7f0de09542d2727243859a1ea346bda5b782d4ae0110f6c2b169c298261707a1fdadaedb0";
-      version = "1.0.207";
-    };
-  }
-
-  {
-    name = "rewrite-cljs/rewrite-cljs";
-    path = pkgs.fetchMavenArtifact {
-      inherit repos;
-      artifactId = "rewrite-cljs";
-      groupId = "rewrite-cljs";
-      sha512 = "d87c07d510247e1b13dcb505436b3a43d8bb9a4bfebbd2ae0430249d2c8a859032affe2b2a4cda8f987e983f584fd999a3f9b87944d44b8837cdf4e2560c5ab9";
-      version = "0.4.4";
+      sha512 = "0a07ceffc2fa3a536b23773eefc7ef5e1108913b93c3a5416116a6566de76dd5c218f3fb0cc19415cbaa8843838de310b76282f20bf1fc3467006c9ec373667e";
+      version = "1.0.225";
     };
   }
 
@@ -1065,8 +1043,8 @@
       inherit repos;
       artifactId = "core.async";
       groupId = "org.clojure";
-      sha512 = "7c8640769a68256f5cf131ed2436713c3c63bba2c4167f3593a1671ef65931d67b9b43eccfa6e5a20467ca7c6f5efd9cbf58d6c14e035757714f71220a754d0b";
-      version = "1.3.618";
+      sha512 = "160a77da25382d7c257eee56cfe83538620576a331e025a2d672fc26d9f04e606666032395f3c2e26247c782544816a5862348f3a921b1ffffcd309c62ac64f5";
+      version = "1.5.648";
     };
   }
 
@@ -1076,8 +1054,8 @@
       inherit repos;
       artifactId = "jackson-dataformat-smile";
       groupId = "com.fasterxml.jackson.dataformat";
-      sha512 = "8998346f7039df868f3387d219efa0c04fc022a948d098296f3d7ac3f7a9a82bde6ec4a8f83b11994ad50318b5aca37781faacb1f20a65ba2ecc6d6d6eb9468e";
-      version = "2.10.2";
+      sha512 = "4c1566aa4fac309de8fba08ea355165cf2a888b7bcec98e7035ac8acd7315e340415a10b8deec6497fc4eea5ba9319fc989676170d8c4c0d0bbc3d4f3cc4d681";
+      version = "2.13.3";
     };
   }
 

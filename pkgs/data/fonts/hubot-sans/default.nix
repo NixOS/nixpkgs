@@ -1,26 +1,31 @@
 { lib
+, fetchzip
 , stdenvNoCC
-, fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hubot-sans";
-  version = "1.0";
+  version = "1.0.1";
 
-  src = fetchFromGitHub {
-    rev = "v" + version;
-    owner = "github";
-    repo = pname;
-    sha256 = "GOql+V5TH4b3TmhlgnKcx3jzUAO2jm4HRJRNzdIKxgg=";
+  src = fetchzip {
+    url = "https://github.com/github/hubot-sans/releases/download/v${finalAttrs.version}/Hubot-Sans.zip";
+    hash = "sha256-EWTyoGNqyZcqlF1H1Tdcodc8muHIo8C9gbSPAjiogRk=";
+    stripRoot = false;
   };
 
   installPhase = ''
-    install -m644 --target $out/share/fonts/truetype/hubot-sans -D $src/dist/hubot-sans.ttf
+    runHook preInstall
+
+    install -Dm644 Hubot\ Sans/TTF/*.ttf -t $out/share/fonts/truetype/
+    install -Dm644 Hubot\ Sans/OTF/*.otf -t $out/share/fonts/opentype/
+
+    runHook postInstall
   '';
 
   meta = {
     description = "A variable font from GitHub";
     homepage = "https://github.com/github/hubot-sans";
+    changelog = "https://github.com/github/hubot-sans/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.ofl;
     longDescription = ''
       Hubot Sans is Mona Sans’s robotic sidekick. The typeface is designed with
@@ -34,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -1,53 +1,90 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
 , django
+
+# optional-dependencies
 , azure-storage-blob
 , boto3
 , dropbox
 , google-cloud-storage
 , libcloud
 , paramiko
+
+# tests
+, cryptography
+, moto
+, pytestCheckHook
+, rsa
 }:
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.13.2";
+  version = "1.14";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-y63RXJCc63JH1P/FA/Eqm+w2mZ340L73wx5XF31RJog=";
+  src = fetchFromGitHub {
+    owner = "jschneier";
+    repo = "django-storages";
+    rev = "refs/tags/${version}";
+    hash = "sha256-q+vQm1T5/ueGPfwzuUOmSI/nESchqJc4XizJieBsLWc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     django
   ];
 
-  preCheck = ''
-    export DJANGO_SETTINGS_MODULE=tests.settings
-    # timezone issues https://github.com/jschneier/django-storages/issues/1171
-    substituteInPlace tests/test_sftp.py \
-      --replace 'test_accessed_time' 'dont_test_accessed_time' \
-      --replace 'test_modified_time' 'dont_test_modified_time'
-  '';
-
-  nativeCheckInputs = [
-    azure-storage-blob
-    boto3
-    dropbox
-    google-cloud-storage
-    libcloud
-    paramiko
-  ];
+  passthru.optional-dependencies = {
+    azure = [
+      azure-storage-blob
+    ];
+    boto3 = [
+      boto3
+    ];
+    dropbox = [
+      dropbox
+    ];
+    google = [
+      google-cloud-storage
+    ];
+    libcloud = [
+      libcloud
+    ];
+    s3 = [
+      boto3
+    ];
+    sftp = [
+      paramiko
+    ];
+  };
 
   pythonImportsCheck = [
     "storages"
   ];
 
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
+
+  nativeCheckInputs = [
+    cryptography
+    moto
+    pytestCheckHook
+    rsa
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
   meta = with lib; {
-    description = "Collection of custom storage backends for Django";
-    homepage = "https://django-storages.readthedocs.io";
     changelog = "https://github.com/jschneier/django-storages/blob/${version}/CHANGELOG.rst";
+    description = "Collection of custom storage backends for Django";
+    downloadPage = "https://github.com/jschneier/django-storages/";
+    homepage = "https://django-storages.readthedocs.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

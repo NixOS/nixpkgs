@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.55.0";
+  version = "0.59.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+ISWPrpY/urpZZZrn6+Ii8gbrwkQMLL6gXhydXd8HqI=";
+    hash = "sha256-ujIA98QD8ds2/iLLeJqn88nY9tZuuOSnOwGvRznA8PQ=";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
       --replace "ascii_magic~=" "ascii_magic>="
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
-      --replace "pytest-cov" ""
+      --replace "required_plugins = pytest-httpserver pytest-cov" ""
   '';
 
   pythonImportsCheck = [

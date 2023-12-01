@@ -5,11 +5,11 @@
 , pytestCheckHook
 , python-dateutil
 , duckdb
-, pyspark
+, setuptools-scm
 }:
 buildPythonPackage rec {
   pname = "sqlglot";
-  version = "10.5.2";
+  version = "17.14.2";
 
   disabled = pythonOlder "3.8";
 
@@ -17,12 +17,17 @@ buildPythonPackage rec {
     repo = "sqlglot";
     owner = "tobymao";
     rev = "v${version}";
-    hash = "sha256-ZFc2aOhCTRFlrzgnYDSdIZxRqKZ8FvkYSZRU0OMHI34=";
+    hash = "sha256-aImshQ5jf0k62ucpK4X8G7uHGAFQkhGgjMYo4mvSvew=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  # optional dependency used in the sqlglot optimizer
   propagatedBuildInputs = [ python-dateutil ];
 
-  nativeCheckInputs = [ pytestCheckHook duckdb pyspark ];
+  nativeCheckInputs = [ pytestCheckHook duckdb ];
 
   # these integration tests assume a running Spark instance
   disabledTestPaths = [ "tests/dataframe/integration" ];

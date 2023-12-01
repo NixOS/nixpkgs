@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromSourcehut
+, wrapGAppsHook
 , pkg-config
 , cmake
 , meson
@@ -8,6 +9,7 @@
 , gtk3
 , gtk-layer-shell
 , json_c
+, librsvg
 , scdoc
 }:
 
@@ -27,6 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     cmake
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk-layer-shell
     json_c
     scdoc
+    librsvg
   ];
 
   mesonFlags = [
@@ -49,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.linux;
+    mainProgram = "gtkgreet";
   };
 }

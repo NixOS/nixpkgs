@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pkginfo
-, sphinxHook
-, sphinx-rtd-theme
 , pytestCheckHook
 }:
 
@@ -25,15 +23,8 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  outputs = [
-    "out"
-    "doc"
-  ];
-
   nativeBuildInputs = [
     pkginfo
-    sphinx-rtd-theme
-    sphinxHook
   ];
 
   pythonImportsCheck = [

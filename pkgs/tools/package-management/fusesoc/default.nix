@@ -4,7 +4,6 @@
 , verilog
 , verilator
 , gnumake
-, gcc
 , edalize
 , fastjsonschema
 , pyparsing
@@ -35,5 +34,6 @@ buildPythonPackage rec {
     description = "A package manager and build tools for HDL code";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
+    mainProgram = "fusesoc";
   };
 }

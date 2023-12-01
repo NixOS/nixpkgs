@@ -1,32 +1,56 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPyPy
+
+# build-system
+, setuptools
+
+# tests
 , objgraph
 , psutil
-, pytestCheckHook
+, python
+, unittestCheckHook
 }:
 
-
-buildPythonPackage rec {
+let greenlet = buildPythonPackage rec {
   pname = "greenlet";
-  version = "2.0.2";
-  format = "setuptools";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-58jcE699sJe+1koFHS3Unp8K9JXCaZXACp7oQmkNNMA=";
+    hash = "sha256-gWvZSIqUy6eNk+GrtYAA6CZvqcwqqczdbrBpasskAFs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  # tests in passthru, infinite recursion via objgraph/graphviz
+  doCheck = false;
 
   nativeCheckInputs = [
     objgraph
     psutil
-    pytestCheckHook
+    unittestCheckHook
   ];
 
-  doCheck = false; # installed tests need to be executed, not sure how to accomplish that
+  preCheck = ''
+    pushd ${placeholder "out"}/${python.sitePackages}
+  '';
+
+  unittestFlagsArray = [
+    "greenlet.tests"
+  ];
+
+  postCheck = ''
+    popd
+  '';
+
+  passthru.tests.pytest = greenlet.overridePythonAttrs (_: { doCheck = true; });
 
   meta = with lib; {
+    changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
     homepage = "https://github.com/python-greenlet/greenlet";
     description = "Module for lightweight in-process concurrent programming";
     license = with licenses; [
@@ -34,4 +58,5 @@ buildPythonPackage rec {
       mit
     ];
   };
-}
+};
+in greenlet

@@ -64,11 +64,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freeipa";
-  version = "4.10.1";
+  version = "4.11.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/freeipa/freeipa-${version}.tar.gz";
-    sha256 = "sha256-q2rQzcBl1tI4/7+hxEwOY9ND86hObe7O7Y9EEH7cUoA=";
+    sha256 = "sha256-l/e2Dq/ako41QWEZyJCD+PA44PzTnzC8B7jYAm/Tt6Q=";
   };
 
   nativeBuildInputs = [
@@ -167,5 +167,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.s1341 ];
     platforms = platforms.linux;
+    mainProgram = "ipa";
   };
 }

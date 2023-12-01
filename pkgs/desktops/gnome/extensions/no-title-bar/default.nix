@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/poehlerj/no-title-bar";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jonafato svsdep maxeaubrey ];
+    maintainers = with maintainers; [ jonafato svsdep amaxine ];
     platforms = platforms.linux;
   };
 }

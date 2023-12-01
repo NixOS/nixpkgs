@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-dbPz1BnKY4jR/S7A7afh+Q8yS5lszwWR9IpdLijczBM=";
   };
 
-  latex = texlive.combine { inherit (texlive)
-    scheme-basic
+  latex = texliveBasic.withPackages (ps: with ps; [
     collection-pstricks
     collection-fontsrecommended
     l3kernel
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     xcolor
     xkeyval
     xstring
-    ;};
+  ]);
 
   nativeBuildInputs = [ rsync makeWrapper ];
   buildInputs = [ hepmc imagemagick python3 latex python3.pkgs.yoda ];

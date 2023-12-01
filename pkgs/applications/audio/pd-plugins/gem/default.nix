@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -10,17 +11,18 @@
 , libv4l
 , libX11
 , file
- }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "gem-unstable";
-  version = "2020-09-22";
+  version = "2023-07-28";
 
   src = fetchFromGitHub {
+
     owner = "umlaeute";
     repo = "Gem";
-    rev = "2edfde4f0587e72ef325e7f53681936dcc19655b";
-    sha256 = "0k5sq128wxi2qhaidspkw310pdgysxs47agv09pkjgvch2n4d5dq";
+    rev = "4ec12eef8716822c68f7c02a5a94668d2427037d";
+    hash = "sha256-Y/Z7oJdKGd7+aSk8eAN9qu4ss+BOvzaXWpWGjfJqGJ8=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +41,11 @@ stdenv.mkDerivation rec {
     libX11
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Graphics Environment for Multimedia";
     homepage = "http://puredata.info/downloads/gem";
-    license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raboof ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raboof carlthome ];
+    platforms = platforms.linux;
   };
 }

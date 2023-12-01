@@ -24,13 +24,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'big|datatype-md5'" ];
 
+  # error: no member named 'file_string' in 'boost::filesystem::path'
+  env.NIX_CFLAGS_COMPILE = "-UCIFTILIB_BOOST_NO_FSV3";
+
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/Washington-University/CiftiLib";
     description = "Library for reading and writing CIFTI files";
     maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.bsd2;
   };
 }

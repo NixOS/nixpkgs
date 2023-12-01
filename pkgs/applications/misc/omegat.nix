@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, unzip, jdk, makeWrapper}:
 
 stdenv.mkDerivation {
-  version = "4.3.0";
+  version = "6.0.0";
   pname = "omegat";
 
   src = fetchurl {  # their zip has repeated files or something, so no fetchzip
-    url = "mirror://sourceforge/project/omegat/OmegaT%20-%20Standard/OmegaT%204.3.0/OmegaT_4.3.0_Without_JRE.zip";
-    sha256 = "0axz7r30p34z5hgvdglznc82g7yvm3g56dv5190jixskx6ba58rs";
+    url = "mirror://sourceforge/project/omegat/OmegaT%20-%20Standard/OmegaT%206.0.0/OmegaT_6.0.0_Without_JRE.zip";
+    sha256 = "sha256-dsbT5iuZBudUL4Kw4rdvi4y98mcvnYNj9jRvC5wJoYI=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];

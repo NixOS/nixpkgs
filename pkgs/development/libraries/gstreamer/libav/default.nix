@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.22.3";
+  version = "1.22.6";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-LsXIBYCLQ3Gn4ysdoCAqHIprNrbOkFCAv1w0CX0SqSM=";
+    hash = "sha256-d4nmQIOIol8jy/lIz8XGIw1zW7zYt/N/SgHJ40ih46c=";
   };
 
   outputs = [ "out" "dev" ];

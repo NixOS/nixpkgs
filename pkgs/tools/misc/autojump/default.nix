@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, bash }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "autojump";

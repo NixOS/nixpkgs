@@ -23,6 +23,15 @@ in {
     example = ["-d"];
   };
 
+  options.services.cage.environment = mkOption {
+    type = types.attrsOf types.str;
+    default = {};
+    example = {
+      WLR_LIBINPUT_NO_DEVICES = "1";
+    };
+    description = lib.mdDoc "Additional environment variables to pass to Cage.";
+  };
+
   options.services.cage.program = mkOption {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
@@ -79,6 +88,7 @@ in {
         # Set up a full (custom) user session for the user, required by Cage.
         PAMName = "cage";
       };
+      environment = cfg.environment;
     };
 
     security.polkit.enable = true;

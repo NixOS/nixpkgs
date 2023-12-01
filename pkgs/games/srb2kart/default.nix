@@ -16,22 +16,22 @@
 
 let
 
-release_tag = "v1.3";
+  release_tag = "v1.6";
 
-installer = fetchurl {
-  url = "https://github.com/STJr/Kart-Public/releases/download/${release_tag}/srb2kart-v13-Installer.exe";
-  sha256 = "0bk36y7wf6xfdg6j0b8qvk8671hagikzdp5nlfqg478zrj0qf6cs";
-};
+  assets = fetchurl {
+    url = "https://github.com/STJr/Kart-Public/releases/download/${release_tag}/AssetsLinuxOnly.zip";
+    sha256 = "sha256-ejhPuZ1C8M9B0S4+2HN1T5pbormT1eVL3nlivqOszdE=";
+  };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "srb2kart";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "STJr";
     repo = "Kart-Public";
     rev = release_tag;
-    sha256 = "131g9bmc9ihvz0klsc3yzd0pnkhx3mz1vzm8y7nrrsgdz5278y49";
+    sha256 = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,6 @@ in stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    #"-DSRB2_ASSET_DIRECTORY=/build/source/assets"
     "-DGME_INCLUDE_DIR=${game-music-emu}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${lib.getDev SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${lib.getDev SDL2}/include/SDL2"
@@ -68,7 +67,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     mkdir assets/installer
     pushd assets/installer
-    unzip ${installer} "*.kart" srb2.srb
+    unzip ${assets} "*.kart" srb2.srb
     popd
   '';
 

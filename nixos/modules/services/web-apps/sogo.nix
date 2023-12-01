@@ -232,8 +232,8 @@ in {
         proxy_connect_timeout 90;
         proxy_send_timeout 90;
         proxy_read_timeout 90;
-        proxy_buffer_size 4k;
-        proxy_buffers 4 32k;
+        proxy_buffer_size 64k;
+        proxy_buffers 8 64k;
         proxy_busy_buffers_size 64k;
         proxy_temp_file_write_size 64k;
         client_max_body_size 50m;

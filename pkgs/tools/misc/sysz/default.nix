@@ -29,5 +29,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with maintainers; [ hleboulanger ];
     platforms = platforms.unix;
     changelog = "https://github.com/joehillen/sysz/blob/${version}/CHANGELOG.md";
+    mainProgram = "sysz";
   };
 }

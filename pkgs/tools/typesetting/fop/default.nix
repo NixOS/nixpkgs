@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "fop";
   };
 }

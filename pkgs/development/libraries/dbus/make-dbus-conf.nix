@@ -42,4 +42,8 @@ runCommand "dbus-1"
       --stringparam apparmor "$apparmor" \
       ${./make-session-conf.xsl} ${dbus}/share/dbus-1/session.conf \
       > $out/session.conf
+
+    # check if files are empty or only contain space characters
+    grep -q '[^[:space:]]' "$out/system.conf" || (echo "\"$out/system.conf\" was generated incorrectly and is empty, try building again." && exit 1)
+    grep -q '[^[:space:]]' "$out/session.conf" || (echo "\"$out/session.conf\" was generated incorrectly and is empty, try building again." && exit 1)
   ''

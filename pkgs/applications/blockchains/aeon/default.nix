@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
   ];

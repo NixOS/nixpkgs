@@ -4,12 +4,14 @@
 , extra-cmake-modules
 , wrapGAppsHook
 
+, futuresql
 , gst_all_1
 , kcoreaddons
 , kcrash
 , ki18n
 , kirigami2
 , kirigami-addons
+, qcoro
 , qtimageformats
 , qtmultimedia
 , qtquickcontrols2
@@ -27,11 +29,13 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    futuresql
     kcoreaddons
     kcrash
     ki18n
     kirigami2
     kirigami-addons
+    qcoro
     qtimageformats
     qtmultimedia
     qtquickcontrols2

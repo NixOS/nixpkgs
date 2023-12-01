@@ -24,7 +24,7 @@ buildGoModule rec {
     sha256 = "sha256-sABNzhyfBNU5pWyE/VWHUzuSyKsx0glj01ectJPakV8=";
   };
 
-  vendorSha256 = "sha256-wB3UiuptT6D0CIUlHC1d5k0rjIxNeh5yAWOmYpyLGmA=";
+  vendorHash = "sha256-wB3UiuptT6D0CIUlHC1d5k0rjIxNeh5yAWOmYpyLGmA=";
 
   doCheck = false;
 
@@ -45,7 +45,6 @@ buildGoModule rec {
     description = "An S3-compatible object storage server";
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
-    platforms = platforms.unix;
     license = licenses.agpl3Plus;
   };
 }

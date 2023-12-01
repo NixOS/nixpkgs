@@ -1,123 +1,110 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    literalExpression
+    mdDoc
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    types
+    ;
 
   cfg = config.services.plantuml-server;
 
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "plantuml-server" "allowPlantumlInclude" ] "This option has been removed from PlantUML.")
+  ];
+
   options = {
     services.plantuml-server = {
-      enable = mkEnableOption (lib.mdDoc "PlantUML server");
+      enable = mkEnableOption (mdDoc "PlantUML server");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.plantuml-server;
-        defaultText = literalExpression "pkgs.plantuml-server";
-        description = lib.mdDoc "PlantUML server package to use";
-      };
+      package = mkPackageOption pkgs "plantuml-server" { };
 
       packages = {
-        jdk = mkOption {
-          type = types.package;
-          default = pkgs.jdk;
-          defaultText = literalExpression "pkgs.jdk";
-          description = lib.mdDoc "JDK package to use for the server";
-        };
-        jetty = mkOption {
-          type = types.package;
-          default = pkgs.jetty;
-          defaultText = literalExpression "pkgs.jetty";
-          description = lib.mdDoc "Jetty package to use for the server";
+        jdk = mkPackageOption pkgs "jdk" { };
+        jetty = mkPackageOption pkgs "jetty" {
+          default = [ "jetty_11" ];
+          extraDescription = ''
+            At the time of writing (v1.2023.12), PlantUML Server does not support
+            Jetty versions higher than 12.x.
+
+            Jetty 12.x has introduced major breaking changes, see
+            <https://github.com/jetty/jetty.project/releases/tag/jetty-12.0.0> and
+            <https://eclipse.dev/jetty/documentation/jetty-12/programming-guide/index.html#pg-migration-11-to-12>
+          '';
         };
       };
 
       user = mkOption {
         type = types.str;
         default = "plantuml";
-        description = lib.mdDoc "User which runs PlantUML server.";
+        description = mdDoc "User which runs PlantUML server.";
       };
 
       group = mkOption {
         type = types.str;
         default = "plantuml";
-        description = lib.mdDoc "Group which runs PlantUML server.";
+        description = mdDoc "Group which runs PlantUML server.";
       };
 
       home = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/lib/plantuml";
-        description = lib.mdDoc "Home directory of the PlantUML server instance.";
+        description = mdDoc "Home directory of the PlantUML server instance.";
       };
 
       listenHost = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "Host to listen on.";
+        description = mdDoc "Host to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8080;
-        description = lib.mdDoc "Port to listen on.";
+        description = mdDoc "Port to listen on.";
       };
 
       plantumlLimitSize = mkOption {
         type = types.int;
         default = 4096;
-        description = lib.mdDoc "Limits image width and height.";
+        description = mdDoc "Limits image width and height.";
       };
 
-      graphvizPackage = mkOption {
-        type = types.package;
-        default = pkgs.graphviz;
-        defaultText = literalExpression "pkgs.graphviz";
-        description = lib.mdDoc "Package containing the dot executable.";
-      };
+      graphvizPackage = mkPackageOption pkgs "graphviz" { };
 
       plantumlStats = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
+        description = mdDoc "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
       };
 
       httpAuthorization = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
-      };
-
-      allowPlantumlInclude = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Enables !include processing which can read files from the server into diagrams. Files are read relative to the current working directory.";
+        description = mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.users.${cfg.user} = {
-      isSystemUser = true;
-      group = cfg.group;
-      home = cfg.home;
-      createHome = true;
-    };
-
-    users.groups.${cfg.group} = {};
-
     systemd.services.plantuml-server = {
       description = "PlantUML server";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.home ];
+
       environment = {
         PLANTUML_LIMIT_SIZE = builtins.toString cfg.plantumlLimitSize;
         GRAPHVIZ_DOT = "${cfg.graphvizPackage}/bin/dot";
         PLANTUML_STATS = if cfg.plantumlStats then "on" else "off";
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
-        ALLOW_PLANTUML_INCLUDE = if cfg.allowPlantumlInclude then "true" else "false";
       };
       script = ''
       ${cfg.packages.jdk}/bin/java \
@@ -128,13 +115,40 @@ in
           jetty.http.host=${cfg.listenHost} \
           jetty.http.port=${builtins.toString cfg.listenPort}
       '';
+
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = mkIf (cfg.home == "/var/lib/plantuml") "plantuml";
+        StateDirectoryMode = mkIf (cfg.home == "/var/lib/plantuml") "0750";
+
+        # Hardening
+        AmbientCapabilities = [ "" ];
+        CapabilityBoundingSet = [ "" ];
+        DynamicUser = true;
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateNetwork = false;
         PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" ];
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ truh ];
+  meta.maintainers = with lib.maintainers; [ truh anthonyroussel ];
 }

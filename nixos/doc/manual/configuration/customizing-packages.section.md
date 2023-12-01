@@ -1,15 +1,34 @@
 # Customising Packages {#sec-customising-packages}
 
 Some packages in Nixpkgs have options to enable or disable optional
-functionality or change other aspects of the package. For instance, the
-Firefox wrapper package (which provides Firefox with a set of plugins
-such as the Adobe Flash player) has an option to enable the Google Talk
-plugin. It can be set in `configuration.nix` as follows:
-`nixpkgs.config.firefox.enableGoogleTalkPlugin = true;`
+functionality or change other aspects of the package.
 
 ::: {.warning}
 Unfortunately, Nixpkgs currently lacks a way to query available
 configuration options.
+:::
+
+::: {.note}
+For example, many packages come with extensions one might add.
+Examples include:
+- [`passExtensions.pass-otp`](https://search.nixos.org/packages/query=passExtensions.pass-otp)
+- [`python310Packages.requests`](https://search.nixos.org/packages/query=python310Packages.requests)
+
+You can use them like this:
+```nix
+environment.systemPackages = with pkgs; [
+  sl
+  (pass.withExtensions (subpkgs: with subpkgs; [
+    pass-audit
+    pass-otp
+    pass-genphrase
+  ]))
+  (python3.withPackages (subpkgs: with subpkgs; [
+      requests
+  ]))
+  cowsay
+];
+```
 :::
 
 Apart from high-level options, it's possible to tweak a package in

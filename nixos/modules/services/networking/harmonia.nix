@@ -14,7 +14,7 @@ in
         description = lib.mdDoc "Path to the signing key that will be used for signing the cache";
       };
 
-      package = lib.mkPackageOptionMD pkgs "harmonia" { };
+      package = lib.mkPackageOption pkgs "harmonia" { };
 
       settings = lib.mkOption {
         inherit (format) type;
@@ -28,6 +28,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    nix.settings.extra-allowed-users = [ "harmonia" ];
+
     systemd.services.harmonia = {
       description = "harmonia binary cache service";
 

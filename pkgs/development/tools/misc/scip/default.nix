@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "scip";
-  version = "0.2.3";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     rev = "v${version}";
-    hash = "sha256-0ErEA44vRRntWxajUKiQXqaKvQtqCPPXnI/sBktQyIo=";
+    hash = "sha256-lZ3W2Z69P5QQN+PgF9+Apj/uEXWaTS+5QOg17m1mGPU=";
   };
 
-  vendorHash = "sha256-T0NYucDVBnTxROVYXlccOvHX74Cs6czXL/fy14I8MZc=";
+  vendorHash = "sha256-3Tq2cexcxHjaH6WIz2hneE1QeBSGoMINBncKbqxODxQ=";
 
   ldflags = [
     "-s"
@@ -24,8 +24,10 @@ buildGoModule rec {
     "-X=main.Reproducible=true"
   ];
 
-  postInstall = ''
-    mv $out/bin/{cmd,scip}
+  # update documentation to fix broken test
+  postPatch = ''
+    substituteInPlace docs/CLI.md \
+      --replace 0.3.0 0.3.1
   '';
 
   passthru.tests = {

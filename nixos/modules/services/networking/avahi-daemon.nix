@@ -56,6 +56,8 @@ in
       '';
     };
 
+    package = mkPackageOption pkgs "avahi" { };
+
     hostName = mkOption {
       type = types.str;
       default = config.networking.hostName;
@@ -260,7 +262,7 @@ in
       (mkAfter [ "mdns" ]) # after dns
     ]);
 
-    environment.systemPackages = [ pkgs.avahi ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc = (mapAttrs'
       (n: v: nameValuePair
@@ -286,19 +288,19 @@ in
       # return a sensible value.
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
-      path = [ pkgs.coreutils pkgs.avahi ];
+      path = [ pkgs.coreutils cfg.package ];
 
       serviceConfig = {
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
-        ExecStart = "${pkgs.avahi}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
         ConfigurationDirectory = "avahi/services";
       };
     };
 
     services.dbus.enable = true;
-    services.dbus.packages = [ pkgs.avahi ];
+    services.dbus.packages = [ cfg.package ];
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 5353 ];
   };

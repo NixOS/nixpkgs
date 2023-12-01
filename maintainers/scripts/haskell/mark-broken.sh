@@ -10,6 +10,24 @@
 
 set -euo pipefail
 
+do_commit=false
+mark_broken_list_flags=""
+
+for arg in "$@"; do
+    case "$arg" in
+        --do-commit)
+            do_commit=true
+            ;;
+        --no-request-logs)
+            mark_broken_list_flags="$mark_broken_list_flags $arg"
+            ;;
+        *)
+            echo "$0: unknown flag: $arg"
+            exit 100
+            ;;
+    esac
+done
+
 broken_config="pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml"
 
 tmpfile=$(mktemp)
@@ -17,7 +35,7 @@ trap "rm ${tmpfile}" 0
 
 echo "Remember that you need to manually run 'maintainers/scripts/haskell/hydra-report.hs get-report' sometime before running this script."
 echo "Generating a list of broken builds and displaying for manual confirmation ..."
-maintainers/scripts/haskell/hydra-report.hs mark-broken-list | sort -i > "$tmpfile"
+maintainers/scripts/haskell/hydra-report.hs mark-broken-list $mark_broken_list_flags | sort -i > "$tmpfile"
 
 $EDITOR "$tmpfile"
 
@@ -34,7 +52,7 @@ clear="env -u HOME -u NIXPKGS_CONFIG"
 $clear maintainers/scripts/haskell/regenerate-hackage-packages.sh
 evalline=$(maintainers/scripts/haskell/hydra-report.hs eval-info)
 
-if [[ "${1:-}" == "--do-commit" ]]; then
+if $do_commit; then
 git add $broken_config
 git add pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml
 git add pkgs/development/haskell-modules/hackage-packages.nix

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjose";
-  version = "0.6.2.1";
+  version = "0.6.2.2";
 
   src = fetchFromGitHub {
     owner = "zmartzone";
     repo = "cjose";
     rev = "v${version}";
-    sha256 = "sha256-QgSO4jFouowDJeUTT4kUEXD+ctQ7JiY/5DkiPyb+Z/I=";
+    sha256 = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "libubox";
-  version = "unstable-2023-01-03${lib.optionalString with_ustream_ssl "-${ustream-ssl.ssl_implementation.pname}"}";
+  version = "unstable-2023-11-03";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "eac92a4d5d82eb31e712157e7eb425af728b2c43";
-    sha256 = "0w6mmwmd3ljhkqfk0qswq28dp63k30s3brlgf8lyi7vj7mrhvn3c";
+    rev = "f7d1569113110ea8df071d2ea64fd17aaf5b42c9";
+    hash = "sha256-W0+QXI0gJ4WwrlRMPAJOChvilZ4zlAf4kXrfgBAkQAE=";
   };
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=OFF" (if with_lua then "-DLUAPATH=${placeholder "out"}/lib/lua" else "-DBUILD_LUA=OFF") ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     description = "C utility functions for OpenWrt";
     homepage = "https://git.openwrt.org/?p=project/libubox.git;a=summary";
     license = licenses.isc;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz mkg20001 ];
     mainProgram = "jshn";
     platforms = platforms.all;
   };

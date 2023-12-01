@@ -1,28 +1,43 @@
 { lib
-, python3
 , buildPythonPackage
 , fetchPypi
+
+# build-system
+, poetry-core
+
+# propagates
+, flet-core
+, httpx
+, oauthlib
+, packaging
+, typing-extensions
+, watchdog
+, websocket-client
+, websockets
+
 }:
 
 buildPythonPackage rec {
   pname = "flet";
-  version = "0.6.2";
+  version = "0.10.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EDNATwO2N4jXVC5H1VmXqC9XGTnQo8vLvTEozRYZuj4=";
+    hash = "sha256-Ogy4F9/beSb3GCpwPsN+8hsVroRoHTSojqg+5eXwcRI=";
   };
 
-  patches = [
-    ./pyproject.toml.patch
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'httpx = "^0.23' 'httpx = ">=0.23' \
+      --replace 'watchdog = "^2' 'watchdog = ">=2'
+  '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     flet-core
     typing-extensions
     websocket-client

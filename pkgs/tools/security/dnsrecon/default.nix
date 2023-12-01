@@ -5,15 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
-  version = "1.1.4";
+  version = "1.1.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = pname;
     rev = version;
-    hash = "sha256-DtyYYNtv0Zk8103NN+vlnr3Etv0bAZ6+A2CXeZZgiUg=";
+    hash = "sha256-W7ZFc+kF00ANoYVTlsY+lJ9FjMEGbqYfNojoZFiRHU8=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "flake8" "" \
+      --replace "pytest" ""
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     dnspython

@@ -1,8 +1,8 @@
-from pathlib import Path
 import io
 import os
 import pty
 import subprocess
+from pathlib import Path
 
 from test_driver.logger import rootlog
 

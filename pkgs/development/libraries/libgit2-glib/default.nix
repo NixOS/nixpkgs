@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
-  version = "1.1.0";
+  version = "1.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "w43XV12vgUHh5CIzOldfr2XzySEMCOg+mBuI3UG/HvM=";
+    sha256 = "EzHa2oOPTh9ZGyZFnUQSajJd52LcPNJhU6Ma+9/hgZA=";
   };
 
   nativeBuildInputs = [
@@ -52,10 +52,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in meson_vapi_link.py meson_python_compile.py; do
-      chmod +x $f
-      patchShebangs $f
-    done
+    chmod +x meson_python_compile.py
+    patchShebangs meson_python_compile.py
   '';
 
   passthru = {

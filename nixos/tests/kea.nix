@@ -134,31 +134,32 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
         extraArgs = [
           "-v"
         ];
-        extraConfig = ''
-          server:
-              listen: 0.0.0.0@53
+        settings = {
+          server.listen = [
+            "0.0.0.0@53"
+          ];
 
-          log:
-            - target: syslog
-              any: debug
+          log.syslog.any = "info";
 
-          acl:
-            - id: dhcp_ddns
-              address: 10.0.0.1
-              action: update
+          acl.dhcp_ddns = {
+            address = "10.0.0.1";
+            action = "update";
+          };
 
-          template:
-            - id: default
-              storage: ${zonesDir}
-              zonefile-sync: -1
-              zonefile-load: difference-no-serial
-              journal-content: all
+          template.default = {
+            storage = zonesDir;
+            zonefile-sync = "-1";
+            zonefile-load = "difference-no-serial";
+            journal-content = "all";
+          };
 
-          zone:
-            - domain: lan.nixos.test
-              file: lan.nixos.test.zone
-              acl: [dhcp_ddns]
-        '';
+          zone."lan.nixos.test" = {
+            file = "lan.nixos.test.zone";
+            acl = [
+              "dhcp_ddns"
+            ];
+          };
+        };
       };
 
     };

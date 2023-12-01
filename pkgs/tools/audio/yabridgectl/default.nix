@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage {
   version = yabridge.version;
 
   src = yabridge.src;
-  sourceRoot = "source/tools/yabridgectl";
+  sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = yabridge.meta.platforms;
+    mainProgram = "yabridgectl";
   };
 }

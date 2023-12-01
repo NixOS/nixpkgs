@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ svend ];
     platforms = platforms.linux;
+    mainProgram = "dual-function-keys";
   };
 }

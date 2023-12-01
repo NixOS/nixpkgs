@@ -15,9 +15,7 @@ let
     storage = {
       cache.blobdescriptor = blobCache;
       delete.enabled = cfg.enableDelete;
-    } // (if cfg.storagePath != null
-          then { filesystem.rootdirectory = cfg.storagePath; }
-          else {});
+    } // (optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -49,12 +47,8 @@ in {
   options.services.dockerRegistry = {
     enable = mkEnableOption (lib.mdDoc "Docker Registry");
 
-    package = mkOption {
-      type = types.package;
-      description = mdDoc "Which Docker registry package to use.";
-      default = pkgs.docker-distribution;
-      defaultText = literalExpression "pkgs.docker-distribution";
-      example = literalExpression "pkgs.gitlab-container-registry";
+    package = mkPackageOption pkgs "docker-distribution" {
+      example = "gitlab-container-registry";
     };
 
     listenAddress = mkOption {
@@ -152,12 +146,10 @@ in {
     };
 
     users.users.docker-registry =
-      (if cfg.storagePath != null
-      then {
+      (optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
-      }
-      else {}) // {
+      }) // {
         group = "docker-registry";
         isSystemUser = true;
       };

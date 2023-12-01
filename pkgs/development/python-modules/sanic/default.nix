@@ -1,30 +1,43 @@
 { lib
 , stdenv
-, aiofiles
-, beautifulsoup4
 , buildPythonPackage
-, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
 , fetchFromGitHub
-, gunicorn
+, fetchpatch
+
+# build-system
+, setuptools
+, wheel
+
+# propagates
+, aiofiles
+, html5tagger
 , httptools
 , multidict
+, sanic-routing
+, tracerite
+, typing-extensions
+, ujson
+, uvloop
+, websockets
+
+# optionals
+, aioquic
+
+# tests
+, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
+
+, beautifulsoup4
+, gunicorn
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, pythonAtLeast
-, sanic-routing
 , sanic-testing
-, setuptools
-, ujson
 , uvicorn
-, uvloop
-, websockets
-, aioquic
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "22.12.0";
+  version = "23.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,23 +46,44 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vj780rP5rJ+YsMWlb3BR9LTKT/nTt0C2H3J0X9sysj8=";
+    hash = "sha256-Ffw92mlYNV+ikb6299uw24EI1XPpl3Ju2st1Yt/YHKw=";
   };
+
+  patches = [
+    # https://github.com/sanic-org/sanic/pull/2801
+    (fetchpatch {
+      name = "fix-test-one-cpu.patch";
+      url = "https://github.com/sanic-org/sanic/commit/a1df2a6de1c9c88a85d166e7e2636d26f7925852.patch";
+      hash = "sha256-vljGuoP/Q9HrP+/AOoI1iUpbDQ4/1Pn7AURP1dncI00=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
     aiofiles
-    aioquic
     httptools
+    html5tagger
     multidict
     sanic-routing
+    tracerite
+    typing-extensions
     ujson
     uvloop
     websockets
   ];
+
+  passthru.optional-dependencies = {
+    ext = [
+      # TODO: sanic-ext
+    ];
+    http3 = [
+      aioquic
+    ];
+  };
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -58,7 +92,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
-  ];
+  ] ++ passthru.optional-dependencies.http3;
 
   inherit doCheck;
 
@@ -107,11 +141,17 @@ buildPythonPackage rec {
     "test_default_reload_shutdown_order"
     # App not found.
     "test_input_is_dir"
+    # HTTP 500 with Websocket subprotocols
+    "test_websocket_route_with_subprotocols"
+    # Socket closes early
+    "test_no_exceptions_when_cancel_pending_request"
   ];
 
   disabledTestPaths = [
     # We are not interested in benchmarks
     "benchmark/"
+    # We are also not interested in typing
+    "typing/test_typing.py"
     # unable to create async loop
     "test_app.py"
     "test_asgi.py"
@@ -130,6 +170,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc AluisioASG ];
+    maintainers = with maintainers; [ AluisioASG ];
   };
 }

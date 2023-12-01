@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , runtimeShell
 
 # build
@@ -27,14 +28,20 @@ buildPythonPackage rec {
     hash = "sha256-8pXOnLNjhIv0d+BqjW8wlb6BT6CmFHSsxn5wLOv3LBQ=";
   };
 
+  patches = [
+    # https://github.com/jedie/python-creole/pull/77
+    (fetchpatch {
+      name = "replace-poetry-with-poetry-core.patch";
+      url = "https://github.com/jedie/python-creole/commit/bfc46730ab4a189f3142246cead8d26005a28671.patch";
+      hash = "sha256-WtoEQyu/154Cfj6eSnNA+t37+o7Ij328QGMKxwcLg5k=";
+    })
+  ];
+
   nativeBuildInputs = [
     poetry-core
   ];
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
-
     substituteInPlace Makefile \
       --replace "/bin/bash" "${runtimeShell}"
 

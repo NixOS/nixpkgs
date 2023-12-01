@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "whispers";
-  version = "2.1.5";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adeptex";
     repo = pname;
-    rev = version;
-    hash = "sha256-vY8ruemRYJ05YtJAYX3TFlp+pRwF7Tkp7eft9e+HrgA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9vXku8BWJtlf+lmAcQ8a7qTisRNc+xVw0T0Eunc4lt4=";
   };
 
   propagatedBuildInputs = [

@@ -3,7 +3,7 @@
 , glib, gdk-pixbuf, cairo
 , mailcap, pango, gtk3
 , glib-networking, gsettings-desktop-schemas
-, xclip, notify-osd, enchant
+, xclip, wl-clipboard, notify-osd, enchant
 }:
 
 stdenv.mkDerivation rec {
@@ -24,10 +24,13 @@ stdenv.mkDerivation rec {
     glib gdk-pixbuf cairo
     mailcap pango gtk3
     glib-networking gsettings-desktop-schemas
-    xclip notify-osd enchant
+    notify-osd enchant
   ] ++ gstBuildInputs;
 
   GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstBuildInputs;
+
+  # The executable is already built in sbclPackages.nyxt, buildPhase tries to build using the makefile which we ignore
+  dontBuild = true;
 
   dontWrapGApps = true;
   installPhase = ''
@@ -39,6 +42,7 @@ stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \
+      --prefix PATH : ${lib.makeBinPath [ xclip wl-clipboard ]} \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
       --argv0 nyxt "''${gappsWrapperArgs[@]}"
   '';
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lewo payas ];
+    maintainers = with maintainers; [ lewo dariof4 ];
     platforms = platforms.all;
   };
 }

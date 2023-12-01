@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby_3_0, tzdata, git, nettools, nixosTests, nodejs, openssl
+, ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+, prefetch-yarn-deps, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
 
 let
@@ -17,7 +17,7 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    ruby = ruby_3_0;
+    ruby = ruby_3_1;
     gemdir = ./rubyEnv;
     gemset =
       let x = import (gemdir + "/gemset.nix") src;
@@ -33,15 +33,6 @@ let
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
         };
-        # the included yarn rake task attaches the yarn:install task
-        # to assets:precompile, which is both unnecessary (since we
-        # run `yarn install` ourselves) and undoes the shebang patches
-        # in node_modules
-        railties = x.railties // {
-          dontBuild = false;
-          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
-          patchFlags = [ "-p2" ];
-        };
       };
     groups = [
       "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
@@ -50,7 +41,7 @@ let
     # `console` executable.
     ignoreCollisions = true;
 
-    extraConfigPaths = [ "${src}/vendor" ];
+    extraConfigPaths = [ "${src}/vendor" "${src}/gems" ];
   };
 
   assets = stdenv.mkDerivation {
@@ -62,7 +53,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert prefetch-yarn-deps ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -97,7 +88,7 @@ let
       yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+      fixup-yarn-lock yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
@@ -169,6 +160,7 @@ stdenv.mkDerivation {
     ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
+    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
   '';
 
   buildPhase = ''
@@ -211,7 +203,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
+    maintainers = teams.gitlab.members;
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

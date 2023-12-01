@@ -1,12 +1,14 @@
 { buildFHSEnv
 , symlinkJoin
 , bottles-unwrapped
-, gst_all_1
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 }:
 
 let fhsEnv = {
+  # Many WINE games need 32bit
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     bottles-unwrapped
     # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
@@ -34,6 +36,14 @@ let fhsEnv = {
         libXv
         libXxf86vm
       ];
+      gstreamerDeps = pkgs: with pkgs.gst_all_1; [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-ugly
+        gst-plugins-bad
+        gst-libav
+      ];
     in
     pkgs: with pkgs; [
       # https://wiki.winehq.org/Building_Wine
@@ -46,12 +56,6 @@ let fhsEnv = {
       gnutls
       libglvnd
       gsm
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-libav
       libgphoto2
       libjpeg_turbo
       libkrb5
@@ -88,11 +92,8 @@ let fhsEnv = {
       p11-kit
       zlib # Freetype
     ] ++ xorgDeps pkgs
+    ++ gstreamerDeps pkgs
     ++ extraLibraries pkgs;
-
-  profile = ''
-    export GST_PLUGIN_PATH=/usr/lib32/gstreamer-1.0:/usr/lib64/gstreamer-1.0
-  '';
 };
 in
 symlinkJoin {

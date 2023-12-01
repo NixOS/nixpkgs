@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "FILES=b2sum.c ../sse/" "#FILES=b2sum.c ../sse/"
   '';
 
-  sourceRoot = "source/b2sum";
+  sourceRoot = "${finalAttrs.src.name}/b2sum";
 
   buildInputs = [ openmp ];
 

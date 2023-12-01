@@ -4,7 +4,7 @@
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "edid-decode";
   version = "unstable-2022-12-14";
 
@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
+    mainProgram = "edid-decode";
   };
-})
+}

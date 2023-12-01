@@ -13,6 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libiconv ];
 
+  # Silence warnings related to use of implicitly declared library functions and implicit ints.
+  # TODO: Remove and/or fix with patches the next time this package is updated.
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=implicit-int"
+    ];
+  };
+
   preBuild = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h

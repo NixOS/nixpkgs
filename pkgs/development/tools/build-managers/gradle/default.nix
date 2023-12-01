@@ -119,6 +119,7 @@ rec {
         ];
         license = licenses.asl20;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
+        mainProgram = "gradle";
       };
     };
 
@@ -127,16 +128,16 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.0.1";
-    nativeVersion = "0.22-milestone-24";
-    sha256 = "02g9i1mrpdydj8d6395cv6a4ny9fw3z7sjzr7n6l6a9zx65masqv";
+    version = "8.4";
+    nativeVersion = "0.22-milestone-25";
+    sha256 = "1bkjxw7i0lm17pdyyvka4xpl6z0cdj0izagphync6839i2pg66iy";
     defaultJava = jdk17;
   };
 
   gradle_7 = gen {
-    version = "7.6.1";
-    nativeVersion = "0.22-milestone-24";
-    sha256 = "11qz1xjfihnlvsblqqnd49kmvjq86pzqcylj6k1zdvxl4dd60iv1";
+    version = "7.6.3";
+    nativeVersion = "0.22-milestone-25";
+    sha256 = "1b6gk0yiyvf86vigd05mz7ryqs8yrpswk9bmpwrnqcp45r3jw33l";
     defaultJava = jdk17;
   };
 

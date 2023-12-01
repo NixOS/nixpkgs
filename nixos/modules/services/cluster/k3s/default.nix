@@ -15,12 +15,7 @@ in
   options.services.k3s = {
     enable = mkEnableOption (lib.mdDoc "k3s");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.k3s;
-      defaultText = literalExpression "pkgs.k3s";
-      description = lib.mdDoc "Package that should be used for k3s";
-    };
+    package = mkPackageOption pkgs "k3s" { };
 
     role = mkOption {
       description = lib.mdDoc ''

@@ -1,24 +1,43 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration, Foundation }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "kamiyaa";
-    repo = pname;
+    repo = "joshuto";
     rev = "v${version}";
-    sha256 = "sha256-sSrXBPZe9R8s+MzWA7cRlaRCyf/4z2qb6DrUCgvKQh8=";
+    hash = "sha256-d2r8xPGnH/299wjEijilgqy3u/xJgtRmwzJdHt0sA+o=";
   };
 
-  cargoSha256 = "sha256-e4asmP/wTnX6/xrK6lAgCkRlGRFniveEiL5GRXVzcZg=";
+  cargoHash = "sha256-amgqoL7NYfl3WzTtgvDoBX46rsL9248rbCis6MHVQhE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration Foundation ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd joshuto \
+      --bash <($out/bin/joshuto completions bash) \
+      --zsh <($out/bin/joshuto completions zsh) \
+      --fish <($out/bin/joshuto completions fish)
+  '';
 
   meta = with lib; {
     description = "Ranger-like terminal file manager written in Rust";
     homepage = "https://github.com/kamiyaa/joshuto";
+    changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda totoroot ];
+    maintainers = with maintainers; [ figsoda totoroot xrelkd ];
+    mainProgram = "joshuto";
   };
 }

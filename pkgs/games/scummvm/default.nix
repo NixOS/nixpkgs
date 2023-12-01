@@ -5,23 +5,23 @@
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${version}";
-    hash = "sha256-kyWgy5Nm8v/zbnhNMUyy/wUIq0I6nQyM9UqympYfwvg=";
+    hash = "sha256-GVsvLAjb7pECd7uvPT9ubDFMIkiPWdU5owOafxk5iy0=";
   };
 
   nativeBuildInputs = [ nasm ];
 
   buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
+    alsa-lib libGLU libGL
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
   ] ++ [
-    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis libGLU libGL SDL2 zlib
+    curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis SDL2 zlib
   ];
 
   dontDisableStatic = true;

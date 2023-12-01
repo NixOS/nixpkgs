@@ -1,17 +1,26 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, pkg-config, python3
 , flac, lame, libmpg123, libogg, libopus, libvorbis
 , alsa-lib, Carbon, AudioToolbox
+
+# for passthru.tests
+, audacity
+, freeswitch
+, gst_all_1
+, libsamplerate
+, moc
+, pipewire
+, pulseaudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsndfile";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-zd0HDUzVYLyFjhIudBJQaKJUtYMjZeQRLALSkyD9tXU=";
+    hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
   };
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
@@ -32,6 +41,29 @@ stdenv.mkDerivation rec {
 
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
+
+  doCheck = true;
+  preCheck = ''
+    patchShebangs tests/test_wrapper.sh tests/pedantic-header-test.sh
+
+    substituteInPlace tests/test_wrapper.sh \
+      --replace '/usr/bin/env' "$(type -P env)"
+  '';
+
+  passthru.tests = {
+    inherit
+      audacity
+      freeswitch
+      libsamplerate
+      moc
+      pipewire
+      pulseaudio;
+    inherit (python3.pkgs)
+      soundfile
+      wavefile;
+    inherit (gst_all_1) gst-plugins-bad;
+    lame = (lame.override { sndfileFileIOSupport = true; });
+  };
 
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";

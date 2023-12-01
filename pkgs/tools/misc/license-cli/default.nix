@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromSourcehut
 , rustPlatform
 , installShellFiles
@@ -14,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "license-cli";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "license";
     rev = version;
-    hash = "sha256-M5ypymJ99T4Vc7XSmqNb69yBLgSYu9I+6FEQvtFGUf0=";
+    hash = "sha256-OGS26mE5rjxlZOaBWhYc7C8aM3Lq2xX0f31LgckjJF8=";
   };
 
-  cargoHash = "sha256-me4xPP6fO1D+vvR9XZg2EHieY7OU2HHQ4P0nkk/IKpE=";
+  cargoHash = "sha256-Zj9t/e6QhiOxU8mlVRBKEbviSTKXM4WQ3lqtoCcMbMI=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 

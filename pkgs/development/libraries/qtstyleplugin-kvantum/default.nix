@@ -5,17 +5,22 @@
 , qmake
 , qtbase
 , qtsvg
-, qtx11extras
-, kwindowsystem
+, qtx11extras ? null
+, kwindowsystem ? null
+, qtwayland
 , libX11
 , libXext
 , qttools
 , wrapQtAppsHook
 , gitUpdater
-}:
 
+, qt5Kvantum ? null
+}:
+let
+  isQt6 = lib.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation rec {
-  pname = "qtstyleplugin-kvantum";
+  pname = "qtstyleplugin-kvantum${lib.optionalString isQt6 "6"}";
   version = "1.0.10";
 
   src = fetchFromGitHub {
@@ -34,13 +39,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-    qtx11extras
-    kwindowsystem
     libX11
     libXext
-  ];
+  ] ++ lib.optionals (!isQt6) [ qtx11extras kwindowsystem ]
+    ++ lib.optional isQt6 qtwayland;
 
-  sourceRoot = "source/Kvantum";
+  sourceRoot = "${src.name}/Kvantum";
 
   patches = [
     (fetchpatch {
@@ -57,6 +61,12 @@ stdenv.mkDerivation rec {
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
 
+  postInstall = lib.optionalString isQt6 ''
+    # make default Kvantum themes available for Qt 6 apps
+    mkdir -p "$out/share"
+    ln -s "${qt5Kvantum}/share/Kvantum" "$out/share/Kvantum"
+  '';
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "V";
   };
@@ -66,6 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo Scrumplex ];
   };
 }

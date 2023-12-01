@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "caio";
-  version = "0.9.12";
+  version = "0.9.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-uMq/3yWP9OwaVxixGAFCLMsDPoJhmIuG0I7hO7AnIOk=";
+    hash = "sha256-Q87NuL6yZ5uKImQqqdKTMWNyfUOb4NaZDEvNdqZbHDk=";
   };
 
   nativeCheckInputs = [

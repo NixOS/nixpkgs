@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz mkg20001 ];
   };
 }

@@ -10,6 +10,7 @@
 , pytest-randomly
 , pytest-timeout
 , pytestCheckHook
+, pythonAtLeast
 , six
 }:
 
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-1Pl+l28J7crfO2UY/9/D019IzOHWOwjR+UvVEHICTqU=";
   };
 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
   propagatedBuildInputs = [
     pyparsing
   ];
@@ -39,12 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Don't run tests for Python 2.7
-  doCheck = !isPy27;
+  __darwinAllowLocalNetworking = true;
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
+  # Don't run tests for older Pythons
+  doCheck = pythonAtLeast "3.9";
 
   disabledTests = [
     # ValueError: Unable to load PEM file.

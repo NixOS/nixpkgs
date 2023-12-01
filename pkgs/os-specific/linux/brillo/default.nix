@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
+    mainProgram = "brillo";
     license = [ licenses.gpl3 licenses.bsd0 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.alexarice ];

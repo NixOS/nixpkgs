@@ -12,6 +12,7 @@ from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
 from mdit_py_plugins.container import container_plugin # type: ignore[attr-defined]
 from mdit_py_plugins.deflist import deflist_plugin # type: ignore[attr-defined]
+from mdit_py_plugins.footnote import footnote_plugin # type: ignore[attr-defined]
 from mdit_py_plugins.myst_role import myst_role_plugin # type: ignore[attr-defined]
 
 _md_escape_table = {
@@ -40,7 +41,7 @@ def md_make_code(code: str, info: str = "", multiline: Optional[bool] = None) ->
     ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
     return f"{ticks}{info}{sep}{code}{sep}{ticks}"
 
-AttrBlockKind = Literal['admonition', 'example']
+AttrBlockKind = Literal['admonition', 'example', 'figure']
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
 
@@ -90,6 +91,29 @@ class Renderer:
             "example_close": self.example_close,
             "example_title_open": self.example_title_open,
             "example_title_close": self.example_title_close,
+            "image": self.image,
+            "figure_open": self.figure_open,
+            "figure_close": self.figure_close,
+            "figure_title_open": self.figure_title_open,
+            "figure_title_close": self.figure_title_close,
+            "table_open": self.table_open,
+            "table_close": self.table_close,
+            "thead_open": self.thead_open,
+            "thead_close": self.thead_close,
+            "tr_open": self.tr_open,
+            "tr_close": self.tr_close,
+            "th_open": self.th_open,
+            "th_close": self.th_close,
+            "tbody_open": self.tbody_open,
+            "tbody_close": self.tbody_close,
+            "td_open": self.td_open,
+            "td_close": self.td_close,
+            "footnote_ref": self.footnote_ref,
+            "footnote_block_open": self.footnote_block_open,
+            "footnote_block_close": self.footnote_block_close,
+            "footnote_open": self.footnote_open,
+            "footnote_close": self.footnote_close,
+            "footnote_anchor": self.footnote_anchor,
         }
 
         self._admonitions = {
@@ -225,6 +249,52 @@ class Renderer:
         raise RuntimeError("md token not supported", token)
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
+    def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_ref(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_block_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_block_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_anchor(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
     found = 0
@@ -267,6 +337,8 @@ def _parse_blockattrs(info: str) -> Optional[tuple[AttrBlockKind, Optional[str],
         return ('admonition', id, classes)
     if classes == ['example']:
         return ('example', id, classes)
+    elif classes == ['figure']:
+        return ('figure', id, classes)
     return None
 
 def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
@@ -293,7 +365,7 @@ def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
                 return False
             id, classes = parsed_attrs
 
-            token = state.push("attr_span_begin", "span", 1) # type: ignore[no-untyped-call]
+            token = state.push("attr_span_begin", "span", 1)
             if id:
                 token.attrs['id'] = id
             if classes:
@@ -303,7 +375,7 @@ def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
             state.posMax = label_end
             state.md.inline.tokenize(state)
 
-            state.push("attr_span_end", "span", -1) # type: ignore[no-untyped-call]
+            state.push("attr_span_end", "span", -1)
 
         state.pos = label_end + match.end() + 1
         state.posMax = input_end
@@ -368,6 +440,32 @@ def _heading_ids(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.before("replacements", "heading_ids", heading_ids)
 
+def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
+    """generate ids for footnotes, their refs, and their backlinks. the ids we
+       generate here are derived from the footnote label, making numeric footnote
+       labels invalid.
+    """
+    def generate_ids(tokens: Sequence[Token]) -> None:
+        for token in tokens:
+            if token.type == 'footnote_open':
+                if token.meta["label"][:1].isdigit():
+                    assert token.map
+                    raise RuntimeError(f"invalid footnote label in line {token.map[0] + 1}")
+                token.attrs['id'] = token.meta["label"]
+            elif token.type == 'footnote_anchor':
+                token.meta['target'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
+            elif token.type == 'footnote_ref':
+                token.attrs['id'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
+                token.meta['target'] = token.meta["label"]
+            elif token.type == 'inline':
+                assert token.children is not None
+                generate_ids(token.children)
+
+    def footnote_ids(state: markdown_it.rules_core.StateCore) -> None:
+        generate_ids(state.tokens)
+
+    md.core.ruler.after("footnote_tail", "footnote_ids", footnote_ids)
+
 def _compact_list_attr(md: markdown_it.MarkdownIt) -> None:
     @dataclasses.dataclass
     class Entry:
@@ -416,6 +514,11 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
                     if id is not None:
                         token.attrs['id'] = id
                     stack.append('example_close')
+                elif kind == 'figure':
+                    token.type = 'figure_open'
+                    if id is not None:
+                        token.attrs['id'] = id
+                    stack.append('figure_close')
                 else:
                     assert_never(kind)
             elif token.type == 'container_blockattr_close':
@@ -423,31 +526,37 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.push("block_attr", block_attr)
 
-def _example_titles(md: markdown_it.MarkdownIt) -> None:
+def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
+    open, close = f'{block}_open', f'{block}_close'
+    title_open, title_close = f'{block}_title_open', f'{block}_title_close'
+
     """
-    find title headings of examples and stick them into meta for renderers, then
-    remove them from the token stream. also checks whether any example contains a
+    find title headings of blocks and stick them into meta for renderers, then
+    remove them from the token stream. also checks whether any block contains a
     non-title heading since those would make toc generation extremely complicated.
     """
-    def example_titles(state: markdown_it.rules_core.StateCore) -> None:
+    def block_titles(state: markdown_it.rules_core.StateCore) -> None:
         in_example = [False]
         for i, token in enumerate(state.tokens):
-            if token.type == 'example_open':
+            if token.type == open:
                 if state.tokens[i + 1].type == 'heading_open':
                     assert state.tokens[i + 3].type == 'heading_close'
-                    state.tokens[i + 1].type = 'example_title_open'
-                    state.tokens[i + 3].type = 'example_title_close'
+                    state.tokens[i + 1].type = title_open
+                    state.tokens[i + 3].type = title_close
                 else:
                     assert token.map
-                    raise RuntimeError(f"found example without title in line {token.map[0] + 1}")
+                    raise RuntimeError(f"found {block} without title in line {token.map[0] + 1}")
                 in_example.append(True)
-            elif token.type == 'example_close':
+            elif token.type == close:
                 in_example.pop()
             elif token.type == 'heading_open' and in_example[-1]:
                 assert token.map
-                raise RuntimeError(f"unexpected non-title heading in example in line {token.map[0] + 1}")
+                raise RuntimeError(f"unexpected non-title heading in {block} in line {token.map[0] + 1}")
 
-    md.core.ruler.push("example_titles", example_titles)
+    def do_add(md: markdown_it.MarkdownIt) -> None:
+        md.core.ruler.push(f"{block}_titles", block_titles)
+
+    return do_add
 
 TR = TypeVar('TR', bound='Renderer')
 
@@ -478,20 +587,24 @@ class Converter(ABC, Generic[TR]):
             },
             renderer_cls=self.ForbiddenRenderer
         )
+        self._md.enable('table')
         self._md.use(
             container_plugin,
             name="blockattr",
             validate=lambda name, *args: _parse_blockattrs(name),
         )
         self._md.use(deflist_plugin)
+        self._md.use(footnote_plugin)
         self._md.use(myst_role_plugin)
         self._md.use(_attr_span_plugin)
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
         self._md.use(_heading_ids)
+        self._md.use(_footnote_ids)
         self._md.use(_compact_list_attr)
         self._md.use(_block_attr)
-        self._md.use(_example_titles)
+        self._md.use(_block_titles("example"))
+        self._md.use(_block_titles("figure"))
         self._md.enable(["smartquotes", "replacements"])
 
     def _parse(self, src: str) -> list[Token]:

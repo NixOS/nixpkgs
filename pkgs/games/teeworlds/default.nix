@@ -1,8 +1,8 @@
 { fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsa-lib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 , nixosTests
-, Carbon
 , Cocoa
+, buildClient ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -33,26 +33,42 @@ stdenv.mkDerivation rec {
     substituteInPlace 'other/bundle/client/Info.plist.in' \
       --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
       --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+
+    # Make sure some bundled dependencies are actually unbundled.
+    # This will fail compilation if one of these dependencies could not
+    # be found, instead of falling back to the bundled version.
+    rm -rf 'src/engine/external/wavpack/'
+    rm -rf 'src/engine/external/zlib/'
+    # md5, pnglite and json-parser (https://github.com/udp/json-parser)
+    # don't seem to be packaged in Nixpkgs, so don't unbundle them.
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (buildClient && stdenv.isLinux) [
     icoutils
   ];
 
   buildInputs = [
-    python3 libGLU SDL2 lua5_3 zlib freetype wavpack
+    python3 lua5_3 zlib
+    wavpack
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ] ++ lib.optionals buildClient ([
+    SDL2
+    freetype
   ] ++ lib.optionals stdenv.isLinux [
+    libGLU
     alsa-lib
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-    Cocoa
+  ]);
+
+  cmakeFlags = [
+    "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString buildClient (lib.optionalString stdenv.isLinux ''
     # Convert and install desktop icon
     mkdir -p $out/share/pixmaps
     icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
@@ -68,7 +84,7 @@ stdenv.mkDerivation rec {
     cp '../other/bundle/client/PkgInfo' "$out/Applications/teeworlds.app/Contents/"
     ln -s "$out/bin/teeworlds" "$out/Applications/teeworlds.app/Contents/MacOS/"
     ln -s "$out/share/teeworlds/data" "$out/Applications/teeworlds.app/Contents/Resources/data"
-  '';
+  '');
 
   passthru.tests.teeworlds = nixosTests.teeworlds;
 
@@ -83,7 +99,18 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://teeworlds.com/";
-    license = "BSD-style, see `license.txt'";
+    license = with lib.licenses; [
+      # See https://github.com/teeworlds/teeworlds/blob/master/license.txt
+      lib.licenses.zlib # Main license
+      cc-by-sa-30 # All content under 'datasrc' except the fonts
+      ofl  # datasrc/fonts/SourceHanSans.ttc
+      free # datasrc/fonts/DejaVuSans.ttf
+      bsd2 # src/engine/external/json-parser/
+      bsd3 # src/engine/external/wavpack
+      # zlib src/engine/external/md5/
+      # zlib src/engine/external/pnglite/
+      # zlib src/engine/external/zlib/
+    ];
     maintainers = with lib.maintainers; [ astsmtl Luflosi ];
     platforms = lib.platforms.unix;
   };

@@ -3,7 +3,7 @@
 , stdenv
 , cmake
 , boost
-, ogre
+, ogre_13
 , mygui
 , ois
 , SDL2
@@ -19,7 +19,7 @@
 }:
 
 let
-  stuntrally_ogre = ogre.overrideAttrs (old: {
+  stuntrally_ogre = ogre_13.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ [
       "-DOGRE_NODELESS_POSITIONING=ON"
       "-DOGRE_RESOURCEMANAGER_STRICT=0"
@@ -27,7 +27,7 @@ let
   });
   stuntrally_mygui = mygui.override {
     withOgre = true;
-    inherit ogre;
+    ogre = stuntrally_ogre;
   };
 in
 

@@ -4,21 +4,31 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
-, libuuid
-, libunwind
-, libxkbcommon
-, icu
-, openssl
-, zlib
-, curl
-, at-spi2-core
+, alsa-lib
 , at-spi2-atk
+, at-spi2-core
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, gdk-pixbuf
+, glib
 , gnutar
-, atomEnv
-, libkrb5
+, gtk3
+, icu
 , libdrm
+, libunwind
+, libuuid
+, libxkbcommon
 , mesa
+, nspr
+, nss
+, openssl
+, pango
+, systemd
 , xorg
+, zlib
 }:
 
 # from justinwoo/azuredatastudio-nix
@@ -62,14 +72,14 @@ in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.35.1";
+  version = "1.44.1";
 
   desktopItems = [ desktopItem urlHandlerDesktopItem ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
-    sha256 = "sha256-b/ha+81TlffnvSENzaePvfFugcKJffvjRU7y+x60OuQ=";
+    sha256 = "sha256-6kEV331kt+/7/uWKZmTTkJX4P06CfxC8Ogq052qlUEg=";
   };
 
   nativeBuildInputs = [
@@ -112,23 +122,37 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.215";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/4.7.1.6";
 
   rpath = lib.concatStringsSep ":" [
-    atomEnv.libPath
-    (
-      lib.makeLibraryPath [
-        libuuid
-        at-spi2-core
-        at-spi2-atk
-        stdenv.cc.cc.lib
-        libkrb5
-        libdrm
-        libxkbcommon
-        mesa
-        xorg.libxshmfence
-      ]
-    )
+    (lib.makeLibraryPath [
+      alsa-lib
+      at-spi2-atk
+      cairo
+      cups
+      dbus
+      expat
+      gdk-pixbuf
+      glib
+      gtk3
+      mesa
+      nss
+      nspr
+      libdrm
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libxshmfence
+      libxkbcommon
+      xorg.libxkbfile
+      pango
+      stdenv.cc.cc.lib
+      systemd
+    ])
     targetPath
     sqltoolsserviceRpath
   ];

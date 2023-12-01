@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "panicparse";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "maruel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Bwvxj9Ifcq2WpicUBK+03fbGuoVAVF2Zmtpy/utUxoo=";
+    sha256 = "sha256-KjWUubrHPJUJWvoa13EGEwTd5uNC0nrHAF8hzdnxEmY=";
   };
 
-  vendorSha256 = "sha256-ZHUxzGqsGX1c4mBA4TBO2+WnGDhwAOGi0uYQx+3OgL8=";
+  vendorHash = "sha256-udkh/6Bu+7djxugMIuVsZvZ3JN2JooihsmcS2wJT0Wo=";
 
   subPackages = [ "." ];
 
@@ -22,6 +22,7 @@ buildGoModule rec {
     description = "Crash your app in style (Golang)";
     homepage = "https://github.com/maruel/panicparse";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "panicparse";
   };
 }

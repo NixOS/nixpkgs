@@ -10,12 +10,7 @@ in
   options.services.greetd = {
     enable = mkEnableOption (lib.mdDoc "greetd");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.greetd.greetd;
-      defaultText = literalExpression "pkgs.greetd.greetd";
-      description = lib.mdDoc "The greetd package that should be used.";
-    };
+    package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
     settings = mkOption {
       type = settingsFormat.type;
@@ -59,6 +54,7 @@ in
     security.pam.services.greetd = {
       allowNullPassword = true;
       startSession = true;
+      enableGnomeKeyring = mkDefault config.services.gnome.gnome-keyring.enable;
     };
 
     # This prevents nixos-rebuild from killing greetd by activating getty again

@@ -11,20 +11,23 @@ let
     CoreServices
     Security;
   inherit (lib) optionals;
-  inherit (stdenv) isDarwin isLinux;
+  inherit (stdenv) isDarwin;
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.1.8";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
-    rev = version;
-    hash = "sha256-z4AqxvKu9E8GGMj6jNUAAWeqoE/j+6NoAEZWeNZ+1BA=";
+    rev = "e98b478b0c82af1469151eff30f4246b9af4a539";
+    hash = "sha256-7o/yQanBBSA+MmMiGCYSjar4hZ8TRZoPiUniF5ELzXU=";
   };
 
-  cargoHash = "sha256-w/9W4DXbh4G5DZ8IGUz4nN3LEjHhL7HgybHqODMFzHw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
   nativeBuildInputs = optionals (!isDarwin) [ pkg-config ];
 
   buildInputs = optionals (!isDarwin) [
@@ -41,6 +44,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A build tool for the Leptos web framework";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ benwis ];
   };

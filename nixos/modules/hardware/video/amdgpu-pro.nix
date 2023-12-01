@@ -20,9 +20,6 @@ in
 {
 
   config = mkIf enabled {
-
-    nixpkgs.config.xorg.abiCompat = "1.20";
-
     services.xserver.drivers = singleton
       { name = "amdgpu"; modules = [ package ]; display = true; };
 

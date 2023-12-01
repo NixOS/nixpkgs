@@ -7,6 +7,7 @@
 , numpy
 , proglog
 , pytestCheckHook
+, pythonOlder
 , python-codon-tables
 , primer3
 , genome-collector
@@ -15,13 +16,16 @@
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.10";
+  version = "3.2.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YlNOvK7ZXUHYdRX1NFEdZ646NGLtGXU1YgAjN6RY2QE=";
+    hash = "sha256-rcZq/HhU1xIyQ1jM8+gO9ONDLBAxiUIByoWk2nMwuGA=";
   };
 
   propagatedBuildInputs = [
@@ -50,12 +54,16 @@ buildPythonPackage rec {
     "test_avoid_phage_blast_matches"
     "test_avoid_matches_with_list"
     "test_avoid_matches_with_phage"
-   ];
-  pythonImportsCheck = [ "dnachisel" ];
+  ];
+
+  pythonImportsCheck = [
+    "dnachisel"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
     description = "Optimize DNA sequences under constraints";
+    changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };

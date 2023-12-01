@@ -55,6 +55,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://smalltalk.gnu.org/";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ skeidel ];
+    maintainers = with maintainers; [ AndersonTorres ];
   };
 }

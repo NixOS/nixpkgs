@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-+L0W+M8sZdUSCWj9Ftft1gkRRfWMHdxon2xNnotx8Xs=";
   };
 
-  vendorSha256 = "sha256-7WHVSEz3y1nxWfbxkzkfHhINLC8+snmWknHyUUpNy7c=";
+  vendorHash = "sha256-7WHVSEz3y1nxWfbxkzkfHhINLC8+snmWknHyUUpNy7c=";
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -25,5 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/mroth/scmpuff";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
+    mainProgram = "scmpuff";
   };
 }

@@ -44,7 +44,7 @@ let
 
     src = subsurfaceSrc;
 
-    sourceRoot = "source/libdivecomputer";
+    sourceRoot = "${subsurfaceSrc.name}/libdivecomputer";
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
 

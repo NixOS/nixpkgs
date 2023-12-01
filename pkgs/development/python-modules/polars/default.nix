@@ -3,18 +3,27 @@
 , buildPythonPackage
 , pythonOlder
 , rustPlatform
+, cmake
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, jemalloc
+, rust-jemalloc-sys
+, darwin
 }:
 let
   pname = "polars";
-  version = "0.17.11";
+  version = "0.19.12";
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
-    hash = "sha256-zNp/77an9daUfHQ+HCaHtZzaq0TT9F+8aH3abrF7+YA=";
+    hash = "sha256-6tn3Q6oZfMjgQ5l5xCFnGimLSDLOjTWCW5uEbi6yFZY=";
+  };
+  rust-jemalloc-sys' = rust-jemalloc-sys.override {
+    jemalloc = jemalloc.override {
+      disableInitExecTls = true;
+    };
   };
 in
 buildPythonPackage {
@@ -27,16 +36,14 @@ buildPythonPackage {
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
-      cd py-polars
-      #sed -i 's/version = "0.17.11"/version = "${version}"/g' Cargo.lock
+    cd py-polars
+    #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
   '';
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "arrow2-0.17.0" = "sha256-jjrwTP+ZKem9lyrmAWJ+t9cZBkGqAR1VlgNFXDtx1LA=";
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
-      "simd-json-0.7.0" = "sha256-tlz6my4vhUQIArPonJml8zIyk1sbbDSORKp3cmPUUSI=";
     };
   };
   cargoRoot = "py-polars";
@@ -46,9 +53,23 @@ buildPythonPackage {
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  nativeBuildInputs = [
+    # needed for libz-ng-sys
+    # TODO: use pkgs.zlib-ng
+    cmake
+  ] ++ (with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ]);
+
+  buildInputs = [
+    rust-jemalloc-sys'
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   pythonImportsCheck = [ "polars" ];
   # nativeCheckInputs = [
@@ -62,7 +83,6 @@ buildPythonPackage {
   # ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
     homepage = "https://github.com/pola-rs/polars";
     license = licenses.asl20;

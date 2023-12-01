@@ -6,7 +6,6 @@
 , fetchPypi
 , setuptools
 , setuptools-scm
-, importlib-metadata
 , cssselect
 , jaraco-test
 , lxml
@@ -17,24 +16,20 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.6.0";
+  version = "2.9.0";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-99zSPBzskJ/fNjDeNG4UE7eyVVk23sFLouu5kTvwgY4=";
+    hash = "sha256-iUd7PRfXkOl7n7Te9wh2cGEFV5Wq5vfIKuMulnyb5M0=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   nativeCheckInputs = [

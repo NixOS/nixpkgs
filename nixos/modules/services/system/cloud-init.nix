@@ -15,6 +15,7 @@ let
   ]
   ++ optional cfg.btrfs.enable btrfs-progs
   ++ optional cfg.ext4.enable e2fsprogs
+  ++ optional cfg.xfs.enable xfsprogs
   ;
   settingsFormat = pkgs.formats.yaml { };
   cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
@@ -54,6 +55,14 @@ in
         default = true;
         description = mdDoc ''
           Allow the cloud-init service to operate `ext4` filesystem.
+        '';
+      };
+
+      xfs.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mdDoc ''
+          Allow the cloud-init service to operate `xfs` filesystem.
         '';
       };
 

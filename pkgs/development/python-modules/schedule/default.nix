@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "schedule";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tK1peq+6cYTJ62oeLrxB94FUckKs3ozq6aCiWwTAki0=";
+    hash = "sha256-hDvAU4uZyT8CuLUOPjmIbAby0AOyT0jhqkyt+j80Enk=";
   };
 
   buildInputs = [

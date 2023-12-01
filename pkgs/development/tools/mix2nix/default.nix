@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mix2nix";
-  version = "0.1.5";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "ydlr";
     repo = "mix2nix";
     rev = version;
-    sha256 = "0flsw8r4x27qxyrlazzjmjq3zkkppgw9krcdcqj7wbq06r2dck3q";
+    hash = "sha256-iWy5q6ERzg8hRZs+bFtR6drZ9yI8Qh1v+47q3q2fFTM=";
   };
 
   nativeBuildInputs = [ elixir ];

@@ -39,5 +39,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.robbinch ];
+    mainProgram = "gitfs";
   };
 }

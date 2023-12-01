@@ -3,26 +3,27 @@
 , fetchFromGitHub
 , gpgme
 , installShellFiles
+, pkg-config
 , testers
 , openshift
 }:
 buildGoModule rec {
   pname = "openshift";
-  version = "4.12.0";
-  gitCommit = "854f807";
+  version = "4.13.0";
+  gitCommit = "e561d37";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "oc";
-    rev = "854f807d8a84dde710c062a5281bca5bc07cb562";
-    hash = "sha256-GH3LjAeMIHmFbJoKGoeeNteP4Ma2+kIC5rAxObdziKg=";
+    rev = "e561d37285c8bde273ce00d086bea599a9cdd3be";
+    hash = "sha256-/ar96N+MSy0DPdza3UWiyolg1EZPBR6LCku4GV+HppM=";
   };
 
   vendorHash = null;
 
   buildInputs = [ gpgme ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
   ldflags = [
     "-s"

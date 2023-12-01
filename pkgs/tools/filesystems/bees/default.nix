@@ -75,8 +75,8 @@ in
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
-'').overrideAttrs (old: {
+'').overrideAttrs {
   passthru.tests = {
     smoke-test = nixosTests.bees;
   };
-})
+}

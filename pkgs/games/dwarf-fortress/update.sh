@@ -38,5 +38,5 @@ done | jq --slurp --raw-input \
 
 # Append $tmp1 to game.json. There should be a better way to handle
 # this but all other attempts failed for me.
-jq -M --argfile a "$tmp1" '. + $a' < "$(dirname "$0")/game.json" > "$tmp2"
+jq -M --slurpfile a "$tmp1" '. + $a[]' < "$(dirname "$0")/game.json" > "$tmp2"
 cat "$tmp2" > "$(dirname "$0")/game.json"

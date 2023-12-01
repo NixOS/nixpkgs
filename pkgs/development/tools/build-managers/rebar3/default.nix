@@ -3,7 +3,7 @@
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.22.0";
+  version = "3.22.1";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "OCd9wGwnwOuv/Ojf1S4ALLn73AGKuXlRtukIiTSE2rs=";
+      sha256 = "bSsDNuwG3LLvBS7P/Ft0rpM/atwy36JonwP0fPRsEis=";
     };
 
     buildInputs = [ erlang ];

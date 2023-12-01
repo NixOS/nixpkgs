@@ -2,22 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pydantic
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pydantic-scim";
-  version = "0.0.7";
-  format = "setuptools";
+  version = "0.0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chalk-ai";
     repo = "pydantic-scim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F+uj7kSz6iSb0Vg00VfJ5GcxghooNDKa75S/ZgU7WgI=";
+    hash = "sha256-Hbc94v/+slXRGDKKbMui8WPwn28/1XcKvHkbLebWtj0=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 

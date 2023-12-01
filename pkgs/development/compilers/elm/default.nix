@@ -69,7 +69,7 @@ let
       attoparsec = self.attoparsec_0_13_2_5;
 
       # aeson 2.0.3.0 does not build with attoparsec_0_13_2_5
-      aeson = self.aeson_1_5_6_0;
+      aeson = doJailbreak self.aeson_1_5_6_0;
 
       # elm-instrument needs this
       indents = self.callPackage ./packages/indents.nix {};
@@ -142,14 +142,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
-  elm-test = nodePkgs.elm-test // {
-    meta = with lib; nodePkgs.elm-test.meta // {
-      description = "Runs elm-test suites from Node.js";
-      homepage = "https://github.com/rtfeldman/node-test-runner";
-      license = licenses.bsd3;
-      maintainers = [ maintainers.turbomack ];
-    };
-  };
+  elm-test = callPackage ./packages/elm-test.nix { };
 } // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
   elm-verify-examples = let
     patched = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
@@ -204,6 +197,15 @@ in lib.makeScope pkgs.newScope (self: with self; {
       };
     };
 
+    elm-graphql =
+      nodePkgs."@dillonkearns/elm-graphql" // {
+        meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
+          description = " Autogenerate type-safe GraphQL queries in Elm.";
+          license = licenses.bsd3;
+          maintainers = [ maintainers.pedrohlc ];
+        };
+      };
+
     elm-review =
       nodePkgs.elm-review // {
         meta = with lib; nodePkgs.elm-review.meta // {
@@ -254,6 +256,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
           # see upstream issue https://github.com/dillonkearns/elm-pages/issues/305 for dealing with the read-only problem
           preFixup = ''
             patch $out/lib/node_modules/elm-pages/generator/src/codegen.js ${./packages/elm-pages-fix-read-only.patch}
+            patch $out/lib/node_modules/elm-pages/generator/src/init.js ${./packages/elm-pages-fix-init-read-only.patch}
           '';
 
           postFixup = ''
@@ -267,6 +270,17 @@ in lib.makeScope pkgs.newScope (self: with self; {
             homepage = "https://github.com/dillonkearns/elm-pages";
             license = licenses.bsd3;
             maintainers = [ maintainers.turbomack maintainers.jali-clarke ];
+          };
+        }
+      );
+
+      elm-land = nodePkgs."elm-land".overrideAttrs (
+        old: {
+          meta = with lib; nodePkgs."elm-land".meta // {
+            description = "A production-ready framework for building Elm applications.";
+            homepage = "https://elm.land/";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.zupo ];
           };
         }
       );

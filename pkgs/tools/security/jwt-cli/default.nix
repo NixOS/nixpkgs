@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
-  version = "5.0.3";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = pname;
     rev = version;
-    sha256 = "01aqqjynfcrn3m36hfjwcfh870imcd0hj5gifxzpnjiqjwpvys59";
+    sha256 = "sha256-EzXpiJGTAlTDHJwl7FwIsDHMqStj2PLD1PHmv0flBKc=";
   };
 
-  cargoSha256 = "1n4gmqmi975cd2zyrf0yi4gbxjjg9f99xa191mgmrdyyij7id3cf";
+  cargoHash = "sha256-l1W+eYuKnMPN2wPhYPXo5ixUz2bX+FZnDazk+FbxquU=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

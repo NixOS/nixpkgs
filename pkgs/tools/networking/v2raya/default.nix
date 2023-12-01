@@ -7,30 +7,47 @@
 , v2ray-geoip
 , v2ray-domain-list-community
 , symlinkJoin
+, fetchYarnDeps
 }:
 let
   pname = "v2raya";
-  version = "2.0.2";
+  version = "2.2.4.3";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
-    sha256 = "sha256-C7N23s/GA66gQ5SVXtXcM9lXIjScR3pLYCrf0w2nHfY=";
+    hash = "sha256-6643sdKVHOHrGRocTm881GCHoON4tlrKcNfOFMHwnQY=";
+    postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
+  guiSrc = "${src}/gui";
 
   web = mkYarnPackage {
     inherit pname version;
-    src = "${src}/gui";
-    yarnNix = ./yarn.nix;
+
+    src = guiSrc;
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${guiSrc}/yarn.lock";
+      sha256 = "sha256-rZIcVLolTMdtN27W6gCw9uk9m4N5v9SZn2563+aN/gs=";
+    };
+
     buildPhase = ''
-      export NODE_OPTIONS=--openssl-legacy-provider
-      ln -s $src/postcss.config.js postcss.config.js
+      runHook preBuild
       OUTPUT_DIR=$out yarn --offline build
+      runHook postBuild
     '';
+
+    configurePhase = ''
+      runHook preConfigure
+      cp -r $node_modules node_modules
+      chmod +w node_modules
+      runHook postConfigure
+    '';
+
     distPhase = "true";
+
     dontInstall = true;
     dontFixup = true;
   };
@@ -45,7 +62,7 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
-  vendorSha256 = "sha256-vnhqI9G/p+SLLA4sre2wfmg1RKIYZmzeL0pSTbHb+Ck=";
+  vendorHash = "sha256-wwDv2ThHwtnUpAnQoc0Ms0mGC44jRvABcE4K5MrF8S4=";
 
   ldflags = [
     "-s"

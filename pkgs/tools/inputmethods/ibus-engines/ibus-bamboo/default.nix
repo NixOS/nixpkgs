@@ -5,7 +5,6 @@
 , xorg
 , pkg-config
 , wrapGAppsHook
-, ibus
 , gtk3
 , go
 }:
