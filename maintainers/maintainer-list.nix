@@ -616,6 +616,12 @@
     githubId = 1229027;
     name = "Andreas Schrägle";
   };
+  ajwhouse = {
+    email = "adam@ajwh.chat";
+    github = "ajwhouse";
+    githubId = 56616368;
+    name = "Adam House";
+  };
   ak = {
     email = "ak@formalprivacy.com";
     github = "alexanderkjeldaas";
@@ -12622,6 +12628,12 @@
     githubId = 9636071;
     name = "Myrl Hex";
   };
+  n00b0ss = {
+    email = "nixpkgs@n00b0ss.de";
+    github = "n00b0ss";
+    githubId = 61601147;
+    name = "basti n00b0ss";
+  };
   n0emis = {
     email = "nixpkgs@n0emis.network";
     github = "n0emis";
@@ -13219,6 +13231,13 @@
     github = "noneucat";
     githubId = 40049608;
     name = "Andy Chun";
+  };
+  noodlez1232 = {
+    email = "contact@nathanielbarragan.xyz";
+    matrix = "@noodlez1232:matrix.org";
+    github = "Noodlez1232";
+    githubId = 12480453;
+    name = "Nathaniel Barragan";
   };
   nook = {
     name = "Tom Nook";
@@ -17766,6 +17785,11 @@
     github = "tcheronneau";
     githubId = 7914437;
     name = "Thomas Cheronneau";
+  };
+  tc-kaluza = {
+    github = "tc-kaluza";
+    githubId = 101565936;
+    name = "Tautvydas Cerniauskas";
   };
   tckmn = {
     email = "andy@tck.mn";

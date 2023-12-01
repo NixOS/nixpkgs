@@ -4347,6 +4347,8 @@ self: super: with self; {
 
   gcal-sync = callPackage ../development/python-modules/gcal-sync { };
 
+  gcodepy = callPackage ../development/python-modules/gcodepy { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcs-oauth2-boto-plugin = callPackage ../development/python-modules/gcs-oauth2-boto-plugin { };
@@ -5291,6 +5293,8 @@ self: super: with self; {
   icoextract = callPackage ../development/python-modules/icoextract { };
 
   icontract = callPackage ../development/python-modules/icontract { };
+
+  id = callPackage ../development/python-modules/id { };
 
   identify = callPackage ../development/python-modules/identify { };
 
@@ -11100,6 +11104,8 @@ self: super: with self; {
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
+  pyspx = callPackage ../development/python-modules/pyspx { };
+
   pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 {
     inherit (pkgs) sqlcipher;
   };
@@ -12751,6 +12757,8 @@ self: super: with self; {
 
   secure = callPackage ../development/python-modules/secure { };
 
+  securesystemslib = callPackage ../development/python-modules/securesystemslib { };
+
   securetar = callPackage ../development/python-modules/securetar { };
 
   sectools = callPackage ../development/python-modules/sectools { };
@@ -12924,6 +12932,10 @@ self: super: with self; {
   signedjson = callPackage ../development/python-modules/signedjson { };
 
   sigrok = callPackage ../development/python-modules/sigrok { };
+
+  sigstore-protobuf-specs = callPackage ../development/python-modules/sigstore-protobuf-specs { };
+
+  sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
@@ -14342,6 +14354,8 @@ self: super: with self; {
   ttstokenizer = callPackage ../development/python-modules/ttstokenizer { };
 
   tubes = callPackage ../development/python-modules/tubes { };
+
+  tuf = callPackage ../development/python-modules/tuf { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 

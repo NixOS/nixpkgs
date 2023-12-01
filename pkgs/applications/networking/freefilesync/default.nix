@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "13.1";
+  version = "13.2";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-xuJQOegmZHPsCmJU2akTD4nQh05M+rpnjQVEer33SCk=";
+    hash = "sha256-Hb3DkHdINtg5vNs6IcCHKxgSiN5u/2kY8V8Fnq5yFCM=";
   };
 
   sourceRoot = ".";
@@ -45,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://sources.debian.org/data/main/f/freefilesync/12.0-2/debian/patches/ffs_devuan.patch";
       postFetch = ''
         substituteInPlace $out \
-          --replace "-std=c++2b" "-std=c++23"
+          --replace "-std=c++2b" "-std=c++23" \
+          --replace "imageWidth," "wxsizeToScreen(imageWidth),"
       '';
       excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
-      hash = "sha256-CtUC94AoYTxoqSMWZrzuO3jTD46rj11JnbNyXtWckCo=";
+      hash = "sha256-LH549fJWGpJ0p6/0YNda1zZHGs/QRl1CYLC/vYKdkO4=";
     })
     # Fix build with GTK 3
     (fetchpatch {

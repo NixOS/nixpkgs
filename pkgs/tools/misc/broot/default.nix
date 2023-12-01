@@ -12,20 +12,21 @@
 , xorg
 , zlib
 , buildPackages
+, withClipboard ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.28.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zq63PfKVcCLudsIBugGQIozG4Ve4vgBwYz0ID5k1J5o=";
+    hash = "sha256-Wx+hUm0y7w0+IYtaRE5X/5Ra37mMEMEliYFbl7c03Ww=";
   };
 
-  cargoHash = "sha256-jjov7kW6iH+Tfi5XBjMFbRk0a4HRYZ7pWm+Aa0hUndM=";
+  cargoHash = "sha256-7B5Uxr1SsAx+mRpvQPSW7pemxp11WngEIK6vF2cbzh4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,6 +39,8 @@ rustPlatform.buildRustPackage rec {
     Security
     zlib
   ];
+
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
