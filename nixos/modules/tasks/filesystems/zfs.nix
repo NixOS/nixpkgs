@@ -16,6 +16,7 @@ let
   cfgTrim = config.services.zfs.trim;
   cfgZED = config.services.zfs.zed;
 
+  selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
@@ -210,11 +211,17 @@ in
   options = {
     boot.zfs = {
       package = mkOption {
-        readOnly = true;
         type = types.package;
-        default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
-        defaultText = literalExpression "if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs";
-        description = lib.mdDoc "Configured ZFS userland tools package.";
+        default = if cfgZfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
+        defaultText = literalExpression "if zfsUnstable is enabled then pkgs.zfsUnstable else pkgs.zfs";
+        description = lib.mdDoc "Configured ZFS userland tools package, use `pkgs.zfsUnstable` if you want to track the latest staging ZFS branch.";
+      };
+
+      modulePackage = mkOption {
+        internal = true; # It is supposed to be selected automatically, but can be overridden by expert users.
+        default = selectModulePackage cfgZfs.package;
+        type = types.package;
+        description = lib.mdDoc "Configured ZFS kernel module package.";
       };
 
       enabled = mkOption {
@@ -534,6 +541,10 @@ in
     (mkIf cfgZfs.enabled {
       assertions = [
         {
+          assertion = cfgZfs.modulePackage.version == cfgZfs.package.version;
+          message = "The kernel module and the userspace tooling versions are not matching, this is an unsupported usecase.";
+        }
+        {
           assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
           message = ''
             To allow ZED to send emails, ZFS needs to be configured to enable
@@ -571,18 +582,14 @@ in
         # https://github.com/NixOS/nixpkgs/issues/106093
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
-        extraModulePackages = let
-          kernelPkg = if config.boot.zfs.enableUnstable then
-            config.boot.kernelPackages.zfsUnstable
-           else
-            config.boot.kernelPackages.zfs;
-        in [
-          (kernelPkg.override { inherit (cfgZfs) removeLinuxDRM; })
+        extraModulePackages = [
+          (cfgZfs.modulePackage.override { inherit (cfgZfs) removeLinuxDRM; })
         ];
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
+        # spl has been removed in ≥ 2.2.0.
+        kernelModules = [ "zfs" ] ++ lib.optional (lib.versionOlder "2.2.0" version) "spl";
         extraUtilsCommands =
           mkIf (!config.boot.initrd.systemd.enable) ''
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
