@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/bin/xdg-open \
       --replace "/usr/bin/printf" "${coreutils}/bin/printf" \
-      --replace "gdbus" "${glib}/bin/gdbus"
+      --replace "gdbus" "${glib}/bin/gdbus" \
+      --replace "mimeopen" "${perlPackages.FileMimeInfo}/bin/mimeopen"
 
     substituteInPlace $out/bin/xdg-mime \
       --replace "/usr/bin/file" "${file}/bin/file"
