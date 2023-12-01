@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, nose
 , numba
 , numpy
 , pytestCheckHook
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-v9BHFxmlbwXVipPze/nV35YijdFBuka3gAl85AlsffQ=";
   };
 
+  postPatch = ''
+    sed -i '/"nose"/d' setup.py
+  '';
+
   nativeBuildInputs = [
     setuptools
   ];
@@ -38,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    nose
     pytestCheckHook
     torchvision
     scikit-learn
