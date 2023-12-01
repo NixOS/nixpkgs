@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 
 # build-system
 , setuptools
@@ -31,6 +32,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/Pylons/paginate/issues/19
+    "test_wrong_collection"
+    "test_unsliceable_sequence3"
   ];
 
   meta = with lib; {
