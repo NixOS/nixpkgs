@@ -16323,6 +16323,12 @@
     githubId = 4927883;
     matrix = "@seirl:matrix.org";
   };
+  selfuryon = {
+    name = "Sergei Iakovlev";
+    email = "siakovlev@pm.me";
+    github = "selfuryon";
+    githubId = 2993917;
+  };
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
