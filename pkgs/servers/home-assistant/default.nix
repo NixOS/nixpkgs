@@ -266,6 +266,15 @@ let
         };
       });
 
+      versioningit = super.versioningit.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.0";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
+        };
+      });
+
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
