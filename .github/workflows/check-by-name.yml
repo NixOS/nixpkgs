@@ -16,6 +16,9 @@ jobs:
     # This is x86_64-linux, for which the tool is always prebuilt on the nixos-* channels,
     # as specified in nixos/release-combined.nix
     runs-on: ubuntu-latest
+    # This should take 1 minute at most, but let's be generous.
+    # The default of 6 hours is definitely too long
+    timeout-minutes: 10
     steps:
       - name: Resolving the merge commit
         env:
@@ -23,6 +26,11 @@ jobs:
         run: |
           # This checks for mergeability of a pull request as recommended in
           # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
+
+          # Retry the API query this many times
+          retryCount=3
+          # Start with 5 seconds, but double every retry
+          retryInterval=5
           while true; do
             echo "Checking whether the pull request can be merged"
             prInfo=$(gh api \
@@ -33,10 +41,19 @@ jobs:
             mergedSha=$(jq -r .merge_commit_sha <<< "$prInfo")
 
             if [[ "$mergeable" == "null" ]]; then
-              # null indicates that GitHub is still computing whether it's mergeable
-              # Wait a couple seconds before trying again
-              echo "GitHub is still computing whether this PR can be merged, waiting 5 seconds before trying again"
-              sleep 5
+              if (( retryCount == 0 )); then
+                echo "Not retrying anymore, probably GitHub is having internal issues"
+                exit 1
+              else
+                (( retryCount -= 1 )) || true
+
+                # null indicates that GitHub is still computing whether it's mergeable
+                # Wait a couple seconds before trying again
+                echo "GitHub is still computing whether this PR can be merged, waiting $retryInterval seconds before trying again ($retryCount retries left)"
+                sleep "$retryInterval"
+
+                (( retryInterval *= 2 )) || true
+              fi
             else
               break
             fi
