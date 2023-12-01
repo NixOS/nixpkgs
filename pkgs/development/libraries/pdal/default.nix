@@ -14,6 +14,7 @@
 , libtiff
 , libxml2
 , postgresql
+, proj
 , tiledb
 , xercesc
 , zlib
@@ -22,14 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pdal";
-  version = "2.5.6";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = version;
-    sha256 = "sha256-JKwa89c05EfZ/FxOkj8lYmw0o2EgSqafRDIV2mTpZ5E=";
+    sha256 = "sha256-ivr5vAlbFjikviz0oAbFH0AJlM4Tv+WE88AeNSf47RM=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/PDAL/PDAL/commit/6320e8832e40d9a5f92af619aaaf05169226de1a.diff";
+      hash = "sha256-EG51+SARZJ0DWYMWRG1Z/ukWDxOS0D5AHp8yawfOJxs=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -46,6 +54,7 @@ stdenv.mkDerivation rec {
     libtiff
     libxml2
     postgresql
+    proj
     tiledb
     xercesc
     zlib
@@ -73,7 +82,20 @@ stdenv.mkDerivation rec {
     "-DBUILD_PLUGIN_OCI=OFF"
     "-DBUILD_PLUGIN_RDBLIB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
     "-DBUILD_PLUGIN_RIVLIB=OFF"
+
+    # https://github.com/PDAL/PDAL/issues/4211
+    # Once merged, https://github.com/PDAL/PDAL/pull/4267 might provide better
+    # solution for #4211.
+    "-DWITH_BACKTRACE=OFF"
+
+    "-DWITH_COMPLETION=ON"
   ];
+
+  # https://github.com/OSGeo/grass/issues/3220
+  postInstall = ''
+    rm $out/lib/libpdalcpp.so
+    ln -rs $out/lib/libpdalcpp.so.?? $out/lib/libpdalcpp.so
+  '';
 
   meta = with lib; {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
