@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
-    repo = pname;
+    repo = "downloader-cli";
     rev = "refs/tags/${version}";
     hash = "sha256-E2K3n9qCQofm4gXu1l7/0iMoJsniuzhsBUplr4aZ39s=";
   };
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Downloader with an awesome customizable progressbar";
     homepage = "https://github.com/deepjyoti30/downloader-cli";
+    changelog = "https://github.com/deepjyoti30/downloader-cli/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];
   };
