@@ -130,6 +130,12 @@ in
       nativeTools = true;
       nativeLibc = true;
       inherit lib nativePrefix;
+      writeScript = (import ../../build-support/trivial {
+        inherit lib stdenv stdenvNoCC;
+        lndir = null;
+        runtimeShell = null;
+        shellcheck-minimal = throw "no shellcheck in first bootstrap stage";
+      }).writeScript;
       bintools = import ../../build-support/bintools-wrapper {
         name = "bintools";
         inherit lib stdenvNoCC nativePrefix;

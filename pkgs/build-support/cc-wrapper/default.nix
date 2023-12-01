@@ -8,6 +8,7 @@
 { name ? ""
 , lib
 , stdenvNoCC
+, writeScript
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
@@ -283,7 +284,7 @@ stdenv.mkDerivation {
 
   # callPackage not used because cc-wrapper is part of the stdenv
   # bootstrap; careful control of inputs is necessary
-  wrapper = import ./cc-wrapper.nix { inherit lib stdenv; };
+  wrapper = import ./cc-wrapper.nix { inherit lib stdenv writeScript; };
 
   installPhase =
     ''

@@ -28,7 +28,7 @@ bootStages ++ [
         nativeTools = false;
         nativePrefix = lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
-        inherit (prevStage) stdenvNoCC binutils coreutils gnugrep;
+        inherit (prevStage) stdenvNoCC binutils coreutils gnugrep writeScript;
         cc = prevStage.gcc.cc;
         isGNU = true;
         shell = prevStage.bash + "/bin/sh";

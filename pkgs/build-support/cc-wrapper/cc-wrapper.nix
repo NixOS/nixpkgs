@@ -1,8 +1,9 @@
 { lib
 , stdenv
+, writeScript
 }:
 
-builtins.toFile "cc-wrapper.sh" ''
+writeScript "cc-wrapper.sh" ''
 #! @shell@
 set -eu -o pipefail +o posix
 shopt -s nullglob

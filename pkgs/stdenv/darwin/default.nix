@@ -139,7 +139,7 @@ let
         inherit (prevStage.llvmPackages) libcxx;
 
         inherit lib;
-        inherit (prevStage) coreutils gnugrep;
+        inherit (prevStage) coreutils gnugrep writeScript;
 
         stdenvNoCC = prevStage.ccWrapperStdenv;
       };
@@ -1173,7 +1173,7 @@ in
               inherit (self.llvmPackages) libcxx;
 
               inherit lib;
-              inherit (self) stdenvNoCC coreutils gnugrep;
+              inherit (self) stdenvNoCC coreutils gnugrep writeScript;
 
               shell = self.bash + "/bin/bash";
             };

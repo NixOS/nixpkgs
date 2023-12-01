@@ -192,7 +192,7 @@ let
           isGNU = true;
           libc = getLibc prevStage;
           inherit lib;
-          inherit (prevStage) coreutils gnugrep;
+          inherit (prevStage) coreutils gnugrep writeScript;
           stdenvNoCC = prevStage.ccWrapperStdenv;
           fortify-headers = prevStage.fortify-headers;
         }).overrideAttrs(a: lib.optionalAttrs (prevStage.gcc-unwrapped.passthru.isXgcc or false) {
@@ -568,6 +568,7 @@ in
         libc = getLibc self;
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
+        inherit (prevStage) writeScript;
         shell = self.bash + "/bin/bash";
         fortify-headers = self.fortify-headers;
       };

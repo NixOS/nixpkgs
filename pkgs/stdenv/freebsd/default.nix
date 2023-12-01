@@ -244,6 +244,7 @@ in
 
       cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         inherit lib;
+        inherit (prevStage) writeScript;
         nativeTools  = true;
         nativePrefix = "/usr";
         nativeLibc   = true;
