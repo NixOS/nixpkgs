@@ -1,0 +1,37 @@
+From 52ab2095649b5951e6af77f68954209473296983 Mon Sep 17 00:00:00 2001
+From: Sandro <sandro.jaeckel@gmail.com>
+Date: Sat, 16 Jan 2021 15:54:05 +0100
+Subject: [PATCH] Fix finding apple libraries
+
+---
+ CMakeLists.txt | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+ 
+
+(rejected by upstream in https://github.com/Azure/azure-c-shared-utility/pull/499,
+seems problem it's solving is nixpkgs-specific)
+
+diff --git a/src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt b/src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
+index 7bbfa6f3f..3567b18bc 100644
+--- a/src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
++++ b/src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
+@@ -120,8 +120,9 @@ endif()
+ 
+ if(${use_applessl})
+     # MACOSX only has native tls and open ssl, so use the native apple tls
+-    find_library(cf_foundation Foundation)
++    find_library(cf_foundation CoreFoundation)
+     find_library(cf_network CFNetwork)
++    find_library(cf_security Security)
+ endif()
+ 
+ if(${no_logging})
+@@ -581,7 +582,7 @@ endif()
+ 
+ 
+ if(${use_applessl})
+-    set(aziotsharedutil_target_libs ${aziotsharedutil_target_libs} ${cf_foundation} ${cf_network})
++    set(aziotsharedutil_target_libs ${aziotsharedutil_target_libs} ${cf_foundation} ${cf_network} ${cf_security})
+ endif()
+ 
+ if(WIN32)

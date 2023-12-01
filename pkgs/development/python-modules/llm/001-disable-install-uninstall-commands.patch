@@ -1,0 +1,34 @@
+diff --git a/llm/cli.py b/llm/cli.py
+index af37feb..18b078a 100644
+--- a/llm/cli.py
++++ b/llm/cli.py
+@@ -1014,18 +1014,7 @@ def templates_path():
+ )
+ def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
+     """Install packages from PyPI into the same environment as LLM"""
+-    args = ["pip", "install"]
+-    if upgrade:
+-        args += ["--upgrade"]
+-    if editable:
+-        args += ["--editable", editable]
+-    if force_reinstall:
+-        args += ["--force-reinstall"]
+-    if no_cache_dir:
+-        args += ["--no-cache-dir"]
+-    args += list(packages)
+-    sys.argv = args
+-    run_module("pip", run_name="__main__")
++    click.echo("Install command has been disabled for Nix. If you want to install extra llm plugins, use llm.withPlugins([]) expression.")
+ 
+ 
+ @cli.command()
+@@ -1033,8 +1022,7 @@ def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
+ @click.option("-y", "--yes", is_flag=True, help="Don't ask for confirmation")
+ def uninstall(packages, yes):
+     """Uninstall Python packages from the LLM environment"""
+-    sys.argv = ["pip", "uninstall"] + list(packages) + (["-y"] if yes else [])
+-    run_module("pip", run_name="__main__")
++    click.echo("Uninstall command has been disabled for Nix. If you want to uninstall extra llm plugins, just remove them from llm.withPlugins([]) list expression.")
+ 
+ 
+ @cli.command()

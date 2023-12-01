@@ -1,0 +1,11 @@
+--- libwchar/Makefile.mk
++++ libwchar/Makefile.mk
+@@ -10,7 +10,7 @@ fake:
+ 	if test "x$(LWCHAR)" = x; \
+ 	then \
+ 		touch $(OBJ); \
+-		ar r libwchar.a $(OBJ); \
++		touch libwchar.a $(OBJ); \
+ 	fi
+ 
+ install:

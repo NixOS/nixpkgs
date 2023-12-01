@@ -1,0 +1,27 @@
+From 6a26922e5e4363de36057d635a1bf889160b2533 Mon Sep 17 00:00:00 2001
+From: Lorenz Brun <lorenz@brun.one>
+Date: Fri, 28 Jan 2022 18:44:43 +0100
+Subject: [PATCH] Do not use store path for autostart on Nix
+
+---
+ linphone-app/src/app/App.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/linphone-app/src/app/App.cpp b/linphone-app/src/app/App.cpp
+index 868f8f44..2c61c648 100644
+--- a/linphone-app/src/app/App.cpp
++++ b/linphone-app/src/app/App.cpp
+@@ -858,6 +858,10 @@ void App::setAutoStart (bool enabled) {
+ 		exec = QProcessEnvironment::systemEnvironment().value(QStringLiteral("APPIMAGE"));
+ 		qDebug() << "exec path autostart set appimage=" << exec;
+ 	}
++	else if (binPath.startsWith("/nix/store")) { // Nix/NixOS
++		exec = QStringLiteral("linphone");
++		qDebug() << "exec path autostart set nix=" << exec;
++	}
+ 	else { //classic package
+ 		exec = binPath;
+ 		qDebug() << "exec path autostart set classic package=" << exec;
+-- 
+2.25.1
+

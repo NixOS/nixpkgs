@@ -1,0 +1,65 @@
+diff --git a/app/fileItemMenu.js b/app/fileItemMenu.js
+index cadca48..9632ecc 100644
+--- a/app/fileItemMenu.js
++++ b/app/fileItemMenu.js
+@@ -683,7 +683,7 @@ var FileItemMenu = class {
+             return;
+         }
+         let xdgEmailCommand = [];
+-        xdgEmailCommand.push('xdg-email');
++        xdgEmailCommand.push('@xdg_utils@/bin/xdg-email');
+         for (let fileItem of this._desktopManager.getCurrentSelection(false)) {
+             fileItem.unsetSelected();
+             xdgEmailCommand.push('--attach');
+diff --git a/app/preferences.js b/app/preferences.js
+index c89271c..29f0db8 100644
+--- a/app/preferences.js
++++ b/app/preferences.js
+@@ -31,6 +31,7 @@ var Preferences = class {
+         this._extensionPath = Data.codePath;
+         this._Enums = Data.Enums;
+         let schemaSource = GioSSS.get_default();
++        const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
+         this._desktopManager = null;
+ 
+         // Gtk
+@@ -38,7 +39,7 @@ var Preferences = class {
+         this.gtkSettings = new Gio.Settings({ settings_schema: schemaGtk });
+ 
+         // Gnome Files
+-        let schemaObj = schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS, true);
++        let schemaObj = schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS, true);
+         if (!schemaObj) {
+             this.nautilusSettings = null;
+             this.CLICK_POLICY_SINGLE = false;
+@@ -47,7 +48,7 @@ var Preferences = class {
+         }
+ 
+         // Compression
+-        const compressionSchema = schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
++        const compressionSchema = schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
+         if (!compressionSchema)
+             this.nautilusCompression = null;
+         else
+diff --git a/dingManager.js b/dingManager.js
+index b738b32..df186e5 100644
+--- a/dingManager.js
++++ b/dingManager.js
+@@ -397,7 +397,7 @@ const DingManager = class {
+     async _doKillAllOldDesktopProcesses() {
+         const procFolder = Gio.File.new_for_path('/proc');
+         const processes = await FileUtils.enumerateDir(procFolder);
+-        const thisPath = `gjs ${GLib.build_filenamev([
++        const thisPath = `@gjs@/bin/gjs ${GLib.build_filenamev([
+             this.path,
+             'app',
+             'ding.js',
+@@ -421,7 +421,7 @@ const DingManager = class {
+                 }
+ 
+                 if (contents.startsWith(thisPath)) {
+-                    let proc = new Gio.Subprocess({argv: ['/bin/kill', filename]});
++                    let proc = new Gio.Subprocess({argv: ['@util_linux@/bin/kill', filename]});
+                     proc.init(null);
+                     print(`Killing old DING process ${filename}`);
+                     await proc.wait_async_promise(null);

@@ -1,0 +1,27 @@
+Index: grantlee-5.1.0/templates/lib/templateloader.cpp
+===================================================================
+--- grantlee-5.1.0.orig/templates/lib/templateloader.cpp
++++ grantlee-5.1.0/templates/lib/templateloader.cpp
+@@ -142,10 +142,6 @@ Template FileSystemTemplateLoader::loadByName(const QString &fileName,
+                      + QLatin1Char('/') + fileName);
+     const QFileInfo fi(file);
+
+-    if (file.exists()
+-        && !fi.canonicalFilePath().contains(
+-            QDir(d->m_templateDirs.at(i)).canonicalPath()))
+-      return {};
+     ++i;
+   }
+
+@@ -173,11 +169,6 @@ FileSystemTemplateLoader::getMediaUri(co
+                      + QLatin1Char('/') + fileName);
+ 
+     const QFileInfo fi(file);
+-    if (!fi.canonicalFilePath().contains(
+-            QDir(d->m_templateDirs.at(i)).canonicalPath())) {
+-      ++i;
+-      continue;
+-    }
+ 
+     if (file.exists()) {
+       auto path = fi.absoluteFilePath();

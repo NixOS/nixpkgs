@@ -1,0 +1,20 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index da1376e..88298a7 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,11 +1,11 @@
+-[tool.poetry]
++[project]
+ name = "preprocess_cancellation"
+ version = "0.2.0"
+ description = "GCode processor to add klipper cancel-object markers"
+ readme = "README.md"
+-authors = ["Franklyn Tackitt <im@frank.af>"]
+-repository = "https://github.com/kageurufu/cancelobject-preprocessor"
+-license = "GPL-3.0-only"
++authors = [ { name = "Franklyn Tackitt", email = "im@frank.af" } ]
++urls.repository = "https://github.com/kageurufu/cancelobject-preprocessor"
++license.text = "GPL-3.0-only"
+ 
+ [tool.poetry.urls]
+ "Bug Tracker" = "https://github.com/kageurufu/cancelobject-preprocessor/issues"

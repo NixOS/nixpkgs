@@ -1,0 +1,15 @@
+--- a/extension.js
++++ b/extension.js
+@@ -339,9 +339,9 @@ const EEPSIndicator = GObject.registerClass(
+                     _lastUsedInputPreset = _idata.trim().slice(1, -1);
+                 } else if (appType === 'native') {
+                     // Get last used presets
+-                    const settings = new Gio.Settings({
+-                        schema_id: 'com.github.wwmm.easyeffects',
+-                    });
++                    const _schema_source = Gio.SettingsSchemaSource.new_from_directory('@easyeffects_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
++                    const _schema = _schema_source.lookup('com.github.wwmm.easyeffects', false);
++                    const settings = new Gio.Settings({settings_schema: _schema});
+                     _lastUsedOutputPreset = settings.get_string(
+                         'last-used-output-preset'
+                     );

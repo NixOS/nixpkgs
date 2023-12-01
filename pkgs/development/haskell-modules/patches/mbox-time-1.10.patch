@@ -1,0 +1,52 @@
+diff -rN -u old-mbox/Data/MBox/String.hs new-mbox/Data/MBox/String.hs
+--- old-mbox/Data/MBox/String.hs	2022-11-22 19:14:52.332543098 +0100
++++ new-mbox/Data/MBox/String.hs	2022-11-22 19:14:52.332543098 +0100
+@@ -1,3 +1,4 @@
++{-# LANGUAGE CPP #-}
+ 
+ -----------------------------------------------------------------------------
+ {- |
+@@ -31,7 +32,11 @@
+ -- | Reads a date header as a UTCTime
+ parseDateHeader :: String -> Maybe UTCTime
+ parseDateHeader header = listToMaybe . catMaybes $ map tryParse formats where
++#if MIN_VERSION_time(1,9,0)
++  tryParse f = parseTimeM True LC.defaultTimeLocale f header
++#else
+   tryParse f = parseTime LC.defaultTimeLocale f header
++#endif
+   formats =
+     [ "%a, %_d %b %Y %T %z"
+     , "%a, %_d %b %Y %T %Z"
+diff -rN -u old-mbox/Data/MBox.hs new-mbox/Data/MBox.hs
+--- old-mbox/Data/MBox.hs	2022-11-22 19:14:52.332543098 +0100
++++ new-mbox/Data/MBox.hs	2022-11-22 19:14:52.332543098 +0100
+@@ -1,3 +1,4 @@
++{-# LANGUAGE CPP #-}
+ {-# LANGUAGE ViewPatterns #-}
+ 
+ -----------------------------------------------------------------------------
+@@ -34,7 +35,11 @@
+ parseDateHeader :: T.Text -> Maybe UTCTime
+ parseDateHeader txt = listToMaybe . catMaybes $ map tryParse formats where
+   header = T.unpack txt
++#if MIN_VERSION_time(1,9,0)
++  tryParse f = parseTimeM True LC.defaultTimeLocale f header
++#else
+   tryParse f = parseTime LC.defaultTimeLocale f header
++#endif
+   formats =
+     [ "%a, %_d %b %Y %T %z"
+     , "%a, %_d %b %Y %T %Z"
+diff -rN -u old-mbox/mbox.cabal new-mbox/mbox.cabal
+--- old-mbox/mbox.cabal	2022-11-22 19:14:52.332543098 +0100
++++ new-mbox/mbox.cabal	2022-11-22 19:14:52.332543098 +0100
+@@ -13,7 +13,7 @@
+ Cabal-Version:       >= 1.6
+ 
+ library
+-  build-depends:     base >= 4, base < 6, safe, time < 1.9, time-locale-compat, text
++  build-depends:     base >= 4, base < 6, safe, time, time-locale-compat, text
+   exposed-modules:   Data.MBox, Data.MBox.String
+   ghc-options:       -Wall
+ 

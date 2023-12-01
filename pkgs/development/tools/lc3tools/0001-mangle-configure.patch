@@ -1,0 +1,29 @@
+diff --git a/configure b/configure
+index 46f9af4..dfc1b3e 100755
+--- a/configure
++++ b/configure
+@@ -17,10 +17,11 @@ esac
+ 
+ # Some binaries that we'll need, and the places that we might find them.
+ 
+-binlist="uname flex gcc wish rm cp mkdir chmod sed"
+-pathlist="/bin /usr/bin /usr/local/bin /sw/bin /usr/x116/bin /usr/X11R6/bin"
+-libpathlist="/lib /usr/lib /usr/local/lib"
+-incpathlist="/include /usr/include /usr/local/include"
++IFS=:
++binlist="uname:flex:gcc:wish:rm:cp:mkdir:chmod:sed"
++pathlist=$PATH
++libpathlist=$LIBS
++incpathlist=$INCLUDES
+ 
+ 
+ # Find the binaries (or die trying).
+@@ -55,7 +56,7 @@ case `$uname -s` in
+ 		echo "Configuring for Cygwin..."
+ 		;;
+ 	Linux*) echo "Configuring for Linux..."
+-		OS_SIM_LIBS="-lcurses"
++		# OS_SIM_LIBS="-lcurses"
+ 		;;
+ 	SunOS*)  echo "Configuring for Solaris..."
+ 		OS_SIM_LIBS="-lcurses -lsocket -lnsl"

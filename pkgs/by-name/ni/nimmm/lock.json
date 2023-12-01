@@ -1,0 +1,40 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "lscolors"
+      ],
+      "path": "/nix/store/h2rqjnvjg3xihh88f2hm72506vpklilz-source",
+      "ref": "v0.3.3",
+      "rev": "668b46c835944254a445b9cc6dfb887e38fa13f1",
+      "sha256": "0526hqh46lcfsvymb67ldsc8xbfn24vicn3b8wrqnh6mag8wynf4",
+      "srcDir": "src",
+      "url": "https://github.com/joachimschmidt557/nim-lscolors/archive/668b46c835944254a445b9cc6dfb887e38fa13f1.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "nimbox"
+      ],
+      "path": "/nix/store/dyv48md5gaz0x61fxi2zc69h05a3jvfq-source",
+      "ref": "master",
+      "rev": "6a56e76c01481176f16ae29b7d7c526bd83f229b",
+      "sha256": "15x1sdfxa1xcqnr68705jfnlv83lm0xnp2z9iz3pgc4bz5vwn4x1",
+      "srcDir": "",
+      "url": "https://github.com/dom96/nimbox/archive/6a56e76c01481176f16ae29b7d7c526bd83f229b.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "noise"
+      ],
+      "path": "/nix/store/cqn9s90ivzsx7mq5k8m19565247sdsg6-source",
+      "ref": "v0.1.8",
+      "rev": "3cb3250ddcdaa74809aad931c066e7ef6e4af36d",
+      "sha256": "0qmak5n5nrf8nb8szhlz8sf05gmbs0x648p4vcd7ca600kaxfgj0",
+      "srcDir": "",
+      "url": "https://github.com/jangko/nim-noise/archive/3cb3250ddcdaa74809aad931c066e7ef6e4af36d.tar.gz"
+    }
+  ]
+}
