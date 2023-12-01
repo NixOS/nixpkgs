@@ -2,23 +2,23 @@
 , stdenv
 , fetchgit
 , cmake
+, elfutils
 , extra-cmake-modules
-, wrapQtAppsHook
 , kitemmodels
 , libiberty
-, libelf
 , libdwarf
 , libopcodes
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elf-dissector";
-  version = "unstable-2023-06-06";
+  version = "unstable-2023-11-25";
 
   src = fetchgit {
     url = "https://invent.kde.org/sdk/elf-dissector.git";
-    rev = "de2e80438176b4b513150805238f3333f660718c";
-    hash = "sha256-2yHPVPu6cncXhFCJvrSodcRFVAxj4vn+e99WhtiZniM=";
+    rev = "888ef6581df0400db45e0a7829a7336531b12641";
+    sha256 = "sha256-V0cn3lAE5MSEUfiSY2q08ig/S1PWu9Scz558IVM97b0=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
 
-  buildInputs = [ kitemmodels libiberty libelf libdwarf libopcodes ];
+  buildInputs = [ kitemmodels libiberty elfutils libopcodes libdwarf ];
 
   meta = with lib; {
     homepage = "https://invent.kde.org/sdk/elf-dissector";
