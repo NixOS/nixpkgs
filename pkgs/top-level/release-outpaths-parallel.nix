@@ -19,10 +19,7 @@ the number of cores -- this helps in two ways:
 , path ? ./../..
 , myChunk
 , numChunks
-
-# This file should contain the result of:
-#   nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names
-, attrPathFile ? ../../release-attrpaths-superset.out
+, attrPathFile
 }:
 
 let
