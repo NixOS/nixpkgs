@@ -284,7 +284,7 @@ stdenv.mkDerivation {
 
   # callPackage not used because cc-wrapper is part of the stdenv
   # bootstrap; careful control of inputs is necessary
-  wrapper = import ./cc-wrapper.nix { inherit lib stdenv writeScript; };
+  wrapper = import ./cc-wrapper.nix { inherit lib stdenv writeScript coreutils; };
 
   installPhase =
     ''
