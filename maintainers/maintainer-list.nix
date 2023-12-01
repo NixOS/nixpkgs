@@ -80,6 +80,16 @@
       fingerprint = "F466 A548 AD3F C1F1 8C88  4576 8702 7528 B006 D66D";
     }];
   };
+  _0x4d6165 = {
+    email = "maeborow@posteo.net";
+    matrix = "0x4d6165:matrix.org";
+    name = "Margaret Miller";
+    github = "0x4d6165";
+    githubId = 9014596;
+    keys = [ {
+      fingerprint = "9208 75D6 8653 7D8F C105  B1BE 317F 7B26 4217 3F9C";
+    }];
+  };
   _0xB10C = {
     email = "nixpkgs@b10c.me";
     name = "0xB10C";

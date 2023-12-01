@@ -37877,6 +37877,8 @@ with pkgs;
     inherit (gnome2) GConf libgnome libgnomeui;
   };
 
+  gnoll = callpackage ../games/gnoll { };
+
   gtypist = callPackage ../games/gtypist { };
 
   gweled = callPackage ../games/gweled { };
@@ -42121,4 +42123,5 @@ with pkgs;
   code-maat = callPackage ../development/tools/code-maat {};
 
   mdhtml = callPackage ../tools/text/mdhtml { };
+  gnoll = callPackage ../games/gnoll {};
 }
