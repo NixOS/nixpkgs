@@ -3,17 +3,20 @@
 , fetchFromGitHub
 , cmake
 , python3
+, curl
+, libxml2
+, libffi
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "c3c";
-  version = "unstable-2021-07-30";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = pname;
-    rev = "2246b641b16e581aec9059c8358858e10a548d94";
-    sha256 = "VdMKdQsedDQCnsmTxO4HnBj5GH/EThspnotvrAscSqE=";
+    rev = "3255183ee49cb903be1c66717d90f35cbcae7f82";
+    sha256 = "1482l0c8crirzaxqq9aghbvfj7c1bbbvzcyspmbv8xbxhyl48zcm";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,6 +24,9 @@ llvmPackages.stdenv.mkDerivation rec {
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.lld
+    curl
+    libxml2
+    libffi
   ];
 
   nativeCheckInputs = [ python3 ];
@@ -36,6 +42,15 @@ llvmPackages.stdenv.mkDerivation rec {
     install -Dm755 c3c $out/bin/c3c
     cp -r lib $out
   '';
+
+  patches = [
+    ./add_ldd_link.patch
+  ];
+
+  cmakeFlags = [
+    "-DC3_LINK_DYNAMIC=0"
+    "-DLLD_LIB_PATH=${llvmPackages.lld.lib}/lib"
+  ];
 
   meta = with lib; {
     description = "Compiler for the C3 language";
