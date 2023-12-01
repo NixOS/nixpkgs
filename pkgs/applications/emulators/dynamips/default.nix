@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, libelf
+, elfutils
 , libpcap
 , nix-update-script
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libelf libpcap ];
+  buildInputs = [ elfutils libpcap ];
 
   cmakeFlags = [ "-DDYNAMIPS_CODE=stable" ];
 
