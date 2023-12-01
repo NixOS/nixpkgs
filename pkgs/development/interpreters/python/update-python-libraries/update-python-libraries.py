@@ -393,6 +393,8 @@ def _update_package(path, target):
     for pname in pnames:
         if BULK_UPDATE and _skip_bulk_update(f"python3Packages.{pname}"):
             raise ValueError(f"Bulk update skipped for {pname}")
+        elif _get_attr_value(f"python3Packages.{pname}.cargoDeps") is not None:
+            raise ValueError(f"Cargo dependencies are unsupported, skipping {pname}")
         try:
             new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
             successful_fetch = True
