@@ -12354,7 +12354,7 @@
     name = "Marc Scholten";
   };
   mr360 = {
-    email = "mr360@users.noreply.github.com";
+    email = "mrme360@proton.me";
     github = "mr360";
     githubId = 6275600;
     name = "MrMe360";
