@@ -12,16 +12,21 @@
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
   version = "1.16.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "bluetooth-data-tools";
     rev = "refs/tags/v${version}";
     hash = "sha256-m/WOW7Zpk/bxZnvWkAgu5qHoZ/loDXg4MTBHzeAzQpM=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=bluetooth_data_tools --cov-report=term-missing:skip-covered" ""
+  '';
 
   # The project can build both an optimized cython version and an unoptimized
   # python version. This ensures we fail if we build the wrong one.
@@ -40,11 +45,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bluetooth_data_tools --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "bluetooth_data_tools"
