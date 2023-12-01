@@ -2,7 +2,7 @@
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
+, wlroots, wayland-protocols, libdrm, wrapGAppsHook
 , nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config wayland-scanner scdoc
+    meson ninja pkg-config wayland-scanner scdoc wrapGAppsHook
   ];
 
   buildInputs = [
