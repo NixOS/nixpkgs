@@ -29,10 +29,12 @@ python3.pkgs.buildPythonApplication rec{
   '';
 
   installPhase = ''
-    patchShebangs $out/bin/plasma-hud
-    mkdir -p $out/bin $out/etc/xdg/autostart
-    cp -r $src/usr/lib/plasma-hud/plasma-hud $out/bin/plasma-hud
-    cp -r $src/etc $out/etc
+    runHook preInstall
+
+    install -Dm555 usr/lib/plasma-hud/plasma-hud -t $out/bin
+    cp -r etc -t $out
+
+    runHook postInstall
   '';
 
   meta = with lib;{
