@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.5.0";
+  version = "32.5.1";
 
   src = fetchzip {
     urls = [
@@ -26,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
       "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-1MJ5K9Zc/BHeQwwlq3XyUV8XTFEpPytNyTnsDpE1tBI="
+      "sha256-hWqL/WoRRigw8cNeJImOQLM8hewyS3PYNGr2WYP+cMk="
     else
-      "sha256-xXunZTqoc2A+ilosRUUluxDwewD3xwITF5nb5Lbyv7Y=";
+      "sha256-dlBnXP3WUgQ0spkLRowfzMcPArhGfpowsvwgCA+kvUA=";
   };
 
   preferLocalBuild = true;
