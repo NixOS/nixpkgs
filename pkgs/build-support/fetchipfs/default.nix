@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , curl
 }:
 
@@ -41,8 +42,9 @@ if (!hasHash) then throw "Specify sha for fetchipfs fixed-output derivation" els
           postFetch
           ipfs
           url
-          port
-          meta;
+          port;
+
+  meta = { license = lib.licenses.unfree; } // meta;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
