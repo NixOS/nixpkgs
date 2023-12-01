@@ -1,10 +1,12 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitea
 , pkg-config
 , openssl
 , nixVersions
 , nixPackage ? nixVersions.nix_2_17
+, darwin
 }:
 
 let
@@ -24,7 +26,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-6kcpP/CFiy571B98Y96/cdcClH50gdyPLZ28Npva7B4=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = lib.optional (!stdenv.isDarwin) openssl
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \
@@ -43,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     description = "Web interface for the Nix store";
     homepage = "https://codeberg.org/gorgon/gorgon/src/branch/main/nix-web";
     license = licenses.eupl12;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ embr ];
     mainProgram = "nix-web";
   };
