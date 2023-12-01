@@ -6,11 +6,11 @@ let
     # Original source https://www.internic.net/domain/named.root
     # occasionally suffers from pointless hash changes,
     # and having stable sources for older versions has advantages, too.
-    urls = map (prefix: prefix + "cc5e14a264912/etc/root.hints") [
+    urls = map (prefix: prefix + "d9c96ae96f066a85d7/etc/root.hints") [
       "https://gitlab.nic.cz/knot/knot-resolver/raw/"
       "https://raw.githubusercontent.com/CZ-NIC/knot-resolver/"
     ];
-    sha256 = "0vdrff4l8s8grif52dnh091s8qydhh88k25zqd9rj66sf1qwcwxl";
+    hash = "sha256-4lG/uPnNHBNIZ/XIeDM1w3iukrpeW0JIjTnGSwkJ8U4=";
   };
 
   rootKey = ./root.key;
@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation {
   pname = "dns-root-data";
-  version = "2019-01-11";
+  version = "2023-11-27";
 
   buildCommand = ''
     mkdir $out
