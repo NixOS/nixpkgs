@@ -34,17 +34,10 @@ in {
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      # NOTE: We don't use top-level jupyter because we don't
-      # want to pass in JUPYTER_PATH but use .environment instead,
-      # saving a rebuild.
-      default = pkgs.python3.pkgs.notebook;
-      defaultText = literalExpression "pkgs.python3.pkgs.notebook";
-      description = lib.mdDoc ''
-        Jupyter package to use.
-      '';
-    };
+    # NOTE: We don't use top-level jupyter because we don't
+    # want to pass in JUPYTER_PATH but use .environment instead,
+    # saving a rebuild.
+    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
 
     command = mkOption {
       type = types.str;

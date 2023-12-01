@@ -71,12 +71,7 @@ in
       };
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.tandoor-recipes;
-      defaultText = literalExpression "pkgs.tandoor-recipes";
-      description = lib.mdDoc "The Tandoor Recipes package to use.";
-    };
+    package = mkPackageOption pkgs "tandoor-recipes" { };
   };
 
   config = mkIf cfg.enable {

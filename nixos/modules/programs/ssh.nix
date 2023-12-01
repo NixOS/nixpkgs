@@ -132,14 +132,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.openssh;
-        defaultText = literalExpression "pkgs.openssh";
-        description = lib.mdDoc ''
-          The package used for the openssh client and daemon.
-        '';
-      };
+      package = mkPackageOption pkgs "openssh" { };
 
       knownHosts = mkOption {
         default = {};

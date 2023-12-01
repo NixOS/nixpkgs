@@ -3277,15 +3277,6 @@
     githubId = 1103294;
     name = "Christopher Rosset";
   };
-  christianharke = {
-    email = "christian@harke.ch";
-    github = "rake5k";
-    githubId = 13007345;
-    name = "Christian Harke";
-    keys = [{
-      fingerprint = "4EBB 30F1 E89A 541A A7F2  52BE 830A 9728 6309 66F4";
-    }];
-  };
   christophcharles = {
     github = "christophcharles";
     githubId = 23055925;
@@ -10019,6 +10010,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lamarios = {
+    matrix = "@lamarios:matrix.org";
+    github = "lamarios";
+    githubId = 1192563;
+    name = "Paul Fauchon";
+  };
   lambda-11235 = {
     email = "taranlynn0@gmail.com";
     github = "lambda-11235";
@@ -12165,7 +12162,7 @@
     name = "Martin Milata";
   };
   mmlb = {
-    email = "manny@peekaboo.mmlb.icu";
+    email = "i@m.mmlb.dev";
     github = "mmlb";
     githubId = 708570;
     name = "Manuel Mendez";
@@ -15013,6 +15010,15 @@
     githubId = 314564;
     name = "Ryan Lahfa";
   };
+  rake5k = {
+    email = "christian@harke.ch";
+    github = "rake5k";
+    githubId = 13007345;
+    name = "Christian Harke";
+    keys = [{
+      fingerprint = "4EBB 30F1 E89A 541A A7F2 52BE 830A 9728 6309 66F4";
+    }];
+  };
   rakesh4g = {
     email = "rakeshgupta4u@gmail.com";
     github = "Rakesh4G";
@@ -15995,6 +16001,15 @@
     githubId = 132835;
     name = "Samuel Dionne-Riel";
   };
+  samuel-martineau = {
+    name = "Samuel Martineau";
+    email = "samuel@smartineau.me";
+    github = "Samuel-Martineau";
+    githubId = 44237969;
+    keys = [{
+      fingerprint = "79A1 CC17 67C7 32B6 A8A2  BF4F 71E0 8761 642D ACD2";
+    }];
+  };
   samuelrivas = {
     email = "samuelrivas@gmail.com";
     github = "samuelrivas";
@@ -16410,6 +16425,12 @@
     github = "shadaj";
     githubId = 543055;
     name = "Shadaj Laddad";
+  };
+  shaddydc = {
+    email = "nixpkgs@shaddy.dev";
+    github = "ShaddyDC";
+    githubId = 18403034;
+    name = "Shaddy";
   };
   shadowrz = {
     email = "shadowrz+nixpkgs@disroot.org";
@@ -19181,6 +19202,12 @@
     github = "janvotava";
     githubId = 367185;
     name = "Jan Votava";
+  };
+  vpetersson = {
+    email = "vpetersson@screenly.io";
+    github = "vpetersson";
+    githubId = 357664;
+    name = "Viktor Petersson";
   };
   vq = {
     email = "vq@erq.se";

@@ -358,10 +358,7 @@ with pkgs;
 
   binbloom = callPackage ../tools/security/binbloom { };
 
-  bingo = callPackage ../development/tools/bingo {
-    # See https://github.com/bwplotka/bingo/issues/143.
-    buildGoModule = buildGo120Module;
-  };
+  bingo = callPackage ../development/tools/bingo { };
 
   bin2c = callPackage ../development/tools/bin2c { };
 
@@ -6012,7 +6009,11 @@ with pkgs;
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
-  mmctl = callPackage ../tools/misc/mmctl { };
+  mmctl = callPackage ../tools/misc/mmctl {
+    # mmctl tests currently fail with go1.21. See
+    # https://mattermost.atlassian.net/browse/MM-55465
+    buildGoModule = buildGo120Module;
+  };
 
   moar = callPackage ../tools/misc/moar { };
 
@@ -9283,9 +9284,7 @@ with pkgs;
 
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
-  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
-    stdenv = gcc8Stdenv;
-  };
+  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
   hylafaxplus = callPackage ../servers/hylafaxplus {
     # libtiff >= 4.6 dropped many executables needed by hylafaxplus
@@ -11972,8 +11971,6 @@ with pkgs;
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
-
-  pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
   pdfcrack = callPackage ../tools/security/pdfcrack { };
 
@@ -19856,7 +19853,7 @@ with pkgs;
 
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
-  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
+  cutter = qt6.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
 
@@ -20067,7 +20064,9 @@ with pkgs;
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
-  sparse = callPackage ../development/tools/analysis/sparse { };
+  sparse = callPackage ../development/tools/analysis/sparse {
+    llvm = llvm_14;
+  };
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
@@ -20829,9 +20828,7 @@ with pkgs;
 
   cln = callPackage ../development/libraries/cln { };
 
-  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
   clucene_core_1 = callPackage ../development/libraries/clucene-core {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
@@ -31427,8 +31424,6 @@ with pkgs;
 
   flowtime = callPackage ../applications/misc/flowtime { };
 
-  fnott = callPackage ../applications/misc/fnott { };
-
   furnace = callPackage ../applications/audio/furnace {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -36539,8 +36534,6 @@ with pkgs;
 
   wp4nix = callPackage ../development/tools/wp4nix { };
 
-  wp-cli = callPackage ../development/tools/wp-cli { };
-
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
@@ -37013,11 +37006,11 @@ with pkgs;
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
-  chia = callPackage ../applications/blockchains/chia { };
+  chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
 
-  chia-dev-tools = callPackage ../applications/blockchains/chia-dev-tools { };
+  chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
 
-  chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
+  chia-plotter = throw "chia-plotter has been removed. see https://github.com/NixOS/nixpkgs/pull/270254";
 
   clboss = callPackage ../applications/blockchains/clboss { };
 
@@ -37535,6 +37528,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AVKit CoreAudio;
   };
   anki-bin = callPackage ../games/anki/bin.nix { };
+  anki-sync-server = callPackage ../games/anki/sync-server.nix { };
 
   armagetronad = callPackage ../games/armagetronad { };
 
@@ -41815,7 +41809,7 @@ with pkgs;
                       mount wall hostname more sysctl getconf
                       getent locale killall xxd watch;
 
-  fts = if stdenv.hostPlatform.isMusl then netbsd.fts else null;
+  fts = if stdenv.hostPlatform.isMusl then musl-fts else null;
 
   bsdSetupHook = makeSetupHook {
     name = "bsd-setup-hook";

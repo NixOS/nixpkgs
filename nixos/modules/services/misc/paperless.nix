@@ -194,12 +194,7 @@ in
       description = lib.mdDoc "User under which Paperless runs.";
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.paperless-ngx;
-      defaultText = literalExpression "pkgs.paperless-ngx";
-      description = lib.mdDoc "The Paperless package to use.";
-    };
+    package = mkPackageOption pkgs "paperless-ngx" { };
   };
 
   config = mkIf cfg.enable {

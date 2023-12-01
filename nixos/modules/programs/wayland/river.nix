@@ -10,12 +10,9 @@ in {
   options.programs.river = {
     enable = mkEnableOption (lib.mdDoc "river, a dynamic tiling Wayland compositor");
 
-    package = mkOption {
-      type = with types; nullOr package;
-      default = pkgs.river;
-      defaultText = literalExpression "pkgs.river";
-      description = lib.mdDoc ''
-        River package to use.
+    package = mkPackageOption pkgs "river" {
+      nullable = true;
+      extraDescription = ''
         Set to `null` to not add any River package to your path.
         This should be done if you want to use the Home Manager River module to install River.
       '';

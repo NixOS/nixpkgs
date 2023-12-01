@@ -5,7 +5,7 @@ let
   inherit (builtins) length map;
   inherit (lib.attrsets) attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
   inherit (lib.modules) mkDefault mkIf;
-  inherit (lib.options) literalExpression mkEnableOption mkOption;
+  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
   inherit (lib.strings) concatLines optionalString toLower;
   inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr package path port str strMatching submodule;
 
@@ -215,14 +215,9 @@ let
         TSM-depending packages used on the system.
       '';
     };
-    package = mkOption {
-      type = package;
-      default = pkgs.tsm-client;
-      defaultText = literalExpression "pkgs.tsm-client";
-      example = literalExpression "pkgs.tsm-client-withGui";
-      description = lib.mdDoc ''
-        The TSM client derivation to be
-        added to the system environment.
+    package = mkPackageOption pkgs "tsm-client" {
+      example = "tsm-client-withGui";
+      extraDescription = ''
         It will be used with `.override`
         to add paths to the client system-options file.
       '';

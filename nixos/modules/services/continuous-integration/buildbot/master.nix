@@ -229,12 +229,8 @@ in {
         description = lib.mdDoc "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.buildbot-full;
-        defaultText = literalExpression "pkgs.buildbot-full";
-        description = lib.mdDoc "Package to use for buildbot.";
-        example = literalExpression "pkgs.buildbot";
+      package = mkPackageOption pkgs "buildbot-full" {
+        example = "buildbot";
       };
 
       packages = mkOption {

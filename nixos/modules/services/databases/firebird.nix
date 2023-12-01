@@ -42,13 +42,9 @@ in
 
       enable = mkEnableOption (lib.mdDoc "the Firebird super server");
 
-      package = mkOption {
-        default = pkgs.firebird;
-        defaultText = literalExpression "pkgs.firebird";
-        type = types.package;
-        example = literalExpression "pkgs.firebird_3";
-        description = lib.mdDoc ''
-          Which Firebird package to be installed: `pkgs.firebird_3`
+      package = mkPackageOption pkgs "firebird" {
+        example = "firebird_3";
+        extraDescription = ''
           For SuperServer use override: `pkgs.firebird_3.override { superServer = true; };`
         '';
       };

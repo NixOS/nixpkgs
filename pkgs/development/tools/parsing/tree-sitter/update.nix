@@ -75,6 +75,8 @@ let
     "tree-sitter-agda"
     # abandoned
     "tree-sitter-fluent"
+    # to unblock my update
+    "csharp-tree-sitter"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -174,6 +176,10 @@ let
     "tree-sitter-norg" = {
       orga = "nvim-neorg";
       repo = "tree-sitter-norg";
+    };
+    "tree-sitter-norg-meta" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg-meta";
     };
     "tree-sitter-commonlisp" = {
       orga = "thehamsta";
@@ -378,6 +384,10 @@ let
     "tree-sitter-cue" = {
       orga = "eonpatapon";
       repo = "tree-sitter-cue";
+    };
+    "tree-sitter-uiua" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-uiua";
     };
     "tree-sitter-wing" = {
       orga = "winglang";
