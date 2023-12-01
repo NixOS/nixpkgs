@@ -30,14 +30,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.yubikey-agent;
-        defaultText = literalExpression "pkgs.yubikey-agent";
-        description = lib.mdDoc ''
-          The package used for the yubikey-agent daemon.
-        '';
-      };
+      package = mkPackageOption pkgs "yubikey-agent" { };
     };
   };
 

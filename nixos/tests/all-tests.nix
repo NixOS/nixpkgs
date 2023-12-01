@@ -120,6 +120,7 @@ in {
   amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
   amd-sev = runTest ./amd-sev.nix;
   anbox = runTest ./anbox.nix;
+  anki-sync-server = handleTest ./anki-sync-server.nix {};
   anuko-time-tracker = handleTest ./anuko-time-tracker.nix {};
   apcupsd = handleTest ./apcupsd.nix {};
   apfs = runTest ./apfs.nix;
@@ -253,6 +254,7 @@ in {
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drbd = handleTest ./drbd.nix {};
+  dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   early-mount-options = handleTest ./early-mount-options.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};

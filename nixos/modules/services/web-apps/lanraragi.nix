@@ -9,7 +9,7 @@ in
   options.services = {
     lanraragi = {
       enable = lib.mkEnableOption (lib.mdDoc "LANraragi");
-      package = lib.mkPackageOptionMD pkgs "lanraragi" { };
+      package = lib.mkPackageOption pkgs "lanraragi" { };
 
       port = lib.mkOption {
         type = lib.types.port;
@@ -72,11 +72,10 @@ in
         "HOME" = "/var/lib/lanraragi";
       };
       preStart = ''
-        REDIS_PASS=${lib.optionalString (cfg.redis.passwordFile != null) "$(head -n1 ${cfg.redis.passwordFile})"}
         cat > lrr.conf <<EOF
         {
           redis_address => "127.0.0.1:${toString cfg.redis.port}",
-          redis_password => "$REDIS_PASS",
+          redis_password => "${lib.optionalString (cfg.redis.passwordFile != null) ''$(head -n1 ${cfg.redis.passwordFile})''}",
           redis_database => "0",
           redis_database_minion => "1",
           redis_database_config => "2",
@@ -84,15 +83,9 @@ in
         }
         EOF
       '' + lib.optionalString (cfg.passwordFile != null) ''
-        PASS_HASH=$(
-          PASS=$(head -n1 ${cfg.passwordFile}) ${cfg.package.perlEnv}/bin/perl -I${cfg.package}/share/lanraragi/lib -e \
-            'use LANraragi::Controller::Config; print LANraragi::Controller::Config::make_password_hash($ENV{PASS})' \
-            2>/dev/null
-        )
-
-        ${lib.getExe pkgs.redis} -h 127.0.0.1 -p ${toString cfg.redis.port} -a "$REDIS_PASS" <<EOF
+        ${lib.getExe pkgs.redis} -h 127.0.0.1 -p ${toString cfg.redis.port} ${lib.optionalString (cfg.redis.passwordFile != null) ''-a "$(head -n1 ${cfg.redis.passwordFile})"''}<<EOF
           SELECT 2
-          HSET LRR_CONFIG password $PASS_HASH
+          HSET LRR_CONFIG password $(${cfg.package}/bin/helpers/lrr-make-password-hash $(head -n1 ${cfg.passwordFile}))
         EOF
       '';
     };

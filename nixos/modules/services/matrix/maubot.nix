@@ -59,7 +59,7 @@ in
   options.services.maubot = with lib; {
     enable = mkEnableOption (mdDoc "maubot");
 
-    package = lib.mkPackageOptionMD pkgs "maubot" { };
+    package = lib.mkPackageOption pkgs "maubot" { };
 
     plugins = mkOption {
       type = types.listOf types.package;

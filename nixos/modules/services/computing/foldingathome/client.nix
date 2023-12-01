@@ -20,14 +20,7 @@ in
   options.services.foldingathome = {
     enable = mkEnableOption (lib.mdDoc "Folding@home client");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.fahclient;
-      defaultText = literalExpression "pkgs.fahclient";
-      description = lib.mdDoc ''
-        Which Folding@home client to use.
-      '';
-    };
+    package = mkPackageOption pkgs "fahclient" { };
 
     user = mkOption {
       type = types.nullOr types.str;

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , git
 , pkg-config
+, xcbuild
 , python3
 , zlib
 }:
@@ -49,6 +50,8 @@ python3.pkgs.buildPythonApplication rec {
     git
     pkg-config
     zlib
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    xcbuild.xcrun
   ] ++ (with python3.pkgs; [
     mock
     parameterized

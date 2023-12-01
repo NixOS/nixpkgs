@@ -14,7 +14,7 @@ in {
       integration. Note that you need to logout and login for this change to apply
     '');
 
-    package = lib.mkPackageOptionMD pkgs "direnv" {};
+    package = lib.mkPackageOption pkgs "direnv" {};
 
     direnvrcExtra = lib.mkOption {
       type = lib.types.lines;
@@ -49,7 +49,7 @@ in {
           default = true;
         };
 
-      package = lib.mkPackageOptionMD pkgs "nix-direnv" {};
+      package = lib.mkPackageOption pkgs "nix-direnv" {};
     };
   };
 

@@ -64,25 +64,14 @@ let
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.swtpm;
-        defaultText = literalExpression "pkgs.swtpm";
-        description = lib.mdDoc ''
-          swtpm package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "swtpm" { };
     };
   };
 
   qemuModule = types.submodule {
     options = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.qemu;
-        defaultText = literalExpression "pkgs.qemu";
-        description = lib.mdDoc ''
-          Qemu package to use with libvirt.
+      package = mkPackageOption pkgs "qemu" {
+        extraDescription = ''
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
         '';
@@ -183,6 +172,31 @@ let
       };
     };
   };
+
+  nssModule = types.submodule {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          This option enables the older libvirt NSS module. This method uses
+          DHCP server records, therefore is dependent on the hostname provided
+          by the guest.
+          Please see https://libvirt.org/nss.html for more information.
+        '';
+      };
+
+      enableGuest = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          This option enables the newer libvirt_guest NSS module. This module
+          uses the libvirt guest name instead of the hostname of the guest.
+          Please see https://libvirt.org/nss.html for more information.
+        '';
+      };
+    };
+  };
 in
 {
 
@@ -224,14 +238,7 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.libvirt;
-      defaultText = literalExpression "pkgs.libvirt";
-      description = lib.mdDoc ''
-        libvirt package to use.
-      '';
-    };
+    package = mkPackageOption pkgs "libvirt" { };
 
     extraConfig = mkOption {
       type = types.lines;
@@ -306,6 +313,14 @@ in
       default = { };
       description = lib.mdDoc ''
         Hooks related options.
+      '';
+    };
+
+    nss = mkOption {
+      type = nssModule;
+      default = { };
+      description = lib.mdDoc ''
+        libvirt NSS module options.
       '';
     };
   };
@@ -434,7 +449,7 @@ in
         ] ++ cfg.extraOptions
       );
 
-      path = [ cfg.qemu.package ] # libvirtd requires qemu-img to manage disk images
+      path = [ cfg.qemu.package pkgs.netcat ] # libvirtd requires qemu-img to manage disk images
         ++ optional vswitch.enable vswitch.package
         ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
@@ -498,5 +513,11 @@ in
         });
       '';
     };
+
+    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssDatabases.hosts = builtins.concatLists [
+      (optional cfg.nss.enable "libvirt")
+      (optional cfg.nss.enableGuest "libvirt_guest")
+    ];
   };
 }

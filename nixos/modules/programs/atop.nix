@@ -16,14 +16,7 @@ in
 
       enable = mkEnableOption (lib.mdDoc "Atop");
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atop;
-        defaultText = literalExpression "pkgs.atop";
-        description = lib.mdDoc ''
-          Which package to use for Atop.
-        '';
-      };
+      package = mkPackageOption pkgs "atop" { };
 
       netatop = {
         enable = mkOption {

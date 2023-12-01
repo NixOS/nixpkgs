@@ -33,15 +33,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.consul;
-        defaultText = literalExpression "pkgs.consul";
-        description = lib.mdDoc ''
-          The package used for the Consul agent and CLI.
-        '';
-      };
-
+      package = mkPackageOption pkgs "consul" { };
 
       webUi = mkOption {
         type = types.bool;
@@ -128,12 +120,7 @@ in
       alerts = {
         enable = mkEnableOption (lib.mdDoc "consul-alerts");
 
-        package = mkOption {
-          description = lib.mdDoc "Package to use for consul-alerts.";
-          default = pkgs.consul-alerts;
-          defaultText = literalExpression "pkgs.consul-alerts";
-          type = types.package;
-        };
+        package = mkPackageOption pkgs "consul-alerts" { };
 
         listenAddr = mkOption {
           description = lib.mdDoc "Api listening address.";

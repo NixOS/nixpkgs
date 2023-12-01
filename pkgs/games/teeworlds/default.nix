@@ -1,7 +1,6 @@
 { fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsa-lib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 , nixosTests
-, Carbon
 , Cocoa
 , buildClient ? true
 }:
@@ -34,6 +33,14 @@ stdenv.mkDerivation rec {
     substituteInPlace 'other/bundle/client/Info.plist.in' \
       --replace ${"'"}''${TARGET_CLIENT}' 'teeworlds' \
       --replace ${"'"}''${PROJECT_VERSION}' '${version}'
+
+    # Make sure some bundled dependencies are actually unbundled.
+    # This will fail compilation if one of these dependencies could not
+    # be found, instead of falling back to the bundled version.
+    rm -rf 'src/engine/external/wavpack/'
+    rm -rf 'src/engine/external/zlib/'
+    # md5, pnglite and json-parser (https://github.com/udp/json-parser)
+    # don't seem to be packaged in Nixpkgs, so don't unbundle them.
   '';
 
   nativeBuildInputs = [
@@ -45,17 +52,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python3 lua5_3 zlib
+    wavpack
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
   ] ++ lib.optionals buildClient ([
-    libGLU
     SDL2
     freetype
-    wavpack
   ] ++ lib.optionals stdenv.isLinux [
+    libGLU
     alsa-lib
     libX11
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-    Cocoa
   ]);
 
   cmakeFlags = [
@@ -93,7 +99,18 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://teeworlds.com/";
-    license = "BSD-style, see `license.txt'";
+    license = with lib.licenses; [
+      # See https://github.com/teeworlds/teeworlds/blob/master/license.txt
+      lib.licenses.zlib # Main license
+      cc-by-sa-30 # All content under 'datasrc' except the fonts
+      ofl  # datasrc/fonts/SourceHanSans.ttc
+      free # datasrc/fonts/DejaVuSans.ttf
+      bsd2 # src/engine/external/json-parser/
+      bsd3 # src/engine/external/wavpack
+      # zlib src/engine/external/md5/
+      # zlib src/engine/external/pnglite/
+      # zlib src/engine/external/zlib/
+    ];
     maintainers = with lib.maintainers; [ astsmtl Luflosi ];
     platforms = lib.platforms.unix;
   };
