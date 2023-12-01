@@ -200,7 +200,9 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg missingArgs.${head (attrNames missingArgs)};
 
-    in if missingArgs == {} then makeOverridable f allArgs else abort error;
+    in if missingArgs == {}
+       then makeOverridable f allArgs
+       else throw "lib.customisation.callPackageWith: ${error}";
 
 
   /* Like callPackage, but for a function that returns an attribute
