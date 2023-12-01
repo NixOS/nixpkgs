@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, setuptools
 , python
 , pkg-config
 , gdb
@@ -25,6 +26,7 @@ let
 in buildPythonPackage rec {
   pname = "cython";
   version = "0.29.36";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Cython";
@@ -34,6 +36,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    setuptools
   ];
 
   nativeCheckInputs = [
