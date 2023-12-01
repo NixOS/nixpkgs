@@ -2,27 +2,29 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, fetchpatch
 , pytest
 , pytest-asyncio
 , pytestCheckHook
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.11.1";
+  version = "3.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f2sSVgKsbXQ+Ujrgv6ceGml6L1U0BkUoxv+EwvfC/H8=";
+    hash = "sha256-MaQPA4wiytMih7tDkyBURR/1WD/wlLym9nXfL4vBpuk=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [
     pytest
