@@ -85,12 +85,16 @@ let
       name = "gd";
       extraBuildInputs = [ gd ];
     };
-    # Build has been broken: https://github.com/NixOS/nixpkgs/issues/191072
-    # haru = buildExtension {
-    #   inherit gawkextlib;
-    #   name = "haru";
-    #   extraBuildInputs = [ libharu ];
-    # };
+    haru = buildExtension {
+      inherit gawkextlib;
+      name = "haru";
+      extraBuildInputs = [ libharu ];
+      patches = [
+        # Renames references to two identifiers with typos that libharu fixed in 2.4.4
+        # https://github.com/libharu/libharu/commit/88271b73c68c521a49a15e3555ef00395aa40810
+        ./fix-typos-corrected-in-libharu-2.4.4.patch
+      ];
+    };
     json = buildExtension {
       inherit gawkextlib;
       name = "json";
