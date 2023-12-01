@@ -1,4 +1,5 @@
 { lib
+, gcc12Stdenv
 , config
 , aws-sdk-cpp
 , boehmgc
@@ -159,7 +160,10 @@ in lib.makeExtensible (self: ({
       patch-monitorfdhup
     ];
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
-  }).override { boehmgc = boehmgc-nix_2_3; };
+  }).override {
+    boehmgc = boehmgc-nix_2_3;
+    stdenv = gcc12Stdenv;
+  };
 
   nix_2_10 = common {
     version = "2.10.3";
