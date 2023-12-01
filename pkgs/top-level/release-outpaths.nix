@@ -41,7 +41,6 @@ let
           checkMeta = checkMeta;
 
           handleEvalIssue = reason: errormsg:
-            if attrNamesOnly then true else
             let
               fatalErrors = [
                 "unknown-meta"
