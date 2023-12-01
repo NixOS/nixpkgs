@@ -2088,8 +2088,6 @@ with pkgs;
 
   transmission-rss = callPackage ../tools/networking/transmission-rss { };
 
-  trigger-control = callPackage ../tools/games/trigger-control { };
-
   trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
 
   ttchat = callPackage ../tools/misc/ttchat { };
@@ -3593,8 +3591,6 @@ with pkgs;
     buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
 
   bunyan-rs = callPackage ../development/tools/bunyan-rs { };
-
-  butt = callPackage ../applications/audio/butt { };
 
   calcure = callPackage ../applications/misc/calcure { };
 
@@ -18323,6 +18319,8 @@ with pkgs;
 
   emmet-ls = callPackage ../development/tools/language-servers/emmet-ls { };
 
+  emmet-language-server = callPackage ../development/tools/language-servers/emmet-language-server { };
+
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
@@ -30014,6 +30012,8 @@ with pkgs;
 
   quattrocento-sans = callPackage ../data/fonts/quattrocento-sans { };
 
+  quivira = callPackage ../data/fonts/quivira { };
+
   raleway = callPackage ../data/fonts/raleway { };
 
   recursive = callPackage ../data/fonts/recursive { };
@@ -41698,8 +41698,6 @@ with pkgs;
   serial-studio = libsForQt5.callPackage ../applications/misc/serial-studio { };
 
   snowsql = callPackage ../applications/misc/snowsql { };
-
-  snowmachine = python3Packages.callPackage ../applications/misc/snowmachine { };
 
   sidequest = callPackage ../applications/misc/sidequest { };
 

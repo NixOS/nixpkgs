@@ -4,7 +4,6 @@
 , boehmgc
 , callPackage
 , fetchFromGitHub
-, fetchurl
 , fetchpatch
 , fetchpatch2
 , runCommand
@@ -238,6 +237,11 @@ in lib.makeExtensible (self: ({
     ];
   };
 
+  nix_2_19 = common {
+    version = "2.19.2";
+    hash = "sha256-iA8DqS+W2fWTfR+nNJSvMHqQ+4NpYMRT3b+2zS6JTvE=";
+  };
+
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
   # making this package an inaccurate representation of what features are available
@@ -257,7 +261,7 @@ in lib.makeExtensible (self: ({
 
   stable = addFallbackPathsCheck self.nix_2_18;
 
-  unstable = self.nix_2_18;
+  unstable = self.nix_2_19;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
