@@ -18579,7 +18579,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else gcc12Stdenv;
     bazel_self = bazel_5;
   };
 
@@ -18590,7 +18590,7 @@ with pkgs;
     runJdk = jdk11_headless;
     stdenv = if stdenv.isDarwin then
       darwin.apple_sdk_11_0.stdenv else
-      if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+      if stdenv.cc.isClang then llvmPackages.stdenv else gcc12Stdenv;
     bazel_self = bazel_6;
   };
 
