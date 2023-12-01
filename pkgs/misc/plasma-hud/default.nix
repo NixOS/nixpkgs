@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, rofi, gobject-introspection }:
+{ wrapGAppsHook, lib, python3, fetchFromGitHub, rofi, gobject-introspection }:
 
 python3.pkgs.buildPythonApplication rec{
   pname = "plasma-hud";
@@ -11,13 +11,17 @@ python3.pkgs.buildPythonApplication rec{
     sha256 = "19vlc156jfdamw7q1pc78fmlf0h3sff5ar3di9j316vbb60js16l";
   };
 
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     rofi
     dbus-python
+    pygobject3
     setproctitle
     xlib
-    pygobject3
-    gobject-introspection
   ];
   format = "other";
   postPatch = ''
