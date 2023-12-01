@@ -5,7 +5,6 @@
 , removeLinuxDRM ? false
 , lib
 , nixosTests
-, fetchpatch
 , ...
 } @ args:
 
@@ -28,18 +27,9 @@ callPackage ./generic.nix args {
 
   # This is a fixed version to the 2.1.x series, move only
   # if the 2.1.x series moves.
-  version = "2.1.13";
+  version = "2.1.14";
 
-  extraPatches = [
-    (fetchpatch {
-      # https://github.com/openzfs/zfs/pull/15571
-      # Remove when it's backported to 2.1.x.
-      url = "https://github.com/robn/zfs/commit/617c990a4cf1157b0f8332f35672846ad16ca70a.patch";
-      hash = "sha256-j5YSrud7BaWk2npBl31qwFFLYltbut3CUjI1cjZOpag=";
-    })
-  ];
-
-  hash = "sha256-tqUCn/Hf/eEmyWRQthWQdmTJK2sDspnHiiEfn9rz2Kc=";
+  hash = "sha256-RVAoZbV9yclGuN+D37SB6UCRFbbLEpBoyrQOQCVsQwE=";
 
   tests = [
     nixosTests.zfs.series_2_1
