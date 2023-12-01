@@ -34,7 +34,7 @@ let
         config = {
           allowAliases = false;
           allowBroken = includeBroken;
-          allowUnfree = true;
+          allowUnfree = false;
           allowInsecurePredicate = x: true;
           checkMeta = checkMeta;
 
@@ -47,7 +47,8 @@ let
             in
             if builtins.elem reason fatalErrors
             then abort errormsg
-            else if !includeBroken && builtins.elem reason [ "broken" ]
+            # hydra does not build unfree packages, so tons of them are broken yet not marked meta.broken.
+            else if !includeBroken && builtins.elem reason [ "broken" "unfree" ]
             then throw "broken"
             else true;
 
