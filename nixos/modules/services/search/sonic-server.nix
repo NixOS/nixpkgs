@@ -13,7 +13,7 @@ in {
     services.sonic-server = {
       enable = lib.mkEnableOption (lib.mdDoc "Sonic Search Index");
 
-      package = lib.mkPackageOptionMD pkgs "sonic-server" { };
+      package = lib.mkPackageOption pkgs "sonic-server" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule { freeformType = settingsFormat.type; };

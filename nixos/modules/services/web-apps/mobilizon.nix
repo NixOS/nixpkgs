@@ -71,7 +71,7 @@ in
         '';
       };
 
-      package = mkPackageOptionMD pkgs "mobilizon" { };
+      package = mkPackageOption pkgs "mobilizon" { };
 
       settings = mkOption {
         type =

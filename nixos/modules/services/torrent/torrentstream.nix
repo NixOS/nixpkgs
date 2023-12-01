@@ -7,7 +7,7 @@ in
 {
   options.services.torrentstream = {
     enable = lib.mkEnableOption (lib.mdDoc "TorrentStream daemon");
-    package = lib.mkPackageOptionMD pkgs "torrentstream" { };
+    package = lib.mkPackageOption pkgs "torrentstream" { };
     port = lib.mkOption {
       type = lib.types.port;
       default = 5082;
