@@ -391,6 +391,11 @@ in
       environment.etc."xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
     })
 
+    (mkIf (cfg.enable || cfg.mobile.enable) {
+      # Required for autorotate
+      hardware.sensor.iio.enable = lib.mkDefault true;
+    })
+
     # Plasma Desktop
     (mkIf cfg.enable {
 
@@ -509,8 +514,6 @@ in
       hardware.bluetooth.enable = true;
       hardware.pulseaudio.enable = true;
       networking.networkmanager.enable = true;
-      # Required for autorotate
-      hardware.sensor.iio.enable = lib.mkDefault true;
 
       # Recommendations can be found here:
       #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
