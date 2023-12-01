@@ -933,6 +933,18 @@ self: super: {
   # https://github.com/basvandijk/concurrent-extra/issues/12
   concurrent-extra = dontCheck super.concurrent-extra;
 
+  csound-sampler =
+    assert super.csound-sampler.version == "0.0.10.1";
+    overrideCabal (drv: {
+      src = (pkgs.fetchFromGitHub {
+        owner = "spell-music";
+        repo = "csound-expression";
+        rev = "345df2c91c9831dd895f58951990165598504814";
+        hash = "sha256-6qPiKsZwZpqB2kmckKDKyQPTcWPIaVwi+EYs74tRod0=";
+      }) + "/csound-sampler";
+      editedCabalFile = null;
+    }) super.csound-sampler;
+
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
