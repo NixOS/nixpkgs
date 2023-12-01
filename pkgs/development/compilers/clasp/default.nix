@@ -1,8 +1,21 @@
-{ pkgs, lib, fetchFromGitHub, llvmPackages_15 }:
-
+{ stdenv
+, lib
+, fetchFromGitHub
+, boost
+, cacert
+, fmt_9
+, git
+, gmpxx
+, libclang
+, libelf
+, libunwind
+, llvm
+, ninja
+, pkg-config
+, sbcl
+}:
 
 let
-
   src = fetchFromGitHub {
     owner = "clasp-developers";
     repo = "clasp";
@@ -19,16 +32,19 @@ let
     "src/libatomic_ops"
   ];
 
-  reposTarball = llvmPackages_15.stdenv.mkDerivation {
+  reposTarball = stdenv.mkDerivation {
     pname = "clasp-repos";
     version = "tarball";
     inherit src;
+
     patches = [ ./clasp-pin-repos-commits.patch ];
-    nativeBuildInputs = with pkgs; [
+
+    nativeBuildInputs = [
       sbcl
       git
       cacert
     ];
+
     buildPhase = ''
       export SOURCE_DATE_EPOCH=1
       export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
@@ -37,22 +53,24 @@ let
         find $x -type d -name .git -exec rm -rvf {} \; || true
       done
     '';
+
     installPhase = ''
       tar --owner=0 --group=0 --numeric-owner --format=gnu \
         --sort=name --mtime="@$SOURCE_DATE_EPOCH" \
         -czf $out ${lib.concatStringsSep " " reposDirs}
     '';
+
     outputHashMode = "flat";
     outputHashAlgo = "sha256";
     outputHash = "sha256-vgwThjn2h3nKnShtKoHgaPdH/FDHv28fLMQvKFEwG6o=";
   };
-
 in
-llvmPackages_15.stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "clasp";
   version = "2.2.0";
   inherit src;
-  nativeBuildInputs = (with pkgs; [
+
+  nativeBuildInputs = [
     sbcl
     git
     pkg-config
@@ -62,10 +80,10 @@ llvmPackages_15.stdenv.mkDerivation {
     boost
     libunwind
     ninja
-  ]) ++ (with llvmPackages_15; [
     llvm
     libclang
-  ]);
+  ];
+
   configurePhase = ''
     export SOURCE_DATE_EPOCH=1
     export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
@@ -80,9 +98,11 @@ llvmPackages_15.stdenv.mkDerivation {
       --lib-path=$out/lib \
       --share-path=$out/share
   '';
+
   buildPhase = ''
     ninja -C build
   '';
+
   installPhase = ''
     ninja -C build install
   '';
@@ -94,9 +114,7 @@ llvmPackages_15.stdenv.mkDerivation {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     # Upstream claims support, but breaks with:
     # error: use of undeclared identifier 'aligned_alloc'
-    broken = llvmPackages_15.stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/clasp-developers/clasp";
   };
-
 }
-
