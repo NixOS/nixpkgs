@@ -145,7 +145,7 @@ let
       result =
         if tried.success
         then tried.value
-        else if enableWarnings
+        else if enableWarnings && path != [ "AAAAAASomeThingsFailToEvaluate" ]
         then lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" []
         else [];
     in
