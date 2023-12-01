@@ -14863,6 +14863,12 @@
       fingerprint = "7756 E88F 3C6A 47A5 C5F0  CDFB AB54 6777 F93E 20BF";
     }];
   };
+  phdyellow = {
+    name = "Phil Dyer";
+    email = "phildyer@protonmail.com";
+    github = "PhDyellow";
+    githubId = 7740661;
+  };
   phfroidmont = {
     name = "Paul-Henri Froidmont";
     email = "nix.contact-j9dw4d@froidmont.org";
