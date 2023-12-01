@@ -1,8 +1,15 @@
-{ wrapGAppsHook, lib, python3, fetchFromGitHub, rofi, gobject-introspection }:
+{ wrapGAppsHook
+, lib
+, python3
+, fetchFromGitHub
+, rofi
+, gobject-introspection
+}:
 
-python3.pkgs.buildPythonApplication rec{
+python3.pkgs.buildPythonApplication rec {
   pname = "plasma-hud";
   version = "19.10.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "Zren";
@@ -22,7 +29,7 @@ python3.pkgs.buildPythonApplication rec{
     setproctitle
     xlib
   ]) ++ [ rofi ];
-  format = "other";
+
   postPatch = ''
     sed -i "s:/usr/lib/plasma-hud:$out/bin:" etc/xdg/autostart/plasma-hud.desktop
   '';
