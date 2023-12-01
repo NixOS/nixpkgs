@@ -6,6 +6,6 @@ index 1311784..77043ac 100644
    default_options: [
      'cpp_std=c++14',
      'warning_level=2',
--    'force_fallback_for=wlroots,libliftoff',
+-    'force_fallback_for=wlroots,libliftoff,vkroots',
    ],
  )

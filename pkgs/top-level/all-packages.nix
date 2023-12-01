@@ -1827,7 +1827,7 @@ with pkgs;
   };
 
   gamescope = callPackage ../applications/window-managers/gamescope {
-    wlroots = wlroots_0_16;
+    wlroots = wlroots_0_17;
   };
 
   gay = callPackage ../tools/misc/gay {  };

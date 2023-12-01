@@ -28,18 +28,28 @@
 , wlroots
 , libliftoff
 , libdisplay-info
+, spirv-headers
 , lib
 , makeBinaryWrapper
 }:
 let
   pname = "gamescope";
-  version = "3.12.5";
+  version = "3.13.19";
 
   vkroots = fetchFromGitHub {
     owner = "Joshua-Ashton";
     repo = "vkroots";
-    rev = "26757103dde8133bab432d172b8841df6bb48155";
-    hash = "sha256-eet+FMRO2aBQJcCPOKNKGuQv5oDIrgdVPRO00c5gkL0=";
+    rev = "d5ef31abc7cb5c69aee4bcb67b10dd543c1ff7ac";
+    hash = "sha256-gNlSEeqy8svxrcUt1gYBacpjzdnfKS89yb//DiiCVTw=";
+  };
+
+  # equivalent to Joshua-Ashton/reshade/9fdbea6892f9959fdc18095d035976c574b268b7
+  # See https://github.com/crosire/reshade/pull/267
+  reshade = fetchFromGitHub {
+    owner = "crosire";
+    repo = "reshade";
+    rev = "5c8b8f0993a46fcd2f471181b002fb7f549c33c5";
+    hash = "sha256-73xoFoZeCIToxC42IdpMCEqajDM0JBEDSVfsZ4VUuQQ=";
   };
 in
 stdenv.mkDerivation {
@@ -49,7 +59,7 @@ stdenv.mkDerivation {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-u4pnKd5ZEC3CS3E2i8E8Wposd8Tu4ZUoQXFmr0runwE=";
+    hash = "sha256-US9S97ce8WuEi6mk2yyi9etsUNPUH2ypPTxdaMXM7cI=";
   };
 
   patches = [
@@ -74,6 +84,7 @@ stdenv.mkDerivation {
   buildInputs = [
     xorg.libXdamage
     xorg.libXcomposite
+    xorg.libXcursor
     xorg.libXrender
     xorg.libXext
     xorg.libXxf86vm
@@ -102,7 +113,6 @@ stdenv.mkDerivation {
     stb
     hwdata
     openvr
-    vkroots
     libdisplay-info
   ];
 
@@ -111,6 +121,10 @@ stdenv.mkDerivation {
   postUnpack = ''
     rm -rf source/subprojects/vkroots
     ln -s ${vkroots} source/subprojects/vkroots
+    rm -rf source/src/reshade
+    ln -s ${reshade} source/src/reshade
+    rm -rf source/thirdparty/SPIRV-Headers
+    ln -s ${spirv-headers} source/thirdparty/SPIRV-Headers
   '';
 
   # --debug-layers flag expects these in the path
