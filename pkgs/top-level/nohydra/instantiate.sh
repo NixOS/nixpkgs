@@ -7,7 +7,6 @@
 TMPFILE=$(mktemp)
 nix-instantiate --impure --json --strict --eval pkgs/top-level/nohydra -A uninstantiated-attrpaths | jq -r '.[]' > $TMPFILE
 
-export NIXPKGS_ALLOW_UNFREE=1
 export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
 export NIXPKGS_ALLOW_INSECURE=1
 
