@@ -50,6 +50,8 @@ makeScopeWithSplicing' {
 
   qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
 
+  qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
+
   qtkeychain = callPackage ../development/libraries/qtkeychain {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
