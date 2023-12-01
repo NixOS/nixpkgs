@@ -41,6 +41,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "fake_useragent"
+  ];
+
   meta = with lib; {
     description = "Up to date simple useragent faker with real world database";
     homepage = "https://github.com/hellysmile/fake-useragent";
