@@ -3,13 +3,12 @@
 , fetchFromGitHub
 , autoreconfHook
 , check
-, flex
-, pkg-config
-, which
 , elfutils
-, libelf
+, flex
 , libffi
 , llvm
+, pkg-config
+, which
 , zlib
 , zstd
 }:
@@ -34,14 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elfutils
     libffi
     llvm
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
-    elfutils
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    libelf
   ];
 
   preConfigure = ''
@@ -52,9 +48,9 @@ stdenv.mkDerivation rec {
   configureScript = "../configure";
 
   configureFlags = [
-    "--enable-vhpi"
     "--disable-lto"
   ];
+  dontDisableStatic = true;
 
   doCheck = true;
 
