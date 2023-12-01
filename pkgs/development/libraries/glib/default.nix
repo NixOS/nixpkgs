@@ -8,14 +8,30 @@
 , pkg-config
 , perl
 , python3
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
-# use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+, libiconv
+, zlib
+, libffi
+, pcre2
+, libelf
+, gnome
+, libselinux
+, bash
+, gnum4
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+  # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
 
-# this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, libxml2, tzdata
-, desktop-file-utils, shared-mime-info
+  # this is just for tests (not in the closure of any regular package)
+, coreutils
+, dbus
+, libxml2
+, tzdata
+, desktop-file-utils
+, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
 , testers
@@ -107,12 +123,18 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.setupHook
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
-    bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    bash
+    gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
+    AppKit
+    Carbon
+    Cocoa
+    CoreFoundation
+    CoreServices
+    Foundation
   ]) ++ lib.optionals buildDocs [
     # Note: this needs to be both in buildInputs and nativeBuildInputs. The
     # Meson gtkdoc module uses find_program to look it up (-> build dep), but
@@ -152,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-Dman=true"                # broken on Darwin
+    "-Dman=true" # broken on Darwin
   ] ++ lib.optionals stdenv.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"
@@ -258,9 +280,9 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     mkHardcodeGsettingsPatch =
-      {
-        src,
-        glib-schema-to-var,
+      { src
+      , glib-schema-to-var
+      ,
       }:
       builtins.trace
         "glib.mkHardcodeGsettingsPatch is deprecated, please use makeHardcodeGsettingsPatch instead"
@@ -272,15 +294,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://wiki.gnome.org/Projects/GLib";
-    license     = licenses.lgpl21Plus;
+    homepage = "https://wiki.gnome.org/Projects/GLib";
+    license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
     pkgConfigModules = [
       "gio-2.0"
       "gobject-2.0"
       "gthread-2.0"
     ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries
