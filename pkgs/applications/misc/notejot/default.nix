@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
     libgee
   ];
 
+  # FIXME: test if next release fixes this
+  patches = [
+    ./new-vala.patch
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

@@ -1,0 +1,26 @@
+From c6a7cfcb792de63fb51eb174f9f3d4e02f6a2ce1 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Fri, 14 Apr 2023 19:35:47 -0400
+Subject: [PATCH] Simplify an overcomplicated Boolean expression
+
+Fixes an order-of operations issue (fixes #395).
+---
+ src/Views/NoteContentView.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Views/NoteContentView.vala b/src/Views/NoteContentView.vala
+index ba6c608..702faae 100644
+--- a/src/Views/NoteContentView.vala
++++ b/src/Views/NoteContentView.vala
+@@ -247,7 +247,7 @@ public class Notejot.NoteContentView : View {
+             if (((Adw.Leaflet)MiscUtils.find_ancestor_of_type<Adw.Leaflet>(this)).folded) {
+                 back2_button.visible = false;
+             } else {
+-                back2_button.visible = ((MainWindow)MiscUtils.find_ancestor_of_type<MainWindow>(this)).sgrid.get_visible_child_name () == "notegrid" != false ? true : false;
++                back2_button.visible = ((MainWindow)MiscUtils.find_ancestor_of_type<MainWindow>(this)).sgrid.get_visible_child_name () == "notegrid";
+             }
+             back2_button.clicked.connect (() => {
+                 ((Adw.Leaflet)MiscUtils.find_ancestor_of_type<Adw.Leaflet>(this)).set_visible_child (((MainWindow)MiscUtils.find_ancestor_of_type<MainWindow>(this)).sgrid);
+-- 
+2.41.0
+
