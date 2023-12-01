@@ -886,6 +886,10 @@ self: super: with self; {
 
   auditok = callPackage ../development/python-modules/auditok { };
 
+  auditwheel = callPackage ../development/python-modules/auditwheel {
+    inherit (pkgs) bzip2 gnutar patchelf unzip;
+  };
+
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
   };
