@@ -21,6 +21,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   meta = with lib; {
     description = "Safely pass data to untrusted environments and back";
     homepage = "https://itsdangerous.palletsprojects.com";
