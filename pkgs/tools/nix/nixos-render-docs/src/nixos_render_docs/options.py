@@ -497,7 +497,7 @@ class OptionsHTMLRenderer(OptionDocsRestrictions, HTMLRenderer):
         return super().bullet_list_open(token, tokens, i)
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         info = f" {html.escape(token.info, True)}" if token.info != "" else ""
-        return f'<pre class="programlisting{info}">{html.escape(token.content)}</pre>'
+        return f'<pre><code class="programlisting{info}">{html.escape(token.content)}</code></pre>'
 
 class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
     __option_block_separator__ = ""

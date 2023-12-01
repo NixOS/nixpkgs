@@ -98,7 +98,7 @@ class HTMLRenderer(Renderer):
         return "</strong></span>"
     def fence(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         info = f" {escape(token.info, True)}" if token.info != "" else ""
-        return f'<pre class="programlisting{info}">\n{escape(token.content)}</pre>'
+        return f'<pre><code class="programlisting{info}">{escape(token.content)}</code></pre>'
     def blockquote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '<div class="blockquote"><blockquote class="blockquote">'
     def blockquote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
