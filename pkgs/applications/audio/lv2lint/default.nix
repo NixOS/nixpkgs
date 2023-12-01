@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkg-config, meson, ninja, lv2, lilv, curl, libelf }:
+{ stdenv, lib, fetchurl, pkg-config, meson, ninja, lv2, lilv, curl }:
 
 stdenv.mkDerivation rec {
   pname = "lv2lint";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [ lv2 lilv curl libelf ];
+  buildInputs = [ lv2 lilv curl ];
 
   meta = with lib; {
     description = "Check whether a given LV2 plugin is up to the specification";
