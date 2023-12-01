@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 54a9eee7f85d369feef55d6a340340ad965f80a0
-  ref: refs/tags/6.3.44
+  revision: dd2f4b923912fc2ffc84d4a1d5e3bbccd5a8efc1
+  ref: refs/tags/6.3.45
   specs:
-    metasploit-framework (6.3.44)
+    metasploit-framework (6.3.45)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
