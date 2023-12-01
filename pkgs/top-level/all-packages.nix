@@ -36638,8 +36638,6 @@ with pkgs;
 
   picom = callPackage ../applications/window-managers/picom { };
 
-  picom-allusive = callPackage ../applications/window-managers/picom/picom-allusive.nix { };
-
   picom-jonaburg = callPackage ../applications/window-managers/picom/picom-jonaburg.nix { };
 
   picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
