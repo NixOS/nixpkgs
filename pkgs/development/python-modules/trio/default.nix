@@ -1,7 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , attrs
 , sortedcontainers
-, async-generator
 , exceptiongroup
 , idna
 , outcome
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     sortedcontainers
-    async-generator
     idna
     outcome
     sniffio
