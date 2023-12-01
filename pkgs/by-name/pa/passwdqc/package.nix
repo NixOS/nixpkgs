@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , libxcrypt
 , pam
 , pkg-config
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-EgPeccqS+DDDMBVMc4bd70EMnXFuyglftxuqoaYHwNY=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-fix-solaris-macos-builds.patch";
+      url = "https://github.com/openwall/passwdqc/commit/fbf38229857f3d1982aa305c20da5e1ea0195b3e.patch";
+      hash = "sha256-FaEWROHwFzd4ZTeKyPvuAr9vcgnHEv8MhERblIU8JC4=";
+    })
+  ];
 
   outputs = [ "out" "man" ];
 
@@ -42,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     "MANDIR=$(man)/man"
     "PKGCONFIGDIR=$(out)/lib/pkgconfig"
     "SECUREDIR=$(out)/lib/security"
+    "SECUREDIR_DARWIN=$(out)/lib/security"
     "SHARED_LIBDIR=$(out)/lib"
     "SHARED_LIBDIR_REL=$(out)/lib"
   ];
