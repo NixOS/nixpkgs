@@ -451,15 +451,15 @@ Preferred source hash type is sha256. There are several ways to get it.
 
 3. Upstream provided hash: use it when upstream provides `sha256` or `sha512` (when upstream provides `md5`, don't use it, compute `sha256` instead).
 
-    A little nuance is that `nix-prefetch-*` tools produce hash encoded with `base32`, but upstream usually provides hexadecimal (`base16`) encoding. Fetchers understand both formats. Nixpkgs does not standardize on any one format.
+    A little nuance is that `nix-prefetch-*` tools produce an SRI formated hash encoded with `base64`, but upstream usually provides hexadecimal (`base16`) encoding. Fetchers understand both formats. Nixpkgs does not standardize on any one format.
 
     You can convert between formats with nix-hash, for example:
 
     ```ShellSession
-    $ nix-hash --type sha256 --to-base32 HASH
+    $ nix-hash --type sha256 --to-sri HASH
     ```
 
-4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
+4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want an SRI hash with base64 encoding.
 
 5. Fake hash: set the hash to one of
 
