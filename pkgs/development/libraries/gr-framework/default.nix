@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.72.10";
+  version = "0.72.11";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-ZFaun8PBtPTmhZ0+OHzUu27NvcJGxsImh+c7ZvCTNa0=";
+    hash = "sha256-HspDRqO/JKpPeHOfctYAOwwR3y1u+GW3v0OnN7OfLT4=";
   };
 
   patches = [
