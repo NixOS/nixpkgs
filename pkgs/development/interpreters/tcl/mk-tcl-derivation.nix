@@ -68,4 +68,6 @@ let
   }
   ));
 
-in lib.extendDerivation true passthru self
+in lib.extendDerivation' {
+  inherit passthru;
+} self
