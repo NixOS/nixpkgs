@@ -129,6 +129,15 @@ let
            # in some places we have *derivations* with jobsets as subattributes, ugh
            !(value.__recurseIntoDerivationForReleaseJobs or false) then
              [ path ]
+
+        # Even wackier case: we have meta.broken==true jobs with
+        # !meta.broken jobs as subattributes with license=unfree, and
+        # check-meta.nix won't throw an "unfree" failure because the
+        # enclosing derivation is marked broken.  Yeah.  Bonkers.
+        # We should just forbid jobsets enclosed by derivations.
+        else if lib.isDerivation value &&
+                !value.meta.available then []
+
         else if !(lib.isAttrs value) then []
         else if (value.__attrsFailEvaluation or false) then []
         else lib.pipe value [
