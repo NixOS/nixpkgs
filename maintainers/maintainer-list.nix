@@ -17028,6 +17028,12 @@
     githubId = 9720532;
     name = "Sergei K";
   };
+  sontek = {
+    email = "sontek@gmail.com";
+    github = "sontek";
+    githubId = 151924;
+    name = "John Anderson";
+  };
   sophrosyne = {
     email = "joshuaortiz@tutanota.com";
     github = "sophrosyne97";
