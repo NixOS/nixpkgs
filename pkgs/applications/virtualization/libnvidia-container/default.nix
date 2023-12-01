@@ -1,17 +1,17 @@
 { stdenv
 , lib
 , addOpenGLRunpath
+, elfutils
 , fetchFromGitHub
-, pkg-config
-, libelf
+, go
 , libcap
 , libseccomp
-, rpcsvc-proto
 , libtirpc
 , makeWrapper
-, substituteAll
+, pkg-config
 , removeReferencesTo
-, go
+, rpcsvc-proto
+, substituteAll
 }:
 let
   modprobeVersion = "495.44";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper removeReferencesTo ];
 
-  buildInputs = [ libelf libcap libseccomp libtirpc ];
+  buildInputs = [ elfutils libcap libseccomp libtirpc ];
 
   makeFlags = [
     "WITH_LIBELF=yes"
