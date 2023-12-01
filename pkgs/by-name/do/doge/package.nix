@@ -1,19 +1,25 @@
-{ lib, python3Packages, fetchPypi }:
-
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 python3Packages.buildPythonPackage rec {
   pname = "doge";
-  version = "3.5.0";
+  version = "3.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0lwdl06lbpnaqqjk8ap9dsags3bzma30z17v0zc7spng1gz8m6xj";
+  src = fetchFromGitHub {
+    owner = "Olivia5k";
+    repo = "doge";
+    rev = version;
+    hash = "sha256-72nRghD5k0ofrlvV3hEdyrr6uzV4+8At1bOCmRZTxhk=";
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/thiderman/doge";
-    description = "wow very terminal doge";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Gonzih ];
+  meta = {
+    homepage = "https://github.com/Olivia5k/doge";
+    description = "Wow very terminal doge";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [Gonzih quantenzitrone];
     mainProgram = "doge";
   };
 }
