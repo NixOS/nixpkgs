@@ -67,6 +67,11 @@ buildPerlModule rec {
   ];
 
   dontWrapGApps = true;
+
+  postInstall = ''
+    cp -r share/* $out/share
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/pipe-viewer" \
       --prefix PATH : "${lib.makeBinPath [ ffmpeg wget youtube-dl yt-dlp ]}"
