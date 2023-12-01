@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "wcc-unstable";
-  version = "2018-04-05";
+  version = "2023-02-04";
 
   src = fetchFromGitHub {
     owner = "endrazine";
     repo = "wcc";
-    rev = "f141963ff193d7e1931d41acde36d20d7221e74f";
-    sha256 = "1f0w869x0176n5nsq7m70r344gv5qvfmk7b58syc0jls8ghmjvb4";
+    rev = "825448004e5e53c3ab9a9dac0886544bc499d259";
+    sha256 = "sha256-Cy7CkqzpgmNPQrg/ubTxLi8vWMSQtGY/a7Trb3e6L+o=";
     fetchSubmodules = true;
   };
 
