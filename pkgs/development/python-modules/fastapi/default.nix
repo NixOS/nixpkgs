@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 
 # build-system
 , hatchling
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.103.1";
+  version = "0.104.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -44,11 +45,18 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-2J8c3S4Ca+c5bI0tyjMJArJKux9qPmu+ohqve5PhSGI=";
+    hash = "sha256-xTTFBc+fswLYUhKRkWP/eiYSbG3j1E7CASkEtHVNTlk=";
   };
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "anyio"
+    # https://github.com/tiangolo/fastapi/pull/9636
+    "starlette"
   ];
 
   propagatedBuildInputs = [
