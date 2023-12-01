@@ -148,6 +148,9 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+      # FIXME: remove on next release
+      patches = [ ./ffmpeg-6.1.patch ];
+
       postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \

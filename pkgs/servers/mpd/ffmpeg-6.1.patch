@@ -1,0 +1,10 @@
+--- a/src/decoder/plugins/FfmpegIo.cxx
++++ b/src/decoder/plugins/FfmpegIo.cxx
+@@ -26,6 +26,7 @@
+ 
+ extern "C" {
+ #include <libavutil/mem.h>
++#include <libavutil/error.h>
+ }
+ 
+ AvioStream::~AvioStream()
