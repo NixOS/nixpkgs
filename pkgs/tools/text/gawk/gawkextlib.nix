@@ -5,7 +5,7 @@
 
 let
   buildExtension = lib.makeOverridable
-    ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true }:
+    ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true, patches ? [ ] }:
       let is_extension = gawkextlib != null;
       in stdenv.mkDerivation rec {
         pname = "gawkextlib-${name}";
@@ -16,6 +16,8 @@ let
           rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
           sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
         };
+
+        inherit patches;
 
         postPatch = ''
           cd ${name}
