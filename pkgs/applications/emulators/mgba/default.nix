@@ -1,18 +1,19 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , SDL2
 , cmake
+, elfutils
+, fetchFromGitHub
 , ffmpeg
 , libedit
-, libelf
 , libepoxy
+, libsForQt5
 , libzip
 , lua5_4
 , minizip
 , pkg-config
-, libsForQt5
 , wrapGAppsHook
+, zstd
 }:
 
 let
@@ -48,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
+    elfutils
     ffmpeg
     libedit
-    libelf
     libepoxy
     libzip
     lua
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
+    zstd
   ];
 
   meta = with lib; {
