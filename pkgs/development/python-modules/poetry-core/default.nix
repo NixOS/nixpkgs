@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    hash = "sha256-OfY2zc+5CgOrgbiPVnvMdT4h1S7Aek8S7iThl6azmsk=";
+    hash = "sha256-RnCJ67jaL2knwv+Uo7p0zOejHAT73f40weaJnfqOYoM=";
   };
 
   nativeCheckInputs = [
