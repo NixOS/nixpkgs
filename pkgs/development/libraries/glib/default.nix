@@ -12,7 +12,7 @@
 , zlib
 , libffi
 , pcre2
-, libelf
+, elfutils
 , gnome
 , libselinux
 , bash
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf
+    elfutils
     finalAttrs.setupHook
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
