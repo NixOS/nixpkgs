@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , nix-update-script
 
-, cairo
 , cmake
+, wrapQtAppsHook
+
+, cairo
 , ffmpeg
 , freetype
 , ghostscript
@@ -13,7 +15,6 @@
 , libtiff
 , qhull
 , qtbase
-, wrapQtAppsHook
 , xorg
 , zeromq
 }:
@@ -60,11 +61,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "GR framework is a graphics library for visualisation applications";
     homepage = "https://gr-framework.org";
-    maintainers = [ lib.maintainers.paveloom ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ paveloom ];
   };
 }
