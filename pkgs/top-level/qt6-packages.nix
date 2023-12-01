@@ -60,6 +60,8 @@ makeScopeWithSplicing' {
     qt5Kvantum = pkgs.libsForQt5.qtstyleplugin-kvantum;
   };
 
+  qtutilities = callPackage ../development/libraries/qtutilities { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qscintilla = callPackage ../development/libraries/qscintilla { };
