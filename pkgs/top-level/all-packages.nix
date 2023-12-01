@@ -19706,7 +19706,21 @@ with pkgs;
 
   openocd = callPackage ../development/embedded/openocd { };
 
-  openocd-rp2040 = callPackage ../development/embedded/openocd-rp2040 { };
+  openocd-rp2040 = openocd.overrideAttrs (old: {
+    pname = "openocd-rp2040";
+    src = fetchFromGitHub {
+      owner = "raspberrypi";
+      repo = "openocd";
+      rev = "4d87f6dcae77d3cbcd8ac3f7dc887adf46ffa504";
+      hash = "sha256-bBqVoHsnNoaC2t8hqcduI8GGlO0VDMUovCB0HC+rxvc=";
+      # openocd disables the vendored libraries that use submodules and replaces them with nix versions.
+      # this works out as one of the submodule sources seems to be flakey.
+      fetchSubmodules = false;
+    };
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      autoreconfHook
+    ];
+  });
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
