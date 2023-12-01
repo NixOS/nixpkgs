@@ -36673,6 +36673,12 @@ with pkgs;
     serverOnly = true;
   };
 
+  zandronum-alpha = callPackage ../games/doom-ports/zandronum/alpha { };
+
+  zandronum-alpha-server = zandronum-alpha.override {
+    serverOnly = true;
+  };
+
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
   doom-bcc = callPackage ../games/doom-ports/zdoom/bcc-git.nix { };
