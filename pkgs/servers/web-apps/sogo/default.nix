@@ -7,6 +7,7 @@ gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.9.0";
 
+  # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
@@ -43,6 +44,8 @@ gnustep.stdenv.mkDerivation rec {
     "--with-ssl=ssl"
     "--enable-mfa"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=int-conversion -Wno-error=implicit-int";
 
   preFixup = ''
     # Create gnustep.conf
