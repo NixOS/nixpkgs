@@ -24,6 +24,7 @@
 { lib ? import (path + "/lib")
 , trace ? false
 , enableWarnings ? true
+, checkMeta ? true
 , path ? ./../..
 }:
 let
@@ -154,7 +155,7 @@ let
       else lib.trace "** ${lib.concatStringsSep "." path}" result;
 
   unfiltered = import ./release-outpaths.nix {
-    checkMeta = false;
+    inherit checkMeta;
     attrNamesOnly = true;
     inherit path;
   };
