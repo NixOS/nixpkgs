@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/sbin/resolvconf" \
-      --set PATH "${coreutils}/bin:${gnused}/bin:${dbus}/bin"
+      --prefix PATH "${lib.makeBinPath [ coreutils gnused dbus ]}"
   '';
 
   meta = {
