@@ -120,6 +120,14 @@
       "sha256": "b57f4a71361a224aeb0e80f2f311f632ab1757356a2de3627ade3e9dd4ee0899",
       "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.3.tar.gz",
       "build_number": "232.10072.28"
+    },
+    "writerside": {
+      "update-channel": "Writerside EAP",
+      "url-template": "https://download.jetbrains.com/writerside/writerside-{version}.tar.gz",
+      "version": "2023.2 EAP",
+      "sha256": "d9d7dab78da28b725cf5df7e433003624947e585c914311c90845d49452c3586",
+      "url": "https://download.jetbrains.com/writerside/writerside-232.10165.tar.gz",
+      "build_number": "232.10165"
     }
   },
   "aarch64-linux": {
@@ -243,6 +251,14 @@
       "sha256": "2b0ead390f94c6b1d2069a078d6882e7ff3d0af280ff15b8481606d3f500fe0d",
       "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.3-aarch64.tar.gz",
       "build_number": "232.10072.28"
+    },
+    "writerside": {
+      "update-channel": "Writerside EAP",
+      "url-template": "https://download.jetbrains.com/writerside/writerside-{version}-aarch64.tar.gz",
+      "version": "2023.2 EAP",
+      "sha256": "f3adcb06a80c7ed4a2c56373c63cd6ff744e3859f88de63ac0b82bd3d0d09e0d",
+      "url": "https://download.jetbrains.com/writerside/writerside-232.10165-aarch64.tar.gz",
+      "build_number": "232.10165"
     }
   },
   "x86_64-darwin": {
@@ -366,6 +382,14 @@
       "sha256": "918bb2061d623f736c73b67db929ced2a83013f64d57406af09f5c9df9c7d8cd",
       "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.3.dmg",
       "build_number": "232.10072.28"
+    },
+    "writerside": {
+      "update-channel": "Writerside EAP",
+      "url-template": "https://download.jetbrains.com/writerside/writerside-{version}.dmg",
+      "version": "2023.2 EAP",
+      "sha256": "78cf63c8ae5d129766e6e146a5e943078103f2990e70b20406d2a5c76ebfaf06",
+      "url": "https://download.jetbrains.com/writerside/writerside-232.10165.dmg",
+      "build_number": "232.10165"
     }
   },
   "aarch64-darwin": {
@@ -489,6 +513,14 @@
       "sha256": "8811624166bf11d591bcf24fee0087861c3193a79aecb7159cced17737d88517",
       "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.3-aarch64.dmg",
       "build_number": "232.10072.28"
+    },
+    "writerside": {
+      "update-channel": "Writerside EAP",
+      "url-template": "https://download.jetbrains.com/writerside/writerside-{version}-aarch64.dmg",
+      "version": "2023.2 EAP",
+      "sha256": "c43ff0a06e9f057bb3d0a9f979439e14e25aa9eeb83e5aa47e65e79a81b6156e",
+      "url": "https://download.jetbrains.com/writerside/writerside-232.10165-aarch64.dmg",
+      "build_number": "232.10165"
     }
   }
 }
