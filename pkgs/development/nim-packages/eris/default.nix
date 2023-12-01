@@ -32,5 +32,6 @@ buildNimPackage (final: prev: {
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "eriscmd";
     badPlatforms = lib.platforms.darwin;
+    broken = true; # goes into an infinite loop spamming stderr with junk
   };
 })
