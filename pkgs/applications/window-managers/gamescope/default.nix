@@ -32,9 +32,16 @@
 , lib
 , makeBinaryWrapper
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
   version = "3.13.19";
+
+  src = fetchFromGitHub {
+    owner = "ValveSoftware";
+    repo = "gamescope";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-US9S97ce8WuEi6mk2yyi9etsUNPUH2ypPTxdaMXM7cI=";
+  };
 
   vkroots = fetchFromGitHub {
     owner = "Joshua-Ashton";
@@ -50,16 +57,6 @@ let
     repo = "reshade";
     rev = "5c8b8f0993a46fcd2f471181b002fb7f549c33c5";
     hash = "sha256-73xoFoZeCIToxC42IdpMCEqajDM0JBEDSVfsZ4VUuQQ=";
-  };
-in
-stdenv.mkDerivation {
-  inherit pname version;
-
-  src = fetchFromGitHub {
-    owner = "ValveSoftware";
-    repo = "gamescope";
-    rev = "refs/tags/${version}";
-    hash = "sha256-US9S97ce8WuEi6mk2yyi9etsUNPUH2ypPTxdaMXM7cI=";
   };
 
   patches = [
@@ -118,11 +115,12 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "lib" ];
 
+  # HACK: We should ideally use pkg-config for all of these, but Gamescope doesn't look for (most of) these using pkg-config
   postUnpack = ''
     rm -rf source/subprojects/vkroots
-    ln -s ${vkroots} source/subprojects/vkroots
+    ln -s ${finalAttrs.vkroots} source/subprojects/vkroots
     rm -rf source/src/reshade
-    ln -s ${reshade} source/src/reshade
+    ln -s ${finalAttrs.reshade} source/src/reshade
     rm -rf source/thirdparty/SPIRV-Headers
     ln -s ${spirv-headers} source/thirdparty/SPIRV-Headers
   '';
@@ -146,4 +144,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     mainProgram = "gamescope";
   };
-}
+})
