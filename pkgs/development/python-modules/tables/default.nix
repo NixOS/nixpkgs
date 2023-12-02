@@ -12,6 +12,7 @@
 , numpy
 , numexpr
 , packaging
+, setuptools
 , sphinx
   # Test inputs
 , python
@@ -21,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "tables";
-  version = "3.8.0";
-  format = "setuptools";
+  version = "3.9.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NPP6I2bOILGPHfVzp3wdJzBs4fKkHZ+e/2IbUZLqh4g=";
+    hash = "sha256-1HAmPC5QxLfIY1oNmawf8vnnBMJNceX6M8RSnn0K2cM=";
   };
 
   patches = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     blosc2
     cython
+    setuptools
     sphinx
   ];
 
