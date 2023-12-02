@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pycfdns";
-  version = "2.0.1";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-f6kxYX/dg16OWYpw29dH4Z26ncLZCYyHKGc4fzoCld0=";
+    hash = "sha256-bLzDakxKq8fcjEKSxc6D5VN9gfAu1M3/zaAU2UYnwSs=";
   };
 
   postPatch = ''
