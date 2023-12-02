@@ -258,6 +258,8 @@ let
         };
       });
 
+      pydantic = super.pydantic_1;
+
       pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.3";
         src = fetchFromGitHub {
@@ -313,6 +315,15 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
+        };
+      });
+
+      versioningit = super.versioningit.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.0";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
         };
       });
 

@@ -1,23 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-, hatch-fancy-pypi-readme
-, libxcrypt
-, annotated-types
-, pydantic-core
-, typing-extensions
+, cython
 , email-validator
-, dirty-equals
-, faker
-, pytestCheckHook
+, fetchFromGitHub
 , pytest-mock
+, pytestCheckHook
+, python-dotenv
+, pythonOlder
+, setuptools
+, typing-extensions
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.3.0";
+  version = "1.10.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,52 +23,46 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-toqrWg8bYzc3UmvG/YmXawfmT8nqaA9fxy24k1cdj+M=";
+    hash = "sha256-ruDVcCLPVuwIkHOjYVuKOoP3hHHr7ItIY55Y6hUgR74=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    cython
+  ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
     libxcrypt
   ];
 
-  nativeBuildInputs = [
-    hatch-fancy-pypi-readme
-    hatchling
-  ];
-
   propagatedBuildInputs = [
-    annotated-types
-    pydantic-core
     typing-extensions
   ];
 
   passthru.optional-dependencies = {
+    dotenv = [
+      python-dotenv
+    ];
     email = [
       email-validator
     ];
   };
 
   nativeCheckInputs = [
-    dirty-equals
-    faker
     pytest-mock
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  pytestFlagsArray = [
+    # https://github.com/pydantic/pydantic/issues/4817
+    "-W" "ignore::pytest.PytestReturnNotNoneWarning"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
-    substituteInPlace pyproject.toml \
-      --replace "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
-      --replace "'--benchmark-group-by', 'group'," "" \
-      --replace "'--benchmark-warmup', 'on'," "" \
-      --replace "'--benchmark-disable'," ""
   '';
 
-  disabledTestPaths = [
-    "tests/benchmarks"
-
-    # avoid cyclic dependency
-    "tests/test_docs.py"
-  ];
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "pydantic" ];
 
