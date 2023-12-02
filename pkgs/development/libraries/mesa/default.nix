@@ -22,7 +22,7 @@
 , libffi
 , libomxil-bellagio
 , libva-minimal
-, libelf
+, elfutils
 , libvdpau
 , libglvnd
 , libunwind
@@ -245,26 +245,26 @@ let
     ++ lib.optional (vulkanLayers != [ ]) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
 
     buildInputs = with xorg; [
+      elfutils
       expat
       glslang
-      llvmPackages.libllvm
-      libglvnd
-      xorgproto
       libX11
       libXext
-      libxcb
-      libXt
       libXfixes
-      libxshmfence
       libXrandr
-      libffi
-      libvdpau
-      libelf
+      libXt
       libXvMC
+      libffi
+      libglvnd
       libpthreadstubs
+      libunwind
+      libvdpau
+      libxcb
+      libxshmfence
+      llvmPackages.libllvm
+      xorgproto
       openssl /*or another sha1 provider*/
       zstd
-      libunwind
       python3Packages.python # for shebang
     ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
