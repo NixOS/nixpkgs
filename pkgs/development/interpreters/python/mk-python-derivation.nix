@@ -44,6 +44,11 @@
 # C can import package A propagated by B
 , propagatedBuildInputs ? []
 
+# Python module dependencies.
+# These are named after PEP-621.
+, dependencies ? []
+, optional-dependencies ? {}
+
 # DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
@@ -95,8 +100,6 @@
 , format ? null
 
 , meta ? {}
-
-, passthru ? {}
 
 , doCheck ? config.doCheckByDefault or false
 
@@ -192,10 +195,25 @@ let
     "setuptools" "wheel"
   ];
 
+  passthru =
+    attrs.passthru or { }
+    // {
+      updateScript = let
+        filename = builtins.head (lib.splitString ":" self.meta.position);
+      in attrs.passthru.updateScript or [ update-python-libraries filename ];
+    }
+    // lib.optionalAttrs (dependencies != []) {
+      inherit dependencies;
+    }
+    // lib.optionalAttrs (optional-dependencies != {}) {
+      inherit optional-dependencies;
+    };
+
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
     "disabledTestPaths" "outputs" "stdenv"
+    "dependencies" "optional-dependencies"
   ]) // {
 
     name = namePrefix + name_;
@@ -252,7 +270,7 @@ let
 
     buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-    propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (propagatedBuildInputs ++ [
+    propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (propagatedBuildInputs ++ dependencies ++ [
       # we propagate python even for packages transformed with 'toPythonApplication'
       # this pollutes the PATH but avoids rebuilds
       # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
@@ -284,6 +302,8 @@ let
 
     outputs = outputs ++ lib.optional withDistOutput "dist";
 
+    inherit passthru;
+
     meta = {
       # default to python's platforms
       platforms = python.meta.platforms;
@@ -297,9 +317,6 @@ let
       disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
   }));
 
-  passthru.updateScript = let
-      filename = builtins.head (lib.splitString ":" self.meta.position);
-    in attrs.passthru.updateScript or [ update-python-libraries filename ];
 in lib.extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
   passthru
