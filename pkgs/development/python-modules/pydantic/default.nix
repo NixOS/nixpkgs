@@ -2,12 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+
+# build-system
 , hatchling
 , hatch-fancy-pypi-readme
+
+# native dependencies
 , libxcrypt
+
+# dependencies
 , annotated-types
 , pydantic-core
 , typing-extensions
+
+# tests
+, cloudpickle
 , email-validator
 , dirty-equals
 , faker
@@ -17,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.3.0";
+  version = "2.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +35,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-toqrWg8bYzc3UmvG/YmXawfmT8nqaA9fxy24k1cdj+M=";
+    hash = "sha256-D0gYcyrKVVDhBgV9sCVTkGq/kFmIoT9l0i5bRM1qxzM=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [
@@ -51,6 +60,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    cloudpickle
     dirty-equals
     faker
     pytest-mock
