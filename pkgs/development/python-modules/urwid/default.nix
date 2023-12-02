@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.2.1";
+  version = "2.2.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4zkRqxjyxz/dvpvyFtAh504gstWqm+MEA8WPVRMbuKE=";
+    hash = "sha256-5FFtVdzua9ASs+cqEMdfKGbGOnQPDsThraBcHhzALjQ=";
   };
 
   postPatch = ''
