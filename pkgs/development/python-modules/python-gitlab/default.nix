@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "3.15.0";
+  version = "4.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yeZet2Eqn7uKvwM5ly7Kf9enPU2mbJtEb/5SiTCv9TQ=";
+    hash = "sha256-+HDXb5jJXQXEM5nXOx6qtZxnGzJ5ODDNL53fMsyTVB4=";
   };
 
   propagatedBuildInputs = [
