@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.14.2";
+  version = "3.14.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
-    rev = version;
-    hash = "sha256-T357ocJvDC+vt0I4VyAu0Q9YzY9cSK7shgp9fQ1qHyY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DNoD6V7l224yQa+AfI+KNviUJBxKB0u0m9B5qX5HuzQ=";
   };
 
   propagatedBuildInputs = [
