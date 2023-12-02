@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioquic";
-  version = "0.9.21";
+  version = "0.9.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ecfsBjGOeFYnZlyk6HI63zR7ciW30AbjMtJXWh9RbvU=";
+    hash = "sha256-UsnaYO0IN/6LimoNfc8N++vsjpoCfhDr9yBPBWnFj6g=";
   };
 
   propagatedBuildInputs = [
