@@ -6,26 +6,40 @@
 , makeWrapper
 , qbe
 , scdoc
+, tzdata
+, substituteAll
 }:
 
 let
   # We use harec's override of qbe until 1.2 is released, but the `qbe` argument
   # is kept to avoid breakage.
   qbe = harec.qbeUnstable;
+  # https://harelang.org/platforms/
+  arch = stdenv.hostPlatform.uname.processor;
+  platform = lib.strings.toLower stdenv.hostPlatform.uname.system;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2023-10-23";
+  version = "unstable-2023-11-27";
+
+  outputs = [ "out" "man" ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "1048620a7a25134db370bf24736efff1ffcb2483";
-    hash = "sha256-slQPIhrcM+KAVAvjuRnqNdEAEr4Xa4iQNVEpI7Wl+Ks=";
+    rev = "d94f355481a320fb2aec13ef62cb3bfe2416f5e4";
+    hash = "sha256-Mpl3VO4xvLCKHeYr/FPuS6jl8CkyeqDz18mQ6Zv05oc=";
   };
 
+  patches = [
+    # Replace FHS paths with nix store
+    (substituteAll {
+      src = ./001-tzdata.patch;
+      inherit tzdata;
+    })
+  ];
+
   nativeBuildInputs = [
-    binutils-unwrapped
     harec
     makeWrapper
     qbe
@@ -36,62 +50,39 @@ stdenv.mkDerivation (finalAttrs: {
     binutils-unwrapped
     harec
     qbe
+    tzdata
   ];
 
+  makeFlags = [
+    "HARECACHE=.harecache"
+    "PREFIX=${builtins.placeholder "out"}"
+    "PLATFORM=${platform}"
+    "ARCH=${arch}"
+  ];
+
+  enableParallelBuilding = true;
+
   # Append the distribution name to the version
-  env.LOCALVER = "nix";
+  env.LOCALVER = "nixpkgs";
 
-  configurePhase =
-    let
-      # https://harelang.org/platforms/
-      arch =
-        if stdenv.isx86_64 then "x86_64"
-        else if stdenv.isAarch64 then "aarch64"
-        else if stdenv.hostPlatform.isRiscV && stdenv.is64bit then "riscv64"
-        else "unsupported";
-      platform =
-        if stdenv.isLinux then "linux"
-        else if stdenv.isFreeBSD then "freebsd"
-        else "unsupported";
-    in
-    ''
-      runHook preConfigure
-
-      cp config.example.mk config.mk
-      makeFlagsArray+=(
-        PREFIX="${builtins.placeholder "out"}"
-        HARECACHE="$(mktemp -d --tmpdir harecache.XXXXXXXX)"
-        BINOUT="$(mktemp -d --tmpdir bin.XXXXXXXX)"
-        PLATFORM="${platform}"
-        ARCH="${arch}"
-      )
-
-      runHook postConfigure
-    '';
+  strictDeps = true;
 
   doCheck = true;
 
-  postFixup =
-    let
-      binPath = lib.makeBinPath [
-        binutils-unwrapped
-        harec
-        qbe
-      ];
-    in
-    ''
-      wrapProgram $out/bin/hare --prefix PATH : ${binPath}
-    '';
+  preConfigure = ''
+    ln -s config.example.mk config.mk
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/hare \
+      --prefix PATH : ${lib.makeBinPath [binutils-unwrapped harec qbe]}
+  '';
 
   setupHook = ./setup-hook.sh;
 
-  strictDeps = true;
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://harelang.org/";
-    description =
-      "A systems programming language designed to be simple, stable, and robust";
+    description = "Systems programming language designed to be simple, stable, and robust";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onemoresuza ];
     mainProgram = "hare";
