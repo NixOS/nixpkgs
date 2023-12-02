@@ -5,6 +5,7 @@
 , easyprocess
 , entrypoint2
 , patool
+, cabextract
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,10 @@ buildPythonPackage rec {
     entrypoint2
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    cabextract
+  ];
 
   pytestFlagsArray = [ "-x" ];
 
