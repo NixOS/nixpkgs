@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.3";
+  version = "2.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5xEXjNMkOetRM9NDz0S4DsC6v39YQi34s2s+Fs56hYU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MNgu3LvFoohXA+JzUiHIaYFw0ssEe+H5T8Ea56LcGuI=";
   };
 
   propagatedBuildInputs = [
