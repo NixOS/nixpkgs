@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.5.0";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PtD3fQnIqd79NcYFdDMlpNwhCY6PHGL/wDR/QnKdsFo=";
+    hash = "sha256-TxODQC/8iTEZdL2BDe4iADrvSvDzEqD9tVd4MzrRq/c=";
   };
 
   propagatedBuildInputs = [
