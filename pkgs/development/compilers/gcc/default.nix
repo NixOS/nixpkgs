@@ -421,7 +421,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   } // lib.optionalAttrs (!atLeast11) {
     badPlatforms = if !(is48 || is49) then [ "aarch64-darwin" ] else lib.platforms.darwin;
   };
-} // lib.optionalAttrs (!atLeast10 && stdenv.hostPlatform.isDarwin) {
+} // lib.optionalAttrs (!atLeast10 && stdenv.targetPlatform.isDarwin) {
   # GCC <10 requires default cctools `strip` instead of `llvm-strip` used by Darwin bintools.
   preBuild = ''
     makeFlagsArray+=('STRIP=${lib.getBin darwin.cctools-port}/bin/${stdenv.cc.targetPrefix}strip')
