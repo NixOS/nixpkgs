@@ -7,8 +7,8 @@ let
     functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs levenshteinAtMost
     optionalAttrs attrNames levenshtein filter elemAt concatStringsSep sort take length
     filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
-    mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
-    ;
+    mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends intersectLists genAttrs
+    id;
 
 in
 rec {
@@ -227,11 +227,42 @@ rec {
       else mapAttrs mkAttrOverridable pkgs;
 
 
-  /* Add attributes to each output of a derivation without changing
-     the derivation itself and check a given condition when evaluating.
+  /*
+    Add attributes to each output of a derivation without changing
+    the derivation itself and check a given condition when evaluating.
 
-     Type:
-       extendDerivation :: Bool -> Any -> Derivation -> Derivation
+    :::{.note}
+    This function isn't aware of any existing overrider (e.g.
+    <pkg>.overrideAttrs or <pkg>.override), and is only suitable for
+    low-level usage, such as the definiton of `stdenv.mkDerivation`
+    and `lib.makeOverridable`.
+
+    Use `extendDerivation'` instead in most other cases.
+    :::
+
+    Type:
+      extendDerivation :: Bool -> AttrSet -> Derivation -> Derivation
+
+    Example:
+      pkgs.hello
+      => «derivation /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-hello-2.12.1.drv»
+
+      helloWithAns = lib.extendDerivation true { ans = 42; } pkgs.hello
+
+      helloWithAns
+      => «derivation /nix/store/nvl9ic0pj1fpyln3zaqrf4cclbqdfn1j-hello-2.12.1.drv»
+
+      helloWithAns.ans
+      => 42
+
+      helloWithAns.out.ans
+      => 42
+
+      helloFive = lib.extendDerivation ((2 + 2 == 5) || builtins.trace "2 + 2 != 5" false) { } pkgs.hello
+
+      helloFive
+      => trace: 2 + 2 != 5
+      => error: assertion 'condition' failed
   */
   extendDerivation = condition: passthru: drv:
     let
@@ -248,9 +279,6 @@ rec {
             drvPath = assert condition; drv.${outputName}.drvPath;
             outPath = assert condition; drv.${outputName}.outPath;
           } //
-            # TODO: give the derivation control over the outputs.
-            #       `overrideAttrs` may not be the only attribute that needs
-            #       updating when switching outputs.
             optionalAttrs (passthru?overrideAttrs) {
               # TODO: also add overrideAttrs when overrideAttrs is not custom, e.g. when not splicing.
               overrideAttrs = f: (passthru.overrideAttrs f).${outputName};
@@ -262,6 +290,185 @@ rec {
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };
+
+  /*
+    Alternative to lib.extendDerivation that takes care of existing
+    overriders.
+
+    Derivations often comes with attributes that performs overriding
+    (referred to as "overriders" here). The argument *overriderNames*
+    specifies all possible names of all such attribuets of the
+    input derivation or its derivation outputs, or in the *passthru*
+    input argument.
+
+    The boolean argument *keepOverriders* specifies if `extendDerivation'`
+    should update existing overriders from the input derivation and its outputs
+    to automatically re-apply the changes to the future overriding results.
+    When set to `false`, one need to update all overriders themself.
+
+    Set *keepOverriders* to `false` allows one to pass overriders through the
+    *passthru* input argument. For custom overrider definition, it also help to
+    specify *overriderNames* to include the names of all overriders, including
+    the custom ones.
+
+    The boolean argument *spreadOverriders* specifies if `extendDerivation'`
+    should attach overriders from the derivation to each output, but decorate them
+    to return the specfic output of the override result.
+    Setting it to `true` requires *keepOverriders* be `true`.
+
+    Type:
+      extendDerivation' ::
+        { condition :: Bool
+        , passthru :: AttrSet
+        , overriderNames :: [ String ]
+        , keepOverriders :: Bool
+        , spreadOverriders :: Bool
+        }
+        -> Derivation -> Derivation
+
+    Example:
+      helloWithAns0 = lib.extendDerivation true { ans = 42; } pkgs.hello
+
+      (helloWithAns0.overrideAttrs { }).ans
+      => error: attribute 'ans' missing
+
+      helloWithAns1 = lib.extendDerivation' {
+        keepOverridable = false;
+        passthru = { ans = 42; };
+      } pkgs.hello
+
+      (helloWithAns1.overrideAttrs { }).ans
+      => error: attribute 'ans' missing
+
+      helloWithAns2 = lib.extendDerivation' {
+        passthru = { ans = 42; };
+      } pkgs.hello
+
+      (helloWithAns2.overrideAttrs { }).ans
+      => 42
+
+      (helloWithAns2.override { }).ans
+      => 42
+
+      pkgs.cpio.dev.outputName
+      => "dev"
+
+      pkgs.cpio.dev.overrideAttrs
+      => «lambda»
+
+      (pkgs.cpio.dev.overrideAttrs { }).outputName
+      => "dev"
+
+      ((lib.extendDerivation true { } cpio).dev.overrideAttrs { }).outputName
+      => "out"
+
+      (lib.extendDerivation' { keepOverriders = false; } cpio).dev.overrideAttrs
+      => error: attribute 'overrideAttrs' missing
+
+      (lib.extendDerivation' { } cpio).dev.overrideAttrs
+      => «lambda»
+
+      ((lib.extendDerivation' { } cpio).dev.overrideAttrs { }).outputName
+      => "dev"
+
+      pkgs.cpio.override
+      => «lambda»
+
+      pkgs.cpio.dev.override
+      => error: attribute 'override' missing
+
+      (lib.extendDerivation' {
+        spreadOverriders = true;
+      } pkgs.cpio).dev.override
+      => «lambda»
+
+      ((lib.extendDerivation' {
+        spreadOverriders = true;
+      } pkgs.cpio).dev.override { }).outputName
+      => "dev"
+  */
+  extendDerivation' =
+    let
+      getExistingAttrs = names: attrs:
+        genAttrs (intersectLists (attrNames attrs) names) (name: attrs.${name});
+      mirrorFunctionArgs' =
+        f:
+        let
+          fArgs = functionArgs f;
+        in
+        if (fArgs != { }) then
+        (g: setFunctionArgs g fArgs)
+        else id;
+    in
+    { condition ? true
+    , passthru ? { }
+    , overriderNames ? [ "overrideAttrs" "overrideDerivation" "override" ]
+    , keepOverriders ? true
+    , spreadOverriders ? false
+    }:
+    assert (spreadOverriders -> keepOverriders) || throw "spreadOverriders == true requires keepOverriders == true";
+    let
+      shiftOverriders = outputName: mapAttrs
+        (overriderName: overrider: mirrorFunctionArgs'
+          overrider
+          (fdrv: (overrider fdrv).${outputName})
+        );
+
+      # Get a subset of overriders to update the `<pkg>.passthru`, as
+      # build helpers may use `<pkg>.passthru` to hold custom overriders,
+      # or to monkey-patch existing overriders.
+      fixMkDerivationPassthru = passthru: overriders:
+        passthru // intersectAttrs passthru overriders;
+
+      fMain = drv:
+      let
+        outputs = drv.outputs or [ "out" ];
+        overriders = genAttrs
+          (intersectLists (attrNames drv) overriderNames)
+          (overriderName: mirrorFunctionArgs' drv.${overriderName}
+            (fdrv: fMain (drv.${overriderName} fdrv))
+          );
+      in
+      drv // passthru // {
+        drvPath = assert condition; drv.drvPath;
+        outPath = assert condition; drv.outPath;
+      } // genAttrs outputs (outputName: fOutput {
+        outputDrv = drv.${outputName};
+        inherit outputName;
+        overridersFromMain = optionalAttrs spreadOverriders overriders;
+      }) // optionalAttrs keepOverriders overriders
+      // optionalAttrs (drv?passthru) {
+        passthru = fixMkDerivationPassthru drv.passthru overriders;
+      };
+
+      fOutput =
+        { outputDrv
+        , outputName ? outputDrv.outputName
+        , overridersFromMain ? { }
+        , outputs ? outputDrv.outputs or [ "out" ]
+        }:
+        let
+          overriders = if keepOverriders
+            then mapAttrs (overriderName: overrider:
+              mirrorFunctionArgs' overrider (fdrv: fOutput {
+                outputDrv = overrider fdrv;
+                inherit outputName overridersFromMain outputs;
+              })
+            ) (shiftOverriders outputName overridersFromMain // getExistingAttrs overriderNames outputDrv)
+            else shiftOverriders outputName (getExistingAttrs overriderNames passthru);
+        in
+        outputDrv // passthru // {
+          inherit (outputDrv) type outputName;
+          outputSpecified = true;
+          inherit outputs;
+          drvPath = assert condition; outputDrv.drvPath;
+          outPath = assert condition; outputDrv.outPath;
+        } // overriders
+        // optionalAttrs (outputDrv?passthru) {
+          passthru = fixMkDerivationPassthru outputDrv.passthru overriders;
+        };
+    in
+    fMain;
 
   /* Strip a derivation of all non-essential attributes, returning
      only those needed by hydra-eval-jobs. Also strictly evaluate the
