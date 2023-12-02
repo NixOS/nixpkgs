@@ -17952,6 +17952,7 @@ with pkgs;
 
   rakudo = callPackage ../development/interpreters/rakudo { };
   moarvm = callPackage ../development/interpreters/rakudo/moarvm.nix {
+    inherit (darwin) cctools-port;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
   nqp = callPackage  ../development/interpreters/rakudo/nqp.nix { };
@@ -29230,8 +29231,6 @@ with pkgs;
 
   documize-community = callPackage ../servers/documize-community { };
 
-  doge = callPackage ../misc/doge { };
-
   doulos-sil = callPackage ../data/fonts/doulos-sil { };
 
   cabin = callPackage ../data/fonts/cabin { };
@@ -30195,6 +30194,8 @@ with pkgs;
 
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
+  vimix-cursor-theme = callPackage ../data/icons/vimix-cursor-theme { };
+
   vimix-gtk-themes = callPackage ../data/themes/vimix {
     inherit (gnome) gnome-shell;
   };
@@ -31007,8 +31008,6 @@ with pkgs;
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
 
   cosmic-settings = callPackage ../applications/window-managers/cosmic/settings { };
-
-  cosmic-edit = callPackage ../applications/editors/cosmic-edit { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
