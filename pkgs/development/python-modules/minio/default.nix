@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.1.17";
+  version = "7.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "minio";
     repo = "minio-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-I0Q1SkZ1zQ9s2HbMTc2EzUnnOti14zQBxHVJasaukug=";
+    hash = "sha256-hZn1T75JbnJ5lIyWnX3f8r6OET/d6ZltuRr6jjYOp2o=";
   };
 
   propagatedBuildInputs = [
