@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   buildCommand = let
     wrapWith = makeWrapper: filename:
-      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : $out/lib";
     wrapQtApp = wrapWith "wrapQtApp";
     wrapProgram = wrapWith "wrapProgram";
   in ''
@@ -100,6 +100,6 @@ stdenv.mkDerivation rec {
     # Upstream doesn't have a contact page / Bug tracker, so it's not easy to
     # notify them about it. Using firejail might help, as some commented
     # downstream.
-    broken = true;
+    # broken = true;
   };
 }
