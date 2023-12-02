@@ -25,7 +25,7 @@
 #, flash-attn
 }:
 let
-  version = "0.0.22.post7";
+  version = "0.03";
 in
 buildPythonPackage {
   pname = "xformers";
@@ -38,7 +38,7 @@ buildPythonPackage {
     owner = "facebookresearch";
     repo = "xformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7lZi3+2dVDZJFYCUlxsyDU8t9qdnl+b2ERRXKA6Zp7U=";
+    hash = "sha256-G8f7tny5B8SAQ6+2uOjhY7nD0uOT4sskIwtTdwivQXo=";
     fetchSubmodules = true;
   };
 
