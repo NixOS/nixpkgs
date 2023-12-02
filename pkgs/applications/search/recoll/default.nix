@@ -169,7 +169,7 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${versions.majorMinor version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];
