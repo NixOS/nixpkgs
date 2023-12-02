@@ -6,12 +6,12 @@
 }:
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "7.1.2"; # needs to match version sabnzbd expects, e.g. https://github.com/sabnzbd/sabnzbd/blob/4.0.x/requirements.txt#L3
+  version = "8.0.0"; # needs to match version sabnzbd expects, e.g. https://github.com/sabnzbd/sabnzbd/blob/4.0.x/requirements.txt#L3
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wDgFXuxclmqMlRXyr9qpruJJcOXfOiOWTZXX53uYEB8=";
+    hash = "sha256-hrRpEVhmnm4ABSqN/F3MllCgoJCg1PdM+oVrQR+uZbk=";
   };
 
   pythonImportsCheck = ["sabctools"];
