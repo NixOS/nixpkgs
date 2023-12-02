@@ -1,4 +1,5 @@
 { fetchFromGitLab
+, fetchpatch
 , lib
 , stdenv
 , autoreconfHook
@@ -30,6 +31,15 @@ stdenv.mkDerivation rec {
     rev = "LIBGSF_${lib.replaceStrings ["."] ["_"] version}";
     hash = "sha256-iJcfR+iy1bbRkh+yCAEhY5ks8V6vXIPH7namZSvP98c=";
   };
+
+  patches = [
+    # Fix build with libxml 2.12
+    # https://gitlab.gnome.org/GNOME/libgsf/-/merge_requests/14
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libgsf/-/commit/b6719aa4a8a0fc3acfd8e7ab339b3493f7251b22.patch";
+      hash = "sha256-tO+Fmwi8Iy0pz2fTlm1BlNVeu5hklu343ZfL3DpLYLA=";
+    })
+  ];
 
   postPatch = ''
     # Fix cross-compilation
