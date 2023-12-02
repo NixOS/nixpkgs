@@ -46,8 +46,6 @@ buildPythonPackage rec {
       --replace '"ufmt"' '"true"'
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-rust
     setuptools-scm

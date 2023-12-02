@@ -22,8 +22,6 @@
     hash = "sha256-fVfBQaaT8/lUGqZRXjOPgvkC01Izb8Sxqn7RCqnW9bo=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ typing-extensions qtpy pyside2 psygnal docstring-parser ];
   nativeCheckInputs = [ pytestCheckHook ];

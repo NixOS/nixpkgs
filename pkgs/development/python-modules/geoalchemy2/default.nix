@@ -40,10 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.shapely;
 
-  env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  };
-
   disabledTestPaths = [
     # tests require live databases
     "tests/gallery/test_decipher_raster.py"

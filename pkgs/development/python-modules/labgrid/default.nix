@@ -57,10 +57,6 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
-
   nativeCheckInputs = [
     mock
     psutil

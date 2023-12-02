@@ -22,8 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-DH+XBj+VcS56+nAOGjjrKG0dnSKrqiU6N5vkILm+vSE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     # We don't want flake8
     rm setup.cfg

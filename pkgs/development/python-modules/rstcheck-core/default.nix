@@ -36,7 +36,6 @@ buildPythonPackage rec {
   ];
 
   env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
     NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
   };
 

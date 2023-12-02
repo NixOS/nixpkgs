@@ -40,10 +40,6 @@ buildPythonPackage rec {
     "test_visa_info"
   ];
 
-  postConfigure = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="v${version}"
-  '';
-
   meta = with lib; {
     description = "Python package for support of the Virtual Instrument Software Architecture (VISA)";
     homepage = "https://github.com/pyvisa/pyvisa";
