@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.3.0";
+  version = "1.3.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i+VJiG9e2kZDa25VWw5Ic7TxCqIcB99FxLwXNa+8zXo=";
+    hash = "sha256-ovVMdqzMFaNL+5Bm5selbB5yNd2ldiuZB5IzC1LM+wU=";
   };
 
   buildInputs = [
