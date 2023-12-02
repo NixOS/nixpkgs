@@ -492,6 +492,9 @@ def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwa
 
     msg = f'{pkgs_prefix}{pname}: {old_version} -> {new_version}'
 
+    if changelog := _get_attr_value(f"{pkgs_prefix}{pname}.meta.changelog"):
+        msg += f"\n\n{changelog}"
+
     try:
         subprocess.check_call([GIT, 'add', path])
         subprocess.check_call([GIT, 'commit', '-m', msg])
