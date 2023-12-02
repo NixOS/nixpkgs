@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "rethinkdb";
-  version = "2.4.9";
+  version = "2.4.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dV8I9xdTWlXAUSj2vmwoJI+pr/JningWqrh+H59YFcE=";
+    hash = "sha256-Vez3RH3BH+wOLOmqxLpMC1f9xcnFfXfuZz1Z0kXHRmY=";
   };
 
   propagatedBuildInputs = [ six setuptools ];
