@@ -2,7 +2,7 @@
 , stdenv
 , makeSetupHook
 , fetchFromGitHub
-, libelf
+, elfutils
 , which
 , pkg-config
 , freeglut
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which pkg-config avrgcc ]
     ++ lib.optional stdenv.isDarwin setupHookDarwin;
-  buildInputs = [ libelf freeglut libGLU libGL ]
+  buildInputs = [ elfutils freeglut libGLU libGL ]
     ++ lib.optional stdenv.isDarwin GLUT;
 
   # remove forbidden references to $TMPDIR
