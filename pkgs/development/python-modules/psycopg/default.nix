@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , pythonOlder
 , substituteAll
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.1.13";
+  version = "3.1.14";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-N+x8RErlId1uBgXZjBBjtPxqJXGuXZEl78DKVKjhy9w=";
+    hash = "sha256-zocRBnrQoJDWI4qhxDnxxIeiLdaWolvsujqfHBYQc/A=";
   };
 
   patches = [
@@ -49,14 +48,6 @@ let
       src = ./ctypes.patch;
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
-    })
-
-    (fetchpatch {
-      # fix environment variables leaking into test environment
-      # https://github.com/psycopg/psycopg/pull/683
-      # https://github.com/psycopg/psycopg/issues/681
-      url = "https://github.com/psycopg/psycopg/commit/f060855aa6126e811de243c7213d2caff9c88123.patch";
-      hash = "sha256-QsFxK8Qasw9kbNCUUCqbOHaf53kT5NONlr28vGoPda0=";
     })
   ];
 
