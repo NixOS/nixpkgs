@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "2.10.0";
+  version = "3.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    rev = "v${version}";
-    hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WL+nNk68NaK36Lwalj23ugiSuB5acSLumLJGQaXE06A=";
   };
 
   nativeBuildInputs = [
