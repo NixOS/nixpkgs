@@ -70,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.36.0";
+  version = "1.36.2";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-vf0o0wBcG3878YD4mTUhni2aTUU9AJkG4an1oaRc4yw=";
+    hash = "sha256-GyQqI3ciRO0TRaAeM4rGu+j/eB4bJlQ7VBTTxUGMNt4=";
   };
 
   configureFlags = [
@@ -169,7 +169,7 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${versions.majorMinor version}.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];

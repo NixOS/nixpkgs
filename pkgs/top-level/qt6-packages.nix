@@ -50,6 +50,8 @@ makeScopeWithSplicing' {
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
+  qzxing = callPackage ../development/libraries/qzxing { };
+
   poppler = callPackage ../development/libraries/poppler {
     lcms = pkgs.lcms2;
     qt6Support = true;

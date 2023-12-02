@@ -2114,6 +2114,8 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+  vprof = with python3Packages; toPythonApplication vprof;
+
   vrc-get = callPackage ../tools/misc/vrc-get {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -4777,8 +4779,6 @@ with pkgs;
   shotman = callPackage ../tools/wayland/shotman { };
 
   slurp = callPackage ../tools/wayland/slurp { };
-
-  sov = callPackage ../tools/wayland/sov { };
 
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
@@ -18291,8 +18291,6 @@ with pkgs;
 
   karma-runner = callPackage ../development/tools/karma-runner { };
 
-  phpunit = callPackage ../development/tools/misc/phpunit { };
-
   teller = callPackage ../development/tools/teller { };
 
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
@@ -19160,7 +19158,9 @@ with pkgs;
 
   fprettify = callPackage ../development/tools/fprettify { };
 
-  framac = callPackage ../development/tools/analysis/frama-c { };
+  framac = callPackage ../development/tools/analysis/frama-c {
+    why3 = pkgs.why3.override { version = "1.6.0"; };
+  };
 
   frame = callPackage ../development/libraries/frame { };
 
@@ -22062,7 +22062,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc { };
 
-  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_17; };
+  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_18; };
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -34378,8 +34378,6 @@ with pkgs;
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
-
-  normcap = callPackage ../applications/graphics/normcap { };
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
