@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , numpy
 , pyyaml
 , python-dateutil
@@ -13,13 +14,17 @@
 }:
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "2.2.4";
-  format = "setuptools";
+  version = "2.2.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LBzB1mSLK+ZulE2y/6WRZqN7kWTRE1rVJdnNix4pgWg=";
+    hash = "sha256-F2mWUpFMn2ipopa3UjvzrmNZsHtdRrUwfkuHbDYBElo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
