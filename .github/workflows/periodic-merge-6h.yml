@@ -13,6 +13,7 @@ on:
     # * is a special character in YAML so you have to quote this string
     # Merge every 6 hours
     - cron:  '0 */6 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
