@@ -1,26 +1,27 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, ensureNewerSourcesForZipFilesHook
 , fetchFromGitHub
-, ncurses
-, python3
 , cunit
 , dpdk
+, elfutils
+, jansson
 , libaio
 , libbsd
+, libnl
+, libpcap
 , libuuid
+, ncurses
 , numactl
 , openssl
 , pkg-config
+, python3
 , zlib
-, libpcap
-, libnl
-, libelf
-, jansson
-, ensureNewerSourcesForZipFilesHook
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdk";
-
   version = "23.09";
 
   src = fetchFromGitHub {
@@ -41,17 +42,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cunit
     dpdk
+    elfutils
     jansson
     libaio
     libbsd
-    libelf
-    libuuid
-    libpcap
     libnl
+    libpcap
+    libuuid
+    ncurses
     numactl
     openssl
-    ncurses
     zlib
+    zstd
   ];
 
   patches = [
