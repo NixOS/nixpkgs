@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.6.2";
+  version = "1.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hhTAD7ilBG3jBP3Ybb0iT5lAgYXXskWsZijQJ2WW5tI=";
+    hash = "sha256-0Kayn3KhPwjgCLm+z/JHzHXISsshMzLt4Yh5xbaqTf0=";
   };
 
   patches = [
