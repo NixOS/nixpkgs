@@ -94,15 +94,23 @@ in
         ExecStart = "${cfg.package}/bin/miniflux";
         User = "miniflux";
         DynamicUser = true;
+        Restart = "always";
+        RestartSec = 5;
         RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0700";
+        Type = "notify";
+        WatchdogSec = "60s";
+        WatchdogSignal = "SIGKILL";
         EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
@@ -113,6 +121,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
+        ProtectSystem = "strict";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
