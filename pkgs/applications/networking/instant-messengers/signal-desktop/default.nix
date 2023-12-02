@@ -6,7 +6,7 @@
   };
   signal-desktop-beta = {
     dir = "Signal Beta";
-    version = "6.40.0-beta.2";
-    hash = "sha256-pfedkxbZ25DFgz+/N7ZEb9LwKrHuoMM+Zi+Tc21QPsg=";
+    version = "6.41.0-beta.1";
+    hash = "sha256-XKHR9vhqRMuAatyTtnLFvVmTOs+4OR5At0VQUFIBX3Q=";
   };
 }
