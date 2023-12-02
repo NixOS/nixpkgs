@@ -2,18 +2,19 @@
 , stdenv
 , fetchurl
 , autoreconfHook
-, pkg-config
 , dpdk
+, elfutils
+, jansson
 , libbpf
+, libbsd
 , libconfig
+, libnl
 , libpcap
 , numactl
 , openssl
+, pkg-config
 , zlib
-, libbsd
-, libelf
-, jansson
-, libnl
+, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -32,16 +33,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dpdk
+    elfutils
+    jansson
+    libbpf
+    libbsd
     libconfig
+    libnl
     libpcap
     numactl
     openssl
     zlib
-    libbsd
-    libelf
-    jansson
-    libbpf
-    libnl
+    zstd
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
