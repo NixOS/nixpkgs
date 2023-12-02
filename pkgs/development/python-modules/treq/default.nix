@@ -1,25 +1,41 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+
+# build-system
+, incremental
+, setuptools
+
+# dependenices
+, attrs
+, hyperlink
 , requests
 , twisted
-, incremental
+
+# tests
 , httpbin
 }:
 
 buildPythonPackage rec {
   pname = "treq";
-  version = "22.2.0";
-  format = "setuptools";
+  version = "23.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-33V+PxQfx4Lt4HamBFIRlP/LQPomRc9I5aNwYDB/Uuw=";
+    hash = "sha256-CRT/kp/RYyzhZ5cjUmD4vBnSD/fEWcHeq9ZbjGjL6sU=";
   };
 
-  propagatedBuildInputs = [
-    requests
+  nativeBuildInputs = [
     incremental
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    hyperlink
+    incremental
+    requests
     twisted
   ] ++ twisted.optional-dependencies.tls;
 
@@ -29,7 +45,11 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     trial treq
+
+    runHook postCheck
   '';
 
   meta = with lib; {
