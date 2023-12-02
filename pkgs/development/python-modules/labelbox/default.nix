@@ -99,5 +99,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
+    # https://github.com/Labelbox/labelbox-python/issues/1246
+    broken = versionAtLeast pydantic.version "2";
   };
 }

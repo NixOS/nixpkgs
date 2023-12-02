@@ -52,5 +52,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/yezz123/pyngo";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
+    # https://github.com/yezz123/pyngo/issues/70
+    broken = versionAtLeast pydantic.version "2";
   };
 }
