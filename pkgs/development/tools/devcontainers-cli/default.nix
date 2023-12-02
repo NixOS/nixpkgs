@@ -17,8 +17,6 @@ stdenv.mkDerivation {
     url = "https://registry.npmjs.org/@devcontainers/cli/-/cli-${version}.tgz";
   };
 
-  nativeBuildInputs = [ ];
-
   dontBuild = true;
   dontConfigure = true;
 
