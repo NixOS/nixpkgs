@@ -63,6 +63,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-cleanup
     django-cors-headers
     django-crispy-forms
+    django-debug-toolbar
     django-hcaptcha
     django-js-reverse
     django-oauth-toolkit
