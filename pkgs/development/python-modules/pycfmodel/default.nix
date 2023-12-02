@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Skyscanner/pycfmodel";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }
