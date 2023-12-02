@@ -17,6 +17,9 @@ let
   cfgZED = config.services.zfs.zed;
 
   selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
+  clevisDatasets = map (e: e.device) (filter (e: (hasAttr e.device config.boot.initrd.clevis.devices) && e.fsType == "zfs" && (fsNeededForBoot e)) config.system.build.fileSystems);
+
+
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
@@ -120,12 +123,12 @@ let
       # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
-      wants = [ "systemd-udev-settle.service" ];
+      wants = [ "systemd-udev-settle.service" ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
-      ];
+      ] ++ optional (config.boot.initrd.clevis.useTang) "network-online.target";
       requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       unitConfig = {
@@ -154,6 +157,9 @@ let
           poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
         fi
         if poolImported "${pool}"; then
+        ${concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true ") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets)}
+
+
           ${optionalString keyLocations.hasKeys ''
             ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
               {
@@ -623,6 +629,9 @@ in
               fi
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
             fi
+
+            ${concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets)}
+
             ${if isBool cfgZfs.requestEncryptionCredentials
               then optionalString cfgZfs.requestEncryptionCredentials ''
                 zfs load-key -a
