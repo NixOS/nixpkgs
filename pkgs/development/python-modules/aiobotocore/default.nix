@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
-  version = "2.6.0";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-e8FBUG08yWNL9B51Uv4ftYx1C0kcdoweOreUtvvvTAk=";
+    hash = "sha256-mVG3dCz9DnExteUFhvTGjZu81E0KbrObP3OX0w/OVzU=";
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions
