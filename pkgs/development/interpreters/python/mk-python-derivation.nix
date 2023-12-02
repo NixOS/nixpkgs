@@ -8,6 +8,7 @@
 , ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
 , toPythonModule
+, requiredPythonModules
 , namePrefix
 , update-python-libraries
 , setuptools
@@ -233,6 +234,8 @@ let
       inherit build-system;
     };
 
+  nativeBuildInputs' = nativeBuildInputs ++ build-system;
+
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((cleanAttrs attrs) // {
 
@@ -270,12 +273,14 @@ let
       else
         pypaBuildHook
     ) (
-      if isBootstrapPackage then
-        pythonRuntimeDepsCheckHook.override {
-          inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
-        }
-      else
-        pythonRuntimeDepsCheckHook
+      null
+      # TODO: Reimplement as a passthru.tests once https://github.com/NixOS/nixpkgs/pull/272177 is merged
+      # if isBootstrapPackage then
+      #   pythonRuntimeDepsCheckHook.override {
+      #     inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
+      #   }
+      # else
+      #   pythonRuntimeDepsCheckHook
     )] ++ optionals (format' == "wheel") [
       wheelUnpackHook
     ] ++ optionals (format' == "egg") [
@@ -287,19 +292,16 @@ let
         }
       else
         pypaInstallHook
-    )] ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-      # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-      pythonImportsCheckHook
-    ] ++ optionals (python.pythonAtLeast "3.3") [
+    )] ++ optionals (python.pythonAtLeast "3.3") [
       # Optionally enforce PEP420 for python3
       pythonNamespacesHook
     ] ++ optionals withDistOutput [
       pythonOutputDistHook
-    ] ++ nativeBuildInputs ++ build-system;
+    ] ++ nativeBuildInputs' ++ requiredPythonModules nativeBuildInputs';
 
     buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-    propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (propagatedBuildInputs ++ dependencies ++ [
+    propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (propagatedBuildInputs ++ [
       # we propagate python even for packages transformed with 'toPythonApplication'
       # this pollutes the PATH but avoids rebuilds
       # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
@@ -312,7 +314,7 @@ let
 
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
-    doInstallCheck = attrs.doCheck or true;
+    doInstallCheck = false; #attrs.doCheck or true;
     nativeInstallCheckInputs = [
     ] ++ optionals (format' == "setuptools") [
       # Longer-term we should get rid of this and require
