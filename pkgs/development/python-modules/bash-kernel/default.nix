@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "bash-kernel";
-  version = "0.9.1";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bash_kernel";
     inherit version;
-    hash = "sha256-AYPVPjYP+baEcQUqmiiagWIXMlFrA04njpcgtdFaFis=";
+    hash = "sha256-n3oDgRyn2csfv/gIIjfPBFC5cYIlL9C4BYeha2XmbVg=";
   };
 
   patches = [
