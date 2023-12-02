@@ -44,6 +44,13 @@ let
         (fdrv: decorate (f.override fdrv));
     };
 
+  compatCustomStdenv = f: origArgs: (
+    if origArgs?stdenv then
+      f.override { inherit (origArgs) stdenv; }
+    else
+      f
+  ) origArgs;
+
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix
   else
@@ -56,6 +63,10 @@ let
     # This will most likely be shadowed by the typical <pkg>.override
     # added by another callPackage onto package definitions.
     lib.makeOverridable
+    # Take the obsolete input argument `stdenv`
+    # and pass as `buildPython*.override { stdenv = stdenv; }`
+    # TODO: Remove this after Nixpkgs 24.11 branch-off
+    compatCustomStdenv
     # Adds <pkg>.overridePythonAttrs
     makeOverridablePythonPackage
   ]);
@@ -63,11 +74,13 @@ let
   buildPythonPackage = decorateBuildPython (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
+    stdenv = python.stdenv; # Customizing stdenv through buildPythonPackage.override without rebuilding python
   });
 
   buildPythonApplication = decorateBuildPython (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
+    stdenv = python.stdenv; # Customizing stdenv through buildPythonApplication.override without rebuilding python
   });
 
   # Check whether a derivation provides a Python module.
