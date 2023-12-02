@@ -2,9 +2,9 @@
 , lib
 , fetchFromGitHub
 , cmake
-, nodejs
-, libelf
+, elfutils
 , libunwind
+, nodejs
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libelf libunwind ];
+  buildInputs = [ elfutils libunwind ];
 
   meta = with lib; {
     description = "Memory tool to find where you allocate your memory";
