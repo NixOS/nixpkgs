@@ -1,8 +1,8 @@
 { stdenv
 , lib
-, fetchgit
 , autoreconfHook
-, libelf
+, elfutils
+, fetchgit
 , libiberty
 }:
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    stdenv.cc.libc
-    libelf
+    elfutils
     libiberty
+    stdenv.cc.libc
   ];
 
   # most tests fail
