@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "man" "out" ];
-
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ] ++ extraBuildInputs;
   hardeningDisable = [ "format" ];
@@ -25,9 +23,6 @@ stdenv.mkDerivation rec {
       wrapProgram "$bin" \
         --prefix PATH : "$out/bin"
     done
-
-    mkdir -p $man/share/man/man1
-    cp doc/*.1 $man/share/man/man1
   '';
 
   doCheck = lib.versionAtLeast version "0.3.4";
