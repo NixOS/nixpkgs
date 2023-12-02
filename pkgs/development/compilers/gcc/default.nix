@@ -410,6 +410,8 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
     ;
   } // lib.optionalAttrs (!atLeast11) {
     badPlatforms = if !(is48 || is49) then [ "aarch64-darwin" ] else lib.platforms.darwin;
+  } // lib.optionalAttrs is11 {
+    badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
   };
 } // optionalAttrs is7 {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
