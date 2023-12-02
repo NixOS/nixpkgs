@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "2.0.0";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o7UREa+IBiFjmqx0p+4XJCcoHQ/R6r2RtoezEcWvgbg=";
+    hash = "sha256-58DuQslADM7glrnlSSP6TtIDTlwuS0/GK8+izatqDxI=";
   };
 
   propagatedBuildInputs = [
