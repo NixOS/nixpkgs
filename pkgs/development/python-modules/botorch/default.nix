@@ -40,8 +40,6 @@ buildPythonPackage rec {
     torch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   checkInputs = [
     pytestCheckHook
   ];

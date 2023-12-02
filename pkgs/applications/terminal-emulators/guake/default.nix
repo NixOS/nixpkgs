@@ -52,8 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ];

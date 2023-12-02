@@ -23,8 +23,6 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [ cython mecab setuptools-scm ];
 
   pythonImportsCheck = [ "ipadic" ];

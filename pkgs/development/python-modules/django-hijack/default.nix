@@ -43,8 +43,6 @@ buildPythonPackage rec {
     hash = "sha256-X3bJ6STFq6zGIzXHSd2C67d4kSOVJJR5aBSM3o5T850=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     gettext
     nodejs

@@ -55,8 +55,6 @@ buildPythonPackage rec {
     "test_basic_parse"
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonImportsCheck = [ "edk2toollib" ];
 
   meta = with lib; {

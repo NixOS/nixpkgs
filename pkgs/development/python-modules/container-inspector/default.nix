@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-J9glnfs6l36/IQoIvE8a+Cw4B8x/6r5UeAU8+T/OiQg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   dontConfigure = true;
 
   postPatch = ''

@@ -28,8 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-82+j3JAkjltXuzRhdvO4hoesSTWlNCY6w2mn6TsZqGM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatchling
     hatch-vcs

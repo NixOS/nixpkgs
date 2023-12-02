@@ -41,8 +41,6 @@ python3.pkgs.buildPythonApplication rec {
     tree-sitter
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   # The scikit-build-core runs CMake internally so we must let it run the configure step itself.
   dontUseCmakeConfigure = true;
   SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" [

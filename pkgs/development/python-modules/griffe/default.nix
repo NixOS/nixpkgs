@@ -24,8 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-j0j13bJtHlPc00pjmfpg/QJKzYQQcyA+jE7q538Uu08=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     pdm-backend
   ];

@@ -31,8 +31,6 @@ buildPythonPackage rec {
     hash = "sha256-hp00iUT1atyTQk532z7VAajpfvtnKE8W2la9MW7NxoE=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
     "grpcio"
   ];
