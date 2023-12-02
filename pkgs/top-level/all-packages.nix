@@ -17948,7 +17948,7 @@ with pkgs;
   python39Packages = python39.pkgs // { __attrsFailEvaluation = true; };
   python310Packages = python310.pkgs // { __attrsFailEvaluation = true; };
   python311Packages = recurseIntoAttrs python311.pkgs // { pythonPackages = python311.pkgs // { __attrsFailEvaluation = true; }; };
-  python312Packages = python312.pkgs // { __attrsFailEvaluation = true; };
+  python312Packages = recurseIntoAttrs python312.pkgs // { pythonPackages = python312.pkgs // { __attrsFailEvaluation = true; }; };
   python313Packages = python313.pkgs // { __attrsFailEvaluation = true; };
   pypyPackages = pypy.pkgs // { __attrsFailEvaluation = true; };
   pypy2Packages = pypy2.pkgs // { __attrsFailEvaluation = true; };
