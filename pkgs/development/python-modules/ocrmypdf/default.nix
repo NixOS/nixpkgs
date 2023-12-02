@@ -50,8 +50,6 @@ buildPythonPackage rec {
     hash = "sha256-Ff0OrSJFglVPpSNB0KvDMnatj+P57zWdcVAFaM+Sg0s=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   patches = [
     (substituteAll {
       src = ./paths.patch;

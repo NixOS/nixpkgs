@@ -23,8 +23,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'version=get_version(),' 'version="${version}",'

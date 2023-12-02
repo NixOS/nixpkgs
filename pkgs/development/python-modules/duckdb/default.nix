@@ -32,7 +32,6 @@ buildPythonPackage rec {
   '';
 
   BUILD_HTTPFS = 1;
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     pybind11

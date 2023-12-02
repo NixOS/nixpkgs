@@ -48,8 +48,6 @@ buildPythonPackage rec {
       --replace "--cov=pyunifiprotect --cov-append" ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm

@@ -47,8 +47,6 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     awkward
     pytestCheckHook

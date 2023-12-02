@@ -36,8 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     ./linux-disable-timezone-test.patch
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   preConfigure = ''
     # fix version displayed by duplicity --version
     # see SourceCopy in setup.py

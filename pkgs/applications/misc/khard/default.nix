@@ -9,7 +9,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-5ki+adfz7m0+FbxC9+IXHLn8oeLKLkASuU15lyDATKQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
     sphinxHook
