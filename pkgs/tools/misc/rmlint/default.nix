@@ -5,7 +5,7 @@
 , gobject-introspection
 , gtksourceview3
 , json-glib
-, libelf
+, elfutils
 , makeWrapper
 , pango
 , pkg-config
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     json-glib
-    libelf
+    elfutils
     util-linux
   ] ++ lib.optionals withGui [
     cairo
