@@ -25,7 +25,15 @@
       valid = value: pythonPackages.hasPythonModule value || providesSetupHook value || lib.elem value exceptions;
       func = name: value:
         if lib.isDerivation value then
-          lib.extendDerivation (valid value || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.") {} value
+          lib.extendDerivation' {
+            condition = valid value || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.";
+            overriderNames = [
+              "override"
+              "overrideAttrs"
+              "overrideDerivation"
+              "overridePythonAttrs"
+            ];
+          } value
         else
           value;
     in lib.mapAttrs func items;
