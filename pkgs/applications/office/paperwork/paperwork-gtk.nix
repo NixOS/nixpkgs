@@ -42,8 +42,6 @@ python3Packages.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/paperwork-gtk";
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     chmod a+w -R ..
     patchShebangs ../tools

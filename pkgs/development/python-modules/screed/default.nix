@@ -17,7 +17,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools-scm ];
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonImportsCheck = [ "screed" ];
   checkInputs = [ pytestCheckHook ];

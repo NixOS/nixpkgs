@@ -17,8 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     glibcLocales
     installShellFiles

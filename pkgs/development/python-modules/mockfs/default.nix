@@ -23,8 +23,6 @@ buildPythonPackage rec {
     sed -i '/addopts/d' pytest.ini
   '';
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm

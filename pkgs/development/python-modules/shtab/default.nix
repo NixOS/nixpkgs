@@ -23,8 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-BMwi3a7CPq58G30XlkJdSfSP6oc6u2AuSPAwEExI9zM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""

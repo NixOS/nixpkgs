@@ -30,8 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = with python3.pkgs; [
     colorama
     distro

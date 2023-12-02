@@ -25,8 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-yx0B31x+BMS4alHro+hAPeVB6YK9B7Tg+3sSCMCYjKs=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   pythonRelaxDeps = [
     "awkward"
   ];

@@ -64,10 +64,6 @@ in python3.pkgs.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath bins)
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
-
   outputs = [ "out" "man" ];
   postBuild = ''
     make -C man
