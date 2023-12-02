@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "open-meteo";
-  version = "0.2.1";
+  version = "0.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-open-meteo";
-    rev = "v${version}";
-    sha256 = "0i8jmhd29vvkpfxs9l5wy8525ngs79mnc7si2j9b1nc41xrv91f6";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-IB+dfQ4bb4dMYYQUVH9YbP3arvfgt4SooPlOKP3AVI8=";
   };
 
   nativeBuildInputs = [
