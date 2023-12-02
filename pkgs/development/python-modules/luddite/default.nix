@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "luddite";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "jumptrading";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "8/7uwO5HLhyXYt+T6VUO/O7TN9+FfRlT8y0r5+CJ/l4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-JXIM7/5LO95oabM16GwAt3v3a8uldGpGXDWmVic8Ins=";
   };
 
   postPatch = ''
