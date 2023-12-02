@@ -6,6 +6,7 @@
 , curl
 , libxml2
 , libffi
+, xar
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -27,6 +28,8 @@ llvmPackages.stdenv.mkDerivation rec {
     curl
     libxml2
     libffi
+  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [
+    xar
   ];
 
   nativeCheckInputs = [ python3 ];
