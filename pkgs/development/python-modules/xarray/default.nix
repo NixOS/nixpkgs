@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2023.8.0";
+  version = "2023.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-glxtZCAqcxpOSTIe3R6d+r9L4GgC8bjIo8AKPr/Izt8=";
+    hash = "sha256-mkXhB0GES1+UjY4edotGDffpBpbRji7/LB1H9dnVAlI=";
   };
 
   nativeBuildInputs = [
