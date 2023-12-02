@@ -16189,7 +16189,7 @@ self: super: with self; {
 
   zope-component = callPackage ../development/python-modules/zope-component { };
 
-  zope_configuration = callPackage ../development/python-modules/zope_configuration { };
+  zope-configuration = callPackage ../development/python-modules/zope-configuration { };
 
   zope-contenttype = callPackage ../development/python-modules/zope-contenttype { };
 
@@ -16225,7 +16225,7 @@ self: super: with self; {
 
   zope-testbrowser = callPackage ../development/python-modules/zope-testbrowser { };
 
-  zope_testing = callPackage ../development/python-modules/zope_testing { };
+  zope-testing = callPackage ../development/python-modules/zope-testing { };
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 

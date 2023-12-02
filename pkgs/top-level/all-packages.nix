@@ -1764,6 +1764,8 @@ with pkgs;
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
+  davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
+
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };
@@ -6857,8 +6859,9 @@ with pkgs;
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_23_02_0
     citrix_workspace_23_07_0
+    citrix_workspace_23_09_0
   ;
-  citrix_workspace = citrix_workspace_23_07_0;
+  citrix_workspace = citrix_workspace_23_09_0;
 
   clima = callPackage ../tools/text/clima { };
 

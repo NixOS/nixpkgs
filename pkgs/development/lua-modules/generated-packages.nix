@@ -2183,6 +2183,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+luasnip = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, jsregexp, lua, luaOlder }:
+buildLuarocksPackage {
+  pname = "luasnip";
+  version = "2.1.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luasnip-2.1.1-1.rockspec";
+    sha256 = "1jrdai8qsanr6x2vqp70hipsxrxh0abvwr2xwh9p4wr29k4wyycb";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/L3MON4D3/LuaSnip/archive/v2.1.1.zip";
+    sha256 = "0mbpwf3sxfrmrza13d9w0hlcmzlrj551g332syp1qhs94abfnnrd";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ jsregexp lua ];
+
+  meta = {
+    homepage = "https://github.com/L3MON4D3/LuaSnip";
+    description = "Snippet Engine for Neovim written in Lua.";
+    license.fullName = "Apache-2.0";
+  };
+}) {};
+
 luasocket = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "luasocket";
