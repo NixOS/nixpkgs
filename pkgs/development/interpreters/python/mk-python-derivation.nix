@@ -50,6 +50,9 @@
 , dependencies ? []
 , optional-dependencies ? {}
 
+# Python PEP-517 build systems.
+, build-system ? []
+
 # DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
@@ -208,13 +211,16 @@ let
     }
     // lib.optionalAttrs (optional-dependencies != {}) {
       inherit optional-dependencies;
+    }
+    // lib.optionalAttrs (build-system != []) {
+      inherit build-system;
     };
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
     "disabledTestPaths" "outputs" "stdenv"
-    "dependencies" "optional-dependencies"
+    "dependencies" "optional-dependencies" "build-system"
   ]) // {
 
     name = namePrefix + name_;
@@ -274,7 +280,7 @@ let
       pythonNamespacesHook
     ] ++ lib.optionals withDistOutput [
       pythonOutputDistHook
-    ] ++ nativeBuildInputs;
+    ] ++ nativeBuildInputs ++ build-system;
 
     buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 

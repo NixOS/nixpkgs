@@ -116,7 +116,7 @@ buildPythonPackage rec {
     rm testing/test_argcomplete.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
@@ -172,7 +172,7 @@ following are specific to `buildPythonPackage`:
   variable in wrapped programs.
 * `pyproject`: Whether the pyproject format should be used. When set to `true`,
   `pypaBuildHook` will be used, and you can add the required build dependencies
-  from `build-system.requires` to `nativeBuildInputs`. Note that the pyproject
+  from `build-system.requires` to `build-system`. Note that the pyproject
   format falls back to using `setuptools`, so you can use `pyproject = true`
   even if the package only has a `setup.py`. When set to `false`, you can
   use the existing [hooks](#setup-hooks0 or provide your own logic to build the
@@ -206,8 +206,8 @@ build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
 because their behaviour is different:
 
-* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
-  as well as the items listed in `setup_requires`.
+* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables.
+* `build-system ? []`: Build-time only Python dependencies. Items listed in `build-system.requires`/`setup_requires`.
 * `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
@@ -304,13 +304,14 @@ python3Packages.buildPythonApplication rec {
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
+    wheel
   ];
 
-  dependencies = [
-    python3Packages.tornado
-    python3Packages.python-daemon
+  dependencies = with python3Packages; [
+    tornado
+    python-daemon
   ];
 
   meta = with lib; {
@@ -467,11 +468,11 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `eggBuildHook` to skip building for eggs.
 - `eggInstallHook` to install eggs.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
-  (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+  (e.g. `setuptools` or `flit`) should still be added as `build-system`.
 - `pypaBuildHook` to build a wheel using
   [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
   PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
-  be added as `nativeBuildInput`.
+  be added as `build-system`.
 - `pipInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
@@ -886,7 +887,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -946,7 +947,7 @@ with import <nixpkgs> {};
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
-      nativeBuildInputs = [
+      build-system = [
         python311.pkgs.setuptools
         python311.pkgs.wheel
       ];
@@ -1020,7 +1021,7 @@ buildPythonPackage rec {
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -1075,7 +1076,7 @@ buildPythonPackage rec {
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -1132,7 +1133,7 @@ buildPythonPackage rec {
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
@@ -1526,7 +1527,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
