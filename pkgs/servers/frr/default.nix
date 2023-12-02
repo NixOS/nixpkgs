@@ -15,7 +15,7 @@
 , c-ares
 , json_c
 , libcap
-, libelf
+, elfutils
 , libunwind
 , libyang
 , net-snmp
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     c-ares
     json_c
-    libelf
+    elfutils
     libunwind
     libyang
     openssl
