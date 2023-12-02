@@ -936,6 +936,18 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
+  csound-expression =
+    assert super.csound-expression.version == "5.4.3";
+    overrideCabal (drv: {
+      src = (pkgs.fetchFromGitHub {
+        owner = "spell-music";
+        repo = "csound-expression";
+        rev = "345df2c91c9831dd895f58951990165598504814";
+        hash = "sha256-6qPiKsZwZpqB2kmckKDKyQPTcWPIaVwi+EYs74tRod0=";
+      }) + "/csound-expression";
+      editedCabalFile = null;
+    }) super.csound-expression;
+
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = appendPatch (fetchpatch {
