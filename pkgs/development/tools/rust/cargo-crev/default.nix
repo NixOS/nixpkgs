@@ -14,16 +14,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
-  version = "0.25.4";
+  version = "0.25.5";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "sha256-cXGZhTLIxR9VHrQT+unbl69AviiQ6FCOJTdOP/4fRYI=";
+    sha256 = "sha256-Pp+D2s7kj+atMc5En+7v3KIYNCAscmDO1LK6x+ctyvY=";
   };
 
-  cargoHash = "sha256-H/5OZCnshGOUKVaBTbFAiMpYdsNC/96gV+rOgiuwDYc=";
+  # The package depends on "index-guix", which is (in the Cargo.toml) a path
+  # dependency, but the repository does not ship that dependency.
+  #
+  # Upstream Issue: https://github.com/crev-dev/cargo-crev/issues/694
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "debcargo" ];
+
+  cargoHash = "sha256-115OZCnshGOUKVaBTbFAiMpYdsNC/96gV+rOgiuwDYc=";
 
   preCheck = ''
     export HOME=$(mktemp -d)
