@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "setuptools-scm-git-archive";
-  version = "1.4";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit version;
     pname = "setuptools_scm_git_archive";
-    sha256 = "b048b27b32e1e76ec865b0caa4bb85df6ddbf4697d6909f567ac36709f6ef2f0";
+    sha256 = "sha256-xBi8d7OXTTrGXyaPBY8j4B3F+ZHyIzEosOFqad4iewk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
