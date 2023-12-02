@@ -73,6 +73,7 @@ luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luasec,,,,,,flosse
+luasnip,,,,,,
 luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
