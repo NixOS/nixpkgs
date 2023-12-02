@@ -58,5 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-semantic-interfaces";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
+    # https://github.com/dbt-labs/dbt-semantic-interfaces/issues/134
+    broken = versionAtLeast pydantic.version "2";
   };
 }

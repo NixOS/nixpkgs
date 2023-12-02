@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , setuptools
+, pydantic
 
 # extras: babel
 , babel
@@ -127,5 +128,7 @@ buildPythonPackage rec {
     description = "Simple security for Flask apps (fork)";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    # https://github.com/Flask-Middleware/flask-security/pull/851
+    broken = versionAtLeast pydantic.version "2";
   };
 }
