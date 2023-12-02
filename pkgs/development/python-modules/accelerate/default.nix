@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.24.1";
+  version = "0.25.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DKyFb+4DUMhVUwr+sgF2IaJS9pEj2o2shGYwExfffWg=";
+    hash = "sha256-WIMOSfo9fGbevMkUHvFsA51SOiGkBO1cK388FudRDY0=";
   };
 
   patches = [
