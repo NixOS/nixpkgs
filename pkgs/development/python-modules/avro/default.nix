@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.11.2";
+  version = "1.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U9zVv/zLmnITbwjQsYdxeV6vTu+wKLuq7V9OF4fw4mg=";
+    hash = "sha256-M5O7UTn5zweR0gV1bOHjmltYWGr1sVPWo7WhmWEOnRc=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
