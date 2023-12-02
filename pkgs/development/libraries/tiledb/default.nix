@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.18.0";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    hash = "sha256-y5/kXODzkNKmMn8P+WOOWGy9Htd0nhXbUxmfw/SqSYY=";
+    hash = "sha256-uLiXhigYz3v7NgY38twot3sBHxZS5QCrOiPfME4wWzE=";
   };
 
   patches = [
