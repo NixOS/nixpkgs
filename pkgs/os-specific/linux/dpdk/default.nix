@@ -10,7 +10,7 @@
 , numactl
 , libbpf
 , zlib
-, libelf
+, elfutils
 , jansson
 , openssl
 , libpcap
@@ -50,10 +50,11 @@ stdenv.mkDerivation {
     python3.pkgs.sphinx
     python3.pkgs.pyelftools
   ];
+
   buildInputs = [
     jansson
     libbpf
-    libelf
+    elfutils
     libpcap
     numactl
     openssl.dev
