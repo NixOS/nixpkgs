@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.optionals stdenv.isDarwin [
       # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
       "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+      # qt translation generation segfaults
+      "-DENABLE_NLS=OFF"
     ];
 
   postPatch = ''
