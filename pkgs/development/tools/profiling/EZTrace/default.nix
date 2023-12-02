@@ -2,7 +2,7 @@
   stdenv,
   fetchFromGitLab,
   gfortran,
-  libelf,
+  elfutils,
   libiberty,
   zlib,
   # Once https://gitlab.com/eztrace/eztrace/-/issues/41
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gfortran autoreconfHook ];
-  buildInputs = [ libelf libiberty zlib libbfd_2_38 libopcodes_2_38 ];
+  buildInputs = [ elfutils libiberty zlib libbfd_2_38 libopcodes_2_38 ];
 
   meta = with lib; {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
