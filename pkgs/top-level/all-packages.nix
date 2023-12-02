@@ -4780,8 +4780,6 @@ with pkgs;
 
   slurp = callPackage ../tools/wayland/slurp { };
 
-  sov = callPackage ../tools/wayland/sov { };
-
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
   swayr = callPackage ../tools/wayland/swayr { };
