@@ -28,8 +28,6 @@ let
       hash = "sha256-C2gKjoaMcUWz/QOsqpv4TkozQyI+zEIQf3GMf5w40aw=";
     };
 
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
     nativeBuildInputs = [
       hatch-vcs
       hatchling

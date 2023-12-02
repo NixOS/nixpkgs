@@ -20,8 +20,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ gettext setuptools-scm ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     mock
     pytestCheckHook

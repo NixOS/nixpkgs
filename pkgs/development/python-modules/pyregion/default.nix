@@ -32,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-r2STKnZwNvonXATrQ5q9NVD9QftlWI1RWl4F+GZSxVg=";
   };
 
-  env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  } // lib.optionalAttrs stdenv.cc.isClang {
+  env = lib.optionalAttrs stdenv.cc.isClang {
     # Try to remove on next update.  generated code returns a NULL in a
     # function where an int is expected.
     NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";

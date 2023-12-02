@@ -10,8 +10,6 @@ buildPythonPackage rec {
   pname = "pytest-pytestrail";
   version = "0.10.5";
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "pytest-pytestrail";

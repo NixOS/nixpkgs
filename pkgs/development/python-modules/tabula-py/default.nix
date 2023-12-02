@@ -31,8 +31,6 @@ buildPythonPackage rec {
       --replace '"java"' '"${lib.getExe jre}"'
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm

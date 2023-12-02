@@ -15,8 +15,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-OzcoOIgEiadWrsUPIxBJTuZQYjScJBYKyqCu1or6fz8=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = with python3.pkgs; [
     hatchling
     hatch-vcs

@@ -19,7 +19,6 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
     DJANGO_SETTINGS_MODULE = "khoj.app.settings";
     postgresqlEnableTCP = 1;
   };

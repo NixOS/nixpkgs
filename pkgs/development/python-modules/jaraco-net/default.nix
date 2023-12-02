@@ -49,8 +49,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     more-itertools
     beautifulsoup4

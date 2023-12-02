@@ -48,8 +48,6 @@ buildPythonPackage rec {
 
   TILEDB_PATH = tiledb;
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   disabled = !isPy3k; # Not bothering with python2 anymore
 
   postPatch = ''

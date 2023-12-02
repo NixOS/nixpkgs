@@ -27,8 +27,6 @@ buildPythonPackage rec {
     setuptools-scm-git-archive
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   propagatedBuildInputs = [
     distro
   ];
