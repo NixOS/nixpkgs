@@ -1,10 +1,24 @@
-{ stdenv, lib
+{ stdenv
+, lib
 , kernel
 , fetchurl
-, pkg-config, meson, ninja, makeWrapper
-, libbsd, numactl, libbpf, zlib, libelf, jansson, openssl, libpcap, rdma-core
-, doxygen, python3, pciutils
-, withExamples ? []
+, pkg-config
+, meson
+, ninja
+, makeWrapper
+, libbsd
+, numactl
+, libbpf
+, zlib
+, libelf
+, jansson
+, openssl
+, libpcap
+, rdma-core
+, doxygen
+, python3
+, pciutils
+, withExamples ? [ ]
 , shared ? false
 , machine ? (
     if stdenv.isx86_64 then "nehalem"
@@ -16,7 +30,8 @@
 let
   mod = kernel != null;
   dpdkVersion = "23.07";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "dpdk";
   version = "${dpdkVersion}" + lib.optionalString mod "-${kernel.version}";
 
@@ -68,10 +83,10 @@ in stdenv.mkDerivation {
   ]
   # kni kernel driver is currently not compatble with 5.11
   ++ lib.optional (mod && kernel.kernelOlder "5.11") "-Ddisable_drivers=kni"
-  ++ [(if shared then "-Ddefault_library=shared" else "-Ddefault_library=static")]
+  ++ [ (if shared then "-Ddefault_library=shared" else "-Ddefault_library=static") ]
   ++ lib.optional (machine != null) "-Dmachine=${machine}"
   ++ lib.optional mod "-Dkernel_dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  ++ lib.optional (withExamples != [ ]) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
 
   postInstall = ''
     # Remove Sphinx cache files. Not only are they not useful, but they also
@@ -80,7 +95,7 @@ in stdenv.mkDerivation {
 
     wrapProgram $out/bin/dpdk-devbind.py \
       --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
-  '' + lib.optionalString (withExamples != []) ''
+  '' + lib.optionalString (withExamples != [ ]) ''
     mkdir -p $examples/bin
     find examples -type f -executable -exec install {} $examples/bin \;
   '';
@@ -88,13 +103,13 @@ in stdenv.mkDerivation {
   outputs =
     [ "out" "doc" ]
     ++ lib.optional mod "kmod"
-    ++ lib.optional (withExamples != []) "examples";
+    ++ lib.optional (withExamples != [ ]) "examples";
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
     broken = mod && kernel.isHardened;
   };
