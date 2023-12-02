@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mako";
-  version = "1.2.4";
+  version = "1.3.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Mako";
     inherit version;
-    hash = "sha256-1go5A9w7sBoYrWqJzb4uTq3GnAvI7x43c7pT1Ew/ejQ=";
+    hash = "sha256-46nTiP0A6HBD7b6HkvRYgKwBFOnErcafbpv7LFXjsRs=";
   };
 
   propagatedBuildInputs = [
