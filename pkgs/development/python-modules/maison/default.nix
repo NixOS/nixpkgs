@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "maison";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dbatten5";
     repo = "maison";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uJW+7+cIt+jnbiC+HvT7KzyNk1enEtELTxtfc4eXAPU=";
+    hash = "sha256-XNo7QS8BCYzkDozLW0T+KMQPI667lDTCFtOqKq9q3hw=";
   };
 
   nativeBuildInputs = [
