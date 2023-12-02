@@ -1,17 +1,29 @@
-{ lib, stdenv, makeSetupHook, fetchFromGitHub, libelf, which, pkg-config, freeglut
-, avrgcc, avrlibc
-, libGLU, libGL
-, GLUT }:
+{ lib
+, stdenv
+, makeSetupHook
+, fetchFromGitHub
+, libelf
+, which
+, pkg-config
+, freeglut
+, avrgcc
+, avrlibc
+, libGLU
+, libGL
+, GLUT
+}:
 
 let
-  setupHookDarwin = makeSetupHook {
-    name = "darwin-avr-gcc-hook";
-    substitutions = {
-      darwinSuffixSalt = stdenv.cc.suffixSalt;
-      avrSuffixSalt = avrgcc.suffixSalt;
-    };
-  } ./setup-hook-darwin.sh;
-in stdenv.mkDerivation rec {
+  setupHookDarwin = makeSetupHook
+    {
+      name = "darwin-avr-gcc-hook";
+      substitutions = {
+        darwinSuffixSalt = stdenv.cc.suffixSalt;
+        avrSuffixSalt = avrgcc.suffixSalt;
+      };
+    } ./setup-hook-darwin.sh;
+in
+stdenv.mkDerivation rec {
   pname = "simavr";
   version = "1.7";
 
@@ -45,9 +57,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A lean and mean Atmel AVR simulator";
-    homepage    = "https://github.com/buserror/simavr";
-    license     = licenses.gpl3;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/buserror/simavr";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ goodrone ];
   };
 
