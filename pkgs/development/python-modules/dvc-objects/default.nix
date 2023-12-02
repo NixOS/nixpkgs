@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "1.3.0";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mqFrXwXMvndXb9oUVwu2IOG7Ltti6AT9acsQx/gdRSs=";
+    hash = "sha256-30UnTbEHpGSgSGnhml7pXtPDivH9+NO7nvK4jEmRRUA=";
   };
 
   nativeBuildInputs = [
