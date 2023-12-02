@@ -42,10 +42,10 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionOlder info.version "28")
+  patches = base.patches ++ lib.optional (lib.versionOlder info.version "27")
     (substituteAll {
       name = "version.patch";
-      src = if lib.versionAtLeast info.version "27" then ./version.patch else ./version-old.patch;
+      src = ./version.patch;
       inherit (info) version;
     })
   ;
@@ -167,7 +167,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_check_raw_ptr_fields = false;
   } // lib.optionalAttrs (lib.versionOlder info.version "26")  {
     use_gnome_keyring = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "28")  {
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "27")  {
     override_electron_version = info.version;
   };
 
