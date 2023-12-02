@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyprusalink";
-  version = "1.1.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
+    hash = "sha256-wboyISggzC50cZ+J/NC0ytWXwCLBmBpP9/MtPkRb+Zs=";
   };
 
   patches = [
