@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.4.1";
+  version = "6.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-oO5+ZCDgqonxaHR95tSrPkZDar/fzr1FXtl6J2W3PeU=";
+    hash = "sha256-YGYprSC5j06Ozg0dUJN5xnba0HUgiXa+d9Ci3czGWoY=";
   };
 
   postPatch = ''
