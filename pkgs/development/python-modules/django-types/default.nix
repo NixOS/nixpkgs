@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "django-types";
-  version = "0.18.0";
+  version = "0.19.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uOIzTIEIZNer8RzTzbHaOyAVtn5/EnAAfjN3f/G9hlQ=";
+    hash = "sha256-WueYhhLPb7w1ewGLvDs6h4tl4EJ1zEbg011mpwja/xI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
