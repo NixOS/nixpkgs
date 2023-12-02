@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tracerite";
-  version = "1.1.0";
+  version = "1.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "tracerite";
-    rev = "v${version}";
-    hash = "sha256-At8wVR3EcHEi051BBfjb+sOhs93GyzWlEAjtehTMeNU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rI1MNdYl/P64tUHyB3qV9gfLbGbCVOXnEFoqFTkaqgg=";
   };
 
   nativeBuildInputs = [
