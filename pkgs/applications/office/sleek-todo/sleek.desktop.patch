@@ -1,0 +1,13 @@
+diff --git a/snap/gui/sleek.desktop b/snap/gui/sleek.desktop
+index ce43c15..1539382 100755
+--- a/snap/gui/sleek.desktop
++++ b/snap/gui/sleek.desktop
+@@ -3,7 +3,7 @@ Name=sleek
+ Exec=sleek %U
+ Terminal=false
+ Type=Application
+-Icon=${SNAP}/meta/gui/icon.png
++Icon=sleek
+ StartupWMClass=sleek
+ Comment=todo.txt manager for Linux, free and open-source (FOSS)
+ Categories=ProjectManagement

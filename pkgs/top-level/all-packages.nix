@@ -17225,6 +17225,8 @@ with pkgs;
 
   sleek = callPackage ../development/tools/database/sleek { };
 
+  sleek-todo = callPackage ../applications/office/sleek-todo { };
+
   smlfmt = callPackage ../development/tools/smlfmt { };
 
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
