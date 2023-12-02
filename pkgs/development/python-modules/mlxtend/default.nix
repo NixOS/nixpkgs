@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.22.0";
+  version = "0.23.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YLCNLpg2qrdFon0/gdggJd9XovHwRHAdleBFQc18qzE=";
+    hash = "sha256-TUZ8SdQAOV1CaIlDl4uXYVHvdlEkOz6E48S3pUS6UE0=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
