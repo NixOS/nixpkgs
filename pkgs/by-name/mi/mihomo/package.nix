@@ -4,7 +4,7 @@
 }:
 
 buildGoModule rec {
-  pname = "clash-meta";
+  pname = "mihomo";
   version = "1.18.1";
 
   src = fetchFromGitHub {
@@ -31,15 +31,11 @@ buildGoModule rec {
   # network required
   doCheck = false;
 
-  postInstall = ''
-    mv $out/bin/mihomo $out/bin/clash-meta
-  '';
-
   meta = with lib; {
-    description = "A rule-based tunnel in Go. Present named mihomo";
+    description = "A rule-based tunnel in Go, formerly clash-meta";
     homepage = "https://github.com/MetaCubeX/mihomo";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ oluceps ];
-    mainProgram = "clash-meta";
+    mainProgram = "mihomo";
   };
 }
