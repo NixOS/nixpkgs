@@ -9229,7 +9229,12 @@ with pkgs;
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
-  hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
+  hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot {
+    elfutils = elfutils.override {
+      # perfparser needs to find debuginfod.h
+      enableDebuginfod = true;
+    };
+  };
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 

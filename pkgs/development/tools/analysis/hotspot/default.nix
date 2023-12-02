@@ -1,23 +1,22 @@
 { lib
 , mkDerivation
+, fetchFromGitHub
 , cmake
 , elfutils
 , extra-cmake-modules
-, fetchFromGitHub
 , kconfigwidgets
+, kddockwidgets
 , ki18n
 , kio
 , kitemmodels
 , kitemviews
 , kparts
 , kwindowsystem
-, libelf
 , qtbase
-, threadweaver
 , qtx11extras
-, zstd
-, kddockwidgets
 , rustc-demangle
+, threadweaver
+, zstd
 }:
 
 mkDerivation rec {
@@ -36,22 +35,22 @@ mkDerivation rec {
     cmake
     extra-cmake-modules
   ];
+
   buildInputs = [
-    (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
+    elfutils
     kconfigwidgets
+    kddockwidgets
     ki18n
     kio
     kitemmodels
     kitemviews
     kparts
     kwindowsystem
-    libelf
     qtbase
-    threadweaver
     qtx11extras
-    zstd
-    kddockwidgets
     rustc-demangle
+    threadweaver
+    zstd
   ];
 
   # hotspot checks for the presence of third party libraries'
