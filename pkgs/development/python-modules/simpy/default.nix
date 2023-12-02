@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "simpy";
-  version = "4.0.2";
+  version = "4.1.1";
   format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bYrcAinfawL7fibc0TOHA7T09j8WelrCpyE8uAq6RIQ=";
+    sha256 = "sha256-BtB1CniEsR4OjiDOC8fG1O1fF0PUVmlTQNE/3/lQAaY=";
   };
 
   nativeBuildInputs = [
