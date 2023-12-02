@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2023.9.5";
+  version = "2023.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VzOu0gLQcobWQs8uMFzI4CyN+1OVx94VqhJYB+rMpMI=";
+    hash = "sha256-SENrAHCCWYEMWqPQSy61E8bMYkCBJepK5otb7B7UGXA=";
   };
 
   postPatch = ''
