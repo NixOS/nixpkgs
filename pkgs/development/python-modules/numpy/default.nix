@@ -53,14 +53,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.26.1";
+  version = "1.26.2";
   pyproject = true;
   disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-yMbHLUqfgx8yjvsTEmQqHK+vqoiYHZq3Y2jVDQfZPL4=";
+    hash = "sha256-9lc4RHZ2q1d38R5ru9uM4Rt4XhBfaQvEWWZXSBa20+o=";
   };
 
   patches = [
