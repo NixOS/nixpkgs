@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.kroah.com/linux-usb/";
     maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
+    mainProgram = "usbview";
   };
 }
