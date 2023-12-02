@@ -23,7 +23,6 @@
 , beautifulsoup4
 , bottleneck
 , blosc2
-, brotlipy
 , fsspec
 , gcsfs
 , html5lib
@@ -39,7 +38,6 @@
 , pymysql
 , pyqt5
 , pyreadstat
-, python-snappy
 , qtpy
 , s3fs
 , scipy
@@ -63,9 +61,9 @@
 , runtimeShell
 }:
 
-buildPythonPackage rec {
+let pandas = buildPythonPackage rec {
   pname = "pandas";
-  version = "2.1.1";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -74,7 +72,7 @@ buildPythonPackage rec {
     owner = "pandas-dev";
     repo = "pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6SgW4BtO7EFnS8P8LL4AGk5EdPwOQ0+is0wXgqsm9w0=";
+    hash = "sha256-okGYzPJC3mpG+Sq4atjWwLlocUDnpjgGRPmQ+4ehQX0=";
   };
 
   postPatch = ''
@@ -116,8 +114,6 @@ buildPythonPackage rec {
         qtpy
       ];
       compression = [
-        brotlipy
-        python-snappy
         zstandard
       ];
       computation = [
@@ -187,16 +183,23 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
+  doCheck = false; # various infinite recursions
+
+  passthru.tests.pytest = pandas.overridePythonAttrs (_: { doCheck = true; });
+
   nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ]
+  ++ lib.flatten (lib.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (stdenv.isLinux) [
     # for locale executable
     glibc
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ]
+  ++ lib.optionals (stdenv.isDarwin) [
     # for locale executable
     adv_cmds
   ];
@@ -263,4 +266,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ raskin fridh knedlsepp ];
   };
-}
+};
+in pandas
