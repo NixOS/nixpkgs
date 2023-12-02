@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "movermeyer";
     repo = "backports.datetime_fromisoformat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aHF3E/fLN+j/T4W9lvuVSMy6iRSEn+ARWmL01rY+ixs=";
+    hash = "sha256-c3LCTOKva99+x96iLHNnL1e1Ft1M1CsjQX+nEqAlXUs=";
   };
 
   nativeCheckInputs = [
