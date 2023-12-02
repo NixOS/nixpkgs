@@ -18,7 +18,7 @@ callPackage ./generic.nix args {
   latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_1;
 
   # this package should point to the latest release.
-  version = "2.1.12";
+  version = "2.1.14";
 
-  sha256 = "eYUR5d4gpTrlFu6j1uL83DWL9uPGgAUDRdSEb73V5i4=";
+  sha256 = "sha256-RVAoZbV9yclGuN+D37SB6UCRFbbLEpBoyrQOQCVsQwE=";
 }
