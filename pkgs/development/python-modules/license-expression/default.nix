@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "license-expression";
-  version = "30.1.1";
+  version = "30.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "license-expression";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5pRfFRQLxWmhEKoJZiC7gZbmW8BbqBNBWbdwFL0MtpM=";
+    hash = "sha256-vsQsHi2jdB0OiV6stm1APjQvr+238UoKgaaeXVx/isI=";
   };
 
   dontConfigure = true;
