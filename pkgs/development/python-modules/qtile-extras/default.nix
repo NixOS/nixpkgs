@@ -94,10 +94,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # AttributeError: type object 'Activity' has no attribute 'RUN'
-    # https://github.com/NixOS/nixpkgs/issues/271610 
+    # https://github.com/NixOS/nixpkgs/issues/271610
     "test/widget/test_strava.py"
   ];
-  
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
