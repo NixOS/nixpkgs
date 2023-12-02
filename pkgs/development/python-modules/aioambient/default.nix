@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2023.10.1";
+  version = "2023.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Q7jb0tJsbVM2vEqKgjXOWJN2OwR9qLchU/4ShOUGPT4=";
+    hash = "sha256-HAnkKfHo9x5CK1CFYp8ejGeobYN8NL7xPrcnghoNXzs=";
   };
 
   postPatch = ''
