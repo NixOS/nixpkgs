@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "0.10.5";
   format = "setuptools";
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "pytest-pytestrail";

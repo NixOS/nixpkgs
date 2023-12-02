@@ -32,8 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-pJ0zK0upEV7TyuNMIcozugkwBlYpK/Dg6BdB0kBpn9k=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     cython
     oldest-supported-numpy

@@ -36,8 +36,6 @@ buildPythonPackage rec {
       --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];

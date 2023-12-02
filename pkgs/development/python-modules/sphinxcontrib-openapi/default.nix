@@ -33,8 +33,6 @@ buildPythonPackage rec {
     sphinxcontrib-httpdomain
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   doCheck = false;
 
   pythonNamespaces = [ "sphinxcontrib" ];

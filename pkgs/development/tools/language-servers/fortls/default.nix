@@ -21,8 +21,6 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ json5 packaging ];
 
-  preBuild = "export SETUPTOOLS_SCM_PRETEND_VERSION=${version}";
-
   doCheck = true;
   checkPhase = "$out/bin/fortls --help 1>/dev/null";
 

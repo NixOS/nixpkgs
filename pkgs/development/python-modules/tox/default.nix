@@ -39,8 +39,6 @@ buildPythonPackage rec {
       --replace "packaging>=22" "packaging"
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     hatchling
     hatch-vcs

@@ -77,8 +77,6 @@ buildPythonPackage rec {
     cachetools
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeCheckInputs = [
     distributed
     pyinstrument

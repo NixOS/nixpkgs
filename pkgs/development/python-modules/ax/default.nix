@@ -44,8 +44,6 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   checkInputs = [
     hypothesis
     mercurial

@@ -58,8 +58,6 @@ buildPythonPackage rec {
         --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     pkg-config
     setuptools

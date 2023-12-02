@@ -50,8 +50,6 @@ buildPythonPackage rec {
     xvfb-run
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   checkPhase = ''
     # Cannot create directory /homeless-shelter/.... Error: FILE_ERROR_ACCESS_DENIED
     export HOME=$TMPDIR
