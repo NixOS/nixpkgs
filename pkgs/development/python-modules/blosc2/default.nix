@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "2.2.7";
+  version = "2.3.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     repo = "python-blosc2";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-5a94Zm6sYl/nSfkcFbKG7PkyXwLB6bAoIvfaq0yVGHo=";
+    hash = "sha256-tRcyntJlmLPbqnX7nzdBQ/50uXy0fVLb2YGVOIwJjxU=";
   };
 
   postPatch = ''
