@@ -129,6 +129,19 @@
       type = "gem";
     };
     version = "3.4.1";
+    dontBuild = false;
+    patches = [
+      # This patch fixes a duplicated declaration of `g_bookmark_file_get_type`
+      # that has been fixed upstream [1] [2]. Note that the source file paths
+      # in the patch file don't exactly match the upstream repo, which is why
+      # we cannot simply fetch the patch from GitHub.
+      #
+      # Can be removed with v. >= 4.1.2
+      #
+      # [1]: https://github.com/ruby-gnome/ruby-gnome/commit/396d2d377bd85d9bdd73b26210e323129deea1f4
+      # [2]: https://github.com/ruby-gnome/ruby-gnome/issues/1547
+      ./ruby-glib2-fix-duplicated-function-declaration.patch
+    ];
   };
   gobject-introspection = {
     dependencies = ["glib2"];

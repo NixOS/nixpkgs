@@ -1,0 +1,21 @@
+This patch was adapted from:
+https://github.com/ruby-gnome/ruby-gnome/commit/396d2d377bd85d9bdd73b26210e323129deea1f4.patch
+
+--- a/ext/glib2/rbglib_bookmarkfile.c
++++ b/ext/glib2/rbglib_bookmarkfile.c
+@@ -21,6 +21,7 @@
+ 
+ #include "rbgprivate.h"
+ 
++#ifndef G_TYPE_BOOKMARK_FILE
+ /************************************************/
+ static GBookmarkFile*
+ bookmarkfile_copy(const GBookmarkFile* file)
+@@ -48,6 +49,7 @@ g_bookmark_file_get_type(void)
+ /************************************************/
+ 
+ #define G_TYPE_BOOKMARK_FILE (g_bookmark_file_get_type())
++#endif
+ 
+ #define RG_TARGET_NAMESPACE cBookmarkFile
+ #define _SELF(self) ((GBookmarkFile*)(RVAL2BOXED(self, G_TYPE_BOOKMARK_FILE)))
