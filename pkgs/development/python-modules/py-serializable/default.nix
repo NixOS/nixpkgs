@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "py-serializable";
-  version = "0.15.0";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "serializable";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U01XRT6XS0Uxpk+2pYOGAkZiZ5kogMBtcuEU1OJpSMo=";
+    hash = "sha256-javjmdFQBxg/yqa6lsxKK18DgvVu/YmqvaWo2Upgzqs=";
   };
 
   nativeBuildInputs = [
