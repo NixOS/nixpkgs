@@ -46,19 +46,13 @@ buildPythonPackage (
       pkg-config
       libsForQt5.qmake
       libsForQt5.wrapQtAppsHook
+      pyqt-builder
+      setuptools
     ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ sip ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       python.pythonOnBuildForHost.pkgs.sip
     ]
-    ++ [
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      libsForQt5.qtwebengine
-      pyqt-builder
-      setuptools
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ libsForQt5.qtdeclarative ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       autoSignDarwinBinariesHook
     ];
@@ -68,10 +62,6 @@ buildPythonPackage (
       libsForQt5.qtbase
       libsForQt5.qtsvg
       libsForQt5.qtwebengine
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      libsForQt5.qtwebchannel
-      libsForQt5.qtdeclarative
     ];
 
     propagatedBuildInputs = [ pyqt5 ];
@@ -101,12 +91,5 @@ buildPythonPackage (
       license = lib.licenses.gpl3;
       hydraPlatforms = lib.lists.intersectLists libsForQt5.qtwebengine.meta.platforms mesa.meta.platforms;
     };
-  }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-    # TODO: figure out why the env hooks aren't adding these inclusions automatically
-    env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-      "-I${lib.getDev libsForQt5.qtbase}/include/QtPrintSupport/"
-      "-I${lib.getDev libsForQt5.qtwebchannel}/include/QtWebChannel/"
-    ];
   }
 )
