@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "portalocker";
-  version = "2.7.0";
+  version = "2.8.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ay6B1TSojsFzbQP3gLoHPwR6BsR4sG4pN0hvM06VXFE=";
+    hash = "sha256-KwNap4KORsWOmzE5DuHxabmOEGarELmmqGH+fiXuTzM=";
   };
 
   propagatedBuildInputs = [
