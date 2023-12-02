@@ -7,6 +7,69 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
 
+  # This uses ZFS test suite.
+  makeZfsTestSuite = name: { zfsPackage, kernelPackage ? null, enableSystemdStage1 ? false, extraTest ? "" }:
+  makeTest {
+    name = "zfs-testsuite-" + name;
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [
+        # Only for ZFS 2.1.x series.
+        raitobezarius
+      ];
+    };
+
+    nodes.machine = { config, pkgs, lib, ... }: {
+      virtualisation = {
+        # ZFS tests ask for 3 disks at least.
+        emptyDiskImages = [ 4096 4096 4096 ];
+        # We don't need our own disk.
+        diskImage = null;
+        # During allocation tests, you need more than 768MiB.
+        memorySize = 4096;
+      };
+      networking.hostId = "deadbeef";
+      # Always test the latest kernel for the test suite.
+      boot.kernelPackages = zfsPackage.latestCompatibleLinuxPackages;
+      boot.zfs.package = zfsPackage;
+      boot.supportedFilesystems = [ "zfs" ];
+      boot.initrd.systemd.enable = enableSystemdStage1;
+      users.users.tester = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" ];
+      };
+      security.sudo.wheelNeedsPassword = false;
+      environment.systemPackages = [
+        pkgs.ksh
+        pkgs.openssl
+        pkgs.nettools
+        pkgs.file
+        pkgs.fio
+        pkgs.bc
+        pkgs.python3
+        pkgs.sysstat
+        pkgs.pamtester
+        pkgs.linuxquota
+        pkgs.gcc
+        pkgs.execline
+        pkgs.nfs-utils
+        pkgs.lsscsi
+        pkgs.parted
+        pkgs.samba
+        pkgs.pax
+        pkgs.dmidecode
+        pkgs.libselinux
+        (config.boot.kernelPackages.perf)
+      ];
+    };
+
+    testScript = ''
+      machine.wait_for_unit("multi-user.target")
+      print(machine.succeed(
+        'DISKS="vda vdb vdc" sudo --preserve-env=DISKS --user tester ${zfsPackage.testsuiteTools}/share/zfs/zfs-tests.sh -v'
+      ))
+    '';
+  };
+
   makeZfsTest = name:
     { kernelPackage ? if enableUnstable
                       then pkgs.zfsUnstable.latestCompatibleLinuxPackages
@@ -197,6 +260,10 @@ in {
   # maintainer: @raitobezarius
   series_2_1 = makeZfsTest "2.1-series" {
     zfsPackage = pkgs.zfs_2_1;
+  };
+  series_2_1_testsuite = makeZfsTestSuite "2.1-series" {
+    zfsPackage = pkgs.zfs_2_1;
+    kernelPackage = pkgs.linuxPackages_6_7;
   };
 
   stable = makeZfsTest "stable" { };
