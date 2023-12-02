@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "bids-validator";
-  version = "1.13.1";
+  version = "1.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cgXOTmj7oXIhUzLHhvGsFmUCW3Arbf8rHhWPAKLfmJA=";
+    hash = "sha256-M7D4ZcGqPjn7klGN8WP6a3lHjRqhAq9S/VNwSl7y6kY=";
   };
 
   # needs packages which are not available in nixpkgs
