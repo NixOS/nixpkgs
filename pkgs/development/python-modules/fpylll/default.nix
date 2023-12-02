@@ -1,29 +1,41 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
+
+# build-system
+, cysignals
+, cython_3
 , pkgconfig
+, setuptools
+
 , gmp
 , pari
 , mpfr
 , fplll
-, cython
-, cysignals
 , numpy
-, pytest
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.9";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
-    rev = version;
-    hash = "sha256-T6l6hKzRDevlLyLu5H+bnEdl0OhsPer1coCDiftbPAk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-EyReCkVRb3CgzIRal5H13OX/UdwWi+evDe7PoS1qP4A=";
   };
+
+  nativeBuildInputs = [
+    cython_3
+    cysignals
+    pkgconfig
+    setuptools
+  ];
 
   buildInputs = [
     gmp
@@ -33,25 +45,19 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython
-    cysignals
     numpy
   ];
 
-  nativeBuildInputs = [
-    pkgconfig
-  ];
-
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # Since upstream introduced --doctest-modules in
     # https://github.com/fplll/fpylll/commit/9732fdb40cf1bd43ad1f60762ec0a8401743fc79,
     # it is necessary to ignore import mismatches. Not sure why, but the files
     # should be identical anyway.
-    PY_IGNORE_IMPORTMISMATCH=1 pytest
+    export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
   meta = with lib; {
