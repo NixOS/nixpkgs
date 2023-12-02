@@ -46,6 +46,12 @@ in stdenv.mkDerivation rec {
     "release"
   ];
 
+  preBuild = ''
+        cd vendor/stb/src
+        make
+        cd ../../..
+  '';
+
   installPhase = ''
     runHook preInstall
 
