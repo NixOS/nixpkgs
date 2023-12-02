@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyavm";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchPypi {
     pname = "PyAVM";
     inherit version;
-    hash = "sha256-gV78ypvYwohHmdjP3lN5F97PfmxuV91tvw5gsYeZ7i8=";
+    hash = "sha256-s7eLPoAHDbY9tPt3RA5zJg+NuTtVV/SqpUUR3NrG8m0=";
   };
 
   propagatedBuildInputs = [
