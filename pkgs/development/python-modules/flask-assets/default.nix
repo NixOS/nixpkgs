@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "flask-assets";
-  version = "2.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     pname = "Flask-Assets";
     inherit version;
-    hash = "sha256-Hf3qNeQHRNRqracoMfdhPWe/OOiyDMqqnpH9w3qjuMI=";
+    hash = "sha256-+E1lMv/lnJ/zUoheh0D/TaJcC8+s2AXwqAaBXkQ1SBM=";
   };
 
   patchPhase = ''
