@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.9.2";
+  version = "0.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dg/Yfp5GzmyUMI6feAwgP+g22JYoQE+L9a+Wp0V77Rw=";
+    hash = "sha256-+DeOqQ0R+XUlkuSHySFj2oDZqf85mT64PAi/LtTso3I=";
   };
 
   nativeBuildInputs = [ setuptools ];
