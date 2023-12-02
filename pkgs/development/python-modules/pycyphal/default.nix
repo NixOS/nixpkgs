@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pycyphal";
-  version = "1.15.2";
+  version = "1.15.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KVX+DwcJp1sjpcG1Utl9me1LwWDZPof+O6hoUt1xlXA=";
+    hash = "sha256-0Mp8d/rNOOPLg0gUPWdOgp/d5n148dxcLceW1VtjrkQ=";
   };
 
   propagatedBuildInputs = [
