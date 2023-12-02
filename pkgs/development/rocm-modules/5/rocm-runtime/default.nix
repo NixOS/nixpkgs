@@ -2,16 +2,16 @@
 , stdenv
 , fetchFromGitHub
 , rocmUpdateScript
-, pkg-config
 , cmake
-, xxd
+, elfutils
+, libdrm
+, libxml2
+, numactl
+, pkg-config
 , rocm-device-libs
 , rocm-thunk
-, libelf
-, libdrm
-, numactl
 , valgrind
-, libxml2
+, xxd
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-thunk
-    libelf
+    elfutils
     libdrm
-    numactl
-    valgrind
     libxml2
+    numactl
+    rocm-thunk
+    valgrind
   ];
 
   postPatch = ''
