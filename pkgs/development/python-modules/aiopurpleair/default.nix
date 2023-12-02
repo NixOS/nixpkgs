@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aiopurpleair";
-  version = "2022.12.1";
+  version = "2023.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+    hash = "sha256-SNgdz3pnPyEH9qIi+aTBbEG6YBIXpwPYZuNJ4dEPLW8=";
   };
 
   patches = [
