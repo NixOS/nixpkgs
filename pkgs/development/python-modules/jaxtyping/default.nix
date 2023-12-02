@@ -16,14 +16,14 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.23";
+    version = "0.2.24";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jaxtyping";
       rev = "refs/tags/v${version}";
-      hash = "sha256-22dIuIjFgqRmV9AQok02skVt7fm17/WpzBm3FrJ6/zs=";
+      hash = "sha256-AMXMsaIhvg9pJOQSjO1+DuF9ttwQqiHGLrcoegWGnGA=";
     };
 
     nativeBuildInputs = [
