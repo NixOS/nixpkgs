@@ -1,0 +1,80 @@
+From 45b123993c7b3b0f0c23efa53cd54fe796141895 Mon Sep 17 00:00:00 2001
+From: Ryan Lahfa <ryan@lahfa.xyz>
+Date: Sun, 26 Nov 2023 14:17:57 +0100
+Subject: [PATCH] linux 6.7: use new shrinker APIs
+
+since f2383e01507eeee8a1c1283d61a117a97d6c4ebe, some shrinker APIs have been moved.
+---
+ config/kernel-shrink.m4 | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/config/kernel-shrink.m4 b/config/kernel-shrink.m4
+index 0c702153e..4a5824ea4 100644
+--- a/config/kernel-shrink.m4
++++ b/config/kernel-shrink.m4
+@@ -11,10 +11,15 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_SUPER_BLOCK_S_SHRINK], [
+ 		int shrink(struct shrinker *s, struct shrink_control *sc)
+ 		    { return 0; }
+ 
++		static const struct shrinker
++			shrinker __attribute__ ((unused)) = {
++				.seeks = DEFAULT_SEEKS,
++				.batch = 0
++		};
++
+ 		static const struct super_block
+ 		    sb __attribute__ ((unused)) = {
+-			.s_shrink.seeks = DEFAULT_SEEKS,
+-			.s_shrink.batch = 0,
++			.s_shrink = &shrinker
+ 		};
+ 	],[])
+ ])
+@@ -35,7 +40,7 @@ dnl # NUMA-aware shrinkers.
+ dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_SRC_SHRINK_CONTROL_HAS_NID], [
+ 	ZFS_LINUX_TEST_SRC([shrink_control_nid], [
+-		#include <linux/fs.h>
++		#include <linux/shrinker.h>
+ 	],[
+ 		struct shrink_control sc __attribute__ ((unused));
+ 		unsigned long scnidsize __attribute__ ((unused)) =
+@@ -56,7 +61,7 @@ AC_DEFUN([ZFS_AC_KERNEL_SHRINK_CONTROL_HAS_NID], [
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_SRC_REGISTER_SHRINKER_VARARG], [
+ 	ZFS_LINUX_TEST_SRC([register_shrinker_vararg], [
+-		#include <linux/mm.h>
++		#include <linux/shrinker.h>
+ 		unsigned long shrinker_cb(struct shrinker *shrink,
+ 		    struct shrink_control *sc) { return 0; }
+ 	],[
+@@ -71,7 +76,7 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_REGISTER_SHRINKER_VARARG], [
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_SRC_SHRINKER_CALLBACK], [
+ 	ZFS_LINUX_TEST_SRC([shrinker_cb_shrink_control], [
+-		#include <linux/mm.h>
++		#include <linux/shrinker.h>
+ 		int shrinker_cb(struct shrinker *shrink,
+ 		    struct shrink_control *sc) { return 0; }
+ 	],[
+@@ -83,7 +88,7 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_SHRINKER_CALLBACK], [
+ 	])
+ 
+ 	ZFS_LINUX_TEST_SRC([shrinker_cb_shrink_control_split], [
+-		#include <linux/mm.h>
++		#include <linux/shrinker.h>
+ 		unsigned long shrinker_cb(struct shrinker *shrink,
+ 		    struct shrink_control *sc) { return 0; }
+ 	],[
+@@ -152,7 +157,7 @@ dnl # Shrinker adjust to use common shrink_control structure.
+ dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_SRC_SHRINK_CONTROL_STRUCT], [
+ 	ZFS_LINUX_TEST_SRC([shrink_control_struct], [
+-		#include <linux/mm.h>
++		#include <linux/shrinker.h>
+ 	],[
+ 		struct shrink_control sc __attribute__ ((unused));
+ 
+-- 
+2.42.0
+

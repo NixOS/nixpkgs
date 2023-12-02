@@ -1,0 +1,125 @@
+From 9ca49b56a8954ab72f9805828545f4bdfecbef68 Mon Sep 17 00:00:00 2001
+From: Ryan Lahfa <ryan@lahfa.xyz>
+Date: Sat, 2 Dec 2023 13:30:32 +0100
+Subject: [PATCH 3/4] linux: support the new generic_fillattr with request
+ masks
+
+---
+ config/kernel-generic_fillattr.m4          | 40 ++++++++++++++++------
+ include/os/linux/kernel/linux/vfs_compat.h | 17 ++++++---
+ module/os/linux/zfs/zfs_vnops_os.c         |  2 +-
+ 3 files changed, 44 insertions(+), 15 deletions(-)
+
+diff --git a/config/kernel-generic_fillattr.m4 b/config/kernel-generic_fillattr.m4
+index 02dee4d4c..272eae1f0 100644
+--- a/config/kernel-generic_fillattr.m4
++++ b/config/kernel-generic_fillattr.m4
+@@ -7,6 +7,9 @@ dnl #
+ dnl # 6.3 API
+ dnl # generic_fillattr() now takes struct mnt_idmap* as the first argument
+ dnl #
++dnl # 6.7 API
++dnl # generic_fillattr() now takes a u32 request mask as the second argument
++dnl #
+ AC_DEFUN([ZFS_AC_KERNEL_SRC_GENERIC_FILLATTR], [
+ 	ZFS_LINUX_TEST_SRC([generic_fillattr_userns], [
+ 		#include <linux/fs.h>
+@@ -25,22 +28,39 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_GENERIC_FILLATTR], [
+ 		struct kstat *k = NULL;
+ 		generic_fillattr(idmap, in, k);
+ 	])
++
++	ZFS_LINUX_TEST_SRC([generic_fillattr_mnt_idmap_with_mask], [
++		#include <linux/fs.h>
++	],[
++		struct mnt_idmap *idmap = NULL;
++		struct inode *in = NULL;
++		struct kstat *k = NULL;
++		generic_fillattr(idmap, 0x0, in, k);
++	])
+ ])
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_GENERIC_FILLATTR], [
+-	AC_MSG_CHECKING([whether generic_fillattr requires struct mnt_idmap*])
+-	ZFS_LINUX_TEST_RESULT([generic_fillattr_mnt_idmap], [
++	AC_MSG_CHECKING([whether generic_fillattr requires a request mask and a struct mnt_idmap*])
++	ZFS_LINUX_TEST_RESULT([generic_fillattr_mnt_idmap_with_mask], [
+ 		AC_MSG_RESULT([yes])
+-		AC_DEFINE(HAVE_GENERIC_FILLATTR_IDMAP, 1,
+-		    [generic_fillattr requires struct mnt_idmap*])
+-	],[
+-		AC_MSG_CHECKING([whether generic_fillattr requires struct user_namespace*])
+-		ZFS_LINUX_TEST_RESULT([generic_fillattr_userns], [
++		AC_DEFINE(HAVE_GENERIC_FILLATTR_IDMAP_WITH_MASK, 1,
++			[generic_fillattr requires struct mnt_idmap* and a u32 request mask])
++	], [
++		AC_MSG_RESULT([no])
++		AC_MSG_CHECKING([whether generic_fillattr requires only struct mnt_idmap*])
++		ZFS_LINUX_TEST_RESULT([generic_fillattr_mnt_idmap], [
+ 			AC_MSG_RESULT([yes])
+-			AC_DEFINE(HAVE_GENERIC_FILLATTR_USERNS, 1,
+-			    [generic_fillattr requires struct user_namespace*])
++			AC_DEFINE(HAVE_GENERIC_FILLATTR_IDMAP, 1,
++					[generic_fillattr requires only struct mnt_idmap*])
+ 		],[
+-			AC_MSG_RESULT([no])
++			AC_MSG_CHECKING([whether generic_fillattr requires struct user_namespace*])
++			ZFS_LINUX_TEST_RESULT([generic_fillattr_userns], [
++				AC_MSG_RESULT([yes])
++				AC_DEFINE(HAVE_GENERIC_FILLATTR_USERNS, 1,
++						[generic_fillattr requires struct user_namespace*])
++			],[
++				AC_MSG_RESULT([no])
++			])
+ 		])
+ 	])
+ ])
+diff --git a/include/os/linux/kernel/linux/vfs_compat.h b/include/os/linux/kernel/linux/vfs_compat.h
+index e82bbf755..d278d3b75 100644
+--- a/include/os/linux/kernel/linux/vfs_compat.h
++++ b/include/os/linux/kernel/linux/vfs_compat.h
+@@ -464,15 +464,24 @@ zpl_is_32bit_api(void)
+  * 6.3 API change
+  * generic_fillattr() first arg is changed to struct mnt_idmap *
+  *
++ * 6.7 API change
++ * generic_fillattr() second arg is now a u32 request mask to filter
++ * the attributes to fill.
++ *
+  */
+-#ifdef HAVE_GENERIC_FILLATTR_IDMAP
+-#define	zpl_generic_fillattr(idmap, ip, sp)	\
++#if defined(HAVE_GENERIC_FILLATTR_IDMAP_WITH_MASK)
++#define zpl_generic_fillattr(idmap, request_mask, ip, sp) \
++	generic_fillattr(idmap, request_mask, ip, sp)
++#elif defined(HAVE_GENERIC_FILLATTR_IDMAP)
++#define	zpl_generic_fillattr(idmap, request_mask, ip, sp)	\
+     generic_fillattr(idmap, ip, sp)
+ #elif defined(HAVE_GENERIC_FILLATTR_USERNS)
+-#define	zpl_generic_fillattr(user_ns, ip, sp)	\
++#define	zpl_generic_fillattr(user_ns, request_mask, ip, sp)	\
+     generic_fillattr(user_ns, ip, sp)
+ #else
+-#define	zpl_generic_fillattr(user_ns, ip, sp)	generic_fillattr(ip, sp)
++#define	zpl_generic_fillattr(user_ns, request_mask, ip, sp)	generic_fillattr(ip, sp)
++/* Introduced in 4.11 with the statx system call */
++#define STATX_BASIC_STATS        0x000007ffU
+ #endif
+ 
+ #endif /* _ZFS_VFS_H */
+diff --git a/module/os/linux/zfs/zfs_vnops_os.c b/module/os/linux/zfs/zfs_vnops_os.c
+index 56d998255..2363ee691 100644
+--- a/module/os/linux/zfs/zfs_vnops_os.c
++++ b/module/os/linux/zfs/zfs_vnops_os.c
+@@ -1687,7 +1687,7 @@ zfs_getattr_fast(zidmap_t *user_ns, struct inode *ip, struct kstat *sp)
+ 
+ 	mutex_enter(&zp->z_lock);
+ 
+-	zpl_generic_fillattr(user_ns, ip, sp);
++	zpl_generic_fillattr(user_ns, STATX_BASIC_STATS, ip, sp);
+ 	/*
+ 	 * +1 link count for root inode with visible '.zfs' directory.
+ 	 */
+-- 
+2.42.0
+

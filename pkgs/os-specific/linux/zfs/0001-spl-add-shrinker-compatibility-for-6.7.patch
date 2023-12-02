@@ -1,0 +1,371 @@
+From cf469211b3efba9a5b06cd771ad0964b20531561 Mon Sep 17 00:00:00 2001
+From: Ryan Lahfa <ryan@lahfa.xyz>
+Date: Fri, 1 Dec 2023 22:21:05 +0100
+Subject: [PATCH 1/4] spl: add shrinker compatibility for 6.7+
+
+---
+ config/kernel-shrink.m4             | 137 +++++++++++++++++++++-------
+ include/os/linux/spl/sys/shrinker.h |  33 ++++++-
+ module/os/linux/spl/Makefile.in     |   1 +
+ module/os/linux/spl/spl-shrinker.c  |  62 +++++++++++++
+ module/os/linux/zfs/zfs_vfsops.c    |   7 +-
+ 5 files changed, 201 insertions(+), 39 deletions(-)
+ create mode 100644 module/os/linux/spl/spl-shrinker.c
+
+diff --git a/config/kernel-shrink.m4 b/config/kernel-shrink.m4
+index 0c702153e..b6a7700f2 100644
+--- a/config/kernel-shrink.m4
++++ b/config/kernel-shrink.m4
+@@ -11,20 +11,55 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_SUPER_BLOCK_S_SHRINK], [
+ 		int shrink(struct shrinker *s, struct shrink_control *sc)
+ 		    { return 0; }
+ 
++		static struct shrinker
++			shrinker = {
++				.seeks = DEFAULT_SEEKS,
++				.batch = 0
++		};
++		static const struct super_block
++		    sb __attribute__ ((unused)) = {
++			.s_shrink = shrinker
++		};
++	],[])
++
++dnl #
++dnl # 6.7 API change
++dnl # s_shrink is now a pointer.
++dnl #
++	ZFS_LINUX_TEST_SRC([super_block_s_shrink_ptr], [
++		#include <linux/fs.h>
++
++		int shrink(struct shrinker *s, struct shrink_control *sc)
++		    { return 0; }
++
++		static struct shrinker
++			shrinker = {
++				.seeks = DEFAULT_SEEKS,
++				.batch = 0
++		};
+ 		static const struct super_block
+ 		    sb __attribute__ ((unused)) = {
+-			.s_shrink.seeks = DEFAULT_SEEKS,
+-			.s_shrink.batch = 0,
++			.s_shrink = &shrinker
+ 		};
+ 	],[])
+ ])
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_SUPER_BLOCK_S_SHRINK], [
+-	AC_MSG_CHECKING([whether super_block has s_shrink])
+-	ZFS_LINUX_TEST_RESULT([super_block_s_shrink], [
++	AC_MSG_CHECKING([whether super_block has s_shrink as a pointer])
++	ZFS_LINUX_TEST_RESULT([super_block_s_shrink_ptr], [
+ 		AC_MSG_RESULT(yes)
++		AC_DEFINE(HAVE_SHRINKER_AS_POINTER_IN_SUPER_BLOCK, 1,
++			[sb->s_shrink-> is valid])
+ 	],[
+-		ZFS_LINUX_TEST_ERROR([sb->s_shrink()])
++		AC_MSG_RESULT(no)
++		AC_MSG_CHECKING([whether super_block has s_shrink as a value])
++		ZFS_LINUX_TEST_RESULT([super_block_s_shrink], [
++			AC_MSG_RESULT(yes)
++			AC_DEFINE(HAVE_SHRINKER_AS_VALUE_IN_SUPER_BLOCK, 1,
++			[sb->s_shrink. is valid])
++		], [
++			ZFS_LINUX_TEST_ERROR([sb->s_shrink was not found])
++		])
+ 	])
+ ])
+ 
+@@ -96,51 +131,84 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_SHRINKER_CALLBACK], [
+ 	])
+ ])
+ 
++dnl #
++dnl # 6.7 API change
++dnl # register_shrinker(), free_shrinker() have disappeared
++dnl # in favor of shrinker_register, shrinker_free, shrinker_alloc.
++dnl #
++AC_DEFUN([ZFS_AC_KERNEL_SRC_DYNAMIC_ALLOC_OF_SHRINKERS], [
++	ZFS_LINUX_TEST_SRC([shrinker_alloc_api], [
++		#include <linux/shrinker.h>
++	],[
++		struct shrinker *shrinker;
++		shrinker = shrinker_alloc(0, "test-shrinker");
++		shrinker_register(shrinker);
++		shrinker_free(shrinker);
++	])
++])
++
+ AC_DEFUN([ZFS_AC_KERNEL_SHRINKER_CALLBACK],[
+ 	dnl #
+-	dnl # 6.0 API change
+-	dnl # register_shrinker() becomes a var-arg function that takes
+-	dnl # a printf-style format string as args > 0
++	dnl # 6.7 API change
++	dnl # register_shrinker(), free_shrinker() have disappeared
++	dnl # in favor of shrinker_register, shrinker_free, shrinker_alloc.
+ 	dnl #
+-	AC_MSG_CHECKING([whether new var-arg register_shrinker() exists])
+-	ZFS_LINUX_TEST_RESULT([register_shrinker_vararg], [
++	AC_MSG_CHECKING([whether the new shrinker API (dynamic allocations) exists])
++	ZFS_LINUX_TEST_RESULT([shrinker_alloc_api], [
+ 		AC_MSG_RESULT(yes)
+-		AC_DEFINE(HAVE_REGISTER_SHRINKER_VARARG, 1,
+-		    [register_shrinker is vararg])
+-
++		AC_DEFINE(HAVE_DYNAMIC_ALLOCATED_SHRINKER, 1, [shrinkers are dynamically allocated])
+ 		dnl # We assume that the split shrinker callback exists if the
+-		dnl # vararg register_shrinker() exists, because the latter is
+-		dnl # a much more recent addition, and the macro test for the
+-		dnl # var-arg version only works if the callback is split
++		dnl # dynamic allocation API exists, because the latter is
++		dnl # a much more recent addition.
+ 		AC_DEFINE(HAVE_SPLIT_SHRINKER_CALLBACK, 1,
+ 			[cs->count_objects exists])
+-	],[
++	], [
+ 		AC_MSG_RESULT(no)
+ 		dnl #
+-		dnl # 3.0 - 3.11 API change
+-		dnl # cs->shrink(struct shrinker *, struct shrink_control *sc)
++		dnl # 6.0 API change
++		dnl # register_shrinker() becomes a var-arg function that takes
++		dnl # a printf-style format string as args > 0
+ 		dnl #
+-		AC_MSG_CHECKING([whether new 2-argument shrinker exists])
+-		ZFS_LINUX_TEST_RESULT([shrinker_cb_shrink_control], [
++		AC_MSG_CHECKING([whether new var-arg register_shrinker() exists])
++		ZFS_LINUX_TEST_RESULT([register_shrinker_vararg], [
+ 			AC_MSG_RESULT(yes)
+-			AC_DEFINE(HAVE_SINGLE_SHRINKER_CALLBACK, 1,
+-				[new shrinker callback wants 2 args])
++			AC_DEFINE(HAVE_REGISTER_SHRINKER_VARARG, 1,
++					[register_shrinker is vararg])
++
++			dnl # We assume that the split shrinker callback exists if the
++			dnl # vararg register_shrinker() exists, because the latter is
++			dnl # a much more recent addition, and the macro test for the
++			dnl # var-arg version only works if the callback is split
++			AC_DEFINE(HAVE_SPLIT_SHRINKER_CALLBACK, 1,
++				[cs->count_objects exists])
+ 		],[
+ 			AC_MSG_RESULT(no)
+-
+ 			dnl #
+-			dnl # 3.12 API change,
+-			dnl # cs->shrink() is logically split in to
+-			dnl # cs->count_objects() and cs->scan_objects()
++			dnl # 3.0 - 3.11 API change
++			dnl # cs->shrink(struct shrinker *, struct shrink_control *sc)
+ 			dnl #
+-			AC_MSG_CHECKING([if cs->count_objects callback exists])
+-			ZFS_LINUX_TEST_RESULT(
+-				[shrinker_cb_shrink_control_split],[
+-					AC_MSG_RESULT(yes)
+-					AC_DEFINE(HAVE_SPLIT_SHRINKER_CALLBACK, 1,
+-						[cs->count_objects exists])
++			AC_MSG_CHECKING([whether new 2-argument shrinker exists])
++			ZFS_LINUX_TEST_RESULT([shrinker_cb_shrink_control], [
++				AC_MSG_RESULT(yes)
++				AC_DEFINE(HAVE_SINGLE_SHRINKER_CALLBACK, 1,
++					[new shrinker callback wants 2 args])
+ 			],[
+-					ZFS_LINUX_TEST_ERROR([shrinker])
++				AC_MSG_RESULT(no)
++
++				dnl #
++				dnl # 3.12 API change,
++				dnl # cs->shrink() is logically split in to
++				dnl # cs->count_objects() and cs->scan_objects()
++				dnl #
++				AC_MSG_CHECKING([if cs->count_objects callback exists])
++				ZFS_LINUX_TEST_RESULT(
++					[shrinker_cb_shrink_control_split],[
++						AC_MSG_RESULT(yes)
++						AC_DEFINE(HAVE_SPLIT_SHRINKER_CALLBACK, 1,
++							[cs->count_objects exists])
++				],[
++						ZFS_LINUX_TEST_ERROR([shrinker])
++				])
+ 			])
+ 		])
+ 	])
+@@ -178,6 +246,7 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_SHRINKER], [
+ 	ZFS_AC_KERNEL_SRC_SHRINKER_CALLBACK
+ 	ZFS_AC_KERNEL_SRC_SHRINK_CONTROL_STRUCT
+ 	ZFS_AC_KERNEL_SRC_REGISTER_SHRINKER_VARARG
++	ZFS_AC_KERNEL_SRC_DYNAMIC_ALLOC_OF_SHRINKERS
+ ])
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_SHRINKER], [
+diff --git a/include/os/linux/spl/sys/shrinker.h b/include/os/linux/spl/sys/shrinker.h
+index d472754be..67b875d9c 100644
+--- a/include/os/linux/spl/sys/shrinker.h
++++ b/include/os/linux/spl/sys/shrinker.h
+@@ -64,12 +64,24 @@
+  * }
+  */
+ 
+-#ifdef HAVE_REGISTER_SHRINKER_VARARG
++#if defined(HAVE_DYNAMIC_ALLOCATED_SHRINKER)
++/* Wrapper functions
++ * for shrinkers
++ */
++
++typedef void (*shrinker_initializer)(struct shrinker *shrink);
++void spl_dynamic_register_shrinker(struct shrinker **s, shrinker_initializer initializer);
++void spl_unregister_shrinker(struct shrinker **s);
++
++#define _spl_register_shrinker(x, initializer)	spl_dynamic_register_shrinker(x, initializer)
++#define spl_register_shrinker(x)		_spl_register_shrinker(x, x ## _initialize_shrinker)
++#elif defined(HAVE_REGISTER_SHRINKER_VARARG)
+ #define	spl_register_shrinker(x)	register_shrinker(x, "zfs-arc-shrinker")
++#define	spl_unregister_shrinker(x)	unregister_shrinker(x)
+ #else
+ #define	spl_register_shrinker(x)	register_shrinker(x)
+-#endif
+ #define	spl_unregister_shrinker(x)	unregister_shrinker(x)
++#endif
+ 
+ /*
+  * Linux 3.0 to 3.11 Shrinker API Compatibility.
+@@ -92,17 +104,30 @@ static struct shrinker varname = {					\
+ 
+ #define	SHRINK_STOP	(-1)
+ 
++/*
++ * Linux 6.7 and later Shrinker API Compatibility.
++ */
++#elif defined(HAVE_DYNAMIC_ALLOCATED_SHRINKER)
++#define SPL_SHRINKER_DECLARE(varname, countfunc, scanfunc, seek_cost)   \
++static void								\
++varname ## _initialize_shrinker(struct shrinker *shrink)		\
++{									\
++	shrink->count_objects = countfunc;				\
++	shrink->scan_objects = scanfunc;				\
++	shrink->seeks = seek_cost;					\
++}									\
++static struct shrinker* varname = NULL				        \
++
+ /*
+  * Linux 3.12 and later Shrinker API Compatibility.
+  */
+-#elif defined(HAVE_SPLIT_SHRINKER_CALLBACK)
++#elif defined(HAVE_SPLIT_SHRINKER_CALLBACK) && !defined(HAVE_DYNAMIC_ALLOCATED_SHRINKER)
+ #define	SPL_SHRINKER_DECLARE(varname, countfunc, scanfunc, seek_cost)	\
+ static struct shrinker varname = {					\
+ 	.count_objects = countfunc,					\
+ 	.scan_objects = scanfunc,					\
+ 	.seeks = seek_cost,						\
+ }
+-
+ #else
+ /*
+  * Linux 2.x to 2.6.22, or a newer shrinker API has been introduced.
+diff --git a/module/os/linux/spl/Makefile.in b/module/os/linux/spl/Makefile.in
+index b2325f91b..b44767cfe 100644
+--- a/module/os/linux/spl/Makefile.in
++++ b/module/os/linux/spl/Makefile.in
+@@ -15,3 +15,4 @@ $(MODULE)-objs += ../os/linux/spl/spl-tsd.o
+ $(MODULE)-objs += ../os/linux/spl/spl-vmem.o
+ $(MODULE)-objs += ../os/linux/spl/spl-xdr.o
+ $(MODULE)-objs += ../os/linux/spl/spl-zlib.o
++$(MODULE)-objs += ../os/linux/spl/spl-shrinker.o
+diff --git a/module/os/linux/spl/spl-shrinker.c b/module/os/linux/spl/spl-shrinker.c
+new file mode 100644
+index 000000000..970a2569f
+--- /dev/null
++++ b/module/os/linux/spl/spl-shrinker.c
+@@ -0,0 +1,62 @@
++/*
++ *  Copyright (C) 2023 Ryan Lahfa
++ *  Written by Ryan Lahfa <ryan@lahfa.xyz>.
++ *  UCRL-CODE-235197
++ *
++ *  This file is part of the SPL, Solaris Porting Layer.
++ *
++ *  The SPL is free software; you can redistribute it and/or modify it
++ *  under the terms of the GNU General Public License as published by the
++ *  Free Software Foundation; either version 2 of the License, or (at your
++ *  option) any later version.
++ *
++ *  The SPL is distributed in the hope that it will be useful, but WITHOUT
++ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
++ *  for more details.
++ *
++ *  You should have received a copy of the GNU General Public License along
++ *  with the SPL.  If not, see <http://www.gnu.org/licenses/>.
++ *
++ *  Solaris Porting Layer (SPL) Atomic Implementation.
++ */
++
++#include <linux/mm.h>
++#include <linux/shrinker.h>
++#include <sys/shrinker.h>
++
++#if defined(HAVE_DYNAMIC_ALLOCATED_SHRINKER)
++
++/* Perform a dynamic allocation to create
++ * the shrinker (assumes it's freed and NULL)
++ * then initialize it according to the initialization function
++ * then register it in the shrinker subsystem.
++ */
++void
++spl_dynamic_register_shrinker(struct shrinker **s, shrinker_initializer initializer)
++{
++	*s = shrinker_alloc(0, "zfs-arc-shrinker");
++	if (!*s)
++	{
++		/* log an error */
++		return;
++	}
++	/*
++	 * We initialize the shrinker functions (seeks, count_objects, scan_objects)
++	 * before registering it.
++	 */
++	initializer(*s);
++	shrinker_register(*s);
++}
++EXPORT_SYMBOL(spl_dynamic_register_shrinker);
++
++void
++spl_unregister_shrinker(struct shrinker **s)
++{
++	if (*s == NULL) return;
++	shrinker_free(*s);
++	*s = NULL;
++}
++EXPORT_SYMBOL(spl_unregister_shrinker);
++
++#endif
+diff --git a/module/os/linux/zfs/zfs_vfsops.c b/module/os/linux/zfs/zfs_vfsops.c
+index e620eb43a..815324636 100644
+--- a/module/os/linux/zfs/zfs_vfsops.c
++++ b/module/os/linux/zfs/zfs_vfsops.c
+@@ -1243,7 +1243,12 @@ zfs_prune(struct super_block *sb, unsigned long nr_to_scan, int *objects)
+ {
+ 	zfsvfs_t *zfsvfs = sb->s_fs_info;
+ 	int error = 0;
++#if defined(HAVE_SHRINKER_AS_POINTER_IN_SUPER_BLOCK)
++	struct shrinker *shrinker = sb->s_shrink;
++#else
+ 	struct shrinker *shrinker = &sb->s_shrink;
++#endif
++
+ 	struct shrink_control sc = {
+ 		.nr_to_scan = nr_to_scan,
+ 		.gfp_mask = GFP_KERNEL,
+@@ -1254,7 +1259,7 @@ zfs_prune(struct super_block *sb, unsigned long nr_to_scan, int *objects)
+ #if defined(HAVE_SPLIT_SHRINKER_CALLBACK) && \
+ 	defined(SHRINK_CONTROL_HAS_NID) && \
+ 	defined(SHRINKER_NUMA_AWARE)
+-	if (sb->s_shrink.flags & SHRINKER_NUMA_AWARE) {
++	if (shrinker->flags & SHRINKER_NUMA_AWARE) {
+ 		*objects = 0;
+ 		for_each_online_node(sc.nid) {
+ 			*objects += (*shrinker->scan_objects)(shrinker, &sc);
+-- 
+2.42.0
+

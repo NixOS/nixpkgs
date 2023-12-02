@@ -4,6 +4,7 @@ let
   , autoreconfHook269, util-linux, nukeReferences, coreutils
   , perl
   , configFile ? "all"
+  , withTestSuite ? false
 
   # Userspace dependencies
   , zlib, libuuid, python3, attr, openssl
@@ -14,6 +15,7 @@ let
   , sysstat, pkg-config
   , curl
   , pam
+  , ksh
 
   # Kernel dependencies
   , kernel ? null
@@ -63,7 +65,7 @@ let
       inherit rev hash;
     };
 
-    patches = extraPatches;
+    patches = (lib.optional (!isAtLeast22Series) ./0001-zfs-tests-enable-NixOS-compat.patch) ++ extraPatches;
 
     postPatch = optionalString buildKernel ''
       patchShebangs scripts
@@ -111,7 +113,8 @@ let
     buildInputs = optionals buildUser [ zlib libuuid attr libtirpc pam ]
       ++ optional buildUser openssl
       ++ optional buildUser curl
-      ++ optional (buildUser && enablePython) python3;
+      ++ optional (buildUser && enablePython) python3
+      ++ optional (buildUser && withTestSuite) ksh;
 
     # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
     NIX_CFLAGS_LINK = "-lgcc_s";
@@ -179,9 +182,13 @@ let
          sed -i '/zfs-import-scan.service/d' $i
          substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
       done
-
-      # Remove tests because they add a runtime dependency on gcc
-      rm -rf $out/share/zfs/zfs-tests
+      ${if withTestSuite then ''
+        # Patch with ksh interpreter.
+        patchShebangs tests
+      '' else ''
+        # Remove tests because they add a runtime dependency on gcc
+        rm -rf $out/share/zfs/zfs-tests
+      ''}
 
       # Add Bash completions.
       install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
@@ -204,6 +211,10 @@ let
       # of the ZFS package set.
       userspaceTools = genericBuild (outerArgs // {
         configFile = "user";
+      }) innerArgs;
+      testsuiteTools = genericBuild (outerArgs // {
+        configFile = "user";
+        withTestSuite = true;
       }) innerArgs;
 
       inherit tests;

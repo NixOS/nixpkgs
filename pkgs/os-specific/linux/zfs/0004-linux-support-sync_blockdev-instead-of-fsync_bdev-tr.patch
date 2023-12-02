@@ -1,0 +1,76 @@
+From 1a402403448a4f164d9686cd951a067abc3d541c Mon Sep 17 00:00:00 2001
+From: Ryan Lahfa <ryan@lahfa.xyz>
+Date: Sat, 2 Dec 2023 14:21:04 +0100
+Subject: [PATCH 4/4] linux: support `sync_blockdev` instead of `fsync_bdev`
+ transparently
+
+---
+ config/kernel-block-device-operations.m4 | 38 ++++++++++++++++++++++++
+ module/os/linux/zfs/zvol_os.c            |  2 +-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
+
+diff --git a/config/kernel-block-device-operations.m4 b/config/kernel-block-device-operations.m4
+index d13c1337b..5b46ae95e 100644
+--- a/config/kernel-block-device-operations.m4
++++ b/config/kernel-block-device-operations.m4
+@@ -108,6 +108,44 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_BLOCK_DEVICE_OPERATIONS_REVALIDATE_DISK], [
+ 	], [], [])
+ ])
+ 
++dnl #
++dnl # 6.7 API change
++dnl # fsync_bdev was removed
++dnl #
++AC_DEFUN([ZFS_AC_KERNEL_SRC_FSYNC_BDEV], [
++	ZFS_LINUX_TEST_SRC([fsync_bdev], [
++		#include <linux/blk.h>
++
++		struct block_device *bdev = NULL;
++		fsync_bdev(bdev);
++	], [], [])
++])
++AC_DEFUN([ZFS_AC_KERNEL_SRC_sync_blockdev], [
++	ZFS_LINUX_TEST_SRC([sync_blockdev], [
++		#include <linux/blk.h>
++
++		struct block_device *bdev = NULL;
++		sync_blockdev(bdev);
++	], [], [])
++])
++
++
++AC_DEFUN([ZFS_AC_KERNEL_FSYNC_BDEV], [
++	AC_MSG_CHECKING([whether sync_blockdev() exists])
++	ZFS_LINUX_TEST_RESULT([sync_blockdev], [
++		AC_MSG_RESULT(yes)
++	], [
++		AC_MSG_RESULT(no)
++		AC_MSG_CHECKING([whether fsync_bdev() exists])
++		ZFS_LINUX_TEST_RESULT([fsync_bdev], [
++			AC_MSG_RESULT(yes)
++			AC_DEFINE([sync_blockdev], [fsync_bdev], [Define sync_blockdev as fsync_bdev])
++		], [
++			ZFS_LINUX_TEST_ERROR([fsync_bdev()])
++		])
++	])
++])
++
+ AC_DEFUN([ZFS_AC_KERNEL_BLOCK_DEVICE_OPERATIONS_REVALIDATE_DISK], [
+ 	AC_MSG_CHECKING([whether bops->revalidate_disk() exists])
+ 	ZFS_LINUX_TEST_RESULT([block_device_operations_revalidate_disk], [
+diff --git a/module/os/linux/zfs/zvol_os.c b/module/os/linux/zfs/zvol_os.c
+index 36f40ba57..cabb7db81 100644
+--- a/module/os/linux/zfs/zvol_os.c
++++ b/module/os/linux/zfs/zvol_os.c
+@@ -694,7 +694,7 @@ zvol_ioctl(struct block_device *bdev, fmode_t mode,
+ 
+ 	switch (cmd) {
+ 	case BLKFLSBUF:
+-		fsync_bdev(bdev);
++		sync_blockdev(bdev);
+ 		invalidate_bdev(bdev);
+ 		rw_enter(&zv->zv_suspend_lock, RW_READER);
+ 
+-- 
+2.42.0
+

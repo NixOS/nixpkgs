@@ -1,0 +1,378 @@
+From af5b2f5f7c47d91db107677c98afe7704e27c847 Mon Sep 17 00:00:00 2001
+From: Ryan Lahfa <ryan@lahfa.xyz>
+Date: Fri, 1 Dec 2023 23:02:29 +0100
+Subject: [PATCH 2/4] linux: support new inode accessors for timestamps
+
+---
+ config/kernel-current-time.m4             |  2 +-
+ config/kernel-inode-times.m4              | 36 +++++++++++++++++++----
+ include/os/linux/zfs/sys/zfs_znode_impl.h | 31 +++++++++++++++++++
+ include/os/linux/zfs/sys/zpl.h            | 19 ++++++++++++
+ module/os/linux/zfs/zfs_ctldir.c          |  6 ++--
+ module/os/linux/zfs/zfs_vnops_os.c        | 20 ++++++-------
+ module/os/linux/zfs/zfs_znode.c           | 27 +++++++++--------
+ module/os/linux/zfs/zpl_inode.c           |  4 +--
+ module/os/linux/zfs/zpl_xattr.c           |  6 ++--
+ 9 files changed, 113 insertions(+), 38 deletions(-)
+
+diff --git a/config/kernel-current-time.m4 b/config/kernel-current-time.m4
+index 3ceb5f63e..72b238901 100644
+--- a/config/kernel-current-time.m4
++++ b/config/kernel-current-time.m4
+@@ -7,7 +7,7 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_CURRENT_TIME], [
+ 		#include <linux/fs.h>
+ 	], [
+ 		struct inode ip __attribute__ ((unused));
+-		ip.i_atime = current_time(&ip);
++		current_time(&ip);
+ 	])
+ ])
+ 
+diff --git a/config/kernel-inode-times.m4 b/config/kernel-inode-times.m4
+index 9c016c790..662ac865d 100644
+--- a/config/kernel-inode-times.m4
++++ b/config/kernel-inode-times.m4
+@@ -27,6 +27,21 @@ AC_DEFUN([ZFS_AC_KERNEL_SRC_INODE_TIMES], [
+ 		memset(&ip, 0, sizeof(ip));
+ 		ts = ip.i_mtime;
+ 	])
++
++	dnl #
++	dnl # 6.7 API change
++	dnl # i_atime, i_mtime, i_ctime are tucked under __i_atime, __i_mtime, __i_ctime.
++	dnl # They have to be accessed via proper accessors and setters now.
++	ZFS_LINUX_TEST_SRC([inode_accessors], [
++		#include <linux/fs.h>
++	],[
++		struct inode ip;
++		struct timespec64 ts;
++
++		memset(&ip, 0, sizeof(ip));
++		ts = inode_get_mtime(&ip);
++		inode_set_mtime_to_ts(&ip, ts);
++	])
+ ])
+ 
+ AC_DEFUN([ZFS_AC_KERNEL_INODE_TIMES], [
+@@ -39,12 +54,21 @@ AC_DEFUN([ZFS_AC_KERNEL_INODE_TIMES], [
+ 		AC_MSG_RESULT(no)
+ 	])
+ 
+-	AC_MSG_CHECKING([whether inode->i_*time's are timespec64])
+-	ZFS_LINUX_TEST_RESULT([inode_times], [
+-		AC_MSG_RESULT(no)
+-	],[
++	AC_MSG_CHECKING([whether inode->i_*time's are to be accessed via accessors])
++	ZFS_LINUX_TEST_RESULT([inode_accessors], [
+ 		AC_MSG_RESULT(yes)
+-		AC_DEFINE(HAVE_INODE_TIMESPEC64_TIMES, 1,
+-		    [inode->i_*time's are timespec64])
++		AC_DEFINE(HAVE_INODE_TIMESTAMP_ACCESSORS, 1,
++			[inode_(get|set)_*time() exists])
++		AC_DEFINE(HAVE_INODE_TIMESPEC64_TIMES, 1, [inode->__i_*time's are timespec64 because of new accessors API])
++	],[
++		AC_MSG_RESULT(no)
++		AC_MSG_CHECKING([whether inode->i_*time's are timespec64])
++		ZFS_LINUX_TEST_RESULT([inode_times], [
++			AC_MSG_RESULT(no)
++		],[
++			AC_MSG_RESULT(yes)
++			AC_DEFINE(HAVE_INODE_TIMESPEC64_TIMES, 1,
++					[inode->i_*time's are timespec64])
++		])
+ 	])
+ ])
+diff --git a/include/os/linux/zfs/sys/zfs_znode_impl.h b/include/os/linux/zfs/sys/zfs_znode_impl.h
+index 9b9ac7a4f..8528a3d74 100644
+--- a/include/os/linux/zfs/sys/zfs_znode_impl.h
++++ b/include/os/linux/zfs/sys/zfs_znode_impl.h
+@@ -141,6 +141,37 @@ do {								\
+ 
+ extern unsigned int zfs_object_mutex_size;
+ 
++/*
++ * Encode ZFS stored time values from struct inode*
++ * for a specific time attribute, e.g. mtime, ctime, atime.
++ */
++#define ZFS_INODE_TIME_ENCODE(inode, stmp, time_type) \
++do {							\
++	inode_timespec_t ts;				\
++	ts = zpl_inode_get_ ## time_type (inode);	\
++	ZFS_TIME_ENCODE(&ts, stmp);			\
++} while (0)						\
++
++#define ZFS_INODE_MTIME_ENCODE(inode, stmp) ZFS_INODE_TIME_ENCODE(inode, stmp, mtime)
++#define ZFS_INODE_CTIME_ENCODE(inode, stmp) ZFS_INODE_TIME_ENCODE(inode, stmp, ctime)
++#define ZFS_INODE_ATIME_ENCODE(inode, stmp) ZFS_INODE_TIME_ENCODE(inode, stmp, atime)
++
++/*
++ * Decode ZFS stored time values into a struct inode*
++ * for a specific time attribute, e.g. mtime, ctime, atime.
++ */
++#define ZFS_INODE_TIME_DECODE(inode, stmp, time_type) \
++do {							\
++	inode_timespec_t ts;				\
++	ts = zpl_inode_get_ ## time_type (inode);	\
++	ZFS_TIME_DECODE(&ts, stmp);			\
++	zpl_inode_set_ ## time_type (inode, ts);	\
++} while (0)						\
++
++#define ZFS_INODE_MTIME_DECODE(inode, stmp) ZFS_INODE_TIME_DECODE(inode, stmp, mtime)
++#define ZFS_INODE_CTIME_DECODE(inode, stmp) ZFS_INODE_TIME_DECODE(inode, stmp, ctime)
++#define ZFS_INODE_ATIME_DECODE(inode, stmp) ZFS_INODE_TIME_DECODE(inode, stmp, atime)
++
+ /*
+  * Encode ZFS stored time values from a struct timespec / struct timespec64.
+  */
+diff --git a/include/os/linux/zfs/sys/zpl.h b/include/os/linux/zfs/sys/zpl.h
+index 4e08470e7..a2c334fda 100644
+--- a/include/os/linux/zfs/sys/zpl.h
++++ b/include/os/linux/zfs/sys/zpl.h
+@@ -20,6 +20,7 @@
+  */
+ /*
+  * Copyright (c) 2011, Lawrence Livermore National Security, LLC.
++ * Copyright (c) 2023, Ryan Lahfa.
+  */
+ 
+ #ifndef	_SYS_ZPL_H
+@@ -177,6 +178,24 @@ zpl_dir_emit_dots(struct file *file, zpl_dir_context_t *ctx)
+ }
+ #endif /* HAVE_VFS_ITERATE */
+ 
++#if defined(HAVE_INODE_TIMESTAMP_ACCESSORS)
++#define zpl_inode_get_mtime(ip)			inode_get_mtime(ip)
++#define zpl_inode_get_atime(ip)			inode_get_atime(ip)
++#define zpl_inode_get_ctime(ip)			inode_get_ctime(ip)
++
++#define zpl_inode_set_mtime(ip, ts)			inode_set_mtime_to_ts(ip, ts)
++#define zpl_inode_set_atime(ip, ts)			inode_set_atime_to_ts(ip, ts)
++#define zpl_inode_set_ctime(ip, ts)			inode_set_ctime_to_ts(ip, ts)
++#else
++#define zpl_inode_get_mtime(ip)			ip->m_time
++#define	zpl_inode_get_atime(ip)			ip->a_time
++#define	zpl_inode_get_ctime(ip)			ip->c_time
++
++#define zpl_inode_set_mtime(ip, ts)			ip->i_mtime = ts
++#define zpl_inode_set_atime(ip, ts)			ip->i_atime = ts
++#define zpl_inode_set_ctime(ip, ts)			ip->i_ctime = ts
++#endif
++
+ #if defined(HAVE_INODE_TIMESTAMP_TRUNCATE)
+ #define	zpl_inode_timestamp_truncate(ts, ip)	timestamp_truncate(ts, ip)
+ #elif defined(HAVE_INODE_TIMESPEC64_TIMES)
+diff --git a/module/os/linux/zfs/zfs_ctldir.c b/module/os/linux/zfs/zfs_ctldir.c
+index 0a3069210..fa1155d43 100644
+--- a/module/os/linux/zfs/zfs_ctldir.c
++++ b/module/os/linux/zfs/zfs_ctldir.c
+@@ -518,9 +518,9 @@ zfsctl_inode_alloc(zfsvfs_t *zfsvfs, uint64_t id,
+ 	ip->i_uid = SUID_TO_KUID(0);
+ 	ip->i_gid = SGID_TO_KGID(0);
+ 	ip->i_blkbits = SPA_MINBLOCKSHIFT;
+-	ip->i_atime = now;
+-	ip->i_mtime = now;
+-	ip->i_ctime = now;
++	zpl_inode_set_atime(ip, now);
++	zpl_inode_set_mtime(ip, now);
++	zpl_inode_set_ctime(ip, now);
+ 	ip->i_fop = fops;
+ 	ip->i_op = ops;
+ #if defined(IOP_XATTR)
+diff --git a/module/os/linux/zfs/zfs_vnops_os.c b/module/os/linux/zfs/zfs_vnops_os.c
+index 9c87a0d8c..56d998255 100644
+--- a/module/os/linux/zfs/zfs_vnops_os.c
++++ b/module/os/linux/zfs/zfs_vnops_os.c
+@@ -2441,15 +2441,14 @@ top:
+ 
+ 	if ((mask & ATTR_ATIME) || zp->z_atime_dirty) {
+ 		zp->z_atime_dirty = B_FALSE;
+-		ZFS_TIME_ENCODE(&ip->i_atime, atime);
++		ZFS_INODE_ATIME_ENCODE(ip, atime);
+ 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_ATIME(zfsvfs), NULL,
+ 		    &atime, sizeof (atime));
+ 	}
+ 
+ 	if (mask & (ATTR_MTIME | ATTR_SIZE)) {
+ 		ZFS_TIME_ENCODE(&vap->va_mtime, mtime);
+-		ZTOI(zp)->i_mtime = zpl_inode_timestamp_truncate(
+-		    vap->va_mtime, ZTOI(zp));
++		zpl_inode_set_mtime(ZTOI(zp), zpl_inode_timestamp_truncate(vap->va_mtime, ZTOI(zp)));
+ 
+ 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MTIME(zfsvfs), NULL,
+ 		    mtime, sizeof (mtime));
+@@ -2457,8 +2456,7 @@ top:
+ 
+ 	if (mask & (ATTR_CTIME | ATTR_SIZE)) {
+ 		ZFS_TIME_ENCODE(&vap->va_ctime, ctime);
+-		ZTOI(zp)->i_ctime = zpl_inode_timestamp_truncate(vap->va_ctime,
+-		    ZTOI(zp));
++		zpl_inode_set_ctime(ZTOI(zp), zpl_inode_timestamp_truncate(vap->va_ctime, ZTOI(zp)));
+ 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_CTIME(zfsvfs), NULL,
+ 		    ctime, sizeof (ctime));
+ 	}
+@@ -3657,8 +3655,8 @@ zfs_putpage(struct inode *ip, struct page *pp, struct writeback_control *wbc,
+ 	    &zp->z_pflags, 8);
+ 
+ 	/* Preserve the mtime and ctime provided by the inode */
+-	ZFS_TIME_ENCODE(&ip->i_mtime, mtime);
+-	ZFS_TIME_ENCODE(&ip->i_ctime, ctime);
++	ZFS_INODE_MTIME_ENCODE(ip, mtime);
++	ZFS_INODE_CTIME_ENCODE(ip, ctime);
+ 	zp->z_atime_dirty = B_FALSE;
+ 	zp->z_seq++;
+ 
+@@ -3752,9 +3750,9 @@ zfs_dirty_inode(struct inode *ip, int flags)
+ 	SA_ADD_BULK_ATTR(bulk, cnt, SA_ZPL_CTIME(zfsvfs), NULL, &ctime, 16);
+ 
+ 	/* Preserve the mode, mtime and ctime provided by the inode */
+-	ZFS_TIME_ENCODE(&ip->i_atime, atime);
+-	ZFS_TIME_ENCODE(&ip->i_mtime, mtime);
+-	ZFS_TIME_ENCODE(&ip->i_ctime, ctime);
++	ZFS_INODE_ATIME_ENCODE(ip, atime);
++	ZFS_INODE_MTIME_ENCODE(ip, mtime);
++	ZFS_INODE_CTIME_ENCODE(ip, ctime);
+ 	mode = ip->i_mode;
+ 
+ 	zp->z_mode = mode;
+@@ -3798,7 +3796,7 @@ zfs_inactive(struct inode *ip)
+ 		if (error) {
+ 			dmu_tx_abort(tx);
+ 		} else {
+-			ZFS_TIME_ENCODE(&ip->i_atime, atime);
++			ZFS_INODE_ATIME_ENCODE(ip, atime);
+ 			mutex_enter(&zp->z_lock);
+ 			(void) sa_update(zp->z_sa_hdl, SA_ZPL_ATIME(zfsvfs),
+ 			    (void *)&atime, sizeof (atime), tx);
+diff --git a/module/os/linux/zfs/zfs_znode.c b/module/os/linux/zfs/zfs_znode.c
+index 0236b3216..5c2805e2a 100644
+--- a/module/os/linux/zfs/zfs_znode.c
++++ b/module/os/linux/zfs/zfs_znode.c
+@@ -601,9 +601,9 @@ zfs_znode_alloc(zfsvfs_t *zfsvfs, dmu_buf_t *db, int blksz,
+ 	if (zp->z_pflags & ZFS_XATTR)
+ 		zp->z_xattr_parent = parent;
+ 
+-	ZFS_TIME_DECODE(&ip->i_atime, atime);
+-	ZFS_TIME_DECODE(&ip->i_mtime, mtime);
+-	ZFS_TIME_DECODE(&ip->i_ctime, ctime);
++	ZFS_INODE_ATIME_DECODE(ip, atime);
++	ZFS_INODE_MTIME_DECODE(ip, mtime);
++	ZFS_INODE_CTIME_DECODE(ip, ctime);
+ 	ZFS_TIME_DECODE(&zp->z_btime, btime);
+ 
+ 	ip->i_ino = zp->z_id;
+@@ -1276,9 +1276,9 @@ zfs_rezget(znode_t *zp)
+ 	zfs_uid_write(ZTOI(zp), z_uid);
+ 	zfs_gid_write(ZTOI(zp), z_gid);
+ 
+-	ZFS_TIME_DECODE(&ZTOI(zp)->i_atime, atime);
+-	ZFS_TIME_DECODE(&ZTOI(zp)->i_mtime, mtime);
+-	ZFS_TIME_DECODE(&ZTOI(zp)->i_ctime, ctime);
++	ZFS_INODE_ATIME_DECODE(ZTOI(zp), atime);
++	ZFS_INODE_MTIME_DECODE(ZTOI(zp), mtime);
++	ZFS_INODE_CTIME_DECODE(ZTOI(zp), ctime);
+ 	ZFS_TIME_DECODE(&zp->z_btime, btime);
+ 
+ 	if ((uint32_t)gen != ZTOI(zp)->i_generation) {
+@@ -1386,21 +1386,24 @@ zfs_zinactive(znode_t *zp)
+ boolean_t
+ zfs_relatime_need_update(const struct inode *ip)
+ {
+-	inode_timespec_t now;
++	inode_timespec_t now, atime, mtime, ctime;
+ 
+ 	gethrestime(&now);
++	atime = zpl_inode_get_atime(ip);
++	mtime = zpl_inode_get_mtime(ip);
++	ctime = zpl_inode_get_ctime(ip);
+ 	/*
+ 	 * In relatime mode, only update the atime if the previous atime
+ 	 * is earlier than either the ctime or mtime or if at least a day
+ 	 * has passed since the last update of atime.
+ 	 */
+-	if (zfs_compare_timespec(&ip->i_mtime, &ip->i_atime) >= 0)
++	if (zfs_compare_timespec(&mtime, &atime) >= 0)
+ 		return (B_TRUE);
+ 
+-	if (zfs_compare_timespec(&ip->i_ctime, &ip->i_atime) >= 0)
++	if (zfs_compare_timespec(&ctime, &atime) >= 0)
+ 		return (B_TRUE);
+ 
+-	if ((hrtime_t)now.tv_sec - (hrtime_t)ip->i_atime.tv_sec >= 24*60*60)
++	if ((hrtime_t)now.tv_sec - (hrtime_t)atime.tv_sec >= 24*60*60)
+ 		return (B_TRUE);
+ 
+ 	return (B_FALSE);
+@@ -1431,7 +1434,7 @@ zfs_tstamp_update_setup(znode_t *zp, uint_t flag, uint64_t mtime[2],
+ 
+ 	if (flag & ATTR_MTIME) {
+ 		ZFS_TIME_ENCODE(&now, mtime);
+-		ZFS_TIME_DECODE(&(ZTOI(zp)->i_mtime), mtime);
++		ZFS_INODE_MTIME_DECODE(ZTOI(zp), mtime);
+ 		if (ZTOZSB(zp)->z_use_fuids) {
+ 			zp->z_pflags |= (ZFS_ARCHIVE |
+ 			    ZFS_AV_MODIFIED);
+@@ -1440,7 +1443,7 @@ zfs_tstamp_update_setup(znode_t *zp, uint_t flag, uint64_t mtime[2],
+ 
+ 	if (flag & ATTR_CTIME) {
+ 		ZFS_TIME_ENCODE(&now, ctime);
+-		ZFS_TIME_DECODE(&(ZTOI(zp)->i_ctime), ctime);
++		ZFS_INODE_CTIME_DECODE(ZTOI(zp), ctime);
+ 		if (ZTOZSB(zp)->z_use_fuids)
+ 			zp->z_pflags |= ZFS_ARCHIVE;
+ 	}
+diff --git a/module/os/linux/zfs/zpl_inode.c b/module/os/linux/zfs/zpl_inode.c
+index 6efaaf438..866a5bda5 100644
+--- a/module/os/linux/zfs/zpl_inode.c
++++ b/module/os/linux/zfs/zpl_inode.c
+@@ -495,7 +495,7 @@ zpl_setattr(struct dentry *dentry, struct iattr *ia)
+ 	vap->va_ctime = ia->ia_ctime;
+ 
+ 	if (vap->va_mask & ATTR_ATIME)
+-		ip->i_atime = zpl_inode_timestamp_truncate(ia->ia_atime, ip);
++		zpl_inode_set_atime(ip, zpl_inode_timestamp_truncate(ia->ia_atime, ip));
+ 
+ 	cookie = spl_fstrans_mark();
+ 	error = -zfs_setattr(ITOZ(ip), vap, 0, cr);
+@@ -727,7 +727,7 @@ zpl_link(struct dentry *old_dentry, struct inode *dir, struct dentry *dentry)
+ 		return (-EMLINK);
+ 
+ 	crhold(cr);
+-	ip->i_ctime = current_time(ip);
++	zpl_inode_set_ctime(ip, current_time(ip));
+ 	/* Must have an existing ref, so igrab() cannot return NULL */
+ 	VERIFY3P(igrab(ip), !=, NULL);
+ 
+diff --git a/module/os/linux/zfs/zpl_xattr.c b/module/os/linux/zfs/zpl_xattr.c
+index 084817609..be2763fe5 100644
+--- a/module/os/linux/zfs/zpl_xattr.c
++++ b/module/os/linux/zfs/zpl_xattr.c
+@@ -510,7 +510,7 @@ zpl_xattr_set_dir(struct inode *ip, const char *name, const void *value,
+ 	error = -zfs_write_simple(xzp, value, size, pos, NULL);
+ out:
+ 	if (error == 0) {
+-		ip->i_ctime = current_time(ip);
++		zpl_inode_set_ctime(ip, current_time(ip));
+ 		zfs_mark_inode_dirty(ip);
+ 	}
+ 
+@@ -960,7 +960,7 @@ zpl_set_acl_impl(struct inode *ip, struct posix_acl *acl, int type)
+ 				 */
+ 				if (ip->i_mode != mode) {
+ 					ip->i_mode = mode;
+-					ip->i_ctime = current_time(ip);
++					zpl_inode_set_ctime(ip, current_time(ip));
+ 					zfs_mark_inode_dirty(ip);
+ 				}
+ 
+@@ -1119,7 +1119,7 @@ zpl_init_acl(struct inode *ip, struct inode *dir)
+ 			return (PTR_ERR(acl));
+ 		if (!acl) {
+ 			ip->i_mode &= ~current_umask();
+-			ip->i_ctime = current_time(ip);
++			zpl_inode_set_ctime(ip, current_time(ip));
+ 			zfs_mark_inode_dirty(ip);
+ 			return (0);
+ 		}
+-- 
+2.42.0
+

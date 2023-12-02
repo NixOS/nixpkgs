@@ -1,0 +1,74 @@
+From a2021b4d30c7959cea891c7a7c6d1d31442f9cd2 Mon Sep 17 00:00:00 2001
+From: Ryan Lahfa <ryan@lahfa.xyz>
+Date: Sat, 2 Dec 2023 15:29:43 +0100
+Subject: [PATCH] zfs-tests: enable NixOS compat
+
+---
+ scripts/zfs-tests.sh | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/scripts/zfs-tests.sh b/scripts/zfs-tests.sh
+index 1e0cf66d1..0a3bc4e66 100755
+--- a/scripts/zfs-tests.sh
++++ b/scripts/zfs-tests.sh
+@@ -53,6 +53,11 @@ ITERATIONS=1
+ ZFS_DBGMSG="$STF_SUITE/callbacks/zfs_dbgmsg.ksh"
+ ZFS_DMESG="$STF_SUITE/callbacks/zfs_dmesg.ksh"
+ UNAME=$(uname -s)
++if [ ! -f /etc/NIXOS ]; then
++	IS_NIXOS=0
++else
++	IS_NIXOS=1
++fi
+ RERUN=""
+ KMEMLEAK=""
+ 
+@@ -245,11 +250,15 @@ create_links() {
+ constrain_path() {
+ 	. "$STF_SUITE/include/commands.cfg"
+ 
+-	# On FreeBSD, base system zfs utils are in /sbin and OpenZFS utils
+-	# install to /usr/local/sbin. To avoid testing the wrong utils we
+-	# need /usr/local to come before / in the path search order.
+-	SYSTEM_DIRS="/usr/local/bin /usr/local/sbin"
+-	SYSTEM_DIRS="$SYSTEM_DIRS /usr/bin /usr/sbin /bin /sbin $LIBEXEC_DIR"
++	if [[ "$IS_NIXOS" == 1 ]]; then
++		SYSTEM_DIRS="${PATH//:/ } $LIBEXEC_DIR"
++	else
++		# On FreeBSD, base system zfs utils are in /sbin and OpenZFS utils
++		# install to /usr/local/sbin. To avoid testing the wrong utils we
++		# need /usr/local to come before / in the path search order.
++		SYSTEM_DIRS="/usr/local/bin /usr/local/sbin"
++		SYSTEM_DIRS="$SYSTEM_DIRS /usr/bin /usr/sbin /bin /sbin $LIBEXEC_DIR"
++	fi
+ 
+ 	if [ "$INTREE" = "yes" ]; then
+ 		# Constrained path set to ./zfs/bin/
+@@ -295,11 +304,13 @@ constrain_path() {
+ 	fi
+ 	create_links "$SYSTEM_DIRS" "$SYSTEM_FILES"
+ 
++	echo "$STF_MISSING_BIN"
++
+ 	# Exceptions
+ 	ln -fs "$STF_PATH/awk" "$STF_PATH/nawk"
+ 	if [ "$UNAME" = "Linux" ] ; then
+-		ln -fs /sbin/fsck.ext4 "$STF_PATH/fsck"
+-		ln -fs /sbin/mkfs.ext4 "$STF_PATH/newfs"
++		ln -fs "$(which fsck.ext4)" "$STF_PATH/fsck"
++		ln -fs "$(which mkfs.ext4)" "$STF_PATH/newfs"
+ 		ln -fs "$STF_PATH/gzip" "$STF_PATH/compress"
+ 		ln -fs "$STF_PATH/gunzip" "$STF_PATH/uncompress"
+ 		ln -fs "$STF_PATH/exportfs" "$STF_PATH/share"
+@@ -534,6 +545,8 @@ constrain_path
+ #
+ if [ "$UNAME" = "FreeBSD" ]; then
+ 	sudo ln -fs /usr/local/bin/ksh93 /bin/ksh
++else
++	sudo ln -fs $(which ksh) "$STF_PATH/ksh"
+ fi
+ [ -e "$STF_PATH/ksh" ] || fail "This test suite requires ksh."
+ [ -e "$STF_SUITE/include/default.cfg" ] || fail \
+-- 
+2.42.0
+
