@@ -1,12 +1,19 @@
-{ stdenv, lib, fetchurl, makeWrapper, nodejs }:
+{ stdenv, lib, fetchzip, makeWrapper, nodejs }:
 
-stdenv.mkDerivation rec {
+let
+  # version and commit pairs can be found in the URLs at
+  # https://cli-assets.heroku.com/versions/heroku-linux-x64-tar-xz.json
+  version = "8.7.1";
+  commit = "3f5e369";
+  hash = "sha256-3pCutQBS8N1Yw4JKTvU046UrOxBi0wLRQywxwezAEeU";
+in
+stdenv.mkDerivation {
   pname = "heroku";
-  version = "7.66.4";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://cli-assets.heroku.com/heroku-v${version}/heroku-v${version}.tar.xz";
-    sha256 = "sha256-AAiC88RBqR5RXeIj39in7hlvI3JNQB6KUwGmt9jo93A=";
+  src = fetchzip {
+    url = "https://cli-assets.heroku.com/versions/${version}/${commit}/heroku-v${version}-${commit}-linux-x64.tar.xz";
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
