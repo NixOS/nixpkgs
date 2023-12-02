@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , easyprocess
 , entrypoint2
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyunpack";
   version = "0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ponty";
@@ -24,8 +25,10 @@ buildPythonPackage rec {
     substituteInPlace pyunpack/__init__.py \
       --replace \
        '_exepath("patool")' \
-       '"${patool}/bin/.patool-wrapped"'
+       '"${lib.getBin patool}/bin/.patool-wrapped"'
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     easyprocess
