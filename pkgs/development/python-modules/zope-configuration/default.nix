@@ -7,7 +7,7 @@
 , zope_interface
 , zope_schema
 , pytestCheckHook
-, zope_testing
+, zope-testing
 , zope_testrunner
 , manuel
 }:
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     manuel
     pytestCheckHook
-    zope_testing
+    zope-testing
     zope_testrunner
   ];
 
