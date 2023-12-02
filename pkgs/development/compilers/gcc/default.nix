@@ -392,7 +392,11 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       EXTRA_LDFLAGS_FOR_TARGET
       ;
   } // optionalAttrs is7 {
-    NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+    NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument"
+      # Downgrade register storage class specifier errors to warnings when building a cross compiler from a clang stdenv.
+      + lib.optionalString (stdenv.cc.isClang && targetPlatform != hostPlatform) " -Wno-register";
+  } // optionalAttrs (!is7 && !atLeast12 && stdenv.cc.isClang && targetPlatform != hostPlatform) {
+    NIX_CFLAGS_COMPILE = "-Wno-register";
   } // optionalAttrs (!atLeast7) {
     inherit langJava;
   } // optionalAttrs atLeast6 {
