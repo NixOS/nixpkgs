@@ -1,12 +1,11 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , pythonOlder
 
 # build time
 , astropy-extension-helpers
-, cython
+, cython_3
 , jinja2
 , oldest-supported-numpy
 , setuptools-scm
@@ -15,9 +14,9 @@
 , pytestCheckHook
 , pytest-xdist
 , pytest-astropy
-, python
 
 # runtime
+, astropy-iers-data
 , numpy
 , packaging
 , pyerfa
@@ -26,26 +25,19 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "5.3.4";
-  format = "pyproject";
+  version = "6.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1JD34vqsLMwBySRCAtYpFUJZr4qXkQTO2J3ErOTm8dg=";
+    hash = "sha256-A82AGlUwXaUjzY14DXY1n1clXc3Fn+C91x/VFU/Hd9k=";
   };
-  # Relax cython dependency to allow this to build, upstream only doesn't
-  # support cython 3 as of writing. See:
-  # https://github.com/astropy/astropy/issues/15315
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'cython==' 'cython>='
-  '';
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    cython
+    cython_3
     jinja2
     oldest-supported-numpy
     setuptools-scm
@@ -53,6 +45,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    astropy-iers-data
     numpy
     packaging
     pyerfa
