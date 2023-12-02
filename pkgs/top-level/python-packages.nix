@@ -7210,6 +7210,10 @@ self: super: with self; {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mujoco = callPackage ../development/python-modules/mujoco {
+    inherit (pkgs) mujoco;
+  };
+
   mujson = callPackage ../development/python-modules/mujson { };
 
   mwcli = callPackage ../development/python-modules/mwcli { };
