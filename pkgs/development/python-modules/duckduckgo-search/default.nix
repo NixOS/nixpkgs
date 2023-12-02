@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "3.9.4";
+  version = "3.9.9";
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "duckduckgo_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R96ezs0INIZAXTcD1eWXuj4MSJvCbtbgzgC3ls7wYyI=";
+    hash = "sha256-swuMCobYF5u41O1Qp5Gx/n8BIgSEnhRVZ5Owk3IPbeI=";
   };
 
   format = "pyproject";
