@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "openlawlibrary";
     repo = "pygls";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hIr06qzOkObEcrIgFUloAPBJdOtcipl4htpbbUVkbdw=";
+    hash = "sha256-ARez9fs50kScfMp/W/aFIOcJonpFrcfyrzJuVwou7fk=";
   };
 
   nativeBuildInputs = [
