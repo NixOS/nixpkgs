@@ -248,7 +248,7 @@ let
       jsoncpp
       libjpeg_turbo
       libpng
-      (pybind11.overridePythonAttrs (_: { inherit stdenv; }))
+      (pybind11.override { inherit stdenv; })
       snappy
       sqlite
     ] ++ lib.optionals cudaSupport [
