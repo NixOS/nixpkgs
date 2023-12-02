@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       require('$out/dist/spec-node/devContainersSpecCLI');
     EOF
 
-    chmod a+x $out/bin/devcontainer
+    chmod +x $out/bin/devcontainer
   '';
 
   meta = with lib; {
