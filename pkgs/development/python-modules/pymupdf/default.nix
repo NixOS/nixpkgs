@@ -22,7 +22,7 @@ let
   mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
 in buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.23.6";
+  version = "1.23.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,8 +30,8 @@ in buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    rev = version;
-    hash = "sha256-60KT5+EGP+s7HD4UIeaf9x2QVNU9IUbC5WKEJbrIBCI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XVf9nKbcTS/rxRCD2u5u8ecCf0bWZ3FXXN/YulI9etU=";
   };
 
   nativeBuildInputs = [
