@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -24,6 +25,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "t5zgzEsMZtnFS8Ihg6EOVwmgAR0q8nICWUjvyrM6Pk8=";
   };
+
+  patches = [
+    # Fix build with libxml 2.12
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gupnp-av/-/commit/1e10a41fcef6ae0d3e89958db89bc22398f3b4f1.patch";
+      hash = "sha256-APeHsLFwSCVuSGc7IXdKaPURU5k5J2nB2jVOABEdRcA=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
