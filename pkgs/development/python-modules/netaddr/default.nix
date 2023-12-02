@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , glibcLocales
 , importlib-resources
 , pytestCheckHook
@@ -9,13 +10,17 @@
 
 buildPythonPackage rec {
   pname = "netaddr";
-  version = "0.8.0";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hx2npi0wnhwlcybilgwlddw6qffx1mb7a3sj4p9s7bvl33mgk6n";
+    sha256 = "sha256-e0b6mxotcf1d6eSjeE7zOXAKU6CMgEDwi69fEZTaASg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   LC_ALL = "en_US.UTF-8";
 
