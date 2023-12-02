@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
+, cmake
 , pkg-config
 
 , callPackage
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-aZRtF4wYWxi/6ORNu7yVxFFdkvJTvBwPinL5lC0Mlqg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   enableParallelBuilding = true;
 
