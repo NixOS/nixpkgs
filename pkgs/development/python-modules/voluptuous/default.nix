@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "alecthomas";
     repo = pname;
-    rev = version;
-    hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7KXuypcKoqZboHTzoNKK5sYUR57wWGJu6y9zkLecep0=";
   };
 
   nativeCheckInputs = [
