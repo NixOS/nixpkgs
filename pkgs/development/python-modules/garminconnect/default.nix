@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "garminconnect";
   version = "0.2.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
