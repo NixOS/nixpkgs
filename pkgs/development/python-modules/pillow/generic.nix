@@ -73,10 +73,5 @@ buildPythonPackage rec {
   '' + lib.optionalString (lib.versionAtLeast version "7.1.0") ''
     export LDFLAGS="$LDFLAGS -L${libxcb}/lib"
     export CFLAGS="$CFLAGS -I${libxcb.dev}/include"
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Remove impurities
-    substituteInPlace setup.py \
-      --replace '"/Library/Frameworks",' "" \
-      --replace '"/System/Library/Frameworks"' ""
   '';
 }
