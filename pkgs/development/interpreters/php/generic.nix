@@ -9,6 +9,7 @@ let
     , nixosTests
     , tests
     , fetchurl
+    , fetchpatch
     , makeBinaryWrapper
     , symlinkJoin
     , writeText
@@ -314,7 +315,19 @@ let
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
-          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          patches = [
+            ./fix-paths-php7.patch
+          ] ++ lib.optionals (lib.versionOlder version "8.2.14") [
+            # Fix build with libxml 2.12
+            # Part of 8.3.0+, 8.2.14RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/8a95e616b91ac0eeedba90a61e36e652919763f2.patch";
+              hash = "sha256-fU0cvmMfwh9y7IIkCcYlVyayxPoxKFQ3qEk9jItr3n8=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+          ] ++ extraPatches;
 
           separateDebugInfo = true;
 

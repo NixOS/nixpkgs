@@ -370,6 +370,36 @@ lib.makeScope pkgs.newScope (self: with self; {
           configureFlags = [
             "--enable-dom"
           ];
+          patches = lib.optionals (lib.versionOlder php.version "8.2.14") [
+            # Fix build with libxml 2.12
+            # Part of 8.3.0+, 8.2.14RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/8a95e616b91ac0eeedba90a61e36e652919763f2.patch";
+              hash = "sha256-fU0cvmMfwh9y7IIkCcYlVyayxPoxKFQ3qEk9jItr3n8=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+          ] ++ lib.optionals ((lib.versionAtLeast php.version "8.3.0" && lib.versionOlder php.version "8.3.1") || lib.versionOlder php.version "8.2.14") [
+            # Fix tests with libxml 2.12
+            # Part of 8.3.1RC1+, 8.2.14RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
+              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
+              excludes = [
+                "NEWS"
+              ];
+            })
+          ] ++ lib.optionals (lib.versionAtLeast php.version "8.3.0") [
+            # Fix tests with libxml 2.12
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ae83d6ab077d19357d446689b9b57f2e05762486.patch";
+              hash = "sha256-qur8PsDFW6tLHVhOTDiRNIL85u+ScKKXhuUKr3ChbHs=";
+              includes = [
+                "ext/dom/tests/DOMNode_isEqualNode.phpt"
+              ];
+            })
+          ];
         }
         {
           name = "enchant";
