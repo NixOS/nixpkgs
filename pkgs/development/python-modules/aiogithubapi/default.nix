@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "23.2.1";
+  version = "23.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-J6kcEVqADmVJZDbU9eqLCL0rohMSA/Ig7FSp/Ye5Sfk=";
+    hash = "sha256-SbpfHKD4QJuCe3QG0GTvsffkuFiGPLEUXOVW9f1gyTI=";
   };
 
   postPatch = ''
