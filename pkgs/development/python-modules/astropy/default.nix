@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "5.3.4";
+  version = "6.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1JD34vqsLMwBySRCAtYpFUJZr4qXkQTO2J3ErOTm8dg=";
+    hash = "sha256-A82AGlUwXaUjzY14DXY1n1clXc3Fn+C91x/VFU/Hd9k=";
   };
   # Relax cython dependency to allow this to build, upstream only doesn't
   # support cython 3 as of writing. See:
