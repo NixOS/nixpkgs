@@ -6,6 +6,7 @@
 , which
 , bison
 , nixosTests
+, libnl
 , linuxHeaders
 , gnutls
 }:
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     glib
     gnutls
   ] ++ lib.optionals stdenv.isLinux [
+    libnl
     linuxHeaders
   ];
 
