@@ -32,20 +32,43 @@ let
       }
       else result);
 
+  preserveFunctionOverride = decorate: f:
+    let
+      fResult = decorate f;
+    in
+    (if (!builtins.isAttrs fResult) then
+      lib.mirrorFunctionArgs f fResult
+    else fResult)
+    // lib.optionalAttrs (f?override) {
+      override = lib.mirrorFunctionArgs f.override
+        (fdrv: decorate (f.override fdrv));
+    };
+
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix
   else
     ./python2/mk-python-derivation.nix;
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  # This ensures that the function argument of buildPython* is always mirrored
+  # and that buildPython*.override is always preserved.
+  decorateBuildPython = f: lib.pipe f (map preserveFunctionOverride [
+    # OBSOLETE: add improvised <pkg>.override
+    # This will most likely be shadowed by the typical <pkg>.override
+    # added by another callPackage onto package definitions.
+    lib.makeOverridable
+    # Adds <pkg>.overridePythonAttrs
+    makeOverridablePythonPackage
+  ]);
+
+  buildPythonPackage = decorateBuildPython (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
-  }));
+  });
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+  buildPythonApplication = decorateBuildPython (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
-  }));
+  });
 
   # Check whether a derivation provides a Python module.
   hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
