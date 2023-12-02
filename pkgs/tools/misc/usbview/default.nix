@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "USB viewer for Linux";
     license = licenses.gpl2Only;
     homepage = "http://www.kroah.com/linux-usb/";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [ shamilton h7x4 ];
     platforms = platforms.linux;
     mainProgram = "usbview";
   };
