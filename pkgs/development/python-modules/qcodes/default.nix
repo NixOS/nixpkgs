@@ -48,7 +48,7 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.42.0";
+  version = "0.42.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     owner = "QCoDeS";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+NtPE9mQKWftk3vR5WFZgM+7jl8HWr9MxVA+VpbuHvE=";
+    hash = "sha256-oNQLIL5L3gtFS6yxqgLDI1s4s9UYqxGc8ASqHuZv6Rk=";
   };
 
   nativeBuildInputs = [
