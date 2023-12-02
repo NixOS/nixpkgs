@@ -165,8 +165,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_widevine = false;
     use_perfetto_client_library = false;
     enable_check_raw_ptr_fields = false;
-  } // lib.optionalAttrs (lib.versionOlder info.version "26")  {
-    use_gnome_keyring = false;
   } // lib.optionalAttrs (lib.versionAtLeast info.version "27")  {
     override_electron_version = info.version;
   };
