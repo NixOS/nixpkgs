@@ -246,6 +246,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
+  qzxing = callPackage ../development/libraries/qzxing { };
+
   soqt = callPackage ../development/libraries/soqt { };
 
   telepathy = callPackage ../development/libraries/telepathy/qt { };
