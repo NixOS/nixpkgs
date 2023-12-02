@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
-  version = "0.9.2";
+  version = "0.9.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eWc0Ra6ZruMzuBHH0AN660CPkzuImDdf8vT/8eO6aGs=";
+    hash = "sha256-/9ODbfzWe7JwvsZIszDiC+N9KWZEjEFIxAktHoq6gYU=";
   };
 
   nativeBuildInputs = [
