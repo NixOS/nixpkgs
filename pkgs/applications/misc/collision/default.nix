@@ -13,16 +13,16 @@
 }:
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     rev = "v${version}";
-    hash = "sha256-YNMtiMSzDqBlJJTUntRtL6oXg+IuyAobQ4FYcwOdOas=";
+    hash = "sha256-Qxe4ILDdfYfxu95EvKRTvkAOgDIZDiLymBlZouBWn0M=";
   };
   patches = [ ./make.patch ];
-  shardsFile = ./collision-shards.nix;
+  shardsFile = ./shards.nix;
 
   # Crystal compiler has a strange issue with OpenSSL. The project will not compile due to
   # main_module:(.text+0x6f0): undefined reference to `SSL_library_init'
