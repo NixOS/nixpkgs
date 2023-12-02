@@ -44,6 +44,27 @@ let
         (fdrv: decorate (f.override fdrv));
     };
 
+  deprecateOutputAttributes = f: origArgs:
+    let
+      result = f origArgs;
+    in
+    if lib.isAttrs result
+    then {
+      # Output attributes to deprecate
+
+      # Throw error when the deprecated improvised <pkg>.override is accessed
+      # This will most likely be shadowed by the typical <pkg>.override
+      # added by another callPackage onto package definitions.
+      override = throw ''
+        Attribute 'override' added by buildPython* is deprecated.
+        Use 'overridePythonAttrs' or 'overrideAttrs' instead, or add '<pkgs>.override' using callPackage.
+      '';
+
+    } // result
+    else if builtins.isFunction result
+    then lib.mirrorFunctionArgs result result
+    else result;
+
   compatCustomStdenv = f: origArgs: (
     if origArgs?stdenv then
       f.override { inherit (origArgs) stdenv; }
@@ -59,10 +80,8 @@ let
   # This ensures that the function argument of buildPython* is always mirrored
   # and that buildPython*.override is always preserved.
   decorateBuildPyhon = f: lib.pipe f (map preserveFunctionOverride [
-    # OBSOLETE: add improvised <pkg>.override
-    # This will most likely be shadowed by the typical <pkg>.override
-    # added by another callPackage onto package definitions.
-    lib.makeOverridable
+    # Throw error upon accessing attempt to deprecated output attributes
+    deprecateOutputAttributes
     # Take the obsolete input argument `stdenv`
     # and pass as `buildPython*.override { stdenv = stdenv; }`
     # TODO: Remove this after Nixpkgs 24.11 branch-off
