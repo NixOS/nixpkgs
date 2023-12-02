@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.7.1";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jHXpPnrQlIpmQ2sY4y6AUx/6W8Pf+683s4NmmlwZO58=";
+    hash = "sha256-btXwx9GRLBcjtcGdgckb2Y/MxC0E/rKTWKgkP8olezo=";
   };
 
   propagatedBuildInputs = [
