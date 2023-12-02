@@ -17923,7 +17923,7 @@ with pkgs;
   python27Packages = python27.pkgs;
   python38Packages = python38.pkgs;
   python39Packages = python39.pkgs;
-  python310Packages = recurseIntoAttrs python310.pkgs;
+  python310Packages = python310.pkgs;
   python311Packages = recurseIntoAttrs python311.pkgs;
   python312Packages = python312.pkgs;
   python313Packages = python313.pkgs;
