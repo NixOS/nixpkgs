@@ -22,6 +22,8 @@
 , libnatpmp
 , libiconv
 , Foundation
+, libicns
+, writeDarwinBundle
   # Build options
 , enableGTK3 ? false
 , gtkmm3
@@ -94,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
   ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
+  ++ lib.optionals stdenv.isDarwin [ libicns writeDarwinBundle ]
   ;
 
   buildInputs = [
@@ -144,6 +147,13 @@ stdenv.mkDerivation (finalAttrs: {
     }
     EOF
     install -Dm0444 -t $out/share/icons ../qt/icons/transmission.svg
+  '' + lib.optionalString (stdenv.isDarwin && (enableQt || enableGTK3)) ''
+    mkdir -p $out/Applications/Transmission.app/Contents/{MacOS,Resources}
+    icnsutil \
+      -c icns \
+      -o $out/Applications/Transmission.app/Contents/Resources/AppIcon.icns \
+      ../macosx/Images/Images.xcassets/AppIcon.appiconset
+    write-darwin-bundle "$out" "Transmission" "${finalAttrs.meta.mainProgram}" "AppIcon"
   '';
 
   passthru.tests = {
