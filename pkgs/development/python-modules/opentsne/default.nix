@@ -15,14 +15,14 @@
 let
   self = buildPythonPackage rec {
     pname = "opentsne";
-    version = "1.0.0";
+    version = "1.0.1";
     format = "pyproject";
 
     src = fetchFromGitHub {
       owner = "pavlin-policar";
       repo = "openTSNE";
-      rev = "v${version}";
-      hash = "sha256-L5Qx6dMJlXF3EaWwlFTQ3dkhGXc5PvQBXYJo+QO+Hxc=";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-UTfEjjNz1mm5fhyTw9GRlMNURwWlr6kLMjrMngkFV3Y=";
     };
 
     nativeBuildInputs = [
