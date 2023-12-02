@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "daiquiri";
-  version = "3.2.1";
+  version = "3.2.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QIxNKOyPDqI+llN0R5gpvSI2TQwI15HL63u6JFlj4P0=";
+    hash = "sha256-P8rvN2/WgIi5I5E3R6t+4S2Lf7Kvf4xfIOWYCZfp6DU=";
   };
 
   nativeBuildInputs = [
