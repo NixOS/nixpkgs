@@ -204,5 +204,7 @@ buildPythonPackage {
     changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada natsukium ];
+    # https://github.com/bentoml/BentoML/issues/3885
+    broken = versionAtLeast pydantic.version "2";
   };
 }
