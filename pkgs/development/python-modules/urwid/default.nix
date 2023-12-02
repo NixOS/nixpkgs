@@ -1,11 +1,10 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 
 # build-system
 , setuptools
 , setuptools-scm
-, wheel
 
 # tests
 , glibcLocales
@@ -14,12 +13,14 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.2.1";
+  version = "2.2.3";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4zkRqxjyxz/dvpvyFtAh504gstWqm+MEA8WPVRMbuKE=";
+  src = fetchFromGitHub {
+    owner = "urwid";
+    repo = "urwid";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oPb2h/+gaqkZTXIiESjExMfBNnOzDvoMkXvkZ/+KVwo=";
   };
 
   postPatch = ''
@@ -29,7 +30,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeCheckInputs = [
@@ -39,9 +39,13 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF8";
 
+  pytestFlagsArray = [
+    "tests"
+  ];
+
   disabledTestPaths = [
     # expect call hangs
-    "urwid/tests/test_vterm.py"
+    "tests/test_vterm.py"
   ];
 
   pythonImportsCheck = [
