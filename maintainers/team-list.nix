@@ -567,6 +567,18 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  lxc = {
+    members = [
+      aanderse
+      adamcstephens
+      jnsgruk
+      megheaiulian
+      mkg20001
+    ];
+    scope = "All things linuxcontainers. LXC, Incus, LXD and related packages.";
+    shortName = "lxc";
+  };
+
   lxqt = {
     members = [
       romildo
