@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.7";
+  version = "0.6.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = "pylsp-mypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZsNIw0xjxnU9Ue0C7TlhzVOCOCKEbCa2CsiiqeMb14I=";
+    hash = "sha256-oEWUXkE8U7/ye6puJZRSkQFi10BPGuc8XZQbHwqOPEI=";
   };
 
   patches = [
