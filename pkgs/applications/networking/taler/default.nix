@@ -9,7 +9,7 @@ let
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${version}";
-    sha256 = "sha256-uwbgIzSjLN+KQCY134VfnCuBEtvCO3a6mEw++HoZDHs=";
+    sha256 = "sha256-oL8vi8gxPjKxRpioMs0GLvkzlTkrm1kyvhsXOgrtvVQ=";
   };
 in rec {
   taler-exchange = stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ in rec {
       # "Server does not allow request for unadvertised object"
       deepClone = true;
       fetchSubmodules = true;
-      sha256 = "sha256-txWwW5vqTblNgVIXdDkpNNZOXpY0udMaz4Wog1GobzE=";
+      sha256 = "sha256-0h+5g73A5dZhC8FgIYMOuUkd9GdQrYfTQVQ3jW+tsmw=";
     };
 
     nativeBuildInputs = [
