@@ -118,5 +118,28 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ emilylange urandom bendlas ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
+    knownVulnerabilities = [
+      ''
+        Forgejo's API and web endpoints before version 1.20.5-1 are affected by multiple
+        critical security vulnerabilities.
+
+        Non-exhaustive list:
+         - reveal comments from issues and pull-requests from private repositories
+         - delete comments from issues and pull-requests
+         - get private release attachments
+         - delete releases and tags
+         - get ssh deployment keys (public key)
+         - get OAuth2 applications (except for the secret)
+         - 2FA not being enforced for the container registry login (docker login)
+
+        There isn't a clear way how to backport and validate all those fixes to the now EOL
+        forgejo 1.19.x and we, the forgejo nixpkgs maintainers, decided against bumping the
+        release from 1.19.x to 1.20.x due to its breaking nature.
+        Given nixpkgs 23.11 has been released by now and nixpkgs 23.05 will reach EOL very
+        soon (2023-12-31), please update to nixpkgs 23.11 instead.
+
+        Upstream: https://forgejo.org/2023-11-release-v1-20-5-1/
+      ''
+    ];
   };
 }
