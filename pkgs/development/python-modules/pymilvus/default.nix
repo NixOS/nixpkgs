@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.3.0";
+  version = "2.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "milvus-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hp00iUT1atyTQk532z7VAajpfvtnKE8W2la9MW7NxoE=";
+    hash = "sha256-qnm6JaeF2Li2NgVGZ6yJ2yz1n3pVZqkF4Ee+q4v/kdA=";
   };
 
   pythonRelaxDeps = [
