@@ -54,7 +54,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "23.8.0";
+  version = "23.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -62,15 +62,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-PHM2Ct0XM2piLA2BHCos4phmtuWbESX9ZQmxclIJiiQ=";
+    hash = "sha256-mHhHoHkKLFlxl2E2huJ4T9VBZ986VdD7F8hBIwXXbOU=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "11787.diff";
-      url = "https://github.com/twisted/twisted/commit/da3bf3dc29f067e7019b2a1c205834ab64b2139a.diff";
-      hash = "sha256-bQgUmbvDa61Vg8p/o/ivfkOAHyj1lTgHkrRVEGLM9aU=";
-    })
     (fetchpatch {
       # Conditionally skip tests that require METHOD_CRYPT
       # https://github.com/twisted/twisted/pull/11827
@@ -111,6 +106,8 @@ buildPythonPackage rec {
     echo 'FileObserverTests.test_getTimezoneOffsetEastOfUTC.skip = "mktime argument out of range"'>> src/twisted/test/test_log.py
     echo 'FileObserverTests.test_getTimezoneOffsetWestOfUTC.skip = "mktime argument out of range"'>> src/twisted/test/test_log.py
     echo 'FileObserverTests.test_getTimezoneOffsetWithoutDaylightSavingTime.skip = "tuple differs, values not"'>> src/twisted/test/test_log.py
+
+    echo 'FileDescriptorTests.test_expectedFDs.skip = "Expected duplicate file descriptor to be greater than original"' >> src/twisted/internet/test/test_posixprocess.py
 
     echo 'MulticastTests.test_joinLeave.skip = "No such device"'>> src/twisted/test/test_udp.py
     echo 'MulticastTests.test_loopback.skip = "No such device"'>> src/twisted/test/test_udp.py
@@ -197,6 +194,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/twisted/twisted/blob/twisted-${version}/NEWS.rst";
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
