@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pylsqpack";
-  version = "0.3.17";
+  version = "0.3.18";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LyB3jblW3H5LGop5ci1XpGUMRZl/tlwTUsv4XreqPOI=";
+    hash = "sha256-Ra5V5yGHdQX01czUlZHWk1PypUioZz36+yUdOFs8CX8=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
