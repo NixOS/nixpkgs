@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "wavefile";
-  version = "1.5";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "vokimon";
     repo = "python-wavefile";
-    rev = "python-wavefile-${version}";
-    sha256 = "9sHj1gb93mCVpejRGSdLJzeFDCeTflZctE7kMWfqFrE=";
+    rev = "refs/tags/python-wavefile-${version}";
+    sha256 = "sha256-TLSWhLARY+3sHkl2p3d3LDGzLu6DggjTJWFpyrwRXSI=";
   };
 
   nativeBuildInputs = [
