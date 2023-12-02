@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.3.1";
+  version = "1.4.1";
   pname = "robotframework-databaselibrary";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-C+shwpGbiA+YS8t9ApJEv6mYQVd3fVvY3qWzDF6vYqU=";
+    sha256 = "sha256-/n4+xA/eLrcVEwlWyLQLrkX5waYaJKRkphwT22b7hTU=";
   };
 
   # unit tests are impure
