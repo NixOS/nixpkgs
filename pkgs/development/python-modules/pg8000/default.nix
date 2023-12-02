@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.30.1";
+  version = "1.30.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wEKA5mocz7UWbbXBZBZMLhuPYq+u3/0hFFGlMproSik=";
+    hash = "sha256-Tnx1dHpDpJwVYj+SWDu24dAj6ubq8sLh5t5Nf7f6QE8=";
   };
 
   nativeBuildInputs = [
