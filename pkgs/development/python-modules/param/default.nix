@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "1.13.0";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "holoviz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5b3UTzb7OXBwcyYyDVCGLUpWxNOYZ3cv8Gfw+x7jsBI=";
+    hash = "sha256-8R1+utY3e3py4iJTgOVfzt5Y7bp2Rn6OfoITGuOsb5c=";
   };
 
   nativeCheckInputs = [
