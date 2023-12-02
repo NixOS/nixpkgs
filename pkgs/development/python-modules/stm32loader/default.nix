@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "stm32loader";
-  version = "0.5.1";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0135qzxlrivvkq6wgkw7shfz94n755qs2c1754p1hc2jk0nqayrg";
+    sha256 = "sha256-QTLSEjdJtDH4GCamnKHN5pEjW41rRtAMXxyZZMM5K3w=";
   };
 
   propagatedBuildInputs = [ progress pyserial ];
