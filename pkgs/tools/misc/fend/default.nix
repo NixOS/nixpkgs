@@ -8,6 +8,10 @@
 , copyDesktopItems
 , makeDesktopItem
 , nix-update-script
+, testers
+, writeText
+, runCommand
+, fend
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,11 +62,26 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = fend; };
+      units = testers.testEqualContents {
+        assertion = "fend does simple math and unit conversions";
+        expected = writeText "expected" ''
+          36 kph
+        '';
+        actual = runCommand "actual" { } ''
+          ${lib.getExe fend} '(100 meters) / (10 seconds) to kph' > $out
+        '';
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
+    changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";
