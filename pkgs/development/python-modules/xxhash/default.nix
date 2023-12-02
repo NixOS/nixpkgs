@@ -1,21 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
+, setuptools
 }:
 
 buildPythonPackage rec {
-  version = "3.3.0";
-  format = "setuptools";
   pname = "xxhash";
+  version = "3.4.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w/njIrHr7r1E49nS2bEk4MVQwe9BvVUq/c3XGVFu5Bo=";
+    hash = "sha256-A3nWzx/5h81CFgmiZM4CXnTzRuPhRd0QbAzC4+w/mak=";
   };
 
   nativeBuildInputs = [
-    setuptools-scm
+    setuptools
   ];
 
   meta = with lib; {
