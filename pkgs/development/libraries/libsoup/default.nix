@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , glib
 , libxml2
 , meson
@@ -29,6 +30,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-5Ld8Qc/EyMWgNfzcMgx7xs+3XvfFoDQVPfFBP6HZLxM=";
   };
+
+  patches = [
+    # Fix build with libxml 2.12
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libsoup/-/commit/ced3c5d8cad0177b297666343f1561799dfefb0d.patch";
+      hash = "sha256-v0ymaB1+ivxIXaLRaEN12SYqfWdvKkLc7c0glLW5RUE=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
