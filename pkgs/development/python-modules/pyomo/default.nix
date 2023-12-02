@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.6.2";
+  version = "6.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     rev = "refs/tags/${version}";
-    hash = "sha256-hh2sfWOUp3ac75NEuTrw3YkvS7hXpzJp39v6cfrhNiQ=";
+    hash = "sha256-HoTtvda97ghQ0SQBZFGkDAwD2WNtZpIum2m1khivEK4=";
   };
 
   propagatedBuildInputs = [
