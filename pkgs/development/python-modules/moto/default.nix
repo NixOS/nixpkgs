@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "4.2.10";
+  version = "4.2.11";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kllf4odHSjGsPvhHlB67CX6P+ww9bBBuR89XPbBpM7I=";
+    hash = "sha256-LaYtUuqnZd/idiySDwqIpY86CeBFgckduWfZL67ISPE=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,9 @@ buildPythonPackage rec {
     # Fails at local name resolution
     "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
     "--deselect=tests/test_s3/test_server.py::test_s3_server_post_cors_multiple_origins"
+    "--deselect=tests/test_s3/test_s3_file_handles.py::TestS3FileHandleClosuresUsingMocks::test_create_multipart"
+    "--deselect=tests/test_core/test_responses_module.py::TestResponsesMockWithPassThru::test_aws_and_http_requests"
+    "--deselect=tests/test_core/test_responses_module.py::TestResponsesMockWithPassThru::test_http_requests"
 
     # Fails at resolving google.com
     "--deselect=tests/test_firehose/test_firehose_put.py::test_put_record_http_destination"
