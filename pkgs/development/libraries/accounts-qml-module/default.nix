@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qml-module";
-  version = "0.7-unstable-2022-10-12";
+  version = "0.7-unstable-2022-10-28";
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = "accounts-qml-module";
-    rev = "4119d52cb969b57fcab63f6bdf543e73c9c17092";
-    hash = "sha256-oixpmNJfmaPqQeAlPuKh+yj2PkXza0EHqF34Do3y4Fk=";
+    rev = "05e79ebbbf3784a87f72b7be571070125c10dfe3";
+    hash = "sha256-ZpnkZauowLPBnO3DDDtG/x07XoQGVNqEF8AQB5TZK84=";
   };
 
   postPatch = ''
