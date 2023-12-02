@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "tesla-powerwall";
-  version = "0.3.19";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jrester";
     repo = "tesla_powerwall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ClrMgPAMBtDMfD6hCJIN1u4mp75QW+c3re28v3FreQg=";
+    hash = "sha256-IqUxWwEvrSEbLAEnHG84oCV75qO0L5LmgpHOfaM6G8o=";
   };
 
   propagatedBuildInputs = [
