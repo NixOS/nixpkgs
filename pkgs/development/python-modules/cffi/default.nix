@@ -58,7 +58,7 @@ if isPyPy then null else buildPythonPackage rec {
     libffi
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycparser
   ];
 

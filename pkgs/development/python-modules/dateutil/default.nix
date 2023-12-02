@@ -14,9 +14,9 @@ buildPythonPackage rec {
     hash = "sha256-ASPKzBYnrhnd88J6XeW9Z+5FhvvdZEDZdI+Ku0g9PoY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ six ];
+  dependencies = [ six ];
 
   # cyclic dependency: tests need freezegun, which depends on python-dateutil
   doCheck = false;

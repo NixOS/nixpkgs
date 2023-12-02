@@ -22,7 +22,7 @@ buildPythonPackage rec {
     '';
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 

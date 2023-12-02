@@ -99,14 +99,14 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     python-dateutil
     pytz
     tzdata
   ];
 
-  passthru.optional-dependencies = let
+  optional-dependencies = let
     extras = {
       aws = [
         s3fs

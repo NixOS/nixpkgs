@@ -26,7 +26,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     setuptools
     typing-extensions

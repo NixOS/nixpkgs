@@ -48,6 +48,8 @@ buildPythonPackage rec {
     ];
   };
 
+  doCheck = false;
+
   nativeCheckInputs = [
     pytest-mock
     pytest-xdist

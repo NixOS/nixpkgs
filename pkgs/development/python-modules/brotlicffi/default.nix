@@ -22,11 +22,15 @@ buildPythonPackage rec {
     brotli
   ];
 
-  propagatedNativeBuildInputs = [
+  # This used to be:
+  # propagatedNativeBuildInputs = [
+  # which is now totally borked.
+  # Also needs python module mapping.
+  build-system = [
     cffi
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
   ];
 

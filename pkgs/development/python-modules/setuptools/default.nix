@@ -27,6 +27,10 @@ buildPythonPackage rec {
     wheel
   ];
 
+  postUnpack = ''
+    set -x
+  '';
+
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '';

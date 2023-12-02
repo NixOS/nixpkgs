@@ -22,12 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-26zniS2MDErBrQlmYiMvgx1OZPTEVFvVMBaj6dRlR0M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools # otherwise cross build fails
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     toml
     zipp
   ] ++ lib.optionals (pythonOlder "3.8") [

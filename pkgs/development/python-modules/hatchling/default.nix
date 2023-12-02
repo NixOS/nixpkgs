@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, requiredPythonModules
 
 # runtime
 , editables
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   };
 
   # listed in backend/pyproject.toml
-  propagatedBuildInputs = [
+  dependencies = [
     editables
     packaging
     pathspec
@@ -39,6 +40,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
+
+  # Also depend on runtime dependencies at build time
+  buildInputs = requiredPythonModules dependencies;
 
   pythonImportsCheck = [
     "hatchling"
