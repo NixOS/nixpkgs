@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.6.2";
+  version = "0.7.1";
 
   disabled = pythonOlder "3.6";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-X/4jA/e2nmmaVEiCgd/4KJc/sAdcYDkyKzvyVztovXM=";
+    hash = "sha256-RspjHEFYdu1k6azmifbpd57tH+SxPeepw5EQzWP/Yc8=";
   };
 
   propagatedBuildInputs = [
