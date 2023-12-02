@@ -3,6 +3,9 @@
 { lib
 , config
 , python
+# stdenv for buildPython*
+# Customizable through `buildPython*.override`
+, stdenv
 , wrapPython
 , unzip
 , ensureNewerSourcesForZipFilesHook
@@ -101,9 +104,6 @@
 , doCheck ? config.doCheckByDefault or false
 
 , disabledTestPaths ? []
-
-# Allow passing in a custom stdenv to buildPython*
-, stdenv ? python.stdenv
 
 , ... } @ attrs:
 
