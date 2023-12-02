@@ -43,5 +43,7 @@ in
         export SABNZBD_APIKEYS="${apiKeys}"
         exec ${lib.getExe pkgs.prometheus-sabnzbd-exporter}
       '';
+
+      serviceConfig.DynamicUser = false;
     };
 }
