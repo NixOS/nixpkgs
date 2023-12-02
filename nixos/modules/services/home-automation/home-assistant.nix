@@ -455,10 +455,10 @@ in {
           ln -s /etc/home-assistant/configuration.yaml "${cfg.configDir}/configuration.yaml"
         '';
         copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
+          rm -f "${cfg.configDir}/ui-lovelace.yaml"
           cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
         '' else ''
-          rm -f "${cfg.configDir}/ui-lovelace.yaml"
-          ln -s /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
+          ln -fs /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
         copyCustomLovelaceModules = if cfg.customLovelaceModules != [] then ''
           mkdir -p "${cfg.configDir}/www"
