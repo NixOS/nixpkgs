@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "partd";
-  version = "1.4.0";
+  version = "1.4.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qg/zXbvMgHrjdNtWMy9MGzm0b2e/KXX1FR4LQYau0NU=";
+    hash = "sha256-VsJd1J5v6lcn5zEgPEZsbgkvMI2PACThmdAvaqIWf2c=";
   };
 
   nativeCheckInputs = [ pytest ];
