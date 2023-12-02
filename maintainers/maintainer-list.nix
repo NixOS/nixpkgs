@@ -6555,6 +6555,12 @@
     githubId = 67984144;
     name = "Gerhard Schwanzer";
   };
+  gernotfeichter = {
+    email = "gernotfeichter@gmail.com";
+    github = "gernotfeichter";
+    githubId = 23199375;
+    name = "Gernot Feichter";
+  };
   gerschtli = {
     email = "tobias.happ@gmx.de";
     github = "Gerschtli";
@@ -15230,6 +15236,12 @@
     githubId = 816465;
     name = "Redvers Davies";
   };
+  redxtech = {
+    email = "gabe@gabedunn.dev";
+    github = "redxtech";
+    githubId = 18155001;
+    name = "Gabe Dunn";
+  };
   reedrw = {
     email = "reedrw5601@gmail.com";
     github = "reedrw";
@@ -15328,6 +15340,15 @@
     github = "rexxDigital";
     githubId = 44014925;
     name = "Rexx Larsson";
+  };
+  RGBCube = {
+    name = "RGBCube";
+    email = "rgbsphere+nixpkgs@gmail.com";
+    github = "RGBCube";
+    githubId = 78925721;
+    keys = [{
+      fingerprint = "jPaU3Vpm/GN0tUuDg72n2+bd9dDMWe4bnKM325eP7eI";
+    }];
   };
   rgnns = {
     email = "jglievano@gmail.com";
