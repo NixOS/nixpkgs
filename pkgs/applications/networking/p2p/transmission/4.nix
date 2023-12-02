@@ -28,6 +28,7 @@
 , enableGTK3 ? false
 , gtkmm3
 , xorg
+, gnome
 , wrapGAppsHook
 , enableQt ? false
 , qt5
@@ -117,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
+  ++ lib.optionals (stdenv.isDarwin && enableGTK3) [ gnome.adwaita-icon-theme ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
   ++ lib.optionals stdenv.isDarwin [ libiconv Foundation ];
@@ -154,6 +156,12 @@ stdenv.mkDerivation (finalAttrs: {
       -o $out/Applications/Transmission.app/Contents/Resources/AppIcon.icns \
       ../macosx/Images/Images.xcassets/AppIcon.appiconset
     write-darwin-bundle "$out" "Transmission" "${finalAttrs.meta.mainProgram}" "AppIcon"
+  '';
+
+  preFixup = lib.optionalString (stdenv.isDarwin && enableGTK3) ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
   '';
 
   passthru.tests = {
