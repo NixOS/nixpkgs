@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cookiecutter";
-  version = "2.3.0";
+  version = "2.5.0";
 
   # not sure why this is broken
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lCp5SYF0f21/Q51uSdOdyRqaZBKDYUFgyTxHTHLCliE=";
+    hash = "sha256-5h6QNHSOP0G4vSwR8A0DB4S0hxHE1cQjY8UJiaZTMew=";
   };
 
   nativeCheckInputs = [
