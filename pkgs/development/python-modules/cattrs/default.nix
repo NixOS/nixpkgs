@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "23.1.2";
+  version = "23.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-YO4Clbo5fmXbysxwwM2qCHJwO5KwDC05VctRVFruJcw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zWM5zmZr2EiJb/4Dc6KjDL89p0C1V0Dsz949byz5OVM=";
   };
 
   nativeBuildInputs = [
