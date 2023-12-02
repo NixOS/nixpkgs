@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "1.3.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "v${version}";
-    sha256 = "1hm9aalpb9sdp8s7ckn75xvyiacp5678pv9maybm5nz0z2h29ibq";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-25rFGpfwJKj9lLDO/ZsqJ2NfCsgSSJghLZxffjX/+7w=";
     leaveDotGit = true;
   };
 
