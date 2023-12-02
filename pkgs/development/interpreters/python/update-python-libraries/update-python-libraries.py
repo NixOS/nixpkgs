@@ -87,7 +87,8 @@ def _get_attr_value(attr_path: str) -> Optional[Any]:
                 f"{NIXPKGS_ROOT}/default.nix",
                 "--json",
                 f"{attr_path}",
-            ]
+            ],
+            stderr=subprocess.DEVNULL,
         )
         return json.loads(response.decode())
     except (subprocess.CalledProcessError, ValueError):
