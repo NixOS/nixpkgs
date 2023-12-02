@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , nix-update-script
 , pkg-config
 , openssl
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +20,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SymtMdj7QVOEiSeTjmVidejFeGK8swnM6nfT7u18URs=";
   };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
