@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytraccar";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    hash = "sha256-ngyLe6sbTTQ7n4WdV06OlQnn/vqkD+JUruyMYS1Ym+Q=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7QGgI+DDYbordBx4LbtCvPWyEh6ur2RrSKMuDlwRlTo=";
   };
 
   nativeBuildInputs = [
