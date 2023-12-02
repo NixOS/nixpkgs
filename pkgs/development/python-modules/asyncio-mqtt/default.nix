@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "asyncio-mqtt";
-  version = "0.16.1";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "sbtinstruments";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-f3JqocjOEwNjo6Uv17ij6oEdrjb6Z2wTzdhdVhx46iM=";
+    hash = "sha256-P8p21wjmFDvI0iobpQsWkKYleY4M0R3yod3/mJ7V+Og=";
   };
 
   nativeBuildInputs = [
