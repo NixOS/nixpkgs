@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyglm";
-  version = "2.7.1";
+  version = "2.7.1-rev1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Zuzu-Typ";
     repo = "PyGLM";
     rev = "refs/tags/${version}";
-    hash = "sha256-nCkwYZLibQcmlF1Nvv2I6qi+97ue7Q1HVxpw32G5qpo=";
+    hash = "sha256-MA/NoeKv6yxXL9A36SBqU7GNuPbCKDvxpOkWP8OmED4=";
     fetchSubmodules = true;
   };
 
