@@ -14,6 +14,7 @@
 , pbr
 , pyparsing
 , pytz
+, setuptools
 , stestr
 , testscenarios
 , pyyaml
@@ -23,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "6.2.1";
-  format = "setuptools";
+  version = "6.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    hash = "sha256-EyK6BfoP88Gor8cn/PlF31qoLWWEcn0uBK8Di1roQkQ=";
+    hash = "sha256-dY2UWyutW+qBq+2ArTP/6h0deTNIrF61s4Zrp0WxHVU=";
   };
 
   postPatch = ''
@@ -38,7 +39,10 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     debtcollector
