@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "7.2.0";
+  version = "7.2.2";
   format = "setuptools";
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jIwg3TDqETVIUHWEodqud5JI26pXEmcseruXCfD7+LI=";
+    hash = "sha256-gHdK7LAklFgnWreD9TCT++dXlf8rMhjSLOP/8KEsTaY=";
   };
 
   nativeCheckInputs = [
