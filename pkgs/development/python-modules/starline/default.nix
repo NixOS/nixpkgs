@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "starline";
-  version = "0.1.5";
+  version = "0.2.0";
 
   disabled = pythonOlder "3.5";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F1P1/NKml2rtd1r7A/g5IVnwQMZzkXzAxjRRDZXBPLk=";
+    hash = "sha256-VQsAq5XPWdkz93CKurQKTkHleQ5itlNHGv6Go68zIOY=";
   };
 
   patches = [
