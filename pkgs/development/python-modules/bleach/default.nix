@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "6.0.0";
+  version = "6.1.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GhqFwVleB9jbFMXwnwnmQzUCxRxZWXDtwJBVHw25lBQ=";
+    hash = "sha256-CjHxg3ljxB1Gu/EzG4d44TCOoHkdsDzE5zV7l89CqP4=";
   };
 
   propagatedBuildInputs = [
