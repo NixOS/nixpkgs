@@ -121,6 +121,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
+      hut # For interacting with the Sourcehut APIs via CLI
       (callPackage ./srht-gen-oauth-tok.nix { }) # To automatically generate OAuth tokens
     ];
   };
@@ -129,6 +130,12 @@ in
     let
       userName = "nixos-test";
       userPass = "AutoNixosTestPwd";
+      hutConfig = pkgs.writeText "hut-config" ''
+        instance "${domain}" {
+          # Will be replaced at runtime with the generated token
+          access-token "OAUTH-TOKEN"
+        }
+      '';
     in
     ''
       start_all()
@@ -148,7 +155,9 @@ in
 
       ## Obtain a OAuth token to be used for querying APIs directly
       (_, token) = machine.execute("srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}")
-      print(token)
+      token = token.strip().replace("/", r"\\/") # Escape slashes in token before passing it to sed
+      machine.execute("mkdir -p ~/.config/hut/")
+      machine.execute("sed s/OAUTH-TOKEN/" + token + "/ ${hutConfig} > ~/.config/hut/config")
 
       # Testing buildsrht
       machine.wait_for_unit("buildsrht.service")
