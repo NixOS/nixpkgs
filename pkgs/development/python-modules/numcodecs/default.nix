@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.11.0";
+  version = "0.12.1";
   format ="pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bAWLMh3oShcpKZsOrk1lKy5I6hyn+d8NplyxNHDmNes=";
+    hash = "sha256-BdkaQzcz5+7yaNfoDsImoCMtokQolhSo84JpAa7BCY4=";
   };
 
   nativeBuildInputs = [
