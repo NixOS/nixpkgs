@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ariadne";
-  version = "0.20.1";
+  version = "0.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "mirumee";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-v3CaLMTo/zbNEoE3K+aWnFTCgLetcnN7vOU/sFqLq2k=";
+    hash = "sha256-T5J0xAF33PDkC8sDOzHADpQJxwdXwKary0y/jaUJ9Fk=";
   };
   patches = [
     ./remove-opentracing.patch
