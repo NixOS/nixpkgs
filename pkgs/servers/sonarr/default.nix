@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sonarr";
-  version = "3.0.10.1567";
+  version = "3.0.9.1549";
 
   src = fetchurl {
     url = "https://download.sonarr.tv/v3/main/${version}/Sonarr.main.${version}.linux.tar.gz";
-    hash = "sha256-6zdp/Bg+9pcrElW5neB+BC16Vn1VhTjhMRRIxGrKhxc=";
+    hash = "sha256-Ba1nrvnlmVkPI+OEpwShNxfNLrpxS+N7wsx3ajkcGoQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
