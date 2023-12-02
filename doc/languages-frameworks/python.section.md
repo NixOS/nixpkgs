@@ -120,7 +120,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     py
     setuptools
@@ -214,9 +214,14 @@ because their behaviour is different:
 * `nativeCheckInputs ? []`: Dependencies needed for running the [`checkPhase`](#ssec-check-phase). These
   are added to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs) when [`doCheck = true`](#var-stdenv-doCheck). Items listed in
   `tests_require` go here.
-* `propagatedBuildInputs ? []`: Aside from propagating dependencies,
+* `dependencies ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
   paths included in this list. Items listed in `install_requires` go here.
+* `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_requires` go here.
+
+Aside from propagating dependencies,
+  `buildPythonPackage` also injects code into and wraps executables with the
+  paths included in this list. Items listed in `extras_requires` go here.
 
 ##### Overriding Python packages {#overriding-python-packages}
 
@@ -303,9 +308,9 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    tornado
-    python-daemon
+  dependencies = [
+    python3Packages.tornado
+    python3Packages.python-daemon
   ];
 
   meta = with lib; {
@@ -977,13 +982,15 @@ that we introduced with the `let` expression.
 
 #### Handling dependencies {#handling-dependencies}
 
-Our example, `toolz`, does not have any dependencies on other Python packages or
-system libraries. According to the manual, [`buildPythonPackage`](#buildpythonpackage-function) uses the
-arguments [`buildInputs`](#var-stdenv-buildInputs) and [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs) to specify dependencies. If
-something is exclusively a build-time dependency, then the dependency should be
-included in [`buildInputs`](#var-stdenv-buildInputs), but if it is (also) a runtime dependency, then it
-should be added to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs). Test dependencies are considered
-build-time dependencies and passed to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
+Our example, `toolz`, does not have any dependencies on other Python packages or system libraries.
+[`buildPythonPackage`](#buildpythonpackage-function) uses the the following arguments in the following circumstances:
+
+- `dependencies` - For Python runtime dependencies.
+- `build-system` - For Python build-time requirements.
+- [`buildInputs`](#var-stdenv-buildInputs) - For non-Python build-time requirements.
+- [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) - For test dependencies
+
+Dependencies can belong to multiple arguments, for example if something is both a build time requirement & a runtime dependency.
 
 The following example shows which arguments are given to [`buildPythonPackage`](#buildpythonpackage-function) in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -1018,7 +1025,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     multipledispatch
     numpy
     python-dateutil
@@ -1041,7 +1048,7 @@ buildPythonPackage rec {
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
 `python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytest`.
 `pytest` is a test runner and is only used during the [`checkPhase`](#ssec-check-phase) and is
-therefore not added to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
+therefore not added to `dependencies`.
 
 In the previous case we had only dependencies on other Python packages to consider.
 Occasionally you have also system libraries to consider. E.g., `lxml` provides
@@ -1136,7 +1143,7 @@ buildPythonPackage rec {
     fftwLongDouble
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
@@ -1459,9 +1466,7 @@ mode is activated.
 
 In the following example, we create a simple environment that has a Python 3.11
 version of our package in it, as well as its dependencies and other packages we
-like to have in the environment, all specified with [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
-Indeed, we can just add any package we like to have in our environment to
-[`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs).
+like to have in the environment, all specified with `dependencies`.
 
 ```nix
 with import <nixpkgs> {};
@@ -1470,9 +1475,11 @@ with python311Packages;
 buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
-  propagatedBuildInputs = [
+  dependencies = [
     pytest
     numpy
+  ];
+  propagatedBuildInputs = [
     pkgs.libsndfile
   ];
 }
@@ -1903,8 +1910,8 @@ configure alternatives](#sec-overlays-alternatives-blas-lapack)".
 
 In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
-* `setup_requires` corresponds to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs)
-* `install_requires` corresponds to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs)
+* `setup_requires` corresponds to `build-system`
+* `install_requires` corresponds to `dependencies`
 * `tests_require` corresponds to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs)
 
 ### How to enable interpreter optimizations? {#optimizations}
@@ -1928,12 +1935,10 @@ in mypython
 
 Some packages define optional dependencies for additional features. With
 `setuptools` this is called `extras_require` and `flit` calls it
-`extras-require`, while PEP 621 calls these `optional-dependencies`. A
-method for supporting this is by declaring the extras of a package in its
-`passthru`, e.g. in case of the package `dask`
+`extras-require`, while PEP 621 calls these `optional-dependencies`.
 
 ```nix
-passthru.optional-dependencies = {
+optional-dependencies = {
   complete = [ distributed ];
 };
 ```
@@ -1941,10 +1946,12 @@ passthru.optional-dependencies = {
 and letting the package requiring the extra add the list to its dependencies
 
 ```nix
-propagatedBuildInputs = [
+dependencies = [
   ...
 ] ++ dask.optional-dependencies.complete;
 ```
+
+This method is using `passthru`, meaning that changing `optional-dependencies` of a package won't cause it to rebuild.
 
 Note this method is preferred over adding parameters to builders, as that can
 result in packages depending on different variants and thereby causing
