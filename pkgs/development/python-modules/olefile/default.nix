@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "olefile";
-  version = "0.46";
+  version = "0.47";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "133b031eaf8fd2c9399b78b8bc5b8fcbe4c31e85295749bb17a87cba8f3c3964";
+    sha256 = "sha256-WZODOBoL89+9kyygymUVrNF07UiHDL9/7hI9aYwZLBw=";
   };
 
   nativeCheckInputs = [
