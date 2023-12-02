@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "wtforms";
-  version = "3.0.1";
+  version = "3.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "WTForms";
+    pname = "wtforms";
     inherit version;
-    hash = "sha256-azUbuxLdWK9X/+8FvHhCXQjRkU4P1o7hQUO3reAjxbw=";
+    hash = "sha256-XlHfivmmD2vurXXvoQl16XdoglqCFGplx8v1uRWZBiA=";
   };
 
   propagatedBuildInputs = [
