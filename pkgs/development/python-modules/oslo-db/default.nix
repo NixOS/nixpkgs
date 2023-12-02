@@ -7,6 +7,7 @@
 , oslo-utils
 , oslotest
 , pbr
+, setuptools
 , sqlalchemy
 , sqlalchemy-migrate
 , stestr
@@ -16,16 +17,19 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "14.0.0";
-  format = "setuptools";
+  version = "14.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    hash = "sha256-nAipzYOOv/rSHrMBL64AKg93v5Vpb6RNBbG2OiJ+n8E=";
+    hash = "sha256-UFilywqwhXaGnle8K5VNdZqMvhklkTMdHPMDMvz62h8=";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    pbr
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     alembic
