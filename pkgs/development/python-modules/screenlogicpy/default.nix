@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.9.4";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dieselrabbit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-OdAhA+vzIrUnE8Xdv52x7ij0LJKyxawaSY4QORP1TUg=";
+    hash = "sha256-pilPmHE5amCQ/mGTy3hJqtSEElx7SevQpeMJZKYv7BA=";
   };
 
   propagatedBuildInputs = [
