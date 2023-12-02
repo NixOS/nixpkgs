@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , kernel ? null
-, libelf
+, elfutils
 , nasm
 , python3
 , withDriver ? false
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   nativeBuildInputs = [
-    libelf
+    elfutils
     nasm
   ] ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
