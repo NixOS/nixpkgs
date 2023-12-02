@@ -28589,11 +28589,13 @@ with self; {
       ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
     patches = [
       ../development/perl-modules/XML-LibXML-clang16.patch
+
+      # Fix test with LibXML 2.12
+      (fetchpatch {
+        url = "https://github.com/shlomif/perl-XML-LibXML/commit/c2e705e650bc5569a7ea3b7c7ebace23538be808.patch";
+        hash = "sha256-fGaatLA9xc3rVXfWBzN3AChoMNGq8cWbQPZapsxzqYc=";
+      })
     ];
-    # Remove test that fails after LibXML 2.11 upgrade
-    postPatch = ''
-      rm t/35huge_mode.t
-    '';
     propagatedBuildInputs = [ XMLSAX ];
     meta = {
       description = "Perl Binding for libxml2";
