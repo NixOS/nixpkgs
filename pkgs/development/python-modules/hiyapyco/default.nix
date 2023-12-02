@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "hiyapyco";
-  version = "0.5.1";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "zerwes";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    hash = "sha256-MVJoMnEi+319ZkhffYWYVi/wj0Ihm0nfVeEXvx7Ac/4=";
+    hash = "sha256-hKTqdclWMKTGeRtQuNj0gYdiGFovFh5FQ2rRjCgbvBM=";
   };
 
   propagatedBuildInputs = [
