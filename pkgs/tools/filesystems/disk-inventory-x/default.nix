@@ -30,6 +30,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ emilytrau Enzime ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 })
