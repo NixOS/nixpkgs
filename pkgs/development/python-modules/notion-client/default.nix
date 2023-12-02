@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "notion-client";
-  version = "2.0.0";
+  version = "2.1.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ramnes";
     repo = "notion-sdk-py";
-    rev = version;
-    hash = "sha256-zfG1OgH/2ytDUC+ogIY9/nP+xkgjiMt9+HVcWEMXoj8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u10iPSbFPv9RewEYru3V6MpwhhySzmnymmv4CsefGC8=";
   };
 
   propagatedBuildInputs = [
