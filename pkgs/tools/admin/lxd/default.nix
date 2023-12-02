@@ -87,7 +87,7 @@ buildGoModule rec {
     homepage = "https://ubuntu.com/lxd";
     changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam adamcstephens ];
+    maintainers = teams.lxc.members;
     platforms = platforms.linux;
   };
 }

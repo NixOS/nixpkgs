@@ -7,7 +7,9 @@ with lib;
 let
   cfg = config.virtualisation.lxc.lxcfs;
 in {
-  meta.maintainers = [ maintainers.mic92 ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   ###### interface
   options.virtualisation.lxc.lxcfs = {

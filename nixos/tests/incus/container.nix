@@ -14,7 +14,9 @@ in
 {
   name = "incus-container";
 
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   nodes.machine = { ... }: {
     virtualisation = {

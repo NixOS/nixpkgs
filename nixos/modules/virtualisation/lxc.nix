@@ -12,6 +12,9 @@ in
 
 {
   ###### interface
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options.virtualisation.lxc = {
     enable =

@@ -37,7 +37,7 @@ buildGoModule rec {
     description = "LXD to Incus migration tool";
     homepage = "https://linuxcontainers.org/incus";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adamcstephens ];
+    maintainers = lib.teams.lxc.members;
     platforms = lib.platforms.linux;
   };
 }

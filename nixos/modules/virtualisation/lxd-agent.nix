@@ -45,7 +45,9 @@ let
     chown -R root:root "$PREFIX"
   '';
 in {
-  meta.maintainers = with lib.maintainers; [ adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options = {
     virtualisation.lxd.agent.enable = lib.mkEnableOption (lib.mdDoc "Enable LXD agent");

@@ -2,7 +2,12 @@
 
 let
   cfg = config.virtualisation.lxc;
-in {
+in
+{
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     ./lxc-instance-common.nix
   ];
