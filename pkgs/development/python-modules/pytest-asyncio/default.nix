@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.21.1";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wpo8MpCPGiXrckT2x5/yBYtGlzso/L2urG7yGc7SPkA=";
+    hash = "sha256-9PjcpIKIkn8iJezO8bxojwlmaJc3mmruzAsNF0yX/5A=";
   };
 
   outputs = [
