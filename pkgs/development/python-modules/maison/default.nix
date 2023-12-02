@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dbatten5/maison/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }
