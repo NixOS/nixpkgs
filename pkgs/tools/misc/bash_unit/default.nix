@@ -1,5 +1,9 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenv
+, coreutils
+, gnugrep
+, gnused
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +16,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-c1C+uBo5PSH07VjulCxkmvfj7UYm6emdDAaN00uvAcg=";
   };
+
+  patchPhase = ''
+    substituteInPlace bash_unit \
+      --replace '"$(which cat)"' "${lib.getExe' coreutils "cat"}" \
+      --replace '"$(which rm)"' "${lib.getExe' coreutils "rm"}" \
+      --replace '"$(which shuf)"' "${lib.getExe' coreutils "shuf"}" \
+      --replace '"$(which sed)"' "${lib.getExe gnused}" \
+      --replace '"$(which grep)"' "${lib.getExe gnugrep}"
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
