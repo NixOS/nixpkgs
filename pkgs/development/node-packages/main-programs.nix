@@ -15,6 +15,7 @@
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
+  "@salesforce/cli" = "sf";
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";
   "@vue/cli" = "vue";
