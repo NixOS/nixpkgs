@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders, gnutls }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, which
+, bison
+, nixosTests
+, linuxHeaders
+, gnutls
+}:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
@@ -9,10 +19,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-9cj9D8tXsckmWU0OV/NWQy7ghni+8dQNCI8IMPDL3Qo=";
   };
 
-  buildInputs = [ glib gnutls ]
-    ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+    bison
+  ];
 
-  nativeBuildInputs = [ pkg-config which bison ];
+  buildInputs = [
+    glib
+    gnutls
+  ] ++ lib.optionals stdenv.isLinux [
+    linuxHeaders
+  ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/nbd-${version}"
