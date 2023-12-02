@@ -39,8 +39,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://containers.dev";
-    description = "A reference implementation for the specification that \
-      can create and configure a dev container from a devcontainer.json";
+    description = "A reference implementation for the specification that can create and configure a dev container from a devcontainer.json";
     license = licenses.mit;
     platforms = lib.intersectLists (lib.platforms.linux) (lib.platforms.x86_64);
     maintainers = with maintainers; [ mr360 ];
