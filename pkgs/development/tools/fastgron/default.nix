@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastgron";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "adamritter";
     repo = "fastgron";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sGTJ98YEvy+pOFVLLIcvgUq5Pn4r1CYL9YEchZhoBeQ=";
+    hash = "sha256-R4s41p7pnYFrjM2CTY1TAYNZCCcKqBS4sPe54CTRFyY=";
   };
 
   nativeBuildInputs = [ cmake ];
