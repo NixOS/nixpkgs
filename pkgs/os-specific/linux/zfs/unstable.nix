@@ -15,7 +15,8 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfsUnstable";
   # check the release notes for compatible kernels
-  kernelCompatible = if stdenv'.isx86_64 || removeLinuxDRM
+  kernelCompatible =
+    if stdenv'.isx86_64 || removeLinuxDRM
     then kernel.kernelOlder "6.7"
     else kernel.kernelOlder "6.2";
 
@@ -27,16 +28,12 @@ callPackage ./generic.nix args {
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.2.1";
-
-  hash = "sha256-2Q/Nhp3YKgMCLPNRNBq5r9U4GeuYlWMWAsjsQy3vFW4=";
+  version = "2.2.2";
 
   isUnstable = true;
   tests = [
     nixosTests.zfs.unstable
   ];
 
-  extraPatches = [
-    ./patches/disable-zfs-dmu-offset-next-sync-by-default-v2-2.patch
-  ];
+  hash = "sha256-CqhETAwhWMhbld5ib3Rz1dxms+GQbLwjEZw/V7U/2nE=";
 }

@@ -120,7 +120,7 @@ in
       ${lib.optionalString (!localDB) ''
         $password = file('${cfg.database.passwordFile}')[0];
         $password = preg_split('~\\\\.(*SKIP)(*FAIL)|\:~s', $password);
-        $password = end($password);
+        $password = rtrim(end($password));
         $password = str_replace("\\:", ":", $password);
         $password = str_replace("\\\\", "\\", $password);
       ''}

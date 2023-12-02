@@ -3,7 +3,6 @@
 , stdenv
 , linuxKernel
 , removeLinuxDRM ? false
-, fetchpatch
 , nixosTests
 , ...
 } @ args:
@@ -26,16 +25,12 @@ callPackage ./generic.nix args {
     else linuxKernel.packages.linux_6_1;
 
   # this package should point to the latest release.
-  version = "2.2.1";
-
-  extraPatches = [
-    ./patches/disable-zfs-dmu-offset-next-sync-by-default-v2-2.patch
-  ];
+  version = "2.2.2";
 
   tests = [
     nixosTests.zfs.installer
     nixosTests.zfs.stable
   ];
 
-  hash = "sha256-2Q/Nhp3YKgMCLPNRNBq5r9U4GeuYlWMWAsjsQy3vFW4=";
+  hash = "sha256-CqhETAwhWMhbld5ib3Rz1dxms+GQbLwjEZw/V7U/2nE=";
 }

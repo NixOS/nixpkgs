@@ -18,7 +18,7 @@ in
     services.ocsinventory-agent = {
       enable = lib.mkEnableOption (lib.mdDoc "OCS Inventory Agent");
 
-      package = lib.mkPackageOptionMD pkgs "ocsinventory-agent" { };
+      package = lib.mkPackageOption pkgs "ocsinventory-agent" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule {

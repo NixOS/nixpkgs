@@ -886,6 +886,10 @@ self: super: with self; {
 
   auditok = callPackage ../development/python-modules/auditok { };
 
+  auditwheel = callPackage ../development/python-modules/auditwheel {
+    inherit (pkgs) bzip2 gnutar patchelf unzip;
+  };
+
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
   };
@@ -4077,6 +4081,8 @@ self: super: with self; {
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
+  flask-sock = callPackage ../development/python-modules/flask-sock { };
+
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
 
   flask-sockets = callPackage ../development/python-modules/flask-sockets { };
@@ -4341,6 +4347,8 @@ self: super: with self; {
 
   gcal-sync = callPackage ../development/python-modules/gcal-sync { };
 
+  gcodepy = callPackage ../development/python-modules/gcodepy { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gcs-oauth2-boto-plugin = callPackage ../development/python-modules/gcs-oauth2-boto-plugin { };
@@ -4487,6 +4495,8 @@ self: super: with self; {
   git-url-parse = callPackage ../development/python-modules/git-url-parse { };
 
   gitdb = callPackage ../development/python-modules/gitdb { };
+
+  githubkit = callPackage ../development/python-modules/githubkit { };
 
   github-to-sqlite = callPackage ../development/python-modules/github-to-sqlite { };
 
@@ -5285,6 +5295,8 @@ self: super: with self; {
   icoextract = callPackage ../development/python-modules/icoextract { };
 
   icontract = callPackage ../development/python-modules/icontract { };
+
+  id = callPackage ../development/python-modules/id { };
 
   identify = callPackage ../development/python-modules/identify { };
 
@@ -9370,6 +9382,8 @@ self: super: with self; {
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
 
+  python-mbedtls = callPackage ../development/python-modules/python-mbedtls { };
+
   python-memcached = callPackage ../development/python-modules/python-memcached { };
 
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
@@ -11092,6 +11106,8 @@ self: super: with self; {
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
+  pyspx = callPackage ../development/python-modules/pyspx { };
+
   pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 {
     inherit (pkgs) sqlcipher;
   };
@@ -12743,6 +12759,8 @@ self: super: with self; {
 
   secure = callPackage ../development/python-modules/secure { };
 
+  securesystemslib = callPackage ../development/python-modules/securesystemslib { };
+
   securetar = callPackage ../development/python-modules/securetar { };
 
   sectools = callPackage ../development/python-modules/sectools { };
@@ -12916,6 +12934,10 @@ self: super: with self; {
   signedjson = callPackage ../development/python-modules/signedjson { };
 
   sigrok = callPackage ../development/python-modules/sigrok { };
+
+  sigstore-protobuf-specs = callPackage ../development/python-modules/sigstore-protobuf-specs { };
+
+  sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
@@ -14181,7 +14203,9 @@ self: super: with self; {
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
 
-  torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
+  torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix {
+    cudaPackages = pkgs.cudaPackages_12;
+  };
 
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
@@ -14199,7 +14223,9 @@ self: super: with self; {
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 
-  torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix { };
+  torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix {
+    cudaPackages = pkgs.cudaPackages_12;
+  };
 
   tornado = callPackage ../development/python-modules/tornado { };
 
@@ -14330,6 +14356,8 @@ self: super: with self; {
   ttstokenizer = callPackage ../development/python-modules/ttstokenizer { };
 
   tubes = callPackage ../development/python-modules/tubes { };
+
+  tuf = callPackage ../development/python-modules/tuf { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 

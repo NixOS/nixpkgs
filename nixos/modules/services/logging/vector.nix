@@ -8,7 +8,7 @@ in
   options.services.vector = {
     enable = mkEnableOption (lib.mdDoc "Vector");
 
-    package = mkPackageOptionMD pkgs "vector" { };
+    package = mkPackageOption pkgs "vector" { };
 
     journaldAccess = mkOption {
       type = types.bool;

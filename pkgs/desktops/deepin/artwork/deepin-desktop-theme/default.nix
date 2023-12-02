@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-theme";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-Zn4QbVuzySHHizvw78uawbdBNKsvxhNQdq+WlLbabc0=";
+    hash = "sha256-rhbxqKT9yrtW4JJ8jCUSpsIh0JeEIttkS414vBhD9vs=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -38,10 +38,7 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  # flow theme has invalid gtk icon cache
-  # https://github.com/linuxdeepin/developer-center/issues/4291
-  postFixup = ''
-    rm -r $out/share/icons/flow
+  preFixup = ''
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
