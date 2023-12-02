@@ -53,7 +53,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "3.44.3";
+  version = "4.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   # and has more frequent releases compared to github tags
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3mXs9PwlzUo89VosBWtnsOzDQf/T22Yv7s5j6OLLp3M=";
+    hash = "sha256-6uEFj/3Urc/CWWmoAJA6y/9LWLUOcpPed9FnVg8G41Y=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
