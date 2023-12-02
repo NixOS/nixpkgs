@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.23.0";
+  version = "0.24.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-t7wxm600XgYl1jsqjOpZdWcmqR9qafdKTaz/xDPdDPY=";
+    hash = "sha256-UqX2jNNYwDNhb71qGdjHNoo2MmSxjf/bZiUoSxlE2XQ=";
   };
 
   postPatch = ''
