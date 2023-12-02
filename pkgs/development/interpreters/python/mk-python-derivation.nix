@@ -300,7 +300,13 @@ let
   passthru.updateScript = let
       filename = builtins.head (lib.splitString ":" self.meta.position);
     in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation
+# TODO: Change to throwIf after Nixpkgs 24.05 branch-off
+in
+lib.warnIf (attrs?stdenv) ''
+  buildPython*: ${name}: argument 'stdenv' is deprecated.
+  Use buildPython*.override { stdenv = ...; } { ... } instead.
+'' (lib.extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
   passthru
   self
+)
