@@ -5,7 +5,9 @@ let
   preseedFormat = pkgs.formats.yaml { };
 in
 {
-  meta.maintainers = [ lib.maintainers.adamcstephens ];
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
 
   options = {
     virtualisation.incus = {

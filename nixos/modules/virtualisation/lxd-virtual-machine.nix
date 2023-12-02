@@ -6,6 +6,10 @@ let
     then "ttyS0"
     else "ttyAMA0"; # aarch64
 in {
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   imports = [
     ./lxc-instance-common.nix
 
