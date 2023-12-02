@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "audible";
-  version = "0.8.2";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SIEDBuMCC/Hap2mGVbKEFic96ClN369SEsV06Sg+poY=";
+    hash = "sha256-qLU8FjJBPKFgjpumPqRiiMBwZi+zW46iEmWM8UerMgs=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 httpx pbkdf2 pillow pyaes rsa ];
