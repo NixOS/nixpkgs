@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.1.1";
+  version = "6.1.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v8IBn4T82FFBkVIyCmN1YEoPFFnCgbWxmbLNDS5yf48=";
+    hash = "sha256-aTJ0rq2BHP8kweh4QWWqdVzS9uRCpexTXH1pf2QipCI=";
   };
 
   propagatedBuildInputs = [
