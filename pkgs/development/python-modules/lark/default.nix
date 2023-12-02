@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.1.7";
+  version = "1.1.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
     rev = "refs/tags/${version}";
-    hash = "sha256-k74tozIgJuwtUqKKmYHlfLpCWyT2hdoygRJiIpw+GDE=";
+    hash = "sha256-bGNoQeiAC2JIFOhgYUnc+nApa2ovFzXnpl9JQAE11hM=";
   };
 
   patches = [
