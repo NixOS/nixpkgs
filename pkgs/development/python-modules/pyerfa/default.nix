@@ -16,11 +16,11 @@
 buildPythonPackage rec {
   pname = "pyerfa";
   format = "pyproject";
-  version = "2.0.0.3";
+  version = "2.0.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-13+7+lg1DBlMy5nl2TqgXTwrFNWq2LZi2Txq2f/0Hzk=";
+    hash = "sha256-26x07409Ow8i7wrTu72zCyqeEFcLH6Wpi+NMe+Nsmms=";
   };
 
   patches = [
