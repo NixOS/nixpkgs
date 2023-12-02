@@ -1,22 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
 , click
 , prompt-toolkit
 , six
+
+# tests
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "click-repl";
-  version = "0.2.0";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-repl";
-    rev = version;
-    hash = "sha256-kaTUKaIomJL0u3NX40bL0I54vkR+Utcdw1QKSbnVy5s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xCT3w0DDY73dtDL5jbssXM05Zlr44OOcy4vexgHyWiE=";
   };
+
+  postPatch = ''
+    sed -i '/--cov=/d' pyproject.toml
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     click
