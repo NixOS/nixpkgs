@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-azure";
-  version = "2.22.1";
+  version = "2.23.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v3VRCN1OoST5RlfUOP9Dpfmf3o9C/ckusmh91Ya2Cik=";
+    hash = "sha256-0+G2n1ysRF/ggl5hkOsUW2UPOm6Y1ExZFBSMfOrEQyg=";
   };
 
   # Prevent circular dependency
