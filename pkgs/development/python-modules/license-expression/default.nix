@@ -10,9 +10,9 @@
 buildPythonPackage rec {
   pname = "license-expression";
   version = "30.2.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nexB";
