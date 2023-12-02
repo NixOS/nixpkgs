@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "tcxreader";
-  version = "0.4.5";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "alenrajsp";
     repo = "tcxreader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CiOLcev9fo2BPgnPZZ2borU25f/gKISqRAapAHgLN3w=";
+    hash = "sha256-J7yzJfJr2EK/0hZLVgk+Poqr/vY/9bsgA6cePTQ45U0=";
   };
 
   nativeBuildInputs = [
