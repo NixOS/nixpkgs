@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.6.1";
+  version = "0.6.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "lidatong";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pZohueZvEIGgY6isci2mGGBewfi9SwnHHy8OwyJGR0w=";
+    hash = "sha256-UVYLyRVLRdt38obSLkSsQdroO95lwpwzerw+gYBIJ7w=";
   };
 
   postPatch = ''
