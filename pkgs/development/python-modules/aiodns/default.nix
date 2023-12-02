@@ -3,21 +3,27 @@
 , fetchFromGitHub
 , pycares
 , pythonOlder
+, setuptools
 , typing
 }:
 
 buildPythonPackage rec {
   pname = "aiodns";
-  version = "3.0.0";
-  format = "setuptools";
+  version = "3.1.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "saghul";
     repo = pname;
-    rev = "aiodns-${version}";
-    sha256 = "1i91a43gsq222r8212jn4m6bxc3fl04z1mf2h7s39nqywxkggvlp";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-JZS53kICsrXDot3CKjG30AOjkYycKpMJvC9yS3c1v5Q=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pycares
