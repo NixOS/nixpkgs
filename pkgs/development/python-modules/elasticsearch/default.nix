@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, setuptools
 , urllib3, requests
 , nosexcover, mock
 , lib
@@ -7,13 +8,17 @@
 
 buildPythonPackage (rec {
   pname = "elasticsearch";
-  version = "8.9.0";
-  format = "setuptools";
+  version = "8.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0zZ/wBPgT8eq00mm3p+tHuBPttYnsOeJaqUFwS/eXgQ=";
+    sha256 = "sha256-nghBO+r/Oka8EMbFcGmoRwTfaqqTCFxzffB/WKKBG3g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Check is disabled because running them destroy the content of the local cluster!
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
