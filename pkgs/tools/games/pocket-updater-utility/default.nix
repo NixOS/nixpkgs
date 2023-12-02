@@ -7,17 +7,18 @@
 , openssl ? pkgs.openssl
 , zlib ? pkgs.zlib
 , hostPlatform ? stdenv.hostPlatform
+, nix-update-script ? stdenv.nix-update-script
 }:
 
 buildDotnetModule rec {
   pname = "pocket-updater-utility";
-  version = "2.36.2";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
     repo = "${pname}";
     rev = "${version}";
-    hash = "sha256-W+7qN898+GbbvPgITXaRoFNuNL/2K8isbraQFWxRXuk=";
+    hash = "sha256-J9FYmoUNkMhLWsRCf64qBDAJaP8AIWGcuH0UjWx90ls=";
   };
 
   buildInputs = [
@@ -49,7 +50,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
