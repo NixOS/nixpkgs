@@ -15,7 +15,7 @@ in lib.recurseIntoAttrs
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { inherit buildLua; };
-    mpv-webm = callPackage ./mpv-webm.nix { };
+    mpv-webm = callPackage ./mpv-webm.nix { inherit buildLua; };
     mpvacious = callPackage ./mpvacious.nix { inherit buildLua; };
     quality-menu = callPackage ./quality-menu.nix { inherit buildLua; };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { inherit buildLua; };
