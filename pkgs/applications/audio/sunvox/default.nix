@@ -1,53 +1,96 @@
-{ lib, stdenv, fetchurl, unzip, alsa-lib, libX11, libXi, SDL2 }:
+{ lib
+, stdenv
+, fetchzip
+, alsa-lib
+, autoPatchelfHook
+, libglvnd
+, libjack2
+, libX11
+, libXi
+, makeWrapper
+, SDL2
+}:
 
 let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc alsa-lib libX11 libXi SDL2 ];
-  arch =
-    if stdenv.isAarch64
-    then "arm64"
-    else if stdenv.isAarch32
-    then "arm_armhf_raspberry_pi"
-    else if stdenv.is64bit
-    then "x86_64"
-    else "x86";
+  platforms = {
+    "x86_64-linux" = "linux_x86_64";
+    "i686-linux" = "linux_x86";
+    "aarch64-linux" = "linux_arm64";
+    "armv7l-linux" = "arm_armhf_raspberry_pi";
+    "x86_64-darwin" = "macos";
+    "aarch64-darwin" = "macos";
+  };
+  bindir = platforms."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation rec {
-  pname = "SunVox";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "sunvox";
   version = "2.1.1c";
 
-  src = fetchurl {
+  src = fetchzip {
     urls = [
-      "https://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip"
+      "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
       "https://web.archive.org/web/20231204012052/https://www.warmplace.ru/soft/sunvox/sunvox-2.1.1c.zip"
     ];
-    sha256 = "sha256-LfBQ/f2X75bcqLp39c2tdaSlDm+E73GUvB68XFqiicw=";
+    hash = "sha256-vJ76ELjqP4wo0tCJJd3A9RarpNo8FJaiyZhj+Q7nEGs=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+  ];
 
-  unpackPhase = "unzip $src";
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libglvnd
+    libX11
+    libXi
+    SDL2
+  ];
 
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
+    libjack2
+  ];
+
+  dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share $out/bin
-    mv sunvox $out/share/
+    runHook preInstall
 
-    bin="$out/share/sunvox/sunvox/linux_${arch}/sunvox"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath "${libPath}" \
-             "$bin"
+    # Delete platform-specific data for all the platforms we're not building for
+    find sunvox -mindepth 1 -maxdepth 1 -type d -not -name "${bindir}" -exec rm -r {} \;
 
-    ln -s "$bin" $out/bin/sunvox
+    mkdir -p $out/{bin,share/sunvox}
+    mv * $out/share/sunvox/
+
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
+      mv $binary $out/bin/$(basename $binary)
+    done
+
+    # Cleanup, make sure we didn't miss anything
+    find $out/share/sunvox/sunvox -type f -name readme.txt -delete
+    rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    ln -s $out/share/sunvox/sunvox/${bindir}/SunVox.app $out/Applications/
+    ln -s $out/share/sunvox/sunvox/${bindir}/reset_sunvox $out/bin/
+
+    # Need to use a wrapper, binary checks for files relative to the path it was called via
+    makeWrapper $out/Applications/SunVox.app/Contents/MacOS/SunVox $out/bin/sunvox
+  '' + ''
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = licenses.unfreeRedistributable;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    homepage = "http://www.warmplace.ru/soft/sunvox/";
-    maintainers = with maintainers; [ puffnfresh ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    homepage = "https://www.warmplace.ru/soft/sunvox/";
+    maintainers = with maintainers; [ puffnfresh OPNA2608 ];
+    platforms = lib.attrNames platforms;
   };
-}
+})
