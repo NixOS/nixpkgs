@@ -22703,7 +22703,7 @@ with pkgs;
   dwarfdump = libdwarf.bin;
   libdwarf_20210528 = callPackage ../development/libraries/libdwarf/20210528.nix { };
 
-  libe57format = callPackage ../development/libraries/libe57format { };
+  libe57format = disable-warnings-if-gcc13 (callPackage ../development/libraries/libe57format { });
 
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
 
