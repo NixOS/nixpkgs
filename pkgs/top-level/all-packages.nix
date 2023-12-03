@@ -7355,8 +7355,11 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
-  curl-impersonate = darwin.apple_sdk_11_0.callPackage ../tools/networking/curl-impersonate { };
-  inherit (curl-impersonate) curl-impersonate-ff curl-impersonate-chrome;
+  curl-impersonate =
+    builtins.mapAttrs (_: pin-to-gcc12-if-gcc13)
+      (darwin.apple_sdk_11_0.callPackage ../tools/networking/curl-impersonate { });
+  curl-impersonate-ff = pin-to-gcc12-if-gcc13 curl-impersonate.curl-impersonate-ff;
+  curl-impersonate-chrom = pin-to-gcc12-if-gcc13 curl-impersonate.curl-impersonate-chrome;
 
   curlie = callPackage ../tools/networking/curlie { };
 
