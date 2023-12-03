@@ -19,10 +19,30 @@ in {
         description = lib.mdDoc "The directory where Ombi stores its data files.";
       };
 
+      address = mkOption {
+        type = types.nullOr types.str;
+        default = "*";
+        example = "localhost";
+        description = lib.mdDoc ''
+          The address the Ombi web interface will bind to (e.g. localhost,
+          127.0.0.1 or *).
+        '';
+      };
+
       port = mkOption {
         type = types.port;
         default = 5000;
         description = lib.mdDoc "The port for the Ombi web interface.";
+      };
+
+      baseUrl = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/ombi";
+        description = lib.mdDoc ''
+          The base url where the web interface is served from. Useful with
+          reverse proxies.
+        '';
       };
 
       openFirewall = mkOption {
@@ -59,7 +79,10 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
+        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host " +
+          "http://${if (cfg.address != null) then cfg.address else "*"}:" +
+          toString cfg.port +
+          optionalString (cfg.baseUrl != null) " --baseurl ${cfg.baseUrl}";
         Restart = "on-failure";
       };
     };
