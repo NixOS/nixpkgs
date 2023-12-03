@@ -1,19 +1,19 @@
-{ lib,
-  fetchgit,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  fuse3,
-  libuuid,
-  acl,
-  libxcrypt,
-  git,
-  installShellFiles,
-  sphinx,
-  stdenv,
-  fetchpatch,
-  testers,
-  proxmox-backup-client,
+{ lib
+, fetchgit
+, rustPlatform
+, pkg-config
+, openssl
+, fuse3
+, libuuid
+, acl
+, libxcrypt
+, git
+, installShellFiles
+, sphinx
+, stdenv
+, fetchpatch
+, testers
+, proxmox-backup-client
 }:
 
 let
