@@ -2,18 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "olefile";
   version = "0.47";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-WZODOBoL89+9kyygymUVrNF07UiHDL9/7hI9aYwZLBw=";
+    hash = "sha256-WZODOBoL89+9kyygymUVrNF07UiHDL9/7hI9aYwZLBw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -25,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package to parse, read and write Microsoft OLE2 files";
-    homepage = "https://www.decalage.info/python/olefileio";
+    homepage = "https://olefile.readthedocs.io/";
     # BSD2 + reference to Pillow
     # http://olefile.readthedocs.io/en/latest/License.html
     license = with licenses; [ bsd2 /* and */ hpnd ];
