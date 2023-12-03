@@ -11763,7 +11763,9 @@ with pkgs;
 
   osqp = callPackage ../development/libraries/science/math/osqp { };
 
-  ossec = callPackage ../tools/security/ossec { };
+  ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
+
+  ossec-server = callPackage ../tools/security/ossec/server.nix { };
 
   osslsigncode = callPackage ../development/tools/osslsigncode { };
 
