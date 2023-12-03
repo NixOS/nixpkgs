@@ -42124,6 +42124,10 @@ with pkgs;
 
   code-maat = callPackage ../development/tools/code-maat {};
 
+  chatall = callPackage ../by-name/ch/chatall/package.nix {
+    electron = electron_26;
+  };
+
   mdhtml = callPackage ../tools/text/mdhtml { };
 
   insulator2 = callPackage ../applications/misc/insulator2 {};
