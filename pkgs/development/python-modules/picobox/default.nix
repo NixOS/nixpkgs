@@ -1,21 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , flask
 , hatchling
 , hatch-vcs
-, isPy27
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "picobox";
   version = "4.0.0";
 
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
