@@ -5,11 +5,11 @@ let
     intersectAttrs;
   inherit (lib)
     functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs
-    optionalAttrs attrNames levenshtein filter elemAt concatStringsSep sort take length
+    optionalAttrs attrNames filter elemAt concatStringsSep sort take length
     filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
     mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
     ;
-  inherit (lib.strings) levenshteinAtMost;
+  inherit (lib.strings) levenshtein levenshteinAtMost;
 
 in
 rec {
