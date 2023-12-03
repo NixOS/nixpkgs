@@ -843,6 +843,7 @@ in
   lemurs-xorg-script = runTest ./lemurs/lemurs-xorg-script.nix;
   libinput = runTest ./libinput.nix;
   librenms = runTest ./librenms.nix;
+  librenms-agent = runTest ./librenms-agent.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;

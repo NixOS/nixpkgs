@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nixosTests,
   testers,
   librenms-agent,
 }:
@@ -27,6 +28,7 @@ stdenv.mkDerivation {
   '';
 
   passthru.tests = {
+    nixos = nixosTests.librenms-agent;
     version = testers.testVersion { package = librenms-agent; };
   };
 
