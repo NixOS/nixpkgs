@@ -5693,7 +5693,7 @@ with pkgs;
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
-    wlroots = wlroots_0_15;
+    wlroots = wlroots_0_16;
   };
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
