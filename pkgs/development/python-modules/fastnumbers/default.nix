@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "fastnumbers";
-  version = "5.0.1";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "SethMMorton";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-y9QnFh44zHC+CSlYtKPmkhLSFBUquYZv4qP/pQxu9e0=";
+    hash = "sha256-TC9+xOvskABpChlrSJcHy6O7D7EnIKL6Ekt/vaLBX2E=";
   };
 
   nativeBuildInputs = [
