@@ -11788,6 +11788,8 @@ self: super: with self; {
 
   pytimeparse2 = callPackage ../development/python-modules/pytimeparse2 { };
 
+  pytikz-allefeld = callPackage ../development/python-modules/pytikz-allefeld { };
+
   pytm = callPackage ../development/python-modules/pytm { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
