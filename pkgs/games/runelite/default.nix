@@ -6,6 +6,7 @@
 , jre
 , xorg
 , gitUpdater
+, libGL
 }:
 
 maven.buildMavenPackage rec {
@@ -45,7 +46,7 @@ maven.buildMavenPackage rec {
     ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
 
     makeWrapper ${jre}/bin/java $out/bin/runelite \
-      --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm libGL ]}" \
       --add-flags "-jar $out/share/RuneLite.jar"
   '';
 
