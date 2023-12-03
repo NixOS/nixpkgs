@@ -1772,6 +1772,8 @@ with pkgs;
 
   davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
 
+  devcontainers-cli = callPackage ../development/tools/devcontainers-cli { };
+
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };
