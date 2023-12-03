@@ -1,4 +1,4 @@
-{ version, sha256, extraPatches ? [] }:
+{ version, hash, extraPatches ? [] }:
 
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 
@@ -334,7 +334,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchgit {
     url = "https://git.ffmpeg.org/ffmpeg.git";
     rev = "n${finalAttrs.version}";
-    inherit sha256;
+    inherit hash;
   };
 
   postPatch = ''
