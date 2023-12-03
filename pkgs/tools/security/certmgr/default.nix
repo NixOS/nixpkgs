@@ -39,6 +39,7 @@ in
         name   = "cloudflare-certmgr-pull-51.patch";
         url    = "https://github.com/cloudflare/certmgr/compare/232e0adf8379db28ab74c46e0dd3eddb3cd8f2ea...55c595a4a2dc871726b3c8337469daf5597718a3.patch";
         sha256 = "0jhsw159d2mgybvbbn6pmvj4yqr5cwcal5fjwkcn9m4f4zlb6qrs";
+        meta.broken = true;  # hash mismatch, FOD not on cache.nixos.org
       })
     ];
   };
