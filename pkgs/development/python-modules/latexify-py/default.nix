@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "latexify-py";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "latexify_py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sxXfm4zJJT+94jcSsYH7Ky3XwFOniSNxvcVUAsgz8u0=";
+    hash = "sha256-bBtAtBJfpStNYWhOJoypDI9hhE4g1ZFHBU8p6S1yCgU=";
   };
 
   nativeBuildInputs = [
