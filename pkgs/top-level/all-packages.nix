@@ -25581,9 +25581,9 @@ with pkgs;
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  waylandpp = callPackage ../development/libraries/waylandpp {
+  waylandpp = disable-warnings-if-gcc13 (callPackage ../development/libraries/waylandpp {
     graphviz = graphviz-nox;
-  };
+  });
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
