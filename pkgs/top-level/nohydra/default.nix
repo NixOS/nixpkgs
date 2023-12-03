@@ -253,6 +253,7 @@ in
     release-map-system-attrpath-drvpath
     release-map-attrpath-drvpath
     uninstantiated-attrpaths
+    uninstantiated-drvpaths
     unrealised-drvpaths
     release;
 }
