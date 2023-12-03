@@ -4,7 +4,7 @@ import ./make-test-python.nix (
   {
     name = "zammad";
 
-    meta.maintainers = with lib.maintainers; [ garbas taeer n0emis ];
+    meta.maintainers = with lib.maintainers; [ taeer n0emis netali ];
 
     nodes.machine = { config, ... }: {
       services.zammad.enable = true;
@@ -44,9 +44,10 @@ import ./make-test-python.nix (
     testScript = ''
       start_all()
       machine.wait_for_unit("postgresql.service")
+      machine.wait_for_unit("redis-zammad.service")
       machine.wait_for_unit("zammad-web.service")
       machine.wait_for_unit("zammad-websocket.service")
-      machine.wait_for_unit("zammad-scheduler.service")
+      machine.wait_for_unit("zammad-worker.service")
       # wait for zammad to fully come up
       machine.sleep(120)
 
