@@ -35851,7 +35851,7 @@ with pkgs;
 
   tessen = callPackage ../tools/security/tessen { };
 
-  inherit (lib.mapAttrs (_: disable-warnings-if-gcc13)
+  inherit (lib.mapAttrs (_: pkg: pkg.override { stdenv = gcc12Stdenv; })
     (callPackage ../applications/graphics/tesseract {
       inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
     }))
