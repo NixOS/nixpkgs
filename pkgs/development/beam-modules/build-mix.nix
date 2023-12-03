@@ -5,6 +5,7 @@
 , src
 , buildInputs ? [ ]
 , nativeBuildInputs ? [ ]
+, erlangCompilerOptions ? [ ]
 , beamDeps ? [ ]
 , propagatedBuildInputs ? [ ]
 , postPatch ? ""
@@ -31,6 +32,13 @@ let
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
+
+    ERL_COMPILER_OPTIONS =
+      let
+        options = [ "deterministic" ] ++ erlangCompilerOptions;
+      in
+      "[${lib.concatStringsSep "," options}]";
+
     LC_ALL = "C.UTF-8";
 
     # add to ERL_LIBS so other modules can find at runtime.
@@ -108,4 +116,3 @@ let
   });
 in
 lib.fix pkg
-
