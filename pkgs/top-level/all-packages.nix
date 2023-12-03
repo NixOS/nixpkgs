@@ -1772,6 +1772,8 @@ with pkgs;
 
   davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
 
+  dehinter = with python3Packages; toPythonApplication dehinter;
+
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };
@@ -1811,6 +1813,10 @@ with pkgs;
   elkhound = callPackage ../development/tools/elkhound { };
 
   ethq = callPackage ../os-specific/linux/ethq { };
+
+  font-v = with python3Packages; toPythonApplication font-v;
+
+  fontbakery = with python3Packages; toPythonApplication fontbakery;
 
   weidu = callPackage ../tools/games/weidu { };
 
@@ -2030,6 +2036,8 @@ with pkgs;
 
   sgrep = callPackage ../tools/text/sgrep { };
 
+  shaperglot = with python3Packages; toPythonApplication shaperglot;
+
   shell-genie = callPackage  ../applications/misc/shell-genie { };
 
   sloth = callPackage ../tools/misc/sloth { };
@@ -2099,6 +2107,8 @@ with pkgs;
   trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
 
   ttchat = callPackage ../tools/misc/ttchat { };
+
+  ufolint = with python3Packages; toPythonApplication ufolint;
 
   ukmm = callPackage ../tools/games/ukmm { };
 
