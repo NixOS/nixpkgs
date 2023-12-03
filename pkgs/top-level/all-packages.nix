@@ -9446,7 +9446,7 @@ with pkgs;
 
   inql = callPackage ../tools/security/inql { };
 
-  intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
+  intel-media-sdk = disable-warnings-if-gcc13 (callPackage ../development/libraries/intel-media-sdk { });
 
   intermodal = callPackage ../tools/misc/intermodal { };
 
