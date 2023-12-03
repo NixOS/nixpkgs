@@ -2,9 +2,21 @@
 #!nix-shell -i bash -p jq ncurses
 # shellcheck shell=bash
 
+# Get a nixpkgs maintainer's metadata as a JSON object
+#  see HELP_MESSAGE just below, or README.md.
+
 set -euo pipefail
 
 declare -A SELECTORS=( [handle]= [email]= [github]= [githubId]= [matrix]= [name]= )
+HELP_MESSAGE="usage: '$0' [selector] value
+examples:
+  get-maintainer.sh nicoo
+  get-maintainer.sh githubId 1155801
+
+\`selector\` defaults to 'handle', can be one of:
+  ${!SELECTORS[*]}
+"
+
 MAINTAINERS_DIR="$(dirname "$0")/.."
 
 die() {
@@ -20,7 +32,7 @@ listAsJSON() {
 
 parseArgs() {
   [ $# -gt 0 -a $# -lt 3 ] || {
-      usage
+      echo "$HELP_MESSAGE"
       die "invalid number of arguments (must be 1 or 2)"
   }
 
@@ -37,17 +49,6 @@ parseArgs() {
 
   value="$1"
   shift
-}
-
-usage() {
-    local name="$(basename "$0")"
-    cat <<MSG
-usage: '$0' [selector] value
-example: $name nicoo; $name githubId 1155801
-
-selector defaults to 'handle', can be one of:
-  ${!SELECTORS[*]}
-MSG
 }
 
 query() {
