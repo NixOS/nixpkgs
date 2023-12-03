@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitLab
 , gitUpdater
+, accountsservice
 , cmake
 , cmake-extras
 , deviceinfo
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfd-service";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/hfd-service";
     rev = finalAttrs.version;
-    hash = "sha256-F1MLYcCYe2GAPNO3UuONM4/j9AnV+V2YgePBn2QY5zM=";
+    hash = "sha256-KcHwLTSdo86YCteUsPndoxmLf23SOEhROc5cJQ8GS1Q=";
   };
 
   postPatch = ''
@@ -31,6 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Queries pkg-config via pkg_get_variable, can't override prefix
     substituteInPlace init/CMakeLists.txt \
       --replace "\''${SYSTEMD_SYSTEM_DIR}" "$out/lib/systemd/system"
+    substituteInPlace CMakeLists.txt \
+      --replace 'pkg_get_variable(AS_INTERFACES_DIR accountsservice interfacesdir)' 'set(AS_INTERFACES_DIR "''${CMAKE_INSTALL_DATADIR}/accountsservice/interfaces")' \
+      --replace 'DESTINATION ''${DBUS_INTERFACES_DIR}' 'DESTINATION ${placeholder "out"}/''${DBUS_INTERFACES_DIR}'
+    substituteInPlace src/CMakeLists.txt \
+      --replace "\''${DBUS_INTERFACES_DIR}/org.freedesktop.Accounts.xml" '${accountsservice}/share/dbus-1/interfaces/org.freedesktop.Accounts.xml'
   '';
 
   strictDeps = true;
@@ -41,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    accountsservice
     cmake-extras
     deviceinfo
     libgbinder
