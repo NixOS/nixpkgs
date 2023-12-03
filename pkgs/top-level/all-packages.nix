@@ -40210,7 +40210,9 @@ with pkgs;
 
   beep = callPackage ../misc/beep { };
 
-  bees = callPackage ../tools/filesystems/bees { };
+  bees = callPackage ../tools/filesystems/bees {
+    stdenv = gcc12Stdenv;
+  };
 
   blahaj = callPackage ../tools/misc/blahaj { };
 
