@@ -936,6 +936,13 @@ self: super: {
       ];
     }) super.csound-expression-dynamic;
 
+  csound-expression =
+    assert super.csound-expression.version == "5.4.3";
+    overrideCabal (drv: {
+      src = csound_src_git + "/csound-expression";
+      editedCabalFile = null;
+    }) super.csound-expression;
+
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal (drv: {
     # We cannot easily byte-compile these files, unfortunately, because they
