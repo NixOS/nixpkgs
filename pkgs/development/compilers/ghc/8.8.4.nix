@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib, stdenv, pkgsBuildHost, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
 , bootPkgs
@@ -47,24 +47,33 @@
     # all `sphinx` dependencies building in those environments.
     # `sphinx` pullls in among others:
     # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
     && !stdenv.hostPlatform.isMusl
   )
 
 , enableHaddockProgram ?
     # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
+
+, # Whether to build an unregisterised version of GHC.
+  # GHC will normally auto-detect whether it can do a registered build, but this
+  # option will force it to do an unregistered build when set to true.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
+  enableUnregisterised ? false
 }:
 
 assert !enableIntegerSimple -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
-assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+assert (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -137,7 +146,9 @@ let
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = pkgsBuildHost.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
+  installCC = pkgsHostTarget.gcc;
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -151,14 +162,11 @@ let
     (lib.optionalString enableIntegerSimple "-integer-simple")
   ];
 
-in
+  targetLibffi = if hostPlatform != targetPlatform
+    then targetPackages.libffi
+    else pkgsHostTarget.libffi;
 
-# C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
-assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
-assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
-assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
+in
 
 stdenv.mkDerivation (rec {
   version = "8.8.4";
@@ -200,9 +208,19 @@ stdenv.mkDerivation (rec {
     # Renamed to match ghc8.8:
     # https://gitlab.haskell.org/ghc/ghc/-/commit/4b431f334018eaef2cf36de3316025c68c922915#20d64c0bdc272817149d1d5cf20a73a8b5fd637f
     ./rename-numa-api-call.patch
+
+    # We need to be able to set AR_STAGE0 and LD_STAGE0 when cross-compiling
+    (fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8f7dd5710b80906ea7a3e15b7bb56a883a49fed8.patch";
+      hash = "sha256-C636Nq2U8YOG/av7XQmG3L1rU0bmC9/7m7Hty5pm5+s=";
+    })
+    ./configure-ar-ld-stage0.patch
   ];
 
   postPatch = "patchShebangs .";
+
+  # GHC is unable to build a cross-compiler without this set.
+  "NIX_CC_WRAPPER_TARGET_HOST_${buildCC.suffixSalt}" = 1;
 
   # GHC is a bit confused on its cross terminology.
   # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
@@ -236,6 +254,9 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' + ''
+    export CC_STAGE0="${buildCC}/bin/${buildCC.targetPrefix}cc"
+    export LD_STAGE0="${buildCC.bintools}/bin/${buildCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
+    export AR_STAGE0="${buildCC.bintools.bintools}/bin/${buildCC.bintools.targetPrefix}ar"
 
     echo -n "${buildMK dontStrip}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -263,18 +284,20 @@ stdenv.mkDerivation (rec {
       done
   '';
 
+  # We don't pass --host because ./configure gets confused when we do
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" ]
+    ++ lib.optional (buildPlatform != hostPlatform || targetPlatform != hostPlatform) "target";
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-curses-includes=${pkgsBuildHost.ncurses.dev}/include"
+    "--with-curses-libraries=${pkgsBuildHost.ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetLibffi.dev}/include"
+    "--with-ffi-libraries=${targetLibffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
@@ -289,6 +312,8 @@ stdenv.mkDerivation (rec {
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ lib.optionals enableUnregisterised [
+    "--enable-unregisterised"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -330,6 +355,14 @@ stdenv.mkDerivation (rec {
     ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
   postInstall = ''
+    # Make the installed GHC use the host platform's tools.
+    sed -i $out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings \
+      -e "s!$CC!${installCC}/bin/${installCC.targetPrefix}cc!g" \
+      -e "s!$CXX!${installCC}/bin/${installCC.targetPrefix}c++!g" \
+      -e "s!$LD!${installCC.bintools}/bin/${installCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}!g" \
+      -e "s!$AR!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ar!g" \
+      -e "s!$RANLIB!${installCC.bintools.bintools}/bin/${installCC.bintools.targetPrefix}ranlib!g"
+
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
@@ -355,17 +388,8 @@ stdenv.mkDerivation (rec {
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
+    platforms = lib.platforms.all;
     inherit (ghc.meta) license;
-    # hardcode platforms because the bootstrap GHC differs depending on the platform,
-    # with differing platforms available for each of them; See HACK comment in
-    # 8.10.2-binary.nix for an explanation of the musl special casing.
-    platforms = [
-      "x86_64-linux"
-    ] ++ lib.optionals (!hostPlatform.isMusl) [
-      "i686-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-    ];
     # integer-simple builds are broken with musl when bootstrapping using
     # GHC 8.10.2 and below, however it is not possible to reverse bootstrap
     # GHC 8.8.4 with GHC 8.10.7.

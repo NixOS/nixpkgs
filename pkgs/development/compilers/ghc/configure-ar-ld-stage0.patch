@@ -1,0 +1,30 @@
+--- a/configure
++++ b/configure
+@@ -3206,6 +3206,7 @@
+   fi
+ 
+ 
++if test -z "$LD_STAGE0"; then
+ LD_STAGE0=`"$WithGhc" --info | grep "^ ,(\"ld command\"," | sed -e 's/.*","//' -e 's/")$//'`
+ tmp=${LD_STAGE0#\$topdir/}
+ if test "${LD_STAGE0}" != "$tmp"
+@@ -3213,9 +3214,10 @@
+     topdir=`"$WithGhc" --print-libdir | sed 's#\\\\#/#g'`
+     LD_STAGE0="$topdir/$tmp"
+ fi
++fi
+ 
+ 
+-
++if test -z "$AR_STAGE0"; then
+ AR_STAGE0=`"$WithGhc" --info | grep "^ ,(\"ar command\"," | sed -e 's/.*","//' -e 's/")$//'`
+ tmp=${AR_STAGE0#\$topdir/}
+ if test "${AR_STAGE0}" != "$tmp"
+@@ -3223,6 +3225,7 @@
+     topdir=`"$WithGhc" --print-libdir | sed 's#\\\\#/#g'`
+     AR_STAGE0="$topdir/$tmp"
+ fi
++fi
+ 
+ 
+ 
