@@ -35424,12 +35424,12 @@ with pkgs;
 
   slic3r = callPackage ../applications/misc/slic3r { };
 
-  curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
+  curaengine_stable = disable-warnings-if-gcc13 (callPackage ../applications/misc/curaengine/stable.nix { });
 
-  curaengine = callPackage ../applications/misc/curaengine {
+  curaengine = disable-warnings-if-gcc13 (callPackage ../applications/misc/curaengine {
     inherit (python3.pkgs) libarcus;
     protobuf = protobuf_21;
-  };
+  });
 
   cura = libsForQt5.callPackage ../applications/misc/cura { };
 
