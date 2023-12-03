@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eliandoran ];
     platforms = platforms.linux;
+    mainProgram = "check_mk_agent";
   };
 }
