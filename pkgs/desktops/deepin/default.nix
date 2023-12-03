@@ -1,4 +1,4 @@
-{ lib, pkgs, libsForQt5 }:
+{ lib, pkgs, stdenv, libsForQt5 }:
 let
   packages = self:
   let

@@ -38762,7 +38762,7 @@ with pkgs;
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
   inherit (cinnamon) mint-x-icons mint-y-icons;
 
-  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
+  deepin = recurseIntoAttrs (callPackage ../desktops/deepin { stdenv = gcc12Stdenv; });
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });
 
