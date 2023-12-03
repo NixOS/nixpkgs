@@ -12166,8 +12166,6 @@ with pkgs;
 
   plowshare = callPackage ../tools/misc/plowshare { };
 
-  pls = callPackage ../tools/misc/pls { };
-
   pm2 = nodePackages.pm2;
 
   pmenu = callPackage ../tools/X11/pmenu { };
