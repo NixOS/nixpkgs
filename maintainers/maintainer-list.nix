@@ -17284,6 +17284,12 @@
     githubId = 327943;
     name = "Scott Zhu Reeves";
   };
+  starzation = {
+    email = "nixpkgs@starzation.net";
+    github = "starzation";
+    githubId = 145975416;
+    name = "Starzation";
+  };
   stasjok = {
     name = "Stanislav Asunkin";
     email = "nixpkgs@stasjok.ru";
