@@ -212,8 +212,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     phpstan = callPackage ../development/php-packages/phpstan { };
 
-    psalm = callPackage ../development/php-packages/psalm { };
-
     psysh = callPackage ../development/php-packages/psysh { };
   };
 
