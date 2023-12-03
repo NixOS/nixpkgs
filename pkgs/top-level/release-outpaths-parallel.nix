@@ -12,7 +12,7 @@ the number of cores -- this helps in two ways:
    (on one core) by making the job size smaller.
 
 */
-# see release-outpaths-parallel.sh
+# see pkgs/top-level/nohydra
 { lib ? import ../../lib
 , checkMeta
 , includeBroken ? true
