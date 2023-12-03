@@ -26830,7 +26830,7 @@ with pkgs;
 
   openxr-loader = callPackage ../development/libraries/openxr-loader { };
 
-  osrm-backend = callPackage ../servers/osrm-backend { };
+  osrm-backend = disable-warnings-if-gcc13 (callPackage ../servers/osrm-backend { });
 
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
 
