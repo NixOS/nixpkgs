@@ -37,17 +37,10 @@ let
     inherit checkMeta path includeBroken;
   };
 
-  filtered = lib.pipe myPaths [
+in
+  lib.pipe myPaths [
     (map (lib.splitString "."))
     (map (path: lib.setAttrByPath path (lib.attrByPath path null unfiltered)))
     (builtins.foldl' lib.recursiveUpdate {})
-  ];
+  ]
 
-  recurseEverywhere = val:
-    if lib.isDerivation val || !(lib.isAttrs val)
-    then val
-    else (builtins.mapAttrs (_: v: recurseEverywhere v) val)
-         // { recurseForDerivations = true; };
-
-in
-  recurseEverywhere filtered
