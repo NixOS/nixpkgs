@@ -29,10 +29,28 @@ makeScopeWithSplicing' {
   inherit stdenv;
 
   # LIBRARIES
+  kdsoap = callPackage ../development/libraries/kdsoap { };
+
+  futuresql = callPackage ../development/libraries/futuresql { };
+  kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+  libquotient = callPackage ../development/libraries/libquotient { };
+  mlt = pkgs.mlt.override {
+    qt = qt6;
+  };
+
+  qca = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/qca {
+    inherit (qt6) qtbase qt5compat;
+  };
+  qcoro = callPackage ../development/libraries/qcoro { };
+  qgpgme = callPackage ../development/libraries/gpgme { };
+  packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
 
   qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
+
+  qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -43,6 +61,8 @@ makeScopeWithSplicing' {
   qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
     qt5Kvantum = pkgs.libsForQt5.qtstyleplugin-kvantum;
   };
+
+  qtutilities = callPackage ../development/libraries/qtutilities { };
 
   quazip = callPackage ../development/libraries/quazip { };
 

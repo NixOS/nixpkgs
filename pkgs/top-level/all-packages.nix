@@ -4376,8 +4376,6 @@ with pkgs;
     charles4
   ;
 
-  libquotient = libsForQt5.callPackage ../development/libraries/libquotient { };
-
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
@@ -19187,8 +19185,6 @@ with pkgs;
   fundoc = callPackage ../development/tools/fundoc { };
 
   funzzy = callPackage ../development/tools/misc/funzzy { };
-
-  futuresql = libsForQt5.callPackage ../development/libraries/futuresql { };
 
   fzf-make = callPackage ../development/tools/misc/fzf-make { };
 
