@@ -8,12 +8,14 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "pyspnego";
   version = "0.10.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,6 +25,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-60aIRrhRynbuuFZzzBhJTlmU74CWuao8jWhr126cPrc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cryptography
@@ -47,6 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spnego" ];
 
   meta = with lib; {
+    changelog = "https://github.com/jborean93/pyspnego/blob/v${version}/CHANGELOG.md";
     description = "Python SPNEGO authentication library";
     homepage = "https://github.com/jborean93/pyspnego";
     license = with licenses; [ mit ];
