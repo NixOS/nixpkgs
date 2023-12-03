@@ -331,16 +331,28 @@ effectiveStdenv.mkDerivation {
     ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ]
     ++ lib.optionals enableCuda (with cudaPackages; [
-      cuda_cudart
-      cuda_cccl # <thrust/*>
-      libnpp # npp.h
+      cuda_cudart.lib
+      cuda_cudart.dev
+      cuda_cccl.dev # <thrust/*>
+      libnpp.dev # npp.h
+      libnpp.lib
+      libnpp.static
       nvidia-optical-flow-sdk
     ] ++ lib.optionals enableCublas [
-      libcublas # cublas_v2.h
+      # May start using the default $out instead once
+      # https://github.com/NixOS/nixpkgs/issues/271792
+      # has been addressed
+      libcublas.static
+      libcublas.lib
+      libcublas.dev # cublas_v2.h
     ] ++ lib.optionals enableCudnn [
-      cudnn # cudnn.h
+      cudnn.dev # cudnn.h
+      cudnn.lib
+      cudnn.static
     ] ++ lib.optionals enableCufft [
-      libcufft # cufft.h
+      libcufft.dev # cufft.h
+      libcufft.lib
+      libcufft.static
     ]);
 
   propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
