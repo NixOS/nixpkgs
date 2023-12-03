@@ -27288,9 +27288,9 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  rippled = callPackage ../servers/rippled {
+  rippled = disable-warnings-if-gcc13 (callPackage ../servers/rippled {
     boost = boost177;
-  };
+  });
 
   rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix { };
 
