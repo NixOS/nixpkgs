@@ -41,7 +41,7 @@ List of open PRs: https://github.com/NixOS/nixpkgs/pulls
 Reviewing guidelines: https://nixos.org/manual/nixpkgs/unstable/#chap-reviewing-contributions
 -->
 
-### Priorities
+---
 
 Add a :+1: [reaction] to [pull requests you find important].
 
