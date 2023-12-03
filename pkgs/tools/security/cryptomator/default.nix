@@ -1,19 +1,17 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
-, maven, jdk21, makeShellWrapper, glib, wrapGAppsHook
+, maven, jdk, makeShellWrapper, glib, wrapGAppsHook
 , libayatana-appindicator
 }:
 
 
 let
-  jdk = jdk21 .override (lib.optionalAttrs stdenv.isLinux {
-    enableJavaFX = true;
-  });
   mavenJdk = maven.override {
-    inherit jdk;
+    jdk = jdk;
   };
 in
+assert stdenv.isLinux; # better than `called with unexpected argument 'enableJavaFX'`
 mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
   version = "1.11.0";
