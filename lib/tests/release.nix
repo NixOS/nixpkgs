@@ -67,5 +67,18 @@ let
 in
   pkgs.symlinkJoin {
     name = "nixpkgs-lib-tests";
-    paths = map testWithNix nixVersions;
+    paths = map testWithNix nixVersions ++
+
+      #
+      # TEMPORARY MIGRATION MECHANISM
+      #
+      # This comment and the expression which follows it should be
+      # removed once the following PR has merged to ofborg and been
+      # deployed:
+      #
+      #   https://github.com/NixOS/ofborg/pull/660
+      #
+      [(import ../../pkgs/test/release {})]
+    ;
+
   }
