@@ -6,6 +6,10 @@
 , buildInputs ? [ ]
 , nativeBuildInputs ? [ ]
 , erlangCompilerOptions ? [ ]
+  # Deterministic Erlang builds remove full system paths from debug information
+  # among other things to keep builds more reproducible. See their docs for more:
+  # https://www.erlang.org/doc/man/compile
+, erlangDeterministicBuilds ? true
 , beamDeps ? [ ]
 , propagatedBuildInputs ? [ ]
 , postPatch ? ""
@@ -35,7 +39,7 @@ let
 
     ERL_COMPILER_OPTIONS =
       let
-        options = [ "deterministic" ] ++ erlangCompilerOptions;
+        options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
       in
       "[${lib.concatStringsSep "," options}]";
 
