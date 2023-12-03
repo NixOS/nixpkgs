@@ -249,6 +249,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
+        # do we really need this inherit here?
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;

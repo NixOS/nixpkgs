@@ -35,10 +35,23 @@
 let
   debugSymbols = debug || developerBuild;
   isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
-  qtPlatformCross = plat: with plat;
+
+  qtPlatformCross = with stdenv.hostPlatform;
     if isLinux
-    then "linux-generic-g++"
-    else throw "Please add a qtPlatformCross entry for ${plat.config}";
+    then "devices/linux-generic-g++"
+    else if isDarwin
+    then
+      # the logic from the configure script
+      if isAarch64 then "macx-clang-arm64"
+      else "macx-clang-x64"
+    else
+      if isCrossBuild then throw "Please add a qtPlatformCross entry for ${config}"
+      else null;
+
+  # We need to keep the original mkspec name in the string for pyqt-builder to determine
+  # the target platform.
+  nixCrossConf = builtins.baseNameOf qtPlatformCross + "-nix-cross";
+
   postFixupPatch = ../${lib.versions.majorMinor version}/qtbase.patch.d/0016-qtbase-cross-build-postFixup.patch;
 in
 
@@ -163,7 +176,6 @@ stdenv.mkDerivation (finalAttrs: ({
             -e 's|/usr/bin/xcode-select|xcode-select|' \
             -e 's|/usr/bin/xcrun|xcrun|' \
             -e 's|/usr/bin/xcodebuild|xcodebuild|' \
-            -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
             ./configure
             substituteInPlace ./mkspecs/common/mac.conf \
                 --replace "/System/Library/Frameworks/OpenGL.framework/" "${OpenGL}/Library/Frameworks/OpenGL.framework/" \
@@ -193,17 +205,19 @@ stdenv.mkDerivation (finalAttrs: ({
 
     ./bin/syncqt.pl -version $version
 
-    # generate a cross compilation config unconditionally so we can pass a natively-built qtbase
+  ''
+    # generate a cross compilation config even for native builds so we can pass a natively-built qtbase
     # as a build dependency for a cross build and to avoid specifying CROSS_COMPILE prefix for qmake later
-    sed -i '1 i CROSS_COMPILE=${stdenv.hostPlatform.config + "-"}' mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-    echo 'QMAKE_PKG_CONFIG=''$''$(PKG_CONFIG)' >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+    + lib.optionalString (qtPlatformCross != null) ''
+    mkdir mkspecs/${nixCrossConf}
+    echo 'CROSS_COMPILE=${stdenv.hostPlatform.config + "-"}' > mkspecs/${nixCrossConf}/qmake.conf
+    echo 'QMAKE_PKG_CONFIG=''$''$(PKG_CONFIG)' >> mkspecs/${nixCrossConf}/qmake.conf
+    echo 'include(../${qtPlatformCross}/qmake.conf)' >> mkspecs/${nixCrossConf}/qmake.conf
+    echo '#include "../${qtPlatformCross}/qplatformdefs.h"' > mkspecs/${nixCrossConf}/qplatformdefs.h
 
-    # does this flag propagation really do anything?
-    echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-    echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-    echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-  '' + lib.optionalString isCrossBuild ''
+  ''
     # QT's configure script will refuse to use pkg-config unless these two environment variables are set
+    + lib.optionalString isCrossBuild ''
     export PKG_CONFIG_SYSROOT_DIR=/
     export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
   '';
@@ -345,6 +359,9 @@ stdenv.mkDerivation (finalAttrs: ({
     ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
 
+  ] ++ lib.optionals (qttranslations != null) [
+    "-translationdir" "${qttranslations}/translations"
+
   # regular build, Darwin options
     ] ++ (if stdenv.isDarwin then [
       "-qt-freetype"
@@ -378,14 +395,11 @@ stdenv.mkDerivation (finalAttrs: ({
     ] ++ lib.optionals (mysqlSupport) [
       "-L" "${libmysqlclient}/lib"
       "-I" "${libmysqlclient}/include"
-
-    ] ++ lib.optional (qttranslations != null) [
-      "-translationdir" "${qttranslations}/translations"
     ]
 
   # cross compilation options
   ))) ++ lib.optionals isCrossBuild [
-    "-device ${qtPlatformCross stdenv.hostPlatform}"
+    "-xplatform ${nixCrossConf}"
     "-external-hostbindir ${qtbase-bootstrap.qmake}/bin"
   ]
 
