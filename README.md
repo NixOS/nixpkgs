@@ -7,7 +7,7 @@
 [![Botnix Build](https://github.com/nervosys/botnix/actions/workflows/test_build.yml/badge.svg)](https://github.com/nervosys/botnix/actions/workflows/test_build.yml)
 -->
 
-# The operating system for intelligent robotic systems
+# The operating system for autonomous systems
 
 ## Announcements
 
