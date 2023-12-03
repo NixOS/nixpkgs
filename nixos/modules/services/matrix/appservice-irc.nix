@@ -216,6 +216,7 @@ in {
         SystemCallFilter = [
           "@system-service @pkey"
           "~@privileged @resources"
+          "@chown"
         ];
         SystemCallArchitectures = "native";
         # AF_UNIX is required to connect to a postgres socket.
