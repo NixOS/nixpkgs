@@ -57,7 +57,15 @@ let
   # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
   firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
-  openCommand = name: fs: ''
+  openCommand = name: fs: if config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices) then ''
+    if clevis decrypt < /etc/clevis/${firstDevice fs}.jwe | bcachefs unlock ${firstDevice fs}
+    then
+      printf "unlocked ${name} using clevis\n"
+    else
+      printf "falling back to interactive unlocking...\n"
+      tryUnlock ${name} ${firstDevice fs}
+    fi
+  '' else ''
     tryUnlock ${name} ${firstDevice fs}
   '';
 

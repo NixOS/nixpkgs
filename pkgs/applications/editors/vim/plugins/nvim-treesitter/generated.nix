@@ -1921,12 +1921,12 @@
   };
   rbs = buildGrammar {
     language = "rbs";
-    version = "0.0.0+rev=192eda4";
+    version = "0.0.0+rev=23c69a4";
     src = fetchFromGitHub {
       owner = "joker1007";
       repo = "tree-sitter-rbs";
-      rev = "192eda46774fd0281cdd41d372d5b4da86148780";
-      hash = "sha256-Bxgh7K3j0oPvZw7JX3kXFmaEAEKefB0A9ATmrbvXrB8=";
+      rev = "23c69a4fa9803abc9d87b235ca88d52418250041";
+      hash = "sha256-tdxx+feI0UIHkk1eS5VrIuYvOZWpuWF3NEioqrnZ+30=";
     };
     meta.homepage = "https://github.com/joker1007/tree-sitter-rbs";
   };

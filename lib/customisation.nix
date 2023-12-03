@@ -4,11 +4,12 @@ let
   inherit (builtins)
     intersectAttrs;
   inherit (lib)
-    functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs levenshteinAtMost
+    functionArgs isFunction mirrorFunctionArgs isAttrs setFunctionArgs
     optionalAttrs attrNames levenshtein filter elemAt concatStringsSep sort take length
     filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
     mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
     ;
+  inherit (lib.strings) levenshteinAtMost;
 
 in
 rec {
@@ -198,7 +199,7 @@ rec {
         + "${loc'}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
-      error = errorForArg missingArgs.${head (attrNames missingArgs)};
+      error = errorForArg (head (attrNames missingArgs));
 
     in if missingArgs == {}
        then makeOverridable f allArgs

@@ -34,7 +34,6 @@ let
     lm_sensors
     net-snmp
     procps
-    unixtools.ping
   ];
 
   mailq = runCommand "mailq-wrapper" { preferLocalBuild = true; } ''
@@ -76,8 +75,8 @@ stdenv.mkDerivation rec {
       -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"${binPath}\"|'
 
     configureFlagsArray+=(
-      --with-ping-command='ping -4 -n -U -w %d -c %d %s'
-      --with-ping6-command='ping -6 -n -U -w %d -c %d %s'
+      --with-ping-command='${lib.getBin unixtools.ping}/bin/ping -4 -n -U -w %d -c %d %s'
+      --with-ping6-command='${lib.getBin unixtools.ping}/bin/ping -6 -n -U -w %d -c %d %s'
     )
 
     install -Dm555 ${share} $out/share

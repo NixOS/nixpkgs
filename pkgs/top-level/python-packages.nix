@@ -7210,6 +7210,10 @@ self: super: with self; {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mujoco = callPackage ../development/python-modules/mujoco {
+    inherit (pkgs) mujoco;
+  };
+
   mujson = callPackage ../development/python-modules/mujson { };
 
   mwcli = callPackage ../development/python-modules/mwcli { };
@@ -15585,6 +15589,8 @@ self: super: with self; {
 
   vpk = callPackage ../development/python-modules/vpk { };
 
+  vprof = callPackage ../development/python-modules/vprof { };
+
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
   vsts = callPackage ../development/python-modules/vsts { };
@@ -16187,7 +16193,7 @@ self: super: with self; {
 
   zope-component = callPackage ../development/python-modules/zope-component { };
 
-  zope_configuration = callPackage ../development/python-modules/zope_configuration { };
+  zope-configuration = callPackage ../development/python-modules/zope-configuration { };
 
   zope-contenttype = callPackage ../development/python-modules/zope-contenttype { };
 
@@ -16223,7 +16229,7 @@ self: super: with self; {
 
   zope-testbrowser = callPackage ../development/python-modules/zope-testbrowser { };
 
-  zope_testing = callPackage ../development/python-modules/zope_testing { };
+  zope-testing = callPackage ../development/python-modules/zope-testing { };
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 

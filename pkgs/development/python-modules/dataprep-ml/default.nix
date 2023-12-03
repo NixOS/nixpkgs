@@ -23,7 +23,7 @@ let
 in
 buildPythonPackage rec {
   pname = "dataprep-ml";
-  version = "0.0.18";
+  version = "0.0.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dataprep_ml";
     inherit version;
-    hash = "sha256-nIqyRwv62j8x5Fy7ILMLWxw6yJmkkNRE1zyUlfvRYTI=";
+    hash = "sha256-X6mTTj4hfnqiCPMFrc8ESFp2E7bRNELLR1uL/dGzsPg=";
   };
 
   nativeBuildInputs = [
