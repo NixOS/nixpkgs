@@ -4572,9 +4572,9 @@ self: super: with self; {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
-  gmsh = toPythonModule (callPackage ../applications/science/math/gmsh {
+  gmsh = disable-warnings-if-gcc13 (toPythonModule (callPackage ../applications/science/math/gmsh {
     enablePython = true;
-  });
+  }));
 
   gntp = callPackage ../development/python-modules/gntp { };
 
