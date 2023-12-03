@@ -3,6 +3,7 @@
 , abc-verifier
 , bash
 , bison
+, boost
 , fetchFromGitHub
 , flex
 , libffi
@@ -18,6 +19,7 @@
 , yosys-bluespec
 , yosys-ghdl
 , yosys-symbiflow
+, enablePython ? true # enable python binding
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
@@ -68,6 +70,10 @@ let
     ghdl     = yosys-ghdl;
   } // (yosys-symbiflow);
 
+  boost_python = boost.override {
+    enablePython = true;
+    python = python3;
+  };
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
@@ -90,7 +96,7 @@ in stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (pp: with pp; [
       click
     ]))
-  ];
+  ] ++ lib.optional enablePython boost_python;
 
   makeFlags = [ "PREFIX=${placeholder "out"}"];
 
@@ -123,6 +129,10 @@ in stdenv.mkDerivation (finalAttrs: {
       echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
       exit 1
     fi
+  '' + lib.optionalString enablePython ''
+    echo "ENABLE_PYOSYS := 1" >> Makefile.conf
+    echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
+    echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
   '';
 
   checkTarget = "test";
