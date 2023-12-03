@@ -62,7 +62,8 @@ let
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents =
             [ jobs.tarball
-              jobs.cabal2nix.x86_64-darwin
+              # broken due to "werkzeug"
+              #jobs.cabal2nix.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
               jobs.go.x86_64-darwin
