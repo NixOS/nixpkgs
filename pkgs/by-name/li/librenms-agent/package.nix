@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "librenms-agent";
@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = nixosTests.librenms-agent;
 
   meta = with lib; {
     description = "Agent that provides data to LibreNMS";
