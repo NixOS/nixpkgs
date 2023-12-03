@@ -516,6 +516,8 @@ self: super: with self; {
 
   amqtt = callPackage ../development/python-modules/amqtt { };
 
+  anchor-kr = callPackage ../development/python-modules/anchor-kr { };
+
   ancp-bids = callPackage ../development/python-modules/ancp-bids { };
 
   android-backup = callPackage ../development/python-modules/android-backup { };
@@ -537,6 +539,8 @@ self: super: with self; {
   angrop = callPackage ../development/python-modules/angrop { };
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
+
+  anitopy = callPackage ../development/python-modules/anitopy { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
 
