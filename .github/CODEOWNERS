@@ -18,6 +18,9 @@
 # EditorConfig
 /.editorconfig @Mic92 @zowoq
 
+# single entry point for Continuous Testing (CT) runners (ofborg, github, etc)
+/ct                         @infinisil @amjoseph-nixpkgs
+
 # Libraries
 /lib                        @infinisil
 /lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
