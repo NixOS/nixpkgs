@@ -26402,11 +26402,12 @@ with pkgs;
 
   engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
-  envoy = disable-warnings-if-gcc13 (callPackage ../servers/http/envoy {
+  envoy = callPackage ../servers/http/envoy {
     go = go_1_20;
     jdk = openjdk11_headless;
     gn = gn1924;
-  });
+    stdenv = gcc12Stdenv;
+  };
 
   ergochat = callPackage ../servers/irc/ergochat { };
 
