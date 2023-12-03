@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, rust
 , rustPlatform
 , cmake
 , makeWrapper
@@ -22,28 +21,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-settings";
-  version = "unstable-2023-10-26";
+  version = "unstable-2023-12-02";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "d15ebbd340dee7adf184831311b5da73faaa80f5";
-    hash = "sha256-OlQ2jjT/ygO+hpl5Cc3h8Yp/SVo+pmI/EH7pqvY9GXI=";
+    rev = "5a452d7ac18a7c58ca990780bcc96c0bd0d18d09";
+    hash = "sha256-ubOV+M4JCPJ51eTsyLj/QLu+ydlqG5jx+fC1RUzJ5Vs=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "accesskit-0.11.0" = "sha256-/6KUCH1CwMHd5YEMOpAdVeAxpjl9JvrzDA4Xnbd1D9k=";
+      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
+      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
       "cosmic-bg-config-0.1.0" = "sha256-fdRFndhwISmbTqmXfekFqh+Wrtdjg3vSZut4IAQUBbA=";
-      "cosmic-comp-config-0.1.0" = "sha256-q0LP8TODETobYg0S6XDsP0Lw/RJIB8YB4jiUkRHpsio=";
-      "cosmic-config-0.1.0" = "sha256-+mnvf/IM9cqoZv5zHW8uBAqeY2pG3IOiOWIESVExnqg=";
-      "cosmic-panel-config-0.1.0" = "sha256-U5FYZ5hjJ5s6lYfWrgyuy8zLjiXGQV+OKwf6nzHZT6w=";
-      "smithay-client-toolkit-0.17.0" = "sha256-vDY4cqz5CZD12twElUWVCsf4N6VO9O+Udl8Dc4arWK4=";
-      "softbuffer-0.2.0" = "sha256-VD2GmxC58z7Qfu/L+sfENE+T8L40mvUKKSfgLmCTmjY=";
-      "taffy-0.3.11" = "sha256-gPHJhYmDb3Pj7eM8eFv1kPoODk0BGiw+yMj9ROXIjAU=";
-      "winit-0.28.6" = "sha256-8IQ6HyvD09v8+KWO5jbAkouRTTX/Des4Pn/sjGrtdok=";
-      "xdg-shell-wrapper-config-0.1.0" = "sha256-pvaI/joul7jWTdIrPq3PbBcQGMLZLd2rTu1aIwXiZN8=";
+      "cosmic-comp-config-0.1.0" = "sha256-WcO47SPiMOVEYxNgUPfvXhu/WnaE1MGtiXNm3dQK0L4=";
+      "cosmic-config-0.1.0" = "sha256-B0N0802anWMKDTMbIfr9RvxsbdHn8UFO/bqtpc7mw8s=";
+      "cosmic-client-toolkit-0.1.0" = "sha256-st46wmOncJvu0kj6qaot6LT/ojmW/BwXbbGf8s0mdZ8=";
+      "cosmic-panel-config-0.1.0" = "sha256-SDqNLuj219FMqlO2devw/DD04RJfSBJLDLH/4ObRCl8=";
+      "smithay-client-toolkit-0.18.0" = "sha256-9NwNrEC+csTVtmXrNQFvOgohTGUO2VCvqOME7SnDCOg=";
+      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
+      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
+      "xdg-shell-wrapper-config-0.1.0" = "sha256-3Dc2fU8xBVUmAs0Q1zEdcdG7vlxpBO+UIlyM/kzGcC4=";
     };
   };
 
