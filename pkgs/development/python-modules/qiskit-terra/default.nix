@@ -33,7 +33,7 @@
 , seaborn
   # Crosstalk-adaptive layout pass
 , withCrosstalkPass ? false
-, z3
+, z3-solver
   # test requirements
 , ddt
 , hypothesis
@@ -53,7 +53,7 @@ let
     pylatexenc
     seaborn
   ];
-  crosstalkPackages = [ z3 ];
+  crosstalkPackages = [ z3-solver ];
 in
 
 buildPythonPackage rec {

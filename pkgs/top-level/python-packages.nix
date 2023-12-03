@@ -16113,9 +16113,11 @@ self: super: with self; {
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 
-  z3 = (toPythonModule (pkgs.z3.override {
+  z3-solver = (toPythonModule ((pkgs.z3.override {
     inherit python;
-  })).python;
+  }).overrideAttrs (_: {
+    pname = "z3-solver";
+  }))).python;
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
