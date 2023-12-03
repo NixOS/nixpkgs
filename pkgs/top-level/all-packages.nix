@@ -24418,7 +24418,7 @@ with pkgs;
 
   libressl = libressl_3_8;
 
-  boringssl = callPackage ../development/libraries/boringssl { };
+  boringssl = disable-warnings-if-gcc13 (callPackage ../development/libraries/boringssl { });
 
   wolfssl = darwin.apple_sdk_11_0.callPackage ../development/libraries/wolfssl {
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
