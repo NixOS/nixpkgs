@@ -34,11 +34,9 @@ let
       ${pkgs.nix}/bin/nix-build ./pkgs/test/release
     '';
 
-    /*
     libtests = ''
       ${pkgs.nix}/bin/nix-build ./lib/tests/release.nix
     '';
-    */
   };
 
 in
