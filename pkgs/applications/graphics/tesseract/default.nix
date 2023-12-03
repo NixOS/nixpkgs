@@ -1,12 +1,16 @@
-{ callPackage, lowPrio, Accelerate, CoreGraphics, CoreVideo}:
+{ callPackage, lowPrio, Accelerate, CoreGraphics, CoreVideo
+, gcc12Stdenv }:
 
 let
-  base3 = callPackage ./tesseract3.nix {};
-  base4 = callPackage ./tesseract4.nix {};
+  base3 = callPackage ./tesseract3.nix { stdenv = gcc12Stdenv; };
+  base4 = callPackage ./tesseract4.nix { stdenv = gcc12Stdenv; };
   base5 = callPackage ./tesseract5.nix {
     inherit Accelerate CoreGraphics CoreVideo;
+    stdenv = gcc12Stdenv;
   };
-  languages = callPackage ./languages.nix {};
+  languages = callPackage ./languages.nix {
+    stdenv = gcc12Stdenv;
+  };
 in
 {
   tesseract3 = callPackage ./wrapper.nix {

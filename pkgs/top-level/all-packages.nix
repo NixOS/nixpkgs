@@ -35851,10 +35851,10 @@ with pkgs;
 
   tessen = callPackage ../tools/security/tessen { };
 
-  inherit (lib.mapAttrs (_: pkg: pkg.override { stdenv = gcc12Stdenv; })
+  inherit
     (callPackage ../applications/graphics/tesseract {
       inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
-    }))
+    })
     tesseract3
     tesseract4
     tesseract5;
