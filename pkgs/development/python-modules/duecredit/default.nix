@@ -7,7 +7,6 @@
 , vcrpy
 , citeproc-py
 , requests
-, six
 }:
 
 buildPythonPackage rec {
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   version = "0.9.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,7 +22,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [ citeproc-py requests six ];
+  propagatedBuildInputs = [ citeproc-py requests ];
 
   nativeCheckInputs = [ pytestCheckHook vcrpy ];
   disabledTests = [ "test_import_doi" ];  # tries to access network
