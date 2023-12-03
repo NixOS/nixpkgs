@@ -10,6 +10,7 @@
 , glib
 , gobject-introspection
 , desktop-file-utils
+, appstream
 , appstream-glib
 , gtk4
 , librsvg
@@ -41,6 +42,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     glib
     desktop-file-utils
+    appstream
     appstream-glib
     pkg-config
     gettext
