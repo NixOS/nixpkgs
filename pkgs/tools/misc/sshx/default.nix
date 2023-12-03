@@ -6,6 +6,7 @@
 , darwin
 , stdenv
 , buildNpmPackage
+, nixosTests
 }:
 let
   version = "unstable-2023-11-23";
@@ -18,7 +19,7 @@ let
   };
 
   mkSshxPackage = { pname, cargoHash, ... }@args:
-    rustPlatform.buildRustPackage (rec {
+    rustPlatform.buildRustPackage (lib.recursiveUpdate args rec {
       inherit
         pname
         version
@@ -31,6 +32,8 @@ let
       cargoBuildFlags = [ "--package" pname ];
       cargoTestFlags = cargoBuildFlags;
 
+      passthru.tests = { inherit (nixosTests) sshx; };
+
       meta = {
         description = "Fast, collaborative live terminal sharing over the web";
         homepage = "https://github.com/ekzhang/sshx";
@@ -38,7 +41,7 @@ let
         maintainers = with lib.maintainers; [ pinpox kranzes ];
         mainProgram = pname;
       };
-    } // args);
+    });
 in
 {
   sshx = mkSshxPackage {
