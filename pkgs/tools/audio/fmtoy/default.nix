@@ -2,71 +2,69 @@
 , lib
 , fetchFromGitHub
 , unstableGitUpdater
-, dos2unix
+, alsa-lib
+, libfmvoice
+, libjack2
 , pkg-config
 , zlib
-, alsa-lib
-, libjack2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fmtoy";
-  version = "unstable-2022-12-23";
+  version = "0.0.0-unstable-2023-05-21";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "fmtoy";
-    rev = "78b61b5e9bc0c6874962dc4040456581c9999b36";
-    sha256 = "r5zbr6TCxzDiQvDsLQu/QwNfem1K4Ahaji0yIz/2yl0=";
+    rev = "2b54180d8edd0de90e2af01bf9ff303bc916e893";
+    hash = "sha256-qoMw4P+QEw4Q/wKBvFPh+WxkmOW6qH9FuFFkO2ZRrMc=";
   };
 
   postPatch = ''
-    dos2unix Makefile
-    # Don't hardcode compilers
-    sed -i -e '/CC=/d' -e '/CXX=/d' Makefile
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Remove Linux-only program & its dependencies
-    sed -i -e '/PROGS/ s/fmtoy_jack//' Makefile
+    rmdir libfmvoice
+    cp --no-preserve=all -r ${libfmvoice.src} libfmvoice
+
     substituteInPlace Makefile \
-      --replace '$(shell pkg-config alsa jack --cflags)' ""
+      --replace 'pkg-config' "$PKG_CONFIG"
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    dos2unix
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
   buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libjack2
+    zlib
   ];
 
   enableParallelBuilding = true;
 
+  buildFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    for prog in $(grep 'PROGS=' Makefile | cut -d= -f2-); do
-      install -Dm755 $prog $out/bin/$prog
-    done
+    install -Dm755 fmtoy_jack $out/bin/fmtoy_jack
 
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/vampirefrog/fmtoy.git";
+  passthru = {
+    updateScript = unstableGitUpdater { };
   };
 
   meta = with lib; {
+    description = "FM synthesiser based on emulated Yamaha YM chips (OPL, OPM and OPN series)";
     homepage = "https://github.com/vampirefrog/fmtoy";
-    description = "Tools for FM voices for Yamaha YM chips (OPL, OPM and OPN series)";
-    # Unclear if gpl3Only or gpl3Plus
-    # https://github.com/vampirefrog/fmtoy/issues/1
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
+    mainProgram = "fmtoy_jack";
     maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
-}
+})
