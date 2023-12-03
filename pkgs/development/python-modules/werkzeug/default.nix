@@ -78,5 +78,6 @@ buildPythonPackage rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    broken = true;  # download returns 404
   };
 }
