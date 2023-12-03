@@ -924,6 +924,15 @@ self: super: {
     '';
   }) super.structured-haskell-mode;
 
+  # Compilation on recent GHC is fixed on git, but not yet on hackage
+  # https://github.com/spell-music/csound-expression/pull/68
+  csound-expression-typed =
+    assert super.csound-expression-typed.version == "0.2.7";
+    overrideCabal (drv: {
+      src = csound_src_git + "/csound-expression-typed";
+      editedCabalFile = null;
+    }) super.csound-expression-typed;
+
   csound-expression-dynamic =
     assert super.csound-expression-dynamic.version == "0.3.9";
     overrideCabal (drv: {
