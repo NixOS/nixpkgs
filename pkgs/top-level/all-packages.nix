@@ -16733,6 +16733,7 @@ with pkgs;
     buildLlvmTools = buildPackages.llvmPackages_13.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
     targetLlvm = targetPackages.llvmPackages_13.llvm or llvmPackages_13.llvm;
+    stdenv = if stdenv.cc.cc.isGNU or false then gcc12Stdenv else stdenv; # does not build with gcc13
   }));
 
   llvmPackages_14 = recurseIntoAttrs (callPackage ../development/compilers/llvm/14 ({
