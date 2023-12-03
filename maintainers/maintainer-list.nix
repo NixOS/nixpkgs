@@ -12253,7 +12253,7 @@
   moni = {
     email = "lythe1107@gmail.com";
     matrix = "@fortuneteller2k:matrix.org";
-    github = "moni";
+    github = "moni-dz";
     githubId = 20619776;
     name = "moni";
   };
