@@ -77,6 +77,7 @@ let
     maintainers = with maintainers; [ d-xo ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    broken = true;
   };
 in
 if stdenv.isDarwin
