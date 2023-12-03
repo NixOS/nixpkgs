@@ -34,6 +34,10 @@ let
       ${pkgs.nix}/bin/nix-build ./pkgs/test/release
     '';
 
+    pkgs-test-release-release-attrpaths-superset =''
+      ${pkgs.nix}/bin/nix-build ./pkgs/test/release/release-attrpaths-superset.nix -A pass
+    '';
+
     libtests = ''
       ${pkgs.nix}/bin/nix-build ./lib/tests/release.nix
     '';
