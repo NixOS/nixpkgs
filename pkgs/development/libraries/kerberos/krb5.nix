@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
-, openssl, openldap, libedit, keyutils, libverto
+, openssl, openldap, libedit, keyutils, libverto, darwin
 
 # for passthru.tests
 , bind
@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
     ++ lib.optionals (!libOnly) [ openldap libedit ]
     ++ lib.optionals withVerto [ libverto ];
+
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
+    libs.xpc
+    frameworks.Kerberos
+  ]);
 
   sourceRoot = "krb5-${version}/src";
 
