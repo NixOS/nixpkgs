@@ -42,10 +42,7 @@ let
     inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
-    namePrefix = "";        # Python applications should not have any prefix
-    toPythonModule = x: x;  # Application does not provide modules.
-  }));
+  buildPythonApplication = args: toPythonApplication (buildPythonPackage args);
 
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../../../build-support/build-setupcfg lib self;
@@ -66,7 +63,7 @@ let
 
   # Convert derivation to a Python module.
   toPythonModule = drv:
-    drv.overrideAttrs( oldAttrs: {
+    (drv.pythonPackage or drv).overrideAttrs( oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
@@ -76,16 +73,43 @@ let
     });
 
   # Convert a Python library to an application.
-  toPythonApplication = drv:
-    drv.overrideAttrs( oldAttrs: {
-      passthru = (oldAttrs.passthru or {}) // {
-        # Remove Python prefix from name so we have a "normal" name.
-        # While the prefix shows up in the store path, it won't be
-        # used by `nix-env`.
-        name = removePythonPrefix oldAttrs.name;
-        pythonModule = false;
+  toPythonApplication = drv':
+    let
+      drv = drv'.overrideAttrs( oldAttrs: {
+        passthru = (oldAttrs.passthru or {}) // {
+          # Remove Python prefix from name so we have a "normal" name.
+          # While the prefix shows up in the store path, it won't be
+          # used by `nix-env`.
+          name = removePythonPrefix oldAttrs.name;
+          pythonModule = false;
+        };
+      });
+
+      outputs = drv.outputs or [ "out" ];
+    in stdenv.mkDerivation {
+      inherit (drv) name pname version;
+      inherit outputs;
+
+      nativeBuildInputs = [ python ];
+      propagatedBuildInputs = requiredPythonModules [ drv' ];
+
+      dontUnpack = true;
+      dontConfigure = true;
+      dontBuild = true;
+
+      installPhase = ''
+        runHook preInstall
+        ${lib.concatStringsSep "\n" (map (output: "python3 ${./link.py} ${drv.${output}} \$${output}") outputs)}
+        runHook postInstall
+      '';
+
+      passthru = drv.passthru // {
+        pythonPackage = drv';
       };
-    });
+
+      inherit (drv) meta;
+    };
+
 
   disabled = drv: throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}";
 

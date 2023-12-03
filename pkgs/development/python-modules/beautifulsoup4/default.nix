@@ -38,12 +38,12 @@ buildPythonPackage rec {
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chardet
     soupsieve
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     html5lib = [
       html5lib
     ];

@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3.pkgs; requiredPythonModules [
+  propagatedBuildInputs = with python3.pkgs; [
     certifi
     colorama
     pandas

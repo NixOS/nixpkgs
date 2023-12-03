@@ -18,7 +18,7 @@ buildPythonPackage rec {
     rm test-requirements.txt requirements.txt
   '';
 
-  dependencies = [
+  build-system = [
     pbr
   ];
 
