@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "1.6.11";
+  version = "1.7.0.0";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "swaylock-effects";
     rev = "v${version}";
-    sha256 = "sha256-MKmWVYssO9HAcP5uqwpy9kDa6/kfZyV2NI7ibozt7Ug=";
+    sha256 = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
   };
 
   postPatch = ''
