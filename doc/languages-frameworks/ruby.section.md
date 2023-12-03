@@ -2,7 +2,7 @@
 
 ## Using Ruby {#using-ruby}
 
-Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 2.6. It's also possible to refer to specific versions, e.g. `ruby_3_y`, `jruby`, or `mruby`.
+Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby. The attribute `ruby` refers to the default Ruby interpreter, which is currently MRI 3.1. It's also possible to refer to specific versions, e.g. `ruby_3_y`, `jruby`, or `mruby`.
 
 In the Nixpkgs tree, Ruby packages can be found throughout, depending on what they do, and are called from the main package set. Ruby gems, however are separate sets, and there's one default set for each interpreter (currently MRI only).
 
@@ -33,7 +33,7 @@ Again, it's possible to launch the interpreter from the shell. The Ruby interpre
 #### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
 As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
-Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
+Say we want to have Ruby, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
 with import <nixpkgs> {};
@@ -114,7 +114,7 @@ With this file in your directory, you can run `nix-shell` to build and use the g
 
 The `bundlerEnv` is a wrapper over all the gems in your gemset. This means that all the `/lib` and `/bin` directories will be available, and the executables of all gems (even of indirect dependencies) will end up in your `$PATH`. The `wrappedRuby` provides you with all executables that come with Ruby itself, but wrapped so they can easily find the gems in your gemset.
 
-One common issue that you might have is that you have Ruby 2.6, but also `bundler` in your gemset. That leads to a conflict for `/bin/bundle` and `/bin/bundler`. You can resolve this by wrapping either your Ruby or your gems in a `lowPrio` call. So in order to give the `bundler` from your gemset priority, it would be used like this:
+One common issue that you might have is that you have Ruby, but also `bundler` in your gemset. That leads to a conflict for `/bin/bundle` and `/bin/bundler`. You can resolve this by wrapping either your Ruby or your gems in a `lowPrio` call. So in order to give the `bundler` from your gemset priority, it would be used like this:
 
 ```nix
 # ...
