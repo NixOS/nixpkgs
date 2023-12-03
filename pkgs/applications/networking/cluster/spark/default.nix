@@ -70,8 +70,8 @@ in
   };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.1";
-    hash = "sha256-4vC9oBCycVNy3hIxFII65j7FHlrxhDURU3NmsJZPDDU=";
+    version = "3.4.2";
+    hash = "sha256-qr0tRuzzEcarJznrQYkaQzGqI7tugp/XJpoZxL7tJwk=";
   };
   spark_3_3 = spark rec {
     pname = "spark";
