@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
+, pythonAtLeast
 , python
 , fetchPypi
 , absl-py
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   format = "wheel";
 
   # As of 2023-10-31, PyPI includes wheels for Python 3.9, 3.10, and 3.11.
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
   src = let
     pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
