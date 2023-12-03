@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     libGLU
   ]);
 
+  # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL subdirectory
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL_net}/include/SDL";
+
   hardeningDisable = [ "format" ];
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
