@@ -8545,7 +8545,9 @@ with pkgs;
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  gifski = callPackage ../tools/graphics/gifski { };
+  gifski = callPackage ../tools/graphics/gifski {
+    ffmpeg = ffmpeg_5;
+  };
 
   github-backup = callPackage ../tools/misc/github-backup { };
 
