@@ -25603,7 +25603,7 @@ with pkgs;
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
-  waylandpp = disable-warnings-if-gcc13 (callPackage ../development/libraries/waylandpp {
+  waylandpp = pin-to-gcc12-if-gcc13 (callPackage ../development/libraries/waylandpp {
     graphviz = graphviz-nox;
   });
 
