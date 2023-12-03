@@ -21006,7 +21006,9 @@ with pkgs;
 
   crocoddyl = callPackage ../development/libraries/crocoddyl { };
 
-  crossguid = callPackage ../development/libraries/crossguid { };
+  crossguid = callPackage ../development/libraries/crossguid {
+    stdenv = gcc12Stdenv;
+  };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
