@@ -20,10 +20,8 @@ buildPythonPackage rec {
   };
 
   # Patch path to GLFW shared object
-  patches = [ ./search-path.patch ];
-
   postPatch = ''
-    substituteInPlace glfw/library.py --replace "@GLFW@" '${glfw3}/lib'
+    substituteInPlace glfw/library.py --replace "_get_library_search_paths()," "[ '${glfw3}/lib' ],"
   '';
 
   propagatedBuildInputs = [
