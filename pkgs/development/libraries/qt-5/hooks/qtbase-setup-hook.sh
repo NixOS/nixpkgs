@@ -39,17 +39,16 @@ isCrossBuild() {
 if isCrossBuild; then
     # When cross compiling we're using a native-built qmake binary and
     # it will need a little help finding the target of cross compilation.
-    if [[ "$(uname)" == 'Linux' ]]; then
-       qtPlatformCross="linux-generic-g++"
+    if nixCrossConf="$(basename $(ls -d @dev@/mkspecs/*-nix-cross))"; then
+        # Force qmake to use this config as the target instead of QMAKE_XSPEC
+        # that was baked into it at compile time.
+        export "XQMAKESPEC=$nixCrossConf"
+        # Use the same config for tools marked with host_build
+        export "QMAKESPEC=$XQMAKESPEC"
     else
-        echo "Please add a qtPlatformCross entry for $(uname)" >&2
+        echo "Please add a qtPlatformCross entry for $($CC -dumpmachine)" >&2
         exit 1
     fi
-
-    # Enable cross-compilation in qmake
-    export "XQMAKESPEC=devices/$qtPlatformCross"
-    # Use the same config for tools marked with host_build
-    export "QMAKESPEC=$XQMAKESPEC"
 fi
 
 providesQtRuntime() {

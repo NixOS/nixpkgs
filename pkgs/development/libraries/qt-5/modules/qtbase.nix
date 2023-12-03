@@ -80,13 +80,23 @@
 let
   debugSymbols = debug || developerBuild;
   isCrossBuild = stdenv.buildPlatform != stdenv.hostPlatform;
+
   qtPlatformCross =
-    plat:
-    with plat;
+    with stdenv.hostPlatform;
     if isLinux then
-      "linux-generic-g++"
+      "devices/linux-generic-g++"
+    else if isDarwin then
+      # the logic from the configure script
+      if isAarch64 then "macx-clang-arm64" else "macx-clang-x64"
+    else if isCrossBuild then
+      throw "Please add a qtPlatformCross entry for ${config}"
     else
-      throw "Please add a qtPlatformCross entry for ${plat.config}";
+      null;
+
+  # We need to keep the original mkspec name in the string for pyqt-builder to determine
+  # the target platform.
+  nixCrossConf = builtins.baseNameOf qtPlatformCross + "-nix-cross";
+
   postFixupPatch = ../${lib.versions.majorMinor version}/qtbase.patch.d/0016-qtbase-cross-build-postFixup.patch;
 
   # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
@@ -300,20 +310,19 @@ stdenv.mkDerivation (
 
         ./bin/syncqt.pl -version $version
 
-        # generate a cross compilation config unconditionally so we can pass a natively-built qtbase
-        # as a build dependency for a cross build and to avoid specifying CROSS_COMPILE prefix for qmake later
-        sed -i '1 i CROSS_COMPILE=${
-          stdenv.hostPlatform.config + "-"
-        }' mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-        echo 'QMAKE_PKG_CONFIG=''$''$(PKG_CONFIG)' >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-
-        # does this flag propagation really do anything?
-        echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-        echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
-        echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
       ''
+      # generate a cross compilation config even for native builds so we can pass a natively-built qtbase
+      # as a build dependency for a cross build and to avoid specifying CROSS_COMPILE prefix for qmake later
+      + lib.optionalString (qtPlatformCross != null) ''
+        mkdir mkspecs/${nixCrossConf}
+        echo 'CROSS_COMPILE=${stdenv.hostPlatform.config + "-"}' > mkspecs/${nixCrossConf}/qmake.conf
+        echo 'QMAKE_PKG_CONFIG=''$''$(PKG_CONFIG)' >> mkspecs/${nixCrossConf}/qmake.conf
+        echo 'include(../${qtPlatformCross}/qmake.conf)' >> mkspecs/${nixCrossConf}/qmake.conf
+        echo '#include "../${qtPlatformCross}/qplatformdefs.h"' > mkspecs/${nixCrossConf}/qplatformdefs.h
+
+      ''
+      # QT's configure script will refuse to use pkg-config unless these two environment variables are set
       + lib.optionalString isCrossBuild ''
-        # QT's configure script will refuse to use pkg-config unless these two environment variables are set
         export PKG_CONFIG_SYSROOT_DIR=/
         export PKG_CONFIG_LIBDIR=${lib.getLib pkg-config}/lib
       '';
@@ -481,6 +490,10 @@ stdenv.mkDerivation (
               "-system-libpng"
 
             ]
+            ++ lib.optional (qttranslations != null) [
+              "-translationdir"
+              "${qttranslations}/translations"
+            ]
             ++ (
               # regular build, Darwin options
               # regular build, other Unixes options
@@ -521,10 +534,6 @@ stdenv.mkDerivation (
                 "-I"
                 "${libmysqlclient}/include"
               ]
-              ++ lib.optional (qttranslations != null) [
-                "-translationdir"
-                "${qttranslations}/translations"
-              ]
 
             )
           )
@@ -532,7 +541,7 @@ stdenv.mkDerivation (
 
       # cross compilation options
       ++ lib.optionals isCrossBuild [
-        "-device ${qtPlatformCross stdenv.hostPlatform}"
+        "-xplatform ${nixCrossConf}"
         "-external-hostbindir ${qtbase-bootstrap.qmake}/bin"
       ]
 

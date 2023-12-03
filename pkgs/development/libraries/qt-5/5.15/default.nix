@@ -286,6 +286,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
+        # do we really need this inherit here?
         inherit
           bison
           cups
