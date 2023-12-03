@@ -13506,6 +13506,10 @@ with pkgs;
 
   sshuttle = callPackage ../tools/security/sshuttle { };
 
+  inherit (callPackages ../tools/misc/sshx { })
+    sshx
+    sshx-server;
+
   ssldump = callPackage ../tools/networking/ssldump { };
 
   sslsplit = callPackage ../tools/networking/sslsplit { };
