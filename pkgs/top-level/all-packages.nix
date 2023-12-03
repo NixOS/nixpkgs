@@ -2787,7 +2787,7 @@ with pkgs;
 
   pcem = callPackage ../applications/emulators/pcem { };
 
-  pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
+  pcsx2 = disable-warnings-if-gcc13 (qt6Packages.callPackage ../applications/emulators/pcsx2 { });
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
