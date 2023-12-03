@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -81,6 +81,8 @@ buildPythonPackage rec {
     "test_sso_cred_fetcher_raises_helpful_message_on_unauthorized_exception"
     "test_sso_credential_fetcher_can_fetch_credentials"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python client for amazon services";
