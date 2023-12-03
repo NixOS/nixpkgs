@@ -39385,7 +39385,7 @@ with pkgs;
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
-  gmsh = callPackage ../applications/science/math/gmsh { };
+  gmsh = disable-warnings-if-gcc13 (callPackage ../applications/science/math/gmsh { });
 
   wcpg = callPackage ../development/libraries/science/math/wcpg { };
 
