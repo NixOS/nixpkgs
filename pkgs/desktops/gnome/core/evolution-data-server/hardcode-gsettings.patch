@@ -202,7 +202,7 @@ index 2525856..7ecc1a8 100644
  				g_clear_object (&settings);
  			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index c01e8b2..59fb4c4 100644
+index ade0a73..d7c3e73 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
 @@ -2626,8 +2626,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
@@ -312,7 +312,7 @@ index bef9188..ce92f6c 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index db5fc2e..162e00f 100644
+index 4deae76..ebe0a1b 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
 @@ -747,7 +747,18 @@ gpg_ctx_get_executable_name (void)
@@ -505,7 +505,7 @@ index 3bb1071..199e822 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 2364f3e..e8f59f2 100644
+index af59b0b..0c7e75e 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -94,7 +94,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
