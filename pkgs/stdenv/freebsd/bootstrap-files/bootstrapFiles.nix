@@ -7,8 +7,10 @@ let
   static = import ./static.nix { inherit stdenvAdapters pkgs; };
 in
   tar-all "${system}-bootstrap-files.tar.xz" ([
+    # static programs
     static.patchelf
   ] ++ (with pkgs; [
+    # dynamic programs
     bash
     patch
     diffutils
@@ -24,8 +26,13 @@ in
     xz
     binutils-unwrapped
     llvmPackages_16.clang-unwrapped
+    (runCommand "bsdcp" {} "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
 
+    # dynamic libraries
     freebsd.libc
+    #freebsd.libcxx
+    #freebsd.libcxxrt
+    libcxxrt
     libiconv
     zlib
     libxml2
@@ -34,10 +41,24 @@ in
     ncurses
     readline
     llvmPackages_16.libllvm
-    llvmPackages_16.libcxx
-    llvmPackages_16.libcxxabi
-    llvmPackages_12.libunwind
     (lib.getLib bzip2)
     (lib.getLib llvmPackages_16.clang-unwrapped)
     (lib.getLib llvmPackages_16.libllvm)
+    (lib.getLib llvmPackages_16.libcxx)
+    (lib.getLib llvmPackages_16.libcxxabi)
+    (lib.getLib llvmPackages_16.libunwind)
+    (lib.getLib llvmPackages_16.compiler-rt)
+
+    # headers
+    (lib.getDev libiconv)
+    (lib.getDev zlib)
+    (lib.getDev libxml2)
+    (lib.getDev pcre2)
+    (lib.getDev libffi)
+    (lib.getDev ncurses)
+    (lib.getDev readline)
+    (lib.getDev bzip2)
+    (lib.getDev llvmPackages_16.libcxx)
+    (lib.getDev llvmPackages_16.libcxxabi)
+    (lib.getDev llvmPackages_16.compiler-rt)
 ]))) {})

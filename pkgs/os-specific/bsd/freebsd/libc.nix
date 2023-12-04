@@ -42,14 +42,15 @@ mkDerivation rec {
     "lib/libcrypt"
     "lib/libmd"
     "sys/crypto/sha2"
+    "sys/crypto/skein"
 
     # libgcc and friends
-    "lib/libgcc_eh"
-    "lib/libgcc_s"
-    "contrib/llvm-project/compiler-rt"
-    "contrib/llvm-project/libunwind"
-    "contrib/llvm-project/libcxx"
-    "lib/libcompiler_rt"
+    #"lib/libgcc_eh"
+    #"lib/libgcc_s"
+    #"contrib/llvm-project/compiler-rt"
+    #"contrib/llvm-project/libunwind"
+    #"contrib/llvm-project/libcxx"
+    #"lib/libcompiler_rt"
   ];
 
   patches = [
@@ -118,20 +119,16 @@ mkDerivation rec {
 
     sed -i -e 's| [^ ]*/libc_nonshared.a||' $out/lib/libc.so
 
-    mkdir $BSDSRCDIR/lib/libcompiler_rt/i386
-    make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags
-    make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags install
-
-    make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags
-    make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags install
-
-    mkdir $BSDSRCDIR/lib/libgcc_s/i386
-    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
-    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags install
+    $CC -nodefaultlibs -lgcc -shared -o $out/lib/libgcc_s.so
+    $AR r $out/lib/libgcc_eh.a  # experimental
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
     NIX_CFLAGS_COMPILE+=" -I$out/include"
     NIX_LDFLAGS+=" -L$out/lib"
+
+    mkdir $BSDSRCDIR/lib/libmd/sys
+    make -C $BSDSRCDIR/lib/libmd $makeFlags
+    make -C $BSDSRCDIR/lib/libmd $makeFlags install
 
     make -C $BSDSRCDIR/lib/libthr $makeFlags
     make -C $BSDSRCDIR/lib/libthr $makeFlags install

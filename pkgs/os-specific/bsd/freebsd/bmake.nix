@@ -11,6 +11,9 @@ mkDerivation {
     substituteInPlace $BSDSRCDIR/share/mk/bsd.sys.mk \
       --replace '-Wl,--fatal-warnings' "" \
       --replace '-Wl,--warn-shared-textrel' ""
+  '' + lib.optionalString stdenv.targetPlatform.isFreeBSD ''
+    substituteInPlace $BSDSRCDIR/share/mk/local.sys.dirdeps.env.mk \
+      --replace 'MK_host_egacy= yes' 'MK_host_egacy= no'
   '';
   #postInstall = ''
   #  make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
