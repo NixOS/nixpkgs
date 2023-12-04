@@ -1,18 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
+
+# build-system
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "future";
   version = "0.18.3";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-NKF0Nu0elml6hvnePRWjsL4B2LyN6cHf/Vn7gjTtUwc=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/PythonCharmers/python-future/commit/1901c1c347bcad603e8404b64656994eb2cc0439.patch";
+      hash = "sha256-wUSWVs7+KTsTmEM4OkpViAjDGWqx5h0SLPIacMZCpWU=";
+      excludes = [
+        "build.sh"
+        "docs/whatsnew.rst"
+      ];
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [
     "future.builtins"
