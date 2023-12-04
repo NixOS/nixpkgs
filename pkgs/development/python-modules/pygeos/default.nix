@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pygeos/pygeos";
     changelog = "https://github.com/pygeos/pygeos/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nialov ];
+    maintainers = teams.geospatial.members;
   };
 }
