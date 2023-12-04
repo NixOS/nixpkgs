@@ -157,7 +157,7 @@ let
           poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
         fi
         if poolImported "${pool}"; then
-        ${concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true ") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets)}
+        ${optionalString config.boot.initrd.clevis.enable (concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem} || true ") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets))}
 
 
           ${optionalString keyLocations.hasKeys ''
@@ -630,7 +630,7 @@ in
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
             fi
 
-            ${concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets)}
+            ${optionalString config.boot.initrd.clevis.enable (concatMapStringsSep "\n" (elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}") (filter (p: (elemAt (splitString "/" p) 0) == pool) clevisDatasets))}
 
             ${if isBool cfgZfs.requestEncryptionCredentials
               then optionalString cfgZfs.requestEncryptionCredentials ''
