@@ -69,9 +69,13 @@ final: prev: let
           # - the cuda_runtime.h header, which is in the dev output
           # - the dynamic library, which is in the lib output
           # - the static library, which is in the static output
-          substitutions.cudartInclude = "${final.cuda_cudart.dev}";
-          substitutions.cudartLib = "${final.cuda_cudart.lib}";
-          substitutions.cudartStatic = "${final.cuda_cudart.static}";
+          substitutions.cudartFlags = let cudart = final.cuda_cudart; in
+            builtins.concatStringsSep " " (final.lib.optionals (final ? cuda_cudart) ([
+              "-I${final.lib.getDev cudart}/include"
+              "-L${final.lib.getLib cudart}/lib"
+            ] ++ final.lib.optionals (builtins.elem "static" cudart.outputs) [
+              "-L${cudart.static}/lib"
+            ]));
         }
         ./hooks/setup-cuda-hook.sh)
     { });
