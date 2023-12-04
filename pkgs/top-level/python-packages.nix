@@ -8082,6 +8082,8 @@ self: super: with self; {
 
   netdisco = callPackage ../development/python-modules/netdisco { };
 
+  nethsm = callPackage ../development/python-modules/nethsm { };
+
   netifaces = callPackage ../development/python-modules/netifaces { };
 
   netmiko = callPackage ../development/python-modules/netmiko { };
