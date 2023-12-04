@@ -1,36 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, docutils
-, python
-, pygments
+, pythonAtLeast
+
+# build-system
 , setuptools
+
+# dependencies
+, build
+, docutils
+, flit-core
+, packaging
+, pygments
 , requests
+, trove-classifiers
+
+# test
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyroma";
-  version = "3.2";
+  version = "4.2";
+  pyproject = true;
+
+  # https://github.com/regebro/pyroma/issues/104
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "regebro";
-    repo = pname;
+    repo = "pyroma";
     rev = version;
-    sha256 = "0ln9w984n48nyxwzd1y48l6b18lnv52radcyizaw56lapcgxrzdr";
+    sha256 = "sha256-ElSw+bY6fbHJPTX7O/9JZ4drttfbUQsU/fv3Cqqb/J4=";
   };
 
   propagatedBuildInputs = [
+    build
     docutils
+    flit-core
+    packaging
     pygments
     setuptools
     requests
+    trove-classifiers
   ];
 
-  # https://github.com/regebro/pyroma/blob/3.2/Makefile#L23
-  # PyPITest requires network access
-  checkPhase = ''
-    ${python.interpreter} -m unittest -k 'not PyPITest' pyroma.tests
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # tries to reach pypi
+    "test_complete"
+    "test_distribute"
+  ];
 
   pythonImportsCheck = [ "pyroma" ];
 
