@@ -1,11 +1,17 @@
-{ lib, appimageTools, fetchurl, asar }: let
+{ lib, stdenv, appimageTools, fetchurl, asar }: let
   pname = "todoist-electron";
   version = "8.10.1";
 
-  src = fetchurl {
-    url = "https://electron-dl.todoist.com/linux/Todoist-linux-x86_64-${version}.AppImage";
-    hash = "sha256-Yp4wfibymHLGlaPDzu2rhSXxanwdXoNpF/d6+S0r+1U=";
-  };
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://electron-dl.todoist.com/linux/Todoist-linux-x86_64-${version}.AppImage";
+      hash = "sha256-2HdS6h2Gvc7SFrZ6RcDwBRFR9saBL7EMf6Au+DRXTs4=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://electron-dl.todoist.com/linux/Todoist-linux-arm64-${version}.AppImage";
+      hash = "sha256-Yp4wfibymHLGlaPDzu2rhSXxanwdXoNpF/d6+S0r+1U=";
+    };
+  }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   appimageContents = (appimageTools.extract { inherit pname version src; }).overrideAttrs (oA: {
     buildCommand = ''
@@ -38,7 +44,7 @@ in appimageTools.wrapAppImage {
   meta = with lib; {
     homepage = "https://todoist.com";
     description = "The official Todoist electron app";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ kylesferrazza pokon548 ];
   };
