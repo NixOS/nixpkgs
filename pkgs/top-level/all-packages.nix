@@ -35769,9 +35769,10 @@ with pkgs;
 
   tessen = callPackage ../tools/security/tessen { };
 
-  inherit (callPackage ../applications/graphics/tesseract {
-    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
-  })
+  inherit (lib.mapAttrs (_: disable-warnings-if-gcc13)
+    (callPackage ../applications/graphics/tesseract {
+      inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+    }))
     tesseract3
     tesseract4
     tesseract5;
