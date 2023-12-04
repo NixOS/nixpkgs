@@ -96,10 +96,9 @@ in
       description = lib.mdDoc ''
         The maximum attachment size in MB.
 
-        Note: Since roundcube only uses 70% of max upload values configured in php
-        30% is added automatically to [](#opt-services.roundcube.maxAttachmentSize).
+        Note: Since there is some overhead in encoding attachments 37% is added automatically to offset this
       '';
-      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
+      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.37)}M";
     };
 
     extraConfig = mkOption {
