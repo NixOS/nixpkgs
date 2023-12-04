@@ -1,25 +1,44 @@
-{ lib, buildPythonPackage, fetchFromGitHub, twisted }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+
+# build-system
+, setuptools
+, versioneer
+
+# tests
+, twisted
+}:
 
 let
   self = buildPythonPackage rec {
     pname = "constantly";
-    version = "15.1.0";
-    format = "setuptools";
+    version = "23.10.4";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
       rev = version;
-      hash = "sha256-0RPK5Vy0b6V4ubvm+vfNOAua7Qpa6j+G+QNExFuHgUU=";
+      hash = "sha256-HTj6zbrCrxvh0PeSkeCSOCloTrVGUX6+o57snrKf6PA=";
     };
+
+    nativeBuildInputs = [
+      setuptools
+      versioneer
+    ] ++ versioneer.optional-dependencies.toml;
 
     # would create dependency loop with twisted
     doCheck = false;
 
-    nativeCheckInputs = [ twisted ];
+    nativeCheckInputs = [
+      twisted
+    ];
 
     checkPhase = ''
+      runHook preCheck
       trial constantly
+      runHook postCheck
     '';
 
     pythonImportsCheck = [ "constantly" ];
