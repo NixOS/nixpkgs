@@ -376,6 +376,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "out" "dev" ] ++ (lib.optional (!buildLibsOnly) "man");
+  separateDebugInfo = true;
 
   nativeBuildInputs =
     [
