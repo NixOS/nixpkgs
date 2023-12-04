@@ -506,7 +506,7 @@
   ./services/editors/haste.nix
   ./services/editors/infinoted.nix
   ./services/finance/odoo.nix
-  ./services/games/asf.nix
+  ./services/games/archisteamfarm.nix
   ./services/games/crossfire-server.nix
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
