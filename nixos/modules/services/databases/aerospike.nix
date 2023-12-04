@@ -123,6 +123,7 @@ in
       };
 
       boot.kernel.sysctl = {
+        "net.core.rmem_max" = mkDefault 15728640;
         "net.core.wmem_max" = mkDefault 5242880;
       };
 
@@ -134,10 +135,6 @@ in
         if [ $(echo "$(${pkgs.procps}/bin/sysctl -n kernel.shmmax) < 1073741824" | ${pkgs.bc}/bin/bc) == "1"  ]; then
           echo "kernel.shmmax too low, setting to 1GB"
           ${pkgs.procps}/bin/sysctl -w kernel.shmmax=1073741824
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/rmem_max) < 15728640" | ${pkgs.bc}/bin/bc) == "1" ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/rmem_max): $(cat /proc/sys/net/core/rmem_max) -> 15728640"
-          echo 15728640 > /proc/sys/net/core/rmem_max
         fi
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}"
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}/smd"
