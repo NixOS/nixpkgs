@@ -100,6 +100,10 @@ buildPythonPackage rec {
   disabledTests = [
     # requires network access
     "test_latex_images"
+    # racy
+    "test_defaults"
+    "test_check_link_response_only"
+    "test_anchors_ignored_for_url"
   ] ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
