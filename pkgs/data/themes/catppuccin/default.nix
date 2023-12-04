@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "grub" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "qt5ct" "refind" "rofi" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -88,6 +88,14 @@ let
       hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
     };
 
+    qt5ct = fetchFromGitHub {
+      name = "qt5ct";
+      owner = "catppuccin";
+      repo = "qt5ct";
+      rev = "89ee948e72386b816c7dad72099855fb0d46d41e";
+      hash = "sha256-t/uyK0X7qt6qxrScmkTU2TvcVJH97hSQuF0yyvSO/qQ=";
+    };
+
     refind = fetchFromGitHub {
       name = "refind";
       owner = "catppuccin";
@@ -173,6 +181,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
     cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
     sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+
+  '' + lib.optionalString (lib.elem "qt5ct" themeList) ''
+    mkdir -p $out/qt5ct
+    cp ${sources.qt5ct}/themes/Catppuccin-"$capitalizedVariant".conf $out/qt5ct/
 
   '' + lib.optionalString (lib.elem "rofi" themeList) ''
     mkdir -p $out/rofi
