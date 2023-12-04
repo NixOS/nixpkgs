@@ -98,6 +98,29 @@ in
           '';
         };
       };
+
+      scanner = {
+        enable = mkEnableOption (lib.mdDoc "ClamAV scanner");
+
+        interval = mkOption {
+          type = types.str;
+          default = "*-*-* 04:00:00";
+          description = lib.mdDoc ''
+            How often clamdscan is invoked. See systemd.time(7) for more
+            information about the format.
+            By default this runs using 10 cores at most, be sure to run it at a time of low traffic.
+          '';
+        };
+
+        scanDirectories = mkOption {
+          type = with types; listOf str;
+          default = [ "/home" "/var/lib" "/tmp" "/etc" "/var/tmp" ];
+          description = lib.mdDoc ''
+            List of directories to scan.
+            The default includes everything I could think of that is valid for nixos. Feel free to contribute a PR to add to the default if you see something missing.
+          '';
+        };
+      };
     };
   };
 
@@ -230,6 +253,26 @@ in
         Group = clamavGroup;
         PrivateTmp = "yes";
         PrivateDevices = "yes";
+      };
+    };
+
+    systemd.timers.clamdscan = mkIf cfg.scanner.enable {
+      description = "Timer for ClamAV virus scanner";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.scanner.interval;
+        Unit = "clamdscan.service";
+      };
+    };
+
+    systemd.services.clamdscan = mkIf cfg.scanner.enable {
+      description = "ClamAV virus scanner";
+      after = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+      wants = optionals cfg.updater.enable [ "clamav-freshclam.service" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkg}/bin/clamdscan --multiscan --fdpass --infected --allmatch ${lib.concatStringsSep " " cfg.scanner.scanDirectories}";
       };
     };
   };
