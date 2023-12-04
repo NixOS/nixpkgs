@@ -1637,6 +1637,10 @@ self: super: {
     dependencies = with self; [ vimwiki fzf-vim ];
   };
 
+  wtf-nvim = super.wtf-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim ];
+  };
+
   YankRing-vim = super.YankRing-vim.overrideAttrs {
     sourceRoot = ".";
   };
