@@ -1,11 +1,32 @@
 { lib
 , callPackage
 , config
+, runCommand
 }:
 
-let buildLua = callPackage ./buildLua.nix { };
-in lib.recurseIntoAttrs
-  ({
+let
+  buildLua = callPackage ./buildLua.nix { };
+
+  addTests = name: drv: drv.override { passthru.tests = lib.attrsets.unionOfDisjoint (drv.passthru.tests or {}) {
+    scriptName-is-valid = let
+      inherit (drv) scriptName;
+      scriptPath = "${drv}/share/mpv/scripts/${scriptName}";
+    in runCommand "mpvScripts.${name}.passthru.tests.scriptName-is-valid" {
+      meta.maintainers = with lib.maintainers; [ nicoo ];
+      preferLocalBuild = true;
+    } ''
+      if [ -e "${scriptPath}" ]; then
+        touch $out
+      else
+        echo "mpvScripts.\"${name}\" does not contain a script named \"${scriptName}\"" >&2
+        exit 1
+      fi
+    '';
+  }; };
+in
+
+lib.recurseIntoAttrs
+  (lib.mapAttrs addTests ({
     acompressor = callPackage ./acompressor.nix { inherit buildLua; };
     autocrop = callPackage ./autocrop.nix { };
     autodeint = callPackage ./autodeint.nix { };
@@ -28,7 +49,7 @@ in lib.recurseIntoAttrs
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
     cutter = callPackage ./cutter.nix { };
   }
-  // (callPackage ./occivink.nix { inherit buildLua; }))
+  // (callPackage ./occivink.nix { inherit buildLua; })))
   // lib.optionalAttrs config.allowAliases {
   youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
 }
