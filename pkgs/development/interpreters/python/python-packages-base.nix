@@ -91,7 +91,7 @@ let
       inherit outputs;
 
       nativeBuildInputs = [ python ];
-      propagatedBuildInputs = requiredPythonModules [ drv' ];
+      buildInputs = requiredPythonModules [ drv' ];
 
       dontUnpack = true;
       dontConfigure = true;
