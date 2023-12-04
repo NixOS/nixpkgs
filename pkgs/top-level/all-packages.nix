@@ -12532,9 +12532,9 @@ with pkgs;
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
-  qgrep = callPackage ../tools/text/qgrep {
+  qgrep = pin-to-gcc12-if-gcc13 (callPackage ../tools/text/qgrep {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
-  };
+  });
 
   qhull = callPackage ../development/libraries/qhull { };
 
