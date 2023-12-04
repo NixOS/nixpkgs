@@ -55,7 +55,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = git-town;
-    command = "git-town version";
+    command = "git-town --version";
     version = "v${version}";
   };
 
