@@ -188,6 +188,7 @@ in {
   chrony = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony.nix {};
   chrony-ptp = handleTestOn ["aarch64-linux" "x86_64-linux"] ./chrony-ptp.nix {};
   cinnamon = handleTest ./cinnamon.nix {};
+  cinnamon-wayland = handleTest ./cinnamon-wayland.nix {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
@@ -358,6 +359,7 @@ in {
   grow-partition = runTest ./grow-partition.nix;
   grub = handleTest ./grub.nix {};
   guacamole-server = handleTest ./guacamole-server.nix {};
+  guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
   hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };

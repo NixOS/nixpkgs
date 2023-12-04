@@ -226,6 +226,12 @@ with pkgs;
 
   chkservice = callPackage ../tools/admin/chkservice { };
 
+  # addDriverRunpath is the preferred package name, as this enables
+  # many more scenarios than just opengl now.
+  addDriverRunpath = callPackage ../build-support/add-driver-runpath { };
+
+  # addOpenGLRunpath should be added to aliases.nix after the 24.05 branch-off.
+  # Post 24.11 branch-off, this should throw an error in aliases.nix.
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
   quickemu = callPackage ../development/quickemu { };
@@ -1766,6 +1772,8 @@ with pkgs;
 
   davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
 
+  dehinter = with python3Packages; toPythonApplication dehinter;
+
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };
@@ -1805,6 +1813,10 @@ with pkgs;
   elkhound = callPackage ../development/tools/elkhound { };
 
   ethq = callPackage ../os-specific/linux/ethq { };
+
+  font-v = with python3Packages; toPythonApplication font-v;
+
+  fontbakery = with python3Packages; toPythonApplication fontbakery;
 
   weidu = callPackage ../tools/games/weidu { };
 
@@ -2024,6 +2036,8 @@ with pkgs;
 
   sgrep = callPackage ../tools/text/sgrep { };
 
+  shaperglot = with python3Packages; toPythonApplication shaperglot;
+
   shell-genie = callPackage  ../applications/misc/shell-genie { };
 
   sloth = callPackage ../tools/misc/sloth { };
@@ -2093,6 +2107,8 @@ with pkgs;
   trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
 
   ttchat = callPackage ../tools/misc/ttchat { };
+
+  ufolint = with python3Packages; toPythonApplication ufolint;
 
   ukmm = callPackage ../tools/games/ukmm { };
 
@@ -3024,7 +3040,12 @@ with pkgs;
 
   blackbox-terminal = callPackage ../applications/terminal-emulators/blackbox-terminal { };
 
-  contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { fmt = fmt_8; };
+  contour = qt6.callPackage ../applications/terminal-emulators/contour {
+    inherit (darwin.apple_sdk_11_0.libs) utmp;
+    inherit (darwin) sigtool;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+    fmt = fmt_9;
+  };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
 
@@ -3891,6 +3912,8 @@ with pkgs;
   gomapenum = callPackage ../tools/security/gomapenum { };
 
   gopacked = callPackage ../applications/misc/gopacked { };
+
+  goperf = callPackage ../development/tools/goperf { };
 
   gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
 
@@ -5691,7 +5714,7 @@ with pkgs;
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
   hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
-    wlroots = wlroots_0_15;
+    wlroots = wlroots_0_16;
   };
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
@@ -23612,6 +23635,8 @@ with pkgs;
 
   libuldaq = callPackage ../development/libraries/libuldaq { };
 
+  libunicode = callPackage ../development/libraries/libunicode { fmt = fmt_8; };
+
   libunwind =
     if stdenv.isDarwin then darwin.libunwind
     else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages_14.libunwind
@@ -25306,6 +25331,8 @@ with pkgs;
   };
 
   tepl = callPackage ../development/libraries/tepl { };
+
+  termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_8; };
 
   telepathy-glib = callPackage ../development/libraries/telepathy/glib { };
 
@@ -31637,7 +31664,9 @@ with pkgs;
 
   gaucheBootstrap = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche/boot.nix { };
 
-  gauche = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche { };
+  gauche = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
+  };
 
   gazelle-origin = python3Packages.callPackage ../tools/misc/gazelle-origin { };
 
@@ -34533,8 +34562,6 @@ with pkgs;
   vgmplay-libvgm = callPackage ../applications/audio/vgmplay-libvgm { };
 
   vgmtools = callPackage ../tools/audio/vgmtools { };
-
-  vieb = callPackage ../applications/networking/browsers/vieb { };
 
   vital = callPackage ../applications/audio/vital { };
 
@@ -42130,4 +42157,6 @@ with pkgs;
   mdhtml = callPackage ../tools/text/mdhtml { };
 
   insulator2 = callPackage ../applications/misc/insulator2 {};
+
+  animdl = python3Packages.callPackage ../applications/video/animdl { };
 }

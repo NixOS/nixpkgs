@@ -317,6 +317,7 @@ with lib.maintainers; {
       das-g
       imincik
       nh2
+      nialov
       sikmir
       willcohen
     ];
