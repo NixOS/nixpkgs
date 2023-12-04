@@ -24833,7 +24833,7 @@ with pkgs;
 
   rlottie = callPackage ../development/libraries/rlottie { };
 
-  rocksdb = callPackage ../development/libraries/rocksdb { };
+  rocksdb = disable-warnings-if-gcc13 (callPackage ../development/libraries/rocksdb { });
 
   rocksdb_7_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
