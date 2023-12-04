@@ -3,7 +3,6 @@ with lib;
 let
   clamavUser = "clamav";
   stateDir = "/var/lib/clamav";
-  runDir = "/run/clamav";
   clamavGroup = clamavUser;
   cfg = config.services.clamav;
   pkg = pkgs.clamav;
@@ -117,9 +116,8 @@ in
 
     services.clamav.daemon.settings = {
       DatabaseDirectory = stateDir;
-      LocalSocket = "${runDir}/clamd.ctl";
-      PidFile = "${runDir}/clamd.pid";
-      TemporaryDirectory = "/tmp";
+      LocalSocket = "/run/clamav/clamd.ctl";
+      PidFile = "/run/clamav/clamd.pid";
       User = "clamav";
       Foreground = true;
     };
@@ -182,7 +180,6 @@ in
         ExecStart = "${pkg}/bin/freshclam";
         SuccessExitStatus = "1"; # if databases are up to date
         StateDirectory = "clamav";
-        RuntimeDirectory = "clamav";
         User = clamavUser;
         Group = clamavGroup;
         PrivateTmp = "yes";
@@ -204,7 +201,6 @@ in
       serviceConfig = {
         Type = "oneshot";
         StateDirectory = "clamav";
-        RuntimeDirectory = "clamav";
         User = clamavUser;
         Group = clamavGroup;
         PrivateTmp = "yes";
@@ -230,7 +226,6 @@ in
         Type = "oneshot";
         ExecStart = "${pkgs.fangfrisch}/bin/fangfrisch --conf ${fangfrischConfigFile} refresh";
         StateDirectory = "clamav";
-        RuntimeDirectory = "clamav";
         User = clamavUser;
         Group = clamavGroup;
         PrivateTmp = "yes";
