@@ -2689,10 +2689,7 @@ with pkgs;
 
   emulationstation = callPackage ../applications/emulators/emulationstation { };
 
-  fceux = callPackage ../applications/emulators/fceux {
-    lua = lua5_1;
-    inherit (libsForQt5) wrapQtAppsHook;
-  };
+  fceux = libsForQt5.callPackage ../applications/emulators/fceux { lua = lua5_1; };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
 
@@ -29181,9 +29178,7 @@ with pkgs;
 
   comfortaa = callPackage ../data/fonts/comfortaa { };
 
-  colloid-kde = callPackage ../data/themes/colloid-kde {
-    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
-  };
+  colloid-kde = libsForQt5.callPackage ../data/themes/colloid-kde { };
 
   comic-mono = callPackage ../data/fonts/comic-mono { };
 
@@ -29399,9 +29394,7 @@ with pkgs;
 
   graphite-gtk-theme = callPackage ../data/themes/graphite-gtk-theme { };
 
-  graphite-kde-theme = callPackage ../data/themes/graphite-kde-theme {
-    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
-  };
+  graphite-kde-theme = libsForQt5.callPackage ../data/themes/graphite-kde-theme { };
 
   greybird = callPackage ../data/themes/greybird { };
 
@@ -29538,9 +29531,7 @@ with pkgs;
 
   layan-gtk-theme = callPackage ../data/themes/layan-gtk-theme { };
 
-  layan-kde = callPackage ../data/themes/layan-kde {
-    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
-  };
+  layan-kde = libsForQt5.callPackage ../data/themes/layan-kde { };
 
   lao = callPackage ../data/fonts/lao { };
 
@@ -29744,9 +29735,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
   };
 
-  nordic = callPackage ../data/themes/nordic {
-    inherit (libsForQt5) breeze-icons plasma-framework plasma-workspace;
-  };
+  nordic = libsForQt5.callPackage ../data/themes/nordic { };
 
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
@@ -29905,9 +29894,7 @@ with pkgs;
 
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
-  qogir-kde = callPackage ../data/themes/qogir-kde {
-    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
-  };
+  qogir-kde = libsForQt5.callPackage ../data/themes/qogir-kde { };
 
   qogir-theme = callPackage ../data/themes/qogir { };
 
@@ -30197,9 +30184,7 @@ with pkgs;
 
   unscii = callPackage ../data/fonts/unscii { };
 
-  utterly-nord-plasma = callPackage ../data/themes/utterly-nord-plasma {
-    inherit (libsForQt5) breeze-icons kdeclarative kirigami2 plasma-framework plasma-workspace;
-  };
+  utterly-nord-plasma = libsForQt5.callPackage ../data/themes/utterly-nord-plasma { };
 
   utterly-round-plasma-style = callPackage ../data/themes/utterly-round-plasma-style { };
 
@@ -30245,9 +30230,7 @@ with pkgs;
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
-  whitesur-kde = callPackage ../data/themes/whitesur-kde {
-    inherit (libsForQt5) kdeclarative plasma-framework plasma-workspace;
-  };
+  whitesur-kde = libsForQt5.callPackage ../data/themes/whitesur-kde { };
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
@@ -35296,9 +35279,7 @@ with pkgs;
 
   simple-scan = gnome.simple-scan;
 
-  sioyek = callPackage ../applications/misc/sioyek {
-    inherit (libsForQt5) qmake qt3d qtbase wrapQtAppsHook;
-  };
+  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -36369,9 +36350,7 @@ with pkgs;
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
-  vym = callPackage ../applications/misc/vym {
-    inherit (libsForQt5) qmake qtscript qtsvg qtbase wrapQtAppsHook;
-  };
+  vym = libsForQt5.callPackage ../applications/misc/vym { };
 
   wad = callPackage ../tools/security/wad { };
 
