@@ -24626,9 +24626,15 @@ with pkgs;
 
   pylode = callPackage ../misc/pylode { };
 
-  python-qt = disable-warnings-if-gcc13 (callPackage ../development/libraries/python-qt {
+  python-qt = (callPackage ../development/libraries/python-qt {
     python = python3;
-    inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
+    inherit (builtins.mapAttrs (_: pkg: pkg.override (previousArgs: lib.optionalAttrs (previousArgs ? stdenv) { stdenv = gcc12Stdenv; })) qt5)
+      qmake qttools qtwebengine qtxmlpatterns;
+    stdenv = gcc12Stdenv;
+  })
+  .overrideAttrs(previousAttrs: {
+    NIX_CFLAGS_COMPILE = "-w";
+    meta = previousAttrs.meta // { broken = true; };
   });
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside { };
@@ -25643,6 +25649,7 @@ with pkgs;
 
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK32;
+    stdenv = gcc12Stdenv;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
