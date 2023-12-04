@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.4.22";
+  version = "0.4.34";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hgwc4rneY0d7KZHuBIWRpndLksts5DTvaYuwZOO4sdI=";
+    hash = "sha256-hRY+M9M1AcwlAnNWvaqxfrt4UWiUfvwmY51eE1kJY8Q=";
   };
 
   sourceRoot = "source/openllm-core";
