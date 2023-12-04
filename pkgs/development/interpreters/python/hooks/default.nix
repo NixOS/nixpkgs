@@ -68,8 +68,8 @@ in {
       # Such conflicts don't happen within the standard nixpkgs python package
       #   set, but in downstream projects that build packages depending on other
       #   versions of this hook's dependencies.
-      passthru.tests = import ./pypa-build-hook-test.nix {
-        inherit pythonOnBuildForHost runCommand;
+      passthru.tests = callPackage ./pypa-build-hook-test.nix {
+        inherit pythonOnBuildForHost;
       };
     } ./pypa-build-hook.sh) {
       inherit (pythonOnBuildForHost.pkgs) build;
