@@ -121,22 +121,24 @@ self: super: {
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
-  hiedb =
-    lib.pipe
-      super.hiedb
-      [
-        # hiedb-0.4.3.0 does not yet support algebraic-graphs-0.7.  This patch works
-        # around the issue.
-        # https://github.com/wz1000/HieDb/pull/44
-        (appendPatch
-          (pkgs.fetchpatch {
-            name = "hiedb-algebraic-graphs-0.7.patch";
-            url = "https://github.com/wz1000/HieDB/commit/4ac8e6735321872b9d5d15a9cac492add5555234.patch";
-            hash = "sha256-Iu+M8r+DrpoxUCG6yekgbW+GffoNjjRksnwUJ6jojhE=";
-          }))
-        # Patch does not actually bump the bound in the .cabal file.
-        doJailbreak
-      ];
+  # 2023-12-03: https://github.com/haskell/haskell-language-server/pull/3867
+  hls-plugin-api = appendPatch (fetchpatch {
+    url = "https://github.com/haskell/haskell-language-server/commit/1c884ea856cceeaa3254a2ef68c8ab3a3c353153.patch";
+    relative = "hls-plugin-api";
+    hash = "sha256-vlXPdEvmuIl+cM+u/GdHi8r72r4+Tqtsvx0CGbWEFCQ=";
+  }) (doJailbreak super.hls-plugin-api);
+  ghcide = appendPatch (fetchpatch {
+    url = "https://github.com/haskell/haskell-language-server/commit/1c884ea856cceeaa3254a2ef68c8ab3a3c353153.patch";
+    relative = "ghcide";
+    hash = "sha256-1URXyQf88v3hjFGvNmcIjHxJ5vExH3iI92XktDrQs0U=";
+  }) (doJailbreak super.ghcide);
+  hls-test-utils = doJailbreak super.hls-test-utils;
+  hls-alternate-number-format-plugin = doJailbreak super.hls-alternate-number-format-plugin;
+  hls-cabal-plugin = doJailbreak super.hls-cabal-plugin;
+  hls-call-hierarchy-plugin = doJailbreak super.hls-call-hierarchy-plugin;
+  hls-explicit-fixity-plugin = doJailbreak super.hls-explicit-fixity-plugin;
+  hls-floskell-plugin = doJailbreak super.hls-floskell-plugin;
+  hls-gadt-plugin = doJailbreak super.hls-gadt-plugin;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
@@ -484,7 +486,6 @@ self: super: {
   # Too strict bounds on algebraic-graphs and bytestring
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core = doJailbreak super.hnix-store-core;
-  hnix-store-core_0_6_1_0 = doDistribute (doJailbreak super.hnix-store-core_0_6_1_0);
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;

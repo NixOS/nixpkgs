@@ -1095,7 +1095,7 @@ self: super: builtins.intersectAttrs super {
     '';
   }) (lib.pipe
         (super.cachix.override {
-          hnix-store-core = self.hnix-store-core_0_6_1_0;
+          hnix-store-core = self.hnix-store-core_0_7_0_0;
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
         [
