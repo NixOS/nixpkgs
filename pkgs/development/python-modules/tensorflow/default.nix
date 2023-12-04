@@ -58,10 +58,10 @@ let
   # cudaPackages.cudnn led to this:
   # https://github.com/tensorflow/tensorflow/issues/60398
   cudnn = cudaPackages.cudnn_8_6;
-  gentoo-patches = fetchzip {
-    url = "https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-2.12.0.tar.bz2";
-    hash = "sha256-SCRX/5/zML7LmKEPJkcM5Tebez9vv/gmE4xhT/jyqWs=";
-  };
+  # gentoo-patches = fetchzip {
+  #   url = "https://dev.gentoo.org/~perfinion/patches/tensorflow-patches-2.12.0.tar.bz2";
+  #   hash = "sha256-SCRX/5/zML7LmKEPJkcM5Tebez9vv/gmE4xhT/jyqWs=";
+  # };
   protobuf-extra = linkFarm "protobuf-extra" [
     { name = "include"; path = protobuf-core.src; }
   ];
@@ -110,7 +110,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.13.0";
+  version = "2.15.0";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
 
@@ -219,7 +219,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
+      hash = "sha256-tCFLEvJ1lHy7NcHDW9Dkd+2D60x+AvOB8EAwmUSQCtM=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -340,36 +340,36 @@ let
     GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/cc";
 
     patches = [
-      "${gentoo-patches}/0002-systemlib-Latest-absl-LTS-has-split-cord-libs.patch"
-      "${gentoo-patches}/0005-systemlib-Updates-for-Abseil-20220623-LTS.patch"
-      "${gentoo-patches}/0007-systemlibs-Add-well_known_types_py_pb2-target.patch"
+      # "${gentoo-patches}/0002-systemlib-Latest-absl-LTS-has-split-cord-libs.patch"
+      # "${gentoo-patches}/0005-systemlib-Updates-for-Abseil-20220623-LTS.patch"
+      # "${gentoo-patches}/0007-systemlibs-Add-well_known_types_py_pb2-target.patch"
       # https://github.com/conda-forge/tensorflow-feedstock/pull/329/commits/0a63c5a962451b4da99a9948323d8b3ed462f461
-      (fetchpatch {
-        name = "fix-layout-proto-duplicate-loading.patch";
-        url = "https://raw.githubusercontent.com/conda-forge/tensorflow-feedstock/0a63c5a962451b4da99a9948323d8b3ed462f461/recipe/patches/0001-Omit-linking-to-layout_proto_cc-if-protobuf-linkage-.patch";
-        hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
-      })
-      ./com_google_absl_add_log.patch
-      ./absl_py_argparse_flags.patch
-      ./protobuf_python.patch
-      ./pybind11_protobuf_python_runtime_dep.patch
-      ./pybind11_protobuf_newer_version.patch
+      # (fetchpatch {
+      #   name = "fix-layout-proto-duplicate-loading.patch";
+      #   url = "https://raw.githubusercontent.com/conda-forge/tensorflow-feedstock/0a63c5a962451b4da99a9948323d8b3ed462f461/recipe/patches/0001-Omit-linking-to-layout_proto_cc-if-protobuf-linkage-.patch";
+      #   hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
+      # })
+      # ./com_google_absl_add_log.patch
+      # ./absl_py_argparse_flags.patch
+      # ./protobuf_python.patch
+      # ./pybind11_protobuf_python_runtime_dep.patch
+      # ./pybind11_protobuf_newer_version.patch
     ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
       ./absl_to_std.patch
     ];
 
-    postPatch = ''
-      # bazel 3.3 should work just as well as bazel 3.1
-      rm -f .bazelversion
-      patchShebangs .
-    '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-      cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
-    '' + lib.optionalString (!withTensorboard) ''
-      # Tensorboard pulls in a bunch of dependencies, some of which may
-      # include security vulnerabilities. So we make it optional.
-      # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
-      sed -i '/tensorboard ~=/d' tensorflow/tools/pip_package/setup.py
-    '';
+    # postPatch = ''
+    #   # bazel 3.3 should work just as well as bazel 3.1
+    #   rm -f .bazelversion
+    #   patchShebangs .
+    # '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+    #   cat ${./com_google_absl_fix_macos.patch} >> third_party/absl/com_google_absl_fix_mac_and_nvcc_build.patch
+    # '' + lib.optionalString (!withTensorboard) ''
+    #   # Tensorboard pulls in a bunch of dependencies, some of which may
+    #   # include security vulnerabilities. So we make it optional.
+    #   # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
+    #   sed -i '/tensorboard ~=/d' tensorflow/tools/pip_package/setup.py
+    # '';
 
     # https://github.com/tensorflow/tensorflow/pull/39470
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-stringop-truncation" ];
@@ -425,11 +425,11 @@ let
     fetchAttrs = {
       sha256 = {
       x86_64-linux = if cudaSupport
-        then "sha256-5VFMNHeLrUxW5RTr6EhT3pay9nWJ5JkZTGirDds5QkU="
-        else "sha256-KzgWV69Btr84FdwQ5JI2nQEsqiPg1/+TWdbw5bmxXOE=";
-      aarch64-linux = "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
-      x86_64-darwin = "sha256-gqb03kB0z2pZQ6m1fyRp1/Nbt8AVVHWpOJSeZNCLc4w=";
-      aarch64-darwin = "sha256-WdgAaFZU+ePwWkVBhLzjlNT7ELfGHOTaMdafcAMD5yo=";
+        then ""
+        else "";
+      aarch64-linux = "";
+      x86_64-darwin = "";
+      aarch64-darwin = "";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
