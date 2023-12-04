@@ -24,6 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-5UlnOGXXFu1p9M5B+Ixc9DW5hLZ1nskv81Y+McbWu6Q=";
   };
 
+  patches = [
+    ./0001-setup.py-propagate-cmakeFlags.patch
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace 'print(" --- Initializing submodules")' "return" \
