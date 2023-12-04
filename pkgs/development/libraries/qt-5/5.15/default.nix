@@ -15,17 +15,7 @@
   fetchpatch,
   fetchFromGitHub,
   makeSetupHook,
-  makeWrapper,
-  bison,
-  cups ? null,
-  harfbuzz,
-  libGL,
-  perl,
   python3,
-  gstreamer,
-  gst-plugins-base,
-  gtk3,
-  dconf,
   llvmPackages_19,
   darwin,
   buildPackages,
@@ -286,15 +276,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        # do we really need this inherit here?
-        inherit
-          bison
-          cups
-          harfbuzz
-          libGL
-          ;
         withGtk3 = !stdenv.hostPlatform.isDarwin;
-        inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
 
@@ -310,9 +292,7 @@ let
       qtlocation = callPackage ../modules/qtlocation.nix { };
       qtlottie = callPackage ../modules/qtlottie.nix { };
       qtmacextras = callPackage ../modules/qtmacextras.nix { };
-      qtmultimedia = callPackage ../modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base;
-      };
+      qtmultimedia = callPackage ../modules/qtmultimedia.nix { };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix { };
       qtpim = callPackage ../modules/qtpim.nix { };
       qtpositioning = callPackage ../modules/qtpositioning.nix { };
