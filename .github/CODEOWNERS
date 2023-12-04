@@ -105,6 +105,9 @@
 /nixos/lib/systemd-*.nix                    @NixOS/systemd
 /pkgs/os-specific/linux/systemd             @NixOS/systemd
 
+# Systemd-boot
+/nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
+
 # Images and installer media
 /nixos/modules/installer/cd-dvd/            @samueldr
 /nixos/modules/installer/sd-card/           @samueldr

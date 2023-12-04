@@ -116,6 +116,7 @@ dont-distribute-packages:
  - FiniteCategoriesGraphViz
  - FiniteMap
  - FirstOrderTheory
+ - Flint2-Examples
  - Flippi
  - ForSyDe
  - Forestry
@@ -1309,6 +1310,7 @@ dont-distribute-packages:
  - fast-bech32
  - fastcdc
  - fastirc
+ - fastparser
  - fault-tree
  - fay-base
  - fay-builder
@@ -3457,6 +3459,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
+ - sandwich_0_2_0_0
  - sarsi
  - sasha
  - sasl

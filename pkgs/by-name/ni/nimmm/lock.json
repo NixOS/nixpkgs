@@ -27,14 +27,14 @@
     {
       "method": "fetchzip",
       "packages": [
-        "noise"
+        "wcwidth"
       ],
-      "path": "/nix/store/cqn9s90ivzsx7mq5k8m19565247sdsg6-source",
-      "ref": "v0.1.8",
-      "rev": "3cb3250ddcdaa74809aad931c066e7ef6e4af36d",
-      "sha256": "0qmak5n5nrf8nb8szhlz8sf05gmbs0x648p4vcd7ca600kaxfgj0",
-      "srcDir": "",
-      "url": "https://github.com/jangko/nim-noise/archive/3cb3250ddcdaa74809aad931c066e7ef6e4af36d.tar.gz"
+      "path": "/nix/store/inpq6nm27r7ixyjsdsm4sg6qna7d2vbc-source",
+      "ref": "v0.1.3",
+      "rev": "fd60d2dd10fd945a471450551ba471c3be80df52",
+      "sha256": "06b9ylqbjcxgm9mjfzljbi8gr9sbajykcqpcxgyqymynqyhxmqjn",
+      "srcDir": "src",
+      "url": "https://github.com/shoyu777/wcwidth-nim/archive/fd60d2dd10fd945a471450551ba471c3be80df52.tar.gz"
     }
   ]
 }

@@ -1,11 +1,11 @@
 { lib
-, azure-common
-, azure-mgmt-core
 , buildPythonPackage
 , fetchPypi
-, isodate
-, msal
 , pythonOlder
+, azure-core
+, cryptography
+, msal
+, msal-extensions
 }:
 
 buildPythonPackage rec {
@@ -21,10 +21,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    azure-common
-    azure-mgmt-core
-    isodate
+    azure-core
+    cryptography
     msal
+    msal-extensions
   ];
 
   pythonImportsCheck = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Azure Identity Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-identity_${version}/sdk/keyvault/azure-mgmt-keyvault/CHANGELOG.md";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-identity_${version}/sdk/identity/azure-identity/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

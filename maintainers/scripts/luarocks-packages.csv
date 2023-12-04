@@ -17,6 +17,7 @@ dkjson,,,,,,
 fennel,,,,,,misterio77
 fifo,,,,,,
 fluent,,,,,,alerque
+fzy,,,,,,mrcjkb
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 haskell-tools.nvim,,,,,,
 http,,,,0.3-0,,vcunat

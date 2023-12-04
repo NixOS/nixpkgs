@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
     rev = version;
-    hash = "sha256-XJOv7JFUJulEkGCMLxGi9nldHaPM/CUzyENIC2TdtoE=";
+    hash = "sha256-WqV04GhX7lIla5BEdHRgRZsAWBSweb1HFAC9XZYqpYo=";
   };
 
-  cargoHash = "sha256-TfAAU46rH6Jq0MuLRjbaVMRjzoSLYNAWBnUcT8DyIVg=";
+  cargoHash = "sha256-A3YcgHed5mp7//FMoC/02KAU7Y+7YiG50eWE9tP5mF8=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
