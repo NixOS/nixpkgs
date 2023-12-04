@@ -334,7 +334,8 @@ in buildPythonPackage rec {
   buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport (with cudaPackages; [
       cuda_cccl.dev # <thrust/*>
-      cuda_cudart # cuda_runtime.h and libraries
+      cuda_cudart.dev # cuda_runtime.h and libraries
+      cuda_cudart.lib
       cuda_cupti.dev # For kineto
       cuda_cupti.lib # For kineto
       cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
