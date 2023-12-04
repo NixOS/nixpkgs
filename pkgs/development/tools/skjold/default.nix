@@ -77,5 +77,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/twu/skjold/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    broken = true;  # does not build with gcc13
   };
 }
