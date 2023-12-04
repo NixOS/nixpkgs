@@ -122,6 +122,10 @@ in
         PermissionsStartOnly = true;
       };
 
+      boot.kernel.sysctl = {
+        "net.core.wmem_max" = mkDefault 5242880;
+      };
+
       preStart = ''
         if [ $(echo "$(${pkgs.procps}/bin/sysctl -n kernel.shmall) < 4294967296" | ${pkgs.bc}/bin/bc) == "1"  ]; then
           echo "kernel.shmall too low, setting to 4G pages"
@@ -134,10 +138,6 @@ in
         if [ $(echo "$(cat /proc/sys/net/core/rmem_max) < 15728640" | ${pkgs.bc}/bin/bc) == "1" ]; then
           echo "increasing socket buffer limit (/proc/sys/net/core/rmem_max): $(cat /proc/sys/net/core/rmem_max) -> 15728640"
           echo 15728640 > /proc/sys/net/core/rmem_max
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/wmem_max) <  5242880" | ${pkgs.bc}/bin/bc) == "1"  ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/wmem_max): $(cat /proc/sys/net/core/wmem_max) -> 5242880"
-          echo  5242880 > /proc/sys/net/core/wmem_max
         fi
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}"
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}/smd"

@@ -37,6 +37,11 @@ in
             default = null;
             description = lib.mdDoc "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
           };
+          "net.core.wmem_max" = mkOption {
+            type = nullOrHighestInt;
+            default = null;
+            description = lib.mdDoc "The maximum send socket buffer size in bytes. In case of conflicting values, the highest will be used.";
+          };
         };
       };
       default = {};
