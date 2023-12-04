@@ -54,14 +54,17 @@ let
     arp = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     col = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.text_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     column = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.text_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     eject = {
       linux = pkgs.util-linux;
@@ -70,97 +73,121 @@ let
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
               else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     getent = {
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
+      freebsd = pkgs.freebsd.utils;
     };
     getopt = {
       linux = pkgs.util-linux;
       darwin = pkgs.getopt;
+      freebsd = pkgs.freebsd.utils;
     };
     fdisk = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     fsck = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     hexdump = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     hostname = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     ifconfig = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     killall = {
       linux = pkgs.psmisc;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     locale = {
       linux = pkgs.glibc;
       darwin = pkgs.darwin.adv_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     logger = {
       linux = pkgs.util-linux;
+      freebsd = pkgs.freebsd.utils;
     };
     more = {
       linux = pkgs.util-linux;
       darwin = more_compat;
+      freebsd = pkgs.freebsd.utils;
     };
     mount = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     netstat = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     ping = {
       linux = pkgs.iputils;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     ps = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.ps;
+      freebsd = pkgs.freebsd.utils;
     };
     quota = {
       linux = pkgs.linuxquota;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     route = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     script = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     sysctl = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.system_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     top = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.top;
+      freebsd = pkgs.freebsd.utils;
     };
     umount = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     whereis = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     wall = {
       linux = pkgs.util-linux;
+      freebsd = pkgs.freebsd.utils;
     };
     watch = {
       linux = pkgs.procps;
@@ -168,14 +195,17 @@ let
       # watch is the only command from procps that builds currently on
       # Darwin. Unfortunately no other implementations exist currently!
       darwin = pkgs.callPackage ../os-specific/linux/procps-ng {};
+      freebsd = pkgs.freebsd.utils;
     };
     write = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.basic_cmds;
+      freebsd = pkgs.freebsd.utils;
     };
     xxd = {
       linux = pkgs.vim;
       darwin = pkgs.vim;
+      freebsd = pkgs.freebsd.utils;
     };
   };
 

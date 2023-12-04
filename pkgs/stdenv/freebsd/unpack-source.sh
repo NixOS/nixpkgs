@@ -17,7 +17,7 @@ _FreeBSDUnpackSource() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        freebsd-cp -a -- "$fn" "$destination"
+        bsdcp -a -- "$fn" "$destination"
         chmod -R +w "$destination"
 
     else

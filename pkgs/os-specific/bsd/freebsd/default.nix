@@ -42,6 +42,7 @@ lib.makeScope newScope (self: with self; {
   gencat = callPackage ./gencat.nix {};
   libmd = callPackage ../../../development/libraries/libmd {};
   cp = callPackage ./cp.nix {};
+  utils = callPackage ./utils.nix ee;
 
   include = callPackage ./include.nix {};
   csu = callPackage ./csu.nix {};
