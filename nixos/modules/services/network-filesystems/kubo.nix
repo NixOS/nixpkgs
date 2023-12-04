@@ -242,6 +242,12 @@ in
               default = "/mfs";
               description = "Where to mount the MFS namespace to";
             };
+
+            Mounts.FuseAllowOther = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Allow all users to access the FUSE mount points";
+            };
           };
         };
         description = ''
@@ -368,10 +374,6 @@ in
     # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
     systemd.packages =
       if cfg.autoMount then [ cfg.package.systemd_unit ] else [ cfg.package.systemd_unit_hardened ];
-
-    services.kubo.settings = lib.mkIf cfg.autoMount {
-      Mounts.FuseAllowOther = lib.mkDefault true;
-    };
 
     systemd.services.ipfs = {
       path = [
