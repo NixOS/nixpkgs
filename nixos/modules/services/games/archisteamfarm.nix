@@ -7,7 +7,7 @@ let
 
   format = pkgs.formats.json { };
 
-  asf-config = format.generate "ASF.json" (cfg.settings // {
+  configFile = format.generate "ASF.json" (cfg.settings // {
     # we disable it because ASF cannot update itself anyways
     # and nixos takes care of restarting the service
     # is in theory not needed as this is already the default for default builds
@@ -76,7 +76,7 @@ in
 
     dataDir = mkOption {
       type = types.path;
-      default = "/var/lib/asf";
+      default = "/var/lib/archisteamfarm";
       description = lib.mdDoc ''
         The ASF home directory used to store all data.
         If left as the default value this directory will automatically be created before the ASF server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.'';
@@ -99,7 +99,7 @@ in
     ipcPasswordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `asf` user/group.";
+      description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.";
     };
 
     ipcSettings = mkOption {
@@ -130,7 +130,7 @@ in
           };
           passwordFile = mkOption {
             type = types.path;
-            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `asf` user/group.";
+            description = lib.mdDoc "Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.";
           };
           enabled = mkOption {
             type = types.bool;
@@ -152,7 +152,7 @@ in
       example = {
         exampleBot = {
           username = "alice";
-          passwordFile = "/var/lib/asf/secrets/password";
+          passwordFile = "/var/lib/archisteamfarm/secrets/password";
           settings = { SteamParentalCode = "1234"; };
         };
       };
@@ -161,31 +161,33 @@ in
   };
 
   config = mkIf cfg.enable {
+    # TODO: drop with 24.11
+    services.archisteamfarm.dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
 
     users = {
-      users.asf = {
+      users.archisteamfarm = {
         home = cfg.dataDir;
         isSystemUser = true;
-        group = "asf";
+        group = "archisteamfarm";
         description = "Archis-Steam-Farm service user";
       };
-      groups.asf = { };
+      groups.archisteamfarm = { };
     };
 
     systemd.services = {
-      asf = {
+      archisteamfarm = {
         description = "Archis-Steam-Farm Service";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = mkMerge [
-          (mkIf (cfg.dataDir == "/var/lib/asf") {
-            StateDirectory = "asf";
+          (mkIf (lib.hasPrefix "/var/lib/" cfg.dataDir) {
+            StateDirectory = lib.last (lib.splitString "/" cfg.dataDir);
             StateDirectoryMode = "700";
           })
           {
-            User = "asf";
-            Group = "asf";
+            User = "archisteamfarm";
+            Group = "archisteamfarm";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
             ExecStart = "${lib.getExe cfg.package} --no-restart --process-required --service --system-required --path ${cfg.dataDir}";
@@ -217,12 +219,10 @@ in
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
-            SystemCallArchitectures = "native";
-            UMask = "0077";
-
-            # we luckily already have systemd v247+
             SecureBits = "noroot-locked";
+            SystemCallArchitectures = "native";
             SystemCallFilter = [ "@system-service" "~@privileged" ];
+            UMask = "0077";
           }
         ];
 
@@ -242,7 +242,7 @@ in
           ''
             mkdir -p config
 
-            cp --no-preserve=mode ${asf-config} config/ASF.json
+            cp --no-preserve=mode ${configFile} config/ASF.json
 
             ${optionalString (cfg.ipcPasswordFile != null) ''
               ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
