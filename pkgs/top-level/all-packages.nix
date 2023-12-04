@@ -22766,9 +22766,10 @@ with pkgs;
 
   libfido2 = callPackage ../development/libraries/libfido2 {};
 
-  libfilezilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/libfilezilla {
-    inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices;
-  };
+  libfilezilla = disable-warnings-if-gcc13
+    (darwin.apple_sdk_11_0.callPackage ../development/libraries/libfilezilla {
+      inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices;
+    });
 
   libfishsound = callPackage ../development/libraries/libfishsound { };
 
