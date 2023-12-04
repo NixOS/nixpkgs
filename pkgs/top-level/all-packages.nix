@@ -7952,7 +7952,7 @@ with pkgs;
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
-  efivar = callPackage ../tools/system/efivar { };
+  efivar = disable-warnings-if-gcc13 (callPackage ../tools/system/efivar { });
 
   eget = callPackage ../tools/misc/eget { };
 
