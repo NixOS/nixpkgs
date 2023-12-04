@@ -10033,7 +10033,7 @@ self: super: with self; {
 
   pycron = callPackage ../development/python-modules/pycron { };
 
-  pycrypto = callPackage ../development/python-modules/pycrypto { };
+  pycrypto = pkgs.disable-warnings-if-gcc13 (callPackage ../development/python-modules/pycrypto { });
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
