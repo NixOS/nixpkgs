@@ -2,12 +2,22 @@
 , config
 , enableCuda ? config.cudaSupport
 , cudatoolkit
+, enableRocm ? false
+, symlinkJoin
+, rocmPackages
 , enableAvx ? stdenv.hostPlatform.avxSupport
 , enableSse41 ? stdenv.hostPlatform.sse4_1Support
 , enableSse42 ? stdenv.hostPlatform.sse4_2Support
 } :
 
-stdenv.mkDerivation rec {
+let
+  rocmList = with rocmPackages; [ rocm-core rocm-thunk rocm-runtime rocm-device-libs clr ];
+
+  rocm = symlinkJoin {
+    name = "rocm";
+    paths = rocmList;
+  };
+in stdenv.mkDerivation rec {
   pname = "ucc";
   version = "1.2.0";
 
@@ -23,6 +33,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+    patchShebangs cuda_lt.sh
 
     for comp in $(find src/components -name Makefile.am); do
       substituteInPlace $comp \
@@ -36,13 +47,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libtool automake autoconf ];
   buildInputs = [ ucx ]
-    ++ lib.optional enableCuda cudatoolkit;
+    ++ lib.optional enableCuda cudatoolkit
+    ++ lib.optionals enableRocm rocmList;
 
   configureFlags = [ ]
    ++ lib.optional enableSse41 "--with-sse41"
    ++ lib.optional enableSse42 "--with-sse42"
    ++ lib.optional enableAvx "--with-avx"
-   ++ lib.optional enableCuda "--with-cuda=${cudatoolkit}";
+   ++ lib.optionals enableCuda [ "--with-cuda=${cudatoolkit}" "--with-ucx=${lib.getDev ucx}" "--with-ucx-libdir=${ucx}/lib" ]
+   ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" "--with-ucx=${lib.getDev ucx}" "--with-ucx-libdir=${ucx}/lib" ];
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
