@@ -15852,6 +15852,15 @@ with pkgs;
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
 
+  disable-warnings-if-gcc13 = pkg:
+    if (pkg.stdenv.cc.cc.isGNU or false && lib.versionAtLeast pkg.stdenv.cc.cc.version "13.0")
+    then pkg.overrideAttrs(previousAttrs: previousAttrs // {
+      env = previousAttrs.env or {} // {
+        NIX_CFLAGS_COMPILE = (previousAttrs.env.NIX_CFLAGS_COMPILE or "") + " -Wno-error";
+      };
+    })
+    else pkg;
+
   wrapNonDeterministicGcc = stdenv: ccWrapper:
     if ccWrapper.isGNU then ccWrapper.overrideAttrs(old: {
       env = old.env // {
