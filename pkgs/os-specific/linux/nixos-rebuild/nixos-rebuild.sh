@@ -439,7 +439,7 @@ SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o Con
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
-if [[ "$action" = dry-build ]]; then
+if [ "$action" = dry-build ]; then
     buildNix=
 fi
 
@@ -640,7 +640,7 @@ if [ -z "$rollback" ] && [ -z "$generation" ]; then
     if ! [[ "$action" = switch || "$action" = boot ]]; then
         copyToTarget "$pathToConfig"
     fi
-elif [[ -n "$rollback" ]]; then
+elif [ -n "$rollback" ]; then
     if [[ "$action" = switch || "$action" = boot ]]; then
         targetHostCmd nix-env --rollback -p "$profile"
         pathToConfig="$profile"
