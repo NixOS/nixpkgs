@@ -75,6 +75,8 @@ in {
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
             docker.fail("docker run --rm hello | grep -i hello")
             docker.succeed("docker image rm hello:latest")
+        with subtest("Ensure ZERO paths are added to the store"):
+            docker.fail("${examples.helloOnRootNoStore} | ${pkgs.crane}/bin/crane export - - | tar t | grep 'nix/store/'")
         with subtest("includeStorePath = false; works with mounted store"):
             docker.succeed("${examples.helloOnRootNoStore} | docker load")
             docker.succeed("docker run --rm --volume ${builtins.storeDir}:${builtins.storeDir}:ro hello | grep -i hello")
