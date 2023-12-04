@@ -1,12 +1,13 @@
 { autoAddOpenGLRunpathHook
 , backendStdenv
 , cmake
-, cuda_cccl
-, cuda_cudart
+, cuda_cccl ? null
+, cuda_cudart ? null
 , cudaFlags
-, cuda_nvcc
+, cuda_nvcc ? null
+, cudatoolkit ? null
 , lib
-, libcublas
+, libcublas ? null
 , setupCudaHook
 , stdenv
 }:
@@ -17,23 +18,24 @@ backendStdenv.mkDerivation {
 
   src = ./.;
 
-  buildInputs = [
+  buildInputs = lib.optionals (cuda_cudart != null) [
     libcublas
     cuda_cudart
     cuda_cccl
+  ] ++ lib.optionals (cuda_cudart == null) [
+    cudatoolkit
   ];
   nativeBuildInputs = [
     cmake
-
-    # NOTE: this needs to be pkgs.buildPackages.cudaPackages_XX_Y.cuda_nvcc for
-    # cross-compilation to work. This should work automatically once we move to
-    # spliced scopes. Delete this comment once that happens
-    cuda_nvcc
 
     # Alternatively, we could remove the propagated hook from cuda_nvcc and add
     # directly:
     # setupCudaHook
     autoAddOpenGLRunpathHook
+  ] ++ lib.optionals (cuda_nvcc != null) [
+    cuda_nvcc
+  ] ++ lib.optionals (cuda_nvcc == null) [
+    cudatoolkit
   ];
 
   cmakeFlags = [
