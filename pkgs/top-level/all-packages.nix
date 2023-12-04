@@ -32166,6 +32166,16 @@ with pkgs;
       shiboken2;
   };
 
+  freecad_realthunder = freecad.overrideAttrs (finalAttrs: {
+    version = "2023.01.31";
+    src = fetchFromGitHub {
+      owner = "realthunder";
+      repo = "FreeCAD";
+      rev = "${finalAttrs.version}-edge";
+      hash = "sha256-gUziaW0HdhbNvl6rZz7n18e5f7RTHUyV8FRTkd2uzdE=";
+    };
+  });
+
   freedv = callPackage ../applications/radio/freedv {
     inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {
