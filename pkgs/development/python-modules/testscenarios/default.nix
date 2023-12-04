@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pbr
 , testtools
 }:
 
 buildPythonPackage rec {
   pname = "testscenarios";
   version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +21,13 @@ buildPythonPackage rec {
       --replace "catch = 1" ""
   '';
 
-  propagatedBuildInputs = [ testtools ];
+  nativeBuildInputs = [
+    pbr
+  ];
+
+  propagatedBuildInputs = [
+    testtools
+  ];
 
   meta = with lib; {
     description = "A pyunit extension for dependency injection";
