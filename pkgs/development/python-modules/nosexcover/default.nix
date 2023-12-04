@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , coverage
 , nose
 }:
@@ -8,6 +9,9 @@
 buildPythonPackage rec {
   pname = "nosexcover";
   version = "1.0.11";
+
+  # requires the imp module
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
