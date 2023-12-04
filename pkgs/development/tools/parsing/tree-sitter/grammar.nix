@@ -23,8 +23,13 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = lib.optionals generate [ nodejs tree-sitter ];
 
-  CFLAGS = [ "-Isrc" "-O2" ];
-  CXXFLAGS = [ "-Isrc" "-O2" ];
+  env = {
+    CFLAGS = toString [ "-Isrc" "-O2" ];
+    CXXFLAGS = toString [ "-Isrc" "-O2" ];
+  } // lib.optionalAttrs stdenv.isDarwin {
+    # Ensure that there is enough space to update the install names of the output on Darwin.
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   stripDebugList = [ "parser" ];
 
