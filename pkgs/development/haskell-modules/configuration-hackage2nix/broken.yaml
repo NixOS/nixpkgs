@@ -1672,6 +1672,7 @@ broken-packages:
   - fortran-vars # failure in job https://hydra.nixos.org/build/233257719 at 2023-09-02
   - fortytwo # failure in job https://hydra.nixos.org/build/233209552 at 2023-09-02
   - foscam-filename # failure in job https://hydra.nixos.org/build/233237326 at 2023-09-02
+  - fp-ieee # failure in job https://hydra.nixos.org/build/241516602 at 2023-12-03
   - FPretty # failure in job https://hydra.nixos.org/build/233196648 at 2023-09-02
   - fptest # failure in job https://hydra.nixos.org/build/233233288 at 2023-09-02
   - fquery # failure in job https://hydra.nixos.org/build/233196287 at 2023-09-02
@@ -3393,6 +3394,7 @@ broken-packages:
   - MapWith # failure in job https://hydra.nixos.org/build/233237146 at 2023-09-02
   - markdown-kate # failure in job https://hydra.nixos.org/build/233227051 at 2023-09-02
   - marked-pretty # failure in job https://hydra.nixos.org/build/233193892 at 2023-09-02
+  - markov-chain-usage-model # failure in job https://hydra.nixos.org/build/241522329 at 2023-12-03
   - markov-realization # failure in job https://hydra.nixos.org/build/233234901 at 2023-09-02
   - mars # failure in job https://hydra.nixos.org/build/234449730 at 2023-09-13
   - marshal-contt # failure in job https://hydra.nixos.org/build/233231755 at 2023-09-02
@@ -4858,6 +4860,7 @@ broken-packages:
   - semilattices # failure in job https://hydra.nixos.org/build/233223765 at 2023-09-02
   - sendgrid-haskell # failure in job https://hydra.nixos.org/build/233228693 at 2023-09-02
   - sendgrid-v3 # failure in job https://hydra.nixos.org/build/233224134 at 2023-09-02
+  - sensei # failure in job https://hydra.nixos.org/build/241518007 at 2023-12-03
   - sensu-run # failure in job https://hydra.nixos.org/build/233251719 at 2023-09-02
   - sentry # failure in job https://hydra.nixos.org/build/233246813 at 2023-09-02
   - seonbi # failure in job https://hydra.nixos.org/build/233196115 at 2023-09-02
@@ -4924,6 +4927,7 @@ broken-packages:
   - SessionLogger # failure in job https://hydra.nixos.org/build/233235790 at 2023-09-02
   - sessions # failure in job https://hydra.nixos.org/build/233214614 at 2023-09-02
   - sessiontypes # failure in job https://hydra.nixos.org/build/233224975 at 2023-09-02
+  - setdown # failure in job https://hydra.nixos.org/build/241521053 at 2023-12-03
   - setgame # failure in job https://hydra.nixos.org/build/233218664 at 2023-09-02
   - set-of # failure in job https://hydra.nixos.org/build/233202960 at 2023-09-02
   - setoid # failure in job https://hydra.nixos.org/build/233213744 at 2023-09-02
@@ -5529,6 +5533,7 @@ broken-packages:
   - th-traced # failure in job https://hydra.nixos.org/build/233247762 at 2023-09-02
   - thumbnail # failure in job https://hydra.nixos.org/build/233257110 at 2023-09-02
   - thumbnail-plus # failure in job https://hydra.nixos.org/build/233255464 at 2023-09-02
+  - thyme # failure in job https://hydra.nixos.org/build/241518029 at 2023-12-03
   - tianbar # failure in job https://hydra.nixos.org/build/233195811 at 2023-09-02
   - ticket-management # failure in job https://hydra.nixos.org/build/233247134 at 2023-09-02
   - tictactoe3d # failure in job https://hydra.nixos.org/build/233193080 at 2023-09-02

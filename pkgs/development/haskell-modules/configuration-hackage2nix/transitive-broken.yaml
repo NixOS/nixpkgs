@@ -1310,6 +1310,7 @@ dont-distribute-packages:
  - fast-bech32
  - fastcdc
  - fastirc
+ - fastparser
  - fault-tree
  - fay-base
  - fay-builder
@@ -3422,6 +3423,7 @@ dont-distribute-packages:
  - roshask
  - rosmsg-bin
  - rounded
+ - rounded-hw
  - roundtrip-xml
  - route-generator
  - route-planning
