@@ -16440,7 +16440,7 @@ with pkgs;
   hugs = callPackage ../development/interpreters/hugs { };
 
   inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
-  openjfx = openjfx17;
+  openjfx = openjfx17.override { stdenv = gcc12Stdenv; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
