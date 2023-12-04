@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
+
   meta = with lib; {
     homepage = "https://ngyro.com/software/guile-lzma.html";
     description = "Guile wrapper for lzma library";
