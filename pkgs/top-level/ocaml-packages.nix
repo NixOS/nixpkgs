@@ -593,6 +593,7 @@ let
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
+    gluten-eio = callPackage ../development/ocaml-modules/gluten/eio.nix { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
     gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
 
