@@ -12532,6 +12532,7 @@ with pkgs;
 
   qgrep = callPackage ../tools/text/qgrep {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreFoundation;
+    stdenv = gcc12Stdenv;
   };
 
   qhull = callPackage ../development/libraries/qhull { };
