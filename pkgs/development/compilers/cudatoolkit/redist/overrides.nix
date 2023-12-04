@@ -52,18 +52,7 @@ in
   );
 
   cuda_nvcc = prev.cuda_nvcc.overrideAttrs (oldAttrs: {
-    # Desiredata: whenever a package (e.g. magma) adds cuda_nvcc to
-    # nativeBuildInputs (offsets `(-1, 0)`), magma should also source the
-    # setupCudaHook, i.e. we want it the hook to be propagated into the
-    # same nativeBuildInputs.
-    #
-    # Logically, cuda_nvcc should include the hook in depsHostHostPropagated,
-    # so that the final offsets for the propagated hook would be `(-1, 0) +
-    # (0, 0) = (-1, 0)`.
-    #
-    # In practice, TargetTarget appears to work:
-    # https://gist.github.com/fd80ff142cd25e64603618a3700e7f82
-    depsTargetTargetPropagated = [
+    propagatedBuildInputs = [
       final.setupCudaHook
     ];
 
