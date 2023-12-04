@@ -886,6 +886,8 @@ let
 
     kappa-agents = callPackage ../development/ocaml-modules/kappa-agents { };
 
+    kappa-binaries = callPackage ../development/ocaml-modules/kappa-binaries { };
+
     kappa-library = callPackage ../development/ocaml-modules/kappa-library { };
 
     kcas = callPackage ../development/ocaml-modules/kcas { };
