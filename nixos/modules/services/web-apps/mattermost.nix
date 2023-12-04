@@ -102,7 +102,7 @@ in
     services.mattermost = {
       enable = mkEnableOption (lib.mdDoc "Mattermost chat server");
 
-      package = mkPackageOption pkgs "mattermostl" { };
+      package = mkPackageOption pkgs "mattermost" { };
 
       statePath = mkOption {
         type = types.str;
