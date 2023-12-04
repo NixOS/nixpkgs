@@ -890,6 +890,8 @@ let
 
     kappa-library = callPackage ../development/ocaml-modules/kappa-library { };
 
+    kappa-server = callPackage ../development/ocaml-modules/kappa-server { };
+
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
