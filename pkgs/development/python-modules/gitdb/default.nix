@@ -3,6 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , smmap
 }:
@@ -21,6 +22,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "smmap"
   ];
 
   propagatedBuildInputs = [
