@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "A better and friendly vi(vim) mode plugin for ZSH.";
     maintainers = with maintainers; [ kyleondy ];
+    platforms = platforms.all;
   };
 }
