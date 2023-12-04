@@ -34119,8 +34119,7 @@ with pkgs;
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openmm = callPackage ../development/libraries/science/chemistry/openmm {
-    stdenv = gcc11Stdenv;
-    gfortran = gfortran11;
+    swig = swig4;
   };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
