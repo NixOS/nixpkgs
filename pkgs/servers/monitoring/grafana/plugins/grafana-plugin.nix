@@ -32,7 +32,7 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
   '';
 
   passthru = {
-    updateScript = [ ./update-grafana-plugin.sh pname ];
+    updateScript = ./update-grafana-plugins.sh;
   } // passthru;
 
   meta = with lib; {
