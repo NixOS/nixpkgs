@@ -8,7 +8,9 @@ let
   pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
-  makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
+  makePythonHook = let
+    defaultArgs = { passthru.provides.setupHook = true; };
+  in args: pkgs.makeSetupHook (lib.recursiveUpdate defaultArgs args);
 
   condaInstallHook = callPackage ({ makePythonHook, gnutar, lbzip2 }:
     makePythonHook {
