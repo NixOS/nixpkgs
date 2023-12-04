@@ -8,10 +8,8 @@ Check for any minor version changes.
 */
 
 { makeScopeWithSplicing', generateSplicesForMkScope
-, lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl, python3
-, gstreamer, gst-plugins-base, gtk3, dconf
-, llvmPackages_15, overrideSDK, overrideLibcxx
+, lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook
+, python3, llvmPackages_15, overrideSDK, overrideLibcxx
 , darwin
 , buildPackages
 
@@ -249,9 +247,7 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        # do we really need this inherit here?
-        inherit bison cups harfbuzz libGL;
-        withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
+        withGtk3 = !stdenv.isDarwin;
         inherit developerBuild decryptSslTraffic;
         inherit (darwin.apple_sdk_11_0.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
@@ -275,9 +271,7 @@ let
       qtlocation = callPackage ../modules/qtlocation.nix {};
       qtlottie = callPackage ../modules/qtlottie.nix {};
       qtmacextras = callPackage ../modules/qtmacextras.nix {};
-      qtmultimedia = callPackage ../modules/qtmultimedia.nix {
-        inherit gstreamer gst-plugins-base;
-      };
+      qtmultimedia = callPackage ../modules/qtmultimedia.nix {};
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
