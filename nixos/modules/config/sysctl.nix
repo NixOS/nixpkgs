@@ -14,6 +14,14 @@ let
     merge = loc: defs: mergeOneOption loc (filterOverrides defs);
   };
 
+  nullOrHighestInt = types.nullOr types.ints.unsigned // {
+    merge = loc: defs:
+      foldl
+        (a: b: if b.value == null then null else lib.max a b.value)
+        0
+        (filterOverrides defs);
+  };
+
 in
 
 {
@@ -23,16 +31,12 @@ in
     boot.kernel.sysctl = mkOption {
       type = types.submodule {
         freeformType = types.attrsOf sysctlOption;
-        options."net.core.rmem_max" = mkOption {
-          type = types.nullOr types.ints.unsigned // {
-            merge = loc: defs:
-              foldl
-                (a: b: if b.value == null then null else lib.max a b.value)
-                0
-                (filterOverrides defs);
+        options = {
+          "net.core.rmem_max" = mkOption {
+            type = nullOrHighestInt;
+            default = null;
+            description = lib.mdDoc "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
           };
-          default = null;
-          description = lib.mdDoc "The maximum socket receive buffer size. In case of conflicting values, the highest will be used.";
         };
       };
       default = {};
