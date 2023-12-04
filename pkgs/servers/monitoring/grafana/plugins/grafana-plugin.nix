@@ -35,8 +35,9 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
     updateScript = [ ./update-grafana-plugin.sh pname ];
   } // passthru;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://grafana.com/grafana/plugins/${pname}";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
+    platforms = if isAttrs zipHash then attrNames zipHash else platforms.unix;
   } // meta;
 } // (builtins.removeAttrs args [ "zipHash" "pname" "version" "sha256" "meta" ]))
