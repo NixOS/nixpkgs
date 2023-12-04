@@ -425,5 +425,15 @@ final: prev: {
       # patch elf is trying to patch binary for sunos
       rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
     '';
+    dependencies = oldAttrs.dependencies ++ lib.optional stdenv.isLinux ({
+      name = "_at_cloudflare_slash_workerd-linux-64";
+      packageName = "@cloudflare/workerd-linux-64";
+      # Should be same version as workerd
+      version = "1.20231030.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-1.20231030.0.tgz";
+        sha512 = "2HUeRTvoCC17fxE0qdBeR7J9dO8j4A8ZbdcvY8pZxdk+zERU6+N03RTbk/dQMU488PwiDvcC3zZqS4gwLfVT8g==";
+      };
+    });
   });
 }
