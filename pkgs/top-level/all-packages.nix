@@ -37223,9 +37223,9 @@ with pkgs;
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
     withGui = true;
   };
-  vertcoind = callPackage ../applications/blockchains/vertcoin {
+  vertcoind = disable-warnings-if-gcc13 (callPackage ../applications/blockchains/vertcoin {
     withGui = false;
-  };
+  });
 
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
