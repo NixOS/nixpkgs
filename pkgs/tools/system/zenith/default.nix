@@ -11,13 +11,13 @@ assert nvidiaSupport -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.14.0";
+  version = "0.14.0-unstable-2023-11-21";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-GrrdE9Ih8x8N2HN+1NfxfthfHbufLAT/Ac+ZZWW5Zg8=";
+    rev = "0ed09e6a68c1517b4d050f5e3163421718226040";
+    hash = "sha256-vw/ar2Qi06HxPfPsfcxtfRhMTqY4FCE+7tCfe9sLEv0=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
