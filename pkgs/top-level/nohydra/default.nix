@@ -121,6 +121,7 @@ let
     #   TODO: open an issue in github.com/nixos/nix and link it here
     # also, ${moreutils}/bin/parallel ensures interleaving at \n but json has multiline output.
     "--arg" "checkMeta" (lib.boolToString enableCheckMeta)
+    "--arg" "systems" "null"
     "--arg" "includeBroken" (lib.boolToString includeBroken)
     "-f" "pkgs/top-level/release-outpaths${lib.optionalString enableParallel "-parallel"}.nix"
   ] ++ lib.optionals enableParallel [
