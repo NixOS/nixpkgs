@@ -55,8 +55,9 @@ setupCUDAToolkitCompilers() {
 
     # CMake's enable_language(CUDA) runs a compiler test and it doesn't account for
     # CUDAToolkit_ROOT. We have to help it locate libcudart
-    if [[ -z "${nvccDontPrependCudartFlags-}" ]] ; then
-        export NVCC_APPEND_FLAGS+=" -L@cudartLib@/lib -L@cudartStatic@/lib -I@cudartInclude@/include"
+    local cudartFlags="@cudartFlags@"
+    if [[ -z "${nvccDontPrependCudartFlags-}" ]] && [[ -n "${cudartFlags:-}" ]] ; then
+        export NVCC_APPEND_FLAGS+=" $cudartFlags"
     fi
 }
 
