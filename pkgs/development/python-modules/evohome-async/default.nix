@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zxdavb/evohome-async";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "evo-client";
   };
 }
