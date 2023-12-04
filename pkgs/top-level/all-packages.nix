@@ -37137,7 +37137,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
     boost = pkgs.boost177;
   });
-  litecoind = litecoin.override { withGui = false; };
+  litecoind = disable-warnings-if-gcc13 (litecoin.override { withGui = false; });
 
   livedl = callPackage ../tools/misc/livedl { };
 
