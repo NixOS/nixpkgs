@@ -884,6 +884,8 @@ let
 
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
 
+    kappa-library = callPackage ../development/ocaml-modules/kappa-library { };
+
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
