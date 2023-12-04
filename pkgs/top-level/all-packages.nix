@@ -41736,7 +41736,7 @@ with pkgs;
 
   xrq = callPackage ../applications/misc/xrq { };
 
-  pynitrokey = callPackage ../tools/security/pynitrokey { };
+  pynitrokey = python3Packages.callPackage ../tools/security/pynitrokey { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
 
