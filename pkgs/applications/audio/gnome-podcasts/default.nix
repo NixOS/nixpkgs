@@ -22,21 +22,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    hash = "sha256-jnuy2UUPklfOYObSJPSqNhqqrfUP7N80pPmnw0rlB9A=";
+    hash = "sha256-LPwCYgAFgUMFQZ0i4ldiuGYGMMWcMqYct3/o7eTIhmU=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "gettext-rs-0.4.2" = "sha256-wyZ1bf0oFcQo8gEi2GEalRUoKMoJYHysu79qcfjd4Ng=";
-    };
   };
 
   nativeBuildInputs = [
