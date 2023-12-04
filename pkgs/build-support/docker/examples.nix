@@ -637,6 +637,7 @@ rec {
     ];
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
+    enableFakechroot = true;
   };
 
   etc =
