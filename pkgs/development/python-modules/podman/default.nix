@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "4.8.0";
+  version = "4.8.0.post1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "containers";
     repo = "podman-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lw8ZW1Uh6pbL5Z15NBBgKFm1143rEyFdecBHsSwBYVo=";
+    hash = "sha256-d7rNXqYeeDHilzNc1jcIWq7rNcYZCvlf9ipu1m3oFfw=";
   };
 
   nativeBuildInputs = [
