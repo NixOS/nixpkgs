@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# Only run the hook from nativeBuildInputs
+(( "$hostOffset" == -1 && "$targetOffset" == 0)) || return 0
+
 echo Sourcing setup-cuda-hook >&2
 
 extendCUDAToolkit_ROOT() {
