@@ -33494,8 +33494,6 @@ with pkgs;
 
   handlr = callPackage ../tools/misc/handlr { };
 
-  handlr-regex = callPackage ../tools/misc/handlr-regex { };
-
   jftui = callPackage ../applications/video/jftui { };
 
   lime = callPackage ../development/libraries/lime { };
