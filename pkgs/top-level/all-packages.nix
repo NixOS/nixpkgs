@@ -30912,7 +30912,7 @@ with pkgs;
 
   clapper = callPackage ../applications/video/clapper { };
 
-  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail { };
+  claws-mail = disable-warnings-if-gcc13 (callPackage ../applications/networking/mailreaders/claws-mail { });
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh { };
 
