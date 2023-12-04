@@ -87,7 +87,7 @@ let
 
       outputs = drv.outputs or [ "out" ];
     in stdenv.mkDerivation {
-      inherit (drv) name pname version;
+      inherit (drv) name version;
       inherit outputs;
 
       nativeBuildInputs = [ python ];
@@ -108,6 +108,10 @@ let
       };
 
       inherit (drv) meta;
+    } // lib.optionalAttrs (drv ? pname) {
+      inherit (drv) pname;
+    } // lib.optionalAttrs (drv ? version) {
+      inherit (drv) version;
     };
 
 
