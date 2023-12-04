@@ -16935,7 +16935,7 @@ with pkgs;
       targetPlatform = lib.systems.elaborate {
         # lib.systems.elaborate won't recognize "unknown" as the last component.
         config = "wasm32-unknown-wasi";
-        rust.config = "wasm32-unknown-unknown";
+        rust.rustcTarget = "wasm32-unknown-unknown";
       };
     };
   }).overrideAttrs (old: {
