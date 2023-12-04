@@ -92,7 +92,7 @@ self: super: {
   th-extras = doJailbreak super.th-extras;
 
   ghc-lib = doDistribute self.ghc-lib_9_6_3_20231014;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231014;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_3_20231121;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
   # Tests fail due to the newly-build fourmolu not being in PATH
